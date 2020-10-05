@@ -1,7 +1,7 @@
 import random 
 import os
 
-from config import TASK_CONFIGS_PATH, SCENES_PATH
+from config import TASK_CONFIGS_PATH
 
 
 class TaskNetTask(object):
@@ -11,14 +11,14 @@ class TaskNetTask(object):
         self.initial_conditions = load_conditions(os.path.join(TASK_CONFIGS_FOLDER, self.atus_activity, 'initial'))
         self.final_conditions = load_conditions(os.path.join(TASK_CONFIGS_FOLDER, self.atus_activity, 'final'))
     
-    def initialize(self):
+    def initialize(self, scene_path, scene_type):
         '''
         Check self.scene to see if it works for this Task. If not, resample.
         '''
-        scenes = random.shuffle(os.listdir(SCENES_PATH))
+        scenes = random.shuffle(os.listdir(scene_path))
         initial_satisfied = False 
         while not initial_satisfied:       
-            self.scene = TaskNetScene(scenes.pop())           # NOTE is this supposed to be the arena?
+            self.scene = scene_type(scenes.pop())             # NOTE is this supposed to be the arena?
             initial_satisfied, to_sample = True, None         # TODO  with Checker
             
         sampled_objects = []                                  # TODO with Sampler 
