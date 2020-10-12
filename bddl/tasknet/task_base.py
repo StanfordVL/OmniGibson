@@ -1,7 +1,7 @@
 import random 
 import os
 
-from config import TASK_CONFIGS_PATH
+from tasknet.config import TASK_CONFIGS_PATH
 
 
 class TaskNetTask(object):
