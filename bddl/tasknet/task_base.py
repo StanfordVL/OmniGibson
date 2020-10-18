@@ -8,28 +8,45 @@ class TaskNetTask(object):
     
     def __init__(self, atus_activity):
         self.atus_activity = atus_activity
-        self.initial_conditions = load_conditions(os.path.join(TASK_CONFIGS_FOLDER, self.atus_activity, 'initial'))
-        self.final_conditions = load_conditions(os.path.join(TASK_CONFIGS_FOLDER, self.atus_activity, 'final'))
+        self.initial_conditions = load_conditions(os.path.join(TASK_CONFIGS_PATH, self.atus_activity, 'initial'))
+        self.final_conditions = load_conditions(os.path.join(TASK_CONFIGS_PATH, self.atus_activity, 'final'))
     
     def initialize(self, scene_path, scene_type):
         '''
-        Check self.scene to see if it works for this Task. If not, resample.
+        Check self.scene to see if it works for this Task. If not, resample. 
+        Populate self.scene with necessary objects. 
         '''
-        scenes = random.shuffle(os.listdir(scene_path))
+        scenes = os.listdir(scene_path)
+        random.shuffle(scenes)
         initial_satisfied = False 
         while not initial_satisfied:       
-            self.scene = scene_type(scenes.pop())             # NOTE is this supposed to be the arena?
-            initial_satisfied, to_sample = True, None         # TODO  with Checker
+            self.scene = scene_type(scenes.pop())                  # NOTE is this supposed to be the arena?
+            initial_satisfied, to_sample = self.check_scene()      # TODO get whether the scene is viable and the objects to be sampled 
             
-        sampled_objects = []                                  # TODO with Sampler 
-        self.scene.add_objects(sampled_objects) 
+        sampled_objects = self.sample_objects(to_sample)           # TODO get list of sampled objects/locations/states
+        self.add_objects(sampled_objects)                          # TODO add objects to scene 
         return self.scene
+
+    def check_scene(self):
+        print('Passing trivially. Later, will check scene against initial conditions and generate to_sample list.')
+        return True, []
+
+    def sample_objects(self, to_sample):
+        print('Passing trivially. Later, will sample objects based on to_sample list.') 
+        sampled_objects = []
+        for obj_to_sample in to_sample:
+            pass
+        return sampled_objects
+
+    def add_objects(self, sampled_objects):
+        print('Passing trivially. Later, will add input objects to scene.')
+        pass 
 
     def check_success(self):
         '''
         Check if scene satisfies final conditions and report binary success + success score 
         '''
-        # TODO implement 
+        print('Passing trivially. Later, check scene against final conditions and report success score.')
         return all(self.final_conditions) 
 
 
