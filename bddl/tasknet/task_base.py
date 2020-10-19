@@ -35,7 +35,7 @@ class TaskNetTask(object):
             self.scene = scene_class(self.scene_name)                   
             initial_satisfied, to_sample = self.check_scene()      # TODO get whether the scene is viable and the objects to be sampled 
             
-        sampled_objects = self.sampler.sample_objects(to_sample, object_class)           # TODO get list of sampled objects/locations/states
+        sampled_objects = self.sampler.sample_objects(to_sample, object_class)           # TODO get list of sampled objects/locations/conditions
         self.add_objects(sampled_objects)                          # TODO add objects to scene 
         return self.scene_name, self.scene
 
