@@ -1,3 +1,4 @@
+import numpy as np 
 import os 
 import random 
 
@@ -22,23 +23,34 @@ class Sampler(object):
         for obj_category, num_instances, location, obj_conditions in to_sample: # turn objs with num_instances>1 into num_instances single objects
             flat_tosample.extend([[obj_category, location, obj_conditions] for __ in range(num_instances)])
         
-        sampled_objects = []
+        sampled_simulator_objects = []
+        sampled_dsl_objects = []
         for obj_category, location, obj_conditions in to_sample:     
-            # Get random sample from `object category`
-            # TODO handle non-leaf nodes 
-            obj_category_instance = random.choice(os.listdir(os.path.join(OBJECT_MODEL_PATH, obj_category)))
-            obj_file = get_object_filepath(obj_category_instance)
-            obj = object_class(filename=obj_file)       # NOTE currently iGibson specific 
-             
+
+            # Pick leaf category 
+            leaf_category = obj_category                # TODO handle non-leaf nodes 
+
             # Generate specific coordinates in `location`
-            obj_pos = [0, 0, 0]
-            # TODO also NOTE not putting them into the scene itself here 
+            obj_pos, obj_orn = np.random.uniform(low=0, high=2, size=3), [0, 0, 0, 1])
+
+            # SIMULATOR OBJECTS 
+            # Get random object model sample from `leaf category`
+            leaf_category_instance = random.choice(os.listdir(os.path.join(OBJECT_MODEL_PATH, leaf_category)))
+            obj_file = get_object_filepath(obj_category_instance)
+            sim_obj = object_class(filename=obj_file)       # NOTE currently iGibson specific 
 
             # Set `obj_conditions`. Throw error if object can't have that state. This should never happen for ATUS.
             # TODO 
-            sampled_objects.append((obj, obj_pos))
+            sampled_simulator_objects.append([obj, obj_pos, obj_orn])
 
-        return sampled_objects 
+            # DSL OBJECTS 
+            dsl_obj = BaseObject(obj_category)                   
+            dsl_obj.set_position(obj_pos)
+            dsl_obj.set_orientation(obj_orn)
+            # TODO set dsl_obj object_conditions and possibly states. Again, throw error if invalid state for object. 
+            sampled_dsl_objects.append(dsl_obj)
+
+        return sampled_simulator_objects, sampled_dsl_objects       # TODO sim and dsl objs need to be associated 
 
             
             

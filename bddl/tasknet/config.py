@@ -13,5 +13,9 @@ def get_object_filepath(obj_category_instance):
     return os.path.join(OBJECT_MODEL_PATH, object_category_instance, 'rigid_body.urdf')
 
 
+def get_conditions_filename(atus_activity, mode):
+    return os.path.join(TASK_CONFIGS_PATH, atus_activity, mode)
+
+
 
 

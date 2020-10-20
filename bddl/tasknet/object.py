@@ -5,9 +5,8 @@ class BaseObject(object):
         self.category = category 
         self.properties = {'Categorizeable': category}
 
-        # Set object states - TODO do we want all objects to have all object states? 
-                            # TODO better name
-                            # TODO how do I get these from the simulator? That applies to pos and orn too. How much do we even need to keep track of them? 
+        # Set obj_conditions - TODO do we want all objects to have all object states? 
+                             # TODO how do I get these from the simulator? That applies to pos and orn too. How much do we need to keep track of them? 
     
     @property 
     def position(self):
