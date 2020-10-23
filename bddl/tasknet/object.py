@@ -14,6 +14,7 @@ class BaseObject(object):
 
     @position.setter                        
     def position(self, new_position):
+        print('position setter called')
         self._position = new_position
 
     @property

@@ -13,9 +13,10 @@ class TaskNetTask(object):
     
     def __init__(self, atus_activity):
         self.atus_activity = atus_activity
-        self.initial_conditions = Parser.parse_conditions(os.path.join(TASK_CONFIGS_PATH, self.atus_activity, 'initial'))
-        self.final_conditions = Parser.parse_conditions(os.path.join(TASK_CONFIGS_PATH, self.atus_activity, 'final'))
+        self.initial_conditions = Parser.parse_conditions(self.atus_activity, 'initial')
+        self.final_conditions = Parser.parse_conditions(self.atus_activity, 'final')
         self.sampler = Sampler()
+        self.checker = Checker()
     
     def initialize(self, scene_class, object_class):
         '''
@@ -32,10 +33,12 @@ class TaskNetTask(object):
         while not accept_scene:       
             try:
                 self.scene_name = scenes.pop()
+                if self.scene_name == 'background':     # TODO what is 'background'?
+                    continue
             except:
                 raise ValueError('None of the available scenes satisfy these initial conditions.')
             self.scene = scene_class(self.scene_name)                   
-            accept_scene, to_sample = self.checker.check_conditions(self.conditions, self.scene, 'initial')
+            accept_scene, to_sample = self.checker.check_conditions(self.initial_conditions, self.scene, 'initial')
             
         self.sampled_simulator_objects, self.sampled_dsl_objects = self.sampler.sample_objects(to_sample, object_class)          
         # TODO Right now, self.sampled_dsl_objects is just a list of tasknet.object.BaseObjects (they need

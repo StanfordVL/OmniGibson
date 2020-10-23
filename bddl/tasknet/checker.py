@@ -1,3 +1,6 @@
+# Same issue of (functionally) static functions as parser at the moment, though I definitely expect core functionality here.  
+
+
 class Checker(object):
     def __init__(self):
         pass 
@@ -21,7 +24,7 @@ class Checker(object):
         accept_scene = True
         to_sample = []
         for condition in conditions:
-            result = check_single_condition(condition, scene_characteristics, mode)
+            result = self.check_single_condition(condition, scene_characteristics, mode)
             if result == 'satisfied':
                 continue                
             elif result == 'sampleable':
@@ -32,7 +35,7 @@ class Checker(object):
 
         return accept_scene, to_sample
     
-    def check_single_condition(condition, scene_characteristics, mode):
+    def check_single_condition(self, condition, scene_characteristics, mode):
         '''
         For a single parsed condition, checks if the condition is satisfied by the 
             existing scene, if the condition is unsatisfiable in the current scene,

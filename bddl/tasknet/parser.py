@@ -26,9 +26,9 @@ class Parser(object):
         conditions_filename = get_conditions_filename(atus_activity, mode)
         conditions = []
         if mode == 'initial':
-            with open(condition_filename, 'r') as condition_file:
-                for line in condition_file:
-                    conditions.append(self.parse_single_condition(line, mode))
+            with open(conditions_filename, 'r') as conditions_file:
+                for line in conditions_file:
+                    conditions.append(Parser.parse_single_condition(line, mode))
 
         elif mode == 'final':
             pass 
@@ -51,7 +51,7 @@ class Parser(object):
         #   Have to specify a condition format. For now, splitting initial and final 
         #       under the assumption that initial conds will follow my format.  
         if mode == 'initial':
-            units = [unit.strip(' \n' for unit in condition_string.split(' ')]
+            units = [unit.strip(' \n') for unit in condition_string.split(' ')]
             obj_category = units[0]
             num_instances = int(units[1])
             location = None         # TODO location
