@@ -35,7 +35,7 @@ class Sampler(object):
             obj_pos, obj_orn = (np.random.uniform(low=0, high=2, size=3), [0, 0, 0, 1])
             obj_pos, obj_orn = ([0, 0, np.random.random()], [0, 0, 0, 1])
 
-            # SIMULATOR OBJECTS 
+            # SIMULATOR OBJECT 
             # Get random object model sample from `leaf category`
             leaf_category_instance = random.choice(os.listdir(os.path.join(OBJECT_MODEL_PATH, leaf_category)))
             obj_file = get_object_filepath(leaf_category, leaf_category_instance)
@@ -45,15 +45,21 @@ class Sampler(object):
             # TODO 
             sampled_simulator_objects.append([sim_obj, obj_pos, obj_orn])
 
-            # DSL OBJECTS 
-            dsl_obj = BaseObject(obj_category)                   
+            # TASKNET OBJECT 
+            dsl_obj = BaseObject(obj_category, sim_obj.body_id)     # TODO is this the right way to get ID? I could 
+                                                                   # do sim_obj.load. Is that safer/
+                                                                   # preferred? Can I assume that the objects were 
+                                                                   # already loaded? Can I assume that regardless of 
+                                                                   # object type? I'm leaving it as self.body_id
+                                                                   # because that seems less simulator-specific, but 
+                                                                   # it is TODO simulator-specific 
             # dsl_obj.set_position(obj_pos)
             dsl_obj.position = obj_pos
             dsl_obj.orientation = obj_orn
             # TODO set dsl_obj object_conditions and possibly states. Again, throw error if invalid state for object. 
             sampled_dsl_objects.append(dsl_obj)
 
-        return sampled_simulator_objects, sampled_dsl_objects       # TODO sim and dsl objs need to be associated 
+        return sampled_simulator_objects, sampled_dsl_objects       # TODO once sim_obj_id is obtained, assuming it is unique, these will be associated 
 
             
             
