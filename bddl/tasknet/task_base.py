@@ -48,7 +48,6 @@ class TaskNetTask(object):
         
         return self.scene_name, self.scene
 
-
     def check_success(self):
         '''
         Check if scene satisfies final conditions and report binary success + success score 
@@ -56,33 +55,38 @@ class TaskNetTask(object):
         print('Passing trivially. Later, check scene against final conditions and report success score.')
         return all(self.final_conditions) 
 
-    def on_top(objA, objB):
-        '''
-        Checks if one object is on top of another. TODO does it need to update TN object representation? 
-                                                        We've been saying no. 
-        True iff object at obj_id_A TODO 
-        :param objA: simulator object
-        :param objB: simulator object 
-        '''
-        raise NotImplementedError('Implement this as a method of the simulator-specific subclass of TaskNetTask.')
+    #### CHECKERS ####
+    def onTop(self, objA, objB):
+        raise NotImplementedError 
+    
+    def inside(self, objA, objB):
+        raise NotImplementedError
+    
+    def nextTo(self, objA, objB):
+        raise NotImplementedError 
 
-    def inside(objA, objB):
-        '''
-        Checks if one object is inside of another. TODO same as above
-        True iff TODO 
-        :param objA: simulator object 
-        :param objB: simulator object 
-        '''
-        raise NotImplementedError('Implement this as a method of the simulator-specific subclass of TaskNetTask.')
-        
-    def next_to(objA, objB):
-        '''
-        Checks if one object is next to another. TODO same as above
-        True iff TODO 
-        :param objA: simulator object 
-        :param objB: simulator object 
-        '''
-        raise NotImplementedError('Implement this as a method of the simulator-specific subclass of TaskNetTask.')
+    def under(self, objA, objB):
+        raise NotImplementedError 
+    
+    def touching(self, objA, objB):
+        raise NotImplementedError 
+
+    #### SAMPLERS ####
+    def sampleOnTop(self, objA, objB):
+        raise NotImplementedError 
+    
+    def sampleInside(self, objA, objB):
+        raise NotImplementedError
+    
+    def sampleNextTo(self, objA, objB):
+        raise NotImplementedError 
+
+    def sampleUnder(self, objA, objB):
+        raise NotImplementedError 
+    
+    def sampleTouching(self, objA, objB):
+        raise NotImplementedError 
+
 
 
 class TaskNetScene(object): 
@@ -92,6 +96,3 @@ class TaskNetScene(object):
 
     def add_objects(self, objects):
         self.objects = objects 
-
-
-    
