@@ -1,6 +1,6 @@
 class BaseObject(object):
-    def __init__(self, category, obj_id=0):
-        self._obj_id = obj_id
+    def __init__(self, category, body_id=0):
+        self._body_id = body_id
         self._position = None
         self._orientation = None
         self.category = category 
@@ -13,11 +13,10 @@ class BaseObject(object):
     def obj_id(self):
         return self._obj_id
 
-    @obj_id.setter(self, new_obj_id):       # TODO should this even be allowed? We definitely don't want to    
-                                            # expose this functionality, so the question is, will we ever need
-                                            # to set IDs other than at TNObject construction. 
-    def obj_id(self):
-        self.obj_id = new_obj_id
+    @body_id.setter                          # TODO this has to be allowed because sim obj body_ids don't exist
+                                            # until they're imported into simulator, but this worries me 
+    def obj_id(self, new_body_id):
+        self._body_id = new_body_id
 
     @property 
     def position(self):
@@ -25,7 +24,6 @@ class BaseObject(object):
 
     @position.setter                        
     def position(self, new_position):
-        print('position setter called')
         self._position = new_position
 
     @property

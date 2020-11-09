@@ -1,6 +1,7 @@
 import numpy as np 
 import os 
-import random 
+import random
+import sys  
 
 from tasknet.config import OBJECT_MODEL_PATH, get_object_filepath
 from tasknet.object import BaseObject
@@ -40,20 +41,12 @@ class Sampler(object):
             leaf_category_instance = random.choice(os.listdir(os.path.join(OBJECT_MODEL_PATH, leaf_category)))
             obj_file = get_object_filepath(leaf_category, leaf_category_instance)
             sim_obj = object_class(filename=obj_file)       # NOTE currently iGibson specific 
-
             # Set `obj_conditions`. Throw error if object can't have that state. This should never happen for ATUS.
             # TODO 
             sampled_simulator_objects.append([sim_obj, obj_pos, obj_orn])
 
             # TASKNET OBJECT 
-            dsl_obj = BaseObject(obj_category, sim_obj.body_id)     # TODO is this the right way to get ID? I could 
-                                                                   # do sim_obj.load. Is that safer/
-                                                                   # preferred? Can I assume that the objects were 
-                                                                   # already loaded? Can I assume that regardless of 
-                                                                   # object type? I'm leaving it as self.body_id
-                                                                   # because that seems less simulator-specific, but 
-                                                                   # it is TODO simulator-specific 
-            # dsl_obj.set_position(obj_pos)
+            dsl_obj = BaseObject(obj_category)  # NOTE can't do body_id now since the sim obj doesn't have an ID yet
             dsl_obj.position = obj_pos
             dsl_obj.orientation = obj_orn
             # TODO set dsl_obj object_conditions and possibly states. Again, throw error if invalid state for object. 

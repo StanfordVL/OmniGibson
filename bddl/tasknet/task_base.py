@@ -39,7 +39,7 @@ class TaskNetTask(object):
                 raise ValueError('None of the available scenes satisfy these initial conditions.')
             self.scene = scene_class(self.scene_name)                   
             accept_scene, to_sample = self.checker.check_conditions(self.initial_conditions, self.scene, 'initial')
-            
+        
         self.sampled_simulator_objects, self.sampled_dsl_objects = self.sampler.sample_objects(to_sample, object_class)          
         # TODO Right now, self.sampled_dsl_objects is just a list of tasknet.object.BaseObjects (they need
         #           to be associated with their sim counterparts). Is this list good enough, or do we need
@@ -86,7 +86,6 @@ class TaskNetTask(object):
     
     def sampleTouching(self, objA, objB):
         raise NotImplementedError 
-
 
 
 class TaskNetScene(object): 

@@ -1,5 +1,5 @@
 # Same issue of (functionally) static functions as parser at the moment, though I definitely expect core functionality here.  
-from gibson2.pybullet_tools.utils import *
+# from gibson2.pybullet_tools.utils import *
 
 
 class Checker(object):
