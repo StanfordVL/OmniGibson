@@ -16,7 +16,7 @@ class TaskNetTask(object):
         self.initial_conditions = Parser.parse_conditions(self.atus_activity, 'initial')
         self.final_conditions = Parser.parse_conditions(self.atus_activity, 'final')
         self.sampler = Sampler()
-        self.checker = Checker()
+        self.checker = TNChecker()
     
     def initialize(self, scene_class, object_class):
         '''

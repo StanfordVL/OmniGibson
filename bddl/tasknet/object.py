@@ -10,8 +10,8 @@ class BaseObject(object):
                              # TODO how do I get these from the simulator? That applies to pos and orn too. How much do we need to keep track of them? 
     
     @property
-    def obj_id(self):
-        return self._obj_id
+    def body_id(self):
+        return self._body_id
 
     @body_id.setter                          # TODO this has to be allowed because sim obj body_ids don't exist
                                             # until they're imported into simulator, but this worries me 

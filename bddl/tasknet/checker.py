@@ -2,7 +2,7 @@
 # from gibson2.pybullet_tools.utils import *
 
 
-class Checker(object):
+class TNChecker(object):
     def __init__(self):
         pass 
 
@@ -41,7 +41,7 @@ class Checker(object):
         For a single parsed condition, checks if the condition is satisfied by the 
             existing scene, if the condition is unsatisfiable in the current scene,
             or if the condition is unsatisfied but satisfiable via sampling in the current scene. 
-        :param condition: list of condition elements
+        :param condition: list of condition elements 
         :param mode: string, "initial" or "final" indicating which type of conditions is being parsed.
         '''
         print('Trivially returning "sampleable". Later, will check if each condition is satisfied, sampleable, or unsatisfiable.')
@@ -58,8 +58,10 @@ class Checker(object):
                 return 'sampleable'
             elif False:
                 return 'unsatisfiable'
+        elif mode == 'final':
+            return 'unsatisfiable'
         else:
-            return 'unsatisfied'
+            raise ValueError('Invalid mode of conditions. Mode must be initial or final.')
 
 
     
