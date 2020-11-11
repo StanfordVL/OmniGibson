@@ -10,7 +10,7 @@ class TNChecker(object):
         '''
         For a set of parsed conditions and a scene, checks if the scene satisfies the conditions,
             doesn't satisfy them but can through sampling, or cannot satisfy them. 
-        :param conditions: list of lists of condition elements 
+        :param conditions: list of condition lambda functions 
         :param scene: scene object that can be queried for already-present object categories, 
                           locations, numbers, and object_conditions
         :param mode: string, "initial" or "final" indicating which type of conditions is being checked
@@ -41,7 +41,7 @@ class TNChecker(object):
         For a single parsed condition, checks if the condition is satisfied by the 
             existing scene, if the condition is unsatisfiable in the current scene,
             or if the condition is unsatisfied but satisfiable via sampling in the current scene. 
-        :param condition: list of condition elements 
+        :param condition: condition lambda function 
         :param mode: string, "initial" or "final" indicating which type of conditions is being parsed.
         '''
         print('Trivially returning "sampleable". Later, will check if each condition is satisfied, sampleable, or unsatisfiable.')
@@ -59,7 +59,7 @@ class TNChecker(object):
             elif False:
                 return 'unsatisfiable'
         elif mode == 'final':
-            return 'unsatisfiable'
+            return 'satisfied' if condition(scene) else 'unsatisfied'
         else:
             raise ValueError('Invalid mode of conditions. Mode must be initial or final.')
 
