@@ -1,12 +1,32 @@
-# NOTE does a custom class that has only static methods deserve to be a class? Probably not. 
-# should I just make this into a file called 'parsing.py'? Possibly. 
-# Leaving as a class in case something comes up. I don't foresee needing instance methods, but 
-# there could be a need for class methods if I put logical primitives into Parser. TBD. 
+# NOTE these are basically static methods, but it's hard to turn it into just
+# a set of parsing functions because of the underlying PDDLParser object. 
+# Maybe try later.  
 
 from tasknet.config import get_conditions_filename
+from pddl_parser import PDDLParser
+ 
+ 
+class TNParser(PDDLParser):
+
+    def parse_predicates(self, atus_activity, instance):
+        domain_filename = get_definition_filename(atus_activity, instance, domain=True)
+        self.parse_domain(domain_filename)      # sets self.predicates
+        return self.predicates 
+    
+    def parse_initial_state(self, atus_activity, instance):
+        problem_filename = get_definition_filename(atus_activity, instance)
+        self.parse_problem(problem_filename)    # sets the three things returned here 
+        return self.objects, self.state
+    
+    def parse_goal(self, atus_activity, instance):
+        problem_filename = get_definition_filename(atus_activity, instance)
+        self.parse_problem(problem_filename)
+        return self.positive_goals, self.negative_goals
 
 
-class Parser(object):
+"""
+# "Deprecated", as if it was ever deployed 
+class _Parser(object):
     def __init__(self):
         pass
 
@@ -62,7 +82,6 @@ class Parser(object):
             pass
 
         return single_condition    
-
-
+"""
      
         

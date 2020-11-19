@@ -145,30 +145,17 @@ class TaskNetTask(object):
 
             def cond2(sim_objects, dsl_objects):
                 objects = organize_objects(sim_objects, dsl_objects)
-                # objects = {}
-                # for sim_obj, dsl_obj in zip(sim_objects, dsl_objects):
-                #     if dsl_obj.category in objects:
-                #         objects[dsl_obj.category].append(sim_obj)
-                #     else:
-                #         objects[dsl_obj.category] = [sim_obj]
                 all_containers_have_soda = all([any([self.inside(soda, container) for soda in objects['soda']]) for container in objects['container']])
                 return all_containers_have_soda
 
             def cond3(sim_objects, dsl_objects):
                 objects = organize_objects(sim_objects, dsl_objects)
-                # objects = {}
-                # for sim_obj, dsl_obj in zip(sim_objects, dsl_objects):
-                #     if dsl_obj.category in objects:
-                #         objects[dsl_obj.category].append(sim_obj)
-                #     else:
-                #         objects[dsl_obj.category] = [sim_obj]
                 all_containers_have_eggs = all([any([self.inside(eggs, container) for eggs in objects['eggs']]) for container in objects['container']])
                 return all_containers_have_eggs
             
             def cond4(sim_objects, dsl_objects):
                 objects = organize_objects(sim_objects, dsl_objects)
                 containers = [sim_obj for sim_obj, dsl_obj in zip(sim_objects, dsl_objects) if dsl_obj.category == 'container']
-                # containers = objects['container']
                 all_containers_nextto_some_container = []
                 for containerA in containers:
                     nextto_container = False
@@ -178,7 +165,6 @@ class TaskNetTask(object):
                         elif self.nextTo(containerA, containerB):
                             nextto_container = True 
                     all_containers_nextto_some_container.append(nextto_container)
-                # all_containers_nextto_some_container = all([any([self.nextTo(containerA, containerB) for containerB in objects['container']]) for containerA in objects['container'] if containerA.body_id != containerB.body_id])
                 return all(all_containers_nextto_some_container)
             
             conditions = [

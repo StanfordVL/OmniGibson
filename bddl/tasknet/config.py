@@ -13,8 +13,9 @@ def get_object_filepath(object_category, object_category_instance):
     return os.path.join(OBJECT_MODEL_PATH, object_category, object_category_instance, 'rigid_body.urdf')
 
 
-def get_conditions_filename(atus_activity, mode):
-    return os.path.join(TASK_CONFIGS_PATH, atus_activity, mode)
+def get_definition_filename(atus_activity, instance, domain=False):
+    filename = 'domain' if domain else 'problem%s' % instance 
+    return os.path.join(TASK_CONFIGS_PATH, atus_activity, filename + '.pddl')
 
 
 
