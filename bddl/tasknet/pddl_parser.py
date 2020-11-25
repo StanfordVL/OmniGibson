@@ -4,7 +4,7 @@ Aside from some labeling, most of it is the same.
 '''
 
 import re
-from action import Action
+from tasknet.action import Action
 
 class PDDLParser:
 

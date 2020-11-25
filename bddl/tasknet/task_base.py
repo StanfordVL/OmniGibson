@@ -1,10 +1,11 @@
 import random 
 import os
+import sys 
 
 from tasknet.config import TASK_CONFIGS_PATH, SCENE_PATH
 from tasknet.sampler import Sampler
 from tasknet.checker import TNChecker 
-from tasknet.parser import Parser 
+from tasknet.parse_compile import TNParser 
 
 task_configs_path, scene_path = TASK_CONFIGS_PATH, SCENE_PATH
 
@@ -16,6 +17,7 @@ class TaskNetTask(object):
         self.task_instance = task_instance      # TODO create option to randomly generate 
         self.sampler = Sampler()
         self.checker = TNChecker()
+        self.parser = TNParser(atus_activity, task_instance)
     
     def initialize(self, scene_class, object_class):
         '''
@@ -107,7 +109,12 @@ class TaskNetTask(object):
     #### TASK ####
     def gen_initial_conditions(self):
         # TODO change to parse/compile from current strat(?) Will have to figure out what to do for sampling 
-        return Parser.parse_conditions(self.atus_activity, 'initial' + str(self.task_instance))
+        # return self.parser.parse_conditions(self.atus_activity, 'initial' + str(self.task_instance))
+        objs, conds = self.parser.get_initial_state()
+        print('OBJECTS:', objs)
+        print('CONDS:', conds)
+        sys.exit()
+        return None
 
     def gen_final_conditions(self):
         '''
@@ -197,3 +204,4 @@ class TaskNetScene(object):
 
     def add_objects(self, objects):
         self.objects = objects 
+    
