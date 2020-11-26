@@ -1,17 +1,26 @@
+import copy 
+
 from tasknet.checking import inside
 
 
-def evaluate(sentence, *args):
+def evaluate(sentence, scope, *args):
+    '''
+    Evaluates a built-up sentence 
+    NOTE: the sentence (of class Sentence) should already have been initialized
+          at compile time. These are *calls* not *constructions*. 
+    '''
     if isinstance(sentence, BasePredicate):
-        assert len(list(args)) == 2             # args should have one list, a list of inputs to the BasePredicate and a scope
-        return sentence(inputs, scope)                  # either one or two object INSTANCES
+        assert len(list(args)) == 1             # args should have one list, a list of inputs (object INSTANCES) to the BasePredicate
+        return sentence(scope, *args)                  # Returns truth value AND sets parent's child_values as the same if there is a parent 
     else:
-        return sentence([evaluate(child, inputs) for child in sentence.children])
+        return sentence(scope, *args)           # Returns truth value 
+
+# SO DO I EVEN NEED THIS EVALUATE FUNCTION? 
 
 
 class Sentence(object):
     def __init__(self):
-        self.parent = []
+        self.parent = None
         self.children = []
         self.child_values = []
 
@@ -33,7 +42,11 @@ class Inside(BasePredicate):
         task, param_list = args 
         assert len(param_list) == 2, 'Param list should have 2 args'
         param1, param2 = param_list
-        return task.inside(scope[param1], scope[param2])
+        result = task.inside(scope[param1], scope[param2])
+        
+        if parent is not None:
+            self.parent.child_values.append(result)
+        return result
 
 
 # Quantifiers: add (N = number of objects of the given category) children to the  
@@ -53,8 +66,9 @@ class ForAll(Sentence):
         if not self.child_values:       #  building the tree 
             for obj in task.objects:     # TODO see how to query objects 
                 if obj.category == iterative_category:      # TODO see how to query object categories
-                    self.children.append((inner_predicate, {iterative_label: obj}))     # add a child predicate that appends 1) the inner predicate 2) a param dictionary mapping name of param to value 
-                                                                                        # I think iterative labels will be unique, if PDDL obeys the conventional laws of scoping
+                    self.children.append(inner_predicate)
+                    new_scope = copy.copy(scope)        # TODO want to reference the same sim object so not doing deepcopy... yikes. test this out. 
+                    new_scope[iterative_label] = obj 
         else:                               # resolving the tree 
             return all(self.child_values)
 
