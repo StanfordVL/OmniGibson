@@ -1,21 +1,5 @@
-PREDICATE_MAPPING = {
-                        # PDDL 
-                        'forall': Universal,
-                        'exists': Existential,
-                        'and': Conjunction,
-                        'or': Disjunction,
-                        'not': Negation,
-                        'imply': Implication,
+import copy 
 
-                        # Atomic predicates 
-                        'inside': Inside,
-                        'nextto': NextTo,
-                        'ontop': OnTop,
-                        'under': Under,
-                        'touching': Touching,
-                        # TODO rest of atomic predicates 
-                     }
-predicate_mapping = PREDICATE_MAPPING
 
 #################### BASE ####################
 class Sentence(object):
@@ -29,45 +13,87 @@ class Sentence(object):
 
 class AtomicPredicate(Sentence):
     def __init__(self, scope, task, body):
-        super().__init__()
+        super().__init__(scope, task, body)
+
+
+class BinaryAtomicPredicate(AtomicPredicate):
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+        assert len(body) == 2, 'Param list should have 2 args'
+        self.input1, self.input2 = body 
+        self.scope = scope 
+        self.condition_function = None              # NOTE defined in child 
+
+    def resolve(self):
+        try: 
+            return self.condition_function(self.scope[self.input1], self.scope[self.input2])
+        except KeyError:
+            return False 
+
+class UnaryAtomicPredicate(AtomicPredicate):
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+        assert len(body) == 1, 'Param list should have 1 arg'
+        self.input = body[0]
+        self.scope = scope 
+        self.condition_function = None 
+    
+    def resolve(self):
+        try: 
+            return self.condition_function(self.scope[self.input])
+        except KeyError: 
+            return False 
 
 
 def create_scope():
+    pass
 
+
+def compile_condition(parsed_condition, task, scope=None):
+    scope = scope if scope is not None else {}
+    return HEAD(scope, task, parsed_condition)
 
 
 #################### ATOMIC PREDICATES ####################
-class Inside(AtomicPredicate):
+class Inside(BinaryAtomicPredicate):
     def __init__(self, scope, task, body):
-        super().__init__()
-        assert len(body) == 2, 'Param list should have 2 args'    # I think this will work out, because of the token structure and subpredicate[1:]
-        input1, input2 = body 
-        self.task = task
-        self.scope = scope  
-
-    def resolve(self):
-        try:
-            return = self.task.inside(self.scope[param1], self.scope[param2])
-        except KeyError:        # NOTE this should only happen during initial conditions 
-            return False    
+        super().__init__(scope, task, body)
+        self.condition_function = task.inside
 
 
+class NextTo(BinaryAtomicPredicate):
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+        self.condition_function = task.nextTo 
 
+
+class OnTop(BinaryAtomicPredicate):
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+        self.condition_function = task.onTop
+
+
+class Cooked(UnaryAtomicPredicate):
+    def __init__(self, scope, task, body):
+        print('COOKED INITIALIZED')
+        super().__init__(scope, task, body)
+
+        print('BODY:', body)
+        self.condition_function = task.cooked 
+        print('COOKED CREATED')
 
 
 #################### RECURSIVE PREDICATES ####################
-# HEAD 
-class HEAD(Conjunction):
-    def __init__(self, scope, task, body):
-        super().__init__()
-
-
 # -JUNCTIONS
 class Conjunction(Sentence):
     def __init__(self, scope, task, body):
-        super().__init__()
+        print('CONJUNCTION INITIALIZED')
+        super().__init__(scope, task, body)
+
+        print('BODY:', body)
         child_predicates = [predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]) for subpredicate in body]
         self.children.extend(child_predicates)
+        print('CONJUNCTION CREATED')
     
     def resolve(self):
         self.child_values = [child.resolve() for child in self.children]
@@ -77,11 +103,14 @@ class Conjunction(Sentence):
 
 class Disjunction(Sentence):
     def __init__(self, scope, task, body):
-        super().__init__()
+        print('DISJUNCTION INITIALIZED')
+        super().__init__(scope, task, body)
 
         # body = [[predicate1], [predicate2], ..., [predicateN]]
+        print('BODY:', body)
         child_predicates = [predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]) for subpredicate in body]
         self.children.extend(child_predicates)
+        print('DISJUNCTION CREATED')
     
     def resolve(self):
         self.child_values = [child.resolve() for child in self.children]
@@ -92,8 +121,10 @@ class Disjunction(Sentence):
 # QUANTIFIERS
 class Universal(Sentence):
     def __init__(self, scope, task, body):  
-        super().__init__()
+        print('UNIVERSAL INITIALIZED')
+        super().__init__(scope, task, body)
 
+        print('BODY:', body)
         iterable, subpredicate = body 
         param_label, __, category = iterable
         assert __ == '-', 'Middle was not a hyphen'
@@ -103,6 +134,7 @@ class Universal(Sentence):
                 new_scope[param_label] = obj 
                 # body = [["param_label", "-", "category"], [predicate]]
                 self.children.append(predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
+        print('UNIVERSAL CREATED')
 
     def resolve(self, scope, *args):
         self.child_values = [child.resolve() for child in self.children]
@@ -112,8 +144,10 @@ class Universal(Sentence):
 
 class Existential(Sentence):
     def __init__(self, scope, task, body):
-        super().__init__()
+        print('EXISTENTIAL INITIALIZED')
+        super().__init__(scope, task, body)
 
+        print('BODY:', body)
         iterable, subpredicate = body 
         param_label, __, category = iterable
         assert __ == '-', 'Middle was not a hyphen'
@@ -123,7 +157,8 @@ class Existential(Sentence):
                 new_scope[param_label] = obj
                 # body = [["param_label", "-", "category"], [predicate]]
                 self.children.append(predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
-        
+        print('EXISTENTIAL CREATED')
+
     def resolve(self):
         self.child_values = [child.resolve() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
@@ -133,11 +168,15 @@ class Existential(Sentence):
 # NEGATION
 class Negation(Sentence):
     def __init__(self, scope, task, body):
-        super().__init__()
+        print('NEGATION INITIALIZED')
+        super().__init__(scope, task, body)
 
-        # body = [predicate]
-        self.children.append(predicate_mapping[body[0]](scope, task, body[1:]))
+        # body = [[predicate]]
+        print('BODY:', body)
+        subpredicate = body[0]
+        self.children.append(predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]))
         assert len(self.children) == 1, 'More than one child.'
+        print('NEGATION CREATED')
     
     def resolve(self):
         self.child_values = [child.resolve() for child in self.children]
@@ -149,20 +188,100 @@ class Negation(Sentence):
 # IMPLICATION 
 class Implication(Sentence):
     def __init__(self, scope, task, body):
-        super().__init__()
+        print('IMPLICATION INITIALIZED')
+        super().__init__(scope, task, body)
 
         # body = [[antecedent], [consequent]]
+        print('BODY:', body)
         antecedent, consequent = body 
         self.children.append(predicate_mapping[antecedent[0]](scope, task, antecedent[1:]))
         self.children.append(predicate_mapping[consequent[0]](scope, task, consequent[1:]))
-    
+        print('IMPLICATION CREATED')
+
     def resolve(self):
         self.child_values = [child.resolve() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         ante, cons = self.child_values 
         return (not ante) or cons
 
+# HEAD 
+class HEAD(Conjunction):
+    def __init__(self, scope, task, body):
+        print('HEAD INITIALIZED')
+        super().__init__(scope, task, body)
+        print('BODY:', body)
+        print('HEAD CREATED')
+
+
+PREDICATE_MAPPING = {
+                        # PDDL 
+                        'forall': Universal,
+                        'exists': Existential,
+                        'and': Conjunction,
+                        'or': Disjunction,
+                        'not': Negation,
+                        'imply': Implication,
+
+                        # Atomic predicates 
+                        'inside': Inside,
+                        'nextto': NextTo,
+                        'ontop': OnTop,
+                        # 'under': Under,
+                        # 'touching': Touching,
+                        'cooked': Cooked,
+                        # TODO rest of atomic predicates 
+                     }
+predicate_mapping = PREDICATE_MAPPING
+
+
+#################### TEST STUFF ####################
+class TestTask(object):
+    def __init__(self, obj_list):
+        self.objects = obj_list
+
+    def cooked(self, objA):
+        print('executing sim cooked function')
+        if objA.category == 'chicken':
+            return True 
+        if objA.category == 'apple':
+            return False 
+
+
+class TestChicken(object):
+    def __init__(self):
+        self.category = 'chicken'
+
+class TestApple(object):
+    def __init__(self):
+        self.category = 'apple'
+
 
 if __name__ == '__main__':
-    pass 
-    # TODO testing 
+    parsed_condition = ["and", 
+                        [
+                            ["forall", 
+                                ["?chick", "-", "chicken"], 
+                                ["cooked", "?ch"]
+                            ],
+                            ["or", 
+                                ["exists", 
+                                    ["?ap", "-", "apple"], 
+                                    ["not", 
+                                        ["cooked", "?ap"]
+                                    ]
+                                ],
+                                ["forall",
+                                    ["?ap", "-", "apple"],
+                                    ["cooked", "?ap"]
+                                ]
+                            ],
+                            ["imply",
+                                ["cooked", "?ap"],
+                                ["cooked", "?chick"]
+                            ]
+                        ]
+                       ]
+    obj_list = [TestChicken(), TestApple(), TestChicken(), TestChicken()]
+    task = TestTask(obj_list)
+    
+    compile_condition(parsed_condition, task)
