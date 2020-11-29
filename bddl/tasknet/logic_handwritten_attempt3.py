@@ -7,7 +7,7 @@ class Sentence(object):
         self.children = []
         self.child_values = []
 
-    def resolve(self, scope, task, body):
+    def resolve(self):
         pass 
 
 
@@ -39,9 +39,12 @@ class UnaryAtomicPredicate(AtomicPredicate):
         self.condition_function = None 
     
     def resolve(self):
+        print('Starting cooked resolution...')
         try: 
+            print('Cooked resolved')
             return self.condition_function(self.scope[self.input])
         except KeyError: 
+            print('Cooked resolved with KeyError')
             return False 
 
 
@@ -78,7 +81,6 @@ class Cooked(UnaryAtomicPredicate):
         print('COOKED INITIALIZED')
         super().__init__(scope, task, body)
 
-        print('BODY:', body)
         self.condition_function = task.cooked 
         print('COOKED CREATED')
 
@@ -90,14 +92,16 @@ class Conjunction(Sentence):
         print('CONJUNCTION INITIALIZED')
         super().__init__(scope, task, body)
 
-        print('BODY:', body)
         child_predicates = [predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]) for subpredicate in body]
         self.children.extend(child_predicates)
         print('CONJUNCTION CREATED')
     
     def resolve(self):
+        print('Starting conjunction resolution...')
         self.child_values = [child.resolve() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
+        result = all(self.child_values)
+        print('Conjunction resolved')
         return all(self.child_values)
 
 
@@ -107,14 +111,16 @@ class Disjunction(Sentence):
         super().__init__(scope, task, body)
 
         # body = [[predicate1], [predicate2], ..., [predicateN]]
-        print('BODY:', body)
         child_predicates = [predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]) for subpredicate in body]
         self.children.extend(child_predicates)
         print('DISJUNCTION CREATED')
     
     def resolve(self):
+        print('Starting disjunction resolution...')
         self.child_values = [child.resolve() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
+        result = any(self.child_values)
+        print('Disjunction resolved')
         return any(self.child_values) 
 
 
@@ -124,7 +130,6 @@ class Universal(Sentence):
         print('UNIVERSAL INITIALIZED')
         super().__init__(scope, task, body)
 
-        print('BODY:', body)
         iterable, subpredicate = body 
         param_label, __, category = iterable
         assert __ == '-', 'Middle was not a hyphen'
@@ -136,9 +141,12 @@ class Universal(Sentence):
                 self.children.append(predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
         print('UNIVERSAL CREATED')
 
-    def resolve(self, scope, *args):
+    def resolve(self):
+        print('Starting universal resolution...')
         self.child_values = [child.resolve() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
+        result = all(self.child_values)
+        print('Universal resolved')
         return all(self.child_values)
 
 
@@ -147,7 +155,6 @@ class Existential(Sentence):
         print('EXISTENTIAL INITIALIZED')
         super().__init__(scope, task, body)
 
-        print('BODY:', body)
         iterable, subpredicate = body 
         param_label, __, category = iterable
         assert __ == '-', 'Middle was not a hyphen'
@@ -160,8 +167,11 @@ class Existential(Sentence):
         print('EXISTENTIAL CREATED')
 
     def resolve(self):
+        print('Starting existential resolution...')
         self.child_values = [child.resolve() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
+        result = any(self.child_values)
+        print('Existential resolved')
         return any(self.child_values)
 
 
@@ -172,16 +182,18 @@ class Negation(Sentence):
         super().__init__(scope, task, body)
 
         # body = [[predicate]]
-        print('BODY:', body)
         subpredicate = body[0]
         self.children.append(predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]))
         assert len(self.children) == 1, 'More than one child.'
         print('NEGATION CREATED')
     
     def resolve(self):
+        print('Starting negation resolution...')
         self.child_values = [child.resolve() for child in self.children]
         assert len(self.child_values) == 1, 'More than one child value'
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
+        result = not self.child_values[0]
+        print('Negation resolved.')
         return not self.child_values[0] 
 
 
@@ -192,16 +204,18 @@ class Implication(Sentence):
         super().__init__(scope, task, body)
 
         # body = [[antecedent], [consequent]]
-        print('BODY:', body)
         antecedent, consequent = body 
         self.children.append(predicate_mapping[antecedent[0]](scope, task, antecedent[1:]))
         self.children.append(predicate_mapping[consequent[0]](scope, task, consequent[1:]))
         print('IMPLICATION CREATED')
 
     def resolve(self):
+        print('Starting implication resolution...')
         self.child_values = [child.resolve() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         ante, cons = self.child_values 
+        result = (not ante) or cons
+        print('Implication resolved')
         return (not ante) or cons
 
 # HEAD 
@@ -209,7 +223,6 @@ class HEAD(Conjunction):
     def __init__(self, scope, task, body):
         print('HEAD INITIALIZED')
         super().__init__(scope, task, body)
-        print('BODY:', body)
         print('HEAD CREATED')
 
 
@@ -241,47 +254,103 @@ class TestTask(object):
 
     def cooked(self, objA):
         print('executing sim cooked function')
-        if objA.category == 'chicken':
-            return True 
-        if objA.category == 'apple':
-            return False 
+        return objA.iscooked
 
 
-class TestChicken(object):
+class TestChickenCooked(object):
     def __init__(self):
         self.category = 'chicken'
+        self.iscooked = True
 
-class TestApple(object):
+class TestChickenUncooked(object):
+    def __init__(self):
+        self.category = 'chicken'
+        self.iscooked = False
+
+class TestAppleUncooked(object):
     def __init__(self):
         self.category = 'apple'
+        self.iscooked = False
 
 
 if __name__ == '__main__':
-    parsed_condition = ["and", 
-                        [
-                            ["forall", 
-                                ["?chick", "-", "chicken"], 
-                                ["cooked", "?ch"]
-                            ],
-                            ["or", 
-                                ["exists", 
-                                    ["?ap", "-", "apple"], 
-                                    ["not", 
+    parsed_condition =  [
+                            ["and", 
+                                ["forall", 
+                                    ["?chick", "-", "chicken"], 
+                                    ["cooked", "?ch"]
+                                ],
+                                ["or", 
+                                    ["exists", 
+                                        ["?ap", "-", "apple"], 
+                                        ["not", 
+                                            ["cooked", "?ap"]
+                                        ]
+                                    ],
+                                    ["forall",
+                                        ["?ap", "-", "apple"],
                                         ["cooked", "?ap"]
                                     ]
                                 ],
-                                ["forall",
-                                    ["?ap", "-", "apple"],
-                                    ["cooked", "?ap"]
-                                ]
                             ],
                             ["imply",
                                 ["cooked", "?ap"],
                                 ["cooked", "?chick"]
+                            ]   
+                        ]
+    
+    parsed_condition2 =  [
+                            ["forall",
+                                ["?chick", "-", "chicken"],
+                                ["cooked", "?chick"]
                             ]
                         ]
-                       ]
-    obj_list = [TestChicken(), TestApple(), TestChicken(), TestChicken()]
-    task = TestTask(obj_list)
     
-    compile_condition(parsed_condition, task)
+    parsed_condition3 =  [
+                            ["forall",
+                                ["?chick", "-", "chicken"],
+                                ["not", ["cooked", "?chick"]]
+                            ]
+                        ]
+    
+    parsed_condition4 =  [
+                            ["exists",
+                                ["?chick", "-", "chicken"],
+                                ["cooked", "?chick"]
+                            ]
+                        ]
+
+    parsed_condition5 =  [
+                            ["exists",
+                                ["?chick", "-", "chicken"],
+                                ["not", ["cooked", "?chick"]]
+                            ]
+                        ]
+    
+    parsed_condition6 = [
+                            ["and",
+                                ["cooked", "?chick"],
+                                ["cooked", "?"]
+                            ]
+
+                        ]
+
+
+    # obj_list = [TestChicken(), TestApple(), TestChicken(), TestChicken()]
+    obj_list = [TestChickenCooked(), TestAppleUncooked(), TestChickenUncooked(), TestChickenCooked()]
+    task = TestTask(obj_list)
+
+    parsed_conditions = [
+                            parsed_condition2, 
+                            parsed_condition3, 
+                            parsed_condition4, 
+                            parsed_condition5
+                        ]
+    
+    for i, parsed_condition in enumerate(parsed_conditions):
+        print('CONDITION', i)
+        print('Compiling...')
+        cond = compile_condition(parsed_condition, task)
+        print('\nResolving...')
+        print('Result:', cond.resolve())
+        print('\n\n')
