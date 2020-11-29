@@ -20,9 +20,9 @@ class BinaryAtomicPredicate(AtomicPredicate):
     def __init__(self, scope, task, body):
         super().__init__(scope, task, body)
         assert len(body) == 2, 'Param list should have 2 args'
-        self.input1, self.input2 = body 
+        self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope 
-        self.condition_function = None              # NOTE defined in child 
+        self.condition_function = None              # NOTE defined in subclasses 
 
     def resolve(self):
         try: 
@@ -34,12 +34,13 @@ class UnaryAtomicPredicate(AtomicPredicate):
     def __init__(self, scope, task, body):
         super().__init__(scope, task, body)
         assert len(body) == 1, 'Param list should have 1 arg'
-        self.input = body[0]
+        self.input = body[0].strip('?')
         self.scope = scope 
         self.condition_function = None 
     
     def resolve(self):
         print('Starting cooked resolution...')
+        print('SCOPE:', self.scope)
         try: 
             print('Cooked resolved')
             return self.condition_function(self.scope[self.input])
@@ -132,10 +133,11 @@ class Universal(Sentence):
 
         iterable, subpredicate = body 
         param_label, __, category = iterable
+        param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
         for obj in task.objects:
             if obj.category == category:
-                new_scope = copy.copy(scope)
+                new_scope = copy.copy(scope)                # NOTE shallow copy, so scopes can keep updating I sincerely hope 
                 new_scope[param_label] = obj 
                 # body = [["param_label", "-", "category"], [predicate]]
                 self.children.append(predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
@@ -157,6 +159,7 @@ class Existential(Sentence):
 
         iterable, subpredicate = body 
         param_label, __, category = iterable
+        param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
         for obj in task.objects:
             if obj.category == category:
