@@ -8,7 +8,7 @@ class Sentence(object):
         self.children = []
         self.child_values = []
 
-    def resolve(self):
+    def evaluate(self):
         pass 
 
 
@@ -25,7 +25,7 @@ class BinaryAtomicPredicate(AtomicPredicate):
         self.scope = scope 
         self.condition_function = None              # NOTE defined in subclasses 
 
-    def resolve(self):
+    def evaluate(self):
         try: 
             return self.condition_function(self.scope[self.input1], self.scope[self.input2])
         except KeyError:
@@ -39,14 +39,14 @@ class UnaryAtomicPredicate(AtomicPredicate):
         self.scope = scope 
         self.condition_function = None 
     
-    def resolve(self):
+    def evaluate(self):
         print('Starting cooked resolution...')
         print('SCOPE:', self.scope)
         try: 
-            print('Cooked resolved')
+            print('Cooked evaluated')
             return self.condition_function(self.scope[self.input])
         except KeyError: 
-            print('Cooked resolved with KeyError')
+            print('Cooked evaluated with KeyError')
             return False 
 
 
@@ -92,12 +92,12 @@ class Conjunction(Sentence):
         self.children.extend(child_predicates)
         print('CONJUNCTION CREATED')
     
-    def resolve(self):
+    def evaluate(self):
         print('Starting conjunction resolution...')
-        self.child_values = [child.resolve() for child in self.children]
+        self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = all(self.child_values)
-        print('Conjunction resolved')
+        print('Conjunction evaluated')
         return all(self.child_values)
 
 
@@ -112,12 +112,12 @@ class Disjunction(Sentence):
         self.children.extend(child_predicates)
         print('DISJUNCTION CREATED')
     
-    def resolve(self):
+    def evaluate(self):
         print('Starting disjunction resolution...')
-        self.child_values = [child.resolve() for child in self.children]
+        self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = any(self.child_values)
-        print('Disjunction resolved')
+        print('Disjunction evaluated')
         return any(self.child_values) 
 
 
@@ -139,12 +139,12 @@ class Universal(Sentence):
                 self.children.append(predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
         print('UNIVERSAL CREATED')
 
-    def resolve(self):
+    def evaluate(self):
         print('Starting universal resolution...')
-        self.child_values = [child.resolve() for child in self.children]
+        self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = all(self.child_values)
-        print('Universal resolved')
+        print('Universal evaluated')
         return all(self.child_values)
 
 
@@ -165,12 +165,12 @@ class Existential(Sentence):
                 self.children.append(predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
         print('EXISTENTIAL CREATED')
 
-    def resolve(self):
+    def evaluate(self):
         print('Starting existential resolution...')
-        self.child_values = [child.resolve() for child in self.children]
+        self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = any(self.child_values)
-        print('Existential resolved')
+        print('Existential evaluated')
         return any(self.child_values)
 
 
@@ -187,13 +187,13 @@ class Negation(Sentence):
         assert len(self.children) == 1, 'More than one child.'
         print('NEGATION CREATED')
     
-    def resolve(self):
+    def evaluate(self):
         print('Starting negation resolution...')
-        self.child_values = [child.resolve() for child in self.children]
+        self.child_values = [child.evaluate() for child in self.children]
         assert len(self.child_values) == 1, 'More than one child value'
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = not self.child_values[0]
-        print('Negation resolved.')
+        print('Negation evaluated.')
         return not self.child_values[0] 
 
 
@@ -210,13 +210,13 @@ class Implication(Sentence):
         self.children.append(predicate_mapping[consequent[0]](scope, task, consequent[1:]))
         print('IMPLICATION CREATED')
 
-    def resolve(self):
+    def evaluate(self):
         print('Starting implication resolution...')
-        self.child_values = [child.resolve() for child in self.children]
+        self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         ante, cons = self.child_values 
         result = (not ante) or cons
-        print('Implication resolved')
+        print('Implication evaluated')
         return (not ante) or cons
 
 # HEAD 
@@ -230,26 +230,10 @@ class HEAD(Sentence):
         self.children.append(predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]))
         print('HEAD CREATED')
     
-    def resolve(self):
-        self.child_values = [child.resolve() for child in self.children]
+    def evaluate(self):
+        self.child_values = [child.evaluate() for child in self.children]
         return self.child_values[0]
         
-
-
-#################### EXTERNAL FUNCTIONS ####################
-
-def create_scope():
-    pass
-
-
-def compile_condition(parsed_condition, task, scope=None):
-    scope = scope if scope is not None else {}                  # TODO 
-    return HEAD(scope, task, parsed_condition)
-
-
-def evaluate_condition(compiled_condition):
-    return compile_condition.resolve() 
-
 
 PREDICATE_MAPPING = {
                         # PDDL 
@@ -374,7 +358,7 @@ if __name__ == '__main__':
     for i, parsed_condition in enumerate(parsed_conditions):
         print('CONDITION', i)
         print('Compiling...')
-        cond = compile_condition(parsed_condition, task)
+        cond = HEAD({}, task, parsed_condition)
         print('\nResolving...')
-        print('Result:', cond.resolve())
+        print('Result:', cond.evaluate())
         print('\n\n')

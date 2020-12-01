@@ -149,9 +149,10 @@ class PDDLParser:
         if type(tokens) is list and tokens.pop(0) == 'define':
             self.problem_name = 'unknown'
             self.objects = dict()
-            self.state = []
-            self.positive_goals = []
-            self.negative_goals = []
+            self.initial_state = []
+            # self.positive_goals = []
+            # self.negative_goals = []
+            self.goal_state = []
             while tokens:
                 group = tokens.pop(0)
                 t = group[0]
@@ -178,9 +179,10 @@ class PDDLParser:
                         self.objects['object'] += object_list
                 elif t == ':init':
                     group.pop(0)
-                    self.state = group
+                    self.initial_state = group
                 elif t == ':goal':
-                    self.split_predicates(group[1], self.positive_goals, self.negative_goals, '', 'goals')
+                    # self.split_predicates(group[1], self.positive_goals, self.negative_goals, '', 'goals')
+                    self.split_predicates(group[1], self.goal_state, '', 'goals')
                 else: print(str(t) + ' is not recognized in problem')
         else:
             raise Exception('File ' + problem_filename + ' does not match problem pattern')
@@ -189,7 +191,8 @@ class PDDLParser:
     # Split predicates
     #-----------------------------------------------
 
-    def split_predicates(self, group, pos, neg, name, part):
+    # def split_predicates(self, group, pos, neg, name, part):
+    def split_predicates(self, group, goals, name, part):
         if not type(group) is list:
             raise Exception('Error with ' + name + part)
         if group[0] == 'and':
@@ -197,12 +200,14 @@ class PDDLParser:
         else:
             group = [group]
         for predicate in group:
-            if predicate[0] == 'not':
-                if len(predicate) != 2:
-                    raise Exception('Unexpected not in ' + name + part)
-                neg.append(predicate[-1])
-            else:
-                pos.append(predicate)
+            # if predicate[0] == 'not':
+            #     if len(predicate) != 2:
+            #         raise Exception('Unexpected not in ' + name + part)
+            #     # neg.append(predicate[-1])     # NOTE removed this because I want the negative goals to have "not"
+            #     neg.append(predicate)
+            # else:
+            #     pos.append(predicate)
+            goals.append(predicate)
 
 # ==========================================
 # Main
@@ -225,9 +230,12 @@ if __name__ == '__main__':
     print('----------------------------')
     print('Problem name: ' + parser.problem_name)
     print('Objects: ' + str(parser.objects))
-    print('State: ' + str(parser.state))
-    print('Positive goals: ' + str(parser.positive_goals))
-    print('Negative goals: ' + str(parser.negative_goals))
+    print('Initial state: ' + str(parser.initial_state))
+    # print('Positive goals: ' + str(parser.positive_goals))
+    # print('Negative goals: ' + str(parser.negative_goals))
+    # print('Goals:' + str(parser.goals))
+    for goal in parser.goal_state:
+        print('Goal:', goal)
     print('Predicates:', parser.predicates)
     # parser.parse_domain(domain)
     # print(parser.predicates)
