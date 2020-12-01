@@ -1,7 +1,8 @@
 import copy 
 
 
-#################### BASE ####################
+#################### BASE LOGIC OBJECTS ####################
+
 class Sentence(object):
     def __init__(self, scope, task, body):
         self.children = []
@@ -49,16 +50,8 @@ class UnaryAtomicPredicate(AtomicPredicate):
             return False 
 
 
-def create_scope():
-    pass
-
-
-def compile_condition(parsed_condition, task, scope=None):
-    scope = scope if scope is not None else {}
-    return HEAD(scope, task, parsed_condition)
-
-
 #################### ATOMIC PREDICATES ####################
+
 class Inside(BinaryAtomicPredicate):
     def __init__(self, scope, task, body):
         super().__init__(scope, task, body)
@@ -87,13 +80,15 @@ class Cooked(UnaryAtomicPredicate):
 
 
 #################### RECURSIVE PREDICATES ####################
+
 # -JUNCTIONS
 class Conjunction(Sentence):
     def __init__(self, scope, task, body):
         print('CONJUNCTION INITIALIZED')
         super().__init__(scope, task, body)
 
-        child_predicates = [predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]) for subpredicate in body]
+        new_scope = copy.copy(scope)
+        child_predicates = [predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]) for subpredicate in body]
         self.children.extend(child_predicates)
         print('CONJUNCTION CREATED')
     
@@ -112,7 +107,8 @@ class Disjunction(Sentence):
         super().__init__(scope, task, body)
 
         # body = [[predicate1], [predicate2], ..., [predicateN]]
-        child_predicates = [predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]) for subpredicate in body]
+        new_scope = copy.copy(scope)
+        child_predicates = [predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]) for subpredicate in body]
         self.children.extend(child_predicates)
         print('DISJUNCTION CREATED')
     
@@ -135,9 +131,9 @@ class Universal(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.objects:
+        for obj in task.objects:                            # TODO change this now that I'm not giving task
             if obj.category == category:
-                new_scope = copy.copy(scope)                # NOTE shallow copy, so scopes can keep updating I sincerely hope 
+                new_scope = copy.copy(scope)                
                 new_scope[param_label] = obj 
                 # body = [["param_label", "-", "category"], [predicate]]
                 self.children.append(predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
@@ -185,6 +181,7 @@ class Negation(Sentence):
         super().__init__(scope, task, body)
 
         # body = [[predicate]]
+        new_scope = copy.copy(scope)
         subpredicate = body[0]
         self.children.append(predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]))
         assert len(self.children) == 1, 'More than one child.'
@@ -207,6 +204,7 @@ class Implication(Sentence):
         super().__init__(scope, task, body)
 
         # body = [[antecedent], [consequent]]
+        new_scope = copy.copy(scope)
         antecedent, consequent = body 
         self.children.append(predicate_mapping[antecedent[0]](scope, task, antecedent[1:]))
         self.children.append(predicate_mapping[consequent[0]](scope, task, consequent[1:]))
@@ -222,11 +220,35 @@ class Implication(Sentence):
         return (not ante) or cons
 
 # HEAD 
-class HEAD(Conjunction):
+class HEAD(Sentence):
     def __init__(self, scope, task, body):
         print('HEAD INITIALIZED')
         super().__init__(scope, task, body)
+
+        new_scope = copy.copy(scope)
+        subpredicate = body
+        self.children.append(predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]))
         print('HEAD CREATED')
+    
+    def resolve(self):
+        self.child_values = [child.resolve() for child in self.children]
+        return self.child_values[0]
+        
+
+
+#################### EXTERNAL FUNCTIONS ####################
+
+def create_scope():
+    pass
+
+
+def compile_condition(parsed_condition, task, scope=None):
+    scope = scope if scope is not None else {}                  # TODO 
+    return HEAD(scope, task, parsed_condition)
+
+
+def evaluate_condition(compiled_condition):
+    return compile_condition.resolve() 
 
 
 PREDICATE_MAPPING = {
@@ -251,6 +273,7 @@ predicate_mapping = PREDICATE_MAPPING
 
 
 #################### TEST STUFF ####################
+
 class TestTask(object):
     def __init__(self, obj_list):
         self.objects = obj_list
@@ -258,7 +281,6 @@ class TestTask(object):
     def cooked(self, objA):
         print('executing sim cooked function')
         return objA.iscooked
-
 
 class TestChickenCooked(object):
     def __init__(self):
@@ -277,8 +299,7 @@ class TestAppleUncooked(object):
 
 
 if __name__ == '__main__':
-    parsed_condition =  [
-                            ["and", 
+    parsed_condition = ["and", 
                                 ["forall", 
                                     ["?chick", "-", "chicken"], 
                                     ["cooked", "?ch"]
@@ -296,47 +317,46 @@ if __name__ == '__main__':
                                     ]
                                 ],
                             ],
-                            ["imply",
-                                ["cooked", "?ap"],
-                                ["cooked", "?chick"]
-                            ]   
-                        ]
+                            # ["imply",
+                            #     ["cooked", "?ap"],
+                            #     ["cooked", "?chick"]
+                            # ]   
+                        # ]
     
-    parsed_condition2 =  [
-                            ["forall",
+    parsed_condition2 = ["forall",
                                 ["?chick", "-", "chicken"],
                                 ["cooked", "?chick"]
                             ]
-                        ]
+                        # ]
     
-    parsed_condition3 =  [
-                            ["forall",
+    parsed_condition3 =  ["forall",
                                 ["?chick", "-", "chicken"],
                                 ["not", ["cooked", "?chick"]]
                             ]
-                        ]
+                        # ]
     
-    parsed_condition4 =  [
-                            ["exists",
+    parsed_condition4 =  ["exists",
                                 ["?chick", "-", "chicken"],
                                 ["cooked", "?chick"]
                             ]
-                        ]
+                        # ]
 
-    parsed_condition5 =  [
-                            ["exists",
+    parsed_condition5 = ["exists",
                                 ["?chick", "-", "chicken"],
                                 ["not", ["cooked", "?chick"]]
                             ]
-                        ]
+                        # ]
     
-    parsed_condition6 = [
-                            ["and",
+    parsed_condition6 = ["and",
                                 ["cooked", "?chick"],
                                 ["cooked", "?"]
                             ]
 
-                        ]
+                        # ]
+    parsed_condition7 = ["imply",
+                                ["not", ["cooked", "?ap"]],
+                                ["cooked", "?chick"]
+                            ]
 
 
     # obj_list = [TestChicken(), TestApple(), TestChicken(), TestChicken()]
@@ -347,7 +367,8 @@ if __name__ == '__main__':
                             parsed_condition2, 
                             parsed_condition3, 
                             parsed_condition4, 
-                            parsed_condition5
+                            parsed_condition5,
+                            parsed_condition7
                         ]
     
     for i, parsed_condition in enumerate(parsed_conditions):
