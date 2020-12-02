@@ -3,12 +3,14 @@
 # Maybe try later.  
 
 from tasknet.config import get_definition_filename
-from tasknet.pddl_parser import PDDLParser
-from tasknet.logic import HEAD
+from tasknet.checking.pddl_parser import PDDLParser
+from tasknet.checking.logic import HEAD
  
 
 #################### PARSING ####################
 
+# TODO turn parsing into pure functionality and no classes, 
+# use functions to parse specific ATUS activity + instance 
 class Parser(PDDLParser):
     def __init__(self, atus_activity, instance):
         super().__init__()
@@ -28,7 +30,7 @@ class Parser(PDDLParser):
     def get_initial_state(self):
         return self.initial_state
     
-    def get_goals(self):
+    def get_goal(self):
         return self.goal_state
 
 
@@ -60,7 +62,8 @@ if __name__ == '__main__':
     import pprint
     tnp = Parser('kinematic_checker_testing', 2)
     print('Predicates:', tnp.get_predicates())
-    objects, init_state = tnp.get_initial_state()
+    objects = tnp.get_objects()
+    init_state = tnp.get_initial_state()
     print('Objects:', objects)
     print('Initial state:', init_state)
     goal = tnp.get_goal()

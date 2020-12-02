@@ -1,15 +1,15 @@
 '''
-This code is lightly adapted from https://github.com/pucrs-automated-planning/pddl-parser
+The PDDLParser class is lightly adapted from https://github.com/pucrs-automated-planning/pddl-parser
 Aside from some labeling, most of it is the same. 
 '''
 
 import re
 from tasknet.action import Action
 
-class PDDLParser:
+class PDDLParser(object):
 
     SUPPORTED_REQUIREMENTS = [':strips', ':negative-preconditions', ':typing']
-
+    
     # ------------------------------------------
     # Tokens
     # ------------------------------------------
