@@ -88,7 +88,7 @@ class Conjunction(Sentence):
         super().__init__(scope, task, body)
 
         new_scope = copy.copy(scope)
-        child_predicates = [predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]) for subpredicate in body]
+        child_predicates = [token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]) for subpredicate in body]
         self.children.extend(child_predicates)
         print('CONJUNCTION CREATED')
     
@@ -108,7 +108,7 @@ class Disjunction(Sentence):
 
         # body = [[predicate1], [predicate2], ..., [predicateN]]
         new_scope = copy.copy(scope)
-        child_predicates = [predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]) for subpredicate in body]
+        child_predicates = [token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]) for subpredicate in body]
         self.children.extend(child_predicates)
         print('DISJUNCTION CREATED')
     
@@ -136,7 +136,7 @@ class Universal(Sentence):
                 new_scope = copy.copy(scope)                
                 new_scope[param_label] = obj 
                 # body = [["param_label", "-", "category"], [predicate]]
-                self.children.append(predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
+                self.children.append(token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
         print('UNIVERSAL CREATED')
 
     def evaluate(self):
@@ -162,7 +162,7 @@ class Existential(Sentence):
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
                 # body = [["param_label", "-", "category"], [predicate]]
-                self.children.append(predicate_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
+                self.children.append(token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
         print('EXISTENTIAL CREATED')
 
     def evaluate(self):
@@ -183,7 +183,7 @@ class Negation(Sentence):
         # body = [[predicate]]
         new_scope = copy.copy(scope)
         subpredicate = body[0]
-        self.children.append(predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]))
+        self.children.append(token_mapping[subpredicate[0]](scope, task, subpredicate[1:]))
         assert len(self.children) == 1, 'More than one child.'
         print('NEGATION CREATED')
     
@@ -206,8 +206,8 @@ class Implication(Sentence):
         # body = [[antecedent], [consequent]]
         new_scope = copy.copy(scope)
         antecedent, consequent = body 
-        self.children.append(predicate_mapping[antecedent[0]](scope, task, antecedent[1:]))
-        self.children.append(predicate_mapping[consequent[0]](scope, task, consequent[1:]))
+        self.children.append(token_mapping[antecedent[0]](scope, task, antecedent[1:]))
+        self.children.append(token_mapping[consequent[0]](scope, task, consequent[1:]))
         print('IMPLICATION CREATED')
 
     def evaluate(self):
@@ -227,15 +227,40 @@ class HEAD(Sentence):
 
         new_scope = copy.copy(scope)
         subpredicate = body
-        self.children.append(predicate_mapping[subpredicate[0]](scope, task, subpredicate[1:]))
+        self.children.append(token_mapping[subpredicate[0]](scope, task, subpredicate[1:]))
         print('HEAD CREATED')
     
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
         return self.child_values[0]
+
+
+#################### CHECKING ####################
+
+def create_scope():
+    pass
+    # TODO 
+
+
+def compile_state(parsed_state, task, scope=None):
+    compiled_state = []
+    for parsed_condition in parsed_state:
+        scope = scope if scope is not None else {}
+        compiled_state.append(HEAD(scope, task, body))
+    return compiled_state
+
+
+def evaluate_state(compiled_state):
+    results = {'satisfied': [], 'unsatisfied': []}
+    for i, compiled_condition in enumerate(compiled_state):
+        if compiled_condition.evaluate():
+            results['satisfied'].append(i)
+    return not bool(results['unsatisfied']), results 
         
 
-PREDICATE_MAPPING = {
+#################### TOKEN MAPPING ####################
+
+TOKEN_MAPPING = {
                         # PDDL 
                         'forall': Universal,
                         'exists': Existential,
@@ -253,7 +278,7 @@ PREDICATE_MAPPING = {
                         'cooked': Cooked,
                         # TODO rest of atomic predicates 
                      }
-predicate_mapping = PREDICATE_MAPPING
+token_mapping = TOKEN_MAPPING
 
 
 #################### TEST STUFF ####################
