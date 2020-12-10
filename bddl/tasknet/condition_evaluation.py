@@ -40,10 +40,7 @@ class UnaryAtomicPredicate(AtomicPredicate):
         self.condition_function = None 
     
     def evaluate(self):
-        print('Starting cooked resolution...')
-        print('SCOPE:', self.scope)
         try: 
-            print('Cooked evaluated')
             return self.condition_function(self.scope[self.input])
         except KeyError: 
             print('Cooked evaluated with KeyError')
@@ -93,11 +90,9 @@ class Conjunction(Sentence):
         print('CONJUNCTION CREATED')
     
     def evaluate(self):
-        print('Starting conjunction resolution...')
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = all(self.child_values)
-        print('Conjunction evaluated')
         return all(self.child_values)
 
 
@@ -113,11 +108,9 @@ class Disjunction(Sentence):
         print('DISJUNCTION CREATED')
     
     def evaluate(self):
-        print('Starting disjunction resolution...')
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = any(self.child_values)
-        print('Disjunction evaluated')
         return any(self.child_values) 
 
 
@@ -140,11 +133,9 @@ class Universal(Sentence):
         print('UNIVERSAL CREATED')
 
     def evaluate(self):
-        print('Starting universal resolution...')
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = all(self.child_values)
-        print('Universal evaluated')
         return all(self.child_values)
 
 
@@ -166,11 +157,9 @@ class Existential(Sentence):
         print('EXISTENTIAL CREATED')
 
     def evaluate(self):
-        print('Starting existential resolution...')
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = any(self.child_values)
-        print('Existential evaluated')
         return any(self.child_values)
 
 
@@ -188,12 +177,10 @@ class Negation(Sentence):
         print('NEGATION CREATED')
     
     def evaluate(self):
-        print('Starting negation resolution...')
         self.child_values = [child.evaluate() for child in self.children]
         assert len(self.child_values) == 1, 'More than one child value'
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         result = not self.child_values[0]
-        print('Negation evaluated.')
         return not self.child_values[0] 
 
 
@@ -211,12 +198,10 @@ class Implication(Sentence):
         print('IMPLICATION CREATED')
 
     def evaluate(self):
-        print('Starting implication resolution...')
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
-        ante, cons = self.child_values 
+        ante, cons = self.child_values
         result = (not ante) or cons
-        print('Implication evaluated')
         return (not ante) or cons
 
 # HEAD 
@@ -246,7 +231,8 @@ def compile_state(parsed_state, task, scope=None):
     compiled_state = []
     for parsed_condition in parsed_state:
         scope = scope if scope is not None else {}
-        compiled_state.append(HEAD(scope, task, body))
+        compiled_state.append(HEAD(scope, task, parsed_condition))
+        print('\n')
     return compiled_state
 
 
@@ -255,6 +241,8 @@ def evaluate_state(compiled_state):
     for i, compiled_condition in enumerate(compiled_state):
         if compiled_condition.evaluate():
             results['satisfied'].append(i)
+        else:
+            results['unsatisfied'].append(i)
     return not bool(results['unsatisfied']), results 
         
 
@@ -288,26 +276,98 @@ class TestTask(object):
         self.objects = obj_list
 
     def cooked(self, objA):
-        print('executing sim cooked function')
         return objA.iscooked
 
-class TestChickenCooked(object):
-    def __init__(self):
+class TestChicken(object):
+    def __init__(self, obj_id, iscooked):
         self.category = 'chicken'
-        self.iscooked = True
+        self.iscooked = iscooked
+        self.obj_id = obj_id
 
-class TestChickenUncooked(object):
-    def __init__(self):
-        self.category = 'chicken'
-        self.iscooked = False
-
-class TestAppleUncooked(object):
-    def __init__(self):
+class TestApple(object):
+    def __init__(self, obj_id, iscooked):
         self.category = 'apple'
-        self.iscooked = False
+        self.iscooked = iscooked
+        self.obj_id = obj_id
 
 
 if __name__ == '__main__':
+
+    # TEST FROM FILE 
+    import sys
+    from tasknet.parsing import parse_domain, parse_problem
+    import pprint
+
+    atus_activity = 'checking_test'
+    task_instance = 0
+
+    domain_name, requirements, types, actions, predicates = parse_domain(atus_activity, task_instance)
+    problem_name, objects, initial_state, goal_state = parse_problem(atus_activity, task_instance, domain_name)
+    print('INITIAL STATE')
+    pprint.pprint(initial_state)
+    print('\nGOAL STATE')
+    pprint.pprint(goal_state)
+
+    test_objects = [TestChicken(1, False),
+                    TestChicken(2, False),
+                    TestChicken(3, False),
+                    TestChicken(4, False),
+                    TestApple(1, False),
+                    TestApple(2, False),
+                    TestApple(3, False)]
+    test_task = TestTask(test_objects)
+
+    scope_labels = ['chicken1', 'chicken2', 'chicken3', 'chicken4', 'apple1', 'apple2', 'apple3']
+    test_scope = {label: obj for label, obj in zip(scope_labels, test_objects)}
+    
+    input('\n\nCompile conditions')
+    compiled_state = compile_state(goal_state, test_task, scope=test_scope)
+
+    input()
+    input('Evaluate without action')
+    success, results = evaluate_state(compiled_state)
+    print('SUCCESS:', success)
+    print('Satisfied conditions:', results['satisfied'])
+    print('Unsatisfied conditions:', results['unsatisfied'])
+
+    input()
+    input('\n\nCook chicken1')
+    test_task.objects[0].iscooked = True 
+    success, results = evaluate_state(compiled_state)
+    print('SUCCESS:', success)
+    print('Satisfied conditions:', results['satisfied'])
+    print('Unsatisfied conditions:', results['unsatisfied'])
+
+    input()
+    input('\n\nCook chicken2-4')
+    test_task.objects[1].iscooked = True 
+    test_task.objects[2].iscooked = True 
+    test_task.objects[3].iscooked = True 
+    success, results = evaluate_state(compiled_state)
+    print('SUCCESS:', success)
+    print('Satisfied conditions:', results['satisfied'])
+    print('Unsatisfied conditions:', results['unsatisfied'])
+
+    input()
+    input('\n\nCook apple1')
+    test_task.objects[-3].iscooked = True 
+    success, results = evaluate_state(compiled_state)
+    print('SUCCESS:', success)
+    print('Satisfied conditions:', results['satisfied'])
+    print('Unsatisfied conditions:', results['unsatisfied'])
+
+    input()
+    input('\n\nCook apple2')
+    test_task.objects[-2].iscooked = True
+    success, results = evaluate_state(compiled_state)
+    print('SUCCESS:', success)
+    print('Satisfied conditions:', results['satisfied'])
+    print('Unsatisfied conditions:', results['unsatisfied'])
+
+
+
+
+    sys.exit()
     parsed_condition = ["and", 
                                 ["forall", 
                                     ["?chick", "-", "chicken"], 
@@ -382,8 +442,11 @@ if __name__ == '__main__':
     
     for i, parsed_condition in enumerate(parsed_conditions):
         print('CONDITION', i)
-        print('Compiling...')
         cond = HEAD({}, task, parsed_condition)
         print('\nResolving...')
         print('Result:', cond.evaluate())
-        print('\n\n')
+        print('\n')
+
+    
+    
+
