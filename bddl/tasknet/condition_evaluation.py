@@ -163,6 +163,30 @@ class Existential(Sentence):
         return any(self.child_values)
 
 
+class NQuantifier(Sentence):
+    def __init__(self, scope, task, body):
+        print('NQUANT INITIALIZED')
+        super().__init__(scope, task, body)
+
+        N, iterable, subpredicate = body 
+        self.N = int(N[0])
+        print(self.N)
+        param_label, __, category = iterable
+        param_label = param_label.strip('?')
+        assert __ == '-', 'Middle was not a hyphen'
+        for obj in task.objects: 
+            if obj.category == category:
+                new_scope = copy.copy(scope)
+                new_scope[param_label] = obj
+                self.children.append(token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
+        print('NQUANT INITIALIZED')
+    
+    def evaluate(self):
+        self.child_values = [child.evaluate() for child in self.children]
+        assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
+        return sum(self.child_values) == self.N
+
+
 # NEGATION
 class Negation(Sentence):
     def __init__(self, scope, task, body):
@@ -256,6 +280,9 @@ TOKEN_MAPPING = {
                         'or': Disjunction,
                         'not': Negation,
                         'imply': Implication,
+
+                        # PDDL extensions
+                        'forn': NQuantifier,
 
                         # Atomic predicates 
                         'inside': Inside,
