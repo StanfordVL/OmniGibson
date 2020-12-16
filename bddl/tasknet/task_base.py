@@ -13,10 +13,8 @@ class TaskNetTask(object):
     def __init__(self, atus_activity, task_instance=0):
         self.atus_activity = atus_activity
         self.task_instance = task_instance      # TODO create option to randomly generate 
-        self.sampler = Sampler()
-        self.checker = TNChecker()
-        self.parser = TNParser(atus_activity, task_instance)
-    
+        self.gen_conditions()
+
     def initialize(self, scene_class, object_class):
         '''
         Check self.scene to see if it works for this Task. If not, resample. 
