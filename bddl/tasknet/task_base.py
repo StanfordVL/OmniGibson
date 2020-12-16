@@ -13,7 +13,6 @@ class TaskNetTask(object):
     def __init__(self, atus_activity, task_instance=0):
         self.atus_activity = atus_activity
         self.task_instance = task_instance      # TODO create option to randomly generate 
-        self.gen_conditions()
 
     def initialize(self, scene_class, object_class):
         '''
@@ -55,8 +54,10 @@ class TaskNetTask(object):
     def gen_conditions(self):
         domain_name, requirements, types, actions, predicates = parse_domain(self.atus_activity, self.task_instance)
         problem_name, objects, parsed_initial_conditions, parsed_goal_conditions = parse_problem(self.atus_activity, self.task_instance, domain_name)
-        self.initial_conditions = compile_state(parsed_initial_conditions, self)
-        self.goal_conditions = compile_state(parsed_goal_conditions, self)
+        if bool(parsed_initial_conditions[0]):
+            self.initial_conditions = compile_state(parsed_initial_conditions, self)
+        if bool(parsed_goal_conditions[0]):
+            self.goal_conditions = compile_state(parsed_goal_conditions, self)
 
     def check_success(self):
         '''
