@@ -1,7 +1,7 @@
 import os 
 
 # PATHS 
-TASK_CONFIGS_PATH = 'task_conditions'
+TASK_CONFIGS_PATH =  os.path.join(os.path.dirname(__file__), 'task_conditions')
 SCENE_PATH = 'd:\\ig_dataset\\scenes'
 OBJECT_MODEL_PATH = 'D:\\gibson2_assets\\processed'
 
