@@ -55,8 +55,8 @@ class TaskNetTask(object):
     def gen_conditions(self):
         domain_name, requirements, types, actions, predicates = parse_domain(self.atus_activity, self.task_instance)
         problem_name, objects, parsed_initial_conditions, parsed_goal_conditions = parse_problem(self.atus_activity, self.task_instance, domain_name)
-        self.initial_conditions = compile_conditions(parsed_initial_state, self)
-        self.goal_conditions = compile_conditions(parsed_goal_state, self)
+        self.initial_conditions = compile_state(parsed_initial_state, self)
+        self.goal_conditions = compile_state(parsed_goal_state, self)
 
     def check_success(self):
         '''
