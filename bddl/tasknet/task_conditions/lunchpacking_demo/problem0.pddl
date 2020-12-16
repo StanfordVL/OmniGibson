@@ -1,0 +1,16 @@
+(define (problem packlunch)
+    (:domain igibson)
+    (:objects)
+    (:init ())
+    (:goal
+        (and
+            (forall (?container - container) (exists (?sandwich - sandwich) (inside ?sandwich ?container)))
+            (forall (?container - container) (exists (?chip - chip) (inside ?chip ?container)))
+            (forall (?container - container) (exists (?fruit - fruit) (inside ?fruit ?container)))
+            (forall (?container - container) (exists (?bread - bread) (inside ?bread ?container)))
+            (forall (?container - container) (exists (?yogurt - yogurt) (inside ?yogurt ?container)))
+            (forall (?container - container) (exists (?water - water) (inside ?water ?container)))
+            (forall (?container - container) (exists (?egg - egg) (inside ?egg ?container)))
+        )
+    )
+)
