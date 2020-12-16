@@ -132,8 +132,11 @@ class Universal(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.sampled_simulator_objects:                            # TODO change this now that I'm not giving task
-            if obj.category == category:
+        # for obj in task.sampled_simulator_objects:                            
+        #     if obj.category == category:
+        for i, obj_cat in enumerate(task.sim_obj_categories):      # TODO this code will need to change back once category is a property of the Object itself 
+            if obj_cat == category:
+                obj = task.sampled_simulator_objects[i]
                 new_scope = copy.copy(scope)                
                 new_scope[param_label] = obj 
                 # body = [["param_label", "-", "category"], [predicate]]
@@ -156,8 +159,9 @@ class Existential(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.sampled_simulator_objects:
-            if obj.category == category:
+        for i, obj_cat in enumerate(task.sim_obj_categories):
+            if obj_cat == category:
+                obj = task.sampled_simulator_objects[i]
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
                 # body = [["param_label", "-", "category"], [predicate]]
@@ -182,8 +186,9 @@ class NQuantifier(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.sampled_simulator_objects: 
-            if obj.category == category:
+        for i, obj_cat in enumerate(task.sim_obj_categories):
+            if obj_cat == category:
+                obj = task.sampled_simulator_objects[i]
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
                 self.children.append(token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
