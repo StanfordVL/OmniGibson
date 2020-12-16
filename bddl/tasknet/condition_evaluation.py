@@ -5,7 +5,7 @@ import numpy as np
 #   1. Objects in scope should be bodyIDs
 #   2. Object categories need to be accessed by bodyID
 #   3. Checker functions on the simulator side need to take bodyIDs 
-#   4. `task.objects` needs to be replaced with the right way of accessing+iterating
+#   4. `task.sampled_simulator_objects` needs to be replaced with the right way of accessing+iterating
 #   5. `task` needs to be input properly. It'll be weird to call these in a method
 #           of TaskNetTask and then have to put `self` in 
 
@@ -132,7 +132,7 @@ class Universal(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.objects:                            # TODO change this now that I'm not giving task
+        for obj in task.sampled_simulator_objects:                            # TODO change this now that I'm not giving task
             if obj.category == category:
                 new_scope = copy.copy(scope)                
                 new_scope[param_label] = obj 
@@ -156,7 +156,7 @@ class Existential(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.objects:
+        for obj in task.sampled_simulator_objects:
             if obj.category == category:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
@@ -182,7 +182,7 @@ class NQuantifier(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.objects: 
+        for obj in task.sampled_simulator_objects: 
             if obj.category == category:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
@@ -202,10 +202,10 @@ class ForPairs(Sentence):
         iterable1, iterable2, subpredicate = body
         param_label1, __, category1 = iterable1
         param_label2, __, category2 = iterable2
-        for obj1 in task.objects:
+        for obj1 in task.sampled_simulator_objects:
             if obj1.category == category1:
                 sub = []
-                for obj2 in task.objects:
+                for obj2 in task.sampled_simulator_objects:
                     if obj2.category == category2 and obj1 != obj2:
                         new_scope = copy.copy(scope)
                         new_scope[param_label1] = obj1
@@ -225,10 +225,10 @@ class ForNPairs(Sentence):
         self.N = int(N[0])
         param_label1, __, category1 = iterable1
         param_label2, __, category2 = iterable2
-        for obj1 in task.objects:
+        for obj1 in task.sampled_simulator_objects:
             if obj1.category == category1:
                 sub = []
-                for obj2 in task.objects:
+                for obj2 in task.sampled_simulator_objects:
                     if obj2.category == category2 and obj1 != obj2:
                         new_scope = copy.copy(scope)
                         new_scope[param_label1] = obj1
@@ -414,7 +414,7 @@ if __name__ == '__main__':
 
     input()
     input('\n\nCook chicken1')
-    test_task.objects[0].iscooked = True 
+    test_task.sampled_simulator_objects[0].iscooked = True 
     success, results = evaluate_state(compiled_state)
     print('SUCCESS:', success)
     print('Satisfied conditions:', results['satisfied'])
@@ -422,9 +422,9 @@ if __name__ == '__main__':
 
     input()
     input('\n\nCook chicken2-4')
-    test_task.objects[1].iscooked = True 
-    test_task.objects[2].iscooked = True 
-    test_task.objects[3].iscooked = True 
+    test_task.sampled_simulator_objects[1].iscooked = True 
+    test_task.sampled_simulator_objects[2].iscooked = True 
+    test_task.sampled_simulator_objects[3].iscooked = True 
     success, results = evaluate_state(compiled_state)
     print('SUCCESS:', success)
     print('Satisfied conditions:', results['satisfied'])
@@ -432,7 +432,7 @@ if __name__ == '__main__':
 
     input()
     input('\n\nCook apple1')
-    test_task.objects[-3].iscooked = True 
+    test_task.sampled_simulator_objects[-3].iscooked = True 
     success, results = evaluate_state(compiled_state)
     print('SUCCESS:', success)
     print('Satisfied conditions:', results['satisfied'])
@@ -440,7 +440,7 @@ if __name__ == '__main__':
 
     input()
     input('\n\nCook apple2')
-    test_task.objects[-2].iscooked = True
+    test_task.sampled_simulator_objects[-2].iscooked = True
     success, results = evaluate_state(compiled_state)
     print('SUCCESS:', success)
     print('Satisfied conditions:', results['satisfied'])
