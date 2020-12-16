@@ -2,12 +2,10 @@ import random
 import os
 import sys 
 
-from tasknet.config import TASK_CONFIGS_PATH, SCENE_PATH
+from tasknet.config import get_definition_filename
 from tasknet.sampler import Sampler
-from tasknet.checker import TNChecker 
-from tasknet.parse_compile import TNParser 
-
-task_configs_path, scene_path = TASK_CONFIGS_PATH, SCENE_PATH
+from tasknet.parsing import parse_domain, parse_problem
+from tasknet.condition_evaluation import compile_state, evaluate_state
 
 
 class TaskNetTask(object):
@@ -56,20 +54,18 @@ class TaskNetTask(object):
         
         return self.scene_name, self.scene 
 
+    def gen_conditions(self):
+        domain_name, requirements, types, actions, predicates = parse_domain(self.atus_activity, self.task_instance)
+        problem_name, objects, parsed_initial_conditions, parsed_goal_conditions = parse_problem(self.atus_activity, self.task_instance, domain_name)
+        self.initial_conditions = compile_conditions(parsed_initial_state, self)
+        self.goal_conditions = compile_conditions(parsed_goal_state, self)
+
     def check_success(self):
         '''
         Check if scene satisfies final conditions and report binary success + success score 
         '''
         # print('Passing trivially. Later, check scene against final conditions and report success score.')
-        self.final_conditions = self.gen_final_conditions()
-        failed_conditions = []
-        success = True 
-        for cond_idx, condition in enumerate(self.final_conditions):
-            if not condition(self.sampled_simulator_objects, self.sampled_dsl_objects):
-                failed_conditions.append(cond_idx)   # TODO maybe make this more sensitive. List the condition itself? 
-                                            #       List which objects specifically failed it? 
-                success = False 
-        return success, failed_conditions 
+        return evaluate_state(self.goal_conditions) 
 
     #### CHECKERS ####
     def exist(self, objA):
@@ -104,85 +100,7 @@ class TaskNetTask(object):
         raise NotImplementedError 
     
     def sampleTouching(self, objA, objB):
-        raise NotImplementedError 
-
-    #### TASK ####
-    def gen_initial_conditions(self):
-        # TODO change to parse/compile from current strat(?) Will have to figure out what to do for sampling 
-        # return self.parser.parse_conditions(self.atus_activity, 'initial' + str(self.task_instance))
-        objs, conds = self.parser.get_initial_state()
-        print('OBJECTS:', objs)
-        print('CONDS:', conds)
-        sys.exit()
-        return None
-
-    def gen_final_conditions(self):
-        '''
-        Parses and compiles final conditions into a series of lambda functions, one per line in 
-            final conditions file. Each lambda takes two inputs: a list of simulator objects, and 
-            a list of DSL objects. They should have a one-to-one match. 
-        TODO change to parse/compile from hard-code 
-        '''
-        conditions = []
-        if self.task_instance == 0:
-            # NOTE incomplete
-            def cond0(sim_objects, dsl_objects):
-                eggs = [sim_obj for sim_obj, dsl_obj in zip(sim_objects, dsl_objects) if dsl_obj.category == 'eggs']
-                boxes = [sim_obj for sim_obj, dsl_obj in zip(sim_objects, dsl_objects) if dsl_obj.category == 'casserole_dish']
-                for egg in eggs:
-                    for box in boxes:
-                        if inside(egg, box):
-                            break
-                for box in boxes:
-                    for egg in eggs:
-                        if not inside(egg, box):
-                            return False 
-                return True 
-        
-        elif self.task_instance == 2:
-            def cond0(sim_objects, dsl_objects):
-                objects = organize_objects(sim_objects, dsl_objects)
-                all_containers_have_chips = all([any([self.inside(chips, container) for chips in objects['chips']]) for container in objects['container']])               
-                return all_containers_have_chips
-            
-            def cond1(sim_objects, dsl_objects):
-                objects = organize_objects(sim_objects, dsl_objects)
-                all_containers_have_fruit = all([any([self.inside(fruit, container) for fruit in objects['fruit']]) for container in objects['container']])
-                return all_containers_have_fruit
-
-            def cond2(sim_objects, dsl_objects):
-                objects = organize_objects(sim_objects, dsl_objects)
-                all_containers_have_soda = all([any([self.inside(soda, container) for soda in objects['soda']]) for container in objects['container']])
-                return all_containers_have_soda
-
-            def cond3(sim_objects, dsl_objects):
-                objects = organize_objects(sim_objects, dsl_objects)
-                all_containers_have_eggs = all([any([self.inside(eggs, container) for eggs in objects['eggs']]) for container in objects['container']])
-                return all_containers_have_eggs
-            
-            def cond4(sim_objects, dsl_objects):
-                objects = organize_objects(sim_objects, dsl_objects)
-                containers = [sim_obj for sim_obj, dsl_obj in zip(sim_objects, dsl_objects) if dsl_obj.category == 'container']
-                all_containers_nextto_some_container = []
-                for containerA in containers:
-                    nextto_container = False
-                    for containerB in containers:
-                        if containerA.body_id == containerB.body_id:
-                            continue
-                        elif self.nextTo(containerA, containerB):
-                            nextto_container = True 
-                    all_containers_nextto_some_container.append(nextto_container)
-                return all(all_containers_nextto_some_container)
-            
-            conditions = [
-                            lambda sim_objects, dsl_objects: cond0(sim_objects, dsl_objects),
-                            lambda sim_objects, dsl_objects: cond1(sim_objects, dsl_objects),  
-                            lambda sim_objects, dsl_objects: cond2(sim_objects, dsl_objects),
-                            # lambda sim_objects, dsl_objects: cond3(sim_objects, dsl_objects),
-                            lambda sim_objects, dsl_objects: cond4(sim_objects, dsl_objects)
-                        ]
-            
-        return conditions      
+        raise NotImplementedError     
 
 
 #### Util functions ####

@@ -1,5 +1,13 @@
 import copy 
+import numpy as np 
 
+# TODO: VERY IMPORTANT
+#   1. Objects in scope should be bodyIDs
+#   2. Object categories need to be accessed by bodyID
+#   3. Checker functions on the simulator side need to take bodyIDs 
+#   4. `task.objects` needs to be replaced with the right way of accessing+iterating
+#   5. `task` needs to be input properly. It'll be weird to call these in a method
+#           of TaskNetTask and then have to put `self` in 
 
 #################### BASE LOGIC OBJECTS ####################
 
@@ -187,6 +195,52 @@ class NQuantifier(Sentence):
         return sum(self.child_values) == self.N
 
 
+class ForPairs(Sentence): 
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+
+        iterable1, iterable2, subpredicate = body
+        param_label1, __, category1 = iterable1
+        param_label2, __, category2 = iterable2
+        for obj1 in task.objects:
+            if obj1.category == category1:
+                sub = []
+                for obj2 in task.objects:
+                    if obj2.category == category2 and obj1 != obj2:
+                        new_scope = copy.copy(scope)
+                        new_scope[param_label1] = obj1
+                        new_scope[param_label2] = obj2
+                        sub.append(token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:])) 
+                self.children.append(sub)
+
+    def evaluate(self):
+        self.child_values = np.array([np.array([child.evaluate() for subchild in child]) for child in self.children])
+        return np.all(np.any(self.child_values, axis=1), axis=0) and np.all(np.any(self.child_values, axis=0), axis=0)
+
+class ForNPairs(Sentence):
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+        
+        N, iterable1, iterable2, subpredcate = body
+        self.N = int(N[0])
+        param_label1, __, category1 = iterable1
+        param_label2, __, category2 = iterable2
+        for obj1 in task.objects:
+            if obj1.category == category1:
+                sub = []
+                for obj2 in task.objects:
+                    if obj2.category == category2 and obj1 != obj2:
+                        new_scope = copy.copy(scope)
+                        new_scope[param_label1] = obj1
+                        new_scope[param_label2] = obj2
+                        sub.append(token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
+                self.children.append(sub)
+    
+    def evaluate(self):
+        self.child_values = np.array([np.array([child.evaluate() for subchild in child]) for child in self.children])
+        return (np.sum(np.any(self.child_values, axis=1), axis=0) >= self.N) and (np.sum(np.any(self.chid_values, axis=0), axis=0) >= self.N)
+
+
 # NEGATION
 class Negation(Sentence):
     def __init__(self, scope, task, body):
@@ -283,6 +337,7 @@ TOKEN_MAPPING = {
 
                         # PDDL extensions
                         'forn': NQuantifier,
+                        'forpairs': ForPairs,
 
                         # Atomic predicates 
                         'inside': Inside,
