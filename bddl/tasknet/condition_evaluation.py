@@ -1,5 +1,11 @@
 import copy 
+import numpy as np 
 
+# TODO: VERY IMPORTANT
+#   1. Change logic for checking categories once new iG object is being used 
+#   2. `task.sampled_simulator_objects` needs to be replaced with the right way of accessing+iterating
+#   3. `task` needs to be input properly. It'll be weird to call these in a method
+#           of TaskNetTask and then have to put `self` in 
 
 #################### BASE LOGIC OBJECTS ####################
 
@@ -26,10 +32,11 @@ class BinaryAtomicPredicate(AtomicPredicate):
         self.condition_function = None              # NOTE defined in subclasses 
 
     def evaluate(self):
-        try: 
+        if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
             return self.condition_function(self.scope[self.input1], self.scope[self.input2])
-        except KeyError:
-            return False 
+        else:
+            print('%s and/or %s are not mapped to simulator objects in scope' % (self.input1, self.input2))
+
 
 class UnaryAtomicPredicate(AtomicPredicate):
     def __init__(self, scope, task, body):
@@ -40,11 +47,11 @@ class UnaryAtomicPredicate(AtomicPredicate):
         self.condition_function = None 
     
     def evaluate(self):
-        try: 
+        if self.scope[self.input] is not None: 
             return self.condition_function(self.scope[self.input])
-        except KeyError: 
-            print('Cooked evaluated with KeyError')
-            return False 
+        else:
+            print('%s is not mapped to a simulator object in scope' % self.input)
+            return False
 
 
 #################### ATOMIC PREDICATES ####################
@@ -124,8 +131,11 @@ class Universal(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.objects:                            # TODO change this now that I'm not giving task
-            if obj.category == category:
+        # for obj in task.sampled_simulator_objects:                            
+        #     if obj.category == category:
+        for i, obj_cat in enumerate(task.sim_obj_categories):      # TODO this code will need to change back once category is a property of the Object itself 
+            if obj_cat == category:
+                obj = task.sampled_simulator_objects[i]
                 new_scope = copy.copy(scope)                
                 new_scope[param_label] = obj 
                 # body = [["param_label", "-", "category"], [predicate]]
@@ -148,8 +158,9 @@ class Existential(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.objects:
-            if obj.category == category:
+        for i, obj_cat in enumerate(task.sim_obj_categories):
+            if obj_cat == category:
+                obj = task.sampled_simulator_objects[i]
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
                 # body = [["param_label", "-", "category"], [predicate]]
@@ -174,8 +185,9 @@ class NQuantifier(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-        for obj in task.objects: 
-            if obj.category == category:
+        for i, obj_cat in enumerate(task.sim_obj_categories):
+            if obj_cat == category:
+                obj = task.sampled_simulator_objects[i]
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
                 self.children.append(token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
@@ -185,6 +197,52 @@ class NQuantifier(Sentence):
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]), 'child_values has NoneTypes'
         return sum(self.child_values) == self.N
+
+
+class ForPairs(Sentence): 
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+
+        iterable1, iterable2, subpredicate = body
+        param_label1, __, category1 = iterable1
+        param_label2, __, category2 = iterable2
+        for obj1 in task.sampled_simulator_objects:
+            if obj1.category == category1:
+                sub = []
+                for obj2 in task.sampled_simulator_objects:
+                    if obj2.category == category2 and obj1 != obj2:
+                        new_scope = copy.copy(scope)
+                        new_scope[param_label1] = obj1
+                        new_scope[param_label2] = obj2
+                        sub.append(token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:])) 
+                self.children.append(sub)
+
+    def evaluate(self):
+        self.child_values = np.array([np.array([child.evaluate() for subchild in child]) for child in self.children])
+        return np.all(np.any(self.child_values, axis=1), axis=0) and np.all(np.any(self.child_values, axis=0), axis=0)
+
+class ForNPairs(Sentence):
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+        
+        N, iterable1, iterable2, subpredcate = body
+        self.N = int(N[0])
+        param_label1, __, category1 = iterable1
+        param_label2, __, category2 = iterable2
+        for obj1 in task.sampled_simulator_objects:
+            if obj1.category == category1:
+                sub = []
+                for obj2 in task.sampled_simulator_objects:
+                    if obj2.category == category2 and obj1 != obj2:
+                        new_scope = copy.copy(scope)
+                        new_scope[param_label1] = obj1
+                        new_scope[param_label2] = obj2
+                        sub.append(token_mapping[subpredicate[0]](new_scope, task, subpredicate[1:]))
+                self.children.append(sub)
+    
+    def evaluate(self):
+        self.child_values = np.array([np.array([child.evaluate() for subchild in child]) for child in self.children])
+        return (np.sum(np.any(self.child_values, axis=1), axis=0) >= self.N) and (np.sum(np.any(self.chid_values, axis=0), axis=0) >= self.N)
 
 
 # NEGATION
@@ -246,9 +304,12 @@ class HEAD(Sentence):
 
 #################### CHECKING ####################
 
-def create_scope():
-    pass
-    # TODO 
+def create_scope(object_terms):
+    '''
+    Creates degenerate scope mapping all object parameters to None
+    :param objects: (list of strings) PDDL terms for objects 
+    '''
+    return {object_term: None for object_term in object_terms}
 
 
 def compile_state(parsed_state, task, scope=None):
@@ -283,6 +344,7 @@ TOKEN_MAPPING = {
 
                         # PDDL extensions
                         'forn': NQuantifier,
+                        'forpairs': ForPairs,
 
                         # Atomic predicates 
                         'inside': Inside,
@@ -359,7 +421,7 @@ if __name__ == '__main__':
 
     input()
     input('\n\nCook chicken1')
-    test_task.objects[0].iscooked = True 
+    test_task.sampled_simulator_objects[0].iscooked = True 
     success, results = evaluate_state(compiled_state)
     print('SUCCESS:', success)
     print('Satisfied conditions:', results['satisfied'])
@@ -367,9 +429,9 @@ if __name__ == '__main__':
 
     input()
     input('\n\nCook chicken2-4')
-    test_task.objects[1].iscooked = True 
-    test_task.objects[2].iscooked = True 
-    test_task.objects[3].iscooked = True 
+    test_task.sampled_simulator_objects[1].iscooked = True 
+    test_task.sampled_simulator_objects[2].iscooked = True 
+    test_task.sampled_simulator_objects[3].iscooked = True 
     success, results = evaluate_state(compiled_state)
     print('SUCCESS:', success)
     print('Satisfied conditions:', results['satisfied'])
@@ -377,7 +439,7 @@ if __name__ == '__main__':
 
     input()
     input('\n\nCook apple1')
-    test_task.objects[-3].iscooked = True 
+    test_task.sampled_simulator_objects[-3].iscooked = True 
     success, results = evaluate_state(compiled_state)
     print('SUCCESS:', success)
     print('Satisfied conditions:', results['satisfied'])
@@ -385,7 +447,7 @@ if __name__ == '__main__':
 
     input()
     input('\n\nCook apple2')
-    test_task.objects[-2].iscooked = True
+    test_task.sampled_simulator_objects[-2].iscooked = True
     success, results = evaluate_state(compiled_state)
     print('SUCCESS:', success)
     print('Satisfied conditions:', results['satisfied'])
