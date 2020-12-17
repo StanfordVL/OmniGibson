@@ -2,11 +2,9 @@ import copy
 import numpy as np 
 
 # TODO: VERY IMPORTANT
-#   1. Objects in scope should be bodyIDs
-#   2. Object categories need to be accessed by bodyID
-#   3. Checker functions on the simulator side need to take bodyIDs 
-#   4. `task.sampled_simulator_objects` needs to be replaced with the right way of accessing+iterating
-#   5. `task` needs to be input properly. It'll be weird to call these in a method
+#   1. Change logic for checking categories once new iG object is being used 
+#   2. `task.sampled_simulator_objects` needs to be replaced with the right way of accessing+iterating
+#   3. `task` needs to be input properly. It'll be weird to call these in a method
 #           of TaskNetTask and then have to put `self` in 
 
 #################### BASE LOGIC OBJECTS ####################
@@ -34,10 +32,11 @@ class BinaryAtomicPredicate(AtomicPredicate):
         self.condition_function = None              # NOTE defined in subclasses 
 
     def evaluate(self):
-        try: 
+        if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
             return self.condition_function(self.scope[self.input1], self.scope[self.input2])
-        except KeyError:
-            return False 
+        else:
+            print('%s and/or %s are not mapped to simulator objects in scope' % (self.input1, self.input2))
+
 
 class UnaryAtomicPredicate(AtomicPredicate):
     def __init__(self, scope, task, body):
@@ -48,11 +47,11 @@ class UnaryAtomicPredicate(AtomicPredicate):
         self.condition_function = None 
     
     def evaluate(self):
-        try: 
+        if self.scope[self.input] is not None: 
             return self.condition_function(self.scope[self.input])
-        except KeyError: 
-            print('Cooked evaluated with KeyError')
-            return False 
+        else:
+            print('%s is not mapped to a simulator object in scope' % self.input)
+            return False
 
 
 #################### ATOMIC PREDICATES ####################
@@ -305,9 +304,12 @@ class HEAD(Sentence):
 
 #################### CHECKING ####################
 
-def create_scope():
-    pass
-    # TODO 
+def create_scope(object_terms):
+    '''
+    Creates degenerate scope mapping all object parameters to None
+    :param objects: (list of strings) PDDL terms for objects 
+    '''
+    return {object_term: None for object_term in object_terms}
 
 
 def compile_state(parsed_state, task, scope=None):
