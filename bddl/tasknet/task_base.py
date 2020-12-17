@@ -5,14 +5,22 @@ import sys
 from tasknet.config import get_definition_filename
 from tasknet.sampler import Sampler
 from tasknet.parsing import parse_domain, parse_problem
-from tasknet.condition_evaluation import compile_state, evaluate_state
+from tasknet.condition_evaluation import create_scope, compile_state, evaluate_state
 
 
 class TaskNetTask(object):
+    # TODO 
+    #   1. Update with new object formats 
+    #   2. Update initialize() to work with self.check_setup()
+    #   3. Update initialize() to work with sampler code 
+    #   4. Various other adaptations to be seen 
     
     def __init__(self, atus_activity, task_instance=0):
         self.atus_activity = atus_activity
         self.task_instance = task_instance      # TODO create option to randomly generate 
+        domain_name, requirements, types, actions, predicates = parse_domain(self.atus_activity, self.task_instance)
+        problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(self.atus_activity, self.task_instance, domain_name)
+        self.object_scope = create_scope(self.objects)
 
     def initialize(self, scene_class, object_class):
         '''
@@ -51,17 +59,24 @@ class TaskNetTask(object):
         
         return self.scene_name, self.scene 
 
-    def gen_conditions(self):
-        domain_name, requirements, types, actions, predicates = parse_domain(self.atus_activity, self.task_instance)
-        problem_name, objects, parsed_initial_conditions, parsed_goal_conditions = parse_problem(self.atus_activity, self.task_instance, domain_name)
+    def gen_initial_conditions(self):
         if bool(parsed_initial_conditions[0]):
-            self.initial_conditions = compile_state(parsed_initial_conditions, self)
+            self.initial_conditions = compile_state(parsed_initial_conditions, self, scope=self.object_scope)
+    
+    def gen_goal_conditions(self):
         if bool(parsed_goal_conditions[0]):
-            self.goal_conditions = compile_state(parsed_goal_conditions, self)
+            self.goal_conditions = compile_state(parsed_goal_conditions, self, scope=self.object_scope)
+
+    def check_setup(self):
+        '''
+        Check if scene will be viable for task  
+        :return: binary success + unsatisfied predicates 
+        '''
+        return evaluate_state(self.initial_conditions)
 
     def check_success(self):
         '''
-        Check if scene satisfies final conditions and report binary success + success score 
+        Check if scene satisfies goal conditions and report binary success + unsatisfied predicates  
         '''
         # print('Passing trivially. Later, check scene against final conditions and report success score.')
         return evaluate_state(self.goal_conditions) 
