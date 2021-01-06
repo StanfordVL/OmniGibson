@@ -47,7 +47,7 @@ class TaskNetTask(object):
             if scene_id is not None and scene != scene_id:
                 continue
             self.scene_id = scene
-            self.scene = scene_class(scene, load_object_categories=['counter'])
+            self.scene = scene_class(scene)
 
             # Reject scenes with missing non-sampleable objects
             # Populate scope with simulator objects
