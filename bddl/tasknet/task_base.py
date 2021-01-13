@@ -28,14 +28,11 @@ class TaskNetTask(object):
             self.atus_activity, self.task_instance, domain_name)
         self.object_scope = create_scope(self.objects)
 
-    def initialize(self, scene_class, object_class, scene_id=None):
+    def initialize(self, scene_class, scene_id=None):
         '''
         Check self.scene to see if it works for this Task. If not, resample.
         Populate self.scene with necessary objects.
         :param scene_class: scene class from simulator
-        :param object_class: object class from simulator
-        :param handmade_scene: None (if sampling) or simulator scene self.task_instance, meant to
-                               replace TaskNet-generated scene
         TODO should this method take scene_path and object_path as args, instead of
             asking user to change in tasknet/config.py?
         '''
@@ -48,6 +45,8 @@ class TaskNetTask(object):
                 continue
             self.scene_id = scene
             self.scene = scene_class(scene)
+            # self.scene = scene_class(scene, load_object_categories=[
+            #                          'table', 'counter', 'fridge'])
 
             # Reject scenes with missing non-sampleable objects
             # Populate scope with simulator objects
@@ -82,6 +81,15 @@ class TaskNetTask(object):
         if bool(self.parsed_goal_conditions[0]):
             self.goal_conditions = compile_state(
                 self.parsed_goal_conditions, self, scope=self.object_scope)
+
+    def check_scene(self):
+        raise NotImplementedError
+
+    def import_scene(self):
+        raise NotImplementedError
+
+    def sample(self):
+        raise NotImplementedError
 
     def check_setup(self):
         '''

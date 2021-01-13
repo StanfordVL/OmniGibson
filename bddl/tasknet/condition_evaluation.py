@@ -40,9 +40,9 @@ class BinaryAtomicPredicate(AtomicPredicate):
             print('%s and/or %s are not mapped to simulator objects in scope' %
                   (self.input1, self.input2))
 
-    def sample(self):
+    def sample(self, binary_state):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            return self.sample_function(self.scope[self.input1], self.scope[self.input2])
+            return self.sample_function(self.scope[self.input1], self.scope[self.input2], binary_state)
         else:
             print('%s and/or %s are not mapped to simulator objects in scope' %
                   (self.input1, self.input2))
@@ -77,21 +77,36 @@ class UnaryAtomicPredicate(AtomicPredicate):
 class Inside(BinaryAtomicPredicate):
     def __init__(self, scope, task, body):
         super().__init__(scope, task, body)
-        self.condition_function = task.inside
-        self.sample_function = task.sampleInside
+        self.condition_function = task.properties['inside'].get_binary_state
+        self.sample_function = task.properties['inside'].set_binary_state
 
 
 class NextTo(BinaryAtomicPredicate):
     def __init__(self, scope, task, body):
         super().__init__(scope, task, body)
-        self.condition_function = task.nextTo
+        self.condition_function = task.properties['nextTo'].get_binary_state
+        self.sample_function = task.properties['nextTo'].set_binary_state
 
 
 class OnTop(BinaryAtomicPredicate):
     def __init__(self, scope, task, body):
         super().__init__(scope, task, body)
-        self.condition_function = task.onTop
-        self.sample_function = task.sampleOnTop
+        self.condition_function = task.properties['onTop'].get_binary_state
+        self.sample_function = task.properties['onTop'].set_binary_state
+
+
+class Under(BinaryAtomicPredicate):
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+        self.condition_function = task.properties['under'].get_binary_state
+        self.sample_function = task.properties['under'].set_binary_state
+
+
+class Touching(BinaryAtomicPredicate):
+    def __init__(self, scope, task, body):
+        super().__init__(scope, task, body)
+        self.condition_function = task.properties['touching'].get_binary_state
+        self.sample_function = task.properties['touching'].set_binary_state
 
 
 class Cooked(UnaryAtomicPredicate):
@@ -399,8 +414,8 @@ TOKEN_MAPPING = {
     'inside': Inside,
     'nextto': NextTo,
     'ontop': OnTop,
-    # 'under': Under,
-    # 'touching': Touching,
+    'under': Under,
+    'touching': Touching,
     'cooked': Cooked,
     # TODO rest of atomic predicates
 }
