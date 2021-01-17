@@ -77,5 +77,5 @@ class ObjectTaxonomy(object):
 
 
 if __name__ == "__main__":
-    object_taxonomy = ObjectTaxonomy('test_taxonomy.json')
+    object_taxonomy = ObjectTaxonomy('hierarchy.json')
     embed()
