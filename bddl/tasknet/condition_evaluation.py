@@ -398,27 +398,29 @@ def evaluate_state(compiled_state):
 #################### TOKEN MAPPING ####################
 
 TOKEN_MAPPING = {
-    # PDDL
-    'forall': Universal,
-    'exists': Existential,
-    'and': Conjunction,
-    'or': Disjunction,
-    'not': Negation,
-    'imply': Implication,
+<<<<<<< HEAD
+                        # PDDL 
+                        'forall': Universal,
+                        'exists': Existential,
+                        'and': Conjunction,
+                        'or': Disjunction,
+                        'not': Negation,
+                        'imply': Implication,
 
-    # PDDL extensions
-    'forn': NQuantifier,
-    'forpairs': ForPairs,
+                        # PDDL extensions
+                        'forn': NQuantifier,
+                        'forpairs': ForPairs,
+                        'fornpairs': ForNPairs,
 
-    # Atomic predicates
-    'inside': Inside,
-    'nextto': NextTo,
-    'ontop': OnTop,
-    'under': Under,
-    'touching': Touching,
-    'cooked': Cooked,
-    # TODO rest of atomic predicates
-}
+                        # Atomic predicates 
+                        'inside': Inside,
+                        'nextto': NextTo,
+                        'ontop': OnTop,
+                        'under': Under,
+                        'touching': Touching,
+                        'cooked': Cooked,
+                        # TODO rest of atomic predicates 
+                     }
 token_mapping = TOKEN_MAPPING
 
 
