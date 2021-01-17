@@ -345,6 +345,7 @@ TOKEN_MAPPING = {
                         # PDDL extensions
                         'forn': NQuantifier,
                         'forpairs': ForPairs,
+                        'fornpairs': ForNPairs,
 
                         # Atomic predicates 
                         'inside': Inside,
