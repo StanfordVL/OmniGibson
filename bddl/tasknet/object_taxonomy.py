@@ -12,16 +12,22 @@ class ObjectTaxonomy(object):
             json_obj = json.load(f)
 
         DG = nx.DiGraph()
-        nodes = [json_obj]
+        nodes = [(json_obj, None)]
         while len(nodes) > 0:
             next_nodes = []
-            for node in nodes:
-                DG.add_node(node['name'],
-                            properties=set(['cookable', 'dustable']))
+            for node, parent in nodes:
+                children_names = set()
                 if 'children' in node:
                     for child in node['children']:
-                        next_nodes.append(child)
-                        DG.add_edge(node['name'], child['name'])
+                        next_nodes.append((child, node))
+                        children_names.add(child['name'])
+                parent_name = parent['name'] if parent is not None else None
+                DG.add_node(node['name'],
+                            properties={'cookable', 'dustable'},
+                            children=children_names,
+                            parent=parent_name)
+                for child_name in children_names:
+                    DG.add_edge(node['name'], child_name)
             nodes = next_nodes
         return DG
 
@@ -54,9 +60,22 @@ class ObjectTaxonomy(object):
         assert self.is_valid(object_name)
         return self.taxonomy.nodes[object_name]['properties']
 
+    def children(self, object_name):
+        assert self.is_valid(object_name)
+        return self.taxonomy.nodes[object_name]['children']
+
+    def parent(self, object_name):
+        assert self.is_valid(object_name)
+        return self.taxonomy.nodes[object_name]['parent']
+
+    def is_leaf(self, object_name):
+        assert self.is_valid(object_name)
+        return self.taxonomy.out_degree(object_name) == 0
+
     def has_property(self, object_name, property_name):
         return property_name in self.properties(object_name)
 
 
 if __name__ == "__main__":
     object_taxonomy = ObjectTaxonomy('test_taxonomy.json')
+    embed()

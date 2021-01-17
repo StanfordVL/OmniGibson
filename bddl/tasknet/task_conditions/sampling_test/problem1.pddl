@@ -12,10 +12,10 @@
     )
     (:goal
         (and 
-        (inside (under chip1 fridge1))
-        (inside (under chip2 fridge1))
-        (inside (under chip3 fridge1))
-        (inside (under chip4 fridge1))
+        (not (inside chip1 fridge1))
+        (not (inside chip2 fridge1))
+        (not (inside chip3 fridge1))
+        (not (inside chip4 fridge1))
         )
     )
 )
