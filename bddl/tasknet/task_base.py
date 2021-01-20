@@ -80,12 +80,15 @@ class TaskNetTask(object):
     def gen_initial_conditions(self):
         if bool(self.parsed_initial_conditions[0]):
             self.initial_conditions = compile_state(
-                [cond for cond in self.parsed_initial_conditions if cond[0] != 'inroom'], self, scope=self.object_scope)
+                [cond for cond in self.parsed_initial_conditions if cond[0] != 'inroom'], 
+                self, 
+                scope=self.object_scope, 
+                object_map=self.objects)
 
     def gen_goal_conditions(self):
         if bool(self.parsed_goal_conditions[0]):
             self.goal_conditions = compile_state(
-                self.parsed_goal_conditions, self, scope=self.object_scope)
+                self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
 
     def check_scene(self):
         raise NotImplementedError
