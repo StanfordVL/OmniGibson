@@ -27,6 +27,11 @@ class TaskNetTask(object):
         problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
             self.atus_activity, self.task_instance, domain_name)
         self.object_scope = create_scope(self.objects)
+        self.obj_inst_to_obj_cat = {
+            obj_inst: obj_cat
+            for obj_cat in self.objects
+            for obj_inst in self.objects[obj_cat]
+        }
 
     def initialize(self, scene_class, scene_id=None):
         '''
@@ -75,7 +80,7 @@ class TaskNetTask(object):
     def gen_initial_conditions(self):
         if bool(self.parsed_initial_conditions[0]):
             self.initial_conditions = compile_state(
-                self.parsed_initial_conditions, self, scope=self.object_scope)
+                [cond for cond in self.parsed_initial_conditions if cond[0] != 'inroom'], self, scope=self.object_scope)
 
     def gen_goal_conditions(self):
         if bool(self.parsed_goal_conditions[0]):
