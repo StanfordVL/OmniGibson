@@ -9,9 +9,6 @@ class OfflineObject:
         self.update_object_properties(obj_data)
         self.body_id = body_id
 
-    def get_body_id(self):
-        return self.body_id
-
     def prepare_object_properties(self):
         self.properties_name = ['onTop', 'inside',
                                 'nextTo', 'under', 'touching']
@@ -43,15 +40,8 @@ class OfflineObject:
             else:
                 print("unsupported")
 
-    def set_position_orientation(self, pos, orn):
-        self.pos = pos
-        self.orn = orn
-
 
 class OfflineTask(TaskNetTask):
-    def __init__(self, task_type, task_instance):
-        super().__init__(task_type, task_instance)
-
     def prepare_object_properties(self):
         self.properties_name = get_all_object_properties()
         self.properties = {}
