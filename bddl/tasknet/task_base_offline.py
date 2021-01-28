@@ -51,10 +51,6 @@ class OfflineObject:
 class OfflineTask(TaskNetTask):
     def __init__(self, task_type, task_instance):
         super().__init__(task_type, task_instance)
-        self.sim_obj_categories = list()
-        self.sampled_simulator_objects = list()
-        self.scene_id = None
-        self.scene = None
 
     def prepare_object_properties(self):
         self.properties_name = get_all_object_properties()
@@ -62,7 +58,7 @@ class OfflineTask(TaskNetTask):
         for prop_name in self.properties_name:
             self.properties[prop_name] = get_object_property_class(prop_name)
 
-    def initialize(self, object_map, frame_data, scene_id=None):
+    def initialize(self, object_map, frame_data):
         '''
         TODO should this method take scene_path and object_path as args, instead of
             asking user to change in tasknet/config.py?
@@ -74,10 +70,6 @@ class OfflineTask(TaskNetTask):
                 body_id = object_map[obj]
                 obj_data = frame_data[f"body_id_{body_id}"]
                 self.object_scope[obj] = OfflineObject(body_id, obj_data)
-                self.sim_obj_categories.append(object_group)
-                self.sampled_simulator_objects.append(self.object_scope[obj])
 
         self.gen_initial_conditions()
         self.gen_goal_conditions()
-
-        return self.scene_id, self.scene

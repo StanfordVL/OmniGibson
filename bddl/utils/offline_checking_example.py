@@ -48,16 +48,16 @@ def main():
     data = h5py.File("./parsed_log.hdf5")
     igtn_task = OfflineTask("lunchpacking_demo", task_instance=0)
     initial_frame = data['0']['physics_data']
-    igtn_task.initialize(object_map=sim_object_catalogue, frame_data=initial_frame, scene_id=0)
+    igtn_task.initialize(object_map=sim_object_catalogue, frame_data=initial_frame)
 
     for i in sorted(data.keys(), key = lambda x: int(x)):
-        for obj in igtn_task.sampled_simulator_objects:
+        for obj in igtn_task.object_scope.values():
             obj.update_object_properties(data[i]['physics_data'][f'body_id_{obj.body_id}'])
         print(igtn_task.check_success())
 
     # last frame
     # i = sorted(data.keys(), key = lambda x: int(x))[-1]
-    # for obj in igtn_task.sampled_simulator_objects:
+    # for obj in igtn_task.object_scope.values():
     #     obj.update_object_properties(data[i]['physics_data'][f'body_id_{obj.body_id}'])
 
 if __name__ == "__main__":
