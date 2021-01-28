@@ -18,8 +18,9 @@ class TaskNetTask(object):
     #   3. Update initialize() to work with sampler code
     #   4. Various other adaptations to be seen
 
-    def __init__(self, atus_activity, task_instance=0):
+    def __init__(self, atus_activity, task_instance=0, scene_path=SCENE_PATH):
         self.atus_activity = atus_activity
+        self.scene_path = scene_path
         # TODO create option to randomly generate
         self.task_instance = task_instance
         domain_name, requirements, types, actions, predicates = parse_domain(
@@ -42,7 +43,7 @@ class TaskNetTask(object):
             asking user to change in tasknet/config.py?
         '''
 
-        scenes = os.listdir(SCENE_PATH)
+        scenes = os.listdir(self.scene_path)
         random.shuffle(scenes)
         accept_scene = False
         for scene in scenes:

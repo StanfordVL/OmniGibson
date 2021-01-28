@@ -2,10 +2,8 @@ import os
 
 # PATHS 
 TASK_CONFIGS_PATH =  os.path.join(os.path.dirname(__file__), 'task_conditions')
-# SCENE_PATH = 'd:\\ig_dataset\\scenes'
-SCENE_PATH = 'c:\\Users\\michael\\Repositories\\iGibson\\gibson2\\data\\ig_dataset\\scenes'
+SCENE_PATH = 'd:\\ig_dataset\\scenes'
 OBJECT_MODEL_PATH = 'D:\\gibson2_assets\\processed'
-# SCENE_PATH = 'c:\\Users\\michael\\Repositories\\iGibson\\gibson2\\data\\assets\models\'
 
 # PDDL 
 SUPPORTED_PDDL_REQUIREMENTS = [':strips', ':negative-preconditions', ':typing', ':adl']
