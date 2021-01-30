@@ -44,9 +44,9 @@ class BaseObject(object):
     def aabb(self):     # TODO do I need this 
         pass 
         
-    def populate_object_properties(self, object_taxonomy):
-        object_properties = {}     # TODO obtain by traversing object_taxonomy, hopefully with builtin functions
-        self.object_properties.update(object_properties)
+    def populate_object_states(self, object_taxonomy):
+        object_states = {}     # TODO obtain by traversing object_taxonomy, hopefully with builtin functions
+        self.object_states.update(object_states)
         
     
 

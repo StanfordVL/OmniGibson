@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+from gibson2.object_states.object_state_base import AbsoluteObjectState, BooleanState, RelativeObjectState
 
 # TODO: VERY IMPORTANT
 #   1. Change logic for checking categories once new iG object is being used
@@ -28,98 +29,88 @@ class AtomicPredicate(Sentence):
 
 
 class BinaryAtomicPredicate(AtomicPredicate):
+    STATE_NAME = None
+
     def __init__(self, scope, task, body, object_map):
         super().__init__(scope, task, body, object_map)
         assert len(body) == 2, 'Param list should have 2 args'
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
-        self.condition_function = None
-        self.sample_function = None
 
     def evaluate(self):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            return self.condition_function(self.scope[self.input1], self.scope[self.input2])
+            state = self.scope[self.input1].states[self.STATE_NAME]
+            assert isinstance(state, BooleanState)
+            assert isinstance(state, RelativeObjectState)
+
+            return state.get_value(self.scope[self.input2])
         else:
             print('%s and/or %s are not mapped to simulator objects in scope' %
                   (self.input1, self.input2))
 
     def sample(self, binary_state):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            return self.sample_function(self.scope[self.input1], self.scope[self.input2], binary_state)
+            state = self.scope[self.input1].states[self.STATE_NAME]
+            assert isinstance(state, BooleanState)
+            assert isinstance(state, RelativeObjectState)
+
+            return state.set_value(self.scope[self.input2], binary_state)
         else:
             print('%s and/or %s are not mapped to simulator objects in scope' %
                   (self.input1, self.input2))
 
 
 class UnaryAtomicPredicate(AtomicPredicate):
+    STATE_NAME = None
+
     def __init__(self, scope, task, body, object_map):
         super().__init__(scope, task, body, object_map)
         assert len(body) == 1, 'Param list should have 1 arg'
         self.input = body[0].strip('?')
         self.scope = scope
-        self.condition_function = None
-        self.sample_function = None
 
     def evaluate(self):
         if self.scope[self.input] is not None:
-            return self.condition_function(self.scope[self.input])
+            state = self.scope[self.input].states[self.STATE_NAME]
+            assert isinstance(state, BooleanState)
+            assert isinstance(state, AbsoluteObjectState)
+
+            return state.get_value()
         else:
             print('%s is not mapped to a simulator object in scope' % self.input)
             return False
 
-    def sample(self):
+    def sample(self, binary_state):
         if self.scope[self.input] is not None:
-            return self.sample_function(self.scope[self.input])
+            state = self.scope[self.input].states[self.STATE_NAME]
+            assert isinstance(state, BooleanState)
+            assert isinstance(state, AbsoluteObjectState)
+
+            return state.set_value(binary_state)
         else:
             print('%s is not mapped to a simulator object in scope' % self.input)
             return False
 
 #################### ATOMIC PREDICATES ####################
 
-
-class Inside(BinaryAtomicPredicate):
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-        self.condition_function = task.properties['inside'].get_binary_state
-        self.sample_function = task.properties['inside'].set_binary_state
+def get_unary_atomic_predicate_for_state(state_name):
+    return type(state_name + "Predicate", (UnaryAtomicPredicate,), {'STATE_NAME': state_name})
 
 
-class NextTo(BinaryAtomicPredicate):
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-        self.condition_function = task.properties['nextTo'].get_binary_state
-        self.sample_function = task.properties['nextTo'].set_binary_state
+def get_binary_atomic_predicate_for_state(state_name):
+    return type(state_name + "Predicate", (BinaryAtomicPredicate,), {'STATE_NAME': state_name})
 
 
-class OnTop(BinaryAtomicPredicate):
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-        self.condition_function = task.properties['onTop'].get_binary_state
-        self.sample_function = task.properties['onTop'].set_binary_state
-
-
-class Under(BinaryAtomicPredicate):
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-        self.condition_function = task.properties['under'].get_binary_state
-        self.sample_function = task.properties['under'].set_binary_state
-
-
-class Touching(BinaryAtomicPredicate):
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-        self.condition_function = task.properties['touching'].get_binary_state
-        self.sample_function = task.properties['touching'].set_binary_state
-
-
-class Cooked(UnaryAtomicPredicate):
+# TODO: Remove this when tests support temperature-based cooked.
+class LegacyCookedForTesting(UnaryAtomicPredicate):
     def __init__(self, scope, task, body, object_map):
         print('COOKED INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
-        self.condition_function = task.cooked
         print('COOKED CREATED')
 
+    def evaluate(self):
+        return self.task.cooked(self.scope[self.input])
 
 #################### RECURSIVE PREDICATES ####################
 
@@ -409,12 +400,12 @@ TOKEN_MAPPING = {
     'fornpairs': ForNPairs,
 
     # Atomic predicates
-    'inside': Inside,
-    'nextto': NextTo,
-    'ontop': OnTop,
-    'under': Under,
-    'touching': Touching,
-    'cooked': Cooked,
+    'inside': get_binary_atomic_predicate_for_state('inside'),
+    'nextto': get_binary_atomic_predicate_for_state('nextTo'),
+    'ontop': get_binary_atomic_predicate_for_state('onTop'),
+    'under': get_binary_atomic_predicate_for_state('under'),
+    'touching': get_binary_atomic_predicate_for_state('touching'),
+    'cooked': LegacyCookedForTesting, # get_unary_atomic_predicate_for_state('cooked'),
     # TODO rest of atomic predicates
 }
 token_mapping = TOKEN_MAPPING
