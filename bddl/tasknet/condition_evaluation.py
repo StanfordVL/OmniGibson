@@ -1,6 +1,5 @@
 import copy
 import numpy as np
-from gibson2.object_states.object_state_base import AbsoluteObjectState, BooleanState, RelativeObjectState
 
 # TODO: VERY IMPORTANT
 #   1. Change logic for checking categories once new iG object is being used
@@ -40,8 +39,6 @@ class BinaryAtomicPredicate(AtomicPredicate):
     def evaluate(self):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
             state = self.scope[self.input1].states[self.STATE_NAME]
-            assert isinstance(state, BooleanState)
-            assert isinstance(state, RelativeObjectState)
 
             return state.get_value(self.scope[self.input2])
         else:
@@ -51,8 +48,6 @@ class BinaryAtomicPredicate(AtomicPredicate):
     def sample(self, binary_state):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
             state = self.scope[self.input1].states[self.STATE_NAME]
-            assert isinstance(state, BooleanState)
-            assert isinstance(state, RelativeObjectState)
 
             return state.set_value(self.scope[self.input2], binary_state)
         else:
@@ -72,8 +67,6 @@ class UnaryAtomicPredicate(AtomicPredicate):
     def evaluate(self):
         if self.scope[self.input] is not None:
             state = self.scope[self.input].states[self.STATE_NAME]
-            assert isinstance(state, BooleanState)
-            assert isinstance(state, AbsoluteObjectState)
 
             return state.get_value()
         else:
@@ -83,8 +76,6 @@ class UnaryAtomicPredicate(AtomicPredicate):
     def sample(self, binary_state):
         if self.scope[self.input] is not None:
             state = self.scope[self.input].states[self.STATE_NAME]
-            assert isinstance(state, BooleanState)
-            assert isinstance(state, AbsoluteObjectState)
 
             return state.set_value(binary_state)
         else:
