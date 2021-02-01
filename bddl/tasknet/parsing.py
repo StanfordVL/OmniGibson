@@ -254,19 +254,75 @@ class Action(object):
             g.append(pred)
         return g
 
+
+######### UTIL ##########
+
+def add_pddl_whitespace(pddl_file=None, string=None):
+    if pddl_file is not None:
+        with open(pddl_file, 'r') as f:
+            raw_pddl = f.read()
+    elif string is not None:
+        raw_pddl = string
+
+    total_characters = len(raw_pddl)
+
+    nest_level = 0
+    refined_pddl = ""
+    new_block = ""
+    char_i = 0
+    last_paren_type = None
+    while char_i < total_characters:
+        if raw_pddl[char_i] == "(":
+            new_block = '\n' + '    ' * nest_level + raw_pddl[char_i]  
+            last_paren_type = "("
+            char_i += 1
+            while raw_pddl[char_i] != ' ' and char_i < total_characters:
+                new_block += raw_pddl[char_i] 
+                char_i += 1
+            refined_pddl += new_block + ' '
+            nest_level += 1
+            print('NEW BLOCK:', new_block)
+        elif raw_pddl[char_i] == ")":
+            nest_level -= 1 
+            if last_paren_type == ")":
+                refined_pddl += "\n" + '    ' * nest_level
+            refined_pddl += raw_pddl[char_i] 
+            last_paren_type = ")"
+        else:
+            refined_pddl += raw_pddl[char_i] 
+        char_i += 1
+
+    with open('task_conditions/parsing_tests/test_app_output_whitespace.pddl', 'w') as f:
+        f.write(refined_pddl)        
+
+    return refined_pddl
+
+
+    # for char in raw_pddl:
+    #     if char == '(':
+    #         nest_level += 1
+    #     elif char == ')':
+    #         nest_level -= 1
+    #     refined_pddl += char
+
+
+
+
 if __name__ == '__main__':
-    import sys, pprint 
-    atus_activity = sys.argv[1]
-    task_instance = sys.argv[2]
-    print('----------------------------')
-    # pprint.pprint(scan_tokens(atus_activity, instance))
-    print('----------------------------')
-    # pprint.pprint(scan_tokens(atus_activity, instance))
-    print('----------------------------')
-    domain_name, requirements, types, actions, predicates = parse_domain(atus_activity, task_instance)
-    problem_name, objects, initial_state, goal_state = parse_problem(atus_activity, task_instance, domain_name)
-    print('----------------------------')
-    print('Problem name:', problem_name)
-    print('Objects:', objects)
-    print('Initial state:', initial_state)
-    print('Goal state:', goal_state)
+    refined_pddl = add_pddl_whitespace(pddl_file="task_conditions/parsing_tests/test_app_output.pddl")
+    print(refined_pddl)
+    # import sys, pprint 
+    # atus_activity = sys.argv[1]
+    # task_instance = sys.argv[2]
+    # print('----------------------------')
+    # # pprint.pprint(scan_tokens(atus_activity, instance))
+    # print('----------------------------')
+    # # pprint.pprint(scan_tokens(atus_activity, instance))
+    # print('----------------------------')
+    # domain_name, requirements, types, actions, predicates = parse_domain(atus_activity, task_instance)
+    # problem_name, objects, initial_state, goal_state = parse_problem(atus_activity, task_instance, domain_name)
+    # print('----------------------------')
+    # print('Problem name:', problem_name)
+    # print('Objects:', objects)
+    # print('Initial state:', initial_state)
+    # print('Goal state:', goal_state)
