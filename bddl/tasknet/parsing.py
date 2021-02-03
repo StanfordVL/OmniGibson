@@ -276,12 +276,12 @@ def add_pddl_whitespace(pddl_file=None, string=None):
             new_block = '\n' + '    ' * nest_level + raw_pddl[char_i]  
             last_paren_type = "("
             char_i += 1
-            while raw_pddl[char_i] != ' ' and char_i < total_characters:
+            while (raw_pddl[char_i] not in [' ', ')']) and char_i < total_characters:
                 new_block += raw_pddl[char_i] 
                 char_i += 1
-            refined_pddl += new_block + ' '
-            nest_level += 1
-            print('NEW BLOCK:', new_block)
+            refined_pddl += new_block + raw_pddl[char_i]
+            if raw_pddl[char_i] == ' ':
+                nest_level += 1
         elif raw_pddl[char_i] == ")":
             nest_level -= 1 
             if last_paren_type == ")":
