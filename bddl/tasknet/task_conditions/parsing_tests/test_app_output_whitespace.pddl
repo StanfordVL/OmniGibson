@@ -1,4 +1,3 @@
-
 (:goal 
     (and 
         (forall 
