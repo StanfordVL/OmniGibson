@@ -257,7 +257,7 @@ class Action(object):
 
 ######### UTIL ##########
 
-def add_pddl_whitespace(pddl_file=None, string=None):
+def add_pddl_whitespace(pddl_file=None, string=None, save=True):
     if pddl_file is not None:
         with open(pddl_file, 'r') as f:
             raw_pddl = f.read()
@@ -292,8 +292,9 @@ def add_pddl_whitespace(pddl_file=None, string=None):
             refined_pddl += raw_pddl[char_i] 
         char_i += 1
 
-    with open('task_conditions/parsing_tests/test_app_output_whitespace.pddl', 'w') as f:
-        f.write(refined_pddl)        
+    if save:
+        with open('task_conditions/parsing_tests/test_app_output_whitespace.pddl', 'w') as f:
+            f.write(refined_pddl)        
 
     return refined_pddl
 

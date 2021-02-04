@@ -2,54 +2,29 @@
 (:goal 
     (and 
         (forall 
-            (?soapsuds - soapsuds) 
-            (inside ?soapsuds ?sink1)
-        ) 
-        (exists 
-            (?cabinet - cabinet) 
-            (forall 
-                (?cup - cup) 
-                (and 
-                    (inside ?cup ?cabinet) 
-                    (scrubbed ?cup)
-                )
+            (?basket - basket) 
+            (forn 
+                (2) 
+                (?egg - egg) 
+                (inside ?egg ?basket)
             )
         ) 
-        (exists 
-            (?cabinet - cabinet) 
-            (forall 
-                (?bowl - bowl) 
-                (and 
-                    (inside ?bowl?cabinet) 
-                    (scrubbed ?bowl)
-                )
-            )
+        (forpairs 
+            (?chocolate - chocolate) 
+            (?basket - basket) 
+            (inside ?chocolate ?basket)
         ) 
-        (exists 
-            (?cabinet - cabinet) 
-            (forall 
-                (?spoon - spoon) 
-                (and 
-                    (inside ?spoon ?cabinet) 
-                    (scrubbed ?spoon)
-                )
-            )
+        (forpairs 
+            (?coloring_material - coloring_material) 
+            (?basket - basket) 
+            (inside ?coloring_material ?basket)
         ) 
-        (exists 
-            (?cabinet - cabinet) 
-            (forall 
-                (?dish - dish) 
-                (and 
-                    (inside ?dish ?dish) 
-                    (scrubbed ?dish)
-                )
-            )
-        ) 
-        (exists 
-            (?cabinet - cabinet) 
-            (and 
-                (inside ?pot1 ?cabinet) 
-                (scrubbed ?pot1)
+        (forall 
+            (?basket - basket) 
+            (forn 
+                (2) 
+                (?crayon - crayon) 
+                (inside ?crayon ?basket)
             )
         )
     )

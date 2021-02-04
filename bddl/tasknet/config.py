@@ -21,7 +21,7 @@ def get_definition_filename(atus_activity, instance, domain=False):
     if domain:
         return os.path.join(TASK_CONFIGS_PATH, 'domain_igibson.pddl')
     else:
-        return os.path.join(TASK_CONFIGS_PATH, atus_activity, 'problem%s.pddl' % instance)
+        return os.path.join(TASK_CONFIGS_PATH, atus_activity, f"problem{instance}.pddl")
 
 
 
