@@ -1,4 +1,4 @@
-(define (problem serving_hors_d_oeuvres_1
+(define (problem serving_hors_d_oeuvres_1)
     (:domain igibson)
 
     (:objects

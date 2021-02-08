@@ -1,4 +1,4 @@
-(define (problem packing_lunches_1
+(define (problem packing_lunches_1)
     (:domain igibson)
 
     (:objects

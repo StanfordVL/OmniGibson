@@ -1,4 +1,4 @@
-(define (problem re-shelving_library_books_1
+(define (problem re-shelving_library_books_1)
     (:domain igibson)
 
     (:objects

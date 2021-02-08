@@ -1,4 +1,4 @@
-(define (problem organizing_school_stuff_1
+(define (problem organizing_school_stuff_1)
     (:domain igibson)
 
     (:objects

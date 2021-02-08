@@ -1,4 +1,4 @@
-(define (problem assembling_gift_baskets_0
+(define (problem assembling_gift_baskets_0)
     (:domain igibson)
 
     (:objects
