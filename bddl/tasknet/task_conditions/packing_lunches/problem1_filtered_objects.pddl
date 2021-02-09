@@ -13,7 +13,7 @@
     	plum1 plum2 plum3 plum4 - plum
     	dinner_napkin1 dinner_napkin2 dinner_napkin3 dinner_napkin4 - dinner_napkin
     	chocolate_box1 chocolate_box2 chocolate_box3 chocolate_box4 - chocolate_box
-    	backpack1 backpack2 backpack3 backpack4 - backpack
+    	basket1 basket2 basket3 basket4 - basket
     )
     
     (:init 
@@ -98,10 +98,10 @@
             (ontop chocolate_box4 shelf1)
         ) 
         (and 
-            (ontop backpack1 counter1) 
-            (ontop backpack2 counter1) 
-            (ontop backpack3 counter1) 
-            (ontop backpack4 counter1)
+            (ontop basket1 counter1) 
+            (ontop basket2 counter1) 
+            (ontop basket3 counter1) 
+            (ontop basket4 counter1)
         ) 
         (inroom counter1 kitchen) 
         (inroom fridge1 kitchen) 
@@ -112,7 +112,7 @@
         (and 
             (forn 
                 (4) 
-                (?backpack - backpack) 
+                (?basket - basket) 
                 (and 
                     (fornpairs 
                         (4) 
@@ -120,7 +120,7 @@
                         (?hamburger - hamburger) 
                         (and 
                             (inside ?hamburger ?bag) 
-                            (inside ?bag ?backpack) 
+                            (inside ?bag ?basket) 
                             (not 
                                 (open ?bag)
                             )
@@ -132,7 +132,7 @@
                         (?plum - plum) 
                         (and 
                             (inside ?plum ?bag) 
-                            (inside ?bag ?backpack) 
+                            (inside ?bag ?basket) 
                             (not 
                                 (open ?bag)
                             )
@@ -142,34 +142,34 @@
             ) 
             (fornpairs 
                 (4) 
-                (?backpack - backpack) 
+                (?basket - basket) 
                 (?dinner_napkin - dinner_napkin) 
-                (inside ?dinner_napkin ?backpack)
+                (inside ?dinner_napkin ?basket)
             ) 
             (fornpairs 
                 (4) 
-                (?backpack - backpack) 
+                (?basket - basket) 
                 (?water - water) 
-                (inside ?water ?backpack)
+                (inside ?water ?basket)
             ) 
             (fornpairs 
                 (4) 
-                (?backpack - backpack) 
+                (?basket - basket) 
                 (?apple - apple) 
-                (inside ?apple ?backpack)
+                (inside ?apple ?basket)
             ) 
             (fornpairs 
                 (4) 
-                (?backpack - backpack) 
+                (?basket - basket) 
                 (?chocolate_box - chocolate_box) 
-                (inside ?chocolate_box ?backpack)
+                (inside ?chocolate_box ?basket)
             ) 
             (forall 
-                (?backpack - backpack) 
+                (?basket - basket) 
                 (and 
-                    (ontop ?backpack ?counter1) 
+                    (ontop ?basket ?counter1) 
                     (not 
-                        (open ?backpack)
+                        (open ?basket)
                     )
                 )
             )

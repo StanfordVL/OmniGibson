@@ -2,7 +2,7 @@
     (:domain igibson)
 
     (:objects
-        backpack1 - backpack
+        basket1 - basket
         sofa1 - sofa
         notebook1 notebook2 notebook3 notebook4 notebook5 - notebook
         sofa_chair1 - sofa_chair
@@ -15,7 +15,7 @@
     )
     
     (:init 
-        (ontop backpack1 sofa1) 
+        (ontop basket1 sofa1) 
         (ontop notebook1 sofa_chair1) 
         (ontop notebook2 sofa_chair1) 
         (nextto notebook3 sofa_chair1) 
@@ -32,16 +32,16 @@
     
     (:goal 
         (and 
-            (ontop ?backpack1 ?sofa_chair1) 
+            (ontop ?basket1 ?sofa_chair1) 
             (forall 
                 (?pen - pen) 
-                (inside ?pen ?backpack1)
+                (inside ?pen ?basket1)
             ) 
             (forall 
                 (?pencil - pencil) 
-                (inside ?pencil ?backpack1)
+                (inside ?pencil ?basket1)
             ) 
-            (inside ?laptop1 ?backpack1) 
+            (inside ?laptop1 ?basket1) 
             (imply 
                 (ontop ?eraser1 ?shelf1) 
                 (ontop ?eraser2 ?shelf1)
@@ -49,7 +49,7 @@
             (forn 
                 (2) 
                 (?notebook - notebook) 
-                (inside ?notebook ?backpack1)
+                (inside ?notebook ?basket1)
             ) 
             (forn 
                 (3) 

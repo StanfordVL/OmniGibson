@@ -6,7 +6,7 @@
     	shelf1 - shelf
     	bag1 - bag
     	table1 - table
-    	backpack1 - backpack
+    	basket1 - basket
     	notebook1 notebook2 notebook3 - notebook
     	eraser1 eraser2 - eraser
     	pen1 pen2 pen3 pen4 - pen
@@ -20,8 +20,8 @@
             (open bag1)
         ) 
         (and 
-            (ontop backpack1 table1) 
-            (open backpack1)
+            (ontop basket1 table1) 
+            (open basket1)
         ) 
         (and 
             (ontop notebook1 shelf1) 
@@ -45,11 +45,11 @@
             (and 
                 (forall 
                     (?notebook - notebook) 
-                    (inside ?notebook ?backpack1)
+                    (inside ?notebook ?basket1)
                 ) 
                 (forall 
                     (?eraser - eraser) 
-                    (inside ?eraser ?backpack1)
+                    (inside ?eraser ?basket1)
                 ) 
                 (and 
                     (and 
@@ -65,12 +65,12 @@
                     (not 
                         (open ?bag1)
                     ) 
-                    (inside ?bag1 ?backpack1)
+                    (inside ?bag1 ?basket1)
                 ) 
-                (inside ?laptop1 ?backpack1)
+                (inside ?laptop1 ?basket1)
             ) 
             (not 
-                (open ?backpack1)
+                (open ?basket1)
             )
         )
     )
