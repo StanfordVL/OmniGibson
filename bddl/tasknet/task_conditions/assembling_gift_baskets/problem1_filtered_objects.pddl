@@ -6,7 +6,7 @@
     	table1 - table
     	notebook1 notebook2 notebook3 notebook4 - notebook
     	wine_bottle1 wine_bottle2 - wine_bottle
-    	cheese_dip1 cheese_dip2 cheese_dip3 cheese_dip4 - cheese_dip
+    	cheddar1 cheddar2 cheddar3 cheddar4 - cheddar
     	photograph1 photograph2 - photograph
     	chocolate_box1 chocolate_box2 - chocolate_box
     	cracker_box1 cracker_box2 cracker_box3 cracker_box4 - cracker_box
@@ -33,10 +33,10 @@
             (ontop wine_bottle2 table1)
         ) 
         (and 
-            (ontop cheese_dip1 table1) 
-            (ontop cheese_dip2 table1) 
-            (ontop cheese_dip3 table1) 
-            (ontop cheese_dip4 table1)
+            (ontop cheddar1 table1) 
+            (ontop cheddar2 table1) 
+            (ontop cheddar3 table1) 
+            (ontop cheddar4 table1)
         ) 
         (and 
             (ontop photograph1 table1) 
@@ -85,10 +85,10 @@
                         )
                     ) 
                     (exists 
-                        (?cheese_dip - cheese_dip) 
+                        (?cheddar - cheddar) 
                         (exists 
                             (?candy_cane - candy_cane) 
-                            (nextto ?cheese_dip ?candy_cane)
+                            (nextto ?cheddar ?candy_cane)
                         )
                     )
                 )
@@ -105,8 +105,8 @@
                     (exists 
                         (?wine_bottle - wine_bottle) 
                         (exists 
-                            (?cheese_dip - cheese_dip) 
-                            (nextto ?cheese_dip ?wine_bottle)
+                            (?cheddar - cheddar) 
+                            (nextto ?cheddar ?wine_bottle)
                         )
                     ) 
                     (exists 

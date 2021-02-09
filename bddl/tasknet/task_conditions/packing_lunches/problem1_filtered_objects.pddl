@@ -8,12 +8,12 @@
     	water1 water2 water3 water4 - water
     	counter1 - counter
     	apple1 apple2 apple3 apple4 - apple
-    	freezer1 - freezer
+    	fridge1 - fridge
     	hamburger1 hamburger2 hamburger3 hamburger4 - hamburger
     	plum1 plum2 plum3 plum4 - plum
     	dinner_napkin1 dinner_napkin2 dinner_napkin3 dinner_napkin4 - dinner_napkin
     	chocolate_box1 chocolate_box2 chocolate_box3 chocolate_box4 - chocolate_box
-    	bag1 bag2 bag3 bag4 - bag
+    	backpack1 backpack2 backpack3 backpack4 - backpack
     )
     
     (:init 
@@ -98,13 +98,13 @@
             (ontop chocolate_box4 shelf1)
         ) 
         (and 
-            (ontop bag1 counter1) 
-            (ontop bag2 counter1) 
-            (ontop bag3 counter1) 
-            (ontop bag4 counter1)
+            (ontop backpack1 counter1) 
+            (ontop backpack2 counter1) 
+            (ontop backpack3 counter1) 
+            (ontop backpack4 counter1)
         ) 
         (inroom counter1 kitchen) 
-        (inroom freezer1 kitchen) 
+        (inroom fridge1 kitchen) 
         (inroom shelf1 kitchen)
     )
     
@@ -112,26 +112,15 @@
         (and 
             (forn 
                 (4) 
-                (?bag - bag) 
+                (?backpack - backpack) 
                 (and 
-                    (forpairs 
-                        (?water - water) 
-                        (?bottle - bottle) 
-                        (and 
-                            (inside ?water ?bottle) 
-                            (inside ?bottle ?bag) 
-                            (not 
-                                (open ?bottle)
-                            )
-                        )
-                    ) 
                     (fornpairs 
                         (4) 
                         (?bag - bag) 
                         (?hamburger - hamburger) 
                         (and 
                             (inside ?hamburger ?bag) 
-                            (inside ?bag ?bag) 
+                            (inside ?bag ?backpack) 
                             (not 
                                 (open ?bag)
                             )
@@ -143,7 +132,7 @@
                         (?plum - plum) 
                         (and 
                             (inside ?plum ?bag) 
-                            (inside ?bag ?bag) 
+                            (inside ?bag ?backpack) 
                             (not 
                                 (open ?bag)
                             )
@@ -153,28 +142,34 @@
             ) 
             (fornpairs 
                 (4) 
-                (?bag - bag) 
+                (?backpack - backpack) 
                 (?dinner_napkin - dinner_napkin) 
-                (inside ?dinner_napkin ?bag)
+                (inside ?dinner_napkin ?backpack)
             ) 
             (fornpairs 
                 (4) 
-                (?bag - bag) 
+                (?backpack - backpack) 
+                (?water - water) 
+                (inside ?water ?backpack)
+            ) 
+            (fornpairs 
+                (4) 
+                (?backpack - backpack) 
                 (?apple - apple) 
-                (inside ?apple ?bag)
+                (inside ?apple ?backpack)
             ) 
             (fornpairs 
                 (4) 
-                (?bag - bag) 
+                (?backpack - backpack) 
                 (?chocolate_box - chocolate_box) 
-                (inside ?chocolate_box ?bag)
+                (inside ?chocolate_box ?backpack)
             ) 
             (forall 
-                (?bag - bag) 
+                (?backpack - backpack) 
                 (and 
-                    (ontop ?bag ?counter1) 
+                    (ontop ?backpack ?counter1) 
                     (not 
-                        (open ?bag)
+                        (open ?backpack)
                     )
                 )
             )
