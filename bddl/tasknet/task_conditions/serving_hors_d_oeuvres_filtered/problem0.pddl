@@ -66,8 +66,8 @@
         (inside plate24 cabinet1) 
         (inroom counter1 kitchen) 
         (inroom fridge1 kitchen) 
-        (inroom table1 livingroom) 
-        (inroom table2 livingroom) 
+        (inroom table1 living_room) 
+        (inroom table2 living_room) 
         (inroom cabinet1 kitchen)
     )
     
