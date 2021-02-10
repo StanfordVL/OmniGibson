@@ -22,9 +22,9 @@
         (ontop notebook6 chair1) 
         (ontop notebook7 table1) 
         (ontop hardback5 shelf1) 
-        (inroom table1 living room) 
-        (inroom shelf1 living room) 
-        (inroom chair1 living room)
+        (inroom table1 living_room) 
+        (inroom shelf1 living_room) 
+        (inroom chair1 living_room)
     )
     
     (:goal 

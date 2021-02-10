@@ -27,8 +27,8 @@
         (ontop dart15 coffee_table1) 
         (ontop dart16 coffee_table1) 
         (nextto dartboard1 wall1) 
-        (inroom wall1 living room) 
-        (inroom coffee_table1 living room)
+        (inroom wall1 living_room) 
+        (inroom coffee_table1 living_room)
     )
     
     (:goal 

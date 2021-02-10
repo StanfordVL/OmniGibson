@@ -21,10 +21,10 @@
         (nextto notebook10 coffee_table1) 
         (nextto notebook11 coffee_table1) 
         (nextto notebook12 coffee_table1) 
-        (inroom sofa1 living room) 
-        (inroom coffee_table1 living room) 
-        (inroom shelf1 living room) 
-        (inroom shelf2 living room)
+        (inroom sofa1 living_room) 
+        (inroom coffee_table1 living_room) 
+        (inroom shelf1 living_room) 
+        (inroom shelf2 living_room)
     )
     
     (:goal 

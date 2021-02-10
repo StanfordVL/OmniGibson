@@ -56,9 +56,9 @@
             (ontop candy_cane1 table1) 
             (ontop candy_cane2 table1)
         ) 
-        (inroom table1 living room) 
-        (inroom carpet1 living room) 
-        (inroom sofa1 living room)
+        (inroom table1 living_room) 
+        (inroom carpet1 living_room) 
+        (inroom sofa1 living_room)
     )
     
     (:goal 
