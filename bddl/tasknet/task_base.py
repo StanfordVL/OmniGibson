@@ -47,6 +47,8 @@ class TaskNetTask(object):
         random.shuffle(scenes)
         accept_scene = False
         for scene in scenes:
+            if scene == "background": 
+                continue
             if scene_id is not None and scene != scene_id:
                 continue
             self.scene_id = scene
