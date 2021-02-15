@@ -1,6 +1,7 @@
 import random
 import os
 import sys
+import pdb
 
 from tasknet.config import SCENE_PATH
 from tasknet.sampler import Sampler
@@ -47,10 +48,14 @@ class TaskNetTask(object):
         random.shuffle(scenes)
         accept_scene = False
         for scene in scenes:
+            print('SCENE:', scene)
             if scene == "background": 
                 continue
             if scene_id is not None and scene != scene_id:
                 continue
+            if scene == 'Beechwood_0_int':
+                print('BEECHWOOD')
+                pdb.set_trace()
             self.scene_id = scene
             self.scene = scene_class(scene)
             # self.scene = scene_class(scene, load_object_categories=[

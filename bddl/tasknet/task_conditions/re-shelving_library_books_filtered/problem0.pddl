@@ -19,6 +19,7 @@
         (ontop notebook10 table1) 
         (ontop notebook11 table1) 
         (ontop notebook12 table1)
+        (inroom table1 living_room)
     )
     
     (:goal 

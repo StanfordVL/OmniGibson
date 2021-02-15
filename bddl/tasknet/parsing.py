@@ -4,6 +4,7 @@ This code is lightly adapted from https://github.com/pucrs-automated-planning/pd
 
 import itertools
 import re
+import sys
 
 from tasknet.config import SUPPORTED_PDDL_REQUIREMENTS as supported_requirements
 from tasknet.config import get_definition_filename
@@ -102,7 +103,7 @@ def parse_action(group):
     parameters = []
     positive_preconditions = []
     negative_preconditions = []
-    preconditions = []
+    # preconditions = []
     add_effects = []
     del_effects = []
     while group:
@@ -257,7 +258,7 @@ class Action(object):
 
 ######### UTIL ##########
 
-def add_pddl_whitespace(pddl_file=None, string=None, save=True):
+def add_pddl_whitespace(pddl_file="task_conditions/parsing_tests/test_app_output.pddl", string=None, save=True):
     if pddl_file is not None:
         with open(pddl_file, 'r') as f:
             raw_pddl = f.read()
@@ -299,19 +300,34 @@ def add_pddl_whitespace(pddl_file=None, string=None, save=True):
     return refined_pddl
 
 
-    # for char in raw_pddl:
-    #     if char == '(':
-    #         nest_level += 1
-    #     elif char == ')':
-    #         nest_level -= 1
-    #     refined_pddl += char
+def remove_pddl_whitespace(pddl_file='task_conditions/parsing_tests/test_app_output_whitespace.pddl', string=None, save=True):
+    if pddl_file is not None:
+        with open(pddl_file, 'r') as f:
+            raw_pddl = f.read()
+    elif string is not None:
+        raw_pddl = string
+    else:
+        raise ValueError('No PDDL given.')
 
+    pddl = ''.join([substr.lstrip(' ') for substr in raw_pddl.split('\n')])
+    print(pddl)
+    pddl = [substr for substr in pddl.split(' ') if substr]
+    print()
+    print(pddl)
+    pddl = ' '.join(pddl)
 
+    with open('task_conditions/parsing_tests/test_app_output_nowhitespace.pddl', 'w') as f:
+        f.write(pddl)
+    
+    return pddl
 
 
 if __name__ == '__main__':
-    refined_pddl = add_pddl_whitespace(pddl_file="task_conditions/parsing_tests/test_app_output.pddl")
-    print(refined_pddl)
+    if sys.argv[1] == 'add':
+        refined_pddl = add_pddl_whitespace()
+    if sys.argv[1] == 'remove':
+        refined_pddl = remove_pddl_whitespace()
+    # print(refined_pddl)
     # import sys, pprint 
     # atus_activity = sys.argv[1]
     # task_instance = sys.argv[2]

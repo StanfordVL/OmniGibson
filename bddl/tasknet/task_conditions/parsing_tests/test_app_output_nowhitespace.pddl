@@ -1,0 +1,1 @@
+(:init (not (scrubbed floor1)) (not (scrubbed floor2)) (inside bucket1 cabinet1) (and (inside swab1 cabinet1) (nextto swab1 bucket1) (not (soaked swab1))) (inside soap1 cabinet1) (inroom floor1 dining_room) (inroom floor2 kitchen) (inroom cabinet1 kitchen))

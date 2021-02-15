@@ -48,7 +48,8 @@ class BinaryAtomicPredicate(AtomicPredicate):
     def sample(self, binary_state):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
             state = self.scope[self.input1].states[self.STATE_NAME]
-
+            # print('SCOPE INPUT2:', self.scope[self.input2])
+            # print('BINARY STATE:', binary_state)
             return state.set_value(self.scope[self.input2], binary_state)
         else:
             print('%s and/or %s are not mapped to simulator objects in scope' %
@@ -371,6 +372,9 @@ def evaluate_state(compiled_state):
             results['satisfied'].append(i)
         else:
             results['unsatisfied'].append(i)
+    print(results)
+    # crash
+    import pdb; pdb.set_trace()
     return not bool(results['unsatisfied']), results
 
 
