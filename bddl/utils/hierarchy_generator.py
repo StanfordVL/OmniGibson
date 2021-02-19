@@ -97,8 +97,11 @@ for synset in owned_synsets:
 
 # Go through the hierarchy and add the words associated with the synsets as attributes.
 def add_igibson_objects(node):
+    categories = []
     if node["name"] in owned_synsets:
-        node["igibson_categories"] = owned_synsets[node["name"]]
+        categories = owned_synsets[node["name"]]
+
+    node["igibson_categories"] = categories
 
     if "children" in node:
         for child_node in node["children"]:
