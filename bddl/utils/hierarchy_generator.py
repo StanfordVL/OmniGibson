@@ -129,8 +129,13 @@ def add_abilities(node):
         name = node["name"]
         word = name[:name.find('.')]
         if word in ability_map:
-            # TODO: We'll convert this to reading the params directly from the JSON
-            abilities = {ability: dict() for ability in ability_map[word]}
+            if isinstance(ability_map[word], dict):
+                abilities = ability_map[word]
+            else:
+                # Support legacy format ability annotations where params are not
+                # supported and abilities are in list format.
+                abilities = {ability: dict() for ability in ability_map[word]}
+
             node["abilities"] = abilities
             return abilities
         else:
