@@ -12,7 +12,8 @@ class ObjectTaxonomy(object):
     def __init__(self, json_str=DEFAULT_HIERARCHY_FILE):
         self.taxonomy = self._parse_taxonomy(json_str)
 
-    def _parse_taxonomy(self, json_str):
+    @staticmethod
+    def _parse_taxonomy(json_str):
         """
         Parse taxonomy from hierarchy JSON file.
 
@@ -22,7 +23,7 @@ class ObjectTaxonomy(object):
         """
         json_obj = json.loads(json_str)
 
-        DG = nx.DiGraph()
+        taxonomy = nx.DiGraph()
         nodes = [(json_obj, None)]
         while len(nodes) > 0:
             next_nodes = []
@@ -32,15 +33,14 @@ class ObjectTaxonomy(object):
                     for child in node['children']:
                         next_nodes.append((child, node))
                         children_names.add(child['name'])
-                DG.add_node(node['name'],
-                            igibson_categories=node['igibson_categories'],
-                            lemmas=node['lemmas'] ,
-                            abilities=node['abilities'],
-                            words=node['words'])
+                taxonomy.add_node(node['name'],
+                                  igibson_categories=node['igibson_categories'],
+                                  lemmas=node['lemmas'],
+                                  abilities=node['abilities'])
                 for child_name in children_names:
-                    DG.add_edge(node['name'], child_name)
+                    taxonomy.add_edge(node['name'], child_name)
             nodes = next_nodes
-        return DG
+        return taxonomy
 
     def _get_class_by_filter(self, filter_fn):
         """
@@ -127,7 +127,7 @@ class ObjectTaxonomy(object):
         """
         assert self.is_valid_class(class_name)
         assert self.is_valid_class(potential_ancestor_class_name)
-        return class_name in self.descendants(potential_ancestor_class_name)
+        return class_name in self.get_descendants(potential_ancestor_class_name)
 
     def is_ancestor(self, class_name, potential_descendant_class_name):
         """
@@ -139,7 +139,7 @@ class ObjectTaxonomy(object):
         """
         assert self.is_valid_class(class_name)
         assert self.is_valid_class(potential_descendant_class_name)
-        return class_name in self.ancestors(potential_descendant_class_name)
+        return class_name in self.get_ancestors(potential_descendant_class_name)
 
     def get_abilities(self, class_name):
         """
@@ -213,7 +213,7 @@ class ObjectTaxonomy(object):
         :param ability: Ability name to check.
         :return: bool indicating if the class has the ability.
         """
-        return ability in self.abilities(class_name)
+        return ability in self.get_abilities(class_name)
 
 
 if __name__ == "__main__":
