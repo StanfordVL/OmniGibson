@@ -1,15 +1,26 @@
+import copy
+import json
+import pkgutil
+
 import networkx as nx
 from IPython import embed
-import json
+
+DEFAULT_HIERARCHY_FILE = pkgutil.get_data(__package__, 'hierarchy.json')
 
 
 class ObjectTaxonomy(object):
-    def __init__(self, json_file):
-        self.taxonomy = self.parse_taxonomy(json_file)
+    def __init__(self, json_str=DEFAULT_HIERARCHY_FILE):
+        self.taxonomy = self._parse_taxonomy(json_str)
 
-    def parse_taxonomy(self, json_file):
-        with open(json_file) as f:
-            json_obj = json.load(f)
+    def _parse_taxonomy(self, json_str):
+        """
+        Parse taxonomy from hierarchy JSON file.
+
+        :param json_str: str containing JSON-encoded hierarchy.
+        :return: networkx.DiGraph corresponding to object hierarchy tree with classes as nodes and parent-child
+            relationships as directed edges from parent to child.
+        """
+        json_obj = json.loads(json_str)
 
         DG = nx.DiGraph()
         nodes = [(json_obj, None)]
@@ -21,61 +32,190 @@ class ObjectTaxonomy(object):
                     for child in node['children']:
                         next_nodes.append((child, node))
                         children_names.add(child['name'])
-                parent_name = parent['name'] if parent is not None else None
                 DG.add_node(node['name'],
-                            properties={'cookable', 'dustable'},
-                            children=children_names,
-                            parent=parent_name)
+                            igibson_categories=node['igibson_categories'],
+                            lemmas=node['lemmas'] ,
+                            abilities=node['abilities'],
+                            words=node['words'])
                 for child_name in children_names:
                     DG.add_edge(node['name'], child_name)
             nodes = next_nodes
         return DG
 
-    def is_valid(self, object_name):
-        return self.taxonomy.has_node(object_name)
+    def _get_class_by_filter(self, filter_fn):
+        """
+        Gets a single class matching the given filter function.
 
-    def descendants(self, object_name):
-        assert self.is_valid(object_name)
-        return nx.algorithms.dag.descendants(self.taxonomy, object_name)
+        :param filter_fn: Filter function that takes a single class name as input and returns a boolean (True to keep).
+        :return: str corresponding to the matching class name, None if no match found.
+        :raises: ValueError if more than one matching class is found.
+        """
+        matched = [class_name for class_name in self.taxonomy.nodes if filter_fn(class_name)]
 
-    def leaf_descendants(self, object_name):
-        return list(filter(lambda node: self.taxonomy.out_degree(node) == 0,
-                           self.descendants(object_name)))
+        if not matched:
+            return None
+        elif len(matched) > 1:
+            raise ValueError("Multiple classes matched: %s" % ", ".join(matched))
 
-    def ancestors(self, object_name):
-        assert self.is_valid(object_name)
-        return nx.algorithms.dag.ancestors(self.taxonomy, object_name)
+        return matched[0]
 
-    def is_desendent(self, object_name_a, object_name_b):
-        assert self.is_valid(object_name_a)
-        assert self.is_valid(object_name_b)
-        return object_name_a in self.descendants(object_name_b)
+    def get_class_name_from_lemma(self, lemma):
+        """
+        Get class name corresponding to WordNet lemma.
 
-    def is_ancestor(self, object_name_a, object_name_b):
-        assert self.is_valid(object_name_a)
-        assert self.is_valid(object_name_b)
-        return object_name_a in self.ancestors(object_name_b)
+        :param lemma: WordNet lemma to search for.
+        :return: str containing matching class name.
+        :raises ValueError if multiple matching classes are found.
+        """
+        return self._get_class_by_filter(lambda class_name: lemma in self.get_lemmas(class_name))
 
-    def properties(self, object_name):
-        assert self.is_valid(object_name)
-        return self.taxonomy.nodes[object_name]['properties']
+    def get_class_name_from_igibson_category(self, igibson_category):
+        """
+        Get class name corresponding to iGibson object category.
 
-    def children(self, object_name):
-        assert self.is_valid(object_name)
-        return self.taxonomy.nodes[object_name]['children']
+        :param igibson_category: iGibson object category to search for.
+        :return: str containing matching class name.
+        :raises ValueError if multiple matching classes are found.
+        """
+        return self._get_class_by_filter(lambda class_name: igibson_category in self.get_igibson_categories(class_name))
 
-    def parent(self, object_name):
-        assert self.is_valid(object_name)
-        return self.taxonomy.nodes[object_name]['parent']
+    def is_valid_class(self, class_name):
+        """
+        Check whether a given class exists within the object taxonomy.
 
-    def is_leaf(self, object_name):
-        assert self.is_valid(object_name)
-        return self.taxonomy.out_degree(object_name) == 0
+        :param class_name: Class name to search.
+        :return: bool indicating if the class exists in the taxonomy.
+        """
+        return self.taxonomy.has_node(class_name)
 
-    def has_property(self, object_name, property_name):
-        return property_name in self.properties(object_name)
+    def get_descendants(self, class_name):
+        """
+        Get the descendant classes of a class.
+
+        :param class_name: Class name to search.
+        :return: list of str corresponding to descendant class names.
+        """
+        assert self.is_valid_class(class_name)
+        return list(nx.algorithms.dag.descendants(self.taxonomy, class_name))
+
+    def get_leaf_descendants(self, class_name):
+        """
+        Get the leaf descendant classes of a class, e.g. descendant classes who are also leaf nodes.
+
+        :param class_name: Class name to search.
+        :return: list of str corresponding to leaf descendant class names.
+        """
+        return [node for node in self.get_descendants(class_name) if self.taxonomy.out_degree(node) == 0]
+
+    def get_ancestors(self, class_name):
+        """
+        Get the ancestor classes of a class.
+
+        :param class_name: Class name to search.
+        :return: list of str corresponding to ancestor class names.
+        """
+        assert self.is_valid_class(class_name)
+        return list(nx.algorithms.dag.ancestors(self.taxonomy, class_name))
+
+    def is_descendant(self, class_name, potential_ancestor_class_name):
+        """
+        Check whether a given class is a descendant of another class.
+
+        :param class_name: The class name being searched for as a descendant.
+        :param potential_ancestor_class_name: The class name being searched for as a parent.
+        :return: bool indicating whether class_name is a descendant of potential_ancestor_class_name.
+        """
+        assert self.is_valid_class(class_name)
+        assert self.is_valid_class(potential_ancestor_class_name)
+        return class_name in self.descendants(potential_ancestor_class_name)
+
+    def is_ancestor(self, class_name, potential_descendant_class_name):
+        """
+        Check whether a given class is an ancestor of another class.
+
+        :param class_name: The class name being searched for as an ancestor.
+        :param potential_descendant_class_name: The class name being searched for as a descendant.
+        :return: bool indicating whether class_name is an ancestor of potential_descendant_class_name.
+        """
+        assert self.is_valid_class(class_name)
+        assert self.is_valid_class(potential_descendant_class_name)
+        return class_name in self.ancestors(potential_descendant_class_name)
+
+    def get_abilities(self, class_name):
+        """
+        Get the abilities of a given class.
+
+        :param class_name: Class name to search.
+        :return: dict in the form of {ability: {param: value}} containing abilities and ability parameters.
+        """
+        assert self.is_valid_class(class_name)
+        return copy.deepcopy(self.taxonomy.nodes[class_name]['abilities'])
+
+    def get_lemmas(self, class_name):
+        """
+        Get the WordNet lemmas matching a given class.
+
+        :param class_name: Class name to search.
+        :return: list of str corresponding to WordNet lemmas matching the class.
+        """
+        assert self.is_valid_class(class_name)
+        return list(self.taxonomy.nodes[class_name]['lemmas'])
+
+    def get_igibson_categories(self, class_name):
+        """
+        Get the iGibson object categories matching a given class.
+
+        :param class_name: Class name to search.
+        :return: list of str corresponding to iGibson object categories matching the class.
+        """
+        assert self.is_valid_class(class_name)
+        return list(self.taxonomy.nodes[class_name]['igibson_categories'])
+
+    def get_children(self, class_name):
+        """
+        Get the immediate child classes of a class.
+
+        :param class_name: Class name to search.
+        :return: list of str corresponding to child class names.
+        """
+        assert self.is_valid_class(class_name)
+        return list(self.taxonomy.successors(class_name))
+
+    def get_parent(self, class_name):
+        """
+        Get the immediate parent class of a class.
+
+        :param class_name: Class name to search.
+        :return: str corresponding to parent class name, None if no parent exists.
+        """
+        assert self.is_valid_class(class_name)
+
+        in_degree = self.taxonomy.in_degree(class_name)
+        assert in_degree <= 1
+
+        return next(self.taxonomy.predecessors(class_name)) if in_degree else None
+
+    def is_leaf(self, class_name):
+        """
+        Check whether a given class is a leaf class e.g. it has no descendants.
+
+        :param class_name: Class name to search.
+        :return: bool indicating if the class is a leaf class.
+        """
+        assert self.is_valid_class(class_name)
+        return self.taxonomy.out_degree(class_name) == 0
+
+    def has_ability(self, class_name, ability):
+        """
+        Check whether the given class has the given ability.
+
+        :param class_name: Class name to check.
+        :param ability: Ability name to check.
+        :return: bool indicating if the class has the ability.
+        """
+        return ability in self.abilities(class_name)
 
 
 if __name__ == "__main__":
-    object_taxonomy = ObjectTaxonomy('hierarchy.json')
+    object_taxonomy = ObjectTaxonomy()
     embed()
