@@ -5,7 +5,9 @@ import pkgutil
 import networkx as nx
 from IPython import embed
 
-DEFAULT_HIERARCHY_FILE = pkgutil.get_data(__package__, 'hierarchy.json')
+import tasknet
+
+DEFAULT_HIERARCHY_FILE = pkgutil.get_data(tasknet.__package__, 'hierarchy.json')
 
 
 class ObjectTaxonomy(object):
