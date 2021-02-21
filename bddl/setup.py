@@ -19,7 +19,8 @@ setup(
     packages=find_packages(),
     install_requires=[
         'pytest',
-        'numpy'
+        'numpy',
+        "networkx"
     ],
     package_data={},
     include_package_data=True
