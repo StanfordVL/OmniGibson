@@ -37,7 +37,7 @@ class ObjectTaxonomy(object):
                         children_names.add(child['name'])
                 taxonomy.add_node(node['name'],
                                   igibson_categories=node['igibson_categories'],
-                                  lemmas=node['lemmas'],
+                                  lemmas=[node['lemmas'][0]],
                                   abilities=node['abilities'])
                 for child_name in children_names:
                     taxonomy.add_edge(node['name'], child_name)
@@ -91,6 +91,7 @@ class ObjectTaxonomy(object):
         :return: list of str corresponding to iGibson object categories of the lemma or the leaf descendants of the lemma
         """
         class_name = self.get_class_name_from_lemma(lemma)
+        assert class_name != None, "The lemma {} is not contained by any synset: no matching class name".format(lemma)
         if self.is_leaf(class_name):
             class_names = [class_name]
         else:
