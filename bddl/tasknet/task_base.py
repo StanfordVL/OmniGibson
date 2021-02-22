@@ -1,7 +1,6 @@
 import random
 import os
 import sys
-import pdb
 
 from tasknet.config import SCENE_PATH
 from tasknet.sampler import Sampler
