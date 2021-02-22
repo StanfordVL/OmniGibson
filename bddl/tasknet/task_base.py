@@ -48,9 +48,9 @@ class TaskNetTask(object):
         accept_scene = False
         for scene in scenes:
             print('SCENE:', scene)
-            if scene == "background": 
-                continue
             if scene_id is not None and scene != scene_id:
+                continue
+            if '_int' not in scene:
                 continue
             self.scene_id = scene
             self.scene = scene_class(scene)
@@ -84,9 +84,9 @@ class TaskNetTask(object):
     def gen_initial_conditions(self):
         if bool(self.parsed_initial_conditions[0]):
             self.initial_conditions = compile_state(
-                [cond for cond in self.parsed_initial_conditions if cond[0] != 'inroom'], 
-                self, 
-                scope=self.object_scope, 
+                [cond for cond in self.parsed_initial_conditions if cond[0] != 'inroom'],
+                self,
+                scope=self.object_scope,
                 object_map=self.objects)
 
     def gen_goal_conditions(self):
