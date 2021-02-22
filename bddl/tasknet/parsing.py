@@ -103,7 +103,6 @@ def parse_action(group):
     parameters = []
     positive_preconditions = []
     negative_preconditions = []
-    # preconditions = []
     add_effects = []
     del_effects = []
     while group:
