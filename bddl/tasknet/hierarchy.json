@@ -51,6 +51,16 @@
                                           "abilities": {}
                                         },
                                         {
+                                          "name": "folding_chair.n.01",
+                                          "igibson_categories": [
+                                            "folding_chair"
+                                          ],
+                                          "lemmas": [
+                                            "folding_chair"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
                                           "name": "highchair.n.01",
                                           "igibson_categories": [
                                             "highchair"
@@ -201,6 +211,16 @@
                                   "name": "table.n.02",
                                   "children": [
                                     {
+                                      "name": "breakfast_table.n.01",
+                                      "igibson_categories": [
+                                        "breakfast_table"
+                                      ],
+                                      "lemmas": [
+                                        "breakfast_table"
+                                      ],
+                                      "abilities": {}
+                                    },
+                                    {
                                       "name": "coffee_table.n.01",
                                       "igibson_categories": [
                                         "coffee_table"
@@ -336,27 +356,6 @@
                                   }
                                 },
                                 {
-                                  "name": "table.n.03",
-                                  "children": [
-                                    {
-                                      "name": "dining_table.n.01",
-                                      "igibson_categories": [
-                                        "dining_table"
-                                      ],
-                                      "lemmas": [
-                                        "dining_table",
-                                        "board"
-                                      ],
-                                      "abilities": {}
-                                    }
-                                  ],
-                                  "igibson_categories": [],
-                                  "lemmas": [
-                                    "table"
-                                  ],
-                                  "abilities": {}
-                                },
-                                {
                                   "name": "lamp.n.02",
                                   "children": [
                                     {
@@ -376,7 +375,6 @@
                                     {
                                       "name": "table_lamp.n.01",
                                       "igibson_categories": [
-                                        "folding_chair",
                                         "table_lamp"
                                       ],
                                       "lemmas": [
@@ -990,6 +988,67 @@
                                 "liquid": {},
                                 "scrubbable": {},
                                 "toggleable": {}
+                              }
+                            },
+                            {
+                              "name": "wheeled_vehicle.n.01",
+                              "children": [
+                                {
+                                  "name": "self-propelled_vehicle.n.01",
+                                  "children": [
+                                    {
+                                      "name": "motor_vehicle.n.01",
+                                      "children": [
+                                        {
+                                          "name": "car.n.01",
+                                          "igibson_categories": [
+                                            "car"
+                                          ],
+                                          "lemmas": [
+                                            "car",
+                                            "auto",
+                                            "automobile",
+                                            "machine",
+                                            "motorcar"
+                                          ],
+                                          "abilities": {
+                                            "dustyable": {},
+                                            "openable": {},
+                                            "scrubbable": {}
+                                          }
+                                        }
+                                      ],
+                                      "igibson_categories": [],
+                                      "lemmas": [
+                                        "motor_vehicle",
+                                        "automotive_vehicle"
+                                      ],
+                                      "abilities": {
+                                        "dustyable": {},
+                                        "openable": {},
+                                        "scrubbable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "lemmas": [
+                                    "self-propelled_vehicle"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "openable": {},
+                                    "scrubbable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "lemmas": [
+                                "wheeled_vehicle"
+                              ],
+                              "abilities": {
+                                "dustyable": {},
+                                "openable": {},
+                                "scrubbable": {}
                               }
                             }
                           ],
@@ -2343,6 +2402,65 @@
                                 "dustyable": {},
                                 "scrubbable": {}
                               }
+                            },
+                            {
+                              "name": "optical_device.n.01",
+                              "children": [
+                                {
+                                  "name": "lens.n.01",
+                                  "children": [
+                                    {
+                                      "name": "converging_lens.n.01",
+                                      "children": [
+                                        {
+                                          "name": "sunglass.n.01",
+                                          "igibson_categories": [
+                                            "sunglass"
+                                          ],
+                                          "lemmas": [
+                                            "sunglass"
+                                          ],
+                                          "abilities": {
+                                            "breakable": {},
+                                            "dustyable": {},
+                                            "scrubbable": {}
+                                          }
+                                        }
+                                      ],
+                                      "igibson_categories": [],
+                                      "lemmas": [
+                                        "converging_lens",
+                                        "convex_lens"
+                                      ],
+                                      "abilities": {
+                                        "breakable": {},
+                                        "dustyable": {},
+                                        "scrubbable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "lemmas": [
+                                    "lens",
+                                    "lense",
+                                    "lens_system"
+                                  ],
+                                  "abilities": {
+                                    "breakable": {},
+                                    "dustyable": {},
+                                    "scrubbable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "lemmas": [
+                                "optical_device"
+                              ],
+                              "abilities": {
+                                "breakable": {},
+                                "dustyable": {},
+                                "scrubbable": {}
+                              }
                             }
                           ],
                           "igibson_categories": [],
@@ -2969,6 +3087,32 @@
                                     "dustyable": {},
                                     "scrubbable": {}
                                   }
+                                },
+                                {
+                                  "name": "ceramic_ware.n.01",
+                                  "children": [
+                                    {
+                                      "name": "porcelain.n.01",
+                                      "igibson_categories": [
+                                        "tile"
+                                      ],
+                                      "lemmas": [
+                                        "porcelain"
+                                      ],
+                                      "abilities": {
+                                        "dustyable": {},
+                                        "scrubbable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "lemmas": [
+                                    "ceramic_ware"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "scrubbable": {}
+                                  }
                                 }
                               ],
                               "igibson_categories": [],
@@ -3249,6 +3393,19 @@
                                 "burnable": {},
                                 "dustyable": {}
                               }
+                            },
+                            {
+                              "name": "hook.n.05",
+                              "igibson_categories": [
+                                "hook"
+                              ],
+                              "lemmas": [
+                                "hook"
+                              ],
+                              "abilities": {
+                                "dustyable": {},
+                                "scrubbable": {}
+                              }
                             }
                           ],
                           "igibson_categories": [],
@@ -3347,6 +3504,96 @@
                           ],
                           "abilities": {
                             "breakable": {},
+                            "dustyable": {},
+                            "openable": {},
+                            "scrubbable": {}
+                          }
+                        },
+                        {
+                          "name": "conveyance.n.03",
+                          "children": [
+                            {
+                              "name": "vehicle.n.01",
+                              "children": [
+                                {
+                                  "name": "wheeled_vehicle.n.01",
+                                  "children": [
+                                    {
+                                      "name": "self-propelled_vehicle.n.01",
+                                      "children": [
+                                        {
+                                          "name": "motor_vehicle.n.01",
+                                          "children": [
+                                            {
+                                              "name": "car.n.01",
+                                              "igibson_categories": [
+                                                "car"
+                                              ],
+                                              "lemmas": [
+                                                "car",
+                                                "auto",
+                                                "automobile",
+                                                "machine",
+                                                "motorcar"
+                                              ],
+                                              "abilities": {
+                                                "dustyable": {},
+                                                "openable": {},
+                                                "scrubbable": {}
+                                              }
+                                            }
+                                          ],
+                                          "igibson_categories": [],
+                                          "lemmas": [
+                                            "motor_vehicle",
+                                            "automotive_vehicle"
+                                          ],
+                                          "abilities": {
+                                            "dustyable": {},
+                                            "openable": {},
+                                            "scrubbable": {}
+                                          }
+                                        }
+                                      ],
+                                      "igibson_categories": [],
+                                      "lemmas": [
+                                        "self-propelled_vehicle"
+                                      ],
+                                      "abilities": {
+                                        "dustyable": {},
+                                        "openable": {},
+                                        "scrubbable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "lemmas": [
+                                    "wheeled_vehicle"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "openable": {},
+                                    "scrubbable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "lemmas": [
+                                "vehicle"
+                              ],
+                              "abilities": {
+                                "dustyable": {},
+                                "openable": {},
+                                "scrubbable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "lemmas": [
+                            "conveyance",
+                            "transport"
+                          ],
+                          "abilities": {
                             "dustyable": {},
                             "openable": {},
                             "scrubbable": {}
@@ -3950,6 +4197,72 @@
                             "liquid": {},
                             "perishable": {}
                           }
+                        },
+                        {
+                          "name": "protective_covering.n.01",
+                          "children": [
+                            {
+                              "name": "shelter.n.02",
+                              "children": [
+                                {
+                                  "name": "canopy.n.03",
+                                  "children": [
+                                    {
+                                      "name": "umbrella.n.01",
+                                      "igibson_categories": [
+                                        "umbrella"
+                                      ],
+                                      "lemmas": [
+                                        "umbrella"
+                                      ],
+                                      "abilities": {
+                                        "breakable": {},
+                                        "burnable": {},
+                                        "dustyable": {},
+                                        "openable": {},
+                                        "scrubbable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "lemmas": [
+                                    "canopy"
+                                  ],
+                                  "abilities": {
+                                    "breakable": {},
+                                    "burnable": {},
+                                    "dustyable": {},
+                                    "openable": {},
+                                    "scrubbable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "lemmas": [
+                                "shelter"
+                              ],
+                              "abilities": {
+                                "breakable": {},
+                                "burnable": {},
+                                "dustyable": {},
+                                "openable": {},
+                                "scrubbable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "lemmas": [
+                            "protective_covering",
+                            "protective_cover",
+                            "protection"
+                          ],
+                          "abilities": {
+                            "breakable": {},
+                            "burnable": {},
+                            "dustyable": {},
+                            "openable": {},
+                            "scrubbable": {}
+                          }
                         }
                       ],
                       "igibson_categories": [],
@@ -4043,6 +4356,21 @@
                                                 "heatSource": {},
                                                 "openable": {},
                                                 "scrubbable": {},
+                                                "toggleable": {}
+                                              }
+                                            },
+                                            {
+                                              "name": "toaster.n.02",
+                                              "igibson_categories": [
+                                                "toaster"
+                                              ],
+                                              "lemmas": [
+                                                "toaster"
+                                              ],
+                                              "abilities": {
+                                                "burnable": {},
+                                                "dustyable": {},
+                                                "heatSource": {},
                                                 "toggleable": {}
                                               }
                                             }
@@ -4156,6 +4484,22 @@
                                             "dustyable": {},
                                             "scrubbable": {},
                                             "toggleable": {}
+                                          }
+                                        },
+                                        {
+                                          "name": "iron.n.04",
+                                          "igibson_categories": [
+                                            "iron"
+                                          ],
+                                          "lemmas": [
+                                            "iron",
+                                            "smoothing_iron"
+                                          ],
+                                          "abilities": {
+                                            "breakable": {},
+                                            "dustyable": {},
+                                            "heatSource": {},
+                                            "scrubbable": {}
                                           }
                                         }
                                       ],
@@ -6081,6 +6425,23 @@
                             "breakable": {},
                             "dustyable": {},
                             "scrubbable": {}
+                          }
+                        },
+                        {
+                          "name": "nut.n.03",
+                          "igibson_categories": [
+                            "nut"
+                          ],
+                          "lemmas": [
+                            "nut"
+                          ],
+                          "abilities": {
+                            "breakable": {},
+                            "burnable": {},
+                            "cookable": {},
+                            "perishable": {},
+                            "scrubbable": {},
+                            "sliceable": {}
                           }
                         }
                       ],
@@ -8674,36 +9035,14 @@
                                   "children": [
                                     {
                                       "name": "lettuce.n.03",
-                                      "children": [
-                                        {
-                                          "name": "cos.n.02",
-                                          "igibson_categories": [
-                                            "lettuce"
-                                          ],
-                                          "lemmas": [
-                                            "cos",
-                                            "cos_lettuce",
-                                            "romaine",
-                                            "romaine_lettuce"
-                                          ],
-                                          "abilities": {
-                                            "breakable": {},
-                                            "burnable": {},
-                                            "cookable": {},
-                                            "freezable": {},
-                                            "perishable": {},
-                                            "sliceable": {}
-                                          }
-                                        }
+                                      "igibson_categories": [
+                                        "lettuce"
                                       ],
-                                      "igibson_categories": [],
                                       "lemmas": [
                                         "lettuce"
                                       ],
                                       "abilities": {
-                                        "breakable": {},
                                         "burnable": {},
-                                        "cookable": {},
                                         "freezable": {},
                                         "perishable": {},
                                         "sliceable": {}
@@ -8716,9 +9055,7 @@
                                     "salad_greens"
                                   ],
                                   "abilities": {
-                                    "breakable": {},
                                     "burnable": {},
-                                    "cookable": {},
                                     "freezable": {},
                                     "perishable": {},
                                     "sliceable": {}
@@ -8748,9 +9085,7 @@
                                 "leafy_vegetable"
                               ],
                               "abilities": {
-                                "breakable": {},
                                 "burnable": {},
-                                "cookable": {},
                                 "freezable": {},
                                 "perishable": {},
                                 "sliceable": {}
@@ -9520,6 +9855,20 @@
                                     "perishable": {},
                                     "sliceable": {}
                                   }
+                                },
+                                {
+                                  "name": "salt.n.02",
+                                  "igibson_categories": [
+                                    "salt"
+                                  ],
+                                  "lemmas": [
+                                    "salt",
+                                    "table_salt",
+                                    "common_salt"
+                                  ],
+                                  "abilities": {
+                                    "soakable": {}
+                                  }
                                 }
                               ],
                               "igibson_categories": [],
@@ -9939,6 +10288,20 @@
                             "perishable": {},
                             "scrubbable": {},
                             "sliceable": {}
+                          }
+                        },
+                        {
+                          "name": "juice.n.01",
+                          "igibson_categories": [
+                            "juice"
+                          ],
+                          "lemmas": [
+                            "juice"
+                          ],
+                          "abilities": {
+                            "freezable": {},
+                            "liquid": {},
+                            "perishable": {}
                           }
                         }
                       ],
@@ -10392,6 +10755,35 @@
                                 "liquid": {},
                                 "perishable": {}
                               }
+                            },
+                            {
+                              "name": "brew.n.01",
+                              "children": [
+                                {
+                                  "name": "beer.n.01",
+                                  "igibson_categories": [
+                                    "beer"
+                                  ],
+                                  "lemmas": [
+                                    "beer"
+                                  ],
+                                  "abilities": {
+                                    "freezable": {},
+                                    "liquid": {},
+                                    "perishable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "lemmas": [
+                                "brew",
+                                "brewage"
+                              ],
+                              "abilities": {
+                                "freezable": {},
+                                "liquid": {},
+                                "perishable": {}
+                              }
                             }
                           ],
                           "igibson_categories": [],
@@ -10515,6 +10907,35 @@
                                   ],
                                   "abilities": {
                                     "burnable": {},
+                                    "freezable": {},
+                                    "liquid": {},
+                                    "perishable": {}
+                                  }
+                                },
+                                {
+                                  "name": "brew.n.01",
+                                  "children": [
+                                    {
+                                      "name": "beer.n.01",
+                                      "igibson_categories": [
+                                        "beer"
+                                      ],
+                                      "lemmas": [
+                                        "beer"
+                                      ],
+                                      "abilities": {
+                                        "freezable": {},
+                                        "liquid": {},
+                                        "perishable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "lemmas": [
+                                    "brew",
+                                    "brewage"
+                                  ],
+                                  "abilities": {
                                     "freezable": {},
                                     "liquid": {},
                                     "perishable": {}
@@ -10776,6 +11197,35 @@
                                   ],
                                   "abilities": {
                                     "burnable": {},
+                                    "freezable": {},
+                                    "liquid": {},
+                                    "perishable": {}
+                                  }
+                                },
+                                {
+                                  "name": "brew.n.01",
+                                  "children": [
+                                    {
+                                      "name": "beer.n.01",
+                                      "igibson_categories": [
+                                        "beer"
+                                      ],
+                                      "lemmas": [
+                                        "beer"
+                                      ],
+                                      "abilities": {
+                                        "freezable": {},
+                                        "liquid": {},
+                                        "perishable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "lemmas": [
+                                    "brew",
+                                    "brewage"
+                                  ],
+                                  "abilities": {
                                     "freezable": {},
                                     "liquid": {},
                                     "perishable": {}
@@ -11404,6 +11854,35 @@
                                 "liquid": {},
                                 "perishable": {}
                               }
+                            },
+                            {
+                              "name": "brew.n.01",
+                              "children": [
+                                {
+                                  "name": "beer.n.01",
+                                  "igibson_categories": [
+                                    "beer"
+                                  ],
+                                  "lemmas": [
+                                    "beer"
+                                  ],
+                                  "abilities": {
+                                    "freezable": {},
+                                    "liquid": {},
+                                    "perishable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "lemmas": [
+                                "brew",
+                                "brewage"
+                              ],
+                              "abilities": {
+                                "freezable": {},
+                                "liquid": {},
+                                "perishable": {}
+                              }
                             }
                           ],
                           "igibson_categories": [],
@@ -11653,6 +12132,35 @@
                                       ],
                                       "abilities": {
                                         "burnable": {},
+                                        "freezable": {},
+                                        "liquid": {},
+                                        "perishable": {}
+                                      }
+                                    },
+                                    {
+                                      "name": "brew.n.01",
+                                      "children": [
+                                        {
+                                          "name": "beer.n.01",
+                                          "igibson_categories": [
+                                            "beer"
+                                          ],
+                                          "lemmas": [
+                                            "beer"
+                                          ],
+                                          "abilities": {
+                                            "freezable": {},
+                                            "liquid": {},
+                                            "perishable": {}
+                                          }
+                                        }
+                                      ],
+                                      "igibson_categories": [],
+                                      "lemmas": [
+                                        "brew",
+                                        "brewage"
+                                      ],
+                                      "abilities": {
                                         "freezable": {},
                                         "liquid": {},
                                         "perishable": {}

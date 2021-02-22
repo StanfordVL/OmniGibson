@@ -9,6 +9,7 @@ from tasknet.condition_evaluation import create_scope, compile_state, evaluate_s
 
 import numpy as np
 from IPython import embed
+from tasknet.object_taxonomy import ObjectTaxonomy
 
 
 class TaskNetTask(object):
@@ -33,6 +34,7 @@ class TaskNetTask(object):
             for obj_cat in self.objects
             for obj_inst in self.objects[obj_cat]
         }
+        self.object_taxonomy = ObjectTaxonomy()
 
     def initialize(self, scene_class, scene_id=None):
         '''
@@ -51,8 +53,9 @@ class TaskNetTask(object):
                 continue
             self.scene_id = scene
             self.scene = scene_class(scene)
-            # self.scene = scene_class(scene, load_object_categories=[
-            #                          'table', 'counter', 'fridge'])
+            # self.scene = scene_class(
+            #     scene,
+            #     load_object_categories=['coffee_table', 'breakfast_table', 'countertop', 'fridge', 'table_lamp'])
 
             # Reject scenes with missing non-sampleable objects
             # Populate scope with simulator objects
@@ -63,12 +66,12 @@ class TaskNetTask(object):
             # Import scenes and objects into simulator
             self.import_scene()
 
-            # Check for initial conditions, return failed conditions
+            # Generate initial conditions
             self.gen_initial_conditions()
-            all_passed, results = self.check_setup()
-            failed_conditions = [self.initial_conditions[cond_idx]
-                                 for cond_idx in results['unsatisfied']]
-            accept_scene = self.sample(failed_conditions)
+
+            # Sample objects to satisfy initial conditions
+            accept_scene = self.sample()
+
             if not accept_scene:
                 continue
 
@@ -81,9 +84,9 @@ class TaskNetTask(object):
     def gen_initial_conditions(self):
         if bool(self.parsed_initial_conditions[0]):
             self.initial_conditions = compile_state(
-                [cond for cond in self.parsed_initial_conditions if cond[0] != 'inroom'], 
-                self, 
-                scope=self.object_scope, 
+                [cond for cond in self.parsed_initial_conditions if cond[0] != 'inroom'],
+                self,
+                scope=self.object_scope,
                 object_map=self.objects)
 
     def gen_goal_conditions(self):

@@ -4,8 +4,10 @@ import pkgutil
 
 import networkx as nx
 from IPython import embed
+import tasknet
 
-DEFAULT_HIERARCHY_FILE = pkgutil.get_data(__package__, 'hierarchy.json')
+DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
+    tasknet.__package__, 'hierarchy.json')
 
 
 class ObjectTaxonomy(object):
@@ -50,12 +52,14 @@ class ObjectTaxonomy(object):
         :return: str corresponding to the matching class name, None if no match found.
         :raises: ValueError if more than one matching class is found.
         """
-        matched = [class_name for class_name in self.taxonomy.nodes if filter_fn(class_name)]
+        matched = [
+            class_name for class_name in self.taxonomy.nodes if filter_fn(class_name)]
 
         if not matched:
             return None
         elif len(matched) > 1:
-            raise ValueError("Multiple classes matched: %s" % ", ".join(matched))
+            raise ValueError("Multiple classes matched: %s" %
+                             ", ".join(matched))
 
         return matched[0]
 
@@ -78,6 +82,23 @@ class ObjectTaxonomy(object):
         :raises ValueError if multiple matching classes are found.
         """
         return self._get_class_by_filter(lambda class_name: igibson_category in self.get_igibson_categories(class_name))
+
+    def get_igibson_categories_from_lemma(self, lemma):
+        """
+        Get the iGibson object categories of the lemma or the leaf descendants of the lemma (if the lemma is not a leaf)
+
+        :param lemma: WordNet lemma to search for.
+        :return: list of str corresponding to iGibson object categories of the lemma or the leaf descendants of the lemma
+        """
+        class_name = self.get_class_name_from_lemma(lemma)
+        if self.is_leaf(class_name):
+            class_names = [class_name]
+        else:
+            class_names = self.get_leaf_descendants(class_name)
+        all_igibson_categories = []
+        for class_name in class_names:
+            all_igibson_categories += self.get_igibson_categories(class_name)
+        return all_igibson_categories
 
     def is_valid_class(self, class_name):
         """
