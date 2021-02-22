@@ -1,0 +1,6831 @@
+{
+  "water": [
+    "freezable",
+    "liquid"
+  ],
+  "newspaper": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "soakable"
+  ],
+  "case": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "soakable"
+  ],
+  "towel": [
+    "burnable",
+    "scrubbable"
+  ],
+  "cup": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "light": [
+    "breakable",
+    "dustyable",
+    "screwable",
+    "toggleable"
+  ],
+  "fabric": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "glass": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "box": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "dish": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "soap": [
+    "liquid"
+  ],
+  "bottle": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "container": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "brush": [
+    "burnable",
+    "scrubbable"
+  ],
+  "door": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "sheet": [
+    "burnable",
+    "scrubbable"
+  ],
+  "bag": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "cleansing_agent": [
+    "burnable",
+    "freezable",
+    "liquid"
+  ],
+  "atomizer": [
+    "liquid",
+    "scrubbable",
+    "toggleable"
+  ],
+  "vegetable_oil": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "bowl": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "vinegar": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "table": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "window": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "detergent": [
+    "freezable",
+    "liquid"
+  ],
+  "rag": [
+    "breakable",
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "tape": [
+    "breakable",
+    "burnable"
+  ],
+  "pop": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "laundry": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "handle": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "knife": [
+    "dustyable",
+    "scrubbable",
+    "slicer"
+  ],
+  "pad": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "tablespoon": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "vacuum": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "clothing": [
+    "burnable",
+    "scrubbable"
+  ],
+  "lid": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "screwable",
+    "scrubbable"
+  ],
+  "bucket": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "salt": [
+    "soakable"
+  ],
+  "screw": [
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "nail": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "sink": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "furniture": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "car": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "package": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "shoe": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "juice": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "paint": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "bubble": [
+    "liquid"
+  ],
+  "coat": [
+    "burnable",
+    "scrubbable"
+  ],
+  "screwdriver": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "apparel": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "rack": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "lemon": [
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "wire": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "pencil": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "powder": [
+    "burnable"
+  ],
+  "hose": [
+    "burnable",
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "fan": [
+    "breakable",
+    "burnable",
+    "coldSource",
+    "dustyable",
+    "scrubbable"
+  ],
+  "board": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "push_button": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "cotton": [
+    "burnable",
+    "sliceable",
+    "soakable"
+  ],
+  "lint": [
+    "breakable",
+    "burnable",
+    "sliceable",
+    "soakable"
+  ],
+  "pot": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "ball": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "plate": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "frame": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "teaspoon": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "toothbrush": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cream": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "wrapping": [
+    "breakable",
+    "burnable",
+    "openable",
+    "sliceable",
+    "soakable"
+  ],
+  "spread": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable",
+    "sliceable"
+  ],
+  "drain": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "buffet": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "string": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "band": [
+    "burnable",
+    "scrubbable"
+  ],
+  "washer": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "pan": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "shelf": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "wool": [
+    "breakable",
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "sleeve": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "stick": [
+    "breakable",
+    "burnable",
+    "scrubbable"
+  ],
+  "nozzle": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "screwable",
+    "scrubbable"
+  ],
+  "spoon": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "hook": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "rock": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "clip": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "date": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "ice": [
+    "breakable",
+    "coldSource",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "nut": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "wheel": [
+    "burnable",
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "foil": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "oven": [
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "refrigerator": [
+    "coldSource",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "book": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "foam": [
+    "breakable",
+    "burnable",
+    "freezable"
+  ],
+  "packaging": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "blade": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "garbage": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "perishable",
+    "scrubbable"
+  ],
+  "cap": [
+    "screwable"
+  ],
+  "block": [
+    "scrubbable"
+  ],
+  "stove": [
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "trouser": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "drawer": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "shirt": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "tea": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "cube": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "bristle": [
+    "burnable"
+  ],
+  "bed": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "jersey": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "iron": [
+    "breakable",
+    "dustyable",
+    "heatSource",
+    "scrubbable"
+  ],
+  "orange": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "net": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "sock": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "bathtub": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "seal": [
+    "dustyable"
+  ],
+  "alcohol": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "shade": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "tray": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "kit": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "pen": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "lining": [
+    "scrubbable"
+  ],
+  "fire": [
+    "heatSource"
+  ],
+  "citrus": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable",
+    "sliceable"
+  ],
+  "rug": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "vegetable": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "butter": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "microwave": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "cord": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "pin": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "plug": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "spring": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "tube": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "coffee": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "basket": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "dryer": [
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "bath": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "hanger": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "wine": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "mold": [
+    "burnable"
+  ],
+  "necktie": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "tank": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "grain": [
+    "burnable",
+    "cookable",
+    "perishable",
+    "soakable"
+  ],
+  "can": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "marker": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "perishable",
+    "scrubbable"
+  ],
+  "mask": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "pack": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "panel": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "blanket": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "dishwasher": [
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "switch": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "coating": [
+    "burnable",
+    "dustyable",
+    "liquid",
+    "scrubbable"
+  ],
+  "sun": [
+    "heatSource"
+  ],
+  "toilet": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "wall_socket": [
+    "burnable",
+    "dustyable",
+    "toggleable"
+  ],
+  "greens": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "vehicle": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "milk": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "acid": [
+    "freezable",
+    "liquid"
+  ],
+  "faucet": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "chair": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "sauce": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable",
+    "soakable"
+  ],
+  "fork": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "washcloth": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "holder": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "card": [
+    "breakable",
+    "burnable"
+  ],
+  "tile": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "yield": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "spatula": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "filter": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "jean": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "mat": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "eraser": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "apple": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "file": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "roller": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "timer": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "screwable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "vent": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "sugar": [
+    "cookable",
+    "perishable",
+    "soakable"
+  ],
+  "picture": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "egg": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "openable",
+    "perishable",
+    "sliceable"
+  ],
+  "curtain": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "jar": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "screwable",
+    "scrubbable"
+  ],
+  "meat": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "electric_refrigerator": [
+    "coldSource",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "dress": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "brim": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "deep-freeze": [
+    "coldSource",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "telephone": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "skirt": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "broom": [
+    "burnable",
+    "dustyable"
+  ],
+  "bin": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "candy": [
+    "breakable",
+    "burnable",
+    "perishable",
+    "sliceable"
+  ],
+  "strap": [
+    "breakable",
+    "burnable",
+    "scrubbable"
+  ],
+  "scissors": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "plaything": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "silk": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "knob": [
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "eatage": [
+    "burnable",
+    "freezable",
+    "perishable"
+  ],
+  "swab": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "underwear": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "cake": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "drill": [
+    "breakable",
+    "dustyable",
+    "screwable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "sweater": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "garment": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "pool": [
+    "freezable",
+    "liquid",
+    "scrubbable"
+  ],
+  "cheese": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "jewelry": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "pillow": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "boot": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "olive": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "bolt": [
+    "dustyable",
+    "screwable"
+  ],
+  "crumb": [
+    "burnable",
+    "cookable",
+    "perishable",
+    "soakable"
+  ],
+  "ventilation": [
+    "dustyable",
+    "openable",
+    "toggleable"
+  ],
+  "baseboard": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "disinfectant": [
+    "burnable",
+    "liquid"
+  ],
+  "scrub_brush": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "cutter": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "seat": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "photograph": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "computer": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "jacket": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "kettle": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "scum": [
+    "scrubbable"
+  ],
+  "burner": [
+    "dustyable",
+    "heatSource",
+    "toggleable"
+  ],
+  "toothpaste": [
+    "freezable",
+    "perishable"
+  ],
+  "mallet": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cable": [
+    "dustyable"
+  ],
+  "rule": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "pasta": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable",
+    "soakable"
+  ],
+  "bread": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "dishrag": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "chip": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable"
+  ],
+  "stand": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "gelatin": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "formula": [
+    "liquid",
+    "perishable"
+  ],
+  "lock": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "rod": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "chocolate": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "ribbon": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "linen": [
+    "burnable",
+    "scrubbable"
+  ],
+  "thermometer": [
+    "breakable",
+    "dustyable"
+  ],
+  "shampoo": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "socket": [
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "porcelain": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "fish": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "thread": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "disposal": [
+    "scrubbable",
+    "toggleable"
+  ],
+  "countertop": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "mirror": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "pill": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "perishable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "peanut": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable",
+    "sliceable"
+  ],
+  "needle": [
+    "breakable"
+  ],
+  "stool": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "knot": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "fastener": [
+    "dustyable",
+    "screwable"
+  ],
+  "hat": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "trap": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "toggleable"
+  ],
+  "land": [
+    "soakable"
+  ],
+  "screen": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "salad": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "light_bulb": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "heatSource",
+    "screwable",
+    "toggleable"
+  ],
+  "scraper": [
+    "scrubbable"
+  ],
+  "carrot": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "pump": [
+    "dustyable",
+    "toggleable"
+  ],
+  "razor": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "ladder": [
+    "dustyable",
+    "openable"
+  ],
+  "pipe": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "lotion": [
+    "liquid"
+  ],
+  "conditioner": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "dustcloth": [
+    "breakable",
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "lime": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "cookie": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "bead": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "dial": [
+    "dustyable",
+    "screwable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "hinge": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "strainer": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "tire": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "lace": [
+    "burnable",
+    "scrubbable"
+  ],
+  "bracket": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "toiletry": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "freezable",
+    "liquid",
+    "openable",
+    "perishable",
+    "screwable",
+    "scrubbable"
+  ],
+  "belt": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "battery": [
+    "burnable",
+    "dustyable"
+  ],
+  "honey": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "cupboard": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "spice": [
+    "burnable",
+    "cookable",
+    "perishable"
+  ],
+  "grate": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "slide_fastener": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "tin": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "cinnamon": [
+    "breakable",
+    "burnable",
+    "perishable",
+    "soakable"
+  ],
+  "crayon": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "slack": [
+    "burnable",
+    "scrubbable"
+  ],
+  "grill": [
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable"
+  ],
+  "pole": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "gauge": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "perfume": [
+    "burnable",
+    "liquid"
+  ],
+  "basin": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "skewer": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "corn": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "cider": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "glove": [
+    "burnable",
+    "scrubbable"
+  ],
+  "flour": [
+    "perishable",
+    "soakable"
+  ],
+  "saucepan": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "vanilla": [
+    "burnable",
+    "freezable",
+    "perishable"
+  ],
+  "gym_shoe": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "bean": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "soakable"
+  ],
+  "backpack": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "onion": [
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "sandwich": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "deodorant": [
+    "burnable",
+    "perishable",
+    "screwable"
+  ],
+  "chest_of_drawers": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "wrench": [
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "whisk": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "popcorn": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable"
+  ],
+  "coil": [
+    "scrubbable"
+  ],
+  "bell": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "heel": [
+    "scrubbable"
+  ],
+  "potato": [
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "truck": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "enamel": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "straw": [
+    "breakable",
+    "burnable"
+  ],
+  "wallboard": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "rice": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "soakable"
+  ],
+  "ceramic": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "lever": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "circuit_breaker": [
+    "dustyable",
+    "toggleable"
+  ],
+  "dustpan": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "notch": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "mattress": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "binder": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "blender": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "painting": [
+    "burnable",
+    "dustyable"
+  ],
+  "collar": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "rail": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "brick": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "syrup": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "berry": [
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "mint": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "packet": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "step_ladder": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "bookshelf": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "laminate": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "steamer": [
+    "dustyable",
+    "heatSource",
+    "scrubbable"
+  ],
+  "chest": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "scoop": [
+    "scrubbable"
+  ],
+  "magazine": [
+    "breakable",
+    "burnable",
+    "coldSource",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "blower": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "undergarment": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "drawing": [
+    "burnable",
+    "dustyable"
+  ],
+  "pouch": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "bedclothes": [
+    "burnable",
+    "scrubbable"
+  ],
+  "legging": [
+    "burnable",
+    "scrubbable"
+  ],
+  "chewing_gum": [
+    "burnable",
+    "perishable"
+  ],
+  "quilt": [
+    "burnable",
+    "scrubbable"
+  ],
+  "staple": [
+    "dustyable"
+  ],
+  "anchor": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "suit": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "garlic": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "pepper": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "desk": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cranberry": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "mayonnaise": [
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "ginger": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "sunglass": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "television_receiver": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "mug": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "golf_club": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "folder": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "plunger": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "funnel": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "candle": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "heatSource"
+  ],
+  "toothpick": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "sofa": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "paintbrush": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cushion": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "watch": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "screwable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "banana": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "openable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "dip": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "soapsuds": [
+    "liquid"
+  ],
+  "flashlight": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "wiring": [
+    "dustyable"
+  ],
+  "breast": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "applicator": [
+    "scrubbable"
+  ],
+  "parsley": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "comb": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "flight": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "grape": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "blush_wine": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "mounting": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "heater": [
+    "dustyable",
+    "heatSource",
+    "toggleable"
+  ],
+  "document": [
+    "burnable",
+    "dustyable"
+  ],
+  "backing": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "beer": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "blockage": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "disk": [
+    "breakable",
+    "dustyable"
+  ],
+  "trigger": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "tarpaulin": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "casserole": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "cutlery": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "dressing": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "decoration": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "lighting": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "bow": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "sliceable"
+  ],
+  "partition": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "scantling": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "soup": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "lamp": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "chicken": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "shell": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "pajama": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "cucumber": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "baggage": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "peach": [
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "pineapple": [
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "squeegee": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "clothespin": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "cracker": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable"
+  ],
+  "notebook": [
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "canvas": [
+    "burnable",
+    "dustyable"
+  ],
+  "tomato": [
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "basil": [
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "blind": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "colander": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "girdle": [
+    "burnable",
+    "scrubbable"
+  ],
+  "frosting": [
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "charger": [
+    "dustyable",
+    "toggleable"
+  ],
+  "rope": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "napkin": [
+    "breakable",
+    "burnable",
+    "soakable"
+  ],
+  "float": [
+    "scrubbable"
+  ],
+  "frying_pan": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "cherry": [
+    "burnable",
+    "cookable",
+    "dustyable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "marble": [
+    "scrubbable"
+  ],
+  "windowsill": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "throw": [
+    "burnable",
+    "scrubbable"
+  ],
+  "yogurt": [
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "pedal": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "compact_disk": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "windshield": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "mill": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "screwable",
+    "scrubbable"
+  ],
+  "beef": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "gravy": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "drive": [
+    "dustyable",
+    "openable",
+    "toggleable"
+  ],
+  "umbrella": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "hairbrush": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "necklace": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "bedspread": [
+    "burnable",
+    "scrubbable"
+  ],
+  "crate": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "chopstick": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "pitcher": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "dishtowel": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "lemonade": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "jug": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "dental_floss": [
+    "breakable",
+    "burnable"
+  ],
+  "receptacle": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "camera": [
+    "breakable",
+    "dustyable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "cocoa": [
+    "freezable",
+    "perishable"
+  ],
+  "tuna": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "lettuce": [
+    "burnable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "lens": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "spinach": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "printer": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "toggleable"
+  ],
+  "trowel": [
+    "scrubbable"
+  ],
+  "carton": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "clock": [
+    "breakable",
+    "dustyable",
+    "timeSetable"
+  ],
+  "clove": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "steak": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "dough": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "strawberry": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "plywood": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "brassiere": [
+    "burnable",
+    "openable",
+    "scrubbable",
+    "soakable"
+  ],
+  "avocado": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "scarf": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "chili": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable",
+    "sliceable"
+  ],
+  "broccoli": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "peg": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "planner": [
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "egg_yolk": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "beater": [
+    "scrubbable"
+  ],
+  "raspberry": [
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "crust": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "sandal": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "swimsuit": [
+    "burnable",
+    "scrubbable"
+  ],
+  "jack": [
+    "scrubbable"
+  ],
+  "toaster": [
+    "burnable",
+    "dustyable",
+    "heatSource",
+    "toggleable"
+  ],
+  "hamper": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "peeler": [
+    "scrubbable"
+  ],
+  "gasket": [
+    "burnable",
+    "scrubbable"
+  ],
+  "clothesline": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "satin": [
+    "burnable",
+    "scrubbable"
+  ],
+  "wheat": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "soakable"
+  ],
+  "tack": [
+    "dustyable"
+  ],
+  "bookcase": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "papaya": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "highlighter": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "muffin": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "canister": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "pizza": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "sunscreen": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "ointment": [
+    "burnable",
+    "freezable",
+    "perishable"
+  ],
+  "bacon": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "cauliflower": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "radio_receiver": [
+    "breakable",
+    "dustyable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "khaki": [
+    "burnable",
+    "scrubbable"
+  ],
+  "clamp": [
+    "dustyable",
+    "openable",
+    "screwable"
+  ],
+  "earring": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "pantyhose": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "barrel": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "calculator": [
+    "breakable",
+    "dustyable",
+    "toggleable"
+  ],
+  "palette": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "stew": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "guard": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "tablecloth": [
+    "burnable",
+    "scrubbable"
+  ],
+  "dispenser": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "sequin": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "granule": [],
+  "shovel": [
+    "breakable",
+    "scrubbable"
+  ],
+  "pie": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "sketch": [
+    "breakable",
+    "burnable"
+  ],
+  "stapler": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "deck": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "library": [
+    "burnable",
+    "dustyable"
+  ],
+  "fur": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "uniform": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "bagel": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "covering": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "raisin": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "watermelon": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "pretzel": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "cupcake": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "burlap": [
+    "burnable",
+    "scrubbable"
+  ],
+  "jam": [
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "batter": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "wreath": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "mixer": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "fuse": [
+    "burnable",
+    "toggleable"
+  ],
+  "suede_cloth": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "duffel_bag": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "soakable"
+  ],
+  "mustard": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "peppermint": [
+    "cookable",
+    "burnable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "blouse": [
+    "burnable",
+    "scrubbable"
+  ],
+  "celery": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "soy_sauce": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "bean_curd": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "earphone": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "toggleable"
+  ],
+  "stocking": [
+    "burnable",
+    "scrubbable"
+  ],
+  "step": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "bicycle": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "chalk": [
+    "breakable"
+  ],
+  "cellophane": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "sweetening": [
+    "freezable",
+    "perishable"
+  ],
+  "wicker": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "soakable"
+  ],
+  "caddy": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "chickpea": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "prawn": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "velcro": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "plum": [
+    "breakable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "clog": [
+    "breakable",
+    "burnable",
+    "freezable",
+    "openable",
+    "scrubbable"
+  ],
+  "drum_sander": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "personal_computer": [
+    "breakable",
+    "dustyable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "flat_coat": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "dressing_table": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "coconut": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "turkey": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "parmesan": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "noodle": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "kale": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "pear": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "cone": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "dustyable",
+    "perishable",
+    "scrubbable"
+  ],
+  "respirator": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "runner": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "gauze": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "blazer": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "margarine": [
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "pendulum": [
+    "dustyable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "pickle": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "drawstring": [
+    "burnable",
+    "openable",
+    "scrubbable",
+    "soakable"
+  ],
+  "pegboard": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "barley": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "soakable"
+  ],
+  "bandage": [
+    "breakable",
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "mail": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "cocktail": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "catsup": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "french_dressing": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "caramel": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "videodisk": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "lipstick": [
+    "breakable",
+    "openable",
+    "perishable"
+  ],
+  "caliper": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "doorknob": [
+    "dustyable",
+    "screwable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "globe": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "paprika": [
+    "freezable",
+    "perishable"
+  ],
+  "blueberry": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "laptop": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "wallet": [
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "tart": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "pea": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "tartan": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "carryall": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "mouse": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "journal": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "alarm": [
+    "breakable",
+    "dustyable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "mango": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "turnbuckle": [
+    "dustyable",
+    "openable",
+    "screwable",
+    "scrubbable"
+  ],
+  "sack": [
+    "burnable",
+    "openable",
+    "scrubbable"
+  ],
+  "crank": [
+    "breakable",
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "rum": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "watchband": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "cooler": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "railing": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "drum": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cheesecloth": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "fiber": [
+    "breakable",
+    "burnable",
+    "scrubbable"
+  ],
+  "sieve": [
+    "scrubbable"
+  ],
+  "platter": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "hoop": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "vase": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "upholstery": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "yardstick": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "jigsaw": [
+    "breakable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "punch": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "latch": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "nylon": [
+    "breakable",
+    "burnable",
+    "scrubbable"
+  ],
+  "rake": [
+    "burnable",
+    "scrubbable"
+  ],
+  "headboard": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "trophy": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "thumbtack": [
+    "dustyable",
+    "screwable"
+  ],
+  "opener": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "monitor": [
+    "breakable",
+    "dustyable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "baseball": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "stamp": [
+    "breakable",
+    "burnable"
+  ],
+  "shellac": [
+    "breakable",
+    "burnable",
+    "liquid"
+  ],
+  "varnish": [
+    "burnable",
+    "freezable",
+    "liquid"
+  ],
+  "slat": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "rayon": [
+    "burnable",
+    "scrubbable"
+  ],
+  "fleece": [
+    "burnable",
+    "scrubbable"
+  ],
+  "mitten": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "shoebox": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "paper_clip": [
+    "breakable"
+  ],
+  "kosher": [],
+  "saw": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "flannel": [
+    "burnable",
+    "scrubbable"
+  ],
+  "ice_lolly": [
+    "breakable",
+    "coldSource",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "jaw": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "football": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "raincoat": [
+    "burnable",
+    "scrubbable"
+  ],
+  "nightgown": [
+    "burnable",
+    "scrubbable"
+  ],
+  "walnut": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "openable",
+    "perishable",
+    "sliceable"
+  ],
+  "liquid_crystal_display": [
+    "breakable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "frill": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "insole": [
+    "burnable",
+    "scrubbable"
+  ],
+  "brew": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "tinsel": [
+    "burnable",
+    "dustyable"
+  ],
+  "almond": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable",
+    "sliceable"
+  ],
+  "dolly": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "axle": [
+    "screwable",
+    "scrubbable"
+  ],
+  "teacup": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "espresso": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "pita": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "marjoram": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "dill": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "beet": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "macaroni": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "soakable"
+  ],
+  "hummus": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "router": [
+    "breakable",
+    "dustyable",
+    "toggleable"
+  ],
+  "topper": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "tripod": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "marshmallow": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "cheddar": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "portrait": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "sweatshirt": [
+    "burnable",
+    "scrubbable"
+  ],
+  "cabbage": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "background": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "mozzarella": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "tampon": [
+    "breakable",
+    "burnable",
+    "soakable"
+  ],
+  "granola": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable"
+  ],
+  "shoelace": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "hubcap": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "pulp": [
+    "breakable",
+    "burnable",
+    "freezable",
+    "perishable"
+  ],
+  "windshield_wiper": [
+    "breakable",
+    "scrubbable"
+  ],
+  "muslin": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "ratchet": [
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "fountain": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "compressor": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "cornmeal": [
+    "burnable",
+    "cookable",
+    "perishable",
+    "soakable"
+  ],
+  "ramp": [
+    "scrubbable"
+  ],
+  "horsehair": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "antenna": [
+    "breakable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "apricot": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "padding": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "snake": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "shaver": [
+    "dustyable",
+    "slicer",
+    "scrubbable"
+  ],
+  "tortilla": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "pane": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "carafe": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "cos": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "ranch": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "nutcracker": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "doll": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "bird_feeder": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "freshener": [
+    "burnable",
+    "liquid"
+  ],
+  "fireplace": [
+    "dustyable",
+    "heatSource",
+    "scrubbable"
+  ],
+  "aerosol": [
+    "burnable"
+  ],
+  "sill": [
+    "freezable",
+    "scrubbable"
+  ],
+  "adapter": [
+    "dustyable",
+    "toggleable"
+  ],
+  "cobweb": [
+    "breakable",
+    "burnable"
+  ],
+  "oat": [
+    "burnable",
+    "cookable",
+    "perishable",
+    "soakable"
+  ],
+  "radish": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "salsa": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "liquor": [
+    "burnable",
+    "liquid",
+    "perishable"
+  ],
+  "briefcase": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "plush": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "embroidery": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "beading": [
+    "breakable"
+  ],
+  "thyme": [
+    "burnable",
+    "perishable",
+    "sliceable"
+  ],
+  "hub": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "wardrobe": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "diaper": [
+    "burnable",
+    "openable",
+    "soakable"
+  ],
+  "envelope": [
+    "breakable",
+    "burnable",
+    "openable",
+    "soakable"
+  ],
+  "coca_cola": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "sorter": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "cringle": [
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "mural": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "biscuit": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "thermostat": [
+    "breakable",
+    "dustyable",
+    "toggleable"
+  ],
+  "cornice": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "sliceable",
+    "soakable"
+  ],
+  "crock": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "lingerie": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "slate": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "toggle_switch": [
+    "toggleable"
+  ],
+  "firewall": [
+    "toggleable"
+  ],
+  "carpet_pad": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "shim": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "straightener": [
+    "dustyable",
+    "heatSource",
+    "toggleable"
+  ],
+  "gown": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "sawhorse": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "brine": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "hamburger": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "light-emitting_diode": [
+    "breakable",
+    "dustyable",
+    "toggleable"
+  ],
+  "cashmere": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "shield": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "detector": [
+    "toggleable"
+  ],
+  "coaster": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "puree": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "seltzer": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "buttermilk": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "lego": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "tumbler": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "confetti": [
+    "burnable"
+  ],
+  "plumbing": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "eiderdown": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "lampshade": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "guitar": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "terry": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "bookend": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "pudding": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "ladle": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "lentil": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "soakable"
+  ],
+  "ham": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "cantaloup": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "nectarine": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "clasp": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "pincer": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "denture": [
+    "breakable",
+    "scrubbable"
+  ],
+  "glaze": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "cognac": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "loaf_of_bread": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "nipple": [
+    "burnable",
+    "scrubbable"
+  ],
+  "scotch": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "cereal": [
+    "breakable",
+    "burnable",
+    "perishable",
+    "soakable"
+  ],
+  "cinder": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "heatSource"
+  ],
+  "computer_keyboard": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "stereo": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "spine": [
+    "breakable"
+  ],
+  "hygrometer": [
+    "breakable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "doormat": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "oatmeal": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "soakable"
+  ],
+  "cornbread": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "eyeliner": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "fence": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "reamer": [
+    "dustyable",
+    "screwable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "corkscrew": [
+    "burnable",
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "ravioli": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "salmon": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "pumpkin": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "chutney": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "sprout": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "squash": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "fig": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "melon": [
+    "burnable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "zucchini": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "sushi": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "meatball": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "tabbouleh": [
+    "burnable",
+    "freezable",
+    "perishable"
+  ],
+  "pork": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "cigarette": [
+    "breakable",
+    "burnable",
+    "perishable"
+  ],
+  "ashcan": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "bangle": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "jewel": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "collage": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "jamb": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "armoire": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "gingham": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "rosemary": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "scrapbook": [
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "remote_control": [
+    "breakable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "headband": [
+    "burnable",
+    "dustyable",
+    "soakable"
+  ],
+  "cologne": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "novel": [
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "magnet": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "mousse": [
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "lanolin": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "boiler": [
+    "burnable",
+    "dustyable",
+    "heatSource",
+    "scrubbable",
+    "toggleable"
+  ],
+  "canola_oil": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "fennel": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "piston": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "beam": [
+    "burnable",
+    "dustyable"
+  ],
+  "keyboard": [
+    "breakable",
+    "dustyable"
+  ],
+  "bikini": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "firework": [
+    "burnable"
+  ],
+  "teapot": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "anchovy": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "scanner": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "toggleable"
+  ],
+  "pond": [
+    "freezable",
+    "liquid"
+  ],
+  "stockpot": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "probe": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "masher": [
+    "scrubbable"
+  ],
+  "nutmeg": [
+    "perishable"
+  ],
+  "fillet": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "dart": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "hedge": [
+    "burnable",
+    "perishable"
+  ],
+  "dartboard": [
+    "burnable",
+    "dustyable"
+  ],
+  "stake": [
+    "burnable",
+    "dustyable"
+  ],
+  "tequila": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "vodka": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "motorcycle": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "frisbee": [
+    "breakable",
+    "dustyable"
+  ],
+  "sifter": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "farfalle": [
+    "cookable",
+    "freezable",
+    "soakable"
+  ],
+  "worktable": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "saucer": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "horseradish": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "radicchio": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "worcester_sauce": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "minibike": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "handlebar": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "turmeric": [
+    "burnable",
+    "cookable",
+    "perishable"
+  ],
+  "album": [
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "cleaver": [
+    "dustyable",
+    "slicer",
+    "scrubbable"
+  ],
+  "chop": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "smoothie": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "apron": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "oxford": [
+    "burnable",
+    "dustyable",
+    "soakable"
+  ],
+  "fudge": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "oolong": [
+    "perishable",
+    "soakable"
+  ],
+  "caper": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "coriander": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "cashew": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable"
+  ],
+  "shallot": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "hood": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "sharpener": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "modem": [
+    "breakable",
+    "dustyable",
+    "toggleable"
+  ],
+  "bidet": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "furnace": [
+    "dustyable",
+    "heatSource",
+    "scrubbable",
+    "toggleable"
+  ],
+  "crouton": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "accelerator": [
+    "burnable",
+    "dustyable",
+    "toggleable"
+  ],
+  "cotter": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "capacitor": [
+    "burnable",
+    "dustyable",
+    "toggleable"
+  ],
+  "siren": [
+    "dustyable",
+    "toggleable"
+  ],
+  "recreational_vehicle": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "blackberry": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "lighter": [
+    "burnable",
+    "heatSource",
+    "toggleable"
+  ],
+  "crossbar": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "mousetrap": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "teddy": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "brownie": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "kabob": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "sculpture": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "faceplate": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "grapefruit": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "mocha": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "putter": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "griddle": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "shaker": [
+    "dustyable",
+    "openable",
+    "screwable",
+    "scrubbable"
+  ],
+  "chock": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "undercarriage": [
+    "scrubbable"
+  ],
+  "duplicator": [
+    "dustyable",
+    "openable",
+    "toggleable"
+  ],
+  "pomegranate": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "fire_extinguisher": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "mantel": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "gumdrop": [
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "resistor": [
+    "dustyable",
+    "toggleable"
+  ],
+  "cheesecake": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "hardback": [
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "stopcock": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "coloring": [
+    "liquid"
+  ],
+  "cart": [
+    "scrubbable"
+  ],
+  "voltmeter": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "semigloss": [
+    "liquid"
+  ],
+  "jump_suit": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "dander": [
+    "burnable",
+    "dustyable"
+  ],
+  "demitasse": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "tabasco": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "relish": [
+    "freezable",
+    "perishable"
+  ],
+  "penne": [
+    "cookable",
+    "freezable",
+    "soakable"
+  ],
+  "dampener": [
+    "scrubbable"
+  ],
+  "firebox": [
+    "dustyable",
+    "heatSource",
+    "scrubbable"
+  ],
+  "sail": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "trailer_truck": [
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "sprocket": [
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "pulley": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "facsimile": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "clamshell": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "tent": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "soakable"
+  ],
+  "tulle": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "wastepaper_basket": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "footboard": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "tidy": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "mascara": [
+    "burnable",
+    "dustyable",
+    "liquid",
+    "openable",
+    "perishable",
+    "screwable"
+  ],
+  "eyeshadow": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "sauerkraut": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "applesauce": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "burrito": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "sausage": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "tahini": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "crowbar": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "webbing": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "potpourri": [
+    "burnable",
+    "perishable"
+  ],
+  "snowball": [
+    "breakable",
+    "burnable",
+    "coldSource",
+    "freezable"
+  ],
+  "chassis": [
+    "scrubbable"
+  ],
+  "sweatband": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "plumber's_snake": [
+    "dustyable",
+    "screwable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "shortening": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "decaffeinated_coffee": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "frappe": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "cream_pitcher": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "percolator": [
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "licorice": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "comfrey": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable",
+    "sliceable"
+  ],
+  "alfalfa": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "stout": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "whiskey": [
+    "burnable",
+    "cookable",
+    "liquid",
+    "perishable"
+  ],
+  "liqueur": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "grater": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "cayenne": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "goblet": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "gazpacho": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "brie": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "power_shovel": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "bobbin": [
+    "burnable",
+    "dustyable",
+    "screwable"
+  ],
+  "earplug": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "toggleable"
+  ],
+  "monocle": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "shear": [
+    "dustyable",
+    "scrubbable",
+    "slicer"
+  ],
+  "trimmer": [
+    "dustyable",
+    "scrubbable",
+    "slicer",
+    "toggleable"
+  ],
+  "bale": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "flatbed": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "speedometer": [
+    "dustyable",
+    "toggleable"
+  ],
+  "odometer": [
+    "dustyable",
+    "toggleable"
+  ],
+  "floorboard": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "repeater": [
+    "breakable",
+    "dustyable",
+    "toggleable"
+  ],
+  "webcam": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "toggleable"
+  ],
+  "doorjamb": [
+    "burnable",
+    "dustyable"
+  ],
+  "groundsheet": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "bedpost": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "easel": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "dinner_jacket": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "buffer": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "lacquer": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "lamb": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "ski": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "robe": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "vest": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "mothball": [
+    "breakable",
+    "burnable",
+    "soakable"
+  ],
+  "clipboard": [
+    "burnable",
+    "dustyable",
+    "openable"
+  ],
+  "pomade": [
+    "perishable"
+  ],
+  "carpet_sweeper": [
+    "burnable"
+  ],
+  "venison": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "generator": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "gumbo": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "eggplant": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "honeydew": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "lasagna": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "meat_loaf": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "taco": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "waffle": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "kiwi": [
+    "burnable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "artichoke": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "prosciutto": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "coleslaw": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "puff": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable"
+  ],
+  "nacho": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "guacamole": [
+    "freezable",
+    "perishable"
+  ],
+  "sangaree": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "fluorescent": [
+    "breakable",
+    "dustyable",
+    "screwable",
+    "toggleable"
+  ],
+  "crochet": [
+    "burnable",
+    "soakable"
+  ],
+  "toolbox": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "lath": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "chisel": [
+    "dustyable",
+    "scrubbable",
+    "slicer"
+  ],
+  "joist": [
+    "breakable",
+    "burnable"
+  ],
+  "breathing_device": [
+    "dustyable",
+    "toggleable"
+  ],
+  "buckle": [
+    "dustyable",
+    "openable"
+  ],
+  "doorframe": [
+    "burnable",
+    "dustyable"
+  ],
+  "stairwell": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "piano": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "brocade": [
+    "burnable",
+    "dustyable",
+    "soakable"
+  ],
+  "gourd": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "knickknack": [
+    "breakable",
+    "burnable",
+    "dustyable"
+  ],
+  "cradle": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "bannister": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cassette": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "toggleable"
+  ],
+  "sled": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "inverter": [
+    "dustyable",
+    "toggleable"
+  ],
+  "choke": [
+    "openable"
+  ],
+  "filament": [
+    "breakable",
+    "burnable"
+  ],
+  "basketball": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "tiara": [
+    "breakable",
+    "dustyable"
+  ],
+  "comforter": [
+    "burnable",
+    "scrubbable"
+  ],
+  "bib": [
+    "burnable",
+    "scrubbable"
+  ],
+  "puppet": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "gingerbread": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "lollipop": [
+    "breakable",
+    "cookable",
+    "perishable"
+  ],
+  "paperweight": [
+    "breakable",
+    "dustyable"
+  ],
+  "van": [
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "earmuff": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "bust": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cardigan": [
+    "burnable",
+    "soakable"
+  ],
+  "stiletto": [
+    "dustyable",
+    "slicer",
+    "scrubbable"
+  ],
+  "sunhat": [
+    "burnable",
+    "dustyable"
+  ],
+  "diary": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "treadmill": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "loafer": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "toner": [
+    "freezable",
+    "liquid"
+  ],
+  "ipod": [
+    "breakable",
+    "dustyable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "barbell": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "chenille": [
+    "burnable",
+    "scrubbable",
+    "soakable"
+  ],
+  "footstool": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "slipper": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "sash": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "greatcoat": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "blackboard": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "capsule": [
+    "breakable",
+    "burnable",
+    "openable"
+  ],
+  "talcum": [
+    "soakable"
+  ],
+  "outsole": [
+    "burnable",
+    "scrubbable"
+  ],
+  "awl": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "pebble": [
+    "scrubbable"
+  ],
+  "crusher": [
+    "dustyable",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "wafer": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "perishable",
+    "soakable"
+  ],
+  "bench": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "caster": [
+    "dustyable",
+    "openable",
+    "screwable",
+    "scrubbable"
+  ],
+  "hazelnut": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "julienne": [
+    "breakable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "curry": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "stopwatch": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "roaster": [
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable"
+  ],
+  "aspartame": [
+    "burnable",
+    "perishable"
+  ],
+  "scone": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "pestle": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "cardamom": [
+    "breakable",
+    "burnable",
+    "freezable",
+    "perishable"
+  ],
+  "conserve": [
+    "perishable"
+  ],
+  "toast": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "curacao": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "baguet": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "blanc": [
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "allspice": [
+    "burnable",
+    "perishable"
+  ],
+  "chicory_escarole": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "sirloin": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "gorgonzola": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "green_onion": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "cumin": [
+    "burnable",
+    "perishable"
+  ],
+  "mostaccioli": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "soakable"
+  ],
+  "pepperoni": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "salami": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "asparagus": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "broth": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "mussel": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "clam": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "bisque": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "lobster": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "marinara": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "mushroom": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "breadcrumb": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "soakable"
+  ],
+  "crab": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "veal": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "cutlet": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "medallion": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "tenderloin": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "gouda": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "brandy": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "martini": [
+    "burnable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "doily": [
+    "breakable",
+    "burnable",
+    "scrubbable"
+  ],
+  "potholder": [
+    "burnable",
+    "scrubbable"
+  ],
+  "ember": [
+    "breakable",
+    "burnable",
+    "heatSource"
+  ],
+  "carabiner": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "hacksaw": [
+    "dustyable",
+    "scrubbable",
+    "slicer"
+  ],
+  "dowel": [
+    "breakable",
+    "burnable",
+    "scrubbable"
+  ],
+  "windowpane": [
+    "breakable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "stirrer": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "spindle": [
+    "burnable"
+  ],
+  "hay": [
+    "burnable",
+    "soakable"
+  ],
+  "softball": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "foliation": [
+    "burnable",
+    "perishable"
+  ],
+  "intake": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "purifier": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "manifold": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "blinker": [
+    "dustyable",
+    "toggleable"
+  ],
+  "shrapnel": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "selsyn": [
+    "scrubbable"
+  ],
+  "inflater": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "diskette": [
+    "breakable",
+    "dustyable"
+  ],
+  "protractor": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "helmet": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "skateboard": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "water_scooter": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "cellular_telephone": [
+    "breakable",
+    "dustyable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "braid": [
+    "burnable",
+    "soakable"
+  ],
+  "paperback_book": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "soakable"
+  ],
+  "dipper": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "camcorder": [
+    "breakable",
+    "dustyable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "microphone": [
+    "burnable",
+    "dustyable",
+    "toggleable"
+  ],
+  "headlight": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "dumbbell": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "pancake": [
+    "breakable",
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable",
+    "soakable"
+  ],
+  "carriage": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "baby_buggy": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cheeseboard": [
+    "burnable",
+    "dustyable",
+    "perishable",
+    "scrubbable"
+  ],
+  "balloon": [
+    "burnable",
+    "dustyable"
+  ],
+  "thimble": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "shower": [
+    "scrubbable"
+  ],
+  "wall": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "floor": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "ceiling": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cabinet": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "carpet": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "coffee_table": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "console_table": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "cooktop": [
+    "dustyable",
+    "heatSource",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "counter": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "fridge": [
+    "coldSource",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "tv": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "crib": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "floor_lamp": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "grandfather_clock": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "timeSetable"
+  ],
+  "office_chair": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "pool_table": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "range_hood": [
+    "burnable",
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "sofa_chair": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "speaker_system": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "towel_rack": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "spaghetti": [
+    "cookable",
+    "freezable",
+    "soakable"
+  ],
+  "cold_cereal": [
+    "soakable"
+  ],
+  "soup_ladle": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "toasting_fork": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "chopping_board": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "bulletin_board": [
+    "dustyable"
+  ],
+  "dish_rack": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "corn_flake": [
+    "cookable",
+    "soakable"
+  ],
+  "puffed_rice": [
+    "cookable",
+    "soakable"
+  ],
+  "raisin_bran": [
+    "cookable",
+    "soakable"
+  ],
+  "carving_knife": [
+    "dustyable",
+    "scrubbable",
+    "slicer"
+  ],
+  "parer": [
+    "dustyable",
+    "scrubbable",
+    "slicer"
+  ],
+  "cruet": [
+    "breakable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "cheese_dip": [
+    "freezable",
+    "perishable"
+  ],
+  "dinner_napkin": [
+    "burnable",
+    "soakable"
+  ],
+  "powdered_milk": [
+    "soakable"
+  ],
+  "velveeta": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "pomelo": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "vidalia_onion": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "turnip": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "dill_pickle": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "pepper_sauce": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "spaghetti_sauce": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "millet": [
+    "soakable"
+  ],
+  "salad_fork": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "dessert_spoon": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "table_knife": [
+    "dustyable",
+    "scrubbable",
+    "slicer"
+  ],
+  "bulldog_clip": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "straight_pin": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "foot_rule": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "commonplace_book": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "pencil_box": [
+    "dustyable",
+    "openable",
+    "scrubbable"
+  ],
+  "pistachio": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "head_cabbage": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "sweet_corn": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "low-fat_milk": [
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "olive_oil": [
+    "cookable",
+    "freezable",
+    "liquid"
+  ],
+  "white_wine": [
+    "cookable",
+    "freezable",
+    "liquid"
+  ],
+  "tablefork": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "wine_bottle": [
+    "breakable",
+    "dustyable",
+    "liquid",
+    "openable",
+    "scrubbable"
+  ],
+  "steel": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "grapeshot": [
+    "burnable"
+  ],
+  "pepper_mill": [
+    "dustyable",
+    "openable",
+    "screwable",
+    "scrubbable"
+  ],
+  "display_panel": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "hip": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable"
+  ],
+  "scale": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "water_ouzel": [],
+  "chives": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "sliceable"
+  ],
+  "attic": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "jolt": [],
+  "pop_music": [],
+  "rocking_chair": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "computer_game": [
+    "breakable",
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ],
+  "straight_chair": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "gooseberry": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable"
+  ],
+  "pot_plant": [
+    "burnable",
+    "soakable"
+  ],
+  "pocketknife": [
+    "dustyable",
+    "slicer",
+    "scrubbable"
+  ],
+  "bell_pepper": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "sliceable"
+  ],
+  "armchair": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "medicine": [
+    "burnable"
+  ],
+  "folderal": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "cpu_board": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "toggleable"
+  ],
+  "clout_nail": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "chestnut": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "perishable",
+    "scrubbable",
+    "soakable"
+  ],
+  "board_game": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "candy_cane": [
+    "burnable",
+    "cookable"
+  ],
+  "rail_fence": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "coatrack": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "lyonnaise_sauce": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "liquid",
+    "perishable"
+  ],
+  "gaming_table": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "hammer": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "walker": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "canned_food": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "openable"
+  ],
+  "chaise_longue": [
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "pepper_grinder": [
+    "dustyable",
+    "screwable",
+    "scrubbable"
+  ],
+  "hand_towel": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "loudspeaker": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "table_lamp": [
+    "dustyable",
+    "screwable",
+    "toggleable"
+  ],
+  "pedestal_table": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "caldron": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "highchair": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "swivel_chair": [
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "disk_drive": [
+    "breakable",
+    "dustyable",
+    "toggleable"
+  ],
+  "bath_towel": [
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "wall_clock": [
+    "breakable",
+    "dustyable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "tongs": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "protein": [],
+  "coffee_maker": [
+    "dustyable",
+    "scrubbable",
+    "timeSetable",
+    "toggleable"
+  ],
+  "drumstick": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "ink_cartridge": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "ring": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "dining_table": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "bracelet": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "paper_towel": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "scrubbable",
+    "soakable"
+  ],
+  "headset": [
+    "dustyable",
+    "scrubbable",
+    "toggleable"
+  ]
+}
