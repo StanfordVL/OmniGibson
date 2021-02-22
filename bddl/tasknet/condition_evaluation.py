@@ -369,8 +369,6 @@ def evaluate_state(compiled_state):
         else:
             results['unsatisfied'].append(i)
     print(results)
-    # crash
-    import pdb; pdb.set_trace()
     return not bool(results['unsatisfied']), results
 
 
