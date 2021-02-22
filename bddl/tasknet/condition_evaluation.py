@@ -125,7 +125,6 @@ class Conjunction(Sentence):
         result = all(self.child_values)
         return all(self.child_values)
 
-
 class Disjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
         print('DISJUNCTION INITIALIZED')
@@ -144,7 +143,6 @@ class Disjunction(Sentence):
                    ), 'child_values has NoneTypes'
         result = any(self.child_values)
         return any(self.child_values)
-
 
 # QUANTIFIERS
 class Universal(Sentence):

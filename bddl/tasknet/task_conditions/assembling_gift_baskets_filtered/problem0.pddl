@@ -5,10 +5,11 @@
      	; basket1 basket2 basket3 basket4 - basket
     	shelf1 - shelf
     	lotion1 lotion2 lotion3 lotion4 - lotion
-    	bottom_cabinet1 - bottom_cabinet
+    	cabinet1 - cabinet
     	soap1 soap2 soap3 soap4 - soap
     	shampoo1 shampoo2 shampoo3 shampoo4 - shampoo
     	conditioner1 conditioner2 conditioner3 conditioner4 - conditioner
+    	; photograph1 photograph2 photograph3 photograph4 - photograph
     	envelope1 envelope2 envelope3 envelope4 - envelope
     	table1 - table
     )
@@ -21,29 +22,35 @@
         ;     (ontop basket4 shelf1)
         ; ) 
         (and 
-            (inside lotion1 bottom_cabinet1) 
-            (inside lotion2 bottom_cabinet1) 
-            (inside lotion3 bottom_cabinet1) 
-            (inside lotion4 bottom_cabinet1)
+            (inside lotion1 cabinet1) 
+            (inside lotion2 cabinet1) 
+            (inside lotion3 cabinet1) 
+            (inside lotion4 cabinet1)
         ) 
         (and 
-            (inside soap1 bottom_cabinet1) 
-            (inside soap2 bottom_cabinet1) 
-            (inside soap3 bottom_cabinet1) 
-            (inside soap4 bottom_cabinet1)
+            (inside soap1 cabinet1) 
+            (inside soap2 cabinet1) 
+            (inside soap3 cabinet1) 
+            (inside soap4 cabinet1)
         ) 
         (and 
-            (inside shampoo1 bottom_cabinet1) 
-            (inside shampoo2 bottom_cabinet1) 
-            (inside shampoo3 bottom_cabinet1) 
-            (inside shampoo4 bottom_cabinet1)
+            (inside shampoo1 cabinet1) 
+            (inside shampoo2 cabinet1) 
+            (inside shampoo3 cabinet1) 
+            (inside shampoo4 cabinet1)
         ) 
         (and 
-            (inside conditioner1 bottom_cabinet1) 
-            (inside conditioner2 bottom_cabinet1) 
-            (inside conditioner3 bottom_cabinet1) 
-            (inside conditioner4 bottom_cabinet1)
+            (inside conditioner1 cabinet1) 
+            (inside conditioner2 cabinet1) 
+            (inside conditioner3 cabinet1) 
+            (inside conditioner4 cabinet1)
         ) 
+        ; (and 
+        ;     (ontop photograph1 table1) 
+        ;     (ontop photograph2 table1) 
+        ;     (ontop photograph3 table1) 
+        ;     (ontop photograph4 table1)
+        ; )
         (and 
             (ontop envelope1 table1) 
             (ontop envelope2 table1) 
@@ -51,7 +58,7 @@
             (ontop envelope4 table1)
         )
         (inroom shelf1 living_room)
-        (inroom bottom_cabinet1 living_room)
+        (inroom cabinet1 living_room)
         (inroom table1 living_room)
     )
     

@@ -54,8 +54,9 @@ class TaskNetTask(object):
             if scene_id is not None and scene != scene_id:
                 continue
             if scene == 'Beechwood_0_int':
-                print('BEECHWOOD')
                 pdb.set_trace()
+            else:       # TODO remove after debugging
+                continue
             self.scene_id = scene
             self.scene = scene_class(scene)
             # self.scene = scene_class(scene, load_object_categories=[

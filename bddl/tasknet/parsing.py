@@ -309,12 +309,12 @@ def remove_pddl_whitespace(pddl_file='task_conditions/parsing_tests/test_app_out
     else:
         raise ValueError('No PDDL given.')
 
-    pddl = ''.join([substr.lstrip(' ') for substr in raw_pddl.split('\n')])
+    pddl = ' '.join([substr.lstrip(' ') for substr in raw_pddl.split('\n')])
     print(pddl)
-    pddl = [substr for substr in pddl.split(' ') if substr]
+    pddl = [' ' + substr if substr[0] != ')' else substr for substr in pddl.split(' ') if substr]
     print()
     print(pddl)
-    pddl = ' '.join(pddl)
+    pddl = ''.join(pddl)[1:]
 
     with open('task_conditions/parsing_tests/test_app_output_nowhitespace.pddl', 'w') as f:
         f.write(pddl)
