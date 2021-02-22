@@ -368,7 +368,6 @@ def evaluate_state(compiled_state):
             results['satisfied'].append(i)
         else:
             results['unsatisfied'].append(i)
-    print(results)
     return not bool(results['unsatisfied']), results
 
 
