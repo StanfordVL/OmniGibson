@@ -48,7 +48,6 @@ class BinaryAtomicPredicate(AtomicPredicate):
     def sample(self, binary_state):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
             state = self.scope[self.input1].states[self.STATE_NAME]
-
             return state.set_value(self.scope[self.input2], binary_state)
         else:
             print('%s and/or %s are not mapped to simulator objects in scope' %
@@ -124,7 +123,6 @@ class Conjunction(Sentence):
         result = all(self.child_values)
         return all(self.child_values)
 
-
 class Disjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
         print('DISJUNCTION INITIALIZED')
@@ -143,7 +141,6 @@ class Disjunction(Sentence):
                    ), 'child_values has NoneTypes'
         result = any(self.child_values)
         return any(self.child_values)
-
 
 # QUANTIFIERS
 class Universal(Sentence):

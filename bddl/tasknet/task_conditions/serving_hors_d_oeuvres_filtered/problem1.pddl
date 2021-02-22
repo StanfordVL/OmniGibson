@@ -57,7 +57,7 @@
         (inroom oven1 kitchen) 
         (inroom fridge1 kitchen) 
         (inroom counter1 kitchen) 
-        (inroom table1 diningroom)
+        (inroom table1 dining_room)
     )
     
     (:goal 

@@ -3,13 +3,13 @@
 
     (:objects
      	coffee_table1 - coffee_table
-    	wall1 - wall
+    	walls1 - walls
     	dart1 dart10 dart11 dart12 dart13 dart14 dart15 dart16 dart2 dart3 dart4 dart5 dart6 dart7 dart8 dart9 - dart
     	dartboard1 - dartboard
     )
     
     (:init 
-        (nextto coffee_table1 wall1) 
+        (nextto coffee_table1 walls1) 
         (ontop dart1 coffee_table1) 
         (ontop dart2 coffee_table1) 
         (ontop dart3 coffee_table1) 
@@ -26,15 +26,15 @@
         (ontop dart14 coffee_table1) 
         (ontop dart15 coffee_table1) 
         (ontop dart16 coffee_table1) 
-        (nextto dartboard1 wall1) 
-        (inroom wall1 living room) 
-        (inroom coffee_table1 living room)
+        (nextto dartboard1 walls1) 
+        (inroom walls1 living_room) 
+        (inroom coffee_table1 living_room)
     )
     
     (:goal 
         (and 
-            (nextto ?coffee_table1 ?wall1) 
-            (nextto ?dartboard1 ?wall1) 
+            (nextto ?coffee_table1 ?walls1) 
+            (nextto ?dartboard1 ?walls1) 
             (forall 
                 (?dart - dart) 
                 (ontop ?dart ?dartboard1)

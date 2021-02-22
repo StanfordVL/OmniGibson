@@ -2,12 +2,13 @@
     (:domain igibson)
 
     (:objects
-     	hamper1 hamper2 hamper3 hamper4 - hamper
+     	; basket1 basket2 basket3 basket4 - basket
     	table1 - table
-    	notebook1 notebook2 notebook3 notebook4 - notebook
+    	; notebook1 notebook2 notebook3 notebook4 - notebook
     	wine_bottle1 wine_bottle2 - wine_bottle
     	cheddar1 cheddar2 cheddar3 cheddar4 - cheddar
-    	photograph1 photograph2 - photograph
+    	; photograph1 photograph2 - photograph
+        envelope1 envelope2 - envelope
     	chocolate_box1 chocolate_box2 - chocolate_box
     	cracker_box1 cracker_box2 cracker_box3 cracker_box4 - cracker_box
     	candy_cane1 candy_cane2 - candy_cane
@@ -16,18 +17,18 @@
     )
     
     (:init 
-        (and 
-            (ontop hamper1 table1) 
-            (ontop hamper2 table1) 
-            (ontop hamper3 table1) 
-            (ontop hamper4 table1)
-        ) 
-        (and 
-            (under notebook1 table1) 
-            (under notebook2 table1) 
-            (under notebook3 table1) 
-            (under notebook4 table1)
-        ) 
+        ; (and 
+        ;     (ontop basket1 table1) 
+        ;     (ontop basket2 table1) 
+        ;     (ontop basket3 table1) 
+        ;     (ontop basket4 table1)
+        ; ) 
+        ; (and 
+        ;     (under notebook1 table1) 
+        ;     (under notebook2 table1) 
+        ;     (under notebook3 table1) 
+        ;     (under notebook4 table1)
+        ; ) 
         (and 
             (ontop wine_bottle1 table1) 
             (ontop wine_bottle2 table1)
@@ -38,10 +39,14 @@
             (ontop cheddar3 table1) 
             (ontop cheddar4 table1)
         ) 
-        (and 
-            (ontop photograph1 table1) 
-            (ontop photograph2 table1)
-        ) 
+        ; (and 
+        ;     (ontop photograph1 table1) 
+        ;     (ontop photograph2 table1)
+        ; ) 
+        (and
+            (ontop envelope1 table1)
+            (ontop envelope2 table1)
+        )
         (and 
             (ontop chocolate_box1 table1) 
             (ontop chocolate_box2 table1)
@@ -65,17 +70,17 @@
         (and 
             (forn 
                 (2) 
-                (?hamper - hamper) 
+                (?basket - basket) 
                 (and 
                     (forn 
                         (2) 
                         (?notebook - notebook) 
-                        (inside ?notebook ?hamper)
+                        (inside ?notebook ?basket)
                     ) 
                     (forn 
                         (2) 
                         (?cracker_box - cracker_box) 
-                        (inside ?cracker_box ?hamper)
+                        (inside ?cracker_box ?basket)
                     ) 
                     (exists 
                         (?candy_cane - candy_cane) 
@@ -95,12 +100,12 @@
             ) 
             (forn 
                 (2) 
-                (?hamper - hamper) 
+                (?basket - basket) 
                 (and 
                     (forn 
                         (2) 
                         (?notebook - notebook) 
-                        (inside ?notebook ?hamper)
+                        (inside ?notebook ?basket)
                     ) 
                     (exists 
                         (?wine_bottle - wine_bottle) 

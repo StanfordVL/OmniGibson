@@ -1,30 +1,46 @@
+
 (:goal 
     (and 
-        (forall 
-            (?basket - basket) 
-            (forn 
-                (2) 
-                (?egg - egg) 
-                (inside ?egg ?basket)
+        (exists 
+            (?jar - jar) 
+            (forall 
+                (?tomato - tomato) 
+                (and 
+                    (inside ?tomato ?jar) 
+                    (cooked ?tomato) 
+                    (sliced ?tomato) 
+                    (not 
+                        (inside ?pickle1 ?jar)
+                    )
+                )
             )
         ) 
-        (forpairs 
-            (?chocolate - chocolate) 
-            (?basket - basket) 
-            (inside ?chocolate ?basket)
-        ) 
-        (forpairs 
-            (?coloring_material - coloring_material) 
-            (?basket - basket) 
-            (inside ?coloring_material ?basket)
+        (exists 
+            (?jar - jar) 
+            (forall 
+                (?pickle - pickle) 
+                (and 
+                    (inside ?pickle ?jar) 
+                    (cooked ?pickle) 
+                    (sliced ?pickle) 
+                    (not 
+                        (inside ?tomato1 ?jar)
+                    )
+                )
+            )
         ) 
         (forall 
-            (?basket - basket) 
-            (forn 
-                (2) 
-                (?crayon - crayon) 
-                (inside ?crayon ?basket)
+            (?jar - jar) 
+            (and 
+                (exists
+                    (?cabinet - cabinet)
+                    (inside ?jar ?cabinet)
+                ) 
+                (inside ?water1 ?jar) 
+                (inside ?sugar1 ?jar)
             )
-        )
+        ) 
+        (ontop ?pot1 ?stove1) 
+        (ontop ?pan1 ?stove1)
     )
 )

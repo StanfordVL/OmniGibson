@@ -49,7 +49,10 @@ class TaskNetTask(object):
         random.shuffle(scenes)
         accept_scene = False
         for scene in scenes:
+            print('SCENE:', scene)
             if scene_id is not None and scene != scene_id:
+                continue
+            if '_int' not in scene:
                 continue
             self.scene_id = scene
             self.scene = scene_class(scene)

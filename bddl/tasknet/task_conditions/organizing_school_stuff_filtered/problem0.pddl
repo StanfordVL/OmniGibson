@@ -1,6 +1,5 @@
-(define (problem organizing_school_stuff_0)
+(define (problem organizing_school_stuff_0) 
     (:domain igibson)
-
     (:objects
         basket1 - basket
         sofa1 - sofa
@@ -13,7 +12,6 @@
         pencil1 pencil2 - pencil
         eraser1 eraser2 - eraser
     )
-    
     (:init 
         (ontop basket1 sofa1) 
         (ontop notebook1 sofa_chair1) 
