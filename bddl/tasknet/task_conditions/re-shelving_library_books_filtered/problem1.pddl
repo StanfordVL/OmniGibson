@@ -17,7 +17,7 @@
         (ontop notebook6 coffee_table1) 
         (ontop notebook7 coffee_table1) 
         (ontop notebook8 coffee_table1) 
-        (ontop notebook9 ?coffee_table) 
+        (ontop notebook9 coffee_table1) 
         (nextto notebook10 coffee_table1) 
         (nextto notebook11 coffee_table1) 
         (nextto notebook12 coffee_table1) 
