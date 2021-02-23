@@ -51,6 +51,7 @@ def add_path(path, node):
     # Take out the oldest ancestor in the path.
     oldest_synset = path[-1]
     name = oldest_synset.name()
+
     # If the current node never had a child before, initialize a list to store them.
     if "children" not in node:
         node["children"] = []
@@ -110,18 +111,6 @@ def add_igibson_objects(node):
 
 add_igibson_objects(hierarchy)
 
-
-# Go through the hierarchy and add the words associated with the synsets as attributes.
-def add_lemmas(node):
-    node["lemmas"] = [str(lemma.name()) for lemma in wn.synset(node["name"]).lemmas()]
-
-    if "children" in node:
-        for child_node in node["children"]:
-            add_lemmas(child_node)
-
-
-add_lemmas(hierarchy)
-
 with open(ABILITY_JSON_PATH) as f:
     ability_map = json.load(f)
 
@@ -153,12 +142,14 @@ def add_abilities(node):
             if child_abilities is not None:
                 if init:
                     # First merge the ability annotations themselves
-                    common_keys = list(set(abilities.keys()) & set(child_abilities.keys()))
+                    common_keys = list(set(abilities.keys())
+                                       & set(child_abilities.keys()))
 
                     # Then add the ability annotations & merge common parameters
                     for ability_key in common_keys:
                         current_params = set(abilities[ability_key].items())
-                        child_params = set(child_abilities[ability_key].items())
+                        child_params = set(
+                            child_abilities[ability_key].items())
 
                         # Note that this intersection finds pairs where both the param
                         # key and the param value are equal.

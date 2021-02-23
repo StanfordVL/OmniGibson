@@ -37,7 +37,6 @@ class ObjectTaxonomy(object):
                         children_names.add(child['name'])
                 taxonomy.add_node(node['name'],
                                   igibson_categories=node['igibson_categories'],
-                                  lemmas=node['lemmas'],
                                   abilities=node['abilities'])
                 for child_name in children_names:
                     taxonomy.add_edge(node['name'], child_name)
@@ -63,16 +62,6 @@ class ObjectTaxonomy(object):
 
         return matched[0]
 
-    def get_class_name_from_lemma(self, lemma):
-        """
-        Get class name corresponding to WordNet lemma.
-
-        :param lemma: WordNet lemma to search for.
-        :return: str containing matching class name.
-        :raises ValueError if multiple matching classes are found.
-        """
-        return self._get_class_by_filter(lambda class_name: lemma in self.get_lemmas(class_name))
-
     def get_class_name_from_igibson_category(self, igibson_category):
         """
         Get class name corresponding to iGibson object category.
@@ -83,14 +72,13 @@ class ObjectTaxonomy(object):
         """
         return self._get_class_by_filter(lambda class_name: igibson_category in self.get_igibson_categories(class_name))
 
-    def get_igibson_categories_from_lemma(self, lemma):
+    def get_subtree_igibson_categories(self, class_name):
         """
-        Get the iGibson object categories of the lemma or the leaf descendants of the lemma (if the lemma is not a leaf)
+        Get the iGibson object categories matching the subtree of a given class (by aggregating categories across all the leaf-level descendants).
 
-        :param lemma: WordNet lemma to search for.
-        :return: list of str corresponding to iGibson object categories of the lemma or the leaf descendants of the lemma
+        :param class name: Class name to search
+        :return: list of str corresponding to iGibson object categories
         """
-        class_name = self.get_class_name_from_lemma(lemma)
         if self.is_leaf(class_name):
             class_names = [class_name]
         else:
@@ -171,16 +159,6 @@ class ObjectTaxonomy(object):
         """
         assert self.is_valid_class(class_name)
         return copy.deepcopy(self.taxonomy.nodes[class_name]['abilities'])
-
-    def get_lemmas(self, class_name):
-        """
-        Get the WordNet lemmas matching a given class.
-
-        :param class_name: Class name to search.
-        :return: list of str corresponding to WordNet lemmas matching the class.
-        """
-        assert self.is_valid_class(class_name)
-        return list(self.taxonomy.nodes[class_name]['lemmas'])
 
     def get_igibson_categories(self, class_name):
         """
