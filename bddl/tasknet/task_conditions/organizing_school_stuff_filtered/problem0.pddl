@@ -1,7 +1,7 @@
 (define (problem organizing_school_stuff_0) 
     (:domain igibson)
     (:objects
-        basket1 - basket
+        basket.n.01_1 - basket.n.01
         sofa1 - sofa
         notebook1 notebook2 notebook3 notebook4 notebook5 - notebook
         sofa_chair1 - sofa_chair
@@ -13,7 +13,7 @@
         eraser1 eraser2 - eraser
     )
     (:init 
-        (ontop basket1 sofa1) 
+        (ontop basket.n.01_1 sofa1) 
         (ontop notebook1 sofa_chair1) 
         (ontop notebook2 sofa_chair1) 
         (nextto notebook3 sofa_chair1) 
@@ -30,16 +30,16 @@
     
     (:goal 
         (and 
-            (ontop ?basket1 ?sofa_chair1) 
+            (ontop ?basket.n.01_1 ?sofa_chair1) 
             (forall 
                 (?pen - pen) 
-                (inside ?pen ?basket1)
+                (inside ?pen ?basket.n.01_1)
             ) 
             (forall 
                 (?pencil - pencil) 
-                (inside ?pencil ?basket1)
+                (inside ?pencil ?basket.n.01_1)
             ) 
-            (inside ?laptop1 ?basket1) 
+            (inside ?laptop1 ?basket.n.01_1) 
             (imply 
                 (ontop ?eraser1 ?shelf1) 
                 (ontop ?eraser2 ?shelf1)
@@ -47,7 +47,7 @@
             (forn 
                 (2) 
                 (?notebook - notebook) 
-                (inside ?notebook ?basket1)
+                (inside ?notebook ?basket.n.01_1)
             ) 
             (forn 
                 (3) 
