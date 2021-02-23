@@ -848,27 +848,49 @@
                           }
                         },
                         {
-                          "name": "device.n.01",
+                          "name": "equipment.n.01",
                           "children": [
                             {
-                              "name": "support.n.10",
+                              "name": "apparatus.n.01",
                               "children": [
                                 {
-                                  "name": "shelf.n.01",
-                                  "children": [
-                                    {
-                                      "name": "bookshelf.n.01",
-                                      "igibson_categories": [
-                                        "bookshelf"
-                                      ],
-                                      "abilities": {
-                                        "burnable": {},
-                                        "dustyable": {},
-                                        "scrubbable": {}
-                                      }
-                                    }
+                                  "name": "burner.n.01",
+                                  "igibson_categories": [
+                                    "burner"
                                   ],
-                                  "igibson_categories": [],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "heatSource": {},
+                                    "toggleable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "dustyable": {},
+                                "heatSource": {},
+                                "toggleable": {}
+                              }
+                            },
+                            {
+                              "name": "game_equipment.n.01",
+                              "children": [
+                                {
+                                  "name": "pool_table.n.01",
+                                  "igibson_categories": [
+                                    "pool_table"
+                                  ],
+                                  "abilities": {
+                                    "burnable": {},
+                                    "dustyable": {},
+                                    "scrubbable": {}
+                                  }
+                                },
+                                {
+                                  "name": "ball.n.01",
+                                  "igibson_categories": [
+                                    "ball"
+                                  ],
                                   "abilities": {
                                     "burnable": {},
                                     "dustyable": {},
@@ -883,6 +905,70 @@
                                 "scrubbable": {}
                               }
                             },
+                            {
+                              "name": "electronic_equipment.n.01",
+                              "children": [
+                                {
+                                  "name": "set.n.13",
+                                  "children": [
+                                    {
+                                      "name": "receiver.n.01",
+                                      "children": [
+                                        {
+                                          "name": "television_receiver.n.01",
+                                          "igibson_categories": [
+                                            "standing_tv",
+                                            "wall_mounted_tv"
+                                          ],
+                                          "abilities": {
+                                            "breakable": {},
+                                            "burnable": {},
+                                            "dustyable": {},
+                                            "scrubbable": {},
+                                            "toggleable": {}
+                                          }
+                                        }
+                                      ],
+                                      "igibson_categories": [],
+                                      "abilities": {
+                                        "breakable": {},
+                                        "burnable": {},
+                                        "dustyable": {},
+                                        "scrubbable": {},
+                                        "toggleable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "abilities": {
+                                    "breakable": {},
+                                    "burnable": {},
+                                    "dustyable": {},
+                                    "scrubbable": {},
+                                    "toggleable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "breakable": {},
+                                "burnable": {},
+                                "dustyable": {},
+                                "scrubbable": {},
+                                "toggleable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "abilities": {
+                            "dustyable": {},
+                            "heatSource": {},
+                            "toggleable": {}
+                          }
+                        },
+                        {
+                          "name": "device.n.01",
+                          "children": [
                             {
                               "name": "instrument.n.01",
                               "children": [
@@ -1510,6 +1596,28 @@
                               }
                             },
                             {
+                              "name": "support.n.10",
+                              "children": [
+                                {
+                                  "name": "shelf.n.01",
+                                  "igibson_categories": [
+                                    "shelf"
+                                  ],
+                                  "abilities": {
+                                    "burnable": {},
+                                    "dustyable": {},
+                                    "scrubbable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "burnable": {},
+                                "dustyable": {},
+                                "scrubbable": {}
+                              }
+                            },
+                            {
                               "name": "exercise_device.n.01",
                               "children": [
                                 {
@@ -1946,128 +2054,11 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
+                            "breakable": {},
                             "burnable": {},
                             "dustyable": {},
-                            "scrubbable": {}
-                          }
-                        },
-                        {
-                          "name": "equipment.n.01",
-                          "children": [
-                            {
-                              "name": "apparatus.n.01",
-                              "children": [
-                                {
-                                  "name": "burner.n.01",
-                                  "igibson_categories": [
-                                    "burner"
-                                  ],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "heatSource": {},
-                                    "toggleable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "dustyable": {},
-                                "heatSource": {},
-                                "toggleable": {}
-                              }
-                            },
-                            {
-                              "name": "game_equipment.n.01",
-                              "children": [
-                                {
-                                  "name": "pool_table.n.01",
-                                  "igibson_categories": [
-                                    "pool_table"
-                                  ],
-                                  "abilities": {
-                                    "burnable": {},
-                                    "dustyable": {},
-                                    "scrubbable": {}
-                                  }
-                                },
-                                {
-                                  "name": "ball.n.01",
-                                  "igibson_categories": [
-                                    "ball"
-                                  ],
-                                  "abilities": {
-                                    "burnable": {},
-                                    "dustyable": {},
-                                    "scrubbable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "burnable": {},
-                                "dustyable": {},
-                                "scrubbable": {}
-                              }
-                            },
-                            {
-                              "name": "electronic_equipment.n.01",
-                              "children": [
-                                {
-                                  "name": "set.n.13",
-                                  "children": [
-                                    {
-                                      "name": "receiver.n.01",
-                                      "children": [
-                                        {
-                                          "name": "television_receiver.n.01",
-                                          "igibson_categories": [
-                                            "standing_tv",
-                                            "wall_mounted_tv"
-                                          ],
-                                          "abilities": {
-                                            "breakable": {},
-                                            "burnable": {},
-                                            "dustyable": {},
-                                            "scrubbable": {},
-                                            "toggleable": {}
-                                          }
-                                        }
-                                      ],
-                                      "igibson_categories": [],
-                                      "abilities": {
-                                        "breakable": {},
-                                        "burnable": {},
-                                        "dustyable": {},
-                                        "scrubbable": {},
-                                        "toggleable": {}
-                                      }
-                                    }
-                                  ],
-                                  "igibson_categories": [],
-                                  "abilities": {
-                                    "breakable": {},
-                                    "burnable": {},
-                                    "dustyable": {},
-                                    "scrubbable": {},
-                                    "toggleable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "breakable": {},
-                                "burnable": {},
-                                "dustyable": {},
-                                "scrubbable": {},
-                                "toggleable": {}
-                              }
-                            }
-                          ],
-                          "igibson_categories": [],
-                          "abilities": {
-                            "dustyable": {},
-                            "heatSource": {},
-                            "toggleable": {}
+                            "scrubbable": {},
+                            "timeSetable": {}
                           }
                         },
                         {
