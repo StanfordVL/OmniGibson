@@ -72,9 +72,9 @@ class ObjectTaxonomy(object):
         """
         return self._get_class_by_filter(lambda class_name: igibson_category in self.get_igibson_categories(class_name))
 
-    def get_igibson_categories_from_class_name(self, class_name):
+    def get_subtree_igibson_categories(self, class_name):
         """
-        Get the iGibson object categories of the class name or the leaf descendants of the class name (if the class_name is not a leaf)
+        Get the iGibson object categories matching the subtree of a given class (by aggregating categories across all the leaf-level descendants).
 
         :param class name: Class name to search
         :return: list of str corresponding to iGibson object categories
