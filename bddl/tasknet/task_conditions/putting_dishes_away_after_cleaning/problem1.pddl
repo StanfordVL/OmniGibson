@@ -2,75 +2,75 @@
     (:domain igibson)
 
     (:objects
-     	counter1 - counter
-    	sink1 - sink
-    	cabinet1 - cabinet
-    	bowl1 bowl2 bowl3 bowl4 - bowl
-    	plate1 plate2 plate3 plate4 - plate
-    	fork1 fork2 fork3 fork4 - fork
-    	knife1 knife2 knife3 knife4 - knife
-    	shelf1 - shelf
+     	countertop.n.01_1 - countertop.n.01
+    	sink.n.01_1 - sink.n.01
+    	cabinet.n.01_1 - cabinet.n.01
+    	bowl.n.01_1 bowl.n.01_2 bowl.n.01_3 bowl.n.01_4 - bowl.n.01
+    	plate.n.04_1 plate.n.04_2 plate.n.04_3 plate.n.04_4 - plate.n.04
+    	tablefork.n.01_1 tablefork.n.01_2 tablefork.n.01_3 tablefork.n.01_4 - tablefork.n.01
+    	table_knife.n.01_1 table_knife.n.01_2 table_knife.n.01_3 table_knife.n.01_4 - table_knife.n.01
+    	shelf.n.01_1 - shelf.n.01
     )
     
     (:init 
-        (scrubbed counter1) 
-        (scrubbed sink1) 
-        (open cabinet1) 
-        (ontop bowl1 counter1) 
-        (ontop bowl2 counter1) 
-        (ontop bowl3 counter1) 
-        (ontop bowl4 counter1) 
-        (scrubbed bowl1) 
-        (scrubbed bowl2) 
-        (scrubbed bowl3) 
-        (scrubbed bowl4) 
-        (ontop plate1 counter1) 
-        (ontop plate2 counter1) 
-        (ontop plate3 counter1) 
-        (ontop plate4 counter1) 
-        (scrubbed plate1) 
-        (scrubbed plate2) 
-        (scrubbed plate3) 
-        (scrubbed plate4) 
-        (inside fork1 sink1) 
-        (inside fork2 sink1) 
-        (inside fork3 sink1) 
-        (inside fork4 sink1) 
-        (scrubbed fork1) 
-        (scrubbed fork2) 
-        (scrubbed fork3) 
-        (scrubbed fork4) 
-        (inside knife1 sink1) 
-        (inside knife2 sink1) 
-        (inside knife3 sink1) 
-        (inside knife4 sink1) 
-        (scrubbed knife1) 
-        (scrubbed knife2) 
-        (scrubbed knife3) 
-        (scrubbed knife4) 
-        (inroom cabinet1 kitchen) 
-        (inroom sink1 kitchen) 
-        (inroom counter1 kitchen) 
-        (inroom shelf1 kitchen)
+        (scrubbed countertop.n.01_1) 
+        (scrubbed sink.n.01_1) 
+        (open cabinet.n.01_1) 
+        (ontop bowl.n.01_1 countertop.n.01_1) 
+        (ontop bowl.n.01_2 countertop.n.01_1) 
+        (ontop bowl.n.01_3 countertop.n.01_1) 
+        (ontop bowl.n.01_4 countertop.n.01_1) 
+        (scrubbed bowl.n.01_1) 
+        (scrubbed bowl.n.01_2) 
+        (scrubbed bowl.n.01_3) 
+        (scrubbed bowl.n.01_4) 
+        (ontop plate.n.04_1 countertop.n.01_1) 
+        (ontop plate.n.04_2 countertop.n.01_1) 
+        (ontop plate.n.04_3 countertop.n.01_1) 
+        (ontop plate.n.04_4 countertop.n.01_1) 
+        (scrubbed plate.n.04_1) 
+        (scrubbed plate.n.04_2) 
+        (scrubbed plate.n.04_3) 
+        (scrubbed plate.n.04_4) 
+        (inside tablefork.n.01_1 sink.n.01_1) 
+        (inside tablefork.n.01_2 sink.n.01_1) 
+        (inside tablefork.n.01_3 sink.n.01_1) 
+        (inside tablefork.n.01_4 sink.n.01_1) 
+        (scrubbed tablefork.n.01_1) 
+        (scrubbed tablefork.n.01_2) 
+        (scrubbed tablefork.n.01_3) 
+        (scrubbed tablefork.n.01_4) 
+        (inside table_knife.n.01_1 sink.n.01_1) 
+        (inside table_knife.n.01_2 sink.n.01_1) 
+        (inside table_knife.n.01_3 sink.n.01_1) 
+        (inside table_knife.n.01_4 sink.n.01_1) 
+        (scrubbed table_knife.n.01_1) 
+        (scrubbed table_knife.n.01_2) 
+        (scrubbed table_knife.n.01_3) 
+        (scrubbed table_knife.n.01_4) 
+        (inroom cabinet.n.01_1 kitchen) 
+        (inroom sink.n.01_1 kitchen) 
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom shelf.n.01_1 kitchen)
     )
     
     (:goal 
         (and 
             (forall 
-                (?bowl - bowl) 
-                (ontop ?bowl ?shelf1)
+                (?bowl.n.01 - bowl.n.01) 
+                (ontop ?bowl.n.01 ?shelf.n.01_1)
             ) 
             (forall 
-                (?plate - plate) 
-                (ontop ?plate ?shelf1)
+                (?plate.n.04 - plate.n.04_) 
+                (ontop ?plate.n.04 ?shelf.n.01_1)
             ) 
             (forall 
-                (?fork - fork) 
-                (inside ?fork ?cabinet1)
+                (?tablefork.n.01 - tablefork.n.01) 
+                (inside ?tablefork.n.01 ?cabinet.n.01_1)
             ) 
             (forall 
-                (?knife - knife) 
-                (inside ?knife ?cabinet1)
+                (?table_knife.n.01 - table_knife.n.01) 
+                (inside ?table_knife.n.01 ?cabinet.n.01_1)
             )
         )
     )

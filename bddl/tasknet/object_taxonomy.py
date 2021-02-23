@@ -201,7 +201,7 @@ class ObjectTaxonomy(object):
         :param class_name: Class name to search.
         :return: bool indicating if the class is a leaf class.
         """
-        assert self.is_valid_class(class_name)
+        assert self.is_valid_class(class_name), "{} is not a valid class name".format(class_name)
         return self.taxonomy.out_degree(class_name) == 0
 
     def has_ability(self, class_name, ability):
