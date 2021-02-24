@@ -83,6 +83,7 @@ class UnaryAtomicPredicate(AtomicPredicate):
 
 #################### ATOMIC PREDICATES ####################
 
+
 def get_unary_atomic_predicate_for_state(state_name):
     return type(state_name + "Predicate", (UnaryAtomicPredicate,), {'STATE_NAME': state_name})
 
@@ -105,6 +106,8 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
 #################### RECURSIVE PREDICATES ####################
 
 # -JUNCTIONS
+
+
 class Conjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
         print('CONJUNCTION INITIALIZED')
@@ -120,8 +123,8 @@ class Conjunction(Sentence):
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
-        result = all(self.child_values)
         return all(self.child_values)
+
 
 class Disjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
@@ -139,10 +142,11 @@ class Disjunction(Sentence):
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
-        result = any(self.child_values)
         return any(self.child_values)
 
 # QUANTIFIERS
+
+
 class Universal(Sentence):
     def __init__(self, scope, task, body, object_map):
         print('UNIVERSAL INITIALIZED')
@@ -156,7 +160,6 @@ class Universal(Sentence):
             if obj_name in object_map[category]:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
-                # body = [["param_label", "-", "category"], [predicate]]
                 self.children.append(token_mapping[subpredicate[0]](
                     new_scope, task, subpredicate[1:], object_map))
         print('UNIVERSAL CREATED')
@@ -165,7 +168,6 @@ class Universal(Sentence):
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
-        result = all(self.child_values)
         return all(self.child_values)
 
 
@@ -191,7 +193,6 @@ class Existential(Sentence):
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
-        result = any(self.child_values)
         return any(self.child_values)
 
 
@@ -228,6 +229,8 @@ class ForPairs(Sentence):
         iterable1, iterable2, subpredicate = body
         param_label1, __, category1 = iterable1
         param_label2, __, category2 = iterable2
+        param_label1 = param_label1.strip('?')
+        param_label2 = param_label2.strip('?')
         for obj_name_1, obj_1 in scope.items():
             if obj_name_1 in object_map[category1]:
                 sub = []
@@ -242,7 +245,7 @@ class ForPairs(Sentence):
 
     def evaluate(self):
         self.child_values = np.array(
-            [np.array([child.evaluate() for subchild in child]) for child in self.children])
+            [np.array([subchild.evaluate() for subchild in child]) for child in self.children])
         return np.all(np.any(self.child_values, axis=1), axis=0) and np.all(np.any(self.child_values, axis=0), axis=0)
 
 
@@ -254,21 +257,23 @@ class ForNPairs(Sentence):
         self.N = int(N[0])
         param_label1, __, category1 = iterable1
         param_label2, __, category2 = iterable2
+        param_label1 = param_label1.strip('?')
+        param_label2 = param_label2.strip('?')
         for obj_name_1, obj_1 in scope.items():
             if obj_name_1 in object_map[category1]:
                 sub = []
                 for obj_name_2, obj_2 in scope.items():
                     if obj_name_2 in object_map[category2] and obj_name_1 != obj_name_2:
                         new_scope = copy.copy(scope)
-                        new_scope[param_label1] = obj1
-                        new_scope[param_label2] = obj2
+                        new_scope[param_label1] = obj_1
+                        new_scope[param_label2] = obj_2
                         sub.append(token_mapping[subpredicate[0]](
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
 
     def evaluate(self):
         self.child_values = np.array(
-            [np.array([child.evaluate() for subchild in child]) for child in self.children])
+            [np.array([subchild.evaluate() for subchild in child]) for child in self.children])
         return (np.sum(np.any(self.child_values, axis=1), axis=0) >= self.N) and (np.sum(np.any(self.chid_values, axis=0), axis=0) >= self.N)
 
 
@@ -279,7 +284,6 @@ class Negation(Sentence):
         super().__init__(scope, task, body, object_map)
 
         # body = [[predicate]]
-        new_scope = copy.copy(scope)
         subpredicate = body[0]
         self.children.append(token_mapping[subpredicate[0]](
             scope, task, subpredicate[1:], object_map))
@@ -291,7 +295,6 @@ class Negation(Sentence):
         assert len(self.child_values) == 1, 'More than one child value'
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
-        result = not self.child_values[0]
         return not self.child_values[0]
 
 
@@ -302,7 +305,6 @@ class Implication(Sentence):
         super().__init__(scope, task, body, object_map)
 
         # body = [[antecedent], [consequent]]
-        new_scope = copy.copy(scope)
         antecedent, consequent = body
         self.children.append(token_mapping[antecedent[0]](
             scope, task, antecedent[1:], object_map))
@@ -315,7 +317,6 @@ class Implication(Sentence):
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
         ante, cons = self.child_values
-        result = (not ante) or cons
         return (not ante) or cons
 
 # HEAD
@@ -326,7 +327,6 @@ class HEAD(Sentence):
         print('HEAD INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
-        new_scope = copy.copy(scope)
         subpredicate = body
         self.children.append(token_mapping[subpredicate[0]](
             scope, task, subpredicate[1:], object_map))
@@ -393,7 +393,8 @@ TOKEN_MAPPING = {
     'ontop': get_binary_atomic_predicate_for_state('onTop'),
     'under': get_binary_atomic_predicate_for_state('under'),
     'touching': get_binary_atomic_predicate_for_state('touching'),
-    'cooked': LegacyCookedForTesting, # get_unary_atomic_predicate_for_state('cooked'),
+    # get_unary_atomic_predicate_for_state('cooked'),
+    'cooked': LegacyCookedForTesting,
     # TODO rest of atomic predicates
 }
 token_mapping = TOKEN_MAPPING
