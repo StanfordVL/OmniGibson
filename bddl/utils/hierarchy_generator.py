@@ -15,6 +15,7 @@ Created by: Zheng Lian & Cem Gokmen
 
 import csv
 import json
+import os
 
 from nltk.corpus import wordnet as wn
 
@@ -23,7 +24,7 @@ This .csv file should contain an `Object` column and a `Synset` column.
 '''
 MODELS_CSV_PATH = "objectmodeling.csv"
 ABILITY_JSON_PATH = "synsets_to_filtered_properties.json"
-OUTPUT_JSON_PATH = "hierarchy_all.json"
+OUTPUT_JSON_PATH = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy.json")
 
 owned_synsets = {}
 with open(MODELS_CSV_PATH) as csv_file:
@@ -136,16 +137,16 @@ def add_abilities(node):
             return None
     else:
         init = False
-        abilities = dict()
+        abilities = {}
         for child_node in node["children"]:
             child_abilities = add_abilities(child_node)
             if child_abilities is not None:
                 if init:
                     # First merge the ability annotations themselves
-                    common_keys = list(set(abilities.keys())
-                                       & set(child_abilities.keys()))
+                    common_keys = set(abilities.keys()) & set(child_abilities.keys())
 
                     # Then add the ability annotations & merge common parameters
+                    new_abilities = {}
                     for ability_key in common_keys:
                         current_params = set(abilities[ability_key].items())
                         child_params = set(
@@ -155,7 +156,9 @@ def add_abilities(node):
                         # key and the param value are equal.
                         common_params = current_params & child_params
 
-                        abilities[ability_key] = dict(common_params)
+                        new_abilities[ability_key] = dict(common_params)
+
+                    abilities = new_abilities
                 else:
                     abilities = child_abilities
                     init = True
