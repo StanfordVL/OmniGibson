@@ -16,6 +16,7 @@ Created by: Zheng Lian & Cem Gokmen
 import csv
 import json
 import os
+from collections import OrderedDict
 
 from nltk.corpus import wordnet as wn
 
@@ -129,10 +130,10 @@ def add_abilities(node):
                 # supported and abilities are in list format.
                 abilities = {ability: dict() for ability in ability_map[word]}
 
-            node["abilities"] = abilities
+            node["abilities"] = OrderedDict(sorted(abilities.items(), key=lambda pair: pair[0]))
             return abilities
         else:
-            node["abilities"] = dict()
+            node["abilities"] = OrderedDict()
             print(f"{word} not found in ability list!")
             return None
     else:
@@ -162,7 +163,7 @@ def add_abilities(node):
                 else:
                     abilities = child_abilities
                     init = True
-        node["abilities"] = abilities
+        node["abilities"] = OrderedDict(sorted(abilities.items(), key=lambda pair: pair[0]))
         return abilities
 
 
