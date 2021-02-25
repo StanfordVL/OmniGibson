@@ -78,6 +78,9 @@ class TaskNetTask(object):
             if not accept_scene:
                 continue
 
+            # Add clutter objects into the scenes
+            self.clutter_scene()
+
         assert accept_scene, 'None of the available scenes satisfy these initial conditions.'
 
         self.gen_goal_conditions()
@@ -101,6 +104,9 @@ class TaskNetTask(object):
         raise NotImplementedError
 
     def import_scene(self):
+        raise NotImplementedError
+
+    def clutter_scene(self):
         raise NotImplementedError
 
     def sample(self):
