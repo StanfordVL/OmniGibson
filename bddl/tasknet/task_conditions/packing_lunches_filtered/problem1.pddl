@@ -27,24 +27,27 @@
     
     (:goal 
         (and 
-            (forn 
-                (1) 
-                (?basket.n.01 - basket.n.01) 
-                (and 
-                    (fornpairs 
-                        (1)
-                        (?bag.n.01 - bag.n.01) 
-                        (?hamburger.n.01 - hamburger.n.01) 
-                        (and 
-                            (inside ?hamburger.n.01 ?bag.n.01) 
-                            (inside ?bag.n.01 ?basket.n.01) 
-                            (not 
-                                (open ?bag.n.01)
-                            )
-                        )
-                    ) 
-                )
-            ) 
+            ; (forn 
+            ;     (1) 
+            ;     (?basket.n.01 - basket.n.01) 
+            ;     (and 
+            ;         (fornpairs 
+            ;             (1)
+            ;             (?bag.n.01 - bag.n.01) 
+            ;             (?hamburger.n.01 - hamburger.n.01) 
+            ;             (and 
+            ;                 (inside ?hamburger.n.01 ?bag.n.01) 
+            ;                 (inside ?bag.n.01 ?basket.n.01) 
+            ;             )
+            ;         ) 
+            ;     )
+            ; ) 
+            (fornpairs
+                (1)
+                (?hamburger.n.01 - hamburger.n.01)
+                (?basket.n.01 - basket.n.01)
+                (inside ?hamburger.n.01 ?basket.n.01)
+            )
             (fornpairs 
                 (1) 
                 (?basket.n.01 - basket.n.01) 
@@ -67,9 +70,6 @@
                 (?basket.n.01 - basket.n.01) 
                 (and 
                     (ontop ?basket.n.01 ?countertop.n.01_1) 
-                    (not 
-                        (open ?basket.n.01)
-                    )
                 )
             )
         )
