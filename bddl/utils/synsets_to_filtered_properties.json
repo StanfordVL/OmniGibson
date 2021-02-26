@@ -478,13 +478,20 @@
     "dustyable",
     "scrubbable"
   ],
-  "oven": [
-    "dustyable",
-    "heatSource",
-    "openable",
-    "scrubbable",
-    "toggleable"
-  ],
+  "oven": {
+    "dustyable": {},
+    "heatSource": {
+      "temperature": 250,
+      "heating_rate": 0.01,
+      "distance_threshold": 0.4,
+      "requires_toggled_on": true,
+      "requires_closed": true,
+      "requires_inside": true
+    },
+    "openable": {},
+    "scrubbable": {},
+    "toggleable": {}
+  },
   "refrigerator": [
     "coldSource",
     "dustyable",
@@ -526,13 +533,20 @@
   "block": [
     "scrubbable"
   ],
-  "stove": [
-    "dustyable",
-    "heatSource",
-    "openable",
-    "scrubbable",
-    "toggleable"
-  ],
+  "stove": {
+    "dustyable": {},
+    "heatSource": {
+      "temperature": 500,
+      "heating_rate": 0.02,
+      "distance_threshold": 0.2,
+      "requires_toggled_on": true,
+      "requires_closed": false,
+      "requires_inside": false
+    },
+    "openable": {},
+    "scrubbable": {},
+    "toggleable": {}
+  },
   "trouser": [
     "burnable",
     "dustyable",
@@ -676,15 +690,22 @@
     "perishable",
     "sliceable"
   ],
-  "microwave": [
-    "breakable",
-    "burnable",
-    "dustyable",
-    "heatSource",
-    "openable",
-    "scrubbable",
-    "toggleable"
-  ],
+  "microwave": {
+    "breakable": {},
+    "burnable": {},
+    "dustyable": {},
+    "heatSource": {
+      "temperature": 1000,
+      "heating_rate": 0.04,
+      "distance_threshold": 0.4,
+      "requires_toggled_on": true,
+      "requires_closed": true,
+      "requires_inside": true
+    },
+    "openable": {},
+    "scrubbable": {},
+    "toggleable": {}
+  },
   "cord": [
     "burnable",
     "dustyable",
