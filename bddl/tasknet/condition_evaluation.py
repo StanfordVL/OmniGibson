@@ -1,107 +1,27 @@
 import copy
 import numpy as np
 
+import tasknet
+from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
+
 # TODO: VERY IMPORTANT
 #   1. Change logic for checking categories once new iG object is being used
 #   2. `task` needs to be input properly. It'll be weird to call these in a method
 #           of TaskNetTask and then have to put `self` in
 
-#################### BASE LOGIC OBJECTS ####################
-
-
-class Sentence(object):
-    def __init__(self, scope, task, body, object_map):
-        self.children = []
-        self.child_values = []
-        self.task = task
-        self.body = body
-        self.scope = scope
-        self.object_map = object_map
-
-    def evaluate(self):
-        pass
-
-
-class AtomicPredicate(Sentence):
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-
-
-class BinaryAtomicPredicate(AtomicPredicate):
-    STATE_NAME = None
-
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-        assert len(body) == 2, 'Param list should have 2 args'
-        self.input1, self.input2 = [inp.strip('?') for inp in body]
-        self.scope = scope
-
-    def evaluate(self):
-        if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            state = self.scope[self.input1].states[self.STATE_NAME]
-
-            return state.get_value(self.scope[self.input2])
-        else:
-            print('%s and/or %s are not mapped to simulator objects in scope' %
-                  (self.input1, self.input2))
-
-    def sample(self, binary_state):
-        if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            state = self.scope[self.input1].states[self.STATE_NAME]
-            return state.set_value(self.scope[self.input2], binary_state)
-        else:
-            print('%s and/or %s are not mapped to simulator objects in scope' %
-                  (self.input1, self.input2))
-
-
-class UnaryAtomicPredicate(AtomicPredicate):
-    STATE_NAME = None
-
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-        assert len(body) == 1, 'Param list should have 1 arg'
-        self.input = body[0].strip('?')
-        self.scope = scope
-
-    def evaluate(self):
-        if self.scope[self.input] is not None:
-            state = self.scope[self.input].states[self.STATE_NAME]
-
-            return state.get_value()
-        else:
-            print('%s is not mapped to a simulator object in scope' % self.input)
-            return False
-
-    def sample(self, binary_state):
-        if self.scope[self.input] is not None:
-            state = self.scope[self.input].states[self.STATE_NAME]
-
-            return state.set_value(binary_state)
-        else:
-            print('%s is not mapped to a simulator object in scope' % self.input)
-            return False
-
 #################### ATOMIC PREDICATES ####################
-
-
-def get_unary_atomic_predicate_for_state(state_name):
-    return type(state_name + "Predicate", (UnaryAtomicPredicate,), {'STATE_NAME': state_name})
-
-
-def get_binary_atomic_predicate_for_state(state_name):
-    return type(state_name + "Predicate", (BinaryAtomicPredicate,), {'STATE_NAME': state_name})
-
-
 # TODO: Remove this when tests support temperature-based cooked.
 class LegacyCookedForTesting(UnaryAtomicPredicate):
     def __init__(self, scope, task, body, object_map):
         print('COOKED INITIALIZED')
         super().__init__(scope, task, body, object_map)
-
         print('COOKED CREATED')
 
-    def evaluate(self):
-        return self.task.cooked(self.scope[self.input])
+    def _evaluate(self, obj):
+        return self.task.cooked(obj)
+
+    def _sample(self):
+        pass
 
 #################### RECURSIVE PREDICATES ####################
 
@@ -114,7 +34,7 @@ class Conjunction(Sentence):
         super().__init__(scope, task, body, object_map)
 
         new_scope = copy.copy(scope)
-        child_predicates = [token_mapping[subpredicate[0]](
+        child_predicates = [get_sentence_for_token(subpredicate[0])(
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
         print('CONJUNCTION CREATED')
@@ -133,7 +53,7 @@ class Disjunction(Sentence):
 
         # body = [[predicate1], [predicate2], ..., [predicateN]]
         new_scope = copy.copy(scope)
-        child_predicates = [token_mapping[subpredicate[0]](
+        child_predicates = [get_sentence_for_token(subpredicate[0])(
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
         print('DISJUNCTION CREATED')
@@ -160,7 +80,7 @@ class Universal(Sentence):
             if obj_name in object_map[category]:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
-                self.children.append(token_mapping[subpredicate[0]](
+                self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
         print('UNIVERSAL CREATED')
 
@@ -185,7 +105,7 @@ class Existential(Sentence):
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
                 # body = [["param_label", "-", "category"], [predicate]]
-                self.children.append(token_mapping[subpredicate[0]](
+                self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
         print('EXISTENTIAL CREATED')
 
@@ -211,7 +131,7 @@ class NQuantifier(Sentence):
             if obj_name in object_map[category]:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj
-                self.children.append(token_mapping[subpredicate[0]](
+                self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
         print('NQUANT INITIALIZED')
 
@@ -239,7 +159,7 @@ class ForPairs(Sentence):
                         new_scope = copy.copy(scope)
                         new_scope[param_label1] = obj_1
                         new_scope[param_label2] = obj_2
-                        sub.append(token_mapping[subpredicate[0]](
+                        sub.append(get_sentence_for_token(subpredicate[0])(
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
 
@@ -267,7 +187,7 @@ class ForNPairs(Sentence):
                         new_scope = copy.copy(scope)
                         new_scope[param_label1] = obj_1
                         new_scope[param_label2] = obj_2
-                        sub.append(token_mapping[subpredicate[0]](
+                        sub.append(get_sentence_for_token(subpredicate[0])(
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
 
@@ -285,7 +205,7 @@ class Negation(Sentence):
 
         # body = [[predicate]]
         subpredicate = body[0]
-        self.children.append(token_mapping[subpredicate[0]](
+        self.children.append(get_sentence_for_token(subpredicate[0])(
             scope, task, subpredicate[1:], object_map))
         assert len(self.children) == 1, 'More than one child.'
         print('NEGATION CREATED')
@@ -306,9 +226,9 @@ class Implication(Sentence):
 
         # body = [[antecedent], [consequent]]
         antecedent, consequent = body
-        self.children.append(token_mapping[antecedent[0]](
+        self.children.append(get_sentence_for_token(antecedent[0])(
             scope, task, antecedent[1:], object_map))
-        self.children.append(token_mapping[consequent[0]](
+        self.children.append(get_sentence_for_token(consequent[0])(
             scope, task, consequent[1:], object_map))
         print('IMPLICATION CREATED')
 
@@ -328,7 +248,7 @@ class HEAD(Sentence):
         super().__init__(scope, task, body, object_map)
 
         subpredicate = body
-        self.children.append(token_mapping[subpredicate[0]](
+        self.children.append(get_sentence_for_token(subpredicate[0])(
             scope, task, subpredicate[1:], object_map))
         print('HEAD CREATED')
 
@@ -388,13 +308,11 @@ TOKEN_MAPPING = {
     'fornpairs': ForNPairs,
 
     # Atomic predicates
-    'inside': get_binary_atomic_predicate_for_state('inside'),
-    'nextto': get_binary_atomic_predicate_for_state('nextTo'),
-    'ontop': get_binary_atomic_predicate_for_state('onTop'),
-    'under': get_binary_atomic_predicate_for_state('under'),
-    'touching': get_binary_atomic_predicate_for_state('touching'),
-    # get_unary_atomic_predicate_for_state('cooked'),
     'cooked': LegacyCookedForTesting,
-    # TODO rest of atomic predicates
 }
-token_mapping = TOKEN_MAPPING
+
+def get_sentence_for_token(token):
+    if token in TOKEN_MAPPING:
+        return TOKEN_MAPPING[token]
+    else:
+        return tasknet.get_backend().get_predicate_class(token)
