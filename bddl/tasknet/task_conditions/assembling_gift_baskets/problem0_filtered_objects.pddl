@@ -1,6 +1,6 @@
-(define (problem assembling_gift_baskets_0)
+(define 
+    (problem assembling_gift_baskets_0)
     (:domain igibson)
-
     (:objects
      	hamper1 hamper2 hamper3 hamper4 - hamper
     	shelf1 - shelf
@@ -12,44 +12,31 @@
     	photograph1 photograph2 photograph3 photograph4 - photograph
     	table1 - table
     )
-    
     (:init 
-        (and 
-            (ontop hamper1 shelf1) 
-            (ontop hamper2 shelf1) 
-            (ontop hamper3 shelf1) 
-            (ontop hamper4 shelf1)
-        ) 
-        (and 
-            (inside lotion1 top_cabinet1) 
-            (inside lotion2 top_cabinet1) 
-            (inside lotion3 top_cabinet1) 
-            (inside lotion4 top_cabinet1)
-        ) 
-        (and 
-            (inside soap1 top_cabinet1) 
-            (inside soap2 top_cabinet1) 
-            (inside soap3 top_cabinet1) 
-            (inside soap4 top_cabinet1)
-        ) 
-        (and 
-            (inside shampoo1 top_cabinet1) 
-            (inside shampoo2 top_cabinet1) 
-            (inside shampoo3 top_cabinet1) 
-            (inside shampoo4 top_cabinet1)
-        ) 
-        (and 
-            (inside conditioner1 top_cabinet1) 
-            (inside conditioner2 top_cabinet1) 
-            (inside conditioner3 top_cabinet1) 
-            (inside conditioner4 top_cabinet1)
-        ) 
-        (and 
-            (ontop photograph1 table1) 
-            (ontop photograph2 table1) 
-            (ontop photograph3 table1) 
-            (ontop photograph4 table1)
-        )
+        (ontop hamper1 shelf1) 
+        (ontop hamper2 shelf1) 
+        (ontop hamper3 shelf1) 
+        (ontop hamper4 shelf1)
+        (inside lotion1 top_cabinet1) 
+        (inside lotion2 top_cabinet1) 
+        (inside lotion3 top_cabinet1) 
+        (inside lotion4 top_cabinet1)
+        (inside soap1 top_cabinet1) 
+        (inside soap2 top_cabinet1) 
+        (inside soap3 top_cabinet1) 
+        (inside soap4 top_cabinet1)
+        (inside shampoo1 top_cabinet1) 
+        (inside shampoo2 top_cabinet1) 
+        (inside shampoo3 top_cabinet1) 
+        (inside shampoo4 top_cabinet1)
+        (inside conditioner1 top_cabinet1) 
+        (inside conditioner2 top_cabinet1) 
+        (inside conditioner3 top_cabinet1) 
+        (inside conditioner4 top_cabinet1)
+        (ontop photograph1 table1) 
+        (ontop photograph2 table1) 
+        (ontop photograph3 table1) 
+        (ontop photograph4 table1)
     )
     
     (:goal 

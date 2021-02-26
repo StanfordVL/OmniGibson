@@ -1,46 +1,70 @@
 
 (:goal 
     (and 
-        (exists 
-            (?jar - jar) 
-            (forall 
-                (?tomato - tomato) 
-                (and 
-                    (inside ?tomato ?jar) 
-                    (cooked ?tomato) 
-                    (sliced ?tomato) 
-                    (not 
-                        (inside ?pickle1 ?jar)
-                    )
-                )
+        (forpairs 
+            (?plate - plate) 
+            (?chair - chair) 
+            (and 
+                (ontop ?plate ?table1 
+                    (dining_room)) 
+                (nextto ?plate ?chair)
             )
         ) 
-        (exists 
-            (?jar - jar) 
-            (forall 
-                (?pickle - pickle) 
-                (and 
-                    (inside ?pickle ?jar) 
-                    (cooked ?pickle) 
-                    (sliced ?pickle) 
-                    (not 
-                        (inside ?tomato1 ?jar)
-                    )
-                )
+        (forpairs 
+            (?bowl - bowl) 
+            (?chair - chair) 
+            (and 
+                (ontop ?bowl ?table1 
+                    (dining_room)) 
+                (nextto ?bowl ?chair)
+            )
+        ) 
+        (forpairs 
+            (?fork - fork) 
+            (?plate - plate) 
+            (and 
+                (ontop ?fork ?table1 
+                    (dining_room)) 
+                (nextto ?fork ?plate)
+            )
+        ) 
+        (forpairs 
+            (?knife - knife) 
+            (?plate - plate) 
+            (and 
+                (ontop ?knife ?table1 
+                    (dining_room)) 
+                (nextto ?knife ?plate)
+            )
+        ) 
+        (forpairs 
+            (?spoon - spoon) 
+            (?plate - plate) 
+            (and 
+                (ontop ?spoon ?table1 
+                    (dining_room)) 
+                (nextto ?spoon ?plate)
             )
         ) 
         (forall 
-            (?jar - jar) 
-            (and 
-                (exists
-                    (?cabinet - cabinet)
-                    (inside ?jar ?cabinet)
-                ) 
-                (inside ?water1 ?jar) 
-                (inside ?sugar1 ?jar)
+            (?tenderloin - tenderloin) 
+            (cooked ?tenderloin)
+        ) 
+        (forpairs 
+            (?tenderloin - tenderloin) 
+            (?plate - plate) 
+            (ontop ?tenderloin ?plate)
+        ) 
+        (forall 
+            (?gazpacho - gazpacho) 
+            (not 
+                (frozen ?gazpacho)
             )
         ) 
-        (ontop ?pot1 ?stove1) 
-        (ontop ?pan1 ?stove1)
+        (forpairs 
+            (?gazpacho - gazpacho) 
+            (?bowl - bowl) 
+            (inside ?gazpacho ?bowl)
+        )
     )
 )
