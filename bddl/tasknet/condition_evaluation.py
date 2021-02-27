@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+from tasknet.config import READABLE_PREDICATE_NAMES
 
 # TODO: VERY IMPORTANT
 #   1. Change logic for checking categories once new iG object is being used
@@ -36,6 +37,9 @@ class BinaryAtomicPredicate(AtomicPredicate):
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
 
+        readable_state_name = READABLE_PREDICATE_NAMES[self.STATE_NAME] if self.STATE_NAME in READABLE_PREDICATE_NAMES else self.STATE_NAME
+        self.natural_string = f"{self.input1} is {readable_state_name} {self.input2}"
+
     def evaluate(self):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
             state = self.scope[self.input1].states[self.STATE_NAME]
@@ -62,6 +66,9 @@ class UnaryAtomicPredicate(AtomicPredicate):
         assert len(body) == 1, 'Param list should have 1 arg'
         self.input = body[0].strip('?')
         self.scope = scope
+
+        readable_state_name = READABLE_PREDICATE_NAMES[self.STATE_NAME] if self.STATE_NAME in READABLE_PREDICATE_NAMES else self.STATE_NAME
+        self.natural_string = f"{self.input} is {readable_state_name}"
 
     def evaluate(self):
         if self.scope[self.input] is not None:
@@ -94,6 +101,8 @@ def get_binary_atomic_predicate_for_state(state_name):
 
 # TODO: Remove this when tests support temperature-based cooked.
 class LegacyCookedForTesting(UnaryAtomicPredicate):
+    STATE_NAME = "cooked"
+
     def __init__(self, scope, task, body, object_map):
         print('COOKED INITIALIZED')
         super().__init__(scope, task, body, object_map)
@@ -117,6 +126,10 @@ class Conjunction(Sentence):
         child_predicates = [token_mapping[subpredicate[0]](
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
+
+        # self.natural_string = 'all of the following should be true: '
+        self.natural_string = ', '.join([child.natural_string for child in self.children[:-1]]) 
+        self.natural_string += f', and {self.children[-1].natural_string}.'
         print('CONJUNCTION CREATED')
 
     def evaluate(self):
@@ -136,6 +149,9 @@ class Disjunction(Sentence):
         child_predicates = [token_mapping[subpredicate[0]](
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
+
+        # self.natural_string = 'at least one of the following should be true: '
+        self.natural_string = ' or '.join([child.natural_string for child in self.children]) + ' or any combination of these'
         print('DISJUNCTION CREATED')
 
     def evaluate(self):
@@ -162,6 +178,8 @@ class Universal(Sentence):
                 new_scope[param_label] = obj
                 self.children.append(token_mapping[subpredicate[0]](
                     new_scope, task, subpredicate[1:], object_map))
+        
+        self.natural_string = f"for every {param_label}, {self.children[0].natural_string}"
         print('UNIVERSAL CREATED')
 
     def evaluate(self):
@@ -187,6 +205,8 @@ class Existential(Sentence):
                 # body = [["param_label", "-", "category"], [predicate]]
                 self.children.append(token_mapping[subpredicate[0]](
                     new_scope, task, subpredicate[1:], object_map))
+        
+        self.natural_string = f"for at least one {param_label}, {self.children[0].natural_string}"
         print('EXISTENTIAL CREATED')
 
     def evaluate(self):
@@ -213,6 +233,8 @@ class NQuantifier(Sentence):
                 new_scope[param_label] = obj
                 self.children.append(token_mapping[subpredicate[0]](
                     new_scope, task, subpredicate[1:], object_map))
+        
+        self.natural_string = f"for exactly {self.N} {param_label}s, {self.children[0].natural_string}"
         print('NQUANT INITIALIZED')
 
     def evaluate(self):
@@ -242,6 +264,8 @@ class ForPairs(Sentence):
                         sub.append(token_mapping[subpredicate[0]](
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
+        
+        self.natural_string = f"for pairs of {param_label1}s and {param_label2}s, {self.children[0].natural_string}."
 
     def evaluate(self):
         self.child_values = np.array(
@@ -270,11 +294,13 @@ class ForNPairs(Sentence):
                         sub.append(token_mapping[subpredicate[0]](
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
+        
+        self.natural_string = f"for {self.N} pairs of {param_label1}s and {param_label2}s, {self.children[0].natural_string}."
 
     def evaluate(self):
         self.child_values = np.array(
             [np.array([subchild.evaluate() for subchild in child]) for child in self.children])
-        return (np.sum(np.any(self.child_values, axis=1), axis=0) >= self.N) and (np.sum(np.any(self.chid_values, axis=0), axis=0) >= self.N)
+        return (np.sum(np.any(self.child_values, axis=1), axis=0) >= self.N) and (np.sum(np.any(self.child_values, axis=0), axis=0) >= self.N)
 
 
 # NEGATION
@@ -288,6 +314,8 @@ class Negation(Sentence):
         self.children.append(token_mapping[subpredicate[0]](
             scope, task, subpredicate[1:], object_map))
         assert len(self.children) == 1, 'More than one child.'
+
+        self.natural_string = f"the following is NOT true: {self.children[0].natural_string}"
         print('NEGATION CREATED')
 
     def evaluate(self):
@@ -310,6 +338,8 @@ class Implication(Sentence):
             scope, task, antecedent[1:], object_map))
         self.children.append(token_mapping[consequent[0]](
             scope, task, consequent[1:], object_map))
+
+        self.natural_string = f"if {self.children[0].natural_string} then {self.children[1].natural_string}, but if not then it doesn't matter"
         print('IMPLICATION CREATED')
 
     def evaluate(self):
@@ -330,6 +360,7 @@ class HEAD(Sentence):
         subpredicate = body
         self.children.append(token_mapping[subpredicate[0]](
             scope, task, subpredicate[1:], object_map))
+        self.natural_string = self.children[0].natural_string + '.'
         print('HEAD CREATED')
 
     def evaluate(self):
@@ -358,6 +389,9 @@ def compile_state(parsed_state, task, scope=None, object_map=None):
         scope = scope if scope is not None else {}
         compiled_state.append(HEAD(scope, task, parsed_condition, object_map))
         print('\n')
+    for compiled_cond in compiled_state:
+        print(compiled_cond.natural_string)
+    crash
     return compiled_state
 
 
@@ -398,3 +432,11 @@ TOKEN_MAPPING = {
     # TODO rest of atomic predicates
 }
 token_mapping = TOKEN_MAPPING
+
+
+if __name__ == '__main__':
+    from parsing import parse_domain, parse_problem
+
+    domain_name, requirements, types, actions, predicates = parse_domain('putting_away_Christmas_decorations', 0)
+    problem_name, objects, parsed_initial_conditions, parsed_goal_conditions = parse_problem('putting_away_Christmas_decorations', 0, domain_name)
+    compile_state()
