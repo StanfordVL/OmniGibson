@@ -58,7 +58,7 @@ class TaskNetTask(object):
                 continue
             if '_int' not in scene:
                 continue
-            if scene != 'Wainscott_0_int':
+            if scene != 'Rs_int':
                 continue
             self.scene_id = scene
             self.scene = scene_class(scene)
