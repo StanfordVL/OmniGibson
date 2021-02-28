@@ -50,6 +50,9 @@ def test_chicken_cooking():
 
     print('\n\nCompile conditions')
     compiled_state = compile_state(goal_state, test_task, scope=test_scope, object_map={'chicken': ['chicken1', 'chicken2', 'chicken3', 'chicken4'], 'apple': ['apple1', 'apple2', 'apple3']})
+    for state in compiled_state:
+        print(state.natural_string)
+    print('\n')
 
     print('Evaluate without action')
     success, results = evaluate_state(compiled_state)
@@ -90,6 +93,8 @@ def test_chicken_cooking():
     print("test")
     assert results['satisfied'] == [0, 2, 3, 4, 5], "Error, predicate evaluation returned wrong truth values"
     # print("Successful evaluation")
+
+test_chicken_cooking()
 
 # def _test():
 #     parsed_condition = ["and",

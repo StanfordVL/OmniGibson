@@ -269,7 +269,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
                                     "dustyable": {},
                                     "scrubbable": {}
                                   }
@@ -325,15 +324,13 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "dustyable": {},
-                                    "scrubbable": {},
                                     "toggleable": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "dustyable": {},
-                                "scrubbable": {}
+                                "dustyable": {}
                               }
                             },
                             {
@@ -351,8 +348,7 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "dustyable": {},
-                            "scrubbable": {}
+                            "dustyable": {}
                           }
                         },
                         {
@@ -449,7 +445,6 @@
                                   "abilities": {
                                     "breakable": {},
                                     "dustyable": {},
-                                    "openable": {},
                                     "scrubbable": {}
                                   }
                                 },
@@ -557,7 +552,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "dustyable": {},
-                                    "openable": {},
                                     "scrubbable": {}
                                   }
                                 },
@@ -621,7 +615,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {},
                                 "openable": {},
                                 "scrubbable": {}
@@ -750,11 +743,21 @@
                                     "dustyable": {},
                                     "scrubbable": {}
                                   }
+                                },
+                                {
+                                  "name": "dustpan.n.02",
+                                  "igibson_categories": [
+                                    "dustpan"
+                                  ],
+                                  "abilities": {
+                                    "burnable": {},
+                                    "dustyable": {},
+                                    "scrubbable": {}
+                                  }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
                                 "burnable": {},
                                 "dustyable": {},
                                 "scrubbable": {}
@@ -839,13 +842,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "breakable": {},
-                            "burnable": {},
-                            "dustyable": {},
-                            "openable": {},
-                            "scrubbable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "equipment.n.01",
@@ -961,9 +958,7 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "dustyable": {},
-                            "heatSource": {},
-                            "toggleable": {}
+                            "dustyable": {}
                           }
                         },
                         {
@@ -1024,7 +1019,6 @@
                                           "igibson_categories": [],
                                           "abilities": {
                                             "breakable": {},
-                                            "burnable": {},
                                             "dustyable": {},
                                             "scrubbable": {},
                                             "timeSetable": {}
@@ -1034,7 +1028,6 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {},
                                         "dustyable": {},
                                         "scrubbable": {},
                                         "timeSetable": {}
@@ -1095,11 +1088,8 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "breakable": {},
-                                    "burnable": {},
                                     "dustyable": {},
-                                    "scrubbable": {},
-                                    "timeSetable": {}
+                                    "scrubbable": {}
                                   }
                                 },
                                 {
@@ -1135,11 +1125,8 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
-                                "burnable": {},
                                 "dustyable": {},
-                                "scrubbable": {},
-                                "timeSetable": {}
+                                "scrubbable": {}
                               }
                             },
                             {
@@ -1176,8 +1163,7 @@
                                   "abilities": {
                                     "breakable": {},
                                     "burnable": {},
-                                    "dustyable": {},
-                                    "scrubbable": {}
+                                    "dustyable": {}
                                   }
                                 },
                                 {
@@ -1229,8 +1215,7 @@
                               "abilities": {
                                 "breakable": {},
                                 "burnable": {},
-                                "dustyable": {},
-                                "scrubbable": {}
+                                "dustyable": {}
                               }
                             },
                             {
@@ -1370,13 +1355,7 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
-                                "burnable": {},
-                                "dustyable": {},
-                                "openable": {},
-                                "scrubbable": {},
-                                "timeSetable": {},
-                                "toggleable": {}
+                                "dustyable": {}
                               }
                             },
                             {
@@ -1509,8 +1488,7 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "dustyable": {},
-                                "scrubbable": {}
+                                "dustyable": {}
                               }
                             },
                             {
@@ -1567,9 +1545,7 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "breakable": {},
                                     "dustyable": {},
-                                    "timeSetable": {},
                                     "toggleable": {}
                                   }
                                 },
@@ -1589,9 +1565,7 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
                                 "dustyable": {},
-                                "timeSetable": {},
                                 "toggleable": {}
                               }
                             },
@@ -1672,11 +1646,7 @@
                                         }
                                       ],
                                       "igibson_categories": [],
-                                      "abilities": {
-                                        "dustyable": {},
-                                        "openable": {},
-                                        "scrubbable": {}
-                                      }
+                                      "abilities": {}
                                     },
                                     {
                                       "name": "pin.n.09",
@@ -1754,25 +1724,16 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "dustyable": {},
-                                        "screwable": {}
+                                        "dustyable": {}
                                       }
                                     }
                                   ],
                                   "igibson_categories": [],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "openable": {},
-                                    "scrubbable": {}
-                                  }
+                                  "abilities": {}
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {
-                                "dustyable": {},
-                                "openable": {},
-                                "scrubbable": {}
-                              }
+                              "abilities": {}
                             },
                             {
                               "name": "filter.n.01",
@@ -2053,13 +2014,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "breakable": {},
-                            "burnable": {},
-                            "dustyable": {},
-                            "scrubbable": {},
-                            "timeSetable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "implement.n.01",
@@ -2119,8 +2074,8 @@
                                                   ],
                                                   "abilities": {
                                                     "dustyable": {},
-                                                    "slicer": {},
-                                                    "scrubbable": {}
+                                                    "scrubbable": {},
+                                                    "slicer": {}
                                                   }
                                                 }
                                               ],
@@ -2146,24 +2101,21 @@
                                           "igibson_categories": [],
                                           "abilities": {
                                             "dustyable": {},
-                                            "scrubbable": {},
-                                            "slicer": {}
+                                            "scrubbable": {}
                                           }
                                         }
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
                                         "dustyable": {},
-                                        "scrubbable": {},
-                                        "slicer": {}
+                                        "scrubbable": {}
                                       }
                                     }
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
                                     "dustyable": {},
-                                    "scrubbable": {},
-                                    "slicer": {}
+                                    "scrubbable": {}
                                   }
                                 },
                                 {
@@ -2221,21 +2173,62 @@
                                       "abilities": {
                                         "scrubbable": {}
                                       }
+                                    },
+                                    {
+                                      "name": "scraper.n.01",
+                                      "igibson_categories": [
+                                        "scraper"
+                                      ],
+                                      "abilities": {
+                                        "scrubbable": {}
+                                      }
                                     }
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
+                                    "scrubbable": {}
+                                  }
+                                },
+                                {
+                                  "name": "drill.n.01",
+                                  "igibson_categories": [
+                                    "drill"
+                                  ],
+                                  "abilities": {
+                                    "breakable": {},
                                     "dustyable": {},
+                                    "screwable": {},
+                                    "scrubbable": {},
+                                    "toggleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "garden_tool.n.01",
+                                  "children": [
+                                    {
+                                      "name": "lawn_mower.n.01",
+                                      "igibson_categories": [
+                                        "lawn_mower"
+                                      ],
+                                      "abilities": {}
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "rake.n.03",
+                                  "igibson_categories": [
+                                    "rake"
+                                  ],
+                                  "abilities": {
+                                    "burnable": {},
                                     "scrubbable": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {
-                                "dustyable": {},
-                                "scrubbable": {},
-                                "slicer": {}
-                              }
+                              "abilities": {}
                             },
                             {
                               "name": "eraser.n.01",
@@ -2337,7 +2330,6 @@
                                           "igibson_categories": [],
                                           "abilities": {
                                             "dustyable": {},
-                                            "openable": {},
                                             "scrubbable": {}
                                           }
                                         },
@@ -2414,26 +2406,6 @@
                                     "dustyable": {},
                                     "scrubbable": {}
                                   }
-                                },
-                                {
-                                  "name": "ceramic_ware.n.01",
-                                  "children": [
-                                    {
-                                      "name": "porcelain.n.01",
-                                      "igibson_categories": [
-                                        "tile"
-                                      ],
-                                      "abilities": {
-                                        "dustyable": {},
-                                        "scrubbable": {}
-                                      }
-                                    }
-                                  ],
-                                  "igibson_categories": [],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "scrubbable": {}
-                                  }
                                 }
                               ],
                               "igibson_categories": [],
@@ -2499,7 +2471,6 @@
                               "abilities": {
                                 "breakable": {},
                                 "dustyable": {},
-                                "openable": {},
                                 "scrubbable": {}
                               }
                             },
@@ -2623,6 +2594,17 @@
                                     "scrubbable": {},
                                     "soakable": {}
                                   }
+                                },
+                                {
+                                  "name": "toothbrush.n.01",
+                                  "igibson_categories": [
+                                    "toothbrush"
+                                  ],
+                                  "abilities": {
+                                    "burnable": {},
+                                    "dustyable": {},
+                                    "scrubbable": {}
+                                  }
                                 }
                               ],
                               "igibson_categories": [],
@@ -2657,8 +2639,7 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
-                                "dustyable": {}
+                                "burnable": {}
                               }
                             },
                             {
@@ -2673,11 +2654,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "dustyable": {},
-                            "scrubbable": {},
-                            "slicer": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "toiletry.n.01",
@@ -2690,12 +2667,30 @@
                               "abilities": {
                                 "liquid": {}
                               }
+                            },
+                            {
+                              "name": "powder.n.03",
+                              "igibson_categories": [
+                                "powder_bottle"
+                              ],
+                              "abilities": {
+                                "burnable": {}
+                              }
+                            },
+                            {
+                              "name": "toothbrush.n.01",
+                              "igibson_categories": [
+                                "toothbrush"
+                              ],
+                              "abilities": {
+                                "burnable": {},
+                                "dustyable": {},
+                                "scrubbable": {}
+                              }
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "liquid": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "connection.n.03",
@@ -2813,10 +2808,7 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "dustyable": {},
-                        "scrubbable": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "covering.n.02",
@@ -2935,7 +2927,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {},
                                 "scrubbable": {}
                               }
@@ -2943,7 +2934,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "dustyable": {},
                             "scrubbable": {}
                           }
@@ -3097,14 +3087,23 @@
                                     "scrubbable": {},
                                     "soakable": {}
                                   }
+                                },
+                                {
+                                  "name": "scarf.n.01",
+                                  "igibson_categories": [
+                                    "scarf"
+                                  ],
+                                  "abilities": {
+                                    "burnable": {},
+                                    "scrubbable": {},
+                                    "soakable": {}
+                                  }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
                                 "burnable": {},
-                                "dustyable": {},
-                                "scrubbable": {},
-                                "soakable": {}
+                                "scrubbable": {}
                               }
                             },
                             {
@@ -3205,7 +3204,6 @@
                           "igibson_categories": [],
                           "abilities": {
                             "burnable": {},
-                            "dustyable": {},
                             "scrubbable": {}
                           }
                         },
@@ -3310,12 +3308,7 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "burnable": {},
-                        "dustyable": {},
-                        "scrubbable": {},
-                        "soakable": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "commodity.n.01",
@@ -3404,8 +3397,6 @@
                                           "igibson_categories": [],
                                           "abilities": {
                                             "dustyable": {},
-                                            "scrubbable": {},
-                                            "timeSetable": {},
                                             "toggleable": {}
                                           }
                                         },
@@ -3464,10 +3455,8 @@
                                           "igibson_categories": [],
                                           "abilities": {
                                             "dustyable": {},
-                                            "heatSource": {},
                                             "openable": {},
-                                            "scrubbable": {},
-                                            "toggleable": {}
+                                            "scrubbable": {}
                                           }
                                         },
                                         {
@@ -3496,10 +3485,7 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "dustyable": {},
-                                        "scrubbable": {},
-                                        "timeSetable": {},
-                                        "toggleable": {}
+                                        "dustyable": {}
                                       }
                                     },
                                     {
@@ -3518,19 +3504,13 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "dustyable": {},
-                                    "scrubbable": {},
-                                    "timeSetable": {},
-                                    "toggleable": {}
+                                    "dustyable": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "dustyable": {},
-                                "scrubbable": {},
-                                "timeSetable": {},
-                                "toggleable": {}
+                                "dustyable": {}
                               }
                             },
                             {
@@ -3682,14 +3662,23 @@
                                         "scrubbable": {},
                                         "soakable": {}
                                       }
+                                    },
+                                    {
+                                      "name": "scarf.n.01",
+                                      "igibson_categories": [
+                                        "scarf"
+                                      ],
+                                      "abilities": {
+                                        "burnable": {},
+                                        "scrubbable": {},
+                                        "soakable": {}
+                                      }
                                     }
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
                                     "burnable": {},
-                                    "dustyable": {},
-                                    "scrubbable": {},
-                                    "soakable": {}
+                                    "scrubbable": {}
                                   }
                                 },
                                 {
@@ -3790,18 +3779,12 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "burnable": {},
-                                "dustyable": {},
                                 "scrubbable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "dustyable": {},
-                            "scrubbable": {},
-                            "timeSetable": {},
-                            "toggleable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "drygoods.n.01",
@@ -3889,32 +3872,24 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
-                                    "soakable": {}
+                                    "burnable": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
-                                "soakable": {}
+                                "burnable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
-                            "soakable": {}
+                            "burnable": {}
                           }
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "dustyable": {},
-                        "scrubbable": {},
-                        "timeSetable": {},
-                        "toggleable": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "surface.n.01",
@@ -3983,8 +3958,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "dustyable": {},
-                        "scrubbable": {}
+                        "dustyable": {}
                       }
                     },
                     {
@@ -4043,18 +4017,14 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {},
-                                "openable": {},
                                 "scrubbable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "dustyable": {},
-                            "openable": {},
                             "scrubbable": {}
                           }
                         },
@@ -4102,8 +4072,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "breakable": {},
-                                    "burnable": {},
                                     "dustyable": {},
                                     "scrubbable": {}
                                   }
@@ -4123,8 +4091,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
-                                "burnable": {},
                                 "dustyable": {},
                                 "scrubbable": {}
                               }
@@ -4132,8 +4098,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
-                            "burnable": {},
                             "dustyable": {},
                             "scrubbable": {}
                           }
@@ -4174,9 +4138,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
                         "dustyable": {},
-                        "openable": {},
                         "scrubbable": {}
                       }
                     },
@@ -4248,11 +4210,40 @@
                             "dustyable": {},
                             "openable": {}
                           }
+                        },
+                        {
+                          "name": "art.n.01",
+                          "children": [
+                            {
+                              "name": "graphic_art.n.01",
+                              "children": [
+                                {
+                                  "name": "painting.n.01",
+                                  "igibson_categories": [
+                                    "painting"
+                                  ],
+                                  "abilities": {
+                                    "burnable": {},
+                                    "dustyable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "burnable": {},
+                                "dustyable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "abilities": {
+                            "burnable": {},
+                            "dustyable": {}
+                          }
                         }
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
                         "burnable": {},
                         "dustyable": {}
                       }
@@ -4308,8 +4299,7 @@
                       "igibson_categories": [],
                       "abilities": {
                         "burnable": {},
-                        "scrubbable": {},
-                        "soakable": {}
+                        "scrubbable": {}
                       }
                     },
                     {
@@ -4334,7 +4324,9 @@
                               ],
                               "abilities": {
                                 "dustyable": {},
-                                "scrubbable": {}
+                                "scrubbable": {},
+                                "toggleable": {},
+                                "waterSource": {}
                               }
                             },
                             {
@@ -4476,12 +4468,7 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {},
-                                    "cookable": {},
-                                    "freezable": {},
-                                    "perishable": {},
-                                    "scrubbable": {},
-                                    "sliceable": {}
+                                    "scrubbable": {}
                                   }
                                 },
                                 {
@@ -4593,37 +4580,19 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
-                                "burnable": {},
-                                "cookable": {},
-                                "freezable": {},
-                                "perishable": {},
-                                "scrubbable": {},
-                                "sliceable": {}
+                                "scrubbable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
-                            "burnable": {},
-                            "cookable": {},
-                            "freezable": {},
-                            "perishable": {},
-                            "scrubbable": {},
-                            "sliceable": {}
+                            "scrubbable": {}
                           }
                         }
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
-                        "burnable": {},
-                        "cookable": {},
-                        "freezable": {},
-                        "perishable": {},
-                        "scrubbable": {},
-                        "sliceable": {}
+                        "scrubbable": {}
                       }
                     },
                     {
@@ -4686,9 +4655,7 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
                                 "burnable": {},
-                                "dustyable": {},
                                 "scrubbable": {},
                                 "soakable": {}
                               }
@@ -4708,9 +4675,7 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
                             "burnable": {},
-                            "dustyable": {},
                             "scrubbable": {},
                             "soakable": {}
                           }
@@ -4718,9 +4683,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
                         "burnable": {},
-                        "dustyable": {},
                         "scrubbable": {},
                         "soakable": {}
                       }
@@ -4845,7 +4808,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
                                 "dustyable": {},
                                 "scrubbable": {}
                               }
@@ -4853,7 +4815,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
                             "dustyable": {},
                             "scrubbable": {}
                           }
@@ -4896,8 +4857,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "dustyable": {},
-                        "scrubbable": {}
+                        "dustyable": {}
                       }
                     },
                     {
@@ -4947,20 +4907,6 @@
                             "breakable": {},
                             "dustyable": {},
                             "scrubbable": {}
-                          }
-                        },
-                        {
-                          "name": "nut.n.03",
-                          "igibson_categories": [
-                            "nut"
-                          ],
-                          "abilities": {
-                            "breakable": {},
-                            "burnable": {},
-                            "cookable": {},
-                            "perishable": {},
-                            "scrubbable": {},
-                            "sliceable": {}
                           }
                         }
                       ],
@@ -5061,20 +5007,44 @@
                             "breakable": {},
                             "burnable": {}
                           }
+                        },
+                        {
+                          "name": "stairway.n.01",
+                          "children": [
+                            {
+                              "name": "stairs.n.01",
+                              "children": [
+                                {
+                                  "name": "ladder.n.01",
+                                  "igibson_categories": [
+                                    "ladder"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "openable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "dustyable": {},
+                                "openable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "abilities": {
+                            "dustyable": {},
+                            "openable": {}
+                          }
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "breakable": {},
-                        "burnable": {}
-                      }
+                      "abilities": {}
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "dustyable": {},
-                    "scrubbable": {}
-                  }
+                  "abilities": {}
                 },
                 {
                   "name": "living_thing.n.01",
@@ -5195,29 +5165,25 @@
                                 "burnable": {},
                                 "cookable": {},
                                 "freezable": {},
-                                "perishable": {},
-                                "sliceable": {}
+                                "perishable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
-                            "soakable": {}
+                            "burnable": {}
                           }
                         }
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
-                        "soakable": {}
+                        "burnable": {}
                       }
                     }
                   ],
                   "igibson_categories": [],
                   "abilities": {
-                    "burnable": {},
-                    "soakable": {}
+                    "burnable": {}
                   }
                 },
                 {
@@ -5353,7 +5319,6 @@
                                             "cookable": {},
                                             "freezable": {},
                                             "perishable": {},
-                                            "scrubbable": {},
                                             "sliceable": {}
                                           }
                                         },
@@ -5452,11 +5417,8 @@
                                           "abilities": {
                                             "burnable": {},
                                             "cookable": {},
-                                            "dustyable": {},
                                             "freezable": {},
-                                            "perishable": {},
-                                            "scrubbable": {},
-                                            "sliceable": {}
+                                            "perishable": {}
                                           }
                                         },
                                         {
@@ -5579,11 +5541,9 @@
                                           ],
                                           "igibson_categories": [],
                                           "abilities": {
-                                            "burnable": {},
                                             "cookable": {},
                                             "freezable": {},
-                                            "perishable": {},
-                                            "sliceable": {}
+                                            "perishable": {}
                                           }
                                         },
                                         {
@@ -5604,13 +5564,8 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "breakable": {},
-                                        "burnable": {},
-                                        "cookable": {},
-                                        "dustyable": {},
                                         "freezable": {},
-                                        "perishable": {},
-                                        "scrubbable": {}
+                                        "perishable": {}
                                       }
                                     },
                                     {
@@ -5653,10 +5608,8 @@
                                         "breakable": {},
                                         "burnable": {},
                                         "cookable": {},
-                                        "dustyable": {},
                                         "freezable": {},
-                                        "perishable": {},
-                                        "scrubbable": {}
+                                        "perishable": {}
                                       }
                                     },
                                     {
@@ -5747,12 +5700,9 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {},
                                         "cookable": {},
-                                        "dustyable": {},
                                         "freezable": {},
                                         "perishable": {},
-                                        "scrubbable": {},
                                         "sliceable": {}
                                       }
                                     },
@@ -5812,10 +5762,7 @@
                                               "abilities": {
                                                 "burnable": {},
                                                 "cookable": {},
-                                                "freezable": {},
-                                                "perishable": {},
-                                                "scrubbable": {},
-                                                "soakable": {}
+                                                "perishable": {}
                                               }
                                             }
                                           ],
@@ -5823,10 +5770,7 @@
                                           "abilities": {
                                             "burnable": {},
                                             "cookable": {},
-                                            "freezable": {},
-                                            "perishable": {},
-                                            "scrubbable": {},
-                                            "soakable": {}
+                                            "perishable": {}
                                           }
                                         }
                                       ],
@@ -5834,10 +5778,7 @@
                                       "abilities": {
                                         "burnable": {},
                                         "cookable": {},
-                                        "freezable": {},
-                                        "perishable": {},
-                                        "scrubbable": {},
-                                        "soakable": {}
+                                        "perishable": {}
                                       }
                                     },
                                     {
@@ -5881,69 +5822,36 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "breakable": {},
-                                    "burnable": {},
-                                    "cookable": {},
-                                    "dustyable": {},
-                                    "freezable": {},
-                                    "perishable": {},
-                                    "scrubbable": {}
+                                    "perishable": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
-                                "burnable": {},
-                                "cookable": {},
-                                "dustyable": {},
-                                "freezable": {},
-                                "perishable": {},
-                                "scrubbable": {}
+                                "perishable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
-                            "burnable": {},
-                            "cookable": {},
-                            "dustyable": {},
-                            "freezable": {},
-                            "perishable": {},
-                            "scrubbable": {}
+                            "perishable": {}
                           }
                         }
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
-                        "burnable": {},
-                        "cookable": {},
-                        "dustyable": {},
-                        "freezable": {},
-                        "perishable": {},
-                        "scrubbable": {}
+                        "perishable": {}
                       }
                     }
                   ],
                   "igibson_categories": [],
                   "abilities": {
-                    "breakable": {},
-                    "burnable": {},
-                    "cookable": {},
-                    "dustyable": {},
-                    "freezable": {},
-                    "perishable": {},
-                    "scrubbable": {}
+                    "perishable": {}
                   }
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "dustyable": {},
-                "scrubbable": {}
-              }
+              "abilities": {}
             },
             {
               "name": "part.n.02",
@@ -6008,9 +5916,7 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
                             "burnable": {},
-                            "dustyable": {},
                             "scrubbable": {},
                             "soakable": {}
                           }
@@ -6030,9 +5936,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
                         "burnable": {},
-                        "dustyable": {},
                         "scrubbable": {},
                         "soakable": {}
                       }
@@ -6040,9 +5944,7 @@
                   ],
                   "igibson_categories": [],
                   "abilities": {
-                    "breakable": {},
                     "burnable": {},
-                    "dustyable": {},
                     "scrubbable": {},
                     "soakable": {}
                   }
@@ -6127,19 +6029,12 @@
                   ],
                   "igibson_categories": [],
                   "abilities": {
-                    "dustyable": {},
-                    "scrubbable": {}
+                    "dustyable": {}
                   }
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "breakable": {},
-                "burnable": {},
-                "dustyable": {},
-                "scrubbable": {},
-                "soakable": {}
-              }
+              "abilities": {}
             },
             {
               "name": "ribbon.n.01",
@@ -6154,10 +6049,7 @@
             }
           ],
           "igibson_categories": [],
-          "abilities": {
-            "dustyable": {},
-            "scrubbable": {}
-          }
+          "abilities": {}
         },
         {
           "name": "matter.n.03",
@@ -6289,7 +6181,6 @@
                                 "cookable": {},
                                 "freezable": {},
                                 "perishable": {},
-                                "scrubbable": {},
                                 "sliceable": {}
                               }
                             },
@@ -6388,11 +6279,8 @@
                               "abilities": {
                                 "burnable": {},
                                 "cookable": {},
-                                "dustyable": {},
                                 "freezable": {},
-                                "perishable": {},
-                                "scrubbable": {},
-                                "sliceable": {}
+                                "perishable": {}
                               }
                             },
                             {
@@ -6515,11 +6403,9 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "cookable": {},
                                 "freezable": {},
-                                "perishable": {},
-                                "sliceable": {}
+                                "perishable": {}
                               }
                             },
                             {
@@ -6540,13 +6426,8 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
-                            "burnable": {},
-                            "cookable": {},
-                            "dustyable": {},
                             "freezable": {},
-                            "perishable": {},
-                            "scrubbable": {}
+                            "perishable": {}
                           }
                         },
                         {
@@ -6602,8 +6483,7 @@
                                 "burnable": {},
                                 "cookable": {},
                                 "freezable": {},
-                                "perishable": {},
-                                "soakable": {}
+                                "perishable": {}
                               }
                             },
                             {
@@ -6684,12 +6564,10 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
                                 "burnable": {},
                                 "cookable": {},
                                 "freezable": {},
-                                "perishable": {},
-                                "scrubbable": {}
+                                "perishable": {}
                               }
                             },
                             {
@@ -6761,7 +6639,6 @@
                                     "cookable": {},
                                     "freezable": {},
                                     "perishable": {},
-                                    "scrubbable": {},
                                     "sliceable": {}
                                   }
                                 },
@@ -6818,7 +6695,6 @@
                                 "cookable": {},
                                 "freezable": {},
                                 "perishable": {},
-                                "scrubbable": {},
                                 "sliceable": {}
                               }
                             },
@@ -7068,24 +6944,16 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
                             "burnable": {},
-                            "cookable": {},
                             "freezable": {},
-                            "perishable": {},
-                            "sliceable": {}
+                            "perishable": {}
                           }
                         }
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
-                        "burnable": {},
-                        "cookable": {},
-                        "dustyable": {},
                         "freezable": {},
-                        "perishable": {},
-                        "scrubbable": {}
+                        "perishable": {}
                       }
                     },
                     {
@@ -7149,7 +7017,6 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
                         "burnable": {},
                         "cookable": {},
                         "freezable": {},
@@ -7226,22 +7093,19 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "cookable": {},
-                                "soakable": {}
+                                "cookable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "cookable": {},
-                            "soakable": {}
+                            "cookable": {}
                           }
                         }
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "cookable": {},
-                        "soakable": {}
+                        "cookable": {}
                       }
                     },
                     {
@@ -7396,27 +7260,11 @@
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "breakable": {},
-                    "burnable": {},
-                    "cookable": {},
-                    "dustyable": {},
-                    "freezable": {},
-                    "perishable": {},
-                    "scrubbable": {}
-                  }
+                  "abilities": {}
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "breakable": {},
-                "burnable": {},
-                "cookable": {},
-                "dustyable": {},
-                "freezable": {},
-                "perishable": {},
-                "scrubbable": {}
-              }
+              "abilities": {}
             },
             {
               "name": "substance.n.07",
@@ -7482,7 +7330,6 @@
                                         "burnable": {},
                                         "cookable": {},
                                         "freezable": {},
-                                        "liquid": {},
                                         "perishable": {}
                                       }
                                     },
@@ -7595,10 +7442,7 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
-                                    "cookable": {},
                                     "freezable": {},
-                                    "liquid": {},
                                     "perishable": {}
                                   }
                                 },
@@ -7669,23 +7513,11 @@
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {
-                                "burnable": {},
-                                "cookable": {},
-                                "freezable": {},
-                                "liquid": {},
-                                "perishable": {}
-                              }
+                              "abilities": {}
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "burnable": {},
-                            "cookable": {},
-                            "freezable": {},
-                            "liquid": {},
-                            "perishable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "dairy_product.n.01",
@@ -7751,7 +7583,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
                                 "burnable": {},
                                 "cookable": {},
                                 "freezable": {},
@@ -7798,12 +7629,7 @@
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {
-                                "cookable": {},
-                                "freezable": {},
-                                "liquid": {},
-                                "perishable": {}
-                              }
+                              "abilities": {}
                             },
                             {
                               "name": "yogurt.n.01",
@@ -7818,14 +7644,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "breakable": {},
-                            "burnable": {},
-                            "cookable": {},
-                            "freezable": {},
-                            "perishable": {},
-                            "sliceable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "canned_food.n.01",
@@ -7916,9 +7735,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "soakable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "starches.n.01",
@@ -7980,11 +7797,7 @@
                           "abilities": {
                             "burnable": {},
                             "cookable": {},
-                            "dustyable": {},
-                            "freezable": {},
-                            "perishable": {},
-                            "scrubbable": {},
-                            "sliceable": {}
+                            "perishable": {}
                           }
                         },
                         {
@@ -8000,13 +7813,7 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "burnable": {},
-                        "cookable": {},
-                        "freezable": {},
-                        "liquid": {},
-                        "perishable": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "nutriment.n.01",
@@ -8060,7 +7867,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
                                 "burnable": {},
                                 "cookable": {},
                                 "perishable": {}
@@ -8096,11 +7902,8 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "cookable": {},
-                                "freezable": {},
-                                "perishable": {},
-                                "sliceable": {}
+                                "freezable": {}
                               }
                             },
                             {
@@ -8170,10 +7973,7 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
-                            "burnable": {},
-                            "cookable": {},
-                            "perishable": {}
+                            "cookable": {}
                           }
                         },
                         {
@@ -8219,10 +8019,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
-                        "burnable": {},
-                        "cookable": {},
-                        "perishable": {}
+                        "cookable": {}
                       }
                     },
                     {
@@ -8254,12 +8051,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "cookable": {},
-                            "freezable": {},
-                            "liquid": {},
-                            "perishable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "soft_drink.n.01",
@@ -8373,7 +8165,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "freezable": {},
                             "liquid": {},
                             "perishable": {}
@@ -8381,12 +8172,7 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "cookable": {},
-                        "freezable": {},
-                        "liquid": {},
-                        "perishable": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "water.n.06",
@@ -8400,13 +8186,7 @@
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "burnable": {},
-                    "cookable": {},
-                    "freezable": {},
-                    "liquid": {},
-                    "perishable": {}
-                  }
+                  "abilities": {}
                 },
                 {
                   "name": "agent.n.03",
@@ -8416,6 +8196,17 @@
                       "children": [
                         {
                           "name": "medicine.n.02",
+                          "children": [
+                            {
+                              "name": "powder.n.03",
+                              "igibson_categories": [
+                                "powder_bottle"
+                              ],
+                              "abilities": {
+                                "burnable": {}
+                              }
+                            }
+                          ],
                           "igibson_categories": [
                             "medicine"
                           ],
@@ -8490,7 +8281,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "freezable": {},
                                 "liquid": {},
                                 "perishable": {}
@@ -8499,7 +8289,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "freezable": {},
                             "liquid": {},
                             "perishable": {}
@@ -8507,15 +8296,11 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "burnable": {}
-                      }
+                      "abilities": {}
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "burnable": {}
-                  }
+                  "abilities": {}
                 },
                 {
                   "name": "nutrient.n.02",
@@ -8539,13 +8324,7 @@
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "burnable": {},
-                "cookable": {},
-                "freezable": {},
-                "liquid": {},
-                "perishable": {}
-              }
+              "abilities": {}
             },
             {
               "name": "substance.n.01",
@@ -8585,12 +8364,7 @@
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {
-                                "cookable": {},
-                                "freezable": {},
-                                "liquid": {},
-                                "perishable": {}
-                              }
+                              "abilities": {}
                             },
                             {
                               "name": "soft_drink.n.01",
@@ -8704,7 +8478,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "freezable": {},
                                 "liquid": {},
                                 "perishable": {}
@@ -8712,12 +8485,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "cookable": {},
-                            "freezable": {},
-                            "liquid": {},
-                            "perishable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "water.n.06",
@@ -8731,21 +8499,11 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "cookable": {},
-                        "freezable": {},
-                        "liquid": {},
-                        "perishable": {}
-                      }
+                      "abilities": {}
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "cookable": {},
-                    "freezable": {},
-                    "liquid": {},
-                    "perishable": {}
-                  }
+                  "abilities": {}
                 },
                 {
                   "name": "material.n.01",
@@ -8826,19 +8584,11 @@
                                     }
                                   ],
                                   "igibson_categories": [],
-                                  "abilities": {
-                                    "cookable": {},
-                                    "freezable": {},
-                                    "liquid": {}
-                                  }
+                                  "abilities": {}
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {
-                                "cookable": {},
-                                "freezable": {},
-                                "liquid": {}
-                              }
+                              "abilities": {}
                             },
                             {
                               "name": "formulation.n.01",
@@ -8890,11 +8640,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "cookable": {},
-                            "freezable": {},
-                            "liquid": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "softener.n.01",
@@ -8920,11 +8666,7 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "cookable": {},
-                        "freezable": {},
-                        "liquid": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "paper.n.01",
@@ -8974,32 +8716,15 @@
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "cookable": {},
-                    "freezable": {},
-                    "liquid": {}
-                  }
+                  "abilities": {}
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "cookable": {},
-                "freezable": {},
-                "liquid": {},
-                "perishable": {}
-              }
+              "abilities": {}
             }
           ],
           "igibson_categories": [],
-          "abilities": {
-            "breakable": {},
-            "burnable": {},
-            "cookable": {},
-            "dustyable": {},
-            "freezable": {},
-            "perishable": {},
-            "scrubbable": {}
-          }
+          "abilities": {}
         },
         {
           "name": "thing.n.12",
@@ -9077,35 +8802,19 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "cookable": {},
-                        "freezable": {},
-                        "liquid": {}
-                      }
+                      "abilities": {}
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "cookable": {},
-                    "freezable": {},
-                    "liquid": {}
-                  }
+                  "abilities": {}
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "cookable": {},
-                "freezable": {},
-                "liquid": {}
-              }
+              "abilities": {}
             }
           ],
           "igibson_categories": [],
-          "abilities": {
-            "cookable": {},
-            "freezable": {},
-            "liquid": {}
-          }
+          "abilities": {}
         },
         {
           "name": "causal_agent.n.01",
@@ -9118,6 +8827,17 @@
                   "children": [
                     {
                       "name": "medicine.n.02",
+                      "children": [
+                        {
+                          "name": "powder.n.03",
+                          "igibson_categories": [
+                            "powder_bottle"
+                          ],
+                          "abilities": {
+                            "burnable": {}
+                          }
+                        }
+                      ],
                       "igibson_categories": [
                         "medicine"
                       ],
@@ -9192,7 +8912,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "freezable": {},
                             "liquid": {},
                             "perishable": {}
@@ -9201,7 +8920,6 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
                         "freezable": {},
                         "liquid": {},
                         "perishable": {}
@@ -9209,28 +8927,19 @@
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "burnable": {}
-                  }
+                  "abilities": {}
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "burnable": {}
-              }
+              "abilities": {}
             }
           ],
           "igibson_categories": [],
-          "abilities": {
-            "burnable": {}
-          }
+          "abilities": {}
         }
       ],
       "igibson_categories": [],
-      "abilities": {
-        "dustyable": {},
-        "scrubbable": {}
-      }
+      "abilities": {}
     },
     {
       "name": "abstraction.n.06",
@@ -9279,12 +8988,7 @@
                                     }
                                   ],
                                   "igibson_categories": [],
-                                  "abilities": {
-                                    "cookable": {},
-                                    "freezable": {},
-                                    "liquid": {},
-                                    "perishable": {}
-                                  }
+                                  "abilities": {}
                                 },
                                 {
                                   "name": "soft_drink.n.01",
@@ -9398,7 +9102,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
                                     "freezable": {},
                                     "liquid": {},
                                     "perishable": {}
@@ -9406,12 +9109,7 @@
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {
-                                "cookable": {},
-                                "freezable": {},
-                                "liquid": {},
-                                "perishable": {}
-                              }
+                              "abilities": {}
                             },
                             {
                               "name": "water.n.06",
@@ -9425,21 +9123,11 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "cookable": {},
-                            "freezable": {},
-                            "liquid": {},
-                            "perishable": {}
-                          }
+                          "abilities": {}
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "cookable": {},
-                        "freezable": {},
-                        "liquid": {},
-                        "perishable": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "material.n.01",
@@ -9520,19 +9208,11 @@
                                         }
                                       ],
                                       "igibson_categories": [],
-                                      "abilities": {
-                                        "cookable": {},
-                                        "freezable": {},
-                                        "liquid": {}
-                                      }
+                                      "abilities": {}
                                     }
                                   ],
                                   "igibson_categories": [],
-                                  "abilities": {
-                                    "cookable": {},
-                                    "freezable": {},
-                                    "liquid": {}
-                                  }
+                                  "abilities": {}
                                 },
                                 {
                                   "name": "formulation.n.01",
@@ -9584,11 +9264,7 @@
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {
-                                "cookable": {},
-                                "freezable": {},
-                                "liquid": {}
-                              }
+                              "abilities": {}
                             },
                             {
                               "name": "softener.n.01",
@@ -9614,11 +9290,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "cookable": {},
-                            "freezable": {},
-                            "liquid": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "paper.n.01",
@@ -9668,38 +9340,19 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "cookable": {},
-                        "freezable": {},
-                        "liquid": {}
-                      }
+                      "abilities": {}
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "cookable": {},
-                    "freezable": {},
-                    "liquid": {},
-                    "perishable": {}
-                  }
+                  "abilities": {}
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "cookable": {},
-                "freezable": {},
-                "liquid": {},
-                "perishable": {}
-              }
+              "abilities": {}
             }
           ],
           "igibson_categories": [],
-          "abilities": {
-            "cookable": {},
-            "freezable": {},
-            "liquid": {},
-            "perishable": {}
-          }
+          "abilities": {}
         },
         {
           "name": "psychological_feature.n.01",
@@ -9782,37 +9435,29 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
                         "dustyable": {},
-                        "scrubbable": {},
-                        "toggleable": {}
+                        "scrubbable": {}
                       }
                     }
                   ],
                   "igibson_categories": [],
                   "abilities": {
-                    "breakable": {},
                     "dustyable": {},
-                    "scrubbable": {},
-                    "toggleable": {}
+                    "scrubbable": {}
                   }
                 }
               ],
               "igibson_categories": [],
               "abilities": {
-                "breakable": {},
                 "dustyable": {},
-                "scrubbable": {},
-                "toggleable": {}
+                "scrubbable": {}
               }
             }
           ],
           "igibson_categories": [],
           "abilities": {
-            "breakable": {},
             "dustyable": {},
-            "scrubbable": {},
-            "toggleable": {}
+            "scrubbable": {}
           }
         },
         {
@@ -9988,17 +9633,9 @@
         }
       ],
       "igibson_categories": [],
-      "abilities": {
-        "cookable": {},
-        "freezable": {},
-        "liquid": {},
-        "perishable": {}
-      }
+      "abilities": {}
     }
   ],
   "igibson_categories": [],
-  "abilities": {
-    "dustyable": {},
-    "scrubbable": {}
-  }
+  "abilities": {}
 }

@@ -36,6 +36,10 @@ class TaskNetTask(object):
         }
         self.object_taxonomy = ObjectTaxonomy()
 
+        # Demo attributes 
+        self.instruction_order = np.random.shuffle(np.arange(len(self.parsed_goal_conditions)))
+        self.currently_viewed_instruction = 0
+
     def initialize(self, scene_class, scene_id=None):
         '''
         Check self.scene to see if it works for this Task. If not, resample.
@@ -80,6 +84,9 @@ class TaskNetTask(object):
             if not accept_scene:
                 continue
 
+            # Add clutter objects into the scenes
+            self.clutter_scene()
+
         assert accept_scene, 'None of the available scenes satisfy these initial conditions.'
 
         self.gen_goal_conditions()
@@ -99,10 +106,19 @@ class TaskNetTask(object):
             self.goal_conditions = compile_state(
                 self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
 
+    def show_instruction(self):
+        return self.goal_conditions[self.currently_viewed_instruction].get_demonstrator_instruction()
+    
+    def iterate_instruction(self):
+        self.currently_viewed_instruction = self.currently_viewed_instruction + 1 % len(self.parsed_goal_conditions)    
+
     def check_scene(self):
         raise NotImplementedError
 
     def import_scene(self):
+        raise NotImplementedError
+
+    def clutter_scene(self):
         raise NotImplementedError
 
     def sample(self):
