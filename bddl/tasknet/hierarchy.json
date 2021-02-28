@@ -3347,9 +3347,15 @@
                                               ],
                                               "abilities": {
                                                 "breakable": {},
-                                                "burnable": {},
                                                 "dustyable": {},
-                                                "heatSource": {},
+                                                "heatSource": {
+                                                  "temperature": 1000,
+                                                  "heating_rate": 0.04,
+                                                  "distance_threshold": 0.4,
+                                                  "requires_toggled_on": true,
+                                                  "requires_closed": true,
+                                                  "requires_inside": true
+                                                },
                                                 "openable": {},
                                                 "scrubbable": {},
                                                 "toggleable": {}
@@ -3362,7 +3368,14 @@
                                               ],
                                               "abilities": {
                                                 "dustyable": {},
-                                                "heatSource": {},
+                                                "heatSource": {
+                                                  "temperature": 250,
+                                                  "heating_rate": 0.01,
+                                                  "distance_threshold": 0.4,
+                                                  "requires_toggled_on": true,
+                                                  "requires_closed": true,
+                                                  "requires_inside": true
+                                                },
                                                 "openable": {},
                                                 "scrubbable": {},
                                                 "toggleable": {}
@@ -3375,7 +3388,14 @@
                                               ],
                                               "abilities": {
                                                 "dustyable": {},
-                                                "heatSource": {},
+                                                "heatSource": {
+                                                  "temperature": 500,
+                                                  "heating_rate": 0.02,
+                                                  "distance_threshold": 0.2,
+                                                  "requires_toggled_on": true,
+                                                  "requires_closed": false,
+                                                  "requires_inside": false
+                                                },
                                                 "openable": {},
                                                 "scrubbable": {},
                                                 "toggleable": {}
