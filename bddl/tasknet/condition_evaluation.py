@@ -128,8 +128,9 @@ class Conjunction(Sentence):
         self.children.extend(child_predicates)
 
         # self.natural_string = 'all of the following should be true: '
-        self.natural_string = ', '.join([child.natural_string for child in self.children[:-1]]) 
-        self.natural_string += f', and {self.children[-1].natural_string}.'
+        # self.natural_string = ', '.join([child.natural_string for child in self.children[:-1]]) 
+        # self.natural_string += f', and {self.children[-1].natural_string}.'
+        self.natural_string = ' and '.join([child.natural_string for child in self.children])
         print('CONJUNCTION CREATED')
 
     def evaluate(self):
@@ -265,7 +266,7 @@ class ForPairs(Sentence):
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
         
-        self.natural_string = f"for pairs of {param_label1}s and {param_label2}s, {self.children[0].natural_string}."
+        self.natural_string = f"for pairs of {param_label1}s and {param_label2}s, {self.children[0].natural_string}"
 
     def evaluate(self):
         self.child_values = np.array(
@@ -295,7 +296,7 @@ class ForNPairs(Sentence):
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
         
-        self.natural_string = f"for {self.N} pairs of {param_label1}s and {param_label2}s, {self.children[0].natural_string}."
+        self.natural_string = f"for {self.N} pairs of {param_label1}s and {param_label2}s, {self.children[0][0].natural_string}"
 
     def evaluate(self):
         self.child_values = np.array(
@@ -360,13 +361,32 @@ class HEAD(Sentence):
         subpredicate = body
         self.children.append(token_mapping[subpredicate[0]](
             scope, task, subpredicate[1:], object_map))
+        
+        # For demo instructions
         self.natural_string = self.children[0].natural_string + '.'
+        self.terms = flatten_list(self.body)
+
         print('HEAD CREATED')
 
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
         assert len(self.child_values) == 1, 'More than one child value'
-        return self.child_values[0]
+        self.currently_satisfied = self.child_values[0]
+        return self.currently_satisfied
+    
+    def get_demonstrator_instruction(self):
+        color = "green" if self.currently_satisfied else "red"
+        return self.natural_string, color
+    
+    def toggle_on_object_highlight(self, toggle):
+        for obj in self.terms:
+            if obj in self.scope:
+                self.scope[obj].highlight()
+    
+    def toggle_off_object_highlight(self, toggle):
+        for obj in self.terms:
+            if obj in self.scope:
+                self.scope[obj].unhighlight()
 
 
 #################### CHECKING ####################
@@ -391,7 +411,6 @@ def compile_state(parsed_state, task, scope=None, object_map=None):
         print('\n')
     for compiled_cond in compiled_state:
         print(compiled_cond.natural_string)
-    crash
     return compiled_state
 
 
@@ -403,6 +422,20 @@ def evaluate_state(compiled_state):
         else:
             results['unsatisfied'].append(i)
     return not bool(results['unsatisfied']), results
+
+
+# def get_instruction(compiled_state, order):
+    
+
+
+#################### UTIL ######################
+
+def flatten_list(li):
+    for elem in li:
+        if isinstance(elem, list):
+            yield from flatten_list(elem)
+        else:
+            yield elem
 
 
 #################### TOKEN MAPPING ####################
