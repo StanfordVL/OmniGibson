@@ -4,7 +4,7 @@ import sys
 
 from tasknet.config import SCENE_PATH
 from tasknet.sampler import Sampler
-from tasknet.parsing import parse_domain, parse_problem
+from tasknet.parsing import parse_domain, parse_problem, gen_natural_language_conditions
 from tasknet.condition_evaluation import create_scope, compile_state, evaluate_state
 
 import numpy as np
@@ -36,6 +36,13 @@ class TaskNetTask(object):
         }
         self.object_taxonomy = ObjectTaxonomy()
 
+        # Demo attributes 
+        self.instruction_order = np.random.shuffle(np.arange(len(self.parsed_goal_conditions)))
+        self.currently_viewed_index = 0
+        self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index]
+        self.current_success = {"satisfied": [], "unsatisfied": []}
+        self.natural_language_goal_conditions = gen_natural_language_conditions(self.parsed_goal_conditions)
+
     def initialize(self, scene_class, scene_id=None):
         '''
         Check self.scene to see if it works for this Task. If not, resample.
@@ -62,6 +69,7 @@ class TaskNetTask(object):
 
             # Reject scenes with missing non-sampleable objects
             # Populate scope with simulator objects
+
             accept_scene = self.check_scene()
             if not accept_scene:
                 continue
@@ -100,6 +108,20 @@ class TaskNetTask(object):
             self.goal_conditions = compile_state(
                 self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
 
+    # def show_instruction(self):
+    #     return self.goal_conditions[self.currently_viewed_index].get_demonstrator_instruction()
+    def show_instruction(self):
+        satisfied = self.currently_viewed_instruction in self.current_success['satisfied']
+        natural_language_condition = self.natural_language_goal_conditions[self.currently_viewed_instruction]
+        objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects()
+        text_color = "green" if satisfied else "red"
+        
+        return natural_language_condition, text_color, objects
+    
+    def iterate_instruction(self):
+        self.currently_viewed_index = self.currently_viewed_index + 1 % len(self.parsed_goal_conditions)   
+        self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index] 
+
     def check_scene(self):
         raise NotImplementedError
 
@@ -124,7 +146,8 @@ class TaskNetTask(object):
         Check if scene satisfies goal conditions and report binary success + unsatisfied predicates
         '''
         # print('Passing trivially. Later, check scene against final conditions and report success score.')
-        return evaluate_state(self.goal_conditions)
+        self.current_success = evaluate_state(self.goal_conditions)
+        return self.current_success
 
     #### CHECKERS ####
     def exist(self, objA):

@@ -2,67 +2,48 @@
     (:domain igibson)
 
     (:objects
-     	shelf1 - shelf
-    	fridge1 - fridge
-    	bag1 bag2 bag3 bag4 - bag
-    	yogurt1 yogurt2 yogurt3 yogurt4 - yogurt
-    	hamburger1 hamburger2 hamburger3 hamburger4 - hamburger
-    	melon1 melon2 melon3 melon4 - melon
-    	soda1 soda2 soda3 soda4 - soda
+     	shelf.n.01_1 - shelf.n.01
+    	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+    	bag.n.01_1 bag.n.01_2 - bag.n.01
+    	yogurt.n.01_1 - yogurt.n.01
+    	hamburger.n.01_1 hamburger.n.01_2 - hamburger.n.01
+    	melon.n.01_1 - melon.n.01
+    	pop.n.02_1 - pop.n.02
     )
     
     (:init 
-        (nextto shelf1 fridge1) 
-        (ontop bag1 shelf1) 
-        (ontop bag2 shelf1) 
-        (ontop bag3 shelf1) 
-        (ontop bag4 shelf1) 
-        (cooked yogurt1) 
-        (inside yogurt1 fridge1) 
-        (cooked yogurt2) 
-        (inside yogurt2 fridge1) 
-        (cooked yogurt3) 
-        (inside yogurt3 fridge1) 
-        (cooked yogurt4) 
-        (inside yogurt4 fridge1) 
-        (ontop hamburger1 shelf1) 
-        (ontop hamburger2 shelf1) 
-        (ontop hamburger3 shelf1) 
-        (ontop hamburger4 shelf1) 
-        (inside melon1 fridge1) 
-        (inside melon2 fridge1) 
-        (inside melon3 fridge1) 
-        (inside melon4 fridge1) 
-        (inside soda1 fridge1) 
-        (inside soda2 fridge1) 
-        (inside soda3 fridge1) 
-        (inside soda4 fridge1) 
-        (inroom fridge1 kitchen) 
-        (inroom shelf1 kitchen)
+        (inside bag.n.01_1 shelf.n.01_1) 
+        (inside bag.n.01_2 shelf.n.01_1) 
+        (inside yogurt.n.01_1 electric_refrigerator.n.01_1) 
+        (inside hamburger.n.01_1 shelf.n.01_1) 
+        (inside hamburger.n.01_2 shelf.n.01_1) 
+        (inside melon.n.01_1 electric_refrigerator.n.01_1) 
+        (inside pop.n.02_1 electric_refrigerator.n.01_1) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom shelf.n.01_1 kitchen)
     )
     
     (:goal 
         (and 
-            (nextto ?shelf1 ?fridge1) 
             (forpairs 
-                (?melon - melon) 
-                (?bag - bag) 
-                (inside ?melon ?bag)
+                (?melon.n.01 - melon.n.01) 
+                (?bag.n.01 - bag.n.01) 
+                (inside ?melon.n.01 ?bag.n.01)
             ) 
             (forpairs 
-                (?yogurt - yogurt) 
-                (?bag - bag) 
-                (inside ?yogurt ?bag)
+                (?yogurt.n.01 - yogurt.n.01) 
+                (?bag.n.01 - bag.n.01) 
+                (inside ?yogurt.n.01 ?bag.n.01)
             ) 
             (forpairs 
-                (?hamburger - hamburger) 
-                (?bag - bag) 
-                (inside ?hamburger ?bag)
+                (?hamburger.n.01 - hamburger.n.01) 
+                (?bag.n.01 - bag.n.01) 
+                (inside ?hamburger.n.01 ?bag.n.01)
             ) 
             (forpairs 
-                (?soda - soda) 
-                (?bag - bag) 
-                (inside ?soda ?bag)
+                (?pop.n.02 - pop.n.02) 
+                (?bag.n.01 - bag.n.01) 
+                (inside ?pop.n.02 ?bag.n.01)
             )
         )
     )

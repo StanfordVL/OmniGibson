@@ -1,58 +1,63 @@
-(define (problem organizing_school_stuff_0) 
+(define 
+    (problem organizing_school_stuff_0) 
     (:domain igibson)
     (:objects
-        basket1 - basket
-        sofa1 - sofa
-        notebook1 notebook2 notebook3 notebook4 notebook5 - notebook
-        sofa_chair1 - sofa_chair
-        laptop1 - laptop
-        pen1 pen2 - pen
-        coffee_table1 - coffee_table
-        shelf1 shelf2 - shelf
-        pencil1 pencil2 - pencil
-        eraser1 eraser2 - eraser
+        basket.n.01_1 - basket.n.01
+        sofa.n.01_1 - sofa.n.01
+        notebook.n.01_1 notebook.n.01_2 notebook.n.01_3 notebook.n.01_4 notebook.n.01_5 - notebook.n.01
+        straight_chair.n.01_1 straight_chair.n.01_2 - straight_chair.n.01
+        laptop.n.01_1 - laptop.n.01
+        pen.n.01_1 pen.n.01_2 - pen.n.01
+        coffee_table.n.01_1 - coffee_table.n.01
+        shelf.n.01_1 shelf.n.01_2 - shelf.n.01
+        pencil.n.01_1 pencil.n.01_2 - pencil.n.01
+        eraser.n.01_1 eraser.n.01_2 - eraser.n.01
     )
     (:init 
-        (ontop basket1 sofa1) 
-        (ontop notebook1 sofa_chair1) 
-        (ontop notebook2 sofa_chair1) 
-        (nextto notebook3 sofa_chair1) 
-        (nextto notebook4 sofa_chair1) 
-        (ontop laptop1 sofa1) 
-        (ontop pen1 coffee_table1) 
-        (ontop pen2 shelf1) 
-        (ontop pencil1 coffee_table1) 
-        (under pencil2 coffee_table1) 
-        (ontop eraser1 shelf1) 
-        (ontop eraser2 shelf2) 
-        (ontop notebook5 sofa1)
+        (ontop basket.n.01_1 sofa.n.01_1) 
+        (ontop notebook.n.01_1 straight_chair.n.01_1) 
+        (ontop notebook.n.01_2 straight_chair.n.01_2) 
+        (nextto notebook.n.01_3 straight_chair.n.01_2) 
+        (nextto notebook.n.01_4 straight_chair.n.01_1) 
+        (ontop laptop.n.01_1 sofa.n.01_1) 
+        (ontop pen.n.01_1 coffee_table.n.01_1) 
+        (ontop pen.n.01_2 shelf.n.01_1) 
+        (ontop pencil.n.01_1 coffee_table.n.01_1) 
+        (under pencil.n.01_2 coffee_table.n.01_1) 
+        (ontop eraser.n.01_1 shelf.n.01_1) 
+        (ontop eraser.n.01_2 shelf.n.01_2) 
+        (ontop notebook.n.01_5 sofa.n.01_1)
+        (inroom sofa.n.01_1 living_room)
+        (inroom straight_chair.n.01_1 living_room)
+        (inroom straight_chair.n.01_2 living_room)
+        (inroom coffee_table.n.01_1 living_room)
     )
     
     (:goal 
         (and 
-            (ontop ?basket1 ?sofa_chair1) 
+            (ontop ?basket.n.01_1 ?coffee_table.n.01_1) 
             (forall 
-                (?pen - pen) 
-                (inside ?pen ?basket1)
+                (?pen.n.01 - pen.n.01) 
+                (inside ?pen.n.01 ?basket.n.01_1)
             ) 
             (forall 
-                (?pencil - pencil) 
-                (inside ?pencil ?basket1)
+                (?pencil.n.01 - pencil.n.01) 
+                (inside ?pencil.n.01 ?basket.n.01_1)
             ) 
-            (inside ?laptop1 ?basket1) 
+            (inside ?laptop.n.01_1 ?basket.n.01_1) 
             (imply 
-                (ontop ?eraser1 ?shelf1) 
-                (ontop ?eraser2 ?shelf1)
+                (ontop ?eraser.n.01_1 ?shelf.n.01_1) 
+                (ontop ?eraser.n.01_2 ?shelf.n.01_1)
             ) 
             (forn 
                 (2) 
-                (?notebook - notebook) 
-                (inside ?notebook ?basket1)
+                (?notebook.n.01 - notebook.n.01) 
+                (inside ?notebook.n.01 ?basket.n.01_1)
             ) 
             (forn 
                 (3) 
-                (?notebook - notebook) 
-                (ontop ?notebook ?shelf2)
+                (?notebook.n.01 - notebook.n.01) 
+                (ontop ?notebook.n.01 ?shelf.n.01_2)
             )
         )
     )

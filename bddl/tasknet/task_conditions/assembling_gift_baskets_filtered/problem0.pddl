@@ -2,99 +2,94 @@
     (:domain igibson)
 
     (:objects
-     	; basket1 basket2 basket3 basket4 - basket
-    	shelf1 - shelf
-    	lotion1 lotion2 lotion3 lotion4 - lotion
-    	cabinet1 - cabinet
-    	soap1 soap2 soap3 soap4 - soap
-    	shampoo1 shampoo2 shampoo3 shampoo4 - shampoo
-    	conditioner1 conditioner2 conditioner3 conditioner4 - conditioner
+     	; basket.n.01_1 basket.n.01_2 basket.n.01_3 basket.n.01_4 - basket.n.01
+        basket.n.01_1 basket.n.01_2 basket.n.01_3 basket.n.01_4 - basket.n.01
+    	shelf.n.01_1 - shelf.n.01
+    	; lotion.n.01_1 lotion.n.01_2 lotion.n.01_3 lotion.n.01_4 - lotion.n.01
+        lotion.n.01_1 lotion.n.01_2 lotion.n.01_3 lotion.n.01_4 - lotion.n.01
+    	cabinet.n.01_1 - cabinet.n.01
+    	; soap.n.01_1 soap.n.01_2 soap.n.01_3 soap.n.01_4 - soap.n.01
+        soap.n.01_1 soap.n.01_2 soap.n.01_3 - soap.n.01
+    	; shampoo.n.01_1 shampoo.n.01_2 shampoo.n.01_3 shampoo.n.01_4 - shampoo.n.01
+        ; shampoo.n.01_1 - shampoo.n.01 
+    	; conditioner.n.03_1 conditioner.n.03_2 conditioner.n.03_3 conditioner.n.03_4 - conditioner.n.03
+        ; conditioner.n.03_1 - conditioner.n.03
     	; photograph1 photograph2 photograph3 photograph4 - photograph
-    	envelope1 envelope2 envelope3 envelope4 - envelope
-    	table1 - table
+    	; envelope.n.01_1 envelope.n.01_2 envelope.n.01_3 envelope.n.01_4 - envelope.n.01
+        envelope.n.01_1 - envelope.n.01
+    	table.n.02_1 - table.n.02
     )
     
     (:init 
-        ; (and 
-        ;     (ontop basket1 shelf1) 
-        ;     (ontop basket2 shelf1) 
-        ;     (ontop basket3 shelf1) 
-        ;     (ontop basket4 shelf1)
-        ; ) 
-        (and 
-            (inside lotion1 cabinet1) 
-            (inside lotion2 cabinet1) 
-            (inside lotion3 cabinet1) 
-            (inside lotion4 cabinet1)
-        ) 
-        (and 
-            (inside soap1 cabinet1) 
-            (inside soap2 cabinet1) 
-            (inside soap3 cabinet1) 
-            (inside soap4 cabinet1)
-        ) 
-        (and 
-            (inside shampoo1 cabinet1) 
-            (inside shampoo2 cabinet1) 
-            (inside shampoo3 cabinet1) 
-            (inside shampoo4 cabinet1)
-        ) 
-        (and 
-            (inside conditioner1 cabinet1) 
-            (inside conditioner2 cabinet1) 
-            (inside conditioner3 cabinet1) 
-            (inside conditioner4 cabinet1)
-        ) 
-        ; (and 
-        ;     (ontop photograph1 table1) 
-        ;     (ontop photograph2 table1) 
-        ;     (ontop photograph3 table1) 
-        ;     (ontop photograph4 table1)
-        ; )
-        (and 
-            (ontop envelope1 table1) 
-            (ontop envelope2 table1) 
-            (ontop envelope3 table1) 
-            (ontop envelope4 table1)
-        )
-        (inroom shelf1 living_room)
-        (inroom cabinet1 living_room)
-        (inroom table1 living_room)
+        (ontop basket.n.01_1 table.n.02_1)
+        (ontop basket.n.01_2 table.n.02_1)
+        (ontop basket.n.01_3 table.n.02_1)
+        (ontop basket.n.01_4 table.n.02_1)
+        (ontop lotion.n.01_1 shelf.n.01_1) 
+        (ontop lotion.n.01_2 shelf.n.01_1) 
+        (ontop lotion.n.01_3 shelf.n.01_1) 
+        (ontop lotion.n.01_4 shelf.n.01_1) 
+        ; (inside lotion.n.01_1 cabinet.n.01_1) 
+        ; (inside lotion.n.01_2 cabinet.n.01_1) 
+        ; (inside lotion.n.01_3 cabinet.n.01_1) 
+        ; (inside lotion.n.01_4 cabinet.n.01_1)
+        (inside soap.n.01_1 shelf.n.01_1) 
+        (inside soap.n.01_2 shelf.n.01_1) 
+        ; (inside soap.n.01_3 shelf.n.01_1) 
+        ; (inside soap.n.01_1 cabinet.n.01_1) 
+        ; (inside soap.n.01_2 cabinet.n.01_1) 
+        ; (inside soap.n.01_3 cabinet.n.01_1) 
+        ; (inside soap.n.01_4 cabinet.n.01_1)
+        ; (inside shampoo.n.01_1 cabinet.n.01_1) 
+        ; (inside shampoo.n.01_2 cabinet.n.01_1) 
+        ; (inside shampoo.n.01_3 cabinet.n.01_1) 
+        ; (inside shampoo.n.01_4 cabinet.n.01_1)
+        ; (inside conditioner.n.03_1 cabinet.n.01_1) 
+        ; (inside conditioner.n.03_2 cabinet.n.01_1) 
+        ; (inside conditioner.n.03_3 cabinet.n.01_1) 
+        ; (inside conditioner.n.03_4 cabinet.n.01_1)
+        ; (ontop envelope.n.01_1 table.n.02_1) 
+        ; (ontop envelope.n.01_2 table.n.02_1) 
+        ; (ontop envelope.n.01_3 table.n.02_1) 
+        ; (ontop envelope.n.01_4 table.n.02_1)
+        (inroom shelf.n.01_1 living_room)
+        (inroom cabinet.n.01_1 living_room)
+        (inroom table.n.02_1 living_room)
     )
     
     (:goal 
         (and 
             (exists 
-                (?table - table) 
+                (?table.n.02 - table.n.02) 
                 (forall 
-                    (?basket - basket) 
-                    (ontop ?basket ?table)
+                    (?basket.n.01 - basket.n.01) 
+                    (ontop ?basket.n.01 ?table.n.02)
                 )
             ) 
+            ; (forpairs 
+            ;     (?basket.n.01 - basket.n.01) 
+            ;     (?conditioner.n.03 - conditioner.n.03) 
+            ;     (inside ?conditioner.n.03 ?basket.n.01)
+            ; ) 
+            ; (forpairs 
+            ;     (?basket.n.01 - basket.n.01) 
+            ;     (?shampoo.n.01 - shampoo.n.01) 
+            ;     (inside ?shampoo.n.01 ?basket.n.01)
+            ; ) 
             (forpairs 
-                (?basket - basket) 
-                (?conditioner - conditioner) 
-                (inside ?conditioner ?basket)
+                (?basket.n.01 - basket.n.01) 
+                (?lotion.n.01 - lotion.n.01) 
+                (inside ?lotion.n.01 ?basket.n.01)
             ) 
             (forpairs 
-                (?basket - basket) 
-                (?shampoo - shampoo) 
-                (inside ?shampoo ?basket)
+                (?basket.n.01 - basket.n.01) 
+                (?envelope.n.01 - envelope.n.01) 
+                (inside ?envelope.n.01 ?basket.n.01)
             ) 
             (forpairs 
-                (?basket - basket) 
-                (?lotion - lotion) 
-                (inside ?lotion ?basket)
-            ) 
-            (forpairs 
-                (?basket - basket) 
-                (?envelope - envelope) 
-                (inside ?envelope ?basket)
-            ) 
-            (forpairs 
-                (?basket - basket) 
-                (?soap - soap) 
-                (inside ?soap ?basket)
+                (?basket.n.01 - basket.n.01) 
+                (?soap.n.01 - soap.n.01) 
+                (inside ?soap.n.01 ?basket.n.01)
             )
         )
     )

@@ -5,6 +5,7 @@ This code is lightly adapted from https://github.com/pucrs-automated-planning/pd
 import itertools
 import re
 import sys
+import pprint
 
 from tasknet.config import SUPPORTED_PDDL_REQUIREMENTS as supported_requirements
 from tasknet.config import get_definition_filename
@@ -255,7 +256,75 @@ class Action(object):
         return g
 
 
-######### UTIL ##########
+######### AESTHETICS UTILS ##########
+
+def flatten_list(li):
+    for elem in li:
+        if isinstance(elem, list):
+            yield from flatten_list(elem)
+        else:
+            yield elem
+
+def gen_natural_language_condition(parsed_condition, indent=0):
+    indent_string = " " * 4 * indent
+    # print(parsed_condition)
+    term = parsed_condition
+
+    # for term in parsed_condition:
+    if isinstance(term, list):
+        if any([isinstance(subterm, list) for subterm in term]):
+            if term[0] == "and":
+                print('indent from and:', indent)
+                yield f", and\n".join([list(gen_natural_language_condition(subterm, indent=indent + 1))[0] for subterm in term[1:]]) 
+            elif term[0] == "or":
+                yield f", or\n".join([list(gen_natural_language_condition(subterm, indent=indent + 1))[0] for subterm in term[1:]]) + \
+                        f",\n{indent_string + '    '}or any combination of these"
+            elif term[0] == "not":
+                yield indent_string + "the following is NOT true:\n" + list(gen_natural_language_condition(term[1], indent=indent + 1))[0]
+            elif term[0] == "imply":
+                yield indent_string + f"if\n{list(gen_natural_language_condition(term[1], indent=indent + 1))[0]}\n{indent_string}then\n{list(gen_natural_language_condition(term[2], indent=indent + 1))[0]}\n{indent_string}but if not it doesn't matter"
+            elif term[0] == "forall":
+                yield indent_string + f"for every {nlterm(term[1][0])},\n{list(gen_natural_language_condition(term[2], indent=indent + 1))[0]}"
+            elif term[0] == "exists":
+                print('EXIST')
+                yield indent_string + f"for at least one {nlterm(term[1][0])},\n{list(gen_natural_language_condition(term[2], indent=indent + 1))[0]}"
+            elif term[0] == "forn":
+                yield indent_string + f"for exactly {term[1][0]} {nlterm(term[2][0])}(s),\n{list(gen_natural_language_condition(term[3], indent=indent + 1))[0]}"
+            elif term[0] == "forpairs":
+                yield indent_string + f"for pairs of {nlterm(term[1][0])} and {nlterm(term[2][0])},\n{list(gen_natural_language_condition(term[3], indent=indent + 1))[0]}"  
+            elif term[0] == "fornpairs":
+                yield indent_string + f"for exactly {term[1][0]} pairs of {nlterm(term[2][0])} and {nlterm(term[3][0])},\n{list(gen_natural_language_condition(term[4], indent=indent + 1))[0]}"            
+            
+        else: 
+            print(indent)
+            if len(term) == 2:
+                # fixed_term1 = term[1].lstrip('?').split('.')[0]
+                # if '_' in term[1]:
+                #     fixed_term1 += term[1].split('_')[-1]
+                article1 = "the " if "_" not in term[1] else ""
+                yield f"{indent_string}{article1}{nlterm(term[1])} is {term[0]}"
+            else:
+                article1 = "the " if "_" not in term[1] else ""
+                article2 = "the " if "_" not in term[2] else ""
+                yield f"{indent_string}{article1}{nlterm(term[1])} is {term[0]} {article2}{nlterm(term[2])}"
+            
+    else:
+        raise ValueError('encountered non-list:', term)
+        yield ''
+            
+
+def nlterm(term):
+    natural_term = term.lstrip('?')
+    natural_term = natural_term.split('.')[0]
+    if '_' in term:
+        print('it is present')
+        natural_term += term.split('_')[-1]
+    return natural_term
+
+
+def gen_natural_language_conditions(parsed_conditions):
+    return [gen_natural_language_condition(parsed_condition) for parsed_condition in parsed_conditions]
+
 
 def add_pddl_whitespace(pddl_file="task_conditions/parsing_tests/test_app_output.pddl", string=None, save=True):
     if pddl_file is not None:
@@ -326,6 +395,8 @@ if __name__ == '__main__':
         refined_pddl = add_pddl_whitespace()
     if sys.argv[1] == 'remove':
         refined_pddl = remove_pddl_whitespace()
+    # if sys.argv[1] == 'test_natural':
+        
     # print(refined_pddl)
     # import sys, pprint 
     # atus_activity = sys.argv[1]
@@ -335,10 +406,29 @@ if __name__ == '__main__':
     # print('----------------------------')
     # # pprint.pprint(scan_tokens(atus_activity, instance))
     # print('----------------------------')
-    # domain_name, requirements, types, actions, predicates = parse_domain(atus_activity, task_instance)
-    # problem_name, objects, initial_state, goal_state = parse_problem(atus_activity, task_instance, domain_name)
+    atus_activity = "assembling_gift_baskets_filtered"
+    task_instance = 0
+    domain_name, requirements, types, actions, predicates = parse_domain(atus_activity, task_instance)
+    problem_name, objects, initial_state, goal_state = parse_problem(atus_activity, task_instance, domain_name)
     # print('----------------------------')
     # print('Problem name:', problem_name)
     # print('Objects:', objects)
     # print('Initial state:', initial_state)
     # print('Goal state:', goal_state)
+    # test_condition = '''            (exists 
+    #             (?table.n.02 - table.n.02) 
+    #             (forall 
+    #                 (?basket.n.01 - basket.n.01) 
+    #                 (ontop ?basket.n.01 ?table.n.02)
+    #             )
+    #         ) '''
+    test_condition = goal_state[0]
+    pprint.pprint(goal_state[0])
+    if sys.argv[1] == 'test_natural':
+        result = list(gen_natural_language_condition(test_condition))
+        print('\nRESULT:')
+        # pprint.pprint(result)
+        print(result)
+        print(len(result))
+        with open('tester.txt', 'w') as f:
+            f.write(''.join(result))

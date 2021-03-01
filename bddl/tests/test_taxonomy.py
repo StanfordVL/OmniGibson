@@ -7,10 +7,6 @@ class TaxonomyTest(unittest.TestCase):
     def setUp(self):
         self.taxonomy = object_taxonomy.ObjectTaxonomy()
 
-    def test_get_class_name_from_lemma(self):
-        self.assertIsNotNone(self.taxonomy.get_class_name_from_lemma("floral_arrangement"))
-        self.assertIsNone(self.taxonomy.get_class_name_from_lemma("invalid_lemma"))
-
     def test_get_class_name_from_igibson_category(self):
         self.assertIsNotNone(self.taxonomy.get_class_name_from_igibson_category("picture"))
         self.assertIsNone(self.taxonomy.get_class_name_from_igibson_category("invalid_category"))
@@ -50,11 +46,6 @@ class TaxonomyTest(unittest.TestCase):
     def test_get_abilities(self):
         self.assertIn("heatSource", self.taxonomy.get_abilities("stove.n.01"))
         self.assertNotIn("burnable", self.taxonomy.get_abilities("stove.n.01"))
-
-    def test_get_lemmas(self):
-        self.assertIn("stove", self.taxonomy.get_lemmas("stove.n.01"))
-        self.assertIn("range", self.taxonomy.get_lemmas("stove.n.01"))
-        self.assertNotIn("potato", self.taxonomy.get_lemmas("stove.n.01"))
 
     def test_get_igibson_categories(self):
         self.assertIn("standing_tv", self.taxonomy.get_igibson_categories("television_receiver.n.01"))

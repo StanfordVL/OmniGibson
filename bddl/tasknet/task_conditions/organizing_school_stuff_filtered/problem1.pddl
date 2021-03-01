@@ -2,75 +2,69 @@
     (:domain igibson)
 
     (:objects
-     	laptop1 - laptop
-    	shelf1 - shelf
-    	bag1 - bag
-    	table1 - table
-    	basket1 - basket
-    	notebook1 notebook2 notebook3 - notebook
-    	eraser1 eraser2 - eraser
-    	pen1 pen2 pen3 pen4 - pen
-    	pencil1 pencil2 - pencil
+     	laptop.n.01_1 - laptop.n.01
+    	shelf.n.01_1 - shelf.n.01
+    	bag.n.01_1 - bag.n.01
+    	desk.n.01_1 - desk.n.01
+    	basket.n.01_1 - basket.n.01
+    	notebook.n.01_1 notebook.n.01_2 notebook.n.01_3 - notebook.n.01
+    	eraser.n.01_1 eraser.n.01_2 - eraser.n.01
+    	pen.n.01_1 pen.n.01_2 pen.n.01_3 pen.n.01_4 - pen.n.01
+    	pencil.n.01_1 pencil.n.01_2 - pencil.n.01
     )
     
     (:init 
-        (ontop laptop1 shelf1) 
-        (and 
-            (ontop bag1 table1) 
-            (open bag1)
-        ) 
-        (and 
-            (ontop basket1 table1) 
-            (open basket1)
-        ) 
-        (and 
-            (ontop notebook1 shelf1) 
-            (ontop notebook2 shelf1) 
-            (ontop notebook3 shelf1) 
-            (ontop eraser1 shelf1) 
-            (ontop eraser2 shelf1)
-        ) 
-        (and 
-            (ontop pen1 table1) 
-            (ontop pen2 table1) 
-            (ontop pen3 table1) 
-            (ontop pen4 table1) 
-            (ontop pencil1 table1) 
-            (ontop pencil2 table1)
-        )
+        (ontop laptop.n.01_1 shelf.n.01_1) 
+        (ontop bag.n.01_1 desk.n.01_1) 
+        (open bag.n.01_1)
+        (ontop basket.n.01_1 desk.n.01_1) 
+        (open basket.n.01_1)
+        (ontop notebook.n.01_1 shelf.n.01_1) 
+        (ontop notebook.n.01_2 shelf.n.01_1) 
+        (ontop notebook.n.01_3 shelf.n.01_1) 
+        (ontop eraser.n.01_1 shelf.n.01_1) 
+        (ontop eraser.n.01_2 shelf.n.01_1)
+        (ontop pen.n.01_1 desk.n.01_1) 
+        (ontop pen.n.01_2 desk.n.01_1) 
+        (ontop pen.n.01_3 desk.n.01_1) 
+        (ontop pen.n.01_4 desk.n.01_1) 
+        (ontop pencil.n.01_1 desk.n.01_1) 
+        (ontop pencil.n.01_2 desk.n.01_1)
+        (inroom shelf.n.01_1 bedroom)
+        (inroom desk.n.01_1 bedroom)
     )
     
     (:goal 
         (and 
             (and 
                 (forall 
-                    (?notebook - notebook) 
-                    (inside ?notebook ?basket1)
+                    (?notebook.n.01 - notebook.n.01) 
+                    (inside ?notebook.n.01 ?basket.n.01_1)
                 ) 
                 (forall 
-                    (?eraser - eraser) 
-                    (inside ?eraser ?basket1)
+                    (?eraser.n.01 - eraser.n.01) 
+                    (inside ?eraser.n.01 ?basket.n.01_1)
                 ) 
                 (and 
                     (and 
                         (forall 
-                            (?pen - pen) 
-                            (inside ?pen ?bag1)
+                            (?pen.n.01 - pen.n.01) 
+                            (inside ?pen.n.01 ?bag.n.01_1)
                         ) 
                         (forall 
-                            (?pencil - pencil) 
-                            (inside ?pencil ?bag1)
+                            (?pencil.n.01 - pencil.n.01) 
+                            (inside ?pencil.n.01 ?bag.n.01_1)
                         )
                     ) 
                     (not 
-                        (open ?bag1)
+                        (open ?bag.n.01_1)
                     ) 
-                    (inside ?bag1 ?basket1)
+                    (inside ?bag.n.01_1 ?basket.n.01_1)
                 ) 
-                (inside ?laptop1 ?basket1)
+                (inside ?laptop.n.01_1 ?basket.n.01_1)
             ) 
             (not 
-                (open ?basket1)
+                (open ?basket.n.01_1)
             )
         )
     )
