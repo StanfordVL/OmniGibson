@@ -1,6 +1,5 @@
 import copy
 import numpy as np
-from tasknet.config import READABLE_PREDICATE_NAMES
 
 import tasknet
 from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
@@ -13,8 +12,6 @@ from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
 #################### ATOMIC PREDICATES ####################
 # TODO: Remove this when tests support temperature-based cooked.
 class LegacyCookedForTesting(UnaryAtomicPredicate):
-    STATE_NAME = "cooked"
-
     def __init__(self, scope, task, body, object_map):
         print('COOKED INITIALIZED')
         super().__init__(scope, task, body, object_map)
@@ -40,7 +37,6 @@ class Conjunction(Sentence):
         child_predicates = [get_sentence_for_token(subpredicate[0])(
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
-
         print('CONJUNCTION CREATED')
 
     def evaluate(self):
@@ -60,7 +56,6 @@ class Disjunction(Sentence):
         child_predicates = [get_sentence_for_token(subpredicate[0])(
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
-
         print('DISJUNCTION CREATED')
 
     def evaluate(self):
@@ -87,7 +82,6 @@ class Universal(Sentence):
                 new_scope[param_label] = obj
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
-        
         print('UNIVERSAL CREATED')
 
     def evaluate(self):
@@ -140,7 +134,6 @@ class NQuantifier(Sentence):
                 new_scope[param_label] = obj
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
-        
         print('NQUANT INITIALIZED')
 
     def evaluate(self):
@@ -218,7 +211,6 @@ class Negation(Sentence):
         self.children.append(get_sentence_for_token(subpredicate[0])(
             scope, task, subpredicate[1:], object_map))
         assert len(self.children) == 1, 'More than one child.'
-
         print('NEGATION CREATED')
 
     def evaluate(self):
@@ -304,8 +296,6 @@ def compile_state(parsed_state, task, scope=None, object_map=None):
         scope = scope if scope is not None else {}
         compiled_state.append(HEAD(scope, task, parsed_condition, object_map))
         print('\n')
-    # for compiled_cond in compiled_state:
-    #     print(compiled_cond.natural_string)
     return compiled_state
 
 
@@ -317,10 +307,6 @@ def evaluate_state(compiled_state):
         else:
             results['unsatisfied'].append(i)
     return not bool(results['unsatisfied']), results
-
-
-# def get_instruction(compiled_state, order):
-    
 
 
 #################### UTIL ######################

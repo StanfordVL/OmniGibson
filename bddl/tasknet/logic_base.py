@@ -1,7 +1,6 @@
 from abc import abstractmethod, ABCMeta
 
 from future.utils import with_metaclass
-# from config import READABLE_PREDICATE_NAMES
 
 class Sentence(with_metaclass(ABCMeta)):
     def __init__(self, scope, task, body, object_map):
