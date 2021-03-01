@@ -35,7 +35,7 @@
         ; (inside lotion.n.01_4 cabinet.n.01_1)
         (inside soap.n.01_1 shelf.n.01_1) 
         (inside soap.n.01_2 shelf.n.01_1) 
-        ; (inside soap.n.01_3 shelf.n.01_1) 
+        (inside soap.n.01_3 shelf.n.01_1) 
         ; (inside soap.n.01_1 cabinet.n.01_1) 
         ; (inside soap.n.01_2 cabinet.n.01_1) 
         ; (inside soap.n.01_3 cabinet.n.01_1) 
