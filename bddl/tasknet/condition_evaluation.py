@@ -41,10 +41,6 @@ class Conjunction(Sentence):
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
 
-        # self.natural_string = 'all of the following should be true: '
-        # self.natural_string = ', '.join([child.natural_string for child in self.children[:-1]]) 
-        # self.natural_string += f', and {self.children[-1].natural_string}.'
-        # self.natural_string = ' and '.join([child.natural_string for child in self.children])
         print('CONJUNCTION CREATED')
 
     def evaluate(self):
@@ -65,8 +61,6 @@ class Disjunction(Sentence):
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
 
-        # self.natural_string = 'at least one of the following should be true: '
-        # self.natural_string = ' or '.join([child.natural_string for child in self.children]) + ' or any combination of these'
         print('DISJUNCTION CREATED')
 
     def evaluate(self):
@@ -94,7 +88,6 @@ class Universal(Sentence):
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
         
-        # self.natural_string = f"for every {param_label}, {self.children[0].natural_string}"
         print('UNIVERSAL CREATED')
 
     def evaluate(self):
@@ -121,7 +114,6 @@ class Existential(Sentence):
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
         
-        # self.natural_string = f"for at least one {param_label}, {self.children[0].natural_string}"
         print('EXISTENTIAL CREATED')
 
     def evaluate(self):
@@ -149,7 +141,6 @@ class NQuantifier(Sentence):
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
         
-        # self.natural_string = f"for exactly {self.N} {param_label}s, {self.children[0].natural_string}"
         print('NQUANT INITIALIZED')
 
     def evaluate(self):
@@ -180,7 +171,6 @@ class ForPairs(Sentence):
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
         
-        # self.natural_string = f"for pairs of {param_label1}s and {param_label2}s, {self.children[0].natural_string}"
 
     def evaluate(self):
         self.child_values = np.array(
@@ -210,7 +200,6 @@ class ForNPairs(Sentence):
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
         
-        # self.natural_string = f"for {self.N} pairs of {param_label1}s and {param_label2}s, {self.children[0][0].natural_string}"
 
     def evaluate(self):
         self.child_values = np.array(
@@ -230,7 +219,6 @@ class Negation(Sentence):
             scope, task, subpredicate[1:], object_map))
         assert len(self.children) == 1, 'More than one child.'
 
-        # self.natural_string = f"the following is NOT true: {self.children[0].natural_string}"
         print('NEGATION CREATED')
 
     def evaluate(self):
@@ -254,7 +242,6 @@ class Implication(Sentence):
         self.children.append(get_sentence_for_token(consequent[0])(
             scope, task, consequent[1:], object_map))
 
-        # self.natural_string = f"if {self.children[0].natural_string} then {self.children[1].natural_string}, but if not then it doesn't matter"
         print('IMPLICATION CREATED')
 
     def evaluate(self):
@@ -276,8 +263,6 @@ class HEAD(Sentence):
         self.children.append(get_sentence_for_token(subpredicate[0])(
             scope, task, subpredicate[1:], object_map))
         
-        # For demo instructions
-        # self.natural_string = self.children[0].natural_string + '.'
         self.terms = flatten_list(self.body)
 
         print('HEAD CREATED')
@@ -287,10 +272,6 @@ class HEAD(Sentence):
         assert len(self.child_values) == 1, 'More than one child value'
         self.currently_satisfied = self.child_values[0]
         return self.currently_satisfied
-    
-    # def get_demonstrator_instruction(self):
-    #     color = "green" if self.currently_satisfied else "red"
-    #     return self.natural_string, color
     
     # def toggle_on_object_highlight(self, toggle):
     #     for obj in self.terms:
