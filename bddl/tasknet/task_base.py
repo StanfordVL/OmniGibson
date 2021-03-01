@@ -38,7 +38,8 @@ class TaskNetTask(object):
 
         # Demo attributes 
         self.instruction_order = np.random.shuffle(np.arange(len(self.parsed_goal_conditions)))
-        self.currently_viewed_instruction = 0
+        self.currently_viewed_index = 0
+        self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index]
         self.current_success = {"satisfied": [], "unsatisfied": []}
         self.natural_language_goal_conditions = gen_natural_language_conditions(self.parsed_goal_conditions)
 
@@ -108,13 +109,18 @@ class TaskNetTask(object):
                 self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
 
     # def show_instruction(self):
-    #     return self.goal_conditions[self.currently_viewed_instruction].get_demonstrator_instruction()
+    #     return self.goal_conditions[self.currently_viewed_index].get_demonstrator_instruction()
     def show_instruction(self):
-        satisfied = self.instruction_order[self.currently_viewed_instruction] in self.current_success['satisfied']
-        return self.natural_language_goal_conditions[self.instruction_order[self.currently_viewed_instruction]], "green" if satisfied else "red"
+        satisfied = self.currently_viewed_instruction in self.current_success['satisfied']
+        natural_language_condition = self.natural_language_goal_conditions[self.currently_viewed_instruction]
+        objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects()
+        text_color = "green" if satisfied else "red"
+        
+        return natural_language_condition, text_color, objects
     
     def iterate_instruction(self):
-        self.currently_viewed_instruction = self.currently_viewed_instruction + 1 % len(self.parsed_goal_conditions)    
+        self.currently_viewed_index = self.currently_viewed_index + 1 % len(self.parsed_goal_conditions)   
+        self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index] 
 
     def check_scene(self):
         raise NotImplementedError

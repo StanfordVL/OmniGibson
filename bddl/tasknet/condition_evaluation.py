@@ -265,6 +265,20 @@ class HEAD(Sentence):
         self.currently_satisfied = self.child_values[0]
         return self.currently_satisfied
     
+    def get_relevant_objects(self):
+        # All object instances and categories that are in the scope will be collected  
+        objects = [self.scope[obj_name] for obj_name in self.terms if obj_name in self.scope]
+
+        # If this has a quantifier, the category-relevant objects won't all be caught, so adding them here
+        # No matter what the quantifier, every object of the category/ies is relevant
+        for term in self.terms:
+            if term in self.object_map:
+                for obj_name, obj in self.scope.items():
+                    if obj_name in self.object_map[term]:
+                        objects.append(obj)
+        
+        return objects
+    
     # def toggle_on_object_highlight(self, toggle):
     #     for obj in self.terms:
     #         if obj in self.scope:

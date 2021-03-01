@@ -61,22 +61,6 @@
         (and 
             (exists 
                 (?table.n.02 - table.n.02) 
-                (forn 
-                    (2)
-                    (?basket.n.01 - basket.n.01)
-                    ; (?basket.n.01 - basket.n.01) 
-                    (and
-                        (ontop ?basket.n.01 ?table.n.02)
-                        (ontop ?basket.n.01 ?table.n.02)
-                        (imply
-                            (not (ontop ?basket.n.01 ?table.n.02_1))
-                            (ontop ?basket.n.01 ?table.n.02)
-                        )
-                    )
-                )
-            ) 
-            (exists 
-                (?table.n.02 - table.n.02) 
                 (forall 
                     (?basket.n.01 - basket.n.01) 
                     (ontop ?basket.n.01 ?table.n.02)
