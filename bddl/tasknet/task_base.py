@@ -37,7 +37,9 @@ class TaskNetTask(object):
         self.object_taxonomy = ObjectTaxonomy()
 
         # Demo attributes 
-        self.instruction_order = np.random.shuffle(np.arange(len(self.parsed_goal_conditions)))
+        # self.instruction_order = np.random.shuffle(np.arange(len(self.parsed_goal_conditions)))
+        self.instruction_order = np.arange(len(self.parsed_goal_conditions))
+        np.random.shuffle(self.instruction_order)
         self.currently_viewed_index = 0
         self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index]
         self.current_success = {"satisfied": [], "unsatisfied": []}
