@@ -10,87 +10,6 @@ from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
 #   2. `task` needs to be input properly. It'll be weird to call these in a method
 #           of TaskNetTask and then have to put `self` in
 
-#################### BASE LOGIC OBJECTS ####################
-
-
-class Sentence(object):
-    def __init__(self, scope, task, body, object_map):
-        self.children = []
-        self.child_values = []
-        self.task = task
-        self.body = body
-        self.scope = scope
-        self.object_map = object_map
-
-    def evaluate(self):
-        pass
-
-
-class AtomicPredicate(Sentence):
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-
-
-class BinaryAtomicPredicate(AtomicPredicate):
-    STATE_NAME = None
-
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-        assert len(body) == 2, 'Param list should have 2 args'
-        self.input1, self.input2 = [inp.strip('?') for inp in body]
-        self.scope = scope
-
-        readable_state_name = READABLE_PREDICATE_NAMES[self.STATE_NAME] if self.STATE_NAME in READABLE_PREDICATE_NAMES else self.STATE_NAME
-        self.natural_string = f"{self.input1} is {readable_state_name} {self.input2}"
-
-    def evaluate(self):
-        if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            state = self.scope[self.input1].states[self.STATE_NAME]
-
-            return state.get_value(self.scope[self.input2])
-        else:
-            print('%s and/or %s are not mapped to simulator objects in scope' %
-                  (self.input1, self.input2))
-
-    def sample(self, binary_state):
-        if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            state = self.scope[self.input1].states[self.STATE_NAME]
-            return state.set_value(self.scope[self.input2], binary_state)
-        else:
-            print('%s and/or %s are not mapped to simulator objects in scope' %
-                  (self.input1, self.input2))
-
-
-class UnaryAtomicPredicate(AtomicPredicate):
-    STATE_NAME = None
-
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
-        assert len(body) == 1, 'Param list should have 1 arg'
-        self.input = body[0].strip('?')
-        self.scope = scope
-
-        readable_state_name = READABLE_PREDICATE_NAMES[self.STATE_NAME] if self.STATE_NAME in READABLE_PREDICATE_NAMES else self.STATE_NAME
-        self.natural_string = f"{self.input} is {readable_state_name}"
-
-    def evaluate(self):
-        if self.scope[self.input] is not None:
-            state = self.scope[self.input].states[self.STATE_NAME]
-
-            return state.get_value()
-        else:
-            print('%s is not mapped to a simulator object in scope' % self.input)
-            return False
-
-    def sample(self, binary_state):
-        if self.scope[self.input] is not None:
-            state = self.scope[self.input].states[self.STATE_NAME]
-
-            return state.set_value(binary_state)
-        else:
-            print('%s is not mapped to a simulator object in scope' % self.input)
-            return False
-
 #################### ATOMIC PREDICATES ####################
 # TODO: Remove this when tests support temperature-based cooked.
 class LegacyCookedForTesting(UnaryAtomicPredicate):
@@ -125,7 +44,7 @@ class Conjunction(Sentence):
         # self.natural_string = 'all of the following should be true: '
         # self.natural_string = ', '.join([child.natural_string for child in self.children[:-1]]) 
         # self.natural_string += f', and {self.children[-1].natural_string}.'
-        self.natural_string = ' and '.join([child.natural_string for child in self.children])
+        # self.natural_string = ' and '.join([child.natural_string for child in self.children])
         print('CONJUNCTION CREATED')
 
     def evaluate(self):
@@ -147,7 +66,7 @@ class Disjunction(Sentence):
         self.children.extend(child_predicates)
 
         # self.natural_string = 'at least one of the following should be true: '
-        self.natural_string = ' or '.join([child.natural_string for child in self.children]) + ' or any combination of these'
+        # self.natural_string = ' or '.join([child.natural_string for child in self.children]) + ' or any combination of these'
         print('DISJUNCTION CREATED')
 
     def evaluate(self):
@@ -175,7 +94,7 @@ class Universal(Sentence):
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
         
-        self.natural_string = f"for every {param_label}, {self.children[0].natural_string}"
+        # self.natural_string = f"for every {param_label}, {self.children[0].natural_string}"
         print('UNIVERSAL CREATED')
 
     def evaluate(self):
@@ -202,7 +121,7 @@ class Existential(Sentence):
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
         
-        self.natural_string = f"for at least one {param_label}, {self.children[0].natural_string}"
+        # self.natural_string = f"for at least one {param_label}, {self.children[0].natural_string}"
         print('EXISTENTIAL CREATED')
 
     def evaluate(self):
@@ -230,7 +149,7 @@ class NQuantifier(Sentence):
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
         
-        self.natural_string = f"for exactly {self.N} {param_label}s, {self.children[0].natural_string}"
+        # self.natural_string = f"for exactly {self.N} {param_label}s, {self.children[0].natural_string}"
         print('NQUANT INITIALIZED')
 
     def evaluate(self):
@@ -261,7 +180,7 @@ class ForPairs(Sentence):
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
         
-        self.natural_string = f"for pairs of {param_label1}s and {param_label2}s, {self.children[0].natural_string}"
+        # self.natural_string = f"for pairs of {param_label1}s and {param_label2}s, {self.children[0].natural_string}"
 
     def evaluate(self):
         self.child_values = np.array(
@@ -291,7 +210,7 @@ class ForNPairs(Sentence):
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
         
-        self.natural_string = f"for {self.N} pairs of {param_label1}s and {param_label2}s, {self.children[0][0].natural_string}"
+        # self.natural_string = f"for {self.N} pairs of {param_label1}s and {param_label2}s, {self.children[0][0].natural_string}"
 
     def evaluate(self):
         self.child_values = np.array(
@@ -311,7 +230,7 @@ class Negation(Sentence):
             scope, task, subpredicate[1:], object_map))
         assert len(self.children) == 1, 'More than one child.'
 
-        self.natural_string = f"the following is NOT true: {self.children[0].natural_string}"
+        # self.natural_string = f"the following is NOT true: {self.children[0].natural_string}"
         print('NEGATION CREATED')
 
     def evaluate(self):
@@ -335,7 +254,7 @@ class Implication(Sentence):
         self.children.append(get_sentence_for_token(consequent[0])(
             scope, task, consequent[1:], object_map))
 
-        self.natural_string = f"if {self.children[0].natural_string} then {self.children[1].natural_string}, but if not then it doesn't matter"
+        # self.natural_string = f"if {self.children[0].natural_string} then {self.children[1].natural_string}, but if not then it doesn't matter"
         print('IMPLICATION CREATED')
 
     def evaluate(self):
@@ -358,7 +277,7 @@ class HEAD(Sentence):
             scope, task, subpredicate[1:], object_map))
         
         # For demo instructions
-        self.natural_string = self.children[0].natural_string + '.'
+        # self.natural_string = self.children[0].natural_string + '.'
         self.terms = flatten_list(self.body)
 
         print('HEAD CREATED')
@@ -369,19 +288,19 @@ class HEAD(Sentence):
         self.currently_satisfied = self.child_values[0]
         return self.currently_satisfied
     
-    def get_demonstrator_instruction(self):
-        color = "green" if self.currently_satisfied else "red"
-        return self.natural_string, color
+    # def get_demonstrator_instruction(self):
+    #     color = "green" if self.currently_satisfied else "red"
+    #     return self.natural_string, color
     
-    def toggle_on_object_highlight(self, toggle):
-        for obj in self.terms:
-            if obj in self.scope:
-                self.scope[obj].highlight()
+    # def toggle_on_object_highlight(self, toggle):
+    #     for obj in self.terms:
+    #         if obj in self.scope:
+    #             self.scope[obj].highlight()
     
-    def toggle_off_object_highlight(self, toggle):
-        for obj in self.terms:
-            if obj in self.scope:
-                self.scope[obj].unhighlight()
+    # def toggle_off_object_highlight(self, toggle):
+    #     for obj in self.terms:
+    #         if obj in self.scope:
+    #             self.scope[obj].unhighlight()
 
 
 #################### CHECKING ####################
@@ -404,8 +323,8 @@ def compile_state(parsed_state, task, scope=None, object_map=None):
         scope = scope if scope is not None else {}
         compiled_state.append(HEAD(scope, task, parsed_condition, object_map))
         print('\n')
-    for compiled_cond in compiled_state:
-        print(compiled_cond.natural_string)
+    # for compiled_cond in compiled_state:
+    #     print(compiled_cond.natural_string)
     return compiled_state
 
 
