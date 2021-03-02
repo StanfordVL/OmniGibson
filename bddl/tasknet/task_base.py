@@ -36,14 +36,15 @@ class TaskNetTask(object):
         }
         self.object_taxonomy = ObjectTaxonomy()
 
-        # Demo attributes 
+        # Demo attributes
         self.instruction_order = np.arange(len(self.parsed_goal_conditions))
         np.random.shuffle(self.instruction_order)
         self.currently_viewed_index = 0
         self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index]
         self.current_success = False
         self.current_goal_status = {"satisfied": [], "unsatisfied": []}
-        self.natural_language_goal_conditions = gen_natural_language_conditions(self.parsed_goal_conditions)
+        self.natural_language_goal_conditions = gen_natural_language_conditions(
+            self.parsed_goal_conditions)
 
     def initialize(self, scene_class, scene_id=None):
         '''
@@ -62,8 +63,6 @@ class TaskNetTask(object):
             if scene_id is not None and scene != scene_id:
                 continue
             if '_int' not in scene:
-                continue
-            if 'Rs_int' not in scene:
                 continue
             self.scene_id = scene
             self.scene = scene_class(scene)
@@ -116,16 +115,20 @@ class TaskNetTask(object):
     #     return self.goal_conditions[self.currently_viewed_index].get_demonstrator_instruction()
     def show_instruction(self):
         satisfied = self.currently_viewed_instruction in self.current_goal_status['satisfied']
-        natural_language_condition = self.natural_language_goal_conditions[self.currently_viewed_instruction]
-        objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects()
+        natural_language_condition = self.natural_language_goal_conditions[
+            self.currently_viewed_instruction]
+        objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects(
+        )
         # text_color = "green" if satisfied else "red"
-        text_color = [83./255., 176./255., 72./255.] if satisfied else [255./255., 51./255., 51./255.]
-        
+        text_color = [83. / 255., 176. / 255., 72. / 255.] if satisfied \
+            else [255. / 255., 51. / 255., 51. / 255.]
+
         return natural_language_condition, text_color, objects
-    
+
     def iterate_instruction(self):
-        self.currently_viewed_index = (self.currently_viewed_index + 1) % len(self.parsed_goal_conditions)   
-        self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index] 
+        self.currently_viewed_index = (
+            self.currently_viewed_index + 1) % len(self.parsed_goal_conditions)
+        self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index]
 
     def check_scene(self):
         raise NotImplementedError
@@ -151,7 +154,8 @@ class TaskNetTask(object):
         Check if scene satisfies goal conditions and report binary success + unsatisfied predicates
         '''
         # print('Passing trivially. Later, check scene against final conditions and report success score.')
-        self.current_success, self.current_goal_status = evaluate_state(self.goal_conditions)
+        self.current_success, self.current_goal_status = evaluate_state(
+            self.goal_conditions)
         return self.current_success, self.current_goal_status
 
     #### CHECKERS ####
