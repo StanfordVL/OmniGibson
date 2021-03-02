@@ -17,11 +17,11 @@ setup(
     url='none of your business',
     zip_safe=False,
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[
+        'pytest',
+        'numpy',
+        "networkx"
+    ],
     package_data={},
     include_package_data=True
 )
-     
-        
-
-

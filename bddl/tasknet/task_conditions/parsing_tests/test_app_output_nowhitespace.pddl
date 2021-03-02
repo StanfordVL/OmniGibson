@@ -1,0 +1,1 @@
+(:goal (and (forall (?chair - chair) (and (exists (?polish - polish) (ontop ?polish ?chair1)) (scrubbed ?chair1))) (forall (?coffee_table - coffee_table) (and (scrubbed ?coffee_table1) (exists (?polish - polish) (ontop ?polish ?coffee_table1)))) (forall (?atomizer - atomizer) (under ?atomizer ?sink1)) (forall (?glass - glass) (under ?glass ?sink1))))
