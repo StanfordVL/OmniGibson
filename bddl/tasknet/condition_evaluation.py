@@ -11,6 +11,8 @@ from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
 
 #################### ATOMIC PREDICATES ####################
 # TODO: Remove this when tests support temperature-based cooked.
+
+
 class LegacyCookedForTesting(UnaryAtomicPredicate):
     def __init__(self, scope, task, body, object_map):
         print('COOKED INITIALIZED')
@@ -107,7 +109,7 @@ class Existential(Sentence):
                 # body = [["param_label", "-", "category"], [predicate]]
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
-        
+
         print('EXISTENTIAL CREATED')
 
     def evaluate(self):
@@ -163,7 +165,6 @@ class ForPairs(Sentence):
                         sub.append(get_sentence_for_token(subpredicate[0])(
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
-        
 
     def evaluate(self):
         self.child_values = np.array(
@@ -192,7 +193,6 @@ class ForNPairs(Sentence):
                         sub.append(get_sentence_for_token(subpredicate[0])(
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
-        
 
     def evaluate(self):
         self.child_values = np.array(
@@ -254,8 +254,8 @@ class HEAD(Sentence):
         subpredicate = body
         self.children.append(get_sentence_for_token(subpredicate[0])(
             scope, task, subpredicate[1:], object_map))
-        
-        self.terms = flatten_list(self.body)
+
+        self.terms = list(flatten_list(self.body))
 
         print('HEAD CREATED')
 
@@ -264,10 +264,11 @@ class HEAD(Sentence):
         assert len(self.child_values) == 1, 'More than one child value'
         self.currently_satisfied = self.child_values[0]
         return self.currently_satisfied
-    
+
     def get_relevant_objects(self):
-        # All object instances and categories that are in the scope will be collected  
-        objects = [self.scope[obj_name] for obj_name in self.terms if obj_name in self.scope]
+        # All object instances and categories that are in the scope will be collected
+        objects = [self.scope[obj_name]
+                   for obj_name in self.terms if obj_name in self.scope]
 
         # If this has a quantifier, the category-relevant objects won't all be caught, so adding them here
         # No matter what the quantifier, every object of the category/ies is relevant
@@ -276,14 +277,14 @@ class HEAD(Sentence):
                 for obj_name, obj in self.scope.items():
                     if obj_name in self.object_map[term]:
                         objects.append(obj)
-        
+
         return objects
-    
+
     # def toggle_on_object_highlight(self, toggle):
     #     for obj in self.terms:
     #         if obj in self.scope:
     #             self.scope[obj].highlight()
-    
+
     # def toggle_off_object_highlight(self, toggle):
     #     for obj in self.terms:
     #         if obj in self.scope:
@@ -352,6 +353,7 @@ TOKEN_MAPPING = {
     # Atomic predicates
     'cooked': LegacyCookedForTesting,
 }
+
 
 def get_sentence_for_token(token):
     if token in TOKEN_MAPPING:

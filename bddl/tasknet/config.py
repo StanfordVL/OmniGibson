@@ -8,7 +8,7 @@ OBJECT_MODEL_PATH = 'D:\\gibson2_assets\\processed'
 # PDDL 
 SUPPORTED_PDDL_REQUIREMENTS = [':strips', ':negative-preconditions', ':typing', ':adl']
 READABLE_PREDICATE_NAMES = {
-    'onTop': 'on top of',
+    'ontop': 'on top of',
     'nextto': 'next to'
 }
 

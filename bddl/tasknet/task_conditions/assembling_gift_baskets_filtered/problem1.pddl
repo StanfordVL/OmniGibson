@@ -3,73 +3,98 @@
     (:domain igibson)
 
     (:objects
-     	; basket1 basket2 basket3 basket4 - basket
+        ; basket.n.01_1 basket.n.01_2 basket.n.01_3 basket.n.01_4 - basket.n.01
+        basket.n.01_1 - basket.n.01
     	table.n.02_1 - table.n.02
-    	; notebook1 notebook2 notebook3 notebook4 - notebook
-    	wine_bottle.n.01_1 wine_bottle.n.01_2 - wine_bottle.n.01
+    	wine_bottle.n.01_1 wine_bottle.n.01_2 wine_bottle.n.01_3 wine_bottle.n.01_4 - wine_bottle.n.01
     	cheddar.n.02_1 cheddar.n.02_2 cheddar.n.02_3 cheddar.n.02_4 - cheddar.n.02
     	; photograph1 photograph2 - photograph
         envelope.n.01_1 envelope.n.01_2 - envelope.n.01
     	chocolate.n.02_1 chocolate.n.02_2 - chocolate.n.02
     	cracker.n.01_1 cracker.n.01_2 cracker.n.01_3 cracker.n.01_4 - cracker.n.01
     	candy_cane.n.01_1 candy_cane.n.01_2 - candy_cane.n.01
-    	rug.n.01_1 - rug.n.01
-    	sofa.n.01_1 - sofa.n.01
+    	table.n.02_1 - table.n.02
+        shelf.n.01_1 shelf.n.01_2 - shelf.n.01
     )
     
     (:init 
-    ; (and 
-    ;     (ontop basket1 table.n.02_1) 
-    ;     (ontop basket2 table.n.02_1) 
-    ;     (ontop basket3 table.n.02_1) 
-    ;     (ontop basket4 table.n.02_1)
-    ; ) 
-    ; (and 
-    ;     (under notebook1 table.n.02_1) 
-    ;     (under notebook2 table.n.02_1) 
-    ;     (under notebook3 table.n.02_1) 
-    ;     (under notebook4 table.n.02_1)
-    ; ) 
-        (ontop wine_bottle.n.01_1 table.n.02_1) 
-        (ontop wine_bottle.n.01_2 table.n.02_1)
-        (ontop cheddar.n.02_1 table.n.02_1) 
-        (ontop cheddar.n.02_2 table.n.02_1) 
-        (ontop cheddar.n.02_3 table.n.02_1) 
-        (ontop cheddar.n.02_4 table.n.02_1)
-    ; (and 
-    ;     (ontop photograph1 table.n.02_1) 
-    ;     (ontop photograph2 table.n.02_1)
-    ; ) 
-        (ontop envelope.n.01_1 table.n.02_1)
-        (ontop envelope.n.01_2 table.n.02_1)
-        (ontop chocolate.n.02_1 table.n.02_1) 
-        (ontop chocolate.n.02_2 table.n.02_1)
-        (ontop cracker.n.01_1 table.n.02_1) 
-        (ontop cracker.n.01_2 table.n.02_1) 
-        (ontop cracker.n.01_3 table.n.02_1) 
-        (ontop cracker.n.01_4 table.n.02_1)
-        (ontop candy_cane.n.01_1 table.n.02_1) 
-        (ontop candy_cane.n.01_2 table.n.02_1)
+        (ontop basket.n.01_1 table.n.02_1) 
+        ; (ontop basket.n.01_2 table.n.02_1) 
+        ; (ontop basket.n.01_3 table.n.02_1) 
+        ; (ontop basket.n.01_4 table.n.02_1)
+        ; (under notebook1 table.n.02_1) 
+        ; (under notebook2 table.n.02_1) 
+        ; (under notebook3 table.n.02_1) 
+        ; (under notebook4 table.n.02_1)
+        (ontop wine_bottle.n.01_1 shelf.n.01_1) 
+        ; (ontop wine_bottle.n.01_2 shelf.n.01_1)
+        ; (ontop wine_bottle.n.01_3 shelf.n.01_1)
+        ; (ontop wine_bottle.n.01_4 shelf.n.01_1)
+        ; (inside cheddar.n.02_1 shelf.n.01_2) 
+        ; (ontop cheddar.n.02_2 shelf.n.01_1) 
+        ; (ontop cheddar.n.02_3 shelf.n.01_1) 
+        ; (ontop cheddar.n.02_4 shelf.n.01_1)
+        ; (ontop photograph1 table.n.02_1) 
+        ; (ontop photograph2 table.n.02_1)
+        (inside envelope.n.01_1 shelf.n.01_2)
+        ; (ontop envelope.n.01_2 table.n.02_1)
+        ; (inside chocolate.n.02_1 shelf.n.01_1) 
+        ; (ontop chocolate.n.02_2 shelf.n.01_1)
+        (ontop cracker.n.01_1 shelf.n.01_2) 
+        ; (ontop cracker.n.01_2 table.n.02_1) 
+        ; (ontop cracker.n.01_3 table.n.02_1) 
+        ; (ontop cracker.n.01_4 table.n.02_1)
+        (inside candy_cane.n.01_1 shelf.n.01_2) 
+        ; (ontop candy_cane.n.01_2 table.n.02_1)
         (inroom table.n.02_1 living_room) 
-        (inroom rug.n.01_1 living_room) 
-        (inroom sofa.n.01_1 living_room)
+        ; (inroom table.n.02_2 living_room) 
+        (inroom shelf.n.01_1 living_room) 
+        (inroom shelf.n.01_2 living_room) 
     )
     
     (:goal 
+        (and
+            (forall
+                (?basket.n.01 - basket.n.01)
+                (and
+                    (exists
+                        (?cracker.n.01 - cracker.n.01)
+                        (inside ?cracker.n.01 ?basket.n.01)
+                    )
+                    (exists
+                        (?candy_cane.n.01 - candy_cane.n.01)
+                        (inside ?candy_cane.n.01 ?basket.n.01)
+                    )
+                    (exists
+                        (?wine_bottle.n.01 - wine_bottle.n.01)
+                        (inside ?wine_bottle.n.01 ?basket.n.01)
+                    )
+                    (exists
+                        (?cheddar.n.02 - cheddar.n.02)
+                        (inside ?cheddar.n.02 ?basket.n.01)
+                    )
+                    (exists
+                        (?envelope.n.01 - envelope.n.01)
+                        (inside ?envelope.n.01 ?basket.n.01)
+                    )
+                )
+            )
+        )
+
         (and 
             (forn 
                 (2) 
-                (?basket - basket) 
+                (?basket.n.01 - basket.n.01) 
                 (and 
-                    (forn 
-                        (2) 
-                        (?notebook - notebook) 
-                        (inside ?notebook ?basket)
-                    ) 
+                    ; (forn 
+                    ;     (2) 
+                    ;     (?notebook - notebook) 
+                    ;     (inside ?notebook ?basket.n.01)
+                    ; ) 
                     (forn 
                         (2) 
                         (?cracker.n.01 - cracker.n.01) 
-                        (inside ?cracker.n.01 ?basket)
+                        (inside ?cracker.n.01 ?basket.n.01)
                     ) 
                     (exists 
                         (?candy_cane.n.01 - candy_cane.n.01) 
