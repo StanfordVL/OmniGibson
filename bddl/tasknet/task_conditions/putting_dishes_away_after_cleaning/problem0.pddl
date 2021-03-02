@@ -2,73 +2,74 @@
     (:domain igibson)
 
     (:objects
-        dishwasher1 - dishwasher
-        dish1 dish10 dish11 dish12 dish2 dish3 dish4 dish5 dish6 dish7 dish8 dish9 - dish
+        dishwasher.n.01_1 - dishwasher.n.01
+        dish.n.01_1 dish.n.01_10 dish.n.01_11 dish.n.01_12 dish.n.01_2 dish.n.01_3 dish.n.01_4 dish.n.01_5 dish.n.01_6 dish.n.01_7 dish.n.01_8 dish.n.01_9 - dish.n.01
     )
     
     (:init 
-        (open dishwasher1) 
+        (open dishwasher.n.01_1) 
         (and 
-            (inside dish1 dishwasher1) 
-            (scrubbed dish1)
+            (inside dish.n.01_1 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_1)
         ) 
         (and 
-            (inside dish2 dishwasher1) 
-            (scrubbed dish2)
+            (inside dish.n.01_2 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_2)
         ) 
         (and 
-            (inside dish3 dishwasher1) 
-            (scrubbed dish3)
+            (inside dish.n.01_3 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_3)
         ) 
         (and 
-            (inside dish4 dishwasher1) 
-            (scrubbed dish4)
+            (inside dish.n.01_4 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_4)
         ) 
         (and 
-            (inside dish5 dishwasher1) 
-            (scrubbed dish5)
+            (inside dish.n.01_5 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_5)
         ) 
         (and 
-            (inside dish6 dishwasher1) 
-            (scrubbed dish6)
+            (inside dish.n.01_6 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_6)
         ) 
         (and 
-            (inside dish7 dishwasher1) 
-            (scrubbed dish7)
+            (inside dish.n.01_7 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_7)
         ) 
         (and 
-            (inside dish8 dishwasher1) 
-            (scrubbed dish8)
+            (inside dish.n.01_8 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_8)
         ) 
         (and 
-            (inside dish9 dishwasher1) 
-            (scrubbed dish9)
+            (inside dish.n.01_9 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_9)
         ) 
         (and 
-            (inside dish10 dishwasher1) 
-            (scrubbed dish10)
+            (inside dish.n.01_10 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_10)
         ) 
         (and 
-            (inside dish11 dishwasher1) 
-            (scrubbed dish11)
+            (inside dish.n.01_11 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_11)
         ) 
         (and 
-            (inside dish12 dishwasher1) 
-            (scrubbed dish12)
+            (inside dish.n.01_12 dishwasher.n.01_1) 
+            (scrubbed dish.n.01_12)
         )
+        (inroom dishwasher.n.01_1 kitchen)
     )
     
     (:goal 
         (and 
             (exists 
-                (?cabinet - cabinet) 
+                (?cabinet.n.01 - cabinet.n.01) 
                 (forall 
-                    (?dish - dish) 
-                    (inside ?dish ?cabinet)
+                    (?dish.n.01 - dish.n.01) 
+                    (inside ?dish.n.01 ?cabinet.n.01)
                 )
             ) 
             (not 
-                (open ?dishwasher)
+                (open ?dishwasher.n.01)
             )
         )
     )

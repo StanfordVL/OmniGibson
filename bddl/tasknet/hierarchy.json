@@ -14,6 +14,98 @@
                   "name": "artifact.n.01",
                   "children": [
                     {
+                      "name": "surface.n.01",
+                      "children": [
+                        {
+                          "name": "horizontal_surface.n.01",
+                          "children": [
+                            {
+                              "name": "floor.n.01",
+                              "igibson_categories": [
+                                "floor"
+                              ],
+                              "abilities": {
+                                "burnable": {},
+                                "dustyable": {},
+                                "scrubbable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "abilities": {
+                            "burnable": {},
+                            "dustyable": {},
+                            "scrubbable": {}
+                          }
+                        },
+                        {
+                          "name": "work_surface.n.01",
+                          "children": [
+                            {
+                              "name": "tabletop.n.01",
+                              "children": [
+                                {
+                                  "name": "countertop.n.01",
+                                  "igibson_categories": [
+                                    "countertop"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "scrubbable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "dustyable": {},
+                                "scrubbable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "abilities": {
+                            "dustyable": {},
+                            "scrubbable": {}
+                          }
+                        },
+                        {
+                          "name": "board.n.09",
+                          "children": [
+                            {
+                              "name": "dartboard.n.01",
+                              "igibson_categories": [
+                                "dartboard"
+                              ],
+                              "abilities": {
+                                "burnable": {},
+                                "dustyable": {}
+                              }
+                            },
+                            {
+                              "name": "pegboard.n.01",
+                              "igibson_categories": [
+                                "pegboard"
+                              ],
+                              "abilities": {
+                                "burnable": {},
+                                "dustyable": {},
+                                "scrubbable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "abilities": {
+                            "burnable": {},
+                            "dustyable": {}
+                          }
+                        }
+                      ],
+                      "igibson_categories": [],
+                      "abilities": {
+                        "dustyable": {}
+                      }
+                    },
+                    {
                       "name": "instrumentality.n.03",
                       "children": [
                         {
@@ -3910,76 +4002,6 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {}
-                    },
-                    {
-                      "name": "surface.n.01",
-                      "children": [
-                        {
-                          "name": "work_surface.n.01",
-                          "children": [
-                            {
-                              "name": "tabletop.n.01",
-                              "children": [
-                                {
-                                  "name": "countertop.n.01",
-                                  "igibson_categories": [
-                                    "countertop"
-                                  ],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "scrubbable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "dustyable": {},
-                                "scrubbable": {}
-                              }
-                            }
-                          ],
-                          "igibson_categories": [],
-                          "abilities": {
-                            "dustyable": {},
-                            "scrubbable": {}
-                          }
-                        },
-                        {
-                          "name": "board.n.09",
-                          "children": [
-                            {
-                              "name": "dartboard.n.01",
-                              "igibson_categories": [
-                                "dartboard"
-                              ],
-                              "abilities": {
-                                "burnable": {},
-                                "dustyable": {}
-                              }
-                            },
-                            {
-                              "name": "pegboard.n.01",
-                              "igibson_categories": [
-                                "pegboard"
-                              ],
-                              "abilities": {
-                                "burnable": {},
-                                "dustyable": {},
-                                "scrubbable": {}
-                              }
-                            }
-                          ],
-                          "igibson_categories": [],
-                          "abilities": {
-                            "burnable": {},
-                            "dustyable": {}
-                          }
-                        }
-                      ],
-                      "igibson_categories": [],
-                      "abilities": {
-                        "dustyable": {}
-                      }
                     },
                     {
                       "name": "structure.n.01",
