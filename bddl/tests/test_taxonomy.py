@@ -11,6 +11,10 @@ class TaxonomyTest(unittest.TestCase):
         self.assertIsNotNone(self.taxonomy.get_class_name_from_igibson_category("picture"))
         self.assertIsNone(self.taxonomy.get_class_name_from_igibson_category("invalid_category"))
 
+    def test_get_subtree_igibson_categories(self):
+        self.assertIn("apple", self.taxonomy.get_subtree_igibson_categories("fruit.n.01"))
+        self.assertNotIn("potato", self.taxonomy.get_subtree_igibson_categories("fruit.n.01"))
+
     def test_is_valid_class(self):
         self.assertTrue(self.taxonomy.is_valid_class("entity.n.01"))
         self.assertFalse(self.taxonomy.is_valid_class("invalid_class"))
@@ -58,7 +62,7 @@ class TaxonomyTest(unittest.TestCase):
         self.assertFalse(len(self.taxonomy.get_children("stove.n.01")))
 
     def test_get_parent(self):
-        self.assertEquals(self.taxonomy.get_parent("stove.n.01"), "kitchen_appliance.n.01")
+        self.assertEqual(self.taxonomy.get_parent("stove.n.01"), "kitchen_appliance.n.01")
         self.assertIsNone(self.taxonomy.get_parent("entity.n.01"))
 
     def test_is_leaf(self):
