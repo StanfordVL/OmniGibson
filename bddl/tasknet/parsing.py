@@ -8,7 +8,7 @@ import sys
 import pprint
 
 from tasknet.config import SUPPORTED_PDDL_REQUIREMENTS as supported_requirements
-from tasknet.config import get_definition_filename
+from tasknet.config import get_definition_filename, READABLE_PREDICATE_NAMES
 
 
 def scan_tokens(filename):
@@ -291,9 +291,9 @@ def gen_natural_language_condition(parsed_condition, indent=0):
             elif term[0] == "forn":
                 yield indent_string + f"for exactly {term[1][0]} {nlterm(term[2][0])}(s),\n{list(gen_natural_language_condition(term[3], indent=indent + 1))[0]}"
             elif term[0] == "forpairs":
-                yield indent_string + f"for pairs of {nlterm(term[1][0])} and {nlterm(term[2][0])},\n{list(gen_natural_language_condition(term[3], indent=indent + 1))[0]}"  
+                yield indent_string + f"for pairs of {nlterm(term[1][0])}s and {nlterm(term[2][0])}s,\n{list(gen_natural_language_condition(term[3], indent=indent + 1))[0]}"  
             elif term[0] == "fornpairs":
-                yield indent_string + f"for exactly {term[1][0]} pairs of {nlterm(term[2][0])} and {nlterm(term[3][0])},\n{list(gen_natural_language_condition(term[4], indent=indent + 1))[0]}"            
+                yield indent_string + f"for exactly {term[1][0]} pairs of {nlterm(term[2][0])}s and {nlterm(term[3][0])}s,\n{list(gen_natural_language_condition(term[4], indent=indent + 1))[0]}"            
             
         else: 
             print(indent)
@@ -302,11 +302,13 @@ def gen_natural_language_condition(parsed_condition, indent=0):
                 # if '_' in term[1]:
                 #     fixed_term1 += term[1].split('_')[-1]
                 article1 = "the " if "_" not in term[1] else ""
-                yield f"{indent_string}{article1}{nlterm(term[1])} is {term[0]}"
+                desc = READABLE_PREDICATE_NAMES[term[0]] if term[0] in READABLE_PREDICATE_NAMES else term[0]
+                yield f"{indent_string}{article1}{nlterm(term[1])} is {desc}"
             else:
                 article1 = "the " if "_" not in term[1] else ""
                 article2 = "the " if "_" not in term[2] else ""
-                yield f"{indent_string}{article1}{nlterm(term[1])} is {term[0]} {article2}{nlterm(term[2])}"
+                desc = READABLE_PREDICATE_NAMES[term[0]] if term[0] in READABLE_PREDICATE_NAMES else term[0]
+                yield f"{indent_string}{article1}{nlterm(term[1])} is {desc} {article2}{nlterm(term[2])}"
             
     else:
         raise ValueError('encountered non-list:', term)
@@ -323,7 +325,7 @@ def nlterm(term):
 
 
 def gen_natural_language_conditions(parsed_conditions):
-    return [gen_natural_language_condition(parsed_condition) for parsed_condition in parsed_conditions]
+    return [''.join(list(gen_natural_language_condition(parsed_condition))) for parsed_condition in parsed_conditions]
 
 
 def add_pddl_whitespace(pddl_file="task_conditions/parsing_tests/test_app_output.pddl", string=None, save=True):
@@ -425,10 +427,10 @@ if __name__ == '__main__':
     test_condition = goal_state[0]
     pprint.pprint(goal_state[0])
     if sys.argv[1] == 'test_natural':
-        result = list(gen_natural_language_condition(test_condition))
+        result = (test_condition)
         print('\nRESULT:')
         # pprint.pprint(result)
         print(result)
-        print(len(result))
+        # print(len(result))
         with open('tester.txt', 'w') as f:
             f.write(''.join(result))

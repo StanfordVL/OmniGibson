@@ -255,7 +255,7 @@ class HEAD(Sentence):
         self.children.append(get_sentence_for_token(subpredicate[0])(
             scope, task, subpredicate[1:], object_map))
         
-        self.terms = flatten_list(self.body)
+        self.terms = list(flatten_list(self.body))
 
         print('HEAD CREATED')
 
@@ -268,6 +268,8 @@ class HEAD(Sentence):
     def get_relevant_objects(self):
         # All object instances and categories that are in the scope will be collected  
         objects = [self.scope[obj_name] for obj_name in self.terms if obj_name in self.scope]
+        print('TERMS:', self.terms)
+        print('OBJECTS:', objects)
 
         # If this has a quantifier, the category-relevant objects won't all be caught, so adding them here
         # No matter what the quantifier, every object of the category/ies is relevant
