@@ -255,7 +255,7 @@ class HEAD(Sentence):
         self.children.append(get_sentence_for_token(subpredicate[0])(
             scope, task, subpredicate[1:], object_map))
 
-        self.terms = list(flatten_list(self.body))
+        self.terms = [term.lstrip('?') for term in list(flatten_list(self.body))]
 
         print('HEAD CREATED')
 
@@ -267,8 +267,8 @@ class HEAD(Sentence):
 
     def get_relevant_objects(self):
         # All object instances and categories that are in the scope will be collected
-        objects = [self.scope[obj_name]
-                   for obj_name in self.terms if obj_name in self.scope]
+        objects = set([self.scope[obj_name]
+                   for obj_name in self.terms if obj_name in self.scope])
 
         # If this has a quantifier, the category-relevant objects won't all be caught, so adding them here
         # No matter what the quantifier, every object of the category/ies is relevant
@@ -276,19 +276,9 @@ class HEAD(Sentence):
             if term in self.object_map:
                 for obj_name, obj in self.scope.items():
                     if obj_name in self.object_map[term]:
-                        objects.append(obj)
+                        objects.add(obj)
 
-        return objects
-
-    # def toggle_on_object_highlight(self, toggle):
-    #     for obj in self.terms:
-    #         if obj in self.scope:
-    #             self.scope[obj].highlight()
-
-    # def toggle_off_object_highlight(self, toggle):
-    #     for obj in self.terms:
-    #         if obj in self.scope:
-    #             self.scope[obj].unhighlight()
+        return list(objects)
 
 
 #################### CHECKING ####################
