@@ -23,10 +23,6 @@
             (forall
                 (?basket.n.01 - basket.n.01)
                 (and
-                    ; (exists
-                    ;     (?cracker.n.01 - cracker.n.01)
-                    ;     (inside ?cracker.n.01 ?basket.n.01)
-                    ; )
                     (exists
                         (?candy_cane.n.01 - candy_cane.n.01)
                         (inside ?candy_cane.n.01 ?basket.n.01)
