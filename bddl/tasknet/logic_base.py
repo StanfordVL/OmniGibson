@@ -28,6 +28,8 @@ class BinaryAtomicPredicate(AtomicPredicate):
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
 
+        # self.flattened_condition_options = [[self]]
+
     @abstractmethod
     def _evaluate(self, obj1, obj2):
         pass
