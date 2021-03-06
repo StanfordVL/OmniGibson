@@ -2,20 +2,10 @@ import copy
 import itertools
 import numpy as np
 import pprint
-import pdb
 
 import tasknet
 from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
 
-# TODO remove after debugging
-import sys 
-def info(type, value, tb):
-    if hasattr(sys, 'ps1') or not sys.stderr.isatty():
-        sys.__excepthook__(type, value, tb)
-    else:
-        traceback.print_exception(type, value, tb)
-        print
-        pdb.post_mortem(tb)
 
 # TODO: VERY IMPORTANT
 #   1. Change logic for checking categories once new iG object is being used
@@ -380,10 +370,24 @@ class Implication(Sentence):
         return (not ante) or cons
     
     def flatten_children(self):
-        self.flattened_condition_options = ["imply",
-            [self.children[0].flattened_condition_options],
-            [self.children[1].flattened_condition_options]
-        ]
+        # (not antecedent) or consequent 
+        flattened_neg_antecedent_options = []
+        antecedent = self.children[0]
+        negated_options = []
+        for option in antecedent.flattened_condition_options:
+            negated_conds = []
+            for cond in option:
+                negated_conds.append(["not", cond])
+            negated_options.append(negated_conds)
+        for negated_option_selections in itertools.product(*negated_options):
+            flattened_neg_antecedent_options.append(
+                list(itertools.chain(negated_option_selections))
+            )
+
+        flattened_consequent_options = self.children[1].flattened_condition_options
+
+        self.flattened_condition_options = flattened_neg_antecedent_options + flattened_consequent_options
+
 
 
 # HEAD
@@ -460,15 +464,10 @@ def evaluate_state(compiled_state):
     return not bool(results['unsatisfied']), results
 
 
-def get_ground_goal_state(compiled_state):
-    for compiled_condition in compiled_state:
-        print()
-        print()
-        pprint.pprint(compiled_condition.flattened_condition_options)
+def get_ground_goal_state_options(compiled_state):
     all_options = list(itertools.product(*[compiled_condition.flattened_condition_options
                                            for compiled_condition in compiled_state]))
     all_unpacked_options = [list(itertools.chain(*option)) for option in all_options]
-    pdb.set_trace()
     return all_unpacked_options
 
 

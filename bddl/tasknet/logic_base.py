@@ -1,5 +1,4 @@
 from abc import abstractmethod, ABCMeta
-import pdb
 
 from future.utils import with_metaclass
 
@@ -57,8 +56,6 @@ class BinaryAtomicPredicate(AtomicPredicate):
                   (self.input1, self.input2))
     
     def flatten_children(self):
-        # if self.STATE_NAME == 'inside':
-        #     pdb.set_trace()
         new_input_terms = []
         for input_term in [self.input1, self.input2]:
             if '_' in input_term:
