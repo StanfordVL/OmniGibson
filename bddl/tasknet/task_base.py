@@ -112,7 +112,11 @@ class TaskNetTask(object):
                 self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
 
     def gen_ground_goal_conditions(self):
-        self.ground_goal_state_options = get_ground_goal_state_options(self.goal_conditions)
+        self.ground_goal_state_options = get_ground_goal_state_options(
+            self.goal_conditions, 
+            self, 
+            scope=self.object_scope, 
+            object_map=self.objects)
 
     # def show_instruction(self):
     #     return self.goal_conditions[self.currently_viewed_index].get_demonstrator_instruction()

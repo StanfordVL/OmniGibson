@@ -463,11 +463,11 @@ def evaluate_state(compiled_state):
     return not bool(results['unsatisfied']), results
 
 
-def get_ground_goal_state_options(compiled_state):
+def get_ground_goal_state_options(compiled_state, task, scope=None, object_map=None):
     all_options = list(itertools.product(*[compiled_condition.flattened_condition_options
                                            for compiled_condition in compiled_state]))
     all_unpacked_options = [list(itertools.chain(*option)) for option in all_options]
-    return all_unpacked_options
+    return compile_state(all_unpacked_options, task, scope=scope, object_map=object_map)
 
 
 #################### UTIL ######################
