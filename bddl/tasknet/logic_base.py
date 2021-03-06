@@ -81,7 +81,7 @@ class UnaryAtomicPredicate(AtomicPredicate):
         self.input = body[0].strip('?')
         self.scope = scope
 
-        self.flattened_condition_options = [[[self.STATE_NAME, self.input1]]]
+        self.flattened_condition_options = [[[self.STATE_NAME, self.input]]]
 
     @abstractmethod
     def _evaluate(self, obj):
