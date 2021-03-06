@@ -71,6 +71,12 @@
                 (?tray.n.01 - tray.n.01)
                 (under ?cherry.n.03 ?tray.n.01)
             )
+            (fornpairs
+                (2)
+                (?cherry.n.03 - cherry.n.03)
+                (?tray.n.01 - tray.n.01)
+                (under ?cherry.n.03 ?tray.n.01)
+            )
         )
     )
 )

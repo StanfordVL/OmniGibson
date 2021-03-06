@@ -42,14 +42,6 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
                 if dsl_term != term and sim_obj == other_sim_obj:
                     self.flattened_condition_options = [[["cooked", dsl_term]]]
             
-        # sim_obj = self.scope[body[0].lstrip('?')]
-        # print('TERM:', body[0], 'SIM OBJ:', sim_obj)
-        # for dsl_term, other_sim_obj in self.scope.items():
-        #     print('ITEM:', dsl_term, other_sim_obj)
-        #     print(sim_obj == other_sim_obj)
-        #     if dsl_term != body[0] and sim_obj == other_sim_obj:
-        #         print('GOT HERE')
-        #         self.flattened_condition_options = [[f"(cooked {dsl_term})"]]
         print('COOKED CREATED')
 
     def _evaluate(self, obj):
@@ -112,39 +104,11 @@ class Disjunction(Sentence):
         return any(self.child_values)
 
     def flatten_children(self):
-        # NOTE this fixes the number of random child choices made per disjunct. 
-        # TODO change this to be exhaustive 
-        # num_random_choices = 2
-
-        # options = list(itertools.product(*[child.flattened_condition_options for child in self.children]))
-        # self.flattened_condition_options = []
-        # for option in options:
-        #     self.flattened_condition_options.extend(
-        #         np.random.choice(option, 2, replace=False)
-        #     )
-
-        # NOTE initially I did this by first getting the cart prod of options by children, but 
-        # ultimately we just want any of the childrens' option predicate lists to be an option. 
-        # so instead I would just take every child, concatenate all of their options together, 
-        # and send that up. 
-        # But this means that no scenarios are sampled where more than one are true. 
-        # It would be like saying num_random_choices = 1 above.
-        # But it'll still tell us if the goal is satisfied at all. 
         self.flattened_condition_options = []
         for child in self.children:
             self.flattened_condition_options.extend(
                 child.flattened_condition_options
             )
-
-        # options = list(itertools.product(
-        #     *[child.flattened_condition_options for child in self.children]
-        # ))
-        # self.flattened_condition_options = []
-        # for option in options:
-        #     for combination in [combo for num_el in range(len(option)) for combo in itertools.combinations(option, num_el + 1)]:
-        #         self.flattened_condition_options.append(
-        #             list(itertools.chain(*combination))
-        #         )
 
 
 # QUANTIFIERS
@@ -212,15 +176,6 @@ class Existential(Sentence):
         return any(self.child_values)
     
     def flatten_children(self):
-        # options = list(itertools.product(
-        #     *[child.flattened_condition_options for child in self.children]
-        # ))
-        # self.flattened_condition_options = []
-        # for option in options:
-        #     for combination in [combo for num_el in range(len(option)) for combo in itertools.combinations(option, num_el + 1)]:
-        #         self.flattened_condition_options.append(
-        #             list(itertools.chain(*combination))
-        #         )
         self.flattened_condition_options = []
         for child in self.children:
             self.flattened_condition_options.extend(
@@ -298,22 +253,12 @@ class ForPairs(Sentence):
         L = min(len(self.children), len(self.children[0]))
         return (np.sum(np.any(self.child_values, axis=1), axis=0) >= L) and (np.sum(np.any(self.child_values, axis=0), axis=0) >= L)
         
-        # TODO test if this works when there are more instances of one of the two categories
-        # return np.all(np.any(self.child_values, axis=1), axis=0) and np.all(np.any(self.child_values, axis=0), axis=0)
-
     def flatten_children(self):
-        # pdb.set_trace()
         self.flattened_condition_options = []
         M, N = len(self.children), len(self.children[0])
         L, G = min(M, N), max(M, N)
         all_choices = itertools.permutations(range(G), L)
         for choice in all_choices:
-            # option = []
-            # for l in range(L):
-            #     child = self.children[l][choice[l]].flattened_condition_options
-            # option = list(itertools.product(
-            #     *[self.children[l][choice[l]].flattened_condition_options for l in range(L)]
-            # ))
             all_child_options = [self.children[l][choice[l]].flattened_condition_options
                                  for l in range(L)]
             choice_options = itertools.product(*all_child_options)
@@ -321,9 +266,6 @@ class ForPairs(Sentence):
             for choice_option in choice_options:
                 unpacked_choice_options.append(list(itertools.chain(*choice_option)))
             self.flattened_condition_options.extend(unpacked_choice_options)
-
-                
-            # self.flattened_condition_options.append(option)
 
 
 class ForNPairs(Sentence):
@@ -356,16 +298,6 @@ class ForNPairs(Sentence):
         return (np.sum(np.any(self.child_values, axis=1), axis=0) >= self.N) and (np.sum(np.any(self.child_values, axis=0), axis=0) >= self.N)
 
     def flatten_children(self):
-        # self.flattened_condition_options = []
-        # M, N = len(self.children), len(self.children[0])
-        # L, G = min(M, N), max(M, N)
-        # all_choices = itertools.permutations(range(G), L)
-        # for choice in all_choices:
-        #     option = []
-        #     for l in range(l):
-        #         option.append(self.children[l][choice[l]])
-        #     self.flattened_condition_options.append(option)
-        
         self.flattened_condition_options = []
         P, Q = len(self.children), len(self.children[0])
         L, G = min(P, Q), max(P, Q)
@@ -374,11 +306,15 @@ class ForNPairs(Sentence):
         all_Q_choices = itertools.permutations(range(Q), self.N)
         for pchoice in all_P_choices:
             for qchoice in all_Q_choices:
-                option = []
-                for n in range(self.N):
-                    option.extend(self.children[pchoice[n]][qchoice[n]].flattened_condition_options)
-                    
-                self.flattened_condition_options.append(option)
+                all_child_options = [self.children[pchoice[n]][qchoice[n]].flattened_condition_options 
+                    for n in range(self.N)
+                ]
+                choice_options = itertools.product(*all_child_options)
+                unpacked_choice_options = []
+                for choice_option in choice_options:
+                    unpacked_choice_options.append(list(itertools.chain(*choice_option)))
+                self.flattened_condition_options.extend(unpacked_choice_options)
+
 
 
 # NEGATION
@@ -404,16 +340,6 @@ class Negation(Sentence):
         return not self.child_values[0]
     
     def flatten_children(self):
-        # self.flattened_condition_options = []
-        # for child in self.children:
-        #     for option in child.flattened_condition_options:
-        #         negated_option = []
-        #         for cond in option:
-        #             negated_option.append(
-        #                 ["not", cond]
-        #             )
-        #         self.flattened_condition_options.append(negated_option)
-        
         # demorgan's law 
         self.flattened_condition_options = []
         child = self.children[0]
@@ -454,7 +380,10 @@ class Implication(Sentence):
         return (not ante) or cons
     
     def flatten_children(self):
-        self.flattened_condition_options = None
+        self.flattened_condition_options = ["imply",
+            [self.children[0].flattened_condition_options],
+            [self.children[1].flattened_condition_options]
+        ]
 
 
 # HEAD
@@ -496,7 +425,7 @@ class HEAD(Sentence):
     
     def flatten_children(self):
         self.flattened_condition_options = self.children[0].flattened_condition_options
-
+    
 
 #################### CHECKING ####################
 
@@ -530,12 +459,18 @@ def evaluate_state(compiled_state):
             results['unsatisfied'].append(i)
     return not bool(results['unsatisfied']), results
 
+
 def get_ground_goal_state(compiled_state):
     for compiled_condition in compiled_state:
         print()
         print()
         pprint.pprint(compiled_condition.flattened_condition_options)
-    return None
+    all_options = list(itertools.product(*[compiled_condition.flattened_condition_options
+                                           for compiled_condition in compiled_state]))
+    all_unpacked_options = [list(itertools.chain(*option)) for option in all_options]
+    pdb.set_trace()
+    return all_unpacked_options
+
 
 #################### UTIL ######################
 
