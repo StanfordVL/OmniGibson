@@ -21,11 +21,10 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
         print('COOKED INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
-        if set('1234567890') & set(body[0]):         # later check this logic to see if it is an instance or category
+        if set('1234567890') & set(body[0]):
             print('SAW NUMBER:', body[0])
             self.flattened_condition_options = [[["cooked", body[0]]]]
         else:
-            print('DIDNt see number:', body[0])
             term = body[0].lstrip('?')
             sim_obj = self.scope[term]
             for dsl_term, other_sim_obj in self.scope.items():
