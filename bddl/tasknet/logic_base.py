@@ -30,7 +30,7 @@ class BinaryAtomicPredicate(AtomicPredicate):
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
 
-        self.flatten_children()
+        self.get_ground_options()
 
 
     @abstractmethod
@@ -55,7 +55,7 @@ class BinaryAtomicPredicate(AtomicPredicate):
             print('%s and/or %s are not mapped to simulator objects in scope' %
                   (self.input1, self.input2))
     
-    def flatten_children(self):
+    def get_ground_options(self):
         new_input_terms = []
         for input_term in [self.input1, self.input2]:
             if '_' in input_term:
@@ -105,7 +105,7 @@ class UnaryAtomicPredicate(AtomicPredicate):
             print('%s is not mapped to a simulator object in scope' % self.input)
             return False
     
-    def flatten_children(self):
+    def get_ground_options(self):
         if '_' in self.input:
             input_term = self.input
         else:

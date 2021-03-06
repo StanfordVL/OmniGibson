@@ -5,7 +5,7 @@ import sys
 from tasknet.config import SCENE_PATH
 from tasknet.sampler import Sampler
 from tasknet.parsing import parse_domain, parse_problem, gen_natural_language_conditions
-from tasknet.condition_evaluation import create_scope, compile_state, evaluate_state, get_ground_goal_state_options
+from tasknet.condition_evaluation import create_scope, compile_state, evaluate_state, get_ground_state_options
 
 import numpy as np
 from IPython import embed
@@ -112,14 +112,12 @@ class TaskNetTask(object):
                 self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
 
     def gen_ground_goal_conditions(self):
-        self.ground_goal_state_options = get_ground_goal_state_options(
+        self.ground_goal_state_options = get_ground_state_options(
             self.goal_conditions, 
             self, 
             scope=self.object_scope, 
             object_map=self.objects)
 
-    # def show_instruction(self):
-    #     return self.goal_conditions[self.currently_viewed_index].get_demonstrator_instruction()
     def show_instruction(self):
         satisfied = self.currently_viewed_instruction in self.current_goal_status['satisfied']
         natural_language_condition = self.natural_language_goal_conditions[
