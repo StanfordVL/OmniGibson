@@ -5,7 +5,7 @@ import sys
 from tasknet.config import SCENE_PATH
 from tasknet.sampler import Sampler
 from tasknet.parsing import parse_domain, parse_problem, gen_natural_language_conditions
-from tasknet.condition_evaluation import create_scope, compile_state, evaluate_state
+from tasknet.condition_evaluation import create_scope, compile_state, evaluate_state, get_ground_goal_state
 
 import numpy as np
 from IPython import embed
@@ -64,6 +64,8 @@ class TaskNetTask(object):
                 continue
             if '_int' not in scene:
                 continue
+            if 'Rs_int' not in scene:
+                continue
             self.scene_id = scene
             self.scene = scene_class(scene)
             # self.scene = scene_class(
@@ -110,6 +112,9 @@ class TaskNetTask(object):
         if bool(self.parsed_goal_conditions[0]):
             self.goal_conditions = compile_state(
                 self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
+
+    def gen_ground_goal_conditions(self):
+        get_ground_goal_state(self.goal_conditions)
 
     # def show_instruction(self):
     #     return self.goal_conditions[self.currently_viewed_index].get_demonstrator_instruction()
