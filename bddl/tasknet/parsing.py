@@ -296,7 +296,7 @@ def gen_natural_language_condition(parsed_condition, indent=0):
                 yield indent_string + f"for exactly {term[1][0]} pairs of {nlterm(term[2][0])}s and {nlterm(term[3][0])}s,\n{list(gen_natural_language_condition(term[4], indent=indent + 1))[0]}"            
             
         else: 
-            print(indent)
+            # print(indent)
             if len(term) == 2:
                 # fixed_term1 = term[1].lstrip('?').split('.')[0]
                 # if '_' in term[1]:
@@ -319,7 +319,7 @@ def nlterm(term):
     natural_term = term.lstrip('?')
     natural_term = natural_term.split('.')[0]
     if '_' in term:
-        print('it is present')
+        # print('it is present')
         natural_term += term.split('_')[-1]
     return natural_term
 

@@ -46,7 +46,7 @@ class TaskNetTask(object):
         self.natural_language_goal_conditions = gen_natural_language_conditions(
             self.parsed_goal_conditions)
 
-    def initialize(self, scene_class, scene_id=None):
+    def initialize(self, scene_class, scene_id=None, scene_kwargs=None):
         '''
         Check self.scene to see if it works for this Task. If not, resample.
         Populate self.scene with necessary objects.
@@ -65,10 +65,10 @@ class TaskNetTask(object):
             if '_int' not in scene:
                 continue
             self.scene_id = scene
-            self.scene = scene_class(scene)
-            # self.scene = scene_class(
-            #     scene,
-            #     load_object_categories=['coffee_table', 'breakfast_table', 'countertop', 'fridge', 'table_lamp'])
+            if scene_kwargs is None:
+                self.scene = scene_class(scene)
+            else:
+                self.scene = scene_class(scene, **scene_kwargs)
 
             # Reject scenes with missing non-sampleable objects
             # Populate scope with simulator objects
