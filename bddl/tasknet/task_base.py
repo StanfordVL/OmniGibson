@@ -46,7 +46,7 @@ class TaskNetTask(object):
         self.natural_language_goal_conditions = gen_natural_language_conditions(
             self.parsed_goal_conditions)
 
-    def initialize(self, scene_class, scene_id=None, scene_kwargs=None):
+    def initialize(self, scene_class, scene_id=None, scene_kwargs=None, online_sampling=True):
         '''
         Check self.scene to see if it works for this Task. If not, resample.
         Populate self.scene with necessary objects.
@@ -57,7 +57,8 @@ class TaskNetTask(object):
 
         scenes = os.listdir(self.scene_path)
         random.shuffle(scenes)
-        accept_scene = False
+        accept_scene = True
+        self.online_sampling = online_sampling
         for scene in scenes:
             print('SCENE:', scene)
             if scene_id is not None and scene != scene_id:
@@ -73,9 +74,10 @@ class TaskNetTask(object):
             # Reject scenes with missing non-sampleable objects
             # Populate scope with simulator objects
 
-            accept_scene = self.check_scene()
-            if not accept_scene:
-                continue
+            if self.online_sampling:
+                accept_scene = self.check_scene()
+                if not accept_scene:
+                    continue
 
             # Import scenes and objects into simulator
             self.import_scene()
@@ -83,14 +85,15 @@ class TaskNetTask(object):
             # Generate initial conditions
             self.gen_initial_conditions()
 
-            # Sample objects to satisfy initial conditions
-            accept_scene = self.sample()
+            if self.online_sampling:
+                # Sample objects to satisfy initial conditions
+                accept_scene = self.sample()
 
-            if not accept_scene:
-                continue
+                if not accept_scene:
+                    continue
 
-            # Add clutter objects into the scenes
-            self.clutter_scene()
+                # Add clutter objects into the scenes
+                self.clutter_scene()
 
         assert accept_scene, 'None of the available scenes satisfy these initial conditions.'
 
