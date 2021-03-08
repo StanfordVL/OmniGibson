@@ -60,12 +60,10 @@ class TaskNetTask(object):
         accept_scene = True
         self.online_sampling = online_sampling
         for scene in scenes:
-            print('SCENE:', scene)
             if scene_id is not None and scene != scene_id:
                 continue
             if '_int' not in scene:
                 continue
-            self.scene_id = scene
             if scene_kwargs is None:
                 self.scene = scene_class(scene)
             else:
@@ -92,14 +90,15 @@ class TaskNetTask(object):
                 if not accept_scene:
                     continue
 
+                self.gen_goal_conditions()
+                print('gen_goal_conditions')
+                embed()
                 # Add clutter objects into the scenes
                 self.clutter_scene()
 
-        assert accept_scene, 'None of the available scenes satisfy these initial conditions.'
+        # assert accept_scene, 'None of the available scenes satisfy these initial conditions.'
 
-        self.gen_goal_conditions()
-
-        return self.scene_id, self.scene
+        return accept_scene
 
     def gen_initial_conditions(self):
         if bool(self.parsed_initial_conditions[0]):
