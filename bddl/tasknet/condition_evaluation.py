@@ -1,5 +1,7 @@
 import copy
+import itertools
 import numpy as np
+import pprint
 
 import tasknet
 from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
@@ -17,6 +19,17 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
     def __init__(self, scope, task, body, object_map):
         print('COOKED INITIALIZED')
         super().__init__(scope, task, body, object_map)
+
+        if set('1234567890') & set(body[0]):
+            print('SAW NUMBER:', body[0])
+            self.flattened_condition_options = [[["cooked", body[0]]]]
+        else:
+            term = body[0].lstrip('?')
+            sim_obj = self.scope[term]
+            for dsl_term, other_sim_obj in self.scope.items():
+                if dsl_term != term and sim_obj == other_sim_obj:
+                    self.flattened_condition_options = [[["cooked", dsl_term]]]
+            
         print('COOKED CREATED')
 
     def _evaluate(self, obj):
@@ -39,6 +52,8 @@ class Conjunction(Sentence):
         child_predicates = [get_sentence_for_token(subpredicate[0])(
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
+
+        self.get_ground_options()
         print('CONJUNCTION CREATED')
 
     def evaluate(self):
@@ -46,6 +61,14 @@ class Conjunction(Sentence):
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
         return all(self.child_values)
+    
+    def get_ground_options(self):
+        options = list(itertools.product(*[child.flattened_condition_options for child in self.children]))
+        self.flattened_condition_options = []
+        for option in options:
+            self.flattened_condition_options.append(
+                list(itertools.chain(*option))
+            )
 
 
 class Disjunction(Sentence):
@@ -58,6 +81,8 @@ class Disjunction(Sentence):
         child_predicates = [get_sentence_for_token(subpredicate[0])(
             new_scope, task, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
+
+        self.get_ground_options()
         print('DISJUNCTION CREATED')
 
     def evaluate(self):
@@ -66,8 +91,15 @@ class Disjunction(Sentence):
                    ), 'child_values has NoneTypes'
         return any(self.child_values)
 
-# QUANTIFIERS
+    def get_ground_options(self):
+        self.flattened_condition_options = []
+        for child in self.children:
+            self.flattened_condition_options.extend(
+                child.flattened_condition_options
+            )
 
+
+# QUANTIFIERS
 
 class Universal(Sentence):
     def __init__(self, scope, task, body, object_map):
@@ -84,6 +116,8 @@ class Universal(Sentence):
                 new_scope[param_label] = obj
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
+        
+        self.get_ground_options()
         print('UNIVERSAL CREATED')
 
     def evaluate(self):
@@ -91,6 +125,16 @@ class Universal(Sentence):
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
         return all(self.child_values)
+    
+    def get_ground_options(self):
+        options = list(itertools.product(
+            *[child.flattened_condition_options for child in self.children]
+        ))
+        self.flattened_condition_options = []
+        for option in options:
+            self.flattened_condition_options.append(
+                list(itertools.chain(*option))
+            )
 
 
 class Existential(Sentence):
@@ -110,6 +154,7 @@ class Existential(Sentence):
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
 
+        self.get_ground_options()
         print('EXISTENTIAL CREATED')
 
     def evaluate(self):
@@ -117,6 +162,13 @@ class Existential(Sentence):
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
         return any(self.child_values)
+    
+    def get_ground_options(self):
+        self.flattened_condition_options = []
+        for child in self.children:
+            self.flattened_condition_options.extend(
+                child.flattened_condition_options
+            )
 
 
 class NQuantifier(Sentence):
@@ -136,6 +188,8 @@ class NQuantifier(Sentence):
                 new_scope[param_label] = obj
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
+        
+        self.get_ground_options()
         print('NQUANT INITIALIZED')
 
     def evaluate(self):
@@ -143,6 +197,18 @@ class NQuantifier(Sentence):
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
         return sum(self.child_values) == self.N
+    
+    def get_ground_options(self):
+        options = list(itertools.product(
+            *[child.flattened_condition_options for child in self.children]
+        ))
+        self.flattened_condition_options = []
+        for option in options: 
+            # for combination in [combo for num_el in range(self.N - 1, len(option)) for combo in itertools.combinations(option, num_el + 1)]:
+            for combination in itertools.combinations(option, self.N):
+                self.flattened_condition_options.append(
+                    list(itertools.chain(*combination))
+                )
 
 
 class ForPairs(Sentence):
@@ -165,11 +231,29 @@ class ForPairs(Sentence):
                         sub.append(get_sentence_for_token(subpredicate[0])(
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
+        
+        self.get_ground_options()
 
     def evaluate(self):
         self.child_values = np.array(
             [np.array([subchild.evaluate() for subchild in child]) for child in self.children])
-        return np.all(np.any(self.child_values, axis=1), axis=0) and np.all(np.any(self.child_values, axis=0), axis=0)
+        
+        L = min(len(self.children), len(self.children[0]))
+        return (np.sum(np.any(self.child_values, axis=1), axis=0) >= L) and (np.sum(np.any(self.child_values, axis=0), axis=0) >= L)
+        
+    def get_ground_options(self):
+        self.flattened_condition_options = []
+        M, N = len(self.children), len(self.children[0])
+        L, G = min(M, N), max(M, N)
+        all_choices = itertools.permutations(range(G), L)
+        for choice in all_choices:
+            all_child_options = [self.children[l][choice[l]].flattened_condition_options
+                                 for l in range(L)]
+            choice_options = itertools.product(*all_child_options)
+            unpacked_choice_options = []
+            for choice_option in choice_options:
+                unpacked_choice_options.append(list(itertools.chain(*choice_option)))
+            self.flattened_condition_options.extend(unpacked_choice_options)
 
 
 class ForNPairs(Sentence):
@@ -193,11 +277,31 @@ class ForNPairs(Sentence):
                         sub.append(get_sentence_for_token(subpredicate[0])(
                             new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
+        
+        self.get_ground_options()
 
     def evaluate(self):
         self.child_values = np.array(
             [np.array([subchild.evaluate() for subchild in child]) for child in self.children])
         return (np.sum(np.any(self.child_values, axis=1), axis=0) >= self.N) and (np.sum(np.any(self.child_values, axis=0), axis=0) >= self.N)
+
+    def get_ground_options(self):
+        self.flattened_condition_options = []
+        P, Q = len(self.children), len(self.children[0])
+        L = min(P, Q)
+        assert self.N <= L, "ForNPairs asks for more pairs than instances available"
+        all_P_choices = itertools.permutations(range(P), self.N)
+        all_Q_choices = itertools.permutations(range(Q), self.N)
+        for pchoice in all_P_choices:
+            for qchoice in all_Q_choices:
+                all_child_options = [self.children[pchoice[n]][qchoice[n]].flattened_condition_options 
+                    for n in range(self.N)
+                ]
+                choice_options = itertools.product(*all_child_options)
+                unpacked_choice_options = []
+                for choice_option in choice_options:
+                    unpacked_choice_options.append(list(itertools.chain(*choice_option)))
+                self.flattened_condition_options.extend(unpacked_choice_options)
 
 
 # NEGATION
@@ -211,6 +315,8 @@ class Negation(Sentence):
         self.children.append(get_sentence_for_token(subpredicate[0])(
             scope, task, subpredicate[1:], object_map))
         assert len(self.children) == 1, 'More than one child.'
+        
+        self.get_ground_options()
         print('NEGATION CREATED')
 
     def evaluate(self):
@@ -219,7 +325,22 @@ class Negation(Sentence):
         assert all([val is not None for val in self.child_values]
                    ), 'child_values has NoneTypes'
         return not self.child_values[0]
-
+    
+    def get_ground_options(self):
+        # demorgan's law 
+        self.flattened_condition_options = []
+        child = self.children[0]
+        negated_options = []
+        for option in child.flattened_condition_options: 
+            negated_conds = []
+            for cond in option: 
+                negated_conds.append(['not', cond])
+            negated_options.append(negated_conds)
+        for negated_option_selections in itertools.product(*negated_options):   # only picking one condition from each set of disjuncts
+            self.flattened_condition_options.append(
+                list(itertools.chain(negated_option_selections))
+            )
+            
 
 # IMPLICATION
 class Implication(Sentence):
@@ -234,6 +355,8 @@ class Implication(Sentence):
         self.children.append(get_sentence_for_token(consequent[0])(
             scope, task, consequent[1:], object_map))
 
+        self.get_ground_options()
+
         print('IMPLICATION CREATED')
 
     def evaluate(self):
@@ -242,9 +365,29 @@ class Implication(Sentence):
                    ), 'child_values has NoneTypes'
         ante, cons = self.child_values
         return (not ante) or cons
+    
+    def get_ground_options(self):
+        # (not antecedent) or consequent 
+        flattened_neg_antecedent_options = []
+        antecedent = self.children[0]
+        negated_options = []
+        for option in antecedent.flattened_condition_options:
+            negated_conds = []
+            for cond in option:
+                negated_conds.append(["not", cond])
+            negated_options.append(negated_conds)
+        for negated_option_selections in itertools.product(*negated_options):
+            flattened_neg_antecedent_options.append(
+                list(itertools.chain(negated_option_selections))
+            )
+
+        flattened_consequent_options = self.children[1].flattened_condition_options
+
+        self.flattened_condition_options = flattened_neg_antecedent_options + flattened_consequent_options
+
+
 
 # HEAD
-
 
 class HEAD(Sentence):
     def __init__(self, scope, task, body, object_map):
@@ -257,6 +400,7 @@ class HEAD(Sentence):
 
         self.terms = [term.lstrip('?') for term in list(flatten_list(self.body))]
 
+        self.get_ground_options()
         print('HEAD CREATED')
 
     def evaluate(self):
@@ -279,7 +423,10 @@ class HEAD(Sentence):
                         objects.add(obj)
 
         return list(objects)
-
+    
+    def get_ground_options(self):
+        self.flattened_condition_options = self.children[0].flattened_condition_options
+    
 
 #################### CHECKING ####################
 
@@ -312,6 +459,29 @@ def evaluate_state(compiled_state):
         else:
             results['unsatisfied'].append(i)
     return not bool(results['unsatisfied']), results
+
+
+def get_ground_state_options(compiled_state, task, scope=None, object_map=None):
+    all_options = list(itertools.product(*[compiled_condition.flattened_condition_options
+                                           for compiled_condition in compiled_state]))
+    all_unpacked_options = [list(itertools.chain(*option)) for option in all_options]
+
+    # Remove all unsatisfiable options (those that contain some (cond1 and not cond1))
+    consistent_unpacked_options = []
+    for option in all_unpacked_options:
+        consistent = True 
+        for cond1, cond2 in itertools.combinations(option, 2):
+            if (cond1[0] == "not" and cond1[1] == cond2) or (cond2[0] == "not" and cond2[1] == cond1):
+                consistent = False
+                break
+        if not consistent:
+            continue
+        consistent_unpacked_options.append(option)
+    consistent_unpacked_options = [
+        compile_state(option, task, scope=scope, object_map=object_map)
+        for option in sorted(consistent_unpacked_options, key=len)
+    ]
+    return consistent_unpacked_options
 
 
 #################### UTIL ######################
