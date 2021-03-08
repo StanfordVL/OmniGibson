@@ -112,11 +112,7 @@ class TaskNetTask(object):
                 self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
 
     def gen_ground_goal_conditions(self):
-        self.ground_goal_state_options = get_ground_state_options(
-            self.goal_conditions, 
-            self, 
-            scope=self.object_scope, 
-            object_map=self.objects)
+        self.ground_goal_state_options = get_ground_state_options(self.goal_conditions)
 
     def show_instruction(self):
         satisfied = self.currently_viewed_instruction in self.current_goal_status['satisfied']
