@@ -461,9 +461,9 @@ def evaluate_state(compiled_state):
     return not bool(results['unsatisfied']), results
 
 
-def get_ground_state_options(compiled_state, task, scope=None, object_map=None):
+def get_ground_state_options(unground_compiled_state):
     all_options = list(itertools.product(*[compiled_condition.flattened_condition_options
-                                           for compiled_condition in compiled_state]))
+                                           for compiled_condition in unground_compiled_state]))
     all_unpacked_options = [list(itertools.chain(*option)) for option in all_options]
 
     # Remove all unsatisfiable options (those that contain some (cond1 and not cond1))
@@ -477,10 +477,7 @@ def get_ground_state_options(compiled_state, task, scope=None, object_map=None):
         if not consistent:
             continue
         consistent_unpacked_options.append(option)
-    consistent_unpacked_options = [
-        compile_state(option, task, scope=scope, object_map=object_map)
-        for option in sorted(consistent_unpacked_options, key=len)
-    ]
+    consistent_unpacked_options = sorted(consistent_unpacked_options, key=len)
     return consistent_unpacked_options
 
 
