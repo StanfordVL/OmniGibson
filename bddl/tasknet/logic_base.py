@@ -2,6 +2,7 @@ from abc import abstractmethod, ABCMeta
 
 from future.utils import with_metaclass
 
+
 class Sentence(with_metaclass(ABCMeta)):
     def __init__(self, scope, task, body, object_map):
         self.children = []
@@ -32,7 +33,6 @@ class BinaryAtomicPredicate(AtomicPredicate):
 
         self.get_ground_options()
 
-
     @abstractmethod
     def _evaluate(self, obj1, obj2):
         pass
@@ -54,24 +54,27 @@ class BinaryAtomicPredicate(AtomicPredicate):
         else:
             print('%s and/or %s are not mapped to simulator objects in scope' %
                   (self.input1, self.input2))
-    
+
     def get_ground_options(self):
         new_input_terms = []
         for input_term in [self.input1, self.input2]:
             if '_' in input_term:
                 new_input_term = input_term
             else:
+                # If the string token is an object category, then there will
+                # exist another object instance that also points to the same
+                # simulator object. Use that object instance instead.
                 sim_obj = self.scope[input_term]
                 for dsl_term, other_sim_obj in self.scope.items():
                     if dsl_term != input_term and sim_obj == other_sim_obj:
                         new_input_term = dsl_term
             new_input_terms.append(new_input_term)
-        
-        self.flattened_condition_options = [[[self.STATE_NAME, 
-                                              new_input_terms[0], 
+
+        self.flattened_condition_options = [[[self.STATE_NAME,
+                                              new_input_terms[0],
                                               new_input_terms[1]]]]
 
-        
+
 class UnaryAtomicPredicate(AtomicPredicate):
     STATE_NAME = None
 
@@ -104,11 +107,14 @@ class UnaryAtomicPredicate(AtomicPredicate):
         else:
             print('%s is not mapped to a simulator object in scope' % self.input)
             return False
-    
+
     def get_ground_options(self):
         if '_' in self.input:
             input_term = self.input
         else:
+            # If the string token is an object category, then there will
+            # exist another object instance that also points to the same
+            # simulator object. Use that object instance instead.
             sim_obj = self.scope[self.input]
             for dsl_term, other_sim_obj in self.scope.items():
                 if dsl_term != input_term and sim_obj == other_sim_obj:

@@ -5,6 +5,7 @@ import pprint
 
 #################### TEST STUFF ####################
 
+
 class Task(object):
     def __init__(self, obj_list):
         self.objects = obj_list
@@ -25,6 +26,7 @@ class Apple(object):
         self.category = 'apple'
         self.iscooked = iscooked
         self.obj_id = obj_id
+
 
 def test_chicken_cooking():
     atus_activity = 'checking_test'
@@ -49,7 +51,14 @@ def test_chicken_cooking():
     test_scope = {label: obj for label, obj in zip(scope_labels, test_objects)}
 
     print('\n\nCompile conditions')
-    compiled_state = compile_state(goal_state, test_task, scope=test_scope, object_map={'chicken': ['chicken1', 'chicken2', 'chicken3', 'chicken4'], 'apple': ['apple1', 'apple2', 'apple3']})
+    compiled_state = compile_state(
+        goal_state, test_task,
+        scope=test_scope,
+        object_map={
+            'chicken': ['chicken1', 'chicken2', 'chicken3', 'chicken4'],
+            'apple': ['apple1', 'apple2', 'apple3']})
+
+    print('Flattened condition options')
     for cond in compiled_state:
         print()
         pprint.pprint(cond.flattened_condition_options)
@@ -91,10 +100,12 @@ def test_chicken_cooking():
     print('Unsatisfied conditions:', results['unsatisfied'])
 
     print("test")
-    assert results['satisfied'] == [0, 2, 3, 4, 5], "Error, predicate evaluation returned wrong truth values"
+    assert results['satisfied'] == [0, 2, 3, 4, 5], \
+        "Error, predicate evaluation returned wrong truth values"
     # print("Successful evaluation")
 
-test_chicken_cooking()
+
+# test_chicken_cooking()
 
 # def _test():
 #     parsed_condition = ["and",
