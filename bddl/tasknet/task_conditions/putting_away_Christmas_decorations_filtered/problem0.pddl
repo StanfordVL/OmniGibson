@@ -12,6 +12,7 @@
         candle.n.01_1 candle.n.01_2 candle.n.01_3 - candle.n.01
         cord.n.01_1 - cord.n.01
         countertop.n.01_1 - countertop.n.01
+        cabinet.n.01_1 - cabinet.n.01
     )
 
     (:init
@@ -32,6 +33,7 @@
         (inroom table.n.02_2 living_room)
         (inroom sofa.n.01_1 living_room)
         (inroom countertop.n.01_1 living_room)
+        (inroom cabinet.n.01_1 living_room)
     )
 
     (:goal
