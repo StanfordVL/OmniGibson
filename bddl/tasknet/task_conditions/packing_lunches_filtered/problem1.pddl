@@ -9,7 +9,7 @@
     	apple.n.01_1 - apple.n.01
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	hamburger.n.01_1 - hamburger.n.01
-    	chocolate.n.02_1 - chocolate.n.02
+        ; chocolate.n.02_1 - chocolate.n.02
     	basket.n.01_1 - basket.n.01
     )
     
@@ -18,7 +18,7 @@
         (ontop water.n.06_1 countertop.n.01_1) 
         (inside apple.n.01_1 electric_refrigerator.n.01_1) 
         (inside hamburger.n.01_1 electric_refrigerator.n.01_1) 
-        (inside chocolate.n.02_1 shelf.n.01_1) 
+        ; (inside chocolate.n.02_1 shelf.n.01_1)
         (ontop basket.n.01_1 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
@@ -60,12 +60,12 @@
                 (?apple.n.01 - apple.n.01) 
                 (inside ?apple.n.01 ?basket.n.01)
             ) 
-            (fornpairs 
-                (1) 
-                (?basket.n.01 - basket.n.01) 
-                (?chocolate.n.02 - chocolate.n.02) 
-                (inside ?chocolate.n.02 ?basket.n.01)
-            ) 
+            ; (fornpairs
+            ;     (1)
+            ;     (?basket.n.01 - basket.n.01)
+            ;     (?chocolate.n.02 - chocolate.n.02)
+            ;     (inside ?chocolate.n.02 ?basket.n.01)
+            ; )
             (forall 
                 (?basket.n.01 - basket.n.01) 
                 (and 

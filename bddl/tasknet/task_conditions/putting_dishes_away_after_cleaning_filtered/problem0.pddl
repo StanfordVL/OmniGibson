@@ -8,7 +8,7 @@
     )
     
     (:init 
-        (inside dish.n.01_1 dishwasher.n.01_1) 
+        (ontop dish.n.01_1 dishwasher.n.01_1)
         (inroom cabinet.n.01_1 kitchen)
         (inroom dishwasher.n.01_1 kitchen)
     )
@@ -18,7 +18,7 @@
             (exists 
                 (?cabinet.n.01 - cabinet.n.01) 
                 (forall 
-                    (?dish.n.01 - dish.n.01) 
+                    (?dish.n.01 - dish.n.01)
                     (inside ?dish.n.01 ?cabinet.n.01)
                 )
             ) 

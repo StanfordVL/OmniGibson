@@ -35,28 +35,28 @@
                 (?bed.n.01 - bed.n.01)
                 (forall
                     (?jean.n.01 - jean.n.01)
-                    (inside ?jean.n.01 ?bed.n.01)
+                    (ontop ?jean.n.01 ?bed.n.01)
                 )
             )
             (exists
                 (?bed.n.01 - bed.n.01)
                 (forall
                     (?pajama.n.02 - pajama.n.02)
-                    (inside ?pajama.n.02 ?bed.n.01)
+                    (ontop ?pajama.n.02 ?bed.n.01)
                 )
             )
             (exists
                 (?bed.n.01 - bed.n.01)
                 (forall
                     (?sock.n.01 - sock.n.01)
-                    (inside ?sock.n.01 ?bed.n.01)
+                    (ontop ?sock.n.01 ?bed.n.01)
                 )
             )
             (exists
                 (?bed.n.01 - bed.n.01)
                 (forall
                     (?underwear.n.01 - underwear.n.01)
-                    (inside ?underwear.n.01 ?bed.n.01)
+                    (ontop ?underwear.n.01 ?bed.n.01)
                 )
             )
         )

@@ -54,11 +54,16 @@ class TaskNetTask(object):
         TODO should this method take scene_path and object_path as args, instead of
             asking user to change in tasknet/config.py?
         '''
-
         scenes = os.listdir(self.scene_path)
         random.shuffle(scenes)
         accept_scene = True
         self.online_sampling = online_sampling
+
+        # Generate initial and goal conditions
+        self.gen_initial_conditions()
+        self.gen_goal_conditions()
+        self.gen_ground_goal_conditions()
+
         for scene in scenes:
             if scene_id is not None and scene != scene_id:
                 continue
@@ -71,7 +76,6 @@ class TaskNetTask(object):
 
             # Reject scenes with missing non-sampleable objects
             # Populate scope with simulator objects
-
             if self.online_sampling:
                 accept_scene = self.check_scene()
                 if not accept_scene:
@@ -79,12 +83,6 @@ class TaskNetTask(object):
 
             # Import scenes and objects into simulator
             self.import_scene()
-
-            # Generate initial and goal conditions
-            self.gen_initial_conditions()
-            self.gen_goal_conditions()
-            print('gen_goal_conditions')
-            embed()
 
             if self.online_sampling:
                 # Sample objects to satisfy initial conditions
@@ -96,6 +94,8 @@ class TaskNetTask(object):
                 # Add clutter objects into the scenes
                 self.clutter_scene()
 
+        # Generate goal condition with the fully populated self.object_scope
+        self.gen_goal_conditions()
         # assert accept_scene, 'None of the available scenes satisfy these initial conditions.'
 
         return accept_scene
@@ -115,7 +115,11 @@ class TaskNetTask(object):
 
     def gen_ground_goal_conditions(self):
         self.ground_goal_state_options = get_ground_state_options(
-            self.goal_conditions)
+            self.goal_conditions,
+            self,
+            scope=self.object_scope,
+            object_map=self.objects)
+        assert len(self.ground_goal_state_options) > 0
 
     def show_instruction(self):
         satisfied = self.currently_viewed_instruction in self.current_goal_status['satisfied']

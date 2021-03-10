@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABCMeta
 
 from future.utils import with_metaclass
+from IPython import embed
 
 
 class Sentence(with_metaclass(ABCMeta)):
@@ -30,7 +31,10 @@ class BinaryAtomicPredicate(AtomicPredicate):
         assert len(body) == 2, 'Param list should have 2 args'
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
-
+        if isinstance(self.scope[self.input1], str):
+            self.input1 = self.scope[self.input1]
+        if isinstance(self.scope[self.input2], str):
+            self.input2 = self.scope[self.input2]
         self.get_ground_options()
 
     @abstractmethod
@@ -56,23 +60,8 @@ class BinaryAtomicPredicate(AtomicPredicate):
                   (self.input1, self.input2))
 
     def get_ground_options(self):
-        new_input_terms = []
-        for input_term in [self.input1, self.input2]:
-            if '_' in input_term:
-                new_input_term = input_term
-            else:
-                # If the string token is an object category, then there will
-                # exist another object instance that also points to the same
-                # simulator object. Use that object instance instead.
-                sim_obj = self.scope[input_term]
-                for dsl_term, other_sim_obj in self.scope.items():
-                    if dsl_term != input_term and sim_obj == other_sim_obj:
-                        new_input_term = dsl_term
-            new_input_terms.append(new_input_term)
-
-        self.flattened_condition_options = [[[self.STATE_NAME,
-                                              new_input_terms[0],
-                                              new_input_terms[1]]]]
+        self.flattened_condition_options = [
+            [[self.STATE_NAME, self.input1, self.input2]]]
 
 
 class UnaryAtomicPredicate(AtomicPredicate):
@@ -83,8 +72,10 @@ class UnaryAtomicPredicate(AtomicPredicate):
         assert len(body) == 1, 'Param list should have 1 arg'
         self.input = body[0].strip('?')
         self.scope = scope
+        if isinstance(self.scope[self.input], str):
+            self.input = self.scope[self.input]
 
-        self.flattened_condition_options = [[[self.STATE_NAME, self.input]]]
+        self.get_ground_options()
 
     @abstractmethod
     def _evaluate(self, obj):
@@ -109,14 +100,5 @@ class UnaryAtomicPredicate(AtomicPredicate):
             return False
 
     def get_ground_options(self):
-        if '_' in self.input:
-            input_term = self.input
-        else:
-            # If the string token is an object category, then there will
-            # exist another object instance that also points to the same
-            # simulator object. Use that object instance instead.
-            sim_obj = self.scope[self.input]
-            for dsl_term, other_sim_obj in self.scope.items():
-                if dsl_term != input_term and sim_obj == other_sim_obj:
-                    input_term = dsl_term
-        self.flattened_condition_options = [[[self.STATE_NAME, input_term]]]
+        self.flattened_condition_options = [
+            [[self.STATE_NAME, self.input]]]

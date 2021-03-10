@@ -25,7 +25,7 @@
                 (?cabinet.n.01 - cabinet.n.01)
                 (forall
                     (?underwear.n.01 - underwear.n.01)
-                    (ontop ?underwear.n.01 ?bed.n.01)
+                    (ontop ?underwear.n.01 ?bed.n.01_1)
                 )
             )
         )
@@ -34,7 +34,7 @@
                 (?cabinet.n.01 - cabinet.n.01)
                 (forall
                     (?jean.n.01 - jean.n.01)
-                    (ontop ?jean.n.01 ?bed.n.01)
+                    (ontop ?jean.n.01 ?bed.n.01_1)
                 )
             )
         )
