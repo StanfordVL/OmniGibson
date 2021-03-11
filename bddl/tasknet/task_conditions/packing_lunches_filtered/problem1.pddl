@@ -3,9 +3,9 @@
 
     (:objects
     	shelf.n.01_1 - shelf.n.01
-    	bag.n.01_1 - bag.n.01
+        ; bag.n.01_1 - bag.n.01
     	water.n.06_1 - water.n.06
-    	countertop.n.01_1 - countertop.n.01
+        countertop.n.01_1 - countertop.n.01
     	apple.n.01_1 - apple.n.01
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	hamburger.n.01_1 - hamburger.n.01
@@ -14,10 +14,10 @@
     )
     
     (:init 
-        (inside bag.n.01_1 shelf.n.01_1)
-        (ontop water.n.06_1 countertop.n.01_1) 
-        (inside apple.n.01_1 electric_refrigerator.n.01_1) 
-        (inside hamburger.n.01_1 electric_refrigerator.n.01_1) 
+        ; (inside bag.n.01_1 shelf.n.01_1)
+        (ontop water.n.06_1 countertop.n.01_1)
+        (inside apple.n.01_1 electric_refrigerator.n.01_1)
+        (inside hamburger.n.01_1 electric_refrigerator.n.01_1)
         ; (inside chocolate.n.02_1 shelf.n.01_1)
         (ontop basket.n.01_1 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 

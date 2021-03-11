@@ -4,7 +4,7 @@
     (:objects
         ; laptop.n.01_1 - laptop.n.01
     	cabinet.n.01_1 cabinet.n.01_2 - cabinet.n.01
-    	bag.n.01_1 - bag.n.01
+        ; bag.n.01_1 - bag.n.01
         basket.n.01_1 - basket.n.01
         ; notebook.n.01_1 notebook.n.01_2 notebook.n.01_3 - notebook.n.01
     	notebook.n.01_1 - notebook.n.01
@@ -18,7 +18,7 @@
     
     (:init 
         ; (ontop laptop.n.01_1 cabinet.n.01_1) 
-        (ontop bag.n.01_1 cabinet.n.01_1)
+        ; (ontop bag.n.01_1 cabinet.n.01_1)
         (ontop basket.n.01_1 cabinet.n.01_2)
         (ontop notebook.n.01_1 cabinet.n.01_2)
         ; (ontop notebook.n.01_2 cabinet.n.01_1) 
@@ -41,10 +41,18 @@
                 (?notebook.n.01 - notebook.n.01) 
                 (inside ?notebook.n.01 ?basket.n.01_1)
             )
-            ; (forall
-            ;     (?eraser.n.01 - eraser.n.01)
-            ;     (inside ?eraser.n.01 ?basket.n.01_1)
-            ; )
+            (forall
+                (?eraser.n.01 - eraser.n.01)
+                (inside ?eraser.n.01 ?basket.n.01_1)
+            )
+            (forall
+                (?pen.n.01 - pen.n.01)
+                (inside ?pen.n.01 ?basket.n.01_1)
+            )
+            (forall
+                (?pencil.n.01 - pencil.n.01)
+                (inside ?pencil.n.01 ?basket.n.01_1)
+            )
             ; (and 
             ;     (and 
             ;         (forall 
