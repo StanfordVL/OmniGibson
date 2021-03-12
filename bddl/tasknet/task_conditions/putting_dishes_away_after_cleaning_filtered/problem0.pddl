@@ -2,15 +2,16 @@
     (:domain igibson)
 
     (:objects
-        dishwasher.n.01_1 - dishwasher.n.01
+        countertop.n.01_1 - countertop.n.01
         cabinet.n.01_1 - cabinet.n.01
-        dish.n.01_1 - dish.n.01
+        plate.n.04_1 plate.n.04_2 - plate.n.04
     )
     
     (:init 
-        (ontop dish.n.01_1 dishwasher.n.01_1)
+        (ontop plate.n.04_1 countertop.n.01_1)
+        (ontop plate.n.04_2 countertop.n.01_1)
         (inroom cabinet.n.01_1 kitchen)
-        (inroom dishwasher.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen)
     )
     
     (:goal 
@@ -18,8 +19,8 @@
             (exists 
                 (?cabinet.n.01 - cabinet.n.01) 
                 (forall 
-                    (?dish.n.01 - dish.n.01)
-                    (inside ?dish.n.01 ?cabinet.n.01)
+                    (?plate.n.04 - plate.n.04)
+                    (inside ?plate.n.04 ?cabinet.n.01)
                 )
             ) 
         )
