@@ -1,7 +1,6 @@
 from abc import abstractmethod, ABCMeta
 
 from future.utils import with_metaclass
-from IPython import embed
 
 
 class Sentence(with_metaclass(ABCMeta)):
