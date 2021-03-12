@@ -2,7 +2,7 @@
     (:domain igibson)
 
     (:objects
-        light_bulb.n.01_1 light_bulb.n.01_2 light_bulb.n.01_3 light_bulb.n.01_4 light_bulb.n.01_5 light_bulb.n.01_6 - light_bulb.n.01
+        light_bulb.n.01_1 light_bulb.n.01_2 light_bulb.n.01_3 - light_bulb.n.01
         ; table.n.02_1 table.n.02_2 - table.n.02
         table.n.02_1 - table.n.02
         ball.n.01_1 ball.n.01_2 ball.n.01_3 - ball.n.01
