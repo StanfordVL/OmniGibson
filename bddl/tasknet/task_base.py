@@ -11,7 +11,6 @@ import numpy as np
 from IPython import embed
 from tasknet.object_taxonomy import ObjectTaxonomy
 
-
 class TaskNetTask(object):
     # TODO
     #   1. Update with new object formats
@@ -118,8 +117,7 @@ class TaskNetTask(object):
         satisfied = self.currently_viewed_instruction in self.current_goal_status['satisfied']
         natural_language_condition = self.natural_language_goal_conditions[
             self.currently_viewed_instruction]
-        objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects(
-        )
+        objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects()
         # text_color = "green" if satisfied else "red"
         text_color = [83. / 255., 176. / 255., 72. / 255.] if satisfied \
             else [255. / 255., 51. / 255., 51. / 255.]

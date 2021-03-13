@@ -17,7 +17,6 @@ from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
 
 class LegacyCookedForTesting(UnaryAtomicPredicate):
     def __init__(self, scope, task, body, object_map):
-        print('COOKED INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
         if set('1234567890') & set(body[0]):
@@ -30,8 +29,6 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
                 if dsl_term != term and sim_obj == other_sim_obj:
                     self.flattened_condition_options = [[["cooked", dsl_term]]]
             
-        print('COOKED CREATED')
-
     def _evaluate(self, obj):
         return self.task.cooked(obj)
 
@@ -45,7 +42,6 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
 
 class Conjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
-        print('CONJUNCTION INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
         new_scope = copy.copy(scope)
@@ -54,7 +50,6 @@ class Conjunction(Sentence):
         self.children.extend(child_predicates)
 
         self.get_ground_options()
-        print('CONJUNCTION CREATED')
 
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
@@ -73,7 +68,6 @@ class Conjunction(Sentence):
 
 class Disjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
-        print('DISJUNCTION INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
         # body = [[predicate1], [predicate2], ..., [predicateN]]
@@ -83,7 +77,6 @@ class Disjunction(Sentence):
         self.children.extend(child_predicates)
 
         self.get_ground_options()
-        print('DISJUNCTION CREATED')
 
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
@@ -103,7 +96,6 @@ class Disjunction(Sentence):
 
 class Universal(Sentence):
     def __init__(self, scope, task, body, object_map):
-        print('UNIVERSAL INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
         iterable, subpredicate = body
@@ -118,7 +110,6 @@ class Universal(Sentence):
                     new_scope, task, subpredicate[1:], object_map))
         
         self.get_ground_options()
-        print('UNIVERSAL CREATED')
 
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
@@ -139,7 +130,6 @@ class Universal(Sentence):
 
 class Existential(Sentence):
     def __init__(self, scope, task, body, object_map):
-        print('EXISTENTIAL INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
         iterable, subpredicate = body
@@ -155,7 +145,6 @@ class Existential(Sentence):
                     new_scope, task, subpredicate[1:], object_map))
 
         self.get_ground_options()
-        print('EXISTENTIAL CREATED')
 
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
@@ -173,7 +162,6 @@ class Existential(Sentence):
 
 class NQuantifier(Sentence):
     def __init__(self, scope, task, body, object_map):
-        print('NQUANT INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
         N, iterable, subpredicate = body
@@ -190,7 +178,6 @@ class NQuantifier(Sentence):
                     new_scope, task, subpredicate[1:], object_map))
         
         self.get_ground_options()
-        print('NQUANT INITIALIZED')
 
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
@@ -307,7 +294,6 @@ class ForNPairs(Sentence):
 # NEGATION
 class Negation(Sentence):
     def __init__(self, scope, task, body, object_map):
-        print('NEGATION INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
         # body = [[predicate]]
@@ -317,7 +303,6 @@ class Negation(Sentence):
         assert len(self.children) == 1, 'More than one child.'
         
         self.get_ground_options()
-        print('NEGATION CREATED')
 
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
@@ -345,7 +330,6 @@ class Negation(Sentence):
 # IMPLICATION
 class Implication(Sentence):
     def __init__(self, scope, task, body, object_map):
-        print('IMPLICATION INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
         # body = [[antecedent], [consequent]]
@@ -356,8 +340,6 @@ class Implication(Sentence):
             scope, task, consequent[1:], object_map))
 
         self.get_ground_options()
-
-        print('IMPLICATION CREATED')
 
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
@@ -391,7 +373,6 @@ class Implication(Sentence):
 
 class HEAD(Sentence):
     def __init__(self, scope, task, body, object_map):
-        print('HEAD INITIALIZED')
         super().__init__(scope, task, body, object_map)
 
         subpredicate = body
@@ -401,7 +382,6 @@ class HEAD(Sentence):
         self.terms = [term.lstrip('?') for term in list(flatten_list(self.body))]
 
         self.get_ground_options()
-        print('HEAD CREATED')
 
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]

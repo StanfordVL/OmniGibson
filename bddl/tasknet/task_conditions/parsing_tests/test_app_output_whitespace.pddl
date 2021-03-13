@@ -1,50 +1,26 @@
 
 (:init 
-    (dusty vehicle1) 
-    (ontop vehicle1 floor1) 
-    (not 
-        (scrubbed vehicle1)
-    ) 
-    (ontop mat1 floor1) 
-    (not 
-        (scrubbed mat1)
-    ) 
-    (ontop mat2 floor1) 
-    (not 
-        (scrubbed mat2)
-    ) 
-    (ontop mat3 floor1) 
-    (not 
-        (scrubbed mat3)
-    ) 
-    (ontop mat4 floor1) 
-    (not 
-        (scrubbed mat4)
-    ) 
-    (under tire1 vehicle1) 
-    (not 
-        (scrubbed tire1)
-    ) 
-    (under tire2 vehicle1) 
-    (not 
-        (scrubbed tire2)
-    ) 
-    (under tire3 vehicle1) 
-    (not 
-        (scrubbed tire3)
-    ) 
-    (under tire4 vehicle1) 
-    (not 
-        (scrubbed tire4)
-    ) 
-    (ontop vacuum1 counter1 
-        (storage_room)) 
-    (ontop soap1 counter1 
-        (storage_room)) 
-    (ontop towel1 counter1 
-        (storage_room)) 
-    (ontop rag1 counter1 
-        (storage_room)) 
-    (inroom floor1 garage) 
-    (inroom counter1 storage_room)
+    (ontop document1 table1) 
+    (ontop document2 table1) 
+    (ontop document3 table1) 
+    (ontop document4 table1) 
+    (ontop document5 table1) 
+    (ontop document6 table1) 
+    (ontop document7 table1) 
+    (ontop document8 table1) 
+    (ontop document9 table1) 
+    (ontop document10 table1) 
+    (ontop file1 cabinet1) 
+    (ontop file2 cabinet1) 
+    (ontop file3 cabinet1) 
+    (ontop file4 cabinet1) 
+    (ontop file5 cabinet1) 
+    (ontop file6 cabinet1) 
+    (inside drawer1 cabinet1) 
+    (open drawer1) 
+    (inside drawer2 cabinet1) 
+    (open drawer2) 
+    (nextto table1 cabinet1) 
+    (inroom cabinet1 home_office) 
+    (inroom table1 home_office)
 )

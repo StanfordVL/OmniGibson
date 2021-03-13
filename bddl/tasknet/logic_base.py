@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABCMeta
+import re
 
 from future.utils import with_metaclass
 
@@ -58,7 +59,7 @@ class BinaryAtomicPredicate(AtomicPredicate):
     def get_ground_options(self):
         new_input_terms = []
         for input_term in [self.input1, self.input2]:
-            if '_' in input_term:
+            if re.search(r"\.n\.\d+_", input_term) is not None:
                 new_input_term = input_term
             else:
                 # If the string token is an object category, then there will
