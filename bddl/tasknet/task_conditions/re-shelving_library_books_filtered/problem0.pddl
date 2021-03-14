@@ -19,8 +19,8 @@
             (forall
                 (?book.n.02 - book.n.02)
                 (or
-                    (inside ?book.n.02 ?shelf.n.01)
-                    (ontop ?book.n.02 ?shelf.n.01)
+                    (inside ?book.n.02 ?shelf.n.01_1)
+                    (ontop ?book.n.02 ?shelf.n.01_1)
                 )
             )
             (forall
