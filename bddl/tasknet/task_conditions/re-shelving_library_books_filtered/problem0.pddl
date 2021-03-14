@@ -16,16 +16,17 @@
 
     (:goal 
         (and 
-            (and 
-                (forall 
-                    (?book.n.02 - book.n.02)
-                    (inside ?book.n.02 ?shelf.n.01_1)
+            (forall
+                (?book.n.02 - book.n.02)
+                (or
+                    (inside ?book.n.02 ?shelf.n.01)
+                    (ontop ?book.n.02 ?shelf.n.01)
                 )
-                (forall 
-                    (?book.n.02 - book.n.02)
-                    (not 
-                        (ontop ?book.n.02 ?table.n.02_1)
-                    )
+            )
+            (forall
+                (?book.n.02 - book.n.02)
+                (not
+                    (ontop ?book.n.02 ?table.n.02_1)
                 )
             )
         )

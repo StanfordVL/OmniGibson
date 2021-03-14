@@ -5,7 +5,7 @@
         basket.n.01_1 - basket.n.01
         notebook.n.01_1 notebook.n.01_2 - notebook.n.01
         shelf.n.01_1 shelf.n.01_2 - shelf.n.01
-        laptop.n.01_1 - laptop.n.01
+        ; laptop.n.01_1 - laptop.n.01
         pen.n.01_1 - pen.n.01
         table.n.02_1 - table.n.02
         pencil.n.01_1 - pencil.n.01
@@ -15,7 +15,7 @@
         (ontop basket.n.01_1 table.n.02_1)
         (ontop notebook.n.01_1 table.n.02_1)
         (ontop notebook.n.01_2 table.n.02_1)
-        (ontop laptop.n.01_1 table.n.02_1)
+        ; (ontop laptop.n.01_1 table.n.02_1)
         (inside pen.n.01_1 shelf.n.01_1)
         (inside pencil.n.01_1 shelf.n.01_2)
         (inside eraser.n.01_1 shelf.n.01_2)
@@ -35,11 +35,14 @@
                 (?pencil.n.01 - pencil.n.01) 
                 (inside ?pencil.n.01 ?basket.n.01_1)
             ) 
-            (inside ?laptop.n.01_1 ?basket.n.01_1)
+            ; (inside ?laptop.n.01_1 ?basket.n.01_1)
             (forn 
                 (2) 
-                (?notebook.n.01 - notebook.n.01) 
-                (inside ?notebook.n.01 ?shelf.n.01_2)
+                (?notebook.n.01 - notebook.n.01)
+                (or
+                    (inside ?notebook.n.01 ?shelf.n.01_2)
+                    (ontop ?notebook.n.01 ?shelf.n.01_2)
+                )
             )
         )
     )
