@@ -3,17 +3,7 @@
     (:domain igibson)
 
     (:objects
-<<<<<<< HEAD
-        basket.n.01_1 basket.n.01_2 basket.n.01_3 basket.n.01_4 - basket.n.01
-    	shelf.n.01_1 shelf.n.01_2 - shelf.n.01
-        lotion.n.01_1 lotion.n.01_2 lotion.n.01_3 lotion.n.01_4 - lotion.n.01
-    	cabinet.n.01_1 - cabinet.n.01
-        soap.n.01_1 soap.n.01_2 soap.n.01_3 soap.n.01_4 - soap.n.01
-    	shampoo.n.01_1 shampoo.n.01_2 shampoo.n.01_3 shampoo.n.01_4 - shampoo.n.01
-    	envelope.n.01_1 envelope.n.01_2 envelope.n.01_3 envelope.n.01_4 - envelope.n.01
-=======
         cabinet.n.01_1 - cabinet.n.01
->>>>>>> f9b9c44b12734398a41421317827e17a43c61730
     	table.n.02_1 - table.n.02
         ; shelf.n.01_1 - shelf.n.01
         basket.n.01_1 basket.n.01_2 - basket.n.01

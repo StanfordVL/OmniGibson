@@ -269,27 +269,6 @@ class Action(object):
         return g
 
 
-######### VERIFICATION UTILS ##########
-
-def check_consistent_objects(pddl_file):
-    """Checks for objects in initial conditions that are not in object 
-    list, and objects in goal conditions that are neither in object list
-    nor initial conditions. If the first returned list is not empty, 
-    the objects in it need to be added to the object list. If the second 
-    returned list is not empty, the objects in it need to be added to the 
-    initial conditions (and object list) only if they are not composed or 
-    decomposed objects. 
-
-    Args:
-        pddl_file (str): filename of PDDL file being checked for consistency
-
-    Returns:
-        (list(str), list(str)): objects in initial conditions but not object list,
-                                objects in goal conditions but not initial conditions
-    """
-    
-
-
 ######### AESTHETICS UTILS ##########
 
 def flatten_list(li):
