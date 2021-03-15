@@ -1,5 +1,4 @@
 from abc import abstractmethod, ABCMeta
-import re
 
 from future.utils import with_metaclass
 
