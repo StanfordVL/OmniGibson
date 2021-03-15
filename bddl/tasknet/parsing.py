@@ -39,7 +39,8 @@ def scan_tokens(filename):
 
 
 def parse_domain(atus_activity, instance):
-    domain_filename = get_definition_filename(atus_activity, instance, domain=True)
+    domain_filename = get_definition_filename(
+        atus_activity, instance, domain=True)
     tokens = scan_tokens(domain_filename)
     if type(tokens) is list and tokens.pop(0) == 'define':
         domain_name = 'unknown'
@@ -56,11 +57,12 @@ def parse_domain(atus_activity, instance):
                 for req in group:
                     if not req in supported_requirements:
                         raise Exception('Requirement %s not supported' % req)
-                requirements = group 
+                requirements = group
             elif t == ':predicates':
                 predicate_name, arguments = parse_predicates(group)
                 if predicate_name in predicates:
-                    raise Exception('Predicate %s defined multiple times' % predicate_name)
+                    raise Exception(
+                        'Predicate %s defined multiple times' % predicate_name)
                 predicates[predicate_name] = arguments
             elif t == ':types':
                 types = group
@@ -68,13 +70,15 @@ def parse_domain(atus_activity, instance):
                 name = group.pop(0)
                 for act in actions:
                     if act.name == name:
-                        raise Exception('Action %s is defined multiple times' % name)
+                        raise Exception(
+                            'Action %s is defined multiple times' % name)
                 actions.append(parse_action(group))
-            else: 
+            else:
                 print('%s is not recognized in domain' % t)
         return domain_name, requirements, types, actions, predicates
     else:
-        raise Exception('File %s does not match domain pattern' % domain_filename)
+        raise Exception('File %s does not match domain pattern' %
+                        domain_filename)
 
 
 def parse_predicates(group):
@@ -118,19 +122,23 @@ def parse_action(group):
                 t = p.pop(0)
                 if t == '-':
                     if not untyped_parameters:
-                        raise Exception('Unexpected hyphen in %s parameters' % name)
+                        raise Exception(
+                            'Unexpected hyphen in %s parameters' % name)
                     param_type = p.pop(0)
                     while untyped_parameters:
-                        parameters.append([untyped_parameters.pop(0), param_type])
+                        parameters.append(
+                            [untyped_parameters.pop(0), param_type])
                 else:
                     untyped_parameters.append(t)
             while untyped_parameters:
                 parameters.append([untyped_parameters.pop(0), 'object'])
         elif t == ':precondition':
-            split_predicates(group.pop(0), positive_preconditions, negative_preconditions, name, ' preconditions')
+            split_predicates(group.pop(0), positive_preconditions,
+                             negative_preconditions, name, ' preconditions')
         elif t == ':effect':
-            split_predicates(group.pop(0), add_effects, del_effects, name, ' effects')
-        else: 
+            split_predicates(group.pop(0), add_effects,
+                             del_effects, name, ' effects')
+        else:
             print('%s is not recognized in action' % t)
     return Action(name, parameters, positive_preconditions, negative_preconditions, add_effects, del_effects)
 
@@ -150,9 +158,10 @@ def parse_problem(atus_activity, task_instance, domain_name):
                 problem_name = group[-1]
             elif t == ':domain':
                 if domain_name != group[-1]:
-                    raise Exception('Different domain specified in problem file')
+                    raise Exception(
+                        'Different domain specified in problem file')
             elif t == ':requirements':
-                pass 
+                pass
             elif t == ':objects':
                 group.pop(0)
                 object_list = []
@@ -176,8 +185,9 @@ def parse_problem(atus_activity, task_instance, domain_name):
                 print('%s is not recognized in problem' % t)
         return problem_name, objects, initial_state, goal_state
     else:
-        raise Exception('File %s does not match problem pattern' % problem_filename)
-             
+        raise Exception('File %s does not match problem pattern' %
+                        problem_filename)
+
 
 def split_predicates(group, pos, neg, name, part):
     if not isinstance(group, list):
@@ -190,7 +200,8 @@ def split_predicates(group, pos, neg, name, part):
         if predicate[0] == 'not':
             if len(predicate) != 2:
                 raise Exception('Unexpected not in ' + name + part)
-            neg.append(predicate[-1])     # NOTE removed this because I want the negative goals to have "not"
+            # NOTE removed this because I want the negative goals to have "not"
+            neg.append(predicate[-1])
         else:
             pos.append(predicate)
 
@@ -218,13 +229,13 @@ class Action(object):
 
     def __str__(self):
         return 'action: ' + self.name + \
-        '\n  parameters: ' + str(self.parameters) + \
-        '\n  positive_preconditions: ' + str(self.positive_preconditions) + \
-        '\n  negative_preconditions: ' + str(self.negative_preconditions) + \
-        '\n  add_effects: ' + str(self.add_effects) + \
-        '\n  del_effects: ' + str(self.del_effects) + '\n'
+            '\n  parameters: ' + str(self.parameters) + \
+            '\n  positive_preconditions: ' + str(self.positive_preconditions) + \
+            '\n  negative_preconditions: ' + str(self.negative_preconditions) + \
+            '\n  add_effects: ' + str(self.add_effects) + \
+            '\n  del_effects: ' + str(self.del_effects) + '\n'
 
-    def __eq__(self, other): 
+    def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
     def groundify(self, objects):
@@ -237,8 +248,10 @@ class Action(object):
             type_map.append(objects[type])
             variables.append(var)
         for assignment in itertools.product(*type_map):
-            positive_preconditions = self.replace(self.positive_preconditions, variables, assignment)
-            negative_preconditions = self.replace(self.negative_preconditions, variables, assignment)
+            positive_preconditions = self.replace(
+                self.positive_preconditions, variables, assignment)
+            negative_preconditions = self.replace(
+                self.negative_preconditions, variables, assignment)
             add_effects = self.replace(self.add_effects, variables, assignment)
             del_effects = self.replace(self.del_effects, variables, assignment)
             yield Action(self.name, assignment, positive_preconditions, negative_preconditions, add_effects, del_effects)
@@ -286,6 +299,7 @@ def flatten_list(li):
         else:
             yield elem
 
+
 def gen_natural_language_condition(parsed_condition, indent=0):
     indent_string = " " * 4 * indent
     # print(parsed_condition)
@@ -296,10 +310,10 @@ def gen_natural_language_condition(parsed_condition, indent=0):
         if any([isinstance(subterm, list) for subterm in term]):
             if term[0] == "and":
                 print('indent from and:', indent)
-                yield f", and\n".join([list(gen_natural_language_condition(subterm, indent=indent + 1))[0] for subterm in term[1:]]) 
+                yield f", and\n".join([list(gen_natural_language_condition(subterm, indent=indent + 1))[0] for subterm in term[1:]])
             elif term[0] == "or":
                 yield f", or\n".join([list(gen_natural_language_condition(subterm, indent=indent + 1))[0] for subterm in term[1:]]) + \
-                        f",\n{indent_string + '    '}or any combination of these"
+                    f",\n{indent_string + '    '}or any combination of these"
             elif term[0] == "not":
                 yield indent_string + "the following is NOT true:\n" + list(gen_natural_language_condition(term[1], indent=indent + 1))[0]
             elif term[0] == "imply":
@@ -307,34 +321,35 @@ def gen_natural_language_condition(parsed_condition, indent=0):
             elif term[0] == "forall":
                 yield indent_string + f"for every {nlterm(term[1][0])},\n{list(gen_natural_language_condition(term[2], indent=indent + 1))[0]}"
             elif term[0] == "exists":
-                print('EXIST')
                 yield indent_string + f"for at least one {nlterm(term[1][0])},\n{list(gen_natural_language_condition(term[2], indent=indent + 1))[0]}"
             elif term[0] == "forn":
                 yield indent_string + f"for exactly {term[1][0]} {nlterm(term[2][0])}(s),\n{list(gen_natural_language_condition(term[3], indent=indent + 1))[0]}"
             elif term[0] == "forpairs":
-                yield indent_string + f"for pairs of {nlterm(term[1][0])}s and {nlterm(term[2][0])}s,\n{list(gen_natural_language_condition(term[3], indent=indent + 1))[0]}"  
+                yield indent_string + f"for pairs of {nlterm(term[1][0])}s and {nlterm(term[2][0])}s,\n{list(gen_natural_language_condition(term[3], indent=indent + 1))[0]}"
             elif term[0] == "fornpairs":
-                yield indent_string + f"for exactly {term[1][0]} pairs of {nlterm(term[2][0])}s and {nlterm(term[3][0])}s,\n{list(gen_natural_language_condition(term[4], indent=indent + 1))[0]}"            
-            
-        else: 
+                yield indent_string + f"for exactly {term[1][0]} pairs of {nlterm(term[2][0])}s and {nlterm(term[3][0])}s,\n{list(gen_natural_language_condition(term[4], indent=indent + 1))[0]}"
+
+        else:
             # print(indent)
             if len(term) == 2:
                 # fixed_term1 = term[1].lstrip('?').split('.')[0]
                 # if '_' in term[1]:
                 #     fixed_term1 += term[1].split('_')[-1]
                 article1 = "the " if "_" not in term[1] else ""
-                desc = READABLE_PREDICATE_NAMES[term[0]] if term[0] in READABLE_PREDICATE_NAMES else term[0]
+                desc = READABLE_PREDICATE_NAMES[term[0]
+                                                ] if term[0] in READABLE_PREDICATE_NAMES else term[0]
                 yield f"{indent_string}{article1}{nlterm(term[1])} is {desc}"
             else:
                 article1 = "the " if "_" not in term[1] else ""
                 article2 = "the " if "_" not in term[2] else ""
-                desc = READABLE_PREDICATE_NAMES[term[0]] if term[0] in READABLE_PREDICATE_NAMES else term[0]
+                desc = READABLE_PREDICATE_NAMES[term[0]
+                                                ] if term[0] in READABLE_PREDICATE_NAMES else term[0]
                 yield f"{indent_string}{article1}{nlterm(term[1])} is {desc} {article2}{nlterm(term[2])}"
-            
+
     else:
         raise ValueError('encountered non-list:', term)
         yield ''
-            
+
 
 def nlterm(term):
     natural_term = term.lstrip('?')
@@ -365,28 +380,28 @@ def add_pddl_whitespace(pddl_file="task_conditions/parsing_tests/test_app_output
     last_paren_type = None
     while char_i < total_characters:
         if raw_pddl[char_i] == "(":
-            new_block = '\n' + '    ' * nest_level + raw_pddl[char_i]  
+            new_block = '\n' + '    ' * nest_level + raw_pddl[char_i]
             last_paren_type = "("
             char_i += 1
             while (raw_pddl[char_i] not in [' ', ')']) and char_i < total_characters:
-                new_block += raw_pddl[char_i] 
+                new_block += raw_pddl[char_i]
                 char_i += 1
             refined_pddl += new_block + raw_pddl[char_i]
             if raw_pddl[char_i] == ' ':
                 nest_level += 1
         elif raw_pddl[char_i] == ")":
-            nest_level -= 1 
+            nest_level -= 1
             if last_paren_type == ")":
                 refined_pddl += "\n" + '    ' * nest_level
-            refined_pddl += raw_pddl[char_i] 
+            refined_pddl += raw_pddl[char_i]
             last_paren_type = ")"
         else:
-            refined_pddl += raw_pddl[char_i] 
+            refined_pddl += raw_pddl[char_i]
         char_i += 1
 
     if save:
         with open('task_conditions/parsing_tests/test_app_output_whitespace.pddl', 'w') as f:
-            f.write(refined_pddl)        
+            f.write(refined_pddl)
 
     return refined_pddl
 
@@ -402,14 +417,15 @@ def remove_pddl_whitespace(pddl_file='task_conditions/parsing_tests/test_app_out
 
     pddl = ' '.join([substr.lstrip(' ') for substr in raw_pddl.split('\n')])
     print(pddl)
-    pddl = [' ' + substr if substr[0] != ')' else substr for substr in pddl.split(' ') if substr]
+    pddl = [' ' + substr if substr[0] !=
+            ')' else substr for substr in pddl.split(' ') if substr]
     print()
     print(pddl)
     pddl = ''.join(pddl)[1:]
 
     with open('task_conditions/parsing_tests/test_app_output_nowhitespace.pddl', 'w') as f:
         f.write(pddl)
-    
+
     return pddl
 
 
@@ -419,9 +435,9 @@ if __name__ == '__main__':
     if sys.argv[1] == 'remove':
         refined_pddl = remove_pddl_whitespace()
     # if sys.argv[1] == 'test_natural':
-        
+
     # print(refined_pddl)
-    # import sys, pprint 
+    # import sys, pprint
     # atus_activity = sys.argv[1]
     # task_instance = sys.argv[2]
     # print('----------------------------')
@@ -431,17 +447,19 @@ if __name__ == '__main__':
     # print('----------------------------')
     atus_activity = "assembling_gift_baskets_filtered"
     task_instance = 0
-    domain_name, requirements, types, actions, predicates = parse_domain(atus_activity, task_instance)
-    problem_name, objects, initial_state, goal_state = parse_problem(atus_activity, task_instance, domain_name)
+    domain_name, requirements, types, actions, predicates = parse_domain(
+        atus_activity, task_instance)
+    problem_name, objects, initial_state, goal_state = parse_problem(
+        atus_activity, task_instance, domain_name)
     # print('----------------------------')
     # print('Problem name:', problem_name)
     # print('Objects:', objects)
     # print('Initial state:', initial_state)
     # print('Goal state:', goal_state)
-    # test_condition = '''            (exists 
-    #             (?table.n.02 - table.n.02) 
-    #             (forall 
-    #                 (?basket.n.01 - basket.n.01) 
+    # test_condition = '''            (exists
+    #             (?table.n.02 - table.n.02)
+    #             (forall
+    #                 (?basket.n.01 - basket.n.01)
     #                 (ontop ?basket.n.01 ?table.n.02)
     #             )
     #         ) '''

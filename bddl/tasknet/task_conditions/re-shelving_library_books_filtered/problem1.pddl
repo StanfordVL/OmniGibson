@@ -21,7 +21,10 @@
                 (?book.n.02 - book.n.02)
                 (exists 
                     (?shelf.n.01 - shelf.n.01)
-                    (inside ?book.n.02 ?shelf.n.01)
+                    (or
+                        (inside ?book.n.02 ?shelf.n.01)
+                        (ontop ?book.n.02 ?shelf.n.01)
+                    )
                 )
             )
         )

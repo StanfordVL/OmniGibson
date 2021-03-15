@@ -24,7 +24,10 @@
                 (?shelf.n.01 - shelf.n.01)
                 (forall
                     (?plaything.n.01 - plaything.n.01)
-                    (inside ?plaything.n.01 ?shelf.n.01)
+                    (or
+                        (inside ?plaything.n.01 ?shelf.n.01)
+                        (ontop ?plaything.n.01 ?shelf.n.01)
+                    )
                 )
             )
         )

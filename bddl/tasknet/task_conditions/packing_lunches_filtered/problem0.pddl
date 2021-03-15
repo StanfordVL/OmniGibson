@@ -9,11 +9,14 @@
     	hamburger.n.01_1 hamburger.n.01_2 - hamburger.n.01
     	melon.n.01_1 - melon.n.01
     	pop.n.02_1 - pop.n.02
+        countertop.n.01_1 - countertop.n.01
     )
     
     (:init 
-        (inside bag.n.01_1 shelf.n.01_1) 
-        (inside bag.n.01_2 shelf.n.01_1) 
+        ; (inside bag.n.01_1 shelf.n.01_1)
+        ; (inside bag.n.01_2 shelf.n.01_1)
+        (ontop bag.n.01_1 countertop.n.01_1)
+        (ontop bag.n.01_2 countertop.n.01_1)
         (inside yogurt.n.01_1 electric_refrigerator.n.01_1) 
         (inside hamburger.n.01_1 shelf.n.01_1) 
         (inside hamburger.n.01_2 shelf.n.01_1) 
@@ -21,6 +24,7 @@
         (inside pop.n.02_1 electric_refrigerator.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom shelf.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen)
     )
     
     (:goal 
