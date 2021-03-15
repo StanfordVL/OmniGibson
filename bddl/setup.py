@@ -20,7 +20,7 @@ setup(
     install_requires=[
         'pytest',
         'numpy',
-        'networkx'
+        'networkx',
         'jupytext'
     ],
     package_data={},
