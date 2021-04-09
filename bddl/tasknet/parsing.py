@@ -269,7 +269,7 @@ class Action(object):
         return g
 
 
-######### AESTHETICS UTILS ##########
+######### WRITING UTILS ##########
 
 def flatten_list(li):
     for elem in li:
@@ -349,6 +349,8 @@ def add_pddl_whitespace(pddl_file="task_conditions/parsing_tests/test_app_output
             raw_pddl = f.read()
     elif string is not None:
         raw_pddl = string
+    else:
+        raise ValueError("No PDDL given")
 
     total_characters = len(raw_pddl)
 
@@ -402,11 +404,31 @@ def remove_pddl_whitespace(pddl_file='task_conditions/parsing_tests/test_app_out
     print(pddl)
     pddl = ''.join(pddl)[1:]
 
-    with open('task_conditions/parsing_tests/test_app_output_nowhitespace.pddl', 'w') as f:
-        f.write(pddl)
+    if save:
+        with open('task_conditions/parsing_tests/test_app_output_nowhitespace.pddl', 'w') as f:
+            f.write(pddl)
 
     return pddl
 
+
+def construct_full_pddl(atus_activity, task_instance, object_list, init_state, goal_state):
+    """Make full PDDL problem file from parts, release as string 
+
+    :param object_list (string): object list (assumed whitespace added with tabs)   TODO change assumptions if needed
+    :param init_state (string): initial state (assumed whitespace not added)
+    :param goal_state (string): goal state (assumed whitespace not added)
+    """
+    object_list = "    ".join(object_list.split("\t"))
+    init_state = "    \n".join(add_pddl_whitespace(pddl_file=None, string=init_state, save=False).split("\n"))
+    goal_state = "    \n".join(add_pddl_whitespace(pddl_file=None, string=goal_state, save=False).split("\n"))
+    pddl = f"""(define\n    
+                   (problem {atus_activity}_{task_instance})\n    
+                   (:domain igibson)\n
+                {init_state}\n
+                {goal_state}\n
+               )"""
+    return pddl
+    
 
 if __name__ == '__main__':
     if sys.argv[1] == 'add':
