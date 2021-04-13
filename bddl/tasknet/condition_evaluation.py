@@ -37,8 +37,6 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
 #################### RECURSIVE PREDICATES ####################
 
 # -JUNCTIONS
-
-
 class Conjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
         super().__init__(scope, task, body, object_map)
@@ -93,7 +91,6 @@ class Disjunction(Sentence):
 
 
 # QUANTIFIERS
-
 class Universal(Sentence):
     def __init__(self, scope, task, body, object_map):
         super().__init__(scope, task, body, object_map)

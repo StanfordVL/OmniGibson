@@ -32,9 +32,16 @@ class BinaryAtomicPredicate(AtomicPredicate):
         self.scope = scope
         print("SCOPE:", scope)
         if isinstance(self.scope[self.input1], str):
-            self.input1 = self.scope[self.input1]
+            try:
+                self.input1 = self.scope[self.input1]
+            except KeyError:
+                # TODO check whether the missing key is a category or not
+                raise UncontrolledCategoryError
         if isinstance(self.scope[self.input2], str):
-            self.input2 = self.scope[self.input2]
+            try:
+                self.input2 = self.scope[self.input2]
+            except KeyError:
+                raise UncontrolledCategoryError
         self.get_ground_options()
 
     @abstractmethod
@@ -73,7 +80,10 @@ class UnaryAtomicPredicate(AtomicPredicate):
         self.input = body[0].strip('?')
         self.scope = scope
         if isinstance(self.scope[self.input], str):
-            self.input = self.scope[self.input]
+            try:
+                self.input = self.scope[self.input]
+            except KeyError:
+                raise UncontrolledCategoryError
 
         self.get_ground_options()
 
@@ -102,3 +112,11 @@ class UnaryAtomicPredicate(AtomicPredicate):
     def get_ground_options(self):
         self.flattened_condition_options = [
             [[self.STATE_NAME, self.input]]]
+
+
+class UncontrolledCategoryError(Exception):
+    """Error class for hanging categories (category strings that are not 
+        in scope)"""
+    def __init__(self, obj_term):
+        super().__init__()
+        self.obj_term = obj_term

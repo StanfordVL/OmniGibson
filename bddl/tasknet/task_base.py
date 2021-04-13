@@ -40,7 +40,6 @@ class TaskNetTask(object):
                 self.atus_activity, self.task_instance)
             problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
                 self.atus_activity, self.task_instance, domain_name)
-        print('OBJECTS:', self.objects)
         self.object_scope = create_scope(self.objects)
         self.obj_inst_to_obj_cat = {
             obj_inst: obj_cat
@@ -125,6 +124,7 @@ class TaskNetTask(object):
         if bool(self.parsed_goal_conditions[0]):
             self.goal_conditions = compile_state(
                 self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
+
 
     def gen_ground_goal_conditions(self):
         self.ground_goal_state_options = get_ground_state_options(
