@@ -25,7 +25,9 @@ class TaskNetTask(object):
         self.scene_path = scene_path
         if predefined_problem is not None:
             self.task_instance = "predefined"
-            domain_name, requirements, types, actions, predicates = parse_domain(get_backend())
+            import pprint
+            pprint.pprint(predefined_problem)
+            domain_name, requirements, types, actions, predicates = parse_domain("igibson")     # parse_domain(get_backend())
             problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
                 self.atus_activity, 
                 self.task_instance, 
@@ -38,6 +40,7 @@ class TaskNetTask(object):
                 self.atus_activity, self.task_instance)
             problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
                 self.atus_activity, self.task_instance, domain_name)
+        print('OBJECTS:', self.objects)
         self.object_scope = create_scope(self.objects)
         self.obj_inst_to_obj_cat = {
             obj_inst: obj_cat

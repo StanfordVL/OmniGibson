@@ -152,7 +152,7 @@ def parse_action(group):
 
 def parse_problem(atus_activity, task_instance, domain_name, predefined_problem=None):
     if predefined_problem is not None: 
-        tokens = scan_tokens(predefined_problem)
+        tokens = scan_tokens(string=predefined_problem)
     else:
         problem_filename = get_definition_filename(atus_activity, task_instance)
         tokens = scan_tokens(filename=problem_filename)
@@ -193,6 +193,13 @@ def parse_problem(atus_activity, task_instance, domain_name, predefined_problem=
                 package_predicates(group[1], goal_state, '', 'goals')
             else:
                 print('%s is not recognized in problem' % t)
+        import pprint
+        print("OBJECTS FINAL:")
+        pprint.pprint(objects)
+        print("INIT FINAL:")
+        pprint.pprint(initial_state)
+        print("GOAL FINAL:")
+        pprint.pprint(goal_state)
         return problem_name, objects, initial_state, goal_state
     else:
         raise Exception(f"Problem {atus_activity} {task_instance} does not match problem pattern")
@@ -433,6 +440,7 @@ def construct_full_pddl(atus_activity, task_instance, object_list, init_state, g
     pddl = f"""(define\n    
                    (problem {atus_activity}_{task_instance})\n    
                    (:domain igibson)\n
+                {object_list}\n
                 {init_state}\n
                 {goal_state}\n
                )"""
