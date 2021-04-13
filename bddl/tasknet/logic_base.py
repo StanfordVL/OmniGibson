@@ -119,6 +119,4 @@ class UnaryAtomicPredicate(AtomicPredicate):
 class UncontrolledCategoryError(Exception):
     """Error class for hanging categories (category strings that are not 
         in scope)"""
-    def __init__(self, obj_term):
-        super().__init__()
-        self.obj_term = obj_term
+    pass
