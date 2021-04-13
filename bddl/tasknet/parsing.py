@@ -8,13 +8,19 @@ import sys
 import pprint
 
 from tasknet.config import SUPPORTED_PDDL_REQUIREMENTS as supported_requirements
-from tasknet.config import get_definition_filename, READABLE_PREDICATE_NAMES
+from tasknet.config import get_domain_filename, get_definition_filename, READABLE_PREDICATE_NAMES
 
 
-def scan_tokens(filename):
-    with open(filename, 'r') as f:
-        # Remove single line comments
-        str = re.sub(r';.*$', '', f.read(), flags=re.MULTILINE).lower()
+def scan_tokens(filename=None, string=None):
+    if filename is not None:
+        with open(filename, 'r') as f:
+            # Remove single line comments
+            raw_str = f.read()
+    elif string is not None:
+        raw_str = string
+    else:
+        raise ValueError("No input PDDL provided.")
+    str = re.sub(r';.*$', '', raw_str, flags=re.MULTILINE).lower()
     # Tokenize
     stack = []
     tokens = []
@@ -38,10 +44,11 @@ def scan_tokens(filename):
     return tokens[0]
 
 
-def parse_domain(atus_activity, instance):
-    domain_filename = get_definition_filename(
-        atus_activity, instance, domain=True)
-    tokens = scan_tokens(domain_filename)
+def parse_domain(domain):
+    # domain_filename = get_definition_filename(
+    #     atus_activity, instance, domain=True)
+    domain_filename = get_domain_filename(domain)
+    tokens = scan_tokens(filename=domain_filename)
     if type(tokens) is list and tokens.pop(0) == 'define':
         domain_name = 'unknown'
         requirements = []
@@ -143,9 +150,12 @@ def parse_action(group):
     return Action(name, parameters, positive_preconditions, negative_preconditions, add_effects, del_effects)
 
 
-def parse_problem(atus_activity, task_instance, domain_name):
-    problem_filename = get_definition_filename(atus_activity, task_instance)
-    tokens = scan_tokens(problem_filename)
+def parse_problem(atus_activity, task_instance, domain_name, predefined_problem=None):
+    if predefined_problem is not None: 
+        tokens = scan_tokens(predefined_problem)
+    else:
+        problem_filename = get_definition_filename(atus_activity, task_instance)
+        tokens = scan_tokens(filename=problem_filename)
     if isinstance(tokens, list) and tokens.pop(0) == 'define':
         problem_name = 'unknown'
         objects = {}
@@ -185,8 +195,7 @@ def parse_problem(atus_activity, task_instance, domain_name):
                 print('%s is not recognized in problem' % t)
         return problem_name, objects, initial_state, goal_state
     else:
-        raise Exception('File %s does not match problem pattern' %
-                        problem_filename)
+        raise Exception(f"Problem {atus_activity} {task_instance} does not match problem pattern")
 
 
 def split_predicates(group, pos, neg, name, part):

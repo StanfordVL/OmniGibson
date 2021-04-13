@@ -2,6 +2,7 @@ import random
 import os
 import sys
 
+from tasknet import get_backend
 from tasknet.config import SCENE_PATH
 from tasknet.sampler import Sampler
 from tasknet.parsing import parse_domain, parse_problem, gen_natural_language_conditions
@@ -18,15 +19,25 @@ class TaskNetTask(object):
     #   3. Update initialize() to work with sampler code
     #   4. Various other adaptations to be seen
 
-    def __init__(self, atus_activity, task_instance=0, scene_path=SCENE_PATH):
+    def __init__(self, atus_activity, task_instance=0, scene_path=SCENE_PATH, predefined_problem=None):
+        # attempting to add predefined pddl support; TODO delete
         self.atus_activity = atus_activity
         self.scene_path = scene_path
-        # TODO create option to randomly generate
-        self.task_instance = task_instance
-        domain_name, requirements, types, actions, predicates = parse_domain(
-            self.atus_activity, self.task_instance)
-        problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
-            self.atus_activity, self.task_instance, domain_name)
+        if predefined_problem is not None:
+            self.task_instance = "predefined"
+            domain_name, requirements, types, actions, predicates = parse_domain(get_backend())
+            problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
+                self.atus_activity, 
+                self.task_instance, 
+                domain_name,
+                predefined_problem = predefined_problem)
+        else:
+            self.task_instance = task_instance
+            # TODO create option to randomly generate
+            domain_name, requirements, types, actions, predicates = parse_domain(
+                self.atus_activity, self.task_instance)
+            problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
+                self.atus_activity, self.task_instance, domain_name)
         self.object_scope = create_scope(self.objects)
         self.obj_inst_to_obj_cat = {
             obj_inst: obj_cat
