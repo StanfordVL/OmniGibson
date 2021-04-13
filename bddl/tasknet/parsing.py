@@ -445,7 +445,7 @@ def construct_full_pddl(atus_activity, task_instance, object_list, init_state, g
                 {goal_state}\n
                )"""
     return pddl
-    
+
 
 if __name__ == '__main__':
     if sys.argv[1] == 'add':

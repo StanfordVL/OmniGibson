@@ -31,17 +31,19 @@ class BinaryAtomicPredicate(AtomicPredicate):
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
         print("SCOPE:", scope)
-        if isinstance(self.scope[self.input1], str):
-            try:
+        try:
+            if isinstance(self.scope[self.input1], str):
                 self.input1 = self.scope[self.input1]
-            except KeyError:
-                # TODO check whether the missing key is a category or not
-                raise UncontrolledCategoryError
-        if isinstance(self.scope[self.input2], str):
-            try:
+        except KeyError:
+            raise UncontrolledCategoryError
+        try:
+            if isinstance(self.scope[self.input2], str):
                 self.input2 = self.scope[self.input2]
-            except KeyError:
-                raise UncontrolledCategoryError
+        except KeyError:
+            raise UncontrolledCategoryError
+
+
+
         self.get_ground_options()
 
     @abstractmethod
@@ -79,11 +81,11 @@ class UnaryAtomicPredicate(AtomicPredicate):
         assert len(body) == 1, 'Param list should have 1 arg'
         self.input = body[0].strip('?')
         self.scope = scope
-        if isinstance(self.scope[self.input], str):
-            try:
+        try:
+            if isinstance(self.scope[self.input], str):
                 self.input = self.scope[self.input]
-            except KeyError:
-                raise UncontrolledCategoryError
+        except KeyError:
+            raise UncontrolledCategoryError
 
         self.get_ground_options()
 
