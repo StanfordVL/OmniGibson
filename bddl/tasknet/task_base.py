@@ -12,6 +12,7 @@ import numpy as np
 from IPython import embed
 from tasknet.object_taxonomy import ObjectTaxonomy
 
+
 class TaskNetTask(object):
     # TODO
     #   1. Update with new object formats
@@ -19,34 +20,33 @@ class TaskNetTask(object):
     #   3. Update initialize() to work with sampler code
     #   4. Various other adaptations to be seen
 
-    def __init__(self, atus_activity, task_instance=0, scene_path=SCENE_PATH, predefined_problem=None):
+    def __init__(self, atus_activity=None, task_instance=None, scene_path=SCENE_PATH, predefined_problem=None):
         # attempting to add predefined pddl support; TODO delete
-        self.atus_activity = atus_activity
         self.scene_path = scene_path
+        self.object_taxonomy = ObjectTaxonomy()
+        self.update_problem(atus_activity, task_instance,
+                            predefined_problem=predefined_problem)
+
+    def update_problem(self, atus_activity, task_instance, predefined_problem=None):
         if predefined_problem is not None:
+            self.atus_activity = "predefined"
             self.task_instance = "predefined"
-            import pprint
-            pprint.pprint(predefined_problem)
-            domain_name, requirements, types, actions, predicates = parse_domain("igibson")     # parse_domain(get_backend())
-            problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
-                self.atus_activity, 
-                self.task_instance, 
-                domain_name,
-                predefined_problem = predefined_problem)
         else:
+            self.atus_activity = atus_activity
             self.task_instance = task_instance
-            # TODO create option to randomly generate
-            domain_name, requirements, types, actions, predicates = parse_domain(
-                self.atus_activity, self.task_instance)
-            problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
-                self.atus_activity, self.task_instance, domain_name)
+        domain_name, requirements, types, actions, predicates = parse_domain(
+            "igibson")
+        problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
+            self.atus_activity,
+            self.task_instance,
+            domain_name,
+            predefined_problem=predefined_problem)
         self.object_scope = create_scope(self.objects)
         self.obj_inst_to_obj_cat = {
             obj_inst: obj_cat
             for obj_cat in self.objects
             for obj_inst in self.objects[obj_cat]
         }
-        self.object_taxonomy = ObjectTaxonomy()
 
         # Demo attributes
         self.instruction_order = np.arange(len(self.parsed_goal_conditions))
@@ -58,7 +58,7 @@ class TaskNetTask(object):
         self.natural_language_goal_conditions = gen_natural_language_conditions(
             self.parsed_goal_conditions)
 
-    def initialize(self, scene_class, scene_id=None, scene_kwargs=None, online_sampling=True):
+    def initialize(self, scene_class, scene_id=None, scene_kwargs=None, online_sampling=True, offline_sampling=False):
         '''
         Check self.scene to see if it works for this Task. If not, resample.
         Populate self.scene with necessary objects.
@@ -70,6 +70,7 @@ class TaskNetTask(object):
         random.shuffle(scenes)
         accept_scene = True
         self.online_sampling = online_sampling
+        self.offline_sampling = offline_sampling
 
         # Generate initial and goal conditions
         self.gen_initial_conditions()
@@ -125,7 +126,6 @@ class TaskNetTask(object):
             self.goal_conditions = compile_state(
                 self.parsed_goal_conditions, self, scope=self.object_scope, object_map=self.objects)
 
-
     def gen_ground_goal_conditions(self):
         self.ground_goal_state_options = get_ground_state_options(
             self.goal_conditions,
@@ -138,7 +138,8 @@ class TaskNetTask(object):
         satisfied = self.currently_viewed_instruction in self.current_goal_status['satisfied']
         natural_language_condition = self.natural_language_goal_conditions[
             self.currently_viewed_instruction]
-        objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects()
+        objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects(
+        )
         # text_color = "green" if satisfied else "red"
         text_color = [83. / 255., 176. / 255., 72. / 255.] if satisfied \
             else [255. / 255., 51. / 255., 51. / 255.]
