@@ -48,6 +48,11 @@ class TaskNetTask(object):
             for obj_inst in self.objects[obj_cat]
         }
 
+        # Generate initial and goal conditions
+        self.gen_initial_conditions()
+        self.gen_goal_conditions()
+        self.gen_ground_goal_conditions()
+
         # Demo attributes
         self.instruction_order = np.arange(len(self.parsed_goal_conditions))
         np.random.shuffle(self.instruction_order)
@@ -71,11 +76,6 @@ class TaskNetTask(object):
         accept_scene = True
         self.online_sampling = online_sampling
         self.offline_sampling = offline_sampling
-
-        # Generate initial and goal conditions
-        self.gen_initial_conditions()
-        self.gen_goal_conditions()
-        self.gen_ground_goal_conditions()
 
         for scene in scenes:
             if scene_id is not None and scene != scene_id:
