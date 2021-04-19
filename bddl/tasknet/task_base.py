@@ -90,7 +90,7 @@ class TaskNetTask(object):
             # Reject scenes with missing non-sampleable objects
             # Populate scope with simulator objects
             if self.online_sampling:
-                accept_scene = self.check_scene()
+                accept_scene, feedback = self.check_scene()
                 if not accept_scene:
                     continue
 
@@ -99,8 +99,7 @@ class TaskNetTask(object):
 
             if self.online_sampling:
                 # Sample objects to satisfy initial conditions
-                accept_scene = self.sample()
-
+                accept_scene, feedback = self.sample()
                 if not accept_scene:
                     continue
 

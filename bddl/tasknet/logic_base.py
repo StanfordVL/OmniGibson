@@ -42,8 +42,6 @@ class BinaryAtomicPredicate(AtomicPredicate):
         except KeyError:
             raise UncontrolledCategoryError
 
-
-
         self.get_ground_options()
 
     @abstractmethod
