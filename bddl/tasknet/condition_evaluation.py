@@ -1,10 +1,11 @@
 import copy
 import itertools
 import numpy as np
-import pprint
 
 import tasknet
 from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
+from tasknet.utils import truncated_product, truncated_permutation
+from tasknet.config import GROUND_GOALS_MAX_OPTIONS, GROUND_GOALS_MAX_PERMUTATIONS
 
 # TODO: VERY IMPORTANT
 #   1. Change logic for checking categories once new iG object is being used
@@ -33,6 +34,7 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
 
     def _sample(self):
         pass
+
 
 #################### RECURSIVE PREDICATES ####################
 
@@ -114,8 +116,10 @@ class Universal(Sentence):
         return all(self.child_values)
 
     def get_ground_options(self):
-        options = list(itertools.product(
-            *[child.flattened_condition_options for child in self.children]
+        # Accept just a few possible options 
+        options = list(truncated_product(
+            *[child.flattened_condition_options for child in self.children],
+            max_options=GROUND_GOALS_MAX_OPTIONS
         ))
         self.flattened_condition_options = []
         for option in options:
@@ -227,11 +231,13 @@ class ForPairs(Sentence):
         self.flattened_condition_options = []
         M, N = len(self.children), len(self.children[0])
         L, G = min(M, N), max(M, N)
-        all_choices = itertools.permutations(range(G), L)
+        # Accept just a few possible mappings 
+        all_choices = truncated_permutation(range(G), r=L, max_permutations=GROUND_GOALS_MAX_OPTIONS)
         for choice in all_choices:
             all_child_options = [self.children[l][choice[l]].flattened_condition_options
                                  for l in range(L)]
-            choice_options = itertools.product(*all_child_options)
+            # Accept just a few possible options 
+            choice_options = truncated_product(*all_child_options, max_options=GROUND_GOALS_MAX_PERMUTATIONS)
             unpacked_choice_options = []
             for choice_option in choice_options:
                 unpacked_choice_options.append(
