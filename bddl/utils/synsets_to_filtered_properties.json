@@ -7027,5 +7027,30 @@
     "cookable",
     "perishable",
     "sliceable"
+  ],
+  "floor.n.01": [
+    "dustyable",
+    "scrubbable"
+  ],
+  "breakfast_table.n.01": [
+    "burnable",
+    "dustyable",
+    "scrubbable"
+  ],
+  "pepper_mill.n.01": [
+    "breakable",
+    "burnable",
+    "dustyable", 
+    "scrubbable"
+  ],
+  "ice_cube.n.01": [
+    "breakable",
+    "coldSource"
+  ],
+  "tart.n.02": [
+    "burnable",
+    "cookable",
+    "freezable",
+    "sliceable"
   ]
 }
