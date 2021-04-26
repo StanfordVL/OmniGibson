@@ -1,8 +1,10 @@
 ###### COMBINATORICS UTILS ######
 
 import itertools
+from tasknet.config import GROUND_GOALS_MAX_OPTIONS, GROUND_GOALS_MAX_PERMUTATIONS
 
-def truncated_product(*sequences, max_options=10):
+
+def truncated_product(*sequences, max_options=GROUND_GOALS_MAX_OPTIONS):
     """Breadth-first search cartesian product 
        Source: https://stackoverflow.com/questions/42288203/generate-itertools-product-in-different-order
 
@@ -12,10 +14,10 @@ def truncated_product(*sequences, max_options=10):
     counter = 0
 
     def partitions(n, k):
-        for c in itertools.combinations(range(n+k-1), k-1):
-            yield (b-a-1 for a, b in zip((-1,)+c, c+(n+k-1,)))
+        for c in itertools.combinations(range(n + k - 1), k - 1):
+            yield (b - a - 1 for a, b in zip((-1,) + c, c + (n + k -1,)))
 
-    max_position = [len(i)-1 for i in sequences]
+    max_position = [len(i) - 1 for i in sequences]
     for i in range(sum(max_position)):
         if counter >= max_options:
             break 
@@ -34,8 +36,8 @@ def truncated_product(*sequences, max_options=10):
         yield tuple(map(lambda seq, pos: seq[pos], sequences, max_position))
 
 
-def truncated_permutation(iterable, r=None, max_permutations=10):
-    """https://docs.python.org/3/library/itertools.html#itertools.permutations
+def truncated_permutations(iterable, r=None, max_permutations=GROUND_GOALS_MAX_PERMUTATIONS):
+    """Adapted from https://docs.python.org/3/library/itertools.html#itertools.permutations
     """
     pool = tuple(iterable)
     n = len(pool)
@@ -72,5 +74,5 @@ if __name__ == "__main__":
     import pprint
     sample_small = [[[['ap1', 'tab1']], [['ap1', 'tab2']]], [[['ap2', 'tab1']], [['ap2', 'tab2']]], [[['ap3', 'tab1']], [['ap3', 'tab2']]]]
     # pprint.pprint(list(truncated_product(*sample_small)))
-    # print(list(truncated_permutation(range(10), 3)))
-    list(truncated_permutation(range(10), 3))
+    # print(list(truncated_permutations(range(10), 3)))
+    list(truncated_permutations(range(10), 3))
