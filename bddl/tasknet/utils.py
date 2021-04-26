@@ -21,7 +21,6 @@ def truncated_product(*sequences, max_options=10):
             break 
         for positions in partitions(i, len(sequences)):
             try:
-                # print("next try:", tuple(map(lambda seq, pos: seq[pos], sequences, positions)))
                 if counter < max_options:
                     counter += 1
                     yield tuple(map(lambda seq, pos: seq[pos], sequences, positions))
