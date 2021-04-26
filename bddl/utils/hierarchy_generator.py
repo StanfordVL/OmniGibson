@@ -121,20 +121,19 @@ def add_abilities(node):
     # At leaf
     if "children" not in node:
         name = node["name"]
-        word = name[:name.find('.')]
-        if word in ability_map:
-            if isinstance(ability_map[word], dict):
-                abilities = ability_map[word]
+        if name in ability_map:
+            if isinstance(ability_map[name], dict):
+                abilities = ability_map[name]
             else:
                 # Support legacy format ability annotations where params are not
                 # supported and abilities are in list format.
-                abilities = {ability: dict() for ability in ability_map[word]}
+                abilities = {ability: dict() for ability in ability_map[name]}
 
             node["abilities"] = OrderedDict(sorted(abilities.items(), key=lambda pair: pair[0]))
             return abilities
         else:
             node["abilities"] = OrderedDict()
-            print(f"{word} not found in ability list!")
+            print(f"{name} not found in ability list!")
             return None
     else:
         init = False
