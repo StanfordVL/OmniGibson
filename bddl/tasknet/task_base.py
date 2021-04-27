@@ -62,7 +62,7 @@ class TaskNetTask(object):
         self.natural_language_goal_conditions = gen_natural_language_conditions(
             self.parsed_goal_conditions)
 
-    def initialize(self, scene_class, scene_id=None, scene_kwargs=None, online_sampling=True, offline_sampling=False):
+    def initialize(self, scene_class, scene_id=None, scene_kwargs=None, online_sampling=True):
         '''
         Check self.scene to see if it works for this Task. If not, resample.
         Populate self.scene with necessary objects.
@@ -74,7 +74,6 @@ class TaskNetTask(object):
         random.shuffle(scenes)
         accept_scene = True
         self.online_sampling = online_sampling
-        self.offline_sampling = offline_sampling
 
         for scene in scenes:
             if scene_id is not None and scene != scene_id:
