@@ -327,7 +327,7 @@ def gen_natural_language_condition(parsed_condition, indent=0):
                 desc = READABLE_PREDICATE_NAMES[term[0]
                                                 ] if term[0] in READABLE_PREDICATE_NAMES else term[0]
                 yield f"{indent_string}{article1}{nlterm(term[1])} is {desc}"
-            else:
+            elif len(term) == 3:
                 article1 = "the " if "_" not in term[1] else ""
                 article2 = "the " if "_" not in term[2] else ""
                 desc = READABLE_PREDICATE_NAMES[term[0]
