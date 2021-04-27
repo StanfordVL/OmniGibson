@@ -30,7 +30,6 @@ class BinaryAtomicPredicate(AtomicPredicate):
         assert len(body) == 2, 'Param list should have 2 args'
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
-        print("SCOPE:", scope)
         try:
             if isinstance(self.scope[self.input1], str):
                 self.input1 = self.scope[self.input1]

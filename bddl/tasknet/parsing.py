@@ -151,10 +151,11 @@ def parse_action(group):
 
 
 def parse_problem(atus_activity, task_instance, domain_name, predefined_problem=None):
-    if predefined_problem is not None: 
+    if predefined_problem is not None:
         tokens = scan_tokens(string=predefined_problem)
     else:
-        problem_filename = get_definition_filename(atus_activity, task_instance)
+        problem_filename = get_definition_filename(
+            atus_activity, task_instance)
         tokens = scan_tokens(filename=problem_filename)
     if isinstance(tokens, list) and tokens.pop(0) == 'define':
         problem_name = 'unknown'
@@ -193,16 +194,17 @@ def parse_problem(atus_activity, task_instance, domain_name, predefined_problem=
                 package_predicates(group[1], goal_state, '', 'goals')
             else:
                 print('%s is not recognized in problem' % t)
-        import pprint
-        print("OBJECTS FINAL:")
-        pprint.pprint(objects)
-        print("INIT FINAL:")
-        pprint.pprint(initial_state)
-        print("GOAL FINAL:")
-        pprint.pprint(goal_state)
+        # import pprint
+        # print("OBJECTS FINAL:")
+        # pprint.pprint(objects)
+        # print("INIT FINAL:")
+        # pprint.pprint(initial_state)
+        # print("GOAL FINAL:")
+        # pprint.pprint(goal_state)
         return problem_name, objects, initial_state, goal_state
     else:
-        raise Exception(f"Problem {atus_activity} {task_instance} does not match problem pattern")
+        raise Exception(
+            f"Problem {atus_activity} {task_instance} does not match problem pattern")
 
 
 def split_predicates(group, pos, neg, name, part):
@@ -435,8 +437,10 @@ def construct_full_pddl(atus_activity, task_instance, object_list, init_state, g
     :param goal_state (string): goal state (assumed whitespace not added)
     """
     object_list = "    ".join(object_list.split("\t"))
-    init_state = "    \n".join(add_pddl_whitespace(pddl_file=None, string=init_state, save=False).split("\n"))
-    goal_state = "    \n".join(add_pddl_whitespace(pddl_file=None, string=goal_state, save=False).split("\n"))
+    init_state = "    \n".join(add_pddl_whitespace(
+        pddl_file=None, string=init_state, save=False).split("\n"))
+    goal_state = "    \n".join(add_pddl_whitespace(
+        pddl_file=None, string=goal_state, save=False).split("\n"))
     pddl = f"""(define\n    
                    (problem {atus_activity}_{task_instance})\n    
                    (:domain igibson)\n

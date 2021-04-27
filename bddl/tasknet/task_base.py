@@ -21,7 +21,6 @@ class TaskNetTask(object):
     #   4. Various other adaptations to be seen
 
     def __init__(self, atus_activity=None, task_instance=None, scene_path=SCENE_PATH, predefined_problem=None):
-        # attempting to add predefined pddl support; TODO delete
         self.scene_path = scene_path
         self.object_taxonomy = ObjectTaxonomy()
         self.update_problem(atus_activity, task_instance,
@@ -115,7 +114,8 @@ class TaskNetTask(object):
     def gen_initial_conditions(self):
         if bool(self.parsed_initial_conditions[0]):
             self.initial_conditions = compile_state(
-                [cond for cond in self.parsed_initial_conditions if cond[0] not in ["inroom", "agentstart"]],
+                [cond for cond in self.parsed_initial_conditions if cond[0]
+                    not in ["inroom", "agentstart"]],
                 self,
                 scope=self.object_scope,
                 object_map=self.objects)
