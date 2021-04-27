@@ -28,5 +28,10 @@ def get_definition_filename(atus_activity, instance, domain=False):
         return os.path.join(TASK_CONFIGS_PATH, atus_activity, f"problem{instance}.pddl")
 
 
+def get_domain_filename(domain_name):
+    return os.path.join(TASK_CONFIGS_PATH, f"domain_{domain_name}.pddl")
 
 
+# MISC 
+GROUND_GOALS_MAX_OPTIONS = 20
+GROUND_GOALS_MAX_PERMUTATIONS = 10

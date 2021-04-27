@@ -30,10 +30,17 @@ class BinaryAtomicPredicate(AtomicPredicate):
         assert len(body) == 2, 'Param list should have 2 args'
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
-        if isinstance(self.scope[self.input1], str):
-            self.input1 = self.scope[self.input1]
-        if isinstance(self.scope[self.input2], str):
-            self.input2 = self.scope[self.input2]
+        try:
+            if isinstance(self.scope[self.input1], str):
+                self.input1 = self.scope[self.input1]
+        except KeyError:
+            raise UncontrolledCategoryError
+        try:
+            if isinstance(self.scope[self.input2], str):
+                self.input2 = self.scope[self.input2]
+        except KeyError:
+            raise UncontrolledCategoryError
+
         self.get_ground_options()
 
     @abstractmethod
@@ -71,8 +78,11 @@ class UnaryAtomicPredicate(AtomicPredicate):
         assert len(body) == 1, 'Param list should have 1 arg'
         self.input = body[0].strip('?')
         self.scope = scope
-        if isinstance(self.scope[self.input], str):
-            self.input = self.scope[self.input]
+        try:
+            if isinstance(self.scope[self.input], str):
+                self.input = self.scope[self.input]
+        except KeyError:
+            raise UncontrolledCategoryError
 
         self.get_ground_options()
 
@@ -101,3 +111,9 @@ class UnaryAtomicPredicate(AtomicPredicate):
     def get_ground_options(self):
         self.flattened_condition_options = [
             [[self.STATE_NAME, self.input]]]
+
+
+class UncontrolledCategoryError(Exception):
+    """Error class for hanging categories (category strings that are not 
+        in scope)"""
+    pass

@@ -1,10 +1,10 @@
 import copy
 import itertools
 import numpy as np
-import pprint
 
 import tasknet
 from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
+from tasknet.utils import truncated_product, truncated_permutations
 
 # TODO: VERY IMPORTANT
 #   1. Change logic for checking categories once new iG object is being used
@@ -34,11 +34,10 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
     def _sample(self):
         pass
 
+
 #################### RECURSIVE PREDICATES ####################
 
 # -JUNCTIONS
-
-
 class Conjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
         super().__init__(scope, task, body, object_map)
@@ -93,7 +92,6 @@ class Disjunction(Sentence):
 
 
 # QUANTIFIERS
-
 class Universal(Sentence):
     def __init__(self, scope, task, body, object_map):
         super().__init__(scope, task, body, object_map)
@@ -117,7 +115,8 @@ class Universal(Sentence):
         return all(self.child_values)
 
     def get_ground_options(self):
-        options = list(itertools.product(
+        # Accept just a few possible options 
+        options = list(truncated_product(
             *[child.flattened_condition_options for child in self.children]
         ))
         self.flattened_condition_options = []
@@ -184,12 +183,14 @@ class NQuantifier(Sentence):
         return sum(self.child_values) == self.N
 
     def get_ground_options(self):
-        options = list(itertools.product(
+        # Accept just a few possible options 
+        options = list(truncated_product(
             *[child.flattened_condition_options for child in self.children]
         ))
         self.flattened_condition_options = []
         for option in options:
             # for combination in [combo for num_el in range(self.N - 1, len(option)) for combo in itertools.combinations(option, num_el + 1)]:
+            # Use a minimal solution (exactly N fulfilled, rather than >=N fulfilled)
             for combination in itertools.combinations(option, self.N):
                 self.flattened_condition_options.append(
                     list(itertools.chain(*combination))
@@ -230,11 +231,13 @@ class ForPairs(Sentence):
         self.flattened_condition_options = []
         M, N = len(self.children), len(self.children[0])
         L, G = min(M, N), max(M, N)
-        all_choices = itertools.permutations(range(G), L)
+        # Accept just a few possible mappings 
+        all_choices = truncated_permutations(range(G), r=L)
         for choice in all_choices:
             all_child_options = [self.children[l][choice[l]].flattened_condition_options
                                  for l in range(L)]
-            choice_options = itertools.product(*all_child_options)
+            # Accept just a few possible options 
+            choice_options = truncated_product(*all_child_options)
             unpacked_choice_options = []
             for choice_option in choice_options:
                 unpacked_choice_options.append(
@@ -276,14 +279,14 @@ class ForNPairs(Sentence):
         P, Q = len(self.children), len(self.children[0])
         L = min(P, Q)
         assert self.N <= L, "ForNPairs asks for more pairs than instances available"
-        all_P_choices = itertools.permutations(range(P), self.N)
-        all_Q_choices = itertools.permutations(range(Q), self.N)
+        all_P_choices = truncated_permutations(range(P), r=self.N)
+        all_Q_choices = truncated_permutations(range(Q), r=self.N)
         for pchoice in all_P_choices:
             for qchoice in all_Q_choices:
                 all_child_options = [self.children[pchoice[n]][qchoice[n]].flattened_condition_options
                                      for n in range(self.N)
                                      ]
-                choice_options = itertools.product(*all_child_options)
+                choice_options = truncated_product(*all_child_options)
                 unpacked_choice_options = []
                 for choice_option in choice_options:
                     unpacked_choice_options.append(

@@ -8,13 +8,19 @@ import sys
 import pprint
 
 from tasknet.config import SUPPORTED_PDDL_REQUIREMENTS as supported_requirements
-from tasknet.config import get_definition_filename, READABLE_PREDICATE_NAMES
+from tasknet.config import get_domain_filename, get_definition_filename, READABLE_PREDICATE_NAMES
 
 
-def scan_tokens(filename):
-    with open(filename, 'r') as f:
-        # Remove single line comments
-        str = re.sub(r';.*$', '', f.read(), flags=re.MULTILINE).lower()
+def scan_tokens(filename=None, string=None):
+    if filename is not None:
+        with open(filename, 'r') as f:
+            # Remove single line comments
+            raw_str = f.read()
+    elif string is not None:
+        raw_str = string
+    else:
+        raise ValueError("No input PDDL provided.")
+    str = re.sub(r';.*$', '', raw_str, flags=re.MULTILINE).lower()
     # Tokenize
     stack = []
     tokens = []
@@ -38,10 +44,9 @@ def scan_tokens(filename):
     return tokens[0]
 
 
-def parse_domain(atus_activity, instance):
-    domain_filename = get_definition_filename(
-        atus_activity, instance, domain=True)
-    tokens = scan_tokens(domain_filename)
+def parse_domain(domain):
+    domain_filename = get_domain_filename(domain)
+    tokens = scan_tokens(filename=domain_filename)
     if type(tokens) is list and tokens.pop(0) == 'define':
         domain_name = 'unknown'
         requirements = []
@@ -143,9 +148,13 @@ def parse_action(group):
     return Action(name, parameters, positive_preconditions, negative_preconditions, add_effects, del_effects)
 
 
-def parse_problem(atus_activity, task_instance, domain_name):
-    problem_filename = get_definition_filename(atus_activity, task_instance)
-    tokens = scan_tokens(problem_filename)
+def parse_problem(atus_activity, task_instance, domain_name, predefined_problem=None):
+    if predefined_problem is not None:
+        tokens = scan_tokens(string=predefined_problem)
+    else:
+        problem_filename = get_definition_filename(
+            atus_activity, task_instance)
+        tokens = scan_tokens(filename=problem_filename)
     if isinstance(tokens, list) and tokens.pop(0) == 'define':
         problem_name = 'unknown'
         objects = {}
@@ -185,8 +194,8 @@ def parse_problem(atus_activity, task_instance, domain_name):
                 print('%s is not recognized in problem' % t)
         return problem_name, objects, initial_state, goal_state
     else:
-        raise Exception('File %s does not match problem pattern' %
-                        problem_filename)
+        raise Exception(
+            f"Problem {atus_activity} {task_instance} does not match problem pattern")
 
 
 def split_predicates(group, pos, neg, name, part):
@@ -269,7 +278,7 @@ class Action(object):
         return g
 
 
-######### AESTHETICS UTILS ##########
+######### WRITING UTILS ##########
 
 def flatten_list(li):
     for elem in li:
@@ -318,7 +327,7 @@ def gen_natural_language_condition(parsed_condition, indent=0):
                 desc = READABLE_PREDICATE_NAMES[term[0]
                                                 ] if term[0] in READABLE_PREDICATE_NAMES else term[0]
                 yield f"{indent_string}{article1}{nlterm(term[1])} is {desc}"
-            else:
+            elif len(term) == 3:
                 article1 = "the " if "_" not in term[1] else ""
                 article2 = "the " if "_" not in term[2] else ""
                 desc = READABLE_PREDICATE_NAMES[term[0]
@@ -349,6 +358,8 @@ def add_pddl_whitespace(pddl_file="task_conditions/parsing_tests/test_app_output
             raw_pddl = f.read()
     elif string is not None:
         raw_pddl = string
+    else:
+        raise ValueError("No PDDL given")
 
     total_characters = len(raw_pddl)
 
@@ -402,9 +413,32 @@ def remove_pddl_whitespace(pddl_file='task_conditions/parsing_tests/test_app_out
     print(pddl)
     pddl = ''.join(pddl)[1:]
 
-    with open('task_conditions/parsing_tests/test_app_output_nowhitespace.pddl', 'w') as f:
-        f.write(pddl)
+    if save:
+        with open('task_conditions/parsing_tests/test_app_output_nowhitespace.pddl', 'w') as f:
+            f.write(pddl)
 
+    return pddl
+
+
+def construct_full_pddl(atus_activity, task_instance, object_list, init_state, goal_state):
+    """Make full PDDL problem file from parts, release as string 
+
+    :param object_list (string): object list (assumed whitespace added with tabs)   TODO change assumptions if needed
+    :param init_state (string): initial state (assumed whitespace not added)
+    :param goal_state (string): goal state (assumed whitespace not added)
+    """
+    object_list = "    ".join(object_list.split("\t"))
+    init_state = "    \n".join(add_pddl_whitespace(
+        pddl_file=None, string=init_state, save=False).split("\n"))
+    goal_state = "    \n".join(add_pddl_whitespace(
+        pddl_file=None, string=goal_state, save=False).split("\n"))
+    pddl = f"""(define\n    
+                   (problem {atus_activity}_{task_instance})\n    
+                   (:domain igibson)\n
+                {object_list}\n
+                {init_state}\n
+                {goal_state}\n
+               )"""
     return pddl
 
 
