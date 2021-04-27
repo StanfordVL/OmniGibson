@@ -115,7 +115,7 @@ class TaskNetTask(object):
         if bool(self.parsed_initial_conditions[0]):
             self.initial_conditions = compile_state(
                 [cond for cond in self.parsed_initial_conditions if cond[0]
-                    not in ["inroom", "agentstart"]],
+                    not in ["inroom"]],
                 self,
                 scope=self.object_scope,
                 object_map=self.objects)

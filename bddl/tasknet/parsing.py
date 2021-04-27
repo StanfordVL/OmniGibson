@@ -45,8 +45,6 @@ def scan_tokens(filename=None, string=None):
 
 
 def parse_domain(domain):
-    # domain_filename = get_definition_filename(
-    #     atus_activity, instance, domain=True)
     domain_filename = get_domain_filename(domain)
     tokens = scan_tokens(filename=domain_filename)
     if type(tokens) is list and tokens.pop(0) == 'define':
@@ -194,13 +192,6 @@ def parse_problem(atus_activity, task_instance, domain_name, predefined_problem=
                 package_predicates(group[1], goal_state, '', 'goals')
             else:
                 print('%s is not recognized in problem' % t)
-        # import pprint
-        # print("OBJECTS FINAL:")
-        # pprint.pprint(objects)
-        # print("INIT FINAL:")
-        # pprint.pprint(initial_state)
-        # print("GOAL FINAL:")
-        # pprint.pprint(goal_state)
         return problem_name, objects, initial_state, goal_state
     else:
         raise Exception(
