@@ -115,7 +115,7 @@ class TaskNetTask(object):
     def gen_initial_conditions(self):
         if bool(self.parsed_initial_conditions[0]):
             self.initial_conditions = compile_state(
-                [cond for cond in self.parsed_initial_conditions if cond[0] != 'inroom'],
+                [cond for cond in self.parsed_initial_conditions if cond[0] not in ["inroom", "agentstart"]],
                 self,
                 scope=self.object_scope,
                 object_map=self.objects)
@@ -134,7 +134,7 @@ class TaskNetTask(object):
         assert len(self.ground_goal_state_options) > 0
 
     def show_instruction(self):
-        satisfied = self.currently_viewed_instruction in self.current_goal_status['satisfied']
+        satisfied = self.currently_viewed_instruction in self.current_goal_status["satisfied"]
         natural_language_condition = self.natural_language_goal_conditions[
             self.currently_viewed_instruction]
         objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects(

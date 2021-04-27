@@ -27,22 +27,26 @@
   "bag.n.04": [
     "burnable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "bag.n.06": [
     "burnable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "bag.n.01": [
     "burnable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "box.n.01": [
     "breakable",
     "burnable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "case.n.19": [
@@ -163,6 +167,7 @@
   "lid.n.02": [
     "breakable",
     "dustyable",
+    "openable",
     "screwable",
     "scrubbable"
   ],
@@ -182,6 +187,7 @@
   ],
   "car.n.01": [
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "pop.n.02": [
@@ -225,10 +231,8 @@
     "scrubbable"
   ],
   "sink.n.01": [
-    "toggleable",
     "dustyable",
-    "scrubbable",
-    "waterSource"
+    "scrubbable"
   ],
   "furniture.n.01": [
     "burnable",
@@ -319,7 +323,8 @@
   "package.n.02": [
     "breakable",
     "burnable",
-    "dustyable"
+    "dustyable",
+    "openable"
   ],
   "frame.n.10": [
     "breakable",
@@ -342,6 +347,7 @@
   "wrapping.n.01": [
     "breakable",
     "burnable",
+    "openable",
     "sliceable",
     "soakable"
   ],
@@ -495,6 +501,7 @@
     "breakable",
     "burnable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "shirt.n.01": [
@@ -511,20 +518,13 @@
   "block.n.01": [
     "scrubbable"
   ],
-  "oven.n.01": {
-    "dustyable": {},
-    "heatSource": {
-      "temperature": 250,
-      "heating_rate": 0.01,
-      "distance_threshold": 0.4,
-      "requires_toggled_on": true,
-      "requires_closed": true,
-      "requires_inside": true
-    },
-    "openable": {},
-    "scrubbable": {},
-    "toggleable": {}
-  },
+  "oven.n.01": [
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
   "teaspoon.n.02": [
     "dustyable",
     "scrubbable"
@@ -573,20 +573,13 @@
     "perishable",
     "sliceable"
   ],
-  "stove.n.01": {
-    "dustyable": {},
-    "heatSource": {
-      "temperature": 500,
-      "heating_rate": 0.02,
-      "distance_threshold": 0.2,
-      "requires_toggled_on": true,
-      "requires_closed": false,
-      "requires_inside": false
-    },
-    "openable": {},
-    "scrubbable": {},
-    "toggleable": {}
-  },
+  "stove.n.01": [
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
   "spoon.n.01": [
     "dustyable",
     "scrubbable"
@@ -748,6 +741,7 @@
     "cookable",
     "freezable",
     "liquid",
+    "openable",
     "perishable",
     "sliceable"
   ],
@@ -854,21 +848,15 @@
     "openable",
     "scrubbable"
   ],
-  "microwave.n.02": {
-    "breakable": {},
-    "dustyable": {},
-    "heatSource": {
-      "temperature": 1000,
-      "heating_rate": 0.04,
-      "distance_threshold": 0.4,
-      "requires_toggled_on": true,
-      "requires_closed": true,
-      "requires_inside": true
-    },
-    "openable": {},
-    "scrubbable": {},
-    "toggleable": {}
-  },
+  "microwave.n.02": [
+    "breakable",
+    "burnable",
+    "dustyable",
+    "heatSource",
+    "openable",
+    "scrubbable",
+    "toggleable"
+  ],
   "acid.n.02": [
     "freezable",
     "liquid"
@@ -1049,6 +1037,7 @@
   "jar.n.01": [
     "breakable",
     "dustyable",
+    "openable",
     "screwable",
     "scrubbable"
   ],
@@ -1479,6 +1468,7 @@
   ],
   "kettle.n.01": [
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "toothpaste.n.01": [
@@ -1643,6 +1633,7 @@
     "burnable",
     "coldSource",
     "dustyable",
+    "openable",
     "soakable"
   ],
   "needle.n.03": [
@@ -1680,6 +1671,7 @@
     "cookable",
     "dustyable",
     "freezable",
+    "openable",
     "perishable",
     "scrubbable",
     "sliceable"
@@ -1765,7 +1757,8 @@
     "scrubbable"
   ],
   "ladder.n.01": [
-    "dustyable"
+    "dustyable",
+    "openable"
   ],
   "popcorn.n.02": [
     "breakable",
@@ -1872,6 +1865,7 @@
   "hinge.n.01": [
     "breakable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "blush_wine.n.01": [
@@ -1911,6 +1905,7 @@
     "breakable",
     "burnable",
     "dustyable",
+    "openable",
     "sliceable"
   ],
   "bracket.n.04": [
@@ -2177,7 +2172,8 @@
   "folder.n.02": [
     "breakable",
     "burnable",
-    "dustyable"
+    "dustyable",
+    "openable"
   ],
   "enamel.n.04": [
     "breakable",
@@ -2194,7 +2190,8 @@
   ],
   "notebook.n.01": [
     "burnable",
-    "dustyable"
+    "dustyable",
+    "openable"
   ],
   "tomato.n.01": [
     "burnable",
@@ -2227,6 +2224,7 @@
     "breakable",
     "burnable",
     "dustyable",
+    "openable",
     "scrubbable",
     "toggleable"
   ],
@@ -2572,6 +2570,7 @@
     "breakable",
     "burnable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "hairbrush.n.01": [
@@ -3156,6 +3155,7 @@
   "highlighter.n.02": [
     "breakable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "foliation.n.03": [
@@ -3962,6 +3962,7 @@
     "breakable",
     "burnable",
     "cookable",
+    "openable",
     "perishable",
     "sliceable"
   ],
@@ -4253,6 +4254,7 @@
   "carafe.n.01": [
     "breakable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "shaver.n.03": [
@@ -4382,6 +4384,7 @@
   "envelope.n.01": [
     "breakable",
     "burnable",
+    "openable",
     "soakable"
   ],
   "coca_cola.n.01": [
@@ -5231,7 +5234,8 @@
   ],
   "hardback.n.01": [
     "burnable",
-    "dustyable"
+    "dustyable",
+    "openable"
   ],
   "stopcock.n.01": [
     "dustyable",
@@ -6414,6 +6418,7 @@
   "range_hood.n.01": [
     "burnable",
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "rocking_chair.n.01": [
@@ -6459,6 +6464,7 @@
   ],
   "bulldog_clip.n.01": [
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "bulletin_board.n.02": [
@@ -6467,7 +6473,8 @@
   "canned_food.n.01": [
     "burnable",
     "cookable",
-    "freezable"
+    "freezable",
+    "openable"
   ],
   "carving_knife.n.01": [
     "dustyable",
@@ -6586,6 +6593,7 @@
   ],
   "pencil_box.n.01": [
     "dustyable",
+    "openable",
     "scrubbable"
   ],
   "pepper_grinder.n.01": [
@@ -6681,6 +6689,7 @@
     "breakable",
     "dustyable",
     "liquid",
+    "openable",
     "scrubbable"
   ],
   "computer_game.n.01": [
@@ -7025,31 +7034,6 @@
     "burnable",
     "cookable",
     "perishable",
-    "sliceable"
-  ],
-  "floor.n.01": [
-    "dustyable",
-    "scrubbable"
-  ],
-  "breakfast_table.n.01": [
-    "burnable",
-    "dustyable",
-    "scrubbable"
-  ],
-  "pepper_mill.n.01": [
-    "breakable",
-    "burnable",
-    "dustyable", 
-    "scrubbable"
-  ],
-  "ice_cube.n.01": [
-    "breakable",
-    "coldSource"
-  ],
-  "tart.n.02": [
-    "burnable",
-    "cookable",
-    "freezable",
     "sliceable"
   ]
 }
