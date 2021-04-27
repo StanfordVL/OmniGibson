@@ -27,9 +27,6 @@ MODELS_CSV_PATH = "objectmodeling.csv"
 ABILITY_JSON_PATH = "synsets_to_filtered_properties.json"
 OUTPUT_JSON_PATH = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy.json")
 
-with open(ABILITY_JSON_PATH) as f:
-    ability_map = json.load(f)
-
 owned_synsets = {}
 with open(MODELS_CSV_PATH) as csv_file:
     reader = csv.DictReader(csv_file)
@@ -41,12 +38,6 @@ with open(MODELS_CSV_PATH) as csv_file:
             owned_synsets[synset].append(obj)
         else:
             owned_synsets[synset] = [obj]
-
-    # Add synsets that appear in the property annotation but do not have corresponding objects yet.
-    for synset in ability_map:
-        if synset not in owned_synsets:
-            owned_synsets[synset] = []
-            print(f"Annotated {synset} has no corresponding iGibson objects.")
 
 
 def add_path(path, node):
@@ -121,6 +112,9 @@ def add_igibson_objects(node):
 
 
 add_igibson_objects(hierarchy)
+
+with open(ABILITY_JSON_PATH) as f:
+    ability_map = json.load(f)
 
 
 def add_abilities(node):
