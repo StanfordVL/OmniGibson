@@ -2137,17 +2137,6 @@
                                                   }
                                                 },
                                                 {
-                                                  "name": "parer.n.02",
-                                                  "igibson_categories": [
-                                                    "parer"
-                                                  ],
-                                                  "abilities": {
-                                                    "dustyable": {},
-                                                    "scrubbable": {},
-                                                    "slicer": {}
-                                                  }
-                                                },
-                                                {
                                                   "name": "table_knife.n.01",
                                                   "igibson_categories": [
                                                     "table_knife"
@@ -7149,124 +7138,6 @@
                       }
                     },
                     {
-                      "name": "cheese.n.01",
-                      "children": [
-                        {
-                          "name": "parmesan.n.01",
-                          "igibson_categories": [
-                            "parmesan"
-                          ],
-                          "abilities": {
-                            "breakable": {},
-                            "burnable": {},
-                            "cookable": {},
-                            "freezable": {},
-                            "perishable": {},
-                            "sliceable": {}
-                          }
-                        },
-                        {
-                          "name": "velveeta.n.01",
-                          "igibson_categories": [
-                            "velveeta"
-                          ],
-                          "abilities": {
-                            "burnable": {},
-                            "cookable": {},
-                            "freezable": {},
-                            "perishable": {},
-                            "sliceable": {}
-                          }
-                        }
-                      ],
-                      "igibson_categories": [
-                        "cheese"
-                      ],
-                      "abilities": {
-                        "burnable": {},
-                        "cookable": {},
-                        "freezable": {},
-                        "perishable": {},
-                        "sliceable": {}
-                      }
-                    },
-                    {
-                      "name": "pasta.n.02",
-                      "children": [
-                        {
-                          "name": "penne.n.01",
-                          "igibson_categories": [
-                            "penne"
-                          ],
-                          "abilities": {
-                            "cookable": {},
-                            "freezable": {},
-                            "soakable": {}
-                          }
-                        }
-                      ],
-                      "igibson_categories": [
-                        "pasta"
-                      ],
-                      "abilities": {
-                        "cookable": {},
-                        "freezable": {},
-                        "soakable": {}
-                      }
-                    },
-                    {
-                      "name": "breakfast_food.n.01",
-                      "children": [
-                        {
-                          "name": "cereal.n.03",
-                          "children": [
-                            {
-                              "name": "cold_cereal.n.01",
-                              "children": [
-                                {
-                                  "name": "puffed_rice.n.01",
-                                  "igibson_categories": [
-                                    "puffed_rice"
-                                  ],
-                                  "abilities": {
-                                    "cookable": {},
-                                    "soakable": {}
-                                  }
-                                },
-                                {
-                                  "name": "raisin_bran.n.01",
-                                  "igibson_categories": [
-                                    "raisin_bran"
-                                  ],
-                                  "abilities": {
-                                    "cookable": {},
-                                    "soakable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "cookable": {},
-                                "soakable": {}
-                              }
-                            }
-                          ],
-                          "igibson_categories": [
-                            "cereal"
-                          ],
-                          "abilities": {
-                            "cookable": {},
-                            "soakable": {}
-                          }
-                        }
-                      ],
-                      "igibson_categories": [],
-                      "abilities": {
-                        "cookable": {},
-                        "soakable": {}
-                      }
-                    },
-                    {
                       "name": "yogurt.n.01",
                       "igibson_categories": [
                         "yogurt"
@@ -7603,6 +7474,57 @@
                         "perishable": {},
                         "sliceable": {}
                       }
+                    },
+                    {
+                      "name": "breakfast_food.n.01",
+                      "children": [
+                        {
+                          "name": "cereal.n.03",
+                          "igibson_categories": [
+                            "cereal"
+                          ],
+                          "abilities": {
+                            "breakable": {},
+                            "burnable": {},
+                            "perishable": {},
+                            "soakable": {}
+                          }
+                        }
+                      ],
+                      "igibson_categories": [],
+                      "abilities": {
+                        "breakable": {},
+                        "burnable": {},
+                        "perishable": {},
+                        "soakable": {}
+                      }
+                    },
+                    {
+                      "name": "cheese.n.01",
+                      "igibson_categories": [
+                        "cheese"
+                      ],
+                      "abilities": {
+                        "breakable": {},
+                        "burnable": {},
+                        "cookable": {},
+                        "freezable": {},
+                        "perishable": {},
+                        "sliceable": {}
+                      }
+                    },
+                    {
+                      "name": "pasta.n.02",
+                      "igibson_categories": [
+                        "pasta"
+                      ],
+                      "abilities": {
+                        "breakable": {},
+                        "burnable": {},
+                        "cookable": {},
+                        "perishable": {},
+                        "soakable": {}
+                      }
                     }
                   ],
                   "igibson_categories": [],
@@ -7653,68 +7575,6 @@
                               }
                             },
                             {
-                              "name": "cheese.n.01",
-                              "children": [
-                                {
-                                  "name": "parmesan.n.01",
-                                  "igibson_categories": [
-                                    "parmesan"
-                                  ],
-                                  "abilities": {
-                                    "breakable": {},
-                                    "burnable": {},
-                                    "cookable": {},
-                                    "freezable": {},
-                                    "perishable": {},
-                                    "sliceable": {}
-                                  }
-                                },
-                                {
-                                  "name": "velveeta.n.01",
-                                  "igibson_categories": [
-                                    "velveeta"
-                                  ],
-                                  "abilities": {
-                                    "burnable": {},
-                                    "cookable": {},
-                                    "freezable": {},
-                                    "perishable": {},
-                                    "sliceable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [
-                                "cheese"
-                              ],
-                              "abilities": {
-                                "burnable": {},
-                                "cookable": {},
-                                "freezable": {},
-                                "perishable": {},
-                                "sliceable": {}
-                              }
-                            },
-                            {
-                              "name": "milk.n.01",
-                              "children": [
-                                {
-                                  "name": "powdered_milk.n.01",
-                                  "igibson_categories": [
-                                    "powdered_milk"
-                                  ],
-                                  "abilities": {
-                                    "soakable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [
-                                "milk"
-                              ],
-                              "abilities": {
-                                "soakable": {}
-                              }
-                            },
-                            {
                               "name": "yogurt.n.01",
                               "igibson_categories": [
                                 "yogurt"
@@ -7724,10 +7584,40 @@
                                 "freezable": {},
                                 "perishable": {}
                               }
+                            },
+                            {
+                              "name": "cheese.n.01",
+                              "igibson_categories": [
+                                "cheese"
+                              ],
+                              "abilities": {
+                                "breakable": {},
+                                "burnable": {},
+                                "cookable": {},
+                                "freezable": {},
+                                "perishable": {},
+                                "sliceable": {}
+                              }
+                            },
+                            {
+                              "name": "milk.n.01",
+                              "igibson_categories": [
+                                "milk"
+                              ],
+                              "abilities": {
+                                "cookable": {},
+                                "freezable": {},
+                                "liquid": {},
+                                "perishable": {}
+                              }
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {}
+                          "abilities": {
+                            "cookable": {},
+                            "freezable": {},
+                            "perishable": {}
+                          }
                         },
                         {
                           "name": "canned_food.n.01",
@@ -7791,18 +7681,6 @@
                                     {
                                       "name": "sauce.n.01",
                                       "children": [
-                                        {
-                                          "name": "pepper_sauce.n.01",
-                                          "igibson_categories": [
-                                            "pepper_sauce"
-                                          ],
-                                          "abilities": {
-                                            "burnable": {},
-                                            "cookable": {},
-                                            "freezable": {},
-                                            "perishable": {}
-                                          }
-                                        },
                                         {
                                           "name": "spaghetti_sauce.n.01",
                                           "igibson_categories": [
@@ -8011,19 +7889,6 @@
                               }
                             },
                             {
-                              "name": "rice.n.01",
-                              "igibson_categories": [
-                                "rice"
-                              ],
-                              "abilities": {
-                                "burnable": {},
-                                "cookable": {},
-                                "freezable": {},
-                                "perishable": {},
-                                "soakable": {}
-                              }
-                            },
-                            {
                               "name": "bread.n.01",
                               "children": [
                                 {
@@ -8088,19 +7953,6 @@
                         {
                           "name": "grain.n.02",
                           "children": [
-                            {
-                              "name": "rice.n.01",
-                              "igibson_categories": [
-                                "rice"
-                              ],
-                              "abilities": {
-                                "burnable": {},
-                                "cookable": {},
-                                "freezable": {},
-                                "perishable": {},
-                                "soakable": {}
-                              }
-                            },
                             {
                               "name": "corn.n.03",
                               "children": [
@@ -8233,28 +8085,6 @@
                               }
                             },
                             {
-                              "name": "pasta.n.01",
-                              "children": [
-                                {
-                                  "name": "spaghetti.n.01",
-                                  "igibson_categories": [
-                                    "spaghetti"
-                                  ],
-                                  "abilities": {
-                                    "cookable": {},
-                                    "freezable": {},
-                                    "soakable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "cookable": {},
-                                "freezable": {},
-                                "soakable": {}
-                              }
-                            },
-                            {
                               "name": "sushi.n.01",
                               "igibson_categories": [
                                 "sushi"
@@ -8295,7 +8125,9 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "cookable": {}
+                            "burnable": {},
+                            "cookable": {},
+                            "perishable": {}
                           }
                         },
                         {
@@ -8341,6 +8173,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
+                        "burnable": {},
                         "cookable": {}
                       }
                     },
@@ -8368,26 +8201,6 @@
                             "freezable": {},
                             "liquid": {},
                             "perishable": {}
-                          }
-                        },
-                        {
-                          "name": "milk.n.01",
-                          "children": [
-                            {
-                              "name": "powdered_milk.n.01",
-                              "igibson_categories": [
-                                "powdered_milk"
-                              ],
-                              "abilities": {
-                                "soakable": {}
-                              }
-                            }
-                          ],
-                          "igibson_categories": [
-                            "milk"
-                          ],
-                          "abilities": {
-                            "soakable": {}
                           }
                         },
                         {
@@ -8483,10 +8296,26 @@
                             "liquid": {},
                             "perishable": {}
                           }
+                        },
+                        {
+                          "name": "milk.n.01",
+                          "igibson_categories": [
+                            "milk"
+                          ],
+                          "abilities": {
+                            "cookable": {},
+                            "freezable": {},
+                            "liquid": {},
+                            "perishable": {}
+                          }
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {}
+                      "abilities": {
+                        "freezable": {},
+                        "liquid": {},
+                        "perishable": {}
+                      }
                     },
                     {
                       "name": "water.n.06",
@@ -8885,26 +8714,6 @@
                               }
                             },
                             {
-                              "name": "milk.n.01",
-                              "children": [
-                                {
-                                  "name": "powdered_milk.n.01",
-                                  "igibson_categories": [
-                                    "powdered_milk"
-                                  ],
-                                  "abilities": {
-                                    "soakable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [
-                                "milk"
-                              ],
-                              "abilities": {
-                                "soakable": {}
-                              }
-                            },
-                            {
                               "name": "tea.n.01",
                               "igibson_categories": [
                                 "tea_box"
@@ -8997,10 +8806,26 @@
                                 "liquid": {},
                                 "perishable": {}
                               }
+                            },
+                            {
+                              "name": "milk.n.01",
+                              "igibson_categories": [
+                                "milk"
+                              ],
+                              "abilities": {
+                                "cookable": {},
+                                "freezable": {},
+                                "liquid": {},
+                                "perishable": {}
+                              }
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {}
+                          "abilities": {
+                            "freezable": {},
+                            "liquid": {},
+                            "perishable": {}
+                          }
                         },
                         {
                           "name": "water.n.06",
@@ -9014,11 +8839,17 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {}
+                      "abilities": {
+                        "freezable": {},
+                        "liquid": {}
+                      }
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {}
+                  "abilities": {
+                    "freezable": {},
+                    "liquid": {}
+                  }
                 }
               ],
               "igibson_categories": [],
@@ -9497,26 +9328,6 @@
                                   }
                                 },
                                 {
-                                  "name": "milk.n.01",
-                                  "children": [
-                                    {
-                                      "name": "powdered_milk.n.01",
-                                      "igibson_categories": [
-                                        "powdered_milk"
-                                      ],
-                                      "abilities": {
-                                        "soakable": {}
-                                      }
-                                    }
-                                  ],
-                                  "igibson_categories": [
-                                    "milk"
-                                  ],
-                                  "abilities": {
-                                    "soakable": {}
-                                  }
-                                },
-                                {
                                   "name": "tea.n.01",
                                   "igibson_categories": [
                                     "tea_box"
@@ -9609,10 +9420,26 @@
                                     "liquid": {},
                                     "perishable": {}
                                   }
+                                },
+                                {
+                                  "name": "milk.n.01",
+                                  "igibson_categories": [
+                                    "milk"
+                                  ],
+                                  "abilities": {
+                                    "cookable": {},
+                                    "freezable": {},
+                                    "liquid": {},
+                                    "perishable": {}
+                                  }
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {}
+                              "abilities": {
+                                "freezable": {},
+                                "liquid": {},
+                                "perishable": {}
+                              }
                             },
                             {
                               "name": "water.n.06",
@@ -9626,11 +9453,17 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {}
+                          "abilities": {
+                            "freezable": {},
+                            "liquid": {}
+                          }
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {}
+                      "abilities": {
+                        "freezable": {},
+                        "liquid": {}
+                      }
                     }
                   ],
                   "igibson_categories": [],
