@@ -26,7 +26,7 @@ class TaskNetTask(object):
         self.update_problem(atus_activity, task_instance,
                             predefined_problem=predefined_problem)
 
-    def update_problem(self, atus_activity, task_instance, predefined_problem=None):
+    def update_problem(self, atus_activity, task_instance, predefined_problem=None, kinematic_only=False):
         if predefined_problem is not None:
             self.atus_activity = "predefined"
             self.task_instance = "predefined"
@@ -40,6 +40,8 @@ class TaskNetTask(object):
             self.task_instance,
             domain_name,
             predefined_problem=predefined_problem)
+        print("FROM TASKNET: PARSED INIT:", self.parsed_initial_conditions)
+        print("FROM TASKNET: PARSED GOAL:", self.parsed_goal_conditions)
         self.object_scope = create_scope(self.objects)
         self.obj_inst_to_obj_cat = {
             obj_inst: obj_cat
@@ -51,6 +53,9 @@ class TaskNetTask(object):
         self.gen_initial_conditions()
         self.gen_goal_conditions()
         self.gen_ground_goal_conditions()
+
+        print("FROM TASKNET: COMPILED INIT:", self.initial_conditions)
+        print("FROM TASKNET: COMPILED GOAL:", self.goal_conditions)
 
         # Demo attributes
         self.instruction_order = np.arange(len(self.parsed_goal_conditions))
@@ -97,7 +102,7 @@ class TaskNetTask(object):
 
             if self.online_sampling:
                 # Sample objects to satisfy initial conditions
-                accept_scene, feedback = self.sample()
+                accept_scene, feedback = self.sample(kinematic_only=kinematic_only)
                 if not accept_scene:
                     continue
 
