@@ -158,7 +158,7 @@ class TaskNetTask(object):
     def clutter_scene(self):
         raise NotImplementedError
 
-    def sample(self):
+    def sample(self, kinematic_only=False):
         raise NotImplementedError
 
     def check_setup(self):
