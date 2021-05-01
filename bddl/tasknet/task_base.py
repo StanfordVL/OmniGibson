@@ -105,7 +105,7 @@ class TaskNetTask(object):
 
             if self.online_sampling:
                 # Sample objects to satisfy initial conditions
-                accept_scene, feedback = self.sample(kinematic_only=kinematic_only)
+                accept_scene, feedback = self.sample()
                 if not accept_scene:
                     continue
 
