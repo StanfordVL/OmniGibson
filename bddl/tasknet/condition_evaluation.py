@@ -5,6 +5,9 @@ import numpy as np
 import tasknet
 from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
 from tasknet.utils import truncated_product, truncated_permutations, UnsupportedSentenceError
+from tasknet.object_taxonomy import ObjectTaxonomy
+
+object_taxonomy = ObjectTaxonomy()
 
 # TODO: VERY IMPORTANT
 #   1. Change logic for checking categories once new iG object is being used
@@ -99,15 +102,31 @@ class Universal(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
+#         for obj_name, obj in scope.items():
+#             if obj_name in object_map[category]:
+#                 new_scope = copy.copy(scope)
+#                 new_scope[param_label] = obj_name
+#                 self.children.append(get_sentence_for_token(subpredicate[0])(
+#                     new_scope, task, subpredicate[1:], object_map))
+# 
+#         self.get_ground_options()
+
+        subtree_categories = object_taxonomy.get_descendants(category) + [category]
+        subtree_instances = set()
+        for subtree_category in subtree_categories:
+            if subtree_category in object_map:
+                # subtree_category_instances.extend(object_map[subtree_category])
+                subtree_instances = subtree_instances.union(set(object_map[subtree_category]))
         for obj_name, obj in scope.items():
-            if obj_name in object_map[category]:
+            if obj_name in subtree_instances:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj_name
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
 
         self.get_ground_options()
-
+                
+        
     def evaluate(self):
         self.child_values = [child.evaluate() for child in self.children]
         assert all([val is not None for val in self.child_values]
