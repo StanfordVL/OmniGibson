@@ -163,7 +163,6 @@ class NQuantifier(Sentence):
 
         N, iterable, subpredicate = body
         self.N = int(N[0])
-        # print(self.N)
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
@@ -498,7 +497,7 @@ TOKEN_MAPPING = {
     'fornpairs': ForNPairs,
 
     # Atomic predicates
-    'cooked': LegacyCookedForTesting,
+    'cooked_test': LegacyCookedForTesting,
 }
 
 

@@ -37,13 +37,14 @@ class TaskNetTask(object):
             self.task_instance = task_instance
         domain_name, requirements, types, actions, predicates = parse_domain(
             "igibson")
+        print()
+        print(predefined_problem)
+        print()
         problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
             self.atus_activity,
             self.task_instance,
             domain_name,
             predefined_problem=predefined_problem)
-        print("FROM TASKNET: PARSED INIT:", self.parsed_initial_conditions)
-        print("FROM TASKNET: PARSED GOAL:", self.parsed_goal_conditions)
         self.object_scope = create_scope(self.objects)
         self.obj_inst_to_obj_cat = {
             obj_inst: obj_cat
@@ -55,9 +56,6 @@ class TaskNetTask(object):
         self.gen_initial_conditions()
         self.gen_goal_conditions()
         self.gen_ground_goal_conditions()
-
-        print("FROM TASKNET: COMPILED INIT:", self.initial_conditions)
-        print("FROM TASKNET: COMPILED GOAL:", self.goal_conditions)
 
         # Demo attributes
         self.instruction_order = np.arange(len(self.parsed_goal_conditions))
