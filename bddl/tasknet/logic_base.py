@@ -8,6 +8,7 @@ class Sentence(with_metaclass(ABCMeta)):
     def __init__(self, scope, task, body, object_map):
         self.children = []
         self.child_values = []
+        self.kwargs = {}
         self.task = task
         self.body = body
         self.scope = scope
@@ -52,7 +53,7 @@ class BinaryAtomicPredicate(AtomicPredicate):
 
     def evaluate(self):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            return self._evaluate(self.scope[self.input1], self.scope[self.input2])
+            return self._evaluate(self.scope[self.input1], self.scope[self.input2], **self.kwargs)
         else:
             print('%s and/or %s are not mapped to simulator objects in scope' %
                   (self.input1, self.input2))
@@ -63,7 +64,7 @@ class BinaryAtomicPredicate(AtomicPredicate):
 
     def sample(self, binary_state):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            return self._sample(self.scope[self.input1], self.scope[self.input2], binary_state)
+            return self._sample(self.scope[self.input1], self.scope[self.input2], binary_state, **self.kwargs)
         else:
             print('%s and/or %s are not mapped to simulator objects in scope' %
                   (self.input1, self.input2))
@@ -97,7 +98,7 @@ class UnaryAtomicPredicate(AtomicPredicate):
 
     def evaluate(self):
         if self.scope[self.input] is not None:
-            return self._evaluate(self.scope[self.input])
+            return self._evaluate(self.scope[self.input], **self.kwargs)
         else:
             print('%s is not mapped to a simulator object in scope' % self.input)
             return False
@@ -108,7 +109,7 @@ class UnaryAtomicPredicate(AtomicPredicate):
 
     def sample(self, binary_state):
         if self.scope[self.input] is not None:
-            return self._sample(self.scope[self.input], binary_state)
+            return self._sample(self.scope[self.input], binary_state, **self.kwargs)
         else:
             print('%s is not mapped to a simulator object in scope' % self.input)
             return False
@@ -116,5 +117,4 @@ class UnaryAtomicPredicate(AtomicPredicate):
     def get_ground_options(self):
         self.flattened_condition_options = [
             [[self.STATE_NAME, self.input]]]
-
 
