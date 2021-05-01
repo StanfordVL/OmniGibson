@@ -8,6 +8,8 @@ from tasknet.sampler import Sampler
 from tasknet.parsing import parse_domain, parse_problem, gen_natural_language_conditions
 from tasknet.condition_evaluation import create_scope, compile_state, evaluate_state, get_ground_state_options
 
+from gibson2.external.pybullet_tools.utils import quat_from_euler
+
 import numpy as np
 from IPython import embed
 from tasknet.object_taxonomy import ObjectTaxonomy
@@ -94,6 +96,7 @@ class TaskNetTask(object):
 
             # Import scenes and objects into simulator
             self.import_scene()
+            self.import_agent()
 
             if self.online_sampling:
                 # Sample objects to satisfy initial conditions
@@ -150,6 +153,9 @@ class TaskNetTask(object):
         self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index]
 
     def check_scene(self):
+        raise NotImplementedError
+
+    def import_agent(self):
         raise NotImplementedError
 
     def import_scene(self):
