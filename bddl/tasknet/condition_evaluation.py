@@ -246,8 +246,7 @@ class ForPairs(Sentence):
                         new_scope[param_label1] = obj_name_1
                         new_scope[param_label2] = obj_name_2
                         sub.append(get_sentence_for_token(subpredicate[0])(
-                            new_scope, task, subpredicate[1:], object_map
-                        )
+                            new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
 
         self.get_ground_options()
@@ -307,8 +306,7 @@ class ForNPairs(Sentence):
                         new_scope[param_label1] = obj_name_1
                         new_scope[param_label2] = obj_name_2
                         sub.append(get_sentence_for_token(subpredicate[0])(
-                            new_scope, task, subpredicate[1:], object_map
-                        )
+                            new_scope, task, subpredicate[1:], object_map))
                 self.children.append(sub)
 
         self.get_ground_options()
