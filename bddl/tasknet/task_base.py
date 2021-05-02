@@ -37,9 +37,6 @@ class TaskNetTask(object):
             self.task_instance = task_instance
         domain_name, requirements, types, actions, predicates = parse_domain(
             "igibson")
-        print()
-        print(predefined_problem)
-        print()
         problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
             self.atus_activity,
             self.task_instance,
@@ -230,7 +227,6 @@ def organize_objects(sim_objects, dsl_objects):
             objects[dsl_obj.category].append(sim_obj)
         else:
             objects[dsl_obj.category] = [sim_obj]
-    # print(objects)
     return objects
 
 
