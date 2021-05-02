@@ -102,20 +102,11 @@ class Universal(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
-#         for obj_name, obj in scope.items():
-#             if obj_name in object_map[category]:
-#                 new_scope = copy.copy(scope)
-#                 new_scope[param_label] = obj_name
-#                 self.children.append(get_sentence_for_token(subpredicate[0])(
-#                     new_scope, task, subpredicate[1:], object_map))
-# 
-#         self.get_ground_options()
 
         subtree_categories = object_taxonomy.get_descendants(category) + [category]
         subtree_instances = set()
         for subtree_category in subtree_categories:
             if subtree_category in object_map:
-                # subtree_category_instances.extend(object_map[subtree_category])
                 subtree_instances = subtree_instances.union(set(object_map[subtree_category]))
         for obj_name, obj in scope.items():
             if obj_name in subtree_instances:
@@ -152,11 +143,16 @@ class Existential(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
+
+        subtree_categories = object_taxonomy.get_descendants(category) + [category]
+        subtree_instances = set()
+        for subtree_category in subtree_categories:
+            if subtree_category in object_map:
+                subtree_instances = subtree_instances.union(set(object_map[subtree_category]))
         for obj_name, obj in scope.items():
-            if obj_name in object_map[category]:
+            if obj_name in subtree_instances:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj_name
-                # body = [["param_label", "-", "category"], [predicate]]
                 self.children.append(get_sentence_for_token(subpredicate[0])(
                     new_scope, task, subpredicate[1:], object_map))
 
@@ -185,8 +181,14 @@ class NQuantifier(Sentence):
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
+
+        subtree_categories = object_taxonomy.get_descendants(category) + [category]
+        subtree_instances = set()
+        for subtree_category in subtree_categories:
+            if subtree_category in object_map:
+                subtree_instances = subtree_instances.union(set(object_map[subtree_category]))
         for obj_name, obj in scope.items():
-            if obj_name in object_map[category]:
+            if obj_name in subtree_instances:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj_name
                 self.children.append(get_sentence_for_token(subpredicate[0])(
@@ -224,16 +226,28 @@ class ForPairs(Sentence):
         param_label2, __, category2 = iterable2
         param_label1 = param_label1.strip('?')
         param_label2 = param_label2.strip('?')
+
+        subtree_categories1 = object_taxonomy.get_descendants(category1) + [category1]
+        subtree_instances1 = set()
+        for subtree_category in subtree_categories1:
+            if subtree_category in object_map:
+                subtree_instances1 = subtree_instances1.union(set(object_map[subtree_category]))
+        subtree_categories2 = object_taxonomy.get_descendants(category2) + [category2]
+        subtree_instances2 = set()
+        for subtree_category in subtree_categories2:
+            if subtree_category in object_map:
+                subtree_instances2 = subtree_instances2.union(set(object_map[subtree_category]))
         for obj_name_1, obj_1 in scope.items():
-            if obj_name_1 in object_map[category1]:
+            if obj_name_1 in subtree_instances1:
                 sub = []
                 for obj_name_2, obj_2 in scope.items():
-                    if obj_name_2 in object_map[category2] and obj_name_1 != obj_name_2:
+                    if obj_name_2 in subtree_instances2 and obj_name_1 != obj_name_2:
                         new_scope = copy.copy(scope)
                         new_scope[param_label1] = obj_name_1
                         new_scope[param_label2] = obj_name_2
                         sub.append(get_sentence_for_token(subpredicate[0])(
-                            new_scope, task, subpredicate[1:], object_map))
+                            new_scope, task, subpredicate[1:], object_map
+                        )
                 self.children.append(sub)
 
         self.get_ground_options()
@@ -273,16 +287,28 @@ class ForNPairs(Sentence):
         param_label2, __, category2 = iterable2
         param_label1 = param_label1.strip('?')
         param_label2 = param_label2.strip('?')
+
+        subtree_categories1 = object_taxonomy.get_descendants(category1) + [category1]
+        subtree_instances1 = set()
+        for subtree_category in subtree_categories1:
+            if subtree_category in object_map:
+                subtree_instances1 = subtree_instances1.union(set(object_map[subtree_category]))
+        subtree_categories2 = object_taxonomy.get_descendants(category2) + [category2]
+        subtree_instances2 = set()
+        for subtree_category in subtree_categories2:
+            if subtree_category in object_map:
+                subtree_instances2 = subtree_instances2.union(set(object_map[subtree_category]))
         for obj_name_1, obj_1 in scope.items():
-            if obj_name_1 in object_map[category1]:
+            if obj_name_1 in subtree_instances1:
                 sub = []
                 for obj_name_2, obj_2 in scope.items():
-                    if obj_name_2 in object_map[category2] and obj_name_1 != obj_name_2:
+                    if obj_name_2 in subtree_instances2 and obj_name_1 != obj_name_2:
                         new_scope = copy.copy(scope)
                         new_scope[param_label1] = obj_name_1
                         new_scope[param_label2] = obj_name_2
                         sub.append(get_sentence_for_token(subpredicate[0])(
-                            new_scope, task, subpredicate[1:], object_map))
+                            new_scope, task, subpredicate[1:], object_map
+                        )
                 self.children.append(sub)
 
         self.get_ground_options()
