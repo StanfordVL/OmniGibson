@@ -1,16 +1,22 @@
 """
+Purpose:
 This is the script that generates the 'hierarchy.json' file that will be necessary
-for the annotation step. 'hierarchy.json' should contain a tree of all of the
-existing models we have, as well as all of their ancestors in WordNet. In addition,
-for nodes that correspond to synsets that directly appeared in the input file, their
-associated objects would also be an attribute.
+for many purposes like initial/goal state annotation, object shopping list annotation,
+and scene generation in iGATUS. 
 
-To run:
-- Prepare an input .csv file (see line 20)
-- python3 modelsToHierarchy_v2.py
+Output Format:
+TODO: Describes output format.
+TODO: Generate 3 types of hierarchy.json:
+    - Hierarchy of just the owned models for scene generation and object sampling.
+    - Hierarchy of the union of all of the owned models + objects extracted from online articles.
+    - Hierarchy of just the objects from online articles, this is our most unbiased object distribution.
 
-Last change: 02/18/2021
-Created by: Zheng Lian & Cem Gokmen
+To Run:
+- Make sure that the .csv files and the .json file are updated (see ### Dependencies).
+- python3 hierarchy_generator.py
+
+Last Change: 05/02/2021
+Created By: Zheng Lian & Cem Gokmen
 """
 
 import csv
@@ -20,13 +26,31 @@ from collections import OrderedDict
 
 from nltk.corpus import wordnet as wn
 
+### Dependencies
 '''
-This .csv file should contain an `Object` column and a `Synset` column.
+This .csv file should contain all of the models we currently own.
+Should contain an `Object` column and a `Synset` column.
 '''
 MODELS_CSV_PATH = "objectmodeling.csv"
+'''
+This .csv file should contain all of the objects we extracted from
+online articles.
+Should contain an `Object` column and a `Synset` column.
+'''
+OBJECT_STATS_PATH = "object_stats.csv"
+'''
+This .json file should contain all of the synsets from the .csv files above
+as well as their associated iGibson abilities.
+NOTE: Please contact Sanjana (sanjana2@stanford.edu) or Zheng (zhengl@stanford.edu) if
+any of the property annotations is missing.
+'''
 ABILITY_JSON_PATH = "synsets_to_filtered_properties.json"
+
 OUTPUT_JSON_PATH = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy.json")
 
+'''
+Load in all of the owned models. Map the synsets to their corresponding object names.
+'''
 owned_synsets = {}
 with open(MODELS_CSV_PATH) as csv_file:
     reader = csv.DictReader(csv_file)
@@ -82,7 +106,6 @@ def generate_paths(paths, path, word):
         for parent in hypernyms:
             generate_paths(paths, path + [parent], parent)
 
-
 '''
 Below is the script that creates the .json hierarchy
 '''
@@ -110,12 +133,10 @@ def add_igibson_objects(node):
         for child_node in node["children"]:
             add_igibson_objects(child_node)
 
-
 add_igibson_objects(hierarchy)
 
 with open(ABILITY_JSON_PATH) as f:
     ability_map = json.load(f)
-
 
 def add_abilities(node):
     # At leaf
@@ -164,7 +185,6 @@ def add_abilities(node):
                     init = True
         node["abilities"] = OrderedDict(sorted(abilities.items(), key=lambda pair: pair[0]))
         return abilities
-
 
 add_abilities(hierarchy)
 
