@@ -28,7 +28,7 @@ class TaskNetTask(object):
         self.update_problem(atus_activity, task_instance,
                             predefined_problem=predefined_problem)
 
-    def update_problem(self, atus_activity, task_instance, predefined_problem=None, kinematic_only=False):
+    def update_problem(self, atus_activity, task_instance, predefined_problem=None):
         if predefined_problem is not None:
             self.atus_activity = "predefined"
             self.task_instance = "predefined"
