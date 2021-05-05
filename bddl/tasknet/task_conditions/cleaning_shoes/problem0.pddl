@@ -2,86 +2,66 @@
     (:domain igibson)
 
     (:objects
-     	gym_shoe1 gym_shoe2 - gym_shoe
-    	floor1 - floor
-    	shoebox1 shoebox2 - shoebox
-    	boot1 boot2 - boot
-    	rag1 - rag
-    	brush1 - brush
-    	carpet1 - carpet
+     	soap.n.01_1 - soap.n.01
+    	bed.n.01_1 - bed.n.01
+    	rack.n.01_1 - rack.n.01
+    	floor.n.01_1 - floor.n.01
+    	rag.n.01_1 - rag.n.01
+    	towel.n.01_1 - towel.n.01
+    	shoe.n.01_1 shoe.n.01_2 shoe.n.01_3 shoe.n.01_4 - shoe.n.01
+    	agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (and 
-            (dusty gym_shoe1) 
-            (ontop gym_shoe1 floor1) 
-            (dusty gym_shoe2) 
-            (nextto gym_shoe1 gym_shoe2) 
-            (ontop gym_shoe2 floor1) 
-            (nextto shoebox1 gym_shoe2) 
-            (ontop shoebox1 floor1)
+        (ontop soap.n.01_1 bed.n.01_1) 
+        (onfloor rack.n.01_1 floor.n.01_1) 
+        (ontop rag.n.01_1 bed.n.01_1) 
+        (onfloor towel.n.01_1 floor.n.01_1) 
+        (ontop shoe.n.01_1 bed.n.01_1) 
+        (ontop shoe.n.01_2 bed.n.01_1) 
+        (ontop shoe.n.01_3 bed.n.01_1) 
+        (ontop shoe.n.01_4 bed.n.01_1) 
+        (stained shoe.n.01_1) 
+        (stained shoe.n.01_2) 
+        (dusty shoe.n.01_3) 
+        (dusty shoe.n.01_4) 
+        (not 
+            (soaked rag.n.01_1)
         ) 
-        (and 
-            (dusty boot1) 
-            (ontop boot1 floor1) 
-            (dusty boot2) 
-            (nextto boot2 boot1) 
-            (ontop boot2 floor1) 
-            (nextto shoebox2 boot2) 
-            (ontop shoebox2 floor1)
-        ) 
-        (and 
-            (nextto rag1 shoebox2) 
-            (ontop rag1 floor1)
-        ) 
-        (and 
-            (nextto brush1 rag1) 
-            (ontop brush1 floor1)
-        ) 
-        (inroom carpet1 living room) 
-        (inroom floor1 living room)
+        (inroom floor.n.01_1 bedroom) 
+        (inroom bed.n.01_1 bedroom) 
+        (onfloor agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (exists 
-                (?shoebox - shoebox) 
-                (and 
-                    (forall 
-                        (?gym_shoe - gym_shoe) 
-                        (and 
-                            (scrubbed ?gym_shoe) 
-                            (inside ?gym_shoe ?shoebox)
-                        )
-                    ) 
-                    (ontop ?shoebox ?floor1)
+            (onfloor ?soap.n.01_1 ?floor.n.01_1) 
+            (onfloor ?rack.n.01_1 ?floor.n.01_1) 
+            (forall 
+                (?shoe.n.01 - shoe.n.01) 
+                (not 
+                    (stained ?shoe.n.01)
                 )
             ) 
-            (exists 
-                (?shoebox - shoebox) 
-                (and 
-                    (forall 
-                        (?boot - boot) 
-                        (and 
-                            (scrubbed ?boot) 
-                            (inside ?boot ?shoebox)
-                        )
-                    ) 
-                    (ontop ?shoebox ?floor1)
+            (forall 
+                (?shoe.n.01 - shoe.n.01) 
+                (not 
+                    (dusty ?shoe.n.01)
                 )
             ) 
-            (exists 
-                (?shoebox - shoebox) 
-                (and 
-                    (not 
-                        (scrubbed ?brush1)
-                    ) 
-                    (nextto ?brush1 ?shoebox) 
-                    (not 
-                        (scrubbed ?rag1)
-                    ) 
-                    (nextto ?rag1 ?shoebox)
-                )
+            (onfloor ?towel.n.01_1 ?floor.n.01_1) 
+            (stained ?towel.n.01_1) 
+            (onfloor ?rag.n.01_1 ?floor.n.01_1) 
+            (soaked ?rag.n.01_1) 
+            (forn 
+                (2) 
+                (?shoe.n.01 - shoe.n.01) 
+                (ontop ?shoe.n.01 ?rack.n.01_1)
+            ) 
+            (forn 
+                (2) 
+                (?shoe.n.01 - shoe.n.01) 
+                (under ?shoe.n.01 ?rack.n.01_1)
             )
         )
     )

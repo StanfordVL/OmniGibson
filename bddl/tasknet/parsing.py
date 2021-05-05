@@ -353,11 +353,11 @@ def gen_natural_language_conditions(parsed_conditions):
 
 
 def add_pddl_whitespace(pddl_file="task_conditions/parsing_tests/test_app_output.pddl", string=None, save=True):
-    if pddl_file is not None:
-        with open(pddl_file, 'r') as f:
-            raw_pddl = f.read()
-    elif string is not None:
+    if string is not None:
         raw_pddl = string
+    elif pddl_file is not None:
+        with open(pddl_file, "r") as f:
+            raw_pddl = f.read()
     else:
         raise ValueError("No PDDL given")
 
