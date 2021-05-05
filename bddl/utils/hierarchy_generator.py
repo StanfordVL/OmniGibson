@@ -85,7 +85,7 @@ for synset in article_synsets:
     if synset not in all_synsets:
         all_synsets[synset] = article_synsets[synset]
     else:
-        all_synsets[synset] = list(set(all_synsets[synset]) & set(article_synsets[synset]))
+        all_synsets[synset] = list(set(all_synsets[synset]) | set(article_synsets[synset]))
 
 with open(ABILITY_JSON_PATH) as f:
     ability_map = json.load(f)
