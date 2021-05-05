@@ -4,9 +4,7 @@ This is the script that generates the 'hierarchy.json' file that will be necessa
 for many purposes like initial/goal state annotation, object shopping list annotation,
 and scene generation in iGATUS. 
 
-Output Format:
-TODO: Describes output format.
-TODO: Generate 3 types of hierarchy.json:
+Generate 3 types of hierarchy.json:
     - Hierarchy of just the owned models for scene generation and object sampling.
     - Hierarchy of the union of all of the owned models + objects extracted from online articles.
     - Hierarchy of just the objects from online articles, this is our most unbiased object distribution.
@@ -15,7 +13,7 @@ To Run:
 - Make sure that the .csv files and the .json file are updated (see ### Dependencies).
 - python3 hierarchy_generator.py
 
-Last Change: 05/02/2021
+Last Change: 05/05/2021
 Created By: Zheng Lian & Cem Gokmen
 """
 
@@ -46,7 +44,9 @@ any of the property annotations is missing.
 '''
 ABILITY_JSON_PATH = "synsets_to_filtered_properties.json"
 
-OUTPUT_JSON_PATH = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy.json")
+OUTPUT_JSON_PATH1 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_owned.json")
+OUTPUT_JSON_PATH2 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_articles.json")
+OUTPUT_JSON_PATH3 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_all.json")
 
 '''
 Load in all of the owned models. Map the synsets to their corresponding object names.
@@ -56,13 +56,39 @@ with open(MODELS_CSV_PATH) as csv_file:
     reader = csv.DictReader(csv_file)
     for row in reader:
         synset = row["Synset"].strip()
-        # synset = synset[synset.find('\'')+1: synset.rfind('\'')]
         obj = row["Object"].strip()
         if synset in owned_synsets:
             owned_synsets[synset].append(obj)
         else:
             owned_synsets[synset] = [obj]
 
+'''
+Load in all of the synsets that appeared in articles.
+'''
+article_synsets = {}
+with open(OBJECT_STATS_PATH) as csv_file:
+    reader = csv.DictReader(csv_file)
+    for row in reader:
+        synset = row["Synset"].strip()
+        synset = synset[synset.find('\'')+1: synset.rfind('\'')]
+        obj = row["Object"].strip()
+        if synset in article_synsets:
+            article_synsets[synset].append(obj)
+        else:
+            article_synsets[synset] = [obj]
+
+'''
+Combined version of the two above.
+'''
+all_synsets = {key: value for key, value in owned_synsets.items()}
+for synset in article_synsets:
+    if synset not in all_synsets:
+        all_synsets[synset] = article_synsets[synset]
+    else:
+        all_synsets[synset] = list(set(all_synsets[synset]) & set(article_synsets[synset]))
+
+with open(ABILITY_JSON_PATH) as f:
+    ability_map = json.load(f)
 
 def add_path(path, node):
     """
@@ -109,20 +135,11 @@ def generate_paths(paths, path, word):
 '''
 Below is the script that creates the .json hierarchy
 '''
-# Every synset we have should theoretically lead up to `entity.n.01`.
-hierarchy = {"name": 'entity.n.01', "children": []}
 
-for synset in owned_synsets:
-    synset = wn.synset(synset)
-    synset_paths = []
-    generate_paths(synset_paths, [synset], synset)
-    for synset_path in synset_paths:
-        # The last word should always be `entity.n.01`, so we can just take it out.
-        add_path(synset_path[:-1], hierarchy)
-
-
-# Go through the hierarchy and add the words associated with the synsets as attributes.
 def add_igibson_objects(node):
+    '''
+    Go through the hierarchy and add the words associated with the synsets as attributes.
+    '''
     categories = []
     if node["name"] in owned_synsets:
         categories = owned_synsets[node["name"]]
@@ -133,10 +150,6 @@ def add_igibson_objects(node):
         for child_node in node["children"]:
             add_igibson_objects(child_node)
 
-add_igibson_objects(hierarchy)
-
-with open(ABILITY_JSON_PATH) as f:
-    ability_map = json.load(f)
 
 def add_abilities(node):
     # At leaf
@@ -186,7 +199,31 @@ def add_abilities(node):
         node["abilities"] = OrderedDict(sorted(abilities.items(), key=lambda pair: pair[0]))
         return abilities
 
-add_abilities(hierarchy)
+def generate_hierarchy(synsets):
+    # Every synset we have should theoretically lead up to `entity.n.01`.
+    hierarchy = {"name": 'entity.n.01', "children": []}
 
-with open(OUTPUT_JSON_PATH, "w") as f:
-    json.dump(hierarchy, f, indent=2)
+    for synset in synsets:
+        synset = wn.synset(synset)
+        synset_paths = []
+        generate_paths(synset_paths, [synset], synset)
+        for synset_path in synset_paths:
+            # The last word should always be `entity.n.01`, so we can just take it out.
+            add_path(synset_path[:-1], hierarchy)
+
+    add_igibson_objects(hierarchy)
+    add_abilities(hierarchy)
+    return hierarchy
+
+hierarchy_owned = generate_hierarchy(owned_synsets)
+with open(OUTPUT_JSON_PATH1, "w") as f:
+    json.dump(hierarchy_owned, f, indent=2)
+
+hierarchy_articles = generate_hierarchy(article_synsets)
+with open(OUTPUT_JSON_PATH2, "w") as f:
+    json.dump(hierarchy_articles, f, indent=2)
+
+hierarchy_all = generate_hierarchy(all_synsets)
+with open(OUTPUT_JSON_PATH3, "w") as f:
+    json.dump(hierarchy_all, f, indent=2)
+
