@@ -11,6 +11,7 @@
             sink.n.01_1 - sink.n.01
             floor.n.01_1 floor.n.01_2 - floor.n.01
             table.n.02_1 - table.n.02
+            agent.n.01_1 - agent.n.01
     )
     
     (:init 
@@ -36,7 +37,8 @@
         (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 living_room) 
         (inroom table.n.02_1 living_room) 
-        (inroom floor.n.01_2 kitchen)
+        (inroom floor.n.01_2 kitchen) 
+        (onfloor agent.n.01_1 floor.n.01_2)
     )
     
     (:goal 
