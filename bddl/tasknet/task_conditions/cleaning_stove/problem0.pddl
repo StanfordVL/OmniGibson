@@ -2,122 +2,48 @@
     (:domain igibson)
 
     (:objects
-     	stove1 - stove
-    	sink1 - sink
-    	counter1 - counter
-    	water1 - water
-    	soap1 - soap
-    	disinfectant1 - disinfectant
-    	washcloth1 - washcloth
-    	vegetable_oil1 - vegetable_oil
-    	grain1 grain2 grain3 - grain
-    	crumb1 crumb2 crumb3 - crumb
-    	scum1 scum2 - scum
-    	garbage1 - garbage
-    	pot1 pot2 - pot
-    	pan1 - pan
+     	stove.n.01_1 - stove.n.01
+    	soap.n.01_1 - soap.n.01
+    	cabinet.n.01_1 - cabinet.n.01
+    	rag.n.01_1 - rag.n.01
+    	sink.n.01_1 - sink.n.01
+    	dishtowel.n.01_1 - dishtowel.n.01
     )
     
     (:init 
-        (and 
-            (dusty stove1) 
-            (nextto stove1 sink1)
+        (dusty stove.n.01_1) 
+        (stained stove.n.01_1) 
+        (inside soap.n.01_1 cabinet.n.01_1) 
+        (inside rag.n.01_1 sink.n.01_1) 
+        (not 
+            (soaked rag.n.01_1)
         ) 
-        (and 
-            (not 
-                (scrubbed counter1)
-            ) 
-            (nextto counter1 sink1)
+        (not 
+            (stained rag.n.01_1)
         ) 
-        (inside water1 sink1) 
-        (nextto soap1 sink1) 
-        (and 
-            (nextto disinfectant1 sink1) 
-            (nextto disinfectant1 soap1)
+        (inside dishtowel.n.01_1 cabinet.n.01_1) 
+        (not 
+            (soaked dishtowel.n.01_1)
         ) 
-        (and 
-            (not 
-                (dusty washcloth1)
-            ) 
-            (nextto washcloth1 soap1) 
-            (nextto washcloth1 sink1)
-        ) 
-        (ontop vegetable_oil1 stove1) 
-        (and 
-            (ontop grain1 stove1) 
-            (nextto grain2 grain1) 
-            (ontop grain2 stove1) 
-            (nextto grain3 grain2) 
-            (ontop grain3 stove1)
-        ) 
-        (and 
-            (nextto crumb1 grain3) 
-            (ontop crumb1 stove1) 
-            (nextto crumb2 crumb1) 
-            (ontop crumb2 stove1) 
-            (nextto crumb3 crumb2) 
-            (ontop crumb3 stove1)
-        ) 
-        (and 
-            (ontop scum1 stove1) 
-            (nextto scum2 scum1) 
-            (ontop scum2 stove1)
-        ) 
-        (nextto garbage1 sink1) 
-        (and 
-            (dusty pot1) 
-            (ontop pot1 stove1)
-        ) 
-        (and 
-            (nextto pot2 pot1) 
-            (dusty pot2) 
-            (ontop pot2 stove1)
-        ) 
-        (and 
-            (dusty pan1) 
-            (ontop pan1 stove1)
-        ) 
-        (inroom sink1 kitchen) 
-        (inroom counter1 kitchen) 
-        (inroom stove1 kitchen)
+        (inroom sink.n.01_1 kitchen) 
+        (inroom stove.n.01_1 kitchen) 
+        (inroom cabinet.n.01_1 kitchen)
     )
     
     (:goal 
         (and 
-            (scrubbed ?counter1) 
-            (scrubbed ?stove1) 
-            (inside ?water1 ?sink1) 
-            (and 
-                (dusty ?washcloth1) 
-                (inside ?washcloth1 ?water1) 
-                (inside ?washcloth1 ?sink1)
+            (not 
+                (dusty ?stove.n.01_1)
             ) 
-            (forall 
-                (?vegetable_oil - vegetable_oil) 
-                (inside ?vegetable_oil ?water1)
+            (not 
+                (stained ?stove.n.01_1)
             ) 
-            (forall 
-                (?grain - grain) 
-                (inside ?grain ?garbage1)
-            ) 
-            (forall 
-                (?crumb - crumb) 
-                (inside ?crumb ?garbage1)
-            ) 
-            (forall 
-                (?pot - pot) 
-                (and 
-                    (scrubbed ?pot) 
-                    (ontop ?pot ?counter1)
-                )
-            ) 
-            (forall 
-                (?pan - pan) 
-                (and 
-                    (scrubbed ?pan) 
-                    (ontop ?pan ?counter1)
-                )
-            )
+            (nextto ?soap.n.01_1 ?sink.n.01_1) 
+            (inside ?rag.n.01_1 ?sink.n.01_1) 
+            (soaked ?rag.n.01_1) 
+            (stained ?rag.n.01_1) 
+            (nextto ?dishtowel.n.01_1 ?sink.n.01_1) 
+            (soaked ?dishtowel.n.01_1)
         )
     )
 )

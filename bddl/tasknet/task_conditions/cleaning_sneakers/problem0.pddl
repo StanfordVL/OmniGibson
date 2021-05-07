@@ -2,67 +2,76 @@
     (:domain igibson)
 
     (:objects
-     	gym_shoe1 gym_shoe2 gym_shoe3 gym_shoe4 - gym_shoe
-    	floor1 - floor
-    	wall1 - wall
-    	cleansing_agent1 - cleansing_agent
-    	bench1 - bench
-    	piece_of_cloth1 - piece_of_cloth
+     	gym_shoe.n.01_1 gym_shoe.n.01_2 gym_shoe.n.01_3 gym_shoe.n.01_4 - gym_shoe.n.01
+            countertop.n.01_1 - countertop.n.01
+            soap.n.01_1 - soap.n.01
+            cabinet.n.01_1 - cabinet.n.01
+            towel.n.01_1 - towel.n.01
+            brush.n.02_1 - brush.n.02
+            sink.n.01_1 - sink.n.01
+            floor.n.01_1 floor.n.01_2 - floor.n.01
+            table.n.02_1 - table.n.02
     )
     
     (:init 
-        (dusty gym_shoe1) 
-        (and 
-            (ontop gym_shoe1 floor1)
+        (onfloor gym_shoe.n.01_1 floor.n.01_2) 
+        (stained gym_shoe.n.01_1) 
+        (onfloor gym_shoe.n.01_2 floor.n.01_2) 
+        (stained gym_shoe.n.01_2) 
+        (onfloor gym_shoe.n.01_3 floor.n.01_2) 
+        (dusty gym_shoe.n.01_3) 
+        (onfloor gym_shoe.n.01_4 floor.n.01_2) 
+        (dusty gym_shoe.n.01_4) 
+        (inside soap.n.01_1 cabinet.n.01_1) 
+        (ontop towel.n.01_1 countertop.n.01_1) 
+        (not 
+            (stained towel.n.01_1)
         ) 
-        (dusty gym_shoe2) 
-        (and 
-            (nextto gym_shoe2 wall1)
+        (ontop brush.n.02_1 countertop.n.01_1) 
+        (not 
+            (stained brush.n.02_1)
         ) 
-        (dusty gym_shoe3) 
-        (and 
-            (ontop gym_shoe3 floor1) 
-            (nextto gym_shoe3 gym_shoe1)
-        ) 
-        (dusty gym_shoe4) 
-        (and 
-            (nextto gym_shoe4 wall1) 
-            (nextto gym_shoe4 gym_shoe2)
-        ) 
-        (ontop cleansing_agent1 bench1) 
-        (ontop piece_of_cloth1 bench1) 
-        (inroom floor1 garage) 
-        (inroom bench1 garage) 
-        (inroom wall1 garage)
+        (inroom sink.n.01_1 kitchen) 
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom cabinet.n.01_1 kitchen) 
+        (inroom floor.n.01_1 living_room) 
+        (inroom table.n.02_1 living_room) 
+        (inroom floor.n.01_2 kitchen)
     )
     
     (:goal 
         (and 
+            (ontop ?towel.n.01_1 ?countertop.n.01_1) 
+            (stained ?towel.n.01_1) 
+            (nextto ?brush.n.02_1 ?towel.n.01_1) 
+            (stained ?brush.n.02_1) 
+            (inside ?soap.n.01_1 ?sink.n.01_1) 
             (forall 
-                (?gym_shoe - gym_shoe) 
-                (and 
-                    (ontop ?gym_shoe ?bench1) 
-                    (scrubbed ?gym_shoe)
+                (?gym_shoe.n.01 - gym_shoe.n.01) 
+                (not 
+                    (dusty ?gym_shoe.n.01)
                 )
             ) 
-            (exists 
-                (?gym_shoe - gym_shoe) 
-                (nextto ?gym_shoe ?gym_shoe1)
+            (forall 
+                (?gym_shoe.n.01 - gym_shoe.n.01) 
+                (not 
+                    (stained ?gym_shoe.n.01)
+                )
             ) 
-            (exists 
-                (?gym_shoe - gym_shoe) 
-                (nextto ?gym_shoe ?gym_shoe2)
+            (forn 
+                (2) 
+                (?gym_shoe.n.01 - gym_shoe.n.01) 
+                (nextto ?gym_shoe.n.01 ?table.n.02_1)
             ) 
-            (exists 
-                (?gym_shoe - gym_shoe) 
-                (nextto ?gym_shoe ?gym_shoe3)
+            (forn 
+                (2) 
+                (?gym_shoe.n.01 - gym_shoe.n.01) 
+                (under ?gym_shoe.n.01 ?table.n.02_1)
             ) 
-            (exists 
-                (?gym_shoe - gym_shoe) 
-                (nextto ?gym_shoe ?gym_shoe4)
-            ) 
-            (ontop ?piece_of_cloth1 ?bench1) 
-            (ontop ?cleansing_agent1 ?bench1)
+            (forall 
+                (?gym_shoe.n.01 - gym_shoe.n.01) 
+                (onfloor ?gym_shoe.n.01 ?floor.n.01_1)
+            )
         )
     )
 )
