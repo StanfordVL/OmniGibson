@@ -25,15 +25,9 @@
             (forall 
                 (?floor.n.01 - floor.n.01) 
                 (not 
-                    (dusty ?floor.n.01_2)
+                    (dusty ?floor.n.01)
                 )
             ) 
-            (forall 
-                (?floor.n.01 - floor.n.01) 
-                (not 
-                    (dusty ?floor.n.01_1)
-                )
-            )
         )
     )
 )

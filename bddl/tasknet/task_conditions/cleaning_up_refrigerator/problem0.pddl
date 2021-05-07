@@ -41,14 +41,6 @@
     
     (:goal 
         (and 
-            (and 
-                (stained ?rag.n.01_1) 
-                (stained ?rag.n.01_2)
-            ) 
-            (and 
-                (soaked ?rag.n.01_1) 
-                (soaked ?rag.n.01_2)
-            ) 
             (forall 
                 (?rag.n.01 - rag.n.01) 
                 (nextto ?rag.n.01 ?sink.n.01_1)

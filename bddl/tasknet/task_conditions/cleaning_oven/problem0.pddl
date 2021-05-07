@@ -4,7 +4,6 @@
     (:objects
      	oven.n.01_1 - oven.n.01
     	soap.n.01_1 - soap.n.01
-    	water.n.06_1 - water.n.06
     	floor.n.01_1 - floor.n.01
     	rag.n.01_1 - rag.n.01
     	sink.n.01_1 - sink.n.01
@@ -15,7 +14,6 @@
         (stained oven.n.01_1) 
         (dusty oven.n.01_1) 
         (ontop soap.n.01_1 oven.n.01_1) 
-        (onfloor water.n.06_1 floor.n.01_1) 
         (onfloor rag.n.01_1 floor.n.01_1) 
         (not 
             (stained rag.n.01_1)
@@ -34,7 +32,6 @@
             (not 
                 (dusty ?oven.n.01_1)
             ) 
-            (stained ?rag.n.01_1)
         )
     )
 )

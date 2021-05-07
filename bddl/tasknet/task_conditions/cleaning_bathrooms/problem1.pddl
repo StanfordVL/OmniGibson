@@ -29,6 +29,15 @@
             (inside ?soap.n.01_1 ?bucket.n.01_1) 
             (onfloor ?bucket.n.01_1 ?floor.n.01) 
             (inside ?rag.n.01_1 ?bucket.n.01_1)
+            (not 
+                (dusty bathtub.n.01_1)
+            )
+            (not
+                (dusty sink.n.01_1)
+            )
+            (not
+                (dusty floor.n.01_1)
+            )
         )
     )
 )

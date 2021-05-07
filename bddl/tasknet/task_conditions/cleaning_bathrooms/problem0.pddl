@@ -6,7 +6,6 @@
     	bathtub.n.01_1 - bathtub.n.01
     	toilet.n.02_1 - toilet.n.02
     	floor.n.01_1 - floor.n.01
-    	water.n.06_1 - water.n.06
     	bucket.n.01_1 - bucket.n.01
     	soap.n.01_1 - soap.n.01
     	brush.n.02_1 - brush.n.02

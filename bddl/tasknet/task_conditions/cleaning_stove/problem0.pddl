@@ -8,8 +8,8 @@
     	rag.n.01_1 - rag.n.01
     	sink.n.01_1 - sink.n.01
     	dishtowel.n.01_1 - dishtowel.n.01
-            floor.n.01_1 - floor.n.01
-            agent.n.01_1 - agent.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 
