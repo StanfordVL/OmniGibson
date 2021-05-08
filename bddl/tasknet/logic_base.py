@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABCMeta
 
 from future.utils import with_metaclass
+from tasknet.utils import UncontrolledCategoryError
 
 
 class Sentence(with_metaclass(ABCMeta)):
@@ -113,8 +114,3 @@ class UnaryAtomicPredicate(AtomicPredicate):
         self.flattened_condition_options = [
             [[self.STATE_NAME, self.input]]]
 
-
-class UncontrolledCategoryError(Exception):
-    """Error class for hanging categories (category strings that are not
-        in scope)"""
-    pass

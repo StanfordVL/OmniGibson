@@ -70,6 +70,16 @@ def truncated_permutations(iterable, r=None, max_permutations=GROUND_GOALS_MAX_P
             return
 
 
+########## CUSTOM ERRORS ############
+
+class UncontrolledCategoryError(Exception):
+    pass
+
+class UnsupportedSentenceError(Exception):
+    def __init__(self, sentence):
+        self.sentence = sentence
+
+
 if __name__ == "__main__":
     import pprint
     sample_small = [[[['ap1', 'tab1']], [['ap1', 'tab2']]], [[['ap2', 'tab1']], [['ap2', 'tab2']]], [[['ap3', 'tab1']], [['ap3', 'tab2']]]]

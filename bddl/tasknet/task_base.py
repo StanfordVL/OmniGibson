@@ -233,7 +233,6 @@ def organize_objects(sim_objects, dsl_objects):
             objects[dsl_obj.category].append(sim_obj)
         else:
             objects[dsl_obj.category] = [sim_obj]
-    # print(objects)
     return objects
 
 
