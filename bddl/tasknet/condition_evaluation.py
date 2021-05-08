@@ -39,7 +39,6 @@ class LegacyCookedForTesting(UnaryAtomicPredicate):
 
 # -JUNCTIONS
 class Conjunction(Sentence):
-    STATE_NAME = "and"
     def __init__(self, scope, task, body, object_map):
         super().__init__(scope, task, body, object_map)
 
@@ -64,13 +63,6 @@ class Conjunction(Sentence):
             self.flattened_condition_options.append(
                 list(itertools.chain(*option))
             )
-
-    def sample(self, binary_state=False):
-        if len(self.children) > 0:
-            raise ValueError("Conjunction should not be sampled nontrivially. This function only exists to pass empty goal conditions.")
-        else:
-            return True 
-
 
 class Disjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
