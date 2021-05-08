@@ -4,7 +4,7 @@
     (:objects
      	soap.n.01_1 - soap.n.01
     	bed.n.01_1 - bed.n.01
-    	rack.n.01_1 - rack.n.01
+    	coatrack.n.01_1 - coatrack.n.01
     	floor.n.01_1 - floor.n.01
     	rag.n.01_1 - rag.n.01
     	towel.n.01_1 - towel.n.01
@@ -14,7 +14,7 @@
     
     (:init 
         (ontop soap.n.01_1 bed.n.01_1) 
-        (onfloor rack.n.01_1 floor.n.01_1) 
+        (onfloor coatrack.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 bed.n.01_1) 
         (onfloor towel.n.01_1 floor.n.01_1) 
         (ontop shoe.n.01_1 bed.n.01_1) 
@@ -36,7 +36,7 @@
     (:goal 
         (and 
             (onfloor ?soap.n.01_1 ?floor.n.01_1) 
-            (onfloor ?rack.n.01_1 ?floor.n.01_1) 
+            (onfloor ?coatrack.n.01_1 ?floor.n.01_1) 
             (forall 
                 (?shoe.n.01 - shoe.n.01) 
                 (not 
@@ -50,19 +50,11 @@
                 )
             ) 
             (onfloor ?towel.n.01_1 ?floor.n.01_1) 
-            (stained ?towel.n.01_1) 
             (onfloor ?rag.n.01_1 ?floor.n.01_1) 
-            (soaked ?rag.n.01_1) 
-            (forn 
-                (2) 
+            (forall 
                 (?shoe.n.01 - shoe.n.01) 
-                (ontop ?shoe.n.01 ?rack.n.01_1)
+                (nextto ?shoe.n.01 ?coatrack.n.01_1)
             ) 
-            (forn 
-                (2) 
-                (?shoe.n.01 - shoe.n.01) 
-                (under ?shoe.n.01 ?rack.n.01_1)
-            )
         )
     )
 )

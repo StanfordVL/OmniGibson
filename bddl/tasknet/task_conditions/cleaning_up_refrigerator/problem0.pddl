@@ -10,6 +10,8 @@
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	bowl.n.01_1 - bowl.n.01
     	sink.n.01_1 - sink.n.01
+            agent.n.01_1 - agent.n.01
+            floor.n.01_1 - floor.n.01
     )
     
     (:init 
@@ -32,22 +34,16 @@
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
-        (inroom cabinet.n.01_1 kitchen)
+        (inroom cabinet.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (onfloor agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (and 
-                (stained ?rag.n.01_1) 
-                (stained ?rag.n.01_2)
-            ) 
-            (and 
-                (soaked ?rag.n.01_1) 
-                (soaked ?rag.n.01_2)
-            ) 
             (forall 
                 (?rag.n.01 - rag.n.01) 
-                (inside ?rag.n.01 ?sink.n.01_1)
+                (nextto ?rag.n.01 ?sink.n.01_1)
             ) 
             (inside ?soap.n.01_1 ?sink.n.01_1) 
             (forall 
