@@ -15,9 +15,10 @@ import json
 
 OBJECT_TAXONOMY = ObjectTaxonomy()
 
-SYNSET_FILE = os.path.join(os.path.dirname(
+INPUT_SYNSET_FILE = os.path.join(os.path.dirname(
     tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties.json')
-
+OUTPUT_SYNSET_FILE = os.path.join(os.path.dirname(
+    tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties_pruned_igibson.json')
 
 def get_categories():
     obj_dir = os.path.join(gibson2.ig_dataset_path, 'objects')
@@ -120,7 +121,7 @@ def main():
     properties_to_synsets['sliceable'] = categories_to_synsets(
         prune_sliceable())
 
-    with open(SYNSET_FILE) as f:
+    with open(INPUT_SYNSET_FILE) as f:
         obj = json.load(f)
 
     for synset in obj:
@@ -133,7 +134,7 @@ def main():
                 curr_properties.remove(prop)
                 print('remove', synset, prop)
 
-    with open(SYNSET_FILE, 'w+') as f:
+    with open(OUTPUT_SYNSET_FILE, 'w') as f:
         json.dump(obj, f, indent=2)
 
 
