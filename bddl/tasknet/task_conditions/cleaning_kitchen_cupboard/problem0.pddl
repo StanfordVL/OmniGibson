@@ -33,10 +33,10 @@
             (imply 
                 (and 
                     (inside ?piece_of_cloth.n.01_1 ?sink.n.01_1) 
-                    (nextto ?cleansing_agent.n.01_1 ?sink.n.01)
+                    (nextto ?cleansing_agent.n.01_1 ?sink.n.01_1)
                 ) 
                 (not 
-                    (dusty ?cabinet.n.01)
+                    (dusty ?cabinet.n.01_1)
                 )
             ) 
             (forall 
