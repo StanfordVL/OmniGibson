@@ -12,6 +12,13 @@ from gibson2.utils.assets_utils import get_ig_category_path
 from IPython import embed
 import json
 
+# TODOs:
+#   1. See note below about making sure property information is included in the pruned dict 
+#   2. Right now, any synset is a candidate for having a property removed because it's impossible in iGibson. 
+#       INSTEAD, only leaf synsets should go through this process. Then, the results should be propagated 
+#       up using the intersection, as we have been doing in the past. 
+#   3. See note below about removing "openable" property from "ashcan.n.01" manually
+
 
 OBJECT_TAXONOMY = ObjectTaxonomy()
 
@@ -74,6 +81,7 @@ def prune_openable():
     # Manuall remove toilet because even thought they have joints, they can't necessarily open the lid of the toilet.
     if 'toilet' in allowed_categories:
         allowed_categories.remove('toilet')
+        # TODO check if need to remove "ashcan.n.01" manually as well
 
     return allowed_categories
 
@@ -128,10 +136,10 @@ def main():
         curr_properties = obj[synset]
         for prop in properties_to_synsets:
             if synset in properties_to_synsets[prop] and prop not in curr_properties:
-                curr_properties.append(prop)
+                curr_properties[prop] = {}      # TODO change this so it isn't just an empty dictionary, it's the information ascribed to the property. E.g. anything temperature-related will have temperature params.
                 print('add', synset, prop)
             elif synset not in properties_to_synsets[prop] and prop in curr_properties:
-                curr_properties.remove(prop)
+                curr_properties.pop(prop)
                 print('remove', synset, prop)
 
     with open(OUTPUT_SYNSET_FILE, 'w') as f:

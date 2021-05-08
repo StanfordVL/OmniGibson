@@ -24,6 +24,10 @@ from collections import OrderedDict
 
 from nltk.corpus import wordnet as wn
 
+# TODO:
+#   1. Make compatible with both types of ability JSONs, use the appropriate ability JSON for each type of hierarchy. 
+#   2. If time: update comments with correct hierarchy filenames 
+
 ### Dependencies
 '''
 This .csv file should contain all of the models we currently own.
@@ -42,7 +46,8 @@ as well as their associated iGibson abilities.
 NOTE: Please contact Sanjana (sanjana2@stanford.edu) or Zheng (zhengl@stanford.edu) if
 any of the property annotations is missing.
 '''
-ABILITY_JSON_PATH = "synsets_to_filtered_properties.json"
+IGIBSON_ABILITY_JSON_PATH = "synsets_to_filtered_properties_pruned_igibson.json"
+ORACLE_ABILITY_JSON_PATH = "synsets_to_filtered_properties.json"
 
 OUTPUT_JSON_PATH1 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_owned.json")
 OUTPUT_JSON_PATH2 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_articles.json")
