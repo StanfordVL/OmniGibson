@@ -107,6 +107,8 @@ class TaskNetTask(object):
                 # Add clutter objects into the scenes
                 self.clutter_scene()
 
+            self.move_agent()
+
         # Generate goal condition with the fully populated self.object_scope
         self.gen_goal_conditions()
         # assert accept_scene, 'None of the available scenes satisfy these initial conditions.'
@@ -157,6 +159,10 @@ class TaskNetTask(object):
 
     def import_agent(self):
         raise NotImplementedError
+
+    def move_agent(self):
+        # Legacy function
+        pass
 
     def import_scene(self):
         raise NotImplementedError
@@ -227,7 +233,6 @@ def organize_objects(sim_objects, dsl_objects):
             objects[dsl_obj.category].append(sim_obj)
         else:
             objects[dsl_obj.category] = [sim_obj]
-    # print(objects)
     return objects
 
 

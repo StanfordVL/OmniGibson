@@ -4,7 +4,7 @@ import numpy as np
 
 import tasknet
 from tasknet.logic_base import Sentence, AtomicPredicate, UnaryAtomicPredicate
-from tasknet.utils import truncated_product, truncated_permutations
+from tasknet.utils import truncated_product, truncated_permutations, UnsupportedSentenceError
 
 # TODO: VERY IMPORTANT
 #   1. Change logic for checking categories once new iG object is being used
@@ -63,7 +63,6 @@ class Conjunction(Sentence):
             self.flattened_condition_options.append(
                 list(itertools.chain(*option))
             )
-
 
 class Disjunction(Sentence):
     def __init__(self, scope, task, body, object_map):
@@ -163,7 +162,6 @@ class NQuantifier(Sentence):
 
         N, iterable, subpredicate = body
         self.N = int(N[0])
-        # print(self.N)
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
@@ -498,7 +496,7 @@ TOKEN_MAPPING = {
     'fornpairs': ForNPairs,
 
     # Atomic predicates
-    'cooked': LegacyCookedForTesting,
+    'cooked_test': LegacyCookedForTesting,
 }
 
 
@@ -506,4 +504,9 @@ def get_sentence_for_token(token):
     if token in TOKEN_MAPPING:
         return TOKEN_MAPPING[token]
     else:
-        return tasknet.get_backend().get_predicate_class(token)
+        # return tasknet.get_backend().get_predicate_class(token)
+        try:
+            return tasknet.get_backend().get_predicate_class(token)
+        except KeyError as e:
+            raise UnsupportedSentenceError(e)
+
