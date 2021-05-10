@@ -24,10 +24,6 @@ from collections import OrderedDict
 
 from nltk.corpus import wordnet as wn
 
-# TODO:
-#   1. Make compatible with both types of ability JSONs, use the appropriate ability JSON for each type of hierarchy. 
-#   2. If time: update comments with correct hierarchy filenames 
-
 ### Dependencies
 '''
 This .csv file should contain all of the models we currently own.
@@ -49,8 +45,11 @@ any of the property annotations is missing.
 IGIBSON_ABILITY_JSON_PATH = "synsets_to_filtered_properties_pruned_igibson.json"
 ORACLE_ABILITY_JSON_PATH = "synsets_to_filtered_properties.json"
 
+# Uses iGibson abilities.
 OUTPUT_JSON_PATH1 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_owned.json")
+# Uses oracle abilities.
 OUTPUT_JSON_PATH2 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_articles.json")
+# Uses oracle abilities.
 OUTPUT_JSON_PATH3 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_all.json")
 
 '''
@@ -92,8 +91,13 @@ for synset in article_synsets:
     else:
         all_synsets[synset] = list(set(all_synsets[synset]) | set(article_synsets[synset]))
 
-with open(ABILITY_JSON_PATH) as f:
-    ability_map = json.load(f)
+with open(IGIBSON_ABILITY_JSON_PATH) as f:
+    igibson_ability_map = json.load(f)
+
+with open(ORACLE_ABILITY_JSON_PATH) as f:
+    oracle_ability_map = json.load(f)
+
+######################################################
 
 def add_path(path, node):
     """
@@ -141,22 +145,22 @@ def generate_paths(paths, path, word):
 Below is the script that creates the .json hierarchy
 '''
 
-def add_igibson_objects(node):
+def add_igibson_objects(node, synsets):
     '''
     Go through the hierarchy and add the words associated with the synsets as attributes.
     '''
     categories = []
-    if node["name"] in owned_synsets:
-        categories = owned_synsets[node["name"]]
+    if node["name"] in synsets:
+        categories = synsets[node["name"]]
 
     node["igibson_categories"] = categories
 
     if "children" in node:
         for child_node in node["children"]:
-            add_igibson_objects(child_node)
+            add_igibson_objects(child_node, synsets)
 
 
-def add_abilities(node):
+def add_abilities(node, ability_map):
     # At leaf
     if "children" not in node:
         name = node["name"]
@@ -178,7 +182,7 @@ def add_abilities(node):
         init = False
         abilities = {}
         for child_node in node["children"]:
-            child_abilities = add_abilities(child_node)
+            child_abilities = add_abilities(child_node, ability_map)
             if child_abilities is not None:
                 if init:
                     # First merge the ability annotations themselves
@@ -204,7 +208,7 @@ def add_abilities(node):
         node["abilities"] = OrderedDict(sorted(abilities.items(), key=lambda pair: pair[0]))
         return abilities
 
-def generate_hierarchy(synsets):
+def generate_hierarchy(synsets, ability_map):
     # Every synset we have should theoretically lead up to `entity.n.01`.
     hierarchy = {"name": 'entity.n.01', "children": []}
 
@@ -216,19 +220,19 @@ def generate_hierarchy(synsets):
             # The last word should always be `entity.n.01`, so we can just take it out.
             add_path(synset_path[:-1], hierarchy)
 
-    add_igibson_objects(hierarchy)
-    add_abilities(hierarchy)
+    add_igibson_objects(hierarchy, synsets)
+    add_abilities(hierarchy, ability_map)
     return hierarchy
 
-hierarchy_owned = generate_hierarchy(owned_synsets)
+hierarchy_owned = generate_hierarchy(owned_synsets, igibson_ability_map)
 with open(OUTPUT_JSON_PATH1, "w") as f:
     json.dump(hierarchy_owned, f, indent=2)
 
-hierarchy_articles = generate_hierarchy(article_synsets)
+hierarchy_articles = generate_hierarchy(article_synsets, oracle_ability_map)
 with open(OUTPUT_JSON_PATH2, "w") as f:
     json.dump(hierarchy_articles, f, indent=2)
 
-hierarchy_all = generate_hierarchy(all_synsets)
+hierarchy_all = generate_hierarchy(all_synsets, oracle_ability_map)
 with open(OUTPUT_JSON_PATH3, "w") as f:
     json.dump(hierarchy_all, f, indent=2)
 
