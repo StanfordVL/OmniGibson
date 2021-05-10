@@ -14,8 +14,9 @@ DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
 
 
 class ObjectTaxonomy(object):
-    def __init__(self, json_str=DEFAULT_HIERARCHY_FILE):
-        self.taxonomy = self._parse_taxonomy(json_str)
+    def __init__(self, hierarchy_type="owned"):
+        hierarchy_file = pkgutil.get_data(tasknet.__package__, f"hierarchy_{hierarchy_type}.json")
+        self.taxonomy = self._parse_taxonomy(hierarchy_file)
 
     @staticmethod
     def _parse_taxonomy(json_str):

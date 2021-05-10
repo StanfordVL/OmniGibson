@@ -55,7 +55,7 @@ def categories_to_synsets(categories):
     for cat in categories:
         # Check that the category has this label.
         class_name = OBJECT_TAXONOMY.get_class_name_from_igibson_category(cat)
-        assert class_name is not None
+        assert class_name is not None, cat
         synsets.append(class_name)
     return synsets
 
@@ -202,6 +202,7 @@ def main():
             # We add a property to a synset if iGibson has it but it is not in the annotation.
             # TODO: Should we update the oracle json file then?
             if synset in properties_to_synsets[prop] and prop not in curr_properties:
+                assert synset in leaf_synsets, f"Synset {synset} not in leaf synsets"
                 curr_properties[prop] = {}
                 print('add', synset, prop)
             # We remove a property from a synset if:
