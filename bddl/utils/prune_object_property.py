@@ -12,8 +12,9 @@ from gibson2.utils.assets_utils import get_ig_category_path
 from IPython import embed
 import json
 
+import hierarchy_generator
+
 # TODOs:
-#   1. See note below about making sure property information is included in the pruned dict 
 #   2. Right now, any synset is a candidate for having a property removed because it's impossible in iGibson. 
 #       INSTEAD, only leaf synsets should go through this process. Then, the results should be propagated 
 #       up using the intersection, as we have been doing in the past. 
@@ -24,13 +25,14 @@ OBJECT_TAXONOMY = ObjectTaxonomy()
 
 INPUT_SYNSET_FILE = os.path.join(os.path.dirname(
     tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties.json')
+MODELS_CSV_PATH = = os.path.join(os.path.dirname(
+    tasknet.__file__), '..', 'utils', 'objectmodeling.csv')
 OUTPUT_SYNSET_FILE = os.path.join(os.path.dirname(
     tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties_pruned_igibson.json')
 
 def get_categories():
     obj_dir = os.path.join(gibson2.ig_dataset_path, 'objects')
     return [cat for cat in os.listdir(obj_dir) if os.path.isdir(os.path.join(obj_dir, cat))]
-
 
 def get_category_with_ability(ability):
     categories = []
@@ -58,6 +60,9 @@ def categories_to_synsets(categories):
 
 
 def prune_openable():
+    '''
+    Returns a list of categories in iGibson that has openable.
+    '''
     # Require all models of the category to have revolute or prismatic joints
     allowed_joints = frozenset(["revolute", "prismatic"])
     categories = get_category_with_ability('openable')
@@ -118,6 +123,56 @@ def prune_sliceable():
             allowed_categories.append(cat.replace('half_', ''))
     return allowed_categories
 
+def get_owned_hierarchy():
+    '''
+    Builds a simply synset hierarchy using owned models. We can use 
+    this to find the leaf nodes.
+    '''
+    owned_synsets = {}
+    with open(MODELS_CSV_PATH) as csv_file:
+        reader = csv.DictReader(csv_file)
+        for row in reader:
+            synset = row["Synset"].strip()
+            obj = row["Object"].strip()
+            if synset in owned_synsets:
+                owned_synsets[synset].append(obj)
+            else:
+                owned_synsets[synset] = [obj]
+
+    # Every synset we have should theoretically lead up to `entity.n.01`.
+    hierarchy = {"name": 'entity.n.01', "children": []}
+
+    for synset in owned_synsets:
+        synset = wn.synset(synset)
+        synset_paths = []
+        hierarchy_generator.generate_paths(synset_paths, [synset], synset)
+        for synset_path in synset_paths:
+            # The last word should always be `entity.n.01`, so we can just take it out.
+            hierarchy_generator.add_path(synset_path[:-1], hierarchy)
+
+    return hierarchy
+
+def get_leaf_synsets(hierarchy, leaf_synsets):
+    '''
+    Goes through a synset hierarchy and adds all of the
+    leaf node synsets into a set.
+    '''
+    if "children" not in hierarchy:
+        leaf_synsets.add(hierarchy["name"])
+    else:
+        for sub_hierarchy in hierarchy["children"]:
+            get_leaf_synsets(sub_hierarchy, leaf_synsets)
+
+def update_synsets_to_properties(hierarchy, synsets_to_properties):
+    if "children" not in hierarchy:
+        if synsets_to_properties[hierarchy["name"]] != hierarchy["abilities"]:
+            print(f"{hierarchy['name']} has conflicting properties. Please investigate.")
+    else:
+        if hierarchy["name"] in synsets_to_properties:
+            synsets_to_properties[hierarchy["name"]] = hierarchy["abilities"]
+            print(f"Abilities updated for {hierarchy['name']}")
+        for sub_hierarchy in hierarchy["children"]:
+            update_synsets_to_properties(sub_hierarchy, synsets_to_properties)
 
 def main():
     properties_to_synsets = {}
@@ -130,21 +185,37 @@ def main():
         prune_sliceable())
 
     with open(INPUT_SYNSET_FILE) as f:
-        obj = json.load(f)
+        synsets_to_properties = json.load(f)
 
-    for synset in obj:
-        curr_properties = obj[synset]
+    # We build a hierarchy using synsets of owned models.
+    hierarchy = get_owned_hierarchy()
+    # We store a set of leaf synset nodes.
+    leaf_synsets = set()
+    get_leaf_synsets(hierarchy, leaf_synsets)
+
+    for synset in synsets_to_properties:
+        curr_properties = synsets_to_properties[synset]
         for prop in properties_to_synsets:
+            # We add a property to a synset if iGibson has it but it is not in the annotation.
+            # TODO: Should we update the oracle json file then?
             if synset in properties_to_synsets[prop] and prop not in curr_properties:
-                curr_properties[prop] = {}      # TODO change this so it isn't just an empty dictionary, it's the information ascribed to the property. E.g. anything temperature-related will have temperature params.
+                curr_properties[prop] = {}
                 print('add', synset, prop)
-            elif synset not in properties_to_synsets[prop] and prop in curr_properties:
+            # We remove a property from a synset if:
+            # 1. The synset does not have this property in iGibson.
+            # 2. The annotation has the property.
+            # 3. The synset is a leaf node in the hierarchy.
+            elif synset not in properties_to_synsets[prop] and prop in curr_properties and synset in leaf_synsets:
                 curr_properties.pop(prop)
                 print('remove', synset, prop)
 
-    with open(OUTPUT_SYNSET_FILE, 'w') as f:
-        json.dump(obj, f, indent=2)
+    # We propogate the leaf nodes' updated properties up the hierarchy.
+    hierarchy_generator.add_abilities(hierarchy, synsets_to_properties)
+    # We go through the hierarchy to update synsets_to_properties.
+    update_synsets_to_properties(hierarchy, synsets_to_properties)
 
+    with open(OUTPUT_SYNSET_FILE, 'w') as f:
+        json.dump(synsets_to_properties, f, indent=2)
 
 if __name__ == "__main__":
     main()
