@@ -13,7 +13,7 @@
     },
     "towel.n.01": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "light.n.02": {
         "breakable": {},
@@ -24,47 +24,47 @@
     "cup.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bag.n.04": {
         "burnable": {
             "burn_temperature": 212.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bag.n.06": {
         "burnable": {
             "burn_temperature": 407.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bag.n.01": {
         "burnable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "box.n.01": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "case.n.19": {
         "burnable": {
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "case.n.05": {
         "burnable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "door.n.01": {
@@ -73,17 +73,17 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "container.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "fabric.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "soap.n.01": {
@@ -93,28 +93,28 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "dish.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "glass.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "table.n.02": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sheet.n.03": {
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "cleansing_agent.n.01": {
         "burnable": {},
@@ -124,11 +124,11 @@
     "bowl.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "brush.n.02": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "vegetable_oil.n.01": {
         "burnable": {},
@@ -138,14 +138,14 @@
     },
     "atomizer.n.01": {
         "liquid": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "window.n.01": {
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tape.n.01": {
         "breakable": {},
@@ -161,20 +161,20 @@
     "handle.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "rag.n.01": {
         "breakable": {},
         "burnable": {
             "burn_temperature": 250.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "apparel.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "lid.n.02": {
@@ -182,11 +182,11 @@
         "dustyable": {},
         "openable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "knife.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "slicer": {}
     },
     "detergent.n.02": {
@@ -198,12 +198,12 @@
             "burn_temperature": 250.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "car.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pop.n.02": {
         "freezable": {},
@@ -213,24 +213,24 @@
     "vacuum.n.04": {
         "cleaningTool": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "clothing.n.01": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "plate.n.04": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "salt.n.02": {
         "soakable": {}
     },
     "tablespoon.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pad.n.01": {
         "burnable": {
@@ -241,32 +241,32 @@
     "pad.n.04": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "coat.n.01": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sink.n.01": {
         "toggleable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "waterSource": {}
     },
     "furniture.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "rack.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "screw.n.02": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bubble.n.01": {
         "liquid": {}
@@ -274,11 +274,11 @@
     "shoe.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bucket.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "juice.n.01": {
         "freezable": {},
@@ -288,7 +288,7 @@
     "wire.n.02": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pencil.n.01": {
         "breakable": {},
@@ -296,30 +296,30 @@
             "burn_temperature": 300.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "push_button.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "shelf.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "screwdriver.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "nail.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "board.n.03": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lemon.n.01": {
         "burnable": {
@@ -331,7 +331,7 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "paint.n.01": {
@@ -346,7 +346,7 @@
         },
         "coldSource": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "package.n.02": {
         "breakable": {},
@@ -361,7 +361,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "hose.n.03": {
         "burnable": {
@@ -369,7 +369,7 @@
         },
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cotton.n.04": {
         "burnable": {
@@ -389,18 +389,18 @@
         "burnable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pot.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "refrigerator.n.01": {
         "coldSource": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "book.n.02": {
         "burnable": {},
@@ -415,42 +415,42 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ball.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ice.n.02": {
         "breakable": {},
         "coldSource": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "foil.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pan.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "toothbrush.n.01": {
         "burnable": {
             "burn_temperature": 500.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sock.n.01": {
         "burnable": {
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "date.n.08": {
@@ -480,7 +480,7 @@
     "trouser.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "cream.n.02": {
@@ -496,7 +496,7 @@
     },
     "drain.n.03": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "string.n.01": {
         "breakable": {},
@@ -504,7 +504,7 @@
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "cap.n.02": {
@@ -512,11 +512,11 @@
     },
     "hook.n.04": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "hook.n.05": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "coffee.n.01": {
         "burnable": {},
@@ -530,13 +530,13 @@
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "stick.n.01": {
         "breakable": {},
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "vegetable.n.01": {
         "breakable": {},
@@ -545,7 +545,7 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tea.n.01": {
         "freezable": {},
@@ -556,12 +556,12 @@
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "shirt.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "bed.n.01": {
@@ -569,10 +569,10 @@
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "block.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "oven.n.01": {
         "dustyable": {},
@@ -585,16 +585,16 @@
             "requires_inside": true
         },
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "teaspoon.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "rock.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "nut.n.03": {
         "breakable": {},
@@ -605,25 +605,25 @@
             "cook_temperature": 350.0
         },
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "tray.n.01": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "band.n.07": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pen.n.01": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "fire.n.04": {
         "heatSource": {}
@@ -631,7 +631,7 @@
     "washer.n.03": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "spread.n.05": {
         "burnable": {},
@@ -651,32 +651,32 @@
             "requires_inside": false
         },
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "spoon.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bathtub.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cube.n.05": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "clip.n.03": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "wool.n.01": {
         "breakable": {},
         "burnable": {
             "burn_temperature": 600.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "jersey.n.03": {
@@ -684,7 +684,7 @@
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "blanket.n.01": {
@@ -692,7 +692,7 @@
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "garbage.n.03": {
@@ -702,7 +702,7 @@
         },
         "dustyable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "wheel.n.01": {
         "burnable": {
@@ -710,7 +710,7 @@
         },
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "kit.n.02": {
         "burnable": {
@@ -718,7 +718,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "nozzle.n.01": {
         "burnable": {
@@ -727,11 +727,11 @@
         "dustyable": {},
         "openable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bath.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pack.n.03": {
         "breakable": {},
@@ -749,44 +749,44 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "blade.n.09": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "electric_refrigerator.n.01": {
         "coldSource": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "iron.n.04": {
         "breakable": {},
         "dustyable": {},
         "heatSource": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "can.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "net.n.06": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "spring.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "rug.n.01": {
         "burnable": {
             "burn_temperature": 400.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "foam.n.01": {
@@ -815,7 +815,7 @@
         "dustyable": {},
         "heatSource": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "orange.n.01": {
@@ -829,7 +829,7 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "citrus.n.01": {
         "burnable": {},
@@ -877,7 +877,7 @@
         "dustyable": {},
         "heatSource": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "seal.n.08": {
@@ -889,7 +889,7 @@
             "burn_temperature": 491.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "grain.n.01": {
         "burnable": {},
@@ -901,7 +901,7 @@
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "apple.n.01": {
         "breakable": {},
@@ -914,25 +914,25 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "shade.n.03": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cord.n.04": {
         "burnable": {
             "burn_temperature": 482.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "cord.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sauce.n.01": {
         "burnable": {},
@@ -945,13 +945,13 @@
     "plug.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "plaything.n.01": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sugar.n.01": {
         "cookable": {},
@@ -962,7 +962,7 @@
         "burnable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "microwave.n.02": {
         "breakable": {},
@@ -976,7 +976,7 @@
             "requires_inside": true
         },
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "acid.n.02": {
@@ -985,17 +985,17 @@
     },
     "pin.n.09": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "fork.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pillow.n.01": {
         "burnable": {
             "burn_temperature": 205.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "greens.n.01": {
@@ -1008,7 +1008,7 @@
     },
     "holder.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "mask.n.04": {
         "breakable": {},
@@ -1016,13 +1016,13 @@
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "vehicle.n.01": {
         "burnable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "photograph.n.01": {
@@ -1034,7 +1034,7 @@
     },
     "panel.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "alcohol.n.01": {
         "burnable": {},
@@ -1049,12 +1049,12 @@
         }
     },
     "lining.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "tube.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "card.n.01": {
         "breakable": {},
@@ -1068,16 +1068,16 @@
         "dustyable": {},
         "openable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "seat.n.03": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "underwear.n.01": {
         "burnable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "dress.n.01": {
@@ -1085,25 +1085,25 @@
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "deep-freeze.n.01": {
         "coldSource": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "necktie.n.01": {
         "burnable": {
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "jacket.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "wall_socket.n.01": {
@@ -1118,32 +1118,32 @@
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "shower.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "tank.n.02": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "switch.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "coating.n.01": {
         "burnable": {},
         "dustyable": {},
         "liquid": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "mat.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "mat.n.07": {
@@ -1151,13 +1151,13 @@
             "burn_temperature": 300.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "toilet.n.02": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "candy.n.01": {
         "breakable": {},
@@ -1181,33 +1181,33 @@
         "dustyable": {},
         "openable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "telephone.n.01": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
     "sweater.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "faucet.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "skirt.n.02": {
         "burnable": {
             "burn_temperature": 205.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cheese.n.01": {
         "breakable": {},
@@ -1244,57 +1244,57 @@
     "roller.n.04": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "vent.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "curtain.n.01": {
         "burnable": {
             "burn_temperature": 394.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "filter.n.01": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "drill.n.01": {
         "breakable": {},
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "brim.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ribbon.n.01": {
         "burnable": {
             "burn_temperature": 4000.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "linen.n.01": {
         "burnable": {
             "burn_temperature": 445.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "jean.n.01": {
         "burnable": {
             "burn_temperature": 482.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "broom.n.01": {
@@ -1309,7 +1309,7 @@
         "burnable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bolt.n.06": {
         "dustyable": {},
@@ -1318,37 +1318,37 @@
     "scissors.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "silk.n.01": {
         "burnable": {
             "burn_temperature": 225.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "countertop.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tile.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "spatula.n.01": {
         "burnable": {
             "burn_temperature": 500.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "spatula.n.02": {
         "burnable": {
             "burn_temperature": 500.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "salad.n.01": {
         "burnable": {},
@@ -1371,7 +1371,7 @@
     "jewelry.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "backpack.n.01": {
         "burnable": {
@@ -1379,32 +1379,32 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "mallet.n.03": {
         "burnable": {
             "burn_temperature": 320.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "mallet.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "boot.n.01": {
         "burnable": {
             "burn_temperature": 225.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "strap.n.01": {
         "breakable": {},
         "burnable": {
             "burn_temperature": 500.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "eraser.n.01": {
         "breakable": {},
@@ -1433,18 +1433,18 @@
         "burnable": {},
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
     "cutter.n.06": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "knob.n.01": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "eatage.n.01": {
         "burnable": {
@@ -1456,12 +1456,12 @@
     "hat.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "rod.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "swab.n.02": {
         "breakable": {},
@@ -1469,7 +1469,7 @@
             "burn_temperature": 50.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "swab.n.01": {
@@ -1488,7 +1488,7 @@
         "toggleable": {}
     },
     "scum.n.02": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "pool.n.06": {
         "freezable": {},
@@ -1497,11 +1497,11 @@
     "pool.n.01": {
         "freezable": {},
         "liquid": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "burner.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "burner.n.02": {
         "dustyable": {},
@@ -1522,7 +1522,7 @@
             "burn_temperature": 150.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ventilation.n.02": {
         "dustyable": {},
@@ -1541,13 +1541,13 @@
         },
         "cleaningTool": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "stool.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "gelatin.n.02": {
         "burnable": {
@@ -1575,7 +1575,7 @@
     "lock.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "staple.n.04": {
         "dustyable": {}
@@ -1591,7 +1591,7 @@
     "garment.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "thermometer.n.01": {
@@ -1622,7 +1622,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "chip.n.04": {
         "breakable": {},
@@ -1637,7 +1637,7 @@
     "mirror.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "stand.n.04": {
         "breakable": {},
@@ -1645,7 +1645,7 @@
             "burn_temperature": 572.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "conditioner.n.03": {
         "freezable": {},
@@ -1666,11 +1666,11 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "glove.n.02": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "screen.n.01": {
         "breakable": {},
@@ -1679,12 +1679,12 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "kettle.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "toothpaste.n.01": {
         "freezable": {},
@@ -1699,7 +1699,7 @@
         "openable": {},
         "perishable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sandwich.n.01": {
         "breakable": {},
@@ -1721,7 +1721,7 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "rule.n.12": {
@@ -1744,11 +1744,11 @@
         "burnable": {
             "burn_temperature": 205.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "disposal.n.04": {
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "rice.n.01": {
@@ -1779,7 +1779,7 @@
     "dial.n.01": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "knot.n.02": {
@@ -1795,16 +1795,16 @@
             "burn_temperature": 750.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "socket.n.02": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "porcelain.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "onion.n.03": {
         "burnable": {},
@@ -1812,18 +1812,18 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "scraper.n.01": {
         "cleaningTool": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "thread.n.01": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "belt.n.02": {
@@ -1832,22 +1832,22 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "desk.n.01": {
         "burnable": {
             "burn_temperature": 1180.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pipe.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bell.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "pill.n.02": {
@@ -1871,7 +1871,7 @@
         "burnable": {
             "burn_temperature": 200.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "magazine.n.02": {
@@ -1891,11 +1891,11 @@
         "dustyable": {},
         "heatSource": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pole.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bead.n.01": {
         "breakable": {},
@@ -1903,11 +1903,11 @@
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "rail.n.04": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "collar.n.01": {
         "burnable": {
@@ -1915,7 +1915,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "banana.n.02": {
         "breakable": {},
@@ -1929,7 +1929,7 @@
         "freezable": {},
         "openable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "cherry.n.03": {
@@ -1942,11 +1942,11 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "scoop.n.06": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "fastener.n.02": {
         "dustyable": {},
@@ -1958,7 +1958,7 @@
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "trap.n.02": {
         "burnable": {
@@ -1980,11 +1980,11 @@
     },
     "saucepan.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lace.n.01": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bean.n.01": {
         "burnable": {},
@@ -1999,7 +1999,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "chicken.n.01": {
         "burnable": {
@@ -2026,7 +2026,7 @@
     },
     "razor.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ladder.n.01": {
         "dustyable": {},
@@ -2052,7 +2052,7 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "straw.n.04": {
@@ -2068,7 +2068,7 @@
     },
     "grate.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "television_receiver.n.01": {
         "breakable": {},
@@ -2076,14 +2076,14 @@
             "burn_temperature": 104.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "slide_fastener.n.01": {
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lotion.n.02": {
         "liquid": {}
@@ -2093,7 +2093,7 @@
     },
     "gauge.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "syrup.n.01": {
@@ -2120,7 +2120,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "avocado.n.01": {
@@ -2154,11 +2154,11 @@
             "burn_temperature": 2012.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bedclothes.n.01": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "wiring.n.01": {
         "dustyable": {}
@@ -2167,7 +2167,7 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "blush_wine.n.01": {
         "burnable": {
@@ -2190,11 +2190,11 @@
     },
     "anchor.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "strainer.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "vanilla.n.02": {
         "burnable": {
@@ -2208,7 +2208,7 @@
             "burn_temperature": 500.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bow.n.08": {
         "breakable": {},
@@ -2221,29 +2221,29 @@
     },
     "bracket.n.04": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "suit.n.01": {
         "burnable": {
             "burn_temperature": 100.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "baggage.n.01": {
         "burnable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "heel.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "pajama.n.02": {
         "burnable": {
             "burn_temperature": 394.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "mug.n.04": {
@@ -2252,47 +2252,47 @@
             "burn_temperature": 140.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "wallboard.n.01": {
         "burnable": {
             "burn_temperature": 451.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ceramic.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "funnel.n.02": {
         "burnable": {
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cushion.n.03": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lever.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "dustpan.n.02": {
         "burnable": {
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tin.n.02": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cinnamon.n.03": {
         "breakable": {},
@@ -2304,26 +2304,26 @@
     },
     "notch.n.03": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sofa.n.01": {
         "burnable": {
             "burn_temperature": 300.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "slack.n.06": {
         "burnable": {
             "burn_temperature": 100.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "steamer.n.02": {
         "dustyable": {},
         "heatSource": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "watch.n.01": {
         "breakable": {},
@@ -2332,7 +2332,7 @@
         },
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
@@ -2370,11 +2370,11 @@
         "burnable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "basin.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "breast.n.03": {
         "burnable": {
@@ -2418,7 +2418,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "chewing_gum.n.01": {
         "burnable": {
@@ -2430,28 +2430,28 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tarpaulin.n.01": {
         "burnable": {
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "quilt.n.01": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cutlery.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "decoration.n.01": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lettuce.n.03": {
         "burnable": {},
@@ -2480,18 +2480,18 @@
     "wrench.n.03": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lamp.n.02": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "whisk.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "spinach.n.02": {
         "burnable": {
@@ -2505,7 +2505,7 @@
         "sliceable": {}
     },
     "coil.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "mayonnaise.n.01": {
         "cookable": {
@@ -2527,17 +2527,17 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "truck.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "golf_club.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "folder.n.02": {
         "breakable": {},
@@ -2550,7 +2550,7 @@
     "enamel.n.04": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "coconut.n.01": {
         "breakable": {},
@@ -2581,7 +2581,7 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "broccoli.n.02": {
@@ -2600,7 +2600,7 @@
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "binder.n.03": {
         "burnable": {
@@ -2608,7 +2608,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "blender.n.01": {
         "breakable": {},
@@ -2616,7 +2616,7 @@
             "burn_temperature": 300.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "painting.n.01": {
@@ -2626,7 +2626,7 @@
     "brick.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "beef.n.02": {
         "burnable": {
@@ -2645,7 +2645,7 @@
             "burn_temperature": 100.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "raspberry.n.02": {
         "cookable": {
@@ -2672,21 +2672,21 @@
     },
     "step_ladder.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "laminate.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "frying_pan.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "throw.n.04": {
         "burnable": {
             "burn_temperature": 475.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "yogurt.n.01": {
         "cookable": {
@@ -2703,7 +2703,7 @@
             "burn_temperature": 400.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "comb.n.01": {
         "breakable": {},
@@ -2711,15 +2711,15 @@
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "blower.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "undergarment.n.01": {
         "burnable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "casserole.n.02": {
@@ -2732,7 +2732,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "radio_receiver.n.01": {
@@ -2750,13 +2750,13 @@
     "blockage.n.02": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "legging.n.01": {
         "burnable": {
             "burn_temperature": 200.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "dressing.n.01": {
         "burnable": {},
@@ -2782,12 +2782,12 @@
         "cookable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "scantling.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cranberry.n.02": {
         "burnable": {
@@ -2798,7 +2798,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "printer.n.03": {
         "breakable": {},
@@ -2812,7 +2812,7 @@
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ginger.n.02": {
         "breakable": {},
@@ -2825,17 +2825,17 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "sunglass.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "plunger.n.03": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cucumber.n.02": {
         "breakable": {},
@@ -2847,7 +2847,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "mustard.n.02": {
@@ -2871,7 +2871,7 @@
         "dustyable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "cracker.n.01": {
@@ -2886,7 +2886,7 @@
             "burn_temperature": 100.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "chili.n.02": {
         "burnable": {},
@@ -2911,14 +2911,14 @@
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "blind.n.03": {
         "breakable": {},
         "burnable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "soapsuds.n.01": {
         "liquid": {}
@@ -2929,7 +2929,7 @@
         "soakable": {}
     },
     "float.n.05": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "flashlight.n.01": {
         "breakable": {},
@@ -2937,14 +2937,14 @@
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "jack.n.10": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "marble.n.02": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "pie.n.01": {
         "burnable": {},
@@ -2956,7 +2956,7 @@
     "compact_disk.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "stew.n.02": {
         "cookable": {
@@ -2970,7 +2970,7 @@
         }
     },
     "applicator.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "muffin.n.01": {
         "breakable": {},
@@ -2990,11 +2990,11 @@
         "dustyable": {},
         "openable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "flight.n.03": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "grape.n.01": {
         "burnable": {
@@ -3059,19 +3059,19 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "hairbrush.n.01": {
         "burnable": {
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "alarm.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
@@ -3083,14 +3083,14 @@
     },
     "backing.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "dishtowel.n.01": {
         "burnable": {
             "burn_temperature": 200.0
         },
         "cleaningTool": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "beer.n.01": {
@@ -3108,13 +3108,13 @@
             "burn_temperature": 100.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tablecloth.n.01": {
         "burnable": {
             "burn_temperature": 125.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "library.n.01": {
         "burnable": {
@@ -3151,12 +3151,12 @@
     },
     "partition.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "caddy.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "carton.n.02": {
         "breakable": {},
@@ -3178,7 +3178,7 @@
             "burn_temperature": 300.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "peppermint.n.03": {
         "cookable": {
@@ -3201,7 +3201,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "celery.n.02": {
@@ -3214,7 +3214,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "almond.n.02": {
@@ -3230,11 +3230,11 @@
     },
     "step.n.04": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "squeegee.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "clothespin.n.01": {
         "breakable": {},
@@ -3243,21 +3243,21 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "brassiere.n.01": {
         "burnable": {
             "burn_temperature": 125.0
         },
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "scarf.n.01": {
         "burnable": {
             "burn_temperature": 120.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "canvas.n.01": {
@@ -3298,13 +3298,13 @@
     },
     "colander.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "girdle.n.02": {
         "burnable": {
             "burn_temperature": 125.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "frosting.n.01": {
         "cookable": {
@@ -3323,7 +3323,7 @@
     "canister.n.02": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pizza.n.01": {
         "breakable": {},
@@ -3358,14 +3358,14 @@
         "openable": {}
     },
     "beater.n.02": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "blazer.n.01": {
         "burnable": {
             "burn_temperature": 100.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pickle.n.01": {
         "breakable": {},
@@ -3380,13 +3380,13 @@
             "burn_temperature": 200.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "satin.n.01": {
         "burnable": {
             "burn_temperature": 125.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "mail.n.03": {
         "breakable": {},
@@ -3399,18 +3399,18 @@
     },
     "pedal.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "guard.n.03": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tack.n.02": {
         "dustyable": {}
     },
     "windshield.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cocktail.n.01": {
         "freezable": {},
@@ -3435,21 +3435,21 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
     "necklace.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "fiber.n.05": {
         "breakable": {},
         "burnable": {
             "burn_temperature": 330.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "clamp.n.01": {
         "dustyable": {},
@@ -3462,29 +3462,29 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "latch.n.01": {
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bedspread.n.01": {
         "burnable": {
             "burn_temperature": 100.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "pitcher.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "platter.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "crate.n.01": {
         "burnable": {
@@ -3492,7 +3492,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "palette.n.02": {
         "breakable": {},
@@ -3500,7 +3500,7 @@
             "burn_temperature": 540.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lemonade.n.01": {
         "freezable": {},
@@ -3517,7 +3517,7 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "nectarine.n.02": {
         "burnable": {
@@ -3528,7 +3528,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "dental_floss.n.01": {
@@ -3566,20 +3566,20 @@
     "covering.n.02": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "receptacle.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lens.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "trowel.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "clock.n.01": {
         "breakable": {},
@@ -3590,7 +3590,7 @@
         "burnable": {
             "burn_temperature": 424.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "chalk.n.04": {
         "breakable": {}
@@ -3599,7 +3599,7 @@
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "bean_curd.n.01": {
         "breakable": {},
@@ -3660,7 +3660,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "prawn.n.01": {
@@ -3686,7 +3686,7 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "egg_yolk.n.01": {
         "breakable": {},
@@ -3716,41 +3716,41 @@
     "fireplace.n.01": {
         "dustyable": {},
         "heatSource": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sandal.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "swimsuit.n.01": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "hamper.n.02": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "peeler.n.03": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "gasket.n.01": {
         "burnable": {
             "burn_temperature": 1220.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "bird_feeder.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "clothesline.n.01": {
         "burnable": {
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "wheat.n.02": {
         "burnable": {
@@ -3767,7 +3767,7 @@
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "bandage.n.01": {
@@ -3775,7 +3775,7 @@
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "brine.n.02": {
@@ -3817,7 +3817,7 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "foliation.n.03": {
         "burnable": {
@@ -3855,12 +3855,12 @@
     },
     "sill.n.01": {
         "freezable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "globe.n.03": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "paprika.n.02": {
         "freezable": {},
@@ -3882,7 +3882,7 @@
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "ointment.n.01": {
         "burnable": {
@@ -3915,17 +3915,17 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "turnbuckle.n.01": {
         "dustyable": {},
         "openable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bicycle.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pumpkin.n.02": {
         "breakable": {},
@@ -3949,18 +3949,18 @@
     "earring.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pantyhose.n.01": {
         "burnable": {
             "burn_temperature": 424.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "railing.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "calculator.n.02": {
         "breakable": {},
@@ -3971,14 +3971,14 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "headboard.n.01": {
         "burnable": {
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "granule.n.01": {},
     "sequin.n.01": {
@@ -3990,7 +3990,7 @@
     },
     "shovel.n.01": {
         "breakable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "punch.n.02": {
         "freezable": {},
@@ -4002,18 +4002,18 @@
         "burnable": {
             "burn_temperature": 795.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "rayon.n.01": {
         "burnable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "baseball.n.02": {
         "burnable": {
             "burn_temperature": 413.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sketch.n.01": {
         "breakable": {},
@@ -4025,11 +4025,11 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "deck.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cupcake.n.01": {
         "breakable": {},
@@ -4052,21 +4052,21 @@
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "burlap.n.01": {
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "uniform.n.01": {
         "burnable": {
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "zucchini.n.02": {
@@ -4078,7 +4078,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "rosemary.n.02": {
@@ -4116,14 +4116,14 @@
     "kosher.n.01": {},
     "saw.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "fur.n.03": {
         "burnable": {
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "batter.n.02": {
@@ -4140,7 +4140,7 @@
     "mixer.n.04": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "fuse.n.01": {
         "burnable": {},
@@ -4151,7 +4151,7 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "duffel_bag.n.01": {
         "burnable": {
@@ -4159,7 +4159,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "tinsel.n.02": {
@@ -4170,7 +4170,7 @@
     },
     "dolly.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "scanner.n.02": {
         "breakable": {},
@@ -4232,7 +4232,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "clog.n.02": {
         "breakable": {},
@@ -4241,11 +4241,11 @@
         },
         "freezable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "drum_sander.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "flat_coat.n.01": {
@@ -4273,11 +4273,11 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tripod.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "marshmallow.n.01": {
         "breakable": {},
@@ -4350,7 +4350,7 @@
         },
         "dustyable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "respirator.n.01": {
         "breakable": {},
@@ -4358,12 +4358,12 @@
             "burn_temperature": 1058.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "gauze.n.02": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "gauze.n.01": {
@@ -4371,13 +4371,13 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {},
         "sliceable": {}
     },
     "runner.n.09": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "granola.n.01": {
         "breakable": {},
@@ -4405,12 +4405,12 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "pendulum.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
@@ -4419,7 +4419,7 @@
             "burn_temperature": 410.0
         },
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "pulp.n.01": {
@@ -4435,7 +4435,7 @@
             "burn_temperature": 451.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "barley.n.01": {
         "breakable": {},
@@ -4451,7 +4451,7 @@
     },
     "compressor.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "caramel.n.02": {
         "burnable": {
@@ -4478,7 +4478,7 @@
     "padding.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "videodisk.n.01": {
@@ -4505,16 +4505,16 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "caliper.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "doorknob.n.01": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "ham.n.01": {
@@ -4522,7 +4522,7 @@
         "cookable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "wallet.n.01": {
         "burnable": {
@@ -4547,7 +4547,7 @@
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "diaper.n.01": {
@@ -4560,7 +4560,7 @@
             "burn_temperature": 780.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "mango.n.02": {
@@ -4580,13 +4580,13 @@
             "burn_temperature": 410.0
         },
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "crank.n.04": {
         "breakable": {},
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "rum.n.01": {
         "burnable": {
@@ -4603,12 +4603,12 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cooler.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "drum.n.04": {
         "breakable": {},
@@ -4616,19 +4616,19 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "watchband.n.01": {
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cheesecloth.n.01": {
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "beam.n.02": {
@@ -4639,23 +4639,23 @@
         "toggleable": {}
     },
     "sieve.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "detector.n.01": {
         "toggleable": {}
     },
     "cart.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "hoop.n.02": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "jigsaw.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "hamburger.n.01": {
@@ -4676,7 +4676,7 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "upholstery.n.01": {
         "breakable": {},
@@ -4684,14 +4684,14 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cashmere.n.01": {
         "burnable": {
             "burn_temperature": 600.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "lego.n.01": {
@@ -4699,7 +4699,7 @@
             "burn_temperature": 780.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "puree.n.01": {
         "burnable": {
@@ -4728,24 +4728,24 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "tumbler.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "rake.n.03": {
         "burnable": {
             "burn_temperature": 392.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "trophy.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "stamp.n.08": {
         "breakable": {},
@@ -4756,12 +4756,12 @@
     "opener.n.03": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pincer.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "thumbtack.n.01": {
         "dustyable": {},
@@ -4788,7 +4788,7 @@
         "burnable": {
             "burn_temperature": 842.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "boiler.n.01": {
         "burnable": {
@@ -4796,7 +4796,7 @@
         },
         "dustyable": {},
         "heatSource": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "glaze.n.01": {
@@ -4829,19 +4829,19 @@
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "jaw.n.03": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "football.n.02": {
         "burnable": {
             "burn_temperature": 413.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "headband.n.01": {
         "burnable": {
@@ -4877,7 +4877,7 @@
         "burnable": {
             "burn_temperature": 879.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "ice_lolly.n.01": {
         "breakable": {},
@@ -4922,14 +4922,14 @@
         "burnable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "nightgown.n.01": {
         "burnable": {
             "burn_temperature": 764.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "novel.n.02": {
         "burnable": {
@@ -4943,7 +4943,7 @@
             "burn_temperature": 764.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "shoebox.n.02": {
@@ -4958,37 +4958,37 @@
     "liquid_crystal_display.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "magnet.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "remote_control.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "fleece.n.03": {
         "burnable": {
             "burn_temperature": 764.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "raincoat.n.01": {
         "burnable": {
             "burn_temperature": 465.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "slipper.n.01": {
         "burnable": {
             "burn_temperature": 764.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tenderloin.n.02": {
         "burnable": {
@@ -5006,7 +5006,7 @@
         "burnable": {
             "burn_temperature": 764.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "bench.n.01": {
@@ -5014,13 +5014,13 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "insole.n.01": {
         "burnable": {
             "burn_temperature": 413.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "brew.n.01": {
         "burnable": {},
@@ -5031,12 +5031,12 @@
     },
     "axle.n.01": {
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "teacup.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "espresso.n.01": {
         "burnable": {
@@ -5071,7 +5071,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "macaroni.n.02": {
         "breakable": {},
@@ -5091,12 +5091,12 @@
             "burn_temperature": 780.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "saucer.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "portrait.n.02": {
         "breakable": {},
@@ -5111,18 +5111,18 @@
         "cookable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "sweatshirt.n.01": {
         "burnable": {
             "burn_temperature": 764.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "background.n.07": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "mozzarella.n.01": {
@@ -5150,19 +5150,19 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "shoelace.n.01": {
         "burnable": {
             "burn_temperature": 764.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "hubcap.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "hay.n.01": {
         "burnable": {
@@ -5172,7 +5172,7 @@
     },
     "windshield_wiper.n.01": {
         "breakable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "stake.n.05": {
         "burnable": {
@@ -5184,12 +5184,12 @@
         "burnable": {
             "burn_temperature": 764.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "fountain.n.03": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lamb.n.05": {
         "burnable": {
@@ -5205,12 +5205,12 @@
     "ratchet.n.01": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "antenna.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "cornmeal.n.01": {
@@ -5224,7 +5224,7 @@
         "soakable": {}
     },
     "ramp.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "snake.n.05": {
         "burnable": {},
@@ -5235,17 +5235,17 @@
     "carafe.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "shaver.n.03": {
         "dustyable": {},
         "slicer": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pane.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "piano.n.01": {
         "breakable": {},
@@ -5258,7 +5258,7 @@
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cos.n.02": {
         "breakable": {},
@@ -5301,7 +5301,7 @@
             "burn_temperature": 764.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "caper.n.02": {
         "burnable": {
@@ -5343,7 +5343,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "oat.n.02": {
@@ -5358,7 +5358,7 @@
     },
     "hub.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "chop.n.02": {
@@ -5370,14 +5370,14 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "apron.n.01": {
         "burnable": {
             "burn_temperature": 764.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "liquor.n.01": {
@@ -5391,7 +5391,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cobweb.n.03": {
         "breakable": {},
@@ -5402,7 +5402,7 @@
     "cleaver.n.01": {
         "dustyable": {},
         "slicer": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "envelope.n.01": {
         "breakable": {},
@@ -5420,16 +5420,16 @@
     "cringle.n.01": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sorter.n.02": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "mural.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "biscuit.n.01": {
         "breakable": {},
@@ -5454,13 +5454,13 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {},
         "soakable": {}
     },
     "lingerie.n.01": {
         "burnable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "blackberry.n.01": {
@@ -5480,7 +5480,7 @@
     "slate.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "shim.n.01": {
         "breakable": {},
@@ -5488,14 +5488,14 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "carpet_pad.n.01": {
         "burnable": {
             "burn_temperature": 780.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "sawhorse.n.01": {
@@ -5503,7 +5503,7 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "straightener.n.01": {
         "dustyable": {},
@@ -5515,23 +5515,23 @@
             "burn_temperature": 764.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "griddle.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "shaker.n.03": {
         "dustyable": {},
         "openable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "shield.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "light-emitting_diode.n.01": {
         "breakable": {},
@@ -5541,7 +5541,7 @@
     "sash.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "footboard.n.02": {
@@ -5549,7 +5549,7 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "confetti.n.01": {
         "burnable": {
@@ -5577,7 +5577,7 @@
             "burn_temperature": 572.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "seltzer.n.01": {
         "freezable": {},
@@ -5600,7 +5600,7 @@
             "burn_temperature": 1000.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "doorjamb.n.01": {
         "burnable": {
@@ -5611,14 +5611,14 @@
     "plumbing.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "eiderdown.n.01": {
         "burnable": {
             "burn_temperature": 764.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lampshade.n.01": {
         "breakable": {},
@@ -5627,7 +5627,7 @@
         },
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "guitar.n.01": {
         "breakable": {},
@@ -5635,15 +5635,15 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "computer_keyboard.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "denture.n.01": {
         "breakable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "loaf_of_bread.n.01": {
         "breakable": {},
@@ -5675,7 +5675,7 @@
     },
     "bookend.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cantaloup.n.02": {
         "burnable": {
@@ -5686,7 +5686,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "paperback_book.n.01": {
@@ -5702,7 +5702,7 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "scotch.n.02": {
         "burnable": {
@@ -5719,7 +5719,7 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "curry.n.01": {
         "burnable": {
@@ -5747,7 +5747,7 @@
     },
     "ladle.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sausage.n.01": {
         "breakable": {},
@@ -5759,14 +5759,14 @@
     },
     "crowbar.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "webbing.n.03": {
         "burnable": {
             "burn_temperature": 795.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "pudding.n.03": {
@@ -5783,7 +5783,7 @@
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "armoire.n.01": {
@@ -5792,7 +5792,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "meatball.n.01": {
         "burnable": {
@@ -5846,7 +5846,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "allspice.n.03": {
         "burnable": {
@@ -5859,7 +5859,7 @@
         "cookable": {},
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "corkscrew.n.01": {
@@ -5868,14 +5868,14 @@
         },
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "gingham.n.01": {
         "burnable": {
             "burn_temperature": 764.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "scrapbook.n.01": {
         "burnable": {
@@ -5887,12 +5887,12 @@
     "jewel.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bangle.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cradle.n.01": {
         "breakable": {},
@@ -5900,14 +5900,14 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "doormat.n.02": {
         "burnable": {
             "burn_temperature": 795.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tabbouleh.n.01": {
         "burnable": {
@@ -5964,7 +5964,7 @@
     "fence.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "eyeliner.n.01": {
         "breakable": {},
@@ -5978,7 +5978,7 @@
         "burnable": {
             "burn_temperature": 764.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "collage.n.01": {
@@ -5991,16 +5991,16 @@
     "jamb.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "piston.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ashcan.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cigarette.n.01": {
         "breakable": {},
@@ -6012,7 +6012,7 @@
     "hygrometer.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "broth.n.01": {
@@ -6039,12 +6039,12 @@
     "reamer.n.01": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "chisel.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "slicer": {}
     },
     "lanolin.n.02": {
@@ -6068,7 +6068,7 @@
     },
     "purifier.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "marinara.n.01": {
@@ -6100,7 +6100,7 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pancake.n.01": {
         "breakable": {},
@@ -6122,7 +6122,7 @@
     "teapot.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "anchovy.n.01": {
         "breakable": {},
@@ -6142,21 +6142,21 @@
     },
     "stockpot.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "probe.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "masher.n.02": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "nutmeg.n.02": {
         "perishable": {}
     },
     "dart.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "hedge.n.01": {
         "burnable": {
@@ -6172,7 +6172,7 @@
     },
     "motorcycle.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "tequila.n.01": {
@@ -6210,11 +6210,11 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sifter.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "turmeric.n.02": {
         "burnable": {
@@ -6234,7 +6234,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "radicchio.n.01": {
         "burnable": {
@@ -6254,12 +6254,12 @@
     },
     "minibike.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "handlebar.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "oxford.n.04": {
         "burnable": {
@@ -6297,7 +6297,7 @@
     "sharpener.n.01": {
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "album.n.02": {
         "burnable": {},
@@ -6309,7 +6309,7 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "oolong.n.01": {
         "perishable": {},
@@ -6337,12 +6337,12 @@
             "burn_temperature": 0.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "furnace.n.01": {
         "dustyable": {},
         "heatSource": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "crouton.n.01": {
@@ -6360,7 +6360,7 @@
     "cotter.n.03": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "accelerator.n.01": {
         "burnable": {
@@ -6368,7 +6368,7 @@
         },
         "dustyable": {},
         "toggleable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "accelerator.n.02": {
         "dustyable": {}
@@ -6390,7 +6390,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "lighter.n.02": {
         "burnable": {
@@ -6401,14 +6401,14 @@
     },
     "crossbar.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "teddy.n.01": {
         "burnable": {
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "mousetrap.n.01": {
@@ -6418,7 +6418,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "brownie.n.03": {
@@ -6446,11 +6446,11 @@
     "sculpture.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "putter.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "kabob.n.01": {
         "breakable": {},
@@ -6467,7 +6467,7 @@
     "faceplate.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "grapefruit.n.02": {
         "burnable": {
@@ -6486,11 +6486,11 @@
         "toggleable": {}
     },
     "undercarriage.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "chock.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "coloring.n.01": {
         "liquid": {}
@@ -6515,11 +6515,11 @@
     "stopcock.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "fire_extinguisher.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "pomegranate.n.02": {
@@ -6551,13 +6551,13 @@
     "demitasse.n.02": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "jump_suit.n.01": {
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "penne.n.01": {
@@ -6575,23 +6575,23 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "trailer_truck.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "sprocket.n.01": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pulley.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "semigloss.n.01": {
         "liquid": {}
@@ -6603,12 +6603,12 @@
         "dustyable": {}
     },
     "dampener.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "firebox.n.01": {
         "dustyable": {},
         "heatSource": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tabasco.n.02": {
         "freezable": {},
@@ -6621,7 +6621,7 @@
             "burn_temperature": 809.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "tent.n.01": {
@@ -6630,19 +6630,19 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "voltmeter.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "clamshell.n.02": {
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "wastepaper_basket.n.01": {
         "burnable": {
@@ -6650,7 +6650,7 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tidy.n.01": {
         "breakable": {},
@@ -6678,19 +6678,19 @@
     "cream_pitcher.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "percolator.n.01": {
         "dustyable": {},
         "heatSource": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "monocle.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bale.n.01": {
         "breakable": {},
@@ -6702,7 +6702,7 @@
     },
     "grater.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cayenne.n.03": {
         "burnable": {
@@ -6717,7 +6717,7 @@
     },
     "power_shovel.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "potpourri.n.03": {
         "burnable": {
@@ -6744,7 +6744,7 @@
     },
     "flatbed.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "speedometer.n.01": {
         "dustyable": {},
@@ -6756,12 +6756,12 @@
     },
     "shear.n.02": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "slicer": {}
     },
     "trimmer.n.02": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "slicer": {},
         "toggleable": {}
     },
@@ -6825,7 +6825,7 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "tahini.n.01": {
@@ -6840,12 +6840,12 @@
         "perishable": {}
     },
     "chassis.n.02": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "goblet.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "gazpacho.n.01": {
         "burnable": {
@@ -6873,7 +6873,7 @@
     "plumber's_snake.n.01": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "webcam.n.01": {
@@ -6951,14 +6951,14 @@
             "burn_temperature": 752.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bedpost.n.01": {
         "burnable": {
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "easel.n.01": {
         "breakable": {},
@@ -6966,19 +6966,19 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "dinner_jacket.n.01": {
         "burnable": {
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "dipper.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "stopwatch.n.01": {
         "breakable": {},
@@ -6986,7 +6986,7 @@
             "burn_temperature": 780.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
@@ -6994,7 +6994,7 @@
         "dustyable": {},
         "heatSource": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "aspartame.n.01": {
         "burnable": {
@@ -7012,17 +7012,17 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "blackboard.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "softball.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "martini.n.01": {
         "freezable": {},
@@ -7034,14 +7034,14 @@
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "basketball.n.02": {
         "burnable": {
             "burn_temperature": 413.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tiara.n.01": {
         "breakable": {},
@@ -7051,20 +7051,20 @@
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "bib.n.02": {
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "puppet.n.03": {
         "burnable": {
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "gingerbread.n.01": {
@@ -7187,20 +7187,20 @@
     "carabiner.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "outsole.n.01": {
         "burnable": {
             "burn_temperature": 500.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "awl.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pebble.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "brocade.n.01": {
         "burnable": {
@@ -7213,7 +7213,7 @@
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cassette.n.01": {
         "breakable": {},
@@ -7228,7 +7228,7 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "meat_loaf.n.01": {
         "breakable": {},
@@ -7294,7 +7294,7 @@
     },
     "shrapnel.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "venison.n.01": {
         "burnable": {
@@ -7309,7 +7309,7 @@
     },
     "generator.n.04": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "diskette.n.01": {
@@ -7354,11 +7354,11 @@
     "protractor.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "helmet.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "skateboard.n.01": {
         "breakable": {},
@@ -7366,16 +7366,16 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "water_scooter.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cellular_telephone.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
@@ -7391,14 +7391,14 @@
     },
     "inflater.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "potholder.n.01": {
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "paperweight.n.01": {
         "breakable": {},
@@ -7407,7 +7407,7 @@
     "van.n.05": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "earmuff.n.01": {
@@ -7415,13 +7415,13 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "bust.n.03": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ember.n.01": {
         "breakable": {},
@@ -7432,7 +7432,7 @@
     },
     "hacksaw.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "slicer": {}
     },
     "dowel.n.01": {
@@ -7440,13 +7440,13 @@
         "burnable": {
             "burn_temperature": 392.0
         },
-        "scrubbable": {}
+        "stainable": {}
     },
     "windowpane.n.01": {
         "breakable": {},
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "julienne.n.01": {
         "breakable": {},
@@ -7462,7 +7462,7 @@
     },
     "buffer.n.05": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "lacquer.n.02": {
@@ -7478,7 +7478,7 @@
     },
     "stirrer.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "mussel.n.01": {
         "burnable": {
@@ -7509,7 +7509,7 @@
     "stiletto.n.01": {
         "dustyable": {},
         "slicer": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sunhat.n.01": {
         "burnable": {
@@ -7531,7 +7531,7 @@
             "burn_temperature": 815.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "loafer.n.02": {
@@ -7539,7 +7539,7 @@
             "burn_temperature": 413.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "toner.n.03": {
         "freezable": {},
@@ -7553,7 +7553,7 @@
     },
     "barbell.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cardamom.n.02": {
         "breakable": {},
@@ -7584,7 +7584,7 @@
     },
     "intake.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "fluorescent.n.01": {
         "breakable": {},
@@ -7596,7 +7596,7 @@
         "burnable": {
             "burn_temperature": 410.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "prosciutto.n.01": {
@@ -7656,21 +7656,21 @@
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "carriage.n.04": {
         "burnable": {
             "burn_temperature": 392.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "baby_buggy.n.01": {
         "burnable": {
             "burn_temperature": 1220.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cheeseboard.n.01": {
         "burnable": {
@@ -7678,11 +7678,11 @@
         },
         "dustyable": {},
         "perishable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "thimble.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "inverter.n.01": {
         "dustyable": {},
@@ -7763,7 +7763,7 @@
     },
     "medallion.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "gouda.n.01": {
         "burnable": {
@@ -7783,7 +7783,7 @@
         "perishable": {}
     },
     "selsyn.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "capsule.n.02": {
         "breakable": {},
@@ -7800,12 +7800,12 @@
             "burn_temperature": 410.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "manifold.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "camcorder.n.01": {
         "breakable": {},
@@ -7823,11 +7823,11 @@
     "headlight.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "dumbbell.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "buckle.n.01": {
         "dustyable": {},
@@ -7841,7 +7841,7 @@
     },
     "stairwell.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "joist.n.01": {
         "breakable": {},
@@ -7885,12 +7885,12 @@
     },
     "pestle.n.03": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "crusher.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "wafer.n.02": {
@@ -7908,7 +7908,7 @@
         "dustyable": {},
         "openable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "crochet.n.01": {
         "burnable": {
@@ -7919,19 +7919,19 @@
     "toolbox.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "caldron.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "loudspeaker.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "armchair.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cabinet.n.01": {
         "burnable": {
@@ -7939,16 +7939,16 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "chaise_longue.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "coffee_maker.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
@@ -7957,26 +7957,26 @@
             "burn_temperature": 320.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "console_table.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "crib.n.01": {
         "burnable": {
             "burn_temperature": 320.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "dining_table.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "floor_lamp.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "table_lamp.n.01": {
@@ -7986,7 +7986,7 @@
     },
     "gaming_table.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "grandfather_clock.n.01": {
         "breakable": {},
@@ -7994,23 +7994,23 @@
             "burn_temperature": 320.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {}
     },
     "highchair.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pedestal_table.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pool_table.n.01": {
         "burnable": {
             "burn_temperature": 320.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pot_plant.n.01": {
         "burnable": {
@@ -8020,7 +8020,7 @@
     },
     "rail_fence.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "range_hood.n.01": {
         "burnable": {
@@ -8028,19 +8028,19 @@
         },
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "rocking_chair.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "straight_chair.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "swivel_chair.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "towel_rack.n.01": {
@@ -8049,12 +8049,12 @@
             "burn_temperature": 1220.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "wall_clock.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "timeSetable": {},
         "toggleable": {}
     },
@@ -8067,7 +8067,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "sliceable": {}
     },
     "lyonnaise_sauce.n.01": {
@@ -8084,7 +8084,7 @@
     "bulldog_clip.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bulletin_board.n.02": {
         "dustyable": {}
@@ -8101,7 +8101,7 @@
     },
     "carving_knife.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "slicer": {}
     },
     "cheese_dip.n.01": {
@@ -8117,7 +8117,7 @@
         },
         "freezable": {},
         "perishable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "chives.n.01": {
@@ -8133,11 +8133,11 @@
     },
     "chopping_board.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "coatrack.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "corn_flake.n.01": {
         "cookable": {
@@ -8151,11 +8151,11 @@
     "cruet.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "scale.n.07": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "dinner_napkin.n.01": {
@@ -8167,11 +8167,11 @@
     },
     "dish_rack.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "foot_rule.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pistachio.n.02": {
         "burnable": {
@@ -8218,7 +8218,7 @@
     },
     "steel.n.03": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "low-fat_milk.n.01": {
         "cookable": {
@@ -8250,23 +8250,23 @@
             "burn_temperature": 451.0
         },
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "parer.n.02": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "slicer": {}
     },
     "pencil_box.n.01": {
         "dustyable": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pepper_grinder.n.01": {
         "dustyable": {},
         "screwable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pepper_sauce.n.01": {
         "burnable": {
@@ -8311,7 +8311,7 @@
     },
     "soup_ladle.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "spaghetti.n.01": {
         "cookable": {
@@ -8331,7 +8331,7 @@
     },
     "straight_pin.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "sweet_corn.n.02": {
         "burnable": {
@@ -8345,20 +8345,20 @@
     },
     "table_knife.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "slicer": {}
     },
     "tablefork.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "toasting_fork.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tongs.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "turnip.n.02": {
         "burnable": {
@@ -8384,7 +8384,7 @@
     },
     "display_panel.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "wine_bottle.n.01": {
@@ -8392,21 +8392,21 @@
         "dustyable": {},
         "liquid": {},
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "computer_game.n.01": {
         "breakable": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "board_game.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "walker.n.04": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "medicine.n.02": {
         "burnable": {}
@@ -8414,7 +8414,7 @@
     "protein.n.01": {},
     "ink_cartridge.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "cpu_board.n.01": {
         "breakable": {},
@@ -8426,7 +8426,7 @@
     },
     "headset.n.01": {
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "disk_drive.n.01": {
@@ -8436,7 +8436,7 @@
     },
     "hammer.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bath_towel.n.01": {
         "burnable": {
@@ -8444,7 +8444,7 @@
         },
         "cleaningTool": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "hand_towel.n.01": {
@@ -8453,7 +8453,7 @@
         },
         "cleaningTool": {},
         "dustyable": {},
-        "scrubbable": {},
+        "stainable": {},
         "soakable": {}
     },
     "candy_cane.n.01": {
@@ -8466,24 +8466,24 @@
     },
     "folderal.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "clout_nail.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pocketknife.n.01": {
         "dustyable": {},
         "slicer": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "bracelet.n.02": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ring.n.08": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "tree.n.01": {
         "burnable": {
@@ -8534,7 +8534,7 @@
     },
     "cage.n.01": {
         "openable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "trout.n.01": {
         "burnable": {
@@ -8565,7 +8565,7 @@
     },
     "rivet.n.02": {},
     "barbecue.n.01": {
-        "scrubbable": {},
+        "stainable": {},
         "heatSource": {},
         "toggleable": {}
     },
@@ -8592,7 +8592,7 @@
         "sliceable": {}
     },
     "broiler.n.01": {
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {},
         "heatSource": {},
         "timeSetable": {}
@@ -8606,7 +8606,7 @@
         "burnable": {
             "burn_temperature": 320.0
         },
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {}
     },
     "candlestick.n.01": {
@@ -8625,7 +8625,7 @@
         "dustyable": {}
     },
     "gravestone.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "nan.n.04": {
         "cookable": {
@@ -8769,7 +8769,7 @@
     "stoop.n.03": {},
     "lumberjack.n.02": {},
     "pruner.n.02": {
-        "scrubbable": {},
+        "stainable": {},
         "slicer": {}
     },
     "planter.n.03": {
@@ -8780,7 +8780,7 @@
         "toggleable": {}
     },
     "casement.n.01": {
-        "scrubbable": {}
+        "stainable": {}
     },
     "thumbscrew.n.02": {
         "screwable": {}
@@ -8796,7 +8796,7 @@
         "dustyable": {}
     },
     "lawn_mower.n.01": {
-        "scrubbable": {},
+        "stainable": {},
         "toggleable": {},
         "slicer": {}
     },
@@ -8810,7 +8810,7 @@
         "breakable": {},
         "burnable": {},
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "drumstick.n.01": {
         "burnable": {
@@ -8835,14 +8835,14 @@
     },
     "floor.n.01": {
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "breakfast_table.n.01": {
         "burnable": {
             "burn_temperature": 320.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "pepper_mill.n.01": {
         "breakable": {},
@@ -8850,7 +8850,7 @@
             "burn_temperature": 320.0
         },
         "dustyable": {},
-        "scrubbable": {}
+        "stainable": {}
     },
     "ice_cube.n.01": {
         "breakable": {},
@@ -8865,5 +8865,9 @@
         },
         "freezable": {},
         "sliceable": {}
+    },
+    "folding_chair.n.01": {
+        "dustyable": {},
+        "stainable": {}
     }
 }

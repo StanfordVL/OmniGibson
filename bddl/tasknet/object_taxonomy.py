@@ -10,7 +10,7 @@ import tasknet
 #   1. Replace "hierarchy.json" with the correct filename OR replace that filename with "hierarchy.json"
 
 DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
-    tasknet.__package__, 'hierarchy.json')
+    tasknet.__package__, 'hierarchy_owned.json')
 
 
 class ObjectTaxonomy(object):

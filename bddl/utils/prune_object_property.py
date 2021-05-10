@@ -1,4 +1,5 @@
 import os
+import csv
 import xml.etree.ElementTree as ET
 from collections import Counter
 
@@ -25,7 +26,7 @@ OBJECT_TAXONOMY = ObjectTaxonomy()
 
 INPUT_SYNSET_FILE = os.path.join(os.path.dirname(
     tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties.json')
-MODELS_CSV_PATH = = os.path.join(os.path.dirname(
+MODELS_CSV_PATH = os.path.join(os.path.dirname(
     tasknet.__file__), '..', 'utils', 'objectmodeling.csv')
 OUTPUT_SYNSET_FILE = os.path.join(os.path.dirname(
     tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties_pruned_igibson.json')
@@ -151,6 +152,7 @@ def get_owned_hierarchy():
             hierarchy_generator.add_path(synset_path[:-1], hierarchy)
 
     return hierarchy
+    
 
 def get_leaf_synsets(hierarchy, leaf_synsets):
     '''
@@ -187,8 +189,9 @@ def main():
     with open(INPUT_SYNSET_FILE) as f:
         synsets_to_properties = json.load(f)
 
-    # We build a hierarchy using synsets of owned models.
-    hierarchy = get_owned_hierarchy()
+    # We build a hierarchy of only owned models, but with oracle properties because
+    #   igibson properties are not yet available. 
+    hierarchy = hierarchy_generator.generate_hierarchy("owned", "oracle")
     # We store a set of leaf synset nodes.
     leaf_synsets = set()
     get_leaf_synsets(hierarchy, leaf_synsets)
@@ -210,7 +213,7 @@ def main():
                 print('remove', synset, prop)
 
     # We propogate the leaf nodes' updated properties up the hierarchy.
-    hierarchy_generator.add_abilities(hierarchy, synsets_to_properties)
+    hierarchy_generator.add_abilities(hierarchy, ability_map=synsets_to_properties)
     # We go through the hierarchy to update synsets_to_properties.
     update_synsets_to_properties(hierarchy, synsets_to_properties)
 

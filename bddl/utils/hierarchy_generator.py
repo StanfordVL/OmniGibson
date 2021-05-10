@@ -91,11 +91,6 @@ for synset in article_synsets:
     else:
         all_synsets[synset] = list(set(all_synsets[synset]) | set(article_synsets[synset]))
 
-with open(IGIBSON_ABILITY_JSON_PATH) as f:
-    igibson_ability_map = json.load(f)
-
-with open(ORACLE_ABILITY_JSON_PATH) as f:
-    oracle_ability_map = json.load(f)
 
 ######################################################
 
@@ -160,7 +155,19 @@ def add_igibson_objects(node, synsets):
             add_igibson_objects(child_node, synsets)
 
 
-def add_abilities(node, ability_map):
+def add_abilities(node, ability_type=None, ability_map=None):
+    if ability_type is None and ability_map is None:
+        raise ValueError("No abilities specified. Abilities can be specified through the ability_type kwarg to get a pre-existing ability map, or the ability_map kwarg to override with custom abilities.")
+    if ability_map is None: 
+        if ability_type == "igibson":
+            with open(IGIBSON_ABILITY_JSON_PATH) as f:
+                ability_map = json.load(f)
+        elif ability_type == "oracle": 
+            with open(ORACLE_ABILITY_JSON_PATH) as f:
+                ability_map = json.load(f)
+        else:
+            raise ValueError("Invalid ability type given.")
+
     # At leaf
     if "children" not in node:
         name = node["name"]
@@ -182,7 +189,7 @@ def add_abilities(node, ability_map):
         init = False
         abilities = {}
         for child_node in node["children"]:
-            child_abilities = add_abilities(child_node, ability_map)
+            child_abilities = add_abilities(child_node, ability_map=ability_map)
             if child_abilities is not None:
                 if init:
                     # First merge the ability annotations themselves
@@ -208,9 +215,19 @@ def add_abilities(node, ability_map):
         node["abilities"] = OrderedDict(sorted(abilities.items(), key=lambda pair: pair[0]))
         return abilities
 
-def generate_hierarchy(synsets, ability_map):
+def generate_hierarchy(hierarchy_type, ability_type):
     # Every synset we have should theoretically lead up to `entity.n.01`.
     hierarchy = {"name": 'entity.n.01', "children": []}
+
+    if hierarchy_type == "owned": 
+        synsets = owned_synsets
+    elif hierarchy_type == "article":
+        synsets = article_synsets
+    elif hierarchy_type == "all": 
+        synsets = all_synsets
+    else:
+        raise ValueError("Invalid hierarchy type given.")
+
 
     for synset in synsets:
         synset = wn.synset(synset)
@@ -221,18 +238,25 @@ def generate_hierarchy(synsets, ability_map):
             add_path(synset_path[:-1], hierarchy)
 
     add_igibson_objects(hierarchy, synsets)
-    add_abilities(hierarchy, ability_map)
+    add_abilities(hierarchy, ability_type=ability_type)
     return hierarchy
 
-hierarchy_owned = generate_hierarchy(owned_synsets, igibson_ability_map)
-with open(OUTPUT_JSON_PATH1, "w") as f:
-    json.dump(hierarchy_owned, f, indent=2)
+def save_hierarchies():
+    """Save all three hierarchy types 
+    """
+    hierarchy_owned = generate_hierarchy("owned", "igibson")
+    with open(OUTPUT_JSON_PATH1, "w") as f:
+        json.dump(hierarchy_owned, f, indent=2)
 
-hierarchy_articles = generate_hierarchy(article_synsets, oracle_ability_map)
-with open(OUTPUT_JSON_PATH2, "w") as f:
-    json.dump(hierarchy_articles, f, indent=2)
+    hierarchy_articles = generate_hierarchy("article", "oracle")
+    with open(OUTPUT_JSON_PATH2, "w") as f:
+        json.dump(hierarchy_articles, f, indent=2)
 
-hierarchy_all = generate_hierarchy(all_synsets, oracle_ability_map)
-with open(OUTPUT_JSON_PATH3, "w") as f:
-    json.dump(hierarchy_all, f, indent=2)
+    hierarchy_all = generate_hierarchy("all", "oracle")
+    with open(OUTPUT_JSON_PATH3, "w") as f:
+        json.dump(hierarchy_all, f, indent=2)
+
+
+if __name__ == "__main__":
+    save_hierarchies()
 
