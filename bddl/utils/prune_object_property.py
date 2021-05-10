@@ -15,13 +15,6 @@ import json
 
 import hierarchy_generator
 
-# TODOs:
-#   2. Right now, any synset is a candidate for having a property removed because it's impossible in iGibson. 
-#       INSTEAD, only leaf synsets should go through this process. Then, the results should be propagated 
-#       up using the intersection, as we have been doing in the past. 
-#   3. See note below about removing "openable" property from "ashcan.n.01" manually
-
-
 OBJECT_TAXONOMY = ObjectTaxonomy()
 
 INPUT_SYNSET_FILE = os.path.join(os.path.dirname(
@@ -87,7 +80,6 @@ def prune_openable():
     # Manuall remove toilet because even thought they have joints, they can't necessarily open the lid of the toilet.
     if 'toilet' in allowed_categories:
         allowed_categories.remove('toilet')
-        # TODO check if need to remove "ashcan.n.01" manually as well
 
     return allowed_categories
 
