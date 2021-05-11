@@ -74,6 +74,7 @@ def prune_openable():
         "toilet",
         "console_table",
         "monitor",
+        "stand",
         "standing_tv",
         "coffee_maker"
     ]
@@ -188,9 +189,7 @@ def main():
             # We add a property to a synset if iGibson has it but it is not in the annotation.
             # TODO: Should we update the oracle json file then?
             if synset in properties_to_synsets[prop] and prop not in curr_properties:
-                assert synset in leaf_synsets, f"Synset {synset} not in leaf synsets"
-                curr_properties[prop] = {}
-                print('add', synset, prop)
+                raise ValueError(f"Please add property '{prop}' to the oracle properties file manually.")
             # We remove a property from a synset if:
             # 1. The synset does not have this property in iGibson.
             # 2. The annotation has the property.
