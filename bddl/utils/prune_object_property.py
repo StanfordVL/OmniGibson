@@ -5,7 +5,6 @@ from collections import Counter
 
 import gibson2
 import tasknet
-from tasknet.object_taxonomy import ObjectTaxonomy
 
 from gibson2.objects.articulated_object import URDFObject
 from gibson2.utils import urdf_utils
@@ -15,7 +14,6 @@ import json
 
 import hierarchy_generator
 
-OBJECT_TAXONOMY = ObjectTaxonomy()
 
 INPUT_SYNSET_FILE = os.path.join(os.path.dirname(
     tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties.json')
@@ -24,30 +22,21 @@ MODELS_CSV_PATH = os.path.join(os.path.dirname(
 OUTPUT_SYNSET_FILE = os.path.join(os.path.dirname(
     tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties_pruned_igibson.json')
 
+NON_MODEL_CATEGORIES = ["floor"]
+
 def get_categories():
     obj_dir = os.path.join(gibson2.ig_dataset_path, 'objects')
     return [cat for cat in os.listdir(obj_dir) if os.path.isdir(os.path.join(obj_dir, cat))]
 
-def get_category_with_ability(ability):
-    categories = []
-    for cat in get_categories():
-        # Check that the category has this label.
-        class_name = OBJECT_TAXONOMY.get_class_name_from_igibson_category(cat)
-        if not class_name:
-            continue
-
-        if not OBJECT_TAXONOMY.has_ability(class_name, ability):
-            continue
-
-        categories.append(cat)
-    return categories
-
-
 def categories_to_synsets(categories):
+    with open(MODELS_CSV_PATH, "r") as f:
+        reader = csv.DictReader(f)
+        cat_to_syn = {row["Object"].strip(): row["Synset"].strip() 
+                      for row in reader}
     synsets = []
     for cat in categories:
         # Check that the category has this label.
-        class_name = OBJECT_TAXONOMY.get_class_name_from_igibson_category(cat)
+        class_name = cat_to_syn[cat]
         assert class_name is not None, cat
         synsets.append(class_name)
     return synsets
@@ -59,10 +48,14 @@ def prune_openable():
     '''
     # Require all models of the category to have revolute or prismatic joints
     allowed_joints = frozenset(["revolute", "prismatic"])
-    categories = get_category_with_ability('openable')
-    print('openable', categories)
+    with open(MODELS_CSV_PATH, "r") as f:
+        reader = csv.DictReader(f)
+        all_categories = [row["Object"].strip() for row in reader]
     allowed_categories = []
-    for cat in categories:
+    # for cat in categories:
+    for cat in all_categories:
+        if cat in NON_MODEL_CATEGORIES:
+            continue
         cat_dir = get_ig_category_path(cat)
         success = True
         for obj_name in os.listdir(cat_dir):
@@ -76,18 +69,23 @@ def prune_openable():
                 break
         if success:
             allowed_categories.append(cat)
-
     # Manuall remove toilet because even thought they have joints, they can't necessarily open the lid of the toilet.
-    if 'toilet' in allowed_categories:
-        allowed_categories.remove('toilet')
+    skip_openable = [
+        "toilet",
+        "console_table",
+        "monitor",
+        "standing_tv",
+        "coffee_maker"
+    ]
+    for skip_category in skip_openable:
+        if skip_category in allowed_categories:
+            allowed_categories.remove(skip_category)
 
     return allowed_categories
 
 
 def prune_heat_source():
     # Heat sources are confined to kitchen appliance that we have articulated models for
-    categories = get_category_with_ability('heatSource')
-    print('heatSource', categories)
     allowed_categories = [
         'microwave',
         'stove',
@@ -98,8 +96,6 @@ def prune_heat_source():
 
 def prune_water_source():
     # Water sources are confined to only sink for now. May add bathtub later?
-    categories = get_category_with_ability('waterSource')
-    print('waterSource', categories)
     allowed_categories = [
         'sink',
     ]
@@ -108,8 +104,6 @@ def prune_water_source():
 
 def prune_sliceable():
     # Sliceable are confined to objects that we have half_* models for
-    categories = get_category_with_ability('sliceable')
-    print('sliceable', categories)
     allowed_categories = []
     for cat in get_categories():
         if 'half_' in cat:

@@ -150,6 +150,7 @@
                                           ],
                                           "abilities": {
                                             "dustyable": {},
+                                            "openable": {},
                                             "stainable": {}
                                           }
                                         },
@@ -384,6 +385,7 @@
                                           "burn_temperature": 572.0
                                         },
                                         "dustyable": {},
+                                        "openable": {},
                                         "stainable": {}
                                       }
                                     }
@@ -9052,7 +9054,7 @@
                         {
                           "name": "coffee.n.01",
                           "igibson_categories": [
-                            "coffee_bag",
+                            "coffee_pouch",
                             "coffee_cup"
                           ],
                           "abilities": {
@@ -9585,7 +9587,7 @@
                             {
                               "name": "coffee.n.01",
                               "igibson_categories": [
-                                "coffee_bag",
+                                "coffee_pouch",
                                 "coffee_cup"
                               ],
                               "abilities": {
@@ -10247,7 +10249,7 @@
                                 {
                                   "name": "coffee.n.01",
                                   "igibson_categories": [
-                                    "coffee_bag",
+                                    "coffee_pouch",
                                     "coffee_cup"
                                   ],
                                   "abilities": {
