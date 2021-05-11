@@ -24,14 +24,16 @@ OUTPUT_SYNSET_FILE = os.path.join(os.path.dirname(
 
 NON_MODEL_CATEGORIES = ["floor"]
 
+
 def get_categories():
     obj_dir = os.path.join(gibson2.ig_dataset_path, 'objects')
     return [cat for cat in os.listdir(obj_dir) if os.path.isdir(os.path.join(obj_dir, cat))]
 
+
 def categories_to_synsets(categories):
     with open(MODELS_CSV_PATH, "r") as f:
         reader = csv.DictReader(f)
-        cat_to_syn = {row["Object"].strip(): row["Synset"].strip() 
+        cat_to_syn = {row["Object"].strip(): row["Synset"].strip()
                       for row in reader}
     synsets = []
     for cat in categories:
@@ -111,35 +113,6 @@ def prune_sliceable():
             allowed_categories.append(cat.replace('half_', ''))
     return allowed_categories
 
-def get_owned_hierarchy():
-    '''
-    Builds a simply synset hierarchy using owned models. We can use 
-    this to find the leaf nodes.
-    '''
-    owned_synsets = {}
-    with open(MODELS_CSV_PATH) as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            synset = row["Synset"].strip()
-            obj = row["Object"].strip()
-            if synset in owned_synsets:
-                owned_synsets[synset].append(obj)
-            else:
-                owned_synsets[synset] = [obj]
-
-    # Every synset we have should theoretically lead up to `entity.n.01`.
-    hierarchy = {"name": 'entity.n.01', "children": []}
-
-    for synset in owned_synsets:
-        synset = wn.synset(synset)
-        synset_paths = []
-        hierarchy_generator.generate_paths(synset_paths, [synset], synset)
-        for synset_path in synset_paths:
-            # The last word should always be `entity.n.01`, so we can just take it out.
-            hierarchy_generator.add_path(synset_path[:-1], hierarchy)
-
-    return hierarchy
-    
 
 def get_leaf_synsets(hierarchy, leaf_synsets):
     '''
@@ -152,16 +125,18 @@ def get_leaf_synsets(hierarchy, leaf_synsets):
         for sub_hierarchy in hierarchy["children"]:
             get_leaf_synsets(sub_hierarchy, leaf_synsets)
 
+
 def update_synsets_to_properties(hierarchy, synsets_to_properties):
     if "children" not in hierarchy:
-        if synsets_to_properties[hierarchy["name"]] != hierarchy["abilities"]:
-            print(f"{hierarchy['name']} has conflicting properties. Please investigate.")
+        assert synsets_to_properties[hierarchy["name"]] == hierarchy["abilities"], \
+            f"{hierarchy['name']} has conflicting properties. Please investigate."
     else:
         if hierarchy["name"] in synsets_to_properties:
             synsets_to_properties[hierarchy["name"]] = hierarchy["abilities"]
             print(f"Abilities updated for {hierarchy['name']}")
         for sub_hierarchy in hierarchy["children"]:
             update_synsets_to_properties(sub_hierarchy, synsets_to_properties)
+
 
 def main():
     properties_to_synsets = {}
@@ -177,7 +152,7 @@ def main():
         synsets_to_properties = json.load(f)
 
     # We build a hierarchy of only owned models, but with oracle properties because
-    #   igibson properties are not yet available. 
+    #   igibson properties are not yet available.
     hierarchy = hierarchy_generator.generate_hierarchy("owned", "oracle")
     # We store a set of leaf synset nodes.
     leaf_synsets = set()
@@ -189,7 +164,8 @@ def main():
             # We add a property to a synset if iGibson has it but it is not in the annotation.
             # TODO: Should we update the oracle json file then?
             if synset in properties_to_synsets[prop] and prop not in curr_properties:
-                raise ValueError(f"Please add property '{prop}' to the oracle properties file manually.")
+                raise ValueError(
+                    f"Please add property '{prop}' to '{synset}'the oracle properties file manually.")
             # We remove a property from a synset if:
             # 1. The synset does not have this property in iGibson.
             # 2. The annotation has the property.
@@ -199,12 +175,14 @@ def main():
                 print('remove', synset, prop)
 
     # We propogate the leaf nodes' updated properties up the hierarchy.
-    hierarchy_generator.add_abilities(hierarchy, ability_map=synsets_to_properties)
+    hierarchy_generator.add_abilities(
+        hierarchy, ability_map=synsets_to_properties)
     # We go through the hierarchy to update synsets_to_properties.
     update_synsets_to_properties(hierarchy, synsets_to_properties)
 
     with open(OUTPUT_SYNSET_FILE, 'w') as f:
         json.dump(synsets_to_properties, f, indent=2)
+
 
 if __name__ == "__main__":
     main()
