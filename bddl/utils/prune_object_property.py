@@ -50,11 +50,8 @@ def prune_openable():
     '''
     # Require all models of the category to have revolute or prismatic joints
     allowed_joints = frozenset(["revolute", "prismatic"])
-    with open(MODELS_CSV_PATH, "r") as f:
-        reader = csv.DictReader(f)
-        all_categories = [row["Object"].strip() for row in reader]
     allowed_categories = []
-    # for cat in categories:
+    all_categories = get_categories()
     for cat in all_categories:
         if cat in NON_MODEL_CATEGORIES:
             continue
@@ -84,6 +81,18 @@ def prune_openable():
         if skip_category in allowed_categories:
             allowed_categories.remove(skip_category)
 
+    add_openable = [
+        'car',
+        'bag',
+        'jar',
+        'package',
+        'wine_bottle',
+        'folder',
+    ]
+    for add_category in add_openable:
+        assert add_category in all_categories
+        allowed_categories.append(add_category)
+
     return allowed_categories
 
 
@@ -111,6 +120,26 @@ def prune_sliceable():
     for cat in get_categories():
         if 'half_' in cat:
             allowed_categories.append(cat.replace('half_', ''))
+    return allowed_categories
+
+
+def prune_burnable():
+    # Burnable are confined to objects that are also cookable
+    allowed_categories = []
+
+    with open(MODELS_CSV_PATH, "r") as f:
+        reader = csv.DictReader(f)
+        cat_to_syn = {row["Object"].strip(): row["Synset"].strip()
+                      for row in reader}
+
+    with open(INPUT_SYNSET_FILE) as f:
+        synsets_to_properties = json.load(f)
+
+    for cat in cat_to_syn:
+        properties = synsets_to_properties[cat_to_syn[cat]]
+        if 'burnable' in properties and 'cookable' in properties:
+            allowed_categories.append(cat)
+
     return allowed_categories
 
 
@@ -147,6 +176,8 @@ def main():
         prune_water_source())
     properties_to_synsets['sliceable'] = categories_to_synsets(
         prune_sliceable())
+    properties_to_synsets['burnable'] = categories_to_synsets(
+        prune_burnable())
 
     with open(INPUT_SYNSET_FILE) as f:
         synsets_to_properties = json.load(f)
