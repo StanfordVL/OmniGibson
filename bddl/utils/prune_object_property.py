@@ -68,7 +68,7 @@ def prune_openable():
                 break
         if success:
             allowed_categories.append(cat)
-    # Manuall remove toilet because even thought they have joints, they can't necessarily open the lid of the toilet.
+    # Manually remove them because even thought they have joints, they can't necessarily be opened semantically
     skip_openable = [
         "toilet",
         "console_table",
@@ -81,6 +81,7 @@ def prune_openable():
         if skip_category in allowed_categories:
             allowed_categories.remove(skip_category)
 
+    # Manually add them because even though they don't have joints for now, we will acquire the articulated version soon
     add_openable = [
         'car',
         'bag',
