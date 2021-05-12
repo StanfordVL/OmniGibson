@@ -75,9 +75,6 @@
                                 "dartboard"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 392.0
-                                },
                                 "dustyable": {}
                               }
                             },
@@ -87,9 +84,6 @@
                                 "pegboard"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 451.0
-                                },
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -97,7 +91,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "dustyable": {}
                           }
                         }
@@ -208,9 +201,6 @@
                                         "bench"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 392.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -221,9 +211,6 @@
                                         "sofa"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 300.0
-                                        },
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -235,7 +222,6 @@
                                         "stool"
                                       ],
                                       "abilities": {
-                                        "burnable": {},
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -256,9 +242,6 @@
                                         "bed"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 205.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -266,9 +249,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 205.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -281,9 +261,6 @@
                                     "top_cabinet"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 320.0
-                                    },
                                     "dustyable": {},
                                     "openable": {},
                                     "stainable": {}
@@ -298,9 +275,6 @@
                                         "breakfast_table"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 320.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -311,9 +285,6 @@
                                         "coffee_table"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 320.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -334,9 +305,6 @@
                                         "desk"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 1180.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -367,9 +335,6 @@
                                         "pool_table"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 320.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -381,9 +346,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 572.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -404,9 +366,6 @@
                                         "crib"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 320.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -414,9 +373,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 320.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -465,9 +421,6 @@
                                 "carpet"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 400.0
-                                },
                                 "dustyable": {},
                                 "soakable": {},
                                 "stainable": {}
@@ -489,7 +442,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {},
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -562,6 +514,7 @@
                                         "breakable": {},
                                         "dustyable": {},
                                         "liquid": {},
+                                        "openable": {},
                                         "stainable": {}
                                       }
                                     }
@@ -633,6 +586,7 @@
                                   "abilities": {
                                     "breakable": {},
                                     "dustyable": {},
+                                    "openable": {},
                                     "screwable": {},
                                     "stainable": {}
                                   }
@@ -688,9 +642,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 140.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -699,9 +650,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 140.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -722,7 +670,6 @@
                                     "chest"
                                   ],
                                   "abilities": {
-                                    "burnable": {},
                                     "dustyable": {},
                                     "openable": {},
                                     "stainable": {}
@@ -829,9 +776,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 451.0
-                                },
                                 "soakable": {}
                               }
                             },
@@ -841,8 +785,8 @@
                                 "bag"
                               ],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {},
+                                "openable": {},
                                 "stainable": {}
                               }
                             },
@@ -853,8 +797,8 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {},
-                                "dustyable": {}
+                                "dustyable": {},
+                                "openable": {}
                               }
                             },
                             {
@@ -867,7 +811,6 @@
                                   ],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {},
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -878,9 +821,6 @@
                                     "dustpan"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 200.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -888,7 +828,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -942,6 +881,7 @@
                                           ],
                                           "abilities": {
                                             "dustyable": {},
+                                            "openable": {},
                                             "stainable": {}
                                           }
                                         }
@@ -949,6 +889,7 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "dustyable": {},
+                                        "openable": {},
                                         "stainable": {}
                                       }
                                     }
@@ -956,6 +897,7 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "dustyable": {},
+                                    "openable": {},
                                     "stainable": {}
                                   }
                                 }
@@ -963,6 +905,7 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "dustyable": {},
+                                "openable": {},
                                 "stainable": {}
                               }
                             }
@@ -1002,9 +945,6 @@
                                     "pool_table"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 320.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -1015,7 +955,6 @@
                                     "ball"
                                   ],
                                   "abilities": {
-                                    "burnable": {},
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -1023,7 +962,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -1045,9 +983,6 @@
                                           ],
                                           "abilities": {
                                             "breakable": {},
-                                            "burnable": {
-                                              "burn_temperature": 104.0
-                                            },
                                             "dustyable": {},
                                             "stainable": {},
                                             "toggleable": {}
@@ -1057,9 +992,6 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 104.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {},
                                         "toggleable": {}
@@ -1069,9 +1001,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 104.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {},
                                     "toggleable": {}
@@ -1081,9 +1010,6 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 104.0
-                                },
                                 "dustyable": {},
                                 "stainable": {},
                                 "toggleable": {}
@@ -1121,9 +1047,6 @@
                                                   ],
                                                   "abilities": {
                                                     "breakable": {},
-                                                    "burnable": {
-                                                      "burn_temperature": 320.0
-                                                    },
                                                     "dustyable": {},
                                                     "stainable": {},
                                                     "timeSetable": {}
@@ -1133,9 +1056,6 @@
                                               "igibson_categories": [],
                                               "abilities": {
                                                 "breakable": {},
-                                                "burnable": {
-                                                  "burn_temperature": 320.0
-                                                },
                                                 "dustyable": {},
                                                 "stainable": {},
                                                 "timeSetable": {}
@@ -1281,9 +1201,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 392.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -1295,9 +1212,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 392.0
-                                        },
                                         "dustyable": {}
                                       }
                                     }
@@ -1305,9 +1219,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 392.0
-                                    },
                                     "dustyable": {}
                                   }
                                 },
@@ -1321,9 +1232,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 392.0
-                                        },
                                         "dustyable": {}
                                       }
                                     }
@@ -1331,9 +1239,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 392.0
-                                    },
                                     "dustyable": {}
                                   }
                                 },
@@ -1347,9 +1252,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 392.0
-                                        },
                                         "dustyable": {}
                                       }
                                     }
@@ -1357,9 +1259,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 392.0
-                                    },
                                     "dustyable": {}
                                   }
                                 }
@@ -1367,9 +1266,6 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 392.0
-                                },
                                 "dustyable": {}
                               }
                             },
@@ -1405,9 +1301,6 @@
                                                   ],
                                                   "abilities": {
                                                     "breakable": {},
-                                                    "burnable": {
-                                                      "burn_temperature": 300.0
-                                                    },
                                                     "dustyable": {},
                                                     "openable": {},
                                                     "stainable": {},
@@ -1419,9 +1312,6 @@
                                               "igibson_categories": [],
                                               "abilities": {
                                                 "breakable": {},
-                                                "burnable": {
-                                                  "burn_temperature": 300.0
-                                                },
                                                 "dustyable": {},
                                                 "openable": {},
                                                 "stainable": {},
@@ -1433,9 +1323,6 @@
                                           "igibson_categories": [],
                                           "abilities": {
                                             "breakable": {},
-                                            "burnable": {
-                                              "burn_temperature": 300.0
-                                            },
                                             "dustyable": {},
                                             "openable": {},
                                             "stainable": {},
@@ -1447,9 +1334,6 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 300.0
-                                        },
                                         "dustyable": {},
                                         "openable": {},
                                         "stainable": {},
@@ -1461,9 +1345,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 300.0
-                                    },
                                     "dustyable": {},
                                     "openable": {},
                                     "stainable": {},
@@ -1482,9 +1363,6 @@
                                           "igibson_categories": [],
                                           "abilities": {
                                             "breakable": {},
-                                            "burnable": {
-                                              "burn_temperature": 320.0
-                                            },
                                             "dustyable": {},
                                             "stainable": {}
                                           }
@@ -1493,9 +1371,6 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 320.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -1504,9 +1379,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 320.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -1615,9 +1487,6 @@
                                                   ],
                                                   "abilities": {
                                                     "breakable": {},
-                                                    "burnable": {
-                                                      "burn_temperature": 1742.0
-                                                    },
                                                     "dustyable": {},
                                                     "toggleable": {}
                                                   }
@@ -1626,9 +1495,6 @@
                                               "igibson_categories": [],
                                               "abilities": {
                                                 "breakable": {},
-                                                "burnable": {
-                                                  "burn_temperature": 1742.0
-                                                },
                                                 "dustyable": {},
                                                 "toggleable": {}
                                               }
@@ -1637,9 +1503,6 @@
                                           "igibson_categories": [],
                                           "abilities": {
                                             "breakable": {},
-                                            "burnable": {
-                                              "burn_temperature": 1742.0
-                                            },
                                             "dustyable": {},
                                             "toggleable": {}
                                           }
@@ -1648,9 +1511,6 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 1742.0
-                                        },
                                         "dustyable": {},
                                         "toggleable": {}
                                       }
@@ -1659,9 +1519,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 1742.0
-                                    },
                                     "dustyable": {},
                                     "toggleable": {}
                                   }
@@ -1737,9 +1594,6 @@
                                   ],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 780.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {},
                                     "toggleable": {}
@@ -1761,7 +1615,6 @@
                                     "shelf"
                                   ],
                                   "abilities": {
-                                    "burnable": {},
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -1773,9 +1626,6 @@
                                   ],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 491.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -1783,7 +1633,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -1797,9 +1646,6 @@
                                     "treadmill"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 815.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {},
                                     "toggleable": {}
@@ -1808,9 +1654,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 815.0
-                                },
                                 "dustyable": {},
                                 "stainable": {},
                                 "toggleable": {}
@@ -2051,9 +1894,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 1830.0
-                                        },
                                         "dustyable": {}
                                       }
                                     },
@@ -2067,9 +1907,6 @@
                                           ],
                                           "abilities": {
                                             "breakable": {},
-                                            "burnable": {
-                                              "burn_temperature": 4600.0
-                                            },
                                             "dustyable": {},
                                             "screwable": {},
                                             "toggleable": {}
@@ -2079,9 +1916,6 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 4600.0
-                                        },
                                         "dustyable": {},
                                         "screwable": {},
                                         "toggleable": {}
@@ -2091,7 +1925,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {},
                                     "dustyable": {}
                                   }
                                 }
@@ -2099,7 +1932,6 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {},
                                 "dustyable": {}
                               }
                             },
@@ -2156,9 +1988,6 @@
                                     "paintbrush"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 200.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -2166,9 +1995,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 200.0
-                                },
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -2345,9 +2171,6 @@
                                           ],
                                           "abilities": {
                                             "breakable": {},
-                                            "burnable": {
-                                              "burn_temperature": 100.0
-                                            },
                                             "dustyable": {},
                                             "stainable": {}
                                           }
@@ -2356,9 +2179,6 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 100.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -2429,9 +2249,6 @@
                                     "rake"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 392.0
-                                    },
                                     "stainable": {}
                                   }
                                 }
@@ -2448,9 +2265,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 50.0
-                                },
                                 "cleaningTool": {},
                                 "dustyable": {}
                               }
@@ -2555,9 +2369,6 @@
                                                 "spatula"
                                               ],
                                               "abilities": {
-                                                "burnable": {
-                                                  "burn_temperature": 500.0
-                                                },
                                                 "dustyable": {},
                                                 "stainable": {}
                                               }
@@ -2565,9 +2376,6 @@
                                           ],
                                           "igibson_categories": [],
                                           "abilities": {
-                                            "burnable": {
-                                              "burn_temperature": 500.0
-                                            },
                                             "dustyable": {},
                                             "stainable": {}
                                           }
@@ -2599,9 +2407,6 @@
                                           ],
                                           "abilities": {
                                             "breakable": {},
-                                            "burnable": {
-                                              "burn_temperature": 300.0
-                                            },
                                             "dustyable": {},
                                             "stainable": {},
                                             "toggleable": {}
@@ -2611,9 +2416,6 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 300.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {},
                                         "toggleable": {}
@@ -2665,7 +2467,6 @@
                                   ],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {},
                                     "dustyable": {},
                                     "screwable": {},
                                     "stainable": {}
@@ -2678,9 +2479,6 @@
                                   ],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 300.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -2723,7 +2521,6 @@
                                   ],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {},
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -2732,7 +2529,6 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {},
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -2790,9 +2586,6 @@
                                     "hairbrush"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 200.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -2803,9 +2596,6 @@
                                     "paintbrush"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 200.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -2816,9 +2606,6 @@
                                     "scrub_brush"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 518.0
-                                    },
                                     "cleaningTool": {},
                                     "dustyable": {},
                                     "soakable": {},
@@ -2831,9 +2618,7 @@
                                     "toothbrush"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 500.0
-                                    },
+                                    "cleaningTool": {},
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -2841,7 +2626,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -2855,9 +2639,6 @@
                                     "broom"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 200.0
-                                    },
                                     "cleaningTool": {},
                                     "dustyable": {}
                                   }
@@ -2868,16 +2649,12 @@
                                     "carpet_sweeper"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 780.0
-                                    },
                                     "cleaningTool": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "cleaningTool": {}
                               }
                             },
@@ -2912,9 +2689,7 @@
                               "igibson_categories": [
                                 "powder_bottle"
                               ],
-                              "abilities": {
-                                "burnable": {}
-                              }
+                              "abilities": {}
                             },
                             {
                               "name": "toothbrush.n.01",
@@ -2922,9 +2697,7 @@
                                 "toothbrush"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 500.0
-                                },
+                                "cleaningTool": {},
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -2935,7 +2708,6 @@
                                 "perfume"
                               ],
                               "abilities": {
-                                "burnable": {},
                                 "liquid": {}
                               }
                             }
@@ -3009,6 +2781,7 @@
                                               ],
                                               "abilities": {
                                                 "dustyable": {},
+                                                "openable": {},
                                                 "stainable": {}
                                               }
                                             }
@@ -3016,6 +2789,7 @@
                                           "igibson_categories": [],
                                           "abilities": {
                                             "dustyable": {},
+                                            "openable": {},
                                             "stainable": {}
                                           }
                                         }
@@ -3023,6 +2797,7 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "dustyable": {},
+                                        "openable": {},
                                         "stainable": {}
                                       }
                                     }
@@ -3030,6 +2805,7 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "dustyable": {},
+                                    "openable": {},
                                     "stainable": {}
                                   }
                                 }
@@ -3037,6 +2813,7 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "dustyable": {},
+                                "openable": {},
                                 "stainable": {}
                               }
                             }
@@ -3044,6 +2821,7 @@
                           "igibson_categories": [],
                           "abilities": {
                             "dustyable": {},
+                            "openable": {},
                             "stainable": {}
                           }
                         }
@@ -3063,9 +2841,6 @@
                                 "carpet"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 400.0
-                                },
                                 "dustyable": {},
                                 "soakable": {},
                                 "stainable": {}
@@ -3074,9 +2849,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {
-                              "burn_temperature": 400.0
-                            },
                             "dustyable": {},
                             "soakable": {},
                             "stainable": {}
@@ -3091,9 +2863,6 @@
                                 "range_hood"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 1220.0
-                                },
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -3101,9 +2870,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {
-                              "burn_temperature": 1220.0
-                            },
                             "dustyable": {},
                             "stainable": {}
                           }
@@ -3144,9 +2910,6 @@
                                     "gym_shoe"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 500.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -3197,7 +2960,6 @@
                                     "hat"
                                   ],
                                   "abilities": {
-                                    "burnable": {},
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -3205,7 +2967,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -3219,14 +2980,12 @@
                                     "glove"
                                   ],
                                   "abilities": {
-                                    "burnable": {},
                                     "stainable": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "stainable": {}
                               }
                             },
@@ -3242,9 +3001,6 @@
                                         "t-shirt"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 205.0
-                                        },
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -3253,9 +3009,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 205.0
-                                    },
                                     "dustyable": {},
                                     "soakable": {},
                                     "stainable": {}
@@ -3270,14 +3023,12 @@
                                         "coat"
                                       ],
                                       "abilities": {
-                                        "burnable": {},
                                         "stainable": {}
                                       }
                                     }
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
                                     "stainable": {}
                                   }
                                 },
@@ -3290,9 +3041,6 @@
                                         "jeans"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 482.0
-                                        },
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -3301,9 +3049,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 482.0
-                                    },
                                     "dustyable": {},
                                     "soakable": {},
                                     "stainable": {}
@@ -3315,7 +3060,6 @@
                                     "sweater"
                                   ],
                                   "abilities": {
-                                    "burnable": {},
                                     "dustyable": {},
                                     "soakable": {},
                                     "stainable": {}
@@ -3330,7 +3074,6 @@
                                         "underwear"
                                       ],
                                       "abilities": {
-                                        "burnable": {},
                                         "soakable": {},
                                         "stainable": {}
                                       }
@@ -3338,7 +3081,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
                                     "soakable": {},
                                     "stainable": {}
                                   }
@@ -3349,9 +3091,6 @@
                                     "scarf"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 120.0
-                                    },
                                     "soakable": {},
                                     "stainable": {}
                                   }
@@ -3359,7 +3098,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "stainable": {}
                               }
                             },
@@ -3375,9 +3113,6 @@
                                         "jeans"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 482.0
-                                        },
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -3386,9 +3121,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 482.0
-                                    },
                                     "dustyable": {},
                                     "soakable": {},
                                     "stainable": {}
@@ -3397,9 +3129,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 482.0
-                                },
                                 "dustyable": {},
                                 "soakable": {},
                                 "stainable": {}
@@ -3414,9 +3143,6 @@
                                     "pajamas"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 394.0
-                                    },
                                     "soakable": {},
                                     "stainable": {}
                                   }
@@ -3424,9 +3150,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 394.0
-                                },
                                 "soakable": {},
                                 "stainable": {}
                               }
@@ -3443,9 +3166,6 @@
                                         "sock"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 205.0
-                                        },
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -3454,9 +3174,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 205.0
-                                    },
                                     "dustyable": {},
                                     "soakable": {},
                                     "stainable": {}
@@ -3465,9 +3182,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 205.0
-                                },
                                 "dustyable": {},
                                 "soakable": {},
                                 "stainable": {}
@@ -3482,9 +3196,6 @@
                                     "dress"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 205.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -3492,9 +3203,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 205.0
-                                },
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -3502,7 +3210,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "stainable": {}
                           }
                         },
@@ -3513,10 +3220,8 @@
                           ],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 100.0
-                            },
-                            "dustyable": {}
+                            "dustyable": {},
+                            "openable": {}
                           }
                         },
                         {
@@ -3526,7 +3231,6 @@
                           ],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {},
                             "soakable": {}
                           }
                         },
@@ -3568,9 +3272,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 392.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -3579,9 +3280,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 392.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -3590,9 +3288,6 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 392.0
-                                },
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -3601,9 +3296,6 @@
                           "igibson_categories": [],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 392.0
-                            },
                             "dustyable": {},
                             "stainable": {}
                           }
@@ -3709,9 +3401,6 @@
                                                 "toaster"
                                               ],
                                               "abilities": {
-                                                "burnable": {
-                                                  "burn_temperature": 200.0
-                                                },
                                                 "dustyable": {},
                                                 "toggleable": {}
                                               }
@@ -3846,7 +3535,6 @@
                                         "hat"
                                       ],
                                       "abilities": {
-                                        "burnable": {},
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -3854,7 +3542,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -3868,14 +3555,12 @@
                                         "glove"
                                       ],
                                       "abilities": {
-                                        "burnable": {},
                                         "stainable": {}
                                       }
                                     }
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
                                     "stainable": {}
                                   }
                                 },
@@ -3891,9 +3576,6 @@
                                             "t-shirt"
                                           ],
                                           "abilities": {
-                                            "burnable": {
-                                              "burn_temperature": 205.0
-                                            },
                                             "dustyable": {},
                                             "soakable": {},
                                             "stainable": {}
@@ -3902,9 +3584,6 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 205.0
-                                        },
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -3919,14 +3598,12 @@
                                             "coat"
                                           ],
                                           "abilities": {
-                                            "burnable": {},
                                             "stainable": {}
                                           }
                                         }
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {},
                                         "stainable": {}
                                       }
                                     },
@@ -3939,9 +3616,6 @@
                                             "jeans"
                                           ],
                                           "abilities": {
-                                            "burnable": {
-                                              "burn_temperature": 482.0
-                                            },
                                             "dustyable": {},
                                             "soakable": {},
                                             "stainable": {}
@@ -3950,9 +3624,6 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 482.0
-                                        },
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -3964,7 +3635,6 @@
                                         "sweater"
                                       ],
                                       "abilities": {
-                                        "burnable": {},
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -3979,7 +3649,6 @@
                                             "underwear"
                                           ],
                                           "abilities": {
-                                            "burnable": {},
                                             "soakable": {},
                                             "stainable": {}
                                           }
@@ -3987,7 +3656,6 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {},
                                         "soakable": {},
                                         "stainable": {}
                                       }
@@ -3998,9 +3666,6 @@
                                         "scarf"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 120.0
-                                        },
                                         "soakable": {},
                                         "stainable": {}
                                       }
@@ -4008,7 +3673,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
                                     "stainable": {}
                                   }
                                 },
@@ -4024,9 +3688,6 @@
                                             "jeans"
                                           ],
                                           "abilities": {
-                                            "burnable": {
-                                              "burn_temperature": 482.0
-                                            },
                                             "dustyable": {},
                                             "soakable": {},
                                             "stainable": {}
@@ -4035,9 +3696,6 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 482.0
-                                        },
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -4046,9 +3704,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 482.0
-                                    },
                                     "dustyable": {},
                                     "soakable": {},
                                     "stainable": {}
@@ -4063,9 +3718,6 @@
                                         "pajamas"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 394.0
-                                        },
                                         "soakable": {},
                                         "stainable": {}
                                       }
@@ -4073,9 +3725,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 394.0
-                                    },
                                     "soakable": {},
                                     "stainable": {}
                                   }
@@ -4092,9 +3741,6 @@
                                             "sock"
                                           ],
                                           "abilities": {
-                                            "burnable": {
-                                              "burn_temperature": 205.0
-                                            },
                                             "dustyable": {},
                                             "soakable": {},
                                             "stainable": {}
@@ -4103,9 +3749,6 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 205.0
-                                        },
                                         "dustyable": {},
                                         "soakable": {},
                                         "stainable": {}
@@ -4114,9 +3757,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 205.0
-                                    },
                                     "dustyable": {},
                                     "soakable": {},
                                     "stainable": {}
@@ -4131,9 +3771,6 @@
                                         "dress"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 205.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -4141,9 +3778,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 205.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -4151,7 +3785,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "stainable": {}
                               }
                             }
@@ -4180,9 +3813,6 @@
                                                 "dinner_napkin"
                                               ],
                                               "abilities": {
-                                                "burnable": {
-                                                  "burn_temperature": 764.6
-                                                },
                                                 "cleaningTool": {},
                                                 "soakable": {}
                                               }
@@ -4190,9 +3820,6 @@
                                           ],
                                           "igibson_categories": [],
                                           "abilities": {
-                                            "burnable": {
-                                              "burn_temperature": 764.6
-                                            },
                                             "cleaningTool": {},
                                             "soakable": {}
                                           }
@@ -4200,9 +3827,6 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 764.6
-                                        },
                                         "cleaningTool": {},
                                         "soakable": {}
                                       }
@@ -4216,9 +3840,6 @@
                                             "bath_towel"
                                           ],
                                           "abilities": {
-                                            "burnable": {
-                                              "burn_temperature": 764.6
-                                            },
                                             "cleaningTool": {},
                                             "dustyable": {},
                                             "soakable": {},
@@ -4228,9 +3849,6 @@
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 764.6
-                                        },
                                         "cleaningTool": {},
                                         "dustyable": {},
                                         "soakable": {},
@@ -4246,38 +3864,26 @@
                                             "sheet"
                                           ],
                                           "abilities": {
-                                            "burnable": {
-                                              "burn_temperature": 410.0
-                                            },
                                             "stainable": {}
                                           }
                                         }
                                       ],
                                       "igibson_categories": [],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 410.0
-                                        },
                                         "stainable": {}
                                       }
                                     }
                                   ],
                                   "igibson_categories": [],
-                                  "abilities": {
-                                    "burnable": {}
-                                  }
+                                  "abilities": {}
                                 }
                               ],
                               "igibson_categories": [],
-                              "abilities": {
-                                "burnable": {}
-                              }
+                              "abilities": {}
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "burnable": {}
-                          }
+                          "abilities": {}
                         }
                       ],
                       "igibson_categories": [],
@@ -4301,9 +3907,6 @@
                                         "door"
                                       ],
                                       "abilities": {
-                                        "burnable": {
-                                          "burn_temperature": 572.0
-                                        },
                                         "dustyable": {},
                                         "openable": {},
                                         "stainable": {}
@@ -4312,9 +3915,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 572.0
-                                    },
                                     "dustyable": {},
                                     "openable": {},
                                     "stainable": {}
@@ -4370,9 +3970,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 1220.0
-                                        },
                                         "dustyable": {},
                                         "stainable": {}
                                       }
@@ -4442,9 +4039,6 @@
                                     "plywood"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 300.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -4452,9 +4046,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 300.0
-                                },
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -4462,9 +4053,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {
-                              "burn_temperature": 300.0
-                            },
                             "dustyable": {},
                             "stainable": {}
                           }
@@ -4489,9 +4077,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 491.0
-                                },
                                 "dustyable": {}
                               }
                             }
@@ -4499,9 +4084,6 @@
                           "igibson_categories": [],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 491.0
-                            },
                             "dustyable": {}
                           }
                         },
@@ -4517,9 +4099,6 @@
                                     "hardback"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 451.0
-                                    },
                                     "dustyable": {}
                                   }
                                 },
@@ -4529,16 +4108,12 @@
                                     "notebook"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 100.0
-                                    },
                                     "dustyable": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {}
                               }
                             },
@@ -4549,9 +4124,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 100.0
-                                },
                                 "coldSource": {},
                                 "dustyable": {},
                                 "soakable": {}
@@ -4564,9 +4136,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 451.0
-                                },
                                 "dustyable": {},
                                 "soakable": {}
                               }
@@ -4574,7 +4143,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "dustyable": {}
                           }
                         },
@@ -4590,28 +4158,24 @@
                                     "painting"
                                   ],
                                   "abilities": {
-                                    "burnable": {},
                                     "dustyable": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "dustyable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "dustyable": {}
                           }
                         }
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
                         "dustyable": {}
                       }
                     },
@@ -4627,9 +4191,6 @@
                                 "pillow"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 205.0
-                                },
                                 "soakable": {},
                                 "stainable": {}
                               }
@@ -4637,9 +4198,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {
-                              "burn_temperature": 205.0
-                            },
                             "soakable": {},
                             "stainable": {}
                           }
@@ -4653,9 +4211,6 @@
                                 "mat"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 300.0
-                                },
                                 "dustyable": {},
                                 "soakable": {},
                                 "stainable": {}
@@ -4664,9 +4219,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {
-                              "burn_temperature": 300.0
-                            },
                             "dustyable": {},
                             "soakable": {},
                             "stainable": {}
@@ -4675,7 +4227,6 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
                         "soakable": {},
                         "stainable": {}
                       }
@@ -4769,9 +4320,6 @@
                                 "plywood"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 300.0
-                                },
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -4779,9 +4327,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {
-                              "burn_temperature": 300.0
-                            },
                             "dustyable": {},
                             "stainable": {}
                           }
@@ -4959,9 +4504,6 @@
                                   ],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 100.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -5000,9 +4542,7 @@
                                   ],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 451.0
-                                    },
+                                    "cleaningTool": {},
                                     "dustyable": {},
                                     "soakable": {},
                                     "stainable": {}
@@ -5014,9 +4554,6 @@
                                     "bath_towel"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 764.6
-                                    },
                                     "cleaningTool": {},
                                     "dustyable": {},
                                     "soakable": {},
@@ -5029,9 +4566,6 @@
                                     "dishtowel"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 200.0
-                                    },
                                     "cleaningTool": {},
                                     "soakable": {},
                                     "stainable": {}
@@ -5043,9 +4577,6 @@
                                     "hand_towel"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 764.6
-                                    },
                                     "cleaningTool": {},
                                     "dustyable": {},
                                     "soakable": {},
@@ -5055,7 +4586,7 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
+                                "cleaningTool": {},
                                 "soakable": {},
                                 "stainable": {}
                               }
@@ -5067,9 +4598,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 250.0
-                                },
                                 "cleaningTool": {},
                                 "soakable": {},
                                 "stainable": {}
@@ -5078,7 +4606,7 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
+                            "cleaningTool": {},
                             "soakable": {},
                             "stainable": {}
                           }
@@ -5086,7 +4614,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
+                        "cleaningTool": {},
                         "soakable": {},
                         "stainable": {}
                       }
@@ -5100,19 +4628,13 @@
                             "tape"
                           ],
                           "abilities": {
-                            "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 250.0
-                            }
+                            "breakable": {}
                           }
                         }
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "breakable": {},
-                        "burnable": {
-                          "burn_temperature": 250.0
-                        }
+                        "breakable": {}
                       }
                     },
                     {
@@ -5122,7 +4644,6 @@
                       ],
                       "abilities": {
                         "breakable": {},
-                        "burnable": {},
                         "dustyable": {},
                         "stainable": {}
                       }
@@ -5150,9 +4671,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 150.0
-                                },
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -5161,9 +4679,6 @@
                           "igibson_categories": [],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 150.0
-                            },
                             "dustyable": {},
                             "stainable": {}
                           }
@@ -5237,9 +4752,6 @@
                           ],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 100.0
-                            },
                             "dustyable": {}
                           }
                         },
@@ -5253,9 +4765,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 100.0
-                                },
                                 "dustyable": {}
                               }
                             }
@@ -5263,9 +4772,6 @@
                           "igibson_categories": [],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 100.0
-                            },
                             "dustyable": {}
                           }
                         }
@@ -5284,7 +4790,6 @@
                             "cord"
                           ],
                           "abilities": {
-                            "burnable": {},
                             "dustyable": {},
                             "stainable": {}
                           }
@@ -5292,7 +4797,6 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
                         "dustyable": {},
                         "stainable": {}
                       }
@@ -5364,9 +4868,6 @@
                                   ],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 100.0
-                                    },
                                     "dustyable": {},
                                     "stainable": {}
                                   }
@@ -5375,9 +4876,6 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 100.0
-                                },
                                 "dustyable": {},
                                 "stainable": {}
                               }
@@ -5386,9 +4884,6 @@
                           "igibson_categories": [],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 100.0
-                            },
                             "dustyable": {},
                             "stainable": {}
                           }
@@ -5397,9 +4892,6 @@
                       "igibson_categories": [],
                       "abilities": {
                         "breakable": {},
-                        "burnable": {
-                          "burn_temperature": 100.0
-                        },
                         "dustyable": {},
                         "stainable": {}
                       }
@@ -5422,37 +4914,25 @@
                                         "straw"
                                       ],
                                       "abilities": {
-                                        "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 130.0
-                                        }
+                                        "breakable": {}
                                       }
                                     }
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "breakable": {},
-                                    "burnable": {
-                                      "burn_temperature": 130.0
-                                    }
+                                    "breakable": {}
                                   }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 130.0
-                                }
+                                "breakable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 130.0
-                            }
+                            "breakable": {}
                           }
                         },
                         {
@@ -5527,9 +5007,6 @@
                                 "pot_plant"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 1472.0
-                                },
                                 "soakable": {}
                               }
                             },
@@ -5655,21 +5132,15 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "burnable": {}
-                          }
+                          "abilities": {}
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "burnable": {}
-                      }
+                      "abilities": {}
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "burnable": {}
-                  }
+                  "abilities": {}
                 },
                 {
                   "name": "natural_object.n.01",
@@ -6516,9 +5987,7 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "burnable": {
-                                  "burn_temperature": 451.0
-                                },
+                                "cleaningTool": {},
                                 "dustyable": {},
                                 "soakable": {},
                                 "stainable": {}
@@ -6530,9 +5999,6 @@
                                 "bath_towel"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 764.6
-                                },
                                 "cleaningTool": {},
                                 "dustyable": {},
                                 "soakable": {},
@@ -6545,9 +6011,6 @@
                                 "dishtowel"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 200.0
-                                },
                                 "cleaningTool": {},
                                 "soakable": {},
                                 "stainable": {}
@@ -6559,9 +6022,6 @@
                                 "hand_towel"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 764.6
-                                },
                                 "cleaningTool": {},
                                 "dustyable": {},
                                 "soakable": {},
@@ -6571,7 +6031,7 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
+                            "cleaningTool": {},
                             "soakable": {},
                             "stainable": {}
                           }
@@ -6583,9 +6043,6 @@
                           ],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {
-                              "burn_temperature": 250.0
-                            },
                             "cleaningTool": {},
                             "soakable": {},
                             "stainable": {}
@@ -6594,7 +6051,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
+                        "cleaningTool": {},
                         "soakable": {},
                         "stainable": {}
                       }
@@ -6602,7 +6059,7 @@
                   ],
                   "igibson_categories": [],
                   "abilities": {
-                    "burnable": {},
+                    "cleaningTool": {},
                     "soakable": {},
                     "stainable": {}
                   }
@@ -6655,9 +6112,6 @@
                                     "wall_socket"
                                   ],
                                   "abilities": {
-                                    "burnable": {
-                                      "burn_temperature": 491.0
-                                    },
                                     "dustyable": {},
                                     "toggleable": {}
                                   }
@@ -6665,9 +6119,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 491.0
-                                },
                                 "dustyable": {},
                                 "toggleable": {}
                               }
@@ -6675,9 +6126,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {
-                              "burn_temperature": 491.0
-                            },
                             "dustyable": {},
                             "toggleable": {}
                           }
@@ -6685,9 +6133,6 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {
-                          "burn_temperature": 491.0
-                        },
                         "dustyable": {},
                         "toggleable": {}
                       }
@@ -6708,9 +6153,6 @@
                 "ribbon"
               ],
               "abilities": {
-                "burnable": {
-                  "burn_temperature": 4000.0
-                },
                 "dustyable": {},
                 "stainable": {}
               }
@@ -7665,7 +7107,6 @@
                                         "lettuce"
                                       ],
                                       "abilities": {
-                                        "burnable": {},
                                         "freezable": {},
                                         "perishable": {}
                                       }
@@ -7673,7 +7114,6 @@
                                   ],
                                   "igibson_categories": [],
                                   "abilities": {
-                                    "burnable": {},
                                     "freezable": {},
                                     "perishable": {}
                                   }
@@ -7697,7 +7137,6 @@
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "burnable": {},
                                 "freezable": {},
                                 "perishable": {}
                               }
@@ -7773,7 +7212,6 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {},
                             "freezable": {},
                             "perishable": {}
                           }
@@ -7781,7 +7219,6 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
                         "freezable": {},
                         "perishable": {}
                       }
@@ -8217,7 +7654,6 @@
                           ],
                           "abilities": {
                             "breakable": {},
-                            "burnable": {},
                             "perishable": {},
                             "soakable": {}
                           }
@@ -8226,7 +7662,6 @@
                       "igibson_categories": [],
                       "abilities": {
                         "breakable": {},
-                        "burnable": {},
                         "perishable": {},
                         "soakable": {}
                       }
@@ -8259,15 +7694,11 @@
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "burnable": {}
-                  }
+                  "abilities": {}
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "burnable": {}
-              }
+              "abilities": {}
             },
             {
               "name": "substance.n.07",
@@ -8580,9 +8011,6 @@
                                       ],
                                       "abilities": {
                                         "breakable": {},
-                                        "burnable": {
-                                          "burn_temperature": 450.0
-                                        },
                                         "perishable": {},
                                         "soakable": {}
                                       }
@@ -8610,7 +8038,6 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
-                                    "burnable": {},
                                     "perishable": {}
                                   }
                                 }
@@ -9180,17 +8607,13 @@
                               "igibson_categories": [
                                 "powder_bottle"
                               ],
-                              "abilities": {
-                                "burnable": {}
-                              }
+                              "abilities": {}
                             }
                           ],
                           "igibson_categories": [
                             "medicine"
                           ],
-                          "abilities": {
-                            "burnable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "drug_of_abuse.n.01",
@@ -9501,18 +8924,12 @@
                             "sticky_note"
                           ],
                           "abilities": {
-                            "burnable": {
-                              "burn_temperature": 451.0
-                            },
                             "soakable": {}
                           }
                         }
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {
-                          "burn_temperature": 451.0
-                        },
                         "soakable": {}
                       }
                     },
@@ -9849,17 +9266,13 @@
                           "igibson_categories": [
                             "powder_bottle"
                           ],
-                          "abilities": {
-                            "burnable": {}
-                          }
+                          "abilities": {}
                         }
                       ],
                       "igibson_categories": [
                         "medicine"
                       ],
-                      "abilities": {
-                        "burnable": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "drug_of_abuse.n.01",
@@ -10163,18 +9576,12 @@
                                 "sticky_note"
                               ],
                               "abilities": {
-                                "burnable": {
-                                  "burn_temperature": 451.0
-                                },
                                 "soakable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "burnable": {
-                              "burn_temperature": 451.0
-                            },
                             "soakable": {}
                           }
                         },
@@ -10631,9 +10038,6 @@
                       ],
                       "abilities": {
                         "breakable": {},
-                        "burnable": {
-                          "burn_temperature": 100.0
-                        },
                         "dustyable": {}
                       }
                     }
@@ -10641,9 +10045,6 @@
                   "igibson_categories": [],
                   "abilities": {
                     "breakable": {},
-                    "burnable": {
-                      "burn_temperature": 100.0
-                    },
                     "dustyable": {}
                   }
                 }
@@ -10651,9 +10052,6 @@
               "igibson_categories": [],
               "abilities": {
                 "breakable": {},
-                "burnable": {
-                  "burn_temperature": 100.0
-                },
                 "dustyable": {}
               }
             }
@@ -10661,9 +10059,6 @@
           "igibson_categories": [],
           "abilities": {
             "breakable": {},
-            "burnable": {
-              "burn_temperature": 100.0
-            },
             "dustyable": {}
           }
         },
@@ -10685,7 +10080,6 @@
                             "roller"
                           ],
                           "abilities": {
-                            "burnable": {},
                             "dustyable": {},
                             "stainable": {}
                           }
@@ -10693,7 +10087,6 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
-                        "burnable": {},
                         "dustyable": {},
                         "stainable": {}
                       }
@@ -10701,7 +10094,6 @@
                   ],
                   "igibson_categories": [],
                   "abilities": {
-                    "burnable": {},
                     "dustyable": {},
                     "stainable": {}
                   }
@@ -10709,7 +10101,6 @@
               ],
               "igibson_categories": [],
               "abilities": {
-                "burnable": {},
                 "dustyable": {},
                 "stainable": {}
               }
@@ -10717,7 +10108,6 @@
           ],
           "igibson_categories": [],
           "abilities": {
-            "burnable": {},
             "dustyable": {},
             "stainable": {}
           }
