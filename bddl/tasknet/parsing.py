@@ -458,31 +458,31 @@ if __name__ == '__main__':
     # print('----------------------------')
     # # pprint.pprint(scan_tokens(atus_activity, instance))
     # print('----------------------------')
-    atus_activity = "assembling_gift_baskets_filtered"
-    task_instance = 0
-    domain_name, requirements, types, actions, predicates = parse_domain(
-        atus_activity, task_instance)
-    problem_name, objects, initial_state, goal_state = parse_problem(
-        atus_activity, task_instance, domain_name)
-    # print('----------------------------')
-    # print('Problem name:', problem_name)
-    # print('Objects:', objects)
-    # print('Initial state:', initial_state)
-    # print('Goal state:', goal_state)
-    # test_condition = '''            (exists
-    #             (?table.n.02 - table.n.02)
-    #             (forall
-    #                 (?basket.n.01 - basket.n.01)
-    #                 (ontop ?basket.n.01 ?table.n.02)
-    #             )
-    #         ) '''
-    test_condition = goal_state[0]
-    pprint.pprint(goal_state[0])
-    if sys.argv[1] == 'test_natural':
-        result = (test_condition)
-        print('\nRESULT:')
-        # pprint.pprint(result)
-        print(result)
-        # print(len(result))
-        with open('tester.txt', 'w') as f:
-            f.write(''.join(result))
+    # atus_activity = "assembling_gift_baskets_filtered"
+    # task_instance = 0
+    # domain_name, requirements, types, actions, predicates = parse_domain(
+    #     atus_activity, task_instance)
+    # problem_name, objects, initial_state, goal_state = parse_problem(
+    #     atus_activity, task_instance, domain_name)
+    # # print('----------------------------')
+    # # print('Problem name:', problem_name)
+    # # print('Objects:', objects)
+    # # print('Initial state:', initial_state)
+    # # print('Goal state:', goal_state)
+    # # test_condition = '''            (exists
+    # #             (?table.n.02 - table.n.02)
+    # #             (forall
+    # #                 (?basket.n.01 - basket.n.01)
+    # #                 (ontop ?basket.n.01 ?table.n.02)
+    # #             )
+    # #         ) '''
+    # test_condition = goal_state[0]
+    # pprint.pprint(goal_state[0])
+    # if sys.argv[1] == 'test_natural':
+    #     result = (test_condition)
+    #     print('\nRESULT:')
+    #     # pprint.pprint(result)
+    #     print(result)
+    #     # print(len(result))
+    #     with open('tester.txt', 'w') as f:
+    #         f.write(''.join(result))
