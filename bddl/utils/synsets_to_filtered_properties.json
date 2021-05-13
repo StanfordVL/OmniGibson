@@ -2746,7 +2746,7 @@
         "timeSetable": {},
         "toggleable": {}
     },
-    "document.n.02": {
+    "document.n.01": {
         "burnable": {
             "burn_temperature": 100.0
         },
@@ -8492,7 +8492,7 @@
         "dustyable": {},
         "stainable": {}
     },
-    "tree.n.01": {
+    "christmas_tree.n.05": {
         "burnable": {
             "burn_temperature": 1472.0
         }
@@ -8877,5 +8877,10 @@
         "dustyable": {},
         "openable": {},
         "stainable": {}
+    },
+    "wood.n.01": {
+        "burnable": {
+            "burn_temperature": 572.0
+        }
     }
 }
