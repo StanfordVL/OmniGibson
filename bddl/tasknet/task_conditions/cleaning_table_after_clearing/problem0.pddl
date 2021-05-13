@@ -32,7 +32,6 @@
             (not 
                 (stained ?table.n.02_1)
             ) 
-            (inside ?soap.n.01_1 ?sink.n.01_1) 
             (forall 
                 (?crumb.n.03 - crumb.n.03) 
                 (not 

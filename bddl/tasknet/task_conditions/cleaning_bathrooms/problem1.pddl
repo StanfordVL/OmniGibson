@@ -2,13 +2,13 @@
     (:domain igibson)
 
     (:objects
-     	rag.n.01_1 - rag.n.01
-    	sink.n.01_1 - sink.n.01
-    	soap.n.01_1 - soap.n.01
-    	bucket.n.01_1 - bucket.n.01
-    	bathtub.n.01_1 - bathtub.n.01
-    	floor.n.01_1 - floor.n.01
-    	agent.n.01_1 - agent.n.01
+        rag.n.01_1 - rag.n.01
+        sink.n.01_1 - sink.n.01
+        soap.n.01_1 - soap.n.01
+        bucket.n.01_1 - bucket.n.01
+        bathtub.n.01_1 - bathtub.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 
@@ -28,14 +28,14 @@
         (and 
             (inside ?soap.n.01_1 ?bucket.n.01_1) 
             (onfloor ?bucket.n.01_1 ?floor.n.01) 
-            (inside ?rag.n.01_1 ?bucket.n.01_1)
+            (inside ?rag.n.01_1 ?bucket.n.01_1) 
             (not 
                 (dusty bathtub.n.01_1)
-            )
-            (not
+            ) 
+            (not 
                 (dusty sink.n.01_1)
-            )
-            (not
+            ) 
+            (not 
                 (dusty floor.n.01_1)
             )
         )

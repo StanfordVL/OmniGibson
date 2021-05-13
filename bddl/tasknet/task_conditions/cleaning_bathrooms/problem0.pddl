@@ -2,14 +2,14 @@
     (:domain igibson)
 
     (:objects
-     	sink.n.01_1 - sink.n.01
-    	bathtub.n.01_1 - bathtub.n.01
-    	toilet.n.02_1 - toilet.n.02
-    	floor.n.01_1 - floor.n.01
-    	bucket.n.01_1 - bucket.n.01
-    	soap.n.01_1 - soap.n.01
-    	brush.n.02_1 - brush.n.02
-    	rag.n.01_1 - rag.n.01
+        sink.n.01_1 - sink.n.01
+        bathtub.n.01_1 - bathtub.n.01
+        toilet.n.02_1 - toilet.n.02
+        floor.n.01_1 - floor.n.01
+        bucket.n.01_1 - bucket.n.01
+        soap.n.01_1 - soap.n.01
+        brush.n.02_1 - brush.n.02
+        rag.n.01_1 - rag.n.01
     )
     
     (:init 

@@ -1,15 +1,12 @@
-(define (problem cleaning_stove_0)
+(define (problem cleaning_stove_1)
     (:domain igibson)
 
     (:objects
-     	stove.n.01_1 - stove.n.01
-    	soap.n.01_1 - soap.n.01
-    	cabinet.n.01_1 - cabinet.n.01
-    	rag.n.01_1 - rag.n.01
+     	rag.n.01_1 - rag.n.01
+    	floor.n.01_1 - floor.n.01
+    	stove.n.01_1 - stove.n.01
     	sink.n.01_1 - sink.n.01
-    	dishtowel.n.01_1 - dishtowel.n.01
-            floor.n.01_1 - floor.n.01
-            agent.n.01_1 - agent.n.01
+    	agent.n.01_1 - agent.n.01
     )
     
     (:init 
