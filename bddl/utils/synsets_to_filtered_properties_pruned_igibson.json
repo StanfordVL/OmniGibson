@@ -1085,6 +1085,7 @@
   },
   "bread.n.01": {
     "breakable": {},
+    "burnable": {},
     "cookable": {},
     "freezable": {},
     "perishable": {},
@@ -2452,12 +2453,6 @@
     "dustyable": {},
     "timeSetable": {},
     "toggleable": {}
-  },
-  "document.n.02": {
-    "burnable": {
-      "burn_temperature": 100.0
-    },
-    "dustyable": {}
   },
   "document.n.01": {
     "dustyable": {}
@@ -5447,15 +5442,6 @@
   },
   "baguet.n.01": {
     "breakable": {},
-    "cookable": {
-      "cook_temperature": 425.0
-    },
-    "freezable": {},
-    "perishable": {},
-    "soakable": {}
-  },
-  "baguette.n.01": {
-    "breakable": {},
     "burnable": {
       "burn_temperature": 525
     },
@@ -5464,7 +5450,6 @@
     },
     "freezable": {},
     "perishable": {},
-    "sliceable": {},
     "soakable": {}
   },
   "fennel.n.02": {
@@ -8055,11 +8040,6 @@
   "ring.n.08": {
     "dustyable": {},
     "stainable": {}
-  },
-  "tree.n.01": {
-    "burnable": {
-      "burn_temperature": 1472.0
-    }
   },
   "christmas_tree.n.05": {},
   "polish.n.03": {

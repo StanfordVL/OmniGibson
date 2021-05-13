@@ -7790,9 +7790,14 @@
                                   "children": [
                                     {
                                       "name": "baguet.n.01",
-                                      "igibson_categories": [],
+                                      "igibson_categories": [
+                                        "baguette"
+                                      ],
                                       "abilities": {
                                         "breakable": {},
+                                        "burnable": {
+                                          "burn_temperature": 525
+                                        },
                                         "cookable": {
                                           "cook_temperature": 425.0
                                         },
@@ -7805,6 +7810,9 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
+                                    "burnable": {
+                                      "burn_temperature": 525
+                                    },
                                     "cookable": {
                                       "cook_temperature": 425.0
                                     },
@@ -7817,6 +7825,9 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "breakable": {},
+                                "burnable": {
+                                  "burn_temperature": 525
+                                },
                                 "cookable": {
                                   "cook_temperature": 425.0
                                 },
@@ -7829,6 +7840,7 @@
                           "igibson_categories": [],
                           "abilities": {
                             "breakable": {},
+                            "burnable": {},
                             "cookable": {},
                             "freezable": {},
                             "perishable": {},
@@ -7945,6 +7957,7 @@
                       ],
                       "igibson_categories": [],
                       "abilities": {
+                        "burnable": {},
                         "cookable": {},
                         "freezable": {}
                       }
@@ -8861,9 +8874,14 @@
                                       "children": [
                                         {
                                           "name": "baguet.n.01",
-                                          "igibson_categories": [],
+                                          "igibson_categories": [
+                                            "baguette"
+                                          ],
                                           "abilities": {
                                             "breakable": {},
+                                            "burnable": {
+                                              "burn_temperature": 525
+                                            },
                                             "cookable": {
                                               "cook_temperature": 425.0
                                             },
@@ -8876,6 +8894,9 @@
                                       "igibson_categories": [],
                                       "abilities": {
                                         "breakable": {},
+                                        "burnable": {
+                                          "burn_temperature": 525
+                                        },
                                         "cookable": {
                                           "cook_temperature": 425.0
                                         },
@@ -8888,6 +8909,9 @@
                                   "igibson_categories": [],
                                   "abilities": {
                                     "breakable": {},
+                                    "burnable": {
+                                      "burn_temperature": 525
+                                    },
                                     "cookable": {
                                       "cook_temperature": 425.0
                                     },
@@ -8900,6 +8924,7 @@
                               "igibson_categories": [],
                               "abilities": {
                                 "breakable": {},
+                                "burnable": {},
                                 "cookable": {},
                                 "freezable": {},
                                 "perishable": {},
@@ -8909,6 +8934,7 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {
+                            "burnable": {},
                             "cookable": {},
                             "freezable": {},
                             "perishable": {}
