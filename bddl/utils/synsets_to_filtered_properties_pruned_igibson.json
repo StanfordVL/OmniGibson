@@ -40,7 +40,7 @@
   },
   "bag.n.01": {
     "dustyable": {},
-    "openable": {},
+    "soakable": {},
     "stainable": {}
   },
   "box.n.01": {
@@ -105,9 +105,7 @@
   "sheet.n.03": {
     "stainable": {}
   },
-  "cleansing_agent.n.01": {
-    "liquid": {}
-  },
+  "cleansing_agent.n.01": {},
   "bowl.n.01": {
     "breakable": {},
     "dustyable": {},
@@ -331,9 +329,6 @@
     "stainable": {}
   },
   "hose.n.03": {
-    "burnable": {
-      "burn_temperature": 451.0
-    },
     "dustyable": {},
     "screwable": {},
     "stainable": {}
@@ -845,10 +840,7 @@
     "stainable": {},
     "soakable": {}
   },
-  "cord.n.01": {
-    "dustyable": {},
-    "stainable": {}
-  },
+  "cord.n.01": {},
   "sauce.n.01": {
     "burnable": {},
     "cookable": {},
@@ -949,9 +941,7 @@
   "lining.n.01": {
     "stainable": {}
   },
-  "tube.n.01": {
-    "breakable": {}
-  },
+  "tube.n.01": {},
   "card.n.01": {
     "breakable": {},
     "burnable": {
@@ -1040,12 +1030,8 @@
     "stainable": {}
   },
   "candy.n.01": {
-    "burnable": {
-      "burn_temperature": 400
-    },
-    "cookable": {
-      "cook_temperature": 290.0
-    }
+    "burnable": {},
+    "cookable": {}
   },
   "crumb.n.03": {
     "burnable": {},
@@ -1099,9 +1085,10 @@
   },
   "bread.n.01": {
     "breakable": {},
-    "burnable": {},
     "cookable": {},
-    "perishable": {}
+    "freezable": {},
+    "perishable": {},
+    "soakable": {}
   },
   "pasta.n.02": {
     "breakable": {},
@@ -1629,27 +1616,16 @@
     "stainable": {}
   },
   "onion.n.03": {
-    "burnable": {
-      "burn_temperature": 450
-    },
-    "cookable": {
-      "cook_temperature": 400.0
-    },
+    "burnable": {},
+    "cookable": {},
     "freezable": {},
-    "perishable": {},
-    "sliceable": {}
+    "perishable": {}
   },
   "scraper.n.01": {
     "cleaningTool": {},
     "stainable": {}
   },
-  "thread.n.01": {
-    "breakable": {},
-    "burnable": {},
-    "dustyable": {},
-    "stainable": {},
-    "soakable": {}
-  },
+  "thread.n.01": {},
   "belt.n.02": {
     "burnable": {
       "burn_temperature": 200.0
@@ -1707,8 +1683,6 @@
   },
   "grill.n.02": {
     "dustyable": {},
-    "heatSource": {},
-    "openable": {},
     "stainable": {}
   },
   "pole.n.01": {
@@ -2101,9 +2075,6 @@
   },
   "watch.n.01": {
     "breakable": {},
-    "burnable": {
-      "burn_temperature": 200.0
-    },
     "dustyable": {},
     "screwable": {},
     "stainable": {},
@@ -2111,9 +2082,7 @@
     "toggleable": {}
   },
   "dip.n.04": {
-    "cookable": {},
     "freezable": {},
-    "liquid": {},
     "perishable": {}
   },
   "pear.n.01": {
@@ -2137,7 +2106,9 @@
     "openable": {}
   },
   "perfume.n.02": {
-    "liquid": {}
+    "freezable": {},
+    "liquid": {},
+    "perishable": {}
   },
   "chest.n.02": {
     "dustyable": {},
@@ -2219,9 +2190,7 @@
     "dustyable": {},
     "stainable": {}
   },
-  "decoration.n.01": {
-    "dustyable": {}
-  },
+  "decoration.n.01": {},
   "lettuce.n.03": {
     "freezable": {},
     "perishable": {}
@@ -2455,9 +2424,6 @@
   },
   "comb.n.01": {
     "breakable": {},
-    "burnable": {
-      "burn_temperature": 200.0
-    },
     "dustyable": {},
     "stainable": {}
   },
@@ -2493,6 +2459,9 @@
     },
     "dustyable": {}
   },
+  "document.n.01": {
+    "dustyable": {}
+  },
   "blockage.n.02": {
     "dustyable": {},
     "openable": {},
@@ -2505,10 +2474,13 @@
     "stainable": {}
   },
   "dressing.n.01": {
-    "burnable": {},
-    "cookable": {},
+    "burnable": {
+      "burn_temperature": 450
+    },
+    "cookable": {
+      "cook_temperature": 212.0
+    },
     "freezable": {},
-    "liquid": {},
     "perishable": {}
   },
   "cocoa.n.02": {
@@ -2549,7 +2521,6 @@
   "printer.n.03": {
     "breakable": {},
     "dustyable": {},
-    "openable": {},
     "toggleable": {}
   },
   "shell.n.05": {
@@ -2620,9 +2591,15 @@
   },
   "cracker.n.01": {
     "breakable": {},
-    "burnable": {},
-    "cookable": {},
-    "perishable": {}
+    "burnable": {
+      "burn_temperature": 2012
+    },
+    "cookable": {
+      "cook_temperature": 500.0
+    },
+    "freezable": {},
+    "perishable": {},
+    "soakable": {}
   },
   "toothpick.n.01": {
     "breakable": {},
@@ -2929,8 +2906,7 @@
     },
     "freezable": {},
     "perishable": {},
-    "stainable": {},
-    "sliceable": {}
+    "stainable": {}
   },
   "almond.n.02": {
     "breakable": {},
@@ -2940,8 +2916,7 @@
     "cookable": {
       "cook_temperature": 325.0
     },
-    "perishable": {},
-    "sliceable": {}
+    "perishable": {}
   },
   "step.n.04": {
     "dustyable": {},
@@ -2985,8 +2960,7 @@
     },
     "dustyable": {},
     "freezable": {},
-    "perishable": {},
-    "sliceable": {}
+    "perishable": {}
   },
   "toaster.n.02": {
     "dustyable": {},
@@ -3236,10 +3210,7 @@
     "sliceable": {}
   },
   "dental_floss.n.01": {
-    "breakable": {},
-    "burnable": {
-      "burn_temperature": 410.0
-    }
+    "breakable": {}
   },
   "pretzel.n.01": {
     "breakable": {},
@@ -3251,7 +3222,6 @@
     },
     "freezable": {},
     "perishable": {},
-    "sliceable": {},
     "soakable": {}
   },
   "bagel.n.01": {
@@ -3264,7 +3234,6 @@
     },
     "freezable": {},
     "perishable": {},
-    "sliceable": {},
     "soakable": {}
   },
   "covering.n.02": {},
@@ -3287,9 +3256,6 @@
     "timeSetable": {}
   },
   "stocking.n.01": {
-    "burnable": {
-      "burn_temperature": 424.0
-    },
     "stainable": {}
   },
   "chalk.n.04": {
@@ -3527,7 +3493,6 @@
   },
   "lipstick.n.01": {
     "breakable": {},
-    "openable": {},
     "perishable": {}
   },
   "blueberry.n.02": {
@@ -3740,7 +3705,6 @@
     },
     "freezable": {},
     "perishable": {},
-    "sliceable": {},
     "soakable": {}
   },
   "keyboard.n.01": {
@@ -3852,18 +3816,11 @@
     "stainable": {}
   },
   "duffel_bag.n.01": {
-    "burnable": {
-      "burn_temperature": 410.0
-    },
     "dustyable": {},
-    "openable": {},
     "stainable": {},
     "soakable": {}
   },
   "tinsel.n.02": {
-    "burnable": {
-      "burn_temperature": 734.0
-    },
     "dustyable": {}
   },
   "dolly.n.02": {
@@ -3873,7 +3830,6 @@
   "scanner.n.02": {
     "breakable": {},
     "dustyable": {},
-    "openable": {},
     "toggleable": {}
   },
   "cellophane.n.01": {
@@ -4211,11 +4167,15 @@
     "toggleable": {}
   },
   "ham.n.01": {
-    "burnable": {},
-    "cookable": {},
+    "breakable": {},
+    "burnable": {
+      "burn_temperature": 400
+    },
+    "cookable": {
+      "cook_temperature": 400.0
+    },
     "freezable": {},
-    "perishable": {},
-    "stainable": {}
+    "perishable": {}
   },
   "wallet.n.01": {
     "burnable": {
@@ -4598,8 +4558,7 @@
       "cook_temperature": 375.0
     },
     "freezable": {},
-    "perishable": {},
-    "sliceable": {}
+    "perishable": {}
   },
   "melon.n.01": {
     "burnable": {},
@@ -4825,11 +4784,7 @@
     "soakable": {}
   },
   "facsimile.n.02": {
-    "burnable": {
-      "burn_temperature": 451.0
-    },
     "dustyable": {},
-    "openable": {},
     "stainable": {},
     "toggleable": {}
   },
@@ -5486,14 +5441,20 @@
     "perishable": {}
   },
   "cologne.n.02": {
-    "burnable": {
-      "burn_temperature": 363.0
-    },
     "freezable": {},
     "liquid": {},
     "perishable": {}
   },
   "baguet.n.01": {
+    "breakable": {},
+    "cookable": {
+      "cook_temperature": 425.0
+    },
+    "freezable": {},
+    "perishable": {},
+    "soakable": {}
+  },
+  "baguette.n.01": {
     "breakable": {},
     "burnable": {
       "burn_temperature": 525
@@ -6079,11 +6040,7 @@
   },
   "mousetrap.n.01": {
     "breakable": {},
-    "burnable": {
-      "burn_temperature": 392.0
-    },
     "dustyable": {},
-    "openable": {},
     "stainable": {},
     "toggleable": {}
   },
@@ -6148,7 +6105,7 @@
   },
   "duplicator.n.01": {
     "dustyable": {},
-    "openable": {},
+    "stainable": {},
     "toggleable": {}
   },
   "undercarriage.n.01": {
@@ -6739,7 +6696,6 @@
     },
     "freezable": {},
     "perishable": {},
-    "sliceable": {},
     "soakable": {}
   },
   "lollipop.n.02": {
@@ -6803,8 +6759,7 @@
       "cook_temperature": 425.0
     },
     "freezable": {},
-    "perishable": {},
-    "sliceable": {}
+    "perishable": {}
   },
   "cumin.n.02": {
     "burnable": {
@@ -7224,6 +7179,13 @@
     "perishable": {}
   },
   "conserve.n.01": {
+    "burnable": {
+      "burn_temperature": 450
+    },
+    "cookable": {
+      "cook_temperature": 220.0
+    },
+    "freezable": {},
     "perishable": {}
   },
   "toast.n.01": {
@@ -7265,8 +7227,7 @@
       "cook_temperature": 400.0
     },
     "freezable": {},
-    "perishable": {},
-    "sliceable": {}
+    "perishable": {}
   },
   "coleslaw.n.01": {
     "burnable": {
@@ -8100,6 +8061,7 @@
       "burn_temperature": 1472.0
     }
   },
+  "christmas_tree.n.05": {},
   "polish.n.03": {
     "liquid": {},
     "openable": {}
@@ -8470,5 +8432,10 @@
     "dustyable": {},
     "openable": {},
     "stainable": {}
+  },
+  "wood.n.01": {
+    "burnable": {
+      "burn_temperature": 572.0
+    }
   }
 }

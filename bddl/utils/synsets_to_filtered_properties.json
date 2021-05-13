@@ -2752,6 +2752,12 @@
         },
         "dustyable": {}
     },
+    "document.n.01": {
+        "burnable": {
+            "burn_temperature": 100.0
+        },
+        "dustyable": {}
+    },
     "blockage.n.02": {
         "dustyable": {},
         "openable": {},
@@ -5842,6 +5848,19 @@
         "sliceable": {},
         "soakable": {}
     },
+    "baguette.n.01": {
+        "breakable": {},
+        "burnable": {
+            "burn_temperature": 525
+        },
+        "cookable": {
+            "cook_temperature": 425.0
+        },
+        "freezable": {},
+        "perishable": {},
+        "sliceable": {},
+        "soakable": {}
+    },
     "fennel.n.02": {
         "burnable": {
             "burn_temperature": 500
@@ -8497,6 +8516,11 @@
             "burn_temperature": 1472.0
         }
     },
+    "christmas_tree.n.05": {
+        "burnable": {
+            "burn_temperature": 1472.0
+        }
+    },
     "polish.n.03": {
         "liquid": {},
         "openable": {}
@@ -8877,5 +8901,10 @@
         "dustyable": {},
         "openable": {},
         "stainable": {}
+    },
+    "wood.n.01": {
+        "burnable": {
+            "burn_temperature": 572.0
+        }
     }
 }
