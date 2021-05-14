@@ -398,13 +398,7 @@
         "stainable": {}
     },
     "refrigerator.n.01": {
-        "coldSource": {
-            "temperature": -18,
-            "heating_rate": 0.02,
-            "requires_toggled_on": true,
-            "requires_closed": true,
-            "requires_inside": true
-        },
+        "coldSource": {},
         "dustyable": {},
         "openable": {},
         "stainable": {}
@@ -763,7 +757,13 @@
         "stainable": {}
     },
     "electric_refrigerator.n.01": {
-        "coldSource": {},
+        "coldSource": {
+            "temperature": -18,
+            "heating_rate": 0.02,
+            "requires_toggled_on": false,
+            "requires_closed": true,
+            "requires_inside": true
+        },
         "dustyable": {},
         "openable": {},
         "stainable": {}
