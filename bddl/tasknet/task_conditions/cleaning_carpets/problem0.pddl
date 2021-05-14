@@ -14,7 +14,6 @@
     
     (:init 
         (stained floor.n.01_1) 
-        (stained floor.n.01_2) 
         (onfloor vacuum.n.04_1 floor.n.01_2) 
         (inside shampoo.n.01_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 corridor) 
@@ -23,16 +22,13 @@
         (inroom dryer.n.01_1 utility_room) 
         (inroom door.n.01_1 corridor) 
         (inroom cabinet.n.01_1 utility_room) 
-        (onfloor agent.n.01_1 floor.n.01_2)
+        (onfloor agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
             (not 
                 (stained ?floor.n.01_1)
-            ) 
-            (not 
-                (stained ?floor.n.01_2)
             )
         )
     )

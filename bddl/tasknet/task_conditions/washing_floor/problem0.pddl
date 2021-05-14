@@ -3,7 +3,7 @@
 
     (:objects
      	bucket.n.01_1 - bucket.n.01
-    	floor.n.01_1 floor.n.01_2 - floor.n.01
+    	floor.n.01_1 - floor.n.01
     	soap.n.01_1 - soap.n.01
     	towel.n.01_1 - towel.n.01
     	shower.n.01_1 - shower.n.01
@@ -23,10 +23,7 @@
         ) 
         (dusty floor.n.01_1) 
         (stained floor.n.01_1) 
-        (dusty floor.n.01_2) 
-        (stained floor.n.01_2) 
         (inroom floor.n.01_1 bathroom) 
-        (inroom floor.n.01_2 bedroom) 
         (inroom shower.n.01_1 bathroom) 
         (inroom toilet.n.02_1 bathroom) 
         (inroom bed.n.01_1 bedroom) 
@@ -39,9 +36,7 @@
             (not 
                 (or 
                     (dusty ?floor.n.01_1) 
-                    (stained ?floor.n.01_1) 
-                    (dusty ?floor.n.01_2) 
-                    (stained ?floor.n.01_2)
+                    (stained ?floor.n.01_1)
                 )
             )
         )

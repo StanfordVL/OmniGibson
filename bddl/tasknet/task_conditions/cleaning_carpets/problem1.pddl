@@ -2,7 +2,7 @@
     (:domain igibson)
 
     (:objects
-     	floor.n.01_1 floor.n.01_2 - floor.n.01
+     	floor.n.01_1 - floor.n.01
     	shoe.n.01_1 - shoe.n.01
     	ball.n.01_1 - ball.n.01
     	vacuum.n.04_1 - vacuum.n.04
@@ -11,12 +11,10 @@
     
     (:init 
         (dusty floor.n.01_1) 
-        (stained floor.n.01_2) 
         (onfloor shoe.n.01_1 floor.n.01_1) 
         (onfloor ball.n.01_1 floor.n.01_1) 
         (onfloor vacuum.n.04_1 floor.n.01_1) 
         (inroom floor.n.01_1 corridor) 
-        (inroom floor.n.01_2 utility_room) 
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     
@@ -24,9 +22,6 @@
         (and 
             (not 
                 (dusty ?floor.n.01_1)
-            ) 
-            (not 
-                (stained ?floor.n.01_2)
             ) 
             (not 
                 (onfloor ?shoe.n.01_1 ?floor.n.01_1)

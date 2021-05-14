@@ -17,7 +17,6 @@
         (onfloor bucket.n.01_1 floor.n.01_1) 
         (onfloor piece_of_cloth.n.01_1 floor.n.01_1) 
         (stained floor.n.01_1) 
-        (stained floor.n.01_2) 
         (inroom floor.n.01_1 bathroom) 
         (inroom floor.n.01_2 corridor) 
         (inroom sink.n.01_1 bathroom) 
@@ -28,9 +27,6 @@
         (and 
             (not 
                 (stained ?floor.n.01_1)
-            ) 
-            (not 
-                (stained ?floor.n.01_2)
             ) 
             (nextto ?bucket.n.01_1 ?sink.n.01_1) 
             (inside ?soap.n.01_1 ?bucket.n.01_1) 
