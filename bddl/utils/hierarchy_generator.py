@@ -148,7 +148,7 @@ def add_igibson_objects(node, synsets):
     if node["name"] in synsets:
         categories = synsets[node["name"]]
 
-    node["igibson_categories"] = categories
+    node["igibson_categories"] = sorted(categories)
 
     if "children" in node:
         for child_node in node["children"]:

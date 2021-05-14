@@ -3609,7 +3609,6 @@
                                                 "heatSource": {
                                                   "temperature": 1000,
                                                   "heating_rate": 0.04,
-                                                  "distance_threshold": 0.4,
                                                   "requires_toggled_on": true,
                                                   "requires_closed": true,
                                                   "requires_inside": true
@@ -3629,7 +3628,6 @@
                                                 "heatSource": {
                                                   "temperature": 250,
                                                   "heating_rate": 0.01,
-                                                  "distance_threshold": 0.4,
                                                   "requires_toggled_on": true,
                                                   "requires_closed": true,
                                                   "requires_inside": true
@@ -3700,7 +3698,13 @@
                                                     "fridge"
                                                   ],
                                                   "abilities": {
-                                                    "coldSource": {},
+                                                    "coldSource": {
+                                                      "temperature": -18,
+                                                      "heating_rate": 0.02,
+                                                      "requires_toggled_on": false,
+                                                      "requires_closed": true,
+                                                      "requires_inside": true
+                                                    },
                                                     "dustyable": {},
                                                     "openable": {},
                                                     "stainable": {}
@@ -3709,7 +3713,13 @@
                                               ],
                                               "igibson_categories": [],
                                               "abilities": {
-                                                "coldSource": {},
+                                                "coldSource": {
+                                                  "temperature": -18,
+                                                  "heating_rate": 0.02,
+                                                  "requires_toggled_on": false,
+                                                  "requires_closed": true,
+                                                  "requires_inside": true
+                                                },
                                                 "dustyable": {},
                                                 "openable": {},
                                                 "stainable": {}
@@ -4403,7 +4413,6 @@
                               ],
                               "abilities": {
                                 "breakable": {},
-                                "coldSource": {},
                                 "dustyable": {},
                                 "soakable": {}
                               }
@@ -5141,15 +5150,13 @@
                                 "ice_cube"
                               ],
                               "abilities": {
-                                "breakable": {},
-                                "coldSource": {}
+                                "breakable": {}
                               }
                             }
                           ],
                           "igibson_categories": [],
                           "abilities": {
-                            "breakable": {},
-                            "coldSource": {}
+                            "breakable": {}
                           }
                         }
                       ],
@@ -9357,8 +9364,8 @@
                         {
                           "name": "coffee.n.01",
                           "igibson_categories": [
-                            "coffee_pouch",
-                            "coffee_cup"
+                            "coffee_cup",
+                            "coffee_pouch"
                           ],
                           "abilities": {
                             "burnable": {},
@@ -9896,8 +9903,8 @@
                             {
                               "name": "coffee.n.01",
                               "igibson_categories": [
-                                "coffee_pouch",
-                                "coffee_cup"
+                                "coffee_cup",
+                                "coffee_pouch"
                               ],
                               "abilities": {
                                 "burnable": {},
@@ -10564,8 +10571,8 @@
                                 {
                                   "name": "coffee.n.01",
                                   "igibson_categories": [
-                                    "coffee_pouch",
-                                    "coffee_cup"
+                                    "coffee_cup",
+                                    "coffee_pouch"
                                   ],
                                   "abilities": {
                                     "burnable": {},

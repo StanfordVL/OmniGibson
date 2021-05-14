@@ -355,7 +355,13 @@
     "stainable": {}
   },
   "refrigerator.n.01": {
-    "coldSource": {},
+    "coldSource": {
+      "temperature": -18,
+      "heating_rate": 0.02,
+      "requires_toggled_on": false,
+      "requires_closed": true,
+      "requires_inside": true
+    },
     "dustyable": {},
     "openable": {},
     "stainable": {}
@@ -514,7 +520,6 @@
     "heatSource": {
       "temperature": 250,
       "heating_rate": 0.01,
-      "distance_threshold": 0.4,
       "requires_toggled_on": true,
       "requires_closed": true,
       "requires_inside": true
@@ -596,8 +601,7 @@
     "stainable": {}
   },
   "cube.n.05": {
-    "breakable": {},
-    "coldSource": {}
+    "breakable": {}
   },
   "clip.n.03": {},
   "wool.n.01": {
@@ -682,7 +686,13 @@
     "stainable": {}
   },
   "electric_refrigerator.n.01": {
-    "coldSource": {},
+    "coldSource": {
+      "temperature": -18,
+      "heating_rate": 0.02,
+      "requires_toggled_on": false,
+      "requires_closed": true,
+      "requires_inside": true
+    },
     "dustyable": {},
     "openable": {},
     "stainable": {}
@@ -874,7 +884,6 @@
     "heatSource": {
       "temperature": 1000,
       "heating_rate": 0.04,
-      "distance_threshold": 0.4,
       "requires_toggled_on": true,
       "requires_closed": true,
       "requires_inside": true
@@ -1675,7 +1684,6 @@
   },
   "magazine.n.02": {
     "breakable": {},
-    "coldSource": {},
     "dustyable": {},
     "soakable": {}
   },
@@ -8396,8 +8404,7 @@
     "stainable": {}
   },
   "ice_cube.n.01": {
-    "breakable": {},
-    "coldSource": {}
+    "breakable": {}
   },
   "tart.n.02": {
     "burnable": {
