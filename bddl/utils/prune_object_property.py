@@ -106,6 +106,13 @@ def prune_heat_source():
     ]
     return allowed_categories
 
+def prune_cold_source():
+    # Cold sources are confined to cooling boxes that share the heating mechanism.
+    allowed_categories = [
+        'fridge',
+    ]
+    return allowed_categories
+
 
 def prune_water_source():
     # Water sources are confined to only sink for now. May add bathtub later?
@@ -173,6 +180,8 @@ def main():
     properties_to_synsets['openable'] = categories_to_synsets(prune_openable())
     properties_to_synsets['heatSource'] = categories_to_synsets(
         prune_heat_source())
+    properties_to_synsets['coldSource'] = categories_to_synsets(
+        prune_cold_source())
     properties_to_synsets['waterSource'] = categories_to_synsets(
         prune_water_source())
     properties_to_synsets['sliceable'] = categories_to_synsets(
