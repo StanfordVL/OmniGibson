@@ -27,7 +27,7 @@
     (:goal 
         (and 
             (inside ?soap.n.01_1 ?bucket.n.01_1) 
-            (onfloor ?bucket.n.01_1 ?floor.n.01) 
+            (onfloor ?bucket.n.01_1 ?floor.n.01_1) 
             (inside ?rag.n.01_1 ?bucket.n.01_1) 
             (not 
                 (dusty bathtub.n.01_1)

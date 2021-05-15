@@ -12,7 +12,6 @@
     (:init 
         (dusty stove.n.01_1) 
         (stained stove.n.01_1) 
-        (inside soap.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
         (not 
             (soaked rag.n.01_1)

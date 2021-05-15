@@ -10,6 +10,7 @@
         soap.n.01_1 - soap.n.01
         brush.n.02_1 - brush.n.02
         rag.n.01_1 - rag.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 
@@ -24,6 +25,7 @@
             (soaked rag.n.01_1)
         ) 
         (onfloor rag.n.01_1 floor.n.01_1) 
+        (onfloor agent.n.01_1 floor.n.01_1)
         (inroom floor.n.01_1 bathroom) 
         (inroom toilet.n.02_1 bathroom) 
         (inroom sink.n.01_1 bathroom) 
