@@ -294,10 +294,8 @@
     "cookable": {
       "cook_temperature": 78.0
     },
-    "dustyable": {},
     "freezable": {},
     "perishable": {},
-    "stainable": {},
     "sliceable": {}
   },
   "paint.n.01": {
@@ -355,7 +353,13 @@
     "stainable": {}
   },
   "refrigerator.n.01": {
-    "coldSource": {},
+    "coldSource": {
+      "temperature": -18,
+      "heating_rate": 0.02,
+      "requires_toggled_on": false,
+      "requires_closed": true,
+      "requires_inside": true
+    },
     "dustyable": {},
     "openable": {},
     "stainable": {}
@@ -514,7 +518,6 @@
     "heatSource": {
       "temperature": 250,
       "heating_rate": 0.01,
-      "distance_threshold": 0.4,
       "requires_toggled_on": true,
       "requires_closed": true,
       "requires_inside": true
@@ -596,8 +599,7 @@
     "stainable": {}
   },
   "cube.n.05": {
-    "breakable": {},
-    "coldSource": {}
+    "breakable": {}
   },
   "clip.n.03": {},
   "wool.n.01": {
@@ -682,7 +684,13 @@
     "stainable": {}
   },
   "electric_refrigerator.n.01": {
-    "coldSource": {},
+    "coldSource": {
+      "temperature": -18,
+      "heating_rate": 0.02,
+      "requires_toggled_on": false,
+      "requires_closed": true,
+      "requires_inside": true
+    },
     "dustyable": {},
     "openable": {},
     "stainable": {}
@@ -746,11 +754,9 @@
     "cookable": {
       "cook_temperature": 212.0
     },
-    "dustyable": {},
     "freezable": {},
     "perishable": {},
-    "sliceable": {},
-    "stainable": {}
+    "sliceable": {}
   },
   "citrus.n.01": {
     "burnable": {},
@@ -821,11 +827,9 @@
     "cookable": {
       "cook_temperature": 212.0
     },
-    "dustyable": {},
     "freezable": {},
     "perishable": {},
-    "sliceable": {},
-    "stainable": {}
+    "sliceable": {}
   },
   "shade.n.03": {
     "burnable": {},
@@ -874,7 +878,6 @@
     "heatSource": {
       "temperature": 1000,
       "heating_rate": 0.04,
-      "distance_threshold": 0.4,
       "requires_toggled_on": true,
       "requires_closed": true,
       "requires_inside": true
@@ -1675,7 +1678,6 @@
   },
   "magazine.n.02": {
     "breakable": {},
-    "coldSource": {},
     "dustyable": {},
     "soakable": {}
   },
@@ -1830,10 +1832,8 @@
     "cookable": {
       "cook_temperature": 212.0
     },
-    "dustyable": {},
     "freezable": {},
     "perishable": {},
-    "stainable": {},
     "sliceable": {}
   },
   "straw.n.04": {
@@ -2303,10 +2303,8 @@
     "cookable": {
       "cook_temperature": 450.0
     },
-    "dustyable": {},
     "freezable": {},
     "perishable": {},
-    "stainable": {},
     "sliceable": {}
   },
   "broccoli.n.02": {
@@ -2578,10 +2576,8 @@
     "cookable": {
       "cook_temperature": 350.0
     },
-    "dustyable": {},
     "freezable": {},
     "perishable": {},
-    "stainable": {},
     "sliceable": {}
   },
   "cracker.n.01": {
@@ -7693,7 +7689,6 @@
     "freezable": {},
     "perishable": {},
     "sliceable": {},
-    "stainable": {},
     "soakable": {}
   },
   "chives.n.01": {
@@ -8396,8 +8391,7 @@
     "stainable": {}
   },
   "ice_cube.n.01": {
-    "breakable": {},
-    "coldSource": {}
+    "breakable": {}
   },
   "tart.n.02": {
     "burnable": {
