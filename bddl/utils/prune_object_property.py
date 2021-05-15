@@ -106,6 +106,7 @@ def prune_heat_source():
     ]
     return allowed_categories
 
+
 def prune_cold_source():
     # Cold sources are confined to cooling boxes that share the heating mechanism.
     allowed_categories = [
@@ -147,6 +148,48 @@ def prune_burnable():
         properties = synsets_to_properties[cat_to_syn[cat]]
         if 'burnable' in properties and 'cookable' in properties:
             allowed_categories.append(cat)
+    return allowed_categories
+
+
+def prune_dustyable():
+    allowed_categories = []
+    sliceable_categories = prune_sliceable()
+    sliceable_categories += ['half_' + item for item in sliceable_categories]
+
+    with open(MODELS_CSV_PATH, "r") as f:
+        reader = csv.DictReader(f)
+        cat_to_syn = {row["Object"].strip(): row["Synset"].strip()
+                      for row in reader}
+
+    with open(INPUT_SYNSET_FILE) as f:
+        synsets_to_properties = json.load(f)
+
+    for cat in cat_to_syn:
+        properties = synsets_to_properties[cat_to_syn[cat]]
+        if 'dustyable' in properties and cat not in sliceable_categories:
+            allowed_categories.append(cat)
+
+    return allowed_categories
+
+
+def prune_stainable():
+    allowed_categories = []
+    sliceable_categories = prune_sliceable()
+    sliceable_categories += ['half_' + item for item in sliceable_categories]
+
+    with open(MODELS_CSV_PATH, "r") as f:
+        reader = csv.DictReader(f)
+        cat_to_syn = {row["Object"].strip(): row["Synset"].strip()
+                      for row in reader}
+
+    with open(INPUT_SYNSET_FILE) as f:
+        synsets_to_properties = json.load(f)
+
+    for cat in cat_to_syn:
+        properties = synsets_to_properties[cat_to_syn[cat]]
+        if 'stainable' in properties:
+            if cat not in sliceable_categories:
+                allowed_categories.append(cat)
 
     return allowed_categories
 
@@ -188,6 +231,10 @@ def main():
         prune_sliceable())
     properties_to_synsets['burnable'] = categories_to_synsets(
         prune_burnable())
+    properties_to_synsets['dustyable'] = categories_to_synsets(
+        prune_dustyable())
+    properties_to_synsets['stainable'] = categories_to_synsets(
+        prune_stainable())
 
     with open(INPUT_SYNSET_FILE) as f:
         synsets_to_properties = json.load(f)

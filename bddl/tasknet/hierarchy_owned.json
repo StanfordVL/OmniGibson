@@ -1462,7 +1462,9 @@
                                       "children": [
                                         {
                                           "name": "pepper_mill.n.01",
-                                          "igibson_categories": [],
+                                          "igibson_categories": [
+                                            "pepper_grinder"
+                                          ],
                                           "abilities": {
                                             "breakable": {},
                                             "dustyable": {},
@@ -5492,11 +5494,9 @@
                                             "cookable": {
                                               "cook_temperature": 212.0
                                             },
-                                            "dustyable": {},
                                             "freezable": {},
                                             "perishable": {},
-                                            "sliceable": {},
-                                            "stainable": {}
+                                            "sliceable": {}
                                           }
                                         },
                                         {
@@ -5670,11 +5670,9 @@
                                                 "cookable": {
                                                   "cook_temperature": 78.0
                                                 },
-                                                "dustyable": {},
                                                 "freezable": {},
                                                 "perishable": {},
-                                                "sliceable": {},
-                                                "stainable": {}
+                                                "sliceable": {}
                                               }
                                             },
                                             {
@@ -5691,11 +5689,9 @@
                                                 "cookable": {
                                                   "cook_temperature": 212.0
                                                 },
-                                                "dustyable": {},
                                                 "freezable": {},
                                                 "perishable": {},
-                                                "sliceable": {},
-                                                "stainable": {}
+                                                "sliceable": {}
                                               }
                                             },
                                             {
@@ -5755,11 +5751,9 @@
                                             "cookable": {
                                               "cook_temperature": 212.0
                                             },
-                                            "dustyable": {},
                                             "freezable": {},
                                             "perishable": {},
-                                            "sliceable": {},
-                                            "stainable": {}
+                                            "sliceable": {}
                                           }
                                         },
                                         {
@@ -5794,11 +5788,9 @@
                                             "cookable": {
                                               "cook_temperature": 350.0
                                             },
-                                            "dustyable": {},
                                             "freezable": {},
                                             "perishable": {},
-                                            "sliceable": {},
-                                            "stainable": {}
+                                            "sliceable": {}
                                           }
                                         },
                                         {
@@ -5949,11 +5941,9 @@
                                             "cookable": {
                                               "cook_temperature": 212.0
                                             },
-                                            "dustyable": {},
                                             "freezable": {},
                                             "perishable": {},
-                                            "sliceable": {},
-                                            "stainable": {}
+                                            "sliceable": {}
                                           }
                                         },
                                         {
@@ -6024,11 +6014,9 @@
                                             "cookable": {
                                               "cook_temperature": 212.0
                                             },
-                                            "dustyable": {},
                                             "freezable": {},
                                             "perishable": {},
-                                            "sliceable": {},
-                                            "stainable": {}
+                                            "sliceable": {}
                                           }
                                         },
                                         {
@@ -6147,8 +6135,7 @@
                                                     "freezable": {},
                                                     "perishable": {},
                                                     "sliceable": {},
-                                                    "soakable": {},
-                                                    "stainable": {}
+                                                    "soakable": {}
                                                   }
                                                 },
                                                 {
@@ -6539,11 +6526,9 @@
                                 "cookable": {
                                   "cook_temperature": 212.0
                                 },
-                                "dustyable": {},
                                 "freezable": {},
                                 "perishable": {},
-                                "sliceable": {},
-                                "stainable": {}
+                                "sliceable": {}
                               }
                             },
                             {
@@ -6717,11 +6702,9 @@
                                     "cookable": {
                                       "cook_temperature": 78.0
                                     },
-                                    "dustyable": {},
                                     "freezable": {},
                                     "perishable": {},
-                                    "sliceable": {},
-                                    "stainable": {}
+                                    "sliceable": {}
                                   }
                                 },
                                 {
@@ -6738,11 +6721,9 @@
                                     "cookable": {
                                       "cook_temperature": 212.0
                                     },
-                                    "dustyable": {},
                                     "freezable": {},
                                     "perishable": {},
-                                    "sliceable": {},
-                                    "stainable": {}
+                                    "sliceable": {}
                                   }
                                 },
                                 {
@@ -6802,11 +6783,9 @@
                                 "cookable": {
                                   "cook_temperature": 212.0
                                 },
-                                "dustyable": {},
                                 "freezable": {},
                                 "perishable": {},
-                                "sliceable": {},
-                                "stainable": {}
+                                "sliceable": {}
                               }
                             },
                             {
@@ -6841,11 +6820,9 @@
                                 "cookable": {
                                   "cook_temperature": 350.0
                                 },
-                                "dustyable": {},
                                 "freezable": {},
                                 "perishable": {},
-                                "sliceable": {},
-                                "stainable": {}
+                                "sliceable": {}
                               }
                             },
                             {
@@ -7244,11 +7221,9 @@
                                     "cookable": {
                                       "cook_temperature": 450.0
                                     },
-                                    "dustyable": {},
                                     "freezable": {},
                                     "perishable": {},
-                                    "sliceable": {},
-                                    "stainable": {}
+                                    "sliceable": {}
                                   }
                                 },
                                 {
