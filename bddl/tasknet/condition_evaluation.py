@@ -224,23 +224,26 @@ class ForPairs(Sentence):
 
         L = min(len(self.children), len(self.children[0]))
         return (np.sum(np.any(self.child_values, axis=1), axis=0) >= L) and (np.sum(np.any(self.child_values, axis=0), axis=0) >= L)
-
+    
     def get_ground_options(self):
         self.flattened_condition_options = []
         M, N = len(self.children), len(self.children[0])
         L, G = min(M, N), max(M, N)
-        # Accept just a few possible mappings 
-        all_choices = truncated_permutations(range(G), r=L)
-        for choice in all_choices:
-            all_child_options = [self.children[l][choice[l]].flattened_condition_options
-                                 for l in range(L)]
-            # Accept just a few possible options 
-            choice_options = truncated_product(*all_child_options)
-            unpacked_choice_options = []
-            for choice_option in choice_options:
-                unpacked_choice_options.append(
-                    list(itertools.chain(*choice_option)))
-            self.flattened_condition_options.extend(unpacked_choice_options)
+        all_L_choices = truncated_permutations(range(L))
+        all_G_choices = truncated_permutations(range(G), r=L)
+        for lchoice in all_L_choices:
+            for gchoice in all_G_choices:
+                if M < N:
+                    all_child_options = [self.children[lchoice[l]][gchoice[l]].flattened_condition_options
+                                         for l in range(L)]
+                else:
+                    all_child_options = [self.children[gchoice[l]][lchoice[l]].flattened_condition_options
+                                         for l in range(L)]
+                choice_options = truncated_product(*all_child_options)
+                unpacked_choice_options = []
+                for choice_option in choice_options:
+                    unpacked_choice_options.append(list(itertools.chain(*choice_option)))
+                self.flattened_condition_options.extend(unpacked_choice_options)
 
 
 class ForNPairs(Sentence):

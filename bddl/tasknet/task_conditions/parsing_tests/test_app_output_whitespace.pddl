@@ -1,26 +1,26 @@
-
-(:init 
-    (ontop document1 table1) 
-    (ontop document2 table1) 
-    (ontop document3 table1) 
-    (ontop document4 table1) 
-    (ontop document5 table1) 
-    (ontop document6 table1) 
-    (ontop document7 table1) 
-    (ontop document8 table1) 
-    (ontop document9 table1) 
-    (ontop document10 table1) 
-    (ontop file1 cabinet1) 
-    (ontop file2 cabinet1) 
-    (ontop file3 cabinet1) 
-    (ontop file4 cabinet1) 
-    (ontop file5 cabinet1) 
-    (ontop file6 cabinet1) 
-    (inside drawer1 cabinet1) 
-    (open drawer1) 
-    (inside drawer2 cabinet1) 
-    (open drawer2) 
-    (nextto table1 cabinet1) 
-    (inroom cabinet1 home_office) 
-    (inroom table1 home_office)
-)
+    (:goal 
+        (and 
+            (forall 
+                (?rag.n.01 - rag.n.01) 
+                (nextto ?rag.n.01 ?sink.n.01_1)
+            ) 
+            (inside ?soap.n.01_1 ?sink.n.01_1) 
+            (forall 
+                (?tray.n.01 - tray.n.01) 
+                (inside ?tray.n.01 ?electric_refrigerator.n.01_1)
+            ) 
+            (not 
+                (stained ?tray.n.01_1)
+            ) 
+            (not 
+                (stained ?tray.n.01_2)
+            ) 
+            (nextto ?bowl.n.01_1 ?sink.n.01_1) 
+            (not 
+                (dusty ?bowl.n.01_1)
+            ) 
+            (not 
+                (stained ?electric_refrigerator.n.01_1)
+            )
+        )
+    )

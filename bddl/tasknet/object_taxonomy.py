@@ -158,7 +158,7 @@ class ObjectTaxonomy(object):
         :param class_name: Class name to search.
         :return: dict in the form of {ability: {param: value}} containing abilities and ability parameters.
         """
-        assert self.is_valid_class(class_name)
+        assert self.is_valid_class(class_name), f"Invalid class name: {class_name}"
         return copy.deepcopy(self.taxonomy.nodes[class_name]['abilities'])
 
     def get_igibson_categories(self, class_name):

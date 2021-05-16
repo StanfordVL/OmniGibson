@@ -1,1 +1,12 @@
-(:init (ontop document1 table1) (ontop document2 table1) (ontop document3 table1) (ontop document4 table1) (ontop document5 table1) (ontop document6 table1) (ontop document7 table1) (ontop document8 table1) (ontop document9 table1) (ontop document10 table1) (ontop file1 cabinet1) (ontop file2 cabinet1) (ontop file3 cabinet1) (ontop file4 cabinet1) (ontop file5 cabinet1) (ontop file6 cabinet1) (inside drawer1 cabinet1) (open drawer1) (inside drawer2 cabinet1) (open drawer2) (nextto table1 cabinet1) (inroom cabinet1 home_office) (inroom table1 home_office))
+    (:init 
+        (inside rag.n.01_1 sink.n.01_1) 
+        (ontop soap.n.01_1 bucket.n.01_1) 
+        (dusty bathtub.n.01_1) 
+        (dusty sink.n.01_1) 
+        (dusty floor.n.01_1) 
+        (onfloor bucket.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 bathroom) 
+        (inroom bathtub.n.01_1 bathroom) 
+        (inroom sink.n.01_1 bathroom) 
+        (onfloor agent.n.01_1 floor.n.01_1)
+    )
