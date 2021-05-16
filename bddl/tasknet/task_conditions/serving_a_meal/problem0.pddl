@@ -4,7 +4,6 @@
     (:objects
      	chicken.n.01_1 chicken.n.01_2 - chicken.n.01
     	knife.n.01_1 knife.n.01_2 - knife.n.01
-    	shelf.n.01_1 - shelf.n.01
     	fork.n.01_1 fork.n.01_2 - fork.n.01
     	spoon.n.01_1 spoon.n.01_2 - spoon.n.01
     	plate.n.04_1 plate.n.04_2 - plate.n.04
