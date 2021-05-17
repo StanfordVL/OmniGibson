@@ -52,26 +52,24 @@
                 (?bag.n.01 - bag.n.01) 
                 (inside ?cookie.n.01 ?bag.n.01)
             ) 
-            (imply 
-                (inside ?salad.n.01_1 ?bag.n.01_1) 
-                (inside ?sandwich.n.01_1 ?bag.n.01_2)
-            ) 
-            (imply 
-                (inside ?salad.n.01_1 ?bag.n.01_2) 
-                (inside ?sandwich.n.01_1 ?bag.n.01_1)
-            ) 
             (exists 
                 (?bag.n.01 - bag.n.01) 
                 (and 
                     (inside ?salad.n.01_1 ?bag.n.01) 
-                    (inside ?juice.n.01_1 ?bag.n.01)
+                    (inside ?juice.n.01_1 ?bag.n.01) 
+                    (not 
+                        (inside ?sandwich.n.01_1 ?bag.n.01)
+                    )
                 )
             ) 
             (exists 
                 (?bag.n.01 - bag.n.01) 
                 (and 
                     (inside ?sandwich.n.01_1 ?bag.n.01) 
-                    (inside ?pop.n.02_1 ?bag.n.01)
+                    (inside ?pop.n.02_1 ?bag.n.01) 
+                    (not 
+                        (inside ?salad.n.01_1 ?bag.n.01)
+                    )
                 )
             ) 
             (or 

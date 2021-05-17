@@ -27,30 +27,10 @@
     (:goal 
         (and 
             (nextto ?piece_of_cloth.n.01_1 ?sink.n.01_1) 
-            (imply 
-                (inside ?bowl.n.01_1 ?sink.n.01_1) 
-                (not 
-                    (inside ?bowl.n.01_1 ?cabinet.n.01_1)
-                )
-            ) 
-            (imply 
-                (inside ?bowl.n.01_2 ?sink.n.01_1) 
-                (not 
-                    (inside ?bowl.n.01_2 ?cabinet.n.01_1)
-                )
-            ) 
-            (imply 
-                (inside ?spoon.n.01_1 ?sink.n.01_1) 
-                (not 
-                    (inside ?spoon.n.01_1 ?cabinet.n.01_2)
-                )
-            ) 
-            (imply 
-                (inside ?spoon.n.01_2 ?sink.n.01_1) 
-                (not 
-                    (inside ?spoon.n.01_2 ?cabinet.n.01_2)
-                )
-            )
+            (nextto ?bowl.n.01_1 ?sink.n.01_1) 
+            (nextto ?bowl.n.01_2 ?sink.n.01_1) 
+            (nextto ?spoon.n.01_1 ?sink.n.01_1) 
+            (nextto ?spoon.n.01_2 ?sink.n.01_1)
         )
     )
 )

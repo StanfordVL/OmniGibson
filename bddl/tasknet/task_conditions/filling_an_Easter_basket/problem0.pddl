@@ -12,7 +12,6 @@
     	egg.n.02_1 egg.n.02_2 - egg.n.02
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	candy.n.01_1 candy.n.01_2 - candy.n.01
-    	chocolate.n.02_1 chocolate.n.02_2 - chocolate.n.02
     	floor.n.01_1 - floor.n.01
     	agent.n.01_1 - agent.n.01
     )
@@ -32,8 +31,6 @@
         (cooked egg.n.02_2) 
         (ontop candy.n.01_1 electric_refrigerator.n.01_1) 
         (ontop candy.n.01_2 electric_refrigerator.n.01_1) 
-        (inside chocolate.n.02_1 electric_refrigerator.n.01_1) 
-        (inside chocolate.n.02_2 electric_refrigerator.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom cabinet.n.01_2 kitchen) 
@@ -44,8 +41,10 @@
     
     (:goal 
         (and 
-            (ontop ?basket.n.01_1 ?countertop.n.01_1) 
-            (ontop ?basket.n.01_2 ?countertop.n.01_1) 
+            (forall 
+                (?basket.n.01 - basket.n.01) 
+                (ontop ?basket.n.01 ?countertop.n.01_1)
+            ) 
             (forpairs 
                 (?basket.n.01 - basket.n.01) 
                 (?egg.n.02 - egg.n.02) 
@@ -56,33 +55,25 @@
                 (?candy.n.01 - candy.n.01) 
                 (inside ?candy.n.01 ?basket.n.01)
             ) 
-            (imply 
-                (inside ?jewelry.n.01_1 ?basket.n.01_1) 
-                (inside ?ball.n.01_1 ?basket.n.01_2)
+            (exists 
+                (?basket.n.01 - basket.n.01) 
+                (and 
+                    (inside ?jewelry.n.01_1 ?basket.n.01) 
+                    (inside ?ball.n.01_1 ?basket.n.01)
+                )
             ) 
-            (imply 
-                (inside ?jewelry.n.01_1 ?basket.n.01_2) 
-                (inside ?ball.n.01_1 ?basket.n.01_1)
-            ) 
-            (and 
-                (exists 
-                    (?bow.n.08 - bow.n.08) 
-                    (ontop ?bow.n.08 ?basket.n.01_1)
-                ) 
-                (exists 
-                    (?bow.n.08 - bow.n.08) 
-                    (ontop ?bow.n.08 ?basket.n.01_2)
+            (forpairs 
+                (?bow.n.08 - bow.n.08) 
+                (?basket.n.01 - basket.n.01) 
+                (or 
+                    (ontop ?bow.n.08 ?basket.n.01) 
+                    (inside ?bow.n.08 ?basket.n.01)
                 )
             ) 
             (forpairs 
                 (?book.n.02 - book.n.02) 
                 (?basket.n.01 - basket.n.01) 
                 (nextto ?book.n.02 ?basket.n.01)
-            ) 
-            (forpairs 
-                (?chocolate.n.02 - chocolate.n.02) 
-                (?basket.n.01 - basket.n.01) 
-                (inside ?chocolate.n.02 ?basket.n.01)
             )
         )
     )
