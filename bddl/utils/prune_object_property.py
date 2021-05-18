@@ -134,6 +134,17 @@ def prune_sliceable():
 
 def prune_burnable():
     # Burnable are confined to objects that are also cookable
+    return prune_condition('burnable', 'cookable')
+
+
+def prune_soakable():
+    # Soakable are confined to objects that are also cleaningTool
+    return prune_condition('soakable', 'cleaningTool') + ['pot_plant']
+
+
+def prune_condition(prune_state, condition_state):
+    # Allow prune_state only if condition_state is also annotated
+    # Burnable are confined to objects that are also cookable
     allowed_categories = []
 
     with open(MODELS_CSV_PATH, "r") as f:
@@ -146,7 +157,7 @@ def prune_burnable():
 
     for cat in cat_to_syn:
         properties = synsets_to_properties[cat_to_syn[cat]]
-        if 'burnable' in properties and 'cookable' in properties:
+        if prune_state in properties and condition_state in properties:
             allowed_categories.append(cat)
     return allowed_categories
 
@@ -235,6 +246,8 @@ def main():
         prune_dustyable())
     properties_to_synsets['stainable'] = categories_to_synsets(
         prune_stainable())
+    properties_to_synsets['soakable'] = categories_to_synsets(
+        prune_soakable())
 
     with open(INPUT_SYNSET_FILE) as f:
         synsets_to_properties = json.load(f)
