@@ -16,7 +16,7 @@
     	water.n.06_1 water.n.06_2 - water.n.06
     	cake.n.03_1 cake.n.03_2 - cake.n.03
     	stove.n.01_1 - stove.n.01
-        cabinet.n.01_1 cabinet.n.01_2 - cabinet.n.01
+            cabinet.n.01_1 cabinet.n.01_2 - cabinet.n.01
     	floor.n.01_1 - floor.n.01
     	agent.n.01_1 - agent.n.01
     )

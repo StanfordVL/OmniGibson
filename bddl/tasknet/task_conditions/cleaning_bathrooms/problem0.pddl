@@ -25,7 +25,7 @@
             (soaked rag.n.01_1)
         ) 
         (onfloor rag.n.01_1 floor.n.01_1) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (onfloor agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
         (inroom toilet.n.02_1 bathroom) 
         (inroom sink.n.01_1 bathroom) 

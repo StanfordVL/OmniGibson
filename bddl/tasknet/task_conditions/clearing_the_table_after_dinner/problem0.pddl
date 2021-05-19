@@ -15,10 +15,6 @@
     )
     
     (:init 
-        (stained floor.n.01_1) 
-        (stained chair.n.01_1) 
-        (stained chair.n.01_2) 
-        (stained table.n.02_1) 
         (ontop cup.n.01_1 table.n.02_1) 
         (ontop cup.n.01_2 table.n.02_1) 
         (onfloor bucket.n.01_1 floor.n.01_1) 
@@ -44,40 +40,30 @@
     
     (:goal 
         (and 
-            (and 
-                (forall 
-                    (?cup.n.01 - cup.n.01) 
-                    (inside ?cup.n.01 ?bucket.n.01_1)
-                ) 
-                (forall 
-                    (?plate.n.04 - plate.n.04) 
-                    (inside ?plate.n.04 ?bucket.n.01_1)
+            (forall 
+                (?cup.n.01 - cup.n.01) 
+                (exists 
+                    (?bucket.n.01 - bucket.n.01) 
+                    (inside ?cup.n.01 ?bucket.n.01)
                 )
             ) 
-            (and 
-                (inside ?catsup.n.01_1 ?bucket.n.01_2) 
-                (forall 
-                    (?crumb.n.03 - crumb.n.03) 
-                    (inside ?crumb.n.03 ?bucket.n.01_2)
-                ) 
-                (forall 
-                    (?beverage.n.01 - beverage.n.01) 
-                    (inside ?beverage.n.01 ?bucket.n.01_2)
+            (forall 
+                (?crumb.n.03 - crumb.n.03) 
+                (exists 
+                    (?bucket.n.01 - bucket.n.01) 
+                    (inside ?crumb.n.03 ?bucket.n.01)
                 )
             ) 
-            (and 
-                (not 
-                    (stained ?floor.n.01_1)
-                ) 
-                (forall 
-                    (?chair.n.01 - chair.n.01) 
-                    (not 
-                        (stained ?chair.n.01)
-                    )
-                ) 
-                (not 
-                    (stained ?table.n.02_1)
+            (forall 
+                (?plate.n.04 - plate.n.04) 
+                (exists 
+                    (?bucket.n.01 - bucket.n.01) 
+                    (inside ?plate.n.04 ?bucket.n.01)
                 )
+            ) 
+            (exists 
+                (?bucket.n.01 - bucket.n.01) 
+                (inside ?catsup.n.01_1 ?bucket.n.01)
             )
         )
     )

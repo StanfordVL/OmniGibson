@@ -2,7 +2,7 @@
     (:domain igibson)
 
     (:objects
-     	shoe.n.01_1 shoe.n.01_2 - shoe.n.01
+    	shoe.n.01_1 shoe.n.01_2 - shoe.n.01
     	rag.n.01_1 - rag.n.01
     	floor.n.01_1 - floor.n.01
     	sink.n.01_1 - sink.n.01
