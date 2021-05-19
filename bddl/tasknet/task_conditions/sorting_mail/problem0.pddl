@@ -7,7 +7,7 @@
     	sofa.n.01_1 - sofa.n.01
     	package.n.02_1 package.n.02_2 package.n.02_3 package.n.02_4 - package.n.02
     	table.n.02_1 - table.n.02
-        agent.n.01_1 - agent.n.01
+    	agent.n.01_1 - agent.n.01
     )
     
     (:init 
@@ -30,11 +30,28 @@
             (and 
                 (forall 
                     (?package.n.02 - package.n.02) 
+                    (and 
+                        (onfloor ?package.n.02 ?floor.n.01_1) 
+                        (or 
+                            (nextto ?package.n.02 ?package.n.02_1) 
+                            (nextto ?package.n.02 ?package.n.02_2) 
+                            (nextto ?package.n.02 ?package.n.02_3) 
+                            (nextto ?package.n.02 ?package.n.02_4)
+                        )
+                    ) 
                     (onfloor ?package.n.02 ?floor.n.01_1)
                 ) 
                 (forall 
                     (?envelope.n.01 - envelope.n.01) 
-                    (ontop ?envelope.n.01 ?sofa.n.01_1)
+                    (and 
+                        (ontop ?envelope.n.01 ?sofa.n.01_1) 
+                        (or 
+                            (nextto ?envelope.n.01 ?envelope.n.01_1) 
+                            (nextto ?envelope.n.01 ?envelope.n.01_2) 
+                            (nextto ?envelope.n.01 ?envelope.n.01_3) 
+                            (nextto ?envelope.n.01 ?envelope.n.01_4)
+                        )
+                    )
                 )
             )
         )
