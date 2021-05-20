@@ -5,7 +5,7 @@
      	sweater.n.01_1 sweater.n.01_2 sweater.n.01_3 sweater.n.01_4 - sweater.n.01
     	floor.n.01_1 - floor.n.01
     	bed.n.01_1 - bed.n.01
-    	roller.n.04_1 - roller.n.04
+    	scrub_brush.n.01_1 - scrub_brush.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -18,9 +18,9 @@
         (dusty sweater.n.01_2) 
         (dusty sweater.n.01_3) 
         (dusty sweater.n.01_4) 
-        (onfloor roller.n.04_1 floor.n.01_1) 
+        (onfloor scrub_brush.n.01_1 floor.n.01_1) 
         (not 
-            (dusty roller.n.04_1)
+            (dusty scrub_brush.n.01_1)
         ) 
         (inroom floor.n.01_1 bedroom) 
         (inroom bed.n.01_1 bedroom) 
