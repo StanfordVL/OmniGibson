@@ -87,8 +87,9 @@ def prune_openable():
         'bag',
         'jar',
         'package',
-        'wine_bottle',
         'folder',
+        'carton',
+        'briefcase',
     ]
     for add_category in add_openable:
         assert add_category in all_categories

@@ -42,8 +42,7 @@
     "stainable": {}
   },
   "box.n.01": {
-    "dustyable": {},
-    "stainable": {}
+    "dustyable": {}
   },
   "case.n.19": {
     "burnable": {
@@ -54,11 +53,9 @@
     "soakable": {}
   },
   "case.n.05": {
-    "burnable": {},
     "dustyable": {},
     "openable": {},
-    "stainable": {},
-    "soakable": {}
+    "stainable": {}
   },
   "door.n.01": {
     "dustyable": {},
@@ -2810,9 +2807,6 @@
   },
   "carton.n.02": {
     "breakable": {},
-    "burnable": {
-      "burn_temperature": 100.0
-    },
     "dustyable": {},
     "openable": {}
   },
@@ -4960,9 +4954,6 @@
     "perishable": {}
   },
   "briefcase.n.01": {
-    "burnable": {
-      "burn_temperature": 413.0
-    },
     "dustyable": {},
     "openable": {},
     "stainable": {}
@@ -7897,7 +7888,6 @@
     "breakable": {},
     "dustyable": {},
     "liquid": {},
-    "openable": {},
     "stainable": {}
   },
   "computer_game.n.01": {
