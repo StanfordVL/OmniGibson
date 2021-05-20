@@ -1,4 +1,4 @@
-(define (problem collect_misplaced_things_0)
+(define (problem collect_misplaced_items_0)
     (:domain igibson)
 
     (:objects
