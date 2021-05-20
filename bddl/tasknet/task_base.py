@@ -30,7 +30,7 @@ class TaskNetTask(object):
 
     def update_problem(self, atus_activity, task_instance, predefined_problem=None):
         if predefined_problem is not None:
-            self.atus_activity = "predefined"
+            self.atus_activity = atus_activity
             self.task_instance = "predefined"
         else:
             self.atus_activity = atus_activity
