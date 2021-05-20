@@ -510,7 +510,6 @@
                                         "breakable": {},
                                         "dustyable": {},
                                         "liquid": {},
-                                        "openable": {},
                                         "stainable": {}
                                       }
                                     }
@@ -680,12 +679,22 @@
                                     "dustyable": {},
                                     "stainable": {}
                                   }
+                                },
+                                {
+                                  "name": "carton.n.02",
+                                  "igibson_categories": [
+                                    "carton"
+                                  ],
+                                  "abilities": {
+                                    "breakable": {},
+                                    "dustyable": {},
+                                    "openable": {}
+                                  }
                                 }
                               ],
                               "igibson_categories": [],
                               "abilities": {
-                                "dustyable": {},
-                                "stainable": {}
+                                "dustyable": {}
                               }
                             },
                             {
@@ -911,6 +920,28 @@
                                     }
                                   ],
                                   "igibson_categories": [],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "openable": {},
+                                    "stainable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "dustyable": {},
+                                "openable": {},
+                                "stainable": {}
+                              }
+                            },
+                            {
+                              "name": "case.n.05",
+                              "children": [
+                                {
+                                  "name": "briefcase.n.01",
+                                  "igibson_categories": [
+                                    "briefcase"
+                                  ],
                                   "abilities": {
                                     "dustyable": {},
                                     "openable": {},
