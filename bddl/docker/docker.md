@@ -6,8 +6,8 @@ First, make a new directory and clone TaskNet and iGibson.
 
 ```bash
 mkdir behavior_container && cd behavior_container
-git clone git@github.com:sanjanasrivastava/TaskNet.git
-git clone git@github.com:fxia22/iGibson.git
+git clone --recursive git@github.com:sanjanasrivastava/TaskNet.git
+git clone --recursive git@github.com:fxia22/iGibson.git
 cd iGibson && git checkout igdsl2 && cd ..
 ```
 
