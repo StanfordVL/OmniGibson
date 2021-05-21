@@ -39,7 +39,7 @@
             (forpairs 
                 (?stocking.n.01 - stocking.n.01) 
                 (?cube.n.05 - cube.n.05) 
-                (inside ?cube.n.05 ?stocking.n.05)
+                (inside ?cube.n.05 ?stocking.n.01)
             ) 
             (forpairs 
                 (?stocking.n.01 - stocking.n.01) 
