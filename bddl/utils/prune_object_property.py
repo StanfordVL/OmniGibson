@@ -75,7 +75,8 @@ def prune_openable():
         "monitor",
         "stand",
         "standing_tv",
-        "coffee_maker"
+        "coffee_maker",
+        "folding_chair",
     ]
     for skip_category in skip_openable:
         if skip_category in allowed_categories:
