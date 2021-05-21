@@ -13,9 +13,9 @@
     	apple.n.01_1 - apple.n.01
     	countertop.n.01_1 - countertop.n.01
     	banana.n.02_1 - banana.n.02
-    	bag.n.01_1 bag.n.01_2 - bag.n.01
+    	carton.n.02_1 carton.n.02_2 - carton.n.02
     	cookie.n.01_1 cookie.n.01_2 - cookie.n.01
-    	floor.n.01_1 - floor.n.01
+    	floor.n.01_1 floor.n.01_2 - floor.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -28,8 +28,8 @@
         (ontop pop.n.02_1 table.n.02_1) 
         (ontop apple.n.01_1 countertop.n.01_1) 
         (ontop banana.n.02_1 countertop.n.01_1) 
-        (ontop bag.n.01_1 table.n.02_1) 
-        (ontop bag.n.01_2 table.n.02_1) 
+        (onfloor carton.n.02_1 floor.n.01_2) 
+        (onfloor carton.n.02_2 floor.n.01_2) 
         (ontop cookie.n.01_1 countertop.n.01_1) 
         (ontop cookie.n.01_2 countertop.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -37,6 +37,7 @@
         (inroom table.n.02_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
+        (inroom floor.n.01_2 living_room) 
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     

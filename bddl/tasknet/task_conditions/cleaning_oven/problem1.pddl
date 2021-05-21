@@ -2,7 +2,6 @@
     (:domain igibson)
 
     (:objects
-     	crumb.n.03_1 crumb.n.03_2 crumb.n.03_3 - crumb.n.03
     	oven.n.01_1 - oven.n.01
     	ashcan.n.01_1 - ashcan.n.01
     	floor.n.01_1 - floor.n.01
@@ -13,9 +12,6 @@
     )
     
     (:init 
-        (inside crumb.n.03_1 oven.n.01_1) 
-        (inside crumb.n.03_2 oven.n.01_1) 
-        (inside crumb.n.03_3 oven.n.01_1) 
         (dusty oven.n.01_1) 
         (stained oven.n.01_1) 
         (onfloor ashcan.n.01_1 floor.n.01_1) 
@@ -29,10 +25,6 @@
     
     (:goal 
         (and 
-            (forall 
-                (?crumb.n.03 - crumb.n.03) 
-                (inside ?crumb.n.03 ?ashcan.n.01_1)
-            ) 
             (not 
                 (dusty ?oven.n.01_1)
             ) 

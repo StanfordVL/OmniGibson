@@ -2,30 +2,31 @@
     (:domain igibson)
 
     (:objects
-     	vegetable.n.01_1 vegetable.n.01_2 vegetable.n.01_3 vegetable.n.01_4 vegetable.n.01_5 vegetable.n.01_6 - vegetable.n.01
-    	countertop.n.01_1 - countertop.n.01
-    	onion.n.03_1 onion.n.03_2 - onion.n.03
-    	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-    	knife.n.01_1 - knife.n.01
-    	dish.n.02_1 dish.n.02_2 - dish.n.02
-    	cabinet.n.01_1 - cabinet.n.01
-    	sink.n.01_1 - sink.n.01
-    	floor.n.01_1 - floor.n.01
-    	agent.n.01_1 - agent.n.01
+        tomato.n.01_1 tomato.n.01_2 - tomato.n.01
+        mushroom.n.05_1 mushroom.n.05_2 - mushroom.n.05
+        chestnut.n.03_1 chestnut.n.03_2 - chestnut.n.03
+        countertop.n.01_1 - countertop.n.01
+        onion.n.03_1 onion.n.03_2 - onion.n.03
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        knife.n.01_1 - knife.n.01
+        dish.n.01_1 dish.n.01_2 - dish.n.01
+        cabinet.n.01_1 - cabinet.n.01
+        sink.n.01_1 - sink.n.01\n\tfloor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop vegetable.n.01_1 countertop.n.01_1) 
-        (ontop vegetable.n.01_2 countertop.n.01_1) 
-        (ontop vegetable.n.01_3 countertop.n.01_1) 
-        (ontop vegetable.n.01_4 countertop.n.01_1) 
-        (ontop vegetable.n.01_5 countertop.n.01_1) 
-        (ontop vegetable.n.01_6 countertop.n.01_1) 
+        (ontop tomato.n.01_1 countertop.n.01_1) 
+        (ontop tomato.n.01_2 countertop.n.01_1) 
+        (ontop mushroom.n.05_1 countertop.n.01_1) 
+        (ontop mushroom.n.05_2 countertop.n.01_1) 
+        (ontop chestnut.n.03_1 countertop.n.01_1) 
+        (ontop chestnut.n.03_2 countertop.n.01_1) 
         (inside onion.n.03_1 electric_refrigerator.n.01_1) 
         (inside onion.n.03_2 electric_refrigerator.n.01_1) 
         (ontop knife.n.01_1 countertop.n.01_1) 
-        (inside dish.n.02_1 cabinet.n.01_1) 
-        (inside dish.n.02_2 cabinet.n.01_1) 
+        (inside dish.n.01_1 cabinet.n.01_1) 
+        (inside dish.n.01_2 cabinet.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
@@ -36,28 +37,45 @@
     
     (:goal 
         (and 
-            (nextto ?knife.n.01_1 ?sink.n.01_1) 
-            (exists 
-                (?dish.n.02 - dish.n.02) 
-                (forall 
-                    (?vegetable.n.01 - vegetable.n.01) 
-                    (inside ?vegetable.n.01 ?dish.n.02)
-                )
-            ) 
-            (exists 
-                (?dish.n.02 - dish.n.02) 
-                (forall 
-                    (?onion.n.03 - onion.n.03) 
-                    (inside ?onion.n.03 ?dish.n.02)
+            (forall 
+                (?tomato.n.01 - tomato.n.01) 
+                (and 
+                    (exists 
+                        (?dish.n.01 - dish.n.01) 
+                        (inside ?tomato.n.01 ?dish.n.01)
+                    ) 
+                    (sliced ?tomato.n.01)
                 )
             ) 
             (forall 
-                (?vegetable.n.01 - vegetable.n.01) 
-                (sliced ?vegetable.n.01)
+                (?mushroom.n.05 - mushroom.n.05) 
+                (and 
+                    (exists 
+                        (?dish.n.01 - dish.n.01) 
+                        (inside ?mushroom.n.05 ?dish.n.01)
+                    ) 
+                    (sliced ?mushroom.n.05)
+                )
+            ) 
+            (forall 
+                (?chestnut.n.03 - chestnut.n.03) 
+                (and 
+                    (exists 
+                        (?dish.n.01 - dish.n.01) 
+                        (inside ?chestnut.n.03 ?dish.n.01)
+                    ) 
+                    (sliced ?chestnut.n.03)
+                )
             ) 
             (forall 
                 (?onion.n.03 - onion.n.03) 
-                (sliced ?onion.n.03)
+                (and 
+                    (exists 
+                        (?dish.n.01 - dish.n.01) 
+                        (inside ?onion.n.03 ?dish.n.01)
+                    ) 
+                    (sliced ?onion.n.03)
+                )
             )
         )
     )

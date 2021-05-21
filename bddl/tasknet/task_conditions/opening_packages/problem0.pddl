@@ -1,10 +1,9 @@
-(define (problem opening_presents_0)
+(define (problem opening_packages_0)
     (:domain igibson)
 
     (:objects
      	package.n.02_1 package.n.02_2 - package.n.02
     	floor.n.01_1 - floor.n.01
-    	bed.n.01_1 - bed.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -17,7 +16,6 @@
         (not 
             (open package.n.02_2)
         ) 
-        (inroom bed.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
         (onfloor agent.n.01_1 floor.n.01_1)
     )
