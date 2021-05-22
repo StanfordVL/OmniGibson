@@ -34,23 +34,21 @@
     
     (:goal 
         (and 
+            (not 
+                (stained ?toilet.n.02_1)
+            ) 
+            (not 
+                (stained ?bathtub.n.01_1)
+            ) 
+            (not 
+                (stained ?sink.n.01_1)
+            ) 
+            (not 
+                (stained ?floor.n.01_1)
+            ) 
             (and 
-                (not 
-                    (stained ?toilet.n.02_1)
-                ) 
-                (not 
-                    (stained ?bathtub.n.01_1)
-                ) 
-                (not 
-                    (stained ?sink.n.01_1)
-                ) 
-                (not 
-                    (stained ?floor.n.01_1)
-                ) 
-                (and 
-                    (soaked ?rag.n.01_1) 
-                    (inside ?rag.n.01_1 ?bucket.n.01_1)
-                )
+                (soaked ?rag.n.01_1) 
+                (inside ?rag.n.01_1 ?bucket.n.01_1)
             )
         )
     )
