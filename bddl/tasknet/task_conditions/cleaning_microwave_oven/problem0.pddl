@@ -3,7 +3,6 @@
 
     (:objects
      	microwave.n.02_1 - microwave.n.02
-    	crumb.n.03_1 crumb.n.03_2 - crumb.n.03
     	rag.n.01_1 - rag.n.01
     	countertop.n.01_1 - countertop.n.01
     	ashcan.n.01_1 - ashcan.n.01
@@ -16,8 +15,6 @@
     (:init 
         (dusty microwave.n.02_1) 
         (stained microwave.n.02_1) 
-        (inside crumb.n.03_1 microwave.n.02_1) 
-        (inside crumb.n.03_2 microwave.n.02_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (onfloor ashcan.n.01_1 floor.n.01_1) 
         (inroom microwave.n.02_1 kitchen) 
@@ -35,10 +32,6 @@
             ) 
             (not 
                 (stained ?microwave.n.02_1)
-            ) 
-            (forall 
-                (?crumb.n.03 - crumb.n.03) 
-                (inside ?crumb.n.03 ?ashcan.n.01_1)
             )
         )
     )

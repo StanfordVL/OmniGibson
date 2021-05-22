@@ -16,7 +16,6 @@
         plate.n.04_1 - plate.n.04
         vegetable_oil.n.01_1 - vegetable_oil.n.01
         apple.n.01_1 - apple.n.01
-        crumb.n.03_1 crumb.n.03_2 crumb.n.03_3 crumb.n.03_4 crumb.n.03_5 - crumb.n.03
         window.n.01_1 - window.n.01
         countertop.n.01_1 - countertop.n.01
         agent.n.01_1 - agent.n.01
@@ -40,11 +39,6 @@
         (stained plate.n.04_1) 
         (inside vegetable_oil.n.01_1 electric_refrigerator.n.01_1) 
         (inside apple.n.01_1 electric_refrigerator.n.01_1) 
-        (onfloor crumb.n.03_1 floor.n.01_1) 
-        (onfloor crumb.n.03_2 floor.n.01_1) 
-        (onfloor crumb.n.03_3 floor.n.01_1) 
-        (onfloor crumb.n.03_4 floor.n.01_1) 
-        (onfloor crumb.n.03_5 floor.n.01_1) 
         (dusty floor.n.01_1) 
         (dusty cabinet.n.01_1) 
         (dusty cabinet.n.01_2) 
@@ -101,10 +95,6 @@
             (and 
                 (inside ?casserole.n.02_1 ?electric_refrigerator.n.01_1) 
                 (inside ?apple.n.01_1 ?electric_refrigerator.n.01_1)
-            ) 
-            (forall 
-                (?crumb.n.03 - crumb.n.03) 
-                (inside ?crumb.n.03 ?bin.n.01_1)
             )
         )
     )

@@ -8,9 +8,9 @@
     )
     
     (:init 
-        (ontop plywood.n.01_1 floor.n.01_1) 
-        (ontop plywood.n.01_2 floor.n.01_1) 
-        (ontop plywood.n.01_3 floor.n.01_1) 
+        (onfloor plywood.n.01_1 floor.n.01_1) 
+        (onfloor plywood.n.01_2 floor.n.01_1) 
+        (onfloor plywood.n.01_3 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom floor.n.01_2 kitchen) 
         (onfloor agent.n.01_1 floor.n.01_1)
@@ -19,7 +19,7 @@
     (:goal 
         (forall 
             (?plywood.n.01 - plywood.n.01) 
-            (onfloor ?plywood.n.01 ?floor.n.01_1)
+            (onfloor ?plywood.n.01 ?floor.n.01_2)
         )
     )
 )
