@@ -4,7 +4,6 @@
     (:objects
      	pot_plant.n.01_1 pot_plant.n.01_2 pot_plant.n.01_3 - pot_plant.n.01
     	floor.n.01_1 floor.n.01_2 - floor.n.01
-    	water.n.06_1 water.n.06_2 water.n.06_3 - water.n.06
     	sink.n.01_1 - sink.n.01
     	table.n.02_1 - table.n.02
     	countertop.n.01_1 - countertop.n.01

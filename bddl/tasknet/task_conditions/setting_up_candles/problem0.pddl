@@ -3,7 +3,7 @@
 
     (:objects
         candle.n.01_1 candle.n.01_2 candle.n.01_3 candle.n.01_4 candle.n.01_5 candle.n.01_6 - candle.n.01
-        table.n.01_1 table.n.01_2 - table.n.01
+        table.n.02_1 table.n.02_2 - table.n.02
         floor.n.01_1 floor.n.01_2 - floor.n.01
         carton.n.02_1 carton.n.02_2 - carton.n.02
         agent.n.01_1 - agent.n.01
