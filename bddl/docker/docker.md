@@ -6,8 +6,8 @@ First, make a new directory and clone TaskNet and iGibson.
 
 ```bash
 mkdir behavior_container && cd behavior_container
-git clone git@github.com:sanjanasrivastava/TaskNet.git
-git clone git@github.com:fxia22/iGibson.git
+git clone --recursive git@github.com:sanjanasrivastava/TaskNet.git
+git clone --recursive git@github.com:fxia22/iGibson.git
 cd iGibson && git checkout igdsl2 && cd ..
 ```
 
@@ -15,7 +15,7 @@ Then copy the Dockerfile into the parent behavior_container directory and build 
 
 ```bash
 cp TaskNet/docker/Dockerfile .
-docker build -f Dockerfile -t behavior
+docker build -f Dockerfile -t behavior .
 ```
 
 Run the docker container, note, we mount the ig_dataset directory into the container to avoid 20+ gigabyte container image sizes, and we mount $HOME as /data to allow saving the video file directly to the host disk.

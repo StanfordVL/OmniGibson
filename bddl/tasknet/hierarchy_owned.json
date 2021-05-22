@@ -8554,17 +8554,32 @@
                                         "freezable": {},
                                         "perishable": {}
                                       }
+                                    },
+                                    {
+                                      "name": "tea.n.05",
+                                      "children": [
+                                        {
+                                          "name": "tea_bag.n.01",
+                                          "igibson_categories": [
+                                            "tea_bag"
+                                          ],
+                                          "abilities": {
+                                            "dustyable": {},
+                                            "soakable": {},
+                                            "stainable": {}
+                                          }
+                                        }
+                                      ],
+                                      "igibson_categories": [],
+                                      "abilities": {
+                                        "dustyable": {},
+                                        "soakable": {},
+                                        "stainable": {}
+                                      }
                                     }
                                   ],
                                   "igibson_categories": [],
-                                  "abilities": {
-                                    "burnable": {},
-                                    "cookable": {
-                                      "cook_temperature": 212.0
-                                    },
-                                    "freezable": {},
-                                    "perishable": {}
-                                  }
+                                  "abilities": {}
                                 },
                                 {
                                   "name": "salt.n.02",

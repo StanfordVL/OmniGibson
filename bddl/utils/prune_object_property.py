@@ -141,7 +141,7 @@ def prune_burnable():
 
 def prune_soakable():
     # Soakable are confined to objects that are also cleaningTool
-    return prune_condition('soakable', 'cleaningTool') + ['pot_plant']
+    return prune_condition('soakable', 'cleaningTool') + ['pot_plant', 'tea_bag']
 
 
 def prune_condition(prune_state, condition_state):
