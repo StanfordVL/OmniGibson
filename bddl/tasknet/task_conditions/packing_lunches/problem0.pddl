@@ -45,41 +45,41 @@
         (and 
             (forpairs 
                 (?chip.n.04 - chip.n.04) 
-                (?bag.n.01 - bag.n.01) 
-                (inside ?chip.n.04 ?bag.n.01)
+                (?carton.n.02 - carton.n.02) 
+                (inside ?chip.n.04 ?carton.n.02)
             ) 
             (forpairs 
                 (?cookie.n.01 - cookie.n.01) 
-                (?bag.n.01 - bag.n.01) 
-                (inside ?cookie.n.01 ?bag.n.01)
+                (?carton.n.02 - carton.n.02) 
+                (inside ?cookie.n.01 ?carton.n.02)
             ) 
             (exists 
-                (?bag.n.01 - bag.n.01) 
+                (?carton.n.02 - carton.n.02) 
                 (and 
-                    (inside ?salad.n.01_1 ?bag.n.01) 
-                    (inside ?juice.n.01_1 ?bag.n.01) 
+                    (inside ?salad.n.01_1 ?carton.n.02) 
+                    (inside ?juice.n.01_1 ?carton.n.02) 
                     (not 
-                        (inside ?sandwich.n.01_1 ?bag.n.01)
+                        (inside ?sandwich.n.01_1 ?carton.n.02)
                     )
                 )
             ) 
             (exists 
-                (?bag.n.01 - bag.n.01) 
+                (?carton.n.02 - carton.n.02) 
                 (and 
-                    (inside ?sandwich.n.01_1 ?bag.n.01) 
-                    (inside ?pop.n.02_1 ?bag.n.01) 
+                    (inside ?sandwich.n.01_1 ?carton.n.02) 
+                    (inside ?pop.n.02_1 ?carton.n.02) 
                     (not 
-                        (inside ?salad.n.01_1 ?bag.n.01)
+                        (inside ?salad.n.01_1 ?carton.n.02)
                     )
                 )
             ) 
             (or 
-                (nextto ?apple.n.01_1 ?bag.n.01_1) 
-                (nextto ?banana.n.02_1 ?bag.n.01_1)
+                (nextto ?apple.n.01_1 ?carton.n.02_1) 
+                (nextto ?banana.n.02_1 ?carton.n.02_1)
             ) 
             (or 
-                (nextto ?apple.n.01_1 ?bag.n.01_2) 
-                (nextto ?banana.n.02_1 ?bag.n.01_2)
+                (nextto ?apple.n.01_1 ?carton.n.02_2) 
+                (nextto ?banana.n.02_1 ?carton.n.02_2)
             )
         )
     )

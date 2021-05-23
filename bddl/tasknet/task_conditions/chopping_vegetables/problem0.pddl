@@ -11,7 +11,8 @@
         knife.n.01_1 - knife.n.01
         dish.n.01_1 dish.n.01_2 - dish.n.01
         cabinet.n.01_1 - cabinet.n.01
-        sink.n.01_1 - sink.n.01\n\tfloor.n.01_1 - floor.n.01
+        sink.n.01_1 - sink.n.01
+        floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
     

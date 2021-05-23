@@ -19,7 +19,7 @@
         (inside pad.n.04_1 shelf.n.01_1) 
         (inroom floor.n.01_1 garage) 
         (inroom shelf.n.01_1 garage) 
-        (onfloor agent.n.01_1 agent.n.01)
+        (onfloor agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

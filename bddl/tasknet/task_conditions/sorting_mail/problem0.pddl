@@ -27,30 +27,27 @@
     
     (:goal 
         (and 
-            (and 
-                (forall 
-                    (?package.n.02 - package.n.02) 
-                    (and 
-                        (onfloor ?package.n.02 ?floor.n.01_1) 
-                        (or 
-                            (nextto ?package.n.02 ?package.n.02_1) 
-                            (nextto ?package.n.02 ?package.n.02_2) 
-                            (nextto ?package.n.02 ?package.n.02_3) 
-                            (nextto ?package.n.02 ?package.n.02_4)
-                        )
-                    ) 
-                    (onfloor ?package.n.02 ?floor.n.01_1)
-                ) 
-                (forall 
-                    (?envelope.n.01 - envelope.n.01) 
-                    (and 
-                        (ontop ?envelope.n.01 ?sofa.n.01_1) 
-                        (or 
-                            (nextto ?envelope.n.01 ?envelope.n.01_1) 
-                            (nextto ?envelope.n.01 ?envelope.n.01_2) 
-                            (nextto ?envelope.n.01 ?envelope.n.01_3) 
-                            (nextto ?envelope.n.01 ?envelope.n.01_4)
-                        )
+            (forall 
+                (?package.n.02 - package.n.02) 
+                (and 
+                    (onfloor ?package.n.02 ?floor.n.01_1) 
+                    (or 
+                        (nextto ?package.n.02 ?package.n.02_1) 
+                        (nextto ?package.n.02 ?package.n.02_2) 
+                        (nextto ?package.n.02 ?package.n.02_3) 
+                        (nextto ?package.n.02 ?package.n.02_4)
+                    )
+                )
+            ) 
+            (forall 
+                (?envelope.n.01 - envelope.n.01) 
+                (and 
+                    (ontop ?envelope.n.01 ?sofa.n.01_1) 
+                    (or 
+                        (nextto ?envelope.n.01 ?envelope.n.01_1) 
+                        (nextto ?envelope.n.01 ?envelope.n.01_2) 
+                        (nextto ?envelope.n.01 ?envelope.n.01_3) 
+                        (nextto ?envelope.n.01 ?envelope.n.01_4)
                     )
                 )
             )

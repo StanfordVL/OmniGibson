@@ -8,6 +8,7 @@
     	bucket.n.01_1 - bucket.n.01
     	rag.n.01_1 - rag.n.01
     	agent.n.01_1 - agent.n.01
+        sink.n.01_1 - sink.n.01
     )
     
     (:init 

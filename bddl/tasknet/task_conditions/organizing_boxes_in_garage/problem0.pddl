@@ -15,8 +15,6 @@
     (:init 
         (onfloor carton.n.02_1 floor.n.01_1) 
         (onfloor carton.n.02_2 floor.n.01_1) 
-        (onfloor carton.n.02_3 floor.n.01_1) 
-        (onfloor carton.n.02_4 floor.n.01_1) 
         (onfloor ball.n.01_1 floor.n.01_1) 
         (onfloor ball.n.01_2 floor.n.01_1) 
         (inside plate.n.04_1 shelf.n.01_1) 
