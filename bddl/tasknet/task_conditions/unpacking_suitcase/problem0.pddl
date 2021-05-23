@@ -21,6 +21,7 @@
         (inside notebook.n.01_1 carton.n.02_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom sofa.n.01_1 living_room)
+        (onfloor agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
