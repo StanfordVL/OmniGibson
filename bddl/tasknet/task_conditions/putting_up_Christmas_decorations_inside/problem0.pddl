@@ -27,10 +27,15 @@
     (:goal 
         (and 
             (nextto ?christmas_tree.n.05_1 ?window.n.01_1) 
-            (touching ?wreath.n.01_1 ?window.n.01_1) 
-            (touching ?wreath.n.01_2 ?window.n.01_2) 
-            (ontop ?tinsel.n.02_1 ?christmas_tree.n.05_1) 
-            (ontop ?tinsel.n.02_2 ?christmas_tree.n.05_1) 
+            (nextto ?wreath.n.01_1 ?christmas_tree.n.05_1) 
+            (nextto ?wreath.n.01_2 ?christmas_tree.n.05_1) 
+            (forall 
+                (?tinsel.n.02 - tinsel.n.02) 
+                (or 
+                    (ontop ?tinsel.n.02 ?christmas_tree.n.05_1) 
+                    (nextto ?tinsel.n.02 ?christmas_tree.n.05_1)
+                )
+            ) 
             (ontop ?bow.n.08_1 ?christmas_tree.n.05_1)
         )
     )

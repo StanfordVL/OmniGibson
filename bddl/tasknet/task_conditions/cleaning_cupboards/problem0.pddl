@@ -12,7 +12,7 @@
     	cleansing_agent.n.01_1 - cleansing_agent.n.01
     	bin.n.01_1 - bin.n.01
     	floor.n.01_1 - floor.n.01
-    	cup.n.01_1 - cup.n.01
+    	bucket.n.01_1 - bucket.n.01
         bed.n.01_1 - bed.n.01
     	agent.n.01_1 - agent.n.01
     )
@@ -29,7 +29,7 @@
         (inside rag.n.01_1 cabinet.n.01_1) 
         (ontop cleansing_agent.n.01_1 bed.n.01_1) 
         (onfloor bin.n.01_1 floor.n.01_1) 
-        (ontop cup.n.01_1 bed.n.01_1) 
+        (ontop bucket.n.01_1 bed.n.01_1) 
         (dusty cabinet.n.01_1) 
         (dusty cabinet.n.01_2) 
         (inroom cabinet.n.01_1 bedroom) 
@@ -60,9 +60,9 @@
             (inside ?screwdriver.n.01_1 ?bin.n.01_1) 
             (forall 
                 (?marker.n.03 - marker.n.03) 
-                (inside ?marker.n.03 ?cup.n.01_1)
+                (inside ?marker.n.03 ?bucket.n.01_1)
             ) 
-            (inside ?pen.n.01_1 ?cup.n.01_1)
+            (inside ?pen.n.01_1 ?bucket.n.01_1)
         )
     )
 )

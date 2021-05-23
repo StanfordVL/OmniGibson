@@ -40,6 +40,9 @@
             (?strawberry.n.01 - strawberry.n.01) 
             (inside ?strawberry.n.01 ?jar.n.01_1)
         ) 
+        (not 
+            (open ?jar.n.01_1)
+        ) 
         (inside ?beef.n.02_1 ?electric_refrigerator.n.01_1) 
         (frozen ?beef.n.02_1)
     )

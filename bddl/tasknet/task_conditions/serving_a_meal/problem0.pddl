@@ -11,7 +11,6 @@
     	table.n.02_1 - table.n.02
     	bread.n.01_1 bread.n.01_2 - bread.n.01
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-    	bowl.n.01_1 bowl.n.01_2 - bowl.n.01
     	salad.n.01_1 salad.n.01_2 - salad.n.01
     	water.n.06_1 water.n.06_2 - water.n.06
     	cake.n.03_1 cake.n.03_2 - cake.n.03
@@ -36,8 +35,6 @@
         (ontop soup.n.01_2 table.n.02_1) 
         (inside bread.n.01_2 electric_refrigerator.n.01_1) 
         (inside bread.n.01_1 electric_refrigerator.n.01_1) 
-        (inside bowl.n.01_1 cabinet.n.01_2) 
-        (inside bowl.n.01_2 cabinet.n.01_2) 
         (inside salad.n.01_1 electric_refrigerator.n.01_1) 
         (inside salad.n.01_2 electric_refrigerator.n.01_1) 
         (inside chicken.n.01_1 electric_refrigerator.n.01_1) 
@@ -62,10 +59,6 @@
                 (ontop ?plate.n.04 ?table.n.02_1)
             ) 
             (forall 
-                (?bowl.n.01 - bowl.n.01) 
-                (ontop ?bowl.n.01 ?table.n.02_1)
-            ) 
-            (forall 
                 (?knife.n.01 - knife.n.01) 
                 (ontop ?knife.n.01 ?table.n.02_1)
             ) 
@@ -75,8 +68,8 @@
             ) 
             (forpairs 
                 (?spoon.n.01 - spoon.n.01) 
-                (?bowl.n.01 - bowl.n.01) 
-                (nextto ?spoon.n.01 ?bowl.n.01)
+                (?soup.n.01 - soup.n.01) 
+                (nextto ?spoon.n.01 ?soup.n.01)
             ) 
             (forall 
                 (?water.n.06 - water.n.06) 
@@ -90,22 +83,17 @@
             (forpairs 
                 (?salad.n.01 - salad.n.01) 
                 (?plate.n.04 - plate.n.04) 
-                (ontop ?salad.n.01 ?plate.n.04)
+                (nextto ?salad.n.01 ?plate.n.04)
             ) 
             (forpairs 
                 (?bread.n.01 - bread.n.01) 
                 (?plate.n.04 - plate.n.04) 
-                (ontop ?bread.n.01 ?plate.n.04)
+                (nextto ?bread.n.01 ?plate.n.04)
             ) 
             (forpairs 
                 (?cake.n.03 - cake.n.03) 
                 (?plate.n.04 - plate.n.04) 
-                (ontop ?cake.n.03 ?plate.n.04)
-            ) 
-            (forpairs 
-                (?soup.n.01 - soup.n.01) 
-                (?bowl.n.01 - bowl.n.01) 
-                (inside ?soup.n.01 ?bowl.n.01)
+                (nextto ?cake.n.03 ?plate.n.04)
             )
         )
     )
