@@ -6,7 +6,7 @@
     	floor.n.01_1 - floor.n.01
     	candy.n.01_1 candy.n.01_2 candy.n.01_3 candy.n.01_4 - candy.n.01
     	cabinet.n.01_1 cabinet.n.01_2 - cabinet.n.01
-    	cookie.n.01_1 cookie.n.01_2 cookie.n.01_3 cookie.n.01_4 - cookie.n.01
+    	pen.n.01_1 pen.n.01_2 pen.n.01_3 pen.n.01_4 - pen.n.01
     	stocking.n.01_1 stocking.n.01_2 stocking.n.01_3 stocking.n.01_4 - stocking.n.01
     	agent.n.01_1 - agent.n.01
     )
@@ -20,10 +20,10 @@
         (inside candy.n.01_2 cabinet.n.01_1) 
         (inside candy.n.01_3 cabinet.n.01_1) 
         (inside candy.n.01_4 cabinet.n.01_1) 
-        (inside cookie.n.01_1 cabinet.n.01_1) 
-        (inside cookie.n.01_2 cabinet.n.01_1) 
-        (inside cookie.n.01_3 cabinet.n.01_1) 
-        (inside cookie.n.01_4 cabinet.n.01_1) 
+        (inside pen.n.01_1 cabinet.n.01_1) 
+        (inside pen.n.01_2 cabinet.n.01_1) 
+        (inside pen.n.01_3 cabinet.n.01_1) 
+        (inside pen.n.01_4 cabinet.n.01_1) 
         (onfloor stocking.n.01_1 floor.n.01_1) 
         (onfloor stocking.n.01_2 floor.n.01_1) 
         (onfloor stocking.n.01_3 floor.n.01_1) 
@@ -48,8 +48,8 @@
             ) 
             (forpairs 
                 (?stocking.n.01 - stocking.n.01) 
-                (?cookie.n.01 - cookie.n.01) 
-                (inside ?cookie.n.01 ?stocking.n.01)
+                (?pen.n.01 - pen.n.01) 
+                (inside ?pen.n.01 ?stocking.n.01)
             )
         )
     )
