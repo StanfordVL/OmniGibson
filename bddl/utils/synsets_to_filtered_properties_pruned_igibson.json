@@ -24,9 +24,6 @@
     "stainable": {}
   },
   "bag.n.04": {
-    "burnable": {
-      "burn_temperature": 260.0
-    },
     "dustyable": {},
     "stainable": {}
   },
@@ -38,7 +35,6 @@
     "stainable": {}
   },
   "bag.n.01": {
-    "dustyable": {},
     "stainable": {}
   },
   "box.n.01": {
@@ -1195,9 +1191,6 @@
     "stainable": {}
   },
   "backpack.n.01": {
-    "burnable": {
-      "burn_temperature": 37.77777777777778
-    },
     "dustyable": {},
     "openable": {},
     "stainable": {}
@@ -4163,10 +4156,6 @@
     "sliceable": {}
   },
   "sack.n.01": {
-    "burnable": {
-      "burn_temperature": 210.0
-    },
-    "openable": {},
     "stainable": {}
   },
   "crank.n.04": {
@@ -8347,6 +8336,10 @@
   },
   "tea_bag.n.01": {
     "soakable": {},
+    "stainable": {},
+    "dustyable": {}
+  },
+  "shoulder_bag.n.01": {
     "stainable": {},
     "dustyable": {}
   }

@@ -8890,6 +8890,16 @@
         "soakable": {},
         "stainable": {},
         "dustyable": {},
-        "burnable": {}
+        "burnable": {
+            "burn_temperature": 250.0
+        }
+    },
+    "shoulder_bag.n.01": {
+        "stainable": {},
+        "dustyable": {},
+        "burnable": {
+            "burn_temperature": 350.0
+        },
+        "openable": {}
     }
 }
