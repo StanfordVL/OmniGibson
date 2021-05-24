@@ -85,7 +85,7 @@ def prune_openable():
     # Manually add them because even though they don't have joints for now, we will acquire the articulated version soon
     add_openable = [
         'car',
-        'bag',
+        'backpack',
         'jar',
         'package',
         'folder',
