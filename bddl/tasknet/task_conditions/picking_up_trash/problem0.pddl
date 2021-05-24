@@ -5,7 +5,8 @@
         ashcan.n.01_1 - ashcan.n.01
         paper.n.01_1 paper.n.01_2 paper.n.01_3 - paper.n.01
         bag.n.01_1 bag.n.01_2 - bag.n.01
-        floor.n.01_1 floor.n.01_2 - floor.n.01\n    agent.n.01_1 - agent.n.01
+        floor.n.01_1 floor.n.01_2 - floor.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 
