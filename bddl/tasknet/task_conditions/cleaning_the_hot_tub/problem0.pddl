@@ -4,14 +4,14 @@
     (:objects
      	pool.n.01_1 - pool.n.01
     	floor.n.01_1 - floor.n.01
-    	brush.n.02_1 - brush.n.02
+    	scrub_brush.n.01_1 - scrub_brush.n.01
     	agent.n.01_1 - agent.n.01
     )
     
     (:init 
         (onfloor pool.n.01_1 floor.n.01_1) 
         (stained pool.n.01_1) 
-        (onfloor brush.n.02_1 floor.n.01_1) 
+        (onfloor scrub_brush.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garage) 
         (onfloor agent.n.01_1 floor.n.01_1)
     )
@@ -22,7 +22,7 @@
             (not 
                 (stained ?pool.n.01_1)
             ) 
-            (inside ?brush.n.02_1 ?pool.n.01_1)
+            (inside ?scrub_brush.n.01_1 ?pool.n.01_1)
         )
     )
 )
