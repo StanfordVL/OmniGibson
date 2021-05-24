@@ -74,12 +74,12 @@
                 )
             ) 
             (or 
-                (nextto ?apple.n.01_1 ?carton.n.02_1) 
-                (nextto ?banana.n.02_1 ?carton.n.02_1)
+                (inside ?apple.n.01_1 ?carton.n.02_1) 
+                (inside ?banana.n.02_1 ?carton.n.02_1)
             ) 
             (or 
-                (nextto ?apple.n.01_1 ?carton.n.02_2) 
-                (nextto ?banana.n.02_1 ?carton.n.02_2)
+                (inside ?apple.n.01_1 ?carton.n.02_2) 
+                (inside ?banana.n.02_1 ?carton.n.02_2)
             )
         )
     )

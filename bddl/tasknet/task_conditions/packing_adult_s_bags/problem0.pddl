@@ -33,13 +33,11 @@
     
     (:goal 
         (and 
-            (and 
-                (inside ?underwear.n.01_1 ?briefcase.n.01_1) 
-                (inside ?earphone.n.01_1 ?briefcase.n.01_1) 
-                (inside ?makeup.n.01_1 ?briefcase.n.01_1) 
-                (inside ?toothbrush.n.01_1 ?briefcase.n.01_1) 
-                (inside ?book.n.02_1 ?briefcase.n.01_1)
-            ) 
+            (inside ?underwear.n.01_1 ?briefcase.n.01_1) 
+            (inside ?earphone.n.01_1 ?briefcase.n.01_1) 
+            (inside ?makeup.n.01_1 ?briefcase.n.01_1) 
+            (inside ?toothbrush.n.01_1 ?briefcase.n.01_1) 
+            (inside ?book.n.02_1 ?briefcase.n.01_1)
             (onfloor ?hanger.n.02_1 ?floor.n.01_1) 
             (onfloor ?briefcase.n.01_1 ?floor.n.01_2)
         )

@@ -44,8 +44,6 @@
                 (?rag.n.01 - rag.n.01) 
                 (soaked ?rag.n.01)
             ) 
-            (soaked ?newspaper.n.03_1) 
-            (inside ?newspaper.n.03_1 ?receptacle.n.01_1) 
             (soaked ?scrub_brush.n.01_1) 
             (not 
                 (stained ?oven.n.01_1)

@@ -8,6 +8,7 @@
     	apple.n.01_1 apple.n.01_2 - apple.n.01
     	tomato.n.01_1 tomato.n.01_2 - tomato.n.01
     	radish.n.01_1 radish.n.01_2 - radish.n.01
+        carving_knife.n.01_1 - carving_knife.n.01
     	bowl.n.01_1 bowl.n.01_2 - bowl.n.01
     	cabinet.n.01_1 - cabinet.n.01
     	sink.n.01_1 - sink.n.01
@@ -32,6 +33,7 @@
         (not 
             (dusty bowl.n.01_2)
         ) 
+        (inside carving_knife.n.01_1 cabinet.n.01_1)
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
