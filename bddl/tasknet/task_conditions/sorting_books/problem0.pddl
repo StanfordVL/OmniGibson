@@ -2,7 +2,7 @@
     (:domain igibson)
 
     (:objects
-     	hardback.n.01_1 hardback.n.01_2 hardback.n.01_3 hardback.n.01_4 hardback.n.01_5 hardback.n.01_6 - hardback.n.01
+     	hardback.n.01_1 hardback.n.01_2 - hardback.n.01
     	table.n.02_1 - table.n.02
     	floor.n.01_1 - floor.n.01
     	shelf.n.01_1 - shelf.n.01
@@ -13,10 +13,6 @@
     (:init 
         (ontop hardback.n.01_1 table.n.02_1) 
         (onfloor hardback.n.01_2 floor.n.01_1) 
-        (ontop hardback.n.01_3 shelf.n.01_1) 
-        (onfloor hardback.n.01_4 floor.n.01_1) 
-        (onfloor hardback.n.01_5 floor.n.01_1) 
-        (ontop hardback.n.01_6 table.n.02_1) 
         (onfloor book.n.02_1 floor.n.01_1) 
         (ontop book.n.02_2 table.n.02_1) 
         (inroom table.n.02_1 living_room) 

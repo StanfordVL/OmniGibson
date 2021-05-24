@@ -21,7 +21,7 @@
             (onfloor ?pool.n.01_1 ?floor.n.01_1) 
             (not 
                 (stained ?pool.n.01_1)
-            ) 
+            )
         )
     )
 )

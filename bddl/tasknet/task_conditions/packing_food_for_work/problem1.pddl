@@ -2,7 +2,7 @@
     (:domain igibson)
 
     (:objects
-     	bag.n.01_1 - bag.n.01
+     	backpack.n.01_1 - backpack.n.01
     	countertop.n.01_1 - countertop.n.01
     	peach.n.03_1 - peach.n.03
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (ontop bag.n.01_1 countertop.n.01_1) 
+        (ontop backpack.n.01_1 countertop.n.01_1) 
         (inside peach.n.03_1 electric_refrigerator.n.01_1) 
         (inside sandwich.n.01_1 electric_refrigerator.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
@@ -23,9 +23,9 @@
     
     (:goal 
         (and 
-            (ontop ?bag.n.01_1 ?countertop.n.01_1) 
-            (inside ?peach.n.03_1 ?bag.n.01_1) 
-            (inside ?sandwich.n.01_1 ?bag.n.01_1)
+            (ontop ?backpack.n.01_1 ?countertop.n.01_1) 
+            (inside ?peach.n.03_1 ?backpack.n.01_1) 
+            (inside ?sandwich.n.01_1 ?backpack.n.01_1)
         )
     )
 )

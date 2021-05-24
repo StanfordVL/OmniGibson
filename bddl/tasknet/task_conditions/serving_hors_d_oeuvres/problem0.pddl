@@ -2,7 +2,6 @@
     (:domain igibson)
 
     (:objects
-     	toothpick.n.01_1 toothpick.n.01_2 toothpick.n.01_3 toothpick.n.01_4 - toothpick.n.01
         cabinet.n.01_1 - cabinet.n.01
     	salad.n.01_1 salad.n.01_2 salad.n.01_3 salad.n.01_4 - salad.n.01
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -16,11 +15,6 @@
     )
     
     (:init 
-        (ontop toothpick.n.01_1 cabinet.n.01_1) 
-        (ontop toothpick.n.01_2 cabinet.n.01_1) 
-        (onfloor tray.n.01_1 floor.n.01_1) 
-        (ontop toothpick.n.01_3 cabinet.n.01_1) 
-        (ontop toothpick.n.01_4 cabinet.n.01_1) 
         (inside salad.n.01_1 electric_refrigerator.n.01_1) 
         (inside salad.n.01_2 electric_refrigerator.n.01_1) 
         (inside salad.n.01_3 electric_refrigerator.n.01_1) 
@@ -69,10 +63,6 @@
                 (?cheese.n.01 - cheese.n.01) 
                 (?salad.n.01 - salad.n.01) 
                 (nextto ?cheese.n.01 ?salad.n.01)
-            ) 
-            (forall 
-                (?toothpick.n.01 - toothpick.n.01) 
-                (ontop ?toothpick.n.01 ?tray.n.01_1)
             )
         )
     )
