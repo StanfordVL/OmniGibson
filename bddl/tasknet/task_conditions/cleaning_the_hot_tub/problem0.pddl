@@ -22,7 +22,6 @@
             (not 
                 (stained ?pool.n.01_1)
             ) 
-            (inside ?scrub_brush.n.01_1 ?pool.n.01_1)
         )
     )
 )
