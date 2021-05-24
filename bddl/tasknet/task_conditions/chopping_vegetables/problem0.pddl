@@ -6,7 +6,7 @@
         mushroom.n.05_1 mushroom.n.05_2 - mushroom.n.05
         chestnut.n.03_1 chestnut.n.03_2 - chestnut.n.03
         countertop.n.01_1 - countertop.n.01
-        onion.n.03_1 onion.n.03_2 - onion.n.03
+        vidalia_onion.n.01_1 vidalia_onion.n.01_2 - vidalia_onion.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         knife.n.01_1 - knife.n.01
         dish.n.01_1 dish.n.01_2 - dish.n.01
@@ -23,8 +23,8 @@
         (ontop mushroom.n.05_2 countertop.n.01_1) 
         (ontop chestnut.n.03_1 countertop.n.01_1) 
         (ontop chestnut.n.03_2 countertop.n.01_1) 
-        (inside onion.n.03_1 electric_refrigerator.n.01_1) 
-        (inside onion.n.03_2 electric_refrigerator.n.01_1) 
+        (inside vidalia_onion.n.01_1 electric_refrigerator.n.01_1) 
+        (inside vidalia_onion.n.01_2 electric_refrigerator.n.01_1) 
         (ontop knife.n.01_1 countertop.n.01_1) 
         (inside dish.n.01_1 cabinet.n.01_1) 
         (inside dish.n.01_2 cabinet.n.01_1) 
@@ -69,13 +69,13 @@
                 )
             ) 
             (forall 
-                (?onion.n.03 - onion.n.03) 
+                (?vidalia_onion.n.01 - vidalia_onion.n.01) 
                 (and 
                     (exists 
                         (?dish.n.01 - dish.n.01) 
-                        (inside ?onion.n.03 ?dish.n.01)
+                        (inside ?vidalia_onion.n.01 ?dish.n.01)
                     ) 
-                    (sliced ?onion.n.03)
+                    (sliced ?vidalia_onion.n.01)
                 )
             )
         )

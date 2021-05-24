@@ -9,6 +9,7 @@
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         cabinet.n.01_1 - cabinet.n.01
         countertop.n.01_1 - countertop.n.01
+        carving_knife.n.01_1 - carving_knife.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -20,6 +21,7 @@
         (ontop jar.n.01_1 countertop.n.01_1) 
         (open jar.n.01_1) 
         (ontop pan.n.01_1 countertop.n.01_1) 
+        (ontop carving_knife.n.01_1 countertop.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 

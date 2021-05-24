@@ -25,16 +25,10 @@
     )
     
     (:goal 
-        (not 
-            (inside briefcase.n.01_1 car.n.01_1)
-        ) 
-        (not 
-            (inside pencil_box.n.01_1 car.n.01_1)
-        ) 
-        (not 
-            (inside headset.n.01_1 car.n.01_1)
-        ) 
-        (not 
+        (and 
+            (inside briefcase.n.01_1 car.n.01_1) 
+            (inside pencil_box.n.01_1 car.n.01_1) 
+            (inside headset.n.01_1 car.n.01_1) 
             (inside duffel_bag.n.01_1 car.n.01_1)
         )
     )
