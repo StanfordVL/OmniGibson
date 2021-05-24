@@ -22,30 +22,20 @@
     )
     
     (:goal 
-        (and 
-            (forpairs 
-                (?fastener.n.02 - fastener.n.02) 
-                (?plywood.n.01 - plywood.n.01) 
-                (and 
-                    (onfloor ?plywood.n.01 ?floor.n.01_2) 
-                    (nextto ?fastener.n.02 ?plywood.n.01)
-                )
-            )
-        )
         (and
             (forall
                 (?plywood.n.01 - plywood.n.01)
                 (onfloor ?plywood.n.01 ?floor.n.01_2)
             )		
-	    (forall 
-		(?plywood.n.01 - plywood.n.01)
+            (forall 
+                (?plywood.n.01 - plywood.n.01)
                 (or
                     (nextto ?plywood.n.01 ?plywood.n.01_1) 
                     (nextto ?plywood.n.01 ?plywood.n.01_2) 
                     (nextto ?plywood.n.01 ?plywood.n.01_3) 
                     (nextto ?plywood.n.01 ?plywood.n.01_4) 
                 )
-	    )
+            )
         )
     )
 )
