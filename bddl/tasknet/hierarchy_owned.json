@@ -783,38 +783,6 @@
                               }
                             },
                             {
-                              "name": "bag.n.01",
-                              "children": [
-                                {
-                                  "name": "drawstring_bag.n.01",
-                                  "children": [
-                                    {
-                                      "name": "duffel_bag.n.01",
-                                      "igibson_categories": [
-                                        "duffel_bag"
-                                      ],
-                                      "abilities": {
-                                        "dustyable": {},
-                                        "stainable": {}
-                                      }
-                                    }
-                                  ],
-                                  "igibson_categories": [],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "stainable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [
-                                "bag"
-                              ],
-                              "abilities": {
-                                "dustyable": {},
-                                "stainable": {}
-                              }
-                            },
-                            {
                               "name": "package.n.02",
                               "igibson_categories": [
                                 "package"
@@ -934,6 +902,55 @@
                               }
                             },
                             {
+                              "name": "bag.n.01",
+                              "children": [
+                                {
+                                  "name": "drawstring_bag.n.01",
+                                  "children": [
+                                    {
+                                      "name": "duffel_bag.n.01",
+                                      "igibson_categories": [
+                                        "duffel_bag"
+                                      ],
+                                      "abilities": {
+                                        "dustyable": {},
+                                        "stainable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "stainable": {}
+                                  }
+                                },
+                                {
+                                  "name": "sack.n.01",
+                                  "igibson_categories": [
+                                    "paper_bag"
+                                  ],
+                                  "abilities": {
+                                    "stainable": {}
+                                  }
+                                },
+                                {
+                                  "name": "backpack.n.01",
+                                  "igibson_categories": [
+                                    "backpack"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "openable": {},
+                                    "stainable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "stainable": {}
+                              }
+                            },
+                            {
                               "name": "case.n.05",
                               "children": [
                                 {
@@ -952,6 +969,26 @@
                               "abilities": {
                                 "dustyable": {},
                                 "openable": {},
+                                "stainable": {}
+                              }
+                            },
+                            {
+                              "name": "bag.n.04",
+                              "children": [
+                                {
+                                  "name": "shoulder_bag.n.01",
+                                  "igibson_categories": [
+                                    "shoulder_bag"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "stainable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "dustyable": {},
                                 "stainable": {}
                               }
                             }
