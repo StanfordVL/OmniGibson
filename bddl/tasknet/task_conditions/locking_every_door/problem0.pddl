@@ -12,9 +12,9 @@
         (open door.n.01_1) 
         (open door.n.01_2) 
         (inroom door.n.01_1 bedroom) 
-        (inroom door.n.01_2 corridor) 
+        (inroom door.n.01_2 living_room) 
         (inroom bed.n.01_1 bedroom) 
-        (inroom floor.n.01_1 corridor) 
+        (inroom floor.n.01_1 living_room) 
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     
