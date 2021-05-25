@@ -17,9 +17,11 @@
     )
     
     (:goal 
-        (forall 
-            (?plywood.n.01 - plywood.n.01) 
-            (onfloor ?plywood.n.01 ?floor.n.01_2)
+        (and 
+            (forall 
+                (?plywood.n.01 - plywood.n.01) 
+                (onfloor ?plywood.n.01 ?floor.n.01_2)
+            )
         )
     )
 )

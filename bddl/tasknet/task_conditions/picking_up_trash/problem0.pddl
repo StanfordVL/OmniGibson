@@ -22,17 +22,19 @@
     )
     
     (:goal 
-        (forall 
-            (?paper.n.01 - paper.n.01) 
-            (inside ?paper.n.01 ?ashcan.n.01_1)
-        ) 
-        (forall 
-            (?bag.n.01 - bag.n.01) 
-            (inside ?bag.n.01 ?ashcan.n.01_1)
-        ) 
-        (forall 
-            (?magazine.n.02 - magazine.n.02) 
-            (inside ?magazine.n.02 ?ashcan.n.01_1)
+        (and 
+            (forall 
+                (?paper.n.01 - paper.n.01) 
+                (inside ?paper.n.01 ?ashcan.n.01_1)
+            ) 
+            (forall 
+                (?bag.n.01 - bag.n.01) 
+                (inside ?bag.n.01 ?ashcan.n.01_1)
+            ) 
+            (forall 
+                (?magazine.n.02 - magazine.n.02) 
+                (inside ?magazine.n.02 ?ashcan.n.01_1)
+            )
         )
     )
 )

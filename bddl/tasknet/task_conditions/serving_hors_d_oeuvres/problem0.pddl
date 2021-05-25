@@ -22,7 +22,7 @@
         (inside parsley.n.02_1 electric_refrigerator.n.01_1) 
         (inside parsley.n.02_2 electric_refrigerator.n.01_1) 
         (inside parsley.n.02_3 electric_refrigerator.n.01_1) 
-        (inside parsley.n.02_4 electric_refrigerator.n.01_1)
+        (inside parsley.n.02_4 electric_refrigerator.n.01_1) 
         (onfloor tray.n.01_1 floor.n.01_1) 
         (ontop cracker.n.01_1 table.n.02_1) 
         (ontop cracker.n.01_2 table.n.02_1) 

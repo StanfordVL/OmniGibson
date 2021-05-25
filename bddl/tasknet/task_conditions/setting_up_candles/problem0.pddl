@@ -26,15 +26,17 @@
     )
     
     (:goal 
-        (forn 
-            (3) 
-            (?candle.n.01 - candle.n.01) 
-            (ontop ?candle.n.01 ?table.n.02_1)
-        ) 
-        (forn 
-            (3) 
-            (?candle.n.01 - candle.n.01) 
-            (ontop ?candle.n.01 ?table.n.02_2)
+        (and 
+            (forn 
+                (3) 
+                (?candle.n.01 - candle.n.01) 
+                (ontop ?candle.n.01 ?table.n.02_1)
+            ) 
+            (forn 
+                (3) 
+                (?candle.n.01 - candle.n.01) 
+                (ontop ?candle.n.01 ?table.n.02_2)
+            )
         )
     )
 )

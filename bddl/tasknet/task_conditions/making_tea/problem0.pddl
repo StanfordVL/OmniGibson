@@ -26,11 +26,11 @@
     )
     
     (:goal 
-        (and
-            (sliced ?lemon.n.01_1)
-            (ontop ?teapot.n.01_1 ?stove.n.01_1)
-            (inside ?tea_bag.n.01_1 ?stove.n.01_1)
-            (soaked ?tea_bag.n.01_1)
+        (and 
+            (sliced ?lemon.n.01_1) 
+            (ontop ?teapot.n.01_1 ?stove.n.01_1) 
+            (inside ?tea_bag.n.01_1 ?stove.n.01_1) 
+            (soaked ?tea_bag.n.01_1) 
             (toggled_on ?stove.n.01_1)
         )
     )
