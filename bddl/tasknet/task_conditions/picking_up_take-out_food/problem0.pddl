@@ -23,10 +23,7 @@
         (and 
             (forall 
                 (?carton.n.02 - carton.n.02) 
-                (or 
-                    (onfloor ?carton.n.02 floor.n.01_1) 
-                    (ontop ?carton.n.02 ?table.n.02_1)
-                )
+                (ontop ?carton.n.02 ?table.n.02_1)
             ) 
             (inside ?sushi.n.01_1 ?carton.n.02_1) 
             (inside ?hamburger.n.01_1 ?carton.n.02_1)
