@@ -4,7 +4,6 @@
     (:objects
      	plywood.n.01_1 plywood.n.01_2 plywood.n.01_3 plywood.n.01_4 - plywood.n.01
     	floor.n.01_1 floor.n.01_2 - floor.n.01
-    	fastener.n.02_1 fastener.n.02_2 fastener.n.02_3 fastener.n.02_4 - fastener.n.02
     	hammer.n.02_1 - hammer.n.02
     	saw.n.02_1 - saw.n.02
     	agent.n.01_1 - agent.n.01
