@@ -2,24 +2,24 @@
     (:domain igibson)
 
     (:objects
-     	briefcase.n.01_1 - briefcase.n.01
-    	floor.n.01_1 - floor.n.01
-    	toothbrush.n.01_1 - toothbrush.n.01
-    	bed.n.01_1 - bed.n.01
-    	sweater.n.01_1 - sweater.n.01
-    	jean.n.01_1 - jean.n.01
-    	underwear.n.01_1 underwear.n.01_2 - underwear.n.01
-    	toothpaste.n.01_1 - toothpaste.n.01
-    	door.n.01_1 - door.n.01
-    	window.n.01_1 - window.n.01
-    	agent.n.01_1 - agent.n.01
+        backpack.n.01_1 - backpack.n.01
+        floor.n.01_1 - floor.n.01
+        toothbrush.n.01_1 - toothbrush.n.01
+        bed.n.01_1 - bed.n.01
+        shampoo.n.01_1 - shampoo.n.01
+        hardback.n.01_1 - hardback.n.01
+        underwear.n.01_1 underwear.n.01_2 - underwear.n.01
+        toothpaste.n.01_1 - toothpaste.n.01
+        door.n.01_1 - door.n.01
+        window.n.01_1 - window.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (onfloor briefcase.n.01_1 floor.n.01_1) 
+        (onfloor backpack.n.01_1 floor.n.01_1) 
         (ontop toothbrush.n.01_1 bed.n.01_1) 
-        (ontop sweater.n.01_1 bed.n.01_1) 
-        (ontop jean.n.01_1 bed.n.01_1) 
+        (ontop hardback.n.01_1 bed.n.01_1) 
+        (ontop shampoo.n.01_1 bed.n.01_1) 
         (ontop underwear.n.01_1 bed.n.01_1) 
         (ontop underwear.n.01_2 bed.n.01_1) 
         (ontop toothpaste.n.01_1 bed.n.01_1) 
@@ -34,15 +34,15 @@
         (and 
             (forall 
                 (?underwear.n.01 - underwear.n.01) 
-                (inside ?underwear.n.01 ?briefcase.n.01_1)
+                (inside ?underwear.n.01 ?backpack.n.01_1)
             ) 
-            (inside ?toothbrush.n.01_1 ?briefcase.n.01_1) 
-            (inside ?sweater.n.01_1 ?briefcase.n.01_1) 
-            (inside ?jean.n.01_1 ?briefcase.n.01_1) 
-            (inside ?toothpaste.n.01_1 ?briefcase.n.01_1) 
+            (inside ?toothbrush.n.01_1 ?backpack.n.01_1) 
+            (inside ?hardback.n.01_1 ?backpack.n.01_1) 
+            (inside ?shampoo.n.01_1 ?backpack.n.01_1) 
+            (inside ?toothpaste.n.01_1 ?backpack.n.01_1) 
             (or 
-                (ontop ?briefcase.n.01_1 ?bed.n.01_1) 
-                (onfloor ?briefcase.n.01_1 ?floor.n.01_1)
+                (ontop ?backpack.n.01_1 ?bed.n.01_1) 
+                (onfloor ?backpack.n.01_1 ?floor.n.01_1)
             )
         )
     )
