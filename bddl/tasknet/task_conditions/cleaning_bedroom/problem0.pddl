@@ -9,13 +9,13 @@
         perfume.n.02_1 - perfume.n.02
         painting.n.01_1 - painting.n.01
         vacuum.n.04_1 - vacuum.n.04
+        hand_towel.n.01_1 - hand_towel.n.01
         sheet.n.03_1 - sheet.n.03
         cabinet.n.01_1 cabinet.n.01_2 - cabinet.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (dusty floor.n.01_1) 
         (dusty cabinet.n.01_1) 
         (dusty cabinet.n.01_2) 
         (ontop apparel.n.01_1 bed.n.01_1) 
@@ -27,6 +27,7 @@
             (dusty vacuum.n.04_1)
         ) 
         (onfloor vacuum.n.04_1 floor.n.01_1) 
+        (onfloor hand_towel.n.01_1 floor.n.01_1)
         (onfloor sheet.n.03_1 floor.n.01_1) 
         (inroom floor.n.01_1 bedroom) 
         (inroom bed.n.01_1 bedroom) 
@@ -49,9 +50,6 @@
                 (inside ?perfume.n.02_1 ?cabinet.n.01_1)
             ) 
             (ontop ?sheet.n.03_1 ?bed.n.01_1) 
-            (not 
-                (dusty ?floor.n.01_1)
-            ) 
             (forall 
                 (?cabinet.n.01 - cabinet.n.01) 
                 (not 
