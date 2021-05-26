@@ -4,11 +4,11 @@
     (:objects
      	bowl.n.01_1 bowl.n.01_2 - bowl.n.01
     	table.n.02_1 - table.n.02
-    	bag.n.01_1 - bag.n.01
+    	sack.n.01_1 - sack.n.01
     	chair.n.01_1 chair.n.01_2 - chair.n.01
     	plate.n.04_1 plate.n.04_2 plate.n.04_3 plate.n.04_4 - plate.n.04
     	cup.n.01_1 cup.n.01_2 - cup.n.01
-    	food.n.02_1 food.n.02_2 - food.n.02
+    	hamburger.n.01_1 hamburger.n.01_2 - hamburger.n.01
     	floor.n.01_1 floor.n.01_2 - floor.n.01
     	detergent.n.02_1 - detergent.n.02
     	dishwasher.n.01_1 - dishwasher.n.01
@@ -20,7 +20,7 @@
         (ontop bowl.n.01_2 table.n.02_1) 
         (stained bowl.n.01_1) 
         (stained bowl.n.01_2) 
-        (ontop bag.n.01_1 table.n.02_1) 
+        (ontop sack.n.01_1 table.n.02_1) 
         (ontop plate.n.04_1 table.n.02_1) 
         (ontop plate.n.04_2 table.n.02_1) 
         (ontop plate.n.04_3 table.n.02_1) 
@@ -33,8 +33,8 @@
         (ontop cup.n.01_2 table.n.02_1) 
         (stained cup.n.01_1) 
         (stained cup.n.01_2) 
-        (ontop food.n.02_1 chair.n.01_2) 
-        (onfloor food.n.02_2 floor.n.01_1) 
+        (ontop hamburger.n.01_1 chair.n.01_2) 
+        (onfloor hamburger.n.01_2 floor.n.01_1) 
         (onfloor detergent.n.02_1 floor.n.01_1) 
         (stained chair.n.01_1) 
         (stained chair.n.01_2) 
@@ -69,10 +69,10 @@
                 )
             ) 
             (forall 
-                (?food.n.02 - food.n.02) 
-                (inside ?food.n.02 ?bag.n.01_1)
+                (?hamburger.n.01 - hamburger.n.01) 
+                (inside ?hamburger.n.01 ?sack.n.01_1)
             ) 
-            (onfloor ?bag.n.01_1 ?floor.n.01_1) 
+            (onfloor ?sack.n.01_1 ?floor.n.01_1) 
             (not 
                 (stained ?floor.n.01_1)
             ) 
