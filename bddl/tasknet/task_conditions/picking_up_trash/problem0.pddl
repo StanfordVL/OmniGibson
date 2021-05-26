@@ -4,7 +4,7 @@
     (:objects
         ashcan.n.01_1 - ashcan.n.01
         pad.n.01_1 pad.n.01_2 pad.n.01_3 - pad.n.01
-        pop.n.02_1pop.n.02_2 - pop.n.02
+        pop.n.02_1 pop.n.02_2 - pop.n.02
         floor.n.01_1 floor.n.01_2 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
