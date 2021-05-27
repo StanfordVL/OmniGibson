@@ -9,6 +9,7 @@
     	washer.n.03_1 - washer.n.03
     	dryer.n.01_1 - dryer.n.01
     	door.n.01_1 - door.n.01
+        sink.n.01_1 - sink.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -22,6 +23,7 @@
         (inroom dryer.n.01_1 utility_room) 
         (inroom door.n.01_1 corridor) 
         (inroom cabinet.n.01_1 utility_room) 
+        (inroom sink.n.01_1 utility_room)
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     
