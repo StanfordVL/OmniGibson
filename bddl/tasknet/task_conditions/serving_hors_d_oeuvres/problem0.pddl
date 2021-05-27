@@ -9,7 +9,7 @@
     	parsley.n.02_1 parsley.n.02_2 parsley.n.02_3 parsley.n.02_4 - parsley.n.02
     	cracker.n.01_1 cracker.n.01_2 cracker.n.01_3 cracker.n.01_4 - cracker.n.01
     	table.n.02_1 - table.n.02
-    	cheese.n.01_1 cheese.n.01_2 cheese.n.01_3 cheese.n.01_4 cheese.n.01_5 cheese.n.01_6 cheese.n.01_7 cheese.n.01_8 - cheese.n.01
+    	cheese.n.01_1 cheese.n.01_2 cheese.n.01_3 cheese.n.01_4 - cheese.n.01
     	floor.n.01_1 - floor.n.01
     	agent.n.01_1 - agent.n.01
     )
@@ -65,6 +65,10 @@
                 (?salad.n.01 - salad.n.01) 
                 (nextto ?cheese.n.01 ?salad.n.01)
             )
+	    (forall
+		(?salad.n.01 - salad.n.01)
+		(nextto ?salad.n.01 ?tray.n.01_1) 
+	    )
         )
     )
 )
