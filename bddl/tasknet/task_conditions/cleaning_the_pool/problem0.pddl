@@ -18,7 +18,7 @@
         (onfloor detergent.n.02_1 floor.n.01_1) 
         (inroom shelf.n.01_1 garage) 
         (inroom floor.n.01_1 garage) 
-        Iinroom sink.n.01_1 storage_room)
+        (inroom sink.n.01_1 storage_room)
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     
