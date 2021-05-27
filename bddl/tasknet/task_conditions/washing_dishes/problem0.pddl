@@ -5,7 +5,6 @@
      	plate.n.04_1 plate.n.04_2 - plate.n.04
         cup.n.01_1 - cup.n.01
     	sink.n.01_1 - sink.n.01
-    	fork.n.01_1 fork.n.01_2 - fork.n.01
     	bowl.n.01_1 - bowl.n.01
     	floor.n.01_1 - floor.n.01
         countertop.n.01_1 - countertop.n.01
@@ -17,14 +16,10 @@
         (ontop plate.n.04_1 countertop.n.01_1) 
         (ontop plate.n.04_2 countertop.n.01_1) 
         (ontop bowl.n.01_1 countertop.n.01_1) 
-        (ontop fork.n.01_1 countertop.n.01_1) 
-        (ontop fork.n.01_2 countertop.n.01_1) 
         (ontop cup.n.01_1 countertop.n.01_1) 
         (inside scrub_brush.n.01_1 sink.n.01_1) 
         (stained plate.n.04_1) 
         (stained plate.n.04_2) 
-        (stained fork.n.01_1) 
-        (stained fork.n.01_2) 
         (stained cup.n.01_1) 
         (stained bowl.n.01_1) 
         (inroom sink.n.01_1 kitchen) 
@@ -39,12 +34,6 @@
                 (?plate.n.04 - plate.n.04) 
                 (not 
                     (stained ?plate.n.04)
-                )
-            ) 
-            (forall 
-                (?fork.n.01 - fork.n.01) 
-                (not 
-                    (stained ?fork.n.01)
                 )
             ) 
             (not 
