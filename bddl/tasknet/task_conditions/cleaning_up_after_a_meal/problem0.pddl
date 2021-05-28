@@ -12,6 +12,7 @@
     	floor.n.01_1 floor.n.01_2 - floor.n.01
     	detergent.n.02_1 - detergent.n.02
     	dishwasher.n.01_1 - dishwasher.n.01
+        sink.n.01_1 - sink.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -45,6 +46,7 @@
         (inroom table.n.02_1 dining_room) 
         (inroom chair.n.01_1 dining_room) 
         (inroom chair.n.01_2 dining_room) 
+        (inroom sink.n.01_1 kitchen)
         (onfloor agent.n.01_1 floor.n.01_2)
     )
     

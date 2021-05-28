@@ -7,6 +7,7 @@
     	rag.n.01_1 - rag.n.01
     	bucket.n.01_1 - bucket.n.01
         table.n.02_1 - table.n.02
+        sink.n.01_1 - sink.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -18,6 +19,7 @@
         (ontop rag.n.01_1 table.n.02_1) 
         (inroom floor.n.01_1 garage) 
         (inroom table.n.02_1 storage_room) 
+        (inroom sink.n.01_1 storage_room)
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     

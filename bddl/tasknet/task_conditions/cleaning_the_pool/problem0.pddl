@@ -7,6 +7,7 @@
     	scrub_brush.n.01_1 - scrub_brush.n.01
     	shelf.n.01_1 - shelf.n.01
     	detergent.n.02_1 - detergent.n.02
+        sink.n.01_1 - sink.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -17,6 +18,7 @@
         (onfloor detergent.n.02_1 floor.n.01_1) 
         (inroom shelf.n.01_1 garage) 
         (inroom floor.n.01_1 garage) 
+        (inroom sink.n.01_1 storage_room)
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     

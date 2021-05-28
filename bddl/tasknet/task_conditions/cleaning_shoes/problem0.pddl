@@ -8,6 +8,7 @@
     	rag.n.01_1 - rag.n.01
     	towel.n.01_1 - towel.n.01
     	shoe.n.01_1 shoe.n.01_2 shoe.n.01_3 shoe.n.01_4 - shoe.n.01
+        sink.n.01_1 - sink.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -28,6 +29,7 @@
         ) 
         (inroom floor.n.01_1 bedroom) 
         (inroom bed.n.01_1 bedroom) 
+        (inroom sink.n.01_1 bathroom)
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     
