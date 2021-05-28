@@ -51,10 +51,6 @@
                 (?cracker.n.01 - cracker.n.01)
                 (nextto ?salad.n.01 ?cracker.n.01)
             )
-            (forall 
-                (?cheese.n.01 - cheese.n.01) 
-                (ontop ?cheese.n.01 ?tray.n.01_1)
-            )
             (forpairs 
                 (?cheese.n.01 - cheese.n.01) 
                 (?parsley.n.02 - parsley.n.02) 
