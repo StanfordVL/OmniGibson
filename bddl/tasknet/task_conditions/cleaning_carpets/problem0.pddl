@@ -4,17 +4,20 @@
     (:objects
      	floor.n.01_1 floor.n.01_2 - floor.n.01
     	vacuum.n.04_1 - vacuum.n.04
+        hand_towel.n.01_1 - hand_towel.n.01
     	shampoo.n.01_1 - shampoo.n.01
     	cabinet.n.01_1 - cabinet.n.01
     	washer.n.03_1 - washer.n.03
     	dryer.n.01_1 - dryer.n.01
     	door.n.01_1 - door.n.01
+        sink.n.01_1
     	agent.n.01_1 - agent.n.01
     )
     
     (:init 
         (stained floor.n.01_1) 
         (onfloor vacuum.n.04_1 floor.n.01_2) 
+        (onfloor hand_towel.n.01_1 floor.n.01_2)
         (inside shampoo.n.01_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 corridor) 
         (inroom floor.n.01_2 utility_room) 
@@ -22,6 +25,7 @@
         (inroom dryer.n.01_1 utility_room) 
         (inroom door.n.01_1 corridor) 
         (inroom cabinet.n.01_1 utility_room) 
+        (inroom sink.n.01_1 utility_room)
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     
