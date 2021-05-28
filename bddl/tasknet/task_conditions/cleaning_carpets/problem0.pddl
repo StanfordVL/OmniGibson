@@ -3,6 +3,7 @@
 
     (:objects
      	floor.n.01_1 floor.n.01_2 - floor.n.01
+        hand_towel.n.01_1 - hand_towel.n.01
     	shampoo.n.01_1 - shampoo.n.01
     	cabinet.n.01_1 - cabinet.n.01
     	washer.n.03_1 - washer.n.03
@@ -14,6 +15,7 @@
     
     (:init 
         (stained floor.n.01_1) 
+        (onfloor hand_towel.n.01_1 floor.n.01_2)
         (inside shampoo.n.01_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 corridor) 
         (inroom floor.n.01_2 utility_room) 
