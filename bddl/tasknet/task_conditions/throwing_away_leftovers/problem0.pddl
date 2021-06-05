@@ -28,7 +28,7 @@
         (and 
             (forall 
                 (?hamburger.n.01 - hamburger.n.01) 
-                (inside ?hamburger.n.01_1 ?ashcan.n.01_1)
+                (inside ?hamburger.n.01 ?ashcan.n.01_1)
             )
         )
     )
