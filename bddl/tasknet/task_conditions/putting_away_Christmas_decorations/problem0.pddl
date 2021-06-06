@@ -28,11 +28,11 @@
         (and 
             (forall 
                 (?wreath.n.01 - wreath.n.01) 
-                (nextto ?wreath.n.01_1 ?cabinet.n.01_1)
+                (nextto ?wreath.n.01 ?cabinet.n.01_1)
             ) 
             (forall 
                 (?bow.n.08 - bow.n.08) 
-                (nextto ?bow.n.08_1 ?cabinet.n.01_1)
+                (nextto ?bow.n.08 ?cabinet.n.01_1)
             ) 
             (forall 
                 (?ribbon.n.01 - ribbon.n.01) 
