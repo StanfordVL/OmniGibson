@@ -10,6 +10,7 @@
         cabinet.n.01_1 - cabinet.n.01
         countertop.n.01_1 - countertop.n.01
         carving_knife.n.01_1 - carving_knife.n.01
+        oven.n.01_1 - oven.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -26,6 +27,7 @@
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
+        (inroom oven.n.01_1 kitchen)
         (onfloor agent.n.01_1 floor.n.01_1)
     )
     
