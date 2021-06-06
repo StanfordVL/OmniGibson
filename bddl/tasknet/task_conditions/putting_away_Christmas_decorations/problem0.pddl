@@ -36,7 +36,7 @@
             ) 
             (forall 
                 (?ribbon.n.01 - ribbon.n.01) 
-                (inside ?ribbon.n.01_1 ?cabinet.n.01_1)
+                (inside ?ribbon.n.01 ?cabinet.n.01_1)
             )
         )
     )
