@@ -2,7 +2,8 @@
     (:domain igibson)
 
     (:objects
-     	pot.n.01_1 pot.n.01_2 - pot.n.01
+     	teapot.n.01_1 - teapot.n.01
+        kettle.n.01_1 - kettle.n.01
     	pan.n.01_1 pan.n.01_2 pan.n.01_3 - pan.n.01
     	countertop.n.01_1 countertop.n.01_2 - countertop.n.01
     	sink.n.01_1 - sink.n.01
@@ -14,10 +15,10 @@
     )
     
     (:init 
-        (ontop pot.n.01_1 countertop.n.01_1) 
-        (stained pot.n.01_1) 
-        (ontop pot.n.01_2 countertop.n.01_2) 
-        (stained pot.n.01_2) 
+        (ontop teapot.n.01_1 countertop.n.01_1) 
+        (stained teapot.n.01_1) 
+        (ontop kettle.n.01_1 countertop.n.01_2) 
+        (stained kettle.n.01_1) 
         (ontop pan.n.01_1 countertop.n.01_1) 
         (stained pan.n.01_1) 
         (ontop pan.n.01_2 countertop.n.01_1) 
@@ -51,14 +52,26 @@
                 )
             ) 
             (forall 
-                (?pot.n.01 - pot.n.01) 
+                (?kettle.n.01 - kettle.n.01) 
                 (and 
                     (not 
-                        (stained ?pot.n.01)
+                        (stained ?kettle.n.01)
                     ) 
                     (exists 
                         (?cabinet.n.01 - cabinet.n.01) 
-                        (inside ?pot.n.01 ?cabinet.n.01)
+                        (inside ?kettle.n.01 ?cabinet.n.01)
+                    )
+                )
+            )
+            (forall 
+                (?teapot.n.01 - teapot.n.01) 
+                (and 
+                    (not 
+                        (stained ?teapot.n.01)
+                    ) 
+                    (exists 
+                        (?cabinet.n.01 - cabinet.n.01) 
+                        (inside ?teapot.n.01 ?cabinet.n.01)
                     )
                 )
             )
