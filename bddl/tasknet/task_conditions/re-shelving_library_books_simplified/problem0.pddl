@@ -2,7 +2,7 @@
 (problem sampling_test)
 (:domain igibson)
 (:objects
-	floor.n.01_1 - floor.n.01
+    floor.n.01_1 - floor.n.01
     agent.n.01_1 - agent.n.01
     table.n.02_1 - table.n.02
     shelf.n.01_1 - shelf.n.01
