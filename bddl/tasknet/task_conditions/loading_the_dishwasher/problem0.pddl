@@ -34,13 +34,13 @@
         (and 
             (forall 
                 (?plate.n.04 - plate.n.04) 
-                (inside ?plate.n.04_1 ?dishwasher.n.01_1)
+                (inside ?plate.n.04 ?dishwasher.n.01_1)
             ) 
             (forall 
                 (?bowl.n.01 - bowl.n.01) 
-                (inside ?bowl.n.01_1 ?dishwasher.n.01_1)
+                (inside ?bowl.n.01 ?dishwasher.n.01_1)
             ) 
-            (inside ?bowl.n.01_1 ?dishwasher.n.01_1)
+            (inside ?mug.n.04_1 ?dishwasher.n.01_1)
         )
     )
 )
