@@ -15,30 +15,30 @@ from IPython import embed
 from bddl.object_taxonomy import ObjectTaxonomy
 
 
-class BDDLActivityInstance(object):
+class BEHAVIORActivityInstance(object):
     # TODO
     #   1. Update with new object formats
     #   2. Update initialize() to work with self.check_setup()
     #   3. Update initialize() to work with sampler code
     #   4. Various other adaptations to be seen
 
-    def __init__(self, atus_activity=None, activity_definition=None, scene_path=SCENE_PATH, predefined_problem=None):
+    def __init__(self, behavior_activity=None, activity_definition=None, scene_path=SCENE_PATH, predefined_problem=None):
         self.scene_path = scene_path
         self.object_taxonomy = ObjectTaxonomy()
-        self.update_problem(atus_activity, activity_definition,
+        self.update_problem(behavior_activity, activity_definition,
                             predefined_problem=predefined_problem)
 
-    def update_problem(self, atus_activity, activity_definition, predefined_problem=None):
+    def update_problem(self, behavior_activity, activity_definition, predefined_problem=None):
         if predefined_problem is not None:
-            self.atus_activity = atus_activity
+            self.behavior_activity = behavior_activity
             self.activity_definition = "predefined"
         else:
-            self.atus_activity = atus_activity
+            self.behavior_activity = behavior_activity
             self.activity_definition = activity_definition
         domain_name, requirements, types, actions, predicates = parse_domain(
             "igibson")
         problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
-            self.atus_activity,
+            self.behavior_activity,
             self.activity_definition,
             domain_name,
             predefined_problem=predefined_problem)

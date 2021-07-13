@@ -148,12 +148,12 @@ def parse_action(group):
     return Action(name, parameters, positive_preconditions, negative_preconditions, add_effects, del_effects)
 
 
-def parse_problem(atus_activity, activity_definition, domain_name, predefined_problem=None):
+def parse_problem(behavior_activity, activity_definition, domain_name, predefined_problem=None):
     if predefined_problem is not None:
         tokens = scan_tokens(string=predefined_problem)
     else:
         problem_filename = get_definition_filename(
-            atus_activity, activity_definition)
+            behavior_activity, activity_definition)
         tokens = scan_tokens(filename=problem_filename)
     if isinstance(tokens, list) and tokens.pop(0) == 'define':
         problem_name = 'unknown'
@@ -195,7 +195,7 @@ def parse_problem(atus_activity, activity_definition, domain_name, predefined_pr
         return problem_name, objects, initial_state, goal_state
     else:
         raise Exception(
-            f"Problem {atus_activity} {activity_definition} does not match problem pattern")
+            f"Problem {behavior_activity} {activity_definition} does not match problem pattern")
 
 
 def split_predicates(group, pos, neg, name, part):
@@ -420,7 +420,7 @@ def remove_pddl_whitespace(pddl_file='activity_conditions/parsing_tests/test_app
     return pddl
 
 
-def construct_full_pddl(atus_activity, activity_definition, object_list, init_state, goal_state):
+def construct_full_pddl(behavior_activity, activity_definition, object_list, init_state, goal_state):
     """Make full PDDL problem file from parts, release as string 
 
     :param object_list (string): object list (assumed whitespace added with tabs)   TODO change assumptions if needed
@@ -433,7 +433,7 @@ def construct_full_pddl(atus_activity, activity_definition, object_list, init_st
     goal_state = "    \n".join(add_pddl_whitespace(
         pddl_file=None, string=goal_state, save=False).split("\n"))
     pddl = f"""(define\n    
-                   (problem {atus_activity}_{activity_definition})\n    
+                   (problem {behavior_activity}_{activity_definition})\n    
                    (:domain igibson)\n
                 {object_list}\n
                 {init_state}\n
@@ -450,16 +450,16 @@ if __name__ == '__main__':
 
     # print(refined_pddl)
     # import sys, pprint
-    # atus_activity = sys.argv[1]
+    # behavior_activity = sys.argv[1]
     # activity_definition = sys.argv[2]
     # print('----------------------------')
-    # # pprint.pprint(scan_tokens(atus_activity, instance))
+    # # pprint.pprint(scan_tokens(behavior_activity, instance))
     # print('----------------------------')
-    # # pprint.pprint(scan_tokens(atus_activity, instance))
+    # # pprint.pprint(scan_tokens(behavior_activity, instance))
     # print('----------------------------')
-    # atus_activity = "assembling_gift_baskets_filtered"
+    # behavior_activity = "assembling_gift_baskets_filtered"
     # activity_definition = 0
     # domain_name, requirements, types, actions, predicates = parse_domain(
-    #     atus_activity, activity_definition)
+    #     behavior_activity, activity_definition)
     # problem_name, objects, initial_state, goal_state = parse_problem(
-    #     atus_activity, activity_definition, domain_name)
+    #     behavior_activity, activity_definition, domain_name)

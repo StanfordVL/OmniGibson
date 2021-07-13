@@ -1,5 +1,5 @@
 from igibson.object_states.factory import prepare_object_states
-from bddl.activity_base import BDDLActivityInstance
+from bddl.activity_base import BEHAVIORActivityInstance
 import sys
 
 class OfflineObject:
@@ -20,7 +20,7 @@ class OfflineObject:
                 print("unsupported")
 
 
-class OfflineActivityInstance(BDDLActivityInstance):
+class OfflineActivityInstance(BEHAVIORActivityInstance):
     def initialize(self, object_map, frame_data):
         '''
         TODO should this method take scene_path and object_path as args, instead of

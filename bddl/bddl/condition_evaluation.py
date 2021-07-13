@@ -9,7 +9,7 @@ from bddl.utils import truncated_product, truncated_permutations, UnsupportedPre
 # TODO: VERY IMPORTANT9o
 #   1. Change logic for checking categories once new iG object is being used
 #   2. `activity_instance` needs to be input properly. It'll be weird to call these in a method
-#           of BDDLActivityInstance and then have to put `self` in
+#           of BEHAVIORActivityInstance and then have to put `self` in
 
 #################### ATOMIC FORMULAE ####################
 # TODO: Remove this when tests support temperature-based cooked.

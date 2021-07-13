@@ -21,11 +21,11 @@ def get_object_filepath(object_category, object_category_instance):
     return os.path.join(OBJECT_MODEL_PATH, object_category, object_category_instance, 'rigid_body.urdf')
 
 
-def get_definition_filename(atus_activity, instance, domain=False):
+def get_definition_filename(behavior_activity, instance, domain=False):
     if domain:
         return os.path.join(ACTIVITY_CONFIGS_PATH, 'domain_igibson.pddl')
     else:
-        return os.path.join(ACTIVITY_CONFIGS_PATH, atus_activity, f"problem{instance}.pddl")
+        return os.path.join(ACTIVITY_CONFIGS_PATH, behavior_activity, f"problem{instance}.pddl")
 
 
 def get_domain_filename(domain_name):
