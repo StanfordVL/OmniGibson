@@ -1,4 +1,4 @@
-from gibson2.object_states.factory import prepare_object_states
+from igibson.object_states.factory import prepare_object_states
 from behavior.activity_base import BEHAVIORActivityInstance
 import sys
 

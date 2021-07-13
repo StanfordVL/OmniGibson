@@ -7,7 +7,7 @@ _backend = None
 def set_backend(backend_name):
     global _backend
     if backend_name == "iGibson":
-        from gibson2.task.behavior_backend import IGibsonBEHAVIORBackend
+        from igibson.task.behavior_backend import IGibsonBEHAVIORBackend
         _backend = IGibsonBEHAVIORBackend()
     else:
         raise ValueError("Invalid backend. Currently supported backends: %s." % ", ".join(_AVAILABLE_BACKENDS))

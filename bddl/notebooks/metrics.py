@@ -20,8 +20,8 @@ import numpy as np
 filename = "../../iGibson/putting_away_Christmas_decorations_filtered_0_Beechwood_0_int_2021-03-13_22-51-53.hdf5"
 
 f = h5py.File(filename, "r")
-print("Task Name: ", f.attrs['/metadata/task_name'])
-print("Task Instance: ", f.attrs['/metadata/task_instance'])
+print("Activity Name: ", f.attrs['/metadata/task_name'])
+print("Activity Definition: ", f.attrs['/metadata/task_instance'])
 print("Scene ID: ", f.attrs['/metadata/scene_id'])
 print("Start time: ", f.attrs['/metadata/start_time'])
 

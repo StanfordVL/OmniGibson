@@ -3,12 +3,12 @@ import csv
 import xml.etree.ElementTree as ET
 from collections import Counter
 
-import gibson2
+import igibson
 import behavior
 
-from gibson2.objects.articulated_object import URDFObject
-from gibson2.utils import urdf_utils
-from gibson2.utils.assets_utils import get_ig_category_path
+from igibson.objects.articulated_object import URDFObject
+from igibson.utils import urdf_utils
+from igibson.utils.assets_utils import get_ig_category_path
 from IPython import embed
 import json
 
@@ -26,7 +26,7 @@ NON_MODEL_CATEGORIES = ["floor"]
 
 
 def get_categories():
-    obj_dir = os.path.join(gibson2.ig_dataset_path, 'objects')
+    obj_dir = os.path.join(igibson.ig_dataset_path, 'objects')
     return [cat for cat in os.listdir(obj_dir) if os.path.isdir(os.path.join(obj_dir, cat))]
 
 

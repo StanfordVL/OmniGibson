@@ -3,7 +3,7 @@ import os
 # PATHS 
 ACTIVITY_CONFIGS_PATH =  os.path.join(os.path.dirname(__file__), 'activity_conditions')
 SCENE_PATH = 'd:\\ig_dataset\\scenes'
-OBJECT_MODEL_PATH = 'D:\\gibson2_assets\\processed'
+OBJECT_MODEL_PATH = 'D:\\igibson_assets\\processed'
 
 # PDDL 
 SUPPORTED_PDDL_REQUIREMENTS = [':strips', ':negative-preconditions', ':typing', ':adl']

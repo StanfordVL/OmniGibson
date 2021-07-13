@@ -29,7 +29,7 @@ COPY ./BEHAVIOR /opt/BEHAVIOR
 WORKDIR /opt/BEHAVIOR
 RUN pip install -e .
 
-RUN python -m gibson2.utils.assets_utils --download_assets
-RUN python -m gibson2.utils.assets_utils --download_demo_data
+RUN python -m igibson.utils.assets_utils --download_assets
+RUN python -m igibson.utils.assets_utils --download_demo_data
 
 WORKDIR /opt/igibson

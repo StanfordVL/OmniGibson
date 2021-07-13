@@ -5,11 +5,11 @@ from behavior.utils import UncontrolledCategoryError
 
 
 class Expression(with_metaclass(ABCMeta)):
-    def __init__(self, scope, task, body, object_map):
+    def __init__(self, scope, activity_instance, body, object_map):
         self.children = []
         self.child_values = []
         self.kwargs = {}
-        self.task = task
+        self.activity_instance = activity_instance
         self.body = body
         self.scope = scope
         self.object_map = object_map
@@ -20,15 +20,15 @@ class Expression(with_metaclass(ABCMeta)):
 
 
 class AtomicFormula(Expression):
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
+    def __init__(self, scope, activity_instance, body, object_map):
+        super().__init__(scope, activity_instance, body, object_map)
 
 
 class BinaryAtomicFormula(AtomicFormula):
     STATE_NAME = None
 
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
+    def __init__(self, scope, activity_instance, body, object_map):
+        super().__init__(scope, activity_instance, body, object_map)
         assert len(body) == 2, 'Param list should have 2 args'
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
@@ -75,8 +75,8 @@ class BinaryAtomicFormula(AtomicFormula):
 class UnaryAtomicFormula(AtomicFormula):
     STATE_NAME = None
 
-    def __init__(self, scope, task, body, object_map):
-        super().__init__(scope, task, body, object_map)
+    def __init__(self, scope, activity_instance, body, object_map):
+        super().__init__(scope, activity_instance, body, object_map)
         assert len(body) == 1, 'Param list should have 1 arg'
         self.input = body[0].strip('?')
         self.scope = scope

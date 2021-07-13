@@ -8,38 +8,38 @@ from behavior.sampler import Sampler
 from behavior.parsing import parse_domain, parse_problem, gen_natural_language_conditions
 from behavior.condition_evaluation import create_scope, compile_state, evaluate_state, get_ground_state_options
 
-from gibson2.external.pybullet_tools.utils import quat_from_euler
+from igibson.external.pybullet_tools.utils import quat_from_euler
 
 import numpy as np
 from IPython import embed
 from behavior.object_taxonomy import ObjectTaxonomy
 
 
-class BEHAVIORTask(object):
+class BEHAVIORActivityInstance(object):
     # TODO
     #   1. Update with new object formats
     #   2. Update initialize() to work with self.check_setup()
     #   3. Update initialize() to work with sampler code
     #   4. Various other adaptations to be seen
 
-    def __init__(self, atus_activity=None, task_instance=None, scene_path=SCENE_PATH, predefined_problem=None):
+    def __init__(self, atus_activity=None, activity_definition=None, scene_path=SCENE_PATH, predefined_problem=None):
         self.scene_path = scene_path
         self.object_taxonomy = ObjectTaxonomy()
-        self.update_problem(atus_activity, task_instance,
+        self.update_problem(atus_activity, activity_definition,
                             predefined_problem=predefined_problem)
 
-    def update_problem(self, atus_activity, task_instance, predefined_problem=None):
+    def update_problem(self, atus_activity, activity_definition, predefined_problem=None):
         if predefined_problem is not None:
             self.atus_activity = atus_activity
-            self.task_instance = "predefined"
+            self.activity_definition = "predefined"
         else:
             self.atus_activity = atus_activity
-            self.task_instance = task_instance
+            self.activity_definition = activity_definition
         domain_name, requirements, types, actions, predicates = parse_domain(
             "igibson")
         problem_name, self.objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
             self.atus_activity,
-            self.task_instance,
+            self.activity_definition,
             domain_name,
             predefined_problem=predefined_problem)
         self.object_scope = create_scope(self.objects)
@@ -66,7 +66,7 @@ class BEHAVIORTask(object):
 
     def initialize(self, scene_class, scene_id=None, scene_kwargs=None, online_sampling=True):
         '''
-        Check self.scene to see if it works for this Task. If not, resample.
+        Check self.scene to see if it works for this ActivityInstance. If not, resample.
         Populate self.scene with necessary objects.
         :param scene_class: scene class from simulator
         TODO should this method take scene_path and object_path as args, instead of
@@ -175,7 +175,7 @@ class BEHAVIORTask(object):
 
     def check_setup(self):
         '''
-        Check if scene will be viable for task
+        Check if scene will be viable for activity definition
         :return: binary success + unsatisfied predicates
         '''
         return evaluate_state(self.initial_conditions)
