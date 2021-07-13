@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABCMeta
 
 from future.utils import with_metaclass
-from behavior.utils import UncontrolledCategoryError
+from bddl.utils import UncontrolledCategoryError
 
 
 class Expression(with_metaclass(ABCMeta)):

@@ -25,8 +25,8 @@ RUN pip install -e .
 
 RUN pip uninstall -y pybullet && pip install --no-cache-dir https://github.com/StanfordVL/bullet3/archive/master.zip
 
-COPY ./BEHAVIOR /opt/BEHAVIOR
-WORKDIR /opt/BEHAVIOR
+COPY ./BDDL /opt/BDDL
+WORKDIR /opt/BDDL
 RUN pip install -e .
 
 RUN python -m igibson.utils.assets_utils --download_assets

@@ -1,5 +1,5 @@
 import h5py
-from behavior.activity_base_offline import OfflineActivityInstance
+from bddl.activity_base_offline import OfflineActivityInstance
 
 def main():
     sim_object_catalogue = {

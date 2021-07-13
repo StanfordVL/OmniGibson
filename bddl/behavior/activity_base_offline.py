@@ -1,5 +1,5 @@
 from igibson.object_states.factory import prepare_object_states
-from behavior.activity_base import BEHAVIORActivityInstance
+from bddl.activity_base import BDDLActivityInstance
 import sys
 
 class OfflineObject:
@@ -20,11 +20,11 @@ class OfflineObject:
                 print("unsupported")
 
 
-class OfflineActivityInstance(BEHAVIORActivityInstance):
+class OfflineActivityInstance(BDDLActivityInstance):
     def initialize(self, object_map, frame_data):
         '''
         TODO should this method take scene_path and object_path as args, instead of
-            asking user to change in behavior/config.py?
+            asking user to change in bddl/config.py?
         '''
         for object_group in self.objects:
             for obj in self.objects[object_group]:

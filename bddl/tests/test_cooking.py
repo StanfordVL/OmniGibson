@@ -1,6 +1,6 @@
 import sys
-from behavior.parsing import parse_domain, parse_problem
-from behavior.condition_evaluation import compile_state, evaluate_state
+from bddl.parsing import parse_domain, parse_problem
+from bddl.condition_evaluation import compile_state, evaluate_state
 import pprint
 
 #################### TEST STUFF ####################

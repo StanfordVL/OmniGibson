@@ -1,7 +1,7 @@
 ###### COMBINATORICS UTILS ######
 
 import itertools
-from behavior.config import GROUND_GOALS_MAX_OPTIONS, GROUND_GOALS_MAX_PERMUTATIONS
+from bddl.config import GROUND_GOALS_MAX_OPTIONS, GROUND_GOALS_MAX_PERMUTATIONS
 
 
 def truncated_product(*sequences, max_options=GROUND_GOALS_MAX_OPTIONS):

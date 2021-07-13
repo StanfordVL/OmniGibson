@@ -2,20 +2,20 @@ import random
 import os
 import sys
 
-from behavior import get_backend
-from behavior.config import SCENE_PATH
-from behavior.sampler import Sampler
-from behavior.parsing import parse_domain, parse_problem, gen_natural_language_conditions
-from behavior.condition_evaluation import create_scope, compile_state, evaluate_state, get_ground_state_options
+from bddl import get_backend
+from bddl.config import SCENE_PATH
+from bddl.sampler import Sampler
+from bddl.parsing import parse_domain, parse_problem, gen_natural_language_conditions
+from bddl.condition_evaluation import create_scope, compile_state, evaluate_state, get_ground_state_options
 
 from igibson.external.pybullet_tools.utils import quat_from_euler
 
 import numpy as np
 from IPython import embed
-from behavior.object_taxonomy import ObjectTaxonomy
+from bddl.object_taxonomy import ObjectTaxonomy
 
 
-class BEHAVIORActivityInstance(object):
+class BDDLActivityInstance(object):
     # TODO
     #   1. Update with new object formats
     #   2. Update initialize() to work with self.check_setup()
@@ -70,7 +70,7 @@ class BEHAVIORActivityInstance(object):
         Populate self.scene with necessary objects.
         :param scene_class: scene class from simulator
         TODO should this method take scene_path and object_path as args, instead of
-            asking user to change in behavior/config.py?
+            asking user to change in bddl/config.py?
         '''
         scenes = os.listdir(self.scene_path)
         random.shuffle(scenes)
@@ -236,7 +236,7 @@ def organize_objects(sim_objects, dsl_objects):
     return objects
 
 
-class BEHAVIORScene(object):
+class BDDLScene(object):
     def __init__(self, scene_file):
         self.scene_file = scene_file
         self.objects = []

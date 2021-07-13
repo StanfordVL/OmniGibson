@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 from collections import Counter
 
 import igibson
-import behavior
+import bddl
 
 from igibson.objects.articulated_object import URDFObject
 from igibson.utils import urdf_utils
@@ -16,11 +16,11 @@ import hierarchy_generator
 
 
 INPUT_SYNSET_FILE = os.path.join(os.path.dirname(
-    behavior.__file__), '..', 'utils', 'synsets_to_filtered_properties.json')
+    bddl.__file__), '..', 'utils', 'synsets_to_filtered_properties.json')
 MODELS_CSV_PATH = os.path.join(os.path.dirname(
-    behavior.__file__), '..', 'utils', 'objectmodeling.csv')
+    bddl.__file__), '..', 'utils', 'objectmodeling.csv')
 OUTPUT_SYNSET_FILE = os.path.join(os.path.dirname(
-    behavior.__file__), '..', 'utils', 'synsets_to_filtered_properties_pruned_igibson.json')
+    bddl.__file__), '..', 'utils', 'synsets_to_filtered_properties_pruned_igibson.json')
 
 NON_MODEL_CATEGORIES = ["floor"]
 

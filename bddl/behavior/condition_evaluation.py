@@ -2,14 +2,14 @@ import copy
 import itertools
 import numpy as np
 
-import behavior
-from behavior.logic_base import Expression, AtomicFormula, UnaryAtomicFormula
-from behavior.utils import truncated_product, truncated_permutations, UnsupportedPredicateError
+import bddl
+from bddl.logic_base import Expression, AtomicFormula, UnaryAtomicFormula
+from bddl.utils import truncated_product, truncated_permutations, UnsupportedPredicateError
 
 # TODO: VERY IMPORTANT9o
 #   1. Change logic for checking categories once new iG object is being used
 #   2. `activity_instance` needs to be input properly. It'll be weird to call these in a method
-#           of BEHAVIORActivityInstance and then have to put `self` in
+#           of BDDLActivityInstance and then have to put `self` in
 
 #################### ATOMIC FORMULAE ####################
 # TODO: Remove this when tests support temperature-based cooked.
@@ -508,7 +508,7 @@ def get_predicate_for_token(token):
         return TOKEN_MAPPING[token]
     else:
         try:
-            return behavior.get_backend().get_predicate_class(token)
+            return bddl.get_backend().get_predicate_class(token)
         except KeyError as e:
             raise UnsupportedPredicateError(e)
 

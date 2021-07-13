@@ -7,8 +7,8 @@ import re
 import sys
 import pprint
 
-from behavior.config import SUPPORTED_PDDL_REQUIREMENTS as supported_requirements
-from behavior.config import get_domain_filename, get_definition_filename, READABLE_PREDICATE_NAMES
+from bddl.config import SUPPORTED_PDDL_REQUIREMENTS as supported_requirements
+from bddl.config import get_domain_filename, get_definition_filename, READABLE_PREDICATE_NAMES
 
 
 def scan_tokens(filename=None, string=None):
