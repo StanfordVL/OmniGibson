@@ -1,0 +1,53 @@
+(define (problem test)
+    (:domain igibson)
+    (:objects
+        chip.n.04_1 chip.n.04_2 chip.n.04_3 chip.n.04_4 chip.n.04_5 chip.n.04_6 chip.n.04_7 chip.n.04_8 chip.n.04_9 chip.n.04_10 chip.n.04_11 chip.n.04_12 chip.n.04_13 chip.n.04_14 chip.n.04_15 chip.n.04_16 chip.n.04_17 chip.n.04_18 chip.n.04_19 chip.n.04_20 chip.n.04_21 chip.n.04_22 chip.n.04_23 chip.n.04_24 chip.n.04_25 chip.n.04_26 chip.n.04_27 chip.n.04_28 chip.n.04_29 chip.n.04_30 - chip.n.04
+        ; chip.n.04_1 chip.n.04_2 chip.n.04_3 - chip.n.04
+        table.n.02_1 table.n.02_2 - table.n.02
+    )
+    (:init
+        (inRoom table.n.02_1 living_room)
+        (inRoom table.n.02_2 living_room)
+        (onTop chip.n.04_1 table.n.02_1)
+        (onTop chip.n.04_2 table.n.02_1)
+        (onTop chip.n.04_3 table.n.02_1)
+        (onTop chip.n.04_4 table.n.02_1)
+        (onTop chip.n.04_5 table.n.02_1)
+        (onTop chip.n.04_6 table.n.02_1)
+        (onTop chip.n.04_7 table.n.02_1)
+        (onTop chip.n.04_8 table.n.02_1)
+        (onTop chip.n.04_9 table.n.02_1)
+        (onTop chip.n.04_10 table.n.02_1)
+        (onTop chip.n.04_11 table.n.02_1)
+        (onTop chip.n.04_12 table.n.02_1)
+        (onTop chip.n.04_13 table.n.02_1)
+        (onTop chip.n.04_14 table.n.02_1)
+        (onTop chip.n.04_15 table.n.02_1)
+        (onTop chip.n.04_16 table.n.02_2)
+        (onTop chip.n.04_17 table.n.02_2)
+        (onTop chip.n.04_18 table.n.02_2)
+        (onTop chip.n.04_19 table.n.02_2)
+        (onTop chip.n.04_20 table.n.02_2)
+        (onTop chip.n.04_21 table.n.02_2)
+        (onTop chip.n.04_22 table.n.02_2)
+        (onTop chip.n.04_23 table.n.02_2)
+        (onTop chip.n.04_24 table.n.02_2)
+        (onTop chip.n.04_25 table.n.02_2)
+        (onTop chip.n.04_26 table.n.02_2)
+        (onTop chip.n.04_27 table.n.02_2)
+        (onTop chip.n.04_28 table.n.02_2)
+        (onTop chip.n.04_29 table.n.02_2)
+        (onTop chip.n.04_30 table.n.02_2)
+    )
+    (:goal
+        (and 
+            (forall
+                (?chip.n.04 - chip.n.04)
+                (exists 
+                    (?table.n.02 - table.n.02)
+                    (onTop ?chip.n.04 ?table.n.02)
+                )
+            )
+        )
+    )
+)

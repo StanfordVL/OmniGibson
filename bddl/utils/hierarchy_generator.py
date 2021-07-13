@@ -46,11 +46,11 @@ IGIBSON_ABILITY_JSON_PATH = "synsets_to_filtered_properties_pruned_igibson.json"
 ORACLE_ABILITY_JSON_PATH = "synsets_to_filtered_properties.json"
 
 # Uses iGibson abilities.
-OUTPUT_JSON_PATH1 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_owned.json")
+OUTPUT_JSON_PATH1 = os.path.join(os.path.dirname(__file__), "..", "behavior", "hierarchy_owned.json")
 # Uses oracle abilities.
-OUTPUT_JSON_PATH2 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_articles.json")
+OUTPUT_JSON_PATH2 = os.path.join(os.path.dirname(__file__), "..", "behavior", "hierarchy_articles.json")
 # Uses oracle abilities.
-OUTPUT_JSON_PATH3 = os.path.join(os.path.dirname(__file__), "..", "tasknet", "hierarchy_all.json")
+OUTPUT_JSON_PATH3 = os.path.join(os.path.dirname(__file__), "..", "behavior", "hierarchy_all.json")
 
 '''
 Load in all of the owned models. Map the synsets to their corresponding object names.

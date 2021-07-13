@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 from collections import Counter
 
 import gibson2
-import tasknet
+import behavior
 
 from gibson2.objects.articulated_object import URDFObject
 from gibson2.utils import urdf_utils
@@ -16,11 +16,11 @@ import hierarchy_generator
 
 
 INPUT_SYNSET_FILE = os.path.join(os.path.dirname(
-    tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties.json')
+    behavior.__file__), '..', 'utils', 'synsets_to_filtered_properties.json')
 MODELS_CSV_PATH = os.path.join(os.path.dirname(
-    tasknet.__file__), '..', 'utils', 'objectmodeling.csv')
+    behavior.__file__), '..', 'utils', 'objectmodeling.csv')
 OUTPUT_SYNSET_FILE = os.path.join(os.path.dirname(
-    tasknet.__file__), '..', 'utils', 'synsets_to_filtered_properties_pruned_igibson.json')
+    behavior.__file__), '..', 'utils', 'synsets_to_filtered_properties_pruned_igibson.json')
 
 NON_MODEL_CATEGORIES = ["floor"]
 

@@ -25,8 +25,8 @@ RUN pip install -e .
 
 RUN pip uninstall -y pybullet && pip install --no-cache-dir https://github.com/StanfordVL/bullet3/archive/master.zip
 
-COPY ./TaskNet /opt/TaskNet
-WORKDIR /opt/TaskNet
+COPY ./BEHAVIOR /opt/BEHAVIOR
+WORKDIR /opt/BEHAVIOR
 RUN pip install -e .
 
 RUN python -m gibson2.utils.assets_utils --download_assets

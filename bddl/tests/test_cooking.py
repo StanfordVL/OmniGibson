@@ -1,6 +1,6 @@
 import sys
-from tasknet.parsing import parse_domain, parse_problem
-from tasknet.condition_evaluation import compile_state, evaluate_state
+from behavior.parsing import parse_domain, parse_problem
+from behavior.condition_evaluation import compile_state, evaluate_state
 import pprint
 
 #################### TEST STUFF ####################

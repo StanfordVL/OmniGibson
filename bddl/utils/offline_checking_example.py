@@ -1,5 +1,5 @@
 import h5py
-from tasknet.task_base_offline import OfflineTask
+from behavior.task_base_offline import OfflineTask
 
 def main():
     sim_object_catalogue = {

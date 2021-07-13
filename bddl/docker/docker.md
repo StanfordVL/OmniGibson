@@ -2,11 +2,11 @@
 
 In order to run deterministic replay on older clusters (ubuntu 16.04, 18.04), you must use a container (we aren't sure of the exact cause yet).
 
-First, make a new directory and clone TaskNet and iGibson.
+First, make a new directory and clone BEHAVIOR and iGibson.
 
 ```bash
 mkdir behavior_container && cd behavior_container
-git clone --recursive git@github.com:sanjanasrivastava/TaskNet.git
+git clone --recursive git@github.com:sanjanasrivastava/BEHAVIOR.git
 git clone --recursive git@github.com:fxia22/iGibson.git
 cd iGibson && git checkout igdsl2 && cd ..
 ```
@@ -14,7 +14,7 @@ cd iGibson && git checkout igdsl2 && cd ..
 Then copy the Dockerfile into the parent behavior_container directory and build the container.
 
 ```bash
-cp TaskNet/docker/Dockerfile .
+cp BEHAVIOR/docker/Dockerfile .
 docker build -f Dockerfile -t behavior .
 ```
 
