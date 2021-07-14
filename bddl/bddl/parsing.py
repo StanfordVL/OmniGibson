@@ -447,19 +447,3 @@ if __name__ == '__main__':
         refined_pddl = add_pddl_whitespace()
     if sys.argv[1] == 'remove':
         refined_pddl = remove_pddl_whitespace()
-
-    # print(refined_pddl)
-    # import sys, pprint
-    # behavior_activity = sys.argv[1]
-    # activity_definition = sys.argv[2]
-    # print('----------------------------')
-    # # pprint.pprint(scan_tokens(behavior_activity, instance))
-    # print('----------------------------')
-    # # pprint.pprint(scan_tokens(behavior_activity, instance))
-    # print('----------------------------')
-    # behavior_activity = "assembling_gift_baskets_filtered"
-    # activity_definition = 0
-    # domain_name, requirements, types, actions, predicates = parse_domain(
-    #     behavior_activity, activity_definition)
-    # problem_name, objects, initial_state, goal_state = parse_problem(
-    #     behavior_activity, activity_definition, domain_name)
