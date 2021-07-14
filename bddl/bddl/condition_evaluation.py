@@ -420,7 +420,7 @@ class HEAD(Expression):
 def create_scope(object_terms):
     '''
     Creates degenerate scope mapping all object parameters to None
-    :param objects: (list of strings) PDDL terms for objects
+    :param objects: (list of strings) BDDL terms for objects
     '''
     scope = {}
     for object_cat in object_terms:
@@ -485,7 +485,7 @@ def flatten_list(li):
 #################### TOKEN MAPPING ####################
 
 TOKEN_MAPPING = {
-    # PDDL
+    # BDDL
     'forall': Universal,
     'exists': Existential,
     'and': Conjunction,
@@ -493,7 +493,7 @@ TOKEN_MAPPING = {
     'not': Negation,
     'imply': Implication,
 
-    # PDDL extensions
+    # BDDL extensions
     'forn': NQuantifier,
     'forpairs': ForPairs,
     'fornpairs': ForNPairs,
