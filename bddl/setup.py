@@ -9,12 +9,12 @@ print('FIND PACKAGES OUTPUT:', find_packages())
 
 
 setup(
-    name='tasknet',
+    name='bddl',
     version='0.0.0',
     author='Stanford University',
     long_description_content_type='text/markdown',
     long_description=long_description,
-    url='none of your business',
+    url='none',
     zip_safe=False,
     packages=find_packages(),
     install_requires=[

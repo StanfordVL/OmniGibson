@@ -1,6 +1,6 @@
 import unittest
 
-from tasknet import object_taxonomy
+from bddl import object_taxonomy
 
 
 class TaxonomyTest(unittest.TestCase):

@@ -1,6 +1,6 @@
 import sys
-from tasknet.parsing import parse_domain, parse_problem
-from tasknet.condition_evaluation import compile_state, evaluate_state
+from bddl.parsing import parse_domain, parse_problem
+from bddl.condition_evaluation import compile_state, evaluate_state
 import pprint
 
 #################### TEST STUFF ####################
@@ -29,12 +29,12 @@ class Apple(object):
 
 
 def test_chicken_cooking():
-    atus_activity = 'checking_test'
+    behavior_activity = 'checking_test'
     task_instance = 0
     domain_name, requirements, types, actions, predicates = parse_domain(
-        atus_activity, task_instance)
+        behavior_activity, task_instance)
     problem_name, objects, initial_state, goal_state = parse_problem(
-        atus_activity, task_instance, domain_name)
+        behavior_activity, task_instance, domain_name)
 
     test_objects = [Chicken(1, False),
                     Chicken(2, False),

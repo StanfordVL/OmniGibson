@@ -1,5 +1,5 @@
 import h5py
-from tasknet.task_base_offline import OfflineTask
+from bddl.activity_base_offline import OfflineActivityInstance
 
 def main():
     sim_object_catalogue = {
@@ -46,18 +46,18 @@ def main():
     }
 
     data = h5py.File("./parsed_log.hdf5")
-    igtn_task = OfflineTask("lunchpacking_demo", task_instance=0)
+    igtn_activity_instance = OfflineActivityInstance("lunchpacking_demo", activity_definition=0)
     initial_frame = data['0']['physics_data']
-    igtn_task.initialize(object_map=sim_object_catalogue, frame_data=initial_frame)
+    igtn_activity_instance.initialize(object_map=sim_object_catalogue, frame_data=initial_frame)
 
     for i in sorted(data.keys(), key = lambda x: int(x)):
-        for obj in igtn_task.object_scope.values():
+        for obj in igtn_activity_instance.object_scope.values():
             obj.update_object_properties(data[i]['physics_data'][f'body_id_{obj.body_id}'])
-        print(igtn_task.check_success())
+        print(igtn_activity_instance.check_success())
 
     # last frame
     # i = sorted(data.keys(), key = lambda x: int(x))[-1]
-    # for obj in igtn_task.object_scope.values():
+    # for obj in igtn_activity_instance.object_scope.values():
     #     obj.update_object_properties(data[i]['physics_data'][f'body_id_{obj.body_id}'])
 
 if __name__ == "__main__":
