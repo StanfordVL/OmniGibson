@@ -421,7 +421,7 @@ def remove_bddl_whitespace(bddl_file='activity_conditions/parsing_tests/test_app
 
 
 def construct_full_bddl(behavior_activity, activity_definition, object_list, init_state, goal_state):
-    """Make full BDDL problem file from parts, release as string 
+    """Make full BDDL problem file from parts, release as string
 
     :param object_list (string): object list (assumed whitespace added with tabs)   TODO change assumptions if needed
     :param init_state (string): initial state (assumed whitespace not added)
@@ -432,8 +432,8 @@ def construct_full_bddl(behavior_activity, activity_definition, object_list, ini
         bddl_file=None, string=init_state, save=False).split("\n"))
     goal_state = "    \n".join(add_bddl_whitespace(
         bddl_file=None, string=goal_state, save=False).split("\n"))
-    bddl = f"""(define\n    
-                   (problem {behavior_activity}_{activity_definition})\n    
+    bddl = f"""(define\n
+                   (problem {behavior_activity}_{activity_definition})\n
                    (:domain igibson)\n
                 {object_list}\n
                 {init_state}\n
@@ -447,19 +447,3 @@ if __name__ == '__main__':
         refined_bddl = add_bddl_whitespace()
     if sys.argv[1] == 'remove':
         refined_bddl = remove_bddl_whitespace()
-
-    # print(refined_bddl)
-    # import sys, pprint
-    # behavior_activity = sys.argv[1]
-    # activity_definition = sys.argv[2]
-    # print('----------------------------')
-    # # pprint.pprint(scan_tokens(behavior_activity, instance))
-    # print('----------------------------')
-    # # pprint.pprint(scan_tokens(behavior_activity, instance))
-    # print('----------------------------')
-    # behavior_activity = "assembling_gift_baskets_filtered"
-    # activity_definition = 0
-    # domain_name, requirements, types, actions, predicates = parse_domain(
-    #     behavior_activity, activity_definition)
-    # problem_name, objects, initial_state, goal_state = parse_problem(
-    #     behavior_activity, activity_definition, domain_name)

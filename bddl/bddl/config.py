@@ -1,24 +1,16 @@
-import os 
+import os
 
-# PATHS 
-ACTIVITY_CONFIGS_PATH =  os.path.join(os.path.dirname(__file__), 'activity_conditions')
-SCENE_PATH = 'd:\\ig_dataset\\scenes'
-OBJECT_MODEL_PATH = 'D:\\igibson_assets\\processed'
+# PATHS
+ACTIVITY_CONFIGS_PATH = os.path.join(
+    os.path.dirname(__file__), 'activity_conditions')
 
-# BDDL 
+# BDDL
 SUPPORTED_BDDL_REQUIREMENTS = [':strips', ':negative-preconditions', ':typing', ':adl']
+
 READABLE_PREDICATE_NAMES = {
     'ontop': 'on top of',
     'nextto': 'next to'
 }
-
-
-def get_object_filepath(object_category, object_category_instance):
-    '''
-    Generate object filename
-    NOTE check if this needs to change
-    '''
-    return os.path.join(OBJECT_MODEL_PATH, object_category, object_category_instance, 'rigid_body.urdf')
 
 
 def get_definition_filename(behavior_activity, instance, domain=False):
@@ -32,6 +24,6 @@ def get_domain_filename(domain_name):
     return os.path.join(ACTIVITY_CONFIGS_PATH, f"domain_{domain_name}.bddl")
 
 
-# MISC 
+# MISC
 GROUND_GOALS_MAX_OPTIONS = 20
 GROUND_GOALS_MAX_PERMUTATIONS = 10
