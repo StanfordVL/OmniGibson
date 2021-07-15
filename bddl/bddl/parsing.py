@@ -7,7 +7,7 @@ import re
 import sys
 import pprint
 
-from bddl.config import SUPPORTED_PDDL_REQUIREMENTS as supported_requirements
+from bddl.config import SUPPORTED_BDDL_REQUIREMENTS as supported_requirements
 from bddl.config import get_domain_filename, get_definition_filename, READABLE_PREDICATE_NAMES
 
 
@@ -19,7 +19,7 @@ def scan_tokens(filename=None, string=None):
     elif string is not None:
         raw_str = string
     else:
-        raise ValueError("No input PDDL provided.")
+        raise ValueError("No input BDDL provided.")
     str = re.sub(r';.*$', '', raw_str, flags=re.MULTILINE).lower()
     # Tokenize
     stack = []
@@ -352,98 +352,98 @@ def gen_natural_language_conditions(parsed_conditions):
     return [''.join(list(gen_natural_language_condition(parsed_condition))) for parsed_condition in parsed_conditions]
 
 
-def add_pddl_whitespace(pddl_file="activity_conditions/parsing_tests/test_app_output.pddl", string=None, save=True):
+def add_bddl_whitespace(bddl_file="activity_conditions/parsing_tests/test_app_output.bddl", string=None, save=True):
     if string is not None:
-        raw_pddl = string
-    elif pddl_file is not None:
-        with open(pddl_file, "r") as f:
-            raw_pddl = f.read()
+        raw_bddl = string
+    elif bddl_file is not None:
+        with open(bddl_file, "r") as f:
+            raw_bddl = f.read()
     else:
-        raise ValueError("No PDDL given")
+        raise ValueError("No BDDL given")
 
-    total_characters = len(raw_pddl)
+    total_characters = len(raw_bddl)
 
     nest_level = 0
-    refined_pddl = ""
+    refined_bddl = ""
     new_block = ""
     char_i = 0
     last_paren_type = None
     while char_i < total_characters:
-        if raw_pddl[char_i] == "(":
-            new_block = '\n' + '    ' * nest_level + raw_pddl[char_i]
+        if raw_bddl[char_i] == "(":
+            new_block = '\n' + '    ' * nest_level + raw_bddl[char_i]
             last_paren_type = "("
             char_i += 1
-            while (raw_pddl[char_i] not in [' ', ')']) and char_i < total_characters:
-                new_block += raw_pddl[char_i]
+            while (raw_bddl[char_i] not in [' ', ')']) and char_i < total_characters:
+                new_block += raw_bddl[char_i]
                 char_i += 1
-            refined_pddl += new_block + raw_pddl[char_i]
-            if raw_pddl[char_i] == ' ':
+            refined_bddl += new_block + raw_bddl[char_i]
+            if raw_bddl[char_i] == ' ':
                 nest_level += 1
-        elif raw_pddl[char_i] == ")":
+        elif raw_bddl[char_i] == ")":
             nest_level -= 1
             if last_paren_type == ")":
-                refined_pddl += "\n" + '    ' * nest_level
-            refined_pddl += raw_pddl[char_i]
+                refined_bddl += "\n" + '    ' * nest_level
+            refined_bddl += raw_bddl[char_i]
             last_paren_type = ")"
         else:
-            refined_pddl += raw_pddl[char_i]
+            refined_bddl += raw_bddl[char_i]
         char_i += 1
 
     if save:
-        with open('activity_conditions/parsing_tests/test_app_output_whitespace.pddl', 'w') as f:
-            f.write(refined_pddl)
+        with open('activity_conditions/parsing_tests/test_app_output_whitespace.bddl', 'w') as f:
+            f.write(refined_bddl)
 
-    return refined_pddl
+    return refined_bddl
 
 
-def remove_pddl_whitespace(pddl_file='activity_conditions/parsing_tests/test_app_output_whitespace.pddl', string=None, save=True):
-    if pddl_file is not None:
-        with open(pddl_file, 'r') as f:
-            raw_pddl = f.read()
+def remove_bddl_whitespace(bddl_file='activity_conditions/parsing_tests/test_app_output_whitespace.bddl', string=None, save=True):
+    if bddl_file is not None:
+        with open(bddl_file, 'r') as f:
+            raw_bddl = f.read()
     elif string is not None:
-        raw_pddl = string
+        raw_bddl = string
     else:
-        raise ValueError('No PDDL given.')
+        raise ValueError('No BDDL given.')
 
-    pddl = ' '.join([substr.lstrip(' ') for substr in raw_pddl.split('\n')])
-    print(pddl)
-    pddl = [' ' + substr if substr[0] !=
-            ')' else substr for substr in pddl.split(' ') if substr]
+    bddl = ' '.join([substr.lstrip(' ') for substr in raw_bddl.split('\n')])
+    print(bddl)
+    bddl = [' ' + substr if substr[0] !=
+            ')' else substr for substr in bddl.split(' ') if substr]
     print()
-    print(pddl)
-    pddl = ''.join(pddl)[1:]
+    print(bddl)
+    bddl = ''.join(bddl)[1:]
 
     if save:
-        with open('activity_conditions/parsing_tests/test_app_output_nowhitespace.pddl', 'w') as f:
-            f.write(pddl)
+        with open('activity_conditions/parsing_tests/test_app_output_nowhitespace.bddl', 'w') as f:
+            f.write(bddl)
 
-    return pddl
+    return bddl
 
 
-def construct_full_pddl(behavior_activity, activity_definition, object_list, init_state, goal_state):
-    """Make full PDDL problem file from parts, release as string 
+def construct_full_bddl(behavior_activity, activity_definition, object_list, init_state, goal_state):
+    """Make full BDDL problem file from parts, release as string
 
     :param object_list (string): object list (assumed whitespace added with tabs)   TODO change assumptions if needed
     :param init_state (string): initial state (assumed whitespace not added)
     :param goal_state (string): goal state (assumed whitespace not added)
     """
     object_list = "    ".join(object_list.split("\t"))
-    init_state = "    \n".join(add_pddl_whitespace(
-        pddl_file=None, string=init_state, save=False).split("\n"))
-    goal_state = "    \n".join(add_pddl_whitespace(
-        pddl_file=None, string=goal_state, save=False).split("\n"))
-    pddl = f"""(define\n    
-                   (problem {behavior_activity}_{activity_definition})\n    
+    init_state = "    \n".join(add_bddl_whitespace(
+        bddl_file=None, string=init_state, save=False).split("\n"))
+    goal_state = "    \n".join(add_bddl_whitespace(
+        bddl_file=None, string=goal_state, save=False).split("\n"))
+    bddl = f"""(define\n
+                   (problem {behavior_activity}_{activity_definition})\n
                    (:domain igibson)\n
                 {object_list}\n
                 {init_state}\n
                 {goal_state}\n
                )"""
-    return pddl
+    return bddl
 
 
 if __name__ == '__main__':
     if sys.argv[1] == 'add':
-        refined_pddl = add_pddl_whitespace()
+        refined_bddl = add_bddl_whitespace()
     if sys.argv[1] == 'remove':
-        refined_pddl = remove_pddl_whitespace()
+        refined_bddl = remove_bddl_whitespace()
