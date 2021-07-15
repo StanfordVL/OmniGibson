@@ -25,11 +25,11 @@ RUN pip install -e .
 
 RUN pip uninstall -y pybullet && pip install --no-cache-dir https://github.com/StanfordVL/bullet3/archive/master.zip
 
-COPY ./TaskNet /opt/TaskNet
-WORKDIR /opt/TaskNet
+COPY ./BDDL /opt/BDDL
+WORKDIR /opt/BDDL
 RUN pip install -e .
 
-RUN python -m gibson2.utils.assets_utils --download_assets
-RUN python -m gibson2.utils.assets_utils --download_demo_data
+RUN python -m igibson.utils.assets_utils --download_assets
+RUN python -m igibson.utils.assets_utils --download_demo_data
 
 WORKDIR /opt/igibson
