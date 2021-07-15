@@ -1,27 +1,16 @@
 import random
 import os
-import sys
 
-from bddl import get_backend
-from bddl.config import SCENE_PATH
 from bddl.parsing import parse_domain, parse_problem, gen_natural_language_conditions
 from bddl.condition_evaluation import create_scope, compile_state, evaluate_state, get_ground_state_options
 
-# from igibson.external.pybullet_tools.utils import quat_from_euler
-
 import numpy as np
-from IPython import embed
 from bddl.object_taxonomy import ObjectTaxonomy
 
 
 class BEHAVIORActivityInstance(object):
-    # TODO
-    #   1. Update with new object formats
-    #   2. Update initialize() to work with self.check_setup()
-    #   3. Update initialize() to work with sampler code
-    #   4. Various other adaptations to be seen
 
-    def __init__(self, behavior_activity=None, activity_definition=None, scene_path=SCENE_PATH, predefined_problem=None):
+    def __init__(self, behavior_activity=None, activity_definition=None, scene_path=None, predefined_problem=None):
         self.scene_path = scene_path
         self.object_taxonomy = ObjectTaxonomy()
         self.update_problem(behavior_activity, activity_definition,
@@ -64,13 +53,6 @@ class BEHAVIORActivityInstance(object):
             self.parsed_goal_conditions)
 
     def initialize(self, scene_class, scene_id=None, scene_kwargs=None, online_sampling=True):
-        '''
-        Check self.scene to see if it works for this ActivityInstance. If not, resample.
-        Populate self.scene with necessary objects.
-        :param scene_class: scene class from simulator
-        TODO should this method take scene_path and object_path as args, instead of
-            asking user to change in bddl/config.py?
-        '''
         scenes = os.listdir(self.scene_path)
         random.shuffle(scenes)
         accept_scene = True
@@ -110,7 +92,6 @@ class BEHAVIORActivityInstance(object):
 
         # Generate goal condition with the fully populated self.object_scope
         self.gen_goal_conditions()
-        # assert accept_scene, 'None of the available scenes satisfy these initial conditions.'
 
         return accept_scene
 
@@ -142,7 +123,6 @@ class BEHAVIORActivityInstance(object):
             self.currently_viewed_instruction]
         objects = self.goal_conditions[self.currently_viewed_instruction].get_relevant_objects(
         )
-        # text_color = "green" if satisfied else "red"
         text_color = [83. / 255., 176. / 255., 72. / 255.] if satisfied \
             else [255. / 255., 51. / 255., 51. / 255.]
 
@@ -151,7 +131,8 @@ class BEHAVIORActivityInstance(object):
     def iterate_instruction(self):
         self.currently_viewed_index = (
             self.currently_viewed_index + 1) % len(self.parsed_goal_conditions)
-        self.currently_viewed_instruction = self.instruction_order[self.currently_viewed_index]
+        self.currently_viewed_instruction = \
+            self.instruction_order[self.currently_viewed_index]
 
     def check_scene(self):
         raise NotImplementedError
@@ -160,7 +141,6 @@ class BEHAVIORActivityInstance(object):
         raise NotImplementedError
 
     def move_agent(self):
-        # Legacy function
         pass
 
     def import_scene(self):
@@ -172,13 +152,6 @@ class BEHAVIORActivityInstance(object):
     def sample(self, kinematic_only=False):
         raise NotImplementedError
 
-    def check_setup(self):
-        '''
-        Check if scene will be viable for activity definition
-        :return: binary success + unsatisfied predicates
-        '''
-        return evaluate_state(self.initial_conditions)
-
     def check_success(self):
         '''
         Check if scene satisfies goal conditions and report binary success + unsatisfied predicates
@@ -187,58 +160,3 @@ class BEHAVIORActivityInstance(object):
         self.current_success, self.current_goal_status = evaluate_state(
             self.goal_conditions)
         return self.current_success, self.current_goal_status
-
-    #### CHECKERS ####
-    def exist(self, objA):
-        raise NotImplementedError
-
-    def onTop(self, objA, objB):
-        raise NotImplementedError
-
-    def inside(self, objA, objB):
-        raise NotImplementedError
-
-    def nextTo(self, objA, objB):
-        raise NotImplementedError
-
-    def under(self, objA, objB):
-        raise NotImplementedError
-
-    def touching(self, objA, objB):
-        raise NotImplementedError
-
-    #### SAMPLERS ####
-    def sampleOnTop(self, objA, objB):
-        raise NotImplementedError
-
-    def sampleInside(self, objA, objB):
-        raise NotImplementedError
-
-    def sampleNextTo(self, objA, objB):
-        raise NotImplementedError
-
-    def sampleUnder(self, objA, objB):
-        raise NotImplementedError
-
-    def sampleTouching(self, objA, objB):
-        raise NotImplementedError
-
-
-#### Util functions ####
-def organize_objects(sim_objects, dsl_objects):
-    objects = {}
-    for sim_obj, dsl_obj in zip(sim_objects, dsl_objects):
-        if dsl_obj.category in objects:
-            objects[dsl_obj.category].append(sim_obj)
-        else:
-            objects[dsl_obj.category] = [sim_obj]
-    return objects
-
-
-class BDDLScene(object):
-    def __init__(self, scene_file):
-        self.scene_file = scene_file
-        self.objects = []
-
-    def add_objects(self, objects):
-        self.objects = objects

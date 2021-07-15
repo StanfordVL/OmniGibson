@@ -6,38 +6,11 @@ import bddl
 from bddl.logic_base import Expression, AtomicFormula, UnaryAtomicFormula
 from bddl.utils import truncated_product, truncated_permutations, UnsupportedPredicateError
 
-# TODO: VERY IMPORTANT9o
-#   1. Change logic for checking categories once new iG object is being used
-#   2. `activity_instance` needs to be input properly. It'll be weird to call these in a method
-#           of BEHAVIORActivityInstance and then have to put `self` in
-
-#################### ATOMIC FORMULAE ####################
-# TODO: Remove this when tests support temperature-based cooked.
-
-
-class LegacyCookedForTesting(UnaryAtomicFormula):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
-
-        if set('1234567890') & set(body[0]):
-            self.flattened_condition_options = [[["cooked", body[0]]]]
-        else:
-            term = body[0].lstrip('?')
-            sim_obj = self.scope[term]
-            for dsl_term, other_sim_obj in self.scope.items():
-                if dsl_term != term and sim_obj == other_sim_obj:
-                    self.flattened_condition_options = [[["cooked", dsl_term]]]
-                    
-    def _evaluate(self, obj):
-        return self.activity_instance.cooked(obj)
-
-    def _sample(self):
-        pass
-
-
 #################### RECURSIVE PREDICATES ####################
 
 # -JUNCTIONS
+
+
 class Conjunction(Expression):
     def __init__(self, scope, activity_instance, body, object_map):
         super().__init__(scope, activity_instance, body, object_map)
@@ -63,6 +36,7 @@ class Conjunction(Expression):
             self.flattened_condition_options.append(
                 list(itertools.chain(*option))
             )
+
 
 class Disjunction(Expression):
     def __init__(self, scope, activity_instance, body, object_map):
@@ -114,7 +88,7 @@ class Universal(Expression):
         return all(self.child_values)
 
     def get_ground_options(self):
-        # Accept just a few possible options 
+        # Accept just a few possible options
         options = list(truncated_product(
             *[child.flattened_condition_options for child in self.children]
         ))
@@ -181,7 +155,7 @@ class NQuantifier(Expression):
         return sum(self.child_values) == self.N
 
     def get_ground_options(self):
-        # Accept just a few possible options 
+        # Accept just a few possible options
         options = list(truncated_product(
             *[child.flattened_condition_options for child in self.children]
         ))
@@ -224,7 +198,7 @@ class ForPairs(Expression):
 
         L = min(len(self.children), len(self.children[0]))
         return (np.sum(np.any(self.child_values, axis=1), axis=0) >= L) and (np.sum(np.any(self.child_values, axis=0), axis=0) >= L)
-    
+
     def get_ground_options(self):
         self.flattened_condition_options = []
         M, N = len(self.children), len(self.children[0])
@@ -242,8 +216,10 @@ class ForPairs(Expression):
                 choice_options = truncated_product(*all_child_options)
                 unpacked_choice_options = []
                 for choice_option in choice_options:
-                    unpacked_choice_options.append(list(itertools.chain(*choice_option)))
-                self.flattened_condition_options.extend(unpacked_choice_options)
+                    unpacked_choice_options.append(
+                        list(itertools.chain(*choice_option)))
+                self.flattened_condition_options.extend(
+                    unpacked_choice_options)
 
 
 class ForNPairs(Expression):
@@ -433,7 +409,8 @@ def compile_state(parsed_state, activity_instance, scope=None, object_map=None):
     compiled_state = []
     for parsed_condition in parsed_state:
         scope = scope if scope is not None else {}
-        compiled_state.append(HEAD(scope, activity_instance, parsed_condition, object_map))
+        compiled_state.append(
+            HEAD(scope, activity_instance, parsed_condition, object_map))
     return compiled_state
 
 
@@ -466,7 +443,8 @@ def get_ground_state_options(compiled_state, activity_instance, scope=None, obje
         consistent_unpacked_options.append(option)
 
     consistent_unpacked_options = [
-        compile_state(option, activity_instance, scope=scope, object_map=object_map)
+        compile_state(option, activity_instance,
+                      scope=scope, object_map=object_map)
         for option in sorted(consistent_unpacked_options, key=len)
     ]
     return consistent_unpacked_options
@@ -497,9 +475,6 @@ TOKEN_MAPPING = {
     'forn': NQuantifier,
     'forpairs': ForPairs,
     'fornpairs': ForNPairs,
-
-    # Atomic predicates
-    'cooked_test': LegacyCookedForTesting,
 }
 
 
@@ -511,4 +486,3 @@ def get_predicate_for_token(token):
             return bddl.get_backend().get_predicate_class(token)
         except KeyError as e:
             raise UnsupportedPredicateError(e)
-
