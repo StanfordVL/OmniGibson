@@ -93,3 +93,7 @@ To test the predicate evaluator, run `pytest` in project root.
 To add a test, create a new python file under the tests directory, and add
 additional functions prefixed with `test_` which include assert statements that
 should evaluate true.
+
+# References 
+
+[1] https://www.researchgate.net/publication/2278933_PDDL_-_The_Planning_Domain_Definition_Language#:~:text=This%20planning%20domain%20consists%20of,domain%20automatically%20from%20human%20demonstrations.
