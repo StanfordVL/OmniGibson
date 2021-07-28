@@ -86,6 +86,22 @@ When using BEHAVIOR activities with a simulator, the goal condition is evaluated
 
 `bddl.condition_evaluation` also contains basic functionality to generate ground solutions to a compositional goal condition, including one that may contain quantification. This functionality is much like a very simple, unoptimized logic program, and will return a subset of solutions in cases where the solution set is too large to compute due to exponential growth. 
 
+# Using BEHAVIOR with a new simulator 
+
+Using BEHAVIOR activities with a new simulator requires implementing its functional requirements for that simulator, as has been done for iGibson 2.0 [3]. 
+
+### Implementation of BDDL predicates as simulated object states
+
+To simulate a BEHAVIOR activity, the simulator must be able to simulate every predicate involved in that activity. The full list of predicates is at [TODO add list of predicates to config]. For any one activity, the required predicates can be found by reading its BDDL problem (in activity_conditions/<activity_name>/.) 
+
+Implementing these requires 1) a simulator-specific child class of the `BDDLBackend` class ([link](https://github.com/StanfordVL/bddl/blob/654cfefb078dbdf264957a08a30571086a2aa726/bddl/backend_abc.py#L6-L9)) and 2) implementations of object states such as `cooked` and `ontop` that can both **instantiate** an object as e.g. `cooked` or `not cooked`, and **check** whether the predicate is true for a given object. 
+
+**1. Child of `BDDLBACKEND`:** This class has one method, `get_predicate_class`. It must take string tokens of predicates from BDDL problems (e.g. `"cooked"`, `"ontop"`) and map them to the simulator's object states. Example: [iGibson's `BDDLBackend` child class](https://github.com/StanfordVL/iGibson/blob/ig-develop/igibson/task/bddl_backend.py). 
+
+**2. Simulated object states:** For any object in a BEHAVIOR activity, it must be instantiated in certain simulated states and be checked for certain simulated states, as specified by a BDDL problem. `BDDLBackend` expects state implementations that are object agnostic, but the implementation is ultimately up to the user. Assuming object-agnostic states, each one should be able to take an object and instantiate that object with the given state if applicable, and check whether that object is in that state or not. Example: [iGibson's object state implementations](https://github.com/StanfordVL/iGibson/tree/ig-develop/igibson/object_states). 
+
+*Note on binary predicates:* in BDDL, all binary predicates are kinematic (`ontop`, `nextto`, `touching`, etc.). Instantiating objects in the associated simulator states is more complex than instantiating objects in unary predicates' states due to potential for failure based on physical constraints of the scene and multiple possibilities for object pairing, especially when implementing scene-agnostic instantiation capable of generating infinite distinct episodes. Please look at the setter methods of kinematic states in iGibson 2.0 for a robust example capable of instantiating BEHAVIOR activities with many objects. 
+
 # Testing
 
 To test the predicate evaluator, run `pytest` in project root.
@@ -97,3 +113,7 @@ should evaluate true.
 # References 
 
 [1] https://www.researchgate.net/publication/2278933_PDDL_-_The_Planning_Domain_Definition_Language#:~:text=This%20planning%20domain%20consists%20of,domain%20automatically%20from%20human%20demonstrations.
+
+[2] TODO parsing code citation
+
+[3] iG2.0
