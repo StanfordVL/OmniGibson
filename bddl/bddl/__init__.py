@@ -7,7 +7,7 @@ _backend = None
 def set_backend(backend_name):
     global _backend
     if backend_name == "iGibson":
-        from igibson.task.bddl_backend import IGibsonBDDLBackend
+        from igibson.activity.bddl_backend import IGibsonBDDLBackend
         _backend = IGibsonBDDLBackend()
     else:
         raise ValueError("Invalid backend. Currently supported backends: %s." % ", ".join(_AVAILABLE_BACKENDS))
