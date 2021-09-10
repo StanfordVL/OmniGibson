@@ -68,7 +68,7 @@ The `:goal` section specifies the condition that the agent must satisfy to be su
 You will typically want to use BEHAVIOR activities with a simulator. To use a BEHAVIOR activity without a simulator, use the following code. 
 ```
 from bddl.activity_base import BEHAVIORActivityInstance 
-behavior_activity = "storing_the_groceries"     # the activity you want to try, full list in bddl/bddl/activity_conditions
+behavior_activity = "storing_the_groceries"     # the activity you want to try, full list in bddl/bddl/activity_definitions
 activity_definition = 0                         # the specific definition you want to use. As of BEHAVIOR100 2021, this should always be 0.
 
 behavior_activity_instance = BEHAVIORActivityInstance(behavior_activity=behavior_activity, activity_definition=activity_definition)
@@ -92,7 +92,7 @@ Using BEHAVIOR activities with a new simulator requires implementing its functio
 
 ### Implementation of BDDL predicates as simulated object states
 
-To simulate a BEHAVIOR activity, the simulator must be able to simulate every predicate involved in that activity. The full list of predicates is at [TODO add list of predicates to config]. For any one activity, the required predicates can be found by reading its BDDL problem (in activity_conditions/<activity_name>/.) 
+To simulate a BEHAVIOR activity, the simulator must be able to simulate every predicate involved in that activity. The full list of predicates is at [TODO add list of predicates to config]. For any one activity, the required predicates can be found by reading its BDDL problem (in activity_definitions/<activity_name>/.) 
 
 Implementing these requires 1) a simulator-specific child class of the `BDDLBackend` class ([link](https://github.com/StanfordVL/bddl/blob/654cfefb078dbdf264957a08a30571086a2aa726/bddl/backend_abc.py#L6-L9)) and 2) implementations of object states such as `cooked` and `ontop` that can both **instantiate** an object as e.g. `cooked` or `not cooked`, and **check** whether the predicate is true for a given object. 
 
@@ -112,8 +112,8 @@ should evaluate true.
 
 # References 
 
-[1] https://www.researchgate.net/publication/2278933_PDDL_-_The_Planning_Domain_Definition_Language#:~:text=This%20planning%20domain%20consists%20of,domain%20automatically%20from%20human%20demonstrations.
+[1] M. Ghallab, A. Howe, C. Knoblock, D. McDermott, A. Ram, M. Veloso, D. Weld, & D. Wilkins. PDDL - The Planning Domain Definition Language. Yale Center for Computational Vision and Control, TR-98-003/DCS TR-1165 (1998). [Online].
 
-[2] TODO parsing code citation
+[2] PDDL Parser (2020). Version 1.1. [Source code]. https://github.com/pucrs-automated-planning/pddl-parser. 
 
-[3] iG2.0
+[3] C. Li*, F. Xia*, R. Martín-Martín*, M. Lingelbach, S. Srivastava, B. Shen, K. Vainio, C. Gokmen, G. Dharan, T. Jain, A. Kurenkov, C. K. Liu, H. Gweon, J. Wu, L. Fei-Fei, S. Savarese. 

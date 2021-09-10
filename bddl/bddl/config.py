@@ -2,7 +2,7 @@ import os
 
 # PATHS
 ACTIVITY_CONFIGS_PATH = os.path.join(
-    os.path.dirname(__file__), 'activity_conditions')
+    os.path.dirname(__file__), 'activity_definitions')
 
 # BDDL
 SUPPORTED_BDDL_REQUIREMENTS = [':strips', ':negative-preconditions', ':typing', ':adl']

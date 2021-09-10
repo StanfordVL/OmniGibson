@@ -390,13 +390,13 @@ def add_bddl_whitespace(bddl_file="activity_conditions/parsing_tests/test_app_ou
         char_i += 1
 
     if save:
-        with open('activity_conditions/parsing_tests/test_app_output_whitespace.bddl', 'w') as f:
+        with open('activity_definitions/parsing_tests/test_app_output_whitespace.bddl', 'w') as f:
             f.write(refined_bddl)
 
     return refined_bddl
 
 
-def remove_bddl_whitespace(bddl_file='activity_conditions/parsing_tests/test_app_output_whitespace.bddl', string=None, save=True):
+def remove_bddl_whitespace(bddl_file='activity_definitions/parsing_tests/test_app_output_whitespace.bddl', string=None, save=True):
     if bddl_file is not None:
         with open(bddl_file, 'r') as f:
             raw_bddl = f.read()
@@ -414,7 +414,7 @@ def remove_bddl_whitespace(bddl_file='activity_conditions/parsing_tests/test_app
     bddl = ''.join(bddl)[1:]
 
     if save:
-        with open('activity_conditions/parsing_tests/test_app_output_nowhitespace.bddl', 'w') as f:
+        with open('activity_definitions/parsing_tests/test_app_output_nowhitespace.bddl', 'w') as f:
             f.write(bddl)
 
     return bddl
