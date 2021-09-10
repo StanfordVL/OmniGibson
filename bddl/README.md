@@ -112,8 +112,8 @@ should evaluate true.
 
 # References 
 
-[1] https://www.researchgate.net/publication/2278933_PDDL_-_The_Planning_Domain_Definition_Language#:~:text=This%20planning%20domain%20consists%20of,domain%20automatically%20from%20human%20demonstrations.
+[1] M. Ghallab, A. Howe, C. Knoblock, D. McDermott, A. Ram, M. Veloso, D. Weld, & D. Wilkins. PDDL - The Planning Domain Definition Language. Yale Center for Computational Vision and Control, TR-98-003/DCS TR-1165 (1998). [Online].
 
-[2] TODO parsing code citation
+[2] PDDL Parser (2020). Version 1.1. [Source code]. https://github.com/pucrs-automated-planning/pddl-parser. 
 
-[3] iG2.0
+[3] C. Li*, F. Xia*, R. Martín-Martín*, M. Lingelbach, S. Srivastava, B. Shen, K. Vainio, C. Gokmen, G. Dharan, T. Jain, A. Kurenkov, C. K. Liu, H. Gweon, J. Wu, L. Fei-Fei, S. Savarese. 
