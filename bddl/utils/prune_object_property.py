@@ -105,6 +105,7 @@ def prune_heat_source():
         'microwave',
         'stove',
         'oven',
+        'burner',
     ]
     return allowed_categories
 
