@@ -997,179 +997,6 @@
                           "abilities": {}
                         },
                         {
-                          "name": "equipment.n.01",
-                          "children": [
-                            {
-                              "name": "apparatus.n.01",
-                              "children": [
-                                {
-                                  "name": "burner.n.01",
-                                  "igibson_categories": [
-                                    "burner"
-                                  ],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "stainable": {}
-                                  }
-                                },
-                                {
-                                  "name": "duplicator.n.01",
-                                  "children": [
-                                    {
-                                      "name": "facsimile.n.02",
-                                      "igibson_categories": [
-                                        "facsimile"
-                                      ],
-                                      "abilities": {
-                                        "dustyable": {},
-                                        "stainable": {},
-                                        "toggleable": {}
-                                      }
-                                    }
-                                  ],
-                                  "igibson_categories": [],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "stainable": {},
-                                    "toggleable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "dustyable": {},
-                                "stainable": {}
-                              }
-                            },
-                            {
-                              "name": "game_equipment.n.01",
-                              "children": [
-                                {
-                                  "name": "pool_table.n.01",
-                                  "igibson_categories": [
-                                    "pool_table"
-                                  ],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "stainable": {}
-                                  }
-                                },
-                                {
-                                  "name": "ball.n.01",
-                                  "igibson_categories": [
-                                    "ball"
-                                  ],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "stainable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "dustyable": {},
-                                "stainable": {}
-                              }
-                            },
-                            {
-                              "name": "electronic_equipment.n.01",
-                              "children": [
-                                {
-                                  "name": "set.n.13",
-                                  "children": [
-                                    {
-                                      "name": "receiver.n.01",
-                                      "children": [
-                                        {
-                                          "name": "television_receiver.n.01",
-                                          "igibson_categories": [
-                                            "standing_tv",
-                                            "wall_mounted_tv"
-                                          ],
-                                          "abilities": {
-                                            "breakable": {},
-                                            "dustyable": {},
-                                            "stainable": {},
-                                            "toggleable": {}
-                                          }
-                                        }
-                                      ],
-                                      "igibson_categories": [],
-                                      "abilities": {
-                                        "breakable": {},
-                                        "dustyable": {},
-                                        "stainable": {},
-                                        "toggleable": {}
-                                      }
-                                    }
-                                  ],
-                                  "igibson_categories": [],
-                                  "abilities": {
-                                    "breakable": {},
-                                    "dustyable": {},
-                                    "stainable": {},
-                                    "toggleable": {}
-                                  }
-                                },
-                                {
-                                  "name": "modem.n.01",
-                                  "igibson_categories": [
-                                    "modem"
-                                  ],
-                                  "abilities": {
-                                    "breakable": {},
-                                    "dustyable": {},
-                                    "toggleable": {}
-                                  }
-                                },
-                                {
-                                  "name": "peripheral.n.01",
-                                  "children": [
-                                    {
-                                      "name": "data_input_device.n.01",
-                                      "children": [
-                                        {
-                                          "name": "scanner.n.02",
-                                          "igibson_categories": [
-                                            "scanner"
-                                          ],
-                                          "abilities": {
-                                            "breakable": {},
-                                            "dustyable": {},
-                                            "toggleable": {}
-                                          }
-                                        }
-                                      ],
-                                      "igibson_categories": [],
-                                      "abilities": {
-                                        "breakable": {},
-                                        "dustyable": {},
-                                        "toggleable": {}
-                                      }
-                                    }
-                                  ],
-                                  "igibson_categories": [],
-                                  "abilities": {
-                                    "breakable": {},
-                                    "dustyable": {},
-                                    "toggleable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "breakable": {},
-                                "dustyable": {},
-                                "toggleable": {}
-                              }
-                            }
-                          ],
-                          "igibson_categories": [],
-                          "abilities": {
-                            "dustyable": {}
-                          }
-                        },
-                        {
                           "name": "device.n.01",
                           "children": [
                             {
@@ -2279,6 +2106,170 @@
                           ],
                           "igibson_categories": [],
                           "abilities": {}
+                        },
+                        {
+                          "name": "equipment.n.01",
+                          "children": [
+                            {
+                              "name": "game_equipment.n.01",
+                              "children": [
+                                {
+                                  "name": "pool_table.n.01",
+                                  "igibson_categories": [
+                                    "pool_table"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "stainable": {}
+                                  }
+                                },
+                                {
+                                  "name": "ball.n.01",
+                                  "igibson_categories": [
+                                    "ball"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "stainable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "dustyable": {},
+                                "stainable": {}
+                              }
+                            },
+                            {
+                              "name": "electronic_equipment.n.01",
+                              "children": [
+                                {
+                                  "name": "set.n.13",
+                                  "children": [
+                                    {
+                                      "name": "receiver.n.01",
+                                      "children": [
+                                        {
+                                          "name": "television_receiver.n.01",
+                                          "igibson_categories": [
+                                            "standing_tv",
+                                            "wall_mounted_tv"
+                                          ],
+                                          "abilities": {
+                                            "breakable": {},
+                                            "dustyable": {},
+                                            "stainable": {},
+                                            "toggleable": {}
+                                          }
+                                        }
+                                      ],
+                                      "igibson_categories": [],
+                                      "abilities": {
+                                        "breakable": {},
+                                        "dustyable": {},
+                                        "stainable": {},
+                                        "toggleable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "abilities": {
+                                    "breakable": {},
+                                    "dustyable": {},
+                                    "stainable": {},
+                                    "toggleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "modem.n.01",
+                                  "igibson_categories": [
+                                    "modem"
+                                  ],
+                                  "abilities": {
+                                    "breakable": {},
+                                    "dustyable": {},
+                                    "toggleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "peripheral.n.01",
+                                  "children": [
+                                    {
+                                      "name": "data_input_device.n.01",
+                                      "children": [
+                                        {
+                                          "name": "scanner.n.02",
+                                          "igibson_categories": [
+                                            "scanner"
+                                          ],
+                                          "abilities": {
+                                            "breakable": {},
+                                            "dustyable": {},
+                                            "toggleable": {}
+                                          }
+                                        }
+                                      ],
+                                      "igibson_categories": [],
+                                      "abilities": {
+                                        "breakable": {},
+                                        "dustyable": {},
+                                        "toggleable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "abilities": {
+                                    "breakable": {},
+                                    "dustyable": {},
+                                    "toggleable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "breakable": {},
+                                "dustyable": {},
+                                "toggleable": {}
+                              }
+                            },
+                            {
+                              "name": "apparatus.n.01",
+                              "children": [
+                                {
+                                  "name": "duplicator.n.01",
+                                  "children": [
+                                    {
+                                      "name": "facsimile.n.02",
+                                      "igibson_categories": [
+                                        "facsimile"
+                                      ],
+                                      "abilities": {
+                                        "dustyable": {},
+                                        "stainable": {},
+                                        "toggleable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "stainable": {},
+                                    "toggleable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "dustyable": {},
+                                "stainable": {},
+                                "toggleable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "abilities": {
+                            "dustyable": {}
+                          }
                         },
                         {
                           "name": "implement.n.01",
@@ -6327,6 +6318,107 @@
               "name": "part.n.02",
               "children": [
                 {
+                  "name": "component.n.03",
+                  "children": [
+                    {
+                      "name": "heating_element.n.01",
+                      "children": [
+                        {
+                          "name": "burner.n.02",
+                          "igibson_categories": [
+                            "burner"
+                          ],
+                          "abilities": {
+                            "dustyable": {},
+                            "heatSource": {},
+                            "toggleable": {}
+                          }
+                        }
+                      ],
+                      "igibson_categories": [],
+                      "abilities": {
+                        "dustyable": {},
+                        "heatSource": {},
+                        "toggleable": {}
+                      }
+                    },
+                    {
+                      "name": "module.n.04",
+                      "children": [
+                        {
+                          "name": "cartridge.n.03",
+                          "children": [
+                            {
+                              "name": "ink_cartridge.n.01",
+                              "igibson_categories": [
+                                "ink_cartridge"
+                              ],
+                              "abilities": {
+                                "dustyable": {},
+                                "stainable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "abilities": {
+                            "dustyable": {},
+                            "stainable": {}
+                          }
+                        }
+                      ],
+                      "igibson_categories": [],
+                      "abilities": {
+                        "dustyable": {},
+                        "stainable": {}
+                      }
+                    },
+                    {
+                      "name": "accessory.n.02",
+                      "children": [
+                        {
+                          "name": "fitting.n.02",
+                          "children": [
+                            {
+                              "name": "receptacle.n.03",
+                              "children": [
+                                {
+                                  "name": "wall_socket.n.01",
+                                  "igibson_categories": [
+                                    "wall_socket"
+                                  ],
+                                  "abilities": {
+                                    "dustyable": {},
+                                    "toggleable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "dustyable": {},
+                                "toggleable": {}
+                              }
+                            }
+                          ],
+                          "igibson_categories": [],
+                          "abilities": {
+                            "dustyable": {},
+                            "toggleable": {}
+                          }
+                        }
+                      ],
+                      "igibson_categories": [],
+                      "abilities": {
+                        "dustyable": {},
+                        "toggleable": {}
+                      }
+                    }
+                  ],
+                  "igibson_categories": [],
+                  "abilities": {
+                    "dustyable": {}
+                  }
+                },
+                {
                   "name": "piece.n.01",
                   "children": [
                     {
@@ -6417,85 +6509,6 @@
                     "cleaningTool": {},
                     "soakable": {},
                     "stainable": {}
-                  }
-                },
-                {
-                  "name": "component.n.03",
-                  "children": [
-                    {
-                      "name": "module.n.04",
-                      "children": [
-                        {
-                          "name": "cartridge.n.03",
-                          "children": [
-                            {
-                              "name": "ink_cartridge.n.01",
-                              "igibson_categories": [
-                                "ink_cartridge"
-                              ],
-                              "abilities": {
-                                "dustyable": {},
-                                "stainable": {}
-                              }
-                            }
-                          ],
-                          "igibson_categories": [],
-                          "abilities": {
-                            "dustyable": {},
-                            "stainable": {}
-                          }
-                        }
-                      ],
-                      "igibson_categories": [],
-                      "abilities": {
-                        "dustyable": {},
-                        "stainable": {}
-                      }
-                    },
-                    {
-                      "name": "accessory.n.02",
-                      "children": [
-                        {
-                          "name": "fitting.n.02",
-                          "children": [
-                            {
-                              "name": "receptacle.n.03",
-                              "children": [
-                                {
-                                  "name": "wall_socket.n.01",
-                                  "igibson_categories": [
-                                    "wall_socket"
-                                  ],
-                                  "abilities": {
-                                    "dustyable": {},
-                                    "toggleable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "dustyable": {},
-                                "toggleable": {}
-                              }
-                            }
-                          ],
-                          "igibson_categories": [],
-                          "abilities": {
-                            "dustyable": {},
-                            "toggleable": {}
-                          }
-                        }
-                      ],
-                      "igibson_categories": [],
-                      "abilities": {
-                        "dustyable": {},
-                        "toggleable": {}
-                      }
-                    }
-                  ],
-                  "igibson_categories": [],
-                  "abilities": {
-                    "dustyable": {}
                   }
                 }
               ],
