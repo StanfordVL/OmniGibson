@@ -116,4 +116,4 @@ should evaluate true.
 
 [2] PDDL Parser (2020). Version 1.1. [Source code]. https://github.com/pucrs-automated-planning/pddl-parser. 
 
-[3] C. Li*, F. Xia*, R. Martín-Martín*, M. Lingelbach, S. Srivastava, B. Shen, K. Vainio, C. Gokmen, G. Dharan, T. Jain, A. Kurenkov, C. K. Liu, H. Gweon, J. Wu, L. Fei-Fei, S. Savarese. 
+[3] C. Li*, F. Xia*, R. Martín-Martín*, M. Lingelbach, S. Srivastava, B. Shen, K. Vainio, C. Gokmen, G. Dharan, T. Jain, A. Kurenkov, C. K. Liu, H. Gweon, J. Wu, L. Fei-Fei, S. Savarese. iGibson 2.0: Object-Centric Simulation for Robot Learning of Everyday Household Tasks. CoRL 2021. 
