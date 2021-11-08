@@ -1,18 +1,16 @@
-from activity import get_conditions
+from activity import Conditions, ObjectTaxonomy
 
 behavior_activity = "packing_lunches"
 activity_definition = 0
 simulator_name = "igibson"
 
-init, goal, ground = get_conditions(behavior_activity, 
-                                    activity_definition,
-                                    simulator_name)
+conds = Conditions(behavior_activity, activity_definition, simulator_name)
 
 print("####### Initial #######")
-print(init)
+print(conds.initial_conditions)
 print()
 print("####### Goal #######")
-print(goal)
+print(conds.goal_conditions)
 print()
 print("####### Ground #######")
-print(ground)
+print(conds.ground_goal_state_options)

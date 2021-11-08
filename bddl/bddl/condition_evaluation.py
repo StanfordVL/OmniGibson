@@ -12,12 +12,12 @@ from bddl.utils import truncated_product, truncated_permutations, UnsupportedPre
 
 
 class Conjunction(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
 
         new_scope = copy.copy(scope)
         child_predicates = [get_predicate_for_token(subpredicate[0])(
-            new_scope, activity_instance, subpredicate[1:], object_map) for subpredicate in body]
+            new_scope, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
 
         self.get_ground_options()
@@ -39,13 +39,13 @@ class Conjunction(Expression):
 
 
 class Disjunction(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
 
         # body = [[predicate1], [predicate2], ..., [predicateN]]
         new_scope = copy.copy(scope)
         child_predicates = [get_predicate_for_token(subpredicate[0])(
-            new_scope, activity_instance, subpredicate[1:], object_map) for subpredicate in body]
+            new_scope, subpredicate[1:], object_map) for subpredicate in body]
         self.children.extend(child_predicates)
 
         self.get_ground_options()
@@ -66,8 +66,8 @@ class Disjunction(Expression):
 
 # QUANTIFIERS
 class Universal(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
         iterable, subpredicate = body
         param_label, __, category = iterable
         param_label = param_label.strip('?')
@@ -77,7 +77,7 @@ class Universal(Expression):
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj_name
                 self.children.append(get_predicate_for_token(subpredicate[0])(
-                    new_scope, activity_instance, subpredicate[1:], object_map))
+                    new_scope, subpredicate[1:], object_map))
 
         self.get_ground_options()
 
@@ -100,8 +100,8 @@ class Universal(Expression):
 
 
 class Existential(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
         iterable, subpredicate = body
         param_label, __, category = iterable
         param_label = param_label.strip('?')
@@ -112,7 +112,7 @@ class Existential(Expression):
                 new_scope[param_label] = obj_name
                 # body = [["param_label", "-", "category"], [predicate]]
                 self.children.append(get_predicate_for_token(subpredicate[0])(
-                    new_scope, activity_instance, subpredicate[1:], object_map))
+                    new_scope, subpredicate[1:], object_map))
 
         self.get_ground_options()
 
@@ -131,8 +131,8 @@ class Existential(Expression):
 
 
 class NQuantifier(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
 
         N, iterable, subpredicate = body
         self.N = int(N[0])
@@ -144,7 +144,7 @@ class NQuantifier(Expression):
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj_name
                 self.children.append(get_predicate_for_token(subpredicate[0])(
-                    new_scope, activity_instance, subpredicate[1:], object_map))
+                    new_scope, subpredicate[1:], object_map))
 
         self.get_ground_options()
 
@@ -170,8 +170,8 @@ class NQuantifier(Expression):
 
 
 class ForPairs(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
 
         iterable1, iterable2, subpredicate = body
         param_label1, __, category1 = iterable1
@@ -187,7 +187,7 @@ class ForPairs(Expression):
                         new_scope[param_label1] = obj_name_1
                         new_scope[param_label2] = obj_name_2
                         sub.append(get_predicate_for_token(subpredicate[0])(
-                            new_scope, activity_instance, subpredicate[1:], object_map))
+                            new_scope, subpredicate[1:], object_map))
                 self.children.append(sub)
 
         self.get_ground_options()
@@ -223,8 +223,8 @@ class ForPairs(Expression):
 
 
 class ForNPairs(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
 
         N, iterable1, iterable2, subpredicate = body
         self.N = int(N[0])
@@ -241,7 +241,7 @@ class ForNPairs(Expression):
                         new_scope[param_label1] = obj_name_1
                         new_scope[param_label2] = obj_name_2
                         sub.append(get_predicate_for_token(subpredicate[0])(
-                            new_scope, activity_instance, subpredicate[1:], object_map))
+                            new_scope, subpredicate[1:], object_map))
                 self.children.append(sub)
 
         self.get_ground_options()
@@ -274,13 +274,13 @@ class ForNPairs(Expression):
 
 # NEGATION
 class Negation(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
 
         # body = [[predicate]]
         subpredicate = body[0]
         self.children.append(get_predicate_for_token(subpredicate[0])(
-            scope, activity_instance, subpredicate[1:], object_map))
+            scope, subpredicate[1:], object_map))
         assert len(self.children) == 1, 'More than one child.'
 
         self.get_ground_options()
@@ -311,15 +311,15 @@ class Negation(Expression):
 
 # IMPLICATION
 class Implication(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
 
         # body = [[antecedent], [consequent]]
         antecedent, consequent = body
         self.children.append(get_predicate_for_token(antecedent[0])(
-            scope, activity_instance, antecedent[1:], object_map))
+            scope, antecedent[1:], object_map))
         self.children.append(get_predicate_for_token(consequent[0])(
-            scope, activity_instance, consequent[1:], object_map))
+            scope, consequent[1:], object_map))
 
         self.get_ground_options()
 
@@ -354,12 +354,12 @@ class Implication(Expression):
 # HEAD
 
 class HEAD(Expression):
-    def __init__(self, scope, activity_instance, body, object_map):
-        super().__init__(scope, activity_instance, body, object_map)
+    def __init__(self, scope, body, object_map):
+        super().__init__(scope, body, object_map)
 
         subpredicate = body
         self.children.append(get_predicate_for_token(subpredicate[0])(
-            scope, activity_instance, subpredicate[1:], object_map))
+            scope, subpredicate[1:], object_map))
 
         self.terms = [term.lstrip('?')
                       for term in list(flatten_list(self.body))]
@@ -405,13 +405,16 @@ def create_scope(object_terms):
     return scope
 
 
-def compile_state(parsed_state, activity_instance, scope=None, object_map=None):
+def compile_state(parsed_state, scope=None, object_map=None):
     compiled_state = []
     for parsed_condition in parsed_state:
         scope = scope if scope is not None else {}
         compiled_state.append(
-            HEAD(scope, activity_instance, parsed_condition, object_map))
+            HEAD(scope, parsed_condition, object_map))
     return compiled_state
+import inspect 
+print("Indef:", inspect.getfullargspec(compile_state))
+
 
 
 def evaluate_state(compiled_state):
@@ -424,7 +427,7 @@ def evaluate_state(compiled_state):
     return not bool(results['unsatisfied']), results
 
 
-def get_ground_state_options(compiled_state, activity_instance, scope=None, object_map=None):
+def get_ground_state_options(compiled_state, scope=None, object_map=None):
     all_options = list(itertools.product(*[compiled_condition.flattened_condition_options
                                            for compiled_condition in compiled_state]))
     all_unpacked_options = [list(itertools.chain(*option))
@@ -443,7 +446,7 @@ def get_ground_state_options(compiled_state, activity_instance, scope=None, obje
         consistent_unpacked_options.append(option)
 
     consistent_unpacked_options = [
-        compile_state(option, activity_instance,
+        compile_state(option,
                       scope=scope, object_map=object_map)
         for option in sorted(consistent_unpacked_options, key=len)
     ]
