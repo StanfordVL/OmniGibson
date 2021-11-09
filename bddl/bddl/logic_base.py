@@ -5,12 +5,13 @@ from bddl.utils import UncontrolledCategoryError
 
 
 class Expression(with_metaclass(ABCMeta)):
-    def __init__(self, scope, body, object_map):
+    def __init__(self, scope, backend, body, object_map):
         self.children = []
         self.child_values = []
         self.kwargs = {}
         self.body = body
         self.scope = scope
+        self.backend = backend
         self.object_map = object_map
 
     @abstractmethod
@@ -19,15 +20,15 @@ class Expression(with_metaclass(ABCMeta)):
 
 
 class AtomicFormula(Expression):
-    def __init__(self, scope, body, object_map):
-        super().__init__(scope, body, object_map)
+    def __init__(self, scope, backend, body, object_map):
+        super().__init__(scope, backend, body, object_map)
 
 
 class BinaryAtomicFormula(AtomicFormula):
     STATE_NAME = None
 
-    def __init__(self, scope, body, object_map):
-        super().__init__(scope, body, object_map)
+    def __init__(self, scope, backend, body, object_map):
+        super().__init__(scope, backend, body, object_map)
         assert len(body) == 2, 'Param list should have 2 args'
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
@@ -74,8 +75,8 @@ class BinaryAtomicFormula(AtomicFormula):
 class UnaryAtomicFormula(AtomicFormula):
     STATE_NAME = None
 
-    def __init__(self, scope, body, object_map):
-        super().__init__(scope, body, object_map)
+    def __init__(self, scope, backend, body, object_map):
+        super().__init__(scope, backend, body, object_map)
         assert len(body) == 1, 'Param list should have 1 arg'
         self.input = body[0].strip('?')
         self.scope = scope

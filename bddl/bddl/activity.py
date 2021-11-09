@@ -21,17 +21,12 @@ class Conditions(object):
         self.activity_definition = activity_definition 
         domain_name, *__ = parse_domain(simulator_name)
         __, self.parsed_objects, self.parsed_initial_conditions, self.parsed_goal_conditions = parse_problem(
-            self.behavior_activity,
-            self.activity_definition, 
-            domain_name
+                        self.behavior_activity,
+                        self.activity_definition, 
+                        domain_name
         )
-        bddl.set_backend("iGibson")
 
-######## API ########
-
-def set_backend(backend):
-    bddl.set_backend("iGibson")
-    
+######## API ########    
 
 def get_object_scope(conds):
     """Create unpopulated object scope to populate for generating goal and
@@ -46,7 +41,7 @@ def get_object_scope(conds):
     """
     return create_scope(conds.parsed_objects)
 
-def get_initial_conditions(conds):
+def get_initial_conditions(conds, backend):
     """Create compiled initial conditions that can be checked and sampled
 
     Args:
@@ -60,12 +55,13 @@ def get_initial_conditions(conds):
     if bool(conds.parsed_initial_conditions[0]):
         initial_conditions = compile_state(
             [cond for cond in conds.parsed_initial_conditions if cond[0] not in ["inroom"]],
+            backend,
             scope=conds.object_scope,
             object_map=conds.parsed_objects
         )
         return initial_conditions
 
-def get_goal_conditions(conds, populated_object_scope):
+def get_goal_conditions(conds, populated_object_scope, backend):
     """Create compiled goal conditions with a populated object scope for checking
 
     Args:
@@ -81,12 +77,13 @@ def get_goal_conditions(conds, populated_object_scope):
     if bool(conds.parsed_goal_conditions[0]):
         goal_conditions = compile_state(
             conds.parsed_goal_conditions,
+            backend,
             scope=populated_object_scope,
             object_map=conds.parsed_objects
         )
         return goal_conditions 
 
-def get_ground_goal_state_options(conds, populated_object_scope):
+def get_ground_goal_state_options(conds, populated_object_scope, backend):
     """Create compiled ground solutions to goal state with a populated object scope
         for checking progress on specific solutions 
 
@@ -104,6 +101,7 @@ def get_ground_goal_state_options(conds, populated_object_scope):
     """
     ground_goal_state_options = get_ground_state_options(
         conds.goal_conditions,
+        backend,
         scope=populated_object_scope,
         object_map=conds.parsed_objects
     )
