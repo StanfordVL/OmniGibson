@@ -61,7 +61,7 @@ def get_initial_conditions(conds, backend):
         )
         return initial_conditions
 
-def get_goal_conditions(conds, populated_object_scope, backend):
+def get_goal_conditions(conds, backend, populated_object_scope):
     """Create compiled goal conditions with a populated object scope for checking
 
     Args:
@@ -83,7 +83,7 @@ def get_goal_conditions(conds, populated_object_scope, backend):
         )
         return goal_conditions 
 
-def get_ground_goal_state_options(conds, populated_object_scope, backend):
+def get_ground_goal_state_options(conds, backend, populated_object_scope):
     """Create compiled ground solutions to goal state with a populated object scope
         for checking progress on specific solutions 
 
