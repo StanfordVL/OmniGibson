@@ -1,5 +1,5 @@
 import bddl
-from bddl.activity import Conditions, ObjectTaxonomy
+from bddl.activity import *
 
 
 bddl.set_backend("iGibson")
@@ -8,11 +8,11 @@ activity_definition = 0
 simulator_name = "igibson"
 
 conds = Conditions(behavior_activity, activity_definition, simulator_name)
-scope = conds.get_object_scope()
+scope = get_object_scope(conds)
 populated_scope = None      # TODO populate scope in iGibson 
-init = conds.get_initial_conditions()
-goal = conds.get_goal_conditions(populated_scope)
-ground = conds.get_ground_goal_state_options(populated_scope)
+init = get_initial_conditions(conds)
+goal = get_goal_conditions(conds, populated_scope)
+ground = get_ground_goal_state_options(conds, populated_scope)
 
 
 print("####### Initial #######")
@@ -23,3 +23,6 @@ print(goal)
 print()
 print("####### Ground #######")
 print(ground)
+
+for __ in range(100):
+    print(evaluate_goal_conditions(goal))
