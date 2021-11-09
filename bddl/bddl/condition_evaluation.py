@@ -16,8 +16,8 @@ class Conjunction(Expression):
         super().__init__(scope, backend, body, object_map)
 
         new_scope = copy.copy(scope)
-        child_predicates = [get_predicate_for_token(subpredicate[0], backend)(
-            new_scope, backend, subpredicate[1:], object_map) for subpredicate in body]
+        child_predicates = [get_predicate_for_token(subexpression[0], backend)(
+            new_scope, backend, subexpression[1:], object_map) for subexpression in body]
         self.children.extend(child_predicates)
 
         self.get_ground_options()
@@ -44,8 +44,8 @@ class Disjunction(Expression):
 
         # body = [[predicate1], [predicate2], ..., [predicateN]]
         new_scope = copy.copy(scope)
-        child_predicates = [get_predicate_for_token(subpredicate[0], backend)(
-            new_scope, subpredicate[1:], object_map) for subpredicate in body]
+        child_predicates = [get_predicate_for_token(subexpression[0], backend)(
+            new_scope, subexpression[1:], object_map) for subexpression in body]
         self.children.extend(child_predicates)
 
         self.get_ground_options()
@@ -68,7 +68,7 @@ class Disjunction(Expression):
 class Universal(Expression):
     def __init__(self, scope, backend, body, object_map):
         super().__init__(scope, backend, body, object_map)
-        iterable, subpredicate = body
+        iterable, subexpression = body
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
@@ -76,8 +76,8 @@ class Universal(Expression):
             if obj_name in object_map[category]:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj_name
-                self.children.append(get_predicate_for_token(subpredicate[0], backend)(
-                    new_scope, subpredicate[1:], object_map))
+                self.children.append(get_predicate_for_token(subexpression[0], backend)(
+                    new_scope, subexpression[1:], object_map))
 
         self.get_ground_options()
 
@@ -102,7 +102,7 @@ class Universal(Expression):
 class Existential(Expression):
     def __init__(self, scope, backend, body, object_map):
         super().__init__(scope, backend, body, object_map)
-        iterable, subpredicate = body
+        iterable, subexpression = body
         param_label, __, category = iterable
         param_label = param_label.strip('?')
         assert __ == '-', 'Middle was not a hyphen'
@@ -111,8 +111,8 @@ class Existential(Expression):
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj_name
                 # body = [["param_label", "-", "category"], [predicate]]
-                self.children.append(get_predicate_for_token(subpredicate[0], backend)(
-                    new_scope, subpredicate[1:], object_map))
+                self.children.append(get_predicate_for_token(subexpression[0], backend)(
+                    new_scope, subexpression[1:], object_map))
 
         self.get_ground_options()
 
@@ -134,7 +134,7 @@ class NQuantifier(Expression):
     def __init__(self, scope, backend, body, object_map):
         super().__init__(scope, backend, body, object_map)
 
-        N, iterable, subpredicate = body
+        N, iterable, subexpression = body
         self.N = int(N[0])
         param_label, __, category = iterable
         param_label = param_label.strip('?')
@@ -143,8 +143,8 @@ class NQuantifier(Expression):
             if obj_name in object_map[category]:
                 new_scope = copy.copy(scope)
                 new_scope[param_label] = obj_name
-                self.children.append(get_predicate_for_token(subpredicate[0], backend)(
-                    new_scope, subpredicate[1:], object_map))
+                self.children.append(get_predicate_for_token(subexpression[0], backend)(
+                    new_scope, subexpression[1:], object_map))
 
         self.get_ground_options()
 
@@ -173,7 +173,7 @@ class ForPairs(Expression):
     def __init__(self, scope, backend, body, object_map):
         super().__init__(scope, backend, body, object_map)
 
-        iterable1, iterable2, subpredicate = body
+        iterable1, iterable2, subexpression = body
         param_label1, __, category1 = iterable1
         param_label2, __, category2 = iterable2
         param_label1 = param_label1.strip('?')
@@ -186,8 +186,8 @@ class ForPairs(Expression):
                         new_scope = copy.copy(scope)
                         new_scope[param_label1] = obj_name_1
                         new_scope[param_label2] = obj_name_2
-                        sub.append(get_predicate_for_token(subpredicate[0], backend)(
-                            new_scope, subpredicate[1:], object_map))
+                        sub.append(get_predicate_for_token(subexpression[0], backend)(
+                            new_scope, subexpression[1:], object_map))
                 self.children.append(sub)
 
         self.get_ground_options()
@@ -226,7 +226,7 @@ class ForNPairs(Expression):
     def __init__(self, scope, backend, body, object_map):
         super().__init__(scope, backend, body, object_map)
 
-        N, iterable1, iterable2, subpredicate = body
+        N, iterable1, iterable2, subexpression = body
         self.N = int(N[0])
         param_label1, __, category1 = iterable1
         param_label2, __, category2 = iterable2
@@ -240,8 +240,8 @@ class ForNPairs(Expression):
                         new_scope = copy.copy(scope)
                         new_scope[param_label1] = obj_name_1
                         new_scope[param_label2] = obj_name_2
-                        sub.append(get_predicate_for_token(subpredicate[0], backend)(
-                            new_scope, subpredicate[1:], object_map))
+                        sub.append(get_predicate_for_token(subexpression[0], backend)(
+                            new_scope, subexpression[1:], object_map))
                 self.children.append(sub)
 
         self.get_ground_options()
@@ -278,9 +278,9 @@ class Negation(Expression):
         super().__init__(scope, backend, body, object_map)
 
         # body = [[predicate]]
-        subpredicate = body[0]
-        self.children.append(get_predicate_for_token(subpredicate[0], backend)(
-            scope, subpredicate[1:], object_map))
+        subexpression = body[0]
+        self.children.append(get_predicate_for_token(subexpression[0], backend)(
+            scope, subexpression[1:], object_map))
         assert len(self.children) == 1, 'More than one child.'
 
         self.get_ground_options()
@@ -357,9 +357,9 @@ class HEAD(Expression):
     def __init__(self, scope, backend, body, object_map):
         super().__init__(scope, backend, body, object_map)
 
-        subpredicate = body
-        self.children.append(get_predicate_for_token(subpredicate[0], backend)(
-            scope, backend, subpredicate[1:], object_map))
+        subexpression = body
+        self.children.append(get_predicate_for_token(subexpression[0], backend)(
+            scope, backend, subexpression[1:], object_map))
 
         self.terms = [term.lstrip('?')
                       for term in list(flatten_list(self.body))]
