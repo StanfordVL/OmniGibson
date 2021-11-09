@@ -23,6 +23,8 @@ print(goal)
 print()
 print("####### Ground #######")
 print(ground)
+print()
 
+print("####### Goal evaluation #######")
 for __ in range(100):
     print(evaluate_goal_conditions(goal))
