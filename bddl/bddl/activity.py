@@ -41,7 +41,7 @@ def get_object_scope(conds):
     """
     return create_scope(conds.parsed_objects)
 
-def get_initial_conditions(conds, backend):
+def get_initial_conditions(conds, backend, scope):
     """Create compiled initial conditions that can be checked and sampled
 
     Args:
@@ -56,12 +56,12 @@ def get_initial_conditions(conds, backend):
         initial_conditions = compile_state(
             [cond for cond in conds.parsed_initial_conditions if cond[0] not in ["inroom"]],
             backend,
-            scope=conds.object_scope,
+            scope=scope,
             object_map=conds.parsed_objects
         )
         return initial_conditions
 
-def get_goal_conditions(conds, backend, populated_object_scope):
+def get_goal_conditions(conds, backend, scope):
     """Create compiled goal conditions with a populated object scope for checking
 
     Args:
@@ -78,12 +78,12 @@ def get_goal_conditions(conds, backend, populated_object_scope):
         goal_conditions = compile_state(
             conds.parsed_goal_conditions,
             backend,
-            scope=populated_object_scope,
+            scope=scope,
             object_map=conds.parsed_objects
         )
         return goal_conditions 
 
-def get_ground_goal_state_options(conds, backend, populated_object_scope):
+def get_ground_goal_state_options(conds, backend, scope):
     """Create compiled ground solutions to goal state with a populated object scope
         for checking progress on specific solutions 
 
@@ -102,7 +102,7 @@ def get_ground_goal_state_options(conds, backend, populated_object_scope):
     ground_goal_state_options = get_ground_state_options(
         conds.goal_conditions,
         backend,
-        scope=populated_object_scope,
+        scope=scope,
         object_map=conds.parsed_objects
     )
     assert len(ground_goal_state_options) > 0
