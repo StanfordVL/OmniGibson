@@ -1,5 +1,5 @@
 import bddl 
-from bddl.parsing import parse_domain, parse_problem, gen_natural_language_conditions
+from bddl.parsing import gen_natural_language_condition, parse_domain, parse_problem, gen_natural_language_conditions
 from bddl.condition_evaluation import create_scope, compile_state, evaluate_state, get_ground_state_options
 from bddl.object_taxonomy import ObjectTaxonomy
 
@@ -122,8 +122,24 @@ def evaluate_goal_conditions(goal_conditions):
     return evaluate_state(goal_conditions)
 
 
-class Instructions(object):
-    def __init__(self, behavior_activity, activity_definition, simulator_name):
-        self.conditions = Conditions(behavior_activity, activity_definition, simulator_name)
-    
-    # TODO implement class to serve VR instructions
+def get_natural_initial_conditions(conds):
+    """Return natural language translation of init of given conditions 
+
+    Args:
+        conditions (list): conditions being translated 
+
+    Returns:
+        list<str>: natural language translations, one per condition in conditions
+    """
+    return gen_natural_language_conditions(conds.parsed_initial_conditions)
+
+def get_natural_goal_conditions(conds):
+    """Return natural language translation of goal of given conditions 
+
+    Args:
+        conditions (list): conditions being translated 
+
+    Returns:
+        list<str>: natural language translations, one per condition in conditions
+    """
+    return gen_natural_language_conditions(conds.parsed_goal_conditions)

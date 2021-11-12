@@ -14,6 +14,9 @@ goal = get_goal_conditions(conds, backend, scope)
 populated_scope = None              # TODO populate scope in iGibson, e.g. through sampling 
 goal = get_goal_conditions(conds, backend, populated_scope)
 ground = get_ground_goal_state_options(conds, backend, populated_scope)
+natural_init = get_natural_initial_conditions(conds)
+natural_init = get_natural_goal_conditions(conds)
+
 
 print("####### Initial #######")
 print(init)
@@ -24,6 +27,9 @@ print()
 print("####### Ground #######")
 print(ground)
 print()
+print("####### Natural language conditions #######")
+print(natural_init)
+print(natural_goal)
 
 print("####### Goal evaluation #######")
 for __ in range(100):
