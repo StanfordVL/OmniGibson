@@ -15,7 +15,7 @@ populated_scope = None              # TODO populate scope in iGibson, e.g. throu
 goal = get_goal_conditions(conds, backend, populated_scope)
 ground = get_ground_goal_state_options(conds, backend, populated_scope)
 natural_init = get_natural_initial_conditions(conds)
-natural_init = get_natural_goal_conditions(conds)
+natural_goal = get_natural_goal_conditions(conds)
 
 
 print("####### Initial #######")
