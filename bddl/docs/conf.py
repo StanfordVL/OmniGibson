@@ -23,8 +23,6 @@ import sys
 import sphinx_rtd_theme
 from recommonmark.parser import CommonMarkParser
 
-import bddl
-
 project = "BEHAVIOR Domain Definition Language"
 copyright = "Stanford University 2018-2021"
 author = "Bokui Shen*, Fei Xia*, Chengshu Li*, Roberto Martín-Martín*, Linxi Fan, Guanzhi Wang, Shyamal Buch, Claudia DArpino, Sanjana Srivastava, Lyne P. Tchapmi, Micael E. Tchapmi, Kent Vainio, Li Fei-Fei, Silvio Savarese (*Equal Contribution)"
