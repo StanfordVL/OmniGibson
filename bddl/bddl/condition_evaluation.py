@@ -413,12 +413,6 @@ def compile_state(parsed_state, backend, scope=None, object_map=None):
         compiled_state.append(HEAD(scope, backend, parsed_condition, object_map))
     return compiled_state
 
-
-import inspect
-
-print("Indef:", inspect.getfullargspec(compile_state))
-
-
 def evaluate_state(compiled_state):
     results = {"satisfied": [], "unsatisfied": []}
     for i, compiled_condition in enumerate(compiled_state):
