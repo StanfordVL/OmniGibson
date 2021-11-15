@@ -1,0 +1,50 @@
+name: Build & deploy docs
+
+on: [push, pull_request]
+
+jobs:
+  build-docs:
+    name: Build documentations
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
+        architecture: x64
+
+    - name: Install dev requirements
+      run: pip install -r requirements-dev.txt
+
+    - name: Generate docs
+      working-directory: ./docs
+      run: make html
+
+    - name: Upload docs
+      uses: actions/upload-artifact@v2
+      with:
+        name: docs
+        path: ./docs/_build/html
+  
+  deploy-docs:
+    name: Deploy prod documentation
+    needs: build-docs
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: docs
+        path: ./docs/_build/html
+
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/_build/html
