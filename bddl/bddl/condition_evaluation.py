@@ -4,7 +4,7 @@ import itertools
 import numpy as np
 
 import bddl
-from bddl.logic_base import AtomicFormula, Expression, UnaryAtomicFormula
+from bddl.logic_base import Expression
 from bddl.utils import (
     UnsupportedPredicateError,
     truncated_permutations,
