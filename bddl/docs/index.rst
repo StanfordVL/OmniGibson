@@ -1,9 +1,9 @@
-.. InteractiveGibsonEnv documentation master file, created by
-   sphinx-quickstart on Tue Nov 19 14:38:54 2019.
+.. BEHAVIOR Domain Definition Language documentation master file, created by
+   sphinx-quickstart on Sun Nov 14 18:27:54 2021.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to iGibson's documentation!
+Welcome to the BDDL documentation!
 ==================================================
 
 .. toctree::

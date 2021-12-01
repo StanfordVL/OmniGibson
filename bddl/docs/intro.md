@@ -1,39 +1,25 @@
-#  iGibson: the Interactive Gibson Environment
 
-### Large Scale Interactive Simulation Environments for Robot Learning
+# BDDL: BEHAVIOR Domain Definition Language 
 
-iGibson, the Interactive Gibson Environment, is a simulation environment providing fast visual rendering and physics simulation (based on Bullet). It is packed with a dataset with hundreds of large 3D environments reconstructed from real homes and offices, and interactive objects that can be pushed and actuated. iGibson allows researchers to train and evaluate robotic agents that use RGB images and/or other visual sensors to solve indoor (interactive) navigation and manipulation tasks such as opening doors, picking and placing objects, or searching in cabinets.
+The BEHAVIOR Domain Definition Language (BDDL) is the domain-specific language of the BEHAVIOR benchmark for embodied AI agents in simulation. BEHAVIOR's 100 activities are realistic, diverse, and complex, and BDDL facilitates data-driven definition of these activities. BDDL is object-centric and based in predicate logic, and can express an activity's initial and goal conditions symbolically. The codebase includes 100 such symbolic definitions and functionality for parsing them and any other BDDL file, including a custom one; compiliing the symbolic definition to be grounded in a physically simulated environment; checking success and progress efficiently at every simulator step; and solving the goal condition to measure finer-grained progress for evaluation. 
 
 
 ### Citation
-If you use iGibson or its assets and models, consider citing the following publication:
+If you use BEHAVIOR, consider citing the following publication:
 
 ```
-@misc{shen2021igibson,
-      title={iGibson 1.0: a Simulation Environment for Interactive Tasks in Large Realistic Scenes}, 
-      author={Bokui Shen and Fei Xia and Chengshu Li and Roberto Martín-Martín and Linxi Fan and Guanzhi Wang and Claudia Pérez-D'Arpino and Shyamal Buch and Sanjana Srivastava and Lyne P. Tchapmi and Micael E. Tchapmi and Kent Vainio and Josiah Wong and Li Fei-Fei and Silvio Savarese},
+@inproceedings{srivastava2021behavior,
+      title={BEHAVIOR: Benchmark for Everyday Household Activities in Virtual, Interactive, Ecological Environments}, 
+      author={Sanjana Srivastava* and Chengshu Li* and Michael Lingelbach* and Roberto Martín-Martín* and Fei Xia and Kent Vainio and Zheng Lian and Cem Gokmen and Shyamal Buch and C. Karen Liu and Silvio Savarese and Hyowon Gweon and Jiajun Wu and Li Fei-Fei},
       year={2021},
-      eprint={2012.02924},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI}
-}
-```
-
-```
-@misc{li2021igibson,
-      title={iGibson 2.0: Object-Centric Simulation for Robot Learning of Everyday Household Tasks}, 
-      author={Chengshu Li and Fei Xia and Roberto Martín-Martín and Michael Lingelbach and Sanjana Srivastava and Bokui Shen and Kent Vainio and Cem Gokmen and Gokul Dharan and Tanish Jain and Andrey Kurenkov and Karen Liu and Hyowon Gweon and Jiajun Wu and Li Fei-Fei and Silvio Savarese},
-      year={2021},
-      eprint={2108.03272},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO}
+      booktitle={5th Annual Conference on Robot Learning}
 }
 ```
 
 ### Code Release
-The GitHub repository of iGibson can be found here: [iGibson GitHub Repo](https://github.com/StanfordVL/iGibson). Bug reports, suggestions for improvement, as well as community developments are encouraged and appreciated. 
+The GitHub repository of BDDL can be found here: [BDDL GitHubRepo](https://github.com/StanfordVL/bddl). Bug reports, suggestions for improvement, as well as community developments are encouraged and appreciated. 
 
 ### Documentation
-The documentation for iGibson can be found here: [iGibson Documentation](http://svl.stanford.edu/igibson/docs/). It includes installation guide (including data download instructions), quickstart guide, code examples, and APIs.
+The documentation for iGibson can be found here: [BDDL Documentation](https://stanfordvl.github.io/bddl). It includes installation guide, quickstart guide, code examples, and APIs.
 
-If you want to know more about iGibson, you can also check out [our webpage](http://svl.stanford.edu/igibson),  [iGibson 2.0 arxiv preprint](https://arxiv.org/abs/2108.03272) and [iGibson 1.0 arxiv preprint](https://arxiv.org/abs/2012.02924).
+If you want to know more about BDDL, you can also check out the [BEHAVIOR paper](https://arxiv.org/abs/2108.03332) and [our webpage](https://behavior.stanford.edu/), where you can create your own BEHAVIOR activity using a visual version of BDDL!

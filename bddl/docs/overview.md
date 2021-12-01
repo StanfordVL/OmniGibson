@@ -1,16 +1,71 @@
 # Overview
 
-Next, we will give an overview of iGibson and briefly explain the different modules in our system.
-![quickstart.png](images/overview.png)
+The BDDL codebase has two primary sections: activity definition and interface with the simulator. Given a simulator and an agent deployed in it, BDDL is typically used to instantiate a BEHAVIOR activity definition in the simulator, then check the agent's progress/success at every step. 
 
-First of all, we have **Dataset** and **Assets**. **Dataset** contain 3D reconstructed real-world environments. **Assets** contain models of robots and objects. Download guide can be found [here](installation.html#downloading-the-assets). More info can be found here: [Dataset](dataset.md) and [Assets](assets.md).
+## Activity definition
 
-Next, we have **Renderer** and **PhysicsEngine**. These are the two pillars that ensure the visual and physics fidelity of iGibson. We developed our own MeshRenderer that supports customizable camera configuration, physics-based rendering (PBR) and various image modalities, and renders at a lightening speed. We use the open-sourced [PyBullet](http://www.pybullet.org/) as our underlying physics engine. It can simulate rigid body collision and joint actuation for robots and articulated objects in an accurate and efficient manner. Since we are using MeshRenderer for rendering and PyBullet for physics simulation, we need to keep them synchronized at all time. Our code have already handled this for you. More info can be found here: [Renderer](renderer.md) and [PhysicsEngine](physics_engine.md).
+### Summary
 
-Furthermore, we have **Scene**, **Object**, **Robot**, and **Simulator**. **Scene** loads 3D scene meshes from `igibson.g_dataset_path, igibson.ig_dataset_path`. **Object** loads interactable objects from `igibson.assets_path`. **Robot** loads robots from `igibson.assets_path`. **Simulator** maintains an instance of **Renderer** and **PhysicsEngine** and provides APIs to import **Scene**, **Object** and **Robot** into both of them and keep them synchronized at all time. More info can be found here: [Scene](./scenes.md), [Object](./objects.md), [Robot](./robots.md), and [Simulator](simulators.md).
+BDDL activities are defined by a set of **objects** in a scene, a ground **initial condition** that the scene configuration satisfies when the agent starts the activity, and a **goal condition** logical expression that the scene configuration must satisfy for the agent to reach success. The following example demonstrates this:
 
-Moreover, we have **Task**, **Sensor** and **Environment**. **Task** defines the task setup and includes a list of **Reward Function** and **Termination Condition**. It also provides task-specific reset functions and task-relevant observation definition. **Sensor** provides a light wrapper around **Render** to retrieve sensory observation. **Environment** follows the [OpenAI gym](https://github.com/openai/gym) convention and provides an API interface for external applications. More info can be found here: [Environment](environments.md).
+```
+(define 
+    (problem cleaning_the_pool_simplified)
+    (:domain igibson)
 
-Finally, any learning framework (e.g. RL, IL) or planning and control framework (e.g. ROS) can be used with **Environment** as long as they accommodate OpenAI gym interface. We provide tight integration with **ROS** that allows for evaluation and visualization of, say, ROS Navigation Stack, in iGibson. More info can be found here: [Learning Framework](learning_framework.md) and [ROS](ros_integration.md).
+    (:objects
+     	pool.n.01_1 - pool.n.01
+    	floor.n.01_1 - floor.n.01
+    	scrub_brush.n.01_1 - scrub_brush.n.01
+        sink.n.01_1 - sink.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (onfloor pool.n.01_1 floor.n.01_1) 
+        (stained pool.n.01_1) 
+        (onfloor scrub_brush.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 garage) 
+        (inroom sink.n.01_1 storage_room)
+        (onfloor agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (onfloor ?pool.n.01_1 ?floor.n.01_1) 
+            (not 
+                (stained ?pool.n.01_1)
+            ) 
+            (ontop ?scrub_brush.n.01_1 ?shelf.n.01_1) 
+        )
+    )
+)
+```
+The `:objects` and `:init` sections specify the initial state as a set of objects and a set of initial atomic formulae the objects must satisfy at the start of the task. The `:goal` section specifies the expression that the objects must satisfy for the task to be considered successfully completed, i.e. what the agent needs to achieve. 
 
-We highly recommend you go through each of the Modules below for more details and code examples.
+### BDDL language 
+
+BDDL includes two types of files: the **domain** file and the **problem** file. There is one domain file per simulator, and one problem file per activity definition (in this sense, "problem" and "activity definition" are interchangeable). 
+
+The domain contains three sections: domain name (`(domain <domain_name>)`); requirements (`(:requirements :strips :adl)` as BDDL relies on these); and predicates, a list of predicates with fields indicating their arity. See the example created for iGibson 2.0 [here](https://github.com/StanfordVL/bddl/blob/master/bddl/activity_definitions/domain_igibson.bddl).
+
+The problem, i.e. an activity definition, is more complex. It consists of a problem name, a domain, objects, initial condition, and goal condition. See examples in subdirectories [here](https://github.com/StanfordVL/bddl/tree/master/bddl/activity_definitions). 
+
+By convention, the problem (`problem`) section should take the form of `(problem <behavior_activity>_<activity_instance>)`, where `activity_instance` is some identifying number that distinguishes this definition of `behavior_activity` from other definitions of the same activity, since a BEHAVIOR activity (e.g. "packing lunches" or "cleaning bathtub") can be defined multiple times to make multiple versions.
+
+The domain (`:domain`) section should take the form of `(:domain <domain_name>)`, where `domain_name` matches to the domain `define`d in some domain file. 
+
+The objects (`:objects`) section should contain all object instances involved in the activity definition, categorized. For example, for an activity definition with three instances of some category `mycat`, `:objects` should include the following line: `mycat_1 mycat_2 mycat_3 - mycat`. BDDL requires that object instances be written as `<category>_<unique_id_number>` where `category` is a WordNet synset (see the next section for details on the role of WordNet in BDDL). `:objects` should list and categorize every object instance used in the definition. 
+
+The initial condition (`:init`) should consist of a list of ground atomic formulae. This means that `:init` cannot contain logical operators such as `and`, `forall`, or `forpairs`, and all objects involved in it must be instances - concrete object instances like `mycat_1` - and not variables that may indicate multiple possible instances (e.g. just `mycat`, which could be any instance with category `mycat`). `:init` can contain certain types of negated atomic formulae (using the `not` logical operator) - specifically, when the atomic formula is **not** involved in location of objects. So, a BDDL activity definition **can** have `(not (cooked mycat_1))` but it **cannot** have `(not (ontop mycat_1 othercat_1))`. This is for the sampler - it is difficult to sample "anywhere-but" efficiently and ecologically. 
+
+Finally, the goal condition (`:goal`) should consist of one logical expression, likely a conjunction of clauses. This expression can use any of the standard logical operators used in the [Planning Domain Definition Language (PDDL)](https://planning.wiki/ref/pddl/problem), namely `and`, `or`, `not`, `imply`, `forall`, and `exists`. It can also use our custom operators: `forn`, `forpairs`, and `fornpairs`. Note that 
+
+### Annotations for activity definition
+
+
+### Creating your own activity definition
+
+
+## Interface with a simulator 
+
