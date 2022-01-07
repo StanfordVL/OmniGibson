@@ -1,12 +1,13 @@
 name: Build & deploy docs
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build-docs:
-    name: Build documentations
+    name: Build and deploy documentation
     runs-on: ubuntu-latest
-    
+    if: github.repository == 'StanfordVL/bddl' && github.ref == 'refs/heads/master'
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -23,25 +24,6 @@ jobs:
     - name: Generate docs
       working-directory: ./docs
       run: make html
-
-    - name: Upload docs
-      uses: actions/upload-artifact@v2
-      with:
-        name: docs
-        path: ./docs/_build/html
-  
-  deploy-docs:
-    name: Deploy prod documentation
-    needs: build-docs
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: docs
-        path: ./docs/_build/html
 
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
