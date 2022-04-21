@@ -789,6 +789,27 @@ class ManipulationRobot(BaseRobot):
             }
         return dic
 
+    @property
+    def _robot_description_yaml(self):
+        """
+        :return: str, file path to the robot description yaml file.
+        """
+        raise NotImplementedError
+
+    @property
+    def _robot_urdf(self):
+        """
+        :return: str, file path to the robot urdf file.
+        """
+        raise NotImplementedError
+
+    @property
+    def _eef_name(self):
+        """
+        :return: str, name of the end effector frame in the urdf file.
+        """
+        raise NotImplementedError
+
     # TODO - update
     @property
     def _default_arm_ik_controller_configs(self):
@@ -800,21 +821,22 @@ class ManipulationRobot(BaseRobot):
         for arm in self.arm_names:
             dic[arm] = {
                 "name": "InverseKinematicsController",
-                "base_body_id": None, #self.base_link.body_id,
-                "task_link_id": None, #self.eef_links[arm].link_id,
-                "task_name": "eef_{}".format(arm),
+                "robot_description_yaml_path": self._robot_description_yaml,
+                "robot_urdf_path": self._robot_urdf,
+                "eef_name": self._eef_name,
                 "control_freq": self._control_freq,
-                "default_joint_pos": self.default_joint_pos,
-                "joint_damping": None, #self.joint_damping,
                 "control_limits": self.control_limits,
                 "dof_idx": self.arm_control_idx[arm],
-                "command_output_limits": (
-                    np.array([-0.2, -0.2, -0.2, -0.5, -0.5, -0.5]),
-                    np.array([0.2, 0.2, 0.2, 0.5, 0.5, 0.5]),
-                ),
-                "kv": 2.0,
-                "mode": "pose_delta_ori",
-                "smoothing_filter_size": 2,
+                "task_name": "eef_{}".format(arm),
+                "command_input_limits": None,
+                "command_output_limits": None,
+                # "command_output_limits": (
+                #     np.array([-0.2, -0.2, -0.2, -0.5, -0.5, -0.5]),
+                #     np.array([0.2, 0.2, 0.2, 0.5, 0.5, 0.5]),
+                # ),
+                "kv": 1.0,
+                "mode": "pose_absolute_ori",
+                "smoothing_filter_size": None,
                 "workspace_pose_limiter": None,
             }
         return dic
