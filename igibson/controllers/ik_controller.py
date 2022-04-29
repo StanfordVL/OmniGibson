@@ -11,6 +11,7 @@ import lula
 IK_MODE_COMMAND_DIMS = {
     "pose_absolute_ori": 6,  # 6DOF (dx,dy,dz,ax,ay,az) control over pose, where the orientation is given in absolute axis-angle coordinates
     "pose_delta_ori": 6,  # 6DOF (dx,dy,dz,dax,day,daz) control over pose
+    "position_fixed_ori": 3,  # 3DOF (dx,dy,dz) control over position, with orientation commands being kept as fixed initial absolute orientation
 }
 IK_MODES = set(IK_MODE_COMMAND_DIMS.keys())
 
@@ -26,7 +27,7 @@ class InverseKinematicsController(ManipulationController):
 
     def __init__(
         self,
-        robot_description_yaml_path,
+        robot_descriptor_yaml_path,
         robot_urdf_path,
         eef_name,
         control_freq,
@@ -37,7 +38,7 @@ class InverseKinematicsController(ManipulationController):
         command_input_limits=None,
         command_output_limits=((-0.2, -0.2, -0.2, -0.5, -0.5, -0.5), (0.2, 0.2, 0.2, 0.5, 0.5, 0.5)),
         kv=2.0,
-        mode="pose_absolute_ori",
+        mode="position_fixed_ori",
         smoothing_filter_size=None,
         workspace_pose_limiter=None,
     ):
@@ -45,7 +46,7 @@ class InverseKinematicsController(ManipulationController):
         :param task_name: str, name assigned to this task frame for computing IK control. During control calculations,
             the inputted control_dict should include entries named <@task_name>_pos_relative and
             <@task_name>_quat_relative. See self._command_to_control() for what these values should entail.
-        :param robot_description_yaml_path: str, path to robot description yaml file
+        :param robot_descriptor_yaml_path: str, path to robot descriptor yaml file
         :param robot_urdf_path: str, path to robot urdf file
         :param eef_name: str, end effector frame name
         :param control_freq: int, controller loop frequency
@@ -79,19 +80,25 @@ class InverseKinematicsController(ManipulationController):
             where pos_command is (x,y,z) cartesian position values, command_quat is (x,y,z,w) quarternion orientation
             values, and the returned tuple is the processed (pos, quat) command.
         """
+        assert mode in IK_MODES, "Invalid ik mode specified! Valid options are: {IK_MODES}, got: {mode}"
+        self.mode = mode
         self.kv = kv
         self.workspace_pose_limiter = workspace_pose_limiter
         self.task_name = task_name
-        self.mode = mode
 
         # Lula specifics
-        self.robot_description_yaml_path = robot_description_yaml_path
+        self.robot_descriptor_yaml_path = robot_descriptor_yaml_path
         self.robot_urdf_path = robot_urdf_path
         self.eef_name = eef_name
 
-        robot_description = lula.load_robot(self.robot_description_yaml_path, self.robot_urdf_path)
-        self.lula_kinematics = robot_description.kinematics()
+        robot_descriptor = lula.load_robot(self.robot_descriptor_yaml_path, self.robot_urdf_path)
+        self.lula_kinematics = robot_descriptor.kinematics()
         self.lula_config = lula.CyclicCoordDescentIkConfig()
+        # self.lula_config.position_tolerance = 0
+        # self.lula_config.orientation_tolerance = 10
+        # self.lula_config.orientation_weight = 0
+        # self.descent_termination_delta = 1e-4
+        # self.lula_config.max_num_descents = 100
 
         # Other variables that will be filled in at runtime
         self._quat_target = None
@@ -112,8 +119,13 @@ class InverseKinematicsController(ManipulationController):
             command_output_limits=command_output_limits,
         )
 
-        print()
-        print("IK Control Limits", command_input_limits)
+        if self.mode == "pose_absolute_ori":
+            if self._command_input_limits is not None:
+                self._command_input_limits[0][3:] = -2 * np.pi
+                self._command_input_limits[1][3:] = 2 * np.pi
+            if self._command_output_limits is not None:
+                self._command_output_limits[0][3:] = -2 * np.pi
+                self._command_output_limits[1][3:] = 2 * np.pi
 
     def reset(self):
         # Reset the filter and clear internal control state
@@ -225,9 +237,9 @@ class InverseKinematicsController(ManipulationController):
         # Run IK
         self.lula_config.cspace_seeds = [current_joint_pos] if current_joint_pos is not None else []
 
+        omni_quat = np.append(target_quat[3], target_quat[:3])
         trans = np.array(target_pos, dtype=np.float64).reshape(3, 1)
-        rot = np.array(quat_to_rot_matrix(target_quat), dtype=np.float64).reshape(3, 3)
-
+        rot = np.array(quat_to_rot_matrix(omni_quat), dtype=np.float64).reshape(3, 3)
         ik_target_pose = lula.Pose3(lula.Rotation3(rot), trans)
         ik_results = lula.compute_ik_ccd(self.lula_kinematics, ik_target_pose, self.eef_name, self.lula_config)
 
@@ -245,4 +257,4 @@ class InverseKinematicsController(ManipulationController):
 
     @property
     def command_dim(self):
-        return 6
+        return IK_MODE_COMMAND_DIMS[self.mode]

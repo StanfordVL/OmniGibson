@@ -119,6 +119,8 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         assert_valid_key(key=default_arm_pose, valid_keys=DEFAULT_ARM_POSES, name="default_arm_pose")
         self.default_arm_pose = default_arm_pose
 
+        print("Default Arm:", self.default_arm)
+
         # Parse reset joint pos if specifying special string
         if isinstance(reset_joint_pos, str):
             assert (
@@ -303,8 +305,8 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         controllers["camera"] = "JointController"
         # TODO: Revert to IK once implemented
         for arm in self.arm_names:
-            controllers["arm_{}".format(arm)] = "JointController" #"InverseKinematicsController"
-            controllers["gripper_{}".format(arm)] = "MultiFingerGripperController"
+            controllers["arm_{}".format(arm)] = "InverseKinematicsController"
+            controllers["gripper_{}".format(arm)] = "JointController"
 
         return controllers
 
@@ -344,6 +346,19 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
 
         return cfg
+
+    @property
+    def _robot_descriptor_yaml(self):
+        return {"left": os.path.join(igibson.assets_path, "models/tiago/tiago_left_arm_descriptor.yaml"),
+                "right": os.path.join(igibson.assets_path, "models/tiago/tiago_right_arm_fixed_trunk_descriptor.yaml")}
+
+    @property
+    def _robot_urdf(self):
+        return os.path.join(igibson.assets_path, "models/tiago/tiago_dual.urdf")
+
+    @property
+    def _eef_name(self):
+        return {"left": "gripper_left_link", "right": "gripper_right_link"}
 
     @property
     def default_joint_pos(self):

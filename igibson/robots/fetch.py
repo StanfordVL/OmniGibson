@@ -282,7 +282,7 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         controllers["base"] = "DifferentialDriveController"
         controllers["camera"] = "JointController"
         # TODO: Revert to IK once implemented
-        controllers["arm_{}".format(self.default_arm)] = "JointController" #"InverseKinematicsController"
+        controllers["arm_{}".format(self.default_arm)] = "InverseKinematicsController"
         controllers["gripper_{}".format(self.default_arm)] = "MultiFingerGripperController"
 
         return controllers
@@ -297,7 +297,10 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         cfg["arm_{}".format(self.default_arm)]["InverseKinematicsController"]["dof_idx"] = np.concatenate(
             [self.trunk_control_idx, self.arm_control_idx[self.default_arm]]
         )
-
+        # Override joint idx in Joint arm controller
+        cfg["arm_{}".format(self.default_arm)]["JointController"]["dof_idx"] = np.concatenate(
+            [self.trunk_control_idx, self.arm_control_idx[self.default_arm]]
+        )
         # If using rigid trunk, we also clamp its limits
         if self.rigid_trunk:
             cfg["arm_{}".format(self.default_arm)]["InverseKinematicsController"]["control_limits"]["position"][0][
@@ -308,6 +311,18 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
             ] = self.untucked_default_joint_pos[self.trunk_control_idx]
 
         return cfg
+
+    @property
+    def _robot_descriptor_yaml(self):
+        return {self.default_arm: os.path.join(igibson.assets_path, "models/fetch/fetch_descriptor.yaml")}
+
+    @property
+    def _robot_urdf(self):
+        return os.path.join(igibson.assets_path, "models/fetch/fetch.urdf")
+
+    @property
+    def _eef_name(self):
+        return {self.default_arm: "gripper_link"}
 
     @property
     def default_joint_pos(self):
