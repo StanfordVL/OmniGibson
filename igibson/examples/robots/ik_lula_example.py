@@ -45,7 +45,7 @@ robot_pos = None
 
 # set the target end effector position w.r.t the robot position
 target_pos_delta = np.array([0.6, -0.4, 0.5])
-target_quat = np.array([0.0, 1.0, 0.0, 0.0])
+target_quat = np.array([1.0, 0.0, 0.0, 0.0])
 
 if robot_pos is not None:
     robot.set_position(robot_pos)
@@ -55,13 +55,13 @@ else:
 
 ## Part 2: Initialize omni.lula ik params
 
-robot_description_yaml_path = f"{FETCH_ASSETS_DIR}/fetch_descriptor.yaml"
+robot_descriptor_yaml_path = f"{FETCH_ASSETS_DIR}/fetch_descriptor.yaml"
 robot_urdf_path = f"{FETCH_ASSETS_DIR}/fetch.urdf"
 eef_name = "gripper_link"
 
 kv = 0.001
 
-robot_description = lula.load_robot(robot_description_yaml_path, robot_urdf_path)
+robot_description = lula.load_robot(robot_descriptor_yaml_path, robot_urdf_path)
 cspace_config = robot_description.default_c_space_configuration()
 lula_kinematics = robot_description.kinematics()
 lula_config = lula.CyclicCoordDescentIkConfig()
@@ -84,6 +84,7 @@ for i in range(100000):
 
     robot.apply_action(action)
     joint_position = robot.get_joint_positions().copy()
+    print(joint_position)
     cspace_config = np.append(joint_position[2], joint_position[5:12])
 
     # print(action)

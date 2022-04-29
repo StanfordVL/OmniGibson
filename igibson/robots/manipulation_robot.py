@@ -23,7 +23,6 @@ from igibson.controllers import (
 from igibson.robots.robot_base import BaseRobot
 from igibson.utils.python_utils import classproperty, assert_valid_key
 
-
 AG_MODES = {
     "physical",
     "assisted",
@@ -373,7 +372,7 @@ class ManipulationRobot(BaseRobot):
                 # New object pose is transform:
                 # original --> "De"transform the original EEF pose --> "Re"transform the new EEF pose
                 new_obj_pose = new_eef_pose @ inv_original_eef_pose @ original_obj_pose
-                self._ag_obj_in_hand[arm].set_position_orientation(*T.mat2pose(hmat=new_obj_pose))
+                self._ag_obj_in_hand[arm].g(*T.mat2pose(hmat=new_obj_pose))
 
     def apply_action(self, action):
         # First run assisted grasping
@@ -790,9 +789,16 @@ class ManipulationRobot(BaseRobot):
         return dic
 
     @property
-    def _robot_description_yaml(self):
+    def _robot_descriptor_yaml(self):
         """
-        :return: str, file path to the robot description yaml file.
+        :return: str, file path to the descriptor of the robot for IK Controller.
+        """
+        raise NotImplementedError
+
+    @property
+    def _robot_fixed_trunk_descriptor_yaml(self):
+        """
+        :return: str, list of file paths to the descriptor of the robot with a fixed trunk for IK Controller.
         """
         raise NotImplementedError
 
@@ -806,7 +812,7 @@ class ManipulationRobot(BaseRobot):
     @property
     def _eef_name(self):
         """
-        :return: str, name of the end effector frame in the urdf file.
+        :return: str, list of names of the end effector frame in the urdf file.
         """
         raise NotImplementedError
 
@@ -821,9 +827,9 @@ class ManipulationRobot(BaseRobot):
         for arm in self.arm_names:
             dic[arm] = {
                 "name": "InverseKinematicsController",
-                "robot_description_yaml_path": self._robot_description_yaml,
+                "robot_descriptor_yaml_path": self._robot_descriptor_yaml[arm],
                 "robot_urdf_path": self._robot_urdf,
-                "eef_name": self._eef_name,
+                "eef_name": self._eef_name[arm],
                 "control_freq": self._control_freq,
                 "control_limits": self.control_limits,
                 "dof_idx": self.arm_control_idx[arm],
@@ -834,8 +840,8 @@ class ManipulationRobot(BaseRobot):
                 #     np.array([-0.2, -0.2, -0.2, -0.5, -0.5, -0.5]),
                 #     np.array([0.2, 0.2, 0.2, 0.5, 0.5, 0.5]),
                 # ),
-                "kv": 1.0,
-                "mode": "pose_absolute_ori",
+                "kv": 1,
+                "mode": "pose_delta_ori",
                 "smoothing_filter_size": None,
                 "workspace_pose_limiter": None,
             }

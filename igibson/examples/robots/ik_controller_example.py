@@ -7,7 +7,6 @@ from igibson.robots.fetch import Fetch
 import numpy as np
 
 ### DEFINE MACROS ###
-FETCH_ASSETS_DIR = "/scr/mjhwang/iGibson3/igibson/data/assets/models/fetch"
 SCENE_ID = "Rs_int"
 USD_TEMPLATE_FILE = f"{ig_dataset_path}/scenes/Rs_int/urdf/Rs_int_best_template.usd"
 #####################
@@ -40,22 +39,21 @@ sim.play()
 
 # set the robot position; if None, put it in the default location
 robot_pos = np.array([0, 0, 0])
-robot_pos = np.array([-1.0, 0.4, 0])
+# robot_pos = np.array([-1.0, 0.4, 0])
+robot_quat = np.array([0.0, 0.0, 1.0, 1.0])
+# robot.set_position_orientation(robot_pos, robot_quat)
 robot.set_position(robot_pos)
 
 # set the target end effector position w.r.t the robot position
 target_pos_delta = np.array([0.6, -0.4, 0.5])
 target_pos = robot_pos + target_pos_delta
-target_quat = np.array([0.0, 1.0, 0.0, 0.0])
+target_quat = np.array([1.0, 0.0, 0.0, 0.0])
 marker.set_position(target_pos)
 
 ## Part 2: Initialize IK Controller
 
 
 control = np.zeros(11)
-control[0] = 0.0015
-# control[1] = 0.01
-# control[4:7] = target_pos_delta
 
 ## Part 3: Compute IK controls and simulate
 for i in range(100000):
@@ -75,7 +73,6 @@ for i in range(100000):
     target_pos_relative, target_quat_relative = T.mat2pose(target_pose_in_base_mat)
 
     control[4:7] = target_pos_relative - pos_relative
-    control[7:10] = T.quat2axisangle(target_quat_relative)
 
     robot.apply_action(control)
     sim.step()

@@ -120,6 +120,8 @@ class Tiago(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         assert_valid_key(key=default_arm_pose, valid_keys=DEFAULT_ARM_POSES, name="default_arm_pose")
         self.default_arm_pose = default_arm_pose
 
+        print("Default Arm:", self.default_arm)
+
         # Parse reset joint pos if specifying special string
         if isinstance(reset_joint_pos, str):
             assert (
@@ -294,8 +296,8 @@ class Tiago(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         controllers["camera"] = "JointController"
         # TODO: Revert to IK once implemented
         for arm in self.arm_names:
-            controllers["arm_{}".format(arm)] = "JointController" #"InverseKinematicsController"
-            controllers["gripper_{}".format(arm)] = "MultiFingerGripperController"
+            controllers["arm_{}".format(arm)] = "InverseKinematicsController"
+            controllers["gripper_{}".format(arm)] = "JointController"
 
         return controllers
 
@@ -304,23 +306,37 @@ class Tiago(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         # Grab defaults from super method first
         cfg = super()._default_controller_config
 
-        for arm in self.arm_names:
-            # Use default IK controller -- also need to override joint idx being controlled to include trunk in default
-            # IK arm controller
-            cfg["arm_{}".format(arm)]["InverseKinematicsController"]["joint_idx"] = np.concatenate(
-                [self.trunk_control_idx, self.arm_control_idx[self.default_arm]]
-            )
+        cfg["arm_{}".format(self.default_arm)]["InverseKinematicsController"]["dof_idx"] = np.concatenate(
+            [self.trunk_control_idx, self.arm_control_idx[self.default_arm]]
+        )
 
-            # If using rigid trunk, we also clamp its limits
-            if self.rigid_trunk:
-                cfg["arm_{}".format(arm)]["InverseKinematicsController"]["control_limits"]["position"][0][
-                    self.trunk_control_idx
-                ] = self.untucked_default_joint_pos[self.trunk_control_idx]
-                cfg["arm_{}".format(arm)]["InverseKinematicsController"]["control_limits"]["position"][1][
-                    self.trunk_control_idx
-                ] = self.untucked_default_joint_pos[self.trunk_control_idx]
+        cfg["arm_{}".format(self.default_arm)]["JointController"]["dof_idx"] = np.concatenate(
+            [self.trunk_control_idx, self.arm_control_idx[self.default_arm]]
+        )
+
+        # If using rigid trunk, we also clamp its limits
+        if self.rigid_trunk:
+            cfg["arm_{}".format(self.default_arm)]["InverseKinematicsController"]["control_limits"]["position"][0][
+                self.trunk_control_idx
+            ] = self.untucked_default_joint_pos[self.trunk_control_idx]
+            cfg["arm_{}".format(self.default_arm)]["InverseKinematicsController"]["control_limits"]["position"][1][
+                self.trunk_control_idx
+            ] = self.untucked_default_joint_pos[self.trunk_control_idx]
 
         return cfg
+
+    @property
+    def _robot_descriptor_yaml(self):
+        return {"left": os.path.join(igibson.assets_path, "models/tiago/tiago_left_arm_descriptor.yaml"),
+                "right": os.path.join(igibson.assets_path, "models/tiago/tiago_right_arm_fixed_trunk_descriptor.yaml")}
+
+    @property
+    def _robot_urdf(self):
+        return os.path.join(igibson.assets_path, "models/tiago/tiago_dual.urdf")
+
+    @property
+    def _eef_name(self):
+        return {"left": "gripper_left_link", "right": "gripper_right_link"}
 
     @property
     def default_joint_pos(self):
@@ -381,7 +397,7 @@ class Tiago(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         """
         :return Array[int]: Indices in low-level control vector corresponding to [tilt, pan] camera joints.
         """
-        return np.array([22, 21])
+        return np.array([4, 3])
 
     @property
     def arm_control_idx(self):
@@ -389,7 +405,7 @@ class Tiago(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         :return dict[str, Array[int]]: Dictionary mapping arm appendage name to indices in low-level control
             vector corresponding to arm joints.
         """
-        return {"left": np.array([3, 4, 5, 6, 7, 8, 9]), "right": np.array([12, 13, 14, 15, 16, 17, 18])}
+        return {"left": np.array([5, 6, 7, 8, 9, 10, 11]), "right": np.array([14, 15, 16, 17, 18, 19, 20])}
 
     @property
     def gripper_control_idx(self):
@@ -397,7 +413,7 @@ class Tiago(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         :return dict[str, Array[int]]: Dictionary mapping arm appendage name to indices in low-level control
             vector corresponding to gripper joints.
         """
-        return {"left": np.array([10, 11]), "right": np.array([19, 20])}
+        return {"left": np.array([12, 13]), "right": np.array([21, 22])}
 
     @property
     def disabled_collision_pairs(self):
