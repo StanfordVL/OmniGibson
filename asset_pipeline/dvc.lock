@@ -1,0 +1,17 @@
+schema: '2.0'
+stages:
+  scene_public_restroom_futuristic_sanitycheck:
+    cmd: python scripts\batch_3dsmax.py scripts\new_sanity_check.py -sceneFile cad\scenes\public_restroom_futuristic\processed.max
+      -mxsString batch:true -mxsString output_path:cad\scenes\public_restroom_futuristic\artifacts\sanitycheck.json
+      -listenerlog cad\scenes\public_restroom_futuristic\artifacts\sanitycheck.log
+    deps:
+    - path: cad/scenes/public_restroom_futuristic/processed.max
+      md5: 4fabf1a3bbb8b45c378c9ae570f662ad
+      size: 7069696
+    - path: cad/scenes/public_restroom_futuristic/textures
+      md5: 200c572625cadc30967af069c8876bbd.dir
+      size: 1122579
+      nfiles: 4
+    - path: scripts/new_sanity_check.py
+      md5: 234e1ea464479507844f5b968f4013a3
+      size: 12967

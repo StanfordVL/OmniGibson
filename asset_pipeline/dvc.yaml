@@ -1,0 +1,7 @@
+stages:
+  scene_public_restroom_futuristic_sanitycheck:
+    cmd: 'python scripts\batch_3dsmax.py scripts\new_sanity_check.py -sceneFile cad\scenes\public_restroom_futuristic\processed.max -mxsString batch:true -mxsString output_path:cad\scenes\public_restroom_futuristic\artifacts\sanitycheck.json -listenerlog cad\scenes\public_restroom_futuristic\artifacts\sanitycheck.log'
+    deps:
+    - cad/scenes/public_restroom_futuristic/processed.max
+    - cad/scenes/public_restroom_futuristic/textures
+    - scripts/new_sanity_check.py
