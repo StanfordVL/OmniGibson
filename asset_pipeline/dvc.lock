@@ -1,9 +1,8 @@
 schema: '2.0'
 stages:
   scene_public_restroom_futuristic_sanitycheck:
-    cmd: python scripts\batch_3dsmax.py scripts\new_sanity_check.py -sceneFile cad\scenes\public_restroom_futuristic\processed.max
-      -mxsString batch:true -mxsString output_path:cad\scenes\public_restroom_futuristic\artifacts\sanitycheck.json
-      -listenerlog cad\scenes\public_restroom_futuristic\artifacts\sanitycheck.log
+    cmd: python scripts/batch_3dsmax.py scripts/new_sanity_check.py -sceneFile cad/scenes/public_restroom_futuristic/processed.max
+      -mxsString batch:true -mxsString dir:cad/scenes/public_restroom_futuristic/artifacts
     deps:
     - path: cad/scenes/public_restroom_futuristic/processed.max
       md5: 4fabf1a3bbb8b45c378c9ae570f662ad
@@ -13,5 +12,51 @@ stages:
       size: 1122579
       nfiles: 4
     - path: scripts/new_sanity_check.py
-      md5: 234e1ea464479507844f5b968f4013a3
-      size: 12967
+      md5: e80cbddcecd93c0682e811b4ee8e79a5
+      size: 13101
+    outs:
+    - path: cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.json
+      md5: 26d822d1090912b35253feceba7b6761
+      size: 6045
+  scene_public_restroom_futuristic_object_list:
+    cmd: python scripts/batch_3dsmax.py scripts/object_list.py -sceneFile cad/scenes/public_restroom_futuristic/processed.max
+      -mxsString dir:cad/scenes/public_restroom_futuristic/artifacts
+    deps:
+    - path: scripts/object_list.py
+      md5: db8e6f4fe181a9de55fd23863fc517e9
+      size: 1343
+    outs:
+    - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.json
+      md5: 8609fc004e71164379a2accda327b3b8
+      size: 937
+    - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  object_inventory:
+    cmd: python scripts/object_inventory.py
+    deps:
+    - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.json
+      md5: 8609fc004e71164379a2accda327b3b8
+      size: 937
+    - path: scripts/object_inventory.py
+      md5: 3ed84a165b9b9d53370f7766233cf89f
+      size: 2175
+    outs:
+    - path: artifacts/pipeline/object_inventory.json
+      md5: 4913dfb9fdf64b64ae8b0d8cfa86d407
+      size: 1164
+  scene_public_restroom_futuristic_export_objs:
+    cmd: python scripts/batch_3dsmax.py scripts/export_objs.py -sceneFile cad/scenes/public_restroom_futuristic/processed.max
+      -mxsString dir:cad/scenes/public_restroom_futuristic/artifacts/objects
+    deps:
+    - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: scripts/export_objs.py
+      md5: 218cf899e0a8ced8c6b3ddd219bdaa0c
+      size: 9092
+    outs:
+    - path: cad/scenes/public_restroom_futuristic/artifacts/objects
+      md5: d6a275dcc15953f1bc8aeff08cbf99fe.dir
+      size: 380
+      nfiles: 1

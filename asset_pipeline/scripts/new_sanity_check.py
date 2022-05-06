@@ -1,6 +1,7 @@
 import collections
 import json
 import re
+from sre_constants import SUCCESS
 import pandas as pd
 import numpy as np
 import trimesh.transformations
@@ -22,6 +23,8 @@ SPREADSHEET_ID = "1JJob97Ovsv9HP1Xrs_LYPlTnJaumR2eMELImGykD22A"
 WORKSHEET_NAME = "Object Category B1K"
 KEY_FILE = os.path.join(os.path.dirname(__file__), "../keys/b1k-dataset-6966129845c0.json")
 
+OUTPUT_FILENAME = "sanitycheck.json"
+SUCCESS_FILENAME = "sanitycheck.success"
 
 def compute_shear(obj):
   # Check that object satisfies no-shear rule.
@@ -283,7 +286,7 @@ def sanity_check_safe():
     print("Warnings:")
     print("\n".join(errors["WARNING"]))
 
-def sanity_check_batch(output_path):
+def sanity_check_batch(out_dir):
   success = False
   errors = []
   warnings = []
@@ -297,14 +300,20 @@ def sanity_check_batch(output_path):
     traceback = traceback.format_exc()
     errors.append("Exception occurred:" + traceback)
 
-  with open(output_path, "w") as f:
+  with open(os.path.join(output_dir, OUTPUT_FILENAME), "w") as f:
     json.dump({"success": success, "errors": errors, "warnings": warnings}, f, indent=4)
+
+  if success:
+    with open(os.path.join(output_dir, SUCCESS_FILENAME), "w") as f:
+      pass
 
 
 if __name__ == "__main__":
   opts = rt.maxops.mxsCmdLineArgs
 
   if opts[rt.name('batch')] == "true":
-    sanity_check_batch(opts[rt.name('output_path')])
+    output_dir = opts[rt.name('dir')]
+    os.makedirs(output_dir, exist_ok=True)
+    sanity_check_batch(output_dir)
   else:
     create_macroscript(sanity_check_safe, category="SVL-Tools", name="Sanity Check", button_text="Sanity Check")
