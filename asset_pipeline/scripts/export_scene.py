@@ -346,7 +346,7 @@ def main():
                         # Generate collision mesh
                         collision_shape_file = os.path.join(obj_link_collision_mesh_folder, obj_relative_path)
                         vhacd = os.path.join(os.path.dirname(__file__), "vhacd.exe")
-                        subprocess.call([vhacd, "--input", visual_shape_file, "--output", collision_shape_file], shell=False, stdout=subprocess.DEVNULL)
+                        subprocess.call([vhacd, "--input", visual_shape_file, "--output", collision_shape_file, "--log", "NUL"], shell=False, stdout=subprocess.DEVNULL)
 
                         # Remove the original saved OBJ folder
                         # shutil.rmtree(obj_link_folder)
