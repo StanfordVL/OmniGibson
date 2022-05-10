@@ -26,7 +26,7 @@ def parse_name(name):
 
 # PhysicalMaterial
 CHANNEL_MAPPING = {
-    "VRayDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
+    "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
     "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
     "VRayMtlReflectGlossinessBake": "Roughness Map",   # iGibson/Omniverse renderer expects we flip the glossiness map
     "VRayAOMap": "Refl Color Map",  # Physical Material doesn't have a dedicated AO map
@@ -55,10 +55,6 @@ def get_map_name_to_ids():
     return map_name_to_ids
 
 MAP_NAME_TO_IDS = get_map_name_to_ids()
-print(MAP_NAME_TO_IDS)
-# for key in MAP_NAME_TO_IDS:
-#     print(key)
-# assert False
 
 def should_bake_texture(obj):
     result = parse_name(obj.name)
@@ -97,6 +93,8 @@ def get_all_lights():
     return lights
 
 def uv_unwrapping(objs):
+    times = {}
+
     unwrapped_objs = set()
     for obj in objs:
         if not should_bake_texture(obj):
@@ -105,6 +103,8 @@ def uv_unwrapping(objs):
         # Within the same object (e.g. window-0-0), there might be instances (e.g. window-0-0-leaf1-base_link-R-upper and window-0-0-leaf1-base_link-R-lower). We only want to unwrap once.
         if obj.baseObject in unwrapped_objs:
             continue
+
+        start_time = time.time()
 
         print("uv_unwrapping", obj.name)
         unwrapped_objs.add(obj.baseObject)
@@ -124,6 +124,11 @@ def uv_unwrapping(objs):
 
         rt.addmodifier(obj, modifier)
         modifier.flattenMapNoParams()
+
+        end_time = time.time()
+        times[obj.name] = end_time - start_time
+
+    return times
 
 
 def prepare_texture_baking(objs):
@@ -152,6 +157,8 @@ def prepare_texture_baking(objs):
             texture_map.setTargetMapSlot(CHANNEL_MAPPING[map_name])
 
 def texture_baking(bakery):
+    start_time = time.time()
+
     btt.outputPath = bakery
     btt.autoCloseProgressDialog = True
     btt.showFrameBuffer = False
@@ -164,10 +171,16 @@ def texture_baking(bakery):
     btt.clearShellKeepBaked()
     print("cleared shell material")
 
+    end_time = time.time()
+    return end_time - start_time
+
 def export_objs(objs, base_dir):
+    times = {}
+
     lights = get_all_lights()
     for obj in objs:
         print("export_objs", obj.name)
+        start_time = time.time()
 
         rt.select(obj)
         obj_dir = os.path.join(base_dir, obj.name)
@@ -177,6 +190,11 @@ def export_objs(objs, base_dir):
         obj_path = os.path.join(obj_dir, obj.name + ".obj")
         rt.exportFile(obj_path, pymxs.runtime.Name("noPrompt"), selectedOnly=True, using=pymxs.runtime.ObjExp)
         export_obj_metadata(obj, obj_dir, lights)
+
+        end_time = time.time()
+        times[obj.name] = end_time - start_time
+
+    return times
 
 def export_obj_metadata(obj, obj_dir, lights):
     print("export_objs_metadata", obj.name)
@@ -213,24 +231,33 @@ def export_obj_metadata(obj, obj_dir, lights):
 
 def main():
     out_dir = rt.maxops.mxsCmdLineArgs[rt.name('dir')]
-    os.makedirs(out_dir, exist_ok=True)
+
+    obj_out_dir = os.path.join(out_dir, "objects")
+    os.makedirs(obj_out_dir, exist_ok=True)
 
     success = True
     error_msg = ""
+    unwrap_times = {}
+    export_times = {}
+    baking_time = {}
     try:
-        with tempfile.TemporaryDirectory() as bakery:
+        with tempfile.TemporaryDirectory() as bakery_dir:
             objs = get_process_objs()
-            uv_unwrapping(objs)
+            unwrap_times = uv_unwrapping(objs)
             prepare_texture_baking(objs)
-            texture_baking(bakery)
-            export_objs(objs, out_dir)
+            baking_time = texture_baking(os.path.abspath(bakery_dir))
+            export_times = export_objs(objs, os.path.abspath(obj_out_dir))
     except Exception as e:
         success = False
         error_msg = traceback.format_exc()
 
-    json_file = os.path.join(out_dir, "export_log.json")
+    json_file = os.path.join(out_dir, "export_objs.json")
     with open(json_file, "w") as f:
-        json.dump({"success": success, "error_msg": error_msg}, f)
+        json.dump({"success": success, "error_msg": error_msg, "channel_map": MAP_NAME_TO_IDS, "unwrap_times": unwrap_times, "export_times": export_times, "baking_time": baking_time}, f)
+
+    if success:
+        with open(os.path.join(out_dir, "export_objs.success"), "w"):
+            pass
 
 if __name__ == "__main__":
     main()

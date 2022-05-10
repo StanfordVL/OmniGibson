@@ -1,35 +1,67 @@
 stages:
-  scene_public_restroom_futuristic_sanitycheck:
-    cmd: 'python scripts/batch_3dsmax.py scripts/new_sanity_check.py -sceneFile cad/scenes/public_restroom_futuristic/processed.max -mxsString batch:true -mxsString dir:cad/scenes/public_restroom_futuristic/artifacts'
-    deps:
-    - cad/scenes/public_restroom_futuristic/processed.max
-    - cad/scenes/public_restroom_futuristic/textures
-    - scripts/new_sanity_check.py
-    outs:
-    - cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.json
-    - cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.success
-  scene_public_restroom_futuristic_object_list:
-    cmd: 'python scripts/batch_3dsmax.py scripts/object_list.py -sceneFile cad/scenes/public_restroom_futuristic/processed.max -mxsString dir:cad/scenes/public_restroom_futuristic/artifacts'
-    deps:
-    - scripts/object_list.py
-    # - cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.json
-    outs:
-    - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
-    - cad/scenes/public_restroom_futuristic/artifacts/object_list.success
+  sanitycheck:
+    foreach:
+      - public_restroom_futuristic
+      - hotel_suite_small
+      - gates_bedroom
+    do:
+      cmd: 'python scripts/batch_3dsmax.py scripts/new_sanity_check.py -sceneFile cad/scenes/${item}/processed.max -mxsString batch:true -mxsString dir:cad/scenes/${item}/artifacts'
+      deps:
+      - cad/scenes/${item}/processed.max
+      - cad/scenes/${item}/textures
+      - scripts/new_sanity_check.py
+      outs:
+      - cad/scenes/${item}/artifacts/sanitycheck.json
+      - cad/scenes/${item}/artifacts/sanitycheck.success
+  object_list:
+    foreach:
+      - public_restroom_futuristic
+      - hotel_suite_small
+      - gates_bedroom
+    do:
+      cmd: 'python scripts/batch_3dsmax.py scripts/object_list.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
+      deps:
+      - scripts/object_list.py
+      # - cad/scenes/${item}/artifacts/sanitycheck.json
+      outs:
+      - cad/scenes/${item}/artifacts/object_list.json
+      - cad/scenes/${item}/artifacts/object_list.success
   object_inventory:
     cmd: 'python scripts/object_inventory.py'
     deps:
     - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
     - cad/scenes/public_restroom_futuristic/artifacts/object_list.success
+    - cad/scenes/hotel_suite_small/artifacts/object_list.json
+    - cad/scenes/hotel_suite_small/artifacts/object_list.success
     - scripts/object_inventory.py
     outs:
     - artifacts/pipeline/object_inventory.json
     - artifacts/pipeline/object_inventory.success
-  scene_public_restroom_futuristic_export_objs:
-    cmd: 'python scripts/batch_3dsmax.py scripts/export_objs.py -sceneFile cad/scenes/public_restroom_futuristic/processed.max -mxsString dir:cad/scenes/public_restroom_futuristic/artifacts/objects'
-    deps:
-    - scripts/export_objs.py
-    - cad/scenes/public_restroom_futuristic/artifacts/object_list.success
-    # - cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.success
-    outs:
-    - cad/scenes/public_restroom_futuristic/artifacts/objects
+  export_objs:
+    foreach:
+      - public_restroom_futuristic
+      - hotel_suite_small
+      - gates_bedroom
+    do:
+      cmd: 'python scripts/batch_3dsmax.py scripts/export_objs.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
+      deps:
+      - scripts/export_objs.py
+      - cad/scenes/${item}/artifacts/object_list.success
+      # - cad/scenes/${item}/artifacts/sanitycheck.success
+      outs:
+      - cad/scenes/${item}/artifacts/objects
+      - cad/scenes/${item}/artifacts/export_objs.json
+      - cad/scenes/${item}/artifacts/export_objs.success
+  export_scenes:
+    foreach:
+      - public_restroom_futuristic
+      - hotel_suite_small
+      - gates_bedroom
+    do:
+      cmd: 'python scripts/export_scene.py ${item}'
+      deps:
+      - cad/scenes/${item}/artifacts/export_objs.success
+      - cad/scenes/${item}/artifacts/objects
+      - scripts/export_scene.py
+      outs:
+      - artifacts/scenes/${item}

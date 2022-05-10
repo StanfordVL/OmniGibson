@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='us-ascii'?>
+<robot name="4DyNEuQo">
+   <link name="base_link">
+      <visual>
+         <origin xyz="0.0 0.0 0.0" />
+         <geometry>
+            <mesh filename="shape\visual\armchair-cehzwd-0.obj" />
+         </geometry>
+      </visual>
+      <collision>
+         <origin xyz="0.0 0.0 0.0" />
+         <geometry>
+            <mesh filename="shape\collision\armchair-cehzwd-0.obj" />
+         </geometry>
+      </collision>
+   </link>
+</robot>

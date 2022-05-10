@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='us-ascii'?>
+<robot name="qh5SAwA4">
+   <link name="base_link">
+      <visual>
+         <origin xyz="0.0 0.0 0.0" />
+         <geometry>
+            <mesh filename="shape\visual\floor_lamp-cosjfl-0.obj" />
+         </geometry>
+      </visual>
+      <collision>
+         <origin xyz="0.0 0.0 0.0" />
+         <geometry>
+            <mesh filename="shape\collision\floor_lamp-cosjfl-0.obj" />
+         </geometry>
+      </collision>
+   </link>
+</robot>

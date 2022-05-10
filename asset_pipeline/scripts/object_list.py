@@ -13,16 +13,17 @@ def main():
     object_names = [x.name for x in rt.objects if rt.classOf(x) == rt.Editable_Poly]
     matches = [PATTERN.fullmatch(name) for name in object_names]
 
-    success = all(x is not None for x in matches)
-    needed = sorted({x.group("category") + "-" + x.group("model_id") for x in matches})
-    provided = sorted({x.group("category") + "-" + x.group("model_id") for x in matches if not x.group("bad")})
+    nomatch = [name for name, match in zip(object_names, matches) if match is None]
+    success = len(nomatch) == 0
+    needed = sorted({x.group("category") + "-" + x.group("model_id") for x in matches if x is not None})
+    provided = sorted({x.group("category") + "-" + x.group("model_id") for x in matches if x is not None and not x.group("bad")})
 
     output_dir = rt.maxops.mxsCmdLineArgs[rt.name('dir')]
     os.makedirs(output_dir, exist_ok=True)
 
     filename = os.path.join(output_dir, OUTPUT_FILENAME)
     with open(filename, "w") as f:
-        json.dump({"success": success, "needed_objects": needed, "provided_objects": provided}, f, indent=4)
+        json.dump({"success": success, "needed_objects": needed, "provided_objects": provided, "error_invalid_name": sorted(nomatch)}, f, indent=4)
 
     if success:
         with open(os.path.join(output_dir, SUCCESS_FILENAME), "w") as f:

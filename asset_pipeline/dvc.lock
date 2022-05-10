@@ -60,3 +60,89 @@ stages:
       md5: d6a275dcc15953f1bc8aeff08cbf99fe.dir
       size: 380
       nfiles: 1
+  export_objs@hotel_suite_small:
+    cmd: python scripts/batch_3dsmax.py scripts/export_objs.py -sceneFile cad/scenes/hotel_suite_small/processed.max
+      -mxsString dir:cad/scenes/hotel_suite_small/artifacts/objects
+    deps:
+    - path: scripts/export_objs.py
+      md5: 218cf899e0a8ced8c6b3ddd219bdaa0c
+      size: 9092
+    outs:
+    - path: cad/scenes/hotel_suite_small/artifacts/objects
+      md5: 3e47aa110af0549207d3e5780492b9b7.dir
+      size: 390
+      nfiles: 1
+  sanitycheck@gates_bedroom:
+    cmd: python scripts/batch_3dsmax.py scripts/new_sanity_check.py -sceneFile cad/scenes/gates_bedroom/processed.max
+      -mxsString batch:true -mxsString dir:cad/scenes/gates_bedroom/artifacts
+    deps:
+    - path: cad/scenes/gates_bedroom/processed.max
+      md5: e96adf79682301932eba6937fdfc73d7
+      size: 6082560
+    - path: cad/scenes/gates_bedroom/textures
+      md5: 3d5b79b2884fac88fc4f5c23aa801aff.dir
+      size: 15820101
+      nfiles: 3
+    - path: scripts/new_sanity_check.py
+      md5: 7ca12684e4057012fad7a5108de15d67
+      size: 13536
+    outs:
+    - path: cad/scenes/gates_bedroom/artifacts/sanitycheck.json
+      md5: d43f5c742c8056071450ffc514e3ace8
+      size: 65
+    - path: cad/scenes/gates_bedroom/artifacts/sanitycheck.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  object_list@gates_bedroom:
+    cmd: python scripts/batch_3dsmax.py scripts/object_list.py -sceneFile cad/scenes/gates_bedroom/processed.max
+      -mxsString dir:cad/scenes/gates_bedroom/artifacts
+    deps:
+    - path: scripts/object_list.py
+      md5: a0520443a87a489591d0f7160dd52bb1
+      size: 1484
+    outs:
+    - path: cad/scenes/gates_bedroom/artifacts/object_list.json
+      md5: a13b9cdcf9407d252f1b21242ddd9470
+      size: 1086
+    - path: cad/scenes/gates_bedroom/artifacts/object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  export_objs@gates_bedroom:
+    cmd: python scripts/batch_3dsmax.py scripts/export_objs.py -sceneFile cad/scenes/gates_bedroom/processed.max
+      -mxsString dir:cad/scenes/gates_bedroom/artifacts
+    deps:
+    - path: cad/scenes/gates_bedroom/artifacts/object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: scripts/export_objs.py
+      md5: 0e1c6bff5afa1279e8ba6616c20a750d
+      size: 9859
+    outs:
+    - path: cad/scenes/gates_bedroom/artifacts/export_objs.json
+      md5: 395637ea0d2fffd4252a508fdf6c374f
+      size: 3393
+    - path: cad/scenes/gates_bedroom/artifacts/export_objs.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: cad/scenes/gates_bedroom/artifacts/objects
+      md5: adae35566b1f5d61a3108ee233c24068.dir
+      size: 6178514
+      nfiles: 185
+  export_scenes@gates_bedroom:
+    cmd: python scripts/export_scene.py gates_bedroom
+    deps:
+    - path: cad/scenes/gates_bedroom/artifacts/export_objs.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: cad/scenes/gates_bedroom/artifacts/objects
+      md5: 23bccd0e896696425a73ac84c0175257.dir
+      size: 5921177
+      nfiles: 185
+    - path: scripts/export_scene.py
+      md5: 27cdf3d23e131f7e7afb23ba0f865364
+      size: 28910
+    outs:
+    - path: artifacts/scenes/gates_bedroom
+      md5: 009f3a83e6d7075430b173c705eae921.dir
+      size: 49467
+      nfiles: 43

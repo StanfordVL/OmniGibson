@@ -1,11 +1,12 @@
 import collections
 import json
 import re
-from sre_constants import SUCCESS
 import pandas as pd
 import numpy as np
 import trimesh.transformations
 import os
+
+from scipy.spatial.transform import Rotation
 
 import gspread
 
@@ -153,22 +154,24 @@ class SanityCheck:
 
     # Check that they all have the same object offset rotation and pos/scale and shear.
     desired_offset_pos = np.array(base.object.objectOffsetPos) / np.array(base.object.objectOffsetScale)
-    desired_offset_rot = quat2arr(base.object.objectOffsetRot)
+    desired_offset_rot_inv = Rotation.from_quat(quat2arr(base.object.objectOffsetRot)).inv()
     desired_shear = compute_shear(base.object)
     for _, row in rows.iterrows():
         this_offset_pos = np.array(row.object.objectOffsetPos) / np.array(row.object.objectOffsetScale)
+        pos_diff = this_offset_pos - desired_offset_pos
         self.expect(
-          np.allclose(this_offset_pos, desired_offset_pos),
-          f"{row.object_name} has different pivot offset rotation. Match pivots on each instance.")
+          np.allclose(pos_diff, 0, atol=1e-3),
+          f"{row.object_name} has different pivot offset position (by {pos_diff}). Match pivots on each instance.")
 
-        this_offset_rot = quat2arr(row.object.objectOffsetRot)
+        this_offset_rot = Rotation.from_quat(quat2arr(row.object.objectOffsetRot))
+        rot_diff = (this_offset_rot * desired_offset_rot_inv).magnitude()
         self.expect(
-          np.allclose(this_offset_rot, desired_offset_rot),
-          f"{row.object_name} has different pivot offset rotation. Match pivots on each instance.")
+          np.allclose(rot_diff, 0, atol=1e-3),
+          f"{row.object_name} has different pivot offset rotation (by {rot_diff}). Match pivots on each instance.")
         
         this_shear = compute_shear(row.object)
         self.expect(
-          np.allclose(this_shear, desired_shear, atol=1e-5),
+          np.allclose(this_shear, desired_shear, atol=1e-3),
           f"{row.object_name} has different shear. Match scaling axes on each instance."
         )
 
@@ -197,13 +200,16 @@ class SanityCheck:
     df["vertex_count"] = df["object"].map(lambda x: len(x.vertices))
     df["type"] = df["object"].map(lambda x: rt.classOf(x))
 
-    # Complain about and remove objects that are the wrong type or unmatching name.
+    # Complain about and remove objects that are the wrong type.
     good_type = df.apply(self.is_valid_object_type, axis="columns")
-    good_name = df.apply(self.is_valid_name, axis="columns")
-    df = df[good_type & good_name]
+    df = df[good_type]
 
     # Additionally filter out the cameras
     df = df[df["type"].isin([rt.Editable_Poly, rt.VRayLight])]
+
+    # Complain about and remove objects that have unmatching name.
+    good_name = df.apply(self.is_valid_name, axis="columns")
+    df = df[good_name]
 
     if df.size == 0:
       return self.errors
