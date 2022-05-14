@@ -115,19 +115,19 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: scripts/export_objs.py
-      md5: 49586de22889b0400bfd127105a8f08c
-      size: 10065
+      md5: 5eee75304b357047ad6f92fa6e3a04cd
+      size: 11744
     outs:
     - path: cad/scenes/gates_bedroom/artifacts/export_objs.json
-      md5: c6590841909eac6055d74978c09b0368
-      size: 3389
+      md5: dfd434b47b8e59d79d5ed8d519d43549
+      size: 1839
     - path: cad/scenes/gates_bedroom/artifacts/export_objs.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/gates_bedroom/artifacts/objects
-      md5: 3938dc782f757eeb0bbe58bde259c837.dir
-      size: 15987639
-      nfiles: 185
+      md5: 6a0f7b24730838ba7a793c77b58a1254.dir
+      size: 2369584
+      nfiles: 3
   export_scenes@gates_bedroom:
     cmd: python scripts/export_scene.py gates_bedroom
     deps:
@@ -136,6 +136,6 @@ stages:
       size: 28790
     outs:
     - path: artifacts/scenes/gates_bedroom
-      md5: c93700bd89249f1705d32056234070c3.dir
-      size: 740770
+      md5: 538bd213cf5623ffbe317838a78bccbf.dir
+      size: 969048
       nfiles: 34

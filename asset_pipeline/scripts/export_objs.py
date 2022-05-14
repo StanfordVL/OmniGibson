@@ -40,6 +40,7 @@ CHANNEL_MAPPING = {
 # }
 
 allow_list = [
+    # "L-armchair-cehzwd-0"
     # "L-table_lamp-bbentu-0",
     # "floor_lamp-cosjfl-0",
     # "desk-zlyqcq-0",
@@ -130,18 +131,23 @@ class ObjectExporter:
         # Make sure it's triangle mesh
         rt.polyop.setVertSelection(obj, rt.name('all'))
         obj.connectVertices()
+        rt.polyop.setVertSelection(obj, rt.name('none'))
 
         # Select all faces in preparation for uv unwrap
-        # rt.polyop.setFaceSelection(obj, rt.name('all'))
+        rt.polyop.setFaceSelection(obj, rt.name('all'))
 
         modifier = rt.unwrap_uvw()
-        modifier.setApplyToWholeObject(True)
+        rt.addmodifier(obj, modifier)
+
+        modifier.unwrap2.setApplyToWholeObject(True)
 
         # In case the object is already uv unwrapped, we will need to assign to a new UV channel
         modifier.setMapChannel(NEW_UV_CHANNEL)
+        modifier.unwrap2.flattenMapNoParams()
 
-        rt.addmodifier(obj, modifier)
-        modifier.flattenMapNoParams()
+        rt.update(obj)
+        rt.forceCompleteRedraw()
+        rt.windows.processPostedMessages()
 
         end_time = time.time()
         self.unwrap_times[obj.name] = end_time - start_time
@@ -185,20 +191,20 @@ class ObjectExporter:
         btt.showFrameBuffer = False
         btt.alwaysOverwriteExistingFiles = True
 
-        def callback():
-            print("finish baking")
-            end_time = time.time()
-            self.baking_times[obj.name] = end_time - start_time
-            self.export_objs(obj)
-            return True
-
         print("start baking")
-        assert btt.bake(onMapBakedCallback=callback), "baking failed"
+        assert btt.bake(), "baking failed"
+        print("finish baking")
+        end_time = time.time()
+        self.baking_times[obj.name] = end_time - start_time
 
-    def export_obj(self, obj):
         # This will clear all the shell material and assign the newly created baked materials to the objects (in place of the original material)
         btt.clearShellKeepBaked()
 
+        rt.update(obj)
+        rt.forceCompleteRedraw()
+        rt.windows.processPostedMessages()
+
+    def export_obj(self, obj):
         print("export_objs", obj.name)
         start_time = time.time()
 
@@ -208,7 +214,13 @@ class ObjectExporter:
 
         # WARNING: we don't know how to set fine-grained setting of OBJ export. It always inherits the setting of the last export. 
         obj_path = os.path.join(obj_dir, obj.name + ".obj")
-        rt.exportFile(obj_path, pymxs.runtime.Name("noPrompt"), selectedOnly=True, using=pymxs.runtime.ObjExp)
+        # rt.ObjExp.setIniName(os.path.join(os.path.parent(__file__), "gw_objexp.ini"))
+        assert rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "UseMapPath") == "1", "Map path not used."
+        assert rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "MapPath") == "./material/", "Wrong material path."
+        rt.exportFile(obj_path, pymxs.runtime.Name("noPrompt"), selectedOnly=True, using=rt.ObjExp)
+        assert os.path.exists(obj_path), f"Could not export object {obj.name}"
+        if self.should_bake_texture(obj):
+            assert os.path.exists(os.path.join(obj_dir, "material")), f"Could not export materials for object {obj.name}"
         self.export_obj_metadata(obj, obj_dir)
 
         end_time = time.time()
@@ -253,8 +265,7 @@ class ObjectExporter:
         for obj in objs:
             self.uv_unwrapping(obj)
             self.texture_baking(obj)
-            # Callback takes care of this now.
-            # self.export_obj(obj)
+            self.export_obj(obj)
 
 def batch_main():
     rt.setvraysilentmode(True)
@@ -267,7 +278,6 @@ def batch_main():
     baking_times = {}
     try:
         with tempfile.TemporaryDirectory() as bakery_dir:
-            bakery_dir = r"C:\Users\Cem\Downloads\bakery"
             exp = ObjectExporter(bakery_dir, out_dir)
             exp.run()
             unwrap_times = exp.unwrap_times
@@ -288,6 +298,7 @@ def batch_main():
 def nonbatch_main():
     out_dir = r"D:\ig_pipeline\cad\scenes\gates_bedroom\artifacts"
     with tempfile.TemporaryDirectory() as bakery_dir:
+            # bakery_dir = r"C:\Users\Cem\Downloads\bakery"
         exp = ObjectExporter(bakery_dir, out_dir)
         exp.run()
 
@@ -297,4 +308,4 @@ if __name__ == "__main__":
     # if "batch" in sys.executable:
     batch_main()
     # else:
-    #     nonbatch_main()
+    # nonbatch_main()

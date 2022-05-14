@@ -81,7 +81,7 @@ stages:
       cmd: 'python scripts/batch_3dsmax.py scripts/export_objs.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
       deps:
       - scripts/export_objs.py
-      - cad/scenes/${item}/artifacts/object_list.success
+      # - cad/scenes/${item}/artifacts/object_list.success
       # - cad/scenes/${item}/artifacts/sanitycheck.success
       outs:
       - cad/scenes/${item}/artifacts/objects
@@ -94,8 +94,8 @@ stages:
     do:
       cmd: 'python scripts/export_scene.py ${item}'
       deps:
-      - cad/scenes/${item}/artifacts/export_objs.success
-      - cad/scenes/${item}/artifacts/objects
+      # - cad/scenes/${item}/artifacts/export_objs.success
+      # - cad/scenes/${item}/artifacts/objects
       - scripts/export_scene.py
       outs:
       - artifacts/scenes/${item}
