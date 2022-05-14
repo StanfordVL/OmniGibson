@@ -1,7 +1,45 @@
 stages:
+  room_object_list:
+    foreach:
+      - house_single_floor
+      - house_double_floor_bottom
+      - house_double_floor_top
+      - grocery_store_asian
+      - grocery_store_cafe
+      - grocery_store_convenience
+      - hall_arch_wood
+      - hall_train_station
+      - hall_glass_ceiling
+      - hall_conference_large
+      - hotel_suite_large
+      - hotel_suite_small
+      - hotel_gym_spa
+      - office_bike
+      - office_cubicles_left
+      - office_cubicles_right
+      - office_large
+      - office_vendor_machine
+      - restaurant_asian
+      - restaurant_cafeteria
+      - restaurant_diner
+      - restaurant_brunch
+      - restaurant_urban
+      - restaurant_hotel
+      - school_gym
+      - school_geography
+      - school_biology
+      - school_chemistry
+      - school_computer_lab_and_infirmary
+    do:
+      cmd: 'python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
+      deps:
+      - scripts/room_object_list.py
+      # - cad/scenes/${item}/artifacts/sanitycheck.json
+      outs:
+      - cad/scenes/${item}/artifacts/room_object_list.json
+      - cad/scenes/${item}/artifacts/room_object_list.success
   sanitycheck:
     foreach:
-      - public_restroom_futuristic
       - hotel_suite_small
       - gates_bedroom
     do:
@@ -29,8 +67,6 @@ stages:
   object_inventory:
     cmd: 'python scripts/object_inventory.py'
     deps:
-    - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
-    - cad/scenes/public_restroom_futuristic/artifacts/object_list.success
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.success
     - scripts/object_inventory.py
@@ -39,7 +75,6 @@ stages:
     - artifacts/pipeline/object_inventory.success
   export_objs:
     foreach:
-      - public_restroom_futuristic
       - hotel_suite_small
       - gates_bedroom
     do:
@@ -54,7 +89,6 @@ stages:
       - cad/scenes/${item}/artifacts/export_objs.success
   export_scenes:
     foreach:
-      - public_restroom_futuristic
       - hotel_suite_small
       - gates_bedroom
     do:

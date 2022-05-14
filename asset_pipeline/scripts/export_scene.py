@@ -220,10 +220,7 @@ def main():
         obj_parent_to_children = parent_to_children[obj_inst]
 
         if should_save_model:
-            obj_model_name = "".join(
-                random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(8)
-            )
-            obj_model_names[(obj_cat, obj_model)] = obj_model_name
+            obj_model_names[(obj_cat, obj_model)] = obj_model
 
         assert (obj_cat, obj_model) in obj_model_names, "missing instance 0 for this model: {}_{}".format(
             obj_cat, obj_model
@@ -349,7 +346,7 @@ def main():
                         subprocess.call([vhacd, "--input", visual_shape_file, "--output", collision_shape_file, "--log", "NUL"], shell=False, stdout=subprocess.DEVNULL)
 
                         # Remove the original saved OBJ folder
-                        # shutil.rmtree(obj_link_folder)
+                        shutil.rmtree(obj_link_folder)
 
                         # Modify MTL reference in OBJ file
                         with open(visual_shape_file, "r") as f:
@@ -389,14 +386,14 @@ def main():
                         visual_origin.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
                         visual_geometry = ET.SubElement(visual, "geometry")
                         visual_mesh = ET.SubElement(visual_geometry, "mesh")
-                        visual_mesh.attrib = {"filename": os.path.join("shape", "visual", obj_relative_path)}
+                        visual_mesh.attrib = {"filename": os.path.join("shape", "visual", obj_relative_path).replace("\\", "/")}
 
                         collision = ET.SubElement(link, "collision")
                         collision_origin = ET.SubElement(collision, "origin")
                         collision_origin.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
                         collision_geometry = ET.SubElement(collision, "geometry")
                         collision_mesh = ET.SubElement(collision_geometry, "mesh")
-                        collision_mesh.attrib = {"filename": os.path.join("shape", "collision", obj_relative_path)}
+                        collision_mesh.attrib = {"filename": os.path.join("shape", "collision", obj_relative_path).replace("\\", "/")}
 
                         if joint_type is not None:
                             # Find the upper joint limit mesh
