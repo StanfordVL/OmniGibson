@@ -286,7 +286,7 @@ def batch_main():
             pass
 
 def nonbatch_main():
-    out_dir = r"C:\Users\Cem\Downloads\objects"
+    out_dir = r"D:\ig_pipeline\cad\scenes\gates_bedroom\artifacts"
     with tempfile.TemporaryDirectory() as bakery_dir:
         exp = ObjectExporter(bakery_dir, out_dir)
         exp.run()
