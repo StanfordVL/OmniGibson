@@ -139,3 +139,493 @@ stages:
       md5: 538bd213cf5623ffbe317838a78bccbf.dir
       size: 969048
       nfiles: 34
+  room_object_list@office_bike:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/office_bike/processed.max
+      -mxsString dir:cad/scenes/office_bike/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/office_bike/artifacts/room_object_list.json
+      md5: 662c77a98c19b49ff7282281995de1d8
+      size: 1341
+    - path: cad/scenes/office_bike/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@hall_train_station:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/hall_train_station/processed.max
+      -mxsString dir:cad/scenes/hall_train_station/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/hall_train_station/artifacts/room_object_list.json
+      md5: 350eda3cbbbc59d7421c4bd2ef682a7a
+      size: 293
+    - path: cad/scenes/hall_train_station/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@restaurant_hotel:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/restaurant_hotel/processed.max
+      -mxsString dir:cad/scenes/restaurant_hotel/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/restaurant_hotel/artifacts/room_object_list.json
+      md5: eef2a62af2e8f435197365d77554f101
+      size: 1381
+    - path: cad/scenes/restaurant_hotel/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  object_list@public_restroom_futuristic:
+    cmd: python scripts/batch_3dsmax.py scripts/object_list.py -sceneFile cad/scenes/public_restroom_futuristic/processed.max
+      -mxsString dir:cad/scenes/public_restroom_futuristic/artifacts
+    deps:
+    - path: scripts/object_list.py
+      md5: a0520443a87a489591d0f7160dd52bb1
+      size: 1484
+    outs:
+    - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.json
+      md5: 6964dad5c905bff13681cb149ff88ff5
+      size: 968
+    - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@office_cubicles_left:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/office_cubicles_left/processed.max
+      -mxsString dir:cad/scenes/office_cubicles_left/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/office_cubicles_left/artifacts/room_object_list.json
+      md5: 778b6aba4815cf23a2ce194f94080913
+      size: 5906
+    - path: cad/scenes/office_cubicles_left/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@grocery_store_cafe:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/grocery_store_cafe/processed.max
+      -mxsString dir:cad/scenes/grocery_store_cafe/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
+      md5: da0cb5d57b8baa3695dead1a48539f66
+      size: 2455
+    - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@restaurant_asian:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/restaurant_asian/processed.max
+      -mxsString dir:cad/scenes/restaurant_asian/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/restaurant_asian/artifacts/room_object_list.json
+      md5: a80bc863996560385dcaa95d72f5f570
+      size: 972
+    - path: cad/scenes/restaurant_asian/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@commercial_kitchen_fire_extinguisher:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/commercial_kitchen_fire_extinguisher/processed.max
+      -mxsString dir:cad/scenes/commercial_kitchen_fire_extinguisher/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
+      md5: 8f54d34da48a0f8c14b6a931b156009a
+      size: 1806
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@restaurant_brunch:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/restaurant_brunch/processed.max
+      -mxsString dir:cad/scenes/restaurant_brunch/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/restaurant_brunch/artifacts/room_object_list.json
+      md5: 873894632b4f8daa5fdb501d6793c016
+      size: 1521
+    - path: cad/scenes/restaurant_brunch/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@hall_conference_large:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/hall_conference_large/processed.max
+      -mxsString dir:cad/scenes/hall_conference_large/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/hall_conference_large/artifacts/room_object_list.json
+      md5: eb9d2dfe01c28b334aaccfd3668e53a3
+      size: 669
+    - path: cad/scenes/hall_conference_large/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@school_computer_lab_and_infirmary:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/school_computer_lab_and_infirmary/processed.max
+      -mxsString dir:cad/scenes/school_computer_lab_and_infirmary/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/room_object_list.json
+      md5: ec795915fa9a510216c89072dfb1c86c
+      size: 8955
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@office_vendor_machine:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/office_vendor_machine/processed.max
+      -mxsString dir:cad/scenes/office_vendor_machine/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/office_vendor_machine/artifacts/room_object_list.json
+      md5: 5ff8c84b02213bfd145e313c26d9daf4
+      size: 1340
+    - path: cad/scenes/office_vendor_machine/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@public_restroom_brown:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/public_restroom_brown/processed.max
+      -mxsString dir:cad/scenes/public_restroom_brown/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/public_restroom_brown/artifacts/room_object_list.json
+      md5: 5dae0d89f2d4c86320dcf562950a5beb
+      size: 717
+    - path: cad/scenes/public_restroom_brown/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@public_restroom_futuristic:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/public_restroom_futuristic/processed.max
+      -mxsString dir:cad/scenes/public_restroom_futuristic/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/public_restroom_futuristic/artifacts/room_object_list.json
+      md5: c6d157e1fc50acc1071f961a142802a7
+      size: 576
+    - path: cad/scenes/public_restroom_futuristic/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@public_restroom_white:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/public_restroom_white/processed.max
+      -mxsString dir:cad/scenes/public_restroom_white/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/public_restroom_white/artifacts/room_object_list.json
+      md5: 210a485366c579cf8c5f2f5d8e66be97
+      size: 622
+    - path: cad/scenes/public_restroom_white/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@office_cubicles_right:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/office_cubicles_right/processed.max
+      -mxsString dir:cad/scenes/office_cubicles_right/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/office_cubicles_right/artifacts/room_object_list.json
+      md5: 778b6aba4815cf23a2ce194f94080913
+      size: 5906
+    - path: cad/scenes/office_cubicles_right/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@school_geography:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/school_geography/processed.max
+      -mxsString dir:cad/scenes/school_geography/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/school_geography/artifacts/room_object_list.json
+      md5: ec795915fa9a510216c89072dfb1c86c
+      size: 8955
+    - path: cad/scenes/school_geography/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@office_large:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/office_large/processed.max
+      -mxsString dir:cad/scenes/office_large/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/office_large/artifacts/room_object_list.json
+      md5: 4f516ec5c0f0b74973231ef2e7329766
+      size: 6984
+    - path: cad/scenes/office_large/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@restaurant_diner:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/restaurant_diner/processed.max
+      -mxsString dir:cad/scenes/restaurant_diner/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/restaurant_diner/artifacts/room_object_list.json
+      md5: 097e2d5c80a922904d6c8a2511dfb7ba
+      size: 1391
+    - path: cad/scenes/restaurant_diner/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@public_restroom_marble:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/public_restroom_marble/processed.max
+      -mxsString dir:cad/scenes/public_restroom_marble/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/public_restroom_marble/artifacts/room_object_list.json
+      md5: e6c4d72bfad836001c9db84aa9b2cd28
+      size: 476
+    - path: cad/scenes/public_restroom_marble/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@restaurant_urban:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/restaurant_urban/processed.max
+      -mxsString dir:cad/scenes/restaurant_urban/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/restaurant_urban/artifacts/room_object_list.json
+      md5: 1026f63db14d8512975292a48409c676
+      size: 1714
+    - path: cad/scenes/restaurant_urban/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@school_biology:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/school_biology/processed.max
+      -mxsString dir:cad/scenes/school_biology/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/school_biology/artifacts/room_object_list.json
+      md5: ec795915fa9a510216c89072dfb1c86c
+      size: 8955
+    - path: cad/scenes/school_biology/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@hall_glass_ceiling:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/hall_glass_ceiling/processed.max
+      -mxsString dir:cad/scenes/hall_glass_ceiling/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/hall_glass_ceiling/artifacts/room_object_list.json
+      md5: 34c045d013740f886578ede3910c43e0
+      size: 342
+    - path: cad/scenes/hall_glass_ceiling/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@grocery_store_convenience:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/grocery_store_convenience/processed.max
+      -mxsString dir:cad/scenes/grocery_store_convenience/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/grocery_store_convenience/artifacts/room_object_list.json
+      md5: 8d1d5a5d19792b8105d01dc6a933fe76
+      size: 2910
+    - path: cad/scenes/grocery_store_convenience/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@public_restroom_blue:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/public_restroom_blue/processed.max
+      -mxsString dir:cad/scenes/public_restroom_blue/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/public_restroom_blue/artifacts/room_object_list.json
+      md5: 99f70e524fa76063b56f5049edb9c16d
+      size: 646
+    - path: cad/scenes/public_restroom_blue/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@commercial_kitchen_pans:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/commercial_kitchen_pans/processed.max
+      -mxsString dir:cad/scenes/commercial_kitchen_pans/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.json
+      md5: 849736f840d20d71b68486ea6df211b6
+      size: 1067
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@hotel_gym_spa:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/hotel_gym_spa/processed.max
+      -mxsString dir:cad/scenes/hotel_gym_spa/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/hotel_gym_spa/artifacts/room_object_list.json
+      md5: bfef884f46fd2f63312d68284f151be0
+      size: 2498
+    - path: cad/scenes/hotel_gym_spa/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@grocery_store_half_stocked:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/grocery_store_half_stocked/processed.max
+      -mxsString dir:cad/scenes/grocery_store_half_stocked/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/room_object_list.json
+      md5: 25152f941f35c0ae277cd0c42c459778
+      size: 2018
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@school_gym:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/school_gym/processed.max
+      -mxsString dir:cad/scenes/school_gym/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/school_gym/artifacts/room_object_list.json
+      md5: ec795915fa9a510216c89072dfb1c86c
+      size: 8955
+    - path: cad/scenes/school_gym/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@hotel_suite_large:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/hotel_suite_large/processed.max
+      -mxsString dir:cad/scenes/hotel_suite_large/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/hotel_suite_large/artifacts/room_object_list.json
+      md5: c9e3007af4e71f7edafad4284d1b6ce5
+      size: 1951
+    - path: cad/scenes/hotel_suite_large/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@grocery_store_asian:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/grocery_store_asian/processed.max
+      -mxsString dir:cad/scenes/grocery_store_asian/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/grocery_store_asian/artifacts/room_object_list.json
+      md5: 728d3f02dfe9fde038a52fe35ded4f38
+      size: 2463
+    - path: cad/scenes/grocery_store_asian/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@hall_arch_wood:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/hall_arch_wood/processed.max
+      -mxsString dir:cad/scenes/hall_arch_wood/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/hall_arch_wood/artifacts/room_object_list.json
+      md5: db651bb420d77dcdacf977976ba8c972
+      size: 319
+    - path: cad/scenes/hall_arch_wood/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@hotel_suite_small:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/hotel_suite_small/processed.max
+      -mxsString dir:cad/scenes/hotel_suite_small/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/hotel_suite_small/artifacts/room_object_list.json
+      md5: bf4af582d9e75ac2b5ead8bcc0bc2390
+      size: 1138
+    - path: cad/scenes/hotel_suite_small/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@restaurant_cafeteria:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/restaurant_cafeteria/processed.max
+      -mxsString dir:cad/scenes/restaurant_cafeteria/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/restaurant_cafeteria/artifacts/room_object_list.json
+      md5: a9b3d26a107dbd4a514b7ec91f155222
+      size: 1458
+    - path: cad/scenes/restaurant_cafeteria/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  room_object_list@school_chemistry:
+    cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/school_chemistry/processed.max
+      -mxsString dir:cad/scenes/school_chemistry/artifacts
+    deps:
+    - path: scripts/room_object_list.py
+      md5: acdbeca7778d26f37e21bde94cc93175
+      size: 1673
+    outs:
+    - path: cad/scenes/school_chemistry/artifacts/room_object_list.json
+      md5: ec795915fa9a510216c89072dfb1c86c
+      size: 8955
+    - path: cad/scenes/school_chemistry/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
