@@ -1,12 +1,13 @@
 stages:
   room_object_list:
     foreach:
-      - house_single_floor
-      - house_double_floor_bottom
-      - house_double_floor_top
+      # - house_single_floor
+      # - house_double_floor_bottom
+      # - house_double_floor_top
       - grocery_store_asian
       - grocery_store_cafe
       - grocery_store_convenience
+      - grocery_store_half_stocked
       - hall_arch_wood
       - hall_train_station
       - hall_glass_ceiling
@@ -30,6 +31,14 @@ stages:
       - school_biology
       - school_chemistry
       - school_computer_lab_and_infirmary
+      # Temporary stuff
+      - public_restroom_blue
+      - public_restroom_brown
+      - public_restroom_futuristic
+      - public_restroom_marble
+      - public_restroom_white
+      - commercial_kitchen_fire_extinguisher
+      - commercial_kitchen_pans
     do:
       cmd: 'python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
       deps:
@@ -38,64 +47,139 @@ stages:
       outs:
       - cad/scenes/${item}/artifacts/room_object_list.json
       - cad/scenes/${item}/artifacts/room_object_list.success
-  sanitycheck:
-    foreach:
-      - hotel_suite_small
-      - gates_bedroom
-    do:
-      cmd: 'python scripts/batch_3dsmax.py scripts/new_sanity_check.py -sceneFile cad/scenes/${item}/processed.max -mxsString batch:true -mxsString dir:cad/scenes/${item}/artifacts'
-      deps:
-      - cad/scenes/${item}/processed.max
-      - cad/scenes/${item}/textures
-      - scripts/new_sanity_check.py
-      outs:
-      - cad/scenes/${item}/artifacts/sanitycheck.json
-      - cad/scenes/${item}/artifacts/sanitycheck.success
-  object_list:
-    foreach:
-      - public_restroom_futuristic
-      - hotel_suite_small
-      - gates_bedroom
-    do:
-      cmd: 'python scripts/batch_3dsmax.py scripts/object_list.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
-      deps:
-      - scripts/object_list.py
-      # - cad/scenes/${item}/artifacts/sanitycheck.json
-      outs:
-      - cad/scenes/${item}/artifacts/object_list.json
-      - cad/scenes/${item}/artifacts/object_list.success
-  object_inventory:
-    cmd: 'python scripts/object_inventory.py'
+  combined_room_object_list:
+    cmd: 'python scripts/combined_room_object_list.py'
     deps:
-    - cad/scenes/hotel_suite_small/artifacts/object_list.json
-    - cad/scenes/hotel_suite_small/artifacts/object_list.success
-    - scripts/object_inventory.py
+    - cad/scenes/grocery_store_asian/artifacts/room_object_list.json
+    - cad/scenes/grocery_store_asian/artifacts/room_object_list.success
+    - cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
+    - cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
+    - cad/scenes/grocery_store_convenience/artifacts/room_object_list.json
+    - cad/scenes/grocery_store_convenience/artifacts/room_object_list.success
+    - cad/scenes/grocery_store_half_stocked/artifacts/room_object_list.json
+    - cad/scenes/grocery_store_half_stocked/artifacts/room_object_list.success
+    - cad/scenes/hall_arch_wood/artifacts/room_object_list.json
+    - cad/scenes/hall_arch_wood/artifacts/room_object_list.success
+    - cad/scenes/hall_train_station/artifacts/room_object_list.json
+    - cad/scenes/hall_train_station/artifacts/room_object_list.success
+    - cad/scenes/hall_glass_ceiling/artifacts/room_object_list.json
+    - cad/scenes/hall_glass_ceiling/artifacts/room_object_list.success
+    - cad/scenes/hall_conference_large/artifacts/room_object_list.json
+    - cad/scenes/hall_conference_large/artifacts/room_object_list.success
+    - cad/scenes/hotel_suite_large/artifacts/room_object_list.json
+    - cad/scenes/hotel_suite_large/artifacts/room_object_list.success
+    - cad/scenes/hotel_suite_small/artifacts/room_object_list.json
+    - cad/scenes/hotel_suite_small/artifacts/room_object_list.success
+    - cad/scenes/hotel_gym_spa/artifacts/room_object_list.json
+    - cad/scenes/hotel_gym_spa/artifacts/room_object_list.success
+    - cad/scenes/office_bike/artifacts/room_object_list.json
+    - cad/scenes/office_bike/artifacts/room_object_list.success
+    - cad/scenes/office_cubicles_left/artifacts/room_object_list.json
+    - cad/scenes/office_cubicles_left/artifacts/room_object_list.success
+    - cad/scenes/office_cubicles_right/artifacts/room_object_list.json
+    - cad/scenes/office_cubicles_right/artifacts/room_object_list.success
+    - cad/scenes/office_large/artifacts/room_object_list.json
+    - cad/scenes/office_large/artifacts/room_object_list.success
+    - cad/scenes/office_vendor_machine/artifacts/room_object_list.json
+    - cad/scenes/office_vendor_machine/artifacts/room_object_list.success
+    - cad/scenes/restaurant_asian/artifacts/room_object_list.json
+    - cad/scenes/restaurant_asian/artifacts/room_object_list.success
+    - cad/scenes/restaurant_cafeteria/artifacts/room_object_list.json
+    - cad/scenes/restaurant_cafeteria/artifacts/room_object_list.success
+    - cad/scenes/restaurant_diner/artifacts/room_object_list.json
+    - cad/scenes/restaurant_diner/artifacts/room_object_list.success
+    - cad/scenes/restaurant_brunch/artifacts/room_object_list.json
+    - cad/scenes/restaurant_brunch/artifacts/room_object_list.success
+    - cad/scenes/restaurant_urban/artifacts/room_object_list.json
+    - cad/scenes/restaurant_urban/artifacts/room_object_list.success
+    - cad/scenes/restaurant_hotel/artifacts/room_object_list.json
+    - cad/scenes/restaurant_hotel/artifacts/room_object_list.success
+    - cad/scenes/school_gym/artifacts/room_object_list.json
+    - cad/scenes/school_gym/artifacts/room_object_list.success
+    - cad/scenes/school_geography/artifacts/room_object_list.json
+    - cad/scenes/school_geography/artifacts/room_object_list.success
+    - cad/scenes/school_biology/artifacts/room_object_list.json
+    - cad/scenes/school_biology/artifacts/room_object_list.success
+    - cad/scenes/school_chemistry/artifacts/room_object_list.json
+    - cad/scenes/school_chemistry/artifacts/room_object_list.success
+    - cad/scenes/school_computer_lab_and_infirmary/artifacts/room_object_list.json
+    - cad/scenes/school_computer_lab_and_infirmary/artifacts/room_object_list.success
+    - cad/scenes/public_restroom_blue/artifacts/room_object_list.json
+    - cad/scenes/public_restroom_blue/artifacts/room_object_list.success
+    - cad/scenes/public_restroom_brown/artifacts/room_object_list.json
+    - cad/scenes/public_restroom_brown/artifacts/room_object_list.success
+    - cad/scenes/public_restroom_futuristic/artifacts/room_object_list.json
+    - cad/scenes/public_restroom_futuristic/artifacts/room_object_list.success
+    - cad/scenes/public_restroom_marble/artifacts/room_object_list.json
+    - cad/scenes/public_restroom_marble/artifacts/room_object_list.success
+    - cad/scenes/public_restroom_white/artifacts/room_object_list.json
+    - cad/scenes/public_restroom_white/artifacts/room_object_list.success
+    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
+    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.json
+    - cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.success
+    - scripts/combined_room_object_list.py
     outs:
-    - artifacts/pipeline/object_inventory.json
-    - artifacts/pipeline/object_inventory.success
-  export_objs:
-    foreach:
-      - hotel_suite_small
-      - gates_bedroom
-    do:
-      cmd: 'python scripts/batch_3dsmax.py scripts/export_objs.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
-      deps:
-      - scripts/export_objs.py
-      # - cad/scenes/${item}/artifacts/object_list.success
-      # - cad/scenes/${item}/artifacts/sanitycheck.success
-      outs:
-      - cad/scenes/${item}/artifacts/objects
-      - cad/scenes/${item}/artifacts/export_objs.json
-      - cad/scenes/${item}/artifacts/export_objs.success
-  export_scenes:
-    foreach:
-      - hotel_suite_small
-      - gates_bedroom
-    do:
-      cmd: 'python scripts/export_scene.py ${item}'
-      deps:
-      # - cad/scenes/${item}/artifacts/export_objs.success
-      # - cad/scenes/${item}/artifacts/objects
-      - scripts/export_scene.py
-      outs:
-      - artifacts/scenes/${item}
+    - artifacts/pipeline/combined_room_object_list.json
+    - artifacts/pipeline/combined_room_object_list.success
+  # sanitycheck:
+  #   foreach:
+  #     - hotel_suite_small
+  #     - gates_bedroom
+  #   do:
+  #     cmd: 'python scripts/batch_3dsmax.py scripts/new_sanity_check.py -sceneFile cad/scenes/${item}/processed.max -mxsString batch:true -mxsString dir:cad/scenes/${item}/artifacts'
+  #     deps:
+  #     - cad/scenes/${item}/processed.max
+  #     - cad/scenes/${item}/textures
+  #     - scripts/new_sanity_check.py
+  #     outs:
+  #     - cad/scenes/${item}/artifacts/sanitycheck.json
+  #     - cad/scenes/${item}/artifacts/sanitycheck.success
+  # object_list:
+  #   foreach:
+  #     - public_restroom_futuristic
+  #     - hotel_suite_small
+  #     - gates_bedroom
+  #   do:
+  #     cmd: 'python scripts/batch_3dsmax.py scripts/object_list.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
+  #     deps:
+  #     - scripts/object_list.py
+  #     # - cad/scenes/${item}/artifacts/sanitycheck.json
+  #     outs:
+  #     - cad/scenes/${item}/artifacts/object_list.json
+  #     - cad/scenes/${item}/artifacts/object_list.success
+  # object_inventory:
+  #   cmd: 'python scripts/object_inventory.py'
+  #   deps:
+  #   - cad/scenes/hotel_suite_small/artifacts/object_list.json
+  #   - cad/scenes/hotel_suite_small/artifacts/object_list.success
+  #   - scripts/object_inventory.py
+  #   outs:
+  #   - artifacts/pipeline/object_inventory.json
+  #   - artifacts/pipeline/object_inventory.success
+  # export_objs:
+  #   foreach:
+  #     - hotel_suite_small
+  #     - gates_bedroom
+  #   do:
+  #     cmd: 'python scripts/batch_3dsmax.py scripts/export_objs.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
+  #     deps:
+  #     - scripts/export_objs.py
+  #     # - cad/scenes/${item}/artifacts/object_list.success
+  #     # - cad/scenes/${item}/artifacts/sanitycheck.success
+  #     outs:
+  #     - cad/scenes/${item}/artifacts/objects
+  #     - cad/scenes/${item}/artifacts/export_objs.json
+  #     - cad/scenes/${item}/artifacts/export_objs.success
+  # export_scenes:
+  #   foreach:
+  #     - hotel_suite_small
+  #     - gates_bedroom
+  #   do:
+  #     cmd: 'python scripts/export_scene.py ${item}'
+  #     deps:
+  #     # - cad/scenes/${item}/artifacts/export_objs.success
+  #     # - cad/scenes/${item}/artifacts/objects
+  #     - scripts/export_scene.py
+  #     outs:
+  #     - artifacts/scenes/${item}

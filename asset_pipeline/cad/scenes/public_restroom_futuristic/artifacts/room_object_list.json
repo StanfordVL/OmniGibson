@@ -1,0 +1,25 @@
+{
+    "success": true,
+    "objects_by_room": {
+        "0": {
+            "walls": 1,
+            "floors": 1,
+            "ceilings": 1
+        },
+        "bathroom_0": {
+            "alarm": 2,
+            "urinal": 3,
+            "mirror": 2,
+            "hand_dryer": 3,
+            "toilet_paper_dispenser": 4,
+            "toilet": 4,
+            "shower_stall": 4,
+            "sink": 2,
+            "soap_dispenser": 4,
+            "heater": 2,
+            "downlight": 10,
+            "door": 1
+        }
+    },
+    "error_invalid_name": []
+}
