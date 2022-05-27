@@ -41,13 +41,6 @@ skill_object_offset_params = {
         "hamburger.n.01_3": [0, -0.8, 0, 0.5 * np.pi],
         "ashcan.n.01_1": [0, 0.8, 0, -0.5 * np.pi],
         "countertop.n.01_1": [0.0, -0.8, 0, 0.5 * np.pi],  # [0.1, 0.5, 0.8 1.0]
-        # 'countertop.n.01_1': [[0.0, -0.8, 0, 0.1 * np.pi], [0.0, -0.8, 0, 0.5 * np.pi], [0.0, -0.8, 0, 0.8 * np.pi],],  # [0.1, 0.5, 0.8 1.0]
-        # # Ihlen_1_int, 0
-        # 'hamburger.n.01_1': [0, 0.8, 0, -0.5 * np.pi],
-        # 'hamburger.n.01_2': [0, 0.8, 0, -0.5 * np.pi],
-        # 'hamburger.n.01_3': [-0.2, 0.7, 0, -0.6 * np.pi],
-        # 'ashcan.n.01_1': [-0.2, -0.5, 0, 0.4 * np.pi],
-        # 'countertop.n.01_1': [-0.5, -0.6, 0, 0.5 * np.pi],
         # putting_away_Halloween_decorations
         "pumpkin.n.02_1": [0.5, 0.0, 0.0, 0.7 * np.pi],
         "pumpkin.n.02_2": [0, -0.5, 0, 0.5 * np.pi],
@@ -161,21 +154,6 @@ action_list_installing_a_printer = [
     [3, "printer.n.03_1"],
 ]
 
-# action_list_throwing_away_leftovers = [
-#     [0, 'hamburger.n.01_1'],
-#     [1, 'hamburger.n.01_1'],
-#     [0, 'ashcan.n.01_1'],
-#     [2, 'ashcan.n.01_1'],  # place
-#     [0, 'hamburger.n.01_2'],
-#     [1, 'hamburger.n.01_2'],
-#     [0, 'ashcan.n.01_1'],
-#     [2, 'ashcan.n.01_1'],  # place
-#     [0, 'hamburger.n.01_3'],
-#     [1, 'hamburger.n.01_3'],
-#     [0, 'ashcan.n.01_1'],
-#     [2, 'ashcan.n.01_1'],  # place
-# ]*4
-
 action_list_throwing_away_leftovers_v1 = [
     [0, "hamburger.n.01_1"],
     [1, "hamburger.n.01_1"],
@@ -207,21 +185,6 @@ action_list_throwing_away_leftovers = [
     [6, "hamburger.n.01_3"],
 ]
 
-# action_list_throwing_away_leftovers = [
-#     [0, 'countertop.n.01_1', 0],
-#     [6, 'hamburger.n.01_2'],  # 1: 137, 2: 138, 3: 139, plate: 135, ashcan: 140
-#     [0, 'ashcan.n.01_1'],
-#     [7, 'ashcan.n.01_1'],  # place
-#     [0, 'countertop.n.01_1', 1],
-#     [6, 'hamburger.n.01_1'],
-#     [0, 'ashcan.n.01_1'],
-#     [7, 'ashcan.n.01_1'],  # place
-#     [0, 'countertop.n.01_1', 2],
-#     [6, 'hamburger.n.01_3'],
-#     [0, 'ashcan.n.01_1'],
-#     [7, 'ashcan.n.01_1'],  # place
-# ]
-
 action_list_putting_leftovers_away = [
     [0, "pasta.n.02_1"],
     [1, "pasta.n.02_1"],
@@ -242,18 +205,6 @@ action_list_putting_leftovers_away = [
 ]
 
 # full set
-# action_list_putting_away_Halloween_decorations = [
-#     [0, 'cabinet.n.01_1'],  # move
-#     [4, 'cabinet.n.01_1'],  # pull
-#     [0, 'pumpkin.n.02_1'],  # move
-#     [1, 'pumpkin.n.02_1'],  # pick
-#     [2, 'cabinet.n.01_1'],  # place
-#     [0, 'pumpkin.n.02_2'],  # move
-#     [1, 'pumpkin.n.02_2'],  # pick
-#     [5, 'cabinet.n.01_1'],  # push
-# ]
-
-# full set
 action_list_putting_away_Halloween_decorations_v1 = [
     [0, "cabinet.n.01_1"],  # move
     [4, "cabinet.n.01_1"],  # pull
@@ -267,23 +218,6 @@ action_list_putting_away_Halloween_decorations_v1 = [
     # [2, 'cabinet.n.01_1'],  # place
     [5, "cabinet.n.01_1"],  # push
 ]
-
-# full sequence
-# action_list_putting_away_Halloween_decorations = [
-#     # [0, 'cabinet.n.01_1'],  # move
-#     # [4, 'cabinet.n.01_1'],  # pull
-#     [0, 'pumpkin.n.02_1'],  # move
-#     [1, 'pumpkin.n.02_1'],  # pick
-#     [0, 'cabinet.n.01_1'],  # move
-#     [2, 'cabinet.n.01_1'],  # place
-#     [0, 'pumpkin.n.02_2'],  # move
-#     [1, 'pumpkin.n.02_2'],  # pick
-#     #
-#     # [0, 'cabinet.n.01_1'],  # move
-#     # [2, 'cabinet.n.01_1'],  # place
-#     #
-#     # [5, 'cabinet.n.01_1'],  # push
-# ] # * 4
 
 # /home/robot/Desktop/behavior/iGibson-dev-jk/igibson/examples/robots/log_dir_his/20220510-001432_putting_away_Halloween_decorations_discrete_rgb_accumReward_m0.01
 # wo vis operation
@@ -623,7 +557,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         pick_place_pos[1] += vector[1]
         pick_place_pos[2] += vector[2]
 
-        pre_grasping_distance = 0.1
+        pre_grasping_distance = 0.6  # 0.1
         plan_full_pre_grasp_motion = not self.skip_arm_planning
 
         picking_direction = self.default_direction
