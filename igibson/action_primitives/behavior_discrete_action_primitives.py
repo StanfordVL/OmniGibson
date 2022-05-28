@@ -675,7 +675,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             plan_full_pre_grasp_motion=plan_full_pre_grasp_motion,
         )
 
-        print("11111111111111111")
+        print("======================== PICK STEP 1 ==========================")
 
         if (
             pre_pick_path is None
@@ -690,26 +690,24 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                 {"object_to_pick": object_name},
             )
 
-        print("22222222222222222222222")
+        print("======================== PICK STEP 2 ==========================")
 
         # First, teleport the robot to the beginning of the pre-pick path
         logger.info("Visualizing pre-pick path")
         self.planner.visualize_arm_path(pre_pick_path, arm=self.arm, keep_last_location=True)
 
-        print("3333333333333333")
+        print("======================== PICK STEP 3 ==========================")
 
         # self.robot.keep_still()
         yield self._get_still_action()
 
-        print(pre_pick_path, interaction_pick_path)
-
-        print("4444444444444444444444444444444")
+        print("======================== PICK STEP 4 ==========================")
         if pre_grasping_distance != 0:
             # Then, execute the interaction_pick_path stopping if there is a contact
             logger.info("Executing interaction-pick path")
             yield from self._execute_ee_path(interaction_pick_path, stop_on_contact=True)
         # At the end, close the hand
-        print("4444444444444444444444444444444")
+        print("======================== PICK STEP 5 ==========================")
         print("Executing grasp")
         yield from self._execute_grasp()
         if pre_grasping_distance != 0:
@@ -719,7 +717,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             )
             for i in range(100):
                 self.env.simulator.step()
-        print("55555555555555555555")
+        print("======================== PICK STEP 6 ==========================")
         logger.info("Executing retracting path")
         if plan_full_pre_grasp_motion:
             self.planner.visualize_arm_path(
@@ -733,8 +731,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                 grasped_obj=obj,
             )
 
-
-        print("6666666666666666666666")
+        print("======================== PICK STEP 7 ==========================")
 
         self.robot.keep_still()
         yield self._get_still_action()

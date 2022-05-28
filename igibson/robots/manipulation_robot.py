@@ -421,9 +421,7 @@ class ManipulationRobot(BaseRobot):
 
     def apply_action(self, action):
         # First run assisted grasping
-        # print('enter apply action ****************************************')
         if self.grasping_mode != "physical":
-            # print('self.grasping_mode: ', self.grasping_mode)
             self._handle_assisted_grasping(action=action)
 
         # Potentially freeze gripper joints
