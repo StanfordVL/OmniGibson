@@ -14,7 +14,7 @@ scene:
   scene_model: Rs_int
   # usd_path: null #/cvgl2/u/jdwong/PAIR/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/usd/Rs_int_task_cleaning_kitchen_cupboard_0_0_fixed_furniture_template.usd #null #/cvgl2/u/jdwong/PAIR/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/urdf/Rs_int_best_template.usd
   usd_path: /home/gibson/Programs/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/usd/Rs_int_task_putting_away_Halloween_decorations_0_0_fixed_furniture_template.usd
-  load_object_categories: ['pumpkin', 'agent']
+  load_object_categories: ['pumpkin', 'bottom_cabinet', 'agent']
   clutter: false
   build_graph: true
 

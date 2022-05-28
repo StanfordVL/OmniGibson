@@ -538,24 +538,35 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             self.is_grasping = True
 
     def _execute_ungrasp(self):
-        action = self._get_still_action()
+        action = self._get_still_action().tolist()
+
+        action[int(self.robot.controller_action_idx["gripper_" + self.arm][0])] = 1.0
+
+        action = np.asarray(action)
 
         # TODO: Extend to non-binary grasping controllers
         # This assumes the grippers are called "gripper_"+self.arm. Maybe some robots do not follow this convention
-        ungrasping_steps = 5 if self.fast_execution else 2 # 10
-        after_get_still_action_time = time.time()
-        for idx in range(ungrasping_steps):
-            action[self.robot.controller_action_idx["gripper_" + self.arm]] = 0.0
+        ungrasping_steps = 5 if self.fast_execution else 9 # 10
+        for i in range(ungrasping_steps):
+            print(i, 'action: ', action)
             yield action
-        yield_action_time = time.time()
-        print('yield ungrasping action: {}'.format(yield_action_time - after_get_still_action_time))
-        if self._get_obj_in_hand() is not None:
+
+        for i in range(3):
+            self.env.simulator.step()
+            grasped_object = self._get_obj_in_hand()
+            print(i, 'grasped_object', grasped_object)
+
+        grasped_object = self._get_obj_in_hand()
+        # print('grasped_object', grasped_object)
+        if not grasped_object is None:
+            # pass
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.EXECUTION_ERROR,
-                "Object still detected in hand after executing release.",
-                {"object_in_hand": self._get_obj_in_hand()},
+                "Object detected in hand after executing ungrasp.",
             )
-        self.is_grasping = False
+        else:
+            logger.info("Execution of ungrasping ended with grasped object None")
+            self.is_grasping = False
 
     def _dummy(self):
         logger.info("Dummy".format())
@@ -740,61 +751,65 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
     def _place(self, object_name):
         logger.info("Placing on object {}".format(object_name))
-        params = skill_object_offset_params[B1KActionPrimitive.PLACE][object_name]
-        obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
-        obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
 
-        # process the offset from object frame to world frame
-        mat = quat2mat(obj_rot_XYZW)
-        np_array = np.array(params[:3])
-        np_array[0] += random.uniform(0, 0.2)
-        vector = mat @ np_array
-
-        pick_place_pos = copy.deepcopy(obj_pos)
-        pick_place_pos[0] += vector[0]
-        pick_place_pos[1] += vector[1]
-        pick_place_pos[2] += vector[2]
-
-        plan_full_pre_drop_motion = not self.skip_arm_planning
-
-        pre_drop_path, _ = self.planner.plan_ee_drop(
-            pick_place_pos, arm=self.arm, plan_full_pre_drop_motion=plan_full_pre_drop_motion
-        )
-
-        if pre_drop_path is None or len(pre_drop_path) == 0:
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.PLANNING_ERROR,
-                "No arm path found to place object",
-                {"object_to_place": object_name},
-            )
-
-        # First, teleport the robot to the pre-ungrasp motion
-        logger.info("Visualizing pre-place path")
-        self.planner.visualize_arm_path(
-            pre_drop_path,
-            arm=self.arm,
-            grasped_obj_id=self.robot._ag_obj_in_hand[self.arm],
-            keep_last_location=True,
-        )
-        yield self._get_still_action()
-        # At the end, open the hand
-        logger.info("Executing ungrasp")
+        # params = skill_object_offset_params[B1KActionPrimitive.PLACE][object_name]
+        # new_name = convert_bddl_scope_to_name(object_name)
+        #
+        # obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
+        # obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
+        #
+        # # process the offset from object frame to world frame
+        #
+        # mat = quat2mat(obj_rot_XYZW)
+        # np_array = np.array(params[:3])
+        # np_array[0] += random.uniform(0, 0.2)
+        # vector = mat @ np_array
+        #
+        # pick_place_pos = copy.deepcopy(obj_pos)
+        # pick_place_pos[0] += vector[0]
+        # pick_place_pos[1] += vector[1]
+        # pick_place_pos[2] += vector[2]
+        #
+        # plan_full_pre_drop_motion = not self.skip_arm_planning
+        #
+        # pre_drop_path, _ = self.planner.plan_ee_drop(
+        #     pick_place_pos, arm=self.arm, plan_full_pre_drop_motion=plan_full_pre_drop_motion
+        # )
+        #
+        # if pre_drop_path is None or len(pre_drop_path) == 0:
+        #     raise ActionPrimitiveError(
+        #         ActionPrimitiveError.Reason.PLANNING_ERROR,
+        #         "No arm path found to place object",
+        #         {"object_to_place": object_name},
+        #     )
+        #
+        # # First, teleport the robot to the pre-ungrasp motion
+        # logger.info("Visualizing pre-place path")
+        # self.planner.visualize_arm_path(
+        #     pre_drop_path,
+        #     arm=self.arm,
+        #     grasped_obj_id=self.robot._ag_obj_in_hand[self.arm],
+        #     keep_last_location=True,
+        # )
+        # yield self._get_still_action()
+        # # At the end, open the hand
+        # logger.info("Executing ungrasp")
         yield from self._execute_ungrasp()
-        # Then, retract the arm
-        logger.info("Executing retracting path")
-        if plan_full_pre_drop_motion:  # Visualizing the full path...
-            self.planner.visualize_arm_path(
-                pre_drop_path,
-                arm=self.arm,
-                keep_last_location=True,
-                reverse_path=True,
-            )
-        else:  # ... or directly teleporting to the last location
-            self.planner.visualize_arm_path(
-                [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
-                arm=self.arm,
-                keep_last_location=True,
-            )
+        # # Then, retract the arm
+        # logger.info("Executing retracting path")
+        # if plan_full_pre_drop_motion:  # Visualizing the full path...
+        #     self.planner.visualize_arm_path(
+        #         pre_drop_path,
+        #         arm=self.arm,
+        #         keep_last_location=True,
+        #         reverse_path=True,
+        #     )
+        # else:  # ... or directly teleporting to the last location
+        #     self.planner.visualize_arm_path(
+        #         [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
+        #         arm=self.arm,
+        #         keep_last_location=True,
+        #     )
         logger.info("Place action completed")
 
     def _toggle(self, object_name):
