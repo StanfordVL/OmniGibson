@@ -834,6 +834,7 @@ class InteractiveTraversableScene(TraversableScene):
         """
         # Grab scene info
         scene_info = self.get_scene_info()
+        breakpoint()
 
         # Iterate over all scene info, and instantiate object classes linked to the objects found on the stage
         # accordingly

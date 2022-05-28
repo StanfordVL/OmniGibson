@@ -358,6 +358,7 @@ class iGibsonEnv(BaseEnv):
         :return: info: info dictionary with any useful information
         """
         # Apply actions if specified
+        # print('igibson_env step: -------------------------------------------')
         if action is not None:
             # If the action is not a dictionary, convert into a dictionary
             if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):

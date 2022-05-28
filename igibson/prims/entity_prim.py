@@ -930,7 +930,7 @@ class EntityPrim(XFormPrim):
         :return: Array[float], minimum values for this robot's joints. If joint does not have a range, returns -1000
             for that joint
         """
-        # print(f"joint_lower_limits: {[joint.lower_limit for joint in self._joints.values()]}")
+        # print(f"{[joint.lower_limit for joint in self._joints.values()]}")
         return np.array([joint.lower_limit for joint in self._joints.values()])
 
     @property

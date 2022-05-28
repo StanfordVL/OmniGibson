@@ -393,6 +393,11 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         return [
             ["torso_lift_link", "shoulder_lift_link"],
             ["torso_lift_link", "torso_fixed_link"],
+            ["caster_wheel_link", "estop_link"],
+            ["caster_wheel_link", "laser_link"],
+            ["caster_wheel_link", "torso_fixed_link"],
+            ["caster_wheel_link", "l_wheel_link"],
+            ["caster_wheel_link", "r_wheel_link"],
         ]
 
     @property

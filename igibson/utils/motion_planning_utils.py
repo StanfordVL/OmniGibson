@@ -149,7 +149,7 @@ class MotionPlanner:
         # TODO: Magic numbers -- change?
         self.robot_footprint_radius = 0.3
         self.arm_interaction_length = 0.1
-        self.arm_ik_threshold = 1.0 #0.05
+        self.arm_ik_threshold = 0.1 #0.05
         self.floor_num = 0
         self.robot_idn = 0
 
@@ -529,6 +529,7 @@ class MotionPlanner:
                     current_orientation = np.array(self.robot.get_eef_orientation(arm=arm))
                     current_orientation_rpy = p.getEulerFromQuaternion(current_orientation)
                     return np.concatenate((ee_position, np.asarray(current_orientation_rpy)))
+
         ik_start = time.time()
         rest_position = self.get_ik_parameters()
 
@@ -544,6 +545,7 @@ class MotionPlanner:
         # self.simulator_step()
         # self.simulator_step()
         # self.simulator_step()
+
         # jnt_state = self.robot.get_joints_state()
 
         state = self.env.dump_state(serialized=False)
@@ -559,17 +561,16 @@ class MotionPlanner:
         control_idx = self.ik_control_idx[arm]
         n_control_idx = len(control_idx)
         current_joint_pos = self.robot.get_joint_positions()
-        # print(1.05, '*************************************')
         jnt_range = (self.robot.joint_upper_limits - self.robot.joint_lower_limits)[control_idx]
         jnt_low = self.robot.joint_lower_limits[control_idx]
-        # jnt_middle = ((self.robot.joint_upper_limits + self.robot.joint_lower_limits) / 2.0)[control_idx]
-        # print(1.1, '*************************************')
+        jnt_middle = ((self.robot.joint_upper_limits + self.robot.joint_lower_limits) / 2.0)[control_idx]
+
         ee_orientation = np.array([0, 0, 0, 1]) if ee_orientation is None else ee_orientation
         if obj_name in [
             "microwave.n.02_1-cleaning_microwave_oven",
         ]:
             ee_orientation = np.array([0.1830127, -0.1830127, 0.6830127, 0.6830127])
-        # print(1.2, '*************************************')
+
         # Find the local transform
         ee_local_pos, ee_local_ori = T.relative_pose_transform(ee_position, ee_orientation, base_pos, base_quat)
         ee_local_ori = np.array([0,0,0,1])
@@ -601,8 +602,7 @@ class MotionPlanner:
             dist = l2_distance(self.robot.get_eef_position(arm=arm), ee_position)
             if dist > self.arm_ik_threshold:
                 # input(f"Distance from pose: {dist}, max: {self.arm_ik_threshold}")
-                log.warning("IK solution is not close enough to the desired pose. Distance: {}, self.robot.get_eef_position(arm=arm): {}, ee_position: {}, self.arm_ik_threshold: {}"
-                            .format(dist, self.robot.get_eef_position(arm=arm), ee_position, self.arm_ik_threshold))
+                log.warning("IK solution is not close enough to the desired pose. Distance: {}".format(dist))
                 n_attempt += 1
                 continue
 
@@ -842,6 +842,350 @@ class MotionPlanner:
         # app.update()
         return line_path
 
+    # def plan_ee_push(
+    #     self,
+    #     pushing_location,
+    #     pushing_direction,
+    #     ee_pushing_orn=None,
+    #     pre_pushing_distance=0.1,
+    #     pushing_distance=0.1,
+    #     pushing_steps=50,
+    #     plan_full_pre_push_motion=True,
+    #     arm=None,
+    # ):
+    #     """
+    #     Plans a full pushing trajectory.
+    #     The trajectory includes a pre-pushing motion in free space (contact-free) to a location in front of the pushing
+    #     location, and a pushing motion (with collisions, to interact) in a straight line in Cartesian space along the
+    #     pushing direction
+    #
+    #     :param pushing_location: 3D point to push at
+    #     :param pushing_direction: direction to push after reaching that point
+    #     :param ee_pushing_orn: orientation of the end effector during pushing [x,y,z,w]. None if we do not constraint it
+    #     :param pre_pushing_distance: distance in front of the pushing point along the pushing direction to plan a motion
+    #         in free space before the interaction
+    #     :param pushing_distance: distance after the pushing point along the pushing direction to move in the interaction
+    #         push. The total motion in the second phase will be pre_pushing_distance + pushing_distance
+    #     :param pushing_steps: steps to compute IK along a straight line for the second phase of the push (interaction)
+    #     :param arm: which arm to use for multi-arm agents. `None` to use the default arm
+    #     :return: tuple of (pre_push_path, push_interaction_path) with the joint space trajectory to follow in the two
+    #         phases of the interaction. Both will be None if the planner fails to find a path
+    #     """
+    #     log.warning(
+    #         "Planning end-effector pushing action at point {} with direction {}".format(
+    #             pushing_location, pushing_direction
+    #         )
+    #     )
+    #     if self.marker is not None:
+    #         self.set_marker_position_direction(pushing_location, pushing_direction)
+    #
+    #     if arm is None:
+    #         arm = self.robot.default_arm
+    #         log.warning("Pushing with the default arm: {}".format(arm))
+    #
+    #     pre_pushing_location = pushing_location - pre_pushing_distance * pushing_direction
+    #     log.warning(
+    #         "It will plan a motion to the location {}, {} m in front of the pushing location"
+    #         "".format(pre_pushing_location, pre_pushing_distance)
+    #     )
+    #
+    #     if plan_full_pre_push_motion:
+    #         pre_push_path = self.plan_ee_motion_to_cartesian_pose(
+    #             pre_pushing_location, ee_orientation=ee_pushing_orn, arm=arm
+    #         )
+    #     else:
+    #         log.warning("Not planning the pre-push path, only checking feasibility of the last location.")
+    #         last_pose = self.get_joint_pose_for_ee_pose_with_ik(
+    #             pre_pushing_location, ee_orientation=ee_pushing_orn, arm=arm
+    #         )
+    #         pre_push_path = [last_pose] if last_pose is not None else []
+    #
+    #     push_interaction_path = None
+    #
+    #     if pre_push_path is None or len(pre_push_path) == 0:
+    #         log.warning("Planning failed: no path found to pre-pushing location")
+    #     else:
+    #         push_interaction_path = self.plan_ee_straight_line_motion(
+    #             pre_push_path[-1],
+    #             pushing_location
+    #             - pushing_direction * pre_pushing_distance,  # This is where the pre-pushing path should end
+    #             pushing_direction,
+    #             ee_orn=ee_pushing_orn,
+    #             line_length=pre_pushing_distance + pushing_distance,
+    #             steps=pushing_steps,
+    #             arm=arm,
+    #         )
+    #         if push_interaction_path is None:
+    #             log.warn("Planning failed: no path found to push the object")
+    #
+    #     return pre_push_path, push_interaction_path
+
+    # def plan_ee_pull(
+    #     self,
+    #     pulling_location,
+    #     pulling_direction,
+    #     ee_pulling_orn=None,
+    #     pre_pulling_distance=0.1,
+    #     pulling_distance=0.1,
+    #     pulling_steps=50,
+    #     plan_full_pre_pull_motion=True,
+    #     arm=None,
+    # ):
+    #     """
+    #     Plans a full pulling trajectory.
+    #     The trajectory includes a pre-pulling motion in free space (contact-free) to a location in front of the pulling
+    #     location, and a pulling motion (with collisions, to pull) in a straight line in Cartesian space along the
+    #     pulling direction
+    #
+    #     :param pulling_location: 3D point to push at
+    #     :param pulling_direction: direction to push after reaching that point
+    #     :param pre_pulling_distance: distance in front of the pulling point in the opposite direction to the pulling
+    #         direction to plan a motion in free space before the interaction pull.
+    #     :param pulling_distance: distance after the pulling point along the pulling direction to move in the interaction
+    #         push.
+    #     :param pulling_steps: steps to compute IK
+    #     :param arm: which arm to use for multi-arm agents. `None` to use the default arm
+    #     :return: tuple of (pre_pull_path, pull_interaction_path1, pull_interaction_path2) with the joint space
+    #         trajectory to follow in the three phases of the interaction. All will be None if the planner fails to find a
+    #         path
+    #     """
+    #     log.warning(
+    #         "Planning end-effector pulling action at point {} with direction {}".format(
+    #             pulling_location, pulling_direction
+    #         )
+    #     )
+    #     if self.marker is not None:
+    #         self.set_marker_position_direction(pulling_location, pulling_direction)
+    #
+    #     if arm is None:
+    #         arm = self.robot.default_arm
+    #         log.warning("Pulling with the default arm: {}".format(arm))
+    #
+    #     pre_pulling_location = pulling_location + pre_pulling_distance * pulling_direction
+    #     log.warning(
+    #         "It will plan a motion to the location {}, {} m in front of the pulling location"
+    #         "".format(pre_pulling_location, pre_pulling_distance)
+    #     )
+    #
+    #     if ee_pulling_orn is None:
+    #         # Compute orientation of the hand to align the fingers to the opposite of the pulling direction and the palm up
+    #         # to the ceiling
+    #         # Assuming fingers point in +x, palm points in +z in eef
+    #         # In world frame, +z points up
+    #         desired_x_dir_normalized = -np.array(pulling_direction) / np.linalg.norm(np.array(pulling_direction))
+    #         z_dir_in_wf = np.array([0, 0, 1.0])
+    #         desired_y_dir = -np.cross(desired_x_dir_normalized, z_dir_in_wf)
+    #         desired_y_dir_normalized = desired_y_dir / np.linalg.norm(desired_y_dir)
+    #         desired_z_dir_normalized = np.cross(desired_x_dir_normalized, desired_y_dir_normalized)
+    #         rot_matrix = np.column_stack((desired_x_dir_normalized, desired_y_dir_normalized, desired_z_dir_normalized))
+    #         quatt = quatXYZWFromRotMat(rot_matrix)
+    #     else:
+    #         log.warning("Planning pulling with end-effector orientation {}".format(ee_pulling_orn))
+    #         quatt = ee_pulling_orn
+    #
+    #     if plan_full_pre_pull_motion:
+    #         pre_pull_path = self.plan_ee_motion_to_cartesian_pose(pre_pulling_location, ee_orientation=quatt, arm=arm)
+    #     else:
+    #         log.warning("Not planning the pre-pull path, only checking feasibility of the last location.")
+    #         last_pose = self.get_joint_pose_for_ee_pose_with_ik(pre_pulling_location, ee_orientation=quatt, arm=arm)
+    #         pre_pull_path = [last_pose] if last_pose is not None else []
+    #
+    #     approach_interaction_path = None
+    #     pull_interaction_path = None
+    #
+    #     if pre_pull_path is None or len(pre_pull_path) == 0:
+    #         log.warning("Planning failed: no path found to pre-pulling location")
+    #     else:
+    #         approach_interaction_path = self.plan_ee_straight_line_motion(
+    #             pre_pull_path[-1],  # This is where the pre-pulling path should end
+    #             pre_pulling_location,
+    #             -pulling_direction,
+    #             ee_orn=quatt,
+    #             line_length=pre_pulling_distance,
+    #             steps=pulling_steps,
+    #             arm=arm,
+    #         )
+    #         if approach_interaction_path is None:
+    #             log.warn("Planning failed: no path found to approach the object to pull")
+    #         else:
+    #             pull_interaction_path = self.plan_ee_straight_line_motion(
+    #                 approach_interaction_path[-1],
+    #                 pre_pulling_location - pulling_direction * pre_pulling_distance,
+    #                 pulling_direction,
+    #                 ee_orn=quatt,
+    #                 line_length=pulling_distance,
+    #                 steps=pulling_steps,
+    #                 arm=arm,
+    #             )
+    #
+    #     return pre_pull_path, approach_interaction_path, pull_interaction_path
+    # '''
+    # def plan_arm_pull(self, hit_pos, hit_normal):
+    #     """
+    #     Attempt to reach a 3D position and prepare for a push later
+    #
+    #     :param hit_pos: 3D position to reach
+    #     :param hit_normal: direction to push after reacehing that position
+    #     :return: arm trajectory or None if no plan can be found
+    #     """
+    #     log.debug("Planning arm push at point {} with direction {}".format(hit_pos, hit_normal))
+    #
+    #     hit_pos = hit_pos + (np.array(hit_normal) * -1.0) * (self.arm_interaction_length * 0.3)
+    #
+    #     # if self.marker is not None:
+    #     #     self.set_marker_position_direction(hit_pos, hit_normal)
+    #     #
+    #     # # Solve the IK problem to set the arm at the desired position
+    #     # joint_positions = self.get_joint_pose_for_ee_pose_with_ik(hit_pos)
+    #
+    #     if joint_positions is not None:
+    #         # Set the arm in the default configuration to initiate arm motion planning (e.g. untucked)
+    #         # set_joint_positions(self.robot_id, self.arm_joint_ids, self.arm_default_joint_positions)
+    #         self.simulator_sync()
+    #         plan = self.plan_base_motion([hit_pos[0], hit_pos[1], 0.05])
+    #         return plan
+    #     else:
+    #         log.debug("Planning failed: goal position may be non-reachable")
+    #         return None
+    #
+    # def interact_pull(self, push_point, push_direction):
+    #     """
+    #     Move the arm starting from the push_point along the push_direction
+    #     and physically simulate the interaction
+    #
+    #     :param push_point: 3D point to start pushing from
+    #     :param push_direction: push direction
+    #     """
+    #     body_ids = self.robots.get_body_ids()
+    #     assert len(body_ids) == 1, "Only single-body robots are supported."
+    #     self.robot_id = body_ids[0]
+    #     self.arm_default_joint_positions = (
+    #         0.1,
+    #         -1.41,
+    #         1.517,
+    #         0.82,
+    #         2.2,
+    #         2.96,
+    #         -1.286,
+    #         0.0,
+    #     )
+    #     self.arm_joint_names = [
+    #         "torso_lift_joint",
+    #         "shoulder_pan_joint",
+    #         "shoulder_lift_joint",
+    #         "upperarm_roll_joint",
+    #         "elbow_flex_joint",
+    #         "forearm_roll_joint",
+    #         "wrist_flex_joint",
+    #         "wrist_roll_joint",
+    #     ]
+    #     self.robot_joint_names = [
+    #         "r_wheel_joint",
+    #         "l_wheel_joint",
+    #         "torso_lift_joint",
+    #         "head_pan_joint",
+    #         "head_tilt_joint",
+    #         "shoulder_pan_joint",
+    #         "shoulder_lift_joint",
+    #         "upperarm_roll_joint",
+    #         "elbow_flex_joint",
+    #         "forearm_roll_joint",
+    #         "wrist_flex_joint",
+    #         "wrist_roll_joint",
+    #         "r_gripper_finger_joint",
+    #         "l_gripper_finger_joint",
+    #     ]
+    #     self.rest_joint_names = [
+    #         "r_wheel_joint",
+    #         "l_wheel_joint",
+    #         "head_pan_joint",
+    #         "head_tilt_joint",
+    #         "r_gripper_finger_joint",
+    #         "l_gripper_finger_joint",
+    #     ]
+    #
+    #     self.arm_joint_ids = joints_from_names(
+    #         self.robot_id,
+    #         self.arm_joint_names,
+    #     )
+    #
+    #     self.robot_arm_indices = [
+    #         self.robot_joint_names.index(arm_joint_name) for arm_joint_name in self.arm_joint_names
+    #     ]
+    #
+    #     self.rest_joint_ids = joints_from_names(
+    #         self.robot_id,
+    #         self.rest_joint_names,
+    #     )
+    #
+    #     push_vector = np.array(push_direction) * self.arm_interaction_length
+    #
+    #     max_limits, min_limits, rest_position, joint_range, joint_damping = self.get_ik_parameters()
+    #     base_pose = get_base_values(self.robot_id)
+    #
+    #     # if self.sleep_flag:
+    #     #     steps = 50
+    #     # else:
+    #     steps = 5
+    #
+    #     for i in range(steps):
+    #         push_goal = np.array(push_point) + push_vector * (i + 1) / float(steps)
+    #
+    #         joint_positions = p.calculateInverseKinematics(
+    #             self.robot_id,
+    #             self.robot.eef_links[self.robot.default_arm].link_id,
+    #             targetPosition=push_goal,
+    #             # targetOrientation=(0, 0.707, 0, 0.707),
+    #             lowerLimits=min_limits,
+    #             upperLimits=max_limits,
+    #             jointRanges=joint_range,
+    #             restPoses=rest_position,
+    #             jointDamping=joint_damping,
+    #             # solver=p.IK_DLS,
+    #             maxNumIterations=100,
+    #         )
+    #
+    #         if self.robot_type == "Fetch":
+    #             joint_positions = np.array(joint_positions)[self.robot_arm_indices]
+    #
+    #         control_joints(self.robot_id, self.arm_joint_ids, joint_positions)
+    #         control_joints(self.robot_id, self.rest_joint_ids, np.array([0.0, 0.0, 0.0, 0.45, 0.5, 0.5]))
+    #
+    #         # set_joint_positions(self.robot_id, self.arm_joint_ids, joint_positions)
+    #
+    #         # if self.robot_type == "Fetch":
+    #         #     joint_positions = np.array(joint_positions)[self.robot_arm_indices]
+    #
+    #         achieved = self.robot.get_eef_position()
+    #         self.simulator_step()
+    #         set_base_values_with_z(self.robot_id, base_pose, z=self.initial_height)
+    #
+    #         if self.mode == "gui_interactive" and self.sleep_flag:
+    #             sleep(0.02)  # for visualization
+    #
+    # def execute_arm_pull(self, plan, hit_pos, hit_normal):
+    #     """
+    #     Execute arm push given arm trajectory
+    #     Should be called after plan_arm_push()
+    #
+    #     :param plan: arm trajectory or None if no plan can be found
+    #     :param hit_pos: 3D position to reach
+    #     :param hit_normal: direction to push after reacehing that position
+    #     """
+    #     if plan is not None:
+    #         log.debug("Teleporting arm along the trajectory. No physics simulation")
+    #         self.visualize_base_path(plan)
+    #         log.debug("Performing pushing actions")
+    #         self.interact_pull(hit_pos, hit_normal)
+    #         log.debug("Teleporting arm to the default configuration")
+    #         self.visualize_base_path(plan[::-1])
+    #         # set_joint_positions(self.robot_id, self.arm_joint_ids, self.arm_default_joint_positions)
+    #         self.simulator_sync()
+    #         done, _ = self.env.task.get_termination(self.env)
+    #         if self.print_log:
+    #             print("pull done: ", done)
+    # '''
+
     def plan_ee_pick(
         self,
         grasping_location,
@@ -985,6 +1329,88 @@ class MotionPlanner:
 
         return pre_drop_path, []  # There is no second part of the action for dropping
 
+    # def plan_ee_toggle(
+    #     self,
+    #     toggling_location,
+    #     toggling_direction,
+    #     pre_toggling_distance=0.1,
+    #     toggling_steps=50,
+    #     plan_full_pre_toggle_motion=True,
+    #     arm=None,
+    # ):
+    #     """
+    #     Plans a full toggling trajectory.
+    #     The trajectory includes a pre-toggling motion in free space (contact-free) to a location in front of the toggling
+    #     location, and a toggling motion (with collisions, to toggle) in a straight line in Cartesian space along the
+    #     toggling direction
+    #
+    #     :param toggling_location: 3D point to push at
+    #     :param toggling_direction: direction to push after reaching that point
+    #     :param pre_toggling_distance: distance in front of the toggling point along the toggling direction to plan a motion
+    #         in free space before the interaction toggle. The total motion in the second phase will be pre_toggling_distance + toggling_distance
+    #     :param toggling_steps: steps to compute IK along a straight line for the second phase of the toggle (interaction)
+    #     :param arm: which arm to use for multi-arm agents. `None` to use the default arm
+    #     :return: tuple of (pre_toggle_path, toggle_interaction_path) with the joint space trajectory to follow in the two
+    #     phases of the interaction. Both will be None if the planner fails to find a path
+    #     """
+    #     log.warning(
+    #         "Planning end-effector toggling action at point {} with direction {}".format(
+    #             toggling_location, toggling_direction
+    #         )
+    #     )
+    #     if self.marker is not None:
+    #         self.set_marker_position_direction(toggling_location, toggling_direction)
+    #
+    #     if arm is None:
+    #         arm = self.robot.default_arm
+    #         log.warning("toggling with the default arm: {}".format(arm))
+    #
+    #     pre_toggling_location = toggling_location - pre_toggling_distance * toggling_direction
+    #     log.warning(
+    #         "It will plan a motion to the location {}, {} m in front of the toggling location"
+    #         "".format(pre_toggling_distance, pre_toggling_location)
+    #     )
+    #     """
+    #     # Compute orientation of the hand to align the fingers to the toggling direction and the palm up to the ceiling
+    #     # Assuming fingers point in +x, palm points in +z in eef
+    #     # In world frame, +z points up
+    #     desired_x_dir_normalized = np.array(toggling_direction) / np.linalg.norm(np.array(toggling_direction))
+    #     z_dir_in_wf = np.array([0, 0, 1.0])
+    #     desired_y_dir = -np.cross(desired_x_dir_normalized, z_dir_in_wf)
+    #     desired_y_dir_normalized = desired_y_dir / np.linalg.norm(desired_y_dir)
+    #     desired_z_dir_normalized = np.cross(desired_x_dir_normalized, desired_y_dir_normalized)
+    #     rot_matrix = np.column_stack((desired_x_dir_normalized, desired_y_dir_normalized, desired_z_dir_normalized))
+    #     quatt = quatXYZWFromRotMat(rot_matrix)
+    #     """
+    #     quatt = (0, 0.7071068, 0, 0.7071068)
+    #     if plan_full_pre_toggle_motion:
+    #         pre_toggle_path = self.plan_ee_motion_to_cartesian_pose(
+    #             pre_toggling_location, ee_orientation=quatt, arm=arm
+    #         )
+    #     else:
+    #         log.warning("Not planning the pre-toggle path, only checking feasibility of the last location.")
+    #         last_pose = self.get_joint_pose_for_ee_pose_with_ik(pre_toggling_location, ee_orientation=quatt, arm=arm)
+    #         pre_toggle_path = [last_pose] if last_pose is not None else []
+    #
+    #     toggle_interaction_path = None
+    #
+    #     if pre_toggle_path is None or len(pre_toggle_path) == 0:
+    #         log.warning("Planning failed: no path found to pre-toggling location")
+    #     else:
+    #         toggle_interaction_path = self.plan_ee_straight_line_motion(
+    #             pre_toggle_path[-1],
+    #             toggling_location
+    #             - toggling_direction * pre_toggling_distance,  # This is where the pre-toggling path should end
+    #             toggling_direction,
+    #             ee_orn=quatt,
+    #             line_length=pre_toggling_distance,
+    #             steps=toggling_steps,
+    #             arm=arm,
+    #         )
+    #         if toggle_interaction_path is None:
+    #             log.warn("Planning failed: no path found to toggle the object")
+    #
+    #     return pre_toggle_path, toggle_interaction_path
 
     def visualize_arm_path(self, arm_path, reverse_path=False, arm=None, grasped_obj=None, keep_last_location=True):
         """
@@ -1074,3 +1500,197 @@ class MotionPlanner:
         yaw = np.arctan2(direction[1], direction[0])
         self.set_marker_position_yaw(pos, yaw)
 
+
+# def plan_hand_motion_br(
+#     robot,
+#     arm,
+#     end_conf,
+#     obstacles=[],
+#     attachments=[],
+#     direct_path=False,
+#     max_distance=HAND_MAX_DISTANCE,
+#     iterations=50,
+#     restarts=2,
+#     shortening=0,
+#     algorithm="birrt",
+#     disabled_colliding_links=[],
+#     check_self_collisions=True,
+#     disabled_self_colliding_pairs=set(),
+#     step_resolutions=(0.03, 0.03, 0.03, 0.2, 0.2, 0.2),
+# ):
+#     if algorithm != "birrt":
+#         print("We only allow birrt with the BehaviorRobot")
+#         exit(-1)
+#
+#     # Define the sampling domain.
+#     cur_pos = np.array(robot.get_position())
+#     target_pos = np.array(end_conf[:3])
+#     both_pos = np.array([cur_pos, target_pos])
+#     HAND_SAMPLING_DOMAIN_PADDING = 1  # Allow 1m of freedom around the sampling range.
+#     min_pos = np.min(both_pos, axis=0) - HAND_SAMPLING_DOMAIN_PADDING
+#     max_pos = np.max(both_pos, axis=0) + HAND_SAMPLING_DOMAIN_PADDING
+#
+#     hand_limits = (min_pos, max_pos)
+#
+#     obj_in_hand = robot._ag_obj_in_hand[arm]
+#
+#     hand_distance_fn, sample_fn, extend_fn, collision_fn = get_brobot_hand_planning_fns(
+#         robot, arm, hand_limits, obj_in_hand, obstacles, step_resolutions, max_distance=max_distance
+#     )
+#
+#     # Get the initial configuration of the selected hand
+#     pos, orn = robot.eef_links[arm].get_position_orientation()
+#     rpy = p.getEulerFromQuaternion(orn)
+#     start_conf = [pos[0], pos[1], pos[2], rpy[0], rpy[1], rpy[2]]
+#
+#     if collision_fn(start_conf):
+#         log.warning("Warning: initial configuration is in collision. Impossible to find a path.")
+#         return None
+#     else:
+#         log.debug("Initial conf is collision free")
+#
+#     if collision_fn(end_conf):
+#         log.warning("Warning: end configuration is in collision. Impossible to find a path.")
+#         return None
+#     else:
+#         log.debug("Final conf is collision free")
+#
+#     if direct_path:
+#         log.warning("Planning direct path")
+#         rpy = p.getEulerFromQuaternion(end_conf[3:])
+#         end_conf = [end_conf[0], end_conf[1], end_conf[2], rpy[0], rpy[1], rpy[2]]
+#         return direct_path(start_conf, end_conf, extend_fn, collision_fn)
+#
+#     # TODO: Deal with obstacles and attachments
+#
+#     path = birrt(
+#         start_conf,
+#         end_conf,
+#         hand_distance_fn,
+#         sample_fn,
+#         extend_fn,
+#         collision_fn,
+#         iterations=iterations,
+#         restarts=restarts,
+#     )
+#
+#     if path is None:
+#         return None
+#     return shorten_path(path, extend_fn, collision_fn, shortening)
+
+
+# def get_brobot_hand_planning_fns(
+#     robot, arm, hand_limits, obj_in_hand, obstacles, step_resolutions, max_distance=HAND_MAX_DISTANCE
+# ):
+#     """
+#     Define the functions necessary to do motion planning with a floating hand for the BehaviorRobot:
+#     distance function, sampling function, extend function and collision checking function
+#
+#     """
+#
+#     def hand_difference_fn(q2, q1):
+#         # Metric distance in location
+#         dx, dy, dz = np.array(q2[:3]) - np.array(q1[:3])
+#         # Per-element distance in orientation
+#         # TODO: the orientation distance should be the angle in the axis-angle representation of the difference of
+#         # orientations between the poses (1 value)
+#         droll = circular_difference(q2[3], q1[3])
+#         dpitch = circular_difference(q2[4], q1[4])
+#         dyaw = circular_difference(q2[5], q1[5])
+#
+#         return np.array((dx, dy, dz, droll, dpitch, dyaw))
+#
+#     def hand_distance_fn(q1, q2, weights=(1, 1, 1, 5, 5, 5)):
+#         """
+#         Function to calculate the distance between two poses of a hand
+#         :param q1: Initial pose of the hand
+#         :param q2: Goal pose of the hand
+#         :param weights: Weights of each of the six elements of the pose difference (3 position and 3 orientation)
+#         """
+#         difference = hand_difference_fn(q1, q2)
+#         return np.sqrt(np.dot(np.array(weights), difference * difference))
+#
+#     def sample_fn():
+#         """
+#         Sample a random hand configuration (6D pose) within limits
+#         """
+#         x, y, z = np.random.uniform(*hand_limits)
+#         r, p, yaw = np.random.uniform((-PI, -PI, -PI), (PI, PI, PI))
+#         return (x, y, z, r, p, yaw)
+#
+#     def extend_fn(q1, q2):
+#         """
+#         Extend function for sampling-based planning
+#         It interpolates between two 6D pose configurations linearly
+#         :param q1: initial configuration
+#         :param q2: final configuration
+#         """
+#         # TODO: Use scipy's slerp
+#         steps = np.abs(np.divide(hand_difference_fn(q2, q1), step_resolutions))
+#         n = int(np.max(steps)) + 1
+#
+#         for i in range(n):
+#             delta = hand_difference_fn(q2, q1)
+#             delta_ahora = ((i + 1) / float(n)) * np.array(delta)
+#             q = delta_ahora + np.array(q1)
+#             q = tuple(q)
+#             yield q
+#
+#     non_hand_non_oih_obstacles = {
+#         obs
+#         for obs in obstacles
+#         if ((obj_in_hand is None or obs not in obj_in_hand.get_body_ids()) and (obs != robot.eef_links[arm].body_id))
+#     }
+#
+#     def collision_fn(pose3d):
+#         quat = pose3d[3:] if len(pose3d[3:]) == 4 else p.getQuaternionFromEuler(pose3d[3:])
+#         pose3dq = (pose3d[:3], quat)
+#         robot.set_eef_position_orientation(pose3d[:3], quat, arm)
+#         close_objects = set(
+#             x[0]
+#             for x in p.getOverlappingObjects(*get_aabb(robot.eef_links[arm].body_id))
+#             if x[0] != robot.eef_links[arm].body_id
+#         )
+#         close_obstacles = close_objects & non_hand_non_oih_obstacles
+#         collisions = [
+#             (obs, pairwise_collision(robot.eef_links[arm].body_id, obs, max_distance=max_distance))
+#             for obs in close_obstacles
+#         ]
+#         colliding_bids = [obs for obs, col in collisions if col]
+#         if colliding_bids:
+#             log.debug("Hand collision with objects: ", colliding_bids)
+#         collision = bool(colliding_bids)
+#
+#         if obj_in_hand is not None:
+#             # Generalize more.
+#             [oih_bid] = obj_in_hand.get_body_ids()  # Generalize.
+#             oih_close_objects = set(x[0] for x in p.getOverlappingObjects(*get_aabb(oih_bid)))
+#             oih_close_obstacles = (oih_close_objects & non_hand_non_oih_obstacles) | close_obstacles
+#             obj_collisions = [
+#                 (obs, pairwise_collision(oih_bid, obs, max_distance=max_distance)) for obs in oih_close_obstacles
+#             ]
+#             obj_colliding_bids = [obs for obs, col in obj_collisions if col]
+#             if obj_colliding_bids:
+#                 log.debug("Held object collision with objects: ", obj_colliding_bids)
+#             collision = collision or bool(obj_colliding_bids)
+#
+#         return collision
+#
+#     return hand_distance_fn, sample_fn, extend_fn, collision_fn
+
+
+# def shorten_path(path, extend, collision, iterations=50):
+#     shortened_path = path
+#     for _ in range(iterations):
+#         if len(shortened_path) <= 2:
+#             return shortened_path
+#         i = random.randint(0, len(shortened_path) - 1)
+#         j = random.randint(0, len(shortened_path) - 1)
+#         if abs(i - j) <= 1:
+#             continue
+#         if j < i:
+#             i, j = j, i
+#         shortcut = list(extend(shortened_path[i], shortened_path[j]))
+#         if all(not collision(q) for q in shortcut):
+#             shortened_path = shortened_path[: i + 1] + shortened_path[j:]
+#     return shortened_path

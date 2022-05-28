@@ -20,7 +20,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         action_generator,
         reward_accumulation="sum",
         accumulate_obs=False,
-        num_attempts=10,
+        num_attempts=1,
     ):
         """
         Environment wrapper class for mapping action primitives to low-level environment actions
@@ -54,9 +54,21 @@ class ActionPrimitiveWrapper(BaseWrapper):
         for _ in range(self.num_attempts):
             obs, done, info = None, None, {}
             try:
+                # print('\n\n\n\n\n\n\naction_primitive_wrapper action: {} -------------------------------------------'.format(action))
+                # actions = list(self.action_generator.apply(action))
+                # print(
+                #     '\n\n\n\n\n\n\n2 action_primitive_wrapper action: {} -------------------------------------------'.format(
+                #         action))
+                # last_idx = len(actions)
                 for lower_level_action in self.action_generator.apply(action):
+                # for idx, lower_level_action in enumerate(actions):
+
                     # Run super step
+                    # print('\n\n\naction_primitive_wrapper step: -------------------------------------------')
                     obs, reward, done, info = super().step(lower_level_action)
+
+                    # if idx == last_idx:
+                    #     breakpoint()
 
                     if self.reward_accumulation == "sum":
                         accumulated_reward += reward

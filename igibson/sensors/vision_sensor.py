@@ -152,10 +152,6 @@ class VisionSensor(BaseSensor):
         for i in range(3):
             app.update()
 
-    def _initialize(self):
-        # Run super first
-        super()._initialize()
-
         # Initialize sensors
         self._initialize_sensors(names=self._modalities)
 
@@ -195,9 +191,6 @@ class VisionSensor(BaseSensor):
         app.update()  # Extra frame required to prevent access violation error
 
     def _get_obs(self):
-        # Make sure we're initialized
-        assert self.initialized, "Cannot grab vision observations without first initializing this VisionSensor!"
-
         # Run super first to grab any upstream obs
         obs = super()._get_obs()
 
