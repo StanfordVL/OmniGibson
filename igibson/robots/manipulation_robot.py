@@ -430,6 +430,7 @@ class ManipulationRobot(BaseRobot):
                 self._freeze_gripper(arm)
 
         # Run super method as normal
+        # print('manipulation robot apply_action: ', action)
         super().apply_action(action)
 
     def deploy_control(self, control, control_type, indices=None, normalized=False):

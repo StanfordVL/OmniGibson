@@ -122,7 +122,11 @@ class iGibsonEnv(BaseEnv):
             robot_idn (int): Which robot to ignore a collision for
             obj (BaseObject): Which object to no longer ignore a collision for
         """
-        self._ignore_robot_object_collisions[robot_idn].remove(obj)
+        # print('remove_ignore_robot_object_collision: ', obj)
+        try:
+            self._ignore_robot_object_collisions[robot_idn].remove(obj)
+        except:
+            print('remove_ignore_robot_object_collision failed: {}'.format(obj))
 
     def remove_ignore_robot_self_collision(self, robot_idn, link):
         """
@@ -377,7 +381,9 @@ class iGibsonEnv(BaseEnv):
                 robot.apply_action(action_dict[robot.name])
 
         # Run simulation step
+        # print('igibson_env _simulator_step 1')
         self._simulator_step()
+        # print('igibson_env _simulator_step 2')
 
         # Grab collisions and store internally
         collisions = self.update_collisions(filtered=True)

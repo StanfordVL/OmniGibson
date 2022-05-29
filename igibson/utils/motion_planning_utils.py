@@ -327,7 +327,7 @@ class MotionPlanner:
                 obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm]
                 if obj_in_hand is not None:
                     objects_to_ignore.append(obj_in_hand)
-
+            print('objects_to_ignore: ', objects_to_ignore)
             for obj in objects_to_ignore:
                 self.env.add_ignore_robot_object_collision(robot_idn=self.robot_idn, obj=obj)
 
@@ -425,6 +425,8 @@ class MotionPlanner:
             grasping_object = self.robot.is_grasping() == IsGraspingState.TRUE
             grasped_obj = self.robot._ag_obj_in_hand[self.robot.default_arm]
 
+            # grasping_object = False
+            # print('m.HEADLESS, grasping_object: ', m.HEADLESS, grasping_object)  # False, True
             if grasping_object:
                 gripper_pos = self.robot.get_eef_position(arm="default")
                 gripper_orn = self.robot.get_eef_orientation(arm="default")
@@ -443,7 +445,7 @@ class MotionPlanner:
                         gripper_pos = self.robot.get_eef_position(arm="default")
                         gripper_orn = self.robot.get_eef_orientation(arm="default")
                         object_pose = T.pose_transform(grasp_pose[0], grasp_pose[1], gripper_pos, gripper_orn)
-                        grasped_obj.set_position_orientation(*object_pose)
+                        # grasped_obj.set_position_orientation(*object_pose)
             else:
                 robot_position, robot_orn = self.robot.get_position_orientation()
                 robot_position[0] = path[-1][0]
@@ -454,7 +456,7 @@ class MotionPlanner:
                     gripper_pos = self.robot.get_eef_position(arm="default")
                     gripper_orn = self.robot.get_eef_orientation(arm="default")
                     object_pose = T.pose_transform(grasp_pose[0], grasp_pose[1], gripper_pos, gripper_orn)
-                    grasped_obj.set_position_orientation(*object_pose)
+                    # grasped_obj.set_position_orientation(*object_pose)
 
             if not keep_last_location:
                 log.info("Not keeping the last state, only visualizing the path and restoring at the end")
@@ -602,7 +604,9 @@ class MotionPlanner:
             dist = l2_distance(self.robot.get_eef_position(arm=arm), ee_position)
             if dist > self.arm_ik_threshold:
                 # input(f"Distance from pose: {dist}, max: {self.arm_ik_threshold}")
-                log.warning("IK solution is not close enough to the desired pose. Distance: {}".format(dist))
+                log.warning("IK solution is not close enough to the desired pose. Distance: {}, self.arm_ik_threshold: {}, "
+                            "self.robot.get_eef_position(arm=arm): {}, ee_position: {}, ".format(dist,
+                            self.arm_ik_threshold, self.robot.get_eef_position(arm=arm), ee_position, ))
                 n_attempt += 1
                 continue
 

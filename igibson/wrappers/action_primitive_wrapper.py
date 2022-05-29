@@ -2,6 +2,8 @@ import logging
 import time
 
 import gym
+import random
+import numpy as np
 
 from igibson.action_primitives.action_primitive_set_base import (
     REGISTERED_PRIMITIVE_SETS,
@@ -34,7 +36,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
             @param num_attempts (int): How many times a primitive will be re-attempted if previous tries fail.
         """
         super().__init__(env=env)
-
+        self.seed(0)
         self.action_generator: BaseActionPrimitiveSet = REGISTERED_PRIMITIVE_SETS[action_generator](
             self, self.task, self.scene, self.robots[0]
         )
@@ -43,6 +45,10 @@ class ActionPrimitiveWrapper(BaseWrapper):
         self.reward_accumulation = reward_accumulation
         self.accumulate_obs = accumulate_obs
         self.num_attempts = num_attempts
+
+    def seed(self, seed):
+        random.seed(seed)
+        np.random.seed(seed)
 
     def step(self, action: int):
         # Run the goal generator and feed the goals into the env.

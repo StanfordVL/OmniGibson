@@ -795,6 +795,7 @@ class EntityPrim(XFormPrim):
             velocity (np.ndarray):linear velocity to set the rigid prim to. Shape (3,).
         """
         self.root_link.set_linear_velocity(velocity)
+        # print('self.get_linear_velocity(): ', self.get_linear_velocity())
 
     def get_linear_velocity(self) -> np.ndarray:
         """[summary]
@@ -811,6 +812,7 @@ class EntityPrim(XFormPrim):
             velocity (np.ndarray): [description]
         """
         self.root_link.set_angular_velocity(velocity)
+        # print('self.get_angular_velocity(): ', self.get_angular_velocity())
 
     def get_angular_velocity(self) -> np.ndarray:
         """[summary]

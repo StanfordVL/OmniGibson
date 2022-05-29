@@ -4,6 +4,7 @@ import omni
 from omni.isaac.core.utils.stage import add_reference_to_stage
 import xml.etree.ElementTree as ET
 import numpy as np
+np.random.seed(0)
 import time
 import igibson.utils.transform_utils as T
 import json
@@ -15,6 +16,7 @@ from omni.isaac.core.utils.constants import AXES_INDICES
 from omni.isaac.core.utils.prims import get_prim_at_path, get_prim_path, is_prim_path_valid
 from omni.isaac.core.utils.carb import set_carb_setting
 from omni.isaac.core.utils.stage import get_current_stage, get_stage_units, traverse_stage
+import time
 
 from igibson.envs.igibson_env import iGibsonEnv
 from igibson.sensors.vision_sensor import VisionSensor
@@ -32,7 +34,6 @@ from igibson.utils.motion_planning_utils import log
 import time
 
 log.setLevel(logging.WARN)
-
 
 ##### SET THIS ######
 # cfg = f"{example_config_path}/debug.yaml"
@@ -58,6 +59,24 @@ cam = VisionSensor(
 # cam.set_position(np.array([0.59, -2.973, 8.929]))
 cam.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
 
+for i in range(1000):
+    sim.step()
+
+# breakpoint()
+for i in range(1):
+    print(i)
+    env.step(2)  # move to pumpkin
+    time.sleep(2)
+    env.step(3)  # pick pumpkin
+    time.sleep(2)
+    # sim.step()
+    # env.step(4)  # place pumpkin
+    # time.sleep(2)
+    env.step(0)  # move to cabinet
+    # breakpoint()
+    time.sleep(2)
+    env.step(4)  # place pumpkin
+    time.sleep(2)
 breakpoint()
 
 sim.step()

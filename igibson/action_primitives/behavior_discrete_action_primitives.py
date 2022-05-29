@@ -52,6 +52,7 @@ skill_object_offset_params = {
         "pumpkin.n.02_1": [0.5, 0.0, 0.0, 0.7 * np.pi],
         "pumpkin.n.02_2": [0, -0.5, 0, 0.5 * np.pi],
         "cabinet.n.01_1": [0.4, -1.15, 0, 0.5 * np.pi],
+        # "cabinet.n.01_1": [-0.1, -1.5, 0, 0.5 * np.pi],
     },
     1: {  # pick
         "printer.n.03_1": [-0.2, 0.0, 0.2],  # dx, dy, dz
@@ -86,8 +87,8 @@ skill_object_offset_params = {
         # Ihlen_1_int, 0
         "ashcan.n.01_1": [0, 0, 0.5],
         # putting_away_Halloween_decorations
-        "cabinet.n.01_1": [0.3, -0.55, 0.25],
-        # "cabinet.n.01_1": [0.3, -0.60, 0.25],
+        #"cabinet.n.01_1": [0.3, -0.55, 0.25],
+        "cabinet.n.01_1": [0.1, -1.0, 0.25],
     },
     3: {  # toggle
         "printer.n.03_1": [-0.3, -0.25, 0.23],  # dx, dy, dz
@@ -159,21 +160,6 @@ action_list_installing_a_printer = [
     [3, "printer.n.03_1"],
 ]
 
-# action_list_throwing_away_leftovers = [
-#     [0, 'hamburger.n.01_1'],
-#     [1, 'hamburger.n.01_1'],
-#     [0, 'ashcan.n.01_1'],
-#     [2, 'ashcan.n.01_1'],  # place
-#     [0, 'hamburger.n.01_2'],
-#     [1, 'hamburger.n.01_2'],
-#     [0, 'ashcan.n.01_1'],
-#     [2, 'ashcan.n.01_1'],  # place
-#     [0, 'hamburger.n.01_3'],
-#     [1, 'hamburger.n.01_3'],
-#     [0, 'ashcan.n.01_1'],
-#     [2, 'ashcan.n.01_1'],  # place
-# ]*4
-
 action_list_throwing_away_leftovers_v1 = [
     [0, "hamburger.n.01_1"],
     [1, "hamburger.n.01_1"],
@@ -205,21 +191,6 @@ action_list_throwing_away_leftovers = [
     [6, "hamburger.n.01_3"],
 ]
 
-# action_list_throwing_away_leftovers = [
-#     [0, 'countertop.n.01_1', 0],
-#     [6, 'hamburger.n.01_2'],  # 1: 137, 2: 138, 3: 139, plate: 135, ashcan: 140
-#     [0, 'ashcan.n.01_1'],
-#     [7, 'ashcan.n.01_1'],  # place
-#     [0, 'countertop.n.01_1', 1],
-#     [6, 'hamburger.n.01_1'],
-#     [0, 'ashcan.n.01_1'],
-#     [7, 'ashcan.n.01_1'],  # place
-#     [0, 'countertop.n.01_1', 2],
-#     [6, 'hamburger.n.01_3'],
-#     [0, 'ashcan.n.01_1'],
-#     [7, 'ashcan.n.01_1'],  # place
-# ]
-
 action_list_putting_leftovers_away = [
     [0, "pasta.n.02_1"],
     [1, "pasta.n.02_1"],
@@ -240,18 +211,6 @@ action_list_putting_leftovers_away = [
 ]
 
 # full set
-# action_list_putting_away_Halloween_decorations = [
-#     [0, 'cabinet.n.01_1'],  # move
-#     [4, 'cabinet.n.01_1'],  # pull
-#     [0, 'pumpkin.n.02_1'],  # move
-#     [1, 'pumpkin.n.02_1'],  # pick
-#     [2, 'cabinet.n.01_1'],  # place
-#     [0, 'pumpkin.n.02_2'],  # move
-#     [1, 'pumpkin.n.02_2'],  # pick
-#     [5, 'cabinet.n.01_1'],  # push
-# ]
-
-# full set
 action_list_putting_away_Halloween_decorations_v1 = [
     [0, "cabinet.n.01_1"],  # move
     [4, "cabinet.n.01_1"],  # pull
@@ -265,23 +224,6 @@ action_list_putting_away_Halloween_decorations_v1 = [
     # [2, 'cabinet.n.01_1'],  # place
     [5, "cabinet.n.01_1"],  # push
 ]
-
-# full sequence
-# action_list_putting_away_Halloween_decorations = [
-#     # [0, 'cabinet.n.01_1'],  # move
-#     # [4, 'cabinet.n.01_1'],  # pull
-#     [0, 'pumpkin.n.02_1'],  # move
-#     [1, 'pumpkin.n.02_1'],  # pick
-#     [0, 'cabinet.n.01_1'],  # move
-#     [2, 'cabinet.n.01_1'],  # place
-#     [0, 'pumpkin.n.02_2'],  # move
-#     [1, 'pumpkin.n.02_2'],  # pick
-#     #
-#     # [0, 'cabinet.n.01_1'],  # move
-#     # [2, 'cabinet.n.01_1'],  # place
-#     #
-#     # [5, 'cabinet.n.01_1'],  # push
-# ] # * 4
 
 # /home/robot/Desktop/behavior/iGibson-dev-jk/igibson/examples/robots/log_dir_his/20220510-001432_putting_away_Halloween_decorations_discrete_rgb_accumReward_m0.01
 # wo vis operation
@@ -478,13 +420,13 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
     ):
         full_body_action = self._get_still_action()
         for arm_action in path if not reverse_path else reversed(path):
-            print(f"contacts: {self.robot._find_gripper_contacts(arm=self.arm)[0]}")
+            # print(f"contacts: {self.robot._find_gripper_contacts(arm=self.arm)[0]}")
             if stop_on_contact and len(self.robot._find_gripper_contacts(arm=self.arm)[0]) != 0:
                 print("Contact detected. Stop motion")
                 print("Contacts {}".format(self.robot._find_gripper_contacts(arm=self.arm)))
                 print("Fingers {}".format([link.prim_path for link in self.robot.finger_links[self.arm]]))
                 return
-            print("Executing action {}".format(arm_action))
+            # print("Executing action {}".format(arm_action))
             # This assumes the arms are called "arm_"+self.arm. Maybe some robots do not follow this convention
             arm_controller_action_idx = self.robot.controller_action_idx["arm_" + self.arm]
             full_body_action[arm_controller_action_idx] = arm_action
@@ -516,12 +458,12 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         grasping_steps = 5 if self.fast_execution else 9 # 10
         for i in range(grasping_steps):
-            print(i, 'action: ', action)
+            # print(i, 'action: ', action)
             yield action
-        for i in range(3):
-            self.env.simulator.step()
-            grasped_object = self._get_obj_in_hand()
-            print(i, 'grasped_object', grasped_object)
+        # for i in range(3):
+        #     self.env.simulator.step()
+        #     grasped_object = self._get_obj_in_hand()
+        #     print(i, 'grasped_object', grasped_object)
         # object_id = 0  # self.task_obj_list['pumpkin.n.02_1'].get_body_ids()[0]
         # print('object_id: ', object_id)
         # self.robot._ag_obj_in_hand[self.arm] = object_id
@@ -547,17 +489,21 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         action = np.asarray(action)
 
+        grasped_object = self._get_obj_in_hand()
+        # print(-1, 'grasped_object', grasped_object)
         # TODO: Extend to non-binary grasping controllers
         # This assumes the grippers are called "gripper_"+self.arm. Maybe some robots do not follow this convention
         ungrasping_steps = 5 if self.fast_execution else 9 # 10
         for i in range(ungrasping_steps):
-            print(i, 'action: ', action)
+            # print(i, 'action: ', action)
+            # action = np.zeros_like(action)
+            # print('_execute_ungrasp: ', action)
             yield action
 
-        for i in range(3):
-            self.env.simulator.step()
-            grasped_object = self._get_obj_in_hand()
-            print(i, 'grasped_object', grasped_object)
+        # for i in range(3):
+        #     self.env.simulator.step()
+        #     grasped_object = self._get_obj_in_hand()
+        #     print(i, 'grasped_object', grasped_object)
 
         grasped_object = self._get_obj_in_hand()
         # print('grasped_object', grasped_object)
@@ -615,14 +561,14 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         objects_to_ignore = []
         if self.is_grasping:
-            obj_idx_to_ignore = [self.robot._ag_obj_in_hand[self.arm]]
-
+            objects_to_ignore = [self.robot._ag_obj_in_hand[self.arm]]
+        # print('obj_in_hand: ', objects_to_ignore)
         plan = self.planner.plan_base_motion(
             [obj_pos[0] + vector[0], obj_pos[1] + vector[1], target_yaw],
             plan_full_base_motion=not self.skip_base_planning,
             objects_to_ignore=objects_to_ignore,
         )
-
+        print('plan: ', plan)
         if plan is not None and len(plan) > 0:
             self.planner.visualize_base_path(plan, keep_last_location=True)
         else:
@@ -631,9 +577,12 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                 "No base path found to object",
                 {"object_to_navigate": object_name},
             )
-        yield self._get_still_action()
+        still_action = self._get_still_action()
+        for i in range(10):
+            self.robot.keep_still()  # angel velocity
+            yield still_action  # self._get_still_action()  # position
         logger.info("Finished navigating to object: {}".format(object_name))
-        return
+        # return
 
     def _pick(self, object_name):
         new_name = convert_bddl_scope_to_name(object_name)
@@ -669,7 +618,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         pick_place_pos[1] += vector[1]
         pick_place_pos[2] += vector[2]
 
-        pre_grasping_distance = 0.0
+        pre_grasping_distance = 0.07
         plan_full_pre_grasp_motion = not self.skip_arm_planning
 
         picking_direction = self.default_direction
@@ -729,8 +678,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             yield from self._execute_ee_path(
                 interaction_pick_path, stop_on_contact=False, reverse_path=True, while_grasping=True
             )
-            for i in range(100):
-                self.env.simulator.step()
         print("======================== PICK STEP 6 ==========================")
         logger.info("Executing retracting path")
         if plan_full_pre_grasp_motion:
@@ -746,9 +693,11 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             )
 
         print("======================== PICK STEP 7 ==========================")
-
-        self.robot.keep_still()
-        yield self._get_still_action()
+        still_action = self._get_still_action()
+        for i in range(50):
+            self.robot.keep_still()
+            yield still_action  # self._get_still_action()
+            # print('yield self._get_still_action()')
 
         print("Pick action completed")
 
@@ -775,8 +724,10 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         #
         # plan_full_pre_drop_motion = not self.skip_arm_planning
         #
+        # dropping_distance = 0.1
         # pre_drop_path, _ = self.planner.plan_ee_drop(
-        #     pick_place_pos, arm=self.arm, plan_full_pre_drop_motion=plan_full_pre_drop_motion
+        #     pick_place_pos, arm=self.arm, plan_full_pre_drop_motion=plan_full_pre_drop_motion,
+        #     dropping_distance=dropping_distance,
         # )
         #
         # if pre_drop_path is None or len(pre_drop_path) == 0:
@@ -791,13 +742,19 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # self.planner.visualize_arm_path(
         #     pre_drop_path,
         #     arm=self.arm,
-        #     grasped_obj_id=self.robot._ag_obj_in_hand[self.arm],
+        #     # grasped_obj_id=self.robot._ag_obj_in_hand[self.arm],
         #     keep_last_location=True,
         # )
-        # yield self._get_still_action()
+        # # yield self._get_still_action()
         # # At the end, open the hand
         # logger.info("Executing ungrasp")
+
         yield from self._execute_ungrasp()
+        still_action = self._get_still_action()
+        for i in range(50):
+            self.robot.keep_still()
+            yield still_action  # self._get_still_action()
+
         # # Then, retract the arm
         # logger.info("Executing retracting path")
         # if plan_full_pre_drop_motion:  # Visualizing the full path...

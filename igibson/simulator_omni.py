@@ -94,6 +94,7 @@ class Simulator(SimulationContext):
             viewer_height=720,
             vertical_fov=90,
             device_idx=0,
+            # render_timestep=1 / 30.0,
     ) -> None:
         super().__init__(
             physics_dt=physics_dt,
@@ -104,6 +105,7 @@ class Simulator(SimulationContext):
             return
         Simulator._world_initialized = True
         self._scene_finalized = False
+        self.render_timestep = rendering_dt  #render_timestep
         # self._current_tasks = dict()
         self._dc_interface = _dynamic_control.acquire_dynamic_control_interface()
         # if not builtins.ISAAC_LAUNCHED_FROM_TERMINAL:
@@ -382,6 +384,7 @@ class Simulator(SimulationContext):
             force_playing (bool): If True, will force physics to propagate (i.e.: set simulation, if paused / stopped,
                 to "play" mode)
         """
+        # print('simulator_omni step() 1')
         # Possibly force playing
         if force_playing and not self.is_playing():
             self.play()
@@ -397,6 +400,7 @@ class Simulator(SimulationContext):
         # self.sync()
         self.frame_count += 1
 
+        # print('simulator_omni step() 2', hasattr(self, 'render_timestep'))
     # TODO: Do we need this?
     # def sync(self, force_sync=False):
     #     """
