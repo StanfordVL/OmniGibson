@@ -353,6 +353,9 @@ action_dict = {
 def convert_bddl_scope_to_name(object_name):
     split_name = object_name.split('.')
     number = split_name[-1].split('_')
+    if split_name[0] == 'cabinet':
+        split_name[0] = 'bottom_cabinet'
+        number[1] = '13'
     return '_'.join([split_name[0], number[1]])
 
 class B1KActionPrimitive(IntEnum):
@@ -597,7 +600,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         try:
             new_name = convert_bddl_scope_to_name(object_name)
-            print(self.env.scene.object_registry)
+            print("++++++++++++++++++", new_name)
             obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
             obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
         except:

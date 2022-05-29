@@ -58,6 +58,7 @@ cam = VisionSensor(
 # cam.set_position(np.array([0.59, -2.973, 8.929]))
 cam.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
 
+breakpoint()
 
 sim.step()
 sim.step()
