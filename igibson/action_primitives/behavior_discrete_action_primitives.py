@@ -600,7 +600,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         try:
             new_name = convert_bddl_scope_to_name(object_name)
-            print("++++++++++++++++++", new_name)
             obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
             obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
         except:
