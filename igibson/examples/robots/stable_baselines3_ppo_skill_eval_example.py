@@ -5,10 +5,11 @@ import os
 from typing import Callable
 
 import igibson
-import behavior
+# import behavior
 from igibson.envs.igibson_env import iGibsonEnv
 from igibson.wrappers import ActionPrimitiveWrapper
-from igibson.envs.skill_env import SkillEnv
+# from igibson.envs.skill_env import SkillEnv
+from igibson import app, ig_dataset_path, example_config_path, Simulator
 
 log = logging.getLogger(__name__)
 
@@ -115,7 +116,7 @@ def main():
     # config_file = os.path.join('..', 'configs', "behavior_pick_and_place.yaml")
     # config_file = os.path.join('..', '..', 'configs', 'robots', "fetch_rl.yaml")
     # config_file = os.path.join(igibson.configs_path, "fetch_behavior_aps_putting_away_Halloween_decorations.yaml")
-    config_file = os.path.join(igibson.configs_path, "fetch_rl_cleaning_microwave_oven.yaml")
+    config_file = f"{example_config_path}/behavior_mp_tiago.yaml"  # os.path.join(igibson.configs_path, "fetch_rl_cleaning_microwave_oven.yaml")
     tensorboard_log_dir = "log_dir"
     num_cpu = 1
 

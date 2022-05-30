@@ -5,11 +5,12 @@ import os, time
 from typing import Callable
 
 import igibson
-import behavior
-from igibson.envs.skill_env import SkillEnv
+# import behavior
+# from igibson.envs.skill_env import SkillEnv
 from igibson.envs.igibson_env import iGibsonEnv
-from igibson.sensors.vision_sensor import VisionSensor
+# from igibson.sensors.vision_sensor import VisionSensor
 from igibson.wrappers import ActionPrimitiveWrapper
+from igibson import app, ig_dataset_path, example_config_path, Simulator
 
 log = logging.getLogger(__name__)
 
@@ -163,7 +164,7 @@ def main():
     # config_file = os.path.join('..', 'configs', "behavior_pick_and_place.yaml")
     # config_file = os.path.join('..', '..', 'configs', 'robots', "fetch_rl.yaml")
     # config_file = os.path.join(igibson.configs_path, "fetch_behavior_aps_putting_away_Halloween_decorations.yaml")
-    config_file = os.path.join(igibson.configs_path, "fetch_rl_cleaning_microwave_oven.yaml")
+    config_file = f"{example_config_path}/behavior_mp_tiago.yaml"  # os.path.join(igibson.configs_path, "fetch_rl_cleaning_microwave_oven.yaml")
     tensorboard_log_dir = os.path.join("log_dir", time.strftime("%Y%m%d-%H%M%S"))
     os.makedirs(tensorboard_log_dir, exist_ok=True)
     prefix = ''
