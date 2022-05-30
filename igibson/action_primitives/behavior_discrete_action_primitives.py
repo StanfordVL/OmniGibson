@@ -851,15 +851,16 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # new_name = object_name
         # jnt = self.env.scene.object_registry('name', new_name).joints['joint_0']
         # jnt = self.env.scene.object_registry('name', new_name).joints['joint_2']
-        jnt = self.task_obj_list[object_name].joints['joint_2']
+        jnt = self.task_obj_list[object_name].joints['joint_0']
 
         min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
         jnt.set_pos(max_pos, target=False)
 
         yield self._get_still_action()
-        for i in range(1):
+        for i in range(5):
             self.env.simulator.step()
             print(i, 'pull sim.step()')
+
         # logger.info("Pulling object {}".format(object_name))
         # params = skill_object_offset_params[B1KActionPrimitive.PULL][object_name]
         # obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
@@ -1041,7 +1042,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # print(self.env.scene.object_registry('name', new_name).joints.keys())
         # odict_keys(['joint_0', 'joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5'])
         # jnt = self.env.scene.object_registry('name', new_name).joints['joint_2']
-        jnt = self.task_obj_list[object_name].joints['joint_2']
+        jnt = self.task_obj_list[object_name].joints['joint_0']
         min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
         jnt.set_pos(min_pos, target=False)
         # print('new_name: {}, jnt: {}, min_pos: {}, max_pos: {}'.format(new_name, jnt, min_pos, max_pos))
