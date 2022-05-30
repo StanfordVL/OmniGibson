@@ -150,6 +150,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
 
         # Search for any sensors this robot might have attached to any of its links
         self._sensors = OrderedDict()
+        print('\n\n\n\n\n\n\n\n\nrobot_base: self._links', self._links)
         obs_modalities = set()
         for link_name, link in self._links.items():
             # Search through all children prims and see if we find any sensor

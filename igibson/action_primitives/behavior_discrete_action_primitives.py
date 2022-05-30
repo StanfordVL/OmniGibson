@@ -260,13 +260,13 @@ action_list_putting_away_Halloween_decorations_v3 = [
 # vis version: full set
 action_list_putting_away_Halloween_decorations = [
     [0, "cabinet.n.01_1"],  # navigate_to 0
-    [4, "cabinet.n.01_1"],  # pull
+    [4, "cabinet.n.01_1"],  # pull 1
     [0, "pumpkin.n.02_1"],  # navigate_to 2
     [1, "pumpkin.n.02_1"],  # pick 3
     [2, "cabinet.n.01_1"],  # place 4
     [0, "pumpkin.n.02_2"],  # navigate_to 5
     [1, "pumpkin.n.02_2"],  # pick 6
-    [5, "cabinet.n.01_1"],  # push
+    [5, "cabinet.n.01_1"],  # push 7
 ]
 
 action_list_room_rearrangement = [
@@ -292,14 +292,14 @@ action_dict = {
     "room_rearrangement": action_list_room_rearrangement,
 }
 
-def convert_bddl_scope_to_name(object_name):
-    split_name = object_name.split('.')
-    number = split_name[-1].split('_')
-    number[1] = str(int(number[1]) - 1)
-    if split_name[0] == 'cabinet':
-        split_name[0] = 'bottom_cabinet'
-        number[1] = '13'
-    return '_'.join([split_name[0], number[1]])
+# def convert_bddl_scope_to_name(object_name):
+#     split_name = object_name.split('.')
+#     number = split_name[-1].split('_')
+#     number[1] = str(int(number[1]) - 1)
+#     if split_name[0] == 'cabinet':
+#         split_name[0] = 'bottom_cabinet'
+#         number[1] = '13'
+#     return '_'.join([split_name[0], number[1]])
 
 class B1KActionPrimitive(IntEnum):
     NAVIGATE_TO = 0
@@ -376,6 +376,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # Whether we check if the objects have moved from the previous navigation attempt and do not try to navigate
         # to them if they have (this avoids moving to objects after pick and place)
         self.obj_pose_check = True
+        self.task_obj_list = self.env.task.object_scope
         self.print_log = True
         self.skip_base_planning = True
         self.skip_arm_planning = True  # False
@@ -546,9 +547,14 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                             )
 
         try:
-            new_name = convert_bddl_scope_to_name(object_name)
-            obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
-            obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
+            # new_name = convert_bddl_scope_to_name(object_name)
+            # new_name = object_name
+            # obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
+            # obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
+
+            obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
+            obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
+
         except:
             breakpoint()
 
@@ -586,10 +592,12 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # return
 
     def _pick(self, object_name):
-        new_name = convert_bddl_scope_to_name(object_name)
+        # new_name = convert_bddl_scope_to_name(object_name)
+        # new_name = object_name
         logger.info("Picking object {}".format(object_name))
         # Don't do anything if the object is already grasped.
-        obj = self.env.scene.object_registry('name', new_name)
+        # obj = self.env.scene.object_registry('name', new_name)
+        obj = self.task_obj_list[object_name]
         robot_is_grasping = self.robot.is_grasping(candidate_obj=None)
         robot_is_grasping_obj = self.robot.is_grasping(candidate_obj=obj)
         if robot_is_grasping == IsGraspingState.TRUE:
@@ -606,9 +614,12 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         params = skill_object_offset_params[B1KActionPrimitive.PICK][object_name]
 
-        new_name = convert_bddl_scope_to_name(object_name)
-        obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
-        obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
+        # new_name = convert_bddl_scope_to_name(object_name)
+        # new_name = object_name
+        # obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
+        # obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
+        obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
+        obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
 
         # process the offset from object frame to world frame
         mat = quat2mat(obj_rot_XYZW)
@@ -835,13 +846,19 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         logger.info("Pushing object {}".format(object_name))
 
-        new_name = convert_bddl_scope_to_name(object_name)
-        jnt = self.env.scene.object_registry('name', new_name).joints['joint_0']
+        # new_name = convert_bddl_scope_to_name(object_name)
+        # new_name = object_name
+        # jnt = self.env.scene.object_registry('name', new_name).joints['joint_0']
+        # jnt = self.env.scene.object_registry('name', new_name).joints['joint_2']
+        jnt = self.task_obj_list[object_name].joints['joint_2']
+
         min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
         jnt.set_pos(max_pos, target=False)
 
         yield self._get_still_action()
-
+        for i in range(1):
+            self.env.simulator.step()
+            print(i, 'pull sim.step()')
         # logger.info("Pulling object {}".format(object_name))
         # params = skill_object_offset_params[B1KActionPrimitive.PULL][object_name]
         # obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
@@ -1017,13 +1034,20 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
     def _push(self, object_name):
         logger.info("Pushing object {}".format(object_name))
 
-        new_name = convert_bddl_scope_to_name(object_name)
-        jnt = self.env.scene.object_registry('name', new_name).joints['joint_0']
+        # new_name = convert_bddl_scope_to_name(object_name)
+        # new_name = object_name
+        # jnt = self.env.scene.object_registry('name', new_name).joints['joint_0']
+        # print(self.env.scene.object_registry('name', new_name).joints.keys())
+        # odict_keys(['joint_0', 'joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5'])
+        # jnt = self.env.scene.object_registry('name', new_name).joints['joint_2']
+        jnt = self.task_obj_list[object_name].joints['joint_2']
         min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
         jnt.set_pos(min_pos, target=False)
-
+        # print('new_name: {}, jnt: {}, min_pos: {}, max_pos: {}'.format(new_name, jnt, min_pos, max_pos))
         yield self._get_still_action()
-
+        for i in range(5):
+            self.env.simulator.step()
+            print(i, 'push sim.step()')
         # min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
         #
         # # Set the value you want

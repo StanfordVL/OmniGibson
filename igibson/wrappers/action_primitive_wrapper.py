@@ -4,6 +4,7 @@ import time
 import gym
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 
 from igibson.action_primitives.action_primitive_set_base import (
     REGISTERED_PRIMITIVE_SETS,
@@ -45,6 +46,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         self.reward_accumulation = reward_accumulation
         self.accumulate_obs = accumulate_obs
         self.num_attempts = num_attempts
+        self.accum_reward = np.asarray([0])
 
     def seed(self, seed):
         random.seed(seed)
@@ -63,6 +65,8 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 for lower_level_action in self.action_generator.apply(action):
 
                     obs, reward, done, info = super().step(lower_level_action)
+                    # obs: odict_keys(['robot0', 'task'])
+                    # obs['robot0']: odict_keys([]), obs['task']: odict_keys(['low_dim'])
 
                     if self.reward_accumulation == "sum":
                         accumulated_reward += reward
@@ -101,5 +105,11 @@ class ActionPrimitiveWrapper(BaseWrapper):
             else:
                 return_obs = accumulated_obs[-1]
         end_time = time.time()
-        logger.error("AP time: {}".format(end_time - start_time))
+        logger.error("AP time: {}, reward: {}, return_obs.keys(): {}".format(end_time - start_time, accumulated_reward, ''))
+        self.accum_reward = self.accum_reward + accumulated_reward
+        print('reward: ', accumulated_reward, self.accum_reward)
+        print('self.robots[0].sensors: ', self.robots[0].sensors)
+        print(return_obs)
+        # plt.imshow(return_obs['robot0']['rgb'])
+        # plt.show()
         return return_obs, accumulated_reward, done, info

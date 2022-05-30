@@ -5,6 +5,7 @@ from omni.isaac.core.utils.stage import add_reference_to_stage
 import xml.etree.ElementTree as ET
 import numpy as np
 np.random.seed(0)
+import matplotlib.pyplot as plt
 import time
 import igibson.utils.transform_utils as T
 import json
@@ -17,6 +18,8 @@ from omni.isaac.core.utils.prims import get_prim_at_path, get_prim_path, is_prim
 from omni.isaac.core.utils.carb import set_carb_setting
 from omni.isaac.core.utils.stage import get_current_stage, get_stage_units, traverse_stage
 import time
+
+import bddl
 
 from igibson.envs.igibson_env import iGibsonEnv
 from igibson.sensors.vision_sensor import VisionSensor
@@ -58,25 +61,48 @@ cam = VisionSensor(
 )
 # cam.set_position(np.array([0.59, -2.973, 8.929]))
 cam.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
+cam.initialize()
 
-for i in range(1000):
+for i in range(500):
     sim.step()
 
-# breakpoint()
-# for i in range(1):
-#     print(i)
-#     env.step(2)  # move to pumpkin
-#     time.sleep(2)
-#     env.step(3)  # pick pumpkin
-#     time.sleep(2)
-#     # sim.step()
-#     # env.step(4)  # place pumpkin
-#     # time.sleep(2)
-#     env.step(0)  # move to cabinet
-#     # breakpoint()
-#     time.sleep(2)
-#     env.step(4)  # place pumpkin
-#     time.sleep(2)
+breakpoint()
+for i in range(1):
+    env.step(0)  # move to pumpkin
+    time.sleep(2)
+    obs = cam._get_obs()
+    # print('obs.keys(): ', obs.keys())
+    # plt.imshow(obs['rgb'])
+    # plt.show()
+    env.step(2)  # pick pumpkin
+    time.sleep(2)
+    # sim.step()
+    # env.step(4)  # place pumpkin
+    # time.sleep(2)
+    env.step(3)  # move to cabinet
+    # breakpoint()
+    time.sleep(2)
+    env.step(0)  # place pumpkin
+    time.sleep(2)
+    env.step(1)  # place pumpkin
+    time.sleep(2)
+    env.step(4)
+    time.sleep(2)
+    env.step(5)
+    time.sleep(2)
+    env.step(6)
+    time.sleep(2)
+    env.step(0)
+    time.sleep(2)
+    env.step(4)
+    time.sleep(2)
+    env.step(7)
+    # env.step(0)  # move to cabinet
+    # # breakpoint()
+    # time.sleep(2)
+    # env.step(1)  # place pumpkin
+    # time.sleep(2)
+    # env.step(7)
 breakpoint()
 
 sim.step()

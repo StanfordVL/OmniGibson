@@ -37,7 +37,6 @@ def load_without_pybullet_vis(load_func):
 
 
 class Simulator:
-class Simulator:
     """
     Simulator class is a wrapper of physics simulator (omniverse) and corresponding renderer, it loads objects into
     omniverse and its renderer and syncs the pose of objects and robot parts.
