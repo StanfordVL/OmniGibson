@@ -491,7 +491,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         action = np.asarray(action)
 
-        grasped_object = self._get_obj_in_hand()
+        # grasped_object = self._get_obj_in_hand()
         # print(-1, 'grasped_object', grasped_object)
         # TODO: Extend to non-binary grasping controllers
         # This assumes the grippers are called "gripper_"+self.arm. Maybe some robots do not follow this convention
@@ -589,6 +589,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             self.robot.keep_still()  # angel velocity
             yield still_action  # self._get_still_action()  # position
         logger.info("Finished navigating to object: {}".format(object_name))
+        # print('\n\n\n\n\n\n', self.env.task.object_scope['agent.n.01_1'].states[Pose].get_value()[0])
         # return
 
     def _pick(self, object_name):
@@ -1047,7 +1048,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         yield self._get_still_action()
         for i in range(5):
             self.env.simulator.step()
-            print(i, 'push sim.step()')
+            # print(i, 'push sim.step()')
         # min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
         #
         # # Set the value you want

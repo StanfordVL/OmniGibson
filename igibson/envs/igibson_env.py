@@ -18,6 +18,7 @@ from igibson.scenes import REGISTERED_SCENES
 from igibson.utils.constants import MAX_CLASS_COUNT, MAX_INSTANCE_COUNT
 from igibson.utils.utils import quatToXYZW
 from igibson.utils.python_utils import assert_valid_key, create_class_from_registry_and_config
+from igibson.sensors.vision_sensor import VisionSensor
 
 
 # How many predefined randomized scene object configurations we have per scene
@@ -201,6 +202,7 @@ class iGibsonEnv(BaseEnv):
         # TODO: Does this need to occur somewhere else?
         self._task.load(env=self)
 
+    # deprecated
     def _load_observation_space(self):
         # Grab robot(s) and task obs spaces
         obs_space = OrderedDict()
@@ -211,13 +213,140 @@ class iGibsonEnv(BaseEnv):
 
         # Also load the task obs space
         obs_space["task"] = self._task.load_observation_space()
+
         return obs_space
+
+    def load_observation_space(self):
+        self.image_width = self.config.get("image_width", 512)
+        self.image_height = self.config.get("image_height", 512)
+        observation_space = OrderedDict()
+        sensors = OrderedDict()
+        vision_modalities = []
+        scan_modalities = []
+        if "task_obs" in self.output:
+            observation_space["task_obs"] = self.build_obs_space(
+                shape=(self.task.task_obs_dim,), low=-np.inf, high=np.inf
+            )
+        if "rgb" in self.output:
+            observation_space["rgb"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 3), low=0.0, high=1.0
+            )
+            vision_modalities.append("rgb")
+        if "depth" in self.output:
+            observation_space["depth"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 1), low=0.0, high=1.0
+            )
+            vision_modalities.append("depth")
+        if "pc" in self.output:
+            observation_space["pc"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 3), low=-np.inf, high=np.inf
+            )
+            vision_modalities.append("pc")
+        if "optical_flow" in self.output:
+            observation_space["optical_flow"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 2), low=-np.inf, high=np.inf
+            )
+            vision_modalities.append("optical_flow")
+        if "scene_flow" in self.output:
+            observation_space["scene_flow"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 3), low=-np.inf, high=np.inf
+            )
+            vision_modalities.append("scene_flow")
+        if "normal" in self.output:
+            observation_space["normal"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 3), low=-np.inf, high=np.inf
+            )
+            vision_modalities.append("normal")
+        if "seg" in self.output:
+            observation_space["seg"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 1), low=0.0, high=MAX_CLASS_COUNT
+            )
+            vision_modalities.append("seg")
+        if "ins_seg" in self.output:
+            observation_space["ins_seg"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 1), low=0.0, high=MAX_INSTANCE_COUNT
+            )
+            vision_modalities.append("ins_seg")
+        if "rgb_filled" in self.output:  # use filler
+            observation_space["rgb_filled"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 3), low=0.0, high=1.0
+            )
+            vision_modalities.append("rgb_filled")
+        if "highlight" in self.output:
+            observation_space["highlight"] = self.build_obs_space(
+                shape=(self.image_height, self.image_width, 1), low=0.0, high=1.0
+            )
+            vision_modalities.append("highlight")
+        if "scan" in self.output:
+            self.n_horizontal_rays = self.config.get("n_horizontal_rays", 128)
+            self.n_vertical_beams = self.config.get("n_vertical_beams", 1)
+            assert self.n_vertical_beams == 1, "scan can only handle one vertical beam for now"
+            observation_space["scan"] = self.build_obs_space(
+                shape=(self.n_horizontal_rays * self.n_vertical_beams, 1), low=0.0, high=1.0
+            )
+            scan_modalities.append("scan")
+        if "scan_rear" in self.output:
+            self.n_horizontal_rays = self.config.get("n_horizontal_rays", 128)
+            self.n_vertical_beams = self.config.get("n_vertical_beams", 1)
+            assert self.n_vertical_beams == 1, "scan can only handle one vertical beam for now"
+            observation_space["scan_rear"] = self.build_obs_space(
+                shape=(self.n_horizontal_rays * self.n_vertical_beams, 1), low=0.0, high=1.0
+            )
+            scan_modalities.append("scan_rear")
+        if "occupancy_grid" in self.output:
+            self.grid_resolution = self.config.get("grid_resolution", 128)
+            self.occupancy_grid_space = gym.spaces.Box(
+                low=0.0, high=1.0, shape=(self.grid_resolution, self.grid_resolution, 1)
+            )
+            observation_space["occupancy_grid"] = self.occupancy_grid_space
+            scan_modalities.append("occupancy_grid")
+        if "bump" in self.output:
+            observation_space["bump"] = gym.spaces.Box(low=0.0, high=1.0, shape=(1,))
+            sensors["bump"] = BumpSensor(self)
+        if "proprioception" in self.output:
+            observation_space["proprioception"] = self.build_obs_space(
+                shape=(self.robots[0].proprioception_dim,), low=-np.inf, high=np.inf
+            )
+
+        if len(vision_modalities) > 0:
+            sensors["vision"] = VisionSensor(prim_path="/World/viewer_camera",
+                                            name="camera_0",
+                                            modalities=["rgb"],
+                                            image_width=self.image_width,
+                                            image_height=self.image_height,)
+            sensors["vision"].set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
+            sensors["vision"].initialize()
+
+        # if len(scan_modalities) > 0:
+        #     sensors["scan_occ"] = ScanSensor(self, scan_modalities)
+        #
+        # if "scan_rear" in scan_modalities:
+        #     sensors["scan_occ_rear"] = ScanSensor(self, scan_modalities, rear=True)
+
+        self.observation_space = gym.spaces.Dict(observation_space)
+        self.sensors = sensors
+        return self.observation_space
+
+    def build_obs_space(self, shape, low, high):
+        """
+        Helper function that builds individual observation spaces.
+        :param shape: shape of the space
+        :param low: lower bounds of the space
+        :param high: higher bounds of the space
+        """
+        return gym.spaces.Box(low=low, high=high, shape=shape, dtype=np.float32)
 
     def _load_action_space(self):
         """
         Load action space for each robot
         """
         self.action_space = gym.spaces.Dict({robot.name: robot.action_space for robot in self.robots})
+
+    def load_action_space(self):
+        """
+        Load action space.
+        """
+        self.action_space = self.robots[0].action_space
 
     def load(self):
         """
@@ -229,6 +358,10 @@ class iGibsonEnv(BaseEnv):
         # Load the task
         self._load_task()
 
+        # Load the obs / action spaces
+        self.load_observation_space()
+        self.load_action_space()
+
         # Start the simulation, then reset the environment
         self.simulator.play()
         self.reset()
@@ -236,9 +369,6 @@ class iGibsonEnv(BaseEnv):
         # Update the initial scene state
         self.scene.update_initial_state()
 
-        # Load the obs / action spaces
-        self.load_observation_space()
-        self._load_action_space()
 
     def reload_model_object_randomization(self, predefined_object_randomization_idx=None):
         """
@@ -257,10 +387,15 @@ class iGibsonEnv(BaseEnv):
 
     def get_obs(self):
         # Grab obs from super call
-        obs = super().get_obs()
+        # obs = super().get_obs()
+        obs = OrderedDict()
 
-        # Add task obs
-        obs["task"] = self._task.get_obs(env=self)
+        if "task_obs" in self.output:
+            obs["task_obs"] = self._task.get_obs(env=self)  # low_dim_obs
+        if "vision" in self.sensors:
+            vision_obs = self.sensors["vision"]._get_obs()
+            for modality in vision_obs:
+                obs[modality] = vision_obs[modality]
 
         return obs
 
@@ -642,16 +777,16 @@ class iGibsonEnv(BaseEnv):
         # Grab and return observations
         obs = self.get_obs()
 
-        if self.observation_space is not None and not self.observation_space.contains(obs):
-            print("Error: Observation space does not match returned observations!")
-            # Print out all observations for all robots and task
-            for robot in self.robots:
-                for key, value in self.observation_space[robot.name].items():
-                    print(key, value.dtype, value.shape)
-                    print('obs', obs['robot0'][key].dtype, obs[robot.name][key].shape)
-            for key, value in self.observation_space['task'].items():
-                print(key, value.dtype, value.shape)
-                print('obs', obs['task'][key].dtype, obs['task'][key].shape)
+        # if self.observation_space is not None and not self.observation_space.contains(obs):
+        #     print("Error: Observation space does not match returned observations!")
+        #     # Print out all observations for all robots and task
+        #     for robot in self.robots:
+        #         for key, value in self.observation_space[robot.name].items():
+        #             print(key, value.dtype, value.shape)
+        #             print('obs', obs['robot0'][key].dtype, obs[robot.name][key].shape)
+        #     for key, value in self.observation_space['task'].items():
+        #         print(key, value.dtype, value.shape)
+        #         print('obs', obs['task'][key].dtype, obs['task'][key].shape)
 
         return obs
 

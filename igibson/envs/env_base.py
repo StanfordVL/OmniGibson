@@ -54,6 +54,7 @@ class BaseEnv(gym.Env, GymObservable, Serializable, Recreatable):
         for config in configs:
             merge_nested_dicts(base_dict=self.config, extra_dict=parse_config(config), inplace=True)
 
+        self.output = self.config["robots"][0]["obs_modalities"]
         # Possibly override scene_id
         if scene_model is not None:
             self.scene_config["model"] = scene_model

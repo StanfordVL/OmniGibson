@@ -52,33 +52,30 @@ sim = env.simulator
 ceiling = env.scene.object_registry("name", "ceilings")
 ceiling.visible = False
 
-cam = VisionSensor(
-    prim_path="/World/viewer_camera",
-    name="camera",
-    modalities=["rgb"],
-    image_width=1280,
-    image_height=720,
-)
-# cam.set_position(np.array([0.59, -2.973, 8.929]))
-cam.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
-cam.initialize()
+# cam = VisionSensor(
+#     prim_path="/World/viewer_camera",
+#     name="camera",
+#     modalities=["rgb"],
+#     image_width=512,
+#     image_height=512,
+# )
+# # cam.set_position(np.array([0.59, -2.973, 8.929]))
+# cam.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
+# cam.initialize()
 
 for i in range(500):
     sim.step()
 
-breakpoint()
+# breakpoint()
 for i in range(1):
     env.step(0)  # move to pumpkin
     time.sleep(2)
-    obs = cam._get_obs()
+    # obs = cam._get_obs()
     # print('obs.keys(): ', obs.keys())
     # plt.imshow(obs['rgb'])
     # plt.show()
     env.step(2)  # pick pumpkin
     time.sleep(2)
-    # sim.step()
-    # env.step(4)  # place pumpkin
-    # time.sleep(2)
     env.step(3)  # move to cabinet
     # breakpoint()
     time.sleep(2)
@@ -87,16 +84,18 @@ for i in range(1):
     env.step(1)  # place pumpkin
     time.sleep(2)
     env.step(4)
+
     time.sleep(2)
     env.step(5)
     time.sleep(2)
     env.step(6)
     time.sleep(2)
     env.step(0)
-    time.sleep(2)
+    time.sleep(5)
     env.step(4)
     time.sleep(2)
     env.step(7)
+
     # env.step(0)  # move to cabinet
     # # breakpoint()
     # time.sleep(2)

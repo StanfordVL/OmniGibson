@@ -5,6 +5,7 @@ import gym
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+import queue
 
 from igibson.action_primitives.action_primitive_set_base import (
     REGISTERED_PRIMITIVE_SETS,
@@ -12,6 +13,7 @@ from igibson.action_primitives.action_primitive_set_base import (
     BaseActionPrimitiveSet,
 )
 from igibson.wrappers.wrapper_base import BaseWrapper
+from igibson.object_states.pose import Pose
 
 logger = logging.getLogger(__name__)
 
@@ -47,10 +49,28 @@ class ActionPrimitiveWrapper(BaseWrapper):
         self.accumulate_obs = accumulate_obs
         self.num_attempts = num_attempts
         self.accum_reward = np.asarray([0])
+        self.pumpkin_n_02_1_reward = True
+        self.pumpkin_n_02_2_reward = True
+        self.arm = 'left'
+        self.action_tm1 = None
+        self.step_index = 0
+        self.initial_pos_dict = {'cabinet.n.01_1': [ 0.42474782, -1.89797091, 0.09850009]}
+        self.max_step = 40  # env.config['max_step']
 
     def seed(self, seed):
         random.seed(seed)
         np.random.seed(seed)
+
+    def reset(self):
+        """
+        By default, run the normal environment reset() function
+        Returns:
+            OrderedDict: Environment observation space after reset occurs
+        """
+        self.pumpkin_n_02_1_reward = True
+        self.pumpkin_n_02_2_reward = True
+        self.step_counter = 0
+        return self.env.reset()
 
     def step(self, action: int):
         # Run the goal generator and feed the goals into the env.
@@ -62,6 +82,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         for _ in range(self.num_attempts):
             obs, done, info = None, None, {}
             try:
+                obj_in_hand_before_act = self.robots[0]._ag_obj_in_hand[self.arm]
                 for lower_level_action in self.action_generator.apply(action):
 
                     obs, reward, done, info = super().step(lower_level_action)
@@ -85,7 +106,24 @@ class ActionPrimitiveWrapper(BaseWrapper):
                     info["primitive_error_reason"] = None
                     info["primitive_error_metadata"] = None
                     info["primitive_error_message"] = None
-
+                # print('\n\n\n\n\n\n\n', self.robots[0]._ag_obj_in_hand[self.arm])
+                # print(self.env.task.object_scope['agent.n.01_1'].states[Pose].get_value()[0])
+                obj_pos = self.env.task.object_scope['agent.n.01_1'].states[Pose].get_value()[0]
+                within_distance = np.sum(np.abs(self.initial_pos_dict['cabinet.n.01_1'] - obj_pos)) < 1e-1
+                # print(self.pumpkin_n_02_1_reward, action == 4,  obj_in_hand_before_act is not None, within_distance)
+                # bddl_object_scope
+                # if self.robots[0]._ag_obj_in_hand[self.arm] is not None:
+                #     print('attr: ', self.robots[0]._ag_obj_in_hand[self.arm].__dict__)
+                if obj_in_hand_before_act is not None:
+                    if self.pumpkin_n_02_1_reward and action == 4 and obj_in_hand_before_act.bddl_object_scope == 'pumpkin.n.02_1' and within_distance:
+                        reward = 0.5
+                        accumulated_reward += reward
+                        self.pumpkin_n_02_1_reward = False
+                    elif self.pumpkin_n_02_2_reward and action == 4 and obj_in_hand_before_act.bddl_object_scope == 'pumpkin.n.02_2' and within_distance:
+                        reward = 0.5
+                        accumulated_reward += reward
+                        self.pumpkin_n_02_2_reward = False
+                self.action_tm1 = action
                 break
             except ActionPrimitiveError as e:
                 end_time = time.time()
@@ -105,11 +143,24 @@ class ActionPrimitiveWrapper(BaseWrapper):
             else:
                 return_obs = accumulated_obs[-1]
         end_time = time.time()
-        logger.error("AP time: {}, reward: {}, return_obs.keys(): {}".format(end_time - start_time, accumulated_reward, ''))
+        logger.error("AP time: {}, reward: {}".format(end_time - start_time, accumulated_reward))
         self.accum_reward = self.accum_reward + accumulated_reward
-        print('reward: ', accumulated_reward, self.accum_reward)
+        print('reward: ', accumulated_reward, 'accum reward: ', self.accum_reward)
         print('self.robots[0].sensors: ', self.robots[0].sensors)
-        print(return_obs)
+        # print('return_obs: {}, done: {}, info: {}'.format(return_obs, done, info))
+        print('return_obs: {}'.format(return_obs, done, info))
+        # print(return_obs.keys())  # odict_keys(['rgb'])
+        # plt.imshow(return_obs['rgb'])
+        # plt.show()
         # plt.imshow(return_obs['robot0']['rgb'])
         # plt.show()
+        self.step_index = self.step_index + 1
+        if self.accum_reward >= 1.0:
+            self.done = True
+            info["is_success"] = True
+        elif self.step_index >= self.max_step:
+            self.done = True
+            info["is_success"] = False
+        else:
+            self.done = False
         return return_obs, accumulated_reward, done, info
