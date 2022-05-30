@@ -259,13 +259,13 @@ action_list_putting_away_Halloween_decorations_v3 = [
 ]
 # vis version: full set
 action_list_putting_away_Halloween_decorations = [
-    [0, "cabinet.n.01_1"],  # navigate_to
-    [6, "cabinet.n.01_1"],  # pull
-    [0, "pumpkin.n.02_1"],  # navigate_to
-    [1, "pumpkin.n.02_1"],  # pick
-    [2, "cabinet.n.01_1"],  # place
-    [0, "pumpkin.n.02_2"],  # navigate_to
-    [1, "pumpkin.n.02_2"],  # pick
+    [0, "cabinet.n.01_1"],  # navigate_to 0
+    [4, "cabinet.n.01_1"],  # pull
+    [0, "pumpkin.n.02_1"],  # navigate_to 2
+    [1, "pumpkin.n.02_1"],  # pick 3
+    [2, "cabinet.n.01_1"],  # place 4
+    [0, "pumpkin.n.02_2"],  # navigate_to 5
+    [1, "pumpkin.n.02_2"],  # pick 6
     [5, "cabinet.n.01_1"],  # push
 ]
 
@@ -295,6 +295,7 @@ action_dict = {
 def convert_bddl_scope_to_name(object_name):
     split_name = object_name.split('.')
     number = split_name[-1].split('_')
+    number[1] = str(int(number[1]) - 1)
     if split_name[0] == 'cabinet':
         split_name[0] = 'bottom_cabinet'
         number[1] = '13'
@@ -831,95 +832,105 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         logger.info("Toggle action completed")
 
     def _pull(self, object_name):
-        logger.info("Pulling object {}".format(object_name))
-        params = skill_object_offset_params[B1KActionPrimitive.PULL][object_name]
-        obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
-        obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
 
-        # process the offset from object frame to world frame
-        mat = quat2mat(obj_rot_XYZW)
-        vector = mat @ np.array(params[:3])
+        logger.info("Pushing object {}".format(object_name))
 
-        pulling_pos = copy.deepcopy(obj_pos)
-        pulling_pos[0] += vector[0]
-        pulling_pos[1] += vector[1]
-        pulling_pos[2] += vector[2]
+        new_name = convert_bddl_scope_to_name(object_name)
+        jnt = self.env.scene.object_registry('name', new_name).joints['joint_0']
+        min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
+        jnt.set_pos(max_pos, target=False)
 
-        pulling_direction = np.array(params[3:6])
-        ee_pulling_orn = p.getQuaternionFromEuler((np.pi / 2, 0, 0))
-        pre_pulling_distance = 0.10
-        pulling_distance = 0.30
-
-        finger_size = self.robot.finger_lengths[self.arm]
-        pulling_pos += pulling_direction * finger_size
-
-        plan_full_pre_pull_motion = not self.skip_arm_planning
-
-        pre_pull_path, approach_interaction_path, pull_interaction_path = self.planner.plan_ee_pull(
-            pulling_location=pulling_pos,
-            pulling_direction=pulling_direction,
-            ee_pulling_orn=ee_pulling_orn,
-            pre_pulling_distance=pre_pulling_distance,
-            pulling_distance=pulling_distance,
-            plan_full_pre_pull_motion=plan_full_pre_pull_motion,
-            pulling_steps=15,
-        )
-
-        if (
-            pre_pull_path is None
-            or len(pre_pull_path) == 0
-            or approach_interaction_path is None
-            or (len(approach_interaction_path) == 0 and pre_pulling_distance != 0)
-            or pull_interaction_path is None
-            or (len(pull_interaction_path) == 0 and pulling_distance != 0)
-        ):
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.PLANNING_ERROR,
-                "No arm path found to pull object",
-                {"object_to_pull": object_name},
-            )
-
-        # First, teleport the robot to the beginning of the pre-pick path
-        logger.info("Visualizing pre-pull path")
-        self.planner.visualize_arm_path(pre_pull_path, arm=self.arm)
-        yield self._get_still_action()
-        # Then, execute the interaction_pick_path stopping if there is a contact
-        logger.info("Executing approaching pull path")
-        yield from self._execute_ee_path(approach_interaction_path, stop_on_contact=True)
-        # At the end, close the hand
-        logger.info("Executing grasp")
-        yield from self._execute_grasp()
-        # Then, execute the interaction_pull_path
-        # Since we may have stopped earlier due to contact, the precomputed path may be wrong
-        # We have two options here: 1) (re)plan from the current pose (online planning), or 2) find the closest point
-        # in the precomputed trajectory and start the execution there. Implementing option 1)
-        logger.info("Replaning interaction pull path and executing")
-        current_ee_position = self.robot.get_eef_position(arm=self.arm)
-        current_ee_orn = self.robot.get_eef_orientation(arm=self.arm)
-        state = self.robot.get_joint_states()
-        joint_positions = np.array([state[joint_name][0] for joint_name in state])
-        arm_joint_positions = joint_positions[self.robot.controller_joint_idx["arm_" + self.arm]]
-        pull_interaction_path = self.planner.plan_ee_straight_line_motion(
-            arm_joint_positions,
-            current_ee_position,
-            pulling_direction,
-            ee_orn=current_ee_orn,
-            line_length=pulling_distance,
-            arm=self.arm,
-        )
-        yield from self._execute_ee_path(pull_interaction_path, while_grasping=True)
-        # Then, open the hand
-        logger.info("Executing ungrasp")
-        yield from self._execute_ungrasp()
-        logger.info("Untuck arm")
-        self.planner.visualize_arm_path(
-            [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
-            arm=self.arm,
-            keep_last_location=True,
-        )
         yield self._get_still_action()
 
-        logger.info("Pull action completed")
+        # logger.info("Pulling object {}".format(object_name))
+        # params = skill_object_offset_params[B1KActionPrimitive.PULL][object_name]
+        # obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
+        # obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
+        #
+        # # process the offset from object frame to world frame
+        # mat = quat2mat(obj_rot_XYZW)
+        # vector = mat @ np.array(params[:3])
+        #
+        # pulling_pos = copy.deepcopy(obj_pos)
+        # pulling_pos[0] += vector[0]
+        # pulling_pos[1] += vector[1]
+        # pulling_pos[2] += vector[2]
+        #
+        # pulling_direction = np.array(params[3:6])
+        # ee_pulling_orn = p.getQuaternionFromEuler((np.pi / 2, 0, 0))
+        # pre_pulling_distance = 0.10
+        # pulling_distance = 0.30
+        #
+        # finger_size = self.robot.finger_lengths[self.arm]
+        # pulling_pos += pulling_direction * finger_size
+        #
+        # plan_full_pre_pull_motion = not self.skip_arm_planning
+        #
+        # pre_pull_path, approach_interaction_path, pull_interaction_path = self.planner.plan_ee_pull(
+        #     pulling_location=pulling_pos,
+        #     pulling_direction=pulling_direction,
+        #     ee_pulling_orn=ee_pulling_orn,
+        #     pre_pulling_distance=pre_pulling_distance,
+        #     pulling_distance=pulling_distance,
+        #     plan_full_pre_pull_motion=plan_full_pre_pull_motion,
+        #     pulling_steps=15,
+        # )
+        #
+        # if (
+        #     pre_pull_path is None
+        #     or len(pre_pull_path) == 0
+        #     or approach_interaction_path is None
+        #     or (len(approach_interaction_path) == 0 and pre_pulling_distance != 0)
+        #     or pull_interaction_path is None
+        #     or (len(pull_interaction_path) == 0 and pulling_distance != 0)
+        # ):
+        #     raise ActionPrimitiveError(
+        #         ActionPrimitiveError.Reason.PLANNING_ERROR,
+        #         "No arm path found to pull object",
+        #         {"object_to_pull": object_name},
+        #     )
+        #
+        # # First, teleport the robot to the beginning of the pre-pick path
+        # logger.info("Visualizing pre-pull path")
+        # self.planner.visualize_arm_path(pre_pull_path, arm=self.arm)
+        # yield self._get_still_action()
+        # # Then, execute the interaction_pick_path stopping if there is a contact
+        # logger.info("Executing approaching pull path")
+        # yield from self._execute_ee_path(approach_interaction_path, stop_on_contact=True)
+        # # At the end, close the hand
+        # logger.info("Executing grasp")
+        # yield from self._execute_grasp()
+        # # Then, execute the interaction_pull_path
+        # # Since we may have stopped earlier due to contact, the precomputed path may be wrong
+        # # We have two options here: 1) (re)plan from the current pose (online planning), or 2) find the closest point
+        # # in the precomputed trajectory and start the execution there. Implementing option 1)
+        # logger.info("Replaning interaction pull path and executing")
+        # current_ee_position = self.robot.get_eef_position(arm=self.arm)
+        # current_ee_orn = self.robot.get_eef_orientation(arm=self.arm)
+        # state = self.robot.get_joint_states()
+        # joint_positions = np.array([state[joint_name][0] for joint_name in state])
+        # arm_joint_positions = joint_positions[self.robot.controller_joint_idx["arm_" + self.arm]]
+        # pull_interaction_path = self.planner.plan_ee_straight_line_motion(
+        #     arm_joint_positions,
+        #     current_ee_position,
+        #     pulling_direction,
+        #     ee_orn=current_ee_orn,
+        #     line_length=pulling_distance,
+        #     arm=self.arm,
+        # )
+        # yield from self._execute_ee_path(pull_interaction_path, while_grasping=True)
+        # # Then, open the hand
+        # logger.info("Executing ungrasp")
+        # yield from self._execute_ungrasp()
+        # logger.info("Untuck arm")
+        # self.planner.visualize_arm_path(
+        #     [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
+        #     arm=self.arm,
+        #     keep_last_location=True,
+        # )
+        # yield self._get_still_action()
+        #
+        # logger.info("Pull action completed")
 
     def _pull_open(self, object_name):
         logger.info("Pulling object {}".format(object_name))
@@ -1003,181 +1014,76 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         print('total time: {}'.format(still_action_time - plan_ee_pull_time))
         print("Pull action completed")
 
-    def _pull_open_v2(self, object_name):
-        logger.info("Pulling object {}".format(object_name))
-        params = skill_object_offset_params[B1KActionPrimitive.PULL][object_name]
-        obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
-        obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
-
-        # process the offset from object frame to world frame
-        mat = quat2mat(obj_rot_XYZW)
-        vector = mat @ np.array(params[:3])
-
-        # acquire the base direction
-        euler = mat2euler(mat)
-        target_yaw = euler[-1] + params[3]
-        print('target_yaw: ', target_yaw, params)
-        pick_place_pos = copy.deepcopy(obj_pos)
-        pick_place_pos[0] += vector[0]
-        pick_place_pos[1] += vector[1]
-        pick_place_pos[2] += vector[2]
-
-        obj_idx_to_ignore = []
-        if self.is_grasping:
-            obj_idx_to_ignore = [self.robot._ag_obj_in_hand[self.arm]]
-
-        # plan = self.planner.plan_arm_pull(pick_place_pos, hit_normal=np.array((-1.0, 0.0, 0.0)))
-        # self.planner.execute_arm_pull(plan, pick_place_pos, -np.array(hit_normal))
-        plan_ee_pull_time = time.time()
-        # plan = self.planner.plan_arm_pull(pick_place_pos, np.array((-1.0, 0.0, 0.0)))
-        plan = self.planner.plan_base_motion(
-            [obj_pos[0] + vector[0], obj_pos[1] + vector[1], target_yaw],
-            plan_full_base_motion=not self.skip_base_planning,
-            obj_idx_to_ignore=obj_idx_to_ignore,
-        )
-        print('plan: ', plan)
-
-        pre_pull_time = time.time()
-        print('plan ee pull time: {}'.format(pre_pull_time - plan_ee_pull_time))
-        # print("Visualizing pre-pull path")
-        # print('pre_pull_path: ', pre_pull_path, len(pre_pull_path))
-        # self.planner.visualize_arm_path(pre_pull_path, arm=self.arm)
-        # yield self._get_still_action()
-        # Then, execute the interaction_pick_path stopping if there is a contact
-        # print("Executing approaching pull path")
-        # print('approach_interaction_path: ', approach_interaction_path, len(approach_interaction_path), np.sum(approach_interaction_path, axis=0).shape)
-        # sum_approach_interaction_path = [np.sum(approach_interaction_path, axis=0)]
-        # print('sum_approach_interaction_path: ', sum_approach_interaction_path)
-        start_execute_ee_time = time.time()
-        print('pre_pull_time: {}'.format(start_execute_ee_time - pre_pull_time))
-        yield from self._execute_ee_path(plan, stop_on_contact=True)
-        execute_ee_time = time.time()
-        print('execute_ee_time: {}'.format(execute_ee_time - start_execute_ee_time))
-        # At the end, close the hand
-        # print("Executing grasp")
-        yield from self._execute_grasp()
-        grasp_time = time.time()
-        print('grasp_time: {}'.format(grasp_time - execute_ee_time))
-        yield from self._execute_ee_path(plan[::-1], while_grasping=True)
-        pull_interaction_time = time.time()
-        print('pull_interaction_time: {}'.format(pull_interaction_time - grasp_time))
-        # Then, open the hand
-        # print("Executing ungrasp")
-        yield from self._execute_ungrasp()
-        ungrasp_time = time.time()
-        print('ungrasp_time: {}'.format(ungrasp_time - pull_interaction_time))
-        yield self._get_still_action()
-        still_action_time = time.time()
-        print('still_action_time: {}'.format(still_action_time - ungrasp_time))
-        print('total time: {}'.format(still_action_time - plan_ee_pull_time))
-        print("Pull action completed")
-
-    def _pull_open_v3(self, object_name):
-        logger.info("Pulling object {}".format(object_name))
-        params = skill_object_offset_params[B1KActionPrimitive.PULL][object_name]
-        obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
-        obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
-
-        # process the offset from object frame to world frame
-        mat = quat2mat(obj_rot_XYZW)
-        vector = mat @ np.array(params[:3])
-
-        # acquire the base direction
-        euler = mat2euler(mat)
-        target_yaw = euler[-1] + params[3]
-        print('target_yaw: ', target_yaw, params)
-        pick_place_pos = copy.deepcopy(obj_pos)
-        pick_place_pos[0] += vector[0]
-        pick_place_pos[1] += vector[1]
-        pick_place_pos[2] += vector[2]
-
-        body_joint_pairs = []
-        for obj in self.env.scene.objects_by_category['bottom_cabinet']:
-            # print('obj: ', obj)
-            for body_id in obj.get_body_ids():
-                for joint_id in range(p.getNumJoints(body_id)):
-                    # cache current physics state
-                    state_id = p.saveState()
-                    all_joint_info = p.getJointInfo(body_id, joint_id)
-                    print('body_id: {}, joint_id: {}, all_joint_info: {}, all_joint_info.shape: {}'
-                          .format(body_id, joint_id, all_joint_info, len(all_joint_info)))  # , 17
-                    j_low, j_high = p.getJointInfo(body_id, joint_id)[8:10]
-                    j_type = p.getJointInfo(body_id, joint_id)[2]
-                    parent_idx = p.getJointInfo(body_id, joint_id)[-1]
-                    if j_type not in [p.JOINT_REVOLUTE, p.JOINT_PRISMATIC]:
-                        p.removeState(state_id)
-                        continue
-                    # this is the continuous joint
-                    if j_low >= j_high:
-                        p.removeState(state_id)
-                        continue
-                    # this is the 2nd degree joint, ignore for now
-                    if parent_idx != -1:
-                        p.removeState(state_id)
-                        continue
-
-                    p.resetJointState(body_id, joint_id, 0.3)
-
-                    body_joint_pairs.append((body_id, joint_id))
-        print('body_joint_pairs: ', body_joint_pairs)
-        print("Pull action completed")
-
     def _push(self, object_name):
         logger.info("Pushing object {}".format(object_name))
-        params = skill_object_offset_params[B1KActionPrimitive.PUSH][object_name]
-        obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
-        obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
 
-        # process the offset from object frame to world frame
-        mat = quat2mat(obj_rot_XYZW)
-        vector = mat @ np.array(params[:3])
+        new_name = convert_bddl_scope_to_name(object_name)
+        jnt = self.env.scene.object_registry('name', new_name).joints['joint_0']
+        min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
+        jnt.set_pos(min_pos, target=False)
 
-        pick_place_pos = copy.deepcopy(obj_pos)
-        pick_place_pos[0] += vector[0]
-        pick_place_pos[1] += vector[1]
-        pick_place_pos[2] += vector[2]
-
-        pushing_direction = np.array(params[3:6])
-
-        pushing_distance = 0.2
-        ee_pushing_orn = np.array(p.getQuaternionFromEuler((0, np.pi / 2, 0)))
-
-        plan_full_pre_push_motion = not self.skip_arm_planning
-
-        pre_push_path, push_interaction_path = self.planner.plan_ee_push(
-            pick_place_pos,
-            pushing_direction=pushing_direction,
-            ee_pushing_orn=ee_pushing_orn,
-            pushing_distance=pushing_distance,
-            plan_full_pre_push_motion=plan_full_pre_push_motion,
-        )
-
-        if (
-            pre_push_path is None
-            or len(pre_push_path) == 0
-            or push_interaction_path is None
-            or (len(push_interaction_path) == 0 and pushing_distance != 0)
-        ):
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.PLANNING_ERROR,
-                "No arm path found to push object",
-                {"object_to_push": object_name},
-            )
-
-        # First, teleport the robot to the beginning of the pre-pick path
-        logger.info("Pre-push motion")
-        self.planner.visualize_arm_path(pre_push_path, arm=self.arm, keep_last_location=True)
-        yield self._get_still_action()
-        # Then, execute the interaction_pick_path stopping if there is a contact
-        logger.info("Pushing interaction")
-        yield from self._execute_ee_path(push_interaction_path, stop_on_contact=False)
-
-        logger.info("Tuck arm")
-        self.planner.visualize_arm_path(
-            [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
-            arm=self.arm,
-            keep_last_location=True,
-        )
         yield self._get_still_action()
 
-        logger.info("Push action completed")
+        # min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
+        #
+        # # Set the value you want
+        # jnt.set_pos(val, target=False)
+        #
+        # params = skill_object_offset_params[B1KActionPrimitive.PUSH][object_name]
+        # obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
+        # obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
+        #
+        # # process the offset from object frame to world frame
+        # mat = quat2mat(obj_rot_XYZW)
+        # vector = mat @ np.array(params[:3])
+        #
+        # pick_place_pos = copy.deepcopy(obj_pos)
+        # pick_place_pos[0] += vector[0]
+        # pick_place_pos[1] += vector[1]
+        # pick_place_pos[2] += vector[2]
+        #
+        # pushing_direction = np.array(params[3:6])
+        #
+        # pushing_distance = 0.2
+        # ee_pushing_orn = np.array(p.getQuaternionFromEuler((0, np.pi / 2, 0)))
+        #
+        # plan_full_pre_push_motion = not self.skip_arm_planning
+        #
+        # pre_push_path, push_interaction_path = self.planner.plan_ee_push(
+        #     pick_place_pos,
+        #     pushing_direction=pushing_direction,
+        #     ee_pushing_orn=ee_pushing_orn,
+        #     pushing_distance=pushing_distance,
+        #     plan_full_pre_push_motion=plan_full_pre_push_motion,
+        # )
+        #
+        # if (
+        #     pre_push_path is None
+        #     or len(pre_push_path) == 0
+        #     or push_interaction_path is None
+        #     or (len(push_interaction_path) == 0 and pushing_distance != 0)
+        # ):
+        #     raise ActionPrimitiveError(
+        #         ActionPrimitiveError.Reason.PLANNING_ERROR,
+        #         "No arm path found to push object",
+        #         {"object_to_push": object_name},
+        #     )
+        #
+        # # First, teleport the robot to the beginning of the pre-pick path
+        # logger.info("Pre-push motion")
+        # self.planner.visualize_arm_path(pre_push_path, arm=self.arm, keep_last_location=True)
+        # yield self._get_still_action()
+        # # Then, execute the interaction_pick_path stopping if there is a contact
+        # logger.info("Pushing interaction")
+        # yield from self._execute_ee_path(push_interaction_path, stop_on_contact=False)
+        #
+        # logger.info("Tuck arm")
+        # self.planner.visualize_arm_path(
+        #     [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
+        #     arm=self.arm,
+        #     keep_last_location=True,
+        # )
+        # yield self._get_still_action()
+        #
+        # logger.info("Push action completed")
+

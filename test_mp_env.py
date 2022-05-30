@@ -63,20 +63,20 @@ for i in range(1000):
     sim.step()
 
 # breakpoint()
-for i in range(1):
-    print(i)
-    env.step(2)  # move to pumpkin
-    time.sleep(2)
-    env.step(3)  # pick pumpkin
-    time.sleep(2)
-    # sim.step()
-    # env.step(4)  # place pumpkin
-    # time.sleep(2)
-    env.step(0)  # move to cabinet
-    # breakpoint()
-    time.sleep(2)
-    env.step(4)  # place pumpkin
-    time.sleep(2)
+# for i in range(1):
+#     print(i)
+#     env.step(2)  # move to pumpkin
+#     time.sleep(2)
+#     env.step(3)  # pick pumpkin
+#     time.sleep(2)
+#     # sim.step()
+#     # env.step(4)  # place pumpkin
+#     # time.sleep(2)
+#     env.step(0)  # move to cabinet
+#     # breakpoint()
+#     time.sleep(2)
+#     env.step(4)  # place pumpkin
+#     time.sleep(2)
 breakpoint()
 
 sim.step()
