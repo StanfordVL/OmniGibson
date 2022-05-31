@@ -300,9 +300,6 @@ class iGibsonEnv(BaseEnv):
             )
             observation_space["occupancy_grid"] = self.occupancy_grid_space
             scan_modalities.append("occupancy_grid")
-        if "bump" in self.output:
-            observation_space["bump"] = gym.spaces.Box(low=0.0, high=1.0, shape=(1,))
-            sensors["bump"] = BumpSensor(self)
         if "proprioception" in self.output:
             observation_space["proprioception"] = self.build_obs_space(
                 shape=(self.robots[0].proprioception_dim,), low=-np.inf, high=np.inf
@@ -348,7 +345,7 @@ class iGibsonEnv(BaseEnv):
         """
         self.action_space = self.robots[0].action_space
 
-    def load(self):
+    def load_v0(self):
         """
         Load environment.
         """
@@ -369,6 +366,26 @@ class iGibsonEnv(BaseEnv):
         # Update the initial scene state
         self.scene.update_initial_state()
 
+    def load(self):
+        """
+        Load environment.
+        """
+        # Do any normal loading first from the super() call
+        super().load()
+        # Load the task
+        self._load_task()
+
+        # Start the simulation, then reset the environment
+        self.simulator.play()
+        self.reset()
+
+        # Update the initial scene state
+        self.scene.update_initial_state()
+
+        # Load the obs / action spaces
+        self.load_observation_space()
+        self._load_action_space()
+
 
     def reload_model_object_randomization(self, predefined_object_randomization_idx=None):
         """
@@ -385,7 +402,7 @@ class iGibsonEnv(BaseEnv):
             (self._predefined_object_randomization_idx + 1) % self._n_predefined_object_randomizations
         self.load()
 
-    def get_obs(self):
+    def get_obs_v0(self):
         # Grab obs from super call
         # obs = super().get_obs()
         obs = OrderedDict()
@@ -397,6 +414,14 @@ class iGibsonEnv(BaseEnv):
             for modality in vision_obs:
                 obs[modality] = vision_obs[modality]
 
+        return obs
+
+    def get_obs(self):
+        # Grab obs from super call
+        obs = super().get_obs()
+
+        # Add task obs
+        obs["task"] = self._task.get_obs(env=self)
         return obs
 
     # TODO!! Wait until omni dev team has an answer

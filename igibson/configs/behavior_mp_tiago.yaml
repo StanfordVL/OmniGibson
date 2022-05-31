@@ -31,7 +31,7 @@ robots:
 #    default_arm_pose: diagonal30
     controller_config:
       base:
-        name: DifferentialDriveController
+        name: NullJointController  # DifferentialDriveController
       arm_left:
         name: JointController #InverseKinematicsController
         motor_type: position

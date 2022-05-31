@@ -79,10 +79,18 @@ class ActionPrimitiveWrapper(BaseWrapper):
 
         start_time = time.time()
 
+        pre_action = 10
+        for lower_level_action in self.action_generator.apply(pre_action):
+            obs, reward, done, info = super().step(lower_level_action)
+            if self.accumulate_obs:
+                accumulated_obs.append(obs)
+            else:
+                accumulated_obs = [obs]  # Do this to save some memory.
+
         for _ in range(self.num_attempts):
             obs, done, info = None, None, {}
             try:
-                obj_in_hand_before_act = self.robots[0]._ag_obj_in_hand[self.arm]
+                # obj_in_hand_before_act = self.robots[0]._ag_obj_in_hand[self.arm]
                 for lower_level_action in self.action_generator.apply(action):
 
                     obs, reward, done, info = super().step(lower_level_action)
@@ -146,21 +154,27 @@ class ActionPrimitiveWrapper(BaseWrapper):
         logger.error("AP time: {}, reward: {}".format(end_time - start_time, accumulated_reward))
         self.accum_reward = self.accum_reward + accumulated_reward
         print('reward: ', accumulated_reward, 'accum reward: ', self.accum_reward)
-        print('self.robots[0].sensors: ', self.robots[0].sensors)
+        # print('self.robots[0].sensors: ', self.robots[0].sensors)
         # print('return_obs: {}, done: {}, info: {}'.format(return_obs, done, info))
-        print('return_obs: {}'.format(return_obs, done, info))
-        # print(return_obs.keys())  # odict_keys(['rgb'])
-        # plt.imshow(return_obs['rgb'])
-        # plt.show()
+        # print('return_obs: {}'.format(return_obs))
+        print('done: {}, info: {}'.format(done, info))
+        print(return_obs['robot0'].keys())  # odict_keys(['rgb'])
+        # _reason': None, 'primitive_error_metadata': None, 'primitive_error_message': None}
+        # odict_keys(['robot0:base_front_laser_link_Lidar_sensor_scan', 'robot0:base_front_laser_link_Lidar_sensor_occupancy_grid', 'robot0:base_rear_laser_link_Lidar_sensor_scan', 'robot0:base_rear_laser_link_Lidar_sensor_occupancy_grid', 'robot0:eyes_Camera_sensor_rgb'])
         # plt.imshow(return_obs['robot0']['rgb'])
         # plt.show()
         self.step_index = self.step_index + 1
-        # if self.accum_reward >= 1.0:
-        #     self.done = True
-        #     info["is_success"] = True
-        # elif self.step_index >= self.max_step:
-        #     self.done = True
-        #     info["is_success"] = False
-        # else:
-        #     self.done = False
+        if self.accum_reward >= 1.0:
+            self.done = True
+            info["is_success"] = True
+        elif self.step_index >= self.max_step:
+            self.done = True
+            info["is_success"] = False
+        else:
+            self.done = False
+        return_obs = {
+            'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb']
+        }
+        plt.imshow(return_obs['rgb'])
+        plt.show()
         return return_obs, accumulated_reward, done, info

@@ -225,10 +225,10 @@ def main():
         del model
     elif mode == 'callback':
         # Save a checkpoint every 1000 steps
-        checkpoint_callback = CheckpointCallback(save_freq=500, save_path=tensorboard_log_dir,
+        checkpoint_callback = CheckpointCallback(save_freq=1000, save_path=tensorboard_log_dir,
                                              name_prefix=prefix)
         eval_callback = EvalCallback(eval_env, best_model_save_path=os.path.join(tensorboard_log_dir, 'best_model'),
-                                     log_path=os.path.join(tensorboard_log_dir, 'results'), eval_freq=500)
+                                     log_path=os.path.join(tensorboard_log_dir, 'results'), eval_freq=1000)
         # Create the callback list
         callback = CallbackList([checkpoint_callback, eval_callback])
 

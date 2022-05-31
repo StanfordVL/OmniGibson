@@ -387,8 +387,11 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         return gym.spaces.Discrete(self.num_discrete_action)
 
     def apply(self, action_index):
-        primitive_obj_pair = self.action_list[action_index]
-        return self.controller_functions[primitive_obj_pair[0]](primitive_obj_pair[1])
+        if action_index == 10:
+            return self._dummy()
+        else:
+            primitive_obj_pair = self.action_list[action_index]
+            return self.controller_functions[primitive_obj_pair[0]](primitive_obj_pair[1])
 
     def _get_obj_in_hand(self):
         return self.robot._ag_obj_in_hand[self.arm]  # TODO(MP): Expose this interface.
@@ -720,10 +723,12 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         logger.info("Placing on object {}".format(object_name))
 
         # params = skill_object_offset_params[B1KActionPrimitive.PLACE][object_name]
-        # new_name = convert_bddl_scope_to_name(object_name)
-        #
-        # obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
-        # obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
+        # # new_name = convert_bddl_scope_to_name(object_name)
+        # #
+        # # obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
+        # # obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
+        # obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
+        # obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
         #
         # # process the offset from object frame to world frame
         #
@@ -770,6 +775,8 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             self.robot.keep_still()
             yield still_action  # self._get_still_action()
 
+        # # for i in range(10):
+        # #     self.env.simulator.step()
         # # Then, retract the arm
         # logger.info("Executing retracting path")
         # if plan_full_pre_drop_motion:  # Visualizing the full path...

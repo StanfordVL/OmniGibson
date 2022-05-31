@@ -150,7 +150,6 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
 
         # Search for any sensors this robot might have attached to any of its links
         self._sensors = OrderedDict()
-        print('\n\n\n\n\n\n\n\n\nrobot_base: self._links', self._links)
         obs_modalities = set()
         for link_name, link in self._links.items():
             # Search through all children prims and see if we find any sensor
@@ -330,11 +329,6 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
         for sensor in self._sensors.values():
             if modality in sensor.all_modalities:
                 sensor.remove_modality(modality=modality)
-
-    @property
-    def root_link_name(self):
-        # Most robots have base_link as the root_link defined. If it exists, we use that, otherwise, we use the default
-        return "base_link" if "base_link" in self._links else super().root_link_name
 
     @property
     def sensors(self):

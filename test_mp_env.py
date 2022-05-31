@@ -49,6 +49,9 @@ env = iGibsonEnv(configs=cfg, physics_timestep=1/120., action_timestep=1/30.)
 env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
 sim = env.simulator
 
+# env_2 = env
+# env_2.reset()
+print('\n\n\n\n\n\n\n\n env_2 reset()')
 # env_2 = iGibsonEnv(configs=cfg, physics_timestep=1/120., action_timestep=1/30.)
 # env_2 = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
 
