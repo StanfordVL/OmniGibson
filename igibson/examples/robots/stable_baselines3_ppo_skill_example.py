@@ -3,6 +3,7 @@
 import logging
 import os, time
 from typing import Callable
+import pdb
 
 import igibson
 # import behavior
@@ -147,6 +148,8 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
                     observations[key] = observations[key].squeeze(-1)  # [:, :, 0]
             else:
                 continue
+            # print(self.extractors)
+            # print('observations[key].shape: ', observations[key].shape)
 
             encoded_tensor_list.append(extractor(observations[key]))
         # Return a (B, self._features_dim) PyTorch tensor, where B is batch dimension.
@@ -176,6 +179,7 @@ def main():
             env = iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.)
             env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
             env.seed(seed + rank)
+            # env = lambda env=iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.): ActionPrimitiveWrapper(env=env)
             return env
 
         set_random_seed(seed)
@@ -195,13 +199,14 @@ def main():
 
     # eval_env = SubprocVecEnv([make_env(i, print_log=True) for i in range(num_cpu)])
     # eval_env = VecMonitor(eval_env)
-    eval_env = env
+    # eval_env = env
 
     policy_kwargs = dict(
         features_extractor_class=CustomCombinedExtractor,
     )
 
     os.makedirs(tensorboard_log_dir, exist_ok=True)
+    # pdb.set_trace()
     model = PPO(
         "MultiInputPolicy",
         env,
@@ -210,8 +215,10 @@ def main():
         policy_kwargs=policy_kwargs,
         n_steps=20 * 10,
         batch_size=8,
+        device='cpu',
     )
-
+    # pdb.set_trace()
+    # print('\n\n\n\n\n\n\n\n\n\n\n\n')
     log.debug(model.policy)
 
     if mode == 'for_loop':
@@ -242,15 +249,14 @@ def main():
     else:
         checkpoint_callback = CheckpointCallback(save_freq=1000, save_path=tensorboard_log_dir, name_prefix=prefix)
         log.debug(model.policy)
-
         print(model)
 
         model.learn(total_timesteps=10000000, callback=checkpoint_callback,
-                    eval_env=eval_env, eval_freq=1000,
+                    eval_env=env, eval_freq=1000,
                     n_eval_episodes=20)
 
     model = PPO.load(os.path.join(tensorboard_log_dir, "ckpt_{}".format(prefix)))
-    mean_reward, std_reward = evaluate_policy(model, eval_env, n_eval_episodes=20)
+    mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=20)
     log.info(f"After Loading: Mean reward: {mean_reward} +/- {std_reward:.2f}")
 
 

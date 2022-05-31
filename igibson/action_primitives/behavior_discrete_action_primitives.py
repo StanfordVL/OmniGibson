@@ -16,7 +16,7 @@ from igibson.utils.motion_planning_utils import MotionPlanner
 from igibson.utils.transform_utils import mat2euler, quat2mat
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.ERROR)
 
 index_action_mapping = {
     0: "move",
@@ -51,7 +51,8 @@ skill_object_offset_params = {
         # putting_away_Halloween_decorations
         "pumpkin.n.02_1": [0.5, 0.0, 0.0, 0.7 * np.pi],
         "pumpkin.n.02_2": [0, -0.5, 0, 0.5 * np.pi],
-        "cabinet.n.01_1": [0.4, -1.15, 0, 0.5 * np.pi],
+        # "cabinet.n.01_1": [0.4, -1.15, 0, 0.5 * np.pi],
+        "cabinet.n.01_1": [0.6, -1.15, 0, 0.5 * np.pi],
         # "cabinet.n.01_1": [-0.1, -1.5, 0, 0.5 * np.pi],
     },
     1: {  # pick
@@ -69,16 +70,10 @@ skill_object_offset_params = {
             0.025,
         ],
         # putting_away_Halloween_decorations
-        "pumpkin.n.02_1": [
-            0.0,
-            0.0,
-            0.0,
-        ],
-        "pumpkin.n.02_2": [
-            0.0,
-            0.0,
-            0.0,
-        ],
+        # "pumpkin.n.02_1": [0.0,0.0,0.0,],
+        # "pumpkin.n.02_2": [0.0,0.0,0.0,],
+        "pumpkin.n.02_1": [0.0,0.0,-0.1,],
+        "pumpkin.n.02_2": [0.0,0.0,-0.1,],
     },
     2: {  # place
         "table.n.02_1": [0, 0, 0.5],  # dx, dy, dz
@@ -463,7 +458,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         grasping_steps = 5 if self.fast_execution else 9 # 10
         for i in range(grasping_steps):
-            # print(i, 'action: ', action)
+            print(i, 'action: ', action)
             yield action
         # for i in range(3):
         #     self.env.simulator.step()
@@ -578,7 +573,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             plan_full_base_motion=not self.skip_base_planning,
             objects_to_ignore=objects_to_ignore,
         )
-        print('plan: ', plan)
+        # print('plan: ', plan)
         if plan is not None and len(plan) > 0:
             self.planner.visualize_base_path(plan, keep_last_location=True)
         else:
@@ -689,6 +684,8 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         print("======================== PICK STEP 5 ==========================")
         print("Executing grasp")
         yield from self._execute_grasp()
+        for i in range(10):
+            self.env.simulator.step()
         if pre_grasping_distance != 0:
             logger.info("Executing retracting path")
             yield from self._execute_ee_path(
@@ -863,10 +860,11 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         jnt = self.task_obj_list[object_name].joints['joint_0']
 
         min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
-        jnt.set_pos(max_pos, target=False)
+        jnt.set_pos(max_pos - 0.1, target=False)
 
-        yield self._get_still_action()
+        still_action = self._get_still_action()
         for i in range(5):
+            yield still_action
             self.env.simulator.step()
             print(i, 'pull sim.step()')
 
@@ -1055,8 +1053,9 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
         jnt.set_pos(min_pos, target=False)
         # print('new_name: {}, jnt: {}, min_pos: {}, max_pos: {}'.format(new_name, jnt, min_pos, max_pos))
-        yield self._get_still_action()
+        still_action = self._get_still_action()
         for i in range(5):
+            yield still_action
             self.env.simulator.step()
             # print(i, 'push sim.step()')
         # min_pos, max_pos = jnt.lower_limit, jnt.upper_limit

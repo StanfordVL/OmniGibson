@@ -6,6 +6,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import queue
+import cv2
 
 from igibson.action_primitives.action_primitive_set_base import (
     REGISTERED_PRIMITIVE_SETS,
@@ -22,7 +23,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
     def __init__(
         self,
         env,
-        action_generator,
+        action_generator="BehaviorActionPrimitives",
         reward_accumulation="sum",
         accumulate_obs=False,
         num_attempts=1,
@@ -56,6 +57,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         self.step_index = 0
         # self.initial_pos_dict = {'cabinet.n.01_1': [ 0.42474782, -1.89797091, 0.09850009]}
         self.max_step = 40  # env.config['max_step']
+        self.reset()
 
     def seed(self, seed):
         random.seed(seed)
@@ -70,7 +72,14 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # self.pumpkin_n_02_1_reward = True
         # self.pumpkin_n_02_2_reward = True
         self.step_counter = 0
-        return self.env.reset()
+        return_obs = self.env.reset()
+        # print('return_obs.keys(): ', return_obs.keys())
+        return_obs = {
+            'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb']
+        }
+        return_obs, accumulated_reward, done, info = self.step(0)
+        # return_obs, accumulated_reward, done, info = self.step(4)
+        return return_obs
 
     def step(self, action: int):
         # Run the goal generator and feed the goals into the env.
@@ -92,7 +101,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
             try:
                 # obj_in_hand_before_act = self.robots[0]._ag_obj_in_hand[self.arm]
                 for lower_level_action in self.action_generator.apply(action):
-
+                    # print('action: {}, lower_level_action: {}'.format(action, lower_level_action))
                     obs, reward, done, info = super().step(lower_level_action)
                     # obs: odict_keys(['robot0', 'task'])
                     # obs['robot0']: odict_keys([]), obs['task']: odict_keys(['low_dim'])
@@ -158,7 +167,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # print('return_obs: {}, done: {}, info: {}'.format(return_obs, done, info))
         # print('return_obs: {}'.format(return_obs))
         print('done: {}, info: {}'.format(done, info))
-        print(return_obs['robot0'].keys())  # odict_keys(['rgb'])
+        # print(return_obs['robot0'].keys())  # odict_keys(['rgb'])
         # _reason': None, 'primitive_error_metadata': None, 'primitive_error_message': None}
         # odict_keys(['robot0:base_front_laser_link_Lidar_sensor_scan', 'robot0:base_front_laser_link_Lidar_sensor_occupancy_grid', 'robot0:base_rear_laser_link_Lidar_sensor_scan', 'robot0:base_rear_laser_link_Lidar_sensor_occupancy_grid', 'robot0:eyes_Camera_sensor_rgb'])
         # plt.imshow(return_obs['robot0']['rgb'])
@@ -173,8 +182,9 @@ class ActionPrimitiveWrapper(BaseWrapper):
         else:
             self.done = False
         return_obs = {
-            'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb']
+            'rgb': cv2.resize(return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'], (512, 512))  # [:, :, :3]
         }
-        plt.imshow(return_obs['rgb'])
-        plt.show()
+        # print('\n\n\n\n\n\n\n return_obs[rgb].shape: {} '.format(return_obs['rgb'].shape))
+        # plt.imshow(return_obs['rgb'])
+        # plt.show()
         return return_obs, accumulated_reward, done, info

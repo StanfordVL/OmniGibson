@@ -229,7 +229,7 @@ class iGibsonEnv(BaseEnv):
             )
         if "rgb" in self.output:
             observation_space["rgb"] = self.build_obs_space(
-                shape=(self.image_height, self.image_width, 3), low=0.0, high=1.0
+                shape=(self.image_height, self.image_width, 4), low=0.0, high=1.0
             )
             vision_modalities.append("rgb")
         if "depth" in self.output:
@@ -267,43 +267,43 @@ class iGibsonEnv(BaseEnv):
                 shape=(self.image_height, self.image_width, 1), low=0.0, high=MAX_INSTANCE_COUNT
             )
             vision_modalities.append("ins_seg")
-        if "rgb_filled" in self.output:  # use filler
-            observation_space["rgb_filled"] = self.build_obs_space(
-                shape=(self.image_height, self.image_width, 3), low=0.0, high=1.0
-            )
-            vision_modalities.append("rgb_filled")
-        if "highlight" in self.output:
-            observation_space["highlight"] = self.build_obs_space(
-                shape=(self.image_height, self.image_width, 1), low=0.0, high=1.0
-            )
-            vision_modalities.append("highlight")
-        if "scan" in self.output:
-            self.n_horizontal_rays = self.config.get("n_horizontal_rays", 128)
-            self.n_vertical_beams = self.config.get("n_vertical_beams", 1)
-            assert self.n_vertical_beams == 1, "scan can only handle one vertical beam for now"
-            observation_space["scan"] = self.build_obs_space(
-                shape=(self.n_horizontal_rays * self.n_vertical_beams, 1), low=0.0, high=1.0
-            )
-            scan_modalities.append("scan")
-        if "scan_rear" in self.output:
-            self.n_horizontal_rays = self.config.get("n_horizontal_rays", 128)
-            self.n_vertical_beams = self.config.get("n_vertical_beams", 1)
-            assert self.n_vertical_beams == 1, "scan can only handle one vertical beam for now"
-            observation_space["scan_rear"] = self.build_obs_space(
-                shape=(self.n_horizontal_rays * self.n_vertical_beams, 1), low=0.0, high=1.0
-            )
-            scan_modalities.append("scan_rear")
-        if "occupancy_grid" in self.output:
-            self.grid_resolution = self.config.get("grid_resolution", 128)
-            self.occupancy_grid_space = gym.spaces.Box(
-                low=0.0, high=1.0, shape=(self.grid_resolution, self.grid_resolution, 1)
-            )
-            observation_space["occupancy_grid"] = self.occupancy_grid_space
-            scan_modalities.append("occupancy_grid")
-        if "proprioception" in self.output:
-            observation_space["proprioception"] = self.build_obs_space(
-                shape=(self.robots[0].proprioception_dim,), low=-np.inf, high=np.inf
-            )
+        # if "rgb_filled" in self.output:  # use filler
+        #     observation_space["rgb_filled"] = self.build_obs_space(
+        #         shape=(self.image_height, self.image_width, 3), low=0.0, high=1.0
+        #     )
+        #     vision_modalities.append("rgb_filled")
+        # if "highlight" in self.output:
+        #     observation_space["highlight"] = self.build_obs_space(
+        #         shape=(self.image_height, self.image_width, 1), low=0.0, high=1.0
+        #     )
+        #     vision_modalities.append("highlight")
+        # if "scan" in self.output:
+        #     self.n_horizontal_rays = self.config.get("n_horizontal_rays", 128)
+        #     self.n_vertical_beams = self.config.get("n_vertical_beams", 1)
+        #     assert self.n_vertical_beams == 1, "scan can only handle one vertical beam for now"
+        #     observation_space["scan"] = self.build_obs_space(
+        #         shape=(self.n_horizontal_rays * self.n_vertical_beams, 1), low=0.0, high=1.0
+        #     )
+        #     scan_modalities.append("scan")
+        # if "scan_rear" in self.output:
+        #     self.n_horizontal_rays = self.config.get("n_horizontal_rays", 128)
+        #     self.n_vertical_beams = self.config.get("n_vertical_beams", 1)
+        #     assert self.n_vertical_beams == 1, "scan can only handle one vertical beam for now"
+        #     observation_space["scan_rear"] = self.build_obs_space(
+        #         shape=(self.n_horizontal_rays * self.n_vertical_beams, 1), low=0.0, high=1.0
+        #     )
+        #     scan_modalities.append("scan_rear")
+        # if "occupancy_grid" in self.output:
+        #     self.grid_resolution = self.config.get("grid_resolution", 128)
+        #     self.occupancy_grid_space = gym.spaces.Box(
+        #         low=0.0, high=1.0, shape=(self.grid_resolution, self.grid_resolution, 1)
+        #     )
+        #     observation_space["occupancy_grid"] = self.occupancy_grid_space
+        #     scan_modalities.append("occupancy_grid")
+        # if "proprioception" in self.output:
+        #     observation_space["proprioception"] = self.build_obs_space(
+        #         shape=(self.robots[0].proprioception_dim,), low=-np.inf, high=np.inf
+        #     )
 
         if len(vision_modalities) > 0:
             sensors["vision"] = VisionSensor(prim_path="/World/viewer_camera",
@@ -780,11 +780,11 @@ class iGibsonEnv(BaseEnv):
         Reset episode.
         """
         # Stop and restart the simulation
-        self._simulator.stop()
-        self._simulator.play()
+        # self._simulator.stop()
+        # self._simulator.play()
 
         # Do any domain randomization
-        self.randomize_domain()
+        # self.randomize_domain()
 
         # # Move all robots away from the scene since the task will place the robots anyways
         # for robot in self.robots:

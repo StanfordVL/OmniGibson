@@ -51,7 +51,7 @@ sim = env.simulator
 
 # env_2 = env
 # env_2.reset()
-print('\n\n\n\n\n\n\n\n env_2 reset()')
+# print('\n\n\n\n\n\n\n\n env_2 reset()')
 # env_2 = iGibsonEnv(configs=cfg, physics_timestep=1/120., action_timestep=1/30.)
 # env_2 = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
 
@@ -70,11 +70,12 @@ ceiling.visible = False
 # cam.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
 # cam.initialize()
 
-for i in range(500):
-    sim.step()
+# for i in range(500):
+#     sim.step()
 
 # breakpoint()
-for i in range(1):
+for i in range(3):
+    env.reset()
     env.step(0)  # move to pumpkin
     time.sleep(2)
     # obs = cam._get_obs()
