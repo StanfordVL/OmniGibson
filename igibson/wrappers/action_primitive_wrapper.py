@@ -56,7 +56,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # self.action_tm1 = None
         self.step_index = 0
         # self.initial_pos_dict = {'cabinet.n.01_1': [ 0.42474782, -1.89797091, 0.09850009]}
-        self.max_step = 40  # env.config['max_step']
+        self.max_step = 30  # env.config['max_step']
         self.reset()
 
     def seed(self, seed):
@@ -72,6 +72,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # self.pumpkin_n_02_1_reward = True
         # self.pumpkin_n_02_2_reward = True
         self.step_counter = 0
+        self.accum_reward = 0
         return_obs = self.env.reset()
         # print('return_obs.keys(): ', return_obs.keys())
         return_obs = {

@@ -24,7 +24,7 @@ try:
     from stable_baselines3.common.preprocessing import maybe_transpose
     from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
     from stable_baselines3.common.utils import set_random_seed
-    from stable_baselines3.common.vec_env import SubprocVecEnv, VecMonitor
+    # from stable_baselines3.common.vec_env import SubprocVecEnv, VecMonitor
     from stable_baselines3.common.callbacks import CallbackList, CheckpointCallback, EvalCallback
 
 except ModuleNotFoundError:
@@ -38,7 +38,7 @@ Note that due to the sparsity of the reward, this training code will not converg
 This only serves as a starting point that users can further build upon.
 """
 
-
+#
 class CustomCombinedExtractor(BaseFeaturesExtractor):
     def __init__(self, observation_space: gym.spaces.Dict):
         # We do not know features-dim here before going over all the items,
@@ -174,20 +174,30 @@ def main():
     num_cpu = 1
     mode = 'chen'  # 'callback'
 
-    def make_env(rank: int, seed: int = 0, print_log=True) -> Callable:
-        def _init() -> ActionPrimitiveWrapper:
-            env = iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.)
-            env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
-            env.seed(seed + rank)
-            # env = lambda env=iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.): ActionPrimitiveWrapper(env=env)
-            return env
-
-        set_random_seed(seed)
-        return _init
+    # def make_env(rank: int, seed: int = 0, print_log=True) -> Callable:
+    #     def _init() -> ActionPrimitiveWrapper:
+    #         env = iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.)
+    #         env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
+    #         env.seed(seed + rank)
+    #         # env = lambda env=iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.): ActionPrimitiveWrapper(env=env)
+    #         return env
+    #
+    #     set_random_seed(seed)
+    #     return _init
 
     # env = SubprocVecEnv([make_env(i) for i in range(num_cpu)])
     # env = VecMonitor(env)
-    env = SubprocVecEnv([make_env(0)])
+    # env = SubprocVecEnv([make_env(0)])
+
+    seed = 0
+
+    env = iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.)
+    env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
+    ceiling = env.scene.object_registry("name", "ceilings")
+    ceiling.visible = False
+    env.seed(seed)
+    set_random_seed(seed)
+    env.reset()
 
     # eval_env = SkillEnv(
     #     config_file=config_file,
@@ -215,7 +225,7 @@ def main():
         policy_kwargs=policy_kwargs,
         n_steps=20 * 10,
         batch_size=8,
-        device='cpu',
+        device='cuda',
     )
     # pdb.set_trace()
     # print('\n\n\n\n\n\n\n\n\n\n\n\n')
