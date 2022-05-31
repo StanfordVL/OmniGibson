@@ -451,6 +451,9 @@ class ManipulationRobot(BaseRobot):
         """
         arm = self.default_arm if arm == "default" else arm
 
+        # for link in self._ag_obj_in_hand[arm].links.values():
+        #     link.mass = 10.0
+
         # Remove joint and filtered collision restraints
         self._simulator.stage.RemovePrim(self._ag_obj_constraint_params[arm]["ag_joint_prim_path"])
         self._ag_data[arm] = None
@@ -1069,6 +1072,9 @@ class ManipulationRobot(BaseRobot):
         # TODO
         max_force = ASSIST_FORCE if joint_type == "FixedJoint" else ASSIST_FORCE * ARTICULATED_ASSIST_FRACTION
         # joint_prim.GetAttribute("physics:breakForce").Set(max_force)
+
+        # for link in ag_obj.links.values():
+        #     link.mass = 0.001
 
         self._ag_obj_constraint_params[arm] = {
             "ag_obj_prim_path": ag_obj.prim_path,

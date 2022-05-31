@@ -181,8 +181,9 @@ def main():
         set_random_seed(seed)
         return _init
 
-    env = SubprocVecEnv([make_env(i) for i in range(num_cpu)])
-    env = VecMonitor(env)
+    # env = SubprocVecEnv([make_env(i) for i in range(num_cpu)])
+    # env = VecMonitor(env)
+    env = SubprocVecEnv([make_env(0)])
 
     # eval_env = SkillEnv(
     #     config_file=config_file,
@@ -192,8 +193,9 @@ def main():
     #     print_log=False,
     # )
 
-    eval_env = SubprocVecEnv([make_env(i, print_log=True) for i in range(num_cpu)])
-    eval_env = VecMonitor(eval_env)
+    # eval_env = SubprocVecEnv([make_env(i, print_log=True) for i in range(num_cpu)])
+    # eval_env = VecMonitor(eval_env)
+    eval_env = env
 
     policy_kwargs = dict(
         features_extractor_class=CustomCombinedExtractor,
