@@ -631,7 +631,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         pick_place_pos[1] += vector[1]
         pick_place_pos[2] += vector[2]
 
-        pre_grasping_distance = 0.07
+        pre_grasping_distance = 0.1
         plan_full_pre_grasp_motion = not self.skip_arm_planning
 
         picking_direction = self.default_direction
@@ -691,6 +691,8 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             yield from self._execute_ee_path(
                 interaction_pick_path, stop_on_contact=False, reverse_path=True, while_grasping=True
             )
+            for i in range(10):
+                self.env.simulator.step()
         print("======================== PICK STEP 6 ==========================")
         logger.info("Executing retracting path")
         if plan_full_pre_grasp_motion:
