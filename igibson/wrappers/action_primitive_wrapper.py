@@ -166,7 +166,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # print('self.robots[0].sensors: ', self.robots[0].sensors)
         # print('return_obs: {}, done: {}, info: {}'.format(return_obs, done, info))
         # print('return_obs: {}'.format(return_obs))
-        print('done: {}, info: {}'.format(done, info))
+
         # print(return_obs['robot0'].keys())  # odict_keys(['rgb'])
         # _reason': None, 'primitive_error_metadata': None, 'primitive_error_message': None}
         # odict_keys(['robot0:base_front_laser_link_Lidar_sensor_scan', 'robot0:base_front_laser_link_Lidar_sensor_occupancy_grid', 'robot0:base_rear_laser_link_Lidar_sensor_scan', 'robot0:base_rear_laser_link_Lidar_sensor_occupancy_grid', 'robot0:eyes_Camera_sensor_rgb'])
@@ -182,9 +182,11 @@ class ActionPrimitiveWrapper(BaseWrapper):
         else:
             self.done = False
         return_obs = {
-            'rgb': cv2.resize(return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'], (512, 512))  # [:, :, :3]
+            # 'rgb': cv2.resize(return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'], (512, 512))[:, :, :3]
+            'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'][:, :, :3] / 255.
         }
         # print('\n\n\n\n\n\n\n return_obs[rgb].shape: {} '.format(return_obs['rgb'].shape))
         # plt.imshow(return_obs['rgb'])
         # plt.show()
+        print('done: {}, info: {}'.format(done, info))
         return return_obs, accumulated_reward, done, info

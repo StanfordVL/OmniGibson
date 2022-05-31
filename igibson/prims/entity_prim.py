@@ -434,7 +434,7 @@ class EntityPrim(XFormPrim):
             normalized (bool): Whether the inputted joint positions should be interpreted as normalized values. Default
                 is False
         """
-        print(f"name: {self.name}, handle: {self._handle}, num dof: {self.n_dof}")
+        # print(f"name: {self.name}, handle: {self._handle}, num dof: {self.n_dof}")
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
         self.assert_articulated()

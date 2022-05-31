@@ -217,8 +217,8 @@ class iGibsonEnv(BaseEnv):
         return obs_space
 
     def load_observation_space(self):
-        self.image_width = self.config.get("image_width", 512)
-        self.image_height = self.config.get("image_height", 512)
+        self.image_width = self.config.get("image_width", 128)
+        self.image_height = self.config.get("image_height", 128)
         observation_space = OrderedDict()
         sensors = OrderedDict()
         vision_modalities = []
@@ -229,7 +229,7 @@ class iGibsonEnv(BaseEnv):
             )
         if "rgb" in self.output:
             observation_space["rgb"] = self.build_obs_space(
-                shape=(self.image_height, self.image_width, 4), low=0.0, high=1.0
+                shape=(self.image_height, self.image_width, 3), low=0.0, high=1.0
             )
             vision_modalities.append("rgb")
         if "depth" in self.output:

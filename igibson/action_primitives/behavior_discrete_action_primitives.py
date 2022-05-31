@@ -458,7 +458,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         grasping_steps = 5 if self.fast_execution else 9 # 10
         for i in range(grasping_steps):
-            print(i, 'action: ', action)
+            # print(i, 'action: ', action)
             yield action
         # for i in range(3):
         #     self.env.simulator.step()
@@ -866,7 +866,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         for i in range(5):
             yield still_action
             self.env.simulator.step()
-            print(i, 'pull sim.step()')
+            # print(i, 'pull sim.step()')
 
         # logger.info("Pulling object {}".format(object_name))
         # params = skill_object_offset_params[B1KActionPrimitive.PULL][object_name]
