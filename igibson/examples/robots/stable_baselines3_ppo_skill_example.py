@@ -229,7 +229,7 @@ def main():
     )
     # pdb.set_trace()
     # print('\n\n\n\n\n\n\n\n\n\n\n\n')
-    log.debug(model.policy)
+    # log.debug(model.policy)
 
     if mode == 'for_loop':
         for i in range(1000):

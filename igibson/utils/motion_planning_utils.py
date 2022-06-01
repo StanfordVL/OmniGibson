@@ -7,7 +7,7 @@ from igibson.robots.manipulation_robot import IsGraspingState
 from omni.isaac.core.utils.prims import get_prim_at_path
 log = logging.getLogger(__name__)
 log.setLevel(logging.ERROR)
-
+import bddl
 import time
 
 import numpy as np
@@ -66,63 +66,187 @@ from igibson.scenes.interactive_traversable_scene import InteractiveTraversableS
 import igibson.utils.transform_utils as T
 from igibson.utils.utils import l2_distance, rotate_vector_2d
 
-import lula
+if m.IS_PUBLIC_ISAACSIM:
+    import pybullet as p
+else:
+    import lula
 
 SEARCHED = []
 # Setting this higher unfortunately causes things to become impossible to pick up (they touch their hosts)
 BODY_MAX_DISTANCE = 0.05
 HAND_MAX_DISTANCE = 0
 
-
-class IKSolver:
-    """
-    Class for thinly wrapping Lula IK solver
-    """
-
-    def __init__(
-        self,
-        robot_description_path,
-        robot_urdf_path,
-        eef_name,
-        default_joint_pos,
-    ):
-        # Create robot description, kinematics, and config
-        self.robot_description = lula.load_robot(robot_description_path, robot_urdf_path)
-        self.kinematics = self.robot_description.kinematics()
-        self.config = lula.CyclicCoordDescentIkConfig()
-        self.eef_name = eef_name
-        self.default_joint_pos = default_joint_pos
-
-    def solve(
-        self,
-        target_pos,
-        target_quat,
-        initial_joint_pos=None,
-    ):
+if m.IS_PUBLIC_ISAACSIM:
+    class IKSolver:
         """
-        Backs out joint positions to achieve desired @target_pos and @target_quat
-
-        Args:
-            target_pos (3-array): desired (x,y,z) local target cartesian position in robot's base coordinate frame
-            target_quat (3-array): desired (x,y,z,w) local target quaternion orientation in robot's base coordinate frame
-            initial_joint_pos (None or n-array): If specified, will set the initial cspace seed when solving for joint
-                positions. Otherwise, will use self.default_joint_pos
-
-        Returns:
-            None or n-array: Joint positions for reaching desired target_pos and target_quat, otherwise None if no
-                solution was found
+        Class for thinly wrapping Lula IK solver
         """
-        pos = np.array(target_pos, dtype=np.float64).reshape(3,1)
-        rot = np.array(T.quat2mat(target_quat), dtype=np.float64)
-        ik_target_pose = lula.Pose3(lula.Rotation3(rot), pos)
 
-        # Set the cspace seed
-        initial_joint_pos = self.default_joint_pos if initial_joint_pos is None else np.array(initial_joint_pos)
-        self.config.cspace_seeds = [initial_joint_pos]
+        def __init__(
+                self,
+                robot_description_path,
+                robot_urdf_path,
+                eef_name,
+                default_joint_pos,
+        ):
+            # Create pybullet server
+            p.connect(p.DIRECT)
+            p.resetSimulation()
 
-        # Compute target joint positions
-        ik_results = lula.compute_ik_ccd(self.kinematics, ik_target_pose, self.eef_name, self.config)
-        return np.array(ik_results.cspace_position)
+            # Create robot
+            self.ik_robot = p.loadURDF(fileName=robot_urdf_path, useFixedBase=1)
+
+            # load the number of joints from the bullet data
+            self.num_bullet_joints = p.getNumJoints(self.ik_robot)
+
+            # Disable collisions between all the joints
+            for joint in range(self.num_bullet_joints):
+                p.setCollisionFilterGroupMask(
+                    bodyUniqueId=self.ik_robot,
+                    linkIndexA=joint,
+                    collisionFilterGroup=0,
+                    collisionFilterMask=0,
+                )
+
+            if "tiago" in robot_urdf_path.lower():
+                if "left" in robot_description_path:
+                    # TODO: Store hardcoded indexes for left arm, joint limits, damping, etc.
+                    self.bullet_ee_idx = 27
+                    self.bullet_joint_indexes = [13, 14, 15, 16, 17, 19, 20]
+                else:
+                    raise ValueError("Should only control left arm!")
+
+            self.default_joint_pos = default_joint_pos
+
+        def solve(
+                self,
+                target_pos,
+                target_quat,
+                initial_joint_pos=None,
+        ):
+            """
+            Backs out joint positions to achieve desired @target_pos and @target_quat
+
+            Args:
+                target_pos (3-array): desired (x,y,z) local target cartesian position in robot's base coordinate frame
+                target_quat (3-array): desired (x,y,z,w) local target quaternion orientation in robot's base coordinate frame
+                initial_joint_pos (None or n-array): If specified, will set the initial cspace seed when solving for joint
+                    positions. Otherwise, will use self.default_joint_pos
+
+            Returns:
+                None or n-array: Joint positions for reaching desired target_pos and target_quat, otherwise None if no
+                    solution was found
+            """
+            # TODO: 0. If initial_joint_pos is None, grab @default_joint_pos as the rest pose. otherwise, use initial_joint_pos. Note that @initial_joint_pos will only have the conrolled joints, NOT all the joints specified!
+            # TODO: 1. Sync initial_joint_pos and the pybullet server via @sync_ik_robot()
+            # TODO: 2. Call ik solution below
+            # TODO: 3. MAke sure only the controlled joinst are returned (NOT all the joints)
+            ik_solution = list(
+                p.calculateInverseKinematics(
+                    bodyUniqueId=self.ik_robot,
+                    endEffectorLinkIndex=self.bullet_ee_idx,
+                    targetPosition=list(target_pos),
+                    targetOrientation=list(target_quat),
+                    lowerLimits=list(self.sim.model.jnt_range[self.joint_index, 0]),
+                    upperLimits=list(self.sim.model.jnt_range[self.joint_index, 1]),
+                    jointRanges=list(
+                        self.sim.model.jnt_range[self.joint_index, 1] - self.sim.model.jnt_range[self.joint_index, 0]
+                    ),
+                    restPoses=self.rest_poses,
+                    jointDamping=[0.1] * self.num_bullet_joints,
+                    physicsClientId=self.bullet_server_id,
+                )
+            )
+            return list(np.array(ik_solution)[self.ik_command_indexes])
+
+        def sync_ik_robot(self, joint_positions=None, simulate=False, sync_last=True):
+            """
+            Force the internal robot model to match the provided joint angles.
+            Args:
+                joint_positions (Iterable): Array of joint positions. Default automatically updates to
+                    current mujoco joint pos state
+                simulate (bool): If True, actually use physics simulation, else
+                    write to physics state directly.
+                sync_last (bool): If False, don't sync the last joint angle. This
+                    is useful for directly controlling the roll at the end effector.
+            """
+            if not joint_positions:
+                joint_positions = self.joint_pos
+            num_joints = self.joint_dim
+            if not sync_last and self.robot_name != "Baxter":
+                num_joints -= 1
+            for i in range(num_joints):
+                if simulate:
+                    p.setJointMotorControl2(
+                        bodyUniqueId=self.ik_robot,
+                        jointIndex=self.bullet_joint_indexes[i],
+                        controlMode=p.POSITION_CONTROL,
+                        targetVelocity=0,
+                        targetPosition=joint_positions[i],
+                        force=500,
+                        positionGain=0.5,
+                        velocityGain=1.0,
+                        physicsClientId=self.bullet_server_id,
+                    )
+                else:
+                    p.resetJointState(
+                        bodyUniqueId=self.ik_robot,
+                        jointIndex=self.bullet_joint_indexes[i],
+                        targetValue=joint_positions[i],
+                        targetVelocity=0,
+                        physicsClientId=self.bullet_server_id,
+                    )
+
+else:
+    class IKSolver:
+        """
+        Class for thinly wrapping Lula IK solver
+        """
+
+        def __init__(
+            self,
+            robot_description_path,
+            robot_urdf_path,
+            eef_name,
+            default_joint_pos,
+        ):
+            # Create robot description, kinematics, and config
+            self.robot_description = lula.load_robot(robot_description_path, robot_urdf_path)
+            self.kinematics = self.robot_description.kinematics()
+            self.config = lula.CyclicCoordDescentIkConfig()
+            self.eef_name = eef_name
+            self.default_joint_pos = default_joint_pos
+
+        def solve(
+            self,
+            target_pos,
+            target_quat,
+            initial_joint_pos=None,
+        ):
+            """
+            Backs out joint positions to achieve desired @target_pos and @target_quat
+
+            Args:
+                target_pos (3-array): desired (x,y,z) local target cartesian position in robot's base coordinate frame
+                target_quat (3-array): desired (x,y,z,w) local target quaternion orientation in robot's base coordinate frame
+                initial_joint_pos (None or n-array): If specified, will set the initial cspace seed when solving for joint
+                    positions. Otherwise, will use self.default_joint_pos
+
+            Returns:
+                None or n-array: Joint positions for reaching desired target_pos and target_quat, otherwise None if no
+                    solution was found
+            """
+            pos = np.array(target_pos, dtype=np.float64).reshape(3,1)
+            rot = np.array(T.quat2mat(target_quat), dtype=np.float64)
+            ik_target_pose = lula.Pose3(lula.Rotation3(rot), pos)
+
+            # Set the cspace seed
+            initial_joint_pos = self.default_joint_pos if initial_joint_pos is None else np.array(initial_joint_pos)
+            self.config.cspace_seeds = [initial_joint_pos]
+
+            # Compute target joint positions
+            ik_results = lula.compute_ik_ccd(self.kinematics, ik_target_pose, self.eef_name, self.config)
+            return np.array(ik_results.cspace_position)
 
 
 class MotionPlanner:
@@ -184,14 +308,15 @@ class MotionPlanner:
                     default_joint_pos=self.robot.default_joint_pos[left_control_idx],
                 )
                 self.ik_control_idx["left"] = left_control_idx
-                right_control_idx = self.robot.arm_control_idx["right"]
-                self.ik_solver["right"] = IKSolver(
-                    robot_description_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml",
-                    robot_urdf_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford.urdf",
-                    eef_name="gripper_right_grasping_frame",
-                    default_joint_pos=self.robot.default_joint_pos[right_control_idx],
-                )
-                self.ik_control_idx["right"] = right_control_idx
+                if not m.IS_PUBLIC_ISAACSIM:
+                    right_control_idx = self.robot.arm_control_idx["right"]
+                    self.ik_solver["right"] = IKSolver(
+                        robot_description_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml",
+                        robot_urdf_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford.urdf",
+                        eef_name="gripper_right_grasping_frame",
+                        default_joint_pos=self.robot.default_joint_pos[right_control_idx],
+                    )
+                    self.ik_control_idx["right"] = right_control_idx
             else:
                 raise ValueError("Invalid robot for generating IK solver. Must be either Fetch or Tiago")
 
@@ -316,7 +441,7 @@ class MotionPlanner:
         # Save state to reload
         state = self.env.dump_state(serialized=False)
         x, y, theta = goal
-        print(f"goal: {x},{y},{theta}")
+        # print(f"goal: {x},{y},{theta}")
 
         # Check only feasibility of the last location
         if not plan_full_base_motion:
@@ -327,7 +452,7 @@ class MotionPlanner:
                 obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm]
                 if obj_in_hand is not None:
                     objects_to_ignore.append(obj_in_hand)
-            print('objects_to_ignore: ', objects_to_ignore)
+            # print('objects_to_ignore: ', objects_to_ignore)
             for obj in objects_to_ignore:
                 self.env.add_ignore_robot_object_collision(robot_idn=self.robot_idn, obj=obj)
 
@@ -579,7 +704,7 @@ class MotionPlanner:
 
         ee_local_pos = ee_local_pos
 
-        print(f"attempting ik at: {ee_local_pos}, {ee_local_ori}")
+        # print(f"attempting ik at: {ee_local_pos}, {ee_local_ori}")
 
         # find collision-free IK solution for arm_subgoal
         while n_attempt < max_attempt:
@@ -1449,6 +1574,7 @@ class MotionPlanner:
         execution_path = (
             execution_path if not m.HEADLESS else [execution_path[-1]]
         )
+
         if self.robot_type != "BehaviorRobot":
             for joint_way_point in execution_path:
                 self.robot.set_joint_positions(joint_way_point, indices=self.ik_control_idx[arm])

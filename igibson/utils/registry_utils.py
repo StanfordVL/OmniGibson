@@ -295,9 +295,9 @@ class SerializableRegistry(Registry, Serializable):
     @property
     def state_size(self):
         # Total state size is the sum of all individual states from each object
-        for obj in self.objects:
-            print(obj.name)
-            print(obj.state_size)
+        # for obj in self.objects:
+            # print(obj.name)
+            # print(obj.state_size)
         return sum(obj.state_size for obj in self.objects)
 
     def _dump_state(self):
@@ -309,7 +309,7 @@ class SerializableRegistry(Registry, Serializable):
 
     def _load_state(self, state):
         # Iterate over all objects and load their states
-        print(f"registry: {self.name}")
+        # print(f"registry: {self.name}")
         for obj in self.objects:
             if obj.name not in state:
                 logging.warning(f"Object '{obj.name}' is not in the state dict to load from. Skip loading its state.")
@@ -327,7 +327,7 @@ class SerializableRegistry(Registry, Serializable):
         # along the way
         idx = 0
         for obj in self.objects:
-            print(f"obj: {obj.name}, state size: {obj.state_size}, passing in state length: {len(state[idx:])}")
+            # print(f"obj: {obj.name}, state size: {obj.state_size}, passing in state length: {len(state[idx:])}")
             # We pass in the entire remaining state vector, assuming the object only parses the relevant states
             # at the beginning
             state_dict[obj.name] = obj.deserialize(state[idx:])

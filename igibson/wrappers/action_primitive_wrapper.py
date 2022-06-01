@@ -55,6 +55,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         self.arm = 'left'
         # self.action_tm1 = None
         self.step_index = 0
+        self.done = False
         # self.initial_pos_dict = {'cabinet.n.01_1': [ 0.42474782, -1.89797091, 0.09850009]}
         self.max_step = 30  # env.config['max_step']
         self.reset()
@@ -71,7 +72,8 @@ class ActionPrimitiveWrapper(BaseWrapper):
         """
         # self.pumpkin_n_02_1_reward = True
         # self.pumpkin_n_02_2_reward = True
-        self.step_counter = 0
+        self.step_index = 0
+        self.done = False
         self.accum_reward = 0
         return_obs = self.env.reset()
         # print('return_obs.keys(): ', return_obs.keys())
@@ -88,6 +90,8 @@ class ActionPrimitiveWrapper(BaseWrapper):
         accumulated_obs = []
 
         start_time = time.time()
+
+        print('++++++++++++++++++++++++++++++ take action:', action)
 
         pre_action = 10
         for lower_level_action in self.action_generator.apply(pre_action):
@@ -145,8 +149,8 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 break
             except ActionPrimitiveError as e:
                 end_time = time.time()
-                logger.error("AP time: {}".format(end_time - start_time))
-                logger.warning("Action primitive failed! Exception {}".format(e))
+                # logger.error("AP time: {}".format(end_time - start_time))
+                # logger.warning("Action primitive failed! Exception {}".format(e))
                 # Record the error info.
                 info["primitive_success"] = False
                 info["primitive_error_reason"] = e.reason
@@ -161,7 +165,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
             else:
                 return_obs = accumulated_obs[-1]
         end_time = time.time()
-        logger.error("AP time: {}, reward: {}".format(end_time - start_time, accumulated_reward))
+        # logger.error("AP time: {}, reward: {}".format(end_time - start_time, accumulated_reward))
         self.accum_reward = self.accum_reward + accumulated_reward
         print('reward: ', accumulated_reward, 'accum reward: ', self.accum_reward)
         # print('self.robots[0].sensors: ', self.robots[0].sensors)
@@ -189,5 +193,5 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # print('\n\n\n\n\n\n\n return_obs[rgb].shape: {} '.format(return_obs['rgb'].shape))
         # plt.imshow(return_obs['rgb'])
         # plt.show()
-        print('done: {}, info: {}'.format(done, info))
-        return return_obs, accumulated_reward, done, info
+        print('done: {}'.format(self.done))
+        return return_obs, accumulated_reward, self.done, info

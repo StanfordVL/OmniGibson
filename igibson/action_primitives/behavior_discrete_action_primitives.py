@@ -422,9 +422,9 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         for arm_action in path if not reverse_path else reversed(path):
             # print(f"contacts: {self.robot._find_gripper_contacts(arm=self.arm)[0]}")
             if stop_on_contact and len(self.robot._find_gripper_contacts(arm=self.arm)[0]) != 0:
-                print("Contact detected. Stop motion")
-                print("Contacts {}".format(self.robot._find_gripper_contacts(arm=self.arm)))
-                print("Fingers {}".format([link.prim_path for link in self.robot.finger_links[self.arm]]))
+                # print("Contact detected. Stop motion")
+                # print("Contacts {}".format(self.robot._find_gripper_contacts(arm=self.arm)))
+                # print("Fingers {}".format([link.prim_path for link in self.robot.finger_links[self.arm]]))
                 return
             # print("Executing action {}".format(arm_action))
             # This assumes the arms are called "arm_"+self.arm. Maybe some robots do not follow this convention
@@ -437,10 +437,10 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             yield full_body_action
 
         if stop_on_contact:
-            print("End of motion and no contact detected")
+            # print("End of motion and no contact detected")
             raise ActionPrimitiveError(ActionPrimitiveError.Reason.EXECUTION_ERROR, "No contact was made.")
-        else:
-            print("End of the path execution")
+        # else:
+            # print("End of the path execution")
 
     def _execute_grasp(self):
         # get_still_action_time = time.time()
@@ -593,128 +593,132 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
     def _pick(self, object_name):
         # new_name = convert_bddl_scope_to_name(object_name)
         # new_name = object_name
-        logger.info("Picking object {}".format(object_name))
-        # Don't do anything if the object is already grasped.
-        # obj = self.env.scene.object_registry('name', new_name)
-        obj = self.task_obj_list[object_name]
-        robot_is_grasping = self.robot.is_grasping(candidate_obj=None)
-        robot_is_grasping_obj = self.robot.is_grasping(candidate_obj=obj)
-        if robot_is_grasping == IsGraspingState.TRUE:
-            if robot_is_grasping_obj == IsGraspingState.TRUE:
-                logger.warning("Robot already grasping the desired object")
-                yield np.zeros(self.robot.action_dim)
-                return
-            else:
+
+        obj = self._get_obj_in_hand()
+
+        if obj is None:
+            logger.info("Picking object {}".format(object_name))
+            # Don't do anything if the object is already grasped.
+            # obj = self.env.scene.object_registry('name', new_name)
+            obj = self.task_obj_list[object_name]
+            robot_is_grasping = self.robot.is_grasping(candidate_obj=None)
+            robot_is_grasping_obj = self.robot.is_grasping(candidate_obj=obj)
+            if robot_is_grasping == IsGraspingState.TRUE:
+                if robot_is_grasping_obj == IsGraspingState.TRUE:
+                    logger.warning("Robot already grasping the desired object")
+                    yield np.zeros(self.robot.action_dim)
+                    return
+                else:
+                    raise ActionPrimitiveError(
+                        ActionPrimitiveError.Reason.PRE_CONDITION_ERROR,
+                        "Cannot grasp when hand is already full.",
+                        {"object": object_name},
+                    )
+
+            params = skill_object_offset_params[B1KActionPrimitive.PICK][object_name]
+
+            # new_name = convert_bddl_scope_to_name(object_name)
+            # new_name = object_name
+            # obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
+            # obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
+            obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
+            obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
+
+            # process the offset from object frame to world frame
+            mat = quat2mat(obj_rot_XYZW)
+            vector = mat @ np.array(params[:3])
+
+            pick_place_pos = copy.deepcopy(obj_pos)
+            pick_place_pos[0] += vector[0]
+            pick_place_pos[1] += vector[1]
+            pick_place_pos[2] += vector[2]
+
+            pre_grasping_distance = 0.1
+            plan_full_pre_grasp_motion = not self.skip_arm_planning
+
+            picking_direction = self.default_direction
+
+            if len(params) > 3:
+                logger.warning(
+                    "The number of params indicate that this picking position was made robot-agnostic."
+                    "Adding finger offset."
+                )
+                finger_size = self.robot.finger_lengths[self.arm]
+                pick_place_pos -= picking_direction * finger_size
+
+            pre_pick_path, interaction_pick_path = self.planner.plan_ee_pick(
+                pick_place_pos,
+                grasping_direction=picking_direction,
+                pre_grasping_distance=pre_grasping_distance,
+                plan_full_pre_grasp_motion=plan_full_pre_grasp_motion,
+            )
+
+            # print("======================== PICK STEP 1 ==========================")
+
+            if (
+                pre_pick_path is None
+                or len(pre_pick_path) == 0
+                or interaction_pick_path is None
+                or (len(interaction_pick_path) == 0 and pre_grasping_distance != 0)
+            ):
+                # print(f"pre pick path path: {pre_pick_path}, interaction pick path: {interaction_pick_path}")
                 raise ActionPrimitiveError(
-                    ActionPrimitiveError.Reason.PRE_CONDITION_ERROR,
-                    "Cannot grasp when hand is already full.",
-                    {"object": object_name},
+                    ActionPrimitiveError.Reason.PLANNING_ERROR,
+                    "No arm path found to pick object",
+                    {"object_to_pick": object_name},
                 )
 
-        params = skill_object_offset_params[B1KActionPrimitive.PICK][object_name]
+            # print("======================== PICK STEP 2 ==========================")
 
-        # new_name = convert_bddl_scope_to_name(object_name)
-        # new_name = object_name
-        # obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
-        # obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
-        obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
-        obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
+            # First, teleport the robot to the beginning of the pre-pick path
+            logger.info("Visualizing pre-pick path")
+            self.planner.visualize_arm_path(pre_pick_path, arm=self.arm, keep_last_location=True)
 
-        # process the offset from object frame to world frame
-        mat = quat2mat(obj_rot_XYZW)
-        vector = mat @ np.array(params[:3])
+            # print("======================== PICK STEP 3 ==========================")
 
-        pick_place_pos = copy.deepcopy(obj_pos)
-        pick_place_pos[0] += vector[0]
-        pick_place_pos[1] += vector[1]
-        pick_place_pos[2] += vector[2]
+            # self.robot.keep_still()
+            yield self._get_still_action()
 
-        pre_grasping_distance = 0.1
-        plan_full_pre_grasp_motion = not self.skip_arm_planning
-
-        picking_direction = self.default_direction
-
-        if len(params) > 3:
-            logger.warning(
-                "The number of params indicate that this picking position was made robot-agnostic."
-                "Adding finger offset."
-            )
-            finger_size = self.robot.finger_lengths[self.arm]
-            pick_place_pos -= picking_direction * finger_size
-
-        pre_pick_path, interaction_pick_path = self.planner.plan_ee_pick(
-            pick_place_pos,
-            grasping_direction=picking_direction,
-            pre_grasping_distance=pre_grasping_distance,
-            plan_full_pre_grasp_motion=plan_full_pre_grasp_motion,
-        )
-
-        print("======================== PICK STEP 1 ==========================")
-
-        if (
-            pre_pick_path is None
-            or len(pre_pick_path) == 0
-            or interaction_pick_path is None
-            or (len(interaction_pick_path) == 0 and pre_grasping_distance != 0)
-        ):
-            print(f"pre pick path path: {pre_pick_path}, interaction pick path: {interaction_pick_path}")
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.PLANNING_ERROR,
-                "No arm path found to pick object",
-                {"object_to_pick": object_name},
-            )
-
-        print("======================== PICK STEP 2 ==========================")
-
-        # First, teleport the robot to the beginning of the pre-pick path
-        logger.info("Visualizing pre-pick path")
-        self.planner.visualize_arm_path(pre_pick_path, arm=self.arm, keep_last_location=True)
-
-        print("======================== PICK STEP 3 ==========================")
-
-        # self.robot.keep_still()
-        yield self._get_still_action()
-
-        print("======================== PICK STEP 4 ==========================")
-        if pre_grasping_distance != 0:
-            # Then, execute the interaction_pick_path stopping if there is a contact
-            logger.info("Executing interaction-pick path")
-            yield from self._execute_ee_path(interaction_pick_path, stop_on_contact=True)
-        # At the end, close the hand
-        print("======================== PICK STEP 5 ==========================")
-        print("Executing grasp")
-        yield from self._execute_grasp()
-        for i in range(10):
-            self.env.simulator.step()
-        if pre_grasping_distance != 0:
-            logger.info("Executing retracting path")
-            yield from self._execute_ee_path(
-                interaction_pick_path, stop_on_contact=False, reverse_path=True, while_grasping=True
-            )
+            # print("======================== PICK STEP 4 ==========================")
+            if pre_grasping_distance != 0:
+                # Then, execute the interaction_pick_path stopping if there is a contact
+                logger.info("Executing interaction-pick path")
+                yield from self._execute_ee_path(interaction_pick_path, stop_on_contact=True)
+            # At the end, close the hand
+            # print("======================== PICK STEP 5 ==========================")
+            # print("Executing grasp")
+            yield from self._execute_grasp()
             for i in range(10):
                 self.env.simulator.step()
-        print("======================== PICK STEP 6 ==========================")
-        logger.info("Executing retracting path")
-        if plan_full_pre_grasp_motion:
-            self.planner.visualize_arm_path(
-                pre_pick_path, arm=self.arm, reverse_path=True, grasped_obj=obj, keep_last_location=True
-            )
-        else:
-            self.planner.visualize_arm_path(
-                [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
-                arm=self.arm,
-                keep_last_location=True,
-                grasped_obj=obj,
-            )
+            if pre_grasping_distance != 0:
+                logger.info("Executing retracting path")
+                yield from self._execute_ee_path(
+                    interaction_pick_path, stop_on_contact=False, reverse_path=True, while_grasping=True
+                )
+                for i in range(5):
+                    self.env.simulator.step()
+            # print("======================== PICK STEP 6 ==========================")
+            # logger.info("Executing retracting path")
+            if plan_full_pre_grasp_motion:
+                self.planner.visualize_arm_path(
+                    pre_pick_path, arm=self.arm, reverse_path=True, grasped_obj=obj, keep_last_location=True
+                )
+            else:
+                self.planner.visualize_arm_path(
+                    [self.robot.tucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
+                    arm=self.arm,
+                    keep_last_location=True,
+                    grasped_obj=obj,
+                )
 
-        print("======================== PICK STEP 7 ==========================")
+            # print("======================== PICK STEP 7 ==========================")
         still_action = self._get_still_action()
-        for i in range(50):
+        for i in range(5):
             self.robot.keep_still()
             yield still_action  # self._get_still_action()
             # print('yield self._get_still_action()')
 
-        print("Pick action completed")
+        # print("Pick action completed")
 
     def _place(self, object_name):
         logger.info("Placing on object {}".format(object_name))
@@ -766,11 +770,32 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # # At the end, open the hand
         # logger.info("Executing ungrasp")
 
-        yield from self._execute_ungrasp()
+        obj = self._get_obj_in_hand()
+
+        if not obj is None:
+            self.planner.visualize_arm_path(
+                [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
+                arm=self.arm,
+                keep_last_location=True,
+                grasped_obj=obj,
+            )
+
+            yield from self._execute_ungrasp()
+            still_action = self._get_still_action()
+            for i in range(10):
+                self.robot.keep_still()
+                yield still_action  # self._get_still_action()
+
+            self.planner.visualize_arm_path(
+                [self.robot.tucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
+                arm=self.arm,
+                keep_last_location=True,
+            )
+
         still_action = self._get_still_action()
-        for i in range(50):
+        for i in range(5):
             self.robot.keep_still()
-            yield still_action  # self._get_still_action()
+            yield still_action
 
         # # for i in range(10):
         # #     self.env.simulator.step()
@@ -1006,7 +1031,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         # First, teleport the robot to the beginning of the pre-pick path
         pre_pull_time = time.time()
-        print('plan ee pull time: {}'.format(pre_pull_time - plan_ee_pull_time))
+        # print('plan ee pull time: {}'.format(pre_pull_time - plan_ee_pull_time))
         # print("Visualizing pre-pull path")
         # print('pre_pull_path: ', pre_pull_path, len(pre_pull_path))
         self.planner.visualize_arm_path(pre_pull_path, arm=self.arm)
@@ -1017,28 +1042,28 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # sum_approach_interaction_path = [np.sum(approach_interaction_path, axis=0)]
         # print('sum_approach_interaction_path: ', sum_approach_interaction_path)
         start_execute_ee_time = time.time()
-        print('pre_pull_time: {}'.format(start_execute_ee_time - pre_pull_time))
+        # print('pre_pull_time: {}'.format(start_execute_ee_time - pre_pull_time))
         yield from self._execute_ee_path(approach_interaction_path, stop_on_contact=True)
         execute_ee_time = time.time()
-        print('execute_ee_time: {}'.format(execute_ee_time - start_execute_ee_time))
+        # print('execute_ee_time: {}'.format(execute_ee_time - start_execute_ee_time))
         # At the end, close the hand
         # print("Executing grasp")
         yield from self._execute_grasp()
         grasp_time = time.time()
-        print('grasp_time: {}'.format(grasp_time - execute_ee_time))
+        # print('grasp_time: {}'.format(grasp_time - execute_ee_time))
         yield from self._execute_ee_path(pull_interaction_path, while_grasping=True)
         pull_interaction_time = time.time()
-        print('pull_interaction_time: {}'.format(pull_interaction_time - grasp_time))
+        # print('pull_interaction_time: {}'.format(pull_interaction_time - grasp_time))
         # Then, open the hand
         # print("Executing ungrasp")
         yield from self._execute_ungrasp()
         ungrasp_time = time.time()
-        print('ungrasp_time: {}'.format(ungrasp_time - pull_interaction_time))
+        # print('ungrasp_time: {}'.format(ungrasp_time - pull_interaction_time))
         yield self._get_still_action()
         still_action_time = time.time()
-        print('still_action_time: {}'.format(still_action_time - ungrasp_time))
-        print('total time: {}'.format(still_action_time - plan_ee_pull_time))
-        print("Pull action completed")
+        # print('still_action_time: {}'.format(still_action_time - ungrasp_time))
+        # print('total time: {}'.format(still_action_time - plan_ee_pull_time))
+        # print("Pull action completed")
 
     def _push(self, object_name):
         logger.info("Pushing object {}".format(object_name))

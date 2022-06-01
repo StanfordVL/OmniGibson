@@ -127,7 +127,8 @@ class iGibsonEnv(BaseEnv):
         try:
             self._ignore_robot_object_collisions[robot_idn].remove(obj)
         except:
-            print('remove_ignore_robot_object_collision failed: {}'.format(obj))
+            return
+            # print('remove_ignore_robot_object_collision failed: {}'.format(obj))
 
     def remove_ignore_robot_self_collision(self, robot_idn, link):
         """
