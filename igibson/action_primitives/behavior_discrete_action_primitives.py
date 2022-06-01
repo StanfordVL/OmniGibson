@@ -464,7 +464,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         #     self.env.simulator.step()
         #     grasped_object = self._get_obj_in_hand()
         #     print(i, 'grasped_object', grasped_object)
-        # object_id = 0  # self.task_obj_list['pumpkin.n.02_1'].get_body_ids()[0]
+        # object_id = 0  # self.task_obj_list['pumpkin.n.02_1'].get_body_ids()[0]f
         # print('object_id: ', object_id)
         # self.robot._ag_obj_in_hand[self.arm] = object_id
         # yield_action_time = time.time()
@@ -593,9 +593,11 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                 {"object_to_navigate": object_name},
             )
         still_action = self._get_still_action()
+        self.robot.keep_still()  # angel velocity
+        yield still_action  # self._get_still_action()  # position
         for i in range(10):
-            self.robot.keep_still()  # angel velocity
-            yield still_action  # self._get_still_action()  # position
+            self.env.simulator.step()
+
         logger.info("Finished navigating to object: {}".format(object_name))
         # print('\n\n\n\n\n\n', self.env.task.object_scope['agent.n.01_1'].states[Pose].get_value()[0])
         # return

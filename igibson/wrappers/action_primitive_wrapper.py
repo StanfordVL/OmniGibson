@@ -56,6 +56,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # self.action_tm1 = None
         self.step_index = 0
         self.done = False
+        self.fallback_state = None
         # self.initial_pos_dict = {'cabinet.n.01_1': [ 0.42474782, -1.89797091, 0.09850009]}
         self.max_step = 30  # env.config['max_step']
         self.reset()
@@ -81,6 +82,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
             'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb']
         }
         return_obs, accumulated_reward, done, info = self.step(0)
+        self.fallback_state = self.dump_state(serialized=False)
         # return_obs, accumulated_reward, done, info = self.step(4)
         return return_obs
 
@@ -147,9 +149,14 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 #         accumulated_reward += reward
                 #         self.pumpkin_n_02_2_reward = False
                 # self.action_tm1 = action
+                self.fallback_state = self.dump_state(serialized=False)
                 break
             except ActionPrimitiveError as e:
                 print("--- Primitive Error! Dummy action!")
+                from copy import deepcopy
+                self.load_state(deepcopy(self.fallback_state), serialized=False)
+                # self.action_generator.robot.keep_still()
+                # self._physics_context._step(current_time=self.current_time)
                 for lower_level_action in self.action_generator.apply(10):
                     # print('action: {}, lower_level_action: {}'.format(action, lower_level_action))
                     obs, reward, done, info = super().step(lower_level_action)

@@ -688,7 +688,8 @@ class iGibsonEnv(BaseEnv):
         # in case the surface is not perfect smooth (has bumps)
         obj.set_position(np.array([pos[0], pos[1], stable_z + offset]))
         # Update by taking a sim step
-        self._simulator.app.update()
+        self._simulator._physics_context._step(current_time=self._simulator.current_time)
+        # self._simulator.app.update()
 
     def test_valid_position(self, obj, pos, ori=None):
         """
@@ -712,7 +713,7 @@ class iGibsonEnv(BaseEnv):
             obj.keep_still()
 
         # Valid if there are no collisions
-        return not self.check_collision(objsA=obj)
+        return not self.check_collision(objsA=obj, step_sim=False)
 
     def land(self, obj, pos, ori):
         """
