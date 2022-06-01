@@ -317,7 +317,7 @@ class MotionPlanner:
         # Save state to reload
         state = self.env.dump_state(serialized=False)
         x, y, theta = goal
-        print(f"goal: {x},{y},{theta}")
+        # print(f"goal: {x},{y},{theta}")
 
         # Check only feasibility of the last location
         if not plan_full_base_motion:

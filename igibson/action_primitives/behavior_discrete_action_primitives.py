@@ -711,7 +711,17 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                     grasped_obj=obj,
                 )
 
-            # print("======================== PICK STEP 7 ==========================")
+        obj = self._get_obj_in_hand()
+
+        if obj is None:
+            self.planner.visualize_arm_path(
+                [self.robot.tucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
+                arm=self.arm,
+                keep_last_location=True,
+                grasped_obj=obj,
+            )
+
+        # print("======================== PICK STEP 7 ==========================")
         still_action = self._get_still_action()
         for i in range(5):
             self.robot.keep_still()

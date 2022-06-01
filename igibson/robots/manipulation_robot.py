@@ -1013,9 +1013,8 @@ class ManipulationRobot(BaseRobot):
         if ag_obj.fixed_base:
             # We search up the tree path from the ag_link until we encounter the root (joint == 0) or a non fixed
             # joint (e.g.: revolute or fixed)
-            joint_handle = -1
             link_handle = ag_link.handle
-            use_spherical = False
+            joint_handle = self._dc.get_rigid_body_parent_joint(link_handle)
             while joint_handle != 0:
                 # If this joint type is not fixed, we've encountered a valid moving joint
                 # So we create a spherical joint rather than fixed joint
