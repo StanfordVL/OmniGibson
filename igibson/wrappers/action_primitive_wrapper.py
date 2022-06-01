@@ -108,6 +108,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 for lower_level_action in self.action_generator.apply(action):
                     # print('action: {}, lower_level_action: {}'.format(action, lower_level_action))
                     obs, reward, done, info = super().step(lower_level_action)
+
                     # obs: odict_keys(['robot0', 'task'])
                     # obs['robot0']: odict_keys([]), obs['task']: odict_keys(['low_dim'])
 
@@ -148,6 +149,11 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 # self.action_tm1 = action
                 break
             except ActionPrimitiveError as e:
+                print("--- Primitive Error! Dummy action!")
+                for lower_level_action in self.action_generator.apply(10):
+                    # print('action: {}, lower_level_action: {}'.format(action, lower_level_action))
+                    obs, reward, done, info = super().step(lower_level_action)
+
                 end_time = time.time()
                 # logger.error("AP time: {}".format(end_time - start_time))
                 # logger.warning("Action primitive failed! Exception {}".format(e))

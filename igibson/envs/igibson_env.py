@@ -448,7 +448,9 @@ class iGibsonEnv(BaseEnv):
             collisions = {(c.body0, c.body1) for robot in self.robots for c in robot.contact_list()}
         else:
             collisions = set()
+        # print(f"collisions: {collisions}")
         self._current_collisions = self._filter_collisions(collisions) if filtered else collisions
+        # print(f"filtered collisions: {self._current_collisions}")
         return self._current_collisions
 
     def _filter_collisions(self, collisions):
@@ -592,7 +594,7 @@ class iGibsonEnv(BaseEnv):
         """
         # Run simulator step and update contacts
         if step_sim:
-            self._simulator_step()
+            self._simulator.app.update()
         collisions = self.update_collisions(filtered=True)
 
         # Run sanity checks and standardize inputs
@@ -686,7 +688,7 @@ class iGibsonEnv(BaseEnv):
         # in case the surface is not perfect smooth (has bumps)
         obj.set_position(np.array([pos[0], pos[1], stable_z + offset]))
         # Update by taking a sim step
-        self._simulator_step()
+        self._simulator.app.update()
 
     def test_valid_position(self, obj, pos, ori=None):
         """

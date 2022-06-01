@@ -313,6 +313,7 @@ class XFormPrim(BasePrim):
         transform.SetMatrix(prim_tf)
         position = transform.GetTranslation()
         orientation = transform.GetRotation().GetQuat()
+
         return np.array(position), gf_quat_to_np_array(orientation)[[1, 2, 3, 0]]
 
     def set_position(self, position):

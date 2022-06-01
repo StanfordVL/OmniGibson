@@ -332,11 +332,13 @@ class MotionPlanner:
             for obj in objects_to_ignore:
                 self.env.add_ignore_robot_object_collision(robot_idn=self.robot_idn, obj=obj)
 
+            # input(f"Testing valid navigate_to position with collision")
             collision_free = self.env.test_valid_position(
                 obj=self.robot,
                 pos=np.array((x, y, self.trav_map.floor_heights[self.floor_num])),
                 ori=np.array([0, 0, theta]),
             )
+            # input(f"navigate_to goal is collision free: {collision_free}")
             # collision_free = True
 
             for obj in objects_to_ignore:
