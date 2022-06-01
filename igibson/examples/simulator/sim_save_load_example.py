@@ -24,10 +24,10 @@ sim.import_scene(scene=scene)
 
 # Report objects loaded.
 for reg in sim.scene.registry.objects:
-    print("=====")
-    print(reg.name)
-    for obj in reg.objects:
-        print(f"Registry: {reg.name}, obj: {obj.name}")
+    # print("=====")
+    # print(reg.name)
+    # for obj in reg.objects:
+    #     print(f"Registry: {reg.name}, obj: {obj.name}")
 
 # Take a look at the scene.
 for _ in range(2000):
@@ -40,12 +40,12 @@ sim.stop()
 o = sim.scene.object_registry("name", "bottom_cabinet_13")
 o.set_position(np.array([0.2, -1.49805, 0.38631]))
 cab_pos_1 = o.get_position()
-print(f"{o.name} position: {cab_pos_1}")
+# print(f"{o.name} position: {cab_pos_1}")
 
 o = sim.scene.object_registry("name", "bottom_cabinet_41")
 o.set_position(np.array([0, 3.13717675, 0.46447614]))
 cab_pos_2 = o.get_position()
-print(f"{o.name} position: {cab_pos_2}")
+# print(f"{o.name} position: {cab_pos_2}")
 
 # Import a robot.
 robot = Turtlebot(prim_path=f"/World/robot", name="robot", obs_modalities=["proprio", "rgb", "scan", "occupancy_grid"])
@@ -58,9 +58,9 @@ robot.apply_action(np.array([1.0, 0]))
 for _ in range(100):
     sim.step()
 
-print(f"{robot.name} position: {robot.get_position()}")
-print(f"{robot.name} linear_velocity: {robot.get_linear_velocity()}")
-print(f"{robot.name} angular_velocity: {robot.get_angular_velocity()}")
+# print(f"{robot.name} position: {robot.get_position()}")
+# print(f"{robot.name} linear_velocity: {robot.get_linear_velocity()}")
+# print(f"{robot.name} angular_velocity: {robot.get_angular_velocity()}")
 
 # Report loaded prims in the world.
 world_prim = sim.world_prim

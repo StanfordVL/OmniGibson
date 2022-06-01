@@ -296,8 +296,8 @@ class SerializableRegistry(Registry, Serializable):
     def state_size(self):
         # Total state size is the sum of all individual states from each object
         # for obj in self.objects:
-            # print(obj.name)
-            # print(obj.state_size)
+        #     print(obj.name)
+        #     print(obj.state_size)
         return sum(obj.state_size for obj in self.objects)
 
     def _dump_state(self):

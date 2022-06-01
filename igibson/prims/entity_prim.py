@@ -6,22 +6,28 @@
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 #
-from typing import Optional, Tuple, Union, List
-from copy import deepcopy
-import numpy as np
-from collections import OrderedDict, Iterable
-from omni.isaac.dynamic_control import _dynamic_control
-from omni.isaac.core.utils.types import DOFInfo
-from omni.isaac.core.utils.transformations import tf_matrix_from_pose
-from omni.isaac.core.utils.rotations import gf_quat_to_np_array
-from pxr import Gf, Usd, UsdGeom, UsdPhysics
-from omni.isaac.core.controllers.articulation_controller import ArticulationController
+from collections import Iterable, OrderedDict
+from typing import Optional, Tuple
+
 import carb
-from omni.isaac.core.utils.prims import is_prim_path_valid, get_prim_property, set_prim_property, \
-    get_prim_parent, get_prim_at_path
-from igibson.prims.xform_prim import XFormPrim
-from igibson.prims.rigid_prim import RigidPrim
+import numpy as np
+from omni.isaac.core.controllers.articulation_controller import ArticulationController
+from omni.isaac.core.utils.prims import (
+    get_prim_at_path,
+    get_prim_parent,
+    get_prim_property,
+    is_prim_path_valid,
+    set_prim_property,
+)
+from omni.isaac.core.utils.rotations import gf_quat_to_np_array
+from omni.isaac.core.utils.transformations import tf_matrix_from_pose
+from omni.isaac.core.utils.types import DOFInfo
+from omni.isaac.dynamic_control import _dynamic_control
+from pxr import Gf, Usd, UsdGeom, UsdPhysics
+
 from igibson.prims.joint_prim import JointPrim
+from igibson.prims.rigid_prim import RigidPrim
+from igibson.prims.xform_prim import XFormPrim
 from igibson.utils.types import JointsState
 
 
@@ -53,7 +59,7 @@ class EntityPrim(XFormPrim):
         self._dc = None                         # Dynamics control interface
         self._handle = None                     # Handle to this articulation
         self._root_handle = None                # Handle to the root rigid body of this articulation
-        self._root_link_name = None  # Name of the root link
+        self._root_link_name = None             # Name of the root link
         self._dofs_infos = None
         self._n_dof = None
         self._default_joints_state = None
@@ -175,9 +181,12 @@ class EntityPrim(XFormPrim):
         # Infer the correct root link name -- this corresponds to whatever link does not have any joint existing
         # in the children joints
         valid_root_links = list(set(self._links.keys()) - joint_children)
-        assert len(valid_root_links) == 1, f"Only a single root link should have been found for this entity prim, " \
-                                           f"but found multiple instead: {valid_root_links}"
-        self._root_link_name = valid_root_links[0]
+
+        # TODO: Uncomment safety check here after we figure out how to handle legacy multi-bodied assets like bed with pillow
+        # assert len(valid_root_links) == 1, f"Only a single root link should have been found for this entity prim, " \
+        #                                    f"but found multiple instead: {valid_root_links}"
+        self._root_link_name = valid_root_links[0] if len(valid_root_links) == 1 else "base_link"
+
         # Disable any requested collision pairs
         for a_name, b_name in self.disabled_collision_pairs:
             link_a, link_b = self._links[a_name], self._links[b_name]
@@ -222,9 +231,6 @@ class EntityPrim(XFormPrim):
             str: Name of this entity's root link
         """
         return self._root_link_name
-        # # Default is the first entry in the links array
-        # link_names = list(self._links.keys())
-        # return "base_link" if "base_link" in link_names else link_names[0]
 
     @property
     def root_link(self):
@@ -814,7 +820,6 @@ class EntityPrim(XFormPrim):
             velocity (np.ndarray):linear velocity to set the rigid prim to. Shape (3,).
         """
         self.root_link.set_linear_velocity(velocity)
-        # print('self.get_linear_velocity(): ', self.get_linear_velocity())
 
     def get_linear_velocity(self) -> np.ndarray:
         """[summary]
@@ -831,7 +836,6 @@ class EntityPrim(XFormPrim):
             velocity (np.ndarray): [description]
         """
         self.root_link.set_angular_velocity(velocity)
-        # print('self.get_angular_velocity(): ', self.get_angular_velocity())
 
     def get_angular_velocity(self) -> np.ndarray:
         """[summary]

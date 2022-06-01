@@ -76,10 +76,7 @@ ceiling.visible = False
 # breakpoint()
 for i in range(3):
     env.reset()
-<<<<<<< HEAD
 
-=======
->>>>>>> e320b4a40d42a2046b93b86b5930fba15e5aa09c
     breakpoint()
 
     env.step(0)  # move to pumpkin

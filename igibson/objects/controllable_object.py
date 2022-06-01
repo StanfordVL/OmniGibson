@@ -378,8 +378,6 @@ class ControllableObject(BaseObject):
 
             # Deploy control based on type
             ctrl_type, norm = control_type[cur_ctrl_idx], normalized[cur_ctrl_idx]       # In multi-DOF joint case all values were already checked to be the same
-            # print('\n\n\n\n\n\nctrl_type, ControlType.VELOCITY: ', ctrl_type, ControlType.POSITION)
-            # ctrl_type: 0
             if ctrl_type == ControlType.EFFORT:
                 joint.set_effort(ctrl, normalized=norm)
             elif ctrl_type == ControlType.VELOCITY:

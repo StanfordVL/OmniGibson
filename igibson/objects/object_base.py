@@ -206,7 +206,7 @@ class BaseObject(EntityPrim, metaclass=ABCMeta):
     def mass(self, mass):
         # Cannot set mass directly for this object!
         raise NotImplementedError("Cannot set mass directly for an object!")
-
+    
     @property
     def link_prim_paths(self):
         return [link.prim_path for link in self._links.values()]
@@ -276,3 +276,4 @@ class BaseObject(EntityPrim, metaclass=ABCMeta):
         Runs any relevant updates for this object. This should occur once per simulation step.
         """
         pass
+

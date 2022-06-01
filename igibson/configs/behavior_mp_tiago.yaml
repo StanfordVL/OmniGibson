@@ -12,9 +12,10 @@ render:
 scene:
   type: InteractiveTraversableScene
   scene_model: Rs_int
-  usd_path: /home/gibson/Programs/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/usd/Rs_int_task_putting_away_Halloween_decorations_0_0_fixed_furniture_template.usd #/cvgl2/u/jdwong/PAIR/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/usd/Rs_int_task_cleaning_kitchen_cupboard_0_0_fixed_furniture_template.usd #null #/cvgl2/u/jdwong/PAIR/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/urdf/Rs_int_best_template.usd
-  clutter: false
+  # usd_path: null #/cvgl2/u/jdwong/PAIR/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/usd/Rs_int_task_cleaning_kitchen_cupboard_0_0_fixed_furniture_template.usd #null #/cvgl2/u/jdwong/PAIR/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/urdf/Rs_int_best_template.usd
+  usd_path: /home/gibson/Programs/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/usd/Rs_int_task_putting_away_Halloween_decorations_0_0_fixed_furniture_template.usd
   load_object_categories: ['pumpkin', 'bottom_cabinet', 'agent', 'candle', 'sofa']
+  clutter: false
   build_graph: true
 
 robots:
@@ -30,8 +31,8 @@ robots:
 #    default_trunk_offset: 0.365
 #    default_arm_pose: diagonal30
     controller_config:
-      base:
-        name: NullJointController  # DifferentialDriveController
+#      base:
+#        name: DifferentialDriveController
       arm_left:
         name: JointController #InverseKinematicsController
         motor_type: position

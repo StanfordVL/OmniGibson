@@ -152,9 +152,9 @@ class VisionSensor(BaseSensor):
         for i in range(3):
             app.update()
 
-        def _initialize(self):
-            # Run super first
-            super()._initialize()
+    def _initialize(self):
+        # Run super first
+        super()._initialize()
 
         # Initialize sensors
         self._initialize_sensors(names=self._modalities)
