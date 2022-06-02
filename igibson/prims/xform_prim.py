@@ -359,7 +359,13 @@ class XFormPrim(BasePrim):
         Returns:
             3-array: (roll, pitch, yaw) global euler orientation of this prim
         """
-        return mat2euler(quat2mat(self.get_orientation()))
+        try:
+            val = mat2euler(quat2mat(self.get_orientation()))
+        except ValueError:
+            print("Value Error Robot Orientation: rotation is {0}".format(self.get_orientation()))
+            val = mat2euler(quat2mat([0.0, 0.0, 0.0, 1.0]))
+
+        return val
 
     def get_local_pose(self):
         """Gets prim's pose with respect to the local frame (the prim's parent frame).
