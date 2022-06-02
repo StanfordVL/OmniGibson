@@ -912,20 +912,20 @@ class BehaviorTask(BaseTask):
 
     def _get_obs(self, env):
         low_dim_obs = OrderedDict()
-        low_dim_obs["robot_pos"] = np.array(env.robots[0].get_position())
-        low_dim_obs["robot_orn"] = np.array(env.robots[0].get_rpy())
-
-        i = 0
-        for _, v in self.object_scope.items():
-            # TODO: May need to update checking here to USDObject? Or even baseobject?
-            if isinstance(v, DatasetObject):
-                low_dim_obs[f"obj_{i}_valid"] = np.array([1.0])
-                low_dim_obs[f"obj_{i}_pos"] = v.get_position()
-                low_dim_obs[f"obj_{i}_orn"] = T.quat2euler(v.get_orientation())     # TODO: WHy euler instead of quat?
-                for arm in env.robots[0].arm_names:
-                    grasping_object = env.robots[0].is_grasping(arm=arm, candidate_obj=v)
-                    low_dim_obs[f"obj_{i}_pos_in_gripper_{arm}"] = np.array([float(grasping_object)])
-                i += 1
+        # low_dim_obs["robot_pos"] = np.array(env.robots[0].get_position())
+        # low_dim_obs["robot_orn"] = np.array(env.robots[0].get_rpy())
+        #
+        # i = 0
+        # for _, v in self.object_scope.items():
+        #     # TODO: May need to update checking here to USDObject? Or even baseobject?
+        #     if isinstance(v, DatasetObject):
+        #         low_dim_obs[f"obj_{i}_valid"] = np.array([1.0])
+        #         low_dim_obs[f"obj_{i}_pos"] = v.get_position()
+        #         low_dim_obs[f"obj_{i}_orn"] = T.quat2euler(v.get_orientation())     # TODO: WHy euler instead of quat?
+        #         for arm in env.robots[0].arm_names:
+        #             grasping_object = env.robots[0].is_grasping(arm=arm, candidate_obj=v)
+        #             low_dim_obs[f"obj_{i}_pos_in_gripper_{arm}"] = np.array([float(grasping_object)])
+        #         i += 1
 
         return low_dim_obs, OrderedDict()
 
