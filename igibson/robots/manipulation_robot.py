@@ -448,8 +448,9 @@ class ManipulationRobot(BaseRobot):
         for arm in self.arm_names:
             if self._ag_obj_in_hand[arm] is not None:
                 self._release_grasp(arm=arm)
+                self._handle_release_window(arm=arm, force_release=True)
 
-        # # Call super like normal
+        # # # Call super like normal
         # super().reset()
 
     def _release_grasp(self, arm="default"):
@@ -461,12 +462,8 @@ class ManipulationRobot(BaseRobot):
         """
         arm = self.default_arm if arm == "default" else arm
 
-        # Remove joint and filtered collision restraints
-        self._simulator.stage.RemovePrim(self._ag_obj_constraint_params[arm]["ag_joint_prim_path"])
         self._ag_data[arm] = None
-        self._ag_obj_in_hand[arm] = None
         self._ag_obj_constraints[arm] = None
-        self._ag_obj_constraint_params[arm] = {}
         self._ag_freeze_gripper[arm] = False
         self._ag_release_counter[arm] = 0
 
@@ -804,6 +801,7 @@ class ManipulationRobot(BaseRobot):
             candidate_data.append((prim_path, dist))
 
         candidate_data = sorted(candidate_data, key=lambda x: x[-1])
+        # print(f"candidate data: {candidate_data}")
 
         ag_prim_path, _ = candidate_data[0]
 
@@ -821,13 +819,14 @@ class ManipulationRobot(BaseRobot):
         ag_obj_link = ag_obj.links[ag_obj_link_name]
 
         # Return None if object cannot be assisted grasped or not touching at least two fingers
+        # print(f"ag obj: {ag_obj}, can assisted grasp: {can_assisted_grasp(ag_obj)}, touching 2 fingers: {touching_at_least_two_fingers}")
         if ag_obj is None or (not can_assisted_grasp(ag_obj)) or (not touching_at_least_two_fingers):
             return None
 
         # Get object and its contacted link
         return ag_obj, ag_obj_link
 
-    def _handle_release_window(self, arm="default"):
+    def _handle_release_window(self, arm="default", force_release=False):
         """
         Handles releasing an object from arm @arm
 
@@ -837,12 +836,14 @@ class ManipulationRobot(BaseRobot):
         arm = self.default_arm if arm == "default" else arm
         self._ag_release_counter[arm] += 1
         time_since_release = self._ag_release_counter[arm] * self._simulator.render_timestep
-        if time_since_release >= RELEASE_WINDOW:
-            # Remove filtered collision restraints
+        if time_since_release >= RELEASE_WINDOW or force_release:
+            # Remove joint and filtered collision restraints
             for finger_link in self.finger_links[arm]:
                 finger_link.remove_filtered_collision_pair(prim=self._ag_obj_in_hand[arm])
+            self._simulator.stage.RemovePrim(self._ag_obj_constraint_params[arm]["ag_joint_prim_path"])
             self._ag_obj_in_hand[arm] = None
             self._ag_release_counter[arm] = None
+            self._ag_obj_constraint_params[arm] = {}
 
     def _freeze_gripper(self, arm="default"):
         """
@@ -1016,6 +1017,10 @@ class ManipulationRobot(BaseRobot):
         arm = self.default_arm if arm == "default" else arm
 
         # Return immediately if ag_data is None
+        # if not(ag_data is None):
+        #     print("+++++++++++++++++++++++", ag_data[0].name, ag_data[1].name, self._ag_whitelist)
+        # print(ag_data)
+
         if ag_data is None or (ag_data[0].name not in self._ag_whitelist and ag_data[1].name not in self._ag_whitelist):
             #print("+++++++++++++++++++++++", ag_data[0].name, ag_data[1].name, self._ag_whitelist)
             return
@@ -1023,6 +1028,7 @@ class ManipulationRobot(BaseRobot):
 
         # Create a p2p joint if it's a child link of a fixed URDF that is connected by a revolute or prismatic joint
         joint_type = "FixedJoint"
+
         if ag_obj.fixed_base:
             # We search up the tree path from the ag_link until we encounter the root (joint == 0) or a non fixed
             # joint (e.g.: revolute or fixed)
@@ -1044,6 +1050,7 @@ class ManipulationRobot(BaseRobot):
             if c_link_prim_path == ag_link.prim_path:
                 contact_pos = np.array(c_contact_pos)
                 break
+
         assert contact_pos is not None
 
         # Joint frame set at the contact point
@@ -1090,6 +1097,7 @@ class ManipulationRobot(BaseRobot):
         # Otherwise the joint transform is very weird
         app.update()
         joint_prim.GetAttribute("physics:jointEnabled").Set(True)
+
         # self._simulator.play()
 
         # Save a reference to this joint prim
@@ -1108,7 +1116,10 @@ class ManipulationRobot(BaseRobot):
             "gripper_pos": self.get_joint_positions()[self.gripper_control_idx[arm]],
             "max_force": max_force,
         }
+
+
         self._ag_obj_in_hand[arm] = ag_obj
+
         self._ag_freeze_gripper[arm] = True
         # Disable collisions while picking things up
         # for finger_link in self.finger_links[arm]:
@@ -1140,6 +1151,7 @@ class ManipulationRobot(BaseRobot):
             # Execute gradual release of object
             if self._ag_obj_in_hand[arm]:
                 if self._ag_release_counter[arm] is not None:
+                    # print(f"handling release window")
                     self._handle_release_window(arm=arm)
                 else:
                     # constraint_violated = (
@@ -1151,6 +1163,7 @@ class ManipulationRobot(BaseRobot):
 
             elif applying_grasp:
                 self._ag_data[arm] = self._calculate_in_hand_object(arm=arm)
+                # print(f"ag data at arm {arm}: {self._ag_data[arm]}")
                 self._establish_grasp(arm=arm, ag_data=self._ag_data[arm])
 
     def dump_config(self):

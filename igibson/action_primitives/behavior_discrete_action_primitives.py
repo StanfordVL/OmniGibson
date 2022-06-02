@@ -263,7 +263,7 @@ action_list_putting_away_Halloween_decorations = [
     [2, "cabinet.n.01_1"],  # place 4
     [0, "pumpkin.n.02_2"],  # navigate_to 5
     [1, "pumpkin.n.02_2"],  # pick 6
-    [5, "cabinet.n.01_1"],  # push 7
+    # [5, "cabinet.n.01_1"],  # push 7
 ]
 
 action_list_room_rearrangement = [
@@ -438,6 +438,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             # This assumes the arms are called "arm_"+self.arm. Maybe some robots do not follow this convention
             arm_controller_action_idx = self.robot.controller_action_idx["arm_" + self.arm]
             full_body_action[arm_controller_action_idx] = arm_action
+            # print(f"execute ee path gripper action: {full_body_action[self.robot.controller_action_idx['gripper_' + self.arm]]}")
 
             if while_grasping:
                 # This assumes the grippers are called "gripper_"+self.arm. Maybe some robots do not follow this convention
@@ -707,7 +708,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                 yield from self._execute_ee_path(interaction_pick_path, stop_on_contact=True)
             # At the end, close the hand
             # print("======================== PICK STEP 5 ==========================")
-            # print("Executing grasp")
+
             yield from self._execute_grasp()
             for i in range(10):
                 self.env.simulator.step()

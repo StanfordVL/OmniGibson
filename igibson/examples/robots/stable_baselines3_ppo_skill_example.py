@@ -217,6 +217,7 @@ def main():
 
     os.makedirs(tensorboard_log_dir, exist_ok=True)
     # pdb.set_trace()
+
     model = PPO(
         "MultiInputPolicy",
         env,
@@ -227,6 +228,10 @@ def main():
         batch_size=8,
         device='cuda',
     )
+
+    # load_path = 'log_dir/20220602-104727/_4000_steps.zip'
+    # model = PPO.load(load_path)
+
     # pdb.set_trace()
     # print('\n\n\n\n\n\n\n\n\n\n\n\n')
     # log.debug(model.policy)

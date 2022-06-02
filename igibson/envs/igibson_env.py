@@ -674,7 +674,7 @@ class iGibsonEnv(BaseEnv):
             offset (None or float): Optional z-offset to place object with. If None, default self._initial_pos_z_offset
                 will be used
         """
-        print(f"set ori: {ori}")
+        # print(f"set ori: {ori}")
         ori = np.array([0, 0, np.random.uniform(0, np.pi * 2)]) if ori is None else ori
         offset = self._initial_pos_z_offset if offset is None else offset
 

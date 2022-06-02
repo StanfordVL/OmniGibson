@@ -20,6 +20,8 @@ DEFAULT_ARM_POSES = {
     "horizontal",
 }
 
+import bddl
+
 RESET_JOINT_OPTIONS = {
     "tuck",
     "untuck",

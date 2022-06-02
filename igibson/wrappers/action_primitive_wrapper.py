@@ -74,6 +74,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # self.pumpkin_n_02_1_reward = True
         # self.pumpkin_n_02_2_reward = True
         self.action_generator.robot.clear_ag()
+        # self.step(4)
         self.step_index = 0
         self.done = False
         self.accum_reward = 0
@@ -158,8 +159,9 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 break
             except ActionPrimitiveError as e:
                 print("--- Primitive Error! Dummy action!")
-                from copy import deepcopy
-                self.load_state(deepcopy(self.fallback_state), serialized=False)
+                # from copy import deepcopy
+                # self.load_state(self.fallback_state, serialized=False)
+
                 # self.action_generator.robot.keep_still()
                 # self._physics_context._step(current_time=self.current_time)
                 for lower_level_action in self.action_generator.apply(10):
