@@ -70,8 +70,8 @@ ceiling.visible = False
 # cam.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
 # cam.initialize()
 
-# for i in range(500):
-#     sim.step()
+for i in range(500):
+    sim.step()
 
 # breakpoint()
 for i in range(3):

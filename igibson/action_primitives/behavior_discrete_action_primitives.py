@@ -9,7 +9,7 @@ import numpy as np
 # import pybullet as p
 
 from igibson.action_primitives.action_primitive_set_base import ActionPrimitiveError, BaseActionPrimitiveSet
-from igibson.controllers import ControlType, JointController
+from igibson.controllers import ControlType, JointController, IsGraspingState
 from igibson.object_states.pose import Pose
 from igibson.robots.manipulation_robot import IsGraspingState
 from igibson.utils.motion_planning_utils import MotionPlanner
@@ -74,6 +74,7 @@ skill_object_offset_params = {
         # "pumpkin.n.02_2": [0.0,0.0,0.0,],
         "pumpkin.n.02_1": [0.0,0.0,-0.1,],
         "pumpkin.n.02_2": [0.0,0.0,-0.1,],
+        # "cabinet.n.01_1": [0.35, -0.65, -0.1],  # dx, dy, dz
     },
     2: {  # place
         "table.n.02_1": [0, 0, 0.5],  # dx, dy, dz
@@ -258,6 +259,7 @@ action_list_putting_away_Halloween_decorations = [
     [4, "cabinet.n.01_1"],  # pull 1
     [0, "pumpkin.n.02_1"],  # navigate_to 2
     [1, "pumpkin.n.02_1"],  # pick 3
+    # [1, "cabinet.n.01_1"], # pick cabinet
     [2, "cabinet.n.01_1"],  # place 4
     [0, "pumpkin.n.02_2"],  # navigate_to 5
     [1, "pumpkin.n.02_2"],  # pick 6
@@ -311,6 +313,12 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
     def __init__(self, env, task, scene, robot, arm=None, execute_free_space_motion=False):
         """ """
         super().__init__(env, task, scene, robot)
+
+        if self.env.task_config["activity_name"] == "putting_away_Halloween_decorations":
+            pumpkins = self.env.scene.object_registry("category", "pumpkin")
+            for pumpkin in pumpkins:
+                for link in pumpkin.links.values():
+                    link.mass = 0.5
 
         if arm is None:
             self.arm = self.robot.default_arm
@@ -375,7 +383,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         self.print_log = True
         self.skip_base_planning = True
         self.skip_arm_planning = True  # False
-        self.is_grasping = False
+        # self.is_grasping = False
         self.fast_execution = False
 
     def get_action_space(self):
@@ -410,7 +418,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                     )
                 )
                 action[action_idx] = joint_positions[joint_idx]
-        if self.is_grasping:
+        if self.robot.is_grasping() == IsGraspingState.TRUE:
             # This assumes the grippers are called "gripper_"+self.arm. Maybe some robots do not follow this convention
             action[self.robot.controller_action_idx["gripper_" + self.arm]] = -1.0
         return action
@@ -480,7 +488,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         else:
             # logger.info("Execution of grasping ended with grasped object {}".format(grasped_object.name))
             logger.info("Execution of grasping ended with grasped object {}".format(grasped_object))
-            self.is_grasping = True
 
     def _execute_ungrasp(self):
         action = self._get_still_action().tolist()
@@ -515,7 +522,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             )
         else:
             logger.info("Execution of ungrasping ended with grasped object None")
-            self.is_grasping = False
 
     def _dummy(self):
         logger.info("Dummy".format())
@@ -575,7 +581,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         target_yaw = euler[-1] + params[3]
 
         objects_to_ignore = []
-        if self.is_grasping:
+        if self.robot.is_grasping() == IsGraspingState.TRUE:
             objects_to_ignore = [self.robot._ag_obj_in_hand[self.arm]]
         # print('obj_in_hand: ', objects_to_ignore)
         plan = self.planner.plan_base_motion(
@@ -593,14 +599,17 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                 {"object_to_navigate": object_name},
             )
         still_action = self._get_still_action()
-        self.robot.keep_still()  # angel velocity
-        yield still_action  # self._get_still_action()  # position
+        # self.robot.keep_still()  # angel velocity
+        # yield still_action  # self._get_still_action()  # position
         for i in range(10):
-            self.env.simulator.step()
+            self.robot.keep_still()  # angel velocity
+            yield still_action  # self._get_still_action()  # position
+            # self.env.simulator.step()
 
         logger.info("Finished navigating to object: {}".format(object_name))
         # print('\n\n\n\n\n\n', self.env.task.object_scope['agent.n.01_1'].states[Pose].get_value()[0])
         # return
+
 
     def _pick(self, object_name):
         # new_name = convert_bddl_scope_to_name(object_name)

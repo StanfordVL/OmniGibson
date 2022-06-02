@@ -456,7 +456,14 @@ def quat2mat(quaternion):
     Returns:
         np.array: 3x3 rotation matrix
     """
-    return R.from_quat(quaternion).as_matrix()
+
+    # try:
+    val = R.from_quat(quaternion).as_matrix()
+    # except ValueError:
+    #     print("Value Error Robot Orientation: rotation is {0}".format(quaternion))
+    #     val = R.from_quat([0.0, 0.0, 0.0, 1.0]).as_matrix()
+
+    return val
 
 
 def quat2axisangle(quat):

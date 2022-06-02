@@ -131,6 +131,7 @@ class ManipulationRobot(BaseRobot):
 
         # Unique to ManipulationRobot
         grasping_mode="physical",
+        ag_whitelist=[],
 
         **kwargs,
     ):
@@ -187,6 +188,7 @@ class ManipulationRobot(BaseRobot):
         self._ag_obj_constraint_params = {arm: {} for arm in self.arm_names}
         self._ag_freeze_gripper = {arm: None for arm in self.arm_names}
         self._ag_release_counter = {arm: None for arm in self.arm_names}
+        self._ag_whitelist = set(ag_whitelist)
 
         # Call super() method
         super().__init__(
@@ -441,6 +443,15 @@ class ManipulationRobot(BaseRobot):
 
         super().deploy_control(control=control, control_type=control_type, indices=indices, normalized=normalized)
 
+    def clear_ag(self):
+        # First, release any grasps for all arms
+        for arm in self.arm_names:
+            if self._ag_obj_in_hand[arm] is not None:
+                self._release_grasp(arm=arm)
+
+        # # Call super like normal
+        # super().reset()
+
     def _release_grasp(self, arm="default"):
         """
         Magic action to release this robot's grasp on an object
@@ -453,6 +464,7 @@ class ManipulationRobot(BaseRobot):
         # Remove joint and filtered collision restraints
         self._simulator.stage.RemovePrim(self._ag_obj_constraint_params[arm]["ag_joint_prim_path"])
         self._ag_data[arm] = None
+        self._ag_obj_in_hand[arm] = None
         self._ag_obj_constraints[arm] = None
         self._ag_obj_constraint_params[arm] = {}
         self._ag_freeze_gripper[arm] = False
@@ -1004,7 +1016,8 @@ class ManipulationRobot(BaseRobot):
         arm = self.default_arm if arm == "default" else arm
 
         # Return immediately if ag_data is None
-        if ag_data is None:
+        if ag_data is None or (ag_data[0].name not in self._ag_whitelist and ag_data[1].name not in self._ag_whitelist):
+            #print("+++++++++++++++++++++++", ag_data[0].name, ag_data[1].name, self._ag_whitelist)
             return
         ag_obj, ag_link = ag_data
 

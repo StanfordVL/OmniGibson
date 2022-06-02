@@ -73,6 +73,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         """
         # self.pumpkin_n_02_1_reward = True
         # self.pumpkin_n_02_2_reward = True
+        self.action_generator.robot.clear_ag()
         self.step_index = 0
         self.done = False
         self.accum_reward = 0
@@ -81,7 +82,9 @@ class ActionPrimitiveWrapper(BaseWrapper):
         return_obs = {
             'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb']
         }
+        # print(f"pre step0")
         return_obs, accumulated_reward, done, info = self.step(0)
+        # print("post step0")
         self.fallback_state = self.dump_state(serialized=False)
         # return_obs, accumulated_reward, done, info = self.step(4)
         return return_obs
@@ -97,6 +100,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
 
         pre_action = 10
         for lower_level_action in self.action_generator.apply(pre_action):
+            # print(f"lower level action: {lower_level_action}")
             obs, reward, done, info = super().step(lower_level_action)
             if self.accumulate_obs:
                 accumulated_obs.append(obs)
@@ -104,6 +108,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 accumulated_obs = [obs]  # Do this to save some memory.
 
         for _ in range(self.num_attempts):
+            # print(f"attempt: {_}")
             obs, done, info = None, None, {}
             try:
                 # obj_in_hand_before_act = self.robots[0]._ag_obj_in_hand[self.arm]

@@ -63,6 +63,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
         # Unique to ManipulationRobot
         grasping_mode="physical",
+        ag_whitelist=[],
 
         # Unique to Fetch
         rigid_trunk=False,
@@ -151,6 +152,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             obs_modalities=obs_modalities,
             proprio_obs=proprio_obs,
             grasping_mode=grasping_mode,
+            ag_whitelist=ag_whitelist,
             **kwargs,
         )
 
@@ -200,7 +202,33 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                 ]
             )
         else:
-            vals = None
+            vals = np.array(
+                [
+                    # 0.0,        # wheels
+                    # 0.0,
+                    0.5,        # trunk
+                    -1.10,
+                    -1.10,
+                    0.4,        # head
+                    1.47,
+                    1.47,
+                    -1.1,
+                    2.71,
+                    2.71,
+                    1.71,
+                    1.71,
+                    -1.57,
+                    -1.57,
+                    1.39,
+                    1.39,
+                    0.0,
+                    0.0,
+                    0.045,  # gripper
+                    0.045,
+                    0.045,
+                    0.045,
+                ]
+            )
 
         return vals
 
