@@ -180,7 +180,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                 [
                     # 0.0,        # wheels
                     # 0.0,
-                    0.5,        # trunk
+                    0.33,        # trunk
                     -1.10,
                     1.47,
                     2.71,
@@ -208,7 +208,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                 [
                     # 0.0,        # wheels
                     # 0.0,
-                    0.5,        # trunk
+                    0.33,        # trunk
                     -1.10,
                     -1.10,
                     0.4,        # head
