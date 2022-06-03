@@ -3,7 +3,7 @@ Set of macros to use globally for iGibson
 """
 
 # Whether to generate a headless or non-headless application upon iGibson startup
-HEADLESS = True
+HEADLESS = False
 
 # Whether to use extra settings (verboseness, extra GUI features) for debugging
 DEBUG = True
@@ -29,4 +29,4 @@ ENABLE_CCD = False
 
 # Whether the public version of IsaacSim is being used
 # TODO: Remove this once we unify omni version being used
-IS_PUBLIC_ISAACSIM = True
+IS_PUBLIC_ISAACSIM = False
