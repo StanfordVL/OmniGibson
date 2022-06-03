@@ -6,6 +6,7 @@ from copy import deepcopy
 
 import gym
 import numpy as np
+import pdb
 
 from future.utils import with_metaclass
 
@@ -162,6 +163,8 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
                         sensor_cls.all_modalities.intersection(self._obs_modalities)
                     obs_modalities = obs_modalities.union(modalities)
                     # Create the sensor and store it internally
+                    # print('\n\n\n\n\n\n\n\n\n\n\n', prim_type, str(prim.GetPrimPath()), modalities,
+                    #       f"{self.name}:{link_name}_{prim_type}_sensor")
                     sensor = create_sensor(
                         sensor_type=prim_type,
                         prim_path=str(prim.GetPrimPath()),
@@ -169,7 +172,16 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
                         modalities=modalities,
                     )
                     self._sensors[sensor.name] = sensor
-
+                    # print('sensor.name: ', sensor.name)
+                    # pdb.set_trace()
+        '''
+         Lidar /World/robot0/base_front_laser_link/Lidar {'scan', 'occupancy_grid'} robot0:base_front_laser_link_Lidar_sensor
+         prim robot0:base_front_laser_link_Lidar_sensor already exists
+         sensor.name:  robot0:base_front_laser_link_Lidar_sensor
+         
+         Camera /World/robot0/eyes/Camera {'rgb'} robot0:eyes_Camera_sensor
+         prim robot0:eyes_Camera_sensor already exists
+        '''
         # Since proprioception isn't an actual sensor, we need to possibly manually add it here as well
         if self._obs_modalities == "all":
             obs_modalities.add("proprio")
