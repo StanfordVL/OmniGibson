@@ -146,9 +146,14 @@ def main():
     #     print_log=True,
     #     action_space_type='continuous',
     # )
-
+    seed = 0
     env = iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.)
-    eval_env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
+    env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
+    ceiling = env.scene.object_registry("name", "ceilings")
+    ceiling.visible = False
+    env.seed(seed)
+    set_random_seed(seed)
+    env.reset()
 
     policy_kwargs = dict(
         features_extractor_class=CustomCombinedExtractor,
@@ -162,7 +167,7 @@ def main():
     #     policy_kwargs=policy_kwargs,
     #     n_steps=20*10,
     # )
-    load_path = 'log_dir/20220504-113956/_51000_steps.zip'
+    load_path = 'log_dir/20220603-003414/_1000_steps'
     # model.load(load_path)
     # model.set_parameters(load_path)
     model = PPO.load(load_path)
@@ -174,7 +179,7 @@ def main():
     log.debug(model.policy)
     print('Evaluating Started ...')
     # model.learn(1000000)
-    mean_reward, std_reward = evaluate_policy(model, eval_env, n_eval_episodes=50)
+    mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=50)
     print('Evaluating Finished ...')
     log.info(f"After Loading: Mean reward: {mean_reward} +/- {std_reward:.2f}")
 

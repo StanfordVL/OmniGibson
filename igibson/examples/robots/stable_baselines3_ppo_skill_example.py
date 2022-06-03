@@ -128,7 +128,7 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
 
     def forward(self, observations) -> th.Tensor:
         encoded_tensor_list = []
-        self.step_index += 1
+        # self.step_index += 1
 
         # self.extractors contain nn.Modules that do all the processing.
         for key, extractor in self.extractors.items():
@@ -140,7 +140,7 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
             #     observations[key] = observations[key].permute((0, 2, 1))
             # print(key, observations[key])  # [0, 500]
             if key in ["rgb",]:
-                cv2.imwrite(os.path.join(self.img_save_dir, '{0:06d}.png'.format(self.step_index)), cv2.cvtColor((observations[key][0].cpu().numpy()*255).astype('uint8'), cv2.COLOR_RGB2BGR))
+                # cv2.imwrite(os.path.join(self.img_save_dir, '{0:06d}.png'.format(self.step_index)), cv2.cvtColor((observations[key][0].cpu().numpy()*255).astype('uint8'), cv2.COLOR_RGB2BGR))
                 observations[key] = observations[key].permute((0, 3, 1, 2))  # range: [0, 1]
             elif key in ["ins_seg"]:
                 observations[key] = observations[key].permute((0, 3, 1, 2)) / 500. # range: [0, 1]
