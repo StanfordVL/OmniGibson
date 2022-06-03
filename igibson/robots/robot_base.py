@@ -171,6 +171,9 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
                         name=f"{self.name}:{link_name}_{prim_type}_sensor",
                         modalities=modalities,
                     )
+
+                    print("_+_+_+_+_+_+_+_+_+_+_", f"{self.name}:{link_name}_{prim_type}_sensor", str(prim.GetPrimPath()))
+
                     self._sensors[sensor.name] = sensor
                     # print('sensor.name: ', sensor.name)
                     # pdb.set_trace()

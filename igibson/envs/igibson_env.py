@@ -306,14 +306,14 @@ class iGibsonEnv(BaseEnv):
         #         shape=(self.robots[0].proprioception_dim,), low=-np.inf, high=np.inf
         #     )
 
-        if len(vision_modalities) > 0:
-            sensors["vision"] = VisionSensor(prim_path="/World/viewer_camera",
-                                            name="camera_0",
-                                            modalities=["rgb"],
-                                            image_width=self.image_width,
-                                            image_height=self.image_height,)
-            sensors["vision"].set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
-            sensors["vision"].initialize()
+        # if len(vision_modalities) > 0:
+        #     sensors["vision"] = VisionSensor(prim_path="/World/viewer_camera",
+        #                                     name="camera_0",
+        #                                     modalities=["rgb"],
+        #                                     image_width=self.image_width,
+        #                                     image_height=self.image_height,)
+        #     sensors["vision"].set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
+        #     sensors["vision"].initialize()
 
         # if len(scan_modalities) > 0:
         #     sensors["scan_occ"] = ScanSensor(self, scan_modalities)

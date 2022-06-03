@@ -46,7 +46,9 @@ cfg = f"{example_config_path}/behavior_mp_tiago.yaml"
 
 # Create environment
 env = iGibsonEnv(configs=cfg, physics_timestep=1/120., action_timestep=1/30.)
+
 env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
+
 sim = env.simulator
 
 # env_2 = env
