@@ -19,7 +19,8 @@ from igibson.utils.constants import MAX_CLASS_COUNT, MAX_INSTANCE_COUNT
 from igibson.utils.utils import quatToXYZW
 from igibson.utils.python_utils import assert_valid_key, create_class_from_registry_and_config
 from igibson.sensors.vision_sensor import VisionSensor
-
+from igibson.utils.usd_utils import get_camera_params
+import omni
 
 # How many predefined randomized scene object configurations we have per scene
 N_PREDEFINED_OBJ_RANDOMIZATIONS = 10
@@ -307,13 +308,13 @@ class iGibsonEnv(BaseEnv):
         #     )
 
         # if len(vision_modalities) > 0:
-        #     sensors["vision"] = VisionSensor(prim_path="/World/viewer_camera",
-        #                                     name="camera_0",
-        #                                     modalities=["rgb"],
-        #                                     image_width=self.image_width,
-        #                                     image_height=self.image_height,)
-        #     sensors["vision"].set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
-        #     sensors["vision"].initialize()
+        self.third_sensor = VisionSensor(prim_path="/World/robot0/eyes/Camera",
+                                        name="camera_0",
+                                        modalities=["rgb"],
+                                        image_width=self.image_width,
+                                        image_height=self.image_height,)
+        # self.third_sensor.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
+        self.third_sensor.initialize()
 
         # if len(scan_modalities) > 0:
         #     sensors["scan_occ"] = ScanSensor(self, scan_modalities)
@@ -545,6 +546,7 @@ class iGibsonEnv(BaseEnv):
 
         # Run simulation step
         # print('igibson_env _simulator_step 1')
+
         self._simulator_step()
         # print('igibson_env _simulator_step 2')
 
