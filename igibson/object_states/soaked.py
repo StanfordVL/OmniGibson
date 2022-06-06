@@ -24,7 +24,8 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
     def __init__(self, obj, fluid):
         super().__init__(obj)
         self.value = False
-        self.fluid_system = SYSTEMS_REGISTRY("name", f"{fluid}System", default_val=None)
+        breakpoint()
+        self.fluid_system = SYSTEMS_REGISTRY("__name__", f"{fluid}System", default_val=None)
 
     def _get_value(self):
         return self.value

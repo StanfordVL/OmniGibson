@@ -956,20 +956,20 @@ class WaterSystem(FluidSystem):
         # Water is 1000 kg/m^3
         return 1000.0
 
-    @classmethod
-    def _create_particle_material(cls):
-        # Use DeepWater omni present for rendering water
-        mtl_created = []
-        omni.kit.commands.execute(
-            "CreateAndBindMdlMaterialFromLibrary",
-            mdl_name="OmniSurfacePresets.mdl",
-            mtl_name="OmniSurface_DeepWater",
-            mtl_created_list=mtl_created,
-        )
-        material_path = mtl_created[0]
-
-        # Also apply physics to this material
-        particleUtils.add_pbd_particle_material(cls.simulator.stage, material_path)
-
-        # Return generated material
-        return UsdShade.Material(get_prim_at_path(material_path))
+    # @classmethod
+    # def _create_particle_material(cls):
+    #     # Use DeepWater omni present for rendering water
+    #     mtl_created = []
+    #     omni.kit.commands.execute(
+    #         "CreateAndBindMdlMaterialFromLibrary",
+    #         mdl_name="OmniSurfacePresets.mdl",
+    #         mtl_name="OmniSurface_DeepWater",
+    #         mtl_created_list=mtl_created,
+    #     )
+    #     material_path = mtl_created[0]
+    #
+    #     # Also apply physics to this material
+    #     particleUtils.add_pbd_particle_material(cls.simulator.stage, material_path)
+    #
+    #     # Return generated material
+    #     return UsdShade.Material(get_prim_at_path(material_path))

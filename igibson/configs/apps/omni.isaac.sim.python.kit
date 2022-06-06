@@ -91,6 +91,12 @@ app.file.ignoreUnsavedOnExit = true # prevents save dialog when exiting
 persistent = false
 dev_build = false
 
+[settings.app.livestream]
+proto = "ws"
+
+[settings.app.livestream.websocket]
+framerate_limit = 120
+
 [settings.app.window]
 title = "iGibson"
 # width = 1700
@@ -146,7 +152,7 @@ physics.updateToUsd = true
 physics.updateVelocitiesToUsd = true
 physics.useFastCache = false
 physics.visualizationDisplayJoints = false
-#physics.overrideGPUSettings = -1 # force CPU physx
+physics.overrideGPUSettings = 1 # force CPU physx
 
 # Misc Settings
 ###############################
@@ -190,6 +196,7 @@ folders.'++' = ["${app}/../exts" ]
 #"omni.isaac.dr" = {}
 "omni.kit.loop-isaac" = {}
 #"omni.physx.flatcache" = {}
+"omni.services.streamclient.websocket" = {}
 
 [dependencies."filter:platform"."linux-x86_64"]
 #"omni.isaac.universal_robots" = {}
