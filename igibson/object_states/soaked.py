@@ -24,7 +24,9 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
     def __init__(self, obj, fluid):
         super().__init__(obj)
         self.value = False
-        self.fluid_system = SYSTEMS_REGISTRY("name", f"{fluid}System", default_val=None)
+        self.fluid_system = SYSTEMS_REGISTRY("__name__", f"{fluid}System", default_val=None)
+        self.absorbed_particle_count = 0
+        self.absorbed_particle_threshold = 50
 
     def _get_value(self):
         return self.value
@@ -37,19 +39,35 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
         # If we don't have a fluid system, we cannot be soaked or do anything
         if self.fluid_system is None:
             return
-        # elif:
 
-        # TODO!
-        return
-        # water_source_objs = self.simulator.scene.get_objects_with_state(WaterSource)
-        # for water_source_obj in water_source_objs:
-        #     contacted_water_prim_paths = set(
-        #         item.bodyUniqueIdB for item in list(self.obj.states[ContactBodies].get_value())
-        #     )
-        #     for particle in water_source_obj.states[WaterSource].water_stream.get_active_particles():
-        #         if not set(particle.link_prim_paths).isdisjoint(contacted_water_prim_paths):
-        #             self.value = Tru
-        # self.update_texture()
+        # Only attempt to absorb if not soaked
+        if self.value == False:
+            # Map of obj_id -> (system, system_particle_id)
+            particle_contacts = self.fluid_system.state_cache['particle_contacts']
+
+            # For each particle hit, hide then add to total particle count of soaked object
+            for particle_system, particle_idxs in particle_contacts.get(self.obj, {}).items():
+                particles_to_absorb = min(len(particle_idxs), self.absorbed_particle_threshold - self.absorbed_particle_count)
+                particle_idxs_to_absorb = particle_idxs[:particles_to_absorb]
+
+                # Hide particles in contact with the object
+                particle_visibilities = self.fluid_system.particle_instancers[particle_system].particle_visibilities
+                new_particle_visibilities = particle_visibilities.copy()
+                new_particle_visibilities[particle_idxs_to_absorb] = 0
+                self.fluid_system.particle_instancers[particle_system].particle_visibilities = new_particle_visibilities
+
+                # Absorb the particles
+                self.absorbed_particle_count += particles_to_absorb
+
+                # If above threshold, soak the object and stop absorbing
+                if self.absorbed_particle_count >= self.absorbed_particle_threshold:
+                    self.value = True
+                    break
+
+        # If the state is soaked, change the texture
+        # TODO (mjlbach): should allow bidirectional soaking/unsoaking
+        if self.value == True:
+            self.update_texture()
 
     @property
     def settable(self):

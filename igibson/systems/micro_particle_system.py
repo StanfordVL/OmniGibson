@@ -15,6 +15,8 @@ from collections import OrderedDict
 import numpy as np
 from pxr import Gf, Vt, UsdShade, UsdGeom, PhysxSchema
 import logging
+from omni.physx import get_physx_scene_query_interface
+from collections import defaultdict
 
 
 # physics settins
@@ -937,6 +939,36 @@ class FluidSystem(MicroParticleSystem):
         prototype.CreateRadiusAttr().Set(cls.particle_radius)
         return [prototype.GetPrim()]
 
+    @classmethod
+    def cache(cls):
+        particle_contacts = defaultdict(lambda: defaultdict(list))
+
+        particle_system = None
+        particle_idx = 0
+
+        def report_hit(hit):
+            base = "/".join(hit.rigid_body.split("/")[:-1])
+            body = cls.simulator.scene.object_registry("prim_path", base)
+            particle_contacts[body][particle_system].append(particle_idx)
+            return True
+
+        for system, value in cls.particle_instancers.items(): # type: ignore
+            for idx, pos in enumerate(value.particle_positions):
+                particle_idx = idx
+                particle_system = system
+                get_physx_scene_query_interface().overlap_sphere(cls.particle_radius, pos, report_hit, False)
+
+        cls.state_cache = {
+            'particle_contacts': particle_contacts,
+        }
+
+    @classmethod
+    def update(cls):
+        GC_THRESHOLD = 0.25
+        for instancer, value in cls.particle_instancers.items(): # type: ignore
+            if np.mean(value.particle_visibilities) <= GC_THRESHOLD:
+                cls.remove_particle_instancer(instancer)
+
 
 class WaterSystem(FluidSystem):
     """
@@ -955,7 +987,7 @@ class WaterSystem(FluidSystem):
     def particle_density(cls):
         # Water is 1000 kg/m^3
         return 1000.0
-
+                
     @classmethod
     def _create_particle_material(cls):
         # Use DeepWater omni present for rendering water
