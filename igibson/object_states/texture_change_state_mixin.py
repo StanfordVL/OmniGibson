@@ -8,6 +8,4 @@ class TextureChangeStateMixin(BaseObjectState):
 
     def update_texture(self):
         # Assume only state evaluated True will need non-default texture.
-        if self.get_value() != self.value:
-            self.value = self.get_value()
-            self.obj.update_textures_for_state(self.__class__, self.value)
+        self.obj.update_textures_for_state(self.__class__, self.value)

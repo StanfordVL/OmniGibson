@@ -16,12 +16,14 @@ class Frozen(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
     def __init__(self, obj, freeze_temperature=_DEFAULT_FREEZE_TEMPERATURE):
         super(Frozen, self).__init__(obj)
         self.freeze_temperature = freeze_temperature
+        self.value = False
 
     @staticmethod
     def get_dependencies():
         return AbsoluteObjectState.get_dependencies() + [Temperature]
 
     def _set_value(self, new_value):
+        self.value = new_value
         if new_value:
             temperature = np.random.uniform(
                 self.freeze_temperature + _FROZEN_SAMPLING_RANGE_MIN,
@@ -34,9 +36,12 @@ class Frozen(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
             return self.obj.states[Temperature].set_value(self.freeze_temperature + 1.0)
 
     def _get_value(self):
-        return self.obj.states[Temperature].get_value() <= self.freeze_temperature
+        return self.value 
 
     # Nothing needs to be done to save/load Frozen since it will happen due to temperature caching.
 
     def _update(self):
-        self.update_texture()
+        value = self.obj.states[Temperature].get_value() <= self.freeze_temperature
+        if self.value != value:
+            self.update_texture()
+        self.value = value

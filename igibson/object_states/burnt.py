@@ -9,6 +9,7 @@ class Burnt(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
     def __init__(self, obj, burn_temperature=_DEFAULT_BURN_TEMPERATURE):
         super(Burnt, self).__init__(obj)
         self.burn_temperature = burn_temperature
+        self.value = False
 
     @staticmethod
     def get_dependencies():
@@ -23,10 +24,14 @@ class Burnt(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
             # Set at exactly one below burnt temperature (or lower if in history).
             desired_max_temp = min(current_max_temp, self.burn_temperature - 1.0)
 
+        self.value = new_value
         return self.obj.states[MaxTemperature].set_value(desired_max_temp)
 
     def _get_value(self):
-        return self.obj.states[MaxTemperature].get_value() >= self.burn_temperature
+        return self.value
 
     def _update(self):
-        self.update_texture()
+        value = self.obj.states[MaxTemperature].get_value() >= self.burn_temperature
+        if value != self.value:
+            self.update_texture()
+        self.value = value

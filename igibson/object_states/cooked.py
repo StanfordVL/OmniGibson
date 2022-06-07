@@ -9,6 +9,7 @@ class Cooked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
     def __init__(self, obj, cook_temperature=_DEFAULT_COOK_TEMPERATURE):
         super(Cooked, self).__init__(obj)
         self.cook_temperature = cook_temperature
+        self.value = False
 
     @staticmethod
     def get_dependencies():
@@ -23,13 +24,18 @@ class Cooked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
             # Set at exactly one below cook temperature (or lower if in history).
             desired_max_temp = min(current_max_temp, self.cook_temperature - 1.0)
 
+        self.value = new_value
+
         return self.obj.states[MaxTemperature].set_value(desired_max_temp)
 
     def _get_value(self):
-        return self.obj.states[MaxTemperature].get_value() >= self.cook_temperature
+        return self.value
 
     # Nothing needs to be done to save/load Burnt since it will happen due to
     # MaxTemperature caching.
 
     def _update(self):
-        self.update_texture()
+        value = self.obj.states[MaxTemperature].get_value() >= self.cook_temperature
+        if value != self.value:
+            self.update_texture()
+        self.value = value

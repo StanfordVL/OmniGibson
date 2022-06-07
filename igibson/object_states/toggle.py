@@ -67,6 +67,7 @@ class ToggledOn(AbsoluteObjectState, BooleanState, TextureChangeStateMixin, Link
             return
 
         robot_can_toggle = False
+        value = self.value
         # detect marker and hand interaction
         for robot in self._simulator.scene.robots:
             robot_can_toggle = robot.can_toggle(button_position_on_object, _TOGGLE_DISTANCE_THRESHOLD)
@@ -79,7 +80,7 @@ class ToggledOn(AbsoluteObjectState, BooleanState, TextureChangeStateMixin, Link
             self.robot_can_toggle_steps = 0
 
         if self.robot_can_toggle_steps == _CAN_TOGGLE_STEPS:
-            self.value = not self.value
+            value = not self.value
 
         # Choose which marker to put on object vs which to put away
         show_marker = self.visual_marker_on if self.get_value() else self.visual_marker_off
@@ -89,7 +90,10 @@ class ToggledOn(AbsoluteObjectState, BooleanState, TextureChangeStateMixin, Link
         show_marker.visible = True
         hidden_marker.visible = False
 
-        self.update_texture()
+        if value != self.value:
+            self.update_texture()
+
+        self.value = value
 
     @property
     def settable(self):

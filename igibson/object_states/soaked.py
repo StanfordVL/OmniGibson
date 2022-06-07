@@ -44,6 +44,8 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
         if self.fluid_system is None:
             return
 
+        value = self.value
+
         # Only attempt to absorb if not soaked
         if not self.value:
             # Map of obj_id -> (system, system_particle_id)
@@ -69,9 +71,8 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
                     break
 
         # If the state is soaked, change the texture
-        # TODO (mjlbach): should allow bidirectional soaking/unsoaking
         # TODO (mjlbach): should update texture by infusing with color of liquid
-        if self.value:
+        if value != self.value:
             self.update_texture()
 
     @property
