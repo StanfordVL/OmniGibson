@@ -46,9 +46,19 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
             particle_contacts = self.fluid_system.state_cache['particle_contacts']
 
             # For each particle hit, hide then add to total particle count of soaked object
-            for particle_system, particle_idx in particle_contacts.get(self.obj, []):
-                breakpoint()
-                self.absorbed_particle_count += 1
+            for particle_system, particle_idxs in particle_contacts.get(self.obj, {}).items():
+                particles_to_absorb = min(len(particle_idxs), self.absorbed_particle_threshold - self.absorbed_particle_count)
+                particle_idxs_to_absorb = particle_idxs[:particles_to_absorb]
+
+                # Hide particles in contact with the object
+                particle_visibilities = self.fluid_system.particle_instancers[particle_system].particle_visibilities
+                new_particle_visibilities = particle_visibilities.copy()
+                new_particle_visibilities[particle_idxs_to_absorb] = 0
+                self.fluid_system.particle_instancers[particle_system].particle_visibilities = new_particle_visibilities
+
+                # Absorb the particles
+                self.absorbed_particle_count += particles_to_absorb
+
                 # If above threshold, soak the object and stop absorbing
                 if self.absorbed_particle_count >= self.absorbed_particle_threshold:
                     self.value = True

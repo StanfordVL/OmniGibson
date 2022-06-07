@@ -941,7 +941,7 @@ class FluidSystem(MicroParticleSystem):
 
     @classmethod
     def cache(cls):
-        particle_contacts = defaultdict(list)
+        particle_contacts = defaultdict(lambda: defaultdict(list))
 
         particle_system = None
         particle_idx = 0
@@ -949,7 +949,7 @@ class FluidSystem(MicroParticleSystem):
         def report_hit(hit):
             base = "/".join(hit.rigid_body.split("/")[:-1])
             body = cls.simulator.scene.object_registry("prim_path", base)
-            particle_contacts[body].append((particle_system, particle_idx))
+            particle_contacts[body][particle_system].append(particle_idx)
             return True
 
         for system, value in cls.particle_instancers.items(): # type: ignore
