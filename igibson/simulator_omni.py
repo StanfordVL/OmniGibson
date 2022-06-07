@@ -328,14 +328,20 @@ class Simulator(SimulationContext):
         for particle_system in self.particle_systems:
             particle_system.update(self)
 
+        for system in self.scene.systems:
+            system.cache()
+
         # Step the object states in global topological order (if the scene exists).
         if self.scene is not None:
             for state_type in self.object_state_types:
+                import igibson
                 for obj in self.scene.get_objects_with_state(state_type):
                     # Only update objects that have been initialized so far
                     if obj.initialized:
                         obj.states[state_type].update()
 
+        for system in self.scene.systems:
+            system.update()
 
         # Clear the bounding box cache so that it gets updated during the next time it's called
         BoundingBoxAPI.clear()

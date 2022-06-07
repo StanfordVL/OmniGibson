@@ -425,6 +425,8 @@ class Simulator:
         for particle_system in self.particle_systems:
             particle_system.update(self)
 
+        breakpoint()
+
         # Step the object states in global topological order.
         for state_type in self.object_state_types:
             for obj in self.scene.get_objects_with_state(state_type):

@@ -15,6 +15,8 @@ from collections import OrderedDict
 import numpy as np
 from pxr import Gf, Vt, UsdShade, UsdGeom, PhysxSchema
 import logging
+from omni.physx import get_physx_scene_query_interface
+from collections import defaultdict
 
 
 # physics settins
@@ -937,6 +939,52 @@ class FluidSystem(MicroParticleSystem):
         prototype.CreateRadiusAttr().Set(cls.particle_radius)
         return [prototype.GetPrim()]
 
+    @classmethod
+    def cache(cls):
+        particle_positions = []
+        particle_visibilities = []
+        particle_to_system_dict = {}
+        particle_to_system_range = {}
+
+        for system_identifier, value in cls.particle_instancers.items(): # type: ignore
+            for key in range(value.particle_positions.shape[0]):
+                particle_to_system_dict[key] = system_identifier
+            particle_positions.append(value.particle_positions)
+            particle_visibilities.append(value.particle_visibilities)
+
+        if len(cls.particle_instancers.keys()) > 0:
+            particle_positions = np.concatenate(particle_positions)
+            particle_visibilities = np.concatenate(particle_visibilities)
+
+        idx = 0
+        particle_hits = defaultdict(list)
+
+        def report_hit(hit):
+            # When a collision is detected, the object color changes to red.
+            base = "/".join(hit.rigid_body.split("/")[:-1])
+            body = cls.simulator.scene.object_registry("prim_path", base)
+            particle_hits[body].append(idx)
+            return True
+
+        for position in particle_positions:
+            get_physx_scene_query_interface().overlap_sphere(cls.particle_radius, position, report_hit, False)
+            idx += 1
+
+        cls.state_cache = {
+            'pos': particle_positions,
+            'visibility': particle_visibilities,
+            'particle_hits': particle_hits,
+            'particle_to_system': particle_to_system_dict,
+            'particle_to_system_range': particle_to_system_range,
+        }
+
+    @classmethod
+    def update(cls):
+        GC_THRESHOLD = 0.75
+        for value in cls.particle_instancers.values(): # type: ignore
+            if np.mean(value.particle_visibilities) <= GC_THRESHOLD:
+                value.remove()
+
 
 class WaterSystem(FluidSystem):
     """
@@ -955,7 +1003,7 @@ class WaterSystem(FluidSystem):
     def particle_density(cls):
         # Water is 1000 kg/m^3
         return 1000.0
-
+                
     # @classmethod
     # def _create_particle_material(cls):
     #     # Use DeepWater omni present for rendering water
