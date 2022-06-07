@@ -26,13 +26,17 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
         self.value = False
         self.fluid_system = SYSTEMS_REGISTRY("__name__", f"{fluid}System", default_val=None)
         self.absorbed_particle_count = 0
-        self.absorbed_particle_threshold = 50
+        self.absorbed_particle_threshold = SOAK_PARTICLE_THRESHOLD
 
-    def _get_value(self):
+    def _get_value(self, fluid):
         return self.value
 
-    def _set_value(self, new_value):
+    def _set_value(self, new_value, fluid):
         self.value = new_value
+        if new_value:
+            self.absorbed_particle_count = self.absorbed_particle_threshold
+        else:
+            self.absorbed_particle_count = 0
         return True
 
     def _update(self):
@@ -41,7 +45,7 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
             return
 
         # Only attempt to absorb if not soaked
-        if self.value == False:
+        if not self.value:
             # Map of obj_id -> (system, system_particle_id)
             particle_contacts = self.fluid_system.state_cache['particle_contacts']
 
@@ -66,7 +70,8 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
 
         # If the state is soaked, change the texture
         # TODO (mjlbach): should allow bidirectional soaking/unsoaking
-        if self.value == True:
+        # TODO (mjlbach): should update texture by infusing with color of liquid
+        if self.value:
             self.update_texture()
 
     @property

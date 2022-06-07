@@ -50,6 +50,8 @@ isregistry.set_int("rtx-defaults/pathtracing/maxSpecularAndTransmissionBounces",
 isregistry.set_int("rtx-defaults/post/dlss/execMode", 1)
 isregistry.set_int("rtx-defaults/translucency/maxRefractionBounces", 12)
 
+# Mininum threshold of particle instance group that must be unhidden before instance group is garbage collected (removed)
+GC_THRESHOLD = 0.25
 
 class PhysxParticleInstancer(BasePrim):
     """
@@ -943,19 +945,19 @@ class FluidSystem(MicroParticleSystem):
     def cache(cls):
         particle_contacts = defaultdict(lambda: defaultdict(list))
 
-        particle_system = None
+        particle_instancer = None
         particle_idx = 0
 
         def report_hit(hit):
             base = "/".join(hit.rigid_body.split("/")[:-1])
             body = cls.simulator.scene.object_registry("prim_path", base)
-            particle_contacts[body][particle_system].append(particle_idx)
+            particle_contacts[body][particle_instancer].append(particle_idx)
             return True
 
-        for system, value in cls.particle_instancers.items(): # type: ignore
+        for system, value in cls.particle_instancers.items():
             for idx, pos in enumerate(value.particle_positions):
                 particle_idx = idx
-                particle_system = system
+                particle_instancer = system
                 get_physx_scene_query_interface().overlap_sphere(cls.particle_radius, pos, report_hit, False)
 
         cls.state_cache = {
@@ -964,7 +966,6 @@ class FluidSystem(MicroParticleSystem):
 
     @classmethod
     def update(cls):
-        GC_THRESHOLD = 0.25
         for instancer, value in cls.particle_instancers.items(): # type: ignore
             if np.mean(value.particle_visibilities) <= GC_THRESHOLD:
                 cls.remove_particle_instancer(instancer)
