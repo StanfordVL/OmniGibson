@@ -334,7 +334,6 @@ class Simulator(SimulationContext):
         # Step the object states in global topological order (if the scene exists).
         if self.scene is not None:
             for state_type in self.object_state_types:
-                import igibson
                 for obj in self.scene.get_objects_with_state(state_type):
                     # Only update objects that have been initialized so far
                     if obj.initialized:
