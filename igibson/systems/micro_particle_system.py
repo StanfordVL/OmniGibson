@@ -941,41 +941,25 @@ class FluidSystem(MicroParticleSystem):
 
     @classmethod
     def cache(cls):
-        particle_positions = []
-        particle_visibilities = []
-        particle_to_system_dict = {}
-        particle_to_system_range = {}
+        particle_contacts = defaultdict(list)
 
-        for system_identifier, value in cls.particle_instancers.items(): # type: ignore
-            for key in range(value.particle_positions.shape[0]):
-                particle_to_system_dict[key] = system_identifier
-            particle_positions.append(value.particle_positions)
-            particle_visibilities.append(value.particle_visibilities)
-
-        if len(cls.particle_instancers.keys()) > 0:
-            particle_positions = np.concatenate(particle_positions)
-            particle_visibilities = np.concatenate(particle_visibilities)
-
-        idx = 0
-        particle_hits = defaultdict(list)
+        particle_system = None
+        particle_idx = 0
 
         def report_hit(hit):
-            # When a collision is detected, the object color changes to red.
             base = "/".join(hit.rigid_body.split("/")[:-1])
             body = cls.simulator.scene.object_registry("prim_path", base)
-            particle_hits[body].append(idx)
+            particle_contacts[body].append((particle_system, particle_idx))
             return True
 
-        for position in particle_positions:
-            get_physx_scene_query_interface().overlap_sphere(cls.particle_radius, position, report_hit, False)
-            idx += 1
+        for system, value in cls.particle_instancers.items(): # type: ignore
+            for idx, pos in enumerate(value.particle_positions):
+                particle_idx = idx
+                particle_system = system
+                get_physx_scene_query_interface().overlap_sphere(cls.particle_radius, pos, report_hit, False)
 
         cls.state_cache = {
-            'pos': particle_positions,
-            'visibility': particle_visibilities,
-            'particle_hits': particle_hits,
-            'particle_to_system': particle_to_system_dict,
-            'particle_to_system_range': particle_to_system_range,
+            'particle_contacts': particle_contacts,
         }
 
     @classmethod

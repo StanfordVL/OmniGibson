@@ -42,15 +42,13 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
 
         # Only attempt to absorb if not soaked
         if self.value == False:
-            # Map of obj_id -> particle id (total, should change to system, system_id)
-            particle_collision_cache = self.fluid_system.state_cache['particle_hits']
+            # Map of obj_id -> (system, system_particle_id)
+            particle_contacts = self.fluid_system.state_cache['particle_contacts']
 
             # For each particle hit, hide then add to total particle count of soaked object
-            for particle_idx in particle_collision_cache.get(self.obj, []):
-                fluid_system = self.fluid_system.state_cache['particle_to_system'][particle_idx]
+            for particle_system, particle_idx in particle_contacts.get(self.obj, []):
                 breakpoint()
                 self.absorbed_particle_count += 1
-
                 # If above threshold, soak the object and stop absorbing
                 if self.absorbed_particle_count >= self.absorbed_particle_threshold:
                     self.value = True
