@@ -1,9 +1,29 @@
 stages:
   room_object_list:
     foreach:
-      # - house_single_floor
-      # - house_double_floor_bottom
-      # - house_double_floor_top
+      - Beechwood_0_int
+      - Beechwood_1_int
+      - Benevolence_0_int
+      - Benevolence_1_int
+      - Benevolence_2_int
+      - Ihlen_0_int
+      - Ihlen_1_int
+      - Merom_0_int
+      - Merom_1_int
+      - Pomaria_0_int
+      - Pomaria_1_int
+      - Pomaria_2_int
+      - Rs_int
+      - Wainscott_0_int
+      - Wainscott_1_int
+      - Beechwood_0_garden
+      - Rs_garden
+      - Pomaria_0_garden
+      - Merom_0_garden
+      - Wainscott_0_garden
+      - house_single_floor
+      - house_double_floor_lower
+      - house_double_floor_upper
       - grocery_store_asian
       - grocery_store_cafe
       - grocery_store_convenience
@@ -39,10 +59,12 @@ stages:
       - public_restroom_white
       - commercial_kitchen_fire_extinguisher
       - commercial_kitchen_pans
+      # - gates_bedroom
     do:
       cmd: 'python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
       deps:
       - scripts/room_object_list.py
+      - cad/scenes/${item}/processed.max
       # - cad/scenes/${item}/artifacts/sanitycheck.json
       outs:
       - cad/scenes/${item}/artifacts/room_object_list.json
@@ -50,6 +72,52 @@ stages:
   combined_room_object_list:
     cmd: 'python scripts/combined_room_object_list.py'
     deps:
+    - cad/scenes/Beechwood_0_int/artifacts/room_object_list.json
+    - cad/scenes/Beechwood_0_int/artifacts/room_object_list.success
+    - cad/scenes/Beechwood_1_int/artifacts/room_object_list.json
+    - cad/scenes/Beechwood_1_int/artifacts/room_object_list.success
+    - cad/scenes/Benevolence_0_int/artifacts/room_object_list.json
+    - cad/scenes/Benevolence_0_int/artifacts/room_object_list.success
+    - cad/scenes/Benevolence_1_int/artifacts/room_object_list.json
+    - cad/scenes/Benevolence_1_int/artifacts/room_object_list.success
+    - cad/scenes/Benevolence_2_int/artifacts/room_object_list.json
+    - cad/scenes/Benevolence_2_int/artifacts/room_object_list.success
+    - cad/scenes/Ihlen_0_int/artifacts/room_object_list.json
+    - cad/scenes/Ihlen_0_int/artifacts/room_object_list.success
+    - cad/scenes/Ihlen_1_int/artifacts/room_object_list.json
+    - cad/scenes/Ihlen_1_int/artifacts/room_object_list.success
+    - cad/scenes/Merom_0_int/artifacts/room_object_list.json
+    - cad/scenes/Merom_0_int/artifacts/room_object_list.success
+    - cad/scenes/Merom_1_int/artifacts/room_object_list.json
+    - cad/scenes/Merom_1_int/artifacts/room_object_list.success
+    - cad/scenes/Pomaria_0_int/artifacts/room_object_list.json
+    - cad/scenes/Pomaria_0_int/artifacts/room_object_list.success
+    - cad/scenes/Pomaria_1_int/artifacts/room_object_list.json
+    - cad/scenes/Pomaria_1_int/artifacts/room_object_list.success
+    - cad/scenes/Pomaria_2_int/artifacts/room_object_list.json
+    - cad/scenes/Pomaria_2_int/artifacts/room_object_list.success
+    - cad/scenes/Rs_int/artifacts/room_object_list.json
+    - cad/scenes/Rs_int/artifacts/room_object_list.success
+    - cad/scenes/Wainscott_0_int/artifacts/room_object_list.json
+    - cad/scenes/Wainscott_0_int/artifacts/room_object_list.success
+    - cad/scenes/Wainscott_1_int/artifacts/room_object_list.json
+    - cad/scenes/Wainscott_1_int/artifacts/room_object_list.success
+    - cad/scenes/Beechwood_0_garden/artifacts/room_object_list.json
+    - cad/scenes/Beechwood_0_garden/artifacts/room_object_list.success
+    - cad/scenes/Rs_garden/artifacts/room_object_list.json
+    - cad/scenes/Rs_garden/artifacts/room_object_list.success
+    - cad/scenes/Pomaria_0_garden/artifacts/room_object_list.json
+    - cad/scenes/Pomaria_0_garden/artifacts/room_object_list.success
+    - cad/scenes/Merom_0_garden/artifacts/room_object_list.json
+    - cad/scenes/Merom_0_garden/artifacts/room_object_list.success
+    - cad/scenes/Wainscott_0_garden/artifacts/room_object_list.json
+    - cad/scenes/Wainscott_0_garden/artifacts/room_object_list.success
+    - cad/scenes/house_single_floor/artifacts/room_object_list.json
+    - cad/scenes/house_single_floor/artifacts/room_object_list.success
+    - cad/scenes/house_double_floor_lower/artifacts/room_object_list.json
+    - cad/scenes/house_double_floor_lower/artifacts/room_object_list.success
+    - cad/scenes/house_double_floor_upper/artifacts/room_object_list.json
+    - cad/scenes/house_double_floor_upper/artifacts/room_object_list.success
     - cad/scenes/grocery_store_asian/artifacts/room_object_list.json
     - cad/scenes/grocery_store_asian/artifacts/room_object_list.success
     - cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
@@ -124,7 +192,64 @@ stages:
     - artifacts/pipeline/combined_room_object_list.success
   # sanitycheck:
   #   foreach:
+  #     - Beechwood_0_int
+  #     - Beechwood_1_int
+  #     - Benevolence_0_int
+  #     - Benevolence_1_int
+  #     - Benevolence_2_int
+  #     - Ihlen_0_int
+  #     - Ihlen_1_int
+  #     - Merom_0_int
+  #     - Merom_1_int
+  #     - Pomaria_0_int
+  #     - Pomaria_1_int
+  #     - Pomaria_2_int
+  #     - Rs_int
+  #     - Wainscott_0_int
+  #     - Wainscott_1_int
+  #     - Beechwood_0_garden
+  #     - Rs_garden
+  #     - Pomaria_0_garden
+  #     - Merom_0_garden
+  #     - Wainscott_0_garden
+  #     - house_single_floor
+  #     - house_double_floor_lower
+  #     - house_double_floor_upper
+  #     - grocery_store_asian
+  #     - grocery_store_cafe
+  #     - grocery_store_convenience
+  #     - grocery_store_half_stocked
+  #     - hall_arch_wood
+  #     - hall_train_station
+  #     - hall_glass_ceiling
+  #     - hall_conference_large
+  #     - hotel_suite_large
   #     - hotel_suite_small
+  #     - hotel_gym_spa
+  #     - office_bike
+  #     - office_cubicles_left
+  #     - office_cubicles_right
+  #     - office_large
+  #     - office_vendor_machine
+  #     - restaurant_asian
+  #     - restaurant_cafeteria
+  #     - restaurant_diner
+  #     - restaurant_brunch
+  #     - restaurant_urban
+  #     - restaurant_hotel
+  #     - school_gym
+  #     - school_geography
+  #     - school_biology
+  #     - school_chemistry
+  #     - school_computer_lab_and_infirmary
+  #     # Temporary stuff
+  #     - public_restroom_blue
+  #     - public_restroom_brown
+  #     - public_restroom_futuristic
+  #     - public_restroom_marble
+  #     - public_restroom_white
+  #     - commercial_kitchen_fire_extinguisher
+  #     - commercial_kitchen_pans
   #     - gates_bedroom
   #   do:
   #     cmd: 'python scripts/batch_3dsmax.py scripts/new_sanity_check.py -sceneFile cad/scenes/${item}/processed.max -mxsString batch:true -mxsString dir:cad/scenes/${item}/artifacts'
@@ -137,9 +262,7 @@ stages:
   #     - cad/scenes/${item}/artifacts/sanitycheck.success
   # object_list:
   #   foreach:
-  #     - public_restroom_futuristic
-  #     - hotel_suite_small
-  #     - gates_bedroom
+  #     - restaurant_brunch
   #   do:
   #     cmd: 'python scripts/batch_3dsmax.py scripts/object_list.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
   #     deps:
@@ -151,16 +274,15 @@ stages:
   # object_inventory:
   #   cmd: 'python scripts/object_inventory.py'
   #   deps:
-  #   - cad/scenes/hotel_suite_small/artifacts/object_list.json
-  #   - cad/scenes/hotel_suite_small/artifacts/object_list.success
+  #   - cad/scenes/restaurant_brunch/artifacts/object_list.json
+  #   - cad/scenes/restaurant_brunch/artifacts/object_list.success
   #   - scripts/object_inventory.py
   #   outs:
   #   - artifacts/pipeline/object_inventory.json
   #   - artifacts/pipeline/object_inventory.success
   # export_objs:
   #   foreach:
-  #     - hotel_suite_small
-  #     - gates_bedroom
+  #     - restaurant_brunch
   #   do:
   #     cmd: 'python scripts/batch_3dsmax.py scripts/export_objs.py -sceneFile cad/scenes/${item}/processed.max -mxsString dir:cad/scenes/${item}/artifacts'
   #     deps:
@@ -171,15 +293,15 @@ stages:
   #     - cad/scenes/${item}/artifacts/objects
   #     - cad/scenes/${item}/artifacts/export_objs.json
   #     - cad/scenes/${item}/artifacts/export_objs.success
-  # export_scenes:
-  #   foreach:
-  #     - hotel_suite_small
-  #     - gates_bedroom
-  #   do:
-  #     cmd: 'python scripts/export_scene.py ${item}'
-  #     deps:
-  #     # - cad/scenes/${item}/artifacts/export_objs.success
-  #     # - cad/scenes/${item}/artifacts/objects
-  #     - scripts/export_scene.py
-  #     outs:
-  #     - artifacts/scenes/${item}
+  export_scenes:
+    foreach:
+      # - restaurant_brunch
+      - gates_bedroom
+    do:
+      cmd: 'python scripts/export_scene.py ${item}'
+      deps:
+      # - cad/scenes/${item}/artifacts/export_objs.success
+      # - cad/scenes/${item}/artifacts/objects
+      - scripts/export_scene.py
+      outs:
+      - artifacts/scenes/${item}

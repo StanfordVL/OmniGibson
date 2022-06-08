@@ -10,11 +10,13 @@ PATTERN = re.compile(r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)
 OUTPUT_FILENAME = "room_object_list.json"
 SUCCESS_FILENAME = "room_object_list.success"
 
+
 def main():
     objects_by_room = defaultdict(Counter)
     nomatch = []
+
     for obj in rt.objects:
-        if rt.classOf(obj) != rt.Editable_Poly:
+        if rt.classOf(obj) not in [rt.Editable_Poly, rt.Editable_Mesh, rt.VrayProxy]:
             continue
 
         match = PATTERN.fullmatch(obj.name)
@@ -22,22 +24,29 @@ def main():
             nomatch.append(obj.name)
             continue
 
+        cat = match.group("category")
+
         room_strs = obj.layer.name
         for room_str in room_strs.split(","):
             room_str = room_str.strip()
+            if room_str == "0":
+                continue
             link_name = match.group("link_name")
             if link_name == "base_link" or not link_name:
-                cat = match.group("category")
                 objects_by_room[room_str][cat] += 1
 
-    success = len(nomatch) == 0
+    success = True # len(nomatch) == 0 and len(notfound_categories) == 0 and len(disapproved_categories) == 0 and len(not_approved_rooms) == 0
 
     output_dir = rt.maxops.mxsCmdLineArgs[rt.name('dir')]
     os.makedirs(output_dir, exist_ok=True)
 
     filename = os.path.join(output_dir, OUTPUT_FILENAME)
     with open(filename, "w") as f:
-        json.dump({"success": success, "objects_by_room": objects_by_room, "error_invalid_name": sorted(nomatch)}, f, indent=4)
+        json.dump({
+            "success": success,
+            "objects_by_room": objects_by_room,
+            "error_invalid_name": sorted(nomatch),
+        }, f, indent=4)
 
     if success:
         with open(os.path.join(output_dir, SUCCESS_FILENAME), "w") as f:

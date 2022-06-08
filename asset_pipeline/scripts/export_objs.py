@@ -40,6 +40,8 @@ CHANNEL_MAPPING = {
 # }
 
 allow_list = [
+    # ""
+    # "L-wineglass-akusda-0",
     # "L-armchair-cehzwd-0"
     # "L-table_lamp-bbentu-0",
     # "floor_lamp-cosjfl-0",
@@ -144,6 +146,7 @@ class ObjectExporter:
         # In case the object is already uv unwrapped, we will need to assign to a new UV channel
         modifier.setMapChannel(NEW_UV_CHANNEL)
         modifier.unwrap2.flattenMapNoParams()
+        rt.maxOps.collapseNodeTo(obj, 1, True)
 
         rt.update(obj)
         rt.forceCompleteRedraw()
@@ -263,6 +266,8 @@ class ObjectExporter:
 
         objs = self.get_process_objs()
         for obj in objs:
+            rt.select([obj])
+            rt.IsolateSelection.EnterIsolateSelectionMode()
             self.uv_unwrapping(obj)
             self.texture_baking(obj)
             self.export_obj(obj)
@@ -306,6 +311,6 @@ def nonbatch_main():
 
 if __name__ == "__main__":
     # if "batch" in sys.executable:
-    batch_main()
+    # batch_main()
     # else:
-    # nonbatch_main()
+    nonbatch_main()

@@ -27,6 +27,15 @@ KEY_FILE = os.path.join(os.path.dirname(__file__), "../keys/b1k-dataset-69661298
 OUTPUT_FILENAME = "sanitycheck.json"
 SUCCESS_FILENAME = "sanitycheck.success"
 
+CATEGORY_DUMMY_REQUIREMENTS = {
+  "sink": ["watersource"],
+}
+
+CATEGORY_VOLUME_REQUIREMENTS = {
+  "sink": ["waterdrain"],
+}
+
+
 def compute_shear(obj):
   # Check that object satisfies no-shear rule.
   object_transform = np.hstack([np.array(obj.objecttransform), [[0], [0], [0], [1]]]).T
@@ -69,7 +78,7 @@ class SanityCheck:
     self.errors = collections.defaultdict(list)
 
   def is_valid_object_type(self, row):
-    is_valid_type = row.type in [rt.Editable_Poly, rt.VRayLight, rt.VRayPhysicalCamera]
+    is_valid_type = row.type in [rt.Editable_Poly, rt.VRayLight, rt.VRayPhysicalCamera, rt.Dummy, rt.VolumeHelper]
     self.expect(is_valid_type, f"{row.object_name} has disallowed type {row.type}.")
     return is_valid_type
 
@@ -142,7 +151,7 @@ class SanityCheck:
   def validate_group_of_instances(self, rows):
     # Pick an object as the base instance
     # TODO: Do a better job of this.
-    base = rows.iloc[0]
+    base = rows[rows["name_instance_id"] == "0"].iloc[0]
 
     # Check that they have the same model ID and same category
     unique_model_ids = rows.groupby(["name_category", "name_model_id"], sort=False, dropna=False).ngroups
@@ -160,7 +169,7 @@ class SanityCheck:
         this_offset_pos = np.array(row.object.objectOffsetPos) / np.array(row.object.objectOffsetScale)
         pos_diff = this_offset_pos - desired_offset_pos
         self.expect(
-          np.allclose(pos_diff, 0, atol=1e-3),
+          np.allclose(pos_diff, 0, atol=1e-2),
           f"{row.object_name} has different pivot offset position (by {pos_diff}). Match pivots on each instance.")
 
         this_offset_rot = Rotation.from_quat(quat2arr(row.object.objectOffsetRot))

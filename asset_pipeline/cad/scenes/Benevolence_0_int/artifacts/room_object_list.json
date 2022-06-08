@@ -1,0 +1,25 @@
+{
+    "success": true,
+    "objects_by_room": {
+        "bathroom_0": {
+            "bathtub": 1,
+            "carpet": 1,
+            "door": 1,
+            "trash_can": 1,
+            "mirror": 1,
+            "sink": 1,
+            "toilet": 1,
+            "towel_rack": 1
+        },
+        "corridor_0": {
+            "door": 2
+        },
+        "empty_room_0": {
+            "door": 2
+        },
+        "entryway_0": {
+            "door": 1
+        }
+    },
+    "error_invalid_name": []
+}

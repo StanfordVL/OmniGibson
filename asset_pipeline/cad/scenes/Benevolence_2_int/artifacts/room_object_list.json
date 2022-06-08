@@ -1,0 +1,54 @@
+{
+    "success": true,
+    "objects_by_room": {
+        "bathroom_1": {
+            "bathtub": 1,
+            "countertop": 1,
+            "door": 1,
+            "bottom_cabinet": 1,
+            "picture": 3,
+            "sink": 2,
+            "toilet": 1,
+            "towel_rack": 1
+        },
+        "bedroom_0": {
+            "bed": 3,
+            "countertop": 1,
+            "door": 4,
+            "breakfast_table": 1,
+            "swivel_chair": 1,
+            "trash_can": 1,
+            "towel_rack": 1,
+            "window": 1
+        },
+        "bedroom_1": {
+            "bed": 2,
+            "crib": 2,
+            "door": 3,
+            "bottom_cabinet": 2,
+            "floor_lamp": 1,
+            "shelf": 2,
+            "mirror": 1,
+            "picture": 1,
+            "wall_mounted_tv": 1,
+            "window": 1
+        },
+        "corridor_0": {
+            "door": 1,
+            "dryer": 1,
+            "picture": 2,
+            "washer": 1
+        },
+        "bathroom_0": {
+            "trash_can": 1,
+            "mirror": 1,
+            "picture": 1,
+            "shower": 1,
+            "sink": 1,
+            "toilet": 1,
+            "towel_rack": 1,
+            "window": 1
+        }
+    },
+    "error_invalid_name": []
+}

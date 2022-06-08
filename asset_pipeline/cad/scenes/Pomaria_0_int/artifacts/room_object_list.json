@@ -1,0 +1,55 @@
+{
+    "success": true,
+    "objects_by_room": {
+        "bathroom_0": {
+            "bathtub": 1,
+            "carpet": 1,
+            "door": 1,
+            "sink": 1,
+            "toilet": 1,
+            "window": 2
+        },
+        "bedroom_1": {
+            "bed": 3,
+            "door": 2,
+            "breakfast_table": 1,
+            "guitar": 2,
+            "monitor": 1,
+            "window": 1
+        },
+        "bedroom_0": {
+            "bed": 2,
+            "carpet": 1,
+            "door": 2,
+            "picture": 2,
+            "shelf": 1,
+            "window": 1
+        },
+        "private_office_0": {
+            "bottom_cabinet": 1,
+            "bottom_cabinet_no_top": 2,
+            "carpet": 1,
+            "countertop": 1,
+            "door": 1,
+            "breakfast_table": 1,
+            "monitor": 1,
+            "swivel_chair": 1,
+            "shelf": 5
+        },
+        "corridor_0": {
+            "door": 5,
+            "shelf": 1
+        },
+        "television_room_0": {
+            "door": 1,
+            "armchair": 1,
+            "coffee_table": 1,
+            "standing_tv": 1,
+            "shelf": 6,
+            "sofa": 1,
+            "straight_chair": 1,
+            "window": 1
+        }
+    },
+    "error_invalid_name": []
+}

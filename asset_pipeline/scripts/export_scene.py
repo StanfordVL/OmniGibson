@@ -92,7 +92,10 @@ def build_object_hierarchy(scene_obj_root):
             if parent_link_name not in parent_to_children[obj_inst]:
                 parent_to_children[obj_inst][parent_link_name] = []
             parent_to_children[obj_inst][parent_link_name].append((obj, link_name, joint_type))
-    return parent_to_children
+
+    # Return in sorted instance ID order.
+    return OrderedDict(sorted(parent_to_children.items(), key=lambda x: (x[0][0], x[0][1], int(x[0][2]))))
+
 
 
 def fix_all_mtl_files(scene_obj_root):
@@ -261,7 +264,7 @@ def main():
             tree_root = ET.Element("robot")
 
             os.makedirs(processed_obj_inst_folder, exist_ok=True)
-            if is_broken:
+            if False: #  is_broken:
                 broken_obj_folders.append(processed_obj_inst_folder)
 
             parent_sets = ["root"]
@@ -521,7 +524,7 @@ def main():
             base_link_offset = metadata["base_link_offset"]
             bbox_size = metadata["bbox_size"]
 
-        if is_broken:
+        if False:#is_broken:
             # The original model in the scene is broken, needs to use an existing model as an alternative
             if should_save_model:
                 existing_model_folder = os.path.join(processed_folder, obj_cat)
