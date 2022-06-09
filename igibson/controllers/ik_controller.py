@@ -11,7 +11,8 @@ import lula
 IK_MODE_COMMAND_DIMS = {
     "pose_absolute_ori": 6,  # 6DOF (dx,dy,dz,ax,ay,az) control over pose, where the orientation is given in absolute axis-angle coordinates
     "pose_delta_ori": 6,  # 6DOF (dx,dy,dz,dax,day,daz) control over pose
-    "position_fixed_ori": 3,  # 3DOF (dx,dy,dz) control over position, with orientation commands being kept as fixed initial absolute orientation
+    "position_fixed_ori": 3,  # 3DOF (dx,dy,dz) control over position, with orientation commands being kept as fixed initial absolute orientation,
+    "position_compliant_ori": 3,  # 3DOF (dx,dy,dz) control over position, with orientation commands automatically being sent as 0s (so can drift over time)
 }
 IK_MODES = set(IK_MODE_COMMAND_DIMS.keys())
 
@@ -27,18 +28,17 @@ class InverseKinematicsController(ManipulationController):
 
     def __init__(
         self,
+        task_name,
         robot_descriptor_yaml_path,
         robot_urdf_path,
         eef_name,
         control_freq,
         control_limits,
         dof_idx,
-        task_name="eef_0",  # TODO: maybe unify this w/ eef name?
-        # command_input_limits="default",
-        command_input_limits=None,
+        command_input_limits="default",
         command_output_limits=((-0.2, -0.2, -0.2, -0.5, -0.5, -0.5), (0.2, 0.2, 0.2, 0.5, 0.5, 0.5)),
         kv=2.0,
-        mode="position_fixed_ori",
+        mode="pose_delta_ori",
         smoothing_filter_size=None,
         workspace_pose_limiter=None,
     ):
@@ -68,6 +68,7 @@ class InverseKinematicsController(ManipulationController):
             If either is None, no scaling will be used. If "default", then this range will automatically be set
             to the @control_limits entry corresponding to self.control_type
         :param kv: float, Gain applied to error between IK-commanded joint positions and current joint positions
+        :param mode: str, mode to use when computing IK. In all cases, position commands are 3DOF delta (dx,dy,dz)
         :param smoothing_filter_size: None or int, if specified, sets the size of a moving average filter to apply
             on all outputted IK joint positions.
         :param workspace_pose_limiter: None or function, if specified, callback method that should clip absolute
@@ -94,12 +95,7 @@ class InverseKinematicsController(ManipulationController):
         robot_descriptor = lula.load_robot(self.robot_descriptor_yaml_path, self.robot_urdf_path)
         self.lula_kinematics = robot_descriptor.kinematics()
         self.lula_config = lula.CyclicCoordDescentIkConfig()
-        # self.lula_config.position_tolerance = 0
-        # self.lula_config.orientation_tolerance = 10
-        # self.lula_config.orientation_weight = 0
-        # self.descent_termination_delta = 1e-4
-        # self.lula_config.max_num_descents = 100
-
+        
         # Other variables that will be filled in at runtime
         self._quat_target = None
 
@@ -118,7 +114,9 @@ class InverseKinematicsController(ManipulationController):
             command_input_limits=command_input_limits,
             command_output_limits=command_output_limits,
         )
-
+        
+        # If the mode is set as absolute orientation, change input and output limits accordingly.
+        # By default, these limits are set as 1, so we modify this to have a correct range.
         if self.mode == "pose_absolute_ori":
             if self._command_input_limits is not None:
                 self._command_input_limits[0][3:] = -2 * np.pi
@@ -172,9 +170,12 @@ class InverseKinematicsController(ManipulationController):
 
     def _command_to_control(self, command, control_dict):
         """
-        Converts the (already preprocessed) inputted @command into deployable joint control signal.
+        Converts the (already preprocessed) inputted @command into deployable (non-clipped!) joint control signal.
+        This processes the command based on self.mode, possibly clips the command based on self.workspace_pose_limiter,
+
         :param command: Array[float], desired (already preprocessed) command to convert into control signals
             Is one of:
+                (dx,dy,dz) - desired delta cartesian position
                 (dx,dy,dz,dax,day,daz) - desired delta cartesian position and delta axis-angle orientation
                 (dx,dy,dz,ax,ay,az) - desired delta cartesian position and global axis-angle orientation
         :param control_dict: Dict[str, Any], dictionary that should include any relevant keyword-mapped
@@ -196,8 +197,16 @@ class InverseKinematicsController(ManipulationController):
         # The first three values of the command are always the (delta) position, convert to absolute values
         dpos = command[:3]
         target_pos = pos_relative + dpos
-
-        if self.mode == "pose_absolute_ori":
+        
+        if self.mode == "position_fixed_ori":
+            # We need to grab the current robot orientation as the commanded orientation if there is none saved
+            if self._quat_target is None:
+                self._quat_target = quat_relative
+            target_quat = self._quat_target
+        elif self.mode == "position_compliant_ori":
+            # Target quat is simply the current robot orientation
+            target_quat = quat_relative
+        elif self.mode == "pose_absolute_ori":
             # Received "delta" ori is in fact the desired absolute orientation
             target_quat = T.axisangle2quat(command[3:])
         else:  # pose_delta_ori control
@@ -234,7 +243,7 @@ class InverseKinematicsController(ManipulationController):
         Returns:
             n-array: corresponding joint positions to match the inputted targets
         """
-        # Run IK
+        # Set the current position as the initial position (cspace seeds) for the IK solver.
         self.lula_config.cspace_seeds = [current_joint_pos] if current_joint_pos is not None else []
 
         omni_quat = np.append(target_quat[3], target_quat[:3])
