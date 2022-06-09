@@ -119,8 +119,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         assert_valid_key(key=default_arm_pose, valid_keys=DEFAULT_ARM_POSES, name="default_arm_pose")
         self.default_arm_pose = default_arm_pose
 
-        print("Default Arm:", self.default_arm)
-
         # Parse reset joint pos if specifying special string
         if isinstance(reset_joint_pos, str):
             assert (
@@ -306,7 +304,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # TODO: Revert to IK once implemented
         for arm in self.arm_names:
             controllers["arm_{}".format(arm)] = "InverseKinematicsController"
-            controllers["gripper_{}".format(arm)] = "JointController"
+            controllers["gripper_{}".format(arm)] = "MultiFingerGripperController"
 
         return controllers
 
