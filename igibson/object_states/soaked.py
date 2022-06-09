@@ -1,7 +1,8 @@
+import logging
 import numpy as np
 from collections import OrderedDict
+from igibson.systems.micro_particle_system import FluidSystem
 import igibson.macros as m
-from igibson.object_states.contact_bodies import ContactBodies
 from igibson.object_states.object_state_base import AbsoluteObjectState, BooleanState
 from igibson.object_states.texture_change_state_mixin import TextureChangeStateMixin
 from igibson.object_states.water_source import WaterSource
@@ -21,58 +22,59 @@ SOAK_PARTICLE_THRESHOLD = 40
 
 
 class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
-    def __init__(self, obj, fluid):
+    def __init__(self, obj, fluid=None):
         super().__init__(obj)
-        self.value = False
-        self.fluid_system = SYSTEMS_REGISTRY("__name__", f"{fluid}System", default_val=None)
-        self.absorbed_particle_count = 0
+        if fluid:
+            logging.warning(f"Fluid system instantiated with fluid argument: this is no longer supported")
+
+        self.fluid_systems = []
+        for system in SYSTEMS_REGISTRY.objects:
+            if issubclass(system, FluidSystem):
+                self.fluid_systems.append(system)
+
+        self.absorbed_particle_system_count = {}
+        for system in self.fluid_systems:
+            self.absorbed_particle_system_count[system.name] = 0
+
         self.absorbed_particle_threshold = SOAK_PARTICLE_THRESHOLD
 
     def _get_value(self, fluid):
-        return self.value
+        return self.absorbed_particle_system_count[fluid] > self.absorbed_particle_threshold
 
     def _set_value(self, new_value, fluid):
-        self.value = new_value
         if new_value:
-            self.absorbed_particle_count = self.absorbed_particle_threshold
+            self.absorbed_particle_system_count[fluid] = self.absorbed_particle_threshold
         else:
-            self.absorbed_particle_count = 0
+            self.absorbed_particle_system_count[fluid] = 0
         return True
 
     def _update(self):
-        # If we don't have a fluid system, we cannot be soaked or do anything
-        if self.fluid_system is None:
-            return
-
-        value = self.value
-
-        # Only attempt to absorb if not soaked
-        if not self.value:
+        # Iterate over all fluid systems
+        for fluid_system in self.fluid_systems:
+            system_name = fluid_system.name
             # Map of obj_id -> (system, system_particle_id)
-            particle_contacts = self.fluid_system.state_cache['particle_contacts']
+            particle_contacts = fluid_system.state_cache['particle_contacts']
 
             # For each particle hit, hide then add to total particle count of soaked object
-            for particle_system, particle_idxs in particle_contacts.get(self.obj, {}).items():
-                particles_to_absorb = min(len(particle_idxs), self.absorbed_particle_threshold - self.absorbed_particle_count)
+            for instancer, particle_idxs in particle_contacts.get(self.obj, {}).items():
+                particles_to_absorb = min(len(particle_idxs), self.absorbed_particle_threshold - self.absorbed_particle_system_count[system_name])
                 particle_idxs_to_absorb = particle_idxs[:particles_to_absorb]
 
                 # Hide particles in contact with the object
-                particle_visibilities = self.fluid_system.particle_instancers[particle_system].particle_visibilities
+                particle_visibilities = fluid_system.particle_instancers[instancer].particle_visibilities
                 new_particle_visibilities = particle_visibilities.copy()
                 new_particle_visibilities[particle_idxs_to_absorb] = 0
-                self.fluid_system.particle_instancers[particle_system].particle_visibilities = new_particle_visibilities
+                fluid_system.particle_instancers[instancer].particle_visibilities = new_particle_visibilities
 
                 # Absorb the particles
-                self.absorbed_particle_count += particles_to_absorb
+                self.absorbed_particle_system_count[system_name] += particles_to_absorb
 
                 # If above threshold, soak the object and stop absorbing
-                if self.absorbed_particle_count >= self.absorbed_particle_threshold:
-                    self.value = True
+                if self.absorbed_particle_system_count[system_name] >= self.absorbed_particle_threshold:
                     break
 
-        # If the state is soaked, change the texture
-        # TODO (mjlbach): should update texture by infusing with color of liquid
-        if value != self.value:
+            # If the state is soaked, change the texture
+            # TODO (mjlbach): should update texture by infusing with color of liquid
             self.update_texture()
 
     @property
@@ -80,10 +82,13 @@ class Soaked(AbsoluteObjectState, BooleanState, TextureChangeStateMixin):
         return True
 
     def _dump_state(self):
-        return OrderedDict(soaked=self.value)
+        value = np.stack(list(self.absorbed_particle_system_count.values())) #type: ignore
+        return OrderedDict(soaked=value)
 
     def _load_state(self, state):
-        self.value = state["soaked"]
+        self.absorbed_particle_count = {
+            'WaterSource': state["soaked"]['WaterSource'],
+        }
 
     def _serialize(self, state):
         return np.array([float(state["soaked"])])
