@@ -141,17 +141,17 @@ class HeatSourceOrSink(AbsoluteObjectState, LinkBasedStateMixin):
             visual_only=True,
         )
         # Import marker into simulator
-        self._simulator.import_object(self.marker, register=False, auto_initialize=True)
+        # self._simulator.import_object(self.marker, register=False, auto_initialize=True)
 
     def _update(self):
         self.status, self.position = self._compute_state_and_position()
 
-        # Move the marker.
-        if self.position is not None:
-            self.marker.set_position(self.position)
-            self.marker.visible = True
-        else:
-            self.marker.visible = False
+        # # Move the marker.
+        # if self.position is not None:
+        #     self.marker.set_position(self.position)
+        #     self.marker.visible = True
+        # else:
+        #     self.marker.visible = False
 
     def _get_value(self):
         return self.status, self.position

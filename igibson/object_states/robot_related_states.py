@@ -73,8 +73,7 @@ class InHandOfRobot(CachingEnabledObjectState, BooleanState):
         from igibson.robots.manipulation_robot import IsGraspingState
 
         return any(
-            robot.is_grasping(arm=arm, candidate_obj=bid) == IsGraspingState.TRUE
-            for bid in self.obj.get_body_ids()
+            robot.is_grasping(arm=arm, candidate_obj=self.obj) == IsGraspingState.TRUE
             for arm in robot.arm_names
         )
 
@@ -92,8 +91,11 @@ class InFOVOfRobot(CachingEnabledObjectState, BooleanState):
         if not robot:
             return False
 
-        body_ids = set(self.obj.get_body_ids())
-        return not body_ids.isdisjoint(robot.states[ObjectsInFOVOfRobot].get_value())
+        # TODO(mjlbach): This is currently broken!!!
+        # body_ids = set(self.obj.get_body_ids())
+        robot.states[ObjectsInFOVOfRobot].get_value()
+        #return not body_ids.isdisjoint(robot.states[ObjectsInFOVOfRobot].get_value())
+        return []
 
     def _set_value(self, new_value):
         raise NotImplementedError("InFOVOfRobot state currently does not support setting.")
@@ -105,6 +107,7 @@ class ObjectsInFOVOfRobot(CachingEnabledObjectState):
 
     def _compute_value(self):
         # Pass the FOV through the instance-to-body ID mapping.
+        breakpoint()
         seg = self._simulator.renderer.render_single_robot_camera(self.obj, modes="ins_seg")[0][:, :, 0]
         seg = np.round(seg * MAX_INSTANCE_COUNT).astype(int)
         body_ids = self._simulator.renderer.get_pb_ids_for_instance_ids(seg)

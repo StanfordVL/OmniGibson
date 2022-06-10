@@ -1,6 +1,7 @@
 import numpy as np
 
 from igibson.metrics.metric_base import MetricBase
+from bddl.activity import evaluate_goal_conditions
 
 
 class TaskMetric(MetricBase):
@@ -9,11 +10,12 @@ class TaskMetric(MetricBase):
         self.timesteps = 0
 
     def start_callback(self, env, _):
-        self.render_timestep = env.simulator.render_timestep
+        self.render_timestep = env.simulator.get_rendering_dt()           
 
     def step_callback(self, env, _):
         self.timesteps += 1
-        self.satisfied_predicates.append(env.task.current_goal_status)
+        _, satisfied_predicates = evaluate_goal_conditions(env.task.ground_goal_state_options[0])
+        self.satisfied_predicates.append(satisfied_predicates)
 
     def end_callback(self, env, _):
         candidate_q_score = []

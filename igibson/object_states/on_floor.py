@@ -56,21 +56,14 @@ class OnFloor(RelativeObjectState, KinematicsMixin, BooleanState):
             return False
 
         objA_states = self.obj.states
-        center, extent = get_center_extent(objA_states)
-        room_instance = other.scene.get_room_instance_by_point(center[:2])
+        center, _ = get_center_extent(objA_states)
+        room_instance = other.scene.seg_map.get_room_instance_by_point(center[:2])
         is_in_room = room_instance == other.room_instance
 
-        floors = other.scene.objects_by_category["floors"]
+        floors = list(other.scene.object_registry("category", "floors"))
         assert len(floors) == 1, "has more than one floor object"
         # Use the floor object in the scene to detect contact points
         scene_floor = floors[0]
-
-        # Special case: the BehaviorRobot does not need to actually touch the floor of a room to be considered
-        # OnFloor in that room. As a hovering robot, BehaviorRobot won't actually touch the floor during operation.
-        from igibson.robots import BehaviorRobot
-
-        if isinstance(self.obj, BehaviorRobot):
-            return is_in_room
 
         touching = self.obj.states[Touching].get_value(scene_floor)
         return is_in_room and touching

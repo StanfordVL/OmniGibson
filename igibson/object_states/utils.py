@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-import trimesh
 from IPython import embed
 from scipy.spatial.transform import Rotation as R
 
@@ -30,6 +29,14 @@ _INSIDE_RAY_CASTING_SAMPLING_PARAMS = {
     "aabb_offset": -0.01,
 }
 
+
+def get_aabb_center(aabb):
+    lower, upper = aabb
+    return (np.array(lower) + np.array(upper)) / 2.
+
+def get_aabb_extent(aabb):
+    lower, upper = aabb
+    return np.array(upper) - np.array(lower)
 
 def get_center_extent(obj_states):
     assert AABB in obj_states
