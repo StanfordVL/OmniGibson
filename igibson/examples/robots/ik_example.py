@@ -1,4 +1,4 @@
-from igibson import assets_path, ig_dataset_path, Simulator
+from igibson import app, assets_path, ig_dataset_path, Simulator
 from igibson.scenes.interactive_traversable_scene import InteractiveTraversableScene
 from igibson.objects.primitive_object import PrimitiveObject
 from igibson.robots.fetch import Fetch
@@ -109,3 +109,5 @@ for i in range(100000):
     
     # Take a simulation step
     sim.step()
+
+app.close()

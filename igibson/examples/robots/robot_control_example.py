@@ -17,6 +17,11 @@ import carb
 SCENE_ID = "Rs_int"
 USD_TEMPLATE_FILE = f"{ig_dataset_path}/scenes/Rs_int/urdf/Rs_int_best_template.usd"
 
+SCENES = OrderedDict(
+    Rs_int="Realistic interactive home environment (default)",
+    empty="Empty environment with no objects",
+)
+
 CONTROL_MODES = OrderedDict(
     random="Use autonomous random actions (default)",
     teleop="Use keyboard control",
@@ -82,16 +87,6 @@ INPUT_TO_JOINT_IDX = {
     carb.input.KeyboardInput.KEY_7: 7,
     carb.input.KeyboardInput.KEY_8: 8,
     carb.input.KeyboardInput.KEY_9: 9,
-    carb.input.KeyboardInput.NUMPAD_0: 10,
-    carb.input.KeyboardInput.NUMPAD_1: 11,
-    carb.input.KeyboardInput.NUMPAD_2: 12,
-    carb.input.KeyboardInput.NUMPAD_3: 13,
-    carb.input.KeyboardInput.NUMPAD_4: 14,
-    carb.input.KeyboardInput.NUMPAD_5: 15,
-    carb.input.KeyboardInput.NUMPAD_6: 16,
-    carb.input.KeyboardInput.NUMPAD_7: 17,
-    carb.input.KeyboardInput.NUMPAD_8: 18,
-    carb.input.KeyboardInput.NUMPAD_9: 19,
 }
 
 def choose_from_options(options, name, random_selection=False):
@@ -251,18 +246,60 @@ class KeyboardController:
             self.reset_action()
         return True
 
+    @staticmethod
+    def print_keyboard_teleop_info():
+        """
+        Prints out relevant information for teleop controlling a robot
+        """
+
+        def print_command(char, info):
+            char += " " * (10 - len(char))
+            print("{}\t{}".format(char, info))
+
+        print()
+        print("*" * 30)
+        print("Controlling the Robot Using the Keyboard")
+        print("*" * 30)
+        print()
+        print("Joint Control")
+        print_command("0-9", "specify the joint to control")
+        print_command("[, ]", "move the joint backwards, forwards, respectively")
+        print()
+        print("Differential Drive Control")
+        print_command("A, D", "turn left, right")
+        print_command("W, S", "move forward, backwards")
+        print()
+        print("Inverse Kinematics Control")
+        print_command("I, K", "translate arm eef along x-axis")
+        print_command("J, L", "translate arm eef along y-axis")
+        print_command("P, ;", "translate arm eef along z-axis")
+        print_command("R, F", "rotate arm eef about x-axis")
+        print_command("T, G", "rotate arm eef about y-axis")
+        print_command("Y, H", "rotate arm eef about z-axis")
+        print()
+        print("Boolean Gripper Control")
+        print_command("N, M", "toggle gripper (open/close); command persists even after releasing")
+        print()
+        print("*" * 30)
+        print()
+
 
 def main(random_selection=False):
     """
     Robot control demo with selection
     Queries the user to select a robot, the controllers, a scene and a type of input (random actions or teleop)
     """
-    # Create an initial headless dummy scene so that we can load the requested robot and extract useful info
     sim = Simulator()
-    scene = InteractiveTraversableScene(
-        scene_model=SCENE_ID,
-        usd_path=USD_TEMPLATE_FILE,
-    )
+
+    # Choose scene to load
+    scene_id = choose_from_options(options=SCENES, name="scene", random_selection=random_selection)
+    if scene_id = "Rs_int":
+        scene = InteractiveTraversableScene(
+            scene_model=SCENE_ID,
+            usd_path=USD_TEMPLATE_FILE,
+        )
+    else:
+        scene = EmptyScene(floor_plane_visible=True)
 
     # Import scene
     sim.import_scene(scene=scene)
@@ -300,6 +337,7 @@ def main(random_selection=False):
         )
         robot.apply_action(action)
         sim.step()
+    app.close()
 
 
 if __name__ == "__main__":

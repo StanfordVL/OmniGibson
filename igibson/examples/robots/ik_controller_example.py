@@ -75,3 +75,5 @@ for i in range(100000):
 
     robot.apply_action(control)
     sim.step()
+
+app.close()
