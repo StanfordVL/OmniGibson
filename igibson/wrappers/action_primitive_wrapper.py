@@ -6,7 +6,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import queue
-import cv2
+import cv2 as cv
 
 from igibson.action_primitives.action_primitive_set_base import (
     REGISTERED_PRIMITIVE_SETS,
@@ -27,6 +27,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         reward_accumulation="sum",
         accumulate_obs=False,
         num_attempts=1,
+        use_obj_in_hand_as_obs=True,
     ):
         """
         Environment wrapper class for mapping action primitives to low-level environment actions
@@ -41,24 +42,26 @@ class ActionPrimitiveWrapper(BaseWrapper):
         """
         super().__init__(env=env)
         self.seed(0)
+        self.use_obj_in_hand_as_obs = use_obj_in_hand_as_obs
         self.action_generator: BaseActionPrimitiveSet = REGISTERED_PRIMITIVE_SETS[action_generator](
             self, self.task, self.scene, self.robots[0]
         )
-
         self.action_space = self.action_generator.get_action_space()
         self.reward_accumulation = reward_accumulation
         self.accumulate_obs = accumulate_obs
         self.num_attempts = num_attempts
         self.accum_reward = np.asarray([0])
-        # self.pumpkin_n_02_1_reward = True
-        # self.pumpkin_n_02_2_reward = True
         self.arm = 'left'
-        # self.action_tm1 = None
         self.step_index = 0
         self.done = False
         self.fallback_state = None
-        # self.initial_pos_dict = {'cabinet.n.01_1': [ 0.42474782, -1.89797091, 0.09850009]}
-        self.max_step = 30  # env.config['max_step']
+        self.max_step = 60  # env.config['max_step']
+        self.is_success_list = []
+        self.reward_list = []
+        if self.use_obj_in_hand_as_obs:
+            self.observation_space['obj_in_hand'] = env.build_obs_space(
+                shape=(1,), low=0.0, high=1
+            )
         self.reset()
 
     def seed(self, seed):
@@ -74,23 +77,28 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # self.pumpkin_n_02_1_reward = True
         # self.pumpkin_n_02_2_reward = True
         self.action_generator.robot.clear_ag()
+
+        self.env.reset()
+        self.simulator.step()
+        robot_initial_location = np.array([0.5, 0, 0.0])
+        self.robots[0].set_position_orientation(robot_initial_location)
+        self.simulator.step()
+        return_obs, accumulated_reward, done, info = self.step(2)
+
         # self.step(4)
         self.step_index = 0
         self.done = False
         self.accum_reward = 0
-        return_obs = self.env.reset()
-        # print('return_obs.keys(): ', return_obs.keys())
-        return_obs = {
-            'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb']
-        }
-        # print(f"pre step0")
-        return_obs, accumulated_reward, done, info = self.step(0)
-        # print("post step0")
+
         self.fallback_state = self.dump_state(serialized=False)
-        # return_obs, accumulated_reward, done, info = self.step(4)
+        print('Success Rate: {} -----------------------\n'.format(np.mean(self.is_success_list)))
+        print('Reward Mean: {}, Reward Std: {} -----------------------\n'.format(np.mean(self.reward_list), np.std(self.reward_list)))
         return return_obs
 
     def step(self, action: int):
+
+        # self.simulator.should_render = False
+
         # Run the goal generator and feed the goals into the env.
         accumulated_reward = 0
         accumulated_obs = []
@@ -99,26 +107,23 @@ class ActionPrimitiveWrapper(BaseWrapper):
 
         print('++++++++++++++++++++++++++++++ take action:', action)
 
-        pre_action = 10
-        for lower_level_action in self.action_generator.apply(pre_action):
-            # print(f"lower level action: {lower_level_action}")
-            obs, reward, done, info = super().step(lower_level_action)
-            if self.accumulate_obs:
-                accumulated_obs.append(obs)
-            else:
-                accumulated_obs = [obs]  # Do this to save some memory.
+        # pre_action = 10
+        # for lower_level_action in self.action_generator.apply(pre_action):
+        #     # print(f"lower level action: {lower_level_action}")
+        #     obs, reward, done, info = super().step(lower_level_action)
+        #     if self.accumulate_obs:
+        #         accumulated_obs.append(obs)
+        #     else:
+        #         accumulated_obs = [obs]  # Do this to save some memory.
 
         for _ in range(self.num_attempts):
             # print(f"attempt: {_}")
-            obs, done, info = None, None, {}
+            # obs, done, info = None, None, {}
             try:
-                # obj_in_hand_before_act = self.robots[0]._ag_obj_in_hand[self.arm]
                 for lower_level_action in self.action_generator.apply(action):
-                    # print('action: {}, lower_level_action: {}'.format(action, lower_level_action))
+                    t1 = time.time()
                     obs, reward, done, info = super().step(lower_level_action)
-
-                    # obs: odict_keys(['robot0', 'task'])
-                    # obs['robot0']: odict_keys([]), obs['task']: odict_keys(['low_dim'])
+                    # print(f"low level env step time: {time.time() - t1}")
 
                     if self.reward_accumulation == "sum":
                         accumulated_reward += reward
@@ -132,46 +137,36 @@ class ActionPrimitiveWrapper(BaseWrapper):
                     else:
                         accumulated_obs = [obs]  # Do this to save some memory.
 
-                    # Record additional info.
-                    info["primitive_success"] = True
-                    info["primitive_error_reason"] = None
-                    info["primitive_error_metadata"] = None
-                    info["primitive_error_message"] = None
-                # print('\n\n\n\n\n\n\n', self.robots[0]._ag_obj_in_hand[self.arm])
-                # print(self.env.task.object_scope['agent.n.01_1'].states[Pose].get_value()[0])
-                # obj_pos = self.env.task.object_scope['agent.n.01_1'].states[Pose].get_value()[0]
-                # within_distance = np.sum(np.abs(self.initial_pos_dict['cabinet.n.01_1'] - obj_pos)) < 1e-1
-                # print(self.pumpkin_n_02_1_reward, action == 4,  obj_in_hand_before_act is not None, within_distance)
-                # bddl_object_scope
-                # if self.robots[0]._ag_obj_in_hand[self.arm] is not None:
-                #     print('attr: ', self.robots[0]._ag_obj_in_hand[self.arm].__dict__)
-                # if obj_in_hand_before_act is not None:
-                #     if self.pumpkin_n_02_1_reward and action == 4 and obj_in_hand_before_act.bddl_object_scope == 'pumpkin.n.02_1' and within_distance:
-                #         reward = 0.5
-                #         accumulated_reward += reward
-                #         self.pumpkin_n_02_1_reward = False
-                #     elif self.pumpkin_n_02_2_reward and action == 4 and obj_in_hand_before_act.bddl_object_scope == 'pumpkin.n.02_2' and within_distance:
-                #         reward = 0.5
-                #         accumulated_reward += reward
-                #         self.pumpkin_n_02_2_reward = False
-                # self.action_tm1 = action
+                dummy_action_id = 10
+                for lower_level_action in self.action_generator.apply(dummy_action_id):
+                    obs, reward, done, info = super().step(lower_level_action)
+                    if self.accumulate_obs:
+                        accumulated_obs.append(obs)
+                    else:
+                        accumulated_obs = [obs]
+
+                # Record additional info.
+                info["primitive_success"] = True
+                info["primitive_error_reason"] = None
+                info["primitive_error_metadata"] = None
+                info["primitive_error_message"] = None
+
                 self.fallback_state = self.dump_state(serialized=False)
+
                 break
             except ActionPrimitiveError as e:
-                print("--- Primitive Error! Dummy action!")
-                # from copy import deepcopy
-                # self.load_state(self.fallback_state, serialized=False)
+                print("--- Primitive Error! Execute dummy action (don't move) to get an observation!")
+                from copy import deepcopy
+                self.load_state(deepcopy(self.fallback_state), serialized=False)
 
-                # self.action_generator.robot.keep_still()
-                # self._physics_context._step(current_time=self.current_time)
-                for lower_level_action in self.action_generator.apply(10):
-                    # print('action: {}, lower_level_action: {}'.format(action, lower_level_action))
+                dummy_action_id = 10
+                for lower_level_action in self.action_generator.apply(dummy_action_id):
                     obs, reward, done, info = super().step(lower_level_action)
+                    if self.accumulate_obs:
+                        accumulated_obs.append(obs)
+                    else:
+                        accumulated_obs = [obs]
 
-                end_time = time.time()
-                # logger.error("AP time: {}".format(end_time - start_time))
-                # logger.warning("Action primitive failed! Exception {}".format(e))
-                # Record the error info.
                 info["primitive_success"] = False
                 info["primitive_error_reason"] = e.reason
                 info["primitive_error_metadata"] = e.metadata
@@ -186,32 +181,47 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 return_obs = accumulated_obs[-1]
         end_time = time.time()
         # logger.error("AP time: {}, reward: {}".format(end_time - start_time, accumulated_reward))
+
         self.accum_reward = self.accum_reward + accumulated_reward
         print('reward: ', accumulated_reward, 'accum reward: ', self.accum_reward)
-        # print('self.robots[0].sensors: ', self.robots[0].sensors)
-        # print('return_obs: {}, done: {}, info: {}'.format(return_obs, done, info))
-        # print('return_obs: {}'.format(return_obs))
-
-        # print(return_obs['robot0'].keys())  # odict_keys(['rgb'])
-        # _reason': None, 'primitive_error_metadata': None, 'primitive_error_message': None}
-        # odict_keys(['robot0:base_front_laser_link_Lidar_sensor_scan', 'robot0:base_front_laser_link_Lidar_sensor_occupancy_grid', 'robot0:base_rear_laser_link_Lidar_sensor_scan', 'robot0:base_rear_laser_link_Lidar_sensor_occupancy_grid', 'robot0:eyes_Camera_sensor_rgb'])
-        # plt.imshow(return_obs['robot0']['rgb'])
-        # plt.show()
         self.step_index = self.step_index + 1
         if self.accum_reward >= 1.0:
             self.done = True
             info["is_success"] = True
+            print('info[is_success]: ', info["is_success"])
+            # self.is_success_list.append(info["is_success"])
+            self.reward_list.append(self.accum_reward)
         elif self.step_index >= self.max_step:
             self.done = True
             info["is_success"] = False
+            print('info[is_success]: ', info["is_success"])
+            # self.is_success_list.append(info["is_success"])
+            self.reward_list.append(self.accum_reward)
         else:
             self.done = False
+
+        img_t = cv.cvtColor(return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'][:, :, :3], cv.COLOR_BGR2HSV)
+        h, s, v = cv.split(img_t)
+        light = random.randint(-80, 160)
+        v1 = np.clip(cv.add(1 * v, light), 0, 255)
+        img1 = np.uint8(cv.merge((h, s, v1)))
+        img1 = cv.cvtColor(img1, cv.COLOR_HSV2BGR).astype(np.float64)
+        img1 += np.random.normal(0, 5, img1.shape)
+        img1 = np.clip(img1, 0., 255.)
+
+        is_obj_in_hand = int(self.action_generator._get_obj_in_hand() is not None)
         return_obs = {
-            # 'rgb': cv2.resize(return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'], (512, 512))[:, :, :3]
-            'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'][:, :, :3] / 255.
+            'rgb': img1 / 255.,
+            'obj_in_hand': np.asarray([is_obj_in_hand]),
         }
-        # print('\n\n\n\n\n\n\n return_obs[rgb].shape: {} '.format(return_obs['rgb'].shape))
+        print('done: {}'.format(self.done))
         # plt.imshow(return_obs['rgb'])
         # plt.show()
-        print('done: {}'.format(self.done))
+        # print('self.is_success_list: ', self.is_success_list)
+
+        # self.simulator.should_render = True
+        # self.simulator.render()
+
+        accumulated_reward -= 0.01
+
         return return_obs, accumulated_reward, self.done, info

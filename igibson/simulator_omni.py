@@ -106,6 +106,7 @@ class Simulator(SimulationContext):
         Simulator._world_initialized = True
         self._scene_finalized = False
         self.render_timestep = rendering_dt  #render_timestep
+        self.should_render = True
         # self._current_tasks = dict()
         self._dc_interface = _dynamic_control.acquire_dynamic_control_interface()
         # if not builtins.ISAAC_LAUNCHED_FROM_TERMINAL:
@@ -396,7 +397,7 @@ class Simulator(SimulationContext):
             super().step(render=False)
 
         # Render on final step unless input says otherwise
-        super().step(render=render)
+        super().step(render=render and self.should_render)
 
         self._non_physics_step()
         # self.sync()

@@ -72,13 +72,14 @@ ceiling.visible = False
 # cam.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
 # cam.initialize()
 
+
 for i in range(500):
     sim.step()
 
+# 0, 1, 2, 3, 0, 4
 # breakpoint()
 for i in range(3):
     env.reset()
-
     breakpoint()
 
     env.step(0)  # move to pumpkin
@@ -87,34 +88,17 @@ for i in range(3):
     # print('obs.keys(): ', obs.keys())
     # plt.imshow(obs['rgb'])
     # plt.show()
-    env.step(2)  # pick pumpkin
+    env.step(1)  # pick pumpkin
     time.sleep(2)
-    env.step(3)  # move to cabinet
+    env.step(2)  # move to cabinet
     # breakpoint()
+    time.sleep(2)
+    env.step(3)  # place pumpkin
     time.sleep(2)
     env.step(0)  # place pumpkin
     time.sleep(2)
-    env.step(1)  # place pumpkin
-    time.sleep(2)
+    breakpoint()
     env.step(4)
-
-    time.sleep(2)
-    env.step(5)
-    time.sleep(2)
-    env.step(6)
-    time.sleep(2)
-    env.step(0)
-    time.sleep(5)
-    env.step(4)
-    time.sleep(2)
-    env.step(7)
-
-    # env.step(0)  # move to cabinet
-    # # breakpoint()
-    # time.sleep(2)
-    # env.step(1)  # place pumpkin
-    # time.sleep(2)
-    # env.step(7)
 breakpoint()
 
 sim.step()

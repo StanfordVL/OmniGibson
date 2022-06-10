@@ -229,6 +229,17 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
         state = np.concatenate([pos, rpy, lin_vel, ang_vel, joints_state])
         return state
 
+    def get_joint_positions(self, normalized=False, joint_idx=None):
+        """
+        Get this robot's joint positions for the specified indices
+        :param joint_idx: ids of the joints to query. Query all, if joint_idx is None. This are iG joint idx, do not use pybullet idx
+        """
+        joint_positions = super().get_joint_positions(normalized=normalized)
+        if joint_idx is not None:
+            return joint_positions[joint_idx]
+        else:
+            return joint_positions
+
     def can_toggle(self, toggle_position, toggle_distance_threshold):
         """
         Returns True if the part of the robot that can toggle a toggleable is within the given range of a

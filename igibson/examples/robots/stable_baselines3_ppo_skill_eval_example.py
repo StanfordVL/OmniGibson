@@ -3,6 +3,7 @@
 import logging
 import os
 from typing import Callable
+import numpy as np
 
 import igibson
 # import behavior
@@ -10,6 +11,7 @@ from igibson.envs.igibson_env import iGibsonEnv
 from igibson.wrappers import ActionPrimitiveWrapper
 # from igibson.envs.skill_env import SkillEnv
 from igibson import app, ig_dataset_path, example_config_path, Simulator
+from igibson.sensors.vision_sensor import VisionSensor
 
 log = logging.getLogger(__name__)
 
@@ -149,11 +151,25 @@ def main():
     seed = 0
     env = iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.)
     env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
-    ceiling = env.scene.object_registry("name", "ceilings")
-    ceiling.visible = False
+    for obj in env.scene.object_registry("category", "ceilings"):
+        obj.visible = False
     env.seed(seed)
     set_random_seed(seed)
     env.reset()
+
+    cam = VisionSensor(
+        prim_path="/World/viewer_camera",
+        name="camera",
+        modalities=["rgb"],
+        image_width=512,
+        image_height=512,
+    )
+    # cam.set_position(np.array([0.59, -2.973, 8.929]))
+    # camera_topdown_position = np.array([0, -1, 6])
+    camera_topdown_position = np.array([1, 0, 5])
+    cam.set_position_orientation(camera_topdown_position, np.array([0, 0, 0, 1]))
+    cam.set_attribute("focalLength", 20)
+    cam.initialize()
 
     policy_kwargs = dict(
         features_extractor_class=CustomCombinedExtractor,

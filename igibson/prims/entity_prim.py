@@ -875,15 +875,14 @@ class EntityPrim(XFormPrim):
                                            quaternion is scalar-last (x, y, z, w). shape is (4, ).
         """
         if self._root_handle is not None and self._dc.is_simulating():
-            pose = self._dc.get_rigid_body_pose(self._root_handle)
+            # pose = self._dc.get_rigid_body_pose(self._root_handle)
+            val = self.root_link.get_position_orientation()
             # print("Error get position ori:", pose)
-
-            return np.asarray(pose.p), np.asarray(pose.r)
         else:
             val = super().get_position_orientation()
             # print("Error 2 get position ori:", val)
 
-            return val
+        return val
 
     def set_local_pose(
         self, translation: Optional[np.ndarray] = None, orientation: Optional[np.ndarray] = None

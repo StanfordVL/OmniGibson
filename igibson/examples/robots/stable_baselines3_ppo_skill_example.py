@@ -2,9 +2,11 @@
 
 import logging
 import os, time, cv2
+import random
 from typing import Callable
 import pdb
-
+import numpy as np
+import torch
 import igibson
 # import behavior
 # from igibson.envs.skill_env import SkillEnv
@@ -12,6 +14,7 @@ from igibson.envs.igibson_env import iGibsonEnv
 # from igibson.sensors.vision_sensor import VisionSensor
 from igibson.wrappers import ActionPrimitiveWrapper
 from igibson import app, ig_dataset_path, example_config_path, Simulator
+from igibson.sensors.vision_sensor import VisionSensor
 
 log = logging.getLogger(__name__)
 
@@ -47,6 +50,8 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
         super(CustomCombinedExtractor, self).__init__(observation_space, features_dim=1)
         self.debug_length = 10
         self.debug_mode = True
+        self.random_cropping = True
+        self.random_cropping_size = 116
         extractors = {}
         self.step_index = 0
         self.img_save_dir = 'img_save_dir'
@@ -100,22 +105,22 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
             if key in ["rgb", "ins_seg"]:
                 n_input_channels = subspace.shape[2]  # channel last
                 cnn = nn.Sequential(
-                    nn.Conv2d(n_input_channels, 4, kernel_size=8, stride=4, padding=0),
+                    nn.Conv2d(n_input_channels, 8, kernel_size=8, stride=2, padding=0),
                     nn.ReLU(),
                     nn.MaxPool2d(2),
-                    nn.Conv2d(4, 8, kernel_size=4, stride=2, padding=0),
+                    nn.Conv2d(8, 16, kernel_size=4, stride=1, padding=0),
                     nn.ReLU(),
                     nn.MaxPool2d(2),
-                    nn.Conv2d(8, 4, kernel_size=3, stride=1, padding=0),
+                    nn.Conv2d(16, 8, kernel_size=3, stride=1, padding=0),
                     nn.ReLU(),
                     nn.Flatten(),
                 )
-                test_tensor = th.zeros([subspace.shape[2], subspace.shape[0], subspace.shape[1]])
+                test_tensor = th.zeros([subspace.shape[2], self.random_cropping_size, self.random_cropping_size])
                 with th.no_grad():
                     n_flatten = cnn(test_tensor[None]).shape[1]
                 fc = nn.Sequential(nn.Linear(n_flatten, feature_size), nn.ReLU())
                 extractors[key] = nn.Sequential(cnn, fc)
-            elif key in ["accum_reward", 'obj_joint']:
+            elif key in ["accum_reward", 'obj_joint', 'obj_in_hand']:
                 extractors[key] = nn.Sequential(nn.Linear(subspace.shape[0], feature_size))
             else:
                 continue
@@ -141,13 +146,18 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
             #     observations[key] = observations[key].permute((0, 2, 1))
             # print(key, observations[key])  # [0, 500]
             if key in ["rgb",]:
+                if self.random_cropping:
+                    random_x = random.randint(0, 12)
+                    random_y = random.randint(0, 12)
+                    observations[key] = observations[key][:, random_x:(random_x+self.random_cropping_size), random_y:(random_y+self.random_cropping_size)]
+
                 if self.debug_mode:
                     cv2.imwrite(os.path.join(self.img_save_dir, '{0:06d}.png'.format(self.step_index % self.debug_length)), cv2.cvtColor((observations[key][0].cpu().numpy()*255).astype('uint8'), cv2.COLOR_RGB2BGR))
                 observations[key] = observations[key].permute((0, 3, 1, 2))  # range: [0, 1]
             elif key in ["ins_seg"]:
                 observations[key] = observations[key].permute((0, 3, 1, 2)) / 500. # range: [0, 1]
-            elif key in ['accum_reward', 'obj_joint']:
-                # print('observations[key].shape: ', observations[key].shape)
+            elif key in ['accum_reward', 'obj_joint', 'obj_in_hand']:
+                # print('observations[key].shape: ', observations[key].shape, observations[key])
                 # if len(observations[key]) == 1:
                 #     observations[key] = observations[key][None, :]
                 if len(observations[key].shape) == 3:
@@ -168,12 +178,19 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
         # print('feature.shape: ', feature.shape)  #  torch.Size([1, 384])
         return feature
 
+def set_pt():
+    app.config["renderer"] = "PathTracing"
+    app._set_render_settings()
+
+def set_rt():
+    app.config["renderer"] = "RayTracingLighting"
+    app._set_render_settings()
 
 def main():
     # config_file = os.path.join('..', 'configs', "behavior_pick_and_place.yaml")
     # config_file = os.path.join('..', '..', 'configs', 'robots', "fetch_rl.yaml")
     # config_file = os.path.join(igibson.configs_path, "fetch_behavior_aps_putting_away_Halloween_decorations.yaml")
-    config_file = f"{example_config_path}/behavior_mp_tiago.yaml"  # os.path.join(igibson.configs_path, "fetch_rl_cleaning_microwave_oven.yaml")
+    config_file = f"{example_config_path}/behavior_mp_tiago_gates.yaml"  # os.path.join(igibson.configs_path, "fetch_rl_cleaning_microwave_oven.yaml")
     tensorboard_log_dir = os.path.join("log_dir", time.strftime("%Y%m%d-%H%M%S"))
     os.makedirs(tensorboard_log_dir, exist_ok=True)
     prefix = ''
@@ -195,15 +212,41 @@ def main():
     # env = VecMonitor(env)
     # env = SubprocVecEnv([make_env(0)])
 
-    seed = 0
+    seed = 2
 
     env = iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.)
     env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
-    ceiling = env.scene.object_registry("name", "ceilings")
-    ceiling.visible = False
+    for obj in env.scene.object_registry("category", "ceilings"):
+        obj.visible = False
     env.seed(seed)
     set_random_seed(seed)
     env.reset()
+
+    # set_pt()
+    #
+    # world = env.simulator.world_prim
+    # for obj_prim in world.GetChildren():
+    #     for link_prim in obj_prim.GetChildren():
+    #         for prim in link_prim.GetChildren():
+    #             if "light" in prim.GetPrimTypeInfo().GetTypeName().lower():
+    #                 prim.GetAttribute("intensity").Set(5e6)
+    #
+    # for _ in range(5):
+    #     env.simulator.step()
+
+    cam = VisionSensor(
+        prim_path="/World/viewer_camera",
+        name="camera",
+        modalities=["rgb"],
+        image_width=512,
+        image_height=512,
+    )
+    # cam.set_position(np.array([0.59, -2.973, 8.929]))
+    # camera_topdown_position = np.array([0, -1, 6])
+    camera_topdown_position = np.array([1, 0, 5])
+    cam.set_position_orientation(camera_topdown_position, np.array([0, 0, 0, 1]))
+    cam.set_attribute("focalLength", 20)
+    cam.initialize()
 
     # eval_env = SkillEnv(
     #     config_file=config_file,
@@ -230,10 +273,21 @@ def main():
         verbose=1,
         tensorboard_log=tensorboard_log_dir,
         policy_kwargs=policy_kwargs,
-        n_steps=20 * 10,
+        n_steps=300,
         batch_size=8,
         device='cuda',
     )
+
+    # load_path = 'log_dir/20220609-112151/_9000_steps'
+    # # model.load(load_path)
+    # # model.set_parameters(load_path)
+    # model = PPO.load(load_path)
+    # # model.load_parameters(load_path, exact_match=True)
+    # print(model.policy)
+    # for name, param in model.policy.named_parameters():
+    #     print(name, param)
+    # model.set_env(env)
+    # print('Successfully RESUME from {}'.format(load_path))
 
     # load_path = 'log_dir/20220602-104727/_4000_steps.zip'
     # model = PPO.load(load_path)
@@ -244,7 +298,7 @@ def main():
 
     if mode == 'for_loop':
         for i in range(1000):
-            model.learn(1000)
+            model.learn(3000)
 
             mean_reward, std_reward = evaluate_policy(model, eval_env, n_eval_episodes=20)
             log.info(f"After Training {i}: Mean reward: {mean_reward} +/- {std_reward:.2f}")
@@ -268,12 +322,12 @@ def main():
         model.save(os.path.join(tensorboard_log_dir, "ckpt_{}".format(prefix)))
         del model
     else:
-        checkpoint_callback = CheckpointCallback(save_freq=1000, save_path=tensorboard_log_dir, name_prefix=prefix)
+        checkpoint_callback = CheckpointCallback(save_freq=3000, save_path=tensorboard_log_dir, name_prefix=prefix)
         log.debug(model.policy)
         print(model)
 
         model.learn(total_timesteps=10000000, callback=checkpoint_callback,
-                    eval_env=env, eval_freq=1000,
+                    eval_env=env, eval_freq=3000,
                     n_eval_episodes=20)
 
     model = PPO.load(os.path.join(tensorboard_log_dir, "ckpt_{}".format(prefix)))

@@ -329,7 +329,12 @@ class RigidPrim(XFormPrim):
             # Call super method by default
             pos, ori = super().get_position_orientation()
 
-        return np.array(pos), np.array(ori)
+        pos, ori = np.array(pos), np.array(ori)
+        ori_norm = np.linalg.norm(ori)
+        if np.isnan(ori_norm) or np.isclose(ori_norm, 0.0):
+            ori = np.array([0, 0, 0, 1.0])
+
+        return pos, ori
 
     def set_local_pose(self, translation=None, orientation=None):
         """

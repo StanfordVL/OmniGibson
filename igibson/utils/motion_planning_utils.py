@@ -7,55 +7,11 @@ from igibson.robots.manipulation_robot import IsGraspingState
 from omni.isaac.core.utils.prims import get_prim_at_path
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.ERROR)
 
 import time
 
 import numpy as np
 from collections import OrderedDict
-
-# from igibson.external.motion.motion_planners.rrt_connect import birrt
-# from igibson.external.pybullet_tools.utils import (
-#     PI,
-#     circular_difference,
-#     direct_path,
-#     get_aabb,
-#     get_base_values,
-#     get_joint_names,
-#     get_joint_positions,
-#     get_joints,
-#     get_max_limits,
-#     get_min_limits,
-#     get_movable_joints,
-#     get_sample_fn,
-#     is_collision_free,
-#     joints_from_names,
-#     link_from_name,
-#     movable_from_joints,
-#     pairwise_collision,
-#     plan_base_motion_2d,
-#     plan_joint_motion,
-#     set_base_values_with_z,
-#     set_joint_positions,
-#     set_pose,
-# )
-
-# from igibson.external.pybullet_tools.utils import (
-#     control_joints,
-#     get_base_values,
-#     get_joint_positions,
-#     get_max_limits,
-#     get_min_limits,
-#     get_sample_fn,
-#     is_collision_free,
-#     joints_from_names,
-#     link_from_name,
-#     plan_base_motion_2d,
-#     plan_joint_motion,
-#     set_base_values_with_z,
-#     set_joint_positions,
-#     set_pose,
-# )
 
 import igibson.macros as m
 from igibson import app, assets_path
@@ -75,55 +31,137 @@ BODY_MAX_DISTANCE = 0.05
 HAND_MAX_DISTANCE = 0
 
 
-class IKSolver:
-    """
-    Class for thinly wrapping Lula IK solver
-    """
-
-    def __init__(
-        self,
-        robot_description_path,
-        robot_urdf_path,
-        eef_name,
-        default_joint_pos,
-    ):
-        # Create robot description, kinematics, and config
-        self.robot_description = lula.load_robot(robot_description_path, robot_urdf_path)
-        self.kinematics = self.robot_description.kinematics()
-        self.config = lula.CyclicCoordDescentIkConfig()
-        self.eef_name = eef_name
-        self.default_joint_pos = default_joint_pos
-
-    def solve(
-        self,
-        target_pos,
-        target_quat,
-        initial_joint_pos=None,
-    ):
+if not m.IS_PUBLIC_ISAACSIM:
+    class IKSolver:
         """
-        Backs out joint positions to achieve desired @target_pos and @target_quat
-
-        Args:
-            target_pos (3-array): desired (x,y,z) local target cartesian position in robot's base coordinate frame
-            target_quat (3-array): desired (x,y,z,w) local target quaternion orientation in robot's base coordinate frame
-            initial_joint_pos (None or n-array): If specified, will set the initial cspace seed when solving for joint
-                positions. Otherwise, will use self.default_joint_pos
-
-        Returns:
-            None or n-array: Joint positions for reaching desired target_pos and target_quat, otherwise None if no
-                solution was found
+        Class for thinly wrapping Lula IK solver
         """
-        pos = np.array(target_pos, dtype=np.float64).reshape(3,1)
-        rot = np.array(T.quat2mat(target_quat), dtype=np.float64)
-        ik_target_pose = lula.Pose3(lula.Rotation3(rot), pos)
 
-        # Set the cspace seed
-        initial_joint_pos = self.default_joint_pos if initial_joint_pos is None else np.array(initial_joint_pos)
-        self.config.cspace_seeds = [initial_joint_pos]
+        def __init__(
+            self,
+            robot_description_path,
+            robot_urdf_path,
+            eef_name,
+            default_joint_pos,
+        ):
+            # Create robot description, kinematics, and config
+            self.robot_description = lula.load_robot(robot_description_path, robot_urdf_path)
+            self.kinematics = self.robot_description.kinematics()
+            self.config = lula.CyclicCoordDescentIkConfig()
+            self.eef_name = eef_name
+            self.default_joint_pos = default_joint_pos
 
-        # Compute target joint positions
-        ik_results = lula.compute_ik_ccd(self.kinematics, ik_target_pose, self.eef_name, self.config)
-        return np.array(ik_results.cspace_position)
+        def solve(
+            self,
+            target_pos,
+            target_quat,
+            initial_joint_pos=None,
+        ):
+            """
+            Backs out joint positions to achieve desired @target_pos and @target_quat
+
+            Args:
+                target_pos (3-array): desired (x,y,z) local target cartesian position in robot's base coordinate frame
+                target_quat (3-array): desired (x,y,z,w) local target quaternion orientation in robot's base coordinate frame
+                initial_joint_pos (None or n-array): If specified, will set the initial cspace seed when solving for joint
+                    positions. Otherwise, will use self.default_joint_pos
+
+            Returns:
+                None or n-array: Joint positions for reaching desired target_pos and target_quat, otherwise None if no
+                    solution was found
+            """
+            pos = np.array(target_pos, dtype=np.float64).reshape(3,1)
+            rot = np.array(T.quat2mat(target_quat), dtype=np.float64)
+            ik_target_pose = lula.Pose3(lula.Rotation3(rot), pos)
+
+            # Set the cspace seed
+            initial_joint_pos = self.default_joint_pos if initial_joint_pos is None else np.array(initial_joint_pos)
+            self.config.cspace_seeds = [initial_joint_pos]
+
+            # Compute target joint positions
+            ik_results = lula.compute_ik_ccd(self.kinematics, ik_target_pose, self.eef_name, self.config)
+            return np.array(ik_results.cspace_position)
+
+else:
+    import pybullet as p
+    from igibson.external.motion.motion_planners.rrt_connect import birrt
+    from igibson.external.pybullet_tools.utils import (
+        PI,
+        circular_difference,
+        direct_path,
+        get_aabb,
+        get_base_values,
+        get_joint_names,
+        get_joint_positions,
+        get_joints,
+        get_max_limits,
+        get_min_limits,
+        get_movable_joints,
+        get_sample_fn,
+        is_collision_free,
+        joints_from_names,
+        link_from_name,
+        movable_from_joints,
+        pairwise_collision,
+        plan_base_motion_2d,
+        plan_joint_motion,
+        set_base_values_with_z,
+        set_joint_positions,
+        set_pose,
+        get_link_position_from_name,
+        get_link_name,
+        base_values_from_pose,
+        pairwise_link_collision,
+        control_joints,
+        get_base_values,
+        get_joint_positions,
+        get_max_limits,
+        get_min_limits,
+        get_sample_fn,
+        is_collision_free,
+        joints_from_names,
+        link_from_name,
+        plan_base_motion_2d,
+        plan_joint_motion,
+        set_base_values_with_z,
+        set_joint_positions,
+        set_pose,
+        get_self_link_pairs,
+        get_body_name,
+        get_link_name,
+        joint_from_name,
+    )
+
+
+    class IKSolver:
+        """
+        Class for thinly wrapping Lula IK solver
+        """
+
+        def __init__(
+            self,
+            robot_description_path,
+            robot_urdf_path,
+            eef_name,
+            default_joint_pos,
+        ):
+            # Create robot description, kinematics, and config
+            if m.HEADLESS:
+                p.connect(p.DIRECT)
+            else:
+                p.connect(p.DIRECT)
+            self.robot_body_id = p.loadURDF(robot_urdf_path)
+            p.resetBasePositionAndOrientation(self.robot_body_id, [0, 0, 0], [0, 0, 0, 1])
+            p.setGravity(0, 0, 0)
+            p.stepSimulation()
+
+        def solve(
+            self,
+            target_pos,
+            target_quat,
+            initial_joint_pos=None,
+        ):
+            print("unused")
 
 
 class MotionPlanner:
@@ -137,7 +175,8 @@ class MotionPlanner:
         base_mp_algo="birrt",
         arm_mp_algo="birrt",
         optimize_iter=0,
-        fine_motion_plan=True,
+        check_selfcollisions_in_path=True,
+        check_collisions_with_env_in_path=True,
         full_observability_2d_planning=False,
         collision_with_pb_2d_planning=False,
         visualize_2d_planning=False,
@@ -186,12 +225,16 @@ class MotionPlanner:
                 )
                 self.ik_control_idx["left"] = left_control_idx
                 right_control_idx = self.robot.arm_control_idx["right"]
-                self.ik_solver["right"] = IKSolver(
-                    robot_description_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml",
-                    robot_urdf_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford.urdf",
-                    eef_name="gripper_right_grasping_frame",
-                    default_joint_pos=self.robot.default_joint_pos[right_control_idx],
-                )
+
+                if m.IS_PUBLIC_ISAACSIM:
+                    self.ik_solver["right"] = self.ik_solver["left"]
+                else:
+                    self.ik_solver["right"] = IKSolver(
+                        robot_description_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml",
+                        robot_urdf_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford.urdf",
+                        eef_name="gripper_right_grasping_frame",
+                        default_joint_pos=self.robot.default_joint_pos[right_control_idx],
+                    )
                 self.ik_control_idx["right"] = right_control_idx
             else:
                 raise ValueError("Invalid robot for generating IK solver. Must be either Fetch or Tiago")
@@ -221,15 +264,16 @@ class MotionPlanner:
         assert not ((not self.full_observability_2d_planning) and self.collision_with_pb_2d_planning)
 
         if self.full_observability_2d_planning:
-            # TODO: it may be better to unify and make that scene.floor_map uses OccupancyGridState values always
-            assert len(self.trav_map.floor_map) == 1  # We assume there is only one floor (not true for Gibson scenes)
-            self.map_2d = np.array(self.trav_map.floor_map[self.floor_num])
-            self.map_2d = np.array((self.map_2d == 255)).astype(np.float32)
-            self.per_pixel_resolution = self.trav_map.trav_map_resolution
-            assert np.array(self.map_2d).shape[0] == np.array(self.map_2d).shape[1]
-            self.grid_resolution = self.map_2d.shape[0]
-            self.occupancy_range = self.grid_resolution * self.per_pixel_resolution
-            self.robot_footprint_radius_in_map = int(np.ceil(self.robot_footprint_radius / self.per_pixel_resolution))
+            # # TODO: it may be better to unify and make that scene.floor_map uses OccupancyGridState values always
+            # assert len(self.trav_map.floor_map) == 1  # We assume there is only one floor (not true for Gibson scenes)
+            # self.map_2d = np.array(self.trav_map.floor_map[self.floor_num])
+            # self.map_2d = np.array((self.map_2d == 255)).astype(np.float32)
+            # self.per_pixel_resolution = self.trav_map.trav_map_resolution
+            # assert np.array(self.map_2d).shape[0] == np.array(self.map_2d).shape[1]
+            # self.grid_resolution = self.map_2d.shape[0]
+            # self.occupancy_range = self.grid_resolution * self.per_pixel_resolution
+            # self.robot_footprint_radius_in_map = int(np.ceil(self.robot_footprint_radius / self.per_pixel_resolution))
+            print("fixme")
         else:
             self.grid_resolution = self.scan_sensor.occupancy_grid_resolution
             self.occupancy_range = self.scan_sensor.occupancy_grid_resolution
@@ -246,7 +290,8 @@ class MotionPlanner:
             self.base_mp_resolutions = np.array([0.05, 0.05, 0.05])
         self.optimize_iter = optimize_iter
         self.initial_height = self.env.env_config["initial_pos_z_offset"]
-        self.fine_motion_plan = fine_motion_plan
+        self.check_selfcollisions_in_path = check_selfcollisions_in_path
+        self.check_collisions_with_env_in_path = check_collisions_with_env_in_path
         self.robot_type = self.robot.model_name
 
         self.marker = None
@@ -335,7 +380,7 @@ class MotionPlanner:
             # print(f"Testing valid navigate_to position with collision")
             collision_free = self.env.test_valid_position(
                 obj=self.robot,
-                pos=np.array((x, y, self.trav_map.floor_heights[self.floor_num])),
+                pos=np.array((x, y, 0)),#self.trav_map.floor_heights[self.floor_num])),
                 ori=np.array([0, 0, theta]),
             )
             # print(f"navigate_to goal is collision free: {collision_free}")
@@ -384,8 +429,10 @@ class MotionPlanner:
             obstacles = self.mp_obstacles - set(self.floor_obj.link_prim_paths) - obj_prim_paths_to_ignore if \
                 self.collision_with_pb_2d_planning else set()
 
+            robot_body_id = list(self.ik_solver.values())[0].robot_body_id
+
             path = plan_base_motion_2d(
-                self.robot_body_id,
+                robot_body_id,
                 [x, y, theta],
                 (tuple(np.min(corners, axis=0)), tuple(np.max(corners, axis=0))),
                 map_2d=map_2d,
@@ -406,6 +453,8 @@ class MotionPlanner:
                 metric2map=[None, self.trav_map.world_to_map][self.full_observability_2d_planning],
                 flip_vertically=self.full_observability_2d_planning,
                 use_pb_for_collisions=self.collision_with_pb_2d_planning,
+                robot=self.robot,
+                simulator=self.env.simulator,
             )
 
         if path is not None and len(path) > 0:
@@ -446,13 +495,14 @@ class MotionPlanner:
                     robot_position[0] = way_point[0]
                     robot_position[1] = way_point[1]
                     robot_orn = T.euler2quat([0, 0, way_point[2]])
-
                     self.robot.set_position_orientation(robot_position, robot_orn)
                     if grasping_object:
                         gripper_pos = self.robot.get_eef_position(arm="default")
                         gripper_orn = self.robot.get_eef_orientation(arm="default")
                         object_pose = T.pose_transform(grasp_pose[0], grasp_pose[1], gripper_pos, gripper_orn)
                         # grasped_obj.set_position_orientation(*object_pose)
+                    self.env.simulator.step()
+                    time.sleep(0.01)
             else:
                 robot_position, robot_orn = self.robot.get_position_orientation()
                 robot_position[0] = path[-1][0]
@@ -476,37 +526,83 @@ class MotionPlanner:
 
         :return: IK parameters
         """
-        arm = self.robot.default_arm if arm == "default" else arm
-        rest_position = None
-        if self.robot_type == "Fetch":
-            rest_position = self.robot.get_joint_positions()[self.ik_control_idx[arm]]
-        elif self.robot_type == "Tiago":
-            rest_position = self.robot.get_joint_positions()[self.ik_control_idx[arm]]
-        elif self.robot_type == "BehaviorRobot":
-            log.warning("Not implemented!")
-        else:
-            log.warning("Robot type is not compatible with IK for motion planning")
-            raise ValueError
 
-        return rest_position
+        if m.IS_PUBLIC_ISAACSIM:
+            arm = self.robot.default_arm
+            max_limits, min_limits, rest_position, joint_range, joint_damping = None, None, None, None, None
+            if self.robot_type == "Fetch":
+                arm_joint_pb_ids = np.array(
+                    joints_from_names(self.ik_solver[arm].robot_body_id, self.robot.arm_joint_names[self.robot.default_arm])
+                )
+                max_limits_arm = get_max_limits(self.ik_solver[arm].robot_body_id, arm_joint_pb_ids)
+                max_limits = [0.5, 0.5] + [max_limits_arm[0]] + [0.5, 0.5] + list(max_limits_arm[1:]) + [0.05, 0.05]
+                min_limits_arm = get_min_limits(self.ik_solver[arm].robot_body_id, arm_joint_pb_ids)
+                min_limits = [-0.5, -0.5] + [min_limits_arm[0]] + [-0.5, -0.5] + list(min_limits_arm[1:]) + [0.0, 0.0]
+                # increase torso_lift_joint lower limit to 0.02 to avoid self-collision
+                min_limits[2] += 0.02
+                current_position = get_joint_positions(self.ik_solver[arm].robot_body_id, arm_joint_pb_ids)
+                rest_position = [0.0, 0.0] + [current_position[0]] + [0.0, 0.0] + list(current_position[1:]) + [0.01,
+                                                                                                                0.01]
+                joint_range = list(np.array(max_limits) - np.array(min_limits))
+                joint_range = [item + 1 for item in joint_range]
+                joint_damping = [0.1 for _ in joint_range]
+            elif self.robot_type == "Tiago":
+                max_limits = get_max_limits(self.ik_solver[arm].robot_body_id, get_movable_joints(self.ik_solver[arm].robot_body_id))
+                min_limits = get_min_limits(self.ik_solver[arm].robot_body_id, get_movable_joints(self.ik_solver[arm].robot_body_id))
+
+                # TODO: Manually limiting the torso
+                # for joint_name in self.robot.arm_joint_names[arm]:
+                #     if "trunk" in joint_name or "torso" in joint_name:
+                #         torso_idx = movable_from_joints(self.ik_solver[arm].robot_body_id, [joint_from_name(self.ik_solver[arm].robot_body_id, joint_name)])[0]
+                #         max_limits[torso_idx] -= 0.03
+                #         min_limits[torso_idx] += 0.03
+                current_position = get_joint_positions(self.ik_solver[arm].robot_body_id, get_movable_joints(self.ik_solver[arm].robot_body_id))
+                rest_position = list(current_position)
+                joint_range = list(np.array(max_limits) - np.array(min_limits))
+                joint_damping = [0.1 for _ in joint_range]
+            elif self.robot_type == "BehaviorRobot":
+                log.warning("Not implemented!")
+            else:
+                log.warning("Robot type is not compatible with IK for motion planning")
+                raise ValueError
+
+            return max_limits, min_limits, rest_position, joint_range, joint_damping
+        else:
+            arm = self.robot.default_arm if arm == "default" else arm
+            rest_position = None
+            if self.robot_type == "Fetch":
+                rest_position = self.robot.get_joint_positions()[self.ik_control_idx[arm]]
+            elif self.robot_type == "Tiago":
+                rest_position = self.robot.get_joint_positions()[self.ik_control_idx[arm]]
+            elif self.robot_type == "BehaviorRobot":
+                log.warning("Not implemented!")
+            else:
+                log.warning("Robot type is not compatible with IK for motion planning")
+                raise ValueError
+
+            return rest_position
 
     def get_joint_pose_for_ee_pose_with_ik(
         self,
         ee_position,
         ee_orientation=None,
         arm=None,
-        check_collisions=True,
+        check_selfcollisions=True,
+        check_collisions_with_env=True,
         randomize_initial_pose=True,
         obj_name=None,
     ):
         """
         Attempt to find arm_joint_pose that satisfies ee_position (and possibly, ee_orientation)
         If failed, return None
+        NOTE: This function must remain SAFE, i.e., the state of the simulator before and after calling this function
+        should be the same, no matter if the function succeeds or fails
 
         :param ee_position: desired position of the end-effector [x, y, z] in the world frame
         :param ee_orientation: desired orientation of the end-effector [x,y,z,w] in the world frame
         :param arm: string of the name of the arm to use. Use default arm if None
-        :param check_collisions: whether we check for collisions in the solution or not
+        :param check_selfcollisions: whether we check for selfcollisions (robot-robot) in the solution or not
+        :param check_collisions_with_env: whether we check for collisions robot-environment in the solution or not
         :return: arm joint_pose
         """
         log.debug("IK query for end-effector pose ({}, {}) with arm {}".format(ee_position, ee_orientation, arm))
@@ -515,64 +611,11 @@ class MotionPlanner:
             arm = self.robot.default_arm
             log.warning("Defaulting to get IK for the default arm: {}".format(arm))
 
-        if self.robot_type == "BehaviorRobot":
-            # TODO
-            if arm == "left_hand":
-                position_arm_shoulder_in_bf = np.array(
-                    [0, 0, 0]
-                )  # TODO: get the location we set the max hand distance from
-            elif arm == "right_hand":
-                position_arm_shoulder_in_bf = np.array(
-                    [0, 0, 0]
-                )  # TODO: get the location we set the max hand distance from
-            body_pos, body_orn = self.robot.get_position_orientation()
-            position_arm_shoulder_in_wf, _ = p.multiplyTransforms(
-                body_pos, body_orn, position_arm_shoulder_in_bf, [0, 0, 0, 1]
-            )
-            if l2_distance(ee_position, position_arm_shoulder_in_wf) > 0.7:  # TODO: get max distance
-                return None
-            else:
-                if ee_orientation is not None:
-                    return np.concatenate((ee_position, p.getEulerFromQuaternion(ee_orientation)))
-                else:
-                    current_orientation = np.array(self.robot.get_eef_orientation(arm=arm))
-                    current_orientation_rpy = p.getEulerFromQuaternion(current_orientation)
-                    return np.concatenate((ee_position, np.asarray(current_orientation_rpy)))
-
         ik_start = time.time()
         rest_position = self.get_ik_parameters()
 
         n_attempt = 0
-        max_attempt = 75
-
-        # arm_joint_pb_ids = np.array(joints_from_names(self.robot_body_id, self.robot.arm_joint_names[arm]))
-        # sample_fn = get_sample_fn(self.robot_body_id, arm_joint_pb_ids)
-        # base_pose = get_base_values(self.robot_body_id)
-        # initial_pb_state = p.saveState()
-
-        # self.robot.keep_still()
-        # self.simulator_step()
-        # self.simulator_step()
-        # self.simulator_step()
-
-        # jnt_state = self.robot.get_joints_state()
-
-        state = self.env.dump_state(serialized=False)
-        # self.simulator_step()
-        # self.simulator_step()
-        # self.env.load_state(state=state, serialized=False)
-        # self.simulator_step()
-        # self.simulator_step()
-        # for i in range(100):
-        #     self.simulator_step()
-        base_pos, base_quat = self.robot.get_position_orientation()
-        base_pos_col_check = base_pos + np.array([0,0,self.initial_height])
-        control_idx = self.ik_control_idx[arm]
-        n_control_idx = len(control_idx)
-        current_joint_pos = self.robot.get_joint_positions()
-        jnt_range = (self.robot.joint_upper_limits - self.robot.joint_lower_limits)[control_idx]
-        jnt_low = self.robot.joint_lower_limits[control_idx]
-        jnt_middle = ((self.robot.joint_upper_limits + self.robot.joint_lower_limits) / 2.0)[control_idx]
+        max_attempt = 100
 
         ee_orientation = np.array([0, 0, 0, 1]) if ee_orientation is None else ee_orientation
         if obj_name in [
@@ -580,80 +623,190 @@ class MotionPlanner:
         ]:
             ee_orientation = np.array([0.1830127, -0.1830127, 0.6830127, 0.6830127])
 
-        # Find the local transform
-        ee_local_pos, ee_local_ori = T.relative_pose_transform(ee_position, ee_orientation, base_pos, base_quat)
-        ee_local_ori = np.array([0,0,0,1])
+        log.debug(f"Original IK query at {ee_position}, {ee_orientation} in world frame")
+        if m.IS_PUBLIC_ISAACSIM:    # Using pybullet IK
+            # There are 2 options:
+            # a) we move the pybullet robot to the current robot location and query a desired ee location in world frame
+            # b) we keep the robot at the origin and we use the desired ee location in robot base link
+            # We are going with a)
+            robot_position, robot_orientation_q = self.robot.get_position_orientation()
+            base_pose = base_values_from_pose((robot_position, robot_orientation_q))
+            set_base_values_with_z(self.ik_solver[arm].robot_body_id, base_pose, z=0)
+            p.stepSimulation()
 
-        ee_local_pos = ee_local_pos
+            arm_joint_pb_ids = np.array(joints_from_names(self.ik_solver[arm].robot_body_id, self.robot.arm_joint_names[arm]))
+            sample_fn = get_sample_fn(self.ik_solver[arm].robot_body_id, arm_joint_pb_ids)
 
-        # print(f"attempting ik at: {ee_local_pos}, {ee_local_ori}")
+            initial_pb_state = p.saveState()
 
-        # find collision-free IK solution for arm_subgoal
-        while n_attempt < max_attempt:
+            max_limits, min_limits, rest_position, joint_range, joint_damping = self.get_ik_parameters()
 
-            if randomize_initial_pose:
-                # Start the iterative IK from a different random initial joint pose
-                #sample = sample_fn()
-                rest_position = np.random.rand(n_control_idx) * jnt_range + jnt_low
+            n_attempt = 0
+            max_attempt = 100
 
-            # Calculate IK solution
-            control_joint_pos = self.ik_solver[arm].solve(
-                target_pos=ee_local_pos,
-                target_quat=ee_local_ori,
-                initial_joint_pos=rest_position,
-            )
+            # find collision-free IK solution for arm_subgoal
+            while n_attempt < max_attempt:
 
-            # Set the joint positions
-            current_joint_pos[control_idx] = control_joint_pos
-            self.robot.set_joint_positions(current_joint_pos)
-            # app.update()
+                if randomize_initial_pose:
+                    # Start the iterative IK from a different random initial joint pose
+                    set_joint_positions(self.ik_solver[arm].robot_body_id, arm_joint_pb_ids, sample_fn())
 
-            dist = l2_distance(self.robot.get_eef_position(arm=arm), ee_position)
-            if dist > self.arm_ik_threshold:
-                # input(f"Distance from pose: {dist}, max: {self.arm_ik_threshold}")
-                log.warning("IK solution is not close enough to the desired pose. Distance: {}".format(dist))
-                n_attempt += 1
-                continue
+                kwargs = dict()
+                if ee_orientation is not None:
+                    kwargs["targetOrientation"] =  ee_orientation
 
-            if check_collisions:
-                # simulator_step will slightly move the robot base and the objects
-                self.robot.set_position(base_pos_col_check)
-                # self.reset_object_states()
-                # TODO: have a principled way for stashing and resetting object states
-                # arm should not have any collision
-                collision_free = not self.env.check_collision(linksA=self.robot.arm_links[arm], step_sim=True)
-
-                if not collision_free:
-                    n_attempt += 1
-                    log.warning("IK solution brings the arm into collision")
-                    continue
-
-                # gripper should not have any self-collision
-                collision_free = not self.env.check_collision(
-                    linksA=[self.robot.eef_links[arm]] + self.robot.finger_links[arm],
-                    objsB=self.robot,
-                    step_sim=False,
+                ee_link_id = link_from_name(self.ik_solver[arm].robot_body_id, self.robot.eef_link_names[arm])
+                joint_pose = p.calculateInverseKinematics(
+                    self.ik_solver[arm].robot_body_id,
+                    ee_link_id,
+                    targetPosition=ee_position,
+                    lowerLimits=min_limits,
+                    upperLimits=max_limits,
+                    jointRanges=joint_range,
+                    restPoses=rest_position,
+                    jointDamping=joint_damping,
+                    maxNumIterations=100,
+                    **kwargs,
                 )
-                if not collision_free:
+
+                # Pybullet returns the joint poses for the entire body. Get only for the relevant arm
+                arm_movable_joint_pb_idx = movable_from_joints(self.ik_solver[arm].robot_body_id, arm_joint_pb_ids)
+                joint_pose = np.array(joint_pose)[arm_movable_joint_pb_idx]
+                set_joint_positions(self.ik_solver[arm].robot_body_id, arm_joint_pb_ids, joint_pose)
+
+                ee_current_position = get_link_position_from_name(self.ik_solver[arm].robot_body_id, self.robot.eef_link_names[arm]) #self.robot.get_eef_position(arm=arm)  #TODO:
+                dist = l2_distance(ee_current_position, ee_position)
+                if dist > self.arm_ik_threshold:
+                    log.debug("IK solution is not close enough to the desired pose. Distance: {}".format(dist))
                     n_attempt += 1
-                    log.warning("IK solution brings the gripper into collision")
                     continue
 
-            # self.episode_metrics['arm_ik_time'] += time() - ik_start
-            # p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, True)
+                if check_selfcollisions:    # This can be done with pybullet, as it contains the robot
+                    p.stepSimulation()
+                    # simulator_step will slightly move the robot base and the objects
+                    set_base_values_with_z(self.ik_solver[arm].robot_body_id, base_pose, z=0)
 
-            # Restore state
+                    # Only the robot is in pybullet. If there are collisions, are self-collisions
+                    # TODO: Weird, the is_collision_free and the pair_wise_collisions return different results
+                    #  While is_collision_free says that none of the robot arm links are in ANY collision, the
+                    #  pairwise_link_collision, which internally checks if there is ANY point of contact (distance less
+                    #  than 0), tells us that there are collisions between the arm and some other links. Using the most
+                    #  restrictive code
+                    # selfcollision_free = is_collision_free(body_a=self.ik_solver[arm].robot_body_id,
+                    #                                    link_a_list=arm_joint_pb_ids)
+                    selfcollision_free = True
+                    disabled_self_colliding_pairs = {
+                        (link_from_name(self.ik_solver[arm].robot_body_id, link1),
+                         link_from_name(self.ik_solver[arm].robot_body_id, link2))
+                        for (link1, link2) in self.robot.disabled_collision_pairs
+                    }
+                    check_link_pairs = get_self_link_pairs(self.ik_solver[arm].robot_body_id, arm_joint_pb_ids, disabled_self_colliding_pairs)
+                    for link1, link2 in check_link_pairs:
+                        if pairwise_link_collision(self.ik_solver[arm].robot_body_id, link1, self.ik_solver[arm].robot_body_id, link2):
+                            log.debug(
+                                f'Self-collision: body {get_body_name(self.ik_solver[arm].robot_body_id)} ({self.ik_solver[arm].robot_body_id}) link {get_link_name(self.ik_solver[arm].robot_body_id, link1)} ({link1}) '
+                                f'body {get_body_name(self.ik_solver[arm].robot_body_id)} ({self.ik_solver[arm].robot_body_id}) link {get_link_name(self.ik_solver[arm].robot_body_id, link2)} ({link2})')
+                            selfcollision_free = False
+                            break
+
+                    # gripper should not have any self-collision
+                    ee_link_id = link_from_name(self.ik_solver[arm].robot_body_id, self.robot.eef_link_names[arm])
+                    ee_selfcollision_free = is_collision_free(
+                        body_a=self.ik_solver[arm].robot_body_id,
+                        link_a_list=[ee_link_id],
+                        body_b=self.ik_solver[arm].robot_body_id,
+                    )
+                    if not selfcollision_free or not ee_selfcollision_free:
+                        n_attempt += 1
+                        log.debug("IK solution brings the robot to self collision")
+                        continue
+
+                if check_collisions_with_env:   # This needs to be done with Omniverse because PB doesn't know about env
+                    # TODO: we need to move the robot to the configuration of the IK solution and check for collisions
+                    #  We should not check for collisions with the fingers
+                    #  After checking, the state of the simulator should be left unchanged (possibly save/restore state)
+                    log.debug("Not implemented yet")
+
+                p.restoreState(initial_pb_state)
+                p.removeState(initial_pb_state)
+                log.debug("IK Solver found a valid configuration")
+                return joint_pose
+
+            p.restoreState(initial_pb_state)
+            p.removeState(initial_pb_state)
+            log.debug("IK Solver failed to find a configuration")
+            return None
+
+        else:   # Using Lula IK
+            base_pos, base_quat = self.robot.get_position_orientation()
+            # Lula IK needs the goal for the end-effector relative to the robot reference frame: Find the local transform
+            ee_local_pos, ee_local_ori = T.relative_pose_transform(ee_position, ee_orientation, base_pos, base_quat)
+            log.debug(f"Attempting IK at {ee_local_pos}, {ee_local_ori} in robot frame")
+
+            state = self.env.dump_state(serialized=False)
+            base_pos_col_check = base_pos + np.array([0,0,self.initial_height])
+            control_idx = self.ik_control_idx[arm]
+            n_control_idx = len(control_idx)
+            current_joint_pos = self.robot.get_joint_positions()
+            jnt_range = (self.robot.joint_upper_limits - self.robot.joint_lower_limits)[control_idx]
+            jnt_low = self.robot.joint_lower_limits[control_idx]
+            jnt_middle = ((self.robot.joint_upper_limits + self.robot.joint_lower_limits) / 2.0)[control_idx]
+
+            # find collision-free IK solution for arm_subgoal
+            while n_attempt < max_attempt:
+
+                if randomize_initial_pose:
+                    # Start the iterative IK from a different random initial joint pose
+                    rest_position = np.random.rand(n_control_idx) * jnt_range + jnt_low
+
+                # Calculate IK solution
+                control_joint_pos = self.ik_solver[arm].solve(
+                    target_pos=ee_local_pos,
+                    target_quat=ee_local_ori,
+                    initial_joint_pos=rest_position,
+                )
+
+                # Set the joint positions
+                current_joint_pos[control_idx] = control_joint_pos
+                self.robot.set_joint_positions(current_joint_pos)
+
+                dist = l2_distance(self.robot.get_eef_position(arm=arm), ee_position)
+                if dist > self.arm_ik_threshold:
+                    # input(f"Distance from pose: {dist}, max: {self.arm_ik_threshold}")
+                    log.warning("IK solution is not close enough to the desired pose. Distance: {}".format(dist))
+                    n_attempt += 1
+                    continue
+
+                if check_collisions:
+                    # simulator_step will slightly move the robot base and the objects
+                    self.robot.set_position(base_pos_col_check)
+                    # arm should not have any collision
+                    collision_free = not self.env.check_collision(linksA=self.robot.arm_links[arm], step_sim=True)
+
+                    if not collision_free:
+                        n_attempt += 1
+                        log.warning("IK solution brings the arm into collision")
+                        continue
+
+                    # gripper should not have any self-collision
+                    collision_free = not self.env.check_collision(
+                        linksA=[self.robot.eef_links[arm]] + self.robot.finger_links[arm],
+                        objsB=self.robot,
+                        step_sim=False,
+                    )
+                    if not collision_free:
+                        n_attempt += 1
+                        log.warning("IK solution brings the gripper into collision")
+                        continue
+
+                # Restore state
+                self.env.load_state(state=state, serialized=False)
+                log.debug("IK Solver found a valid configuration")
+                return control_joint_pos
+
             self.env.load_state(state=state, serialized=False)
-            # app.update()
-            log.debug("IK Solver found a valid configuration")
-            return control_joint_pos
-
-        # p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, True)
-        self.env.load_state(state=state, serialized=False)
-        # app.update()
-        # self.episode_metrics['arm_ik_time'] += time() - ik_start
-        log.debug("IK Solver failed to find a configuration")
-        return None
+            log.debug("IK Solver failed to find a configuration")
+            return None
 
     def plan_arm_motion_to_joint_pose(
         self, arm_joint_pose, initial_arm_configuration=None, arm=None, disable_collision_hand_links=False
@@ -677,20 +830,19 @@ class MotionPlanner:
             log.warning("Defaulting to planning a joint space trajectory with the default arm: {}".format(arm))
 
         disabled_self_colliding_pairs = {}
-        if self.fine_motion_plan:
-            check_self_collisions = True
+        if self.check_selfcollisions_in_path:
             if self.robot_type != "BehaviorRobot":  # For any other robot, remove the collisions from the list
                 disabled_self_colliding_pairs = {
-                    (link_from_name(self.robot_body_id, link1), link_from_name(self.robot_body_id, link2))
+                    (link_from_name(self.ik_solver[arm].robot_body_id, link1), link_from_name(self.ik_solver[arm].robot_body_id, link2))
                     for (link1, link2) in self.robot.disabled_collision_pairs
                 }
+
+        if self.check_collisions_with_env_in_path:
             mp_obstacles = self.mp_obstacles
         else:
-            check_self_collisions = False
             mp_obstacles = []
 
-        p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, False)
-        initial_pb_state = p.saveState()
+        state = self.env.dump_state(serialized=False)
 
         if initial_arm_configuration is not None:
             log.warning(
@@ -700,7 +852,8 @@ class MotionPlanner:
             exit(-1)
         else:
             # Set the arm in the default configuration to initiate arm motion planning (e.g. untucked)
-            self.robot.untuck()
+            self.robot.tuck()
+            self.simulator_step()
 
         disabled_colliding_links = []
         if disable_collision_hand_links:
@@ -709,16 +862,19 @@ class MotionPlanner:
             ]
 
         if self.robot_type != "BehaviorRobot":
-            arm_joint_pb_ids = np.array(joints_from_names(self.robot_body_id, self.robot.arm_joint_names[arm]))
+            arm_joint_pb_ids = np.array(joints_from_names(self.ik_solver[arm].robot_body_id, self.robot.arm_joint_names[arm]))
             arm_path = plan_joint_motion(
-                self.robot_body_id,
-                arm_joint_pb_ids,
-                arm_joint_pose,
+                body=self.ik_solver[arm].robot_body_id,
+                joints=arm_joint_pb_ids,
+                end_conf=arm_joint_pose,
                 disabled_colliding_links=disabled_colliding_links,
-                check_self_collisions=check_self_collisions,
+                check_self_collisions=self.check_selfcollisions_in_path,
                 disabled_self_colliding_pairs=disabled_self_colliding_pairs,
                 obstacles=mp_obstacles,
                 algorithm=self.arm_mp_algo,
+                robot=self.robot,
+                simulator=self.env.simulator,
+                og_joint_ids=np.concatenate((self.robot.trunk_control_idx, self.robot.arm_control_idx[arm])),
             )
         else:
             arm_path = plan_hand_motion_br(
@@ -731,9 +887,8 @@ class MotionPlanner:
                 obstacles=mp_obstacles,
                 algorithm=self.arm_mp_algo,
             )
-        p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, True)
-        restoreState(initial_pb_state)
-        p.removeState(initial_pb_state)
+
+        self.env.load_state(state=state, serialized=False)
 
         if arm_path is not None and len(arm_path) > 0:
             log.warning("Path found!")
@@ -756,7 +911,7 @@ class MotionPlanner:
         :param set_marker: whether we set the visual marker at the given goal
         :return: arm trajectory or None if no plan can be found
         """
-        log.warn("Planning arm motion to end-effector pose ({}, {})".format(ee_position, ee_orientation))
+        log.warning("Planning arm motion to end-effector pose ({}, {})".format(ee_position, ee_orientation))
         if self.marker is not None and set_marker:
             self.set_marker_position_direction(ee_position, [0, 0, 1])
 
@@ -799,7 +954,7 @@ class MotionPlanner:
 
         if arm is None:
             arm = self.robot.default_arm
-            log.warn("Planning straight line for the default arm: {}".format(arm))
+            log.warning("Planning straight line for the default arm: {}".format(arm))
 
         if line_length == 0.0:
             log.warning("Requested line of length 0. Returning a path with only one configuration: initial_arm_pose")
@@ -811,7 +966,12 @@ class MotionPlanner:
         if self.robot_type != "BehaviorRobot":
             joint_pos = self.robot.get_joint_positions()
             joint_pos[self.ik_control_idx[arm]] = initial_arm_pose
-            self.robot.set_joint_positions(joint_pos)
+
+            if m.IS_PUBLIC_ISAACSIM:
+                arm_joint_pb_ids = np.array(joints_from_names(self.ik_solver[arm].robot_body_id, self.robot.arm_joint_names[arm]))
+                set_joint_positions(self.ik_solver[arm].robot_body_id, arm_joint_pb_ids, initial_arm_pose)
+            else:
+                self.robot.set_joint_positions(joint_pos)
             # app.update()
             # app.update()
             # self.simulator_sync()
@@ -834,7 +994,7 @@ class MotionPlanner:
             # print(i, 'start joint pose time {}'.format(start_joint_pose - start_push_goal))
             # Solve the IK problem to set the arm at the desired position
             joint_pose = self.get_joint_pose_for_ee_pose_with_ik(
-                push_goal, ee_orientation=ee_orn, arm=arm, check_collisions=False, randomize_initial_pose=False
+                push_goal, ee_orientation=ee_orn, arm=arm, check_selfcollisions=True, check_collisions_with_env=False, randomize_initial_pose=False
             )
             start_restore = time.time()
             # print('start restore {}'.format(start_restore-start_joint_pose))
@@ -851,349 +1011,6 @@ class MotionPlanner:
         # app.update()
         return line_path
 
-    # def plan_ee_push(
-    #     self,
-    #     pushing_location,
-    #     pushing_direction,
-    #     ee_pushing_orn=None,
-    #     pre_pushing_distance=0.1,
-    #     pushing_distance=0.1,
-    #     pushing_steps=50,
-    #     plan_full_pre_push_motion=True,
-    #     arm=None,
-    # ):
-    #     """
-    #     Plans a full pushing trajectory.
-    #     The trajectory includes a pre-pushing motion in free space (contact-free) to a location in front of the pushing
-    #     location, and a pushing motion (with collisions, to interact) in a straight line in Cartesian space along the
-    #     pushing direction
-    #
-    #     :param pushing_location: 3D point to push at
-    #     :param pushing_direction: direction to push after reaching that point
-    #     :param ee_pushing_orn: orientation of the end effector during pushing [x,y,z,w]. None if we do not constraint it
-    #     :param pre_pushing_distance: distance in front of the pushing point along the pushing direction to plan a motion
-    #         in free space before the interaction
-    #     :param pushing_distance: distance after the pushing point along the pushing direction to move in the interaction
-    #         push. The total motion in the second phase will be pre_pushing_distance + pushing_distance
-    #     :param pushing_steps: steps to compute IK along a straight line for the second phase of the push (interaction)
-    #     :param arm: which arm to use for multi-arm agents. `None` to use the default arm
-    #     :return: tuple of (pre_push_path, push_interaction_path) with the joint space trajectory to follow in the two
-    #         phases of the interaction. Both will be None if the planner fails to find a path
-    #     """
-    #     log.warning(
-    #         "Planning end-effector pushing action at point {} with direction {}".format(
-    #             pushing_location, pushing_direction
-    #         )
-    #     )
-    #     if self.marker is not None:
-    #         self.set_marker_position_direction(pushing_location, pushing_direction)
-    #
-    #     if arm is None:
-    #         arm = self.robot.default_arm
-    #         log.warning("Pushing with the default arm: {}".format(arm))
-    #
-    #     pre_pushing_location = pushing_location - pre_pushing_distance * pushing_direction
-    #     log.warning(
-    #         "It will plan a motion to the location {}, {} m in front of the pushing location"
-    #         "".format(pre_pushing_location, pre_pushing_distance)
-    #     )
-    #
-    #     if plan_full_pre_push_motion:
-    #         pre_push_path = self.plan_ee_motion_to_cartesian_pose(
-    #             pre_pushing_location, ee_orientation=ee_pushing_orn, arm=arm
-    #         )
-    #     else:
-    #         log.warning("Not planning the pre-push path, only checking feasibility of the last location.")
-    #         last_pose = self.get_joint_pose_for_ee_pose_with_ik(
-    #             pre_pushing_location, ee_orientation=ee_pushing_orn, arm=arm
-    #         )
-    #         pre_push_path = [last_pose] if last_pose is not None else []
-    #
-    #     push_interaction_path = None
-    #
-    #     if pre_push_path is None or len(pre_push_path) == 0:
-    #         log.warning("Planning failed: no path found to pre-pushing location")
-    #     else:
-    #         push_interaction_path = self.plan_ee_straight_line_motion(
-    #             pre_push_path[-1],
-    #             pushing_location
-    #             - pushing_direction * pre_pushing_distance,  # This is where the pre-pushing path should end
-    #             pushing_direction,
-    #             ee_orn=ee_pushing_orn,
-    #             line_length=pre_pushing_distance + pushing_distance,
-    #             steps=pushing_steps,
-    #             arm=arm,
-    #         )
-    #         if push_interaction_path is None:
-    #             log.warn("Planning failed: no path found to push the object")
-    #
-    #     return pre_push_path, push_interaction_path
-
-    # def plan_ee_pull(
-    #     self,
-    #     pulling_location,
-    #     pulling_direction,
-    #     ee_pulling_orn=None,
-    #     pre_pulling_distance=0.1,
-    #     pulling_distance=0.1,
-    #     pulling_steps=50,
-    #     plan_full_pre_pull_motion=True,
-    #     arm=None,
-    # ):
-    #     """
-    #     Plans a full pulling trajectory.
-    #     The trajectory includes a pre-pulling motion in free space (contact-free) to a location in front of the pulling
-    #     location, and a pulling motion (with collisions, to pull) in a straight line in Cartesian space along the
-    #     pulling direction
-    #
-    #     :param pulling_location: 3D point to push at
-    #     :param pulling_direction: direction to push after reaching that point
-    #     :param pre_pulling_distance: distance in front of the pulling point in the opposite direction to the pulling
-    #         direction to plan a motion in free space before the interaction pull.
-    #     :param pulling_distance: distance after the pulling point along the pulling direction to move in the interaction
-    #         push.
-    #     :param pulling_steps: steps to compute IK
-    #     :param arm: which arm to use for multi-arm agents. `None` to use the default arm
-    #     :return: tuple of (pre_pull_path, pull_interaction_path1, pull_interaction_path2) with the joint space
-    #         trajectory to follow in the three phases of the interaction. All will be None if the planner fails to find a
-    #         path
-    #     """
-    #     log.warning(
-    #         "Planning end-effector pulling action at point {} with direction {}".format(
-    #             pulling_location, pulling_direction
-    #         )
-    #     )
-    #     if self.marker is not None:
-    #         self.set_marker_position_direction(pulling_location, pulling_direction)
-    #
-    #     if arm is None:
-    #         arm = self.robot.default_arm
-    #         log.warning("Pulling with the default arm: {}".format(arm))
-    #
-    #     pre_pulling_location = pulling_location + pre_pulling_distance * pulling_direction
-    #     log.warning(
-    #         "It will plan a motion to the location {}, {} m in front of the pulling location"
-    #         "".format(pre_pulling_location, pre_pulling_distance)
-    #     )
-    #
-    #     if ee_pulling_orn is None:
-    #         # Compute orientation of the hand to align the fingers to the opposite of the pulling direction and the palm up
-    #         # to the ceiling
-    #         # Assuming fingers point in +x, palm points in +z in eef
-    #         # In world frame, +z points up
-    #         desired_x_dir_normalized = -np.array(pulling_direction) / np.linalg.norm(np.array(pulling_direction))
-    #         z_dir_in_wf = np.array([0, 0, 1.0])
-    #         desired_y_dir = -np.cross(desired_x_dir_normalized, z_dir_in_wf)
-    #         desired_y_dir_normalized = desired_y_dir / np.linalg.norm(desired_y_dir)
-    #         desired_z_dir_normalized = np.cross(desired_x_dir_normalized, desired_y_dir_normalized)
-    #         rot_matrix = np.column_stack((desired_x_dir_normalized, desired_y_dir_normalized, desired_z_dir_normalized))
-    #         quatt = quatXYZWFromRotMat(rot_matrix)
-    #     else:
-    #         log.warning("Planning pulling with end-effector orientation {}".format(ee_pulling_orn))
-    #         quatt = ee_pulling_orn
-    #
-    #     if plan_full_pre_pull_motion:
-    #         pre_pull_path = self.plan_ee_motion_to_cartesian_pose(pre_pulling_location, ee_orientation=quatt, arm=arm)
-    #     else:
-    #         log.warning("Not planning the pre-pull path, only checking feasibility of the last location.")
-    #         last_pose = self.get_joint_pose_for_ee_pose_with_ik(pre_pulling_location, ee_orientation=quatt, arm=arm)
-    #         pre_pull_path = [last_pose] if last_pose is not None else []
-    #
-    #     approach_interaction_path = None
-    #     pull_interaction_path = None
-    #
-    #     if pre_pull_path is None or len(pre_pull_path) == 0:
-    #         log.warning("Planning failed: no path found to pre-pulling location")
-    #     else:
-    #         approach_interaction_path = self.plan_ee_straight_line_motion(
-    #             pre_pull_path[-1],  # This is where the pre-pulling path should end
-    #             pre_pulling_location,
-    #             -pulling_direction,
-    #             ee_orn=quatt,
-    #             line_length=pre_pulling_distance,
-    #             steps=pulling_steps,
-    #             arm=arm,
-    #         )
-    #         if approach_interaction_path is None:
-    #             log.warn("Planning failed: no path found to approach the object to pull")
-    #         else:
-    #             pull_interaction_path = self.plan_ee_straight_line_motion(
-    #                 approach_interaction_path[-1],
-    #                 pre_pulling_location - pulling_direction * pre_pulling_distance,
-    #                 pulling_direction,
-    #                 ee_orn=quatt,
-    #                 line_length=pulling_distance,
-    #                 steps=pulling_steps,
-    #                 arm=arm,
-    #             )
-    #
-    #     return pre_pull_path, approach_interaction_path, pull_interaction_path
-    # '''
-    # def plan_arm_pull(self, hit_pos, hit_normal):
-    #     """
-    #     Attempt to reach a 3D position and prepare for a push later
-    #
-    #     :param hit_pos: 3D position to reach
-    #     :param hit_normal: direction to push after reacehing that position
-    #     :return: arm trajectory or None if no plan can be found
-    #     """
-    #     log.debug("Planning arm push at point {} with direction {}".format(hit_pos, hit_normal))
-    #
-    #     hit_pos = hit_pos + (np.array(hit_normal) * -1.0) * (self.arm_interaction_length * 0.3)
-    #
-    #     # if self.marker is not None:
-    #     #     self.set_marker_position_direction(hit_pos, hit_normal)
-    #     #
-    #     # # Solve the IK problem to set the arm at the desired position
-    #     # joint_positions = self.get_joint_pose_for_ee_pose_with_ik(hit_pos)
-    #
-    #     if joint_positions is not None:
-    #         # Set the arm in the default configuration to initiate arm motion planning (e.g. untucked)
-    #         # set_joint_positions(self.robot_id, self.arm_joint_ids, self.arm_default_joint_positions)
-    #         self.simulator_sync()
-    #         plan = self.plan_base_motion([hit_pos[0], hit_pos[1], 0.05])
-    #         return plan
-    #     else:
-    #         log.debug("Planning failed: goal position may be non-reachable")
-    #         return None
-    #
-    # def interact_pull(self, push_point, push_direction):
-    #     """
-    #     Move the arm starting from the push_point along the push_direction
-    #     and physically simulate the interaction
-    #
-    #     :param push_point: 3D point to start pushing from
-    #     :param push_direction: push direction
-    #     """
-    #     body_ids = self.robots.get_body_ids()
-    #     assert len(body_ids) == 1, "Only single-body robots are supported."
-    #     self.robot_id = body_ids[0]
-    #     self.arm_default_joint_positions = (
-    #         0.1,
-    #         -1.41,
-    #         1.517,
-    #         0.82,
-    #         2.2,
-    #         2.96,
-    #         -1.286,
-    #         0.0,
-    #     )
-    #     self.arm_joint_names = [
-    #         "torso_lift_joint",
-    #         "shoulder_pan_joint",
-    #         "shoulder_lift_joint",
-    #         "upperarm_roll_joint",
-    #         "elbow_flex_joint",
-    #         "forearm_roll_joint",
-    #         "wrist_flex_joint",
-    #         "wrist_roll_joint",
-    #     ]
-    #     self.robot_joint_names = [
-    #         "r_wheel_joint",
-    #         "l_wheel_joint",
-    #         "torso_lift_joint",
-    #         "head_pan_joint",
-    #         "head_tilt_joint",
-    #         "shoulder_pan_joint",
-    #         "shoulder_lift_joint",
-    #         "upperarm_roll_joint",
-    #         "elbow_flex_joint",
-    #         "forearm_roll_joint",
-    #         "wrist_flex_joint",
-    #         "wrist_roll_joint",
-    #         "r_gripper_finger_joint",
-    #         "l_gripper_finger_joint",
-    #     ]
-    #     self.rest_joint_names = [
-    #         "r_wheel_joint",
-    #         "l_wheel_joint",
-    #         "head_pan_joint",
-    #         "head_tilt_joint",
-    #         "r_gripper_finger_joint",
-    #         "l_gripper_finger_joint",
-    #     ]
-    #
-    #     self.arm_joint_ids = joints_from_names(
-    #         self.robot_id,
-    #         self.arm_joint_names,
-    #     )
-    #
-    #     self.robot_arm_indices = [
-    #         self.robot_joint_names.index(arm_joint_name) for arm_joint_name in self.arm_joint_names
-    #     ]
-    #
-    #     self.rest_joint_ids = joints_from_names(
-    #         self.robot_id,
-    #         self.rest_joint_names,
-    #     )
-    #
-    #     push_vector = np.array(push_direction) * self.arm_interaction_length
-    #
-    #     max_limits, min_limits, rest_position, joint_range, joint_damping = self.get_ik_parameters()
-    #     base_pose = get_base_values(self.robot_id)
-    #
-    #     # if self.sleep_flag:
-    #     #     steps = 50
-    #     # else:
-    #     steps = 5
-    #
-    #     for i in range(steps):
-    #         push_goal = np.array(push_point) + push_vector * (i + 1) / float(steps)
-    #
-    #         joint_positions = p.calculateInverseKinematics(
-    #             self.robot_id,
-    #             self.robot.eef_links[self.robot.default_arm].link_id,
-    #             targetPosition=push_goal,
-    #             # targetOrientation=(0, 0.707, 0, 0.707),
-    #             lowerLimits=min_limits,
-    #             upperLimits=max_limits,
-    #             jointRanges=joint_range,
-    #             restPoses=rest_position,
-    #             jointDamping=joint_damping,
-    #             # solver=p.IK_DLS,
-    #             maxNumIterations=100,
-    #         )
-    #
-    #         if self.robot_type == "Fetch":
-    #             joint_positions = np.array(joint_positions)[self.robot_arm_indices]
-    #
-    #         control_joints(self.robot_id, self.arm_joint_ids, joint_positions)
-    #         control_joints(self.robot_id, self.rest_joint_ids, np.array([0.0, 0.0, 0.0, 0.45, 0.5, 0.5]))
-    #
-    #         # set_joint_positions(self.robot_id, self.arm_joint_ids, joint_positions)
-    #
-    #         # if self.robot_type == "Fetch":
-    #         #     joint_positions = np.array(joint_positions)[self.robot_arm_indices]
-    #
-    #         achieved = self.robot.get_eef_position()
-    #         self.simulator_step()
-    #         set_base_values_with_z(self.robot_id, base_pose, z=self.initial_height)
-    #
-    #         if self.mode == "gui_interactive" and self.sleep_flag:
-    #             sleep(0.02)  # for visualization
-    #
-    # def execute_arm_pull(self, plan, hit_pos, hit_normal):
-    #     """
-    #     Execute arm push given arm trajectory
-    #     Should be called after plan_arm_push()
-    #
-    #     :param plan: arm trajectory or None if no plan can be found
-    #     :param hit_pos: 3D position to reach
-    #     :param hit_normal: direction to push after reacehing that position
-    #     """
-    #     if plan is not None:
-    #         log.debug("Teleporting arm along the trajectory. No physics simulation")
-    #         self.visualize_base_path(plan)
-    #         log.debug("Performing pushing actions")
-    #         self.interact_pull(hit_pos, hit_normal)
-    #         log.debug("Teleporting arm to the default configuration")
-    #         self.visualize_base_path(plan[::-1])
-    #         # set_joint_positions(self.robot_id, self.arm_joint_ids, self.arm_default_joint_positions)
-    #         self.simulator_sync()
-    #         done, _ = self.env.task.get_termination(self.env)
-    #         if self.print_log:
-    #             print("pull done: ", done)
-    # '''
 
     def plan_ee_pick(
         self,
@@ -1219,7 +1036,7 @@ class MotionPlanner:
         :return: tuple of (pre_grasp_path, grasp_interaction_path) with the joint space trajectory to follow in the two
         phases of the interaction. Both will be None if the planner fails to find a path
         """
-        log.warning(
+        log.debug(
             "Planning end-effector grasping action at point {} with direction {}".format(
                 grasping_location, grasping_direction
             )
@@ -1229,10 +1046,10 @@ class MotionPlanner:
 
         if arm is None:
             arm = self.robot.default_arm
-            log.warning("Grasping with the default arm: {}".format(arm))
+            log.debug("Grasping with the default arm: {}".format(arm))
 
         pre_grasping_location = grasping_location - pre_grasping_distance * grasping_direction
-        log.warning(
+        log.debug(
             "It will plan a motion to the location {}, {} m in front of the grasping location"
             "".format(pre_grasping_distance, pre_grasping_location)
         )
@@ -1245,7 +1062,7 @@ class MotionPlanner:
         desired_y_dir = -np.cross(desired_x_dir_normalized, z_dir_in_wf)
 
         if np.linalg.norm(desired_y_dir) < 0.05:
-            log.warning("Approaching grasping location top-down")
+            log.debug("Approaching grasping location top-down")
             desired_y_dir_normalized = np.array([0.0, 1.0, 0.0])
         else:
             desired_y_dir_normalized = desired_y_dir / np.linalg.norm(desired_y_dir)
@@ -1256,14 +1073,14 @@ class MotionPlanner:
         if plan_full_pre_grasp_motion:
             pre_grasp_path = self.plan_ee_motion_to_cartesian_pose(pre_grasping_location, ee_orientation=quatt, arm=arm)
         else:
-            log.warning("Not planning the pre-grasp path, only checking feasibility of the last location.")
+            log.debug("Not planning the pre-grasp path, only checking feasibility of the last location.")
             last_pose = self.get_joint_pose_for_ee_pose_with_ik(pre_grasping_location, ee_orientation=quatt, arm=arm)
             pre_grasp_path = [last_pose] if last_pose is not None else []
 
         grasp_interaction_path = None
 
         if pre_grasp_path is None or len(pre_grasp_path) == 0:
-            log.warning("Planning failed: no path found to pre-grasping location")
+            log.debug("Planning failed: no path found to pre-grasping location")
         elif pre_grasping_distance == 0:
             log.debug("Skipping computation of interaction path because the pre-grasping distance is zero")
             grasp_interaction_path = []
@@ -1279,9 +1096,209 @@ class MotionPlanner:
                 arm=arm,
             )
             if grasp_interaction_path is None:
-                log.warn("Planning failed: no path found to grasp the object")
+                log.debug("Planning failed: no path found to grasp the object")
 
         return pre_grasp_path, grasp_interaction_path
+
+    def plan_ee_place(
+        self,
+        placing_location,
+        placing_direction=np.array([-1.0, 0.0, 0.0]),
+        placing_ee_orientation=np.array([0.0, 0.0, -1.0]),
+        plan_full_pre_place_motion=False,
+        pre_placing_distance=0.17,
+        arm=None,
+        skip_above=False,
+    ):
+        """
+        Plans a full grasping trajectory.
+        The trajectory includes a pre-grasping motion in free space (contact-free) to a location in front of the grasping
+        location, and a grasping motion (with collisions, to grasp) in a straight line in Cartesian space along the
+        grasping direction
+
+        :param grasping_location: 3D point to push at
+        :param grasping_direction: direction to approach the object to grasp. Default: [0,0,-1] -> top-down
+        :param pre_grasping_distance: distance in front of the grasping point along the grasping direction to plan a motion
+            in free space before the approach to grasp.
+        :param grasping_steps: steps to compute IK along a straight line for the second phase of the grasp (interaction)
+        :param arm: which arm to use for multi-arm agents. `None` to use the default arm
+        :return: tuple of (pre_grasp_path, grasp_interaction_path) with the joint space trajectory to follow in the two
+        phases of the interaction. Both will be None if the planner fails to find a path
+        """
+        log.debug(
+            "Planning end-effector grasping action at point {} with direction {}".format(
+                placing_location, placing_direction
+            )
+        )
+        if self.marker is not None:
+            self.set_marker_position_direction(placing_location, placing_ee_orientation)
+
+        if arm is None:
+            arm = self.robot.default_arm
+            log.debug("Placing with the default arm: {}".format(arm))
+
+        log.debug(
+            "It will plan a motion to the location {}, {} m above of the placing location"
+            "".format(pre_placing_distance, placing_location)
+        )
+
+        # Compute orientation of the hand to align the fingers to the grasping direction and the palm up to the ceiling
+        # Assuming fingers point in +x, palm points in +z in eef
+        # In world frame, +z points up
+        desired_x_dir_normalized = np.array(placing_ee_orientation) / np.linalg.norm(np.array(placing_ee_orientation))
+        z_dir_in_wf = np.array([0, 0, 1.0])
+        desired_y_dir = -np.cross(desired_x_dir_normalized, z_dir_in_wf)
+
+        if np.linalg.norm(desired_y_dir) < 0.05:
+            log.debug("Approaching placing location top-down")
+            desired_y_dir_normalized = np.array([0.0, 1.0, 0.0])
+        else:
+            desired_y_dir_normalized = desired_y_dir / np.linalg.norm(desired_y_dir)
+        desired_z_dir_normalized = np.cross(desired_x_dir_normalized, desired_y_dir_normalized)
+        rot_matrix = np.column_stack((desired_x_dir_normalized, desired_y_dir_normalized, desired_z_dir_normalized))
+        quatt = T.mat2quat(rot_matrix)
+
+        pre_placing_location = placing_location - pre_placing_distance * placing_direction
+
+        # print(f"Planning motion to the pre-placing location: {pre_placing_location}")
+
+        if plan_full_pre_place_motion:
+            pre_place_path = self.plan_ee_motion_to_cartesian_pose(pre_placing_location, ee_orientation=quatt, arm=arm)
+        else:
+            log.debug("Not planning the pre-place path, only checking feasibility of the last location.")
+            last_pose = self.get_joint_pose_for_ee_pose_with_ik(pre_placing_location, ee_orientation=quatt, arm=arm)
+            pre_place_path = [last_pose] if last_pose is not None else []
+
+        if not skip_above and pre_place_path is not None and pre_placing_distance != 0:
+            # print("Planning placing motion")
+            if plan_full_pre_place_motion:
+                pre_place_above_path = self.plan_ee_straight_line_motion(
+                    pre_place_path[-1],
+                    pre_placing_location, # This is where the pre-above path should end
+                    placing_direction,
+                    ee_orn=quatt,
+                    line_length=pre_placing_distance,
+                    steps=10,
+                    arm=arm,
+                )
+            else:
+                last_pose_above = self.get_joint_pose_for_ee_pose_with_ik(placing_location, ee_orientation=quatt, arm=arm)
+                pre_place_above_path = [last_pose_above] if last_pose_above is not None else []
+        else:
+            pre_place_above_path = []
+
+        return pre_place_path, pre_place_above_path
+
+
+    def plan_ee_push(
+        self,
+        pushing_location,
+        pushing_direction,
+        pushing_ee_orientation=np.array([0.0, 0.0, -1.0]),
+        inserting_distance=0.3,
+        inserting_steps=20,
+        pre_pushing_distance=0.25,
+        pushing_steps=10,
+        plan_full_pre_push_motion=False,
+        arm=None,
+    ):
+        """
+        Plans a full grasping trajectory.
+        The trajectory includes a pre-grasping motion in free space (contact-free) to a location in front of the grasping
+        location, and a grasping motion (with collisions, to grasp) in a straight line in Cartesian space along the
+        grasping direction
+
+        :param grasping_location: 3D point to push at
+        :param grasping_direction: direction to approach the object to grasp. Default: [0,0,-1] -> top-down
+        :param pre_grasping_distance: distance in front of the grasping point along the grasping direction to plan a motion
+            in free space before the approach to grasp.
+        :param grasping_steps: steps to compute IK along a straight line for the second phase of the grasp (interaction)
+        :param arm: which arm to use for multi-arm agents. `None` to use the default arm
+        :return: tuple of (pre_grasp_path, grasp_interaction_path) with the joint space trajectory to follow in the two
+        phases of the interaction. Both will be None if the planner fails to find a path
+        """
+        log.debug(
+            "Planning end-effector grasping action at point {} with direction {}".format(
+                pushing_location, pushing_ee_orientation
+            )
+        )
+        if self.marker is not None:
+            self.set_marker_position_direction(pushing_location, pushing_ee_orientation)
+
+        if arm is None:
+            arm = self.robot.default_arm
+            log.debug("Grasping with the default arm: {}".format(arm))
+
+        log.debug(
+            "It will plan a motion to the location {}, {} m above of the pushing location"
+            "".format(pre_pushing_distance, pushing_location)
+        )
+
+        # Compute orientation of the hand to align the fingers to the grasping direction and the palm up to the ceiling
+        # Assuming fingers point in +x, palm points in +z in eef
+        # In world frame, +z points up
+        desired_x_dir_normalized = np.array(pushing_ee_orientation) / np.linalg.norm(np.array(pushing_ee_orientation))
+        z_dir_in_wf = np.array([0, 0, 1.0])
+        desired_y_dir = -np.cross(desired_x_dir_normalized, z_dir_in_wf)
+
+        if np.linalg.norm(desired_y_dir) < 0.05:
+            log.debug("Approaching grasping location top-down")
+            desired_y_dir_normalized = np.array([0.0, 1.0, 0.0])
+        else:
+            desired_y_dir_normalized = desired_y_dir / np.linalg.norm(desired_y_dir)
+        desired_z_dir_normalized = np.cross(desired_x_dir_normalized, desired_y_dir_normalized)
+        rot_matrix = np.column_stack((desired_x_dir_normalized, desired_y_dir_normalized, desired_z_dir_normalized))
+        quatt = T.mat2quat(rot_matrix)
+
+        if plan_full_pre_push_motion:
+            pre_push_path = self.plan_ee_motion_to_cartesian_pose(pushing_location, ee_orientation=quatt, arm=arm)
+        else:
+            log.debug("Not planning the pre-grasp path, only checking feasibility of the last location.")
+            last_pose = self.get_joint_pose_for_ee_pose_with_ik(pushing_location, ee_orientation=quatt, arm=arm)
+            pre_push_path = [last_pose] if last_pose is not None else []
+
+        if pre_push_path is not None and len(pre_push_path) > 1:
+            pre_insert_path = self.plan_ee_straight_line_motion(
+                pre_push_path[-1],
+                pushing_location, # This is where the pre-above path should end
+                -1.0 * pushing_direction,
+                ee_orn=quatt,
+                line_length=pre_pushing_distance,
+                steps=inserting_steps,
+                arm=arm,
+            )
+
+            insert_path = self.plan_ee_straight_line_motion(
+                pre_push_path[-1],
+                pushing_location - pre_pushing_distance * pushing_direction,
+                # This is where the pre-inserting path should end
+                pushing_ee_orientation,
+                ee_orn=quatt,
+                line_length=inserting_distance,  # insert more into the drawer
+                steps=inserting_steps,
+                arm=arm,
+            )
+
+            if insert_path is not None and len(insert_path) > 1:
+                push_interaction_path = self.plan_ee_straight_line_motion(
+                    insert_path[-1],
+                    pushing_location + inserting_distance * pushing_ee_orientation - pre_pushing_distance * pushing_direction,
+                    # This is where the pre-pushing path should end
+                    pushing_direction,
+                    ee_orn=quatt,
+                    line_length=pre_pushing_distance * 0.23,
+                    steps=pushing_steps,
+                    arm=arm,
+                )
+
+                if push_interaction_path is None:
+                    log.debug("Planning failed: no path found to push the object")
+            else:
+                pre_insert_path, insert_path, push_interaction_path = [], [], []
+        else:
+            pre_insert_path, insert_path, push_interaction_path = [], [], []
+
+        return pre_push_path, pre_insert_path, insert_path, push_interaction_path
 
     def plan_ee_drop(
         self,
@@ -1417,7 +1434,7 @@ class MotionPlanner:
     #             arm=arm,
     #         )
     #         if toggle_interaction_path is None:
-    #             log.warn("Planning failed: no path found to toggle the object")
+    #             log.warning("Planning failed: no path found to toggle the object")
     #
     #     return pre_toggle_path, toggle_interaction_path
 
@@ -1433,7 +1450,7 @@ class MotionPlanner:
 
         if arm is None:
             arm = self.robot.default_arm
-            log.warn("Visualizing arm path for the default arm: {}".format(arm))
+            log.warning("Visualizing arm path for the default arm: {}".format(arm))
 
         if not keep_last_location:
             state = self.env.dump_state(serialized=False)
@@ -1449,14 +1466,18 @@ class MotionPlanner:
                 obj_pos, obj_orn = p.getBasePositionAndOrientation(grasped_obj_id)
                 grasp_pose = p.multiplyTransforms(*p.invertTransform(gripper_pos, gripper_orn), obj_pos, obj_orn)
 
-        # base_pose = get_base_values(self.robot_body_id)
-        execution_path = arm_path if not reverse_path else reversed(arm_path)
+        initial_robot_position, initial_robot_orn = self.robot.get_position_orientation()
+
+        # base_pose = get_base_values(self.ik_solver[arm].robot_body_id)
+        execution_path = arm_path if not reverse_path else arm_path[::-1]
         execution_path = (
             execution_path if not m.HEADLESS else [execution_path[-1]]
         )
         if self.robot_type != "BehaviorRobot":
             for joint_way_point in execution_path:
                 self.robot.set_joint_positions(joint_way_point, indices=self.ik_control_idx[arm])
+
+                self.robot.set_position_orientation(initial_robot_position, initial_robot_orn)
 
                 # Teleport also the grasped object
                 if grasped_obj is not None:
@@ -1483,6 +1504,11 @@ class MotionPlanner:
                     grasp_pos, grasp_orn = T.mat2pose(grasp_pose)
                     grasped_obj.set_position_orientation(grasp_pos, grasp_orn)
 
+                    grasped_obj.set_linear_velocity(np.array([0.0, 0.0, 0.0]))
+                    grasped_obj.set_angular_velocity(np.array([0.0, 0.0, 0.0]))
+
+                self.simulator_step()
+                time.sleep(0.01)
         else:
             # TODO
             for (x, y, z, roll, pitch, yaw) in execution_path:

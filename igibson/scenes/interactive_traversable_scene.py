@@ -139,7 +139,7 @@ class InteractiveTraversableScene(TraversableScene):
         self.get_scene_loading_info(usd_file=usd_file, usd_path=usd_path)
 
         # Load room semantic and instance segmentation map (must occur AFTER inferring scene directory)
-        self._seg_map = SegmentationMap(scene_dir=self.scene_dir, seg_map_resolution=seg_map_resolution)
+        #self._seg_map = SegmentationMap(scene_dir=self.scene_dir, seg_map_resolution=seg_map_resolution)
 
         # Decide which room(s) and object categories to load
         self.filter_rooms_and_object_categories(
@@ -834,7 +834,6 @@ class InteractiveTraversableScene(TraversableScene):
         """
         # Grab scene info
         scene_info = self.get_scene_info()
-        breakpoint()
 
         # Iterate over all scene info, and instantiate object classes linked to the objects found on the stage
         # accordingly

@@ -74,6 +74,7 @@ class iGibsonEnv(BaseEnv):
         self._current_collisions = None
         self._current_step = 0
         self._collision_step = 0
+        self.num_envs = 1
 
         # Run super
         super(iGibsonEnv, self).__init__(

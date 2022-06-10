@@ -4,6 +4,9 @@ and adapted by iGibson team.
 """
 from __future__ import print_function
 
+import logging
+log = logging.getLogger(__name__)
+
 import colorsys
 import json
 import math
@@ -11,7 +14,7 @@ import os
 import pickle
 import platform
 import numpy as np
-
+import pybullet as p
 import random
 import sys
 import time
@@ -30,6 +33,7 @@ from igibson.utils.constants import OccupancyGridState
 #from ..motion.motion_planners.rrt_connect import birrt, direct_path
 import cv2
 import logging
+import igibson.utils.transform_utils as T
 
 # from future_builtins import map, filter
 # from builtins import input # TODO - use future
@@ -2956,35 +2960,76 @@ def get_collision_fn(body, joints, obstacles, attachments, self_collisions, disa
     def collision_fn(q):
         if not all_between(lower_limits, q, upper_limits):
             pass
-            # print(lower_limits, q, upper_limits)
-            # print('Joint limits violated')
-            # return True
         set_joint_positions(body, joints, q)
         for attachment in attachments:
             attachment.assign()
 
         # Check for self collisions
         for link1, link2 in check_link_pairs:
-            # Self-collisions should not have the max_distance parameter
-            # , **kwargs):
             if pairwise_link_collision(body, link1, body, link2):
                 return True
 
         # Check for collisions of the moving bodies and the obstacles
         for body1, body2 in check_body_pairs:
             if pairwise_collision(body1, body2, **kwargs):
-                # print('body collision between {} and {}'.format(body1, body2))
-                # if isinstance(body1, tuple):
-                #     body1a, links1a = expand_links(body1)
-                #     print(get_body_name(body1a))
-                # else:
-                #     print(get_body_name(body1))
-                # if isinstance(body2, tuple):
-                #     body2a, links2a = expand_links(body2)
-                #     print(get_body_name(body2a))
-                # else:
-                #     print(get_body_name(body2))
                 return True
+        return False
+    return collision_fn
+
+
+def get_collision_fn_ov(body, joints, obstacles, attachments, self_collisions, disabled_collisions,
+                            custom_limits={}, allow_collision_links=[], robot=None, simulator=None, og_joint_ids=[],
+                        **kwargs ):
+
+    # Pair of links within the robot that need to be checked for self-collisions
+    # Pairs in the disabled_collisions list are excluded
+    # If the flag self_collisions is False, we do not check for any self collisions by setting this list to be empty
+    check_link_pairs = get_self_link_pairs(body, joints, disabled_collisions) if self_collisions else []
+
+    # List of links that move on the robot and that should be checked for collisions with the obstacles
+    # We do not check for collisions of the links that are allowed (in the allow_collision_links list)
+    moving_links = frozenset([item for item in get_moving_links(body, joints) if not item in allow_collision_links])
+
+    # TODO: This is a fetch specific change
+    attached_bodies = [attachment.child for attachment in attachments]
+    moving_bodies = [(body, moving_links)] + attached_bodies
+    #moving_bodies = [body] + [attachment.child for attachment in attachments]
+    # + list(combinations(moving_bodies, 2))
+
+    # Pairs to check for collisions
+    check_body_pairs = list(product(moving_bodies, obstacles))
+    lower_limits, upper_limits = get_custom_limits(body, joints, custom_limits)
+
+    # TODO: maybe prune the link adjacent to the robot
+    # TODO: test self collision with the holding
+    def collision_fn(q):
+        if not all_between(lower_limits, q, upper_limits):
+            pass
+
+        set_joint_positions(body, joints, q)
+        p.stepSimulation()
+
+        # Check for self collisions
+        for link1, link2 in check_link_pairs:
+            if pairwise_link_collision(body, link1, body, link2):
+                log.debug(
+                    f'Self-collision: body {get_body_name(body)} ({body}) link {get_link_name(body, link1)} ({link1}) '
+                    f'body {get_body_name(body)} ({body}) link {get_link_name(body, link2)} ({link2})')
+                return True
+
+        ################################################### OV
+        # Set the joint configuration in OV and step to get collisions
+        robot.set_joint_positions(q, indices=og_joint_ids)
+        simulator.step(render=False)
+
+        contact_list = robot.contact_list()
+        filtered_contacts = [contact for contact in contact_list if
+                             (contact.body0, contact.body1) in check_body_pairs or (contact.body1, contact.body0) in check_body_pairs]
+        if len(filtered_contacts) != 0:
+            for contact in filtered_contacts:
+                print("Robot in contact: {}-{}".format(contact.body0, contact.body1))
+            return True
+
         return False
     return collision_fn
 
@@ -3020,26 +3065,40 @@ def plan_direct_joint_motion(body, joints, end_conf, **kwargs):
 
 def check_initial_end(start_conf, end_conf, collision_fn):
     if collision_fn(start_conf):
-        # print("Warning: initial configuration is in collision")
+        print("Warning: initial configuration is in collision")
         return False
     if collision_fn(end_conf):
-        # print("Warning: end configuration is in collision")
+        print("Warning: end configuration is in collision")
         return False
     return True
 
 
 def plan_joint_motion(body, joints, end_conf, obstacles=[], attachments=[],
-                      self_collisions=True, disabled_collisions=set(),
-                      weights=None, resolutions=None, max_distance=MAX_DISTANCE, custom_limits={}, algorithm='birrt', allow_collision_links=[], **kwargs):
+                      check_self_collisions=True, disabled_self_colliding_pairs=set(),
+                      weights=None, resolutions=None, max_distance=MAX_DISTANCE, custom_limits={}, algorithm='birrt',
+                      disabled_colliding_links=[], robot=None, simulator=None, og_joint_ids=[], **kwargs):
 
     assert len(joints) == len(end_conf)
+    # sample_fn = get_sample_fn(body, joints, custom_limits=custom_limits)
+    # distance_fn = get_distance_fn(body, joints, weights=weights)
+    # extend_fn = get_extend_fn(body, joints, resolutions=resolutions)
+    # collision_fn = get_collision_fn(body, joints, obstacles, attachments, self_collisions, disabled_collisions,
+    #                                 custom_limits=custom_limits, max_distance=max_distance, allow_collision_links=allow_collision_links)
+    #
+    # start_conf = get_joint_positions(body, joints)
+
+    # Using Omniverse
     sample_fn = get_sample_fn(body, joints, custom_limits=custom_limits)
     distance_fn = get_distance_fn(body, joints, weights=weights)
     extend_fn = get_extend_fn(body, joints, resolutions=resolutions)
-    collision_fn = get_collision_fn(body, joints, obstacles, attachments, self_collisions, disabled_collisions,
-                                    custom_limits=custom_limits, max_distance=max_distance, allow_collision_links=allow_collision_links)
+    collision_fn = get_collision_fn_ov(body, joints, obstacles, attachments, check_self_collisions, disabled_self_colliding_pairs,
+                                    custom_limits=custom_limits, max_distance=max_distance,
+                                    allow_collision_links=disabled_colliding_links, robot=robot, simulator=simulator,
+                                       og_joint_ids=og_joint_ids)
 
-    start_conf = get_joint_positions(body, joints)
+    # Get configuration from Omniverse and set it in the pybullet twin
+    start_conf = robot.get_joint_positions(normalized=False, joint_idx=og_joint_ids)
+    set_joint_positions(body, joints, start_conf)
 
     if not check_initial_end(start_conf, end_conf, collision_fn):
         return None
@@ -3257,6 +3316,8 @@ def plan_base_motion_2d(body,
                         use_pb_for_collisions=False,
                         debugging_prints = False,
                         upsampling_factor = 4,
+                        robot = None,
+                        simulator = None,
                         **kwargs):
     """
     Performs motion planning for a robot base in 2D
@@ -3334,7 +3395,10 @@ def plan_base_motion_2d(body,
             yield q
 
     # Get the start configuration: x, y, theta of the robot base
-    start_conf = get_base_values(body)
+    # start_conf = get_base_values(body)
+    # TODO: with Omniverse
+    robot_start_position, robot_start_orientation_q = robot.get_position_orientation()
+    start_conf = base_values_from_pose((robot_start_position, robot_start_orientation_q))
 
     # Do not plan for goals that are very close by
     # This makes it impossible to "plan" for pure rotations. Use a negative min_goal_dist to allow pure rotations
@@ -3424,9 +3488,24 @@ def plan_base_motion_2d(body,
             cv2.waitKey(1)
 
         if use_pb_for_collisions:
-            set_base_values(body, q)
-            in_collision = any(pairwise_collision(body, obs, max_distance=max_distance) for obs in obstacles)
-            set_base_values(body, start_conf)   # Reset the original configuration
+            # set_base_values(body, q)
+            # in_collision = any(pairwise_collision(body, obs, max_distance=max_distance) for obs in obstacles)
+            # set_base_values(body, start_conf)   # Reset the original configuration
+            robot_position, robot_orn = robot.get_position_orientation()
+            robot_position[0] = q[0]
+            robot_position[1] = q[1]
+            robot_position[2] = 0
+            robot_orn = T.euler2quat([0, 0, q[2]])
+            robot.set_position_orientation(robot_position, robot_orn)
+            simulator.step(render=False)    # Remove the render=False to see the issue with pushing objects
+            contact_list = robot.contact_list()
+            filtered_contacts = [contact for contact in contact_list if contact.body0 in obstacles or contact.body1 in obstacles]
+            in_collision = len(filtered_contacts) != 0
+            for contact in filtered_contacts:
+                print("Robot in contact: {}-{}".format(contact.body0, contact.body1))
+            # TODO: I was resetting the initial location but is it necessary if we always teleport to a new one to check?
+            # robot.set_position_orientation(robot_start_position, robot_start_orientation_q)
+            # simulator.step()
         else:   # Use local or global map
             # If the point is outside of the map/occupancy map, then we return "collision"
             if pts[0] < robot_footprint_radius_in_map or pts[1] < robot_footprint_radius_in_map \
@@ -3470,13 +3549,11 @@ def plan_base_motion_2d(body,
 
     # Do not plan if the initial pose is in collision
     if collision_fn(start_conf):
-        if debugging_prints:
-            print("Warning: initial configuration is in collision")
+        print("Warning: initial configuration is in collision")
         return None
     # Do not plan if the final pose is in collision
     if collision_fn(end_conf):
-        if debugging_prints:
-            print("Warning: end configuration is in collision")
+        print("Warning: end configuration is in collision")
         return None
     
     if algorithm == 'direct':
@@ -4666,8 +4743,7 @@ def read_pcd_file(path):
         return [tuple(map(float, f.readline().split())) for _ in range(num_points)]
 
 
-def is_collision_free(body_a, link_a_list,
-                      body_b=None, link_b_list=None):
+def is_collision_free(body_a, link_a_list, body_b=None, link_b_list=None):
     """
     :param body_a: body id of body A
     :param link_a_list: link ids of body A that that of interest
@@ -4677,22 +4753,18 @@ def is_collision_free(body_a, link_a_list,
     """
     if body_b is None:
         for link_a in link_a_list:
-            contact_pts = p.getContactPoints(
-                bodyA=body_a, linkIndexA=link_a)
+            contact_pts = p.getContactPoints(bodyA=body_a, linkIndexA=link_a)
             if len(contact_pts) > 0:
                 return False
     elif link_b_list is None:
         for link_a in link_a_list:
-            contact_pts = p.getContactPoints(
-                bodyA=body_a, bodyB=body_b, linkIndexA=link_a)
+            contact_pts = p.getContactPoints(bodyA=body_a, bodyB=body_b, linkIndexA=link_a)
             if len(contact_pts) > 0:
                 return False
     else:
         for link_a in link_a_list:
             for link_b in link_b_list:
-                contact_pts = p.getContactPoints(
-                    bodyA=body_a, bodyB=body_b,
-                    linkIndexA=link_a, linkIndexB=link_b)
+                contact_pts = p.getContactPoints(bodyA=body_a, bodyB=body_b, linkIndexA=link_a, linkIndexB=link_b)
                 if len(contact_pts) > 0:
                     return False
     return True
