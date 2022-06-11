@@ -211,6 +211,14 @@ class EntityPrim(XFormPrim):
         super()._post_load()
 
     @property
+    def prim_type(self):
+        """
+        Returns:
+            str: Type of this entity prim, one of igibson.utils.constants.PrimType
+        """
+        return self._prim_type
+
+    @property
     def articulated(self):
         """
         Returns:
@@ -895,16 +903,26 @@ class EntityPrim(XFormPrim):
                                                           quaternion is scalar-last (x, y, z, w). shape is (4, ).
                                                           Defaults to None, which means left unchanged.
         """
-        if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and self._dc.is_simulating():
-            current_position, current_orientation = self.get_position_orientation()
-            if position is None:
-                position = current_position
-            if orientation is None:
-                orientation = current_orientation
-            pose = _dynamic_control.Transform(position, orientation)
-            self._dc.set_rigid_body_pose(self._root_handle, pose)
+        current_position, current_orientation = self.get_position_orientation()
+        if position is None:
+            position = current_position
+        if orientation is None:
+            orientation = current_orientation
+
+        if self._prim_type == PrimType.CLOTH:
+            # Can only set position
+            if self._dc is not None and self._dc.is_simulating():
+                # Assume there is only one base link (the cloth)
+                self.root_link.set_position_orientation(position, [0, 0, 0, 1])
+            else:
+                super().set_position_orientation(position, [0, 0, 0, 1])
         else:
-            super().set_position_orientation(position=position, orientation=orientation)
+            if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and \
+                    self._dc is not None and self._dc.is_simulating():
+                pose = _dynamic_control.Transform(position, orientation)
+                self._dc.set_rigid_body_pose(self._root_handle, pose)
+            else:
+                super().set_position_orientation(position=position, orientation=orientation)
 
     def get_position_orientation(self) -> Tuple[np.ndarray, np.ndarray]:
         """Gets prim's pose with respect to the world's frame.
@@ -914,11 +932,51 @@ class EntityPrim(XFormPrim):
                                            second index is quaternion orientation in the world frame of the prim.
                                            quaternion is scalar-last (x, y, z, w). shape is (4, ).
         """
-        if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and self._dc.is_simulating():
-            pose = self._dc.get_rigid_body_pose(self._root_handle)
-            return np.asarray(pose.p), np.asarray(pose.r)
+        if self._prim_type == PrimType.CLOTH:
+            if self._dc is not None and self._dc.is_simulating():
+                return self.root_link.get_position_orientation()
+            else:
+                return super().get_position_orientation()
         else:
-            return super().get_position_orientation()
+            if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and \
+                    self._dc is not None and self._dc.is_simulating():
+                pose = self._dc.get_rigid_body_pose(self._root_handle)
+                return np.asarray(pose.p), np.asarray(pose.r)
+            else:
+                return super().get_position_orientation()
+
+    def set_local_pose_when_simulating(
+        self, translation: Optional[np.ndarray] = None, orientation: Optional[np.ndarray] = None
+    ) -> None:
+        """Sets prim's pose with respect to the local frame (the prim's parent frame) when sumulation is running.
+
+        Args:
+            translation (Optional[np.ndarray], optional): translation in the local frame of the prim
+                                                          (with respect to its parent prim). shape is (3, ).
+                                                          Defaults to None, which means left unchanged.
+            orientation (Optional[np.ndarray], optional): quaternion orientation in the world frame of the prim.
+                                                          quaternion is scalar-last (x, y, z, w). shape is (4, ).
+                                                          Defaults to None, which means left unchanged.
+        """
+        current_translation, current_orientation = self.get_local_pose()
+        if translation is None:
+            translation = current_translation
+        if orientation is None:
+            orientation = current_orientation
+        orientation = orientation[[3, 0, 1, 2]]
+        local_transform = tf_matrix_from_pose(translation=translation, orientation=orientation)
+        parent_world_tf = UsdGeom.Xformable(get_prim_parent(self._prim)).ComputeLocalToWorldTransform(
+            Usd.TimeCode.Default()
+        )
+        my_world_transform = np.matmul(parent_world_tf, local_transform)
+        transform = Gf.Transform()
+        transform.SetMatrix(Gf.Matrix4d(np.transpose(my_world_transform)))
+        calculated_position = transform.GetTranslation()
+        calculated_orientation = transform.GetRotation().GetQuat()
+        self.set_position_orientation(
+            position=np.array(calculated_position),
+            orientation=gf_quat_to_np_array(calculated_orientation)[[1, 2, 3, 0]],
+        )
 
     def set_local_pose(
         self, translation: Optional[np.ndarray] = None, orientation: Optional[np.ndarray] = None
@@ -933,30 +991,38 @@ class EntityPrim(XFormPrim):
                                                           quaternion is scalar-last (x, y, z, w). shape is (4, ).
                                                           Defaults to None, which means left unchanged.
         """
-        if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and self._dc.is_simulating():
-            current_translation, current_orientation = self.get_local_pose()
-            if translation is None:
-                translation = current_translation
-            if orientation is None:
-                orientation = current_orientation
-            orientation = orientation[[3, 0, 1, 2]]
-            local_transform = tf_matrix_from_pose(translation=translation, orientation=orientation)
-            parent_world_tf = UsdGeom.Xformable(get_prim_parent(self._prim)).ComputeLocalToWorldTransform(
-                Usd.TimeCode.Default()
-            )
-            my_world_transform = np.matmul(parent_world_tf, local_transform)
-            transform = Gf.Transform()
-            transform.SetMatrix(Gf.Matrix4d(np.transpose(my_world_transform)))
-            calculated_position = transform.GetTranslation()
-            calculated_orientation = transform.GetRotation().GetQuat()
-            self.set_position_orientation(
-                position=np.array(calculated_position),
-                orientation=gf_quat_to_np_array(calculated_orientation)[[1, 2, 3, 0]],
-            )
-            return
+        if self._prim_type == PrimType.CLOTH:
+            if self._dc is not None and self._dc.is_simulating():
+                self.set_local_pose_when_simulating(translation=translation, orientation=orientation)
+            else:
+                super().set_local_pose(translation=translation, orientation=orientation)
         else:
-            super().set_local_pose(translation=translation, orientation=orientation)
-            return
+            if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and \
+                    self._dc is not None and self._dc.is_simulating():
+                self.set_local_pose_when_simulating(translation=translation, orientation=orientation)
+            else:
+                super().set_local_pose(translation=translation, orientation=orientation)
+
+    def get_local_pose_when_simulating(self) -> Tuple[np.ndarray, np.ndarray]:
+        """Gets prim's pose with respect to the local frame (the prim's parent frame) when simulation is running.
+
+        Returns:
+            Tuple[np.ndarray, np.ndarray]: first index is position in the local frame of the prim. shape is (3, ).
+                                           second index is quaternion orientation in the local frame of the prim.
+                                           quaternion is scalar-last (x, y, z, w). shape is (4, ).
+        """
+        parent_world_tf = UsdGeom.Xformable(get_prim_parent(self._prim)).ComputeLocalToWorldTransform(
+            Usd.TimeCode.Default()
+        )
+        world_position, world_orientation = self.get_position_orientation()
+        my_world_transform = tf_matrix_from_pose(translation=world_position,
+                                                 orientation=world_orientation[[3, 0, 1, 2]])
+        local_transform = np.matmul(np.linalg.inv(np.transpose(parent_world_tf)), my_world_transform)
+        transform = Gf.Transform()
+        transform.SetMatrix(Gf.Matrix4d(np.transpose(local_transform)))
+        calculated_translation = transform.GetTranslation()
+        calculated_orientation = transform.GetRotation().GetQuat()
+        return np.array(calculated_translation), gf_quat_to_np_array(calculated_orientation)[[1, 2, 3, 0]]
 
     def get_local_pose(self) -> Tuple[np.ndarray, np.ndarray]:
         """Gets prim's pose with respect to the local frame (the prim's parent frame).
@@ -966,20 +1032,17 @@ class EntityPrim(XFormPrim):
                                            second index is quaternion orientation in the local frame of the prim.
                                            quaternion is scalar-last (x, y, z, w). shape is (4, ).
         """
-        if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and self._dc.is_simulating():
-            parent_world_tf = UsdGeom.Xformable(get_prim_parent(self._prim)).ComputeLocalToWorldTransform(
-                Usd.TimeCode.Default()
-            )
-            world_position, world_orientation = self.get_position_orientation()
-            my_world_transform = tf_matrix_from_pose(translation=world_position, orientation=world_orientation[[3, 0, 1, 2]])
-            local_transform = np.matmul(np.linalg.inv(np.transpose(parent_world_tf)), my_world_transform)
-            transform = Gf.Transform()
-            transform.SetMatrix(Gf.Matrix4d(np.transpose(local_transform)))
-            calculated_translation = transform.GetTranslation()
-            calculated_orientation = transform.GetRotation().GetQuat()
-            return np.array(calculated_translation), gf_quat_to_np_array(calculated_orientation)[[1, 2, 3, 0]]
+        if self._prim_type == PrimType.CLOTH:
+            if self._dc is not None and self._dc.is_simulating():
+                return self.get_local_pose_when_simulating()
+            else:
+                return super().get_local_pose()
         else:
-            return super().get_local_pose()
+            if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and \
+                    self._dc is not None and self._dc.is_simulating():
+                return self.get_local_pose_when_simulating()
+            else:
+                return super().get_local_pose()
 
     # TODO: Is the omni joint damping (used for driving motors) same as dissipative joint damping (what we had in pb)?
     @property

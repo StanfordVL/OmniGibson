@@ -24,10 +24,12 @@ from igibson.controllers import (
 from igibson.objects.dataset_object import DatasetObject
 from igibson.robots.robot_base import BaseRobot
 from igibson.utils.python_utils import classproperty, assert_valid_key
-from igibson.utils.constants import JointType
+from igibson.utils.constants import JointType, PrimType
 from igibson.utils.usd_utils import create_joint
+import igibson.macros as m
 
-from pxr import Gf
+from pxr import Gf, PhysxSchema
+import omni
 
 
 AG_MODES = {
@@ -441,7 +443,7 @@ class ManipulationRobot(BaseRobot):
 
         super().deploy_control(control=control, control_type=control_type, indices=indices, normalized=normalized)
 
-    def _release_grasp(self, arm="default"):
+    def _release_grasp_rigid(self, arm="default"):
         """
         Magic action to release this robot's grasp on an object
 
@@ -457,6 +459,26 @@ class ManipulationRobot(BaseRobot):
         self._ag_obj_constraint_params[arm] = {}
         self._ag_freeze_gripper[arm] = False
         self._ag_release_counter[arm] = 0
+
+    def _release_grasp_cloth(self, arm="default"):
+        """
+        Same as _calculate_in_hand_object_rigid, except for cloth. Only one should be used at any given time.
+        """
+        arm = self.default_arm if arm == "default" else arm
+        # Disable attachment
+        self._ag_obj_constraints[arm].GetAttachmentEnabledAttr().Set(False)
+        # Remove joint and filtered collision restraints
+        self._ag_data[arm] = None
+        self._ag_obj_constraints[arm] = None
+        self._ag_obj_constraint_params[arm] = {}
+        self._ag_freeze_gripper[arm] = False
+        self._ag_release_counter[arm] = 0
+
+    def _release_grasp(self, arm="default"):
+        if m.AG_CLOTH:
+            return self._release_grasp_cloth(arm)
+        else:
+            return self._release_grasp_rigid(arm)
 
     def get_control_dict(self):
         # In addition to super method, add in EEF states
@@ -750,7 +772,7 @@ class ManipulationRobot(BaseRobot):
         arm = self.default_arm if arm == "default" else arm
         return self.get_relative_eef_pose(arm=arm)[1]
 
-    def _calculate_in_hand_object(self, arm="default"):
+    def _calculate_in_hand_object_rigid(self, arm="default"):
         """
         Calculates which object to assisted-grasp for arm @arm. Returns an (object_id, link_id) tuple or None
         if no valid AG-enabled object can be found.
@@ -992,7 +1014,7 @@ class ManipulationRobot(BaseRobot):
 
         return cfg
 
-    def _establish_grasp(self, arm="default", ag_data=None):
+    def _establish_grasp_rigid(self, arm="default", ag_data=None):
         """
         Establishes an ag-assisted grasp, if enabled.
 
@@ -1140,6 +1162,72 @@ class ManipulationRobot(BaseRobot):
             elif applying_grasp:
                 self._ag_data[arm] = self._calculate_in_hand_object(arm=arm)
                 self._establish_grasp(arm=arm, ag_data=self._ag_data[arm])
+
+    def _calculate_in_hand_object(self, arm="default"):
+        if m.AG_CLOTH:
+            return self._calculate_in_hand_object_cloth(arm)
+        else:
+            return self._calculate_in_hand_object_rigid(arm)
+
+    def _establish_grasp(self, arm="default", ag_data=None):
+        if m.AG_CLOTH:
+            return self._establish_grasp_cloth(arm, ag_data)
+        else:
+            return self._establish_grasp_rigid(arm, ag_data)
+
+    def _calculate_in_hand_object_cloth(self, arm="default"):
+        """
+        Same as _calculate_in_hand_object_rigid, except for cloth. Only one should be used at any given time.
+        """
+        AG_CLOTH_DIST = 0.15
+        candidates = []
+        eef_pos = self.eef_links[arm].get_position()
+        cloth_objs = self._simulator.scene.object_registry("prim_type", PrimType.CLOTH)
+        if cloth_objs is None:
+            return None
+
+        for cloth_obj in cloth_objs:
+            candidates.append((cloth_obj, np.linalg.norm(cloth_obj.get_position() - eef_pos)))
+        sorted(candidates, key=lambda x: x[1])
+        ag_obj, dist = candidates[0]
+        if dist > AG_CLOTH_DIST:
+            return None
+
+        # Assume cloth has one and only one link called "base_link", which is the cloth mesh
+        return ag_obj, ag_obj.links["base_link"]
+
+    def _establish_grasp_cloth(self, arm="default", ag_data=None):
+        """
+        Same as _establish_grasp_cloth, except for cloth. Only one should be used at any given time.
+        """
+        arm = self.default_arm if arm == "default" else arm
+
+        # Return immediately if ag_data is None
+        if ag_data is None:
+            return
+
+        ag_obj, ag_link = ag_data
+        attachment_path = ag_link.prim.GetPath().AppendElementString("rigidAttachment")
+        finger_link_col_mesh = self.finger_links["left"][0].collision_meshes["collisions"]
+        omni.kit.commands.execute("CreatePhysicsAttachment", target_attachment_path=attachment_path,
+                                  actor0_path=ag_link.prim.GetPath(), actor1_path=finger_link_col_mesh.prim.GetPath())
+        attachment = PhysxSchema.PhysxPhysicsAttachment.Get(self._simulator.stage, attachment_path)
+
+        # Save a reference to this attachment
+        self._ag_obj_constraints[arm] = attachment
+        self._ag_obj_constraint_params[arm] = {
+            "ag_obj_prim_path": ag_obj.prim_path,
+            "ag_link_prim_path": ag_link.prim_path,
+            "gripper_pos": self.get_joint_positions()[self.gripper_control_idx[arm]],
+        }
+        self._ag_obj_in_hand[arm] = ag_obj
+        self._ag_freeze_gripper[arm] = True
+        # Disable collisions while picking things up
+        # for finger_link in self.finger_links[arm]:
+        #     finger_link.add_filtered_collision_pair(prim=ag_obj)
+        for joint in self.finger_joints[arm]:
+            j_val = joint.get_state()[0][0]
+            self._ag_freeze_joint_pos[arm][joint.joint_name] = j_val
 
     def dump_config(self):
         # Grab running config
