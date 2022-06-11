@@ -8,6 +8,7 @@ from igibson.object_states.object_state_base import AbsoluteObjectState, Boolean
 from igibson.object_states.on_floor import RoomFloor
 from igibson.objects.multi_object_wrappers import ObjectMultiplexer
 from igibson.robots.robot_base import BaseRobot
+from igibson.object_states import InFOVOfRobot, InReachOfRobot
 
 SIMULATOR_SETTLE_TIME = 150
 
@@ -24,7 +25,7 @@ class KinematicDisarrangement(MetricBase):
 
     def update_state_cache(self, env):
         state_cache = {}
-        for obj_id, obj in env.scene.objects_by_name.items():
+        for obj in  env.scene.object_registry.objects:
             if isinstance(obj, BaseRobot):
                 continue
             if type(obj) == ObjectMultiplexer:
@@ -35,7 +36,7 @@ class KinematicDisarrangement(MetricBase):
                     obj._multiplexed_objects[1].objects[0].states[Pose].get_value(),
                     obj._multiplexed_objects[1].objects[1].states[Pose].get_value(),
                 ]
-                state_cache[obj_id] = {
+                state_cache[obj.root_handle] = {
                     "pose": {
                         "base": obj._multiplexed_objects[0].states[Pose].get_value(),
                         "children": part_pose,
@@ -43,7 +44,7 @@ class KinematicDisarrangement(MetricBase):
                     "active": obj.current_index,
                 }
             else:
-                state_cache[obj_id] = {
+                state_cache[obj.root_handle] = {
                     "pose": {
                         "base": obj.states[Pose].get_value(),
                     },
@@ -148,7 +149,7 @@ class LogicalDisarrangement(MetricBase):
     def cache_single_object(obj_id, obj, room_floors, env):
         obj_cache = {}
         for state_class, state in obj.states.items():
-            if not isinstance(state, BooleanState):
+            if not isinstance(state, BooleanState) or state.__class__ in [InFOVOfRobot, InReachOfRobot] :
                 continue
             if isinstance(state, AbsoluteObjectState):
                 obj_cache[state_class] = state.get_value()
@@ -161,7 +162,8 @@ class LogicalDisarrangement(MetricBase):
                 obj_cache[state_class] = relational_state_cache
             else:
                 relational_state_cache = {}
-                for target_obj_id, target_obj in env.scene.objects_by_name.items():
+                for target_obj in env.scene.object_registry.objects:
+                    target_obj_id = target_obj.root_handle
                     if obj_id == target_obj_id or isinstance(target_obj, BaseRobot):
                         continue
                     relational_state_cache[target_obj_id] = False
@@ -182,13 +184,14 @@ class LogicalDisarrangement(MetricBase):
                 name="room_floor_" + room_inst,
                 scene=env.scene,
                 room_instance=room_inst,
-                floor_obj=env.scene.objects_by_name["floors"],
+                floor_obj=env.scene.object_registry("name", "floors")
             )
-            for room_inst in env.scene.room_ins_name_to_ins_id.keys()
+            for room_inst in env.scene.seg_map.room_ins_name_to_ins_id
         }
 
         state_cache = {}
-        for obj_id, obj in env.scene.objects_by_name.items():
+        for obj in env.scene.object_registry.objects:
+            obj_id = obj.root_handle
             if isinstance(obj, BaseRobot):
                 continue
             state_cache[obj_id] = {}
@@ -200,10 +203,10 @@ class LogicalDisarrangement(MetricBase):
                 else:
                     cache_base = None
                     cache_part_1 = self.cache_single_object(
-                        obj_id, obj._multiplexed_objects[1].objects[0], room_floors, env.task
+                        obj_id, obj._multiplexed_objects[1].objects[0], room_floors, env
                     )
                     cache_part_2 = self.cache_single_object(
-                        obj_id, obj._multiplexed_objects[1].objects[1], room_floors, env.task
+                        obj_id, obj._multiplexed_objects[1].objects[1], room_floors, env
                     )
                 state_cache[obj_id] = {
                     "base_states": cache_base,
@@ -212,7 +215,7 @@ class LogicalDisarrangement(MetricBase):
                     "type": "multiplexer",
                 }
             else:
-                cache_base = self.cache_single_object(obj_id, obj, room_floors, env.task)
+                cache_base = self.cache_single_object(obj_id, obj, room_floors, env)
                 state_cache[obj_id] = {
                     "base_states": cache_base,
                     "type": "standard",
@@ -332,6 +335,7 @@ class LogicalDisarrangement(MetricBase):
     def step_callback(self, env, _):
         if not self.initialized and env.simulator.frame_count == SIMULATOR_SETTLE_TIME:
             self.initial_state_cache = self.create_object_logical_state_cache(env)
+
             self.initialized = True
         else:
             return
@@ -343,8 +347,6 @@ class LogicalDisarrangement(MetricBase):
         Wipes active collision groups. To get the logical disarrangement, we must wake up all objects in the scene
         This can only be done at the end of the scene so as to not affect determinism.
         """
-        for obj in env.scene.objects_by_name.values():
-            obj.force_wakeup()
         env.simulator.step()
 
         self.cur_state_cache = self.create_object_logical_state_cache(env)

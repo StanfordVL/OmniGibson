@@ -13,11 +13,11 @@ class RobotMetric(MetricBase):
 
     def step_callback(self, env, _):
         robot = env.robots[0]
-        agent_distance = {part: 0 for part in self.agent_pos}
 
         self.next_state_cache = {
-            "body": {"position": robot.get_position()},
-        }.update({arm: {"position": robot.get_eef_position(arm)} for arm in robot.arm_names})
+            "base": {"position": robot.get_position()},
+        }
+        self.next_state_cache.update({arm: {"position": robot.get_eef_position(arm)} for arm in robot.arm_names})
 
         if not self.initialized:
             self.agent_pos = {part: [] for part in ["base"] + robot.arm_names}
@@ -31,11 +31,11 @@ class RobotMetric(MetricBase):
             self.state_cache = copy.deepcopy(self.next_state_cache)
             self.initialized = True
 
-        self.agent_pos["body"].append(list(self.state_cache["body"]["position"]))
+        self.agent_pos["base"].append(list(self.state_cache["base"]["position"]))
         distance = np.linalg.norm(
-            np.array(self.next_state_cache["body"]["position"]) - self.state_cache["body"]["position"]
+            np.array(self.next_state_cache["base"]["position"]) - self.state_cache["base"]["position"]
         )
-        self.delta_agent_distance["body"].append(distance)
+        self.delta_agent_distance["base"].append(distance)
 
         for arm in robot.arm_names:
             self.agent_pos[arm].append(list(self.state_cache[arm]["position"]))

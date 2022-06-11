@@ -36,7 +36,10 @@ class _Dirty(AbsoluteObjectState, BooleanState):
         self._max_particles_for_clean = 0
 
     def _get_value(self):
-        return self.DIRT_CLASS.num_group_particles(group=self.dirt_group) > self._max_particles_for_clean
+        if self.dirt_group in self.DIRT_CLASS.groups:
+            return self.DIRT_CLASS.num_group_particles(group=self.dirt_group) > self._max_particles_for_clean
+        else:
+            return False
 
     def _set_value(self, new_value):
         if not new_value:
