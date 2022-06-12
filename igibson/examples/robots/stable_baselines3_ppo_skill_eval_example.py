@@ -12,6 +12,7 @@ from igibson.wrappers import ActionPrimitiveWrapper
 # from igibson.envs.skill_env import SkillEnv
 from igibson import app, ig_dataset_path, example_config_path, Simulator
 from igibson.sensors.vision_sensor import VisionSensor
+import h5py
 
 log = logging.getLogger(__name__)
 
@@ -118,7 +119,7 @@ def main():
     # config_file = os.path.join('..', 'configs', "behavior_pick_and_place.yaml")
     # config_file = os.path.join('..', '..', 'configs', 'robots', "fetch_rl.yaml")
     # config_file = os.path.join(igibson.configs_path, "fetch_behavior_aps_putting_away_Halloween_decorations.yaml")
-    config_file = f"{example_config_path}/behavior_mp_tiago.yaml"  # os.path.join(igibson.configs_path, "fetch_rl_cleaning_microwave_oven.yaml")
+    config_file = f"{example_config_path}/behavior_mp_tiago_gates.yaml"  # os.path.join(igibson.configs_path, "fetch_rl_cleaning_microwave_oven.yaml")
     tensorboard_log_dir = "log_dir"
     num_cpu = 1
 
@@ -183,7 +184,7 @@ def main():
     #     policy_kwargs=policy_kwargs,
     #     n_steps=20*10,
     # )
-    load_path = 'log_dir/20220603-003414/_1000_steps'
+    load_path = 'log_dir/20220611-021339/_11000_steps'
     # model.load(load_path)
     # model.set_parameters(load_path)
     model = PPO.load(load_path)
@@ -197,8 +198,37 @@ def main():
     # model.learn(1000000)
     mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=50)
     print('Evaluating Finished ...')
+
+    env.close()
+
     log.info(f"After Loading: Mean reward: {mean_reward} +/- {std_reward:.2f}")
 
 
+def data_generation():
+    config_file = f"{example_config_path}/behavior_mp_tiago_gates.yaml"  # os.path.join(igibson.configs_path, "fetch_rl_cleaning_microwave_oven.yaml")
+    tensorboard_log_dir = "log_dir"
+    num_cpu = 1
+
+    seed = 0
+    env = iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.)
+    env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
+    for obj in env.scene.object_registry("category", "ceilings"):
+        obj.visible = False
+    env.seed(seed)
+    set_random_seed(seed)
+    env.reset()
+
+    file = h5py.File('dataset_sim2real_raw.hdf5', 'r', driver='core')
+
+    for round in range(30):
+        for i in range(len(file)-1):
+            print('trial_{0}'.format(i))
+            env.reset()
+            for j in range(len(file['trial_{0}'.format(i)]['act'])):
+                print(file['trial_{0}'.format(i)]['act'][j])
+                env.step(file['trial_{0}'.format(i)]['act'][j])
+
+    env.close()
+
 if __name__ == "__main__":
-    main()
+    data_generation()

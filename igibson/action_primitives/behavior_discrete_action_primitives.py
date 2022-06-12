@@ -32,7 +32,7 @@ skill_object_offset_params = {
         "pumpkin.n.02_1": [0.5, 0.0, 0.0, 0.7 * np.pi],
         "pumpkin.n.02_2": [0.3, -0.45, 0, 0.5 * np.pi],
         "breakfast_table.n.01_1": [0.7318, 1.5472, 0, 2.7],
-        "coffee_table.n.01_1": [1.7489, -0.08226, 0, 4.384],
+        "coffee_table.n.01_1": [1.8489, -0.08226, 0, 4.384],
         "ashcan.n.01_1": [2.3111, 0.08212, 0, 0],
     },
     1: {  # pick
@@ -531,6 +531,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # Plan a 2D motion
         plan = self.planner.plan_base_motion(
             [vector[0] + random.uniform(-0.1, 0.1), vector[1] + random.uniform(-0.1, 0.1), target_yaw + random.uniform(-0.1, 0.5)],
+            # [vector[0], vector[1], target_yaw],
             plan_full_base_motion=not self.skip_base_planning,
             objects_to_ignore=objects_to_ignore,
         )

@@ -50,8 +50,8 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
         super(CustomCombinedExtractor, self).__init__(observation_space, features_dim=1)
         self.debug_length = 10
         self.debug_mode = True
-        self.random_cropping = True
-        self.random_cropping_size = 116
+        self.random_cropping = False
+        self.random_cropping_size = 128
         extractors = {}
         self.step_index = 0
         self.img_save_dir = 'img_save_dir'
@@ -322,12 +322,12 @@ def main():
         model.save(os.path.join(tensorboard_log_dir, "ckpt_{}".format(prefix)))
         del model
     else:
-        checkpoint_callback = CheckpointCallback(save_freq=3000, save_path=tensorboard_log_dir, name_prefix=prefix)
+        checkpoint_callback = CheckpointCallback(save_freq=1000, save_path=tensorboard_log_dir, name_prefix=prefix)
         log.debug(model.policy)
         print(model)
 
-        model.learn(total_timesteps=10000000, callback=checkpoint_callback,
-                    eval_env=env, eval_freq=3000,
+        model.learn(total_timesteps=40000, callback=checkpoint_callback,
+                    eval_env=env, eval_freq=1000,
                     n_eval_episodes=20)
 
     model = PPO.load(os.path.join(tensorboard_log_dir, "ckpt_{}".format(prefix)))

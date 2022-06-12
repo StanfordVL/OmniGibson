@@ -7,6 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import queue
 import cv2 as cv
+import os
+
+import h5py
 
 from igibson.action_primitives.action_primitive_set_base import (
     REGISTERED_PRIMITIVE_SETS,
@@ -55,13 +58,18 @@ class ActionPrimitiveWrapper(BaseWrapper):
         self.step_index = 0
         self.done = False
         self.fallback_state = None
-        self.max_step = 60  # env.config['max_step']
+        self.max_step = 20  # env.config['max_step']
         self.is_success_list = []
         self.reward_list = []
         if self.use_obj_in_hand_as_obs:
             self.observation_space['obj_in_hand'] = env.build_obs_space(
                 shape=(1,), low=0.0, high=1
             )
+        # self.f = h5py.File('dataset_sim2real_raw.hdf5', 'w')
+        self.f = h5py.File('dataset_sim2real_aug.hdf5', 'w')
+        self.trial_id = 0
+        self.img_save_dir = 'img_save_dir'
+        self.debug_length = 10
         self.reset()
 
     def seed(self, seed):
@@ -76,6 +84,21 @@ class ActionPrimitiveWrapper(BaseWrapper):
         """
         # self.pumpkin_n_02_1_reward = True
         # self.pumpkin_n_02_2_reward = True
+
+        print("previous!!!!!!!! {}".format(self.accum_reward))
+        if self.accum_reward >= 1.0:
+            self.f['trial_{0}'.format(self.trial_id - 1)].create_dataset('rgb', data=np.array(self.tmp_trial_rgb))
+            print(np.array(self.tmp_trial_rgb).shape)
+            self.f['trial_{0}'.format(self.trial_id - 1)].create_dataset('gri', data=np.array(self.tmp_trial_gri))
+            print(np.array(self.tmp_trial_gri))
+            self.f['trial_{0}'.format(self.trial_id - 1)].create_dataset('act', data=np.array(self.tmp_trial_act))
+            print(np.array(self.tmp_trial_act))
+            print("Trial {} saved!!!!!!!!!!!!!!!!!".format(self.trial_id - 1))
+        if self.accum_reward >= 1.0 or self.trial_id == 0:
+            self.f.create_group('trial_{0}'.format(self.trial_id))
+            print("New buffer {} created!!!!!!!!!!!!!".format(self.trial_id))
+            self.trial_id += 1
+
         self.action_generator.robot.clear_ag()
 
         self.env.reset()
@@ -83,19 +106,30 @@ class ActionPrimitiveWrapper(BaseWrapper):
         robot_initial_location = np.array([0.5, 0, 0.0])
         self.robots[0].set_position_orientation(robot_initial_location)
         self.simulator.step()
-        return_obs, accumulated_reward, done, info = self.step(2)
+        return_obs, accumulated_reward, done, info = self.step(2, record=False)
 
         # self.step(4)
         self.step_index = 0
         self.done = False
         self.accum_reward = 0
 
+        self.tmp_trial_rgb = []
+        self.tmp_trial_gri = []
+        self.tmp_trial_act = []
+
         self.fallback_state = self.dump_state(serialized=False)
         print('Success Rate: {} -----------------------\n'.format(np.mean(self.is_success_list)))
         print('Reward Mean: {}, Reward Std: {} -----------------------\n'.format(np.mean(self.reward_list), np.std(self.reward_list)))
+
+        self.tmp_trial_rgb.append(return_obs['rgb'])
+        self.tmp_trial_gri.append(return_obs['obj_in_hand'][0])
+
         return return_obs
 
-    def step(self, action: int):
+    def close(self):
+        self.f.close()
+
+    def step(self, action: int, record=True):
 
         # self.simulator.should_render = False
 
@@ -202,18 +236,29 @@ class ActionPrimitiveWrapper(BaseWrapper):
 
         img_t = cv.cvtColor(return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'][:, :, :3], cv.COLOR_BGR2HSV)
         h, s, v = cv.split(img_t)
-        light = random.randint(-80, 160)
+        light = random.randint(-40, 120)
         v1 = np.clip(cv.add(1 * v, light), 0, 255)
         img1 = np.uint8(cv.merge((h, s, v1)))
-        img1 = cv.cvtColor(img1, cv.COLOR_HSV2BGR).astype(np.float64)
+        img1 = cv.cvtColor(img1, cv.COLOR_HSV2RGB).astype(np.float64)
         img1 += np.random.normal(0, 5, img1.shape)
         img1 = np.clip(img1, 0., 255.)
+
+        # img1 = return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'][:, :, :3]
 
         is_obj_in_hand = int(self.action_generator._get_obj_in_hand() is not None)
         return_obs = {
             'rgb': img1 / 255.,
             'obj_in_hand': np.asarray([is_obj_in_hand]),
         }
+
+        if record:
+            if info['primitive_success']:
+                self.tmp_trial_act.append(action)
+                if self.done == False:
+                    self.tmp_trial_rgb.append(return_obs['rgb'])
+                    cv.imwrite(os.path.join(self.img_save_dir, '{0:06d}.png'.format(self.step_index % self.debug_length)), return_obs['rgb'] * 255)
+                    self.tmp_trial_gri.append(return_obs['obj_in_hand'][0])
+
         print('done: {}'.format(self.done))
         # plt.imshow(return_obs['rgb'])
         # plt.show()
@@ -222,6 +267,6 @@ class ActionPrimitiveWrapper(BaseWrapper):
         # self.simulator.should_render = True
         # self.simulator.render()
 
-        accumulated_reward -= 0.01
+        # accumulated_reward -= 0.01
 
         return return_obs, accumulated_reward, self.done, info

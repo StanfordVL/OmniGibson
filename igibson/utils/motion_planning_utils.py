@@ -316,7 +316,9 @@ class MotionPlanner:
                 visual_only=True,
             )
             self.env.simulator.import_object(self.marker, register=False, auto_initialize=True)
+            self.marker.visible = False
             self.env.simulator.import_object(self.marker_direction, register=False, auto_initialize=True)
+            self.marker_direction.visible = False
 
         self.visualize_2d_planning = visualize_2d_planning
         self.visualize_2d_result = visualize_2d_result
