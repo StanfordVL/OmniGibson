@@ -354,7 +354,7 @@ class VisualParticleSystem(MacroParticleSystem):
 
         # Additionally, we have n_groups (1), with m_particles for each group (n), attached_obj_uuids (n), and
         # particle ids and corresponding link info for each particle (m * 2)
-        return state_size + 2 * len(cls._group_particles) + \
+        return state_size + 1 + 2 * len(cls._group_particles) + \
                sum([2 * cls.num_group_particles(group) for group in cls.groups])
 
     @classmethod
@@ -594,7 +594,7 @@ class VisualParticleSystem(MacroParticleSystem):
                 sub-entries corresponding to the desired number of particles assigned to that group
         """
         # We have to be careful here -- some particle groups may have been deleted / are mismatched, so we need
-        # to update accordingly, potentially deleting stale instancers and creating new instancers as needed
+        # to update accordingly, potentially deleting stale groups and creating new groups as needed
         name_to_info_mapping = {obj.name: {
             "n_particles": len(p_idns),
             "particle_idns": p_idns,
@@ -707,6 +707,7 @@ class VisualParticleSystem(MacroParticleSystem):
         n_groups = int(state[0])
         groups_dict = OrderedDict()
         group_objs = []
+        # Index starts at 1 because index 0 is n_groups
         idx = 1
         for i in range(n_groups):
             obj_uuid, n_particles = int(state[idx]), int(state[idx + 1])
@@ -716,7 +717,7 @@ class VisualParticleSystem(MacroParticleSystem):
             groups_dict[obj.name] = OrderedDict(
                 particle_attached_obj_uuid=obj_uuid,
                 n_particles=n_particles,
-                particle_idns=[int(idn) for idn in state[idx + 2 : idx + 2 + n_particles]],
+                particle_idns=[int(idn) for idn in state[idx + 2 : idx + 2 + n_particles]], # Idx + 2 because the first two are obj_uuid and n_particles
                 particle_attached_link_names=[group_obj_id2link[int(idn)] for idn in state[idx + 2 + n_particles : idx + 2 + n_particles * 2]],
             )
             idx += 2 + n_particles * 2
