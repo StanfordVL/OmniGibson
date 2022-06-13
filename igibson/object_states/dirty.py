@@ -3,6 +3,7 @@ from igibson.object_states import AABB
 from igibson.object_states.object_state_base import AbsoluteObjectState, BooleanState
 from igibson.utils.constants import SemanticClass
 from igibson.systems.macro_particle_system import DustSystem, StainSystem
+from collections import OrderedDict
 import numpy as np
 
 s = settings.object_states.dirty
@@ -19,6 +20,10 @@ class _Dirty(AbsoluteObjectState, BooleanState):
     @staticmethod
     def get_dependencies():
         return AbsoluteObjectState.get_dependencies() + [AABB]
+
+    @property
+    def settable(self):
+        return True
 
     def __init__(self, obj):
         super(_Dirty, self).__init__(obj)
@@ -53,6 +58,27 @@ class _Dirty(AbsoluteObjectState, BooleanState):
                     self.DIRT_CLASS.num_group_particles(group=self.dirt_group) * clean_threshold
 
         return new_value
+
+    @property
+    def state_size(self):
+        return 2
+
+    def _dump_state(self):
+        return OrderedDict(value=self.get_value(), max_particles_for_clean=self._max_particles_for_clean)
+
+    def _load_state(self, state):
+        # Check to see if the value is different from what we currently have, if so, we set the state
+        if state["value"] != self.get_value():
+            self.set_value(state["value"])
+
+        # also set the max particles for clean
+        self._max_particles_for_clean = state["max_particles_for_clean"]
+
+    def _serialize(cls, state):
+        return np.array([state["value"], state["max_particles_for_clean"]])
+
+    def _deserialize(cls, state):
+        return OrderedDict(value=state[0], max_particles_for_clean=state[1]), 2
 
 
 class Dusty(_Dirty):
