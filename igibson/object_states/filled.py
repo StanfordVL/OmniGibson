@@ -13,7 +13,7 @@ if m.ENABLE_OMNI_PARTICLES:
 
 
 # Proportion of object's volume that must be filled for object to be considered filled
-VOLUME_FILL_PROPORTION = 0.45
+VOLUME_FILL_PROPORTION = 0.3
 
 
 def get_particle_positions_in_frame(pos, quat, scale, particle_positions):
@@ -307,8 +307,7 @@ class Filled(RelativeObjectState, BooleanState, LinkBasedStateMixin):
         self.check_in_volume = None        # Function to check whether particles are in volume for this container
         self.calculate_volume = None       # Function to calculate the real-world volume for this container
 
-    def _get_value(self, fluid):
-        fluid_system = get_system_from_element_name(fluid)
+    def _get_value(self, fluid_system):
         # Check what volume is filled
         if len(fluid_system.particle_instancers) > 0:
             particle_positions = np.concatenate([inst.particle_positions for inst in fluid_system.particle_instancers.values()], axis=0)
@@ -325,15 +324,13 @@ class Filled(RelativeObjectState, BooleanState, LinkBasedStateMixin):
 
         return value
 
-    def _set_value(self, fluid, new_value):
-        fluid_system = get_system_from_element_name(fluid)
-
+    def _set_value(self, fluid_system, new_value):
         # If we found no link, directly return
         if self.link is None:
             return
 
         # First, check our current state
-        current_state = self.get_value(fluid)
+        current_state = self.get_value(fluid_system)
 
         # Only do something if we're changing state
         if current_state != new_value:
@@ -381,15 +378,17 @@ class Filled(RelativeObjectState, BooleanState, LinkBasedStateMixin):
         state = OrderedDict()
         for system in get_fluid_systems().values():
             fluid_name = get_element_name_from_system(system)
-            state[fluid_name] = self.get_value(fluid_name)
+            state[fluid_name] = self.get_value(system)
 
         return state
 
     def _load_state(self, state):
-        # Check to see if the value is different from what we currently have, if so, we set the state
+        # Check to see if the value is different from what we currently have
+        # This should always be the same, because our get_value() reads from the particle system, which should
+        # hav already updated / synchronized its state
         for fluid_name, val in state.items():
-            if val != self.get_value(fluid_name):
-                self.set_value(fluid_name, val)
+            assert val == self.get_value(get_system_from_element_name(fluid_name)), \
+            f"Expected state {self.__class__.__name__} to have synchronized values, but got current value: {self.get_value(get_system_from_element_name(fluid_name))} with desired value: {val}"
 
     def _serialize(cls, state):
         return np.array([val for val in state.values()], dtype=float)

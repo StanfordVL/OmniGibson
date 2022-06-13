@@ -31,46 +31,44 @@ class Soaked(AbsoluteObjectState, BooleanState):
     def __init__(self, obj):
         super(Soaked, self).__init__(obj)
 
-        # Map of fluid system name to the number of absorbed particles for this object corresponding
+        # Map of fluid system to number of absorbed particles for this object corresponding
         # To that fluid system
         self.absorbed_particle_system_count = {}
-        self.fluid_systems = []
 
         for system in get_fluid_systems().values():
-            self.fluid_systems.append(system)
-            self.absorbed_particle_system_count[get_element_name_from_system(system)] = 0
+            self.absorbed_particle_system_count[system] = 0
 
         self.absorbed_particle_threshold = SOAK_PARTICLE_THRESHOLD
-        self.cloth_heuristic_update_fcn = lambda soaked_state, fluid: False                # Should determine whether we're soaked or not
+        self.cloth_heuristic_update_fcn = lambda soaked_state, fluid_system: None              # Should update the absorbed particle count appropriately
 
-    def _get_value(self, fluid):
-        assert self.absorbed_particle_system_count[fluid] <= self.absorbed_particle_threshold
-        return self.absorbed_particle_system_count[fluid] == self.absorbed_particle_threshold
+    def _get_value(self, fluid_system):
+        assert self.absorbed_particle_system_count[fluid_system] <= self.absorbed_particle_threshold
+        return self.absorbed_particle_system_count[fluid_system] == self.absorbed_particle_threshold
 
-    def _set_value(self, new_value, fluid):
-        assert_valid_key(key=fluid, valid_keys=self.absorbed_particle_system_count, name="fluid element name")
-        self.absorbed_particle_system_count[fluid] = self.absorbed_particle_threshold if new_value else 0
+    def _set_value(self, new_value, fluid_system):
+        assert_valid_key(key=fluid_system, valid_keys=self.absorbed_particle_system_count, name="fluid element name")
+        self.absorbed_particle_system_count[fluid_system] = self.absorbed_particle_threshold if new_value else 0
         return True
 
     def _update(self):
         # Handle cloth in a special way
         if self.obj._prim_type == PrimType.CLOTH:
-            for fluid_system in self.fluid_systems:
-                self.cloth_heuristic_update_fcn(self, get_element_name_from_system(fluid_system))
+            for fluid_system in self.absorbed_particle_system_count.keys():
+                self.cloth_heuristic_update_fcn(self, fluid_system)
 
             return
 
         # Iterate over all fluid systems
-        for fluid_system in self.fluid_systems:
-            fluid_name = get_element_name_from_system(fluid_system)
+        for fluid_system in self.absorbed_particle_system_count.keys():
+            # fluid_name = get_element_name_from_system(fluid_system)
             # Map of obj_id -> (system, system_particle_id)
             particle_contacts = fluid_system.state_cache['particle_contacts']
 
             # For each particle hit, hide then add to total particle count of soaked object
             for instancer, particle_idxs in particle_contacts.get(self.obj, {}).items():
-                assert self.absorbed_particle_threshold >= self.absorbed_particle_system_count[fluid_name]
+                assert self.absorbed_particle_threshold >= self.absorbed_particle_system_count[fluid_system]
 
-                particles_to_absorb = min(len(particle_idxs), self.absorbed_particle_threshold - self.absorbed_particle_system_count[fluid_name])
+                particles_to_absorb = min(len(particle_idxs), self.absorbed_particle_threshold - self.absorbed_particle_system_count[fluid_system])
                 particle_idxs_to_absorb = particle_idxs[:particles_to_absorb]
 
                 # Hide particles in contact with the object
@@ -78,23 +76,23 @@ class Soaked(AbsoluteObjectState, BooleanState):
                 particle_visibilities[particle_idxs_to_absorb] = 0
 
                 # Absorb the particles
-                self.absorbed_particle_system_count[fluid_name] += particles_to_absorb
+                self.absorbed_particle_system_count[fluid_system] += particles_to_absorb
 
                 # If above threshold, soak the object and stop absorbing
-                if self.absorbed_particle_system_count[fluid_name] >= self.absorbed_particle_threshold:
+                if self.absorbed_particle_system_count[fluid_system] >= self.absorbed_particle_threshold:
                     break
 
         # TODO: remove this
         for system, count in self.absorbed_particle_system_count.items():
             assert count <= self.absorbed_particle_threshold, \
-                f"{system} contains {count} particles violating threshold: {self.absorbed_particle_threshold}"
+                f"{system.name} contains {count} particles violating threshold: {self.absorbed_particle_threshold}"
 
     def get_texture_change_params(self):
         albedo_add = 0.1
         colors = []
 
-        for fluid_system in self.fluid_systems:
-            if self.get_value(fluid_system.name):
+        for fluid_system in self.absorbed_particle_system_count.keys():
+            if self.get_value(fluid_system):
                 color = [0.0, 0.0, 1.0]
                 colors.append(color)
             # TODO: Figure out how to read shader type
@@ -132,19 +130,27 @@ class Soaked(AbsoluteObjectState, BooleanState):
 
     @property
     def state_size(self):
-        return len(self.fluid_systems)
+        return len(self.absorbed_particle_system_count)
 
     def _dump_state(self):
-        return OrderedDict(soaked=self.absorbed_particle_system_count)
+        state = OrderedDict()
+        for system, val in self.absorbed_particle_system_count.items():
+            state[get_element_name_from_system(system)] = val
+        return state
 
     def _load_state(self, state):
-        self.absorbed_particle_system_count = state["soaked"]
+        for system_name, val in state.items():
+            self.absorbed_particle_system_count[get_system_from_element_name(system_name)] = val
 
     def _serialize(self, state):
-        return np.stack(list(state['soaked'].values()))
+        return np.stack(list(state.values()))
 
     def _deserialize(self, state):
-        return OrderedDict(soaked=OrderedDict(((get_element_name_from_system(system), state[i]) for i, system in enumerate(self.fluid_systems)))), len(self.fluid_systems)
+        state_dict = OrderedDict()
+        for i, system in enumerate(self.absorbed_particle_system_count.keys()):
+            state_dict[get_element_name_from_system(system)] = state[i]
+
+        return state_dict, len(self.absorbed_particle_system_count)
 
     @staticmethod
     def get_optional_dependencies():

@@ -67,9 +67,11 @@ class _Dirty(AbsoluteObjectState, BooleanState):
         return OrderedDict(value=self.get_value(), max_particles_for_clean=self._max_particles_for_clean)
 
     def _load_state(self, state):
-        # Check to see if the value is different from what we currently have, if so, we set the state
-        if state["value"] != self.get_value():
-            self.set_value(state["value"])
+        # Check to see if the value is different from what we currently have
+        # This should always be the same, because our get_value() reads from the particle system, which should
+        # hav already updated / synchronized its state
+        assert state["value"] == self.get_value(), \
+            f"Expected state {self.__class__.__name__} to have synchronized values, but got current value: {self.get_value()} with desired value: {state['value']}"
 
         # also set the max particles for clean
         self._max_particles_for_clean = state["max_particles_for_clean"]
