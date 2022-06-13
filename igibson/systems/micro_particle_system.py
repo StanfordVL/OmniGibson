@@ -45,7 +45,7 @@ def set_carb_settings_for_fluid_isosurface():
     isregistry.set_bool(SETTING_UPDATE_TO_USD, True)
     isregistry.set_int(SETTING_NUM_THREADS, 8)
     isregistry.set_bool(SETTING_UPDATE_VELOCITIES_TO_USD, False)
-    isregistry.set_bool(SETTING_UPDATE_PARTICLES_TO_USD, False)     # TODO: Why does setting this value --> True result in no isosurface being rendered?
+    isregistry.set_bool(SETTING_UPDATE_PARTICLES_TO_USD, True)     # TODO: Why does setting this value --> True result in no isosurface being rendered?
     isregistry.set_int("persistent/simulation/minFrameRate", 60)
     isregistry.set_bool("rtx-defaults/pathtracing/lightcache/cached/enabled", False)
     isregistry.set_bool("rtx-defaults/pathtracing/cached/enabled", False)
@@ -449,7 +449,7 @@ class MicroParticleSystem(BaseParticleSystem):
             # Also need to synchronize any instancers we have
             for prim in cls.prim.GetChildren():
                 name = prim.GetName()
-                if "Instancer" in prim.GetName():
+                if prim.GetPrimTypeInfo().GetTypeName() == "PointInstancer":
                     cls.particle_instancers[name] = PhysxParticleInstancer(
                         prim_path=prim.GetPrimPath().pathString,
                         name=name,
@@ -686,8 +686,8 @@ class MicroParticleSystem(BaseParticleSystem):
             positions=np.zeros((n_particles, 3)) if positions is None else positions,
             self_collision=self_collision,
             fluid=cls.is_fluid,
-            particle_mass=0.001, #None,
-            particle_density=None, #cls.particle_density,
+            particle_mass=None,
+            particle_density=cls.particle_density,
             orientations=orientations,
             velocities=velocities,
             angular_velocities=None,
@@ -763,7 +763,7 @@ class MicroParticleSystem(BaseParticleSystem):
         mesh_prim = get_prim_at_path(mesh_prim_path)
         sampling_api = PhysxSchema.PhysxParticleSamplingAPI.Apply(mesh_prim)
         sampling_api.CreateParticlesRel().AddTarget(points_prim_path)
-        sampling_api.CreateSamplingDistanceAttr().Set(0.99 * 0.6 * 2.0 * cls.particle_contact_offset if sampling_distance is None else sampling_distance)
+        sampling_api.CreateSamplingDistanceAttr().Set(0 if sampling_distance is None else sampling_distance)
         sampling_api.CreateMaxSamplesAttr().Set(max_samples)
         sampling_api.CreateVolumeAttr().Set(sample_volume)
 
@@ -1013,7 +1013,7 @@ class FluidSystem(MicroParticleSystem):
     @classproperty
     def use_isosurface(cls):
         # TODO: Make true once omni bugs are fixed
-        return False
+        return True
 
     @classproperty
     def particle_radius(cls):
@@ -1083,8 +1083,10 @@ class WaterSystem(FluidSystem):
 
     @classproperty
     def particle_density(cls):
+        # TODO: Water density seems to be unstable, debug later?
         # Water is 1000 kg/m^3
-        return 1000.0
+        # return 1000.0
+        return 1.0
 
     @classmethod
     def _create_particle_material(cls):
