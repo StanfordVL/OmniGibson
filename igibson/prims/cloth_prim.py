@@ -106,6 +106,8 @@ class ClothPrim(GeomPrim):
             np.array: (N, 3) numpy array, where each of the N particles' desired positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
+        assert pos.shape[0] == self.particle_positions.shape[0], \
+            f"Got mismatch in particle setting size: {pos.shape[0]}, vs. number of particles {self.particle_positions.shape[0]}!"
         pos = (pos - self.get_position()).astype(float)
         self.set_attribute(attr="points", val=array_to_vtarray(arr=pos, element_type=Gf.Vec3f))
 

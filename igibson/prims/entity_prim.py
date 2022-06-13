@@ -29,6 +29,7 @@ from igibson.prims.xform_prim import XFormPrim
 from igibson.utils.types import JointsState
 from igibson.utils.constants import PrimType
 from igibson.utils.types import GEOM_TYPES
+import igibson.macros as m
 
 
 class EntityPrim(XFormPrim):
@@ -202,7 +203,8 @@ class EntityPrim(XFormPrim):
         if self._prim_type == PrimType.CLOTH:
             assert not self._visual_only, "Cloth cannot be visual-only."
             assert len(self._links) == 1, "Cloth entity prim can only have one link."
-            self.create_attachment_point_link()
+            if m.AG_CLOTH:
+                self.create_attachment_point_link()
 
         # Disable any requested collision pairs
         for a_name, b_name in self.disabled_collision_pairs:
@@ -947,7 +949,7 @@ class EntityPrim(XFormPrim):
             else:
                 return super().get_position_orientation()
 
-    def set_local_pose_when_simulating(
+    def _set_local_pose_when_simulating(
         self, translation: Optional[np.ndarray] = None, orientation: Optional[np.ndarray] = None
     ) -> None:
         """Sets prim's pose with respect to the local frame (the prim's parent frame) when sumulation is running.
@@ -995,17 +997,17 @@ class EntityPrim(XFormPrim):
         """
         if self._prim_type == PrimType.CLOTH:
             if self._dc is not None and self._dc.is_simulating():
-                self.set_local_pose_when_simulating(translation=translation, orientation=orientation)
+                self._set_local_pose_when_simulating(translation=translation, orientation=orientation)
             else:
                 super().set_local_pose(translation=translation, orientation=orientation)
         else:
             if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and \
                     self._dc is not None and self._dc.is_simulating():
-                self.set_local_pose_when_simulating(translation=translation, orientation=orientation)
+                self._set_local_pose_when_simulating(translation=translation, orientation=orientation)
             else:
                 super().set_local_pose(translation=translation, orientation=orientation)
 
-    def get_local_pose_when_simulating(self) -> Tuple[np.ndarray, np.ndarray]:
+    def _get_local_pose_when_simulating(self) -> Tuple[np.ndarray, np.ndarray]:
         """Gets prim's pose with respect to the local frame (the prim's parent frame) when simulation is running.
 
         Returns:
@@ -1036,13 +1038,13 @@ class EntityPrim(XFormPrim):
         """
         if self._prim_type == PrimType.CLOTH:
             if self._dc is not None and self._dc.is_simulating():
-                return self.get_local_pose_when_simulating()
+                return self._get_local_pose_when_simulating()
             else:
                 return super().get_local_pose()
         else:
             if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and \
                     self._dc is not None and self._dc.is_simulating():
-                return self.get_local_pose_when_simulating()
+                return self._get_local_pose_when_simulating()
             else:
                 return super().get_local_pose()
 
@@ -1277,8 +1279,11 @@ class EntityPrim(XFormPrim):
     def create_attachment_point_link(self):
         """
         Create a collision-free, invisible attachment point link for the cloth object, and create an attachment between
-        the ClothPrim and this attachment point link (RigidPrim). The goal is to use this link to create fixed joint
-        with the world, and this joint will move to match the robot gripper frame (AG for cloth).
+        the ClothPrim and this attachment point link (RigidPrim).
+
+
+        One use case for this is that we can create a fixed joint between this link and the world to enable AG fo cloth.
+        During simulation, this joint will move and match the robot gripper frame, which will then drive the cloth.
         """
 
         assert self._prim_type == PrimType.CLOTH, "create_attachment_point_link should only be called for Cloth"
