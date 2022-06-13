@@ -15,8 +15,9 @@ from omni.isaac.core.utils.rotations import gf_quat_to_np_array
 from omni.isaac.core.utils.transformations import tf_matrix_from_pose
 from omni.isaac.core.utils.types import DOFInfo
 from omni.isaac.dynamic_control import _dynamic_control
-from pxr import Gf, Usd, UsdGeom
+from pxr import Gf, Usd, UsdGeom, UsdPhysics, PhysxSchema
 from omni.isaac.core.controllers.articulation_controller import ArticulationController
+import omni
 
 from omni.isaac.core.utils.prims import get_prim_property, set_prim_property, \
     get_prim_parent, get_prim_at_path
@@ -193,19 +194,20 @@ class EntityPrim(XFormPrim):
         #                                    f"but found multiple instead: {valid_root_links}"
         self._root_link_name = valid_root_links[0] if len(valid_root_links) == 1 else "base_link"
 
+        # Set visual only flag
+        # This automatically handles setting collisions / gravity appropriately per-link
+        self.visual_only = self._load_config["visual_only"] if \
+            "visual_only" in self._load_config and self._load_config["visual_only"] is not None else False
+
         if self._prim_type == PrimType.CLOTH:
             assert not self._visual_only, "Cloth cannot be visual-only."
             assert len(self._links) == 1, "Cloth entity prim can only have one link."
+            self.create_attachment_point_link()
 
         # Disable any requested collision pairs
         for a_name, b_name in self.disabled_collision_pairs:
             link_a, link_b = self._links[a_name], self._links[b_name]
             link_a.add_filtered_collision_pair(prim=link_b)
-
-        # Set visual only flag
-        # This automatically handles setting collisions / gravity appropriately per-link
-        self.visual_only = self._load_config["visual_only"] if \
-            "visual_only" in self._load_config and self._load_config["visual_only"] is not None else False
 
         # Run super
         super()._post_load()
@@ -913,9 +915,9 @@ class EntityPrim(XFormPrim):
             # Can only set position
             if self._dc is not None and self._dc.is_simulating():
                 # Assume there is only one base link (the cloth)
-                self.root_link.set_position_orientation(position, [0, 0, 0, 1])
+                self.root_link.set_position_orientation(position, orientation)
             else:
-                super().set_position_orientation(position, [0, 0, 0, 1])
+                super().set_position_orientation(position, orientation)
         else:
             if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and \
                     self._dc is not None and self._dc.is_simulating():
@@ -1271,6 +1273,50 @@ class EntityPrim(XFormPrim):
         self.set_angular_velocity(velocity=np.zeros(3))
         for joint in self._joints.values():
             joint.keep_still()
+
+    def create_attachment_point_link(self):
+        """
+        Create a collision-free, invisible attachment point link for the cloth object, and create an attachment between
+        the ClothPrim and this attachment point link (RigidPrim). The goal is to use this link to create fixed joint
+        with the world, and this joint will move to match the robot gripper frame (AG for cloth).
+        """
+
+        assert self._prim_type == PrimType.CLOTH, "create_attachment_point_link should only be called for Cloth"
+        link_name = "attachment_point"
+        stage = self._simulator.stage
+        link_prim = stage.DefinePrim(f"{self._prim_path}/{link_name}", "Xform")
+        vis_prim = UsdGeom.Sphere.Define(stage, f"{self._prim_path}/{link_name}/visuals").GetPrim()
+        col_prim = UsdGeom.Sphere.Define(stage, f"{self._prim_path}/{link_name}/collisions").GetPrim()
+
+        # Set the radius to be 0.03m. In theory, we want this radius to be as small as possible. Otherwise, the cloth
+        # dynamics will be unrealistic. However, in practice, if the radius is too small, the attachment becomes very
+        # unstable. Empirically 0.03m works reasonably well.
+        vis_prim.GetAttribute("radius").Set(0.03)
+        col_prim.GetAttribute("radius").Set(0.03)
+
+        # Add collision API to collision geom
+        UsdPhysics.CollisionAPI.Apply(col_prim)
+        UsdPhysics.MeshCollisionAPI.Apply(col_prim)
+        PhysxSchema.PhysxCollisionAPI.Apply(col_prim)
+
+        # Create a attachment point link
+        link = RigidPrim(
+            prim_path=link_prim.GetPrimPath().__str__(),
+            name=f"{self._name}:{link_name}",
+        )
+        link.disable_collisions()
+        # TODO (eric): Should we disable gravity for this link?
+        # link.disable_gravity()
+        link.visible = False
+        # Set a very small mass
+        link.mass = 1e-6
+
+        self._links[link_name] = link
+
+        # Create an attachment between the root link (ClothPrim) and the newly created attachment point link (RigidPrim)
+        attachment_path = self.root_link.prim.GetPath().AppendElementString("attachment")
+        omni.kit.commands.execute("CreatePhysicsAttachment", target_attachment_path=attachment_path,
+                                  actor0_path=self.root_link.prim.GetPath(), actor1_path=link.prim.GetPath())
 
     # TODO: Remove?
     # def save_state(self):

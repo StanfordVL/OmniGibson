@@ -24,6 +24,7 @@ from igibson.controllers import (
 from igibson.objects.dataset_object import DatasetObject
 from igibson.robots.robot_base import BaseRobot
 from igibson.utils.python_utils import classproperty, assert_valid_key
+from igibson.object_states.filled import generate_points_in_volume_checker_function
 from igibson.utils.constants import JointType, PrimType
 from igibson.utils.usd_utils import create_joint
 import igibson.macros as m
@@ -189,6 +190,8 @@ class ManipulationRobot(BaseRobot):
         self._ag_obj_constraint_params = {arm: {} for arm in self.arm_names}
         self._ag_freeze_gripper = {arm: None for arm in self.arm_names}
         self._ag_release_counter = {arm: None for arm in self.arm_names}
+        self._ag_check_in_volume = {arm: None for arm in self.arm_names}
+        self._ag_calculate_volume = {arm: None for arm in self.arm_names}
 
         # Call super() method
         super().__init__(
@@ -239,6 +242,13 @@ class ManipulationRobot(BaseRobot):
 
         # run super
         super()._validate_configuration()
+
+    def _initialize(self):
+        super()._initialize()
+        if m.AG_CLOTH:
+            for arm in self.arm_names:
+                self._ag_check_in_volume[arm], self._ag_calculate_volume[arm] = \
+                    generate_points_in_volume_checker_function(obj=self, volume_link=self.eef_links[arm])
 
     def is_grasping(self, arm="default", candidate_obj=None):
         """
@@ -443,7 +453,7 @@ class ManipulationRobot(BaseRobot):
 
         super().deploy_control(control=control, control_type=control_type, indices=indices, normalized=normalized)
 
-    def _release_grasp_rigid(self, arm="default"):
+    def _release_grasp(self, arm="default"):
         """
         Magic action to release this robot's grasp on an object
 
@@ -459,26 +469,6 @@ class ManipulationRobot(BaseRobot):
         self._ag_obj_constraint_params[arm] = {}
         self._ag_freeze_gripper[arm] = False
         self._ag_release_counter[arm] = 0
-
-    def _release_grasp_cloth(self, arm="default"):
-        """
-        Same as _calculate_in_hand_object_rigid, except for cloth. Only one should be used at any given time.
-        """
-        arm = self.default_arm if arm == "default" else arm
-        # Disable attachment
-        self._ag_obj_constraints[arm].GetAttachmentEnabledAttr().Set(False)
-        # Remove joint and filtered collision restraints
-        self._ag_data[arm] = None
-        self._ag_obj_constraints[arm] = None
-        self._ag_obj_constraint_params[arm] = {}
-        self._ag_freeze_gripper[arm] = False
-        self._ag_release_counter[arm] = 0
-
-    def _release_grasp(self, arm="default"):
-        if m.AG_CLOTH:
-            return self._release_grasp_cloth(arm)
-        else:
-            return self._release_grasp_rigid(arm)
 
     def get_control_dict(self):
         # In addition to super method, add in EEF states
@@ -1156,12 +1146,28 @@ class ManipulationRobot(BaseRobot):
                     #     get_constraint_violation(self._ag_obj_cid[arm]) > CONSTRAINT_VIOLATION_THRESHOLD
                     # )
                     # if constraint_violated or releasing_grasp:
+                    if m.AG_CLOTH:
+                        self._update_constraint_cloth(arm=arm)
+
                     if releasing_grasp:
                         self._release_grasp(arm=arm)
 
             elif applying_grasp:
                 self._ag_data[arm] = self._calculate_in_hand_object(arm=arm)
                 self._establish_grasp(arm=arm, ag_data=self._ag_data[arm])
+
+    def _update_constraint_cloth(self, arm="default"):
+        """
+        Update the AG constraint for cloth: for the fixed joint between the attachment point and the world, we set
+        the local pos to match the current eef link position plus the attachment_point_pos_local offset. As a result,
+        the joint will drive the attachment point to the updated position, which will then drive the cloth.
+        See _establish_grasp_cloth for more details.
+        """
+        attachment_point_pos_local = self._ag_obj_constraint_params[arm]["attachment_point_pos_local"]
+        eef_link_pos, eef_link_orn = self.eef_links[arm].get_position_orientation()
+        attachment_point_pos, _ = T.pose_transform(eef_link_pos, eef_link_orn, attachment_point_pos_local, [0, 0, 0, 1])
+        joint_prim = self._ag_obj_constraints[arm]
+        joint_prim.GetAttribute("physics:localPos1").Set(Gf.Vec3f(*attachment_point_pos.astype(float)))
 
     def _calculate_in_hand_object(self, arm="default"):
         if m.AG_CLOTH:
@@ -1178,27 +1184,61 @@ class ManipulationRobot(BaseRobot):
     def _calculate_in_hand_object_cloth(self, arm="default"):
         """
         Same as _calculate_in_hand_object_rigid, except for cloth. Only one should be used at any given time.
+
+        Calculates which object to assisted-grasp for arm @arm. Returns an (BaseObject, RigidPrim, np.ndarray) tuple or
+        None if no valid AG-enabled object can be found.
+
+        1) Check if the gripper is closed enough
+        2) Go through each of the cloth object, and check if its attachment point link position is within the "ghost"
+        box volume of the gripper link.
+
+        Only returns the first valid object and ignore the rest.
+
+        :param arm: str, specific arm to calculate in-hand object for.
+        Default is "default" which corresponds to the first entry in self.arm_names
+
+        :return None or tuple(BaseObject, RigidPrim, np.ndarray): If a valid assisted-grasp object is found, returns
+        the corresponding (object, object_link, attachment_point_position) to the contacted in-hand object. Otherwise,
+        returns None
         """
-        AG_CLOTH_DIST = 0.15
-        candidates = []
-        eef_pos = self.eef_links[arm].get_position()
+        # TODO (eric): Assume joint_pos = 0 means fully closed
+        GRIPPER_FINGER_CLOSE_THRESHOLD = 0.03
+        gripper_finger_pos = self.get_joint_positions()[self.gripper_control_idx[arm]]
+        gripper_finger_close = np.sum(gripper_finger_pos) < GRIPPER_FINGER_CLOSE_THRESHOLD
+        if not gripper_finger_close:
+            return None
+
         cloth_objs = self._simulator.scene.object_registry("prim_type", PrimType.CLOTH)
         if cloth_objs is None:
             return None
 
+        # TODO (eric): Only AG one cloth at any given moment.
+        # Returns the first cloth that overlaps with the "ghost" box volume
         for cloth_obj in cloth_objs:
-            candidates.append((cloth_obj, np.linalg.norm(cloth_obj.get_position() - eef_pos)))
-        sorted(candidates, key=lambda x: x[1])
-        ag_obj, dist = candidates[0]
-        if dist > AG_CLOTH_DIST:
-            return None
+            attachment_point_pos = cloth_obj.links["attachment_point"].get_position()
+            particles_in_volume = self._ag_check_in_volume[arm]([attachment_point_pos])
+            if particles_in_volume.sum() > 0 and gripper_finger_close:
+                return cloth_obj, cloth_obj.links["attachment_point"], attachment_point_pos
 
-        # Assume cloth has one and only one link called "base_link", which is the cloth mesh
-        return ag_obj, ag_obj.links["base_link"]
+        return None
 
     def _establish_grasp_cloth(self, arm="default", ag_data=None):
         """
         Same as _establish_grasp_cloth, except for cloth. Only one should be used at any given time.
+        Establishes an ag-assisted grasp, if enabled.
+
+        Create a fixed joint between the attachment point link of the cloth object and the world.
+        In theory, we could have created a fixed joint to the eef link, but omni doesn't support this as the robot has
+        an articulation root API attached to it, which is incompatible with the attachment API.
+
+        We also store attachment_point_pos_local as the attachment point position in the eef link frame when the fixed
+        joint is created. As the eef link frame changes its pose, we will use attachment_point_pos_local to figure out
+        the new attachment_point_pos in the world frame and set the fixed joint to there. See _update_constraint_cloth
+        for more details.
+
+        :param arm: str, specific arm to establish grasp.
+            Default is "default" which corresponds to the first entry in self.arm_names
+        :param ag_data: None or (BaseObject, RigidPrim, np.ndarray)
         """
         arm = self.default_arm if arm == "default" else arm
 
@@ -1206,19 +1246,50 @@ class ManipulationRobot(BaseRobot):
         if ag_data is None:
             return
 
-        ag_obj, ag_link = ag_data
-        attachment_path = ag_link.prim.GetPath().AppendElementString("rigidAttachment")
-        finger_link_col_mesh = self.finger_links["left"][0].collision_meshes["collisions"]
-        omni.kit.commands.execute("CreatePhysicsAttachment", target_attachment_path=attachment_path,
-                                  actor0_path=ag_link.prim.GetPath(), actor1_path=finger_link_col_mesh.prim.GetPath())
-        attachment = PhysxSchema.PhysxPhysicsAttachment.Get(self._simulator.stage, attachment_path)
+        ag_obj, ag_link, attachment_point_pos = ag_data
 
-        # Save a reference to this attachment
-        self._ag_obj_constraints[arm] = attachment
+        # Find the attachment point position in the eef frame
+        eef_link_pos, eef_link_orn = self.eef_links[arm].get_position_orientation()
+        attachment_point_pos_local, _ = \
+            T.relative_pose_transform(attachment_point_pos, [0, 0, 0, 1], eef_link_pos, eef_link_orn)
+
+        # Create the joint
+        # self._simulator.pause()
+        joint_prim_path = f"{ag_link.prim_path}/ag_constraint"
+        joint_type = "FixedJoint"
+        joint_prim = create_joint(
+            prim_path=joint_prim_path,
+            joint_type=joint_type,
+            body0=ag_link.prim_path,
+            body1=None,
+            enabled=False,
+            stage=self._simulator.stage,
+        )
+
+        # Set the local pose of this joint
+        joint_prim.GetAttribute("physics:localPos1").Set(Gf.Vec3f(*attachment_point_pos))
+
+        # We have to toggle the joint from off to on after a physics step because of an omni quirk
+        # Otherwise the joint transform is very weird
+        app.update()
+        joint_prim.GetAttribute("physics:jointEnabled").Set(True)
+
+        # Save a reference to this joint prim
+        self._ag_obj_constraints[arm] = joint_prim
+
+        # Modify max force based on user-determined assist parameters
+        # TODO
+        max_force = ASSIST_FORCE
+        # joint_prim.GetAttribute("physics:breakForce").Set(max_force)
+
         self._ag_obj_constraint_params[arm] = {
             "ag_obj_prim_path": ag_obj.prim_path,
             "ag_link_prim_path": ag_link.prim_path,
+            "ag_joint_prim_path": joint_prim_path,
+            "joint_type": joint_type,
             "gripper_pos": self.get_joint_positions()[self.gripper_control_idx[arm]],
+            "max_force": max_force,
+            "attachment_point_pos_local": attachment_point_pos_local,
         }
         self._ag_obj_in_hand[arm] = ag_obj
         self._ag_freeze_gripper[arm] = True
