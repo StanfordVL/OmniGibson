@@ -227,6 +227,11 @@ class Simulator(SimulationContext):
             self._physics_context.enable_gpu_dynamics(False)
             self._physics_context.set_broadphase_type("MBP")
 
+        # Set GPU Pairs capacity
+        self._physics_context.set_gpu_found_lost_aggregate_pairs_capacity(m.GPU_PAIRS_CAPACITY)
+        self._physics_context.set_gpu_found_lost_pairs_capacity(m.GPU_PAIRS_CAPACITY)
+        self._physics_context.set_gpu_total_aggregate_pairs_capacity(m.GPU_PAIRS_CAPACITY)
+
     def _set_viewer_settings(self):
         """
         Initializes a reference to the viewer in the App, and sets the frame size
