@@ -132,13 +132,13 @@ stages:
     cmd: python scripts/export_scene.py gates_bedroom
     deps:
     - path: scripts/export_scene.py
-      md5: d54564e558c0ca162b3734cff83cb4b2
-      size: 28931
+      md5: 5611c7445403fd9e07b6323495ffc491
+      size: 26578
     outs:
     - path: artifacts/scenes/gates_bedroom
-      md5: 392c0bf0d68022bdb3fcfb0f7205beeb.dir
-      size: 767067
-      nfiles: 34
+      md5: bdf6408859dfc42a31d9c0d115cffeeb.dir
+      size: 10551
+      nfiles: 1
   room_object_list@office_bike:
     cmd: python scripts/batch_3dsmax.py scripts/room_object_list.py -sceneFile cad/scenes/office_bike/processed.max
       -mxsString dir:cad/scenes/office_bike/artifacts
@@ -1481,10 +1481,54 @@ stages:
     cmd: python scripts/export_scene.py restaurant_brunch
     deps:
     - path: scripts/export_scene.py
-      md5: d54564e558c0ca162b3734cff83cb4b2
-      size: 28931
+      md5: 5611c7445403fd9e07b6323495ffc491
+      size: 26578
     outs:
     - path: artifacts/scenes/restaurant_brunch
-      md5: 4a1893bd506e1b01d06958e65eb01502.dir
-      size: 3141982
-      nfiles: 34
+      md5: 6b05f9970d181598307c7d015a6f209f.dir
+      size: 161129
+      nfiles: 1
+  export_scenes@restaurant_hotel:
+    cmd: python scripts/export_scene.py restaurant_hotel
+    deps:
+    - path: scripts/export_scene.py
+      md5: 5611c7445403fd9e07b6323495ffc491
+      size: 26578
+    outs:
+    - path: artifacts/scenes/restaurant_hotel
+      md5: b25b8cc3bb215330945ed56f146f5f30.dir
+      size: 334425
+      nfiles: 1
+  export_scenes@grocery_store_convenience:
+    cmd: python scripts/export_scene.py grocery_store_convenience
+    deps:
+    - path: scripts/export_scene.py
+      md5: 410c74cff1303c03b6a8d7df91492f0c
+      size: 26547
+    outs:
+    - path: artifacts/scenes/grocery_store_convenience
+      md5: 2a3155cee14f24f45b959ee99622d41d.dir
+      size: 782488
+      nfiles: 1
+  export_scenes@office_vendor_machine:
+    cmd: python scripts/export_scene.py office_vendor_machine
+    deps:
+    - path: scripts/export_scene.py
+      md5: 5611c7445403fd9e07b6323495ffc491
+      size: 26578
+    outs:
+    - path: artifacts/scenes/office_vendor_machine
+      md5: f5ea874788cccc43f11e63d92695dc4f.dir
+      size: 62245
+      nfiles: 1
+  export_scenes@house_double_floor_upper:
+    cmd: python scripts/export_scene.py house_double_floor_upper
+    deps:
+    - path: scripts/export_scene.py
+      md5: 5611c7445403fd9e07b6323495ffc491
+      size: 26578
+    outs:
+    - path: artifacts/scenes/house_double_floor_upper
+      md5: 1e2ac01a35a10d548b650f2fb80c15f4.dir
+      size: 138062
+      nfiles: 1
