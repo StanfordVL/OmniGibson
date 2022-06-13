@@ -482,6 +482,15 @@ class Simulator(SimulationContext):
 
         self.frame_count += 1
 
+    def step_physics(self, current_time=None):
+        """
+        Step the physics a single step.
+
+        Args:
+            current_time (None or float): If specified, determines the current time at which the sim is being stepped
+        """
+        self._physics_context._step(current_time=self.current_time if current_time is None else current_time)
+
     # TODO: Do we need this?
     # def sync(self, force_sync=False):
     #     """
