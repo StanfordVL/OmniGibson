@@ -478,6 +478,7 @@ def update_shader_asset_paths(shader):
     Args:
         shader (Usd.Shader): Shader prim whose input channels should be updated
     """
+    return
     # Update the material paths so that it's correct wrt to the local machine / directory setup that
     # this prim and USD is being loaded on
     for inp in shader.GetInputs():
