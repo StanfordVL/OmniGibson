@@ -16,6 +16,7 @@ from igibson.object_states.factory import (
     get_state_name,
     get_states_for_ability,
     get_texture_change_states,
+    get_fire_states,
     get_steam_states,
     get_texture_change_priority,
 )
@@ -198,6 +199,9 @@ class StatefulObject(BaseObject):
         if len(set(self.states) & set(get_steam_states())) > 0:
             self._create_steam_apis()
 
+        if len(set(self.states) & set(get_fire_states())) > 0:
+            self._create_fire_apis()
+
     def _create_texture_change_apis(self):
         """
         Create necessary apis for texture changes.
@@ -212,6 +216,69 @@ class StatefulObject(BaseObject):
                 shader.CreateInput("albedo_add", Sdf.ValueTypeNames.Float).Set(0.0)
                 shader.CreateInput("diffuse_tint", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f([1.0, 1.0, 1.0]))
                 self._shaders.append(shader)
+
+
+    def _create_fire_apis(self):
+        """
+        Create necessary prims and apis for fire effects.
+        """
+        # Make sure that flow setting is enabled.
+        renderer_setting = RendererSettings()
+        renderer_setting.common_settings.flow_settings.enable()
+
+        # Define prim paths.
+        flowEmitterSphere_prim_path = self._prim_path + "/flowEmitterSphere"
+        flowSimulate_prim_path = self._prim_path+ "/flowSimulate"
+        flowOffscreen_prim_path = self._prim_path + "/flowOffscreen"
+        flowRender_prim_path = self._prim_path+ "/flowRender"
+
+        # Define prims.
+        stage = self._simulator.stage
+        emitter = stage.DefinePrim(flowEmitterSphere_prim_path, "FlowEmitterSphere")
+        simulate = stage.DefinePrim(flowSimulate_prim_path, "FlowSimulate")
+        offscreen = stage.DefinePrim(flowOffscreen_prim_path, "FlowOffscreen")
+        renderer = stage.DefinePrim(flowRender_prim_path, "FlowRender")
+        advection = stage.DefinePrim(flowSimulate_prim_path + "/advection", "FlowAdvectionCombustionParams")
+        smoke = stage.DefinePrim(flowSimulate_prim_path + "/advection/smoke", "FlowAdvectionCombustionParams")
+        vorticity = stage.DefinePrim(flowSimulate_prim_path + "/vorticity", "FlowVorticityParams")
+        rayMarch = stage.DefinePrim(flowRender_prim_path + "/rayMarch", "FlowRayMarchParams")
+        colormap = stage.DefinePrim(flowOffscreen_prim_path + "/colormap", "FlowRayMarchColormapParams")
+
+        self._emitter = emitter
+
+        # Update settings.
+        # TODO: get radius of heat_source_link from metadata.
+        radius = 0.05
+        
+        emitter.CreateAttribute("enabled", VT.Bool, False).Set(False)
+        emitter.CreateAttribute("fuel", VT.Float, False).Set(0.8)
+        emitter.CreateAttribute("coupleRateFuel", VT.Float, False).Set(1.5)
+        emitter.CreateAttribute("coupleRateVelocity", VT.Float, False).Set(2.0)
+        emitter.CreateAttribute("radius", VT.Float, False).Set(radius)
+        emitter.CreateAttribute("velocity", VT.Float3, False).Set((0, 0, 0))
+        self.update_fire_emitter_position()
+
+        simulate.CreateAttribute("densityCellSize", VT.Float, False).Set(radius*0.2)
+
+        advection.CreateAttribute("buoyancyPerTemp", VT.Float, False).Set(0.04)
+        advection.CreateAttribute("burnPerTemp", VT.Float, False).Set(4)
+        advection.CreateAttribute("gravity", VT.Float3, False).Set((0, 0, -60.0))
+
+        smoke.CreateAttribute("fade", Sdf.ValueTypeNames.Float, False).Set(2.0)
+
+        vorticity.CreateAttribute("constantMask", VT.Float, False).Set(5.0)
+
+        rayMarch.CreateAttribute("attenuation", VT.Float, False).Set(0.5)
+
+        rgbaPoints = []
+        rgbaPoints.append(Gf.Vec4f(0.0154, 0.0177, 0.0154, 0.004902))
+        rgbaPoints.append(Gf.Vec4f(0.03575, 0.03575, 0.03575, 0.504902))
+        rgbaPoints.append(Gf.Vec4f(0.03575, 0.03575, 0.03575, 0.504902))
+        rgbaPoints.append(Gf.Vec4f(1, 0.1594, 0.0134, 0.8))
+        rgbaPoints.append(Gf.Vec4f(13.53, 2.99, 0.12599, 0.8))
+        rgbaPoints.append(Gf.Vec4f(78, 39, 6.1, 0.7))
+        colormap.CreateAttribute("rgbaPoints", Sdf.ValueTypeNames.Float4Array, False).Set(rgbaPoints)
+
 
     def _create_steam_apis(self):
         """
@@ -267,9 +334,21 @@ class StatefulObject(BaseObject):
         Args:
             value (bool): Value to set
         """
-        if self._emitter is not None:
-            if value != self._emitter.GetAttribute("enabled").Get():
-                self._emitter.GetAttribute("enabled").Set(value)
+        if self._emitter is None:
+            return
+        if value != self._emitter.GetAttribute("enabled").Get():
+            self._emitter.GetAttribute("enabled").Set(value)
+
+    def update_fire_emitter_position(self):
+        """
+        Update the position of the emitter prim for fire effect.
+        """
+        if self._emitter is None:
+            return
+        heat_link = self.links["heat_source_link"]
+        heat_link_pos = heat_link.get_local_pose()[0]
+        self._emitter.CreateAttribute("position", VT.Float3, False).Set((heat_link_pos[0], heat_link_pos[1], heat_link_pos[2]))
+
 
     def get_textures(self):
         """Gets prim's texture files.
@@ -303,6 +382,9 @@ class StatefulObject(BaseObject):
                     texture_change_states.append(state)
             if state_type in get_steam_states():
                 emitter_enabled = emitter_enabled or state.get_value()
+            if state_type in get_fire_states():
+                emitter_enabled = emitter_enabled or state.get_value()[0]
+                self.update_fire_emitter_position()
 
         self.set_emitter_enabled(emitter_enabled)
 
