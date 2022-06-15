@@ -61,6 +61,22 @@ sim.step()
 # Heat source is on.
 heat_source_state, heat_source_position = stove.states[object_states.HeatSourceOrSink].get_value()
 assert heat_source_state
+for _ in range(500):
+    sim.step()
 
-for _ in range(3000):
+# Toggle off stove.
+stove.states[object_states.ToggledOn].set_value(False)
+assert not stove.states[object_states.ToggledOn].get_value()
+for _ in range(200):
+    sim.step()
+
+# Move stove.
+stove.set_linear_velocity(velocity=np.array([-5.0, 0, 0.0]))
+for i in range(200):
+    sim.step()
+
+# Toggle on stove again.
+stove.states[object_states.ToggledOn].set_value(True)
+assert stove.states[object_states.ToggledOn].get_value()
+for i in range(500):
     sim.step()
