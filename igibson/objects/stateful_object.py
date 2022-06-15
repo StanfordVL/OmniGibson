@@ -357,7 +357,7 @@ class StatefulObject(BaseObject):
         Should be called after all the states are updated.
         """
         texture_change_states = []
-        emitter_enabled = False
+        emitter_enabled = defaultdict(bool)
         for state_type, state in self.states.items():
             if state_type in get_texture_change_states():
                 if state_type in [Soaked]:
@@ -369,15 +369,15 @@ class StatefulObject(BaseObject):
                 elif state.get_value():
                     texture_change_states.append(state)
             if state_type in get_steam_states():
-                emitter_enabled = emitter_enabled or state.get_value()
-                self.update_emitter_position(EmitterType.STEAM)
-                self.set_emitter_enabled(EmitterType.STEAM, emitter_enabled)
+                emitter_enabled[EmitterType.STEAM] |= state.get_value()
             if state_type in get_fire_states():
                 # Currently, the only state that uses fire is HeatSourceOrSink, whose get_value()
                 # returns (heat_source_state, heat_source_position).
-                emitter_enabled = emitter_enabled or state.get_value()[0]
-                self.update_emitter_position(EmitterType.FIRE)
-                self.set_emitter_enabled(EmitterType.FIRE, emitter_enabled)
+                emitter_enabled[EmitterType.FIRE] |= state.get_value()[0]
+
+            for emitter_type in emitter_enabled:
+                self.update_emitter_position(emitter_type)
+                self.set_emitter_enabled(emitter_type, emitter_enabled[emitter_type])
 
         texture_change_states.sort(key=lambda s: get_texture_change_priority()[s.__class__])
         object_state = texture_change_states[-1] if len(texture_change_states) > 0 else None
