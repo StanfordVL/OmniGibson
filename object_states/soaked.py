@@ -40,10 +40,10 @@ while True:
     # breakpoint()
     # for obj in sim.scene.object_registry("states", igibson.object_states.ToggledOn):
     #     print(obj.name)
-    if idx > 500:
+    if idx == 500:
         print("Toggling on sink!")
-        sink = sim.scene.object_registry("name", "sink_35")
-        sink.states[igibson.object_states.ToggledOn].set_value(True)
+        # sink = sim.scene.object_registry("name", "sink_35")
+        # sink.states[igibson.object_states.ToggledOn].set_value(True)
         sink = sim.scene.object_registry("name", "sink_42")
         sink.states[igibson.object_states.ToggledOn].set_value(True)
 
