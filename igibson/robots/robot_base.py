@@ -392,7 +392,14 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
     @abstractmethod
     def model_file(self):
         """
-        :return str: absolute path to robot model's URDF / MJCF file
+        :return str: absolute path to robot model's USD file
+        """
+        raise NotImplementedError
+
+    @property
+    def robot_urdf(self):
+        """
+        :return: str, file path to the robot urdf file.
         """
         raise NotImplementedError
 
