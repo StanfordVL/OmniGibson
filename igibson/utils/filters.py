@@ -56,6 +56,7 @@ class MovingAverageFilter(Filter):
         :param filter_width: The number of past samples to take the moving average over.
         """
         self.obs_dim = obs_dim
+        assert filter_width > 0, f"MovingAverageFilter must have a non-zero size! Got: {filter_width}"
         self.filter_width = filter_width
         self.past_samples = np.zeros((filter_width, obs_dim))
         self.current_idx = 0
