@@ -12,11 +12,15 @@ from collections import OrderedDict
 
 import numpy as np
 
+import carb
+import omni
+from pxr import Gf
 
+from igibson import Simulator, app
 from igibson.robots import REGISTERED_ROBOTS, ManipulationRobot
 from igibson.scenes.empty_scene import EmptyScene
-from igibson.scenes.interactive_traversable_scene import InteractiveIndoorScene
-from igibson.simulator import Simulator
+from igibson.scenes.interactive_traversable_scene import InteractiveTraversableScene
+from igibson.sensors.vision_sensor import VisionSensor
 
 CONTROL_MODES = OrderedDict(
     random="Use autonomous random actions (default)",
@@ -27,24 +31,6 @@ SCENES = OrderedDict(
     Rs_int="Realistic interactive home environment (default)",
     empty="Empty environment with no objects",
 )
-
-GUIS = OrderedDict(
-    ig="iGibson GUI (default)",
-    pb="PyBullet GUI",
-)
-
-ARROWS = {
-    0: "up_arrow",
-    1: "down_arrow",
-    2: "left_arrow",
-    3: "right_arrow",
-    65295: "left_arrow",
-    65296: "right_arrow",
-    65297: "up_arrow",
-    65298: "down_arrow",
-}
-
-gui = "ig"
 
 
 def choose_from_options(options, name, random_selection=False):
@@ -129,20 +115,39 @@ class KeyboardController:
             self.controller_info[name] = {
                 "name": type(controller).__name__,
                 "start_idx": idx,
+                "dofs": controller.dof_idx,
                 "command_dim": controller.command_dim,
             }
             idx += controller.command_dim
 
         # Other persistent variables we need to keep track of
-        self.joint_control_idx = None  # Indices of joints being directly controlled via joint control
+        self.joint_names = [name for name in robot.joints.keys()]   # Ordered list of joint names belonging to the robot
+        self.joint_command_idx = None   # Indices of joints being directly controlled in the action array
+        self.joint_control_idx = None  # Indices of joints being directly controlled in the actual joint array
+        self.active_joint_command_idx_idx = 0   # Which index within the joint_command_idx variable is being controlled by the user
         self.current_joint = -1  # Active joint being controlled for joint control
         self.gripper_direction = 1.0  # Flips between -1 and 1
         self.persistent_gripper_action = None  # Whether gripper actions should persist between commands,
         # i.e.: if using binary gripper control and when no keypress is active, the gripper action should still the last executed gripper action
-        self.last_keypress = None  # Last detected keypress
-        self.keypress_mapping = None
+        self.keypress_mapping = None    # Maps omni keybindings to information for controlling various parts of the robot
+        self.current_keypress = None    # Current key that is being pressed
+        self.active_action = None       # Current action information based on the current keypress
+        self.toggling_gripper = False   # Whether we should toggle the gripper during the next action
+
+        # Populate the keypress mapping dictionary
         self.populate_keypress_mapping()
-        self.time_last_keyboard_input = time.time()
+
+        # Register the keyboard callback function
+        self.register_keyboard_handler()
+
+    def register_keyboard_handler(self):
+        """
+        Sets up the keyboard callback functionality with omniverse
+        """
+        appwindow = omni.appwindow.get_default_app_window()
+        input_interface = carb.input.acquire_input_interface()
+        keyboard = appwindow.get_keyboard()
+        sub_keyboard = input_interface.subscribe_to_keyboard_events(keyboard, self.keyboard_event_handler)
 
     def populate_keypress_mapping(self):
         """
@@ -153,49 +158,86 @@ class KeyboardController:
                 val: <float>
         """
         self.keypress_mapping = {}
-        self.joint_control_idx = set()
+        self.joint_command_idx = []
+        self.joint_control_idx = []
 
         # Add mapping for joint control directions (no index because these are inferred at runtime)
-        self.keypress_mapping["]"] = {"idx": None, "val": 0.1}
-        self.keypress_mapping["["] = {"idx": None, "val": -0.1}
+        self.keypress_mapping[carb.input.KeyboardInput.RIGHT_BRACKET] = {"idx": None, "val": 0.1}
+        self.keypress_mapping[carb.input.KeyboardInput.LEFT_BRACKET] = {"idx": None, "val": -0.1}
 
         # Iterate over all controller info and populate mapping
         for component, info in self.controller_info.items():
             if info["name"] == "JointController":
                 for i in range(info["command_dim"]):
-                    ctrl_idx = info["start_idx"] + i
-                    self.joint_control_idx.add(ctrl_idx)
+                    cmd_idx = info["start_idx"] + i
+                    self.joint_command_idx.append(cmd_idx)
+                self.joint_control_idx += info["dofs"].tolist()
             elif info["name"] == "DifferentialDriveController":
-                self.keypress_mapping["i"] = {"idx": info["start_idx"] + 0, "val": 0.2}
-                self.keypress_mapping["k"] = {"idx": info["start_idx"] + 0, "val": -0.2}
-                self.keypress_mapping["l"] = {"idx": info["start_idx"] + 1, "val": 0.1}
-                self.keypress_mapping["j"] = {"idx": info["start_idx"] + 1, "val": -0.1}
+                self.keypress_mapping[carb.input.KeyboardInput.I] = {"idx": info["start_idx"] + 0, "val": 0.2}
+                self.keypress_mapping[carb.input.KeyboardInput.K] = {"idx": info["start_idx"] + 0, "val": -0.2}
+                self.keypress_mapping[carb.input.KeyboardInput.L] = {"idx": info["start_idx"] + 1, "val": -0.1}
+                self.keypress_mapping[carb.input.KeyboardInput.J] = {"idx": info["start_idx"] + 1, "val": 0.1}
             elif info["name"] == "InverseKinematicsController":
-                self.keypress_mapping["up_arrow"] = {"idx": info["start_idx"] + 0, "val": 0.5}
-                self.keypress_mapping["down_arrow"] = {"idx": info["start_idx"] + 0, "val": -0.5}
-                self.keypress_mapping["right_arrow"] = {"idx": info["start_idx"] + 1, "val": -0.5}
-                self.keypress_mapping["left_arrow"] = {"idx": info["start_idx"] + 1, "val": 0.5}
-                self.keypress_mapping["p"] = {"idx": info["start_idx"] + 2, "val": 0.5}
-                self.keypress_mapping[";"] = {"idx": info["start_idx"] + 2, "val": -0.5}
-                self.keypress_mapping["n"] = {"idx": info["start_idx"] + 3, "val": 0.5}
-                self.keypress_mapping["b"] = {"idx": info["start_idx"] + 3, "val": -0.5}
-                self.keypress_mapping["o"] = {"idx": info["start_idx"] + 4, "val": 0.5}
-                self.keypress_mapping["u"] = {"idx": info["start_idx"] + 4, "val": -0.5}
-                self.keypress_mapping["v"] = {"idx": info["start_idx"] + 5, "val": 0.5}
-                self.keypress_mapping["c"] = {"idx": info["start_idx"] + 5, "val": -0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.UP] = {"idx": info["start_idx"] + 0, "val": 0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.DOWN] = {"idx": info["start_idx"] + 0, "val": -0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.RIGHT] = {"idx": info["start_idx"] + 1, "val": -0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.LEFT] = {"idx": info["start_idx"] + 1, "val": 0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.P] = {"idx": info["start_idx"] + 2, "val": 0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.SEMICOLON] = {"idx": info["start_idx"] + 2, "val": -0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.N] = {"idx": info["start_idx"] + 3, "val": 0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.B] = {"idx": info["start_idx"] + 3, "val": -0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.O] = {"idx": info["start_idx"] + 4, "val": 0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.U] = {"idx": info["start_idx"] + 4, "val": -0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.V] = {"idx": info["start_idx"] + 5, "val": 0.5}
+                self.keypress_mapping[carb.input.KeyboardInput.C] = {"idx": info["start_idx"] + 5, "val": -0.5}
             elif info["name"] == "MultiFingerGripperController":
                 if info["command_dim"] > 1:
                     for i in range(info["command_dim"]):
                         ctrl_idx = info["start_idx"] + i
                         self.joint_control_idx.add(ctrl_idx)
                 else:
-                    self.keypress_mapping[" "] = {"idx": info["start_idx"], "val": 1.0}
+                    self.keypress_mapping[carb.input.KeyboardInput.T] = {"idx": info["start_idx"], "val": 1.0}
                     self.persistent_gripper_action = 1.0
             elif info["name"] == "NullGripperController":
                 # We won't send actions if using a null gripper controller
-                self.keypress_mapping[" "] = {"idx": info["start_idx"], "val": None}
+                self.keypress_mapping[carb.input.KeyboardInput.T] = {"idx": info["start_idx"], "val": None}
             else:
                 raise ValueError("Unknown controller name received: {}".format(info["name"]))
+
+    def keyboard_event_handler(self, event, *args, **kwargs):
+        # Check if we've received a key press or repeat
+        if event.type == carb.input.KeyboardEventType.KEY_PRESS \
+                or event.type == carb.input.KeyboardEventType.KEY_REPEAT:
+            # Handle special cases
+            if event.input in {carb.input.KeyboardInput.KEY_1, carb.input.KeyboardInput.KEY_2}:
+                # Decrement joint and print out new joint being controlled
+                self.active_joint_command_idx_idx = max(0, self.active_joint_command_idx_idx - 1) \
+                    if event.input == carb.input.KeyboardInput.KEY_1 \
+                    else min(len(self.joint_control_idx) - 1, self.active_joint_command_idx_idx + 1)
+                print(f"Now controlling joint {self.joint_names[self.joint_control_idx[self.active_joint_command_idx_idx]]}")
+            elif event.input == carb.input.KeyboardInput.ESCAPE:
+                # Terminate immediately
+                app.close()
+                exit(0)
+            else:
+                # Handle all other actions and update accordingly
+                self.active_action = self.keypress_mapping.get(event.input, None)
+
+            if event.type == carb.input.KeyboardEventType.KEY_PRESS:
+                # Store the current keypress
+                self.current_keypress = event.input
+
+                # Also store whether we pressed the key for toggling gripper actions
+                if event.input == carb.input.KeyboardInput.T:
+                    self.toggling_gripper = True
+
+        # If we release a key, clear the active action and keypress
+        elif event.type == carb.input.KeyboardEventType.KEY_RELEASE:
+            self.active_action = None
+            self.current_keypress = None
+
+        # Callback always needs to return True
+        return True
 
     def get_random_action(self):
         """
@@ -208,87 +250,45 @@ class KeyboardController:
         :return Array: Generated action vector based on received user inputs from the keyboard
         """
         action = np.zeros(self.action_dim)
-        keypress = self.get_keyboard_input()
 
-        if keypress is not None:
-            # If the keypress is a number, the user is trying to select a specific joint to control
-            if keypress.isnumeric():
-                if int(keypress) in self.joint_control_idx:
-                    self.current_joint = int(keypress)
+        # Handle the action if any key is actively being pressed
+        if self.active_action is not None:
+            idx, val = self.active_action["idx"], self.active_action["val"]
 
-            elif keypress in self.keypress_mapping:
-                action_info = self.keypress_mapping[keypress]
-                idx, val = action_info["idx"], action_info["val"]
+            # Only handle the action if the value is specified
+            if val is not None:
+                # If there is no index, the user is controlling a joint with "[" and "]"
+                if idx is None:
+                    idx = self.joint_command_idx[self.active_joint_command_idx_idx]
 
-                # Non-null gripper
-                if val is not None:
-                    # If the keypress is a spacebar, this is a gripper action
-                    if keypress == " ":
-                        # We toggle the gripper direction if the last keypress is DIFFERENT from this keypress AND
-                        # we're past the gripper time threshold, to avoid high frequency toggling
-                        # i.e.: holding down the spacebar shouldn't result in rapid toggling of the gripper
-                        if keypress != self.last_keypress:
-                            self.gripper_direction *= -1.0
-
-                        # Modify the gripper value
-                        val *= self.gripper_direction
-                        if self.persistent_gripper_action is not None:
-                            self.persistent_gripper_action = val
-
-                    # If there is no index, the user is controlling a joint with "[" and "]". Set the idx to self.current_joint
-                    if idx is None and self.current_joint != -1:
-                        idx = self.current_joint
-
-                    if idx is not None:
-                        action[idx] = val
-
-        sys.stdout.write("\033[K")
-        print("Pressed {}. Action: {}".format(keypress, action))
-        sys.stdout.write("\033[F")
-
-        # Update last keypress
-        self.last_keypress = keypress
+                # Set the action
+                action[idx] = val
 
         # Possibly set the persistent gripper action
-        if self.persistent_gripper_action is not None and self.keypress_mapping[" "]["val"] is not None:
-            action[self.keypress_mapping[" "]["idx"]] = self.persistent_gripper_action
+        if self.persistent_gripper_action is not None and \
+                self.keypress_mapping[carb.input.KeyboardInput.T]["val"] is not None:
+
+            # Possibly update the stored value if the toggle gripper key has been pressed
+            if self.toggling_gripper:
+                # We toggle the gripper direction
+                self.gripper_direction *= -1.0
+                self.persistent_gripper_action = \
+                    self.keypress_mapping[carb.input.KeyboardInput.T]["val"] * self.gripper_direction
+
+                # Clear the toggling gripper flag
+                self.toggling_gripper = False
+
+            # Set the persistent action
+            action[self.keypress_mapping[carb.input.KeyboardInput.T]["idx"]] = self.persistent_gripper_action
+
+        # Print out the user what is being pressed / controlled
+        sys.stdout.write("\033[K")
+        keypress_str = self.current_keypress.__str__().split(".")[-1]
+        print("Pressed {}. Action: {}".format(keypress_str, action))
+        sys.stdout.write("\033[F")
 
         # Return action
         return action
-
-    def get_keyboard_input(self):
-        """
-        Checks for newly received user inputs and returns the first received input, if any
-        :return None or str: User input in string form. Note that only the characters mentioned in
-        @self.print_keyboard_teleop_info are explicitly supported
-        """
-        global gui
-
-        # Getting current time
-        current_time = time.time()
-        if gui == "pb":
-            kbe = p.getKeyboardEvents()
-            # Record the first keypress if any was detected
-            keypress = -1 if len(kbe.keys()) == 0 else list(kbe.keys())[0]
-        else:
-            # Record the last keypress if it's pressed after the last check
-            keypress = (
-                -1
-                if self.simulator.viewer.time_last_pressed_key is None
-                or self.simulator.viewer.time_last_pressed_key < self.time_last_keyboard_input
-                else self.simulator.viewer.last_pressed_key
-            )
-        # Updating the time of the last check
-        self.time_last_keyboard_input = current_time
-
-        if keypress in ARROWS:
-            # Handle special case of arrow keys, which are mapped differently between pybullet and cv2
-            keypress = ARROWS[keypress]
-        else:
-            # Handle general case where a key was actually pressed (value > -1)
-            keypress = chr(keypress) if keypress > -1 else None
-
-        return keypress
 
     @staticmethod
     def print_keyboard_teleop_info():
@@ -306,7 +306,7 @@ class KeyboardController:
         print("*" * 30)
         print()
         print("Joint Control")
-        print_command("0-9", "specify the joint to control")
+        print_command("1, 2", "decrement / increment the joint to control")
         print_command("[, ]", "move the joint backwards, forwards, respectively")
         print()
         print("Differential Drive Control")
@@ -322,7 +322,7 @@ class KeyboardController:
         print_command("v, c", "rotate arm eef about z-axis")
         print()
         print("Boolean Gripper Control")
-        print_command("space", "toggle gripper (open/close)")
+        print_command("t", "toggle gripper (open/close)")
         print()
         print("*" * 30)
         print()
@@ -336,16 +336,24 @@ def main(random_selection=False, headless=False, short_exec=False):
     logging.info("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
 
     # Create an initial headless dummy scene so we can load the requested robot and extract useful info
-    s = Simulator(mode="headless", use_pb_gui=False)
+    sim = Simulator()
     scene = EmptyScene()
-    s.import_scene(scene)
+    sim.import_scene(scene)
 
     # Get robot to create
     robot_name = choose_from_options(
         options=list(sorted(REGISTERED_ROBOTS.keys())), name="robot", random_selection=random_selection
     )
-    robot = REGISTERED_ROBOTS[robot_name](action_type="continuous")
-    s.import_object(robot)
+    robot = REGISTERED_ROBOTS[robot_name](
+        prim_path="/World/robot",
+        name="robot",
+        action_type="continuous",
+    )
+    sim.import_object(robot)
+
+    # Play and step simulator so that robot is fully initialized
+    sim.play()
+    sim.step()
 
     # Get controller choice
     controller_choices = choose_controllers(robot=robot, random_selection=random_selection)
@@ -359,72 +367,70 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Choose scene to load
     scene_id = choose_from_options(options=SCENES, name="scene", random_selection=random_selection)
 
-    # Choose GUI
-    global gui
-    gui = choose_from_options(options=GUIS, name="gui", random_selection=random_selection)
-
-    if (
-        gui == "ig"
-        and platform.system() != "Darwin"
-        and control_mode == "teleop"
-        and isinstance(robot, ManipulationRobot)
-        and controller_choices["arm"] == "InverseKinematicsController"
-    ):
-        message = "Warning: iG GUI does not support arrow keys for your OS (needed to control the arm with an IK Controller). Falling back to PyBullet (pb) GUI."
-        logging.warning(message)
-        gui = "pb"
-
-    # Infer what GUI(s) to use
-    render_mode, use_pb_gui = None, None
-    if gui == "ig":
-        render_mode, use_pb_gui = "gui_interactive", False
-    elif gui == "pb":
-        render_mode, use_pb_gui = "headless", True
-    else:
-        raise ValueError("Unknown GUI: {}".format(gui))
-
-    if headless:
-        render_mode, use_pb_gui = "headless", False
-
-    # Shut down dummy simulator and re-create actual simulator
-    s.disconnect()
-    del s
-    s = Simulator(mode=render_mode, use_pb_gui=use_pb_gui, image_width=512, image_height=512)
+    # Clear simulator and reload actual desired robot configuration
+    sim.clear()
 
     # Load scene
-    scene = EmptyScene(floor_plane_rgba=[0.6, 0.6, 0.6, 1]) if scene_id == "empty" else InteractiveIndoorScene(scene_id)
-    s.import_scene(scene)
+    scene = EmptyScene(floor_plane_visible=True) if scene_id == "empty" else InteractiveTraversableScene(scene_id)
+    sim.import_scene(scene)
+
+    # Create a reference to the default viewer camera that already exists in the simulator
+    cam = VisionSensor(
+        prim_path="/World/viewer_camera",
+        name="camera",
+        modalities="rgb",
+        image_height=720,
+        image_width=1280,
+        viewport_name="Viewport",
+    )
+    # We update its clipping range so that it doesn't clip nearby objects (default min is 1 m)
+    cam.set_attribute("clippingRange", Gf.Vec2f(0.001, 10000000.0))
+    # In order for camera changes to propagate, we must toggle its visibility
+    cam.visible = False
+    # A single step has to happen here before we toggle visibility for changes to propagate
+    sim.step()
+    cam.visible = True
+    # Initialize the camera sensor and update its pose so it points towards the robot
+    cam.initialize()
+    sim.step()
+    cam.set_position_orientation(
+        position=np.array([4.32248, -5.74338, 6.85436]),
+        orientation=np.array([0.39592, 0.13485, 0.29286, 0.85982]),
+    )
 
     # Load robot
     robot = REGISTERED_ROBOTS[robot_name](
+        prim_path="/World/robot",
+        name="robot",
+        # visual_only=True,
         action_type="continuous",
         action_normalize=True,
         controller_config={
             component: {"name": controller_name} for component, controller_name in controller_choices.items()
         },
     )
-    s.import_object(robot)
+    sim.import_object(robot)
 
     # Reset the robot
     robot.set_position([0, 0, 0])
+
+    # Play and step simulator so that robot is fully initialized
+    sim.play()
+    sim.step()
+
+    # Reset robot and make sure it is not moving
     robot.reset()
     robot.keep_still()
 
-    # Set initial viewer if using IG GUI
-    if gui != "pb" and not headless:
-        s.viewer.initial_pos = [1.6, 0, 1.3]
-        s.viewer.initial_view_direction = [-0.7, 0, -0.7]
-        s.viewer.reset_viewer()
-
     # Create teleop controller
-    action_generator = KeyboardController(robot=robot, simulator=s)
+    action_generator = KeyboardController(robot=robot, simulator=sim)
 
     # Print out relevant keyboard info if using keyboard teleop
     if control_mode == "teleop":
         action_generator.print_keyboard_teleop_info()
 
     # Other helpful user info
-    print("Running demo. Switch to the viewer windows")
+    print("Running demo.")
     print("Press ESC to quit")
 
     # Loop control until user quits
@@ -436,10 +442,11 @@ def main(random_selection=False, headless=False, short_exec=False):
         )
         robot.apply_action(action)
         for _ in range(10):
-            s.step()
+            sim.step()
             step += 1
 
-    s.disconnect()
+    # Always shut the simulation down cleanly at the end
+    app.close()
 
 
 if __name__ == "__main__":
