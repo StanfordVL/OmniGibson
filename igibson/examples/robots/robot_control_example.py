@@ -126,8 +126,12 @@ class KeyboardController:
         self.joint_control_idx = None  # Indices of joints being directly controlled in the actual joint array
         self.active_joint_command_idx_idx = 0   # Which index within the joint_command_idx variable is being controlled by the user
         self.current_joint = -1  # Active joint being controlled for joint control
-        self.gripper_direction = 1.0  # Flips between -1 and 1
-        self.persistent_gripper_action = None  # Whether gripper actions should persist between commands,
+        self.ik_arms = []               # List of arm controller names to be controlled by IK
+        self.active_arm_idx = 0         # Which index within self.ik_arms is actively being controlled (only relevant for IK)
+        self.binary_grippers = []           # Grippers being controlled using multi-finger binary controller
+        self.active_gripper_idx = 0     # Which index within self.binary_grippers is actively being controlled
+        self.gripper_direction = None  # Flips between -1 and 1, per arm controlled by multi-finger binary control
+        self.persistent_gripper_action = None  # Persistent gripper commands, per arm controlled by multi-finger binary control
         # i.e.: if using binary gripper control and when no keypress is active, the gripper action should still the last executed gripper action
         self.keypress_mapping = None    # Maps omni keybindings to information for controlling various parts of the robot
         self.current_keypress = None    # Current key that is being pressed
@@ -149,6 +153,34 @@ class KeyboardController:
         keyboard = appwindow.get_keyboard()
         sub_keyboard = input_interface.subscribe_to_keyboard_events(keyboard, self.keyboard_event_handler)
 
+    def generate_ik_keypress_mapping(self, controller_info):
+        """
+        Generates a dictionary for keypress mappings for IK control, based on the inputted @controller_info
+
+        Args:
+            controller_info (dict): Dictionary of controller information for the specific robot arm to control
+                with IK
+
+        Returns:
+            dict: Populated keypress mappings for IK to control the specified controller
+        """
+        mapping = {}
+
+        mapping[carb.input.KeyboardInput.UP] = {"idx": controller_info["start_idx"] + 0, "val": 0.5}
+        mapping[carb.input.KeyboardInput.DOWN] = {"idx": controller_info["start_idx"] + 0, "val": -0.5}
+        mapping[carb.input.KeyboardInput.RIGHT] = {"idx": controller_info["start_idx"] + 1, "val": -0.5}
+        mapping[carb.input.KeyboardInput.LEFT] = {"idx": controller_info["start_idx"] + 1, "val": 0.5}
+        mapping[carb.input.KeyboardInput.P] = {"idx": controller_info["start_idx"] + 2, "val": 0.5}
+        mapping[carb.input.KeyboardInput.SEMICOLON] = {"idx": controller_info["start_idx"] + 2, "val": -0.5}
+        mapping[carb.input.KeyboardInput.N] = {"idx": controller_info["start_idx"] + 3, "val": 0.5}
+        mapping[carb.input.KeyboardInput.B] = {"idx": controller_info["start_idx"] + 3, "val": -0.5}
+        mapping[carb.input.KeyboardInput.O] = {"idx": controller_info["start_idx"] + 4, "val": 0.5}
+        mapping[carb.input.KeyboardInput.U] = {"idx": controller_info["start_idx"] + 4, "val": -0.5}
+        mapping[carb.input.KeyboardInput.V] = {"idx": controller_info["start_idx"] + 5, "val": 0.5}
+        mapping[carb.input.KeyboardInput.C] = {"idx": controller_info["start_idx"] + 5, "val": -0.5}
+
+        return mapping
+
     def populate_keypress_mapping(self):
         """
         Populates the mapping @self.keypress_mapping, which maps keypresses to action info:
@@ -160,6 +192,8 @@ class KeyboardController:
         self.keypress_mapping = {}
         self.joint_command_idx = []
         self.joint_control_idx = []
+        self.gripper_direction = {}
+        self.persistent_gripper_action = {}
 
         # Add mapping for joint control directions (no index because these are inferred at runtime)
         self.keypress_mapping[carb.input.KeyboardInput.RIGHT_BRACKET] = {"idx": None, "val": 0.1}
@@ -178,29 +212,22 @@ class KeyboardController:
                 self.keypress_mapping[carb.input.KeyboardInput.L] = {"idx": info["start_idx"] + 1, "val": -0.1}
                 self.keypress_mapping[carb.input.KeyboardInput.J] = {"idx": info["start_idx"] + 1, "val": 0.1}
             elif info["name"] == "InverseKinematicsController":
-                self.keypress_mapping[carb.input.KeyboardInput.UP] = {"idx": info["start_idx"] + 0, "val": 0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.DOWN] = {"idx": info["start_idx"] + 0, "val": -0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.RIGHT] = {"idx": info["start_idx"] + 1, "val": -0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.LEFT] = {"idx": info["start_idx"] + 1, "val": 0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.P] = {"idx": info["start_idx"] + 2, "val": 0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.SEMICOLON] = {"idx": info["start_idx"] + 2, "val": -0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.N] = {"idx": info["start_idx"] + 3, "val": 0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.B] = {"idx": info["start_idx"] + 3, "val": -0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.O] = {"idx": info["start_idx"] + 4, "val": 0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.U] = {"idx": info["start_idx"] + 4, "val": -0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.V] = {"idx": info["start_idx"] + 5, "val": 0.5}
-                self.keypress_mapping[carb.input.KeyboardInput.C] = {"idx": info["start_idx"] + 5, "val": -0.5}
+                self.ik_arms.append(component)
+                self.keypress_mapping.update(self.generate_ik_keypress_mapping(controller_info=info))
             elif info["name"] == "MultiFingerGripperController":
                 if info["command_dim"] > 1:
                     for i in range(info["command_dim"]):
-                        ctrl_idx = info["start_idx"] + i
-                        self.joint_control_idx.add(ctrl_idx)
+                        cmd_idx = info["start_idx"] + i
+                        self.joint_command_idx.append(cmd_idx)
+                    self.joint_control_idx += info["dofs"].tolist()
                 else:
                     self.keypress_mapping[carb.input.KeyboardInput.T] = {"idx": info["start_idx"], "val": 1.0}
-                    self.persistent_gripper_action = 1.0
+                    self.gripper_direction[component] = 1.0
+                    self.persistent_gripper_action[component] = 1.0
+                    self.binary_grippers.append(component)
             elif info["name"] == "NullGripperController":
                 # We won't send actions if using a null gripper controller
-                self.keypress_mapping[carb.input.KeyboardInput.T] = {"idx": info["start_idx"], "val": None}
+                self.keypress_mapping[carb.input.KeyboardInput.T] = {"idx": None, "val": None}
             else:
                 raise ValueError("Unknown controller name received: {}".format(info["name"]))
 
@@ -208,17 +235,36 @@ class KeyboardController:
         # Check if we've received a key press or repeat
         if event.type == carb.input.KeyboardEventType.KEY_PRESS \
                 or event.type == carb.input.KeyboardEventType.KEY_REPEAT:
+
             # Handle special cases
-            if event.input in {carb.input.KeyboardInput.KEY_1, carb.input.KeyboardInput.KEY_2}:
-                # Decrement joint and print out new joint being controlled
+            if event.input in {carb.input.KeyboardInput.KEY_1, carb.input.KeyboardInput.KEY_2} and len(self.joint_control_idx) > 1:
+                # Update joint and print out new joint being controlled
                 self.active_joint_command_idx_idx = max(0, self.active_joint_command_idx_idx - 1) \
                     if event.input == carb.input.KeyboardInput.KEY_1 \
                     else min(len(self.joint_control_idx) - 1, self.active_joint_command_idx_idx + 1)
                 print(f"Now controlling joint {self.joint_names[self.joint_control_idx[self.active_joint_command_idx_idx]]}")
+
+            elif event.input in {carb.input.KeyboardInput.KEY_3, carb.input.KeyboardInput.KEY_4} and len(self.ik_arms) > 1:
+                # Update arm, update keypress mapping, and print out new arm being controlled
+                self.active_arm_idx = max(0, self.active_arm_idx - 1) \
+                    if event.input == carb.input.KeyboardInput.KEY_3 \
+                    else min(len(self.ik_arms) - 1, self.active_arm_idx + 1)
+                new_arm = self.ik_arms[self.active_arm_idx]
+                self.keypress_mapping.update(self.generate_ik_keypress_mapping(self.controller_info[new_arm]))
+                print(f"Now controlling arm {new_arm} with IK")
+
+            elif event.input in {carb.input.KeyboardInput.KEY_5, carb.input.KeyboardInput.KEY_6} and len(self.binary_grippers) > 1:
+                # Update gripper, update keypress mapping, and print out new gripper being controlled
+                self.active_gripper_idx = max(0, self.active_gripper_idx - 1) \
+                    if event.input == carb.input.KeyboardInput.KEY_5 \
+                    else min(len(self.binary_grippers) - 1, self.active_gripper_idx + 1)
+                print(f"Now controlling gripper {self.binary_grippers[self.active_gripper_idx]} with binary toggling")
+
             elif event.input == carb.input.KeyboardInput.ESCAPE:
                 # Terminate immediately
                 app.close()
                 exit(0)
+
             else:
                 # Handle all other actions and update accordingly
                 self.active_action = self.keypress_mapping.get(event.input, None)
@@ -265,21 +311,22 @@ class KeyboardController:
                 action[idx] = val
 
         # Possibly set the persistent gripper action
-        if self.persistent_gripper_action is not None and \
-                self.keypress_mapping[carb.input.KeyboardInput.T]["val"] is not None:
+        if len(self.binary_grippers) > 0 and self.keypress_mapping[carb.input.KeyboardInput.T]["val"] is not None:
 
-            # Possibly update the stored value if the toggle gripper key has been pressed
-            if self.toggling_gripper:
-                # We toggle the gripper direction
-                self.gripper_direction *= -1.0
-                self.persistent_gripper_action = \
-                    self.keypress_mapping[carb.input.KeyboardInput.T]["val"] * self.gripper_direction
+            for i, binary_gripper in enumerate(self.binary_grippers):
+                # Possibly update the stored value if the toggle gripper key has been pressed and
+                # it's the active gripper being controlled
+                if self.toggling_gripper and i == self.active_gripper_idx:
+                    # We toggle the gripper direction or this gripper
+                    self.gripper_direction[binary_gripper] *= -1.0
+                    self.persistent_gripper_action[binary_gripper] = \
+                        self.keypress_mapping[carb.input.KeyboardInput.T]["val"] * self.gripper_direction[binary_gripper]
 
-                # Clear the toggling gripper flag
-                self.toggling_gripper = False
+                    # Clear the toggling gripper flag
+                    self.toggling_gripper = False
 
-            # Set the persistent action
-            action[self.keypress_mapping[carb.input.KeyboardInput.T]["idx"]] = self.persistent_gripper_action
+                # Set the persistent action
+                action[self.controller_info[binary_gripper]["start_idx"]] = self.persistent_gripper_action[binary_gripper]
 
         # Print out the user what is being pressed / controlled
         sys.stdout.write("\033[K")
@@ -314,6 +361,7 @@ class KeyboardController:
         print_command("l, j", "move forward, backwards")
         print()
         print("Inverse Kinematics Control")
+        print_command("3, 4", "toggle between the different arm(s) to control")
         print_command(u"\u2190, \u2192", "translate arm eef along x-axis")
         print_command(u"\u2191, \u2193", "translate arm eef along y-axis")
         print_command("p, ;", "translate arm eef along z-axis")
@@ -322,6 +370,7 @@ class KeyboardController:
         print_command("v, c", "rotate arm eef about z-axis")
         print()
         print("Boolean Gripper Control")
+        print_command("5, 6", "toggle between the different gripper(s) using binary control")
         print_command("t", "toggle gripper (open/close)")
         print()
         print("*" * 30)
