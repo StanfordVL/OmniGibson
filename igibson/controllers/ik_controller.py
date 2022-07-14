@@ -1,6 +1,5 @@
 import numpy as np
 
-
 import igibson.utils.transform_utils as T
 from igibson.controllers import ControlType, ManipulationController
 from igibson.utils.filters import MovingAverageFilter
@@ -260,7 +259,12 @@ class InverseKinematicsController(ManipulationController):
             target_quat=target_quat,
             initial_joint_pos=current_joint_pos,
         )
-        assert target_joint_pos is not None, f"Could not find valid IK configuration!"
+
+        if target_joint_pos is None:
+            # Print warning that we couldn't find a valid solution, and return the current joint configuration
+            # instead so that we execute a no-op control
+            print(f"Could not find valid IK configuration! Returning no-op control instead.")
+            target_joint_pos = current_joint_pos
 
         # Optionally pass through smoothing filter for better stability
         if self.control_filter is not None:
