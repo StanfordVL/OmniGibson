@@ -90,7 +90,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
     ik_solver = IKSolver(
         robot_description_path=robot.robot_arm_descriptor_yamls[robot.default_arm],
-        robot_urdf_path=robot.robot_urdf,
+        robot_urdf_path=robot.urdf_path,
         default_joint_pos=robot.get_joint_positions()[control_idx],
         eef_name=robot.eef_link_names[robot.default_arm],
     )

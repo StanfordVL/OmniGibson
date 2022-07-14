@@ -900,7 +900,7 @@ class ManipulationRobot(BaseRobot):
                 "name": "InverseKinematicsController",
                 "task_name": f"eef_{arm}",
                 "robot_description_path": self.robot_arm_descriptor_yamls[arm],
-                "robot_urdf_path": self.robot_urdf,
+                "robot_urdf_path": self.urdf_path,
                 "eef_name": self.eef_link_names[arm],
                 "control_freq": self._control_freq,
                 "default_joint_pos": self.default_joint_pos,

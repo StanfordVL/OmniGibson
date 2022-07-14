@@ -493,16 +493,16 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                 in self.arm_names}
 
     @property
-    def model_file(self):
+    def usd_path(self):
         return os.path.join(igibson.assets_path, "models/tiago/tiago_dual_omnidirectional_stanford/tiago_dual_omnidirectional_stanford.usd")
 
     @property
     def robot_arm_descriptor_yamls(self):
         return {"left": os.path.join(igibson.assets_path, "models/tiago/tiago_dual_omnidirectional_stanford_left_arm_descriptor.yaml"),
-                "right": os.path.join(igibson.assets_path, "models/tiago/tiago_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml")}
+                "right": os.path.join(igibson.assets_path, "models/tiago/tiago_dual_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml")}
 
     @property
-    def robot_urdf(self):
+    def urdf_path(self):
         return os.path.join(igibson.assets_path, "models/tiago/tiago_dual_omnidirectional_stanford.urdf")
 
     def dump_config(self):

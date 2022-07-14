@@ -118,7 +118,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
         # Run super init
         super().__init__(
             prim_path=prim_path,
-            usd_path=self.model_file,
+            usd_path=self.usd_path,
             name=name,
             category=category,
             class_id=class_id,
@@ -390,14 +390,13 @@ class BaseRobot(USDObject, ControllableObject, GymObservable, Registerable):
 
     @property
     @abstractmethod
-    def model_file(self):
-        """
-        :return str: absolute path to robot model's USD file
-        """
+    def usd_path(self):
+        # For all robots, this must be specified a priori, before we actually initialize the USDObject constructor!
+        # So we override the parent implementation, and make this an abstract method
         raise NotImplementedError
 
     @property
-    def robot_urdf(self):
+    def urdf_path(self):
         """
         :return: str, file path to the robot urdf file.
         """

@@ -424,7 +424,7 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         return {self.default_arm: ["r_gripper_finger_joint", "l_gripper_finger_joint"]}
 
     @property
-    def model_file(self):
+    def usd_path(self):
         return os.path.join(igibson.assets_path, "models/fetch/fetch/fetch.usd")
 
     @property
@@ -432,7 +432,7 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         return {self.default_arm: os.path.join(igibson.assets_path, "models/fetch/fetch_descriptor.yaml")}
 
     @property
-    def robot_urdf(self):
+    def urdf_path(self):
         return os.path.join(igibson.assets_path, "models/fetch/fetch.urdf")
 
     def dump_config(self):
