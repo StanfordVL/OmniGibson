@@ -35,3 +35,7 @@ class Turtlebot(TwoWheelRobot):
     @property
     def usd_path(self):
         return os.path.join(igibson.assets_path, "models/turtlebot/turtlebot/turtlebot.usd")
+
+    @property
+    def urdf_path(self):
+        return os.path.join(igibson.assets_path, "models/turtlebot/turtlebot.urdf")

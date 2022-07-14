@@ -26,3 +26,7 @@ class Husky(LocomotionRobot):
     @property
     def usd_path(self):
         return os.path.join(igibson.assets_path, "models/husky/husky/husky.usd")
+
+    @property
+    def urdf_path(self):
+        return os.path.join(igibson.assets_path, "models/husky/husky.urdf")

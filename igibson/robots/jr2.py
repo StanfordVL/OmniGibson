@@ -220,3 +220,7 @@ class JR2(ManipulationRobot, TwoWheelRobot):
     @property
     def usd_path(self):
         return os.path.join(igibson.assets_path, "models/jr2_urdf/jr2_kinova.urdf")
+
+    @property
+    def urdf_path(self):
+        return os.path.join(igibson.assets_path, "models/jr2_urdf/jr2_kinova.urdf")

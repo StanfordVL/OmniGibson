@@ -32,3 +32,7 @@ class Ant(LocomotionRobot):
     @property
     def usd_path(self):
         return os.path.join(igibson.assets_path, "models/ant/ant.xml")
+
+    @property
+    def urdf_path(self):
+        return os.path.join(igibson.assets_path, "models/ant/ant.xml")
