@@ -126,21 +126,21 @@ class InverseKinematicsController(ManipulationController):
             if command_input_limits is not None:
                 if command_input_limits == "default":
                     command_input_limits = [
-                        [-1.0, -1.0, -1.0, -2 * np.pi, -2 * np.pi, -2 * np.pi],
-                        [1.0, 1.0, 1.0, 2 * np.pi, 2 * np.pi, 2 * np.pi],
+                        [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
+                        [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],
                     ]
                 else:
-                    command_input_limits[0][3:] = -2 * np.pi
-                    command_input_limits[1][3:] = 2 * np.pi
+                    command_input_limits[0][3:] = -np.pi
+                    command_input_limits[1][3:] = np.pi
             if command_output_limits is not None:
                 if command_output_limits == "default":
                     command_output_limits = [
-                        [-1.0, -1.0, -1.0, -2 * np.pi, -2 * np.pi, -2 * np.pi],
-                        [1.0, 1.0, 1.0, 2 * np.pi, 2 * np.pi, 2 * np.pi],
+                        [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
+                        [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],
                     ]
                 else:
-                    command_output_limits[0][3:] = -2 * np.pi
-                    command_output_limits[1][3:] = 2 * np.pi
+                    command_output_limits[0][3:] = -np.pi
+                    command_output_limits[1][3:] = np.pi
 
         # Run super init
         super().__init__(
