@@ -29,11 +29,13 @@ IMG_HEIGHT = 720
 IMG_WIDTH = 1280
 #(array([2.37998462, 0.13371089, 0.01527086]), array([4.72678607e-08, 5.57332172e-08, 7.60978907e-02, 9.97100353e-01]))
 
-ROBOT_POS = np.array([2.0489, -0.18226, 0.01527086])
-ROBOT_QUAT = T.euler2quat(np.array([0,0,4.084]))
+# Robot location at coffee table
+ROBOT_POS = np.array([ 1.8089,     -0.15226,     0.01527086]) #np.array([2.0489, -0.18226, 0.01527086])
+ROBOT_QUAT = T.euler2quat(np.array([0,0,4.3])) #T.euler2quat(np.array([0,0,4.084]))
 
-# ROBOT_POS = np.array([0.5318, 1.3472, 0.01527086])
-# ROBOT_QUAT = T.euler2quat(np.array([0,0,2.7])) #np.array([4.72678607e-08, 5.57332172e-08, 7.60978907e-02, 9.97100353e-01])
+# Robot location at kitchen table
+# ROBOT_POS = np.array([0.6118,     1.5072,     0.01527086]) #np.array([0.5318, 1.3472, 0.01527086])
+# ROBOT_QUAT = T.euler2quat(np.array([0,0,2.65])) #T.euler2quat(np.array([0,0,2.7])) #np.array([4.72678607e-08, 5.57332172e-08, 7.60978907e-02, 9.97100353e-01])
 
 PHOTO_SAVE_DIRECTORY = f"/scr/robertom/og_photos/{SCENE_ID}"
 #### YOU DONT NEED TO TOUCH ANYTHING BELOW HERE IDEALLY :) #####
@@ -130,8 +132,14 @@ def take_photo(use_rt=None, name=f"{SCENE_ID}", rootdir=PHOTO_SAVE_DIRECTORY):
     
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     Image.fromarray(img).save(f"{rootdir}/{name}_{app.config['renderer']}_{timestamp}_depth.png")
+
     img = obs["robot:eyes_Camera_sensor_rgb"][:, :, :3]
-    Image.fromarray(img).save(f"{rootdir}/{name}_{app.config['renderer']}_{timestamp}_rgb.png")
+
+    im = Image.fromarray(img)
+    im1 = im.crop((0, 0, 400, 400))
+    newsize = (128, 128)
+    im1 = im1.resize(newsize)
+    im1.save(f"{rootdir}/{name}_{app.config['renderer']}_{timestamp}_rgb.png")
     
     if use_rt is not None:
         set_rt()
@@ -210,17 +218,29 @@ class CameraMover:
                 if command is not None:
                     if len(command) == 3:
                         # Convert to world frame to move the camera
-                        transform = T.quat2mat(self.cam.get_orientation())
-                        delta_pos_global = transform @ command
-                        self.cam.set_position(self.cam.get_position() + delta_pos_global)
-                        print(self.cam.get_position())
+                        # transform = T.quat2mat(self.cam.get_orientation())
+                        # delta_pos_global = transform @ command
+                        # self.cam.set_position(self.cam.get_position() + delta_pos_global)
+                        # print(self.cam.get_position())
+                        global ROBOT_POS
+                        ROBOT_POS += command
+                        sim.play()
+                        robot.set_position_orientation(ROBOT_POS, ROBOT_QUAT)
+                        sim.pause()
+                        print(ROBOT_POS)
+
                     elif len(command) == 2:
+                        # global ROBOT_QUAT
+                        # euler = T.quat2euler(ROBOT_QUAT)
                         euler = T.quat2euler(self.cam.get_orientation())
                         euler[1] += command[0]
                         euler[2] += command[1]
                         quat = T.euler2quat(euler)
                         self.cam.set_orientation(quat)
                         print(self.cam.get_orientation())
+                        # ROBOT_QUAT = quat
+                        # robot.set_position_orientation(ROBOT_POS, ROBOT_QUAT)
+                        # print(ROBOT_QUAT)
                     else:
                         euler = T.quat2euler(self.cam.get_orientation())
                         euler[0] += command[0]
@@ -230,7 +250,7 @@ class CameraMover:
 
         return True
 
-cam_mover = CameraMover(cam=cam)
+cam_mover = CameraMover(cam=cam, delta=0.01)
 
 # Move lamp
 lamp = sim.scene.object_registry("name", "table_lamp_bbentu_0").set_position([2.8367, 1.53104, 1.0504])
@@ -254,7 +274,7 @@ cam.GetAttribute("focalLength").Set((h_aperture / 2.0) / np.tan(HFOV / 2.0))
 
 for lidar_name in ["front", "rear"]:
     lidar = get_prim_at_path("/World/robot/base_{}_laser_link/Lidar".format(lidar_name))
-    lidar.GetAttribute("drawLines").Set(True)
+    # lidar.GetAttribute("drawLines").Set(True)
     # lidar.GetAttribute("drawPoints").Set(True)
 
     lidar.GetAttribute("minRange").Set(0.13)
