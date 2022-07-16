@@ -41,8 +41,8 @@ log.setLevel(logging.WARN)
 ##### SET THIS ######
 # cfg = f"{example_config_path}/debug.yaml"
 # cfg = f"{example_config_path}/turtlebot_nav.yaml"
-cfg = f"{example_config_path}/behavior_mp_tiago.yaml"
-#### YOU DONT NEED TO TOUCH ANYTHING BELOW HERE IDEALLY :) #####
+cfg = f"{example_config_path}/behavior_mp_tiago_gates.yaml"
+#### YOU DONT NEED TO TOUCH ANYTHING BELOW HERE IDEALLY :) ####
 
 # Create environment
 env = iGibsonEnv(configs=cfg, physics_timestep=1/120., action_timestep=1/30.)
@@ -57,7 +57,8 @@ sim = env.simulator
 
 
 ceiling = env.scene.object_registry("name", "ceilings")
-ceiling.visible = False
+if ceiling is not None:
+    ceiling.visible = False
 
 # cam = VisionSensor(
 #     prim_path="/World/viewer_camera",
@@ -70,8 +71,9 @@ ceiling.visible = False
 # cam.set_position_orientation(np.array([0, -6.5, 6.5]), np.array([0.394, 0.005, 0.013, 0.919]))
 # cam.initialize()
 
-# for i in range(500):
-#     sim.step()
+for i in range(10000000000000000000):
+    print(env.scene.robots[0].get_position_orientation())
+    sim.step()
 
 # breakpoint()
 for i in range(3):

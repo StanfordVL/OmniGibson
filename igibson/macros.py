@@ -28,4 +28,4 @@ ENABLE_CCD = True
 
 # Whether the public version of IsaacSim is being used
 # TODO: Remove this once we unify omni version being used
-IS_PUBLIC_ISAACSIM = True # False
+IS_PUBLIC_ISAACSIM = False # False
