@@ -35,9 +35,9 @@ def main():
             if link_name == "base_link" or not link_name:
                 objects_by_room[room_str][cat] += 1
 
-    success = True # len(nomatch) == 0 and len(notfound_categories) == 0 and len(disapproved_categories) == 0 and len(not_approved_rooms) == 0
+    success = True # len(nomatch) == 0
 
-    output_dir = rt.maxops.mxsCmdLineArgs[rt.name('dir')]
+    output_dir = os.path.join(rt.maxFilePath, "artifacts")
     os.makedirs(output_dir, exist_ok=True)
 
     filename = os.path.join(output_dir, OUTPUT_FILENAME)

@@ -1,6 +1,8 @@
 [core]
     remote = cvgl
     autostage = true
+[cache]
+    type = symlink
 ['remote "cvgl"']
     url = ssh://scdt.stanford.edu/cvgl/group/Gibson/ig_pipeline
     ask_password = true

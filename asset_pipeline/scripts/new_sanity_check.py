@@ -18,7 +18,7 @@ except:
 
 MAX_VERTICES = 100000
 WARN_VERTICES = 20000
-PATTERN = re.compile(r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[a-z0-9_]+)-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?$")
+PATTERN = re.compile(r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[a-z0-9_]{6})-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?(?:-M(?P<meta_type>[a-z]+)_(?P<meta_id>[0-9]+))?$")
 
 SPREADSHEET_ID = "1JJob97Ovsv9HP1Xrs_LYPlTnJaumR2eMELImGykD22A"
 WORKSHEET_NAME = "Object Category B1K"
@@ -151,7 +151,10 @@ class SanityCheck:
   def validate_group_of_instances(self, rows):
     # Pick an object as the base instance
     # TODO: Do a better job of this.
-    base = rows[rows["name_instance_id"] == "0"].iloc[0]
+    rows_with_id_zero = rows[rows["name_instance_id"] == "0"]
+    obj_name = rows["object_name"].iloc[0]
+    assert len(rows_with_id_zero.index) > 0, f"No instance ID 0 instance of {obj_name}."
+    base = rows_with_id_zero.iloc[0]
 
     # Check that they have the same model ID and same category
     unique_model_ids = rows.groupby(["name_category", "name_model_id"], sort=False, dropna=False).ngroups
@@ -169,7 +172,7 @@ class SanityCheck:
         this_offset_pos = np.array(row.object.objectOffsetPos) / np.array(row.object.objectOffsetScale)
         pos_diff = this_offset_pos - desired_offset_pos
         self.expect(
-          np.allclose(pos_diff, 0, atol=1e-2),
+          np.allclose(pos_diff, 0, atol=5e-2),
           f"{row.object_name} has different pivot offset position (by {pos_diff}). Match pivots on each instance.")
 
         this_offset_rot = Rotation.from_quat(quat2arr(row.object.objectOffsetRot))
@@ -327,7 +330,7 @@ if __name__ == "__main__":
   opts = rt.maxops.mxsCmdLineArgs
 
   if opts[rt.name('batch')] == "true":
-    output_dir = opts[rt.name('dir')]
+    output_dir = os.path.join(rt.maxFilePath, "artifacts")
     os.makedirs(output_dir, exist_ok=True)
     sanity_check_batch(output_dir)
   else:
