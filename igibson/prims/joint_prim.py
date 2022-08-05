@@ -257,10 +257,11 @@ class JointPrim(BasePrim):
             kp, kd = 0.0, 0.0
 
         # Set values
-        for dof_handle, dof_property in zip(self._dof_handles, self._dof_properties):
-            dof_property.stiffness = kp
-            dof_property.damping = kd
-            self._dc.set_dof_properties(dof_handle, dof_property)
+        if self._dc:
+            for dof_handle, dof_property in zip(self._dof_handles, self._dof_properties):
+                dof_property.stiffness = kp
+                dof_property.damping = kd
+                self._dc.set_dof_properties(dof_handle, dof_property)
 
         # Update control type
         self._control_type = control_type
@@ -852,3 +853,132 @@ class JointPrim(BasePrim):
     def duplicate(self, simulator, prim_path):
         # Cannot directly duplicate a joint prim
         raise NotImplementedError("Cannot directly duplicate a joint prim!")
+
+
+class VirtualJointPrim(JointPrim):
+    def __init__(
+        self,
+        prim_path,
+        name,
+        joint_type,
+        get_state_callback,
+        set_pos_callback,
+        lower_limit,
+        upper_limit
+    ):
+
+        super().__init__(
+            prim_path,
+            name,
+            {},
+            None,
+        )
+
+        self._joint_name = name
+        self._joint_type = joint_type
+        self._n_dof = 1  # currently only support 1 dof joint
+        self.get_state_callback = get_state_callback
+        self.set_pos_callback = set_pos_callback
+        self._control_type = ControlType.POSITION
+        self._lower_limit = lower_limit
+        self._upper_limit = upper_limit
+
+    def _initialize(self):
+        # no need to run super initialize
+        pass
+
+    def get_state(self, normalized=False):
+        return self.get_state_callback()
+
+    def set_pos(self, pos, normalized=False, target=False):
+        assert self._control_type == ControlType.POSITION, \
+            "Trying to set joint position target, but control type is not position!"
+        self.set_pos_callback(pos)
+
+    def set_vel(self, vel, normalized=False, target=False):
+        raise NotImplementedError("Cannot directly set velocity of virtual joint!")
+
+    def set_effort(self, effort, normalized=False):
+        raise NotImplementedError("Cannot directly set effort of virtual joint!")
+
+    def duplicate(self, simulator, prim_path):
+        raise NotImplementedError("Cannot directly duplicate a joint prim!")
+
+    def keep_still(self):
+        # virtual joints will by default stay still
+        pass
+
+    def update_handles(self):
+        # virtual joints does not possess dc handle
+        self._handle = _dynamic_control.INVALID_HANDLE
+
+    @property
+    def dof_properties(self):
+        raise NotImplementedError("Virtual joint does not support dof properties!")
+
+    @property
+    def max_velocity(self):
+        print("Virtual joint does not support velocity!")
+        return np.nan
+
+    @max_velocity.setter
+    def max_velocity(self, vel):
+        raise NotImplementedError("Virtual joint does not support velocity!")
+
+    @property
+    def max_force(self):
+        print("Virtual joint does not support force!")
+        return np.nan
+
+    @max_force.setter
+    def max_force(self, force):
+        raise NotImplementedError("Virtual joint does not support force!")
+
+    @property
+    def stiffness(self):
+        print("Virtual joint does not support stiffness!")
+        return np.nan
+
+    @stiffness.setter
+    def stiffness(self, stiffness):
+        raise NotImplementedError("Virtual joint does not support stiffness!")
+
+    @property
+    def damping(self):
+        raise NotImplementedError("Virtual joint does not support damping!")
+
+    @damping.setter
+    def damping(self, damping):
+        raise NotImplementedError("Virtual joint does not support damping!")
+
+    @property
+    def friction(self):
+        print("Virtual joint does not support friction!")
+        return np.nan
+
+    @friction.setter
+    def friction(self, friction):
+        raise NotImplementedError("Virtual joint does not support friction!")
+
+    @property
+    def lower_limit(self):
+        assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
+        return -DEFAULT_MAX_POS if self._lower_limit in {None, -np.inf} else self._lower_limit
+
+    @lower_limit.setter
+    def lower_limit(self, lower_limit):
+        self._lower_limit = T.rad2deg(lower_limit) if self.is_revolute else lower_limit
+
+    @property
+    def upper_limit(self):
+        assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
+        return DEFAULT_MAX_POS if self._upper_limit in {None, np.inf} else self._upper_limit
+
+    @upper_limit.setter
+    def upper_limit(self, upper_limit):
+        self.upper_limit = T.rad2deg(upper_limit) if self.is_revolute else upper_limit
+
+    @property
+    def has_limit(self):
+        assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
+        return self.upper_limit not in {None, np.inf}
