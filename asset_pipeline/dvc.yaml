@@ -19,6 +19,7 @@ stages:
       cmd: 'python scripts/batch_3dsmax.py scripts/object_list.py -sceneFile cad/${item}/processed.max'
       deps:
       - scripts/object_list.py
+      - cad/${item}/processed.max
       # - cad/${item}/artifacts/sanitycheck.json
       outs:
       - cad/${item}/artifacts/object_list.json
@@ -36,60 +37,49 @@ stages:
     - artifacts/pipeline/object_inventory.json
     - artifacts/pipeline/object_inventory.success
 
-  generate_object_images:
-    # Generate photos of each object found in each entry.
-    foreach: ${combined}
-    do:
-      cmd: 'python scripts/batch_3dsmax.py scripts/generate_object_images.py -sceneFile cad/${item}/processed.max'
-      deps:
-      - scripts/generate_object_images.py
-      - cad/${item}/processed.max
-      outs:
-      - cad/${item}/artifacts/object_images
-      - cad/${item}/artifacts/generate_object_images.success
+  # generate_object_images:
+  #   # Generate photos of each object found in each entry.
+  #   foreach: ${combined}
+  #   do:
+  #     cmd: 'python scripts/batch_3dsmax.py scripts/generate_object_images.py -sceneFile cad/${item}/processed.max'
+  #     deps:
+  #     - scripts/generate_object_images.py
+  #     - cad/${item}/processed.max
+  #     outs:
+  #     - cad/${item}/artifacts/object_images
+  #     - cad/${item}/artifacts/generate_object_images.success
 
   export_meshes:
     # Export meshes from 3dsmax as obj/mtl files with baked textures.
     # TODO: Get this to work.
-    # TODO: Export a list too.
     foreach: ${combined}
     do:
       cmd: 'python scripts/batch_3dsmax.py scripts/export_meshes.py -sceneFile cad/${item}/processed.max'
       deps:
       - scripts/export_meshes.py
       - cad/${item}/artifacts/object_list.success
-      - cad/${item}/artifacts/sanitycheck.success
+      # - cad/${item}/artifacts/sanitycheck.success  # TODO: Enable
       - cad/${item}/processed.max
       outs:
       - cad/${item}/artifacts/meshes
       - cad/${item}/artifacts/export_meshes.json
       - cad/${item}/artifacts/export_meshes.success
 
-  export_unprocessed_objs:
+  export_objs:
     # Process exported meshes into iGibson objects.
     foreach: ${combined}
     do:
-      cmd: 'python scripts/export_unprocessed_objs.py ${item}'
+      cmd: 'python -m scripts.export_objs ${item}'
       deps:
       - cad/${item}/artifacts/export_meshes.success
       - cad/${item}/artifacts/meshes
-      - scripts/export_unprocessed_objs.py
-      outs:
-      - cad/${item}/artifacts/unprocessed_objects
-      - cad/${item}/artifacts/export_unprocessed_objs.success
-
-  postprocess_objs:
-    # Add metadata to iGibson objects.
-    foreach: ${combined}
-    do:
-      cmd: 'touch cad/${item}/artifacts/postprocess_objs.success' # 'python scripts/postprocess_objs.py ${item}'
-      deps:
-      - cad/${item}/artifacts/unprocessed_objects
-      - cad/${item}/artifacts/export_unprocessed_objs.success
-      - scripts/postprocess_objs.py
+      - cad/${item}/artifacts/object_list.success
+      - cad/${item}/artifacts/object_list.json
+      - scripts/export_objs.py
+      - scripts/mesh_tree.py
       outs:
       - cad/${item}/artifacts/objects
-      - cad/${item}/artifacts/postprocess_objs.success
+      - cad/${item}/artifacts/export_objs.success
 
   validate_objs:
     # Validate exported objects.
@@ -98,7 +88,7 @@ stages:
       cmd: 'python scripts/validate_objs.py ${item}'
       deps:
       - cad/${item}/artifacts/objects
-      - cad/${item}/artifacts/postprocess_objs.success
+      - cad/${item}/artifacts/export_objs.success
       - scripts/validate_objs.py
       outs:
       - cad/${item}/artifacts/validate_objs.json
@@ -111,25 +101,26 @@ stages:
     # TODO: List out the dependencies automatically.
     - scripts/aggregate_objs.py
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.json
-    - cad/scenes/restaurant_hotel/artifacts/postprocess_objs.success
+    - cad/scenes/restaurant_hotel/artifacts/export_objs.success
     - cad/scenes/restaurant_hotel/artifacts/objects
     - artifacts/pipeline/object_inventory.json
     - artifacts/pipeline/object_inventory.success
     outs:
     - artifacts/aggregate/objects
     - artifacts/pipeline/aggregate_objs.success
+    - artifacts/pipeline/aggregate_objs.json
 
-  generate_scene_images:
-    # Generate photos of each scene.
-    foreach: ${scenes}
-    do:
-      cmd: 'python scripts/batch_3dsmax.py scripts/generate_images.py -sceneFile cad/${item}/processed.max'
-      deps:
-      - scripts/generate_images.py
-      - cad/${item}/processed.max
-      outs:
-      - cad/${item}/artifacts/top.png
-      - cad/${item}/artifacts/generate_images.success
+  # generate_scene_images:
+  #   # Generate photos of each scene.
+  #   foreach: ${scenes}
+  #   do:
+  #     cmd: 'python scripts/batch_3dsmax.py scripts/generate_images.py -sceneFile cad/${item}/processed.max'
+  #     deps:
+  #     - scripts/generate_images.py
+  #     - cad/${item}/processed.max
+  #     outs:
+  #     - cad/${item}/artifacts/top.png
+  #     - cad/${item}/artifacts/generate_images.success
 
   room_object_list:
     # Generate a list of all objects found in each room in each scene.
@@ -156,84 +147,73 @@ stages:
     - artifacts/pipeline/combined_room_object_list.json
     - artifacts/pipeline/combined_room_object_list.success
 
-  export_unprocessed_scene:
+  export_scene:
     # Generate scene URDF file from meshes.
     foreach: ${scenes}
     do:
-      cmd: 'python scripts/export_unprocessed_scene.py ${item}'
+      cmd: 'python -m scripts.export_scene ${item}'
       deps:
       - cad/${item}/artifacts/export_meshes.success
       - cad/${item}/artifacts/meshes
       - artifacts/aggregate/objects
       - artifacts/pipeline/aggregate_objs.success
-      - scripts/export_unprocessed_scene.py
-      outs:
-      - cad/${item}/artifacts/unprocessed_scene
-      - cad/${item}/artifacts/export_unprocessed_scene.success
-
-  postprocess_scene:
-    # Add metadata to scene.
-    foreach: ${scenes}
-    do:
-      cmd: 'python scripts/postprocess_scene.py ${item}'
-      deps:
-      - cad/${item}/artifacts/unprocessed_scene
-      - cad/${item}/artifacts/export_unprocessed_scene.success
-      - scripts/postprocess_scene.py
+      - scripts/export_scene.py
+      - scripts/export_objs.py
+      - scripts/mesh_tree.py
       outs:
       - cad/${item}/artifacts/scene
-      - cad/${item}/artifacts/postprocess_scene.success
+      - cad/${item}/artifacts/export_scene.success
 
-  validate_scene:
-    # Validate exported scene, e.g. physics stability.
-    foreach: ${scenes}
-    do:
-      cmd: 'python scripts/validate_scene.py ${item}'
-      deps:
-      - cad/${item}/artifacts/scene
-      - cad/${item}/artifacts/postprocess_scene.success
-      - scripts/validate_scene.py
-      outs:
-      - cad/${item}/artifacts/validate_scene.json
-      - cad/${item}/artifacts/validate_scene.success
+  # validate_scene:
+  #   # Validate exported scene, e.g. physics stability.
+  #   foreach: ${scenes}
+  #   do:
+  #     cmd: 'python scripts/validate_scene.py ${item}'
+  #     deps:
+  #     - cad/${item}/artifacts/scene
+  #     - cad/${item}/artifacts/export_scene.success
+  #     - scripts/validate_scene.py
+  #     outs:
+  #     - cad/${item}/artifacts/validate_scene.json
+  #     - cad/${item}/artifacts/validate_scene.success
 
-  aggregate_scenes:
-    # Aggregate scenes from different entries into a single location.
-    cmd: 'python scripts/aggregate_scenes.py'
-    deps:
-    # TODO: List out the dependencies automatically.
-    - cad/scenes/restaurant_hotel/artifacts/scene
-    - cad/scenes/restaurant_hotel/artifacts/validate_scene.success
-    - scripts/aggregate_scenes.py
-    outs:
-    - artifacts/aggregate/scenes
-    - artifacts/pipeline/aggregate_scenes.success
+  # aggregate_scenes:
+  #   # Aggregate scenes from different entries into a single location.
+  #   cmd: 'python scripts/aggregate_scenes.py'
+  #   deps:
+  #   # TODO: List out the dependencies automatically.
+  #   - cad/scenes/restaurant_hotel/artifacts/scene
+  #   - cad/scenes/restaurant_hotel/artifacts/validate_scene.success
+  #   - scripts/aggregate_scenes.py
+  #   outs:
+  #   - artifacts/aggregate/scenes
+  #   - artifacts/pipeline/aggregate_scenes.success
 
-  postprocess_and_compile_dataset:
-    # Add metadata and compile everything in the right spot.
-    cmd: 'python scripts/postprocess_and_compile_dataset.py'
-    deps:
-    - scripts/aggregate_scenes.py
-    - artifacts/aggregate/objects
-    - artifacts/aggregate/scenes
-    outs:
-    - artifacts/out
-    - artifacts/pipeline/postprocess_and_compile_dataset.success
+  # postprocess_and_compile_dataset:
+  #   # Add metadata and compile everything in the right spot.
+  #   cmd: 'python scripts/postprocess_and_compile_dataset.py'
+  #   deps:
+  #   - scripts/aggregate_scenes.py
+  #   - artifacts/aggregate/objects
+  #   - artifacts/aggregate/scenes
+  #   outs:
+  #   - artifacts/out
+  #   - artifacts/pipeline/postprocess_and_compile_dataset.success
 
-  pack_dataset:
-    # Zip the dataset.
-    cmd: 'python scripts/pack_dataset.py'
-    deps:
-    - artifacts/out
-    - scripts/pack_dataset.py
-    outs:
-    - artifacts/og_dataset.zip
+  # pack_dataset:
+  #   # Zip the dataset.
+  #   cmd: 'python scripts/pack_dataset.py'
+  #   deps:
+  #   - artifacts/out
+  #   - scripts/pack_dataset.py
+  #   outs:
+  #   - artifacts/og_dataset.zip
 
-  upload_dataset:
-    # Upload the dataset to Cloud Storage.
-    cmd: 'python scripts/upload_dataset.py'
-    deps:
-    - artifacts/og_dataset.zip
-    - scripts/upload_dataset.py
-    outs:
-    - artifacts/pipeline/upload_dataset.success
+  # upload_dataset:
+  #   # Upload the dataset to Cloud Storage.
+  #   cmd: 'python scripts/upload_dataset.py'
+  #   deps:
+  #   - artifacts/og_dataset.zip
+  #   - scripts/upload_dataset.py
+  #   outs:
+  #   - artifacts/pipeline/upload_dataset.success

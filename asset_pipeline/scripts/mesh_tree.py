@@ -1,18 +1,23 @@
+import copy
 import json
 import os
 import re
 
 import networkx as nx
+import numpy as np
+import tqdm
 import trimesh
 
 
 PATTERN = re.compile(r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[a-z0-9_]{6})-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?$")
-
+SCALE_FACTOR = 0.001
+SCALE_MATRIX = trimesh.transformations.scale_matrix(SCALE_FACTOR)
 
 def build_mesh_tree(mesh_list, mesh_root):
     G = nx.DiGraph()
 
-    for mesh_name in mesh_list:
+    print("Building mesh tree.")
+    for mesh_name in tqdm.tqdm(mesh_list):
         groups = PATTERN.match(mesh_name).groups()
         (
             is_broken,
@@ -42,17 +47,37 @@ def build_mesh_tree(mesh_list, mesh_root):
         assert os.path.isfile(json_path), f"Expected metadata for {mesh_name} could not be found."
         with open(json_path, "r") as metadata_file:
             metadata = json.load(metadata_file)
+            meta_links = metadata["meta_links"]
+
+            # Delete meta links from metadata to avoid confusion
+            del metadata["meta_links"]
+
+            # Apply the scaling factor.
+            for meta_link_type in meta_links:
+                for meta_link in meta_links[meta_link_type].values():
+                    meta_link["position"] = np.array(meta_link["position"]) * SCALE_FACTOR
+                    if "length" in meta_link:
+                        meta_link["length"] *= SCALE_FACTOR
+                    if "width" in meta_link:
+                        meta_link["width"] *= SCALE_FACTOR
+                    if "size" in meta_link:
+                        meta_link["size"] *= SCALE_FACTOR
 
         # Add the data for the position onto the node.
         if joint_limit == "upper":
             assert "upper_filename" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
-            G.nodes[node_key]["upper_filename"] = mesh_name
-            G.nodes[node_key]["upper_mesh"] = trimesh.load(mesh_name, process=False, force="mesh")
-        elif joint_limit == "lower":
+            G.nodes[node_key]["upper_filename"] = mesh_path
+            upper_mesh = trimesh.load(mesh_path, process=False, force="mesh")
+            upper_mesh.apply_transform(SCALE_MATRIX)
+            G.nodes[node_key]["upper_mesh"] = upper_mesh
+        else:
             assert "lower_filename" not in G.nodes[node_key]
-            G.nodes[node_key]["lower_filename"] = mesh_name, f"Found two lower meshes for {node_key}"
-            G.nodes[node_key]["lower_mesh"] = trimesh.load(mesh_name, process=False, force="mesh")
+            G.nodes[node_key]["lower_filename"] = mesh_path, f"Found two lower meshes for {node_key}"
+            lower_mesh = trimesh.load(mesh_path, process=False, force="mesh")
+            lower_mesh.apply_transform(SCALE_MATRIX)
+            G.nodes[node_key]["lower_mesh"] = lower_mesh
             G.nodes[node_key]["metadata"] = metadata
+            G.nodes[node_key]["meta_links"] = meta_links
 
         # Add the edge in from the parent
         if link_name != "base_link":
@@ -62,10 +87,10 @@ def build_mesh_tree(mesh_list, mesh_root):
 
     # Quick validation.
     for node, data in G.nodes(data=True):
-        assert "upper_filename" in data, f"{node} does not have upper filename."
-        assert "upper_mesh" in data, f"{node} does not have upper mesh."
-        assert "lower_filename" in data, f"{node} does not have upper filename."
-        assert "lower_mesh" in data, f"{node} does not have upper mesh."
+        assert node[-1] == "base_link" or "upper_filename" in data, f"{node} does not have upper filename."
+        assert node[-1] == "base_link" or "upper_mesh" in data, f"{node} does not have upper mesh."
+        assert "lower_filename" in data, f"{node} does not have lower filename."
+        assert "lower_mesh" in data, f"{node} does not have lower mesh."
         assert "metadata" in data, f"{node} does not have metadata."
 
         if node[3] == "base_link":
@@ -73,7 +98,7 @@ def build_mesh_tree(mesh_list, mesh_root):
         else:
             assert G.in_degree(node) != 0, f"Non-base_link node {node} should not have in degree 0."
 
-    # Create combined mesh for each root node.
+    # Create combined mesh for each root node and add some data.
     roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
     for root in roots:
         nodes = nx.dfs_preorder_nodes(G, root)

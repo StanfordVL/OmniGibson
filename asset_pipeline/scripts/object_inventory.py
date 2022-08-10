@@ -3,8 +3,11 @@ import glob
 import json
 import os
 
+import yaml
+
 
 OBJECT_FILE_GLOB = os.path.join(os.path.dirname(__file__), "../cad/*/*/artifacts/object_list.json")
+PARAMS_FILE = os.path.join(os.path.dirname(__file__), "../params.yaml")
 DEFAULT_PATH = os.path.join(os.path.dirname(__file__), "../artifacts/pipeline/object_inventory.json")
 SUCCESS_PATH = os.path.join(os.path.dirname(__file__), "../artifacts/pipeline/object_inventory.success")
 
@@ -15,8 +18,15 @@ def main():
     providers = defaultdict(list)
     skipped_files = []
 
+    # Get the providers.
+    with open(PARAMS_FILE, "r") as f:
+        params = yaml.load(f, Loader=yaml.SafeLoader)
+        targets = params["combined"]
+
     # Merge the object lists.
-    for object_file in glob.glob(OBJECT_FILE_GLOB):
+    for target in targets:
+        object_file = os.path.join(os.path.dirname(__file__), "../cad", target, "artifacts/object_list.json")
+
         with open(object_file, "r") as f:
             object_list = json.load(f)
 

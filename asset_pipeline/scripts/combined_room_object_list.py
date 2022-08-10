@@ -5,6 +5,7 @@ import os
 
 import gspread
 from nltk.corpus import wordnet as wn
+import yaml
 
 
 SPREADSHEET_ID = "1JJob97Ovsv9HP1Xrs_LYPlTnJaumR2eMELImGykD22A"
@@ -12,6 +13,7 @@ OBJECT_CATEGORY_WORKSHEET_NAME = "Object Category B1K"
 ROOM_NAME_WORKSHEET_NAME = "Allowed Room Types"
 KEY_FILE = os.path.join(os.path.dirname(__file__), "../keys/b1k-dataset-6966129845c0.json")
 FAKE_SYNSETS = {"knife_block.n.01"}
+PARAMS_FILE = os.path.join(os.path.dirname(__file__), "../params.yaml")
 
 def get_disapproved_categories():
   gc = gspread.service_account(filename=KEY_FILE)
@@ -48,7 +50,6 @@ def get_approved_room_types():
 
   return approved
 
-OBJECT_FILE_GLOB = os.path.join(os.path.dirname(__file__), "../cad/*/*/artifacts/room_object_list.json")
 DEFAULT_PATH = os.path.join(os.path.dirname(__file__), "../artifacts/pipeline/combined_room_object_list.json")
 SUCCESS_PATH = os.path.join(os.path.dirname(__file__), "../artifacts/pipeline/combined_room_object_list.success")
 
@@ -129,8 +130,15 @@ def main():
     exists, disapproved, cat_to_synset = get_disapproved_categories()
     approved_rooms = set(get_approved_room_types())
 
+    # Get the list of targets 
+    with open(PARAMS_FILE, "r") as f:
+        params = yaml.load(f, Loader=yaml.SafeLoader)
+        targets = params["scenes"]
+
     # Add the object lists.
-    for object_file in glob.glob(OBJECT_FILE_GLOB):
+    for target in targets:
+        object_file = os.path.join(os.path.dirname(__file__), "../cad", target, "artifacts/room_object_list.json")
+
         with open(object_file, "r") as f:
             object_list = json.load(f)
 
@@ -191,13 +199,21 @@ def main():
 
     # Merge the stuff
     for base, additions in SCENES_TO_ADD.items():
+        if base not in scenes:
+            continue 
+
         for addition in additions:
+            if addition not in scenes:
+                continue
+
             base_keys = set(scenes[base].keys())
             add_keys = set(scenes[addition].keys())
             assert base_keys.isdisjoint(add_keys), f"Keys colliding between {base} and {addition}: {base_keys} vs {add_keys}"
             scenes[base].update(scenes[addition])
 
     for scene in SCENES_TO_EXCLUDE:
+        if scene not in scenes:
+            continue
         del scenes[scene]
 
     success = len(skipped_files) == 0 and len(notfound_categories) == 0 and len(disapproved_categories) == 0 and len(not_approved_rooms) == 0 and len(invalid_synsets) == 0

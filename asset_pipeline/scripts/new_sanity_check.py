@@ -196,7 +196,7 @@ class SanityCheck:
 
     self.expect(
       rt.units.systemScale == 1,
-      "System scale not set to 1mm.")
+      "System scale not set to 1m.")
 
     self.expect(
       rt.units.systemType == rt.Name("millimeters"),

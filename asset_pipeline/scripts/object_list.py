@@ -15,17 +15,19 @@ def main():
     matches = [PATTERN.fullmatch(name) for name in object_names]
 
     nomatch = [name for name, match in zip(object_names, matches) if match is None]
-    success = True # len(nomatch) == 0
+    success = len(nomatch) == 0
     needed = sorted({x.group("category") + "-" + x.group("model_id") for x in matches if x is not None})
     provided = sorted({x.group("category") + "-" + x.group("model_id") for x in matches if x is not None and not x.group("bad")})
     counts = Counter([x.group("category") + "-" + x.group("model_id") for x in matches if x is not None])
+
+    meshes = sorted(name for match, name in zip(matches, object_names) if match is not None)
 
     output_dir = os.path.join(rt.maxFilePath, "artifacts")
     os.makedirs(output_dir, exist_ok=True)
 
     filename = os.path.join(output_dir, OUTPUT_FILENAME)
     with open(filename, "w") as f:
-        json.dump({"success": success, "needed_objects": needed, "provided_objects": provided, "object_counts": counts, "error_invalid_name": sorted(nomatch)}, f, indent=4)
+        json.dump({"success": success, "needed_objects": needed, "provided_objects": provided, "meshes": meshes, "object_counts": counts, "error_invalid_name": sorted(nomatch)}, f, indent=4)
 
     if success:
         with open(os.path.join(output_dir, SUCCESS_FILENAME), "w") as f:

@@ -228,7 +228,11 @@ class ObjectExporter:
         # rt.ObjExp.setIniName(os.path.join(os.path.parent(__file__), "gw_objexp.ini"))
         assert rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "UseMapPath") == "1", "Map path not used."
         assert rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "MapPath") == "./material/", "Wrong material path."
-        rt.exportFile(obj_path, pymxs.runtime.Name("noPrompt"), selectedOnly=True, using=rt.ObjExp)
+        assert rt.getIniSetting(rt.ObjExp.getIniName(), "Geometry", "FlipZyAxis") == "0", "Should not flip axes when exporting."
+        assert rt.units.systemScale == 1, "System scale not set to 1mm."
+        assert rt.units.systemType == rt.Name("millimeters"), "System scale not set to 1mm."
+
+        rt.exportFile(obj_path, rt.Name("noPrompt"), selectedOnly=True, using=rt.ObjExp)
         assert os.path.exists(obj_path), f"Could not export object {obj.name}"
         if self.should_bake_texture(obj):
             assert os.path.exists(os.path.join(obj_dir, "material")), f"Could not export materials for object {obj.name}"
@@ -245,7 +249,6 @@ class ObjectExporter:
         metadata["orientation"] = [obj.rotation.x, obj.rotation.y, obj.rotation.z, obj.rotation.w]
         metadata["meta_links"] = defaultdict(lambda: defaultdict(dict))
         obj_name_result = parse_name(obj.name)
-        link_name = "base_link" if obj_name_result.group("link_name") is None else obj_name_result.group("link_name")
         for light in self.lights:
             light_name_result = parse_name(light.name)
             if obj_name_result.group("category") == light_name_result.group("category") and obj_name_result.group("model_id") == light_name_result.group("model_id") and obj_name_result.group("instance_id") == light_name_result.group("instance_id"):
@@ -256,7 +259,7 @@ class ObjectExporter:
                 # TODO: Don't do this. It's included in SC now. This causes issues w/ scale.
                 rt.resetPivot(light)
                 light_id = int(light_name_result.group("light_id"))
-                metadata["meta_links"]["lights"][link_name][light_id] = {
+                metadata["meta_links"]["lights"][light_id] = {
                     "type": light.type,
                     "length": light.sizeLength,
                     "width": light.sizeWidth,
@@ -273,12 +276,12 @@ class ObjectExporter:
 
             meta_type = child_name_result.group("meta_type")
             meta_id = int(child_name_result.group("meta_id"))
-            metadata["meta_links"][meta_type][link_name][meta_id] = {
+            metadata["meta_links"][meta_type][meta_id] = {
                 "position": [child.position.x, child.position.y, child.position.z],
                 "orientation": [child.rotation.x, child.rotation.y, child.rotation.z, child.rotation.w],
             }
             if rt.classOf(child) == rt.VolumeHelper:
-                metadata["meta_links"][meta_type][link_name][meta_id]["size"] = child.size
+                metadata["meta_links"][meta_type][meta_id]["size"] = child.size
 
         json_file = os.path.join(obj_dir, obj.name + ".json")
         with open(json_file, "w") as f:
