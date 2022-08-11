@@ -43,6 +43,7 @@ m.DEFAULT_MAX_POS = 1000.0
 m.DEFAULT_MAX_PRISMATIC_VEL = 1.0
 m.DEFAULT_MAX_REVOLUTE_VEL = 15.0
 m.DEFAULT_MAX_EFFORT = 100.0
+m.COMPONENT_SUFFIXES = ["x", "y", "z", "rx", "ry", "rz"]
 
 # TODO: Split into non-articulated / articulated Joint Prim classes?
 
@@ -816,7 +817,7 @@ class JointPrim(BasePrim):
 
         # Potentially de-normalize if the input is normalized
         if normalized:
-            effort = self._denormalize_vel(effort)
+            effort = self._denormalize_effort(effort)
 
         # Set the DOF(s) in this joint
         for dof_handle, e in zip(self._dof_handles, effort):
@@ -861,22 +862,39 @@ class JointPrim(BasePrim):
 
 
 class VirtualJointPrim(JointPrim):
+    """
+    Virtual joint prim inherited from joint prim, provide callback functions to get and set the joint state
+
+        Args:
+            prim_path (str): prim path of the Prim to encapsulate or create.
+            name (str): Name for the object. Names need to be unique per scene.
+            joint_type (str): type of joint
+            get_state_callback (Callable): callback function to get the joint states (pos, orn)
+            control_type (ControlType): control type of the joint. Default is ControlType.POSITION
+            set_pos_callback (Callable): callback function to set the joint's position
+            set_vel_callback (Callable): callback function to set the joint's velocity
+            set_effort_callback (Callable): callback function to set the joint's effort
+            lower_limit (float): lower limit for the joint
+            upper_limit (float): upper limit for the joint
+    """
     def __init__(
         self,
         prim_path,
         name,
         joint_type,
         get_state_callback,
-        set_pos_callback,
-        lower_limit,
-        upper_limit
+        set_pos_callback=None,
+        set_vel_callback=None,
+        set_effort_callback=None,
+        lower_limit=None,
+        upper_limit=None
     ):
 
         super().__init__(
-            prim_path,
-            name,
-            {},
-            None,
+            prim_path=prim_path,
+            name=name,
+            load_config={},
+            articulation=None,
         )
 
         self._joint_name = name
@@ -884,27 +902,45 @@ class VirtualJointPrim(JointPrim):
         self._n_dof = 1  # currently only support 1 dof joint
         self.get_state_callback = get_state_callback
         self.set_pos_callback = set_pos_callback
-        self._control_type = ControlType.POSITION
+        self.set_vel_callback = set_vel_callback
+        self.set_effort_callback = set_effort_callback
+
         self._lower_limit = lower_limit
         self._upper_limit = upper_limit
+        self._max_velocity = None
+        self._max_force = None
 
     def _initialize(self):
         # no need to run super initialize
-        pass
+        # set control type to position as default
+        self._control_type = ControlType.POSITION
 
     def get_state(self, normalized=False):
         return self.get_state_callback()
 
     def set_pos(self, pos, normalized=False, target=False):
-        assert self._control_type == ControlType.POSITION, \
-            "Trying to set joint position target, but control type is not position!"
-        self.set_pos_callback(pos)
+        if normalized:
+            pos = self._denormalize_pos(pos)
+        if self.set_pos_callback is not None:
+            assert self._control_type == ControlType.POSITION, \
+                f"Trying to set joint position target, but control type is {self.control_type}!"
+            self.set_pos_callback(pos)
 
     def set_vel(self, vel, normalized=False, target=False):
-        raise NotImplementedError("Cannot directly set velocity of virtual joint!")
+        if normalized:
+            vel = self._denormalize_vel(vel)
+        if self.set_vel_callback is not None:
+            assert self._control_type == ControlType.VELOCITY, \
+                "Trying to set joint velocity target, but control type is not velocity!"
+            self.set_vel_callback(vel)
 
     def set_effort(self, effort, normalized=False):
-        raise NotImplementedError("Cannot directly set effort of virtual joint!")
+        if normalized:
+            effort = self._denormalize_effort(effort)
+        if self.set_effort_callback is not None:
+            assert self._control_type == ControlType.EFFORT, \
+                f"Trying to set joint effort target, but control type is not effort!"
+            self.set_effort_callback(effort)
 
     def duplicate(self, simulator, prim_path):
         raise NotImplementedError("Cannot directly duplicate a joint prim!")
@@ -923,21 +959,20 @@ class VirtualJointPrim(JointPrim):
 
     @property
     def max_velocity(self):
-        print("Virtual joint does not support velocity!")
-        return np.nan
+        default_max_vel = m.DEFAULT_MAX_REVOLUTE_VEL if self.joint_type == "RevoluteJoint" else m.DEFAULT_MAX_PRISMATIC_VEL
+        return default_max_vel if self._max_velocity in {None, np.inf} else self._max_velocity
 
     @max_velocity.setter
     def max_velocity(self, vel):
-        raise NotImplementedError("Virtual joint does not support velocity!")
+        self._max_velocity = vel
 
     @property
     def max_force(self):
-        print("Virtual joint does not support force!")
-        return np.nan
+        return m.DEFAULT_MAX_EFFORT if self._max_force in {None, np.inf} else self._max_force
 
     @max_force.setter
     def max_force(self, force):
-        raise NotImplementedError("Virtual joint does not support force!")
+        self._max_force = force
 
     @property
     def stiffness(self):
@@ -968,7 +1003,7 @@ class VirtualJointPrim(JointPrim):
     @property
     def lower_limit(self):
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
-        return -DEFAULT_MAX_POS if self._lower_limit in {None, -np.inf} else self._lower_limit
+        return -m.DEFAULT_MAX_POS if self._lower_limit in {None, -np.inf} else self._lower_limit
 
     @lower_limit.setter
     def lower_limit(self, lower_limit):
@@ -977,7 +1012,7 @@ class VirtualJointPrim(JointPrim):
     @property
     def upper_limit(self):
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
-        return DEFAULT_MAX_POS if self._upper_limit in {None, np.inf} else self._upper_limit
+        return m.DEFAULT_MAX_POS if self._upper_limit in {None, np.inf} else self._upper_limit
 
     @upper_limit.setter
     def upper_limit(self, upper_limit):
