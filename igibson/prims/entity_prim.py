@@ -142,7 +142,7 @@ class EntityPrim(XFormPrim):
             n_dof = 0
 
         # Set up any virtual joints for any non-base bodies.
-        virtual_joints = {joint.joint_name: joint for joint in self._setup_virtual_joints()}
+        virtual_joints = self._setup_virtual_joints()
         assert self._joints.keys().isdisjoint(virtual_joints.keys())
         for joint in virtual_joints.values():
             n_virtual_dof += joint.n_dof
@@ -381,7 +381,7 @@ class EntityPrim(XFormPrim):
 
     def _setup_virtual_joints(self):
         """Create and return any virtual joints an object might need. Subclasses can implement this as necessary."""
-        return []
+        return OrderedDict()
 
     def contact_list(self):
         """

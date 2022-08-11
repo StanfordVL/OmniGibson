@@ -337,28 +337,19 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     def _setup_virtual_joints(self):
         """
         Sets up the virtual joints for the omnidirectional base.
+        Returns:
+            OrderDict[str: VirtualJointPrim] for each dof
         """
-        virtual_joints = []
         virtual_joint_prim_path = self.prim_path + "/virtual_joint_base"
-        # create the actual fixed joint in the stage
-        self.joint_world_to_base = create_joint(
-            prim_path=virtual_joint_prim_path,
-            joint_type="FixedJoint",
-            body0=None,
-            body1=self.root_link.prim_path,
-            enabled=True,
-            stage=self._simulator.stage
-        )
         # create the virtual joint prims for x, y, rz
-        virtual_joints.extend(
-            Virtual6DOFJoint(
-                prim_path=virtual_joint_prim_path,
-                joint_name="virtual_joint_base",
-                command_callback=self.set_base_pos,
-                reset_callback=self.reset_base_pos,
-                dof=[0, 1, 5],
-            ).get_joints()
-        )
+        virtual_joints = Virtual6DOFJoint(
+            prim_path=virtual_joint_prim_path,
+            joint_name="virtual_joint_base",
+            dof=['x', 'y', 'rz'],
+            get_state_callback=self.get_position_orientation,
+            command_pos_callback=self.set_base_pos,
+            reset_pos_callback=self.reset_base_pos,
+        ).joints
         return virtual_joints
 
     @property
@@ -477,12 +468,12 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def base_control_idx(self):
         """
-        :return Array[int]: Indices in low-level control vector corresponding to teh virtual planar joints.
+        :return Array[int]: Indices in low-level control vector corresponding to the virtual planar joints.
         """
         joints = list(self.joints.keys())
         return np.array(
             [
-                joints.index("virtual_joint_base_%s" % component)
+                joints.index(f"virtual_joint_base_{component}")
                 for component in ["x", "y", "rz"]
             ]
         )
@@ -573,43 +564,18 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
         return cfg
 
-    def reset_base_pos(self, pos, normalized=False):
+    def reset_base_pos(self, pos):
         """
         Call back function to get the base's state
         """
-        # TODO: test this functionality
-        self.joint_world_to_base.GetAttribute("physics:jointEnabled").Set(False)
-        if normalized:
-            pos = self._denormalize_pos(pos)
-        self.root_link.GetAttribute("physics:localPos0").Set(Gf.Vec3f(pos[:3]))
-        self.root_link.GetAttribute("physics:localRot0").Set(Gf.Vec3f(pos[3:]))
-        # # Set the DOF(s) in this joint
-        self.joint_world_to_base.GetAttribute("physics:localPos0").Set(Gf.Vec3f(pos[:3]))
-        self.joint_world_to_base.GetAttribute("physics:localRot0").Set(Gf.Vec3f(pos[3:]))
-        self.joint_world_to_base.GetAttribute("physics:jointEnabled").Set(True)
+        self.set_position_orientation(pos[:3], pos[3:])
 
-    def set_base_pos(self, pos, normalized=False):
+    def set_base_pos(self, pos):
         """
         Call back function to set the base's position
         """
-        cur_pos, cur_orn = self.get_base_position_orientation()
-        # Potentially de-normalize if the input is normalized
-        if normalized:
-            pos = self._denormalize_pos(pos)
+        cur_pos, cur_orn = self.get_position_orientation()
         new_pos = cur_pos + np.matmul(quat2mat(cur_orn), np.array(pos[:3]))
         new_orn = euler2quat(quat2euler(cur_orn) + pos[3:])
 
-        # Set the DOF(s) in this joint
-        self.joint_world_to_base.GetAttribute("physics:localPos0").Set(
-            Gf.Vec3f(new_pos[0], new_pos[1], new_pos[2])
-        )
-        self.joint_world_to_base.GetAttribute("physics:localRot0").Set(
-            Gf.Quatf(new_orn[3], new_orn[0], new_orn[1], new_orn[2])     # use wxyz instead of xyzw
-        )
-
-    def get_base_position_orientation(self):
-        """Get object base position and orientation in the format of Tuple[Array[x, y, z], Array[x, y, z, w]]"""
-        cur_pos = self.joint_world_to_base.GetAttribute("physics:localPos0").Get()
-        cur_orn = self.joint_world_to_base.GetAttribute("physics:localRot0").Get()
-        cur_orn_im = cur_orn.GetImaginary()
-        return np.array(cur_pos), np.array([cur_orn_im[0], cur_orn_im[1], cur_orn_im[2], cur_orn.GetReal()])
+        self.set_position_orientation(new_pos, new_orn)
