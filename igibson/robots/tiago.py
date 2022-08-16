@@ -11,7 +11,7 @@ from igibson.robots.locomotion_robot import LocomotionRobot
 from igibson.utils.python_utils import assert_valid_key
 from igibson.utils.usd_utils import JointType
 from igibson.utils.transform_utils import euler2quat, quat2euler, quat2mat
-from igibson.objects.virtual_joint import Virtual6DOFJoint
+from igibson.prims.joint_prim import Virtual6DOFJoint
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -324,7 +324,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             dof=['x', 'y', 'rz'],
             get_state_callback=self.get_position_orientation,
             command_pos_callback=self._update_base_pose_callback_function,
-            reset_pos_callback=self._reset_base_pos,
+            reset_pos_callback=self._reset_base_pose,
         ).joints
         return virtual_joints
 
