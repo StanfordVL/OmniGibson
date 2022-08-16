@@ -57,7 +57,7 @@ from collections import OrderedDict
 #     set_pose,
 # )
 
-import igibson.macros as m
+from igibson.macros import gm, create_module_macros
 from igibson import app, assets_path
 from igibson.objects.primitive_object import PrimitiveObject
 from igibson.robots.manipulation_robot import ManipulationRobot
@@ -65,14 +65,17 @@ from igibson.sensors.scan_sensor import ScanSensor
 from igibson.scenes.gibson_indoor_scene import StaticTraversableScene
 from igibson.scenes.interactive_traversable_scene import InteractiveTraversableScene
 import igibson.utils.transform_utils as T
-from igibson.utils.utils import l2_distance, rotate_vector_2d
 from igibson.utils.control_utils import IKSolver
 
 
 SEARCHED = []
+
+# Create settings for this module
+m = create_module_macros(module_path=__file__)
+
 # Setting this higher unfortunately causes things to become impossible to pick up (they touch their hosts)
-BODY_MAX_DISTANCE = 0.05
-HAND_MAX_DISTANCE = 0
+m.BODY_MAX_DISTANCE = 0.05
+m.HAND_MAX_DISTANCE = 0
 
 
 class MotionPlanner:
@@ -201,7 +204,7 @@ class MotionPlanner:
         self.marker = None
         self.marker_direction = None
 
-        if not m.HEADLESS:
+        if not gm.HEADLESS:
             self.marker = PrimitiveObject(
                 prim_path="/World/mp_vis_marker",
                 primitive_type="Sphere",
@@ -305,12 +308,12 @@ class MotionPlanner:
                 half_occupancy_range = self.occupancy_range / 2.0
                 robot_position_xy = self.robot.get_position()[:2]
                 corners = [
-                    robot_position_xy + rotate_vector_2d(local_corner, -yaw)
+                    robot_position_xy + (T.euler2mat([0, 0, yaw]) @ local_corner)[:2]
                     for local_corner in [
-                        np.array([half_occupancy_range, half_occupancy_range]),
-                        np.array([half_occupancy_range, -half_occupancy_range]),
-                        np.array([-half_occupancy_range, half_occupancy_range]),
-                        np.array([-half_occupancy_range, -half_occupancy_range]),
+                        np.array([half_occupancy_range, half_occupancy_range, 0]),
+                        np.array([half_occupancy_range, -half_occupancy_range, 0]),
+                        np.array([-half_occupancy_range, half_occupancy_range, 0]),
+                        np.array([-half_occupancy_range, -half_occupancy_range, 0]),
                     ]
                 ]
             else:
@@ -381,7 +384,7 @@ class MotionPlanner:
                 obj_pos, obj_orn = grasped_obj.get_position_orientation()
                 grasp_pose = T.relative_pose_transform(gripper_pos, gripper_orn, obj_pos, obj_orn)
 
-            if not m.HEADLESS:
+            if not gm.HEADLESS:
                 for way_point in path:
                     robot_position, robot_orn = self.robot.get_position_orientation()
                     robot_position[0] = way_point[0]
@@ -470,7 +473,7 @@ class MotionPlanner:
             position_arm_shoulder_in_wf, _ = p.multiplyTransforms(
                 body_pos, body_orn, position_arm_shoulder_in_bf, [0, 0, 0, 1]
             )
-            if l2_distance(ee_position, position_arm_shoulder_in_wf) > 0.7:  # TODO: get max distance
+            if T.l2_distance(ee_position, position_arm_shoulder_in_wf) > 0.7:  # TODO: get max distance
                 return None
             else:
                 if ee_orientation is not None:
@@ -549,7 +552,7 @@ class MotionPlanner:
             self.robot.set_joint_positions(current_joint_pos)
             # app.update()
 
-            dist = l2_distance(self.robot.get_eef_position(arm=arm), ee_position)
+            dist = T.l2_distance(self.robot.get_eef_position(arm=arm), ee_position)
             if dist > self.arm_ik_threshold:
                 # input(f"Distance from pose: {dist}, max: {self.arm_ik_threshold}")
                 log.warning("IK solution is not close enough to the desired pose. Distance: {}".format(dist))
@@ -928,7 +931,7 @@ class MotionPlanner:
     #         desired_y_dir_normalized = desired_y_dir / np.linalg.norm(desired_y_dir)
     #         desired_z_dir_normalized = np.cross(desired_x_dir_normalized, desired_y_dir_normalized)
     #         rot_matrix = np.column_stack((desired_x_dir_normalized, desired_y_dir_normalized, desired_z_dir_normalized))
-    #         quatt = quatXYZWFromRotMat(rot_matrix)
+    #         quatt = T.mat2quat(rot_matrix)
     #     else:
     #         log.warning("Planning pulling with end-effector orientation {}".format(ee_pulling_orn))
     #         quatt = ee_pulling_orn
@@ -1330,7 +1333,7 @@ class MotionPlanner:
     #     desired_y_dir_normalized = desired_y_dir / np.linalg.norm(desired_y_dir)
     #     desired_z_dir_normalized = np.cross(desired_x_dir_normalized, desired_y_dir_normalized)
     #     rot_matrix = np.column_stack((desired_x_dir_normalized, desired_y_dir_normalized, desired_z_dir_normalized))
-    #     quatt = quatXYZWFromRotMat(rot_matrix)
+    #     quatt = T.mat2quat(rot_matrix)
     #     """
     #     quatt = (0, 0.7071068, 0, 0.7071068)
     #     if plan_full_pre_toggle_motion:
@@ -1393,7 +1396,7 @@ class MotionPlanner:
         # base_pose = get_base_values(self.robot_body_id)
         execution_path = arm_path if not reverse_path else reversed(arm_path)
         execution_path = (
-            execution_path if not m.HEADLESS else [execution_path[-1]]
+            execution_path if not gm.HEADLESS else [execution_path[-1]]
         )
         if self.robot_type != "BehaviorRobot":
             for joint_way_point in execution_path:
@@ -1478,7 +1481,7 @@ class MotionPlanner:
 #     obstacles=[],
 #     attachments=[],
 #     direct_path=False,
-#     max_distance=HAND_MAX_DISTANCE,
+#     max_distance=m.HAND_MAX_DISTANCE,
 #     iterations=50,
 #     restarts=2,
 #     shortening=0,
@@ -1496,9 +1499,9 @@ class MotionPlanner:
 #     cur_pos = np.array(robot.get_position())
 #     target_pos = np.array(end_conf[:3])
 #     both_pos = np.array([cur_pos, target_pos])
-#     HAND_SAMPLING_DOMAIN_PADDING = 1  # Allow 1m of freedom around the sampling range.
-#     min_pos = np.min(both_pos, axis=0) - HAND_SAMPLING_DOMAIN_PADDING
-#     max_pos = np.max(both_pos, axis=0) + HAND_SAMPLING_DOMAIN_PADDING
+#     m.HAND_SAMPLING_DOMAIN_PADDING = 1  # Allow 1m of freedom around the sampling range.
+#     min_pos = np.min(both_pos, axis=0) - m.HAND_SAMPLING_DOMAIN_PADDING
+#     max_pos = np.max(both_pos, axis=0) + m.HAND_SAMPLING_DOMAIN_PADDING
 #
 #     hand_limits = (min_pos, max_pos)
 #
@@ -1550,7 +1553,7 @@ class MotionPlanner:
 
 
 # def get_brobot_hand_planning_fns(
-#     robot, arm, hand_limits, obj_in_hand, obstacles, step_resolutions, max_distance=HAND_MAX_DISTANCE
+#     robot, arm, hand_limits, obj_in_hand, obstacles, step_resolutions, max_distance=m.HAND_MAX_DISTANCE
 # ):
 #     """
 #     Define the functions necessary to do motion planning with a floating hand for the BehaviorRobot:

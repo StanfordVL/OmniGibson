@@ -25,20 +25,25 @@ from omni.isaac.core.utils.prims import (
 import numpy as np
 import carb
 from omni.isaac.core.utils.stage import get_current_stage
+from igibson.macros import create_module_macros
 from igibson.prims.prim_base import BasePrim
 from igibson.utils.usd_utils import create_joint
-from igibson.utils.types import JointsState
+from igibson.utils.omni_types import JointsState
 from igibson.utils.transform_utils import quat_inverse, quat_multiply
 from igibson.utils.constants import JointType
 from igibson.utils.python_utils import assert_valid_key
 import igibson.utils.transform_utils as T
 from igibson.controllers.controller_base import ControlType
 
-DEFAULT_MAX_POS = 1000.0
-DEFAULT_MAX_PRISMATIC_VEL = 1.0
-DEFAULT_MAX_REVOLUTE_VEL = 15.0
-DEFAULT_MAX_EFFORT = 100.0
-COMPONENT_SUFFIXES = ["x", "y", "z", "rx", "ry", "rz"]
+
+# Create settings for this module
+m = create_module_macros(module_path=__file__)
+
+m.DEFAULT_MAX_POS = 1000.0
+m.DEFAULT_MAX_PRISMATIC_VEL = 1.0
+m.DEFAULT_MAX_REVOLUTE_VEL = 15.0
+m.DEFAULT_MAX_EFFORT = 100.0
+m.COMPONENT_SUFFIXES = ["x", "y", "z", "rx", "ry", "rz"]
 
 # TODO: Split into non-articulated / articulated Joint Prim classes?
 
@@ -400,7 +405,7 @@ class JointPrim(BasePrim):
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         # We either return the raw value or a default value if there is no max specified
         raw_vel = self._dof_properties[0].max_velocity
-        default_max_vel = DEFAULT_MAX_REVOLUTE_VEL if self.joint_type == "RevoluteJoint" else DEFAULT_MAX_PRISMATIC_VEL
+        default_max_vel = m.DEFAULT_MAX_REVOLUTE_VEL if self.joint_type == "RevoluteJoint" else m.DEFAULT_MAX_PRISMATIC_VEL
         return default_max_vel if raw_vel in {None, np.inf} else raw_vel
 
     @max_velocity.setter
@@ -428,7 +433,7 @@ class JointPrim(BasePrim):
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         # We either return the raw value or a default value if there is no max specified
         raw_force = self._dof_properties[0].max_effort
-        return DEFAULT_MAX_EFFORT if raw_force in {None, np.inf} else raw_force
+        return m.DEFAULT_MAX_EFFORT if raw_force in {None, np.inf} else raw_force
 
     @max_force.setter
     def max_force(self, force):
@@ -526,7 +531,7 @@ class JointPrim(BasePrim):
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         # We either return the raw value or a default value if there is no max specified
         raw_pos = self._dof_properties[0].lower
-        return -DEFAULT_MAX_POS if raw_pos in {None, -np.inf} else raw_pos
+        return -m.DEFAULT_MAX_POS if raw_pos in {None, -np.inf} else raw_pos
 
     @lower_limit.setter
     def lower_limit(self, lower_limit):
@@ -552,7 +557,7 @@ class JointPrim(BasePrim):
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         # We either return the raw value or a default value if there is no max specified
         raw_pos = self._dof_properties[0].upper
-        return DEFAULT_MAX_POS if raw_pos in {None, np.inf} else raw_pos
+        return m.DEFAULT_MAX_POS if raw_pos in {None, np.inf} else raw_pos
 
     @upper_limit.setter
     def upper_limit(self, upper_limit):
@@ -954,7 +959,7 @@ class VirtualJointPrim(JointPrim):
 
     @property
     def max_velocity(self):
-        default_max_vel = DEFAULT_MAX_REVOLUTE_VEL if self.joint_type == "RevoluteJoint" else DEFAULT_MAX_PRISMATIC_VEL
+        default_max_vel = m.DEFAULT_MAX_REVOLUTE_VEL if self.joint_type == "RevoluteJoint" else m.DEFAULT_MAX_PRISMATIC_VEL
         return default_max_vel if self._max_velocity in {None, np.inf} else self._max_velocity
 
     @max_velocity.setter
@@ -963,7 +968,7 @@ class VirtualJointPrim(JointPrim):
 
     @property
     def max_force(self):
-        return DEFAULT_MAX_EFFORT if self._max_force in {None, np.inf} else self._max_force
+        return m.DEFAULT_MAX_EFFORT if self._max_force in {None, np.inf} else self._max_force
 
     @max_force.setter
     def max_force(self, force):
@@ -998,7 +1003,7 @@ class VirtualJointPrim(JointPrim):
     @property
     def lower_limit(self):
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
-        return -DEFAULT_MAX_POS if self._lower_limit in {None, -np.inf} else self._lower_limit
+        return -m.DEFAULT_MAX_POS if self._lower_limit in {None, -np.inf} else self._lower_limit
 
     @lower_limit.setter
     def lower_limit(self, lower_limit):
@@ -1007,7 +1012,7 @@ class VirtualJointPrim(JointPrim):
     @property
     def upper_limit(self):
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
-        return DEFAULT_MAX_POS if self._upper_limit in {None, np.inf} else self._upper_limit
+        return m.DEFAULT_MAX_POS if self._upper_limit in {None, np.inf} else self._upper_limit
 
     @upper_limit.setter
     def upper_limit(self, upper_limit):

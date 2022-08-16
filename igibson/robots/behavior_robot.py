@@ -25,7 +25,6 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from igibson import assets_path
-from igibson.objects.visual_marker import VisualMarker
 from igibson.robots.active_camera_robot import ActiveCameraRobot
 from igibson.robots.locomotion_robot import LocomotionRobot
 from igibson.robots.manipulation_robot import GraspingPoint, ManipulationRobot
@@ -494,7 +493,7 @@ class BehaviorRobot(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             {
                 "gripper_%s"
                 % arm: {
-                    "NullGripperController": self._default_gripper_null_controller_configs[arm],
+                    "NullJointController": self._default_gripper_null_controller_configs[arm],
                     "MultiFingerGripperController": self._default_gripper_multi_finger_controller_configs[arm],
                 }
                 for arm in self.arm_names

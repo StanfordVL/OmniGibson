@@ -27,10 +27,9 @@ from igibson.prims.cloth_prim import ClothPrim
 from igibson.prims.joint_prim import JointPrim
 from igibson.prims.rigid_prim import RigidPrim
 from igibson.prims.xform_prim import XFormPrim
-from igibson.utils.types import JointsState
-from igibson.utils.constants import PrimType
-from igibson.utils.types import GEOM_TYPES
-import igibson.macros as m
+from igibson.utils.omni_types import JointsState
+from igibson.utils.constants import PrimType, GEOM_TYPES
+from igibson.macros import gm
 
 
 class EntityPrim(XFormPrim):
@@ -216,7 +215,7 @@ class EntityPrim(XFormPrim):
         if self._prim_type == PrimType.CLOTH:
             assert not self._visual_only, "Cloth cannot be visual-only."
             assert len(self._links) == 1, "Cloth entity prim can only have one link."
-            if m.AG_CLOTH:
+            if gm.AG_CLOTH:
                 self.create_attachment_point_link()
 
         # Disable any requested collision pairs
@@ -505,7 +504,6 @@ class EntityPrim(XFormPrim):
             target (bool): Whether the positions being set are target values or manual values to immediately set.
                 Default is False, corresponding to an instantaneous setting of the positions
         """
-        print(f"name: {self.name}, handle: {self._handle}, num dof: {self.n_dof}")
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
         self.assert_articulated()

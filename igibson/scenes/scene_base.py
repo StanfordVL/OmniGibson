@@ -24,13 +24,10 @@ import gc
 from igibson import app
 from igibson.utils.python_utils import classproperty, Serializable, Registerable, Recreatable
 from igibson.utils.registry_utils import SerializableRegistry
-from igibson.utils.utils import NumpyEncoder
+from igibson.utils.config_utils import NumpyEncoder
 from igibson.objects.object_base import BaseObject
 from igibson.objects.dataset_object import DatasetObject
 from igibson.systems import SYSTEMS_REGISTRY
-
-# from igibson.objects.particles import Particle
-# from igibson.objects.visual_marker import VisualMarker
 from igibson.robots.robot_base import BaseRobot
 
 # Global dicts that will contain mappings
@@ -350,15 +347,15 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
     #     """
     #     # Remove all object, robot, system info
 
-
-    def remove_object(self, obj):
+    def remove_object(self, obj, simulator):
         # Remove from the appropriate registry
         if isinstance(obj, BaseRobot):
             self.robot_registry.remove(obj)
         else:
             self.object_registry.remove(obj)
+
         # Remove from omni stage
-        obj.remove(self)
+        obj.remove(simulator=simulator)
 
     # TODO: Integrate good features of this
     #

@@ -8,7 +8,6 @@ from igibson.objects.object_base import BaseObject
 from igibson.controllers import create_controller
 from igibson.controllers.controller_base import ControlType
 from igibson.utils.python_utils import assert_valid_key, merge_nested_dicts
-from igibson.utils.types import JointsState
 
 
 class ControllableObject(BaseObject):
@@ -71,7 +70,7 @@ class ControllableObject(BaseObject):
         """
         # Store inputs
         self._control_freq = control_freq
-        self._controller_config = {} if controller_config is None else controller_config
+        self._controller_config = controller_config
         self._reset_joint_pos = reset_joint_pos if reset_joint_pos is None else np.array(reset_joint_pos)
 
         # Make sure action type is valid, and also save
@@ -113,18 +112,6 @@ class ControllableObject(BaseObject):
                 self._dof_to_joints[idx] = joint
                 idx += 1
 
-        # Update the configs
-        for group in self.controller_order:
-            group_controller_name = (
-                self._controller_config[group]["name"]
-                if group in self._controller_config and "name" in self._controller_config[group]
-                else self._default_controllers[group]
-            )
-            self._controller_config[group] = merge_nested_dicts(
-                base_dict=self._default_controller_config[group][group_controller_name],
-                extra_dict=self._controller_config.get(group, {}),
-            )
-
         # Update the reset joint pos
         if self._reset_joint_pos is None:
             self._reset_joint_pos = self.default_joint_pos
@@ -164,6 +151,9 @@ class ControllableObject(BaseObject):
         Stores created controllers as dictionary mapping controller names to specific controller
         instances used by this object.
         """
+        # Generate the controller config
+        self._controller_config = self._generate_controller_config(custom_config=self._controller_config)
+
         # Store dof idx mapping to dof name
 
         # TODO: Verify that this modification has no side effects
@@ -191,6 +181,48 @@ class ControllableObject(BaseObject):
                     kp=self.default_kp if control_type == ControlType.POSITION else None,
                     kd=self.default_kd if control_type == ControlType.VELOCITY else None,
                 )
+
+    def _generate_controller_config(self, custom_config=None):
+        """
+        Generates a fully-populated controller config, overriding any default values with the corresponding values
+        specified in @custom_config
+
+        Args:
+            custom_config (None or Dict[str, ...]): nested dictionary mapping controller name(s) to specific custom
+                controller configurations for this object. This will override any default values specified by this class
+
+        Returns:
+            dict: Fully-populated nested dictionary mapping controller name(s) to specific controller configurations for
+                this object
+        """
+        controller_config = {} if custom_config is None else deepcopy(custom_config)
+
+        # Update the configs
+        for group in self.controller_order:
+            group_controller_name = (
+                controller_config[group]["name"]
+                if group in controller_config and "name" in controller_config[group]
+                else self._default_controllers[group]
+            )
+            controller_config[group] = merge_nested_dicts(
+                base_dict=self._default_controller_config[group][group_controller_name],
+                extra_dict=controller_config.get(group, {}),
+            )
+
+        return controller_config
+
+    def reload_controllers(self, controller_config=None):
+        """
+        Reloads controllers based on the specified new @controller_config
+
+        Args:
+            controller_config (None or Dict[str, ...]): nested dictionary mapping controller name(s) to specific
+                controller configurations for this object. This will override any default values specified by this class.
+        """
+        self._controller_config = {} if controller_config is None else controller_config
+
+        # (Re-)load controllers
+        self._load_controllers()
 
     def reset(self):
         # Make sure simulation is playing, otherwise, we cannot reset because DC requires active running

@@ -1,5 +1,8 @@
 from collections import OrderedDict
-from igibson.prims.joint_prim import VirtualJointPrim, COMPONENT_SUFFIXES
+from igibson.prims.joint_prim import VirtualJointPrim
+from igibson.macros import macros
+
+COMPONENT_SUFFIXES = macros.prims.joint_prim.COMPONENT_SUFFIXES
 
 
 class Virtual6DOFJoint(object):

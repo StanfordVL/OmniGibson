@@ -17,7 +17,7 @@ from igibson.objects.ycb_object import YCBObject
 from igibson.robots import REGISTERED_ROBOTS
 from igibson.scenes.empty_scene import EmptyScene
 from igibson.simulator import Simulator
-from igibson.utils.assets_utils import get_ig_avg_category_specs, get_ig_category_path, get_ig_model_path
+from igibson.utils.asset_utils import get_ig_avg_category_specs, get_ig_category_path, get_ig_model_path
 
 GRASPING_MODES = OrderedDict(
     sticky="Sticky Mitten - Objects are magnetized when they touch the fingers and a CLOSE command is given",
@@ -158,7 +158,7 @@ class KeyboardController:
                 else:
                     self.keypress_mapping[" "] = {"idx": info["start_idx"], "val": 1.0}
                     self.persistent_gripper_action = 1.0
-            elif info["name"] == "NullGripperController":
+            elif info["name"] == "NullJointController":
                 # We won't send actions if using a null gripper controller
                 self.keypress_mapping[" "] = {"idx": info["start_idx"], "val": None}
             else:

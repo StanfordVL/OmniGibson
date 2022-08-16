@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-from typing import Iterable
 
 import igibson
 from igibson.controllers import ControlType
@@ -9,11 +8,9 @@ from igibson.robots.active_camera_robot import ActiveCameraRobot
 from igibson.robots.manipulation_robot import GraspingPoint, ManipulationRobot
 from igibson.robots.locomotion_robot import LocomotionRobot
 from igibson.utils.python_utils import assert_valid_key
-from igibson.utils.usd_utils import JointType, create_joint
+from igibson.utils.usd_utils import JointType
 from igibson.utils.transform_utils import euler2quat, quat2euler, quat2mat
 from igibson.objects.virtual_joint import Virtual6DOFJoint
-import igibson.macros as m
-from pxr import Gf
 
 DEFAULT_ARM_POSES = {
     "vertical",
@@ -181,64 +178,33 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def tucked_default_joint_pos(self):
-        if m.IS_PUBLIC_ISAACSIM:
-            vals = np.array(
-                [
-                    # 0.0,        # wheels
-                    # 0.0,
-                    0.0,        # trunk
-                    -1.10,
-                    1.47,
-                    2.71,
-                    1.71,
-                    -1.57,
-                    1.39,
-                    0.0,
-                    0.045,  # gripper
-                    0.045,
-                    -1.10,
-                    1.47,
-                    2.71,
-                    1.71,
-                    -1.57,
-                    1.39,
-                    0.0,
-                    0.045,
-                    0.045,
-                    0.0,        # head
-                    0.0,        # head
-                ]
-            )
-        else:
-            vals = np.array(
-                [
-                    # 0.0,        # wheels
-                    # 0.0,
-                    0.0,        # trunk
-                    -1.10,
-                    -1.10,
-                    0.0,        # head
-                    1.47,
-                    1.47,
-                    0.0,        # head
-                    2.71,
-                    2.71,
-                    1.71,
-                    1.71,
-                    -1.57,
-                    -1.57,
-                    1.39,
-                    1.39,
-                    0.0,
-                    0.0,
-                    0.045,  # gripper
-                    0.045,
-                    0.045,
-                    0.045,
-                ]
-            )
-
-        return vals
+        return np.array(
+            [
+                # 0.0,        # wheels
+                # 0.0,
+                0.0,        # trunk
+                -1.10,
+                -1.10,
+                0.0,        # head
+                1.47,
+                1.47,
+                0.0,        # head
+                2.71,
+                2.71,
+                1.71,
+                1.71,
+                -1.57,
+                -1.57,
+                1.39,
+                1.39,
+                0.0,
+                0.0,
+                0.045,  # gripper
+                0.045,
+                0.045,
+                0.045,
+            ]
+        )
 
     @property
     def untucked_default_joint_pos(self):
@@ -490,7 +456,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         """
         :return Array[int]: Indices in low-level control vector corresponding to [tilt, pan] camera joints.
         """
-        return np.array([19, 20]) if m.IS_PUBLIC_ISAACSIM else np.array([3, 6])
+        return np.array([3, 6])
 
     @property
     def arm_control_idx(self):
@@ -498,11 +464,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         :return dict[str, Array[int]]: Dictionary mapping arm appendage name to indices in low-level control
             vector corresponding to arm joints.
         """
-        if m.IS_PUBLIC_ISAACSIM:
-            vals = {"left": np.array([1, 2, 3, 4, 5, 6, 7]), "right": np.array([10, 11, 12, 13, 14, 15, 16])}
-        else:
-            vals = {"left": np.array([1, 4, 7, 9, 11, 13, 15]), "right": np.array([2, 5, 8, 10, 12, 14, 16])}
-        return vals
+        return {"left": np.array([1, 4, 7, 9, 11, 13, 15]), "right": np.array([2, 5, 8, 10, 12, 14, 16])}
 
     @property
     def gripper_control_idx(self):
@@ -510,11 +472,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         :return dict[str, Array[int]]: Dictionary mapping arm appendage name to indices in low-level control
             vector corresponding to gripper joints.
         """
-        if m.IS_PUBLIC_ISAACSIM:
-            vals = {"left": np.array([8, 9]), "right": np.array([17, 18])}
-        else:
-            vals = {"left": np.array([17, 18]), "right": np.array([19, 20])}
-        return vals
+        return {"left": np.array([17, 18]), "right": np.array([19, 20])}
 
     @property
     def finger_lengths(self):

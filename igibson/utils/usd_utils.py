@@ -24,8 +24,7 @@ import numpy as np
 import trimesh
 
 from igibson import assets_path, ig_dataset_path
-from igibson.utils.constants import JointType
-from igibson.utils.types import PRIMITIVE_MESH_TYPES
+from igibson.utils.constants import JointType, PRIMITIVE_MESH_TYPES
 from igibson.utils.python_utils import assert_valid_key
 
 GF_TO_VT_MAPPING = {
@@ -330,6 +329,7 @@ class BoundingBoxAPI:
         lower, upper = container
         return np.less_equal(lower, point).all() and np.less_equal(point, upper).all()
 
+
 def clear():
     """
     Clear state tied to singleton classes
@@ -482,7 +482,7 @@ def update_shader_asset_paths(shader):
     # this prim and USD is being loaded on
     for inp in shader.GetInputs():
         if inp.GetTypeName().cppTypeName == "SdfAssetPath":
-            original_path = inp.Get().path
+            original_path = inp.Get().path if inp.Get().resolvedPath == "" else inp.Get().resolvedPath
             # Only update the path if it's not the same root path
             if ig_dataset_path not in original_path and assets_path not in original_path:
                 usd_metadata = get_usd_metadata()

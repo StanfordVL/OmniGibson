@@ -5,13 +5,11 @@ import math
 import numpy as np
 import time
 
-import igibson.macros as m
 from igibson import app
 from igibson.sensors.sensor_base import BaseSensor
 from igibson.utils.constants import MAX_CLASS_COUNT, MAX_INSTANCE_COUNT
 from igibson.utils.python_utils import assert_valid_key, classproperty
 from igibson.utils.usd_utils import get_camera_params, get_semantic_objects_pose
-from igibson.utils.vision_utils import get_rgb_filled
 from igibson.utils.transform_utils import euler2quat, quat2euler
 
 import carb
@@ -19,10 +17,7 @@ from omni.isaac.core.utils.stage import get_current_stage
 from pxr import Gf, UsdGeom
 
 # Import viewport getter based on isaacsim version
-if m.IS_PUBLIC_ISAACSIM:
-    from omni.kit.viewport import get_viewport_interface as acquire_viewport_interface
-else:
-    from omni.kit.viewport_legacy import acquire_viewport_interface
+from omni.kit.viewport_legacy import acquire_viewport_interface
 
 # Make sure synthetic data extension is enabled
 ext_manager = app.app.get_extension_manager()
@@ -38,7 +33,7 @@ class VisionSensor(BaseSensor):
     """
     Vision sensor that handles a variety of modalities, including:
 
-        - RGB (normal, filled)
+        - RGB (normal)
         - Depth (normal, linear)
         - Normals
         - Segmentation (semantic, instance)
@@ -54,7 +49,7 @@ class VisionSensor(BaseSensor):
         modalities (str or list of str): Modality(s) supported by this sensor. Default is "all", which corresponds
             to all modalities being used. Otherwise, valid options should be part of cls.all_modalities.
             For this vision sensor, this includes any of:
-                {rgb, rgb_filled, depth, depth_linear, normal, seg_semantic, seg_instance, flow, bbox_2d_tight,
+                {rgb, depth, depth_linear, normal, seg_semantic, seg_instance, flow, bbox_2d_tight,
                 bbox_2d_loose, bbox_3d, camera, pose}
         enabled (bool): Whether this sensor should be enabled by default
         noise (None or BaseSensorNoise): If specified, sensor noise model to apply to this sensor.
@@ -64,11 +59,9 @@ class VisionSensor(BaseSensor):
         image_width (int): Width of generated images, in pixels
         viewport_name (None or str): If specified, will link this camera to the specified viewport, overriding its
             current camera. Otherwise, creates a new viewport
-
     """
     _SENSOR_HELPERS = OrderedDict(
         rgb=sensors_util.get_rgb,
-        rgb_filled=get_rgb_filled,
         depth=sensors_util.get_depth,
         depth_linear=sensors_util.get_depth_linear,
         normal=sensors_util.get_normals,
@@ -186,22 +179,10 @@ class VisionSensor(BaseSensor):
         is_initialized = False
         sensors = []
 
-        # Initialize differently based on what version of Isaac Sim we're using
-        if m.IS_PUBLIC_ISAACSIM:
-            while not is_initialized and time.time() < (start + timeout):
-                for name in names:
-                    sensors.append(sensors_util.create_or_retrieve_sensor(self._viewport, self._RAW_SENSOR_TYPES[name]))
-                app.update()
-                is_initialized = not any([not self._sd.is_sensor_initialized(s) for s in sensors])
-            if not is_initialized:
-                uninitialized = [s for s in sensors if not self._sd.is_sensor_initialized(s)]
-                raise TimeoutError(f"Unable to initialized sensors: [{uninitialized}] within {timeout} seconds.")
-
-        else:
-            for name in names:
-                sensors.append(sensors_util.create_or_retrieve_sensor(self._viewport, self._RAW_SENSOR_TYPES[name]))
-            app.update()
-
+        # Initialize sensors
+        for name in names:
+            sensors.append(sensors_util.create_or_retrieve_sensor(self._viewport, self._RAW_SENSOR_TYPES[name]))
+        app.update()
         app.update()  # Extra frame required to prevent access violation error
 
     def _get_obs(self):
@@ -340,6 +321,29 @@ class VisionSensor(BaseSensor):
             app.update()
 
     @property
+    def clipping_range(self):
+        """
+        Returns:
+            2-tuple: [min, max] value of the sensor's clipping range, in meters
+        """
+        return np.array(self.get_attribute("clippingRange"))
+
+    @clipping_range.setter
+    def clipping_range(self, limits):
+        """
+        Sets the clipping range @limits for this sensor
+
+        Args:
+            limits (2-tuple): [min, max] value of the sensor's clipping range, in meters
+        """
+        self.set_attribute(attr="clippingRange", val=Gf.Vec2f(*limits))
+        # In order for sensor changes to propagate, we must toggle its visibility
+        self.visible = False
+        # A single update step has to happen here before we toggle visibility for changes to propagate
+        app.update()
+        self.visible = True
+
+    @property
     def _obs_space_mapping(self):
         # Make sure bbox obs aren't being used, since they are variable in size!
         for modality in {"bbox_2d_tight", "bbox_2d_loose", "bbox_3d", "camera", "pose"}:
@@ -351,7 +355,6 @@ class VisionSensor(BaseSensor):
         # (shape, low, high)
         obs_space_mapping = OrderedDict(
             rgb=((self.image_height, self.image_width, 4), 0, 255, np.uint8),
-            rgb_filled=((self.image_height, self.image_width, 3), 0, 255, np.uint8),
             depth=((self.image_height, self.image_width, 1), 0.0, 1.0, np.float32),
             depth_linear=((self.image_height, self.image_width, 1), 0.0, np.inf, np.float32),
             normal=((self.image_height, self.image_width, 3), -1.0, 1.0, np.float32),
