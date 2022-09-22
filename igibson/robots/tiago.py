@@ -33,8 +33,6 @@ RESET_JOINT_OPTIONS = {
     "untuck",
 }
 
-
-m.BASE_POSE_SETTER_CALLBACK_NAME = "tiago_base_pose_setter"
 m.MAX_LINEAR_VELOCITY = 1.5  # linear velocity in meters/second
 m.MAX_ANGULAR_VELOCITY = np.pi  # angular velocity in radians/second
 
@@ -137,7 +135,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self.default_arm_pose = default_arm_pose
 
         # Other args that will be created at runtime
-        self._base_pose_delta = None
         self._base_to_world_d6_joint_prim = None
 
         # Parse reset joint pos if specifying special string
@@ -275,14 +272,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self.set_joint_positions(self.untucked_default_joint_pos)
 
     def _post_load(self):
-        from IPython import embed
-        print("post load")
-        embed()
-
         super()._post_load()
-
-        print("post load 2")
-        embed()
         # The eef gripper links should be visual-only. They only contain a "ghost" box volume for detecting objects
         # inside the gripper, in order to activate attachments (AG for Cloths).
         for arm in self.arm_names:
@@ -339,7 +329,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             dof=['x', 'y', 'rz'],
             get_state_callback=lambda: [[np.zeros(1)] * 3] * 6,  # [position], [velocity], [effort] for all 6 joints
             command_pos_callback=self._base_command_pos_callback,
-            reset_pos_callback=lambda _: None,  # NO resetting the base joint, use set_position_orientation instead
+            reset_pos_callback=lambda _: None,  # do NOT allow resetting, use set_position_orientation instead
         ).joints
         return virtual_joints
 
@@ -371,6 +361,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def _default_base_controller_configs(self):
+        # The command limit is scaled by the rendering time step (it becomes meter/radian per time step)
         command_limits = (
             np.array([-m.MAX_LINEAR_VELOCITY] * 2 + [-m.MAX_ANGULAR_VELOCITY]) * ig.sim.get_rendering_dt(),
             np.array([m.MAX_LINEAR_VELOCITY] * 2 + [m.MAX_ANGULAR_VELOCITY]) * ig.sim.get_rendering_dt(),
@@ -559,29 +550,10 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             self._base_to_world_d6_joint_prim.GetAttribute("drive:transY:physics:targetPosition").Set(pos[1])
             self._base_to_world_d6_joint_prim.GetAttribute("drive:rotZ:physics:targetPosition").Set(rpy[2])
 
-    def remove(self, simulator=None):
-        # Call super first
-        super().remove(simulator=simulator)
-
-        # Also remove the callback for the base
-        ig.sim.remove_physics_callback(callback_name=m.BASE_POSE_SETTER_CALLBACK_NAME)
-
     def _base_command_pos_callback(self, delta):
         """
-        Updates the callback function used by the simulator before every physics simulation step
+        Updates the target position of the D6Joint between the base and the world to drive the robot's base
         """
-        # Check if the physics callback exists -- if not, add it to the set of callbacks
-        if not ig.sim.physics_callback_exists(callback_name=m.BASE_POSE_SETTER_CALLBACK_NAME):
-            ig.sim.add_physics_callback(callback_name=m.BASE_POSE_SETTER_CALLBACK_NAME, callback_fn=self._set_base_pose_callback)
-
-        # Update the delta value used in the callback
-        self._base_pose_delta = np.array(delta)
-
-    def _set_base_pose_callback(self, step_size=None):
-        """
-        Call back function called directly from the simulator to update the base's pose
-        """
-        delta = self._base_pose_delta
         cur_pos, cur_orn = self.get_position_orientation()
         new_pos, new_orn = T.pose_transform(cur_pos, cur_orn, delta[:3], T.euler2quat(delta[3:]))
         new_pos_x = float(new_pos[0])
