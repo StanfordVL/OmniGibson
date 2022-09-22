@@ -3,6 +3,7 @@ import os
 import numpy as np
 
 import igibson as ig
+import igibson.utils.transform_utils as T
 from igibson.macros import create_module_macros
 from igibson.controllers import ControlType
 from igibson.robots.active_camera_robot import ActiveCameraRobot
@@ -12,6 +13,8 @@ from igibson.utils.python_utils import assert_valid_key
 from igibson.utils.usd_utils import JointType
 from igibson.utils.transform_utils import euler2quat, quat2euler, quat2mat
 from igibson.prims.joint_prim import Virtual6DOFJoint
+
+from omni.isaac.core.utils.prims import get_prim_at_path
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -32,8 +35,8 @@ RESET_JOINT_OPTIONS = {
 
 
 m.BASE_POSE_SETTER_CALLBACK_NAME = "tiago_base_pose_setter"
-m.BODY_LINEAR_VELOCITY = 0.05  # linear velocity thresholds in meters/frame
-m.BODY_ANGULAR_VELOCITY = 0.05  # angular velocity thresholds in radians/frame
+m.MAX_LINEAR_VELOCITY = 1.5  # linear velocity in meters/second
+m.MAX_ANGULAR_VELOCITY = np.pi  # angular velocity in radians/second
 
 
 class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
@@ -134,7 +137,8 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self.default_arm_pose = default_arm_pose
 
         # Other args that will be created at runtime
-        self._base_pose_update_delta = None
+        self._base_pose_delta = None
+        self._base_to_world_d6_joint_prim = None
 
         # Parse reset joint pos if specifying special string
         if isinstance(reset_joint_pos, str):
@@ -271,12 +275,23 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self.set_joint_positions(self.untucked_default_joint_pos)
 
     def _post_load(self):
+        from IPython import embed
+        print("post load")
+        embed()
+
         super()._post_load()
+
+        print("post load 2")
+        embed()
         # The eef gripper links should be visual-only. They only contain a "ghost" box volume for detecting objects
         # inside the gripper, in order to activate attachments (AG for Cloths).
         for arm in self.arm_names:
             self.eef_links[arm].visual_only = True
             self.eef_links[arm].visible = False
+
+        # Reference to the pre-defined D6Joint in the Tiago USD file
+        self._base_to_world_d6_joint_prim = get_prim_at_path(os.path.join(self.root_link.prim_path, "D6Joint"))
+        self._sync_base_to_world_d6_joint_to_current_pose()
 
     def _initialize(self):
         # Run super method first
@@ -322,9 +337,9 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             prim_path=virtual_joint_prim_path,
             joint_name="virtual_joint_base",
             dof=['x', 'y', 'rz'],
-            get_state_callback=self.get_position_orientation,
-            command_pos_callback=self._update_base_pose_callback_function,
-            reset_pos_callback=self._reset_base_pose,
+            get_state_callback=lambda: [[np.zeros(1)] * 3] * 6,  # [position], [velocity], [effort] for all 6 joints
+            command_pos_callback=self._base_command_pos_callback,
+            reset_pos_callback=lambda _: None,  # NO resetting the base joint, use set_position_orientation instead
         ).joints
         return virtual_joints
 
@@ -352,11 +367,14 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         for arm in self.arm_names:
             controllers["arm_{}".format(arm)] = "InverseKinematicsController"
             controllers["gripper_{}".format(arm)] = "MultiFingerGripperController"
-
         return controllers
 
     @property
     def _default_base_controller_configs(self):
+        command_limits = (
+            np.array([-m.MAX_LINEAR_VELOCITY] * 2 + [-m.MAX_ANGULAR_VELOCITY]) * ig.sim.get_rendering_dt(),
+            np.array([m.MAX_LINEAR_VELOCITY] * 2 + [m.MAX_ANGULAR_VELOCITY]) * ig.sim.get_rendering_dt(),
+        )
         dic = {
             "name": "JointController",
             "control_freq": self._control_freq,
@@ -365,11 +383,8 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             "motor_type": "position",
             "compute_delta_in_quat_space": [(3, 4, 5)],
             "dof_idx": self.base_control_idx,
-            "command_input_limits": (
-                np.array([-m.BODY_LINEAR_VELOCITY] * 3 + [-m.BODY_ANGULAR_VELOCITY] * 3),
-                np.array([m.BODY_LINEAR_VELOCITY] * 3 + [m.BODY_ANGULAR_VELOCITY] * 3),
-            ),
-            "command_output_limits": None,
+            "command_input_limits": command_limits,
+            "command_output_limits": command_limits,
         }
         return dic
 
@@ -512,7 +527,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def usd_path(self):
-        return os.path.join(ig.assets_path, "models/tiago/tiago_dual_omnidirectional_stanford/tiago_dual_omnidirectional_stanford.usd")
+        return os.path.join(ig.assets_path, "models/tiago/tiago_dual_omnidirectional_stanford/tiago_dual_omnidirectional_stanford_d6.usd")
 
     @property
     def robot_arm_descriptor_yamls(self):
@@ -532,11 +547,17 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
         return cfg
 
-    def _reset_base_pose(self, pose):
-        """
-        Call back function to get the base's state
-        """
-        self.set_position_orientation(pose[:3], pose[3:])
+    def set_position_orientation(self, position=None, orientation=None):
+        super().set_position_orientation(position, orientation)
+        self._sync_base_to_world_d6_joint_to_current_pose()
+
+    def _sync_base_to_world_d6_joint_to_current_pose(self):
+        if self._base_to_world_d6_joint_prim is not None:
+            pos = self.get_position()
+            rpy = self.get_rpy()
+            self._base_to_world_d6_joint_prim.GetAttribute("drive:transX:physics:targetPosition").Set(pos[0])
+            self._base_to_world_d6_joint_prim.GetAttribute("drive:transY:physics:targetPosition").Set(pos[1])
+            self._base_to_world_d6_joint_prim.GetAttribute("drive:rotZ:physics:targetPosition").Set(rpy[2])
 
     def remove(self, simulator=None):
         # Call super first
@@ -545,7 +566,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # Also remove the callback for the base
         ig.sim.remove_physics_callback(callback_name=m.BASE_POSE_SETTER_CALLBACK_NAME)
 
-    def _update_base_pose_callback_function(self, delta):
+    def _base_command_pos_callback(self, delta):
         """
         Updates the callback function used by the simulator before every physics simulation step
         """
@@ -554,15 +575,19 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             ig.sim.add_physics_callback(callback_name=m.BASE_POSE_SETTER_CALLBACK_NAME, callback_fn=self._set_base_pose_callback)
 
         # Update the delta value used in the callback
-        self._base_pose_update_delta = np.array(delta)
+        self._base_pose_delta = np.array(delta)
 
     def _set_base_pose_callback(self, step_size=None):
         """
-        Call back function called directly from the simulator to update the base's position
+        Call back function called directly from the simulator to update the base's pose
         """
-        # Grab the delta, then update the robot's pose
-        delta = self._base_pose_update_delta * ig.sim.get_physics_dt() / ig.sim.get_rendering_dt()
+        delta = self._base_pose_delta
         cur_pos, cur_orn = self.get_position_orientation()
-        new_pos = cur_pos + np.matmul(quat2mat(cur_orn), np.array(delta[:3]))
-        new_orn = euler2quat(quat2euler(cur_orn) + delta[3:])
-        self.set_position_orientation(new_pos, new_orn)
+        new_pos, new_orn = T.pose_transform(cur_pos, cur_orn, delta[:3], T.euler2quat(delta[3:]))
+        new_pos_x = float(new_pos[0])
+        new_pos_y = float(new_pos[1])
+        new_pos_yaw = float(np.rad2deg(T.quat2euler(new_orn)[2]))
+
+        self._base_to_world_d6_joint_prim.GetAttribute("drive:transX:physics:targetPosition").Set(new_pos_x)
+        self._base_to_world_d6_joint_prim.GetAttribute("drive:transY:physics:targetPosition").Set(new_pos_y)
+        self._base_to_world_d6_joint_prim.GetAttribute("drive:rotZ:physics:targetPosition").Set(new_pos_yaw)
