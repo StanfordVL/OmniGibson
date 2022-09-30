@@ -68,6 +68,7 @@ class EntityPrim(XFormPrim):
         self._default_joints_state = None
         self._links = None
         self._joints = None
+        self._virtual_joints = None
         self._visual_only = None
 
         # This needs to be initialized to be used for _load() of PrimitiveObject
@@ -141,12 +142,11 @@ class EntityPrim(XFormPrim):
             n_dof = 0
 
         # Set up any virtual joints for any non-base bodies.
-        virtual_joints = self._setup_virtual_joints()
-        assert self._joints.keys().isdisjoint(virtual_joints.keys())
-        for joint in virtual_joints.values():
+        self._virtual_joints = self._setup_virtual_joints()
+        assert self._joints.keys().isdisjoint(self._virtual_joints.keys())
+        for joint in self._virtual_joints.values():
             n_virtual_dof += joint.n_dof
             joint.initialize()
-        self._joints.update(virtual_joints)
 
         # Make sure root prim stored is the same as the one found during initialization
         assert self.root_prim == root_prim, \
@@ -305,12 +305,33 @@ class EntityPrim(XFormPrim):
 
     @property
     def n_dof(self):
-        """[summary]
+        """
+        Return the number of DoFs of the object, including physical and virtual joints.
 
         Returns:
-            int: [description]
+            int: dofs
         """
         return self._n_physical_dof + self._n_virtual_dof
+
+    @property
+    def n_physical_dof(self):
+        """
+        Return the number of physical DoFs of the object.
+
+        Returns:
+            int: physical dofs
+        """
+        return self._n_physical_dof
+
+    @property
+    def n_virtual_dof(self):
+        """
+        Return the number of virtual DoFs of the object.
+
+        Returns:
+            int: virtual dofs
+        """
+        return self._n_virtual_dof
 
     @property
     def n_joints(self):
@@ -319,6 +340,14 @@ class EntityPrim(XFormPrim):
             int: Number of joints owned by this articulation
         """
         return len(list(self._joints.keys()))
+
+    @property
+    def n_virtual_joints(self):
+        """
+        Returns:
+            int: Number of virtual joints owned by this articulation
+        """
+        return len(list(self._virtual_joints.keys()))
 
     @property
     def n_links(self):
@@ -335,6 +364,14 @@ class EntityPrim(XFormPrim):
             OrderedDict: Dictionary mapping joint names (str) to joint prims (JointPrim) owned by this articulation
         """
         return self._joints
+
+    @property
+    def virtual_joints(self):
+        """
+        Returns:
+            OrderedDict: Dictionary mapping joint names (str) to joint prims (VirtualJointPrim) owned by this articulation
+        """
+        return self._virtual_joints
 
     @property
     def links(self):

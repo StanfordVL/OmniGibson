@@ -1,6 +1,7 @@
 import os
 
 import numpy as np
+from pxr import Gf
 
 import igibson as ig
 import igibson.utils.transform_utils as T
@@ -15,6 +16,7 @@ from igibson.utils.transform_utils import euler2quat, quat2euler, quat2mat
 from igibson.prims.joint_prim import Virtual6DOFJoint
 
 from omni.isaac.core.utils.prims import get_prim_at_path
+from omni.isaac.core.utils.rotations import gf_quat_to_np_array
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -135,7 +137,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self.default_arm_pose = default_arm_pose
 
         # Other args that will be created at runtime
-        self._base_to_world_d6_joint_prim = None
+        self._world_base_fixed_joint_prim = None
 
         # Parse reset joint pos if specifying special string
         if isinstance(reset_joint_pos, str):
@@ -189,38 +191,23 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def tucked_default_joint_pos(self):
-        return np.array(
-            [
-                # 0.0,        # wheels
-                # 0.0,
-                0.0,        # trunk
-                -1.10,
-                -1.10,
-                0.0,        # head
-                1.47,
-                1.47,
-                0.0,        # head
-                2.71,
-                2.71,
-                1.71,
-                1.71,
-                -1.57,
-                -1.57,
-                1.39,
-                1.39,
-                0.0,
-                0.0,
-                0.045,  # gripper
-                0.045,
-                0.045,
-                0.045,
-            ]
-        )
+        pos = np.zeros(self._n_physical_dof)
+        # Keep the current joint positions for the base joints
+        pos[self.base_control_idx] = self.get_joint_positions()[self.base_control_idx]
+        pos[self.trunk_control_idx] = 0
+        pos[self.camera_control_idx] = np.array([0.0, 0.0])
+        for arm in self.arm_names:
+            pos[self.gripper_control_idx[arm]] = np.array([0.045, 0.045])  # open gripper
+            pos[self.arm_control_idx[arm]] = np.array(
+                [-1.10, 1.47, 2.71, 1.71, -1.57, 1.39, 0]
+            )
+        return pos
 
     @property
     def untucked_default_joint_pos(self):
-        pos = np.zeros(self.n_joints)
-        pos[self.base_control_idx] = 0.0
+        pos = np.zeros(self._n_physical_dof)
+        # Keep the current joint positions for the base joints
+        pos[self.base_control_idx] = self.get_joint_positions()[self.base_control_idx]
         pos[self.trunk_control_idx] = 0.02 + self.default_trunk_offset
         pos[self.camera_control_idx] = np.array([0.0, 0.45])
         pos[self.gripper_control_idx[self.default_arm]] = np.array([0.045, 0.045])  # open gripper
@@ -279,9 +266,10 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             self.eef_links[arm].visual_only = True
             self.eef_links[arm].visible = False
 
-        # Reference to the pre-defined D6Joint in the Tiago USD file
-        self._base_to_world_d6_joint_prim = get_prim_at_path(os.path.join(self.root_link.prim_path, "D6Joint"))
-        self._sync_base_to_world_d6_joint_to_current_pose()
+        self._world_base_fixed_joint_prim = get_prim_at_path(os.path.join(self.root_link.prim_path, "world_base_joint"))
+        position, orientation = self.get_position_orientation()
+        self._world_base_fixed_joint_prim.GetAttribute("physics:localPos0").Set(tuple(position))
+        self._world_base_fixed_joint_prim.GetAttribute("physics:localRot0").Set(Gf.Quatf(*orientation[[3, 0, 1, 2]]))
 
     def _initialize(self):
         # Run super method first
@@ -293,16 +281,32 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                 if joint.joint_type != JointType.JOINT_FIXED:
                     joint.friction = 500
 
+    @property
+    def base_footprint_link_name(self):
+        return "base_footprint"
+
+    @property
+    def base_footprint_link(self):
+        """
+        Returns:
+            RigidPrim: base footprint link of this object prim
+        """
+        return self._links[self.base_footprint_link_name]
+
     def _actions_to_control(self, action):
         # Run super method first
         u_vec, u_type_vec = super()._actions_to_control(action=action)
+        base_orn = self.base_footprint_link.get_orientation()
+        root_link_orn = self.root_link.get_orientation()
 
-        # Override trunk value if we're keeping the trunk rigid
-        if self.rigid_trunk:
-            u_vec[self.trunk_control_idx] = self.untucked_default_joint_pos[self.trunk_control_idx]
-            u_type_vec[self.trunk_control_idx] = ControlType.POSITION
+        cur_orn = T.mat2quat(T.quat2mat(root_link_orn).T  @ T.quat2mat(base_orn))
 
-        # Return control
+        # Rotate the desired linear and angular velocity
+        # from the local frame (base_footprint) to the root link frame (base_footprint_x)
+        lin_vel_global, _ = T.pose_transform([0, 0, 0], cur_orn, u_vec[self.base_idx[:3]], [0, 0, 0, 1])
+        ang_vel_global, _ = T.pose_transform([0, 0, 0], cur_orn, u_vec[self.base_idx[3:]], [0, 0, 0, 1])
+
+        u_vec[self.base_control_idx] = np.array([lin_vel_global[0], lin_vel_global[1], ang_vel_global[2]])
         return u_vec, u_type_vec
 
     def _get_proprioception_dict(self):
@@ -315,23 +319,22 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
         return dic
 
-    def _setup_virtual_joints(self):
+    @property
+    def control_limits(self):
         """
-        Sets up the virtual joints for the omnidirectional base.
-        Returns:
-            OrderDict[str: VirtualJointPrim] for each dof
+        :return: Dict[str, Any]: Keyword-mapped limits for this object. Dict contains:
+            position: (min, max) joint limits, where min and max are N-DOF arrays
+            velocity: (min, max) joint velocity limits, where min and max are N-DOF arrays
+            effort: (min, max) joint effort limits, where min and max are N-DOF arrays
+            has_limit: (n_dof,) array where each element is True if that corresponding joint has a position limit
+                (otherwise, joint is assumed to be limitless)
         """
-        virtual_joint_prim_path = self.prim_path + "/virtual_joint_base"
-        # create the virtual joint prims for x, y, rz
-        virtual_joints = Virtual6DOFJoint(
-            prim_path=virtual_joint_prim_path,
-            joint_name="virtual_joint_base",
-            dof=['x', 'y', 'rz'],
-            get_state_callback=lambda: [[np.zeros(1)] * 3] * 6,  # [position], [velocity], [effort] for all 6 joints
-            command_pos_callback=self._base_command_pos_callback,
-            reset_pos_callback=lambda _: None,  # do NOT allow resetting, use set_position_orientation instead
-        ).joints
-        return virtual_joints
+        limits = super().control_limits
+        limits["velocity"][0][self.base_idx[:3]] = -m.MAX_LINEAR_VELOCITY
+        limits["velocity"][1][self.base_idx[:3]] = m.MAX_LINEAR_VELOCITY
+        limits["velocity"][0][self.base_idx[3:]] = -m.MAX_ANGULAR_VELOCITY
+        limits["velocity"][1][self.base_idx[3:]] = m.MAX_ANGULAR_VELOCITY
+        return limits
 
     @property
     def default_proprio_obs(self):
@@ -363,15 +366,15 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     def _default_base_controller_configs(self):
         # The command limit is scaled by the rendering time step (it becomes meter/radian per time step)
         command_limits = (
-            np.array([-m.MAX_LINEAR_VELOCITY] * 2 + [-m.MAX_ANGULAR_VELOCITY]) * ig.sim.get_rendering_dt(),
-            np.array([m.MAX_LINEAR_VELOCITY] * 2 + [m.MAX_ANGULAR_VELOCITY]) * ig.sim.get_rendering_dt(),
+            np.array([-m.MAX_LINEAR_VELOCITY] * 2 + [-m.MAX_ANGULAR_VELOCITY]),
+            np.array([m.MAX_LINEAR_VELOCITY] * 2 + [m.MAX_ANGULAR_VELOCITY]),
         )
         dic = {
             "name": "JointController",
             "control_freq": self._control_freq,
             "control_limits": self.control_limits,
             "use_delta_commands": False,
-            "motor_type": "position",
+            "motor_type": "velocity",
             "compute_delta_in_quat_space": [(3, 4, 5)],
             "dof_idx": self.base_control_idx,
             "command_input_limits": command_limits,
@@ -450,13 +453,26 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def base_control_idx(self):
         """
+        :return Array[int]: Controllable indices in low-level control vector corresponding to the virtual planar joints.
+        """
+        joints = list(self.joints.keys())
+        return np.array(
+            [
+                joints.index(f"base_footprint_{component}_joint")
+                for component in ["x", "y", "rz"]
+            ]
+        )
+
+    @property
+    def base_idx(self):
+        """
         :return Array[int]: Indices in low-level control vector corresponding to the virtual planar joints.
         """
         joints = list(self.joints.keys())
         return np.array(
             [
-                joints.index(f"virtual_joint_base_{component}")
-                for component in ["x", "y", "rz"]
+                joints.index(f"base_footprint_{component}_joint")
+                for component in ["x", "y", "z", "rx", "ry", "rz"]
             ]
         )
 
@@ -465,14 +481,14 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         """
         :return Array[int]: Indices in low-level control vector corresponding to trunk joint.
         """
-        return np.array([0])
+        return np.array([6])
 
     @property
     def camera_control_idx(self):
         """
         :return Array[int]: Indices in low-level control vector corresponding to [tilt, pan] camera joints.
         """
-        return np.array([3, 6])
+        return np.array([9, 12])
 
     @property
     def arm_control_idx(self):
@@ -480,7 +496,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         :return dict[str, Array[int]]: Dictionary mapping arm appendage name to indices in low-level control
             vector corresponding to arm joints.
         """
-        return {"left": np.array([1, 4, 7, 9, 11, 13, 15]), "right": np.array([2, 5, 8, 10, 12, 14, 16])}
+        return {"left": np.array([7, 10, 13, 15, 17, 19, 21]), "right": np.array([8, 11, 14, 16, 18, 20, 22])}
 
     @property
     def gripper_control_idx(self):
@@ -488,7 +504,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         :return dict[str, Array[int]]: Dictionary mapping arm appendage name to indices in low-level control
             vector corresponding to gripper joints.
         """
-        return {"left": np.array([17, 18]), "right": np.array([19, 20])}
+        return {"left": np.array([23, 24]), "right": np.array([25, 26])}
 
     @property
     def finger_lengths(self):
@@ -518,7 +534,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def usd_path(self):
-        return os.path.join(ig.assets_path, "models/tiago/tiago_dual_omnidirectional_stanford/tiago_dual_omnidirectional_stanford_d6.usd")
+        return os.path.join(ig.assets_path, "models/tiago/tiago_dual_omnidirectional_stanford/tiago_dual_omnidirectional_stanford_33.usd")
 
     @property
     def robot_arm_descriptor_yamls(self):
@@ -538,28 +554,81 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
         return cfg
 
+    def get_position_orientation(self):
+        # If the simulator is playing, return the pose of the base_footprint link frame
+        if self._dc is not None and self._dc.is_simulating():
+            return self.base_footprint_link.get_position_orientation()
+
+        # Else, return the pose of the robot frame
+        else:
+            return super().get_position_orientation()
+
     def set_position_orientation(self, position=None, orientation=None):
-        super().set_position_orientation(position, orientation)
-        self._sync_base_to_world_d6_joint_to_current_pose()
+        current_position, current_orientation = self.get_position_orientation()
+        if position is None:
+            position = current_position
+        if orientation is None:
+            orientation = current_orientation
 
-    def _sync_base_to_world_d6_joint_to_current_pose(self):
-        if self._base_to_world_d6_joint_prim is not None:
-            pos = self.get_position()
-            rpy = self.get_rpy()
-            self._base_to_world_d6_joint_prim.GetAttribute("drive:transX:physics:targetPosition").Set(pos[0])
-            self._base_to_world_d6_joint_prim.GetAttribute("drive:transY:physics:targetPosition").Set(pos[1])
-            self._base_to_world_d6_joint_prim.GetAttribute("drive:rotZ:physics:targetPosition").Set(rpy[2])
+        # If the simulator is playing, set the 6 base joints to achieve the desired pose
+        if self._dc is not None and self._dc.is_simulating():
+            joint_pos, joint_orn = self.root_link.get_position_orientation()
+            inv_joint_pos, inv_joint_orn = T.mat2pose(T.pose_inv(T.pose2mat((joint_pos, joint_orn))))
 
-    def _base_command_pos_callback(self, delta):
+            relative_pos, relative_orn = T.pose_transform(inv_joint_pos, inv_joint_orn, position, orientation)
+            relative_rpy = T.quat2euler(relative_orn)
+            self.joints["base_footprint_x_joint"].set_pos(relative_pos[0])
+            self.joints["base_footprint_y_joint"].set_pos(relative_pos[1])
+            self.joints["base_footprint_z_joint"].set_pos(relative_pos[2])
+            self.joints["base_footprint_rx_joint"].set_pos(relative_rpy[0])
+            self.joints["base_footprint_ry_joint"].set_pos(relative_rpy[1])
+            self.joints["base_footprint_rz_joint"].set_pos(relative_rpy[2])
+
+        # Else, set the pose of the robot frame, and also move the joint frame for the world_base_joint to match it
+        else:
+            # Call the super() method to move the robot frame first
+            super().set_position_orientation(position, orientation)
+            # Move the joint frame for the world_base_joint
+            if self._world_base_fixed_joint_prim is not None:
+                self._world_base_fixed_joint_prim.GetAttribute("physics:localPos0").Set(tuple(position))
+                self._world_base_fixed_joint_prim.GetAttribute("physics:localRot0").Set(Gf.Quatf(*orientation[[3, 0, 1, 2]]))
+
+    def set_linear_velocity(self, velocity: np.ndarray):
+        """Sets the linear velocity of the root prim in stage.
+
+        Args:
+            velocity (np.ndarray):linear velocity to set the rigid prim to. Shape (3,).
         """
-        Updates the target position of the D6Joint between the base and the world to drive the robot's base
-        """
-        cur_pos, cur_orn = self.get_position_orientation()
-        new_pos, new_orn = T.pose_transform(cur_pos, cur_orn, delta[:3], T.euler2quat(delta[3:]))
-        new_pos_x = float(new_pos[0])
-        new_pos_y = float(new_pos[1])
-        new_pos_yaw = float(np.rad2deg(T.quat2euler(new_orn)[2]))
+        orn = self.root_link.get_orientation()
+        velocity_in_root_link = T.quat2mat(orn).T @ velocity
+        self.joints["base_footprint_x_joint"].set_vel(velocity_in_root_link[0])
+        self.joints["base_footprint_y_joint"].set_vel(velocity_in_root_link[1])
+        self.joints["base_footprint_z_joint"].set_vel(velocity_in_root_link[2])
 
-        self._base_to_world_d6_joint_prim.GetAttribute("drive:transX:physics:targetPosition").Set(new_pos_x)
-        self._base_to_world_d6_joint_prim.GetAttribute("drive:transY:physics:targetPosition").Set(new_pos_y)
-        self._base_to_world_d6_joint_prim.GetAttribute("drive:rotZ:physics:targetPosition").Set(new_pos_yaw)
+    def get_linear_velocity(self) -> np.ndarray:
+        """[summary]
+
+        Returns:
+            np.ndarray: [description]
+        """
+        return self.base_footprint_link.get_linear_velocity()
+
+    def set_angular_velocity(self, velocity: np.ndarray) -> None:
+        """[summary]
+
+        Args:
+            velocity (np.ndarray): [description]
+        """
+        orn = self.root_link.get_orientation()
+        velocity_in_root_link = T.quat2mat(orn).T @ velocity
+        self.joints["base_footprint_rx_joint"].set_vel(velocity_in_root_link[0])
+        self.joints["base_footprint_ry_joint"].set_vel(velocity_in_root_link[1])
+        self.joints["base_footprint_rz_joint"].set_vel(velocity_in_root_link[2])
+
+    def get_angular_velocity(self) -> np.ndarray:
+        """[summary]
+
+        Returns:
+            np.ndarray: [description]
+        """
+        return self.base_footprint_link.get_angular_velocity()

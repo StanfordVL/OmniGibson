@@ -258,7 +258,6 @@ class JointPrim(BasePrim):
             assert kp is not None, "kp gain must be specified for setting POSITION control!"
             assert kd is None, "kd gain must not be specified for setting POSITION control!"
             kd = 0.0
-
         elif control_type == ControlType.VELOCITY:
             assert kp is None, "kp gain must not be specified for setting VELOCITY control!"
             assert kd is not None, "kd gain must be specified for setting VELOCITY control!"
@@ -658,6 +657,33 @@ class JointPrim(BasePrim):
 
         return pos, vel, effort
 
+    def get_target(self, normalized=False):
+        """
+        (pos, vel) target of this joint
+
+        Args:
+            normalized (bool): If True, will return normalized target of this joint
+
+        Returns:
+            Tuple:
+                - n-array: target position of this joint, where n = number of DOF for this joint
+                - n-array: target velocity of this joint, where n = number of DOF for this joint
+        """
+        # Make sure we only call this if we're an articulated joint
+        self.assert_articulated()
+
+        # Grab raw states
+        pos, vel = np.zeros(self.n_dof), np.zeros(self.n_dof)
+        for i, dof_handle in enumerate(self._dof_handles):
+            pos[i] = self._dc.get_dof_position_target(dof_handle)
+            vel[i] = self._dc.get_dof_velocity_target(dof_handle)
+
+        # Potentially normalize if requested
+        if normalized:
+            pos, vel = self._normalize_pos(pos), self._normalize_vel(vel)
+
+        return pos, vel
+
     def _normalize_pos(self, pos):
         """
         Normalizes raw joint positions @pos
@@ -837,10 +863,13 @@ class JointPrim(BasePrim):
 
     def _dump_state(self):
         pos, vel, effort = self.get_state() if self.articulated else (np.array([]), np.array([]), np.array([]))
+        target_pos, target_vel = self.get_target() if self.articulated else (np.array([]), np.array([]))
         return OrderedDict(
             pos=pos,
             vel=vel,
             effort=effort,
+            target_pos=target_pos,
+            target_vel=target_vel,
         )
 
     def _load_state(self, state):
@@ -848,6 +877,10 @@ class JointPrim(BasePrim):
             self.set_pos(state["pos"], target=False)
             self.set_vel(state["vel"], target=False)
             self.set_effort(state["effort"])
+            if self._control_type == ControlType.POSITION:
+                self.set_pos(state["target_pos"], target=True)
+            elif self._control_type == ControlType.VELOCITY:
+                self.set_vel(state["target_vel"], target=True)
 
     def _serialize(self, state):
         # We serialize by iterating over the keys and adding them to a list that's concatenated at the end
@@ -860,7 +893,9 @@ class JointPrim(BasePrim):
             pos=state[0:self.n_dof],
             vel=state[self.n_dof:2*self.n_dof],
             effort=state[2*self.n_dof:3*self.n_dof],
-        ), 3*self.n_dof
+            target_pos=state[3*self.n_dof:4*self.n_dof],
+            target_vel=state[4*self.n_dof:5*self.n_dof],
+        ), 5*self.n_dof
 
     def duplicate(self, simulator, prim_path):
         # Cannot directly duplicate a joint prim
@@ -875,11 +910,11 @@ class VirtualJointPrim(JointPrim):
             prim_path (str): prim path of the Prim to encapsulate or create.
             name (str): Name for the object. Names need to be unique per scene.
             joint_type (str): type of joint
-            get_state_callback (Callable): callback function to get the joint states (pos, orn)
-            control_type (ControlType): control type of the joint. Default is ControlType.POSITION
-            set_pos_callback (Callable): callback function to set the joint's position
-            set_vel_callback (Callable): callback function to set the joint's velocity
-            set_effort_callback (Callable): callback function to set the joint's effort
+            get_state_callback (Callable): callback function to get the joint states, () -> (pos: np.ndarray(np.float), vel: np.ndarray(np.float), effort: np.ndarray(np.float))
+            get_target_callback (Callable): callback function to get the joint targets, () -> (pos: np.ndarray(np.float), vel: np.ndarray(np.float))
+            set_pos_callback (Callable): callback function to set the joint's position, (pos: float, target: bool) -> None
+            set_vel_callback (Callable): callback function to set the joint's velocity, (vel: float, target: bool) -> None
+            set_effort_callback (Callable): callback function to set the joint's effort, (effort: float) -> None
             lower_limit (float): lower limit for the joint
             upper_limit (float): upper limit for the joint
     """
@@ -888,7 +923,8 @@ class VirtualJointPrim(JointPrim):
         prim_path,
         name,
         joint_type,
-        get_state_callback,
+        get_state_callback=None,
+        get_target_callback=None,
         set_pos_callback=None,
         set_vel_callback=None,
         set_effort_callback=None,
@@ -907,6 +943,7 @@ class VirtualJointPrim(JointPrim):
         self._joint_type = joint_type
         self._n_dof = 1  # currently only support 1 dof joint
         self.get_state_callback = get_state_callback
+        self.get_target_callback = get_target_callback
         self.set_pos_callback = set_pos_callback
         self.set_vel_callback = set_vel_callback
         self.set_effort_callback = set_effort_callback
@@ -919,34 +956,44 @@ class VirtualJointPrim(JointPrim):
     def _initialize(self):
         # no need to run super initialize
         # set control type to position as default
-        self._control_type = ControlType.POSITION
+        self._control_type = ControlType.EFFORT
 
     def get_state(self, normalized=False):
+        if self.get_state_callback is None:
+            raise ValueError("Trying to call get_state() but get_state_callback is not registered.")
         return self.get_state_callback()
 
+    def get_target(self, normalized=False):
+        if self.get_target_callback is None:
+            raise ValueError("Trying to call get_target() but get_target_callback is not registered.")
+        return self.get_target_callback()
+
     def set_pos(self, pos, normalized=False, target=False):
+        if self.set_pos_callback is None:
+            raise ValueError("Trying to call set_pos() but set_pos_callback is not registered.")
         if normalized:
             pos = self._denormalize_pos(pos)
-        if self.set_pos_callback is not None:
+        if target:
             assert self._control_type == ControlType.POSITION, \
                 f"Trying to set joint position target, but control type is {self.control_type}!"
-            self.set_pos_callback(pos)
+        self.set_pos_callback(pos, target)
 
     def set_vel(self, vel, normalized=False, target=False):
+        if self.set_vel_callback is None:
+            raise ValueError("Trying to call set_vel() but set_vel_callback is not registered.")
         if normalized:
             vel = self._denormalize_vel(vel)
-        if self.set_vel_callback is not None:
+        if target:
             assert self._control_type == ControlType.VELOCITY, \
                 "Trying to set joint velocity target, but control type is not velocity!"
-            self.set_vel_callback(vel)
+        self.set_vel_callback(vel, target)
 
     def set_effort(self, effort, normalized=False):
+        if self.set_effort_callback is None:
+            raise ValueError("Trying to call set_effort() but set_effort_callback is not registered.")
         if normalized:
             effort = self._denormalize_effort(effort)
-        if self.set_effort_callback is not None:
-            assert self._control_type == ControlType.EFFORT, \
-                f"Trying to set joint effort target, but control type is not effort!"
-            self.set_effort_callback(effort)
+        self.set_effort_callback(effort)
 
     def duplicate(self, simulator, prim_path):
         raise NotImplementedError("Cannot directly duplicate a joint prim!")
@@ -1029,20 +1076,41 @@ class VirtualJointPrim(JointPrim):
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         return self.upper_limit not in {None, np.inf}
 
+    def _dump_state(self):
+        pos, vel, effort = self.get_state() if self.get_state_callback is not None else (np.array([]), np.array([]), np.array([]))
+        target_pos, target_vel = self.get_target() if self.get_target_callback is not None else (np.array([]), np.array([]))
+        return OrderedDict(
+            pos=pos,
+            vel=vel,
+            effort=effort,
+            target_pos=target_pos,
+            target_vel=target_vel,
+        )
+
+    def _load_state(self, state):
+        if self.set_pos_callback is not None:
+            self.set_pos(state["pos"], target=False)
+            if self.get_target_callback is not None:
+                self.set_pos(state["target_pos"], target=True)
+        if self.set_vel_callback is not None:
+            self.set_vel(state["vel"], target=False)
+            if self.get_target_callback is not None:
+                self.set_vel(state["target_vel"], target=True)
+        if self.set_effort_callback is not None:
+            self.set_effort(state["effort"])
 
 class Virtual6DOFJoint:
     """
     A Virtual 6DOF Joint interface that wraps up 6 1DOF VirtualJointPrim and provide set and get state callbacks
-
         Args:
             prim_path (str): prim path of the Prim to encapsulate or create.
             joint_name (str): Name for the object. Names need to be unique per scene.
             dof (List[str]): sublist of COMPONENT_SUFFIXES, list of dof for this joint
-            get_state_callback (Callable): callback function to get the joint states (pos, orn)
-            command_pos_callback (Callable): callback function to set the joint's position
-            reset_pos_callback (Callable): callback function to reset the joint's position
-            command_vel_callback (Callable): callback function to set the joint's velocity
-            command_effort_callback (Callable): callback function to set the joint's effort
+            get_state_callback (Callable): callback function to get the joint states, () -> [(pos: np.ndarray(np.float), vel: np.ndarray(np.float), effort: np.ndarray(np.float))] * 6
+            get_target_callback (Callable): callback function to get the joint targets, () -> [(pos: np.ndarray(np.float), vel: np.ndarray(np.float))] * 6
+            command_pos_callback (Callable): callback function to set the joint's position, (pos: list[float] of length 6, target: bool) -> None
+            command_vel_callback (Callable): callback function to set the joint's velocity, (vel: list[float] of length 6, target: bool) -> None
+            command_effort_callback (Callable): callback function to set the joint's effort, (effort: list[float] of length 6) -> None
             lower_limits (List[float]): lower limits for each dof of the joint
             upper_limits (List[float]): upper limits for each dof of the joint
     """
@@ -1052,8 +1120,8 @@ class Virtual6DOFJoint:
         joint_name,
         dof=tuple(m.COMPONENT_SUFFIXES),
         get_state_callback=None,
+        get_target_callback=None,
         command_pos_callback=None,
-        reset_pos_callback=None,
         command_vel_callback=None,
         command_effort_callback=None,
         lower_limits=None,
@@ -1061,8 +1129,8 @@ class Virtual6DOFJoint:
     ):
         self.joint_name = joint_name
         self._get_state_callback = get_state_callback
+        self._get_target_callback = get_target_callback
         self._command_pos_callback = command_pos_callback
-        self._reset_pos_callback = reset_pos_callback
         self._command_vel_callback = command_vel_callback
         self._command_effort_callback = command_effort_callback
 
@@ -1075,9 +1143,10 @@ class Virtual6DOFJoint:
                 name=f"{self.joint_name}_{name}",
                 joint_type="PrismaticJoint" if i < 3 else "RevoluteJoint",
                 get_state_callback=lambda: self.get_state()[i],
-                set_pos_callback=lambda pos, i_dof=i: self.set_pos(i_dof, pos),
-                set_vel_callback=lambda vel, i_dof=i: self.set_vel(i_dof, vel),
-                set_effort_callback=lambda effort, i_dof=i: self.set_effort(i_dof, effort),
+                get_target_callback=lambda: self.get_target()[i],
+                set_pos_callback=lambda pos, target, idx=i: self.set_pos(idx, pos, target),
+                set_vel_callback=lambda vel, target, idx=i: self.set_vel(idx, vel, target),
+                set_effort_callback=lambda effort: self.set_effort(i, effort),
                 lower_limit=lower_limits[i] if lower_limits is not None else None,
                 upper_limit=upper_limits[i] if upper_limits is not None else None,
             )
@@ -1085,35 +1154,42 @@ class Virtual6DOFJoint:
         self._get_actuated_indices = lambda lst: [lst[idx] for idx in self.dof]
 
         self._reset_stored_control()
-        self._reset_stored_reset()
 
     def get_state(self):
-        """ get the current state (pos/orn) of the joint"""
+        """ Get the state of the joint in the format of [(np.array([pos]), np.array([vel]), np.array([effort]))] * 6
+        """
         if self._get_state_callback is None:
             raise NotImplementedError("get state callback is not implemented for this virtual joint!")
         return self._get_state_callback()
+
+    def get_target(self):
+        """ Get the target of the joint in the format of [(np.array([target_pos]), np.array([target_vel]))] * 6
+        """
+        if self._get_target_callback is None:
+            raise NotImplementedError("get state callback is not implemented for this virtual joint!")
+        return self._get_target_callback()
 
     @property
     def joints(self):
         """Gets the 1DOF VirtualJoints belonging to this 6DOF joint."""
         return self._joints
 
-    def set_pos(self, dof, val):
+    def set_pos(self, dof, val, target):
         """Calls the command callback with position values for the DOF."""
         self._stored_control[dof] = val
         if all(ctrl is not None for ctrl in self._get_actuated_indices(self._stored_control)):
             if self._command_pos_callback:
-                self._command_pos_callback(self._stored_control)
+                self._command_pos_callback(self._stored_control, target)
                 self._reset_stored_control()
             else:
                 raise NotImplementedError(f"set position callback for {self.joint_name} is not implemented!")
 
-    def set_vel(self, dof, val):
+    def set_vel(self, dof, val, target):
         """Calls the command callback with velocity values for the DOF."""
         self._stored_control[dof] = val
         if all(ctrl is not None for ctrl in self._get_actuated_indices(self._stored_control)):
             if self._command_vel_callback:
-                self._command_vel_callback(self._stored_control)
+                self._command_vel_callback(self._stored_control, target)
                 self._reset_stored_control()
             else:
                 raise NotImplementedError(f"set velocity callback for {self.joint_name} is not implemented!")
@@ -1128,15 +1204,5 @@ class Virtual6DOFJoint:
             else:
                 raise NotImplementedError(f"set effort callback for {self.joint_name} is not implemented!")
 
-    def reset_pos(self, dof, val):
-        """Calls the reset callback with position values for the DOF"""
-        self._stored_reset[dof] = val
-        if all(reset_val is not None for reset_val in self._get_actuated_indices(self._stored_reset)):
-            self._reset_pos_callback(self._stored_reset)
-            self._reset_stored_reset()
-
     def _reset_stored_control(self):
         self._stored_control = [None] * len(self._joints)
-
-    def _reset_stored_reset(self):
-        self._stored_reset = [None] * len(self._joints)
