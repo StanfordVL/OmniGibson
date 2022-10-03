@@ -268,6 +268,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
         self._world_base_fixed_joint_prim = get_prim_at_path(os.path.join(self.root_link.prim_path, "world_base_joint"))
         position, orientation = self.get_position_orientation()
+        # Set the world-to-base fixed joint to be at the robot's current pose
         self._world_base_fixed_joint_prim.GetAttribute("physics:localPos0").Set(tuple(position))
         self._world_base_fixed_joint_prim.GetAttribute("physics:localRot0").Set(Gf.Quatf(*orientation[[3, 0, 1, 2]]))
 
@@ -281,6 +282,8 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                 if joint.joint_type != JointType.JOINT_FIXED:
                     joint.friction = 500
 
+    # Name of the actual root link that we are interested in. Note that this is different from self.root_link_name,
+    # which is "base_footprint_x", corresponding to the first of the 6 1DoF joints to control the base.
     @property
     def base_footprint_link_name(self):
         return "base_footprint"
@@ -296,13 +299,14 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     def _actions_to_control(self, action):
         # Run super method first
         u_vec, u_type_vec = super()._actions_to_control(action=action)
+
+        # Change the control from base_footprint_link ("base_footprint") frame to root_link ("base_footprint_x") frame
         base_orn = self.base_footprint_link.get_orientation()
         root_link_orn = self.root_link.get_orientation()
 
         cur_orn = T.mat2quat(T.quat2mat(root_link_orn).T  @ T.quat2mat(base_orn))
 
-        # Rotate the desired linear and angular velocity
-        # from the local frame (base_footprint) to the root link frame (base_footprint_x)
+        # Rotate the linear and angular velocity to the desired frame
         lin_vel_global, _ = T.pose_transform([0, 0, 0], cur_orn, u_vec[self.base_idx[:3]], [0, 0, 0, 1])
         ang_vel_global, _ = T.pose_transform([0, 0, 0], cur_orn, u_vec[self.base_idx[3:]], [0, 0, 0, 1])
 
@@ -329,6 +333,10 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             has_limit: (n_dof,) array where each element is True if that corresponding joint has a position limit
                 (otherwise, joint is assumed to be limitless)
         """
+        # Overwrite the control limits with the maximum linear and angular velocities for the purpose of clip_control
+        # Note that when clip_control happens, the control is still in the base_footprint_link ("base_footprint") frame
+        # Omniverse still thinks these joints have no limits because when the control is transformed to the root_link
+        # ("base_footprint_x") frame, it can go above this limit.
         limits = super().control_limits
         limits["velocity"][0][self.base_idx[:3]] = -m.MAX_LINEAR_VELOCITY
         limits["velocity"][1][self.base_idx[:3]] = m.MAX_LINEAR_VELOCITY
@@ -364,11 +372,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def _default_base_controller_configs(self):
-        # The command limit is scaled by the rendering time step (it becomes meter/radian per time step)
-        command_limits = (
-            np.array([-m.MAX_LINEAR_VELOCITY] * 2 + [-m.MAX_ANGULAR_VELOCITY]),
-            np.array([m.MAX_LINEAR_VELOCITY] * 2 + [m.MAX_ANGULAR_VELOCITY]),
-        )
         dic = {
             "name": "JointController",
             "control_freq": self._control_freq,
@@ -377,8 +380,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             "motor_type": "velocity",
             "compute_delta_in_quat_space": [(3, 4, 5)],
             "dof_idx": self.base_control_idx,
-            "command_input_limits": command_limits,
-            "command_output_limits": command_limits,
         }
         return dic
 
@@ -453,7 +454,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def base_control_idx(self):
         """
-        :return Array[int]: Controllable indices in low-level control vector corresponding to the virtual planar joints.
+        :return Array[int]: Indices in low-level control vector corresponding to the three controllable 1DoF base joints
         """
         joints = list(self.joints.keys())
         return np.array(
@@ -466,7 +467,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def base_idx(self):
         """
-        :return Array[int]: Indices in low-level control vector corresponding to the virtual planar joints.
+        :return Array[int]: Indices in low-level control vector corresponding to the six 1DoF base joints
         """
         joints = list(self.joints.keys())
         return np.array(
@@ -570,8 +571,11 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         if orientation is None:
             orientation = current_orientation
 
-        # If the simulator is playing, set the 6 base joints to achieve the desired pose
+        # If the simulator is playing, set the 6 base joints to achieve the desired pose of base_footprint link frame
         if self._dc is not None and self._dc.is_simulating():
+            # Find the relative transformation from base_footprint_link ("base_footprint") frame to root_link
+            # ("base_footprint_x") frame. Assign it to the 6 1DoF joints that control the base.
+            # Note that the 6 1DoF joints are originated from the root_link ("base_footprint_x") frame.
             joint_pos, joint_orn = self.root_link.get_position_orientation()
             inv_joint_pos, inv_joint_orn = T.mat2pose(T.pose_inv(T.pose2mat((joint_pos, joint_orn))))
 
@@ -584,7 +588,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             self.joints["base_footprint_ry_joint"].set_pos(relative_rpy[1])
             self.joints["base_footprint_rz_joint"].set_pos(relative_rpy[2])
 
-        # Else, set the pose of the robot frame, and also move the joint frame for the world_base_joint to match it
+        # Else, set the pose of the robot frame, and then move the joint frame of the world_base_joint to match it
         else:
             # Call the super() method to move the robot frame first
             super().set_position_orientation(position, orientation)
@@ -594,11 +598,9 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                 self._world_base_fixed_joint_prim.GetAttribute("physics:localRot0").Set(Gf.Quatf(*orientation[[3, 0, 1, 2]]))
 
     def set_linear_velocity(self, velocity: np.ndarray):
-        """Sets the linear velocity of the root prim in stage.
-
-        Args:
-            velocity (np.ndarray):linear velocity to set the rigid prim to. Shape (3,).
-        """
+        # Transform the desired linear velocity from the world frame to the root_link ("base_footprint_x") frame
+        # Note that this will also set the target to be the desired linear velocity (i.e. the robot will try to maintain
+        # such velocity), which is different from the default behavior of set_linear_velocity for all other objects.
         orn = self.root_link.get_orientation()
         velocity_in_root_link = T.quat2mat(orn).T @ velocity
         self.joints["base_footprint_x_joint"].set_vel(velocity_in_root_link[0])
@@ -606,19 +608,11 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self.joints["base_footprint_z_joint"].set_vel(velocity_in_root_link[2])
 
     def get_linear_velocity(self) -> np.ndarray:
-        """[summary]
-
-        Returns:
-            np.ndarray: [description]
-        """
+        # Note that the link we are interested in is self.base_footprint_link, not self.root_link
         return self.base_footprint_link.get_linear_velocity()
 
     def set_angular_velocity(self, velocity: np.ndarray) -> None:
-        """[summary]
-
-        Args:
-            velocity (np.ndarray): [description]
-        """
+        # See comments of self.set_linear_velocity
         orn = self.root_link.get_orientation()
         velocity_in_root_link = T.quat2mat(orn).T @ velocity
         self.joints["base_footprint_rx_joint"].set_vel(velocity_in_root_link[0])
@@ -626,9 +620,5 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self.joints["base_footprint_rz_joint"].set_vel(velocity_in_root_link[2])
 
     def get_angular_velocity(self) -> np.ndarray:
-        """[summary]
-
-        Returns:
-            np.ndarray: [description]
-        """
+        # Note that the link we are interested in is self.base_footprint_link, not self.root_link
         return self.base_footprint_link.get_angular_velocity()

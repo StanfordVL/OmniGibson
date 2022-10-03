@@ -955,7 +955,7 @@ class VirtualJointPrim(JointPrim):
 
     def _initialize(self):
         # no need to run super initialize
-        # set control type to position as default
+        # set control type to effort as default
         self._control_type = ControlType.EFFORT
 
     def get_state(self, normalized=False):

@@ -333,6 +333,7 @@ class ControllableObject(BaseObject):
 
         # Compose controls
         u_vec = np.zeros(self.n_dof)
+        # By default, the control type is effort and the control value is 0 (np.zeros) - 0 effort means no control.
         u_type_vec = np.array([ControlType.EFFORT] * self.n_dof)
         for group, ctrl in control.items():
             idx = self._controllers[group].dof_idx

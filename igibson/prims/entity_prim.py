@@ -902,31 +902,31 @@ class EntityPrim(XFormPrim):
         """Sets the linear velocity of the root prim in stage.
 
         Args:
-            velocity (np.ndarray):linear velocity to set the rigid prim to. Shape (3,).
+            velocity (np.ndarray): linear velocity to set the rigid prim to, in the world frame. Shape (3,).
         """
         self.root_link.set_linear_velocity(velocity)
 
     def get_linear_velocity(self) -> np.ndarray:
-        """[summary]
+        """Gets the linear velocity of the root prim in stage.
 
         Returns:
-            np.ndarray: [description]
+            velocity (np.ndarray): linear velocity to set the rigid prim to, in the world frame. Shape (3,).
         """
         return self.root_link.get_linear_velocity()
 
     def set_angular_velocity(self, velocity: np.ndarray) -> None:
-        """[summary]
+        """Sets the angular velocity of the root prim in stage.
 
         Args:
-            velocity (np.ndarray): [description]
+            velocity (np.ndarray): angular velocity to set the rigid prim to, in the world frame. Shape (3,).
         """
         self.root_link.set_angular_velocity(velocity)
 
     def get_angular_velocity(self) -> np.ndarray:
-        """[summary]
+        """Gets the angular velocity of the root prim in stage.
 
         Returns:
-            np.ndarray: [description]
+            velocity (np.ndarray): angular velocity to set the rigid prim to, in the world frame. Shape (3,).
         """
         return self.root_link.get_angular_velocity()
 
