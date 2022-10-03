@@ -107,7 +107,7 @@ class ControllableObject(BaseObject):
         # Fill in the DOF to joint mapping
         self._dof_to_joints = OrderedDict()
         idx = 0
-        for joint in (list(self._joints.values()) + list(self._virtual_joints.values())):
+        for joint in self._joints.values():
             for _ in range(joint.n_dof):
                 self._dof_to_joints[idx] = joint
                 idx += 1
@@ -159,7 +159,7 @@ class ControllableObject(BaseObject):
         # TODO: Verify that this modification has no side effects
         # dof_names_ordered = [self._dc.get_dof_name(self._dc.get_articulation_dof(self._handle, i))
         #                      for i in range(self.n_dof)]
-        self.dof_names_ordered = list(self._joints.keys()) + list(self._virtual_joints.keys())
+        self.dof_names_ordered = list(self._joints.keys())
 
         # Initialize controllers to create
         self._controllers = OrderedDict()
@@ -180,8 +180,7 @@ class ControllableObject(BaseObject):
         for name in self._controllers:
             for dof in self._controllers[name].dof_idx:
                 control_type = self._controllers[name].control_type
-                joints = self._joints if dof < self.n_physical_dof else self._virtual_joints
-                joints[self.dof_names_ordered[dof]].set_control_type(
+                self._joints[self.dof_names_ordered[dof]].set_control_type(
                     control_type=control_type,
                     kp=self.default_kp if control_type == ControlType.POSITION else None,
                     kd=self.default_kd if control_type == ControlType.VELOCITY else None,
@@ -239,7 +238,7 @@ class ControllableObject(BaseObject):
 
         # Additionally set the joint states based on the reset values
         self.set_joint_positions(positions=self._reset_joint_pos, target=False)
-        self.set_joint_velocities(velocities=np.zeros(self._n_physical_dof), target=False)
+        self.set_joint_velocities(velocities=np.zeros(self.n_dof), target=False)
 
         # Update the control modes of each joint based on the outputted control from the controllers
         # Omni resets them after every reset
@@ -629,7 +628,7 @@ class ControllableObject(BaseObject):
             float: Default kp gain to apply to any DOF when switching control modes (e.g.: switching from a
                 velocity control mode to a position control mode)
         """
-        return 4000.0 #400.0
+        return 1e7
 
     @property
     def default_kd(self):
@@ -638,7 +637,7 @@ class ControllableObject(BaseObject):
             float: Default kd gain to apply to any DOF when switching control modes (e.g.: switching from a
                 position control mode to a velocity control mode)
         """
-        return 4000.0
+        return 1e5
 
     @property
     @abstractmethod

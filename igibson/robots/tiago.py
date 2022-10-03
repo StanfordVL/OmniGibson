@@ -13,7 +13,6 @@ from igibson.robots.locomotion_robot import LocomotionRobot
 from igibson.utils.python_utils import assert_valid_key
 from igibson.utils.usd_utils import JointType
 from igibson.utils.transform_utils import euler2quat, quat2euler, quat2mat
-from igibson.prims.joint_prim import Virtual6DOFJoint
 
 from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.isaac.core.utils.rotations import gf_quat_to_np_array
@@ -191,7 +190,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def tucked_default_joint_pos(self):
-        pos = np.zeros(self._n_physical_dof)
+        pos = np.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
         pos[self.base_control_idx] = self.get_joint_positions()[self.base_control_idx]
         pos[self.trunk_control_idx] = 0
@@ -205,7 +204,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def untucked_default_joint_pos(self):
-        pos = np.zeros(self._n_physical_dof)
+        pos = np.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
         pos[self.base_control_idx] = self.get_joint_positions()[self.base_control_idx]
         pos[self.trunk_control_idx] = 0.02 + self.default_trunk_offset
@@ -581,12 +580,12 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
             relative_pos, relative_orn = T.pose_transform(inv_joint_pos, inv_joint_orn, position, orientation)
             relative_rpy = T.quat2euler(relative_orn)
-            self.joints["base_footprint_x_joint"].set_pos(relative_pos[0])
-            self.joints["base_footprint_y_joint"].set_pos(relative_pos[1])
-            self.joints["base_footprint_z_joint"].set_pos(relative_pos[2])
-            self.joints["base_footprint_rx_joint"].set_pos(relative_rpy[0])
-            self.joints["base_footprint_ry_joint"].set_pos(relative_rpy[1])
-            self.joints["base_footprint_rz_joint"].set_pos(relative_rpy[2])
+            self.joints["base_footprint_x_joint"].set_pos(relative_pos[0], target=False)
+            self.joints["base_footprint_y_joint"].set_pos(relative_pos[1], target=False)
+            self.joints["base_footprint_z_joint"].set_pos(relative_pos[2], target=False)
+            self.joints["base_footprint_rx_joint"].set_pos(relative_rpy[0], target=False)
+            self.joints["base_footprint_ry_joint"].set_pos(relative_rpy[1], target=False)
+            self.joints["base_footprint_rz_joint"].set_pos(relative_rpy[2], target=False)
 
         # Else, set the pose of the robot frame, and then move the joint frame of the world_base_joint to match it
         else:
@@ -603,9 +602,9 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # such velocity), which is different from the default behavior of set_linear_velocity for all other objects.
         orn = self.root_link.get_orientation()
         velocity_in_root_link = T.quat2mat(orn).T @ velocity
-        self.joints["base_footprint_x_joint"].set_vel(velocity_in_root_link[0])
-        self.joints["base_footprint_y_joint"].set_vel(velocity_in_root_link[1])
-        self.joints["base_footprint_z_joint"].set_vel(velocity_in_root_link[2])
+        self.joints["base_footprint_x_joint"].set_vel(velocity_in_root_link[0], target=False)
+        self.joints["base_footprint_y_joint"].set_vel(velocity_in_root_link[1], target=False)
+        self.joints["base_footprint_z_joint"].set_vel(velocity_in_root_link[2], target=False)
 
     def get_linear_velocity(self) -> np.ndarray:
         # Note that the link we are interested in is self.base_footprint_link, not self.root_link
@@ -615,9 +614,9 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # See comments of self.set_linear_velocity
         orn = self.root_link.get_orientation()
         velocity_in_root_link = T.quat2mat(orn).T @ velocity
-        self.joints["base_footprint_rx_joint"].set_vel(velocity_in_root_link[0])
-        self.joints["base_footprint_ry_joint"].set_vel(velocity_in_root_link[1])
-        self.joints["base_footprint_rz_joint"].set_vel(velocity_in_root_link[2])
+        self.joints["base_footprint_rx_joint"].set_vel(velocity_in_root_link[0], target=False)
+        self.joints["base_footprint_ry_joint"].set_vel(velocity_in_root_link[1], target=False)
+        self.joints["base_footprint_rz_joint"].set_vel(velocity_in_root_link[2], target=False)
 
     def get_angular_velocity(self) -> np.ndarray:
         # Note that the link we are interested in is self.base_footprint_link, not self.root_link
