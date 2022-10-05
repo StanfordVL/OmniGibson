@@ -21,6 +21,7 @@ from omni.isaac.core.utils.prims import (
     get_prim_object_type,
 )
 from omni.isaac.core.utils.stage import get_current_stage
+from omni.isaac.core.utils.prims import delete_prim
 from igibson.utils.python_utils import Serializable, UniquelyNamed, Recreatable
 
 
@@ -54,7 +55,6 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
 
         # Other values that will be filled in at runtime
         self._applied_visual_material = None
-        self._binding_api = None
         self._loaded = False                                # Whether this prim exists in the stage or not
         self._initialized = False                           # Whether this prim has its internal handles / info initialized or not (occurs AFTER and INDEPENDENTLY from loading!)
         self._prim = None
@@ -139,12 +139,10 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
             raise ValueError("Cannot remove a prim that was never loaded.")
 
         # Remove prim
+        delete_prim(self.prim_path)
         if simulator:
-            simulator.stage.RemovePrim(self.prim_path)
             # Also clear the name so we can reuse this later
             self.remove_names(include_all_owned=True, skip_ids={id(simulator)})
-        else:
-            get_current_stage().RemovePrim(self.prim_path)
 
     @abstractmethod
     def _load(self, simulator=None):
