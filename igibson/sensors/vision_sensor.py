@@ -13,7 +13,6 @@ from igibson.utils.transform_utils import euler2quat, quat2euler
 import carb
 from omni.isaac.core.utils.stage import get_current_stage
 from pxr import Gf, UsdGeom
-from omni.kit.viewport_legacy import acquire_viewport_interface
 
 # Make sure synthetic data extension is enabled
 ext_manager = app.app.get_extension_manager()
@@ -23,6 +22,7 @@ ext_manager.set_extension_enabled("omni.syntheticdata", True)
 from omni.syntheticdata import sensors as sensors_util
 import omni.syntheticdata._syntheticdata as sd
 sensor_types = sd.SensorType
+from omni.kit.viewport.window import get_viewport_window_instances
 
 
 class VisionSensor(BaseSensor):
@@ -129,22 +129,23 @@ class VisionSensor(BaseSensor):
         self._sd = sd.acquire_syntheticdata_interface()
 
         # Create a new viewport to link to this camera or link to a pre-existing one
-        vp = acquire_viewport_interface()
         viewport_name = self._load_config["viewport_name"]
-        if viewport_name is not None:
-            vp_names_to_handles = {vp.get_viewport_window_name(h): h for h in vp.get_instance_list()}
-            assert_valid_key(key=viewport_name, valid_keys=vp_names_to_handles, name="viewport name")
-            viewport_handle = vp_names_to_handles[viewport_name]
-        else:
-            viewport_handle = vp.create_instance()
-        self._viewport = vp.get_viewport_window(viewport_handle)
+        vp_names_to_handles = {window_instance.name : window_instance for window_instance in get_viewport_window_instances()}
+        # if viewport_name is not None:
+        # else:
+        #     raise Exception("Requires a viewport in scene")
+            # viewport_handle = vp.create_instance()
+        self._viewport = vp_names_to_handles[viewport_name].viewport_api
+        self._window = vp_names_to_handles[viewport_name]
 
         # Link the camera and viewport together
         self._viewport.set_active_camera(self._prim_path)
 
         # Set the viewer size
-        self._viewport.set_texture_resolution(self._load_config["image_width"], self._load_config["image_height"])
-        self._viewport.set_window_size(self._load_config["image_height"], self._load_config["image_width"])
+        self._viewport.set_texture_resolution((self._load_config["image_width"], self._load_config["image_height"]))
+        # self._viewport.set_window_size(self._load_config["image_height"], self._load_config["image_width"])
+        self._window.width = self._load_config["image_width"]
+        self._window.height = self._load_config["image_height"]
         # Requires 3 updates to propagate changes
         for i in range(3):
             app.update()
@@ -290,7 +291,7 @@ class VisionSensor(BaseSensor):
             height (int): Image height of this sensor, in pixels
         """
         width, _ = self._viewport.get_texture_resolution()
-        self._viewport.set_texture_resolution(width, height)
+        self._viewport.set_texture_resolution((width, height))
         # Requires 3 updates to propagate changes
         for i in range(3):
             app.update()
@@ -312,7 +313,7 @@ class VisionSensor(BaseSensor):
             width (int): Image width of this sensor, in pixels
         """
         _, height = self._viewport.get_texture_resolution()
-        self._viewport.set_texture_resolution(width, height)
+        self._viewport.set_texture_resolution((width, height))
         # Requires 3 updates to propagate changes
         for i in range(3):
             app.update()

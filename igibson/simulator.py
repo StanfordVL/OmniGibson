@@ -41,8 +41,8 @@ from igibson.objects.stateful_object import StatefulObject
 from igibson.object_states.factory import get_states_by_dependency_order
 from igibson.sensors.vision_sensor import VisionSensor
 from igibson.transition_rules import DEFAULT_RULES, TransitionResults
-from omni.kit.viewport_legacy import acquire_viewport_interface
-
+from omni.kit.viewport.utility import get_active_viewport_window
+from omni.kit.viewport.window import get_viewport_window_instances
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -118,7 +118,7 @@ class Simulator(SimulationContext, Serializable):
         self._dc_interface = _dynamic_control.acquire_dynamic_control_interface()
         # if not builtins.ISAAC_LAUNCHED_FROM_TERMINAL:
         #     self.start_simulation()
-        set_camera_view()
+        set_camera_view(np.array([0,0,0]), np.array([0,0,0]))
         self._data_logger = DataLogger()
 
         # Store other internal vars
@@ -196,15 +196,14 @@ class Simulator(SimulationContext, Serializable):
         Args:
             prim_path (str): Path to check for / create the viewer camera
         """
-        vp = acquire_viewport_interface()
-        viewers_to_names = {vp.get_viewport_window(h): vp.get_viewport_window_name(h) for h in vp.get_instance_list()}
+        viewers_to_names = {window_instance.name : window_instance for window_instance in get_viewport_window_instances()}
         self._viewer_camera = VisionSensor(
             prim_path=prim_path,
             name=prim_path.split("/")[-1],                  # Assume name is the lowest-level name in the prim_path
             modalities="rgb",
             image_height=self.viewer_height,
             image_width=self.viewer_width,
-            viewport_name=viewers_to_names[self._viewer],
+            viewport_name=self._viewer.name,
         )
         if not self._viewer_camera.loaded:
             self._viewer_camera.load(simulator=self)
@@ -307,10 +306,7 @@ class Simulator(SimulationContext, Serializable):
         """
         Initializes a reference to the viewer in the App, and sets the frame size
         """
-        # Store reference to viewer (see https://docs.omniverse.nvidia.com/app_isaacsim/app_isaacsim/reference_python_snippets.html#get-camera-parameters)
-        viewport = acquire_viewport_interface()
-        viewport_handle = viewport.get_instance("Viewport")
-        self._viewer = viewport.get_viewport_window(viewport_handle)
+        self._viewer = get_active_viewport_window()
 
         # Set viewer camera and frame size
         self._set_viewer_camera()

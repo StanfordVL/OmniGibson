@@ -105,14 +105,15 @@ logging.info("Example config path: {}".format(example_config_path))
 debug_sampling = False
 
 # Finally, we must create the igibson application
-from igibson.app_omni import OmniApp
+# from igibson.app_omni import OmniApp
+from omni.isaac.kit import SimulationApp as OmniApp
 
 # Create app as a global reference so any submodule can access it
 app = OmniApp(
     {
         "headless": gm.HEADLESS,
     },
-    debug=gm.DEBUG,
+    # debug=gm.DEBUG,
 )
 
 # Next import must be simulator

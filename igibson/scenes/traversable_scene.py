@@ -38,14 +38,14 @@ class TraversableScene(Scene):
         self.scene_model = scene_model
 
         # Create traversable map
-        self._trav_map = TraversableMap(
-            trav_map_resolution=trav_map_resolution,
-            trav_map_erosion=trav_map_erosion,
-            trav_map_with_objects=trav_map_with_objects,
-            build_graph=build_graph,
-            num_waypoints=num_waypoints,
-            waypoint_resolution=waypoint_resolution,
-        )
+        # self._trav_map = TraversableMap(
+        #     trav_map_resolution=trav_map_resolution,
+        #     trav_map_erosion=trav_map_erosion,
+        #     trav_map_with_objects=trav_map_with_objects,
+        #     build_graph=build_graph,
+        #     num_waypoints=num_waypoints,
+        #     waypoint_resolution=waypoint_resolution,
+        # )
 
     @property
     def trav_map(self):
