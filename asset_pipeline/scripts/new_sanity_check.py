@@ -78,7 +78,7 @@ class SanityCheck:
     self.errors = collections.defaultdict(list)
 
   def is_valid_object_type(self, row):
-    is_valid_type = row.type in [rt.Editable_Poly, rt.VRayLight, rt.VRayPhysicalCamera, rt.Dummy, rt.VolumeHelper]
+    is_valid_type = row.type in [rt.Editable_Poly, rt.VRayLight, rt.VRayPhysicalCamera, rt.Dummy, rt.VolumeHelper, rt.Physical_Camera, rt.FreeCamera]
     self.expect(is_valid_type, f"{row.object_name} has disallowed type {row.type}.")
     return is_valid_type
 
@@ -162,7 +162,9 @@ class SanityCheck:
 
     # Check that the keys start from 0 and are contiguous.
     unique_instance_ids = rows.groupby(["name_category", "name_model_id", "name_instance_id"], sort=False, dropna=False).ngroups
-    self.expect(set(rows["name_instance_id"]) == set(str(x) for x in range(unique_instance_ids)), f"All instances of {base.object_name} do not have contiguous instance IDs.")
+    existing_instance_ids = set(rows["name_instance_id"])
+    expected_instance_ids = set(str(x) for x in range(unique_instance_ids))
+    self.expect(existing_instance_ids == expected_instance_ids, f"All instances of {base.object_name} do not have contiguous instance IDs. Missing: {sorted(expected_instance_ids - existing_instance_ids)}")
 
     # Check that they all have the same object offset rotation and pos/scale and shear.
     desired_offset_pos = np.array(base.object.objectOffsetPos) / np.array(base.object.objectOffsetScale)

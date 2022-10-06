@@ -42,13 +42,15 @@ CHANNEL_MAPPING = {
 #     "Normal": "Bump Map",
 # }
 
+RENDER_PRESET_FILENAME = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "render_presets", "objrender-gi.rps"))
+
 allow_list = [
 ]
 black_list = [
 ]
 
 class ObjectExporter:
-    def __init__(self, bakery, out_dir, export_textures=False):
+    def __init__(self, bakery, out_dir, export_textures=True):
         self.unwrapped_objs = set()
         self.MAP_NAME_TO_IDS = self.get_map_name_to_ids()
         self.lights = self.get_all_lights()
@@ -81,15 +83,13 @@ class ObjectExporter:
 
         result = parse_name(obj.name)
         # only bake texture for the first instance of a non-broken model
-        return result and result.group("instance_id") == "0" and not result.group("bad")
+        return result and result.group("instance_id") == "0" and not result.group("bad") and not result.group("joint_side") == "upper"
        
     def get_process_objs(self):
         objs = []
         wrong_objs = []
         for obj in rt.objects:
             if rt.classOf(obj) != rt.Editable_Poly:
-                if rt.classOf(obj) not in [rt.VRayLight, rt.VRayPhysicalCamera, rt.Targetobject, rt.Dummy, rt.VolumeHelper, rt.VRayProxy]:
-                    wrong_objs.append((obj.name, rt.ClassOf(obj)))
                 continue
             if allow_list and all(re.fullmatch(p, obj.name) is None for p in allow_list):
                 continue
@@ -102,8 +102,8 @@ class ObjectExporter:
             obj_dir = os.path.join(self.obj_out_dir, obj.name)
             obj_file = os.path.join(obj_dir, obj.name + ".obj")
             json_file = os.path.join(obj_dir, obj.name + ".json")
-            if os.path.exists(obj_file) and os.path.exists(json_file):
-                continue
+            # if os.path.exists(obj_file) and os.path.exists(json_file):
+            #    continue
             objs.append(obj)
         
         if len(wrong_objs) != 0:
@@ -137,11 +137,6 @@ class ObjectExporter:
         self.unwrapped_objs.add(obj.baseObject)
 
         rt.select(obj)
-        
-        # Make sure it's triangle mesh
-        rt.polyop.setVertSelection(obj, rt.name('all'))
-        obj.connectVertices()
-        rt.polyop.setVertSelection(obj, rt.name('none'))
 
         # Select all faces in preparation for uv unwrap
         rt.polyop.setFaceSelection(obj, rt.name('all'))
@@ -324,6 +319,7 @@ class ObjectExporter:
 
     def run(self):
         assert rt.classOf(rt.renderers.current) == rt.V_Ray_5__update_2_3, f"Renderer should be set to V-Ray 5.2.3 CPU instead of {rt.classOf(rt.renderers.current)}"
+        assert rt.execute('max modify mode')
 
         objs = self.get_process_objs()
         should_bake_count = sum(1 for x in objs if self.should_bake_texture(x))
@@ -340,6 +336,12 @@ class ObjectExporter:
 
                 rt.select([obj])
                 rt.IsolateSelection.EnterIsolateSelectionMode()
+
+                # Make sure it's triangle mesh
+                rt.polyop.setVertSelection(obj, rt.name('all'))
+                obj.connectVertices()
+                rt.polyop.setVertSelection(obj, rt.name('none'))
+
                 obj.isHidden = False
                 self.uv_unwrapping(obj)
                 self.texture_baking(obj)
@@ -352,6 +354,9 @@ class ObjectExporter:
         assert len(failures) == 0, f"Some objects could not be exported:\n{failure_msg}"
 
 def main():
+    preset_categories = rt.renderpresets.LoadCategories(RENDER_PRESET_FILENAME)
+    assert rt.renderpresets.Load(0, RENDER_PRESET_FILENAME, preset_categories)
+
     rt.setvraysilentmode(True)
     out_dir = os.path.join(rt.maxFilePath, "artifacts")
 

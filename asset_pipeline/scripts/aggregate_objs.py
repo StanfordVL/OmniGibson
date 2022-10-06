@@ -34,7 +34,7 @@ def main():
 
         # We were able to find everything we are looking for, so let's actually copy things now.
         for src_path, dst_path in copy_list:
-            shutil.copytree(src_path, dst_path, symlinks=False, dirs_exist_ok=False)
+            shutil.copytree(src_path, dst_path, symlinks=True, dirs_exist_ok=False)
     except Exception as e:
         success = False
         error_msg = traceback.format_exc()

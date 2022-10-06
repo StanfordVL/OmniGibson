@@ -1,5 +1,6 @@
 import multiprocessing
 import os
+import signal
 import subprocess
 import sys
 import traceback
@@ -15,7 +16,7 @@ def process_target(args):
         stage, target, timeout = args
         cmd = ["dvc", "repro", f"{stage}@{target}"]
         print("Running", " ".join(cmd))
-        return subprocess.run(cmd, timeout=timeout).returncode == 0
+        return subprocess.run(cmd, timeout=timeout, stdin=subprocess.PIPE).returncode == 0
     except:
         traceback.print_exc()
         return False
@@ -23,7 +24,7 @@ def process_target(args):
 
 @click.command()
 @click.argument('stage')
-@click.option('--subset', type=click.Choice(['scenes', 'objects', 'combined'], case_sensitive=False), default="combined", help='Which subset of targets to run.')
+@click.option('--subset', default="combined", help='Which subset of targets to run.', type=str)
 @click.option('--processes', default=3, help='Number of concurrent processes to run.', type=int)
 @click.option('--timeout', default=15*60, help='Seconds to wait until the process is terminated.', type=int)
 def run_stages(stage, subset, processes, timeout):
@@ -37,8 +38,19 @@ def run_stages(stage, subset, processes, timeout):
     targets = files[subset]
 
     # Run parallel processing.
-    with multiprocessing.Pool(processes) as p:
-        results = p.map(process_target, [(stage, target, timeout) for target in targets])
+    original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
+    pool = multiprocessing.Pool(processes)
+    signal.signal(signal.SIGINT, original_sigint_handler)
+    try:
+        res = pool.map_async(process_target, [(stage, target, timeout) for target in targets])
+        results = res.get(1e6) # Without the timeout this blocking call ignores all signals.
+    except KeyboardInterrupt:
+        print("Caught KeyboardInterrupt, terminating workers")
+        pool.terminate()
+    else:
+        print("Normal termination")
+        pool.close()
+    pool.join()
 
     # Split the targets into successes and failures.
     successes = []

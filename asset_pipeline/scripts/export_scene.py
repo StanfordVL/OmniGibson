@@ -53,7 +53,7 @@ def main():
         joint = ET.SubElement(scene_tree_root, "joint")
         joint.attrib = {
             "name": f"j_{obj_name_in_scene}",
-            "type": "fixed" # if is_loose is None else "floating",
+            "type": "fixed" if G.nodes[root_node]["is_loose"] is None else "floating",
         }
         joint_origin = ET.SubElement(joint, "origin")
         joint_origin_xyz = bbox_world_center.tolist()

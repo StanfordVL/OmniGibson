@@ -17,7 +17,9 @@ def build_mesh_tree(mesh_list, mesh_root):
     G = nx.DiGraph()
 
     print("Building mesh tree.")
-    for mesh_name in tqdm.tqdm(mesh_list):
+    pbar = tqdm.tqdm(mesh_list)
+    for mesh_name in pbar:
+        pbar.set_description(mesh_name)
         groups = PATTERN.match(mesh_name).groups()
         (
             is_broken,
@@ -78,6 +80,7 @@ def build_mesh_tree(mesh_list, mesh_root):
             G.nodes[node_key]["lower_mesh"] = lower_mesh
             G.nodes[node_key]["metadata"] = metadata
             G.nodes[node_key]["meta_links"] = meta_links
+            G.nodes[node_key]["material_dir"] = os.path.join(mesh_dir, "material")
 
         # Add the edge in from the parent
         if link_name != "base_link":
