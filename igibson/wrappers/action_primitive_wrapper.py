@@ -2,6 +2,7 @@ import logging
 import time
 
 import gym
+from gym.spaces import Dict
 
 from igibson.action_primitives.action_primitive_set_base import (
     REGISTERED_PRIMITIVE_SETS,
@@ -19,6 +20,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         env,
         action_generator,
         reward_accumulation="sum",
+        flatten_nested_obs=True,
         accumulate_obs=False,
         num_attempts=10,
     ):
@@ -34,7 +36,6 @@ class ActionPrimitiveWrapper(BaseWrapper):
             @param num_attempts (int): How many times a primitive will be re-attempted if previous tries fail.
         """
         super().__init__(env=env)
-
         self.action_generator: BaseActionPrimitiveSet = REGISTERED_PRIMITIVE_SETS[action_generator](
             self, self.task, self.scene, self.robots[0]
         )
@@ -43,6 +44,27 @@ class ActionPrimitiveWrapper(BaseWrapper):
         self.reward_accumulation = reward_accumulation
         self.accumulate_obs = accumulate_obs
         self.num_attempts = num_attempts
+
+        # Flatten our observation space if requested
+        self.flatten_nested_obs = flatten_nested_obs
+        if self.flatten_nested_obs:
+            # TODO: A bit naive, properly implement recursive version later
+            self.observation_space = gym.spaces.Dict(
+                {k: v for subdict in self.observation_space.values() for k, v in subdict.items()}
+            )
+        else:
+            self.observation_space = self.env.observation_space
+
+    def reset(self):
+        obs = super().reset()
+
+        if self.flatten_nested_obs:
+            obs = {k: v for subdict in obs.values() for k, v in subdict.items()}
+
+        print("IN AP WRAPPER RESET")
+        # from IPython import embed; embed()
+
+        return obs
 
     def step(self, action: int):
         # Run the goal generator and feed the goals into the env.
@@ -53,39 +75,41 @@ class ActionPrimitiveWrapper(BaseWrapper):
 
         for _ in range(self.num_attempts):
             obs, done, info = None, None, {}
-            try:
-                for lower_level_action in self.action_generator.apply(action):
-                    # Run super step
-                    obs, reward, done, info = super().step(lower_level_action)
+            for lower_level_action in self.action_generator.apply(action):
+                # Run super step
+                obs, reward, done, info = super().step(lower_level_action)
 
-                    if self.reward_accumulation == "sum":
-                        accumulated_reward += reward
-                    elif self.reward_accumulation == "max":
-                        accumulated_reward = max(reward, accumulated_reward)
-                    else:
-                        raise ValueError("Reward accumulation should be one of 'sum' and 'max'.")
+                if self.flatten_nested_obs:
+                    obs = {k: v for subdict in obs.values() for k, v in subdict.items()}
 
-                    if self.accumulate_obs:
-                        accumulated_obs.append(obs)
-                    else:
-                        accumulated_obs = [obs]  # Do this to save some memory.
+                if self.reward_accumulation == "sum":
+                    accumulated_reward += reward
+                elif self.reward_accumulation == "max":
+                    accumulated_reward = max(reward, accumulated_reward)
+                else:
+                    raise ValueError("Reward accumulation should be one of 'sum' and 'max'.")
 
-                    # Record additional info.
-                    info["primitive_success"] = True
-                    info["primitive_error_reason"] = None
-                    info["primitive_error_metadata"] = None
-                    info["primitive_error_message"] = None
+                if self.accumulate_obs:
+                    accumulated_obs.append(obs)
+                else:
+                    accumulated_obs = [obs]  # Do this to save some memory.
 
-                break
-            except ActionPrimitiveError as e:
-                end_time = time.time()
-                logger.error("AP time: {}".format(end_time - start_time))
-                logger.warning("Action primitive failed! Exception {}".format(e))
-                # Record the error info.
-                info["primitive_success"] = False
-                info["primitive_error_reason"] = e.reason
-                info["primitive_error_metadata"] = e.metadata
-                info["primitive_error_message"] = str(e)
+                # Record additional info.
+                info["primitive_success"] = True
+                info["primitive_error_reason"] = None
+                info["primitive_error_metadata"] = None
+                info["primitive_error_message"] = None
+
+            #     break
+            # except ActionPrimitiveError as e:
+            #     end_time = time.time()
+            #     logger.error("AP time: {}".format(end_time - start_time))
+            #     logger.warning("Action primitive failed! Exception {}".format(e))
+            #     # Record the error info.
+            #     info["primitive_success"] = False
+            #     info["primitive_error_reason"] = e.reason
+            #     info["primitive_error_metadata"] = e.metadata
+            #     info["primitive_error_message"] = str(e)
 
         # TODO: Think more about what to do when no observations etc. can be obtained.
         return_obs = None
@@ -94,6 +118,12 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 return_obs = accumulated_obs
             else:
                 return_obs = accumulated_obs[-1]
+        else:
+            raise ValueError("Accumualted obs should not be empty!")
         end_time = time.time()
         logger.error("AP time: {}".format(end_time - start_time))
+
+        print(f"IN AP END OF STEP CALL")
+        # from IPython import embed; embed()
+
         return return_obs, accumulated_reward, done, info

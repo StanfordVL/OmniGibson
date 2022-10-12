@@ -642,7 +642,9 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             pre_grasping_distance=pre_grasping_distance,
             plan_full_pre_grasp_motion=plan_full_pre_grasp_motion,
         )
-
+        print(pre_pick_path, interaction_pick_path, pre_grasping_distance)  # [] None 0.1
+        import pdb
+        pdb.set_trace()
         if (
             pre_pick_path is None
             or len(pre_pick_path) == 0

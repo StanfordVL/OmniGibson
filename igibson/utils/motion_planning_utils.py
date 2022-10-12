@@ -3,6 +3,7 @@ import random
 
 from transforms3d import euler
 
+import igibson as ig
 from igibson.robots.manipulation_robot import IsGraspingState
 from igibson.utils.sim_utils import check_collision
 from omni.isaac.core.utils.prims import get_prim_at_path
@@ -115,6 +116,7 @@ class MotionPlanner:
         # If not None, maps arm name to ik lula solver
         self.ik_solver = None
         self.ik_control_idx = None
+        print('self.robot.model_name: ', self.robot.model_name)  # "Tiago"
         if isinstance(self.robot, ManipulationRobot):
             self.ik_solver = OrderedDict()
             self.ik_control_idx = OrderedDict()
@@ -131,6 +133,10 @@ class MotionPlanner:
                 self.ik_control_idx[self.robot.default_arm] = control_idx
             elif self.robot.model_name == "Tiago":
                 left_control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx["left"]])
+                print('************************ PyBullet Enabled **************************')
+                print(f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford_left_arm_descriptor.yaml")
+                # import pdb
+                # pdb.set_trace()
                 self.ik_solver["left"] = IKSolver(
                     robot_description_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford_left_arm_descriptor.yaml",
                     robot_urdf_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford.urdf",
@@ -139,12 +145,15 @@ class MotionPlanner:
                 )
                 self.ik_control_idx["left"] = left_control_idx
                 right_control_idx = self.robot.arm_control_idx["right"]
-                self.ik_solver["right"] = IKSolver(
-                    robot_description_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml",
-                    robot_urdf_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford.urdf",
-                    eef_name="gripper_right_grasping_frame",
-                    default_joint_pos=self.robot.default_joint_pos[right_control_idx],
-                )
+                # if m.IS_PUBLIC_ISAACSIM:
+                self.ik_solver["right"] = self.ik_solver["left"]
+                # else:
+                # self.ik_solver["right"] = IKSolver(
+                #     robot_description_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml",
+                #     robot_urdf_path=f"{assets_path}/models/tiago/tiago_dual_omnidirectional_stanford.urdf",
+                #     eef_name="gripper_right_grasping_frame",
+                #     default_joint_pos=self.robot.default_joint_pos[right_control_idx],
+                # )
                 self.ik_control_idx["right"] = right_control_idx
             else:
                 raise ValueError("Invalid robot for generating IK solver. Must be either Fetch or Tiago")
@@ -223,8 +232,8 @@ class MotionPlanner:
                 length=0.2,
                 visual_only=True,
             )
-            self.env.simulator.import_object(self.marker, register=False, auto_initialize=True)
-            self.env.simulator.import_object(self.marker_direction, register=False, auto_initialize=True)
+            ig.sim.import_object(self.marker, register=False, auto_initialize=True)
+            ig.sim.import_object(self.marker_direction, register=False, auto_initialize=True)
 
         self.visualize_2d_planning = visualize_2d_planning
         self.visualize_2d_result = visualize_2d_result
@@ -244,7 +253,7 @@ class MotionPlanner:
 
     def simulator_step(self):
         """Step the simulator and sync the simulator to renderer"""
-        self.env.simulator.step(render=True)
+        ig.sim.step(render=True)
 
     def plan_base_motion(self, goal, plan_full_base_motion=True, objects_to_ignore=None):
         """
