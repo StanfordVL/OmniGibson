@@ -93,8 +93,6 @@ class ClothPrim(GeomPrim):
                 shader = get_shader_from_material(prim=get_prim_at_path(target))
                 update_shader_asset_paths(shader=shader)
 
-
-
     def _initialize(self):
         super()._initialize()
         # TODO (eric): hacky way to get cloth rendering to work (otherwise, there exist some rendering artifacts).

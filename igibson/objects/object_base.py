@@ -196,23 +196,38 @@ class BaseObject(EntityPrim, metaclass=ABCMeta):
             type_label="class",
         )
 
-        # Iterate over all links and grab their relevant shader info for highlighting (i.e.: emissivity info)
+        # Force populate inputs and outputs of the shaders of all materials
+        for material in self.materials:
+            material.shader_force_populate()
+
+        # Iterate over all links and grab their relevant material info for highlighting (i.e.: emissivity info)
         self._highlighted = False
         self._highlight_cached_values = OrderedDict()
+
+        for material in self.materials:
+            self._highlight_cached_values[material] = {
+                "enable_emission": material.enable_emission,
+                "emissive_color": material.emissive_color,
+                "emissive_intensity": material.emissive_intensity,
+            }
+
+    @property
+    def materials(self):
+        """
+        Loop through each link and their visual meshes to gather all the materials that belong to this object
+        Returns:
+            materials: a list of MaterialPrim that belongs to this object
+        """
         materials = set()
+        material_paths = set()
         for link in self._links.values():
             xforms = [link] + list(link.visual_meshes.values()) if self.prim_type == PrimType.RIGID else [link]
             for xform in xforms:
                 if xform.has_material():
-                    # Only keep non-redundant materials
                     mat_path = xform.material.prim_path
-                    if mat_path not in materials:
-                        materials.add(mat_path)
-                        self._highlight_cached_values[mat_path] = {
-                            "enable_emission": xform.material.enable_emission,
-                            "emissive_color": xform.material.emissive_color,
-                            "emissive_intensity": xform.material.emissive_intensity,
-                        }
+                    if mat_path not in material_paths:
+                        materials.add(xform.material)
+        return materials
 
     @property
     def articulation_root_path(self):
@@ -272,7 +287,7 @@ class BaseObject(EntityPrim, metaclass=ABCMeta):
     @highlighted.setter
     def highlighted(self, enabled):
         """
-        Iterates over all owned links, and modifies their shaders with emissive colors so that the object is
+        Iterates over all owned links, and modifies their materials with emissive colors so that the object is
         highlighted (magenta by default)
 
         Args:
@@ -282,25 +297,17 @@ class BaseObject(EntityPrim, metaclass=ABCMeta):
         if enabled == self._highlighted:
             return
 
-        materials = set()
-        for link_name, link in self._links.items():
-            xforms = [link] + list(link.visual_meshes.values())
-            for xform in xforms:
-                if xform.has_material():
-                    # Only save / modify non-redundant materials
-                    mat_path = xform.material.prim_path
-                    if mat_path not in materials:
-                        materials.add(mat_path)
-                        if enabled:
-                            # Store values before swapping
-                            self._highlight_cached_values[mat_path] = {
-                                "enable_emission": xform.material.enable_emission,
-                                "emissive_color": xform.material.emissive_color,
-                                "emissive_intensity": xform.material.emissive_intensity,
-                            }
-                        xform.material.enable_emission = True if enabled else self._highlight_cached_values[mat_path]["enable_emission"]
-                        xform.material.emissive_color = m.HIGHLIGHT_RGB if enabled else self._highlight_cached_values[mat_path]["emissive_color"]
-                        xform.material.emissive_intensity = m.HIGHLIGHT_INTENSITY if enabled else self._highlight_cached_values[mat_path]["emissive_intensity"]
+        for material in self.materials:
+            if enabled:
+                # Store values before swapping
+                self._highlight_cached_values[material] = {
+                    "enable_emission": material.enable_emission,
+                    "emissive_color": material.emissive_color,
+                    "emissive_intensity": material.emissive_intensity,
+                }
+            material.enable_emission = True if enabled else self._highlight_cached_values[material]["enable_emission"]
+            material.emissive_color = m.HIGHLIGHT_RGB if enabled else self._highlight_cached_values[material]["emissive_color"]
+            material.emissive_intensity = m.HIGHLIGHT_INTENSITY if enabled else self._highlight_cached_values[material]["emissive_intensity"]
 
         # Update internal value
         self._highlighted = enabled
