@@ -1,6 +1,6 @@
 import gym
 import logging
-from collections import OrderedDict
+from collections import OrderedDict, Iterable
 
 import igibson as ig
 from igibson.macros import gm, create_module_macros
@@ -10,9 +10,12 @@ from igibson.scenes import REGISTERED_SCENES
 from igibson.utils.gym_utils import GymObservable
 from igibson.utils.sim_utils import get_collisions
 from igibson.utils.config_utils import parse_config
+from igibson.utils.transform_utils import quatToXYZW
 from igibson.utils.python_utils import assert_valid_key, merge_nested_dicts, create_class_from_registry_and_config,\
     Serializable, Recreatable
-
+import numpy as np
+from transforms3d.euler import euler2quat
+from igibson.robots.robot_base import BaseRobot
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -76,7 +79,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # Merge in specified configs
         for config in configs:
             merge_nested_dicts(base_dict=self.config, extra_dict=parse_config(config), inplace=True)
-
+        # import pdb
+        # pdb.set_trace()
+        self.output = self.config["robots"][0]["obs_modalities"]
         # Set the simulator settings
         ig.sim.set_simulation_dt(physics_dt=physics_timestep, rendering_dt=action_timestep)
         ig.sim.viewer_width = self.render_config["viewer_width"]
@@ -124,7 +129,11 @@ class Environment(gym.Env, GymObservable, Recreatable):
             robot_idn (int): Which robot to ignore a collision for
             obj (BaseObject): Which object to no longer ignore a collision for
         """
-        self._ignore_robot_object_collisions[robot_idn].remove(obj)
+        # self._ignore_robot_object_collisions[robot_idn].remove(obj)
+        try:
+            self._ignore_robot_object_collisions[robot_idn].remove(obj)
+        except:
+            return
 
     def remove_ignore_robot_self_collision(self, robot_idn, link):
         """
@@ -295,6 +304,71 @@ class Environment(gym.Env, GymObservable, Recreatable):
         obs_space["task"] = self._task.load_observation_space()
         return obs_space
 
+    def build_obs_space(self, shape, low, high):
+        """
+        Helper function that builds individual observation spaces.
+        :param shape: shape of the space
+        :param low: lower bounds of the space
+        :param high: higher bounds of the space
+        """
+        return gym.spaces.Box(low=low, high=high, shape=shape, dtype=np.float32)
+
+    # def load_observation_space(self):
+    #     self.image_width = self.config.get("image_width", 128)
+    #     self.image_height = self.config.get("image_height", 128)
+    #     observation_space = OrderedDict()
+    #     sensors = OrderedDict()
+    #     vision_modalities = []
+    #     scan_modalities = []
+    #     if "task_obs" in self.output:
+    #         observation_space["task_obs"] = self.build_obs_space(
+    #             shape=(self.task.task_obs_dim,), low=-np.inf, high=np.inf
+    #         )
+    #     if "rgb" in self.output:
+    #         observation_space["rgb"] = self.build_obs_space(
+    #             shape=(self.image_height, self.image_width, 3), low=0.0, high=1.0
+    #         )
+    #         vision_modalities.append("rgb")
+    #     if "depth" in self.output:
+    #         observation_space["depth"] = self.build_obs_space(
+    #             shape=(self.image_height, self.image_width, 1), low=0.0, high=1.0
+    #         )
+    #         vision_modalities.append("depth")
+    #     if "pc" in self.output:
+    #         observation_space["pc"] = self.build_obs_space(
+    #             shape=(self.image_height, self.image_width, 3), low=-np.inf, high=np.inf
+    #         )
+    #         vision_modalities.append("pc")
+    #     if "optical_flow" in self.output:
+    #         observation_space["optical_flow"] = self.build_obs_space(
+    #             shape=(self.image_height, self.image_width, 2), low=-np.inf, high=np.inf
+    #         )
+    #         vision_modalities.append("optical_flow")
+    #     if "scene_flow" in self.output:
+    #         observation_space["scene_flow"] = self.build_obs_space(
+    #             shape=(self.image_height, self.image_width, 3), low=-np.inf, high=np.inf
+    #         )
+    #         vision_modalities.append("scene_flow")
+    #     if "normal" in self.output:
+    #         observation_space["normal"] = self.build_obs_space(
+    #             shape=(self.image_height, self.image_width, 3), low=-np.inf, high=np.inf
+    #         )
+    #         vision_modalities.append("normal")
+    #     if "seg" in self.output:
+    #         observation_space["seg"] = self.build_obs_space(
+    #             shape=(self.image_height, self.image_width, 1), low=0.0, high=MAX_CLASS_COUNT
+    #         )
+    #         vision_modalities.append("seg")
+    #     if "ins_seg" in self.output:
+    #         observation_space["ins_seg"] = self.build_obs_space(
+    #             shape=(self.image_height, self.image_width, 1), low=0.0, high=MAX_INSTANCE_COUNT
+    #         )
+    #         vision_modalities.append("ins_seg")
+    #
+    #     self.observation_space = gym.spaces.Dict(observation_space)
+    #     self.sensors = sensors
+    #     return self.observation_space
+
     def _load_action_space(self):
         """
         Load action space for each robot
@@ -427,6 +501,14 @@ class Environment(gym.Env, GymObservable, Recreatable):
         info["episode_length"] = self._current_step
         info["collision_step"] = self._collision_step
 
+    def dump_state(self, serialized=False):
+        # Default state is from the scene
+        return self._scene.dump_state(serialized=serialized)
+
+    def load_state(self, state, serialized=False):
+        # Default state is from the scene
+        self._scene.load_state(state=state, serialized=serialized)
+
     def step(self, action):
         """
         Apply robot's action and return the next state, reward, done and info,
@@ -438,6 +520,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
         :return: done: whether the episode is terminated
         :return: info: info dictionary with any useful information
         """
+        # import pdb
+        # pdb.set_trace()
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = OrderedDict()
@@ -538,18 +622,237 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # Grab and return observations
         obs = self.get_obs()
 
-        if self.observation_space is not None and not self.observation_space.contains(obs):
-            # Print out all observations for all robots and task
-            for robot in self.robots:
-                for key, value in self.observation_space[robot.name].items():
-                    logging.error(("obs_space", key, value.dtype, value.shape))
-                    logging.error(("obs", key, obs[robot.name][key].dtype, obs[robot.name][key].shape))
-            for key, value in self.observation_space["task"].items():
-                logging.error(("obs_space", key, value.dtype, value.shape))
-                logging.error(("obs", key, obs["task"][key].dtype, obs["task"][key].shape))
-            raise ValueError("Observation space does not match returned observations!")
+        # if self.observation_space is not None and not self.observation_space.contains(obs):
+        #     # Print out all observations for all robots and task
+        #     for robot in self.robots:
+        #         for key, value in self.observation_space[robot.name].items():
+        #             logging.error(("obs_space", key, value.dtype, value.shape))
+        #             logging.error(("obs", key, obs[robot.name][key].dtype, obs[robot.name][key].shape))
+        #     for key, value in self.observation_space["task"].items():
+        #         logging.error(("obs_space", key, value.dtype, value.shape))
+        #         logging.error(("obs", key, obs["task"][key].dtype, obs["task"][key].shape))
+        #     raise ValueError("Observation space does not match returned observations!")
 
         return obs
+
+    # TODO!
+    def set_pos_orn_with_z_offset(self, obj, pos, ori=None, offset=None):
+        """
+        Reset position and orientation for the object @obj with optional offset @offset.
+
+        Args:
+            obj (BaseObject): Object to place in the environment
+            pos (3-array): Global (x,y,z) location to place the object
+            ori (None or 3-array): Optional (r,p,y) orientation when placing the robot. If None, a random orientation
+                about the z-axis will be sampled
+            offset (None or float): Optional z-offset to place object with. If None, default self._initial_pos_z_offset
+                will be used
+        """
+        # print(f"set ori: {ori}")
+        ori = np.array([0, 0, np.random.uniform(0, np.pi * 2)]) if ori is None else ori
+        offset = self._initial_pos_z_offset if offset is None else offset
+
+        # first set the correct orientation
+        obj.set_position_orientation(pos, quatToXYZW(euler2quat(*ori), "wxyz"))
+        # get the AABB in this orientation
+        # lower, _ = obj.states[object_states.AABB].get_value() # TODO!
+        lower = np.array([0, 0, pos[2]])
+        # Get the stable Z
+        stable_z = pos[2] + (pos[2] - lower[2])
+        # change the z-value of position with stable_z + additional offset
+        # in case the surface is not perfect smooth (has bumps)
+        obj.set_position(np.array([pos[0], pos[1], stable_z + offset]))
+        # Update by taking a sim step
+        ig.sim._physics_context._step(current_time=ig.sim.current_time)
+        # self._simulator.app.update()
+
+    def test_valid_position(self, obj, pos, ori=None):
+        """
+        Test if the object can be placed with no collision.
+
+        Args:
+            obj (BaseObject): Object to place in the environment
+            pos (3-array): Global (x,y,z) location to place the object
+            ori (None or 3-array): Optional (r,p,y) orientation when placing the robot. If None, a random orientation
+                about the z-axis will be sampled
+
+        Returns:
+            bool: Whether the placed object position is valid
+        """
+        # Set the position of the object
+        self.set_pos_orn_with_z_offset(obj=obj, pos=pos, ori=ori)
+
+        # If we're placing a robot, make sure it's reset and not moving
+        if isinstance(obj, BaseRobot):
+            obj.reset()
+            obj.keep_still()
+
+        # Valid if there are no collisions
+        return not self.check_collision(objsA=obj, step_sim=False)
+
+    def check_collision(self, objsA=None, linksA=None, objsB=None, linksB=None, step_sim=False):
+        """
+        Check whether the given object @objsA or any of @links has collision after one simulator step. If both
+        are specified, will take the union of the two.
+
+        Note: This natively checks for collisions with @objsA and @linksA. If @objsB and @linksB are None, any valid
+            collision will trigger a True
+
+        Args:
+            objsA (None or EntityPrim or list of EntityPrim): If specified, object(s) to check for collision
+            linksA (None or RigidPrim or list of RigidPrim): If specified, link(s) to check for collision
+            objsB (None or EntityPrim or list of EntityPrim): If specified, object(s) to check for collision with any
+                of @objsA or @linksA
+            linksB (None or RigidPrim or list of RigidPrim): If specified, link(s) to check for collision with any
+                of @objsA or @linksA
+            step_sim (bool): Whether to step the simulation first before checking collisions. Default is False
+
+        Returns:
+            bool: Whether any of @objsA or @linksA are in collision or not, possibly with @objsB or @linksB if specified
+        """
+        # Run simulator step and update contacts
+        if step_sim:
+            self._simulator.app.update()
+        collisions = self.update_collisions(filtered=True)
+
+        # Run sanity checks and standardize inputs
+        assert objsA is not None or linksA is not None, \
+            "Either objsA or linksA must be specified for collision checking!"
+
+        objsA = [] if objsA is None else [objsA] if not isinstance(objsA, Iterable) else objsA
+        linksA = [] if linksA is None else [linksA] if not isinstance(linksA, Iterable) else linksA
+
+        # Grab all link prim paths owned by the collision set A
+        paths_A = {link.prim_path for obj in objsA for link in obj.links.values()}
+        paths_A = paths_A.union({link.prim_path for link in linksA})
+
+        # Determine whether we're checking any collision from collision set A
+        check_any_collision = objsB is None and linksB is None
+
+        in_collision = False
+        if check_any_collision:
+            # Immediately check collisions
+            for col_pair in collisions:
+                if len(set(col_pair) - paths_A) < 2:
+                    in_collision = True
+                    break
+        else:
+            # Grab all link prim paths owned by the collision set B
+            objsB = [] if objsB is None else [objsB] if not isinstance(objsB, Iterable) else objsB
+            linksB = [] if linksB is None else [linksB] if not isinstance(linksB, Iterable) else linksB
+            paths_B = {link.prim_path for obj in objsB for link in obj.links.values()}
+            paths_B = paths_B.union({link.prim_path for link in linksB})
+            paths_shared = paths_A.intersection(paths_B)
+            paths_disjoint = paths_A.union(paths_B) - paths_shared
+            is_AB_shared = len(paths_shared) > 0
+
+            # Check collisions specifically between groups A and B
+            for col_pair in collisions:
+                col_pair = set(col_pair)
+                # Two cases -- either paths_A and paths_B overlap or they don't. Process collision checking logic
+                # separately for each case
+                if is_AB_shared:
+                    # Two cases for valid collision: there is a shared collision body in this pair or there isn't.
+                    # Process separately in each case
+                    col_pair_no_shared = col_pair - paths_shared
+                    if len(col_pair_no_shared) < 2:
+                        # Make sure this set minus the disjoint set results in empty col_pair remaining -- this means
+                        # a valid pair combo was found
+                        if len(col_pair_no_shared - paths_disjoint) == 0:
+                            in_collision = True
+                            break
+                    else:
+                        # Make sure A and B sets each have an entry in the col pair for a valid collision
+                        if len(col_pair - paths_A) == 1 and len(col_pair - paths_B) == 1:
+                            in_collision = True
+                            break
+                else:
+                    # Make sure A and B sets each have an entry in the col pair for a valid collision
+                    if len(col_pair - paths_A) == 1 and len(col_pair - paths_B) == 1:
+                        in_collision = True
+                        break
+
+        # Only going into this if it is for logging --> efficiency
+        if logging.root.level <= logging.DEBUG:
+            for item in collisions:
+                logging.debug("linkA:{}, linkB:{}".format(item[0], item[1]))
+
+        return in_collision
+
+    # TODO!! Wait until omni dev team has an answer
+    def update_collisions(self, filtered=True):
+        """
+        Grab collisions that occurred during the most recent physics timestep
+
+        Args:
+            filtered (bool): Whether to filter the raw collisions or not based on
+                self._ignore_robot_[object/self]_collisions
+
+        Returns:
+            set of 2-tuple: Unique collision pairs occurring in the simulation at the current timestep, represented
+                by their prim_paths
+        """
+        # Grab collisions based on the status of our contact reporting macro flag
+        if m.ENABLE_GLOBAL_CONTACT_REPORTING:
+            collisions = {(c.body0, c.body1)
+                          for obj_group in (self.scene.objects, self.robots)
+                          for obj in obj_group
+                          for c in obj.contact_list()}
+        elif m.ENABLE_ROBOT_CONTACT_REPORTING:
+            collisions = {(c.body0, c.body1) for robot in self.robots for c in robot.contact_list()}
+        else:
+            collisions = set()
+        # print(f"collisions: {collisions}")
+        self._current_collisions = self._filter_collisions(collisions) if filtered else collisions
+        # print(f"filtered collisions: {self._current_collisions}")
+        return self._current_collisions
+
+    def _filter_collisions(self, collisions):
+        """
+        Filter out collisions that should be ignored, based on self._ignore_robot_[object/self]_collisions
+
+        Args:
+            collisions (set of 2-tuple): Unique collision pairs occurring in the simulation at the current timestep,
+                represented by their prim_paths
+
+        Returns:
+            set of 2-tuple: Filtered collision pairs occurring in the simulation at the current timestep,
+                represented by their prim_paths
+        """
+        # Iterate over all robots
+        new_collisions = set()
+        for robot, filtered_links, filtered_objs in zip(
+                self.robots, self._ignore_robot_self_collisions, self._ignore_robot_object_collisions
+        ):
+            # Grab all link prim paths owned by the robot
+            robot_prims = {link.prim_path for link in robot.links.values()}
+            # Loop over all filtered links and compose them
+            filtered_link_prims = {link.prim_path for link in filtered_links}
+            # Loop over all filtered objects and compose them
+            filtered_obj_prims = {link.prim_path for obj in filtered_objs for link in obj.links.values()}
+            # Get union of robot and obj prims
+            filtered_robot_obj_prims = robot_prims.union(filtered_obj_prims)
+            # Iterate over all collision pairs
+            for col_pair in collisions:
+                # First check for self_collision -- we check by first subtracting all filtered links from the col_pair
+                # set and making sure the length is < 2, and then subtracting all robot_prims and making sure that the
+                # length is 0. If both conditions are met, then we know this is a filtered collision!
+                col_pair_set = set(col_pair)
+                if len(col_pair_set - filtered_link_prims) < 2 and len(col_pair_set - robot_prims) == 0:
+                    # Filter this collision
+                    continue
+                # Check for object filtering -- we check by first subtracting all robot links from the col_pair
+                # set and making sure the length is < 2, and then subtracting all filtered_obj_prims and making sure
+                # that the length is < 2. If both conditions are met, this means that this was a collision between
+                # the robot and a filtered object, so we know this is a filtered collision!
+                elif len(col_pair_set - robot_prims) < 2 and len(col_pair_set - filtered_obj_prims) < 2:
+                    # Filter this collision
+                    continue
+                else:
+                    # Add this collision
+                    new_collisions.add(col_pair)
+
+        return new_collisions
 
     @property
     def episode_steps(self):

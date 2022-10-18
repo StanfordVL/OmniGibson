@@ -913,8 +913,8 @@ class BehaviorTask(BaseTask):
     def _get_obs(self, env):
         low_dim_obs = OrderedDict()
         low_dim_obs["robot_pos"] = np.array(env.robots[0].get_position())
-        low_dim_obs["robot_ori_cos"] = np.cos(env.robots[0].get_rpy())
-        low_dim_obs["robot_ori_sin"] = np.sin(env.robots[0].get_rpy())
+        # low_dim_obs["robot_ori_cos"] = np.cos(env.robots[0].get_rpy())
+        # low_dim_obs["robot_ori_sin"] = np.sin(env.robots[0].get_rpy())
 
         i = 0
         for _, v in self.object_scope.items():

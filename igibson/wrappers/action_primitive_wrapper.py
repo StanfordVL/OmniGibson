@@ -2,7 +2,14 @@ import logging
 import time
 
 import gym
-from gym.spaces import Dict
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+import queue
+import cv2
+import os
+import igibson as ig
+from collections import OrderedDict
 
 from igibson.action_primitives.action_primitive_set_base import (
     REGISTERED_PRIMITIVE_SETS,
@@ -10,7 +17,8 @@ from igibson.action_primitives.action_primitive_set_base import (
     BaseActionPrimitiveSet,
 )
 from igibson.wrappers.wrapper_base import BaseWrapper
-
+from igibson.object_states.pose import Pose
+from igibson.sensors.vision_sensor import VisionSensor
 logger = logging.getLogger(__name__)
 
 
@@ -18,11 +26,11 @@ class ActionPrimitiveWrapper(BaseWrapper):
     def __init__(
         self,
         env,
-        action_generator,
+        action_generator="BehaviorActionPrimitives",
         reward_accumulation="sum",
-        flatten_nested_obs=True,
         accumulate_obs=False,
-        num_attempts=10,
+        num_attempts=3,
+        flatten_nested_obs=True,
     ):
         """
         Environment wrapper class for mapping action primitives to low-level environment actions
@@ -36,35 +44,84 @@ class ActionPrimitiveWrapper(BaseWrapper):
             @param num_attempts (int): How many times a primitive will be re-attempted if previous tries fail.
         """
         super().__init__(env=env)
+        self.seed(0)
         self.action_generator: BaseActionPrimitiveSet = REGISTERED_PRIMITIVE_SETS[action_generator](
             self, self.task, self.scene, self.robots[0]
         )
-
         self.action_space = self.action_generator.get_action_space()
         self.reward_accumulation = reward_accumulation
         self.accumulate_obs = accumulate_obs
         self.num_attempts = num_attempts
+        self.accum_reward = np.asarray([0])
+        self.arm = 'left'
+        self.step_index = 0
+        self.done = False
+        self.fallback_state = None
+        self.max_step = 30  # env.config['max_step']
+        self.is_success_list = []
 
-        # Flatten our observation space if requested
-        self.flatten_nested_obs = flatten_nested_obs
-        if self.flatten_nested_obs:
-            # TODO: A bit naive, properly implement recursive version later
-            self.observation_space = gym.spaces.Dict(
-                {k: v for subdict in self.observation_space.values() for k, v in subdict.items()}
-            )
-        else:
-            self.observation_space = self.env.observation_space
+        # # Flatten our observation space if requested
+        # self.flatten_nested_obs = flatten_nested_obs
+        # if self.flatten_nested_obs:
+        #     # TODO: A bit naive, properly implement recursive version later
+        #     self.observation_space = gym.spaces.Dict(
+        #         {k: v for subdict in self.observation_space.values() for k, v in subdict.items() if k != ''}
+        #     )
+        # else:
+        #     self.observation_space = self.env.observation_space
+        observation_space = OrderedDict()
+        observation_space["rgb"] = gym.spaces.Box(low=0, high=255, shape=(128, 128, 3), dtype=np.float32)
+        self.observation_space = gym.spaces.Dict(observation_space)
+        # import pdb
+        # pdb.set_trace()
+        self.reset()
+
+        # import pdb
+        # pdb.set_trace()
+        # for i in range(5):
+        #     self.step(0)
+        #     self.step(1)
+        #     self.step(2)
+        #     self.step(3)
+        #     self.step(0)
+        #     self.step(4)
+        #     self.reset()
+
+    def seed(self, seed):
+        random.seed(seed)
+        np.random.seed(seed)
 
     def reset(self):
-        obs = super().reset()
+        """
+        By default, run the normal environment reset() function
+        Returns:
+            OrderedDict: Environment observation space after reset occurs
+        """
+        # self.pumpkin_n_02_1_reward = True
+        # self.pumpkin_n_02_2_reward = True
+        self.action_generator.robot.clear_ag()
+        # self.step(4)
+        self.step_index = 0
+        self.done = False
+        self.accum_reward = 0
+        return_obs = self.env.reset()
+        # TODO: Change it to be specified in a config file. That way it can be different for different scenes, tasks,
+        #  or robots
 
-        if self.flatten_nested_obs:
-            obs = {k: v for subdict in obs.values() for k, v in subdict.items()}
+        # robot_initial_location = np.array([0.5, 1.0, 0.0])
+        # self.robots[0].set_position_orientation(robot_initial_location)
+        # ig.sim.step()
+        return_obs = {
+            'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'][:, :, :3] / 255.
+        }
+        # print(f"pre step0")
+        
+        return_obs, accumulated_reward, done, info = self.step(0)
+        # print("post step0")
+        self.fallback_state = self.dump_state(serialized=False)
+        print('Success Rate: {} -----------------------\n'.format(np.mean(self.is_success_list)))
 
-        print("IN AP WRAPPER RESET")
-        # from IPython import embed; embed()
-
-        return obs
+        return return_obs
 
     def step(self, action: int):
         # Run the goal generator and feed the goals into the env.
@@ -73,43 +130,61 @@ class ActionPrimitiveWrapper(BaseWrapper):
 
         start_time = time.time()
 
+        print('++++++++++++++++++++++++++++++ take action:', action)
+
+        pre_action = 10
+        for lower_level_action in self.action_generator.apply(pre_action):
+            # print(f"lower level action: {lower_level_action}")
+            obs, reward, done, info = super().step(lower_level_action)
+            if self.accumulate_obs:
+                accumulated_obs.append(obs)
+            else:
+                accumulated_obs = [obs]  # Do this to save some memory.
+
         for _ in range(self.num_attempts):
+            # print(f"attempt: {_}")
             obs, done, info = None, None, {}
-            for lower_level_action in self.action_generator.apply(action):
-                # Run super step
-                obs, reward, done, info = super().step(lower_level_action)
+            try:
+                for lower_level_action in self.action_generator.apply(action):
+                    obs, reward, done, info = super().step(lower_level_action)
 
-                if self.flatten_nested_obs:
-                    obs = {k: v for subdict in obs.values() for k, v in subdict.items()}
+                    if self.reward_accumulation == "sum":
+                        accumulated_reward += reward
+                    elif self.reward_accumulation == "max":
+                        accumulated_reward = max(reward, accumulated_reward)
+                    else:
+                        raise ValueError("Reward accumulation should be one of 'sum' and 'max'.")
 
-                if self.reward_accumulation == "sum":
-                    accumulated_reward += reward
-                elif self.reward_accumulation == "max":
-                    accumulated_reward = max(reward, accumulated_reward)
-                else:
-                    raise ValueError("Reward accumulation should be one of 'sum' and 'max'.")
+                    if self.accumulate_obs:
+                        accumulated_obs.append(obs)
+                    else:
+                        accumulated_obs = [obs]  # Do this to save some memory.
 
-                if self.accumulate_obs:
-                    accumulated_obs.append(obs)
-                else:
-                    accumulated_obs = [obs]  # Do this to save some memory.
+                    # Record additional info.
+                    info["primitive_success"] = True
+                    info["primitive_error_reason"] = None
+                    info["primitive_error_metadata"] = None
+                    info["primitive_error_message"] = None
 
-                # Record additional info.
-                info["primitive_success"] = True
-                info["primitive_error_reason"] = None
-                info["primitive_error_metadata"] = None
-                info["primitive_error_message"] = None
+                self.fallback_state = self.dump_state(serialized=False)
+                break
+            except ActionPrimitiveError as e:
+                print("--- Primitive Error! Execute dummy action (don't move) to get an observation!")
+                from copy import deepcopy
+                self.load_state(deepcopy(self.fallback_state), serialized=False)
 
-            #     break
-            # except ActionPrimitiveError as e:
-            #     end_time = time.time()
-            #     logger.error("AP time: {}".format(end_time - start_time))
-            #     logger.warning("Action primitive failed! Exception {}".format(e))
-            #     # Record the error info.
-            #     info["primitive_success"] = False
-            #     info["primitive_error_reason"] = e.reason
-            #     info["primitive_error_metadata"] = e.metadata
-            #     info["primitive_error_message"] = str(e)
+                dummy_action_id = 10
+                for lower_level_action in self.action_generator.apply(dummy_action_id):
+                    obs, reward, done, info = super().step(lower_level_action)
+                    if self.accumulate_obs:
+                        accumulated_obs.append(obs)
+                    else:
+                        accumulated_obs = [obs]
+
+                info["primitive_success"] = False
+                info["primitive_error_reason"] = e.reason
+                info["primitive_error_metadata"] = e.metadata
+                info["primitive_error_message"] = str(e)
 
         # TODO: Think more about what to do when no observations etc. can be obtained.
         return_obs = None
@@ -118,12 +193,23 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 return_obs = accumulated_obs
             else:
                 return_obs = accumulated_obs[-1]
-        else:
-            raise ValueError("Accumualted obs should not be empty!")
         end_time = time.time()
-        logger.error("AP time: {}".format(end_time - start_time))
-
-        print(f"IN AP END OF STEP CALL")
-        # from IPython import embed; embed()
-
-        return return_obs, accumulated_reward, done, info
+        # logger.error("AP time: {}, reward: {}".format(end_time - start_time, accumulated_reward))
+        self.accum_reward = self.accum_reward + accumulated_reward
+        print('reward: ', accumulated_reward, 'accum reward: ', self.accum_reward)
+        self.step_index = self.step_index + 1
+        if self.accum_reward >= 1.0:
+            self.done = True
+            info["is_success"] = True
+            self.is_success_list.append(True)
+        elif self.step_index >= self.max_step:
+            self.done = True
+            info["is_success"] = False
+            self.is_success_list.append(False)
+        else:
+            self.done = False
+        return_obs = {
+            'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'][:, :, :3] / 255.
+        }
+        print('done: {}'.format(self.done))
+        return return_obs, accumulated_reward, self.done, info

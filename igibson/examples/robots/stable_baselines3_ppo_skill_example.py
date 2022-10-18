@@ -94,8 +94,9 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
             # else:
             #     raise ValueError("Unknown observation key: %s" % key)
 
-            if key in ["robot0:eyes_Camera_sensor_rgb", "ins_seg"]:
-                n_input_channels = subspace.shape[0]  # channel last
+            if key in ["rgb", "ins_seg"]:
+                print(subspace.shape)
+                n_input_channels = subspace.shape[2]  # channel last
                 cnn = nn.Sequential(
                     nn.Conv2d(n_input_channels, 4, kernel_size=8, stride=4, padding=0),
                     nn.ReLU(),
@@ -107,7 +108,9 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
                     nn.ReLU(),
                     nn.Flatten(),
                 )
-                test_tensor = th.zeros([subspace.shape[0], subspace.shape[1], subspace.shape[2]])
+                test_tensor = th.zeros([subspace.shape[2], subspace.shape[0], subspace.shape[1]])
+                # print('test_tensor.shape, test_tensor[None].shape: ', test_tensor.shape, test_tensor[None].shape)
+                # test_tensor.shape, test_tensor[None].shape:  torch.Size([128, 128, 3]) torch.Size([1, 128, 128, 3])
                 with th.no_grad():
                     n_flatten = cnn(test_tensor[None]).shape[1]
                 fc = nn.Sequential(nn.Linear(n_flatten, feature_size), nn.ReLU())
@@ -139,10 +142,10 @@ class CustomCombinedExtractor(BaseFeaturesExtractor):
             # elif key in ["scan"]:
             #     observations[key] = observations[key].permute((0, 2, 1))
             # print(key, observations[key])  # [0, 500]
-            if key in ["robot0:eyes_Camera_sensor_rgb",]:
-                # if self.debug_mode:
-                #     cv2.imwrite(os.path.join(self.img_save_dir, '{0:06d}.png'.format(self.step_index % self.debug_length)), cv2.cvtColor((observations[key][0].cpu().numpy()*255).astype('uint8'), cv2.COLOR_RGB2BGR))
-                observations[key] = observations[key]#.permute((0, 3, 1, 2))  # range: [0, 1]
+            if key in ["rgb",]:
+                if self.debug_mode:
+                    cv2.imwrite(os.path.join(self.img_save_dir, '{0:06d}.png'.format(self.step_index % self.debug_length)), cv2.cvtColor((observations[key][0].cpu().numpy()*255).astype('uint8'), cv2.COLOR_RGB2BGR))
+                observations[key] = observations[key].permute((0, 3, 1, 2))  # range: [0, 1]
             elif key in ["ins_seg"]:
                 raise NotImplementedError
                 observations[key] = observations[key].permute((0, 3, 1, 2)) / 500. # range: [0, 1]
@@ -203,6 +206,9 @@ def main():
     # env = iGibsonEnv(configs=config_file, physics_timestep=1 / 120., action_timestep=1 / 30.)
     env = ig.Environment(configs=config_file, action_timestep=1 / 60., physics_timestep=1 / 60.)
     env = ActionPrimitiveWrapper(env=env, action_generator="BehaviorActionPrimitives")
+    # import pdb
+    # pdb.set_trace()
+    # print(env.action_space, env.observation_space)
     # ceiling = env.scene.object_registry("name", "ceilings")
     # ceiling.visible = False
     # env.seed(seed)
@@ -241,10 +247,15 @@ def main():
         batch_size=8,
         device='cuda',
     )
-
-    # load_path = 'log_dir/20220602-104727/_4000_steps.zip'
-    # model = PPO.load(load_path)
-
+    '''
+    load_path = 'log_dir/20221016-193306/_5000_steps'
+    model = PPO.load(load_path)
+    print(model.policy)
+    for name, param in model.policy.named_parameters():
+        print(name, param)
+    model.set_env(env)
+    print('Successfully RESUME from {}'.format(load_path))
+    '''
     # pdb.set_trace()
     # print('\n\n\n\n\n\n\n\n\n\n\n\n')
     # log.debug(model.policy)

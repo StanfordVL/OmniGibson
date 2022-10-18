@@ -977,6 +977,28 @@ def l2_distance(v1, v2):
     return np.linalg.norm(np.array(v1) - np.array(v2))
 
 
+def quatToXYZW(orn, seq):
+    """Convert quaternion from arbitrary sequence to XYZW (pybullet convention)."""
+    assert (
+        len(seq) == 4 and "x" in seq and "y" in seq and "z" in seq and "w" in seq
+    ), "Quaternion sequence {} is not valid, please double check.".format(seq)
+    inds = [seq.index(axis) for axis in "xyzw"]
+    return orn[inds]
+
+def rotate_vector_2d(v, yaw):
+    """Rotates 2d vector by yaw counterclockwise"""
+    local_to_global = R.from_euler("z", yaw).as_matrix()
+    global_to_local = local_to_global.T
+    global_to_local = global_to_local[:2, :2]
+    if len(v.shape) == 1:
+        return np.dot(global_to_local, v)
+    elif len(v.shape) == 2:
+        return np.dot(global_to_local, v.T).T
+    else:
+        print("Incorrect input shape for rotate_vector_2d", v.shape)
+        return v
+
+
 def frustum(left, right, bottom, top, znear, zfar):
     """Create view frustum matrix."""
     assert right != left

@@ -3,6 +3,7 @@ from collections import namedtuple
 
 import numpy as np
 
+import igibson as ig
 from igibson import app
 from igibson.macros import gm, create_module_macros
 from igibson.utils.asset_utils import get_assisted_grasping_categories
@@ -477,6 +478,13 @@ class ManipulationRobot(BaseRobot):
         self._ag_freeze_gripper[arm] = False
         self._ag_release_counter[arm] = 0
 
+    def clear_ag(self):
+        # First, release any grasps for all arms
+        for arm in self.arm_names:
+            if self._ag_obj_in_hand[arm] is not None:
+                self._release_grasp(arm=arm)
+                self._handle_release_window(arm=arm, force_release=True)
+
     def get_control_dict(self):
         # In addition to super method, add in EEF states
         dic = super().get_control_dict()
@@ -834,7 +842,7 @@ class ManipulationRobot(BaseRobot):
         # Get object and its contacted link
         return ag_obj, ag_obj_link
 
-    def _handle_release_window(self, arm="default"):
+    def _handle_release_window_v0(self, arm="default"):
         """
         Handles releasing an object from arm @arm
 
@@ -850,6 +858,25 @@ class ManipulationRobot(BaseRobot):
                 finger_link.remove_filtered_collision_pair(prim=self._ag_obj_in_hand[arm])
             self._ag_obj_in_hand[arm] = None
             self._ag_release_counter[arm] = None
+
+    def _handle_release_window(self, arm="default", force_release=False):
+        """
+        Handles releasing an object from arm @arm
+
+        :param arm: str, specific arm to handle release window.
+        Default is "default" which corresponds to the first entry in self.arm_names
+        """
+        arm = self.default_arm if arm == "default" else arm
+        self._ag_release_counter[arm] += 1
+        time_since_release = self._ag_release_counter[arm] * self._simulator.get_rendering_dt()
+        if time_since_release >= m.RELEASE_WINDOW or force_release:
+            # Remove joint and filtered collision restraints
+            for finger_link in self.finger_links[arm]:
+                finger_link.remove_filtered_collision_pair(prim=self._ag_obj_in_hand[arm])
+            # ig.simstage.RemovePrim(self._ag_obj_constraint_params[arm]["ag_joint_prim_path"])
+            self._ag_obj_in_hand[arm] = None
+            self._ag_release_counter[arm] = None
+            self._ag_obj_constraint_params[arm] = {}
 
     def _freeze_gripper(self, arm="default"):
         """
@@ -1018,6 +1045,17 @@ class ManipulationRobot(BaseRobot):
 
         return cfg
 
+    def get_joint_positions(self, normalized=False, joint_idx=None):
+        """
+        Get this robot's joint positions for the specified indices
+        :param joint_idx: ids of the joints to query. Query all, if joint_idx is None. This are iG joint idx, do not use pybullet idx
+        """
+        joint_positions = super().get_joint_positions(normalized=normalized)
+        if joint_idx is not None:
+            return joint_positions[joint_idx]
+        else:
+            return joint_positions
+
     def _establish_grasp_rigid(self, arm="default", ag_data=None):
         """
         Establishes an ag-assisted grasp, if enabled.
@@ -1039,8 +1077,9 @@ class ManipulationRobot(BaseRobot):
         if ag_obj.fixed_base:
             # We search up the tree path from the ag_link until we encounter the root (joint == 0) or a non fixed
             # joint (e.g.: revolute or fixed)
-            joint_handle = -1
+            # joint_handle = -1
             link_handle = ag_link.handle
+            joint_handle = self._dc.get_rigid_body_parent_joint(link_handle)
             use_spherical = False
             while joint_handle != 0:
                 # If this joint type is not fixed, we've encountered a valid moving joint

@@ -174,6 +174,15 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         )
 
     @property
+    def arm_joint_names(self):
+        names = dict()
+        for arm in self.arm_control_idx:
+            names[arm] = ["torso_lift_joint"] + [
+                list(self.joints.keys())[joint_id] for joint_id in self.arm_control_idx[arm]
+            ]
+        return names
+
+    @property
     def model_name(self):
         """
         :return str: robot model name
@@ -194,12 +203,17 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # Keep the current joint positions for the base joints
         pos[self.base_control_idx] = self.get_joint_positions()[self.base_control_idx]
         pos[self.trunk_control_idx] = 0
-        pos[self.camera_control_idx] = np.array([0.0, 0.0])
+        pos[self.camera_control_idx] = np.array([0.4, -1.1])
         for arm in self.arm_names:
             pos[self.gripper_control_idx[arm]] = np.array([0.045, 0.045])  # open gripper
             pos[self.arm_control_idx[arm]] = np.array(
                 [-1.10, 1.47, 2.71, 1.71, -1.57, 1.39, 0]
             )
+        # print('pos: ', pos)
+        # pos[-2:] = np.array([0.4, -1.1])
+        # import pdb
+        # pdb.set_trace()
+
         return pos
 
     @property
@@ -601,6 +615,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # Note that this will also set the target to be the desired linear velocity (i.e. the robot will try to maintain
         # such velocity), which is different from the default behavior of set_linear_velocity for all other objects.
         orn = self.root_link.get_orientation()
+        # print('orn: ', orn)
         velocity_in_root_link = T.quat2mat(orn).T @ velocity
         self.joints["base_footprint_x_joint"].set_vel(velocity_in_root_link[0], target=False)
         self.joints["base_footprint_y_joint"].set_vel(velocity_in_root_link[1], target=False)
