@@ -24,7 +24,9 @@ from igibson.objects.usd_object import USDObject
 from igibson.utils.constants import AVERAGE_CATEGORY_SPECS, DEFAULT_JOINT_FRICTION, SPECIAL_JOINT_FRICTIONS, JointType
 import igibson.utils.transform_utils as T
 from igibson.utils.usd_utils import BoundingBoxAPI
+from igibson.utils.asset_utils import decrypt_file
 from igibson.utils.constants import PrimType
+from igibson.macros import gm
 
 
 class DatasetObject(USDObject):
@@ -191,6 +193,12 @@ class DatasetObject(USDObject):
         if prim_type == PrimType.CLOTH:
             assert usd_path.endswith(".usd"), f"usd_path [{usd_path}] is invalid."
             usd_path = usd_path[:-4] + "_cloth.usd"
+
+        if gm.USE_ENCRYPTED_ASSETS:
+            encrypted_filename = usd_path.replace(".usd", ".encrypted.usd")
+            decrypted_filename = usd_path.replace(".usd", ".decrypted.usd")
+            decrypt_file(encrypted_filename, decrypted_filename)
+            usd_path = decrypted_filename
 
         # Run super init
         super().__init__(
@@ -464,6 +472,12 @@ class DatasetObject(USDObject):
         for joint in self._joints.values():
             if joint.joint_type != JointType.JOINT_FIXED:
                 joint.friction = friction
+
+    def _load(self, simulator=None):
+        prim = super()._load(simulator=simulator)
+        if gm.USE_ENCRYPTED_ASSETS:
+            os.remove(self.usd_path)
+        return prim
 
     def _post_load(self):
         # We run this post loading first before any others because we're modifying the load config that will be used
