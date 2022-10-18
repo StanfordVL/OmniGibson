@@ -133,7 +133,7 @@ class Open(CachingEnabledObjectState, BooleanState):
 
             # All joints are relevant if we are closing, but if we are opening let's sample a subset.
             if new_value and not fully:
-                num_to_open = random.randint(1, len(relevant_joints))
+                num_to_open = random.randint(1, 1) #len(relevant_joints))
                 relevant_joints = random.sample(relevant_joints, num_to_open)
 
             # Go through the relevant joints & set random positions.
