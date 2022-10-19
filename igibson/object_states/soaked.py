@@ -46,13 +46,21 @@ class Soaked(RelativeObjectState, BooleanState):
     def _update(self):
         # Iterate over all fluid systems
         for fluid_system in self.absorbed_particle_system_count.keys():
+            # We should never "over-absorb" particles from any fluid system above the threshold
+            assert self.absorbed_particle_system_count[fluid_system] <= m.SOAK_PARTICLE_THRESHOLD, \
+                f"over-absorb particles from {fluid_system.name}"
+
+            # If we already reach the absorption limit, continue
+            if self.absorbed_particle_system_count[fluid_system] == m.SOAK_PARTICLE_THRESHOLD:
+                continue
+
             # Dict[Object, Dict[instancer_name, List[particle_idxs]]
             instancer_name_to_particle_idxs = {}
             if self.obj.prim_type == PrimType.RIGID:
                 # The fluid system caches contact information for each of its particles with rigid bodies
                 particle_contacts = fluid_system.state_cache['particle_contacts']
                 instancer_name_to_particle_idxs = particle_contacts.get(self.obj, {})
-            else:
+            elif self.obj.prim_type == PrimType.CLOTH:
                 # Scene query interface overlap sphere API doesn't work for cloth objects, so no contact will be cached.
                 # A reasonable heuristics is to detect if the fluid particles lie within the AABB of the object
                 aabb_low, aabb_high = self.obj.states[AABB].get_value()
@@ -60,10 +68,11 @@ class Soaked(RelativeObjectState, BooleanState):
                     inbound = ((aabb_low < instancer.particle_positions) & (instancer.particle_positions < aabb_high))
                     inbound_idxs = inbound.all(axis=1).nonzero()[0]
                     instancer_name_to_particle_idxs[instancer_name] = inbound_idxs
+            else:
+                raise ValueError(f"Unknown prim type {self.obj.prim_type} when handling Soaked state.")
 
             # For each particle hit, hide then add to total particle count of soaked object
             for instancer, particle_idxs in instancer_name_to_particle_idxs.items():
-                assert self.absorbed_particle_system_count[fluid_system] <= m.SOAK_PARTICLE_THRESHOLD
                 max_particle_absorbed = m.SOAK_PARTICLE_THRESHOLD - self.absorbed_particle_system_count[fluid_system]
                 particles_to_absorb = min(len(particle_idxs), max_particle_absorbed)
                 particle_idxs_to_absorb = list(particle_idxs)[:particles_to_absorb]
