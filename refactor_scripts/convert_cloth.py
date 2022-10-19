@@ -130,7 +130,7 @@ for category in CLOTH_CATEGORIES:
         if gm.USE_ENCRYPTED_ASSETS:
             usd_path = cloth_usd_file
             encrypted_usd_path = usd_path.replace(".usd", ".encrypted.usd")
-            encrypt_file(usd_path, encrypted_usd_path)
+            encrypt_file(usd_path, encrypted_filename=encrypted_usd_path)
             os.remove(usd_path)
 
 app.close()

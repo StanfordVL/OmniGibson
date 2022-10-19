@@ -625,7 +625,7 @@ def import_obj_metadata(obj_category, obj_model, import_render_channels=False):
 
     if gm.USE_ENCRYPTED_ASSETS:
         encrypted_usd_path = usd_path.replace(".usd", ".encrypted.usd")
-        encrypt_file(usd_path, encrypted_usd_path)
+        encrypt_file(usd_path, encrypted_filename=encrypted_usd_path)
         os.remove(usd_path)
 
 
