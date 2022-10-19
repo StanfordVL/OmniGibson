@@ -1,12 +1,15 @@
 from pxr import Gf, Usd, Sdf, UsdGeom, UsdShade
 import numpy as np
-import omni
 import asyncio
-from igibson import app
-from igibson.utils.physx_utils import bind_material
+
+import omni
 from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.usd import get_shader_from_material
+
+from igibson import app, assets_path, ig_dataset_path
+from igibson.utils.physx_utils import bind_material
 from igibson.prims.prim_base import BasePrim
+from igibson.utils.usd_utils import get_usd_metadata
 
 
 class MaterialPrim(BasePrim):
@@ -86,6 +89,35 @@ class MaterialPrim(BasePrim):
         asyncio.ensure_future(omni.usd.get_context().load_mdl_parameters_for_prim_async(self._shader))
         app.update()
 
+    def shader_update_asset_paths(self):
+        """
+        Updates material shader paths appropriately so that a material can verifiably be used given the current machine setup.
+
+        Omni does NOT export materials when saving a USD, so if a USD is saved on one machine and ported to another one,
+        it will break unless we update the material paths to point to the new correct paths on the new machine.
+        """
+        # Update the material paths so that it's correct wrt to the local machine / directory setup that
+        # this prim and USD is being loaded on
+        for inp_name in self.shader_input_names_by_type("SdfAssetPath"):
+            inp = self.get_input(inp_name)
+            if inp is None:
+                continue
+            original_path = inp.path if inp.resolvedPath == "" else inp.resolvedPath
+            if original_path == "":
+                continue
+            # Only update the path if it's not the same root path
+            if ig_dataset_path not in original_path and assets_path not in original_path:
+                usd_metadata = get_usd_metadata()
+                source_asset_path = usd_metadata["source_ig_asset_path"]
+                source_ig_dataset_path = usd_metadata["source_ig_dataset_path"]
+                if source_asset_path in original_path:
+                    new_path = f"{assets_path}{original_path.split(source_asset_path)[-1]}"
+                elif source_ig_dataset_path in original_path:
+                    new_path = f"{ig_dataset_path}{original_path.split(source_ig_dataset_path)[-1]}"
+                else:
+                    raise ValueError(f"Could not find appropriate remapping for material asset path: {original_path}!")
+                self.set_input(inp_name, new_path)
+
     def get_input(self, inp):
         """
         Grabs the input with corresponding name @inp associated with this material and shader
@@ -126,6 +158,16 @@ class MaterialPrim(BasePrim):
             set: All the shader input names associated with this material
         """
         return {inp.GetBaseName() for inp in self._shader.GetInputs()}
+
+    def shader_input_names_by_type(self, input_type):
+        """
+        Args:
+            input_type (str): input type
+
+        Returns:
+            set: All the shader input names associated with this material that match the given input type
+        """
+        return {inp.GetBaseName() for inp in self._shader.GetInputs() if inp.GetTypeName().cppTypeName == input_type}
 
     @property
     def diffuse_color_constant(self):

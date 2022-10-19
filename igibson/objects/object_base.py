@@ -199,6 +199,7 @@ class BaseObject(EntityPrim, metaclass=ABCMeta):
         # Force populate inputs and outputs of the shaders of all materials
         for material in self.materials:
             material.shader_force_populate()
+            material.shader_update_asset_paths()
 
         # Iterate over all links and grab their relevant material info for highlighting (i.e.: emissivity info)
         self._highlighted = False
