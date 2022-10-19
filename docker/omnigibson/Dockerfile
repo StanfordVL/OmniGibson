@@ -38,4 +38,8 @@ WORKDIR /iGibson3/igibson/examples/
 
 RUN sed -i "s/gm.HEADLESS = False/gm.HEADLESS = True/" /iGibson3/igibson/macros.py
 
-ENTRYPOINT bash --login
+RUN pip install jupyterlab
+
+ENTRYPOINT []
+
+CMD ["/bin/bash"]
