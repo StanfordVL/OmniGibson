@@ -467,7 +467,8 @@ class DatasetObject(USDObject):
                 joint.friction = friction
 
     def _load(self, simulator=None):
-        if gm.USE_ENCRYPTED_ASSETS and self.category == "carpet":
+        if gm.USE_ENCRYPTED_ASSETS:
+            # Create a temporary file to store the decrytped asset, load it, and then delete it.
             with tempfile.NamedTemporaryFile(suffix=".usd") as fp:
                 original_usd_path = self._usd_path
                 encrypted_filename = original_usd_path.replace(".usd", ".encrypted.usd")
@@ -540,9 +541,13 @@ class DatasetObject(USDObject):
         # Run super last
         super()._post_load()
 
-        if gm.USE_ENCRYPTED_ASSETS and self.category == "carpet":
-            # TODO: update the material path here
-            pass
+        if gm.USE_ENCRYPTED_ASSETS:
+            # The loaded USD is from an already-deleted temporary file, so the asset paths for texture maps are wrong.
+            # We explicitly provide the root_path to update all the asset paths: the asset paths are relative to the
+            # original USD folder, i.e. <category>/<model>/usd.
+            root_path = os.path.dirname(self._usd_path)
+            for material in self.materials:
+                material.shader_update_asset_paths_with_root_path(root_path)
 
         # Assign realistic density and mass based on average object category spec
         if self.avg_obj_dims is not None:
