@@ -404,7 +404,7 @@ def change_data_path():
             yaml.dump(global_config, f)
 
 
-def decrypt_file(encrypted_filename, decrypted_filename):
+def decrypt_file(encrypted_filename, decrypted_filename=None, decrypted_file=None):
     with open(igibson.key_path, "rb") as filekey:
         key = filekey.read()
     fernet = Fernet(key)
@@ -414,11 +414,14 @@ def decrypt_file(encrypted_filename, decrypted_filename):
 
     decrypted = fernet.decrypt(encrypted)
 
-    with open(decrypted_filename, "wb") as dec_f:
-        dec_f.write(decrypted)
+    if decrypted_file is not None:
+        decrypted_file.write(decrypted)
+    else:
+        with open(decrypted_filename, "wb") as decrypted_file:
+            decrypted_file.write(decrypted)
 
 
-def encrypt_file(original_filename, encrypted_filename):
+def encrypt_file(original_filename, encrypted_filename=None, encrypted_file=None):
     with open(igibson.key_path, "rb") as filekey:
         key = filekey.read()
     fernet = Fernet(key)
@@ -428,8 +431,11 @@ def encrypt_file(original_filename, encrypted_filename):
 
     encrypted = fernet.encrypt(original)
 
-    with open(encrypted_filename, "wb") as enc_f:
-        enc_f.write(encrypted)
+    if encrypted_file is not None:
+        encrypted_file.write(encrypted)
+    else:
+        with open(encrypted_filename, "wb") as encrypted_file:
+            encrypted_file.write(encrypted)
 
 
 if __name__ == "__main__":

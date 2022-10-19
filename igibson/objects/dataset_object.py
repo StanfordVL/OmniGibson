@@ -5,6 +5,7 @@ import math
 import os
 import random
 import time
+import tempfile
 import xml.etree.ElementTree as ET
 
 import cv2
@@ -193,12 +194,6 @@ class DatasetObject(USDObject):
         if prim_type == PrimType.CLOTH:
             assert usd_path.endswith(".usd"), f"usd_path [{usd_path}] is invalid."
             usd_path = usd_path[:-4] + "_cloth.usd"
-
-        if gm.USE_ENCRYPTED_ASSETS:
-            encrypted_filename = usd_path.replace(".usd", ".encrypted.usd")
-            decrypted_filename = usd_path.replace(".usd", ".decrypted.usd")
-            decrypt_file(encrypted_filename, decrypted_filename)
-            usd_path = decrypted_filename
 
         # Run super init
         super().__init__(
@@ -474,10 +469,17 @@ class DatasetObject(USDObject):
                 joint.friction = friction
 
     def _load(self, simulator=None):
-        prim = super()._load(simulator=simulator)
-        if gm.USE_ENCRYPTED_ASSETS:
-            os.remove(self.usd_path)
-        return prim
+        if gm.USE_ENCRYPTED_ASSETS and self.category == "carpet":
+            with tempfile.NamedTemporaryFile(suffix=".usd") as fp:
+                original_usd_path = self._usd_path
+                encrypted_filename = original_usd_path.replace(".usd", ".encrypted.usd")
+                decrypt_file(encrypted_filename, decrypted_file=fp)
+                self._usd_path = fp.name
+                prim = super()._load(simulator=simulator)
+                self._usd_path = original_usd_path
+                return prim
+        else:
+            return super()._load(simulator=simulator)
 
     def _post_load(self):
         # We run this post loading first before any others because we're modifying the load config that will be used
@@ -539,6 +541,10 @@ class DatasetObject(USDObject):
 
         # Run super last
         super()._post_load()
+
+        if gm.USE_ENCRYPTED_ASSETS and self.category == "carpet":
+            # TODO: update the material path here
+            pass
 
         # Assign realistic density and mass based on average object category spec
         if self.avg_obj_dims is not None:
