@@ -649,7 +649,7 @@ class MotionPlanner:
 
             ee_current_position = get_link_position_from_name(self.ik_solver[arm].robot_body_id, self.robot.eef_link_names[arm]) #self.robot.get_eef_position(arm=arm)  #TODO:
             dist = l2_distance(ee_current_position, ee_position)
-            print('ee_current_position, ee_position: ', ee_current_position, ee_position)
+            # print('ee_current_position, ee_position: ', ee_current_position, ee_position)
             if dist > self.arm_ik_threshold:
                 # print("IK solution is not close enough to the desired pose. Distance: {}, ee_current_position: {}, "
                 #       "self.ik_solver[arm].robot_body_id: {}, self.robot.eef_link_names[arm]: {}".format(dist,
@@ -1479,6 +1479,11 @@ class MotionPlanner:
                     inv_jnt_local_pose_1 = T.pose_inv(T.pose2mat((local_pos_1, local_orn_1)))
                     grasp_pose = gripper_pose @ jnt_local_pose_0 @ inv_jnt_local_pose_1
                     grasp_pos, grasp_orn = T.mat2pose(grasp_pose)
+
+                    self.simulator_step()
+                    # from IPython import embed
+                    # print("change obj pose")
+                    # embed()
                     grasped_obj.set_position_orientation(grasp_pos, grasp_orn)
 
                 self.simulator_step()

@@ -78,14 +78,17 @@ class ActionPrimitiveWrapper(BaseWrapper):
 
         # import pdb
         # pdb.set_trace()
-        # for i in range(5):
-        #     self.step(0)
-        #     self.step(1)
-        #     self.step(2)
-        #     self.step(3)
-        #     self.step(0)
-        #     self.step(4)
-        #     self.reset()
+        # from IPython import embed
+        # print("debug")
+        # embed()
+        for i in range(5):
+            self.step(0)
+            self.step(1)
+            self.step(2)
+            self.step(3)
+            self.step(0)
+            self.step(4)
+            self.reset()
 
     def seed(self, seed):
         random.seed(seed)

@@ -640,6 +640,10 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # new_name = convert_bddl_scope_to_name(object_name)
         # new_name = object_name
 
+        # from IPython import embed
+        # print("debug pick")
+        # embed()
+
         obj = self._get_obj_in_hand()
         if not obj is None:
             raise ActionPrimitiveError(
@@ -825,6 +829,9 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         print("Finished navigating to object: {}, self.agent_location: {}".format(object_name, self.agent_location))
         '''
         print("Pick action completed")
+        # from IPython import embed
+        # print("debug pick")
+        # embed()
 
     def _place_v0(self, object_name):
         logger.info("Placing on object {}".format(object_name))
@@ -1349,10 +1356,15 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         print('robot_position: ', robot_position)
         robot_pos_before_cabinet = np.array([7.74685502e-01, -2.19805408e+00, -7.16727482e-06])
         if np.linalg.norm(robot_position - robot_pos_before_cabinet) > 1e-1:
-            still_action = self._get_still_action()
-            for i in range(5):
-                yield still_action
-                ig.sim.step()
+            raise ActionPrimitiveError(
+                ActionPrimitiveError.Reason.PLANNING_ERROR,
+                "Robot is not in the front of the cabinet",
+                {"push open": object_name},
+            )
+            # still_action = self._get_still_action()
+            # for i in range(5):
+            #     yield still_action
+            #     ig.sim.step()
         else:
             if self.skip_arm_planning:
                 jnt.set_pos(max_pos - 0.33, target=False)  # + np.random.uniform(-0.01,0.01)
