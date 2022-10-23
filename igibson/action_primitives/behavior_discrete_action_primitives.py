@@ -198,53 +198,6 @@ action_list_putting_leftovers_away = [
     [2, "countertop.n.01_1"],  # place
 ]
 
-# full set
-action_list_putting_away_Halloween_decorations_v1 = [
-    [0, "cabinet.n.01_1"],  # move
-    [4, "cabinet.n.01_1"],  # pull
-    [0, "pumpkin.n.02_1"],  # move
-    [1, "pumpkin.n.02_1"],  # pick
-    # [0, 'cabinet.n.01_1'],  # move
-    [2, "cabinet.n.01_1"],  # place
-    [0, "pumpkin.n.02_2"],  # move
-    [1, "pumpkin.n.02_2"],  # pick
-    # [0, 'cabinet.n.01_1'],  # move
-    # [2, 'cabinet.n.01_1'],  # place
-    [5, "cabinet.n.01_1"],  # push
-]
-
-# /home/robot/Desktop/behavior/iGibson-dev-jk/igibson/examples/robots/log_dir_his/20220510-001432_putting_away_Halloween_decorations_discrete_rgb_accumReward_m0.01
-# wo vis operation
-action_list_putting_away_Halloween_decorations_v2 = [
-    [0, "cabinet.n.01_1"],  # move
-    [4, "cabinet.n.01_1"],  # pull
-    [0, "pumpkin.n.02_1"],  # move
-    [1, "pumpkin.n.02_1"],  # pick
-    [0, "cabinet.n.01_1"],  # move, repeated
-    [2, "cabinet.n.01_1"],  # place
-    [0, "pumpkin.n.02_2"],  # move
-    [1, "pumpkin.n.02_2"],  # pick
-    #
-    # [0, 'cabinet.n.01_1'],  # move
-    # [2, 'cabinet.n.01_1'],  # place
-    #
-    [5, "cabinet.n.01_1"],  # push
-]  # * 4
-
-# vis version: full sequence
-action_list_putting_away_Halloween_decorations_v3 = [
-    [0, "cabinet.n.01_1"],  # move
-    [4, "cabinet.n.01_1"],  # vis pull
-    [0, "pumpkin.n.02_1"],  # move
-    [6, "pumpkin.n.02_1"],  # vis pick
-    [0, "cabinet.n.01_1"],  # move
-    [7, "cabinet.n.01_1"],  # vis place
-    [0, "pumpkin.n.02_2"],  # move
-    [6, "pumpkin.n.02_2"],  # vis pick
-    [0, "cabinet.n.01_1"],  # move
-    [7, "cabinet.n.01_1"],  # vis place
-    [5, "cabinet.n.01_1"],  # vis push
-]
 # vis version: full set
 action_list_putting_away_Halloween_decorations = [
     [0, "cabinet.n.01_1"],  # navigate_to 0
@@ -279,14 +232,6 @@ action_dict = {
     "room_rearrangement": action_list_room_rearrangement,
 }
 
-# def convert_bddl_scope_to_name(object_name):
-#     split_name = object_name.split('.')
-#     number = split_name[-1].split('_')
-#     number[1] = str(int(number[1]) - 1)
-#     if split_name[0] == 'cabinet':
-#         split_name[0] = 'bottom_cabinet'
-#         number[1] = '13'
-#     return '_'.join([split_name[0], number[1]])
 
 class B1KActionPrimitive(IntEnum):
     NAVIGATE_TO = 0
@@ -313,9 +258,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             self.arm = self.robot.default_arm
             logger.info("Using with the default arm: {}".format(self.arm))
 
-        # Checks for the right type of robot and controller to use planned trajectories
-        # TODO: Uncomment this later when magic grasping is working
-        # assert robot.grasping_mode == "assisted", "This APs implementation requires assisted grasping to check success"
         if robot.model_name in ["Tiago", "Fetch"]:
             assert not robot.rigid_trunk, "The APs will use the trunk of Fetch/Tiago, it can't be rigid"
         assert isinstance(
@@ -364,7 +306,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         self.default_direction = np.array((0.0, 0.0, -1.0))  # default hit normal
         self.execute_free_space_motion = execute_free_space_motion
 
-        # self.task_obj_list = self.env.task.object_scope
         # Whether we check if the objects have moved from the previous navigation attempt and do not try to navigate
         # to them if they have (this avoids moving to objects after pick and place)
         self.obj_pose_check = True
@@ -377,8 +318,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         self.is_close_to_cabinet = False
         self.ag_name_mapping = {'pumpkin_0': 'pumpkin.n.02_1', 'pumpkin_1': 'pumpkin.n.02_2',}
         self.agent_location = 2
-        # self.pumpkin_1_grasped = 0  # False
-        # self.pumpkin_2_grasped = 0  # False
         self.view_location = {
             'cabinet.n.01_1': np.array([0.7746856808093053, -2.1980548994181603, 1.6858723008716936e-06]),
             'pumpkin.n.02_1': np.array([0.5010705671572231, -2.8976973969861453, 4.691743125169298]),
@@ -427,17 +366,11 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
     ):
         full_body_action = self._get_still_action()
         for arm_action in path if not reverse_path else reversed(path):
-            # print(f"contacts: {self.robot._find_gripper_contacts(arm=self.arm)[0]}")
             if stop_on_contact and len(self.robot._find_gripper_contacts(arm=self.arm)[0]) != 0:
-                # print("Contact detected. Stop motion")
-                # print("Contacts {}".format(self.robot._find_gripper_contacts(arm=self.arm)))
-                # print("Fingers {}".format([link.prim_path for link in self.robot.finger_links[self.arm]]))
                 return
-            # print("Executing action {}".format(arm_action))
             # This assumes the arms are called "arm_"+self.arm. Maybe some robots do not follow this convention
             arm_controller_action_idx = self.robot.controller_action_idx["arm_" + self.arm]
             full_body_action[arm_controller_action_idx] = arm_action
-            # print(f"execute ee path gripper action: {full_body_action[self.robot.controller_action_idx['gripper_' + self.arm]]}")
 
             if while_grasping:
                 # This assumes the grippers are called "gripper_"+self.arm. Maybe some robots do not follow this convention
@@ -445,48 +378,25 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             yield full_body_action
 
         if stop_on_contact:
-            # print("End of motion and no contact detected")
             raise ActionPrimitiveError(ActionPrimitiveError.Reason.EXECUTION_ERROR, "No contact was made.")
-        # else:
-            # print("End of the path execution")
+
 
     def _execute_grasp(self):
-        # get_still_action_time = time.time()
         action = self._get_still_action().tolist()
-        # after_get_still_action_time = time.time()
-        # print('_get_still_action: {}'.format(after_get_still_action_time - get_still_action_time))
-        # TODO: Extend to non-binary grasping controllers
         # This assumes the grippers are called "gripper_"+self.arm. Maybe some robots do not follow this convention
-        pre_action = copy.deepcopy(action)
-        # print('1', pre_action, self.robot.controller_action_idx["gripper_" + self.arm])
         action[int(self.robot.controller_action_idx["gripper_" + self.arm][0])] = -1.0
-        # print('2', action, self.robot.controller_action_idx["gripper_" + self.arm])
         action = np.asarray(action)
-        # print('action - pre_action', action - pre_action, action, np.asarray(pre_action),)
 
         grasping_steps = 5 if self.fast_execution else 9 # 10
         for i in range(grasping_steps):
-            # print(i, 'action: ', action)
             yield action
-        # for i in range(3):
-        #     ig.sim.step()
-        #     grasped_object = self._get_obj_in_hand()
-        #     print(i, 'grasped_object', grasped_object)
-        # object_id = 0  # self.task_obj_list['pumpkin.n.02_1'].get_body_ids()[0]f
-        # print('object_id: ', object_id)
-        # self.robot._ag_obj_in_hand[self.arm] = object_id
-        # yield_action_time = time.time()
-        # print('yield grasping action: {}'.format(yield_action_time - after_get_still_action_time))
         grasped_object = self._get_obj_in_hand()
-        # print('grasped_object', grasped_object)
         if grasped_object is None:
-            # pass
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.EXECUTION_ERROR,
                 "No object detected in hand after executing grasp.",
             )
         else:
-            # logger.info("Execution of grasping ended with grasped object {}".format(grasped_object.name))
             logger.info("Execution of grasping ended with grasped object {}".format(grasped_object))
 
     def _execute_ungrasp(self):
@@ -496,26 +406,14 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         action = np.asarray(action)
 
-        # grasped_object = self._get_obj_in_hand()
-        # print(-1, 'grasped_object', grasped_object)
-        # TODO: Extend to non-binary grasping controllers
         # This assumes the grippers are called "gripper_"+self.arm. Maybe some robots do not follow this convention
         ungrasping_steps = 5 if self.fast_execution else 9 # 10
         for i in range(ungrasping_steps):
-            # print(i, 'action: ', action)
-            # action = np.zeros_like(action)
-            # print('_execute_ungrasp: ', action)
             yield action
 
-        # for i in range(3):
-        #     ig.sim.step()
-        #     grasped_object = self._get_obj_in_hand()
-        #     print(i, 'grasped_object', grasped_object)
 
         grasped_object = self._get_obj_in_hand()
-        # print('grasped_object', grasped_object)
         if not grasped_object is None:
-            # pass
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.EXECUTION_ERROR,
                 "Object detected in hand after executing ungrasp.",
@@ -549,15 +447,8 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         logger.info("Navigating to object {}".format(object_name))
         params = skill_object_offset_params[B1KActionPrimitive.NAVIGATE_TO][object_name]
 
-        # If we check whether the object has moved from its initial location. If we check that, and the object has moved
-        # more than a threshold, we ignore the command
-        print('self.initial_pos_dict: ', self.initial_pos_dict)
-        # import pdb
-        # pdb.set_trace()
-
         moved_distance_threshold = 1e-1
         if self.obj_pose_check:
-            # if self.env.config["task"] in ["putting_away_Halloween_decorations"]:
             obj_pos = self.env.task.object_scope[object_name].states[Pose].get_value()[0]
             if object_name in ["pumpkin.n.02_1", "pumpkin.n.02_2"]:
                 if object_name not in self.initial_pos_dict:
@@ -596,7 +487,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # If the planner suceeded, we visualize it and keep the last location
         if plan is not None and len(plan) > 0:
             self.planner.visualize_base_path(plan, keep_last_location=True)
-        else:   # Otherwise, we raise an error
+        else:
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.PLANNING_ERROR,
                 "No base path found to object",
@@ -612,19 +503,15 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         # We manually step the simulator to make the robot settle down
         for i in range(10):
             self.robot.keep_still()  # angel velocity
-            yield still_action  # self._get_still_action()  # position
-            # ig.sim.step()
+            yield still_action  # position
+
         if object_name == 'cabinet.n.01_1':
             self.is_close_to_cabinet = True
         else:
             self.is_close_to_cabinet = False
 
         current_location = copy.deepcopy(np.array([obj_pos[0] + vector[0], obj_pos[1] + vector[1], target_yaw]))
-        print('target location: ', current_location, self.view_location['cabinet.n.01_1'],
-              self.view_location['pumpkin.n.02_1'], self.view_location['pumpkin.n.02_2'],
-              np.sum(np.abs(current_location - self.view_location['cabinet.n.01_1'])),
-              np.sum(np.abs(current_location - self.view_location['pumpkin.n.02_1'])),
-              np.sum(np.abs(current_location - self.view_location['pumpkin.n.02_2'])))
+
         distance_thres = 1e-1
         if np.sum(np.abs(current_location - self.view_location['cabinet.n.01_1'])) < distance_thres:
             self.agent_location = 0
@@ -637,13 +524,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         print("Finished navigating to object: {}, self.agent_location: {}".format(object_name, self.agent_location))
 
     def _pick(self, object_name):
-        # new_name = convert_bddl_scope_to_name(object_name)
-        # new_name = object_name
-
-        # from IPython import embed
-        # print("debug pick")
-        # embed()
-
         obj = self._get_obj_in_hand()
         if not obj is None:
             raise ActionPrimitiveError(
@@ -654,7 +534,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
         logger.info("Picking object {}".format(object_name))
         # Don't do anything if the object is already grasped.
-        # obj = self.env.scene.object_registry('name', new_name)
         obj = self.task_obj_list[object_name]
         robot_is_grasping = self.robot.is_grasping(candidate_obj=None)
 
@@ -688,8 +567,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         plan_full_pre_grasp_motion = not self.skip_arm_planning
         picking_direction = self.default_direction
 
-        # print('obj_pos: {}, vector: {}, pick_place_pos: {}'.format(obj_pos, vector, pick_place_pos))
-        # obj_pos: [-0.30116537  0.10003112  0.07572521], vector: [0. 0. 0.], pick_place_pos: [-0.30116537  0.10003112  0.07572521]
         # If the params have been prepared for any robot, we use the finger size as offset
         if len(params) > 3:
             logger.warning(
@@ -706,8 +583,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             plan_full_pre_grasp_motion=plan_full_pre_grasp_motion,
         )
         print('pre_pick_path: {}, interaction_pick_path: {}, pre_grasping_distance: {}'.format(pre_pick_path, interaction_pick_path, pre_grasping_distance))  # [] None 0.1
-        # import pdb
-        # pdb.set_trace()
         # If the pre-pick path planning of the interaction path planning failed, we raise an error
         if (
             pre_pick_path is None
@@ -726,9 +601,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         logger.info("Visualizing pre-pick path")
         self.planner.visualize_arm_path(pre_pick_path, arm=self.arm, keep_last_location=True)
         yield self._get_still_action()
-
-        # import pdb
-        # pdb.set_trace()
 
         # If we are requesting some interaction path
         if pre_grasping_distance != 0:
@@ -749,8 +621,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             )
             for i in range(5):
                 ig.sim.step()
-        # print("======================== PICK STEP 6 ==========================")
-        # logger.info("Executing retracting path")
         if plan_full_pre_grasp_motion:
             self.planner.visualize_arm_path(
                 pre_pick_path, arm=self.arm, reverse_path=True, grasped_obj=obj, keep_last_location=True
@@ -763,171 +633,12 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                 grasped_obj=obj,
             )
 
-        # print("======================== PICK STEP 7 ==========================")
-        still_action = self._get_still_action()
-        for i in range(5):
-            self.robot.keep_still()
-            yield still_action  # self._get_still_action()
-        #     # print('yield self._get_still_action()')
-        # for i in range(10):
-        #     ig.sim.step()
-        #     time.sleep(0.01)
-        '''
-        # ------------------------------------------------------
-        objects_to_ignore = []
-        if self.robot.is_grasping() == IsGraspingState.TRUE:
-            objects_to_ignore = [self.robot._ag_obj_in_hand[self.arm]]
-
-        # Plan a 2D motion
-        plan = self.planner.plan_base_motion(
-            [obj_pos[0] + vector[0], obj_pos[1] + vector[1], target_yaw],
-            plan_full_base_motion=not self.skip_base_planning,
-            objects_to_ignore=objects_to_ignore,
-        )
-
-        # If the planner suceeded, we visualize it and keep the last location
-        if plan is not None and len(plan) > 0:
-            self.planner.visualize_base_path(plan, keep_last_location=True)
-        else:  # Otherwise, we raise an error
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.PLANNING_ERROR,
-                "No base path found to object",
-                {"object_to_navigate": object_name},
-            )
-
-        # Stop the robot after teleporting it
-        self.robot.keep_still()
-        # This action will get executed by the wrapping environment. It should keep the robot still
-        still_action = self._get_still_action()
-        yield still_action
-
-        # We manually step the simulator to make the robot settle down
-        for i in range(10):
-            self.robot.keep_still()  # angel velocity
-            yield still_action  # self._get_still_action()  # position
-            # ig.sim.step()
-        if object_name == 'cabinet.n.01_1':
-            self.is_close_to_cabinet = True
-        else:
-            self.is_close_to_cabinet = False
-
-        current_location = copy.deepcopy(np.array([obj_pos[0] + vector[0], obj_pos[1] + vector[1], target_yaw]))
-        print('target location: ', current_location, self.view_location['cabinet.n.01_1'],
-              self.view_location['pumpkin.n.02_1'], self.view_location['pumpkin.n.02_2'],
-              np.sum(np.abs(current_location - self.view_location['cabinet.n.01_1'])),
-              np.sum(np.abs(current_location - self.view_location['pumpkin.n.02_1'])),
-              np.sum(np.abs(current_location - self.view_location['pumpkin.n.02_2'])))
-        distance_thres = 1e-1
-        if np.sum(np.abs(current_location - self.view_location['cabinet.n.01_1'])) < distance_thres:
-            self.agent_location = 0
-        elif np.sum(np.abs(current_location - self.view_location['pumpkin.n.02_1'])) < distance_thres:
-            self.agent_location = 1
-        elif np.sum(np.abs(current_location - self.view_location['pumpkin.n.02_2'])) < distance_thres:
-            self.agent_location = 2
-        else:
-            self.agent_location = 3
-        print("Finished navigating to object: {}, self.agent_location: {}".format(object_name, self.agent_location))
-        '''
-        print("Pick action completed")
-        # from IPython import embed
-        # print("debug pick")
-        # embed()
-
-    def _place_v0(self, object_name):
-        logger.info("Placing on object {}".format(object_name))
-
-        # params = skill_object_offset_params[B1KActionPrimitive.PLACE][object_name]
-        # # new_name = convert_bddl_scope_to_name(object_name)
-        # #
-        # # obj_pos = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[0]
-        # # obj_rot_XYZW = self.env.scene.object_registry('name', new_name).states[Pose].get_value()[1]
-        # obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
-        # obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
-        #
-        # # process the offset from object frame to world frame
-        #
-        # mat = quat2mat(obj_rot_XYZW)
-        # np_array = np.array(params[:3])
-        # np_array[0] += random.uniform(0, 0.2)
-        # vector = mat @ np_array
-        #
-        # pick_place_pos = copy.deepcopy(obj_pos)
-        # pick_place_pos[0] += vector[0]
-        # pick_place_pos[1] += vector[1]
-        # pick_place_pos[2] += vector[2]
-        #
-        # plan_full_pre_drop_motion = not self.skip_arm_planning
-        #
-        # dropping_distance = 0.1
-        # pre_drop_path, _ = self.planner.plan_ee_drop(
-        #     pick_place_pos, arm=self.arm, plan_full_pre_drop_motion=plan_full_pre_drop_motion,
-        #     dropping_distance=dropping_distance,
-        # )
-        #
-        # if pre_drop_path is None or len(pre_drop_path) == 0:
-        #     raise ActionPrimitiveError(
-        #         ActionPrimitiveError.Reason.PLANNING_ERROR,
-        #         "No arm path found to place object",
-        #         {"object_to_place": object_name},
-        #     )
-        #
-        # # First, teleport the robot to the pre-ungrasp motion
-        # logger.info("Visualizing pre-place path")
-        # self.planner.visualize_arm_path(
-        #     pre_drop_path,
-        #     arm=self.arm,
-        #     # grasped_obj_id=self.robot._ag_obj_in_hand[self.arm],
-        #     keep_last_location=True,
-        # )
-        # # yield self._get_still_action()
-        # # At the end, open the hand
-        # logger.info("Executing ungrasp")
-
-        obj = self._get_obj_in_hand()
-
-        if not obj is None:
-            self.planner.visualize_arm_path(
-                [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
-                arm=self.arm,
-                keep_last_location=True,
-                grasped_obj=obj,
-            )
-
-            yield from self._execute_ungrasp()
-            still_action = self._get_still_action()
-            for i in range(10):
-                self.robot.keep_still()
-                yield still_action  # self._get_still_action()
-
-            self.planner.visualize_arm_path(
-                [self.robot.tucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
-                arm=self.arm,
-                keep_last_location=True,
-            )
-
         still_action = self._get_still_action()
         for i in range(5):
             self.robot.keep_still()
             yield still_action
+        print("Pick action completed")
 
-        # # for i in range(10):
-        # #     ig.sim.step()
-        # # Then, retract the arm
-        # logger.info("Executing retracting path")
-        # if plan_full_pre_drop_motion:  # Visualizing the full path...
-        #     self.planner.visualize_arm_path(
-        #         pre_drop_path,
-        #         arm=self.arm,
-        #         keep_last_location=True,
-        #         reverse_path=True,
-        #     )
-        # else:  # ... or directly teleporting to the last location
-        #     self.planner.visualize_arm_path(
-        #         [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
-        #         arm=self.arm,
-        #         keep_last_location=True,
-        #     )
-        logger.info("Place action completed")
 
     def _place(self, object_name):
         logger.info("Placing on object {}".format(object_name))
@@ -948,7 +659,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
 
             # If we are skipping arm planning, we do not need to plan for a pre-place, only the feasibility of the grasping
             # location
-
             plan_full_pre_place_motion = not self.skip_arm_planning  # True
             pre_place_path, pre_place_above_path = self.planner.plan_ee_place(
                 place_pos,
@@ -956,7 +666,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             )
 
             # If the pre-place path planning of the interaction path planning failed, we raise an error
-
             if (
                     pre_place_path is None
                     or len(pre_place_path) == 0
@@ -981,7 +690,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             still_action = self._get_still_action()
             for i in range(10):
                 self.robot.keep_still()
-                yield still_action  # self._get_still_action()
+                yield still_action
 
             self.planner.visualize_arm_path(
                 pre_place_above_path, arm=self.arm,
@@ -997,7 +706,7 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         still_action = self._get_still_action()
         for i in range(5):
             self.robot.keep_still()
-            yield still_action  # self._get_still_action()
+            yield still_action
 
         logger.info("Place action completed")
 
@@ -1069,10 +778,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
             )
         logger.info("Pushing object {}".format(object_name))
 
-        # new_name = convert_bddl_scope_to_name(object_name)
-        # new_name = object_name
-        # jnt = self.env.scene.object_registry('name', new_name).joints['joint_0']
-        # jnt = self.env.scene.object_registry('name', new_name).joints['joint_2']
         jnt = self.task_obj_list[object_name].joints['joint_0']
 
         min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
@@ -1082,97 +787,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         for i in range(5):
             yield still_action
             ig.sim.step()
-            # print(i, 'pull sim.step()')
-
-        # logger.info("Pulling object {}".format(object_name))
-        # params = skill_object_offset_params[B1KActionPrimitive.PULL][object_name]
-        # obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
-        # obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
-        #
-        # # process the offset from object frame to world frame
-        # mat = quat2mat(obj_rot_XYZW)
-        # vector = mat @ np.array(params[:3])
-        #
-        # pulling_pos = copy.deepcopy(obj_pos)
-        # pulling_pos[0] += vector[0]
-        # pulling_pos[1] += vector[1]
-        # pulling_pos[2] += vector[2]
-        #
-        # pulling_direction = np.array(params[3:6])
-        # ee_pulling_orn = p.getQuaternionFromEuler((np.pi / 2, 0, 0))
-        # pre_pulling_distance = 0.10
-        # pulling_distance = 0.30
-        #
-        # finger_size = self.robot.finger_lengths[self.arm]
-        # pulling_pos += pulling_direction * finger_size
-        #
-        # plan_full_pre_pull_motion = not self.skip_arm_planning
-        #
-        # pre_pull_path, approach_interaction_path, pull_interaction_path = self.planner.plan_ee_pull(
-        #     pulling_location=pulling_pos,
-        #     pulling_direction=pulling_direction,
-        #     ee_pulling_orn=ee_pulling_orn,
-        #     pre_pulling_distance=pre_pulling_distance,
-        #     pulling_distance=pulling_distance,
-        #     plan_full_pre_pull_motion=plan_full_pre_pull_motion,
-        #     pulling_steps=15,
-        # )
-        #
-        # if (
-        #     pre_pull_path is None
-        #     or len(pre_pull_path) == 0
-        #     or approach_interaction_path is None
-        #     or (len(approach_interaction_path) == 0 and pre_pulling_distance != 0)
-        #     or pull_interaction_path is None
-        #     or (len(pull_interaction_path) == 0 and pulling_distance != 0)
-        # ):
-        #     raise ActionPrimitiveError(
-        #         ActionPrimitiveError.Reason.PLANNING_ERROR,
-        #         "No arm path found to pull object",
-        #         {"object_to_pull": object_name},
-        #     )
-        #
-        # # First, teleport the robot to the beginning of the pre-pick path
-        # logger.info("Visualizing pre-pull path")
-        # self.planner.visualize_arm_path(pre_pull_path, arm=self.arm)
-        # yield self._get_still_action()
-        # # Then, execute the interaction_pick_path stopping if there is a contact
-        # logger.info("Executing approaching pull path")
-        # yield from self._execute_ee_path(approach_interaction_path, stop_on_contact=True)
-        # # At the end, close the hand
-        # logger.info("Executing grasp")
-        # yield from self._execute_grasp()
-        # # Then, execute the interaction_pull_path
-        # # Since we may have stopped earlier due to contact, the precomputed path may be wrong
-        # # We have two options here: 1) (re)plan from the current pose (online planning), or 2) find the closest point
-        # # in the precomputed trajectory and start the execution there. Implementing option 1)
-        # logger.info("Replaning interaction pull path and executing")
-        # current_ee_position = self.robot.get_eef_position(arm=self.arm)
-        # current_ee_orn = self.robot.get_eef_orientation(arm=self.arm)
-        # state = self.robot.get_joint_states()
-        # joint_positions = np.array([state[joint_name][0] for joint_name in state])
-        # arm_joint_positions = joint_positions[self.robot.controller_joint_idx["arm_" + self.arm]]
-        # pull_interaction_path = self.planner.plan_ee_straight_line_motion(
-        #     arm_joint_positions,
-        #     current_ee_position,
-        #     pulling_direction,
-        #     ee_orn=current_ee_orn,
-        #     line_length=pulling_distance,
-        #     arm=self.arm,
-        # )
-        # yield from self._execute_ee_path(pull_interaction_path, while_grasping=True)
-        # # Then, open the hand
-        # logger.info("Executing ungrasp")
-        # yield from self._execute_ungrasp()
-        # logger.info("Untuck arm")
-        # self.planner.visualize_arm_path(
-        #     [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
-        #     arm=self.arm,
-        #     keep_last_location=True,
-        # )
-        # yield self._get_still_action()
-        #
-        # logger.info("Pull action completed")
 
     def _pull_open(self, object_name):
         logger.info("Pulling object {}".format(object_name))
@@ -1220,127 +834,26 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                 {"object_to_pull": object_name},
             )
 
-        # First, teleport the robot to the beginning of the pre-pick path
-        pre_pull_time = time.time()
-        # print('plan ee pull time: {}'.format(pre_pull_time - plan_ee_pull_time))
-        # print("Visualizing pre-pull path")
-        # print('pre_pull_path: ', pre_pull_path, len(pre_pull_path))
         self.planner.visualize_arm_path(pre_pull_path, arm=self.arm)
-        # yield self._get_still_action()
-        # Then, execute the interaction_pick_path stopping if there is a contact
-        # print("Executing approaching pull path")
-        # print('approach_interaction_path: ', approach_interaction_path, len(approach_interaction_path), np.sum(approach_interaction_path, axis=0).shape)
-        # sum_approach_interaction_path = [np.sum(approach_interaction_path, axis=0)]
-        # print('sum_approach_interaction_path: ', sum_approach_interaction_path)
-        start_execute_ee_time = time.time()
-        # print('pre_pull_time: {}'.format(start_execute_ee_time - pre_pull_time))
         yield from self._execute_ee_path(approach_interaction_path, stop_on_contact=True)
-        execute_ee_time = time.time()
-        # print('execute_ee_time: {}'.format(execute_ee_time - start_execute_ee_time))
-        # At the end, close the hand
-        # print("Executing grasp")
         yield from self._execute_grasp()
-        grasp_time = time.time()
-        # print('grasp_time: {}'.format(grasp_time - execute_ee_time))
         yield from self._execute_ee_path(pull_interaction_path, while_grasping=True)
-        pull_interaction_time = time.time()
-        # print('pull_interaction_time: {}'.format(pull_interaction_time - grasp_time))
-        # Then, open the hand
-        # print("Executing ungrasp")
         yield from self._execute_ungrasp()
-        ungrasp_time = time.time()
-        # print('ungrasp_time: {}'.format(ungrasp_time - pull_interaction_time))
         yield self._get_still_action()
-        still_action_time = time.time()
-        # print('still_action_time: {}'.format(still_action_time - ungrasp_time))
-        # print('total time: {}'.format(still_action_time - plan_ee_pull_time))
-        # print("Pull action completed")
+
 
     def _push(self, object_name):
         logger.info("Pushing object {}".format(object_name))
 
-        # new_name = convert_bddl_scope_to_name(object_name)
-        # new_name = object_name
-        # jnt = self.env.scene.object_registry('name', new_name).joints['joint_0']
-        # print(self.env.scene.object_registry('name', new_name).joints.keys())
-        # odict_keys(['joint_0', 'joint_1', 'joint_2', 'joint_3', 'joint_4', 'joint_5'])
-        # jnt = self.env.scene.object_registry('name', new_name).joints['joint_2']
         jnt = self.task_obj_list[object_name].joints['joint_0']
         min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
         jnt.set_pos(min_pos, target=False)
-        # print('new_name: {}, jnt: {}, min_pos: {}, max_pos: {}'.format(new_name, jnt, min_pos, max_pos))
         still_action = self._get_still_action()
         for i in range(5):
             yield still_action
             ig.sim.step()
-            # print(i, 'push sim.step()')
-        # min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
-        #
-        # # Set the value you want
-        # jnt.set_pos(val, target=False)
-        #
-        # params = skill_object_offset_params[B1KActionPrimitive.PUSH][object_name]
-        # obj_pos = self.task_obj_list[object_name].states[Pose].get_value()[0]
-        # obj_rot_XYZW = self.task_obj_list[object_name].states[Pose].get_value()[1]
-        #
-        # # process the offset from object frame to world frame
-        # mat = quat2mat(obj_rot_XYZW)
-        # vector = mat @ np.array(params[:3])
-        #
-        # pick_place_pos = copy.deepcopy(obj_pos)
-        # pick_place_pos[0] += vector[0]
-        # pick_place_pos[1] += vector[1]
-        # pick_place_pos[2] += vector[2]
-        #
-        # pushing_direction = np.array(params[3:6])
-        #
-        # pushing_distance = 0.2
-        # ee_pushing_orn = np.array(p.getQuaternionFromEuler((0, np.pi / 2, 0)))
-        #
-        # plan_full_pre_push_motion = not self.skip_arm_planning
-        #
-        # pre_push_path, push_interaction_path = self.planner.plan_ee_push(
-        #     pick_place_pos,
-        #     pushing_direction=pushing_direction,
-        #     ee_pushing_orn=ee_pushing_orn,
-        #     pushing_distance=pushing_distance,
-        #     plan_full_pre_push_motion=plan_full_pre_push_motion,
-        # )
-        #
-        # if (
-        #     pre_push_path is None
-        #     or len(pre_push_path) == 0
-        #     or push_interaction_path is None
-        #     or (len(push_interaction_path) == 0 and pushing_distance != 0)
-        # ):
-        #     raise ActionPrimitiveError(
-        #         ActionPrimitiveError.Reason.PLANNING_ERROR,
-        #         "No arm path found to push object",
-        #         {"object_to_push": object_name},
-        #     )
-        #
-        # # First, teleport the robot to the beginning of the pre-pick path
-        # logger.info("Pre-push motion")
-        # self.planner.visualize_arm_path(pre_push_path, arm=self.arm, keep_last_location=True)
-        # yield self._get_still_action()
-        # # Then, execute the interaction_pick_path stopping if there is a contact
-        # logger.info("Pushing interaction")
-        # yield from self._execute_ee_path(push_interaction_path, stop_on_contact=False)
-        #
-        # logger.info("Tuck arm")
-        # self.planner.visualize_arm_path(
-        #     [self.robot.untucked_default_joint_pos[self.robot.controller_joint_idx["arm_" + self.arm]]],
-        #     arm=self.arm,
-        #     keep_last_location=True,
-        # )
-        # yield self._get_still_action()
-        #
-        # logger.info("Push action completed")
 
     def _push_open(self, object_name):
-        # new_name = convert_bddl_scope_to_name(object_name)
-        # new_name = object_name
-
         obj = self._get_obj_in_hand()
         if not obj is None:
             raise ActionPrimitiveError(
@@ -1353,7 +866,6 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
         min_pos, max_pos = jnt.lower_limit, jnt.upper_limit
 
         robot_position = self.robot.get_position()
-        print('robot_position: ', robot_position)
         robot_pos_before_cabinet = np.array([7.74685502e-01, -2.19805408e+00, -7.16727482e-06])
         if np.linalg.norm(robot_position - robot_pos_before_cabinet) > 1e-1:
             raise ActionPrimitiveError(
@@ -1361,20 +873,15 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                 "Robot is not in the front of the cabinet",
                 {"push open": object_name},
             )
-            # still_action = self._get_still_action()
-            # for i in range(5):
-            #     yield still_action
-            #     ig.sim.step()
         else:
             if self.skip_arm_planning:
-                jnt.set_pos(max_pos - 0.33, target=False)  # + np.random.uniform(-0.01,0.01)
+                jnt.set_pos(max_pos - 0.33, target=False)
                 still_action = self._get_still_action()
                 for i in range(5):
                     yield still_action
                     ig.sim.step()
             else:
                 jnt.set_pos(min_pos + (max_pos - min_pos) * 0.2, target=False)
-                # print('new_name: {}, jnt: {}, min_pos: {}, max_pos: {}'.format(new_name, jnt, min_pos, max_pos))
                 still_action = self._get_still_action()
                 for i in range(5):
                     yield still_action

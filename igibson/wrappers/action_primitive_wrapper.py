@@ -60,35 +60,10 @@ class ActionPrimitiveWrapper(BaseWrapper):
         self.max_step = 30  # env.config['max_step']
         self.is_success_list = []
 
-        # # Flatten our observation space if requested
-        # self.flatten_nested_obs = flatten_nested_obs
-        # if self.flatten_nested_obs:
-        #     # TODO: A bit naive, properly implement recursive version later
-        #     self.observation_space = gym.spaces.Dict(
-        #         {k: v for subdict in self.observation_space.values() for k, v in subdict.items() if k != ''}
-        #     )
-        # else:
-        #     self.observation_space = self.env.observation_space
         observation_space = OrderedDict()
         observation_space["rgb"] = gym.spaces.Box(low=0, high=255, shape=(128, 128, 3), dtype=np.float32)
         self.observation_space = gym.spaces.Dict(observation_space)
-        # import pdb
-        # pdb.set_trace()
         self.reset()
-
-        # import pdb
-        # pdb.set_trace()
-        # from IPython import embed
-        # print("debug")
-        # embed()
-        for i in range(5):
-            self.step(0)
-            self.step(1)
-            self.step(2)
-            self.step(3)
-            self.step(0)
-            self.step(4)
-            self.reset()
 
     def seed(self, seed):
         random.seed(seed)
@@ -100,30 +75,18 @@ class ActionPrimitiveWrapper(BaseWrapper):
         Returns:
             OrderedDict: Environment observation space after reset occurs
         """
-        # self.pumpkin_n_02_1_reward = True
-        # self.pumpkin_n_02_2_reward = True
         self.action_generator.robot.clear_ag()
-        # self.step(4)
         self.step_index = 0
         self.done = False
         self.accum_reward = 0
         return_obs = self.env.reset()
-        # TODO: Change it to be specified in a config file. That way it can be different for different scenes, tasks,
-        #  or robots
-
-        # robot_initial_location = np.array([0.5, 1.0, 0.0])
-        # self.robots[0].set_position_orientation(robot_initial_location)
-        # ig.sim.step()
         return_obs = {
             'rgb': return_obs['robot0']['robot0:eyes_Camera_sensor_rgb'][:, :, :3] / 255.
         }
-        # print(f"pre step0")
         
         return_obs, accumulated_reward, done, info = self.step(0)
-        # print("post step0")
         self.fallback_state = self.dump_state(serialized=False)
-        print('Success Rate: {} -----------------------\n'.format(np.mean(self.is_success_list)))
-
+        print('Success Rate: {}\n'.format(np.mean(self.is_success_list)))
         return return_obs
 
     def step(self, action: int):
@@ -133,19 +96,17 @@ class ActionPrimitiveWrapper(BaseWrapper):
 
         start_time = time.time()
 
-        print('++++++++++++++++++++++++++++++ take action:', action)
+        print('++++++++++++++++ take action:{} ++++++++++++++++'.format(action))
 
         pre_action = 10
         for lower_level_action in self.action_generator.apply(pre_action):
-            # print(f"lower level action: {lower_level_action}")
             obs, reward, done, info = super().step(lower_level_action)
             if self.accumulate_obs:
                 accumulated_obs.append(obs)
             else:
-                accumulated_obs = [obs]  # Do this to save some memory.
+                accumulated_obs = [obs]
 
         for _ in range(self.num_attempts):
-            # print(f"attempt: {_}")
             obs, done, info = None, None, {}
             try:
                 for lower_level_action in self.action_generator.apply(action):
@@ -161,7 +122,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
                     if self.accumulate_obs:
                         accumulated_obs.append(obs)
                     else:
-                        accumulated_obs = [obs]  # Do this to save some memory.
+                        accumulated_obs = [obs]
 
                     # Record additional info.
                     info["primitive_success"] = True
@@ -189,15 +150,12 @@ class ActionPrimitiveWrapper(BaseWrapper):
                 info["primitive_error_metadata"] = e.metadata
                 info["primitive_error_message"] = str(e)
 
-        # TODO: Think more about what to do when no observations etc. can be obtained.
         return_obs = None
         if accumulated_obs:
             if self.accumulate_obs:
                 return_obs = accumulated_obs
             else:
                 return_obs = accumulated_obs[-1]
-        end_time = time.time()
-        # logger.error("AP time: {}, reward: {}".format(end_time - start_time, accumulated_reward))
         self.accum_reward = self.accum_reward + accumulated_reward
         print('reward: ', accumulated_reward, 'accum reward: ', self.accum_reward)
         self.step_index = self.step_index + 1
