@@ -82,14 +82,12 @@ class BaseWrapper:
         # (see https://stackoverflow.com/questions/3278077/difference-between-getattr-vs-getattribute)
         orog_attr = getattr(self.env, attr)
         if callable(orog_attr):
-
             def hooked(*args, **kwargs):
                 result = orog_attr(*args, **kwargs)
                 # prevent wrapped_class from becoming unwrapped
                 if result == self.env:
                     return self
                 return result
-
             return hooked
         else:
             return orog_attr
