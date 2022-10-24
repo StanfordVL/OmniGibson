@@ -14,6 +14,7 @@ import time
 import numpy as np
 from collections import OrderedDict
 
+import omnigibson as og
 from omnigibson.macros import gm, create_module_macros
 from omnigibson import app, assets_path
 from omnigibson.objects.primitive_object import PrimitiveObject
@@ -269,17 +270,19 @@ class MotionPlanner:
             )
             self.marker_direction = PrimitiveObject(
                 prim_path="/World/mp_vis_marker_direction",
-                primitive_type="Sphere",
+                primitive_type="Cylinder",
                 name="mp_vis_marker_direction",
                 rgba=[0, 0, 1, 1],
                 radius=0.01,
-                length=0.2,
+                height=0.2,
                 visual_only=True,
             )
             if self.mode == 'baseline':
                 og.sim.import_object(self.marker, register=False, auto_initialize=True)
-                self.marker.visible = False
                 og.sim.import_object(self.marker_direction, register=False, auto_initialize=True)
+                # Need to render first before setting visibility. Otherwise, segfault will happen.
+                og.sim.render()
+                self.marker.visible = False
                 self.marker_direction.visible = False
             else:
                 self.env.simulator.import_object(self.marker, register=False, auto_initialize=True)
@@ -632,9 +635,9 @@ class MotionPlanner:
             ee_current_position = get_link_position_from_name(self.ik_solver[arm].robot_body_id, self.robot.eef_link_names[arm]) #self.robot.get_eef_position(arm=arm)  #TODO:
             dist = l2_distance(ee_current_position, ee_position)
             if dist > self.arm_ik_threshold:
-                print("IK solution is not close enough to the desired pose. Distance: {}, ee_current_position: {}, "
-                      "self.ik_solver[arm].robot_body_id: {}, self.robot.eef_link_names[arm]: {}".format(dist,
-                     ee_current_position, self.ik_solver[arm].robot_body_id, self.robot.eef_link_names[arm]))
+                # print("IK solution is not close enough to the desired pose. Distance: {}, ee_current_position: {}, "
+                #       "self.ik_solver[arm].robot_body_id: {}, self.robot.eef_link_names[arm]: {}".format(dist,
+                #      ee_current_position, self.ik_solver[arm].robot_body_id, self.robot.eef_link_names[arm]))
                 n_attempt += 1
                 continue
 

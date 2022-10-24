@@ -256,8 +256,9 @@ class BehaviorActionPrimitives(BaseActionPrimitiveSet):
                     link.mass = 0.5
 
         if arm is None:
-            self.arm = self.robot.default_arm
-            logger.info("Using with the default arm: {}".format(self.arm))
+            arm = self.robot.default_arm
+        self.arm = arm
+        logger.info("Using arm: {}".format(self.arm))
 
         if robot.model_name in ["Tiago", "Fetch"]:
             assert not robot.rigid_trunk, "The APs will use the trunk of Fetch/Tiago, it can't be rigid"

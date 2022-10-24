@@ -49,7 +49,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         self.mode = mode
         self.seed(0)
         self.action_generator: BaseActionPrimitiveSet = REGISTERED_PRIMITIVE_SETS[action_generator](
-            self, self.task, self.scene, self.robots[0], self.mode
+            self, self.task, self.scene, self.robots[0], mode=self.mode
         )
         self.action_space = self.action_generator.get_action_space()
         self.reward_accumulation = reward_accumulation

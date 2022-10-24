@@ -12,10 +12,11 @@ from omnigibson.utils.sim_utils import get_collisions
 from omnigibson.utils.config_utils import parse_config
 from omnigibson.utils.python_utils import assert_valid_key, merge_nested_dicts, create_class_from_registry_and_config, \
     Serializable, Recreatable
+from omnigibson.utils.transform_utils import quatToXYZW
 
 import numpy as np
 from transforms3d.euler import euler2quat
-from igibson.robots.robot_base import BaseRobot
+from omnigibson.robots.robot_base import BaseRobot
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)

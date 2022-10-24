@@ -6,7 +6,7 @@ import bddl
 
 import omnigibson as ig
 from omnigibson.wrappers import ActionPrimitiveWrapper
-from omnigibson import app, ig_dataset_path, example_config_path, Simulator
+from omnigibson import example_config_path
 
 log = logging.getLogger(__name__)
 

@@ -76,8 +76,8 @@ class IKSolver_v0:
         return np.array(ik_results.cspace_position)
 
 import pybullet as p
-from igibson.external.motion.motion_planners.rrt_connect import birrt
-from igibson.external.pybullet_tools.utils import (
+from omnigibson.external.motion.motion_planners.rrt_connect import birrt
+from omnigibson.external.pybullet_tools.utils import (
     PI,
     circular_difference,
     direct_path,

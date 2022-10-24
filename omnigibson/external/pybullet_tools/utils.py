@@ -24,16 +24,16 @@ from itertools import product, combinations, count
 
 from .transformations import quaternion_from_matrix, unit_vector
 
-from igibson.external.motion.motion_planners.rrt_connect import birrt, direct_path
-from igibson.external.motion.motion_planners.rrt_star import rrt_star
-from igibson.external.motion.motion_planners.lazy_prm import lazy_prm_replan_loop
-from igibson.external.motion.motion_planners.rrt import rrt
-from igibson.external.motion.motion_planners.smoothing import optimize_path
-from igibson.utils.constants import OccupancyGridState
+from omnigibson.external.motion.motion_planners.rrt_connect import birrt, direct_path
+from omnigibson.external.motion.motion_planners.rrt_star import rrt_star
+from omnigibson.external.motion.motion_planners.lazy_prm import lazy_prm_replan_loop
+from omnigibson.external.motion.motion_planners.rrt import rrt
+from omnigibson.external.motion.motion_planners.smoothing import optimize_path
+from omnigibson.utils.constants import OccupancyGridState
 #from ..motion.motion_planners.rrt_connect import birrt, direct_path
 import cv2
 import logging
-import igibson.utils.transform_utils as T
+import omnigibson.utils.transform_utils as T
 
 # from future_builtins import map, filter
 # from builtins import input # TODO - use future
@@ -865,12 +865,12 @@ def save_image(filename, rgba):
 def get_projection_matrix(width, height, vertical_fov, near, far):
     """
     OpenGL projection matrix
-    :param width: 
-    :param height: 
+    :param width:
+    :param height:
     :param vertical_fov: vertical field of view in radians
-    :param near: 
-    :param far: 
-    :return: 
+    :param near:
+    :param far:
+    :return:
     """
     # http://www.songho.ca/opengl/gl_projectionmatrix.html
     # http://www.songho.ca/opengl/gl_transform.html#matrix
@@ -2658,7 +2658,7 @@ def any_link_pair_collision(body1, links1, body2, links2=None, **kwargs):
 
 def body_collision(body1, body2, max_distance=MAX_DISTANCE):  # 10000
     # TODO: confirm that this doesn't just check the base link
-    
+
     #for i in range(p.getNumJoints(body1)):
     #    for j in range(p.getNumJoints(body2)):
     #        #if len(p.getContactPoints(body1, body2, i, j)) > 0:
@@ -3555,7 +3555,7 @@ def plan_base_motion_2d(body,
     if collision_fn(end_conf):
         print("Warning: end configuration is in collision")
         return None
-    
+
     if algorithm == 'direct':
         path = direct_path(start_conf, end_conf, extend_fn, collision_fn)
     elif algorithm == 'birrt':
