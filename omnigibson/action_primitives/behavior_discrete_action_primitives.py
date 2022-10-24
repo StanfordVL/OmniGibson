@@ -42,7 +42,7 @@ skill_object_offset_params = {
         "pumpkin.n.02_1": [0.5, 0.0, 0.0, 0.7 * np.pi],
         "pumpkin.n.02_2": [0.3, -0.45, 0, 0.5 * np.pi],
         # "cabinet.n.01_1": [0.4, -1.15, 0, 0.5 * np.pi],
-        "cabinet.n.01_1": [0.7, -0.8, 0, 0.5 * np.pi],
+        "cabinet.n.01_1": [0.7, -0.83, 0, 0.5 * np.pi],
         # "cabinet.n.01_1": [-0.1, -1.5, 0, 0.5 * np.pi],
     },
     1: {  # pick

@@ -27,7 +27,7 @@ gm.ENABLE_ROBOT_CONTACT_REPORTING = True
 
 # Whether to use omni's particles feature (e.g. for fluids) or not
 # This also dictates whether we need to use GPU dynamics or not
-gm.ENABLE_OMNI_PARTICLES = False
+gm.ENABLE_OMNI_PARTICLES = True
 
 # Whether to use high-fidelity rendering (this includes, e.g., isosurfaces)
 gm.ENABLE_HQ_RENDERING = False

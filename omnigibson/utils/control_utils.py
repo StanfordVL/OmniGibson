@@ -8,7 +8,7 @@ import numpy as np
 import omnigibson.utils.transform_utils as T
 
 
-class IKSolver_v0:
+class IKSolver:
     """
     Class for thinly wrapping Lula IK solver
     """
@@ -74,85 +74,3 @@ class IKSolver_v0:
         # Compute target joint positions
         ik_results = lula.compute_ik_ccd(self.kinematics, ik_target_pose, self.eef_name, self.config)
         return np.array(ik_results.cspace_position)
-
-import pybullet as p
-from omnigibson.external.motion.motion_planners.rrt_connect import birrt
-from omnigibson.external.pybullet_tools.utils import (
-    PI,
-    circular_difference,
-    direct_path,
-    get_aabb,
-    get_base_values,
-    get_joint_names,
-    get_joint_positions,
-    get_joints,
-    get_max_limits,
-    get_min_limits,
-    get_movable_joints,
-    get_sample_fn,
-    is_collision_free,
-    joints_from_names,
-    link_from_name,
-    movable_from_joints,
-    pairwise_collision,
-    plan_base_motion_2d,
-    plan_joint_motion,
-    set_base_values_with_z,
-    set_joint_positions,
-    set_pose,
-    get_link_position_from_name,
-    get_link_name,
-    base_values_from_pose,
-    pairwise_link_collision,
-    control_joints,
-    get_base_values,
-    get_joint_positions,
-    get_max_limits,
-    get_min_limits,
-    get_sample_fn,
-    is_collision_free,
-    joints_from_names,
-    link_from_name,
-    plan_base_motion_2d,
-    plan_joint_motion,
-    set_base_values_with_z,
-    set_joint_positions,
-    set_pose,
-    get_self_link_pairs,
-    get_body_name,
-    get_link_name,
-)
-
-
-class IKSolver:
-    """
-    Class for thinly wrapping Lula IK solver
-    """
-
-    def __init__(
-        self,
-        robot_description_path,
-        robot_urdf_path,
-        eef_name,
-        default_joint_pos,
-        headless=False,
-    ):
-        # Create robot description, kinematics, and config
-        if headless:
-            p.connect(p.DIRECT)
-        else:
-            # import pdb
-            # pdb.set_trace()
-            p.connect(p.GUI)
-        self.robot_body_id = p.loadURDF(robot_urdf_path)
-        p.resetBasePositionAndOrientation(self.robot_body_id, [0, 0, 0], [0, 0, 0, 1])
-        p.setGravity(0, 0, 0)
-        p.stepSimulation()
-
-    def solve(
-        self,
-        target_pos,
-        target_quat,
-        initial_joint_pos=None,
-    ):
-        print("unused")

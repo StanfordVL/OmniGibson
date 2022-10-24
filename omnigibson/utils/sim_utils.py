@@ -201,7 +201,6 @@ def place_base_pose(obj, pos, quat=None, z_offset=None):
 
     obj.set_position_orientation(pos, quat)
 
-
 def test_valid_pose(obj, pos, quat=None, z_offset=None):
     """
     Test if the object can be placed with no collision.
@@ -225,6 +224,8 @@ def test_valid_pose(obj, pos, quat=None, z_offset=None):
     # Set the pose of the object
     place_base_pose(obj, pos, quat, z_offset)
 
+    og.sim.step_physics()
+
     # If we're placing a robot, make sure it's reset and not moving
     # Run import here to avoid circular imports
     from omnigibson.robots.robot_base import BaseRobot
@@ -232,8 +233,11 @@ def test_valid_pose(obj, pos, quat=None, z_offset=None):
         obj.reset()
         obj.keep_still()
 
+    # TODO: figure out why this causes gpu dynamics issues
+    # og.sim.step_physics()
+
     # Check whether we're in collision after taking a single physics step
-    in_collision = check_collision(prims=obj, step_physics=True)
+    in_collision = check_collision(prims=obj, step_physics=False)
 
     # Restore state after checking the collision
     og.sim.scene.load_state(state, serialized=False)

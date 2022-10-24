@@ -78,7 +78,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         Returns:
             OrderedDict: Environment observation space after reset occurs
         """
-        self.action_generator.robot.clear_ag()
+        self.action_generator.robot.release_grasp_at_once()
         self.step_index = 0
         self.done = False
         self.accum_reward = 0
@@ -88,7 +88,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         }
         
         return_obs, accumulated_reward, done, info = self.step(0)
-        self.fallback_state = self.dump_state(serialized=False)
+        self.fallback_state = og.sim.dump_state(serialized=False)
         print('Success Rate: {}\n'.format(np.mean(self.is_success_list)))
         return return_obs
 
@@ -133,12 +133,12 @@ class ActionPrimitiveWrapper(BaseWrapper):
                     info["primitive_error_metadata"] = None
                     info["primitive_error_message"] = None
 
-                self.fallback_state = self.dump_state(serialized=False)
+                self.fallback_state = og.sim.dump_state(serialized=False)
                 break
             except ActionPrimitiveError as e:
                 print("--- Primitive Error! Execute dummy action (don't move) to get an observation!")
                 from copy import deepcopy
-                self.load_state(deepcopy(self.fallback_state), serialized=False)
+                og.sim.load_state(deepcopy(self.fallback_state), serialized=False)
 
                 dummy_action_id = 10
                 for lower_level_action in self.action_generator.apply(dummy_action_id):

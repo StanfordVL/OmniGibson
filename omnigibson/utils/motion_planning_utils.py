@@ -23,10 +23,10 @@ from omnigibson.sensors.scan_sensor import ScanSensor
 from omnigibson.scenes.static_traversable_scene import StaticTraversableScene
 from omnigibson.scenes.interactive_traversable_scene import InteractiveTraversableScene
 import omnigibson.utils.transform_utils as T
-from omnigibson.utils.control_utils import IKSolver
 import omnigibson.macros as m
 from omnigibson.scenes.interactive_traversable_scene import InteractiveTraversableScene
-from omnigibson.utils.transform_utils import l2_distance, rotate_vector_2d
+from omnigibson.utils.transform_utils import l2_distance, euler2quat
+from omnigibson.utils.sim_utils import land_object, test_valid_pose
 
 import lula
 
@@ -338,10 +338,11 @@ class MotionPlanner:
             for obj in objects_to_ignore:
                 self.env.add_ignore_robot_object_collision(robot_idn=self.robot_idn, obj=obj)
 
-            collision_free = self.env.test_valid_position(
+            collision_free = test_valid_pose(
                 obj=self.robot,
                 pos=np.array((x, y, self.trav_map.floor_heights[self.floor_num])),
-                ori=np.array([0, 0, theta]),
+                quat=euler2quat(np.array([0, 0, theta])),
+                z_offset=self.initial_height,
             )
 
             for obj in objects_to_ignore:
@@ -361,7 +362,7 @@ class MotionPlanner:
                 half_occupancy_range = self.occupancy_range / 2.0
                 robot_position_xy = self.robot.get_position()[:2]
                 corners = [
-                    robot_position_xy + rotate_vector_2d(local_corner, -yaw)
+                    robot_position_xy + (euler2mat([0., 0., yaw]) @ np.append(local_corner, 1.0))[:2]
                     for local_corner in [
                         np.array([half_occupancy_range, half_occupancy_range]),
                         np.array([half_occupancy_range, -half_occupancy_range]),
@@ -724,7 +725,7 @@ class MotionPlanner:
         else:
             mp_obstacles = []
 
-        state = self.env.dump_state(serialized=False)
+        state = og.sim.dump_state(serialized=False)
 
         if initial_arm_configuration is not None:
             log.warning(
@@ -770,7 +771,7 @@ class MotionPlanner:
                 algorithm=self.arm_mp_algo,
             )
 
-        self.env.load_state(state=state, serialized=False)
+        og.sim.load_state(state=state, serialized=False)
 
         if arm_path is not None and len(arm_path) > 0:
             log.warning("Path found!")
@@ -842,10 +843,7 @@ class MotionPlanner:
             log.warning("Requested line of length 0. Returning a path with only one configuration: initial_arm_pose")
             return [initial_arm_pose]
 
-        if not self.mode== 'baseline':
-            state = og.sim.dump_state(serialized=False)
-        else:
-            state = self.env.dump_state(serialized=False)
+        state = og.sim.dump_state(serialized=False)
 
         # Start planning from the given pose
         if self.robot_type != "BehaviorRobot":
@@ -875,19 +873,15 @@ class MotionPlanner:
             )
             start_restore = time.time()
             if joint_pose is None:
-                if not self.mode == 'baseline':
-                    og.sim.load_state(state=state, serialized=False)
-                else:
-                    self.env.load_state(state=state, serialized=False)
+                og.sim.load_state(state=state, serialized=False)
                 log.warning("Failed to retrieve IK solution for EE line path. Failure.")
                 return None
 
             line_path.append(joint_pose)
             end_restore = time.time()
-        if not self.mode== 'baseline':
-            og.sim.load_state(state=state, serialized=False)
-        else:
-            self.env.load_state(state=state, serialized=False)
+
+        og.sim.load_state(state=state, serialized=False)
+
         return line_path
 
 
@@ -1246,10 +1240,7 @@ class MotionPlanner:
             log.warning("Visualizing arm path for the default arm: {}".format(arm))
 
         if not keep_last_location:
-            if not self.mode== 'baseline':
-                state = og.sim.dump_state(serialized=False)
-            else:
-                state = self.env.dump_state(serialized=False)
+            state = og.sim.dump_state(serialized=False)
 
         if grasped_obj is not None:
             if self.robot_type != "BehaviorRobot":
@@ -1313,10 +1304,7 @@ class MotionPlanner:
                     self.simulator_sync()
 
         if not keep_last_location:
-            if not self.mode== 'baseline':
-                og.sim.load_state(state=state, serialized=False)
-            else:
-                self.env.load_state(state=state, serialized=False)
+            og.sim.load_state(state=state, serialized=False)
 
     def set_marker_position(self, pos):
         """

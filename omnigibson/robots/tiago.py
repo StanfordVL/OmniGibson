@@ -176,9 +176,9 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def arm_joint_names(self):
         names = dict()
-        for arm in self.arm_control_idx:
+        for arm in self.arm_names:
             names[arm] = ["torso_lift_joint"] + [
-                list(self.joints.keys())[joint_id] for joint_id in self.arm_control_idx[arm]
+                f"arm_{arm}_{i}_joint" for i in range(1, 8)
             ]
         return names
 
@@ -201,18 +201,15 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     def tucked_default_joint_pos(self):
         pos = np.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
-        pos[self.base_control_idx] = self.get_joint_positions()[self.base_control_idx]
+        pos[self.base_idx] = self.get_joint_positions()[self.base_idx]
         pos[self.trunk_control_idx] = 0
+        # TODO: figure out if this is the right thing to do
         pos[self.camera_control_idx] = np.array([0.4, -1.1])
         for arm in self.arm_names:
             pos[self.gripper_control_idx[arm]] = np.array([0.045, 0.045])  # open gripper
             pos[self.arm_control_idx[arm]] = np.array(
                 [-1.10, 1.47, 2.71, 1.71, -1.57, 1.39, 0]
             )
-        # print('pos: ', pos)
-        # pos[-2:] = np.array([0.4, -1.1])
-        # import pdb
-        # pdb.set_trace()
 
         return pos
 
@@ -220,7 +217,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     def untucked_default_joint_pos(self):
         pos = np.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
-        pos[self.base_control_idx] = self.get_joint_positions()[self.base_control_idx]
+        pos[self.base_idx] = self.get_joint_positions()[self.base_idx]
         pos[self.trunk_control_idx] = 0.02 + self.default_trunk_offset
         pos[self.camera_control_idx] = np.array([0.0, 0.45])
         pos[self.gripper_control_idx[self.default_arm]] = np.array([0.045, 0.045])  # open gripper
@@ -270,6 +267,15 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         Immediately set this robot's configuration to be in untucked mode
         """
         self.set_joint_positions(self.untucked_default_joint_pos)
+
+    def reset(self):
+        """
+        Reset should not change the robot base pose.
+        We need to cache and restore the base joints to the world.
+        """
+        base_joint_positions = self.get_joint_positions()[self.base_idx]
+        super().reset()
+        self.set_joint_positions(base_joint_positions, indices=self.base_idx)
 
     def _post_load(self):
         super()._post_load()
@@ -615,7 +621,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # Note that this will also set the target to be the desired linear velocity (i.e. the robot will try to maintain
         # such velocity), which is different from the default behavior of set_linear_velocity for all other objects.
         orn = self.root_link.get_orientation()
-        # print('orn: ', orn)
         velocity_in_root_link = T.quat2mat(orn).T @ velocity
         self.joints["base_footprint_x_joint"].set_vel(velocity_in_root_link[0], target=False)
         self.joints["base_footprint_y_joint"].set_vel(velocity_in_root_link[1], target=False)

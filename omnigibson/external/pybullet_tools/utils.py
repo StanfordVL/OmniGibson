@@ -3097,7 +3097,7 @@ def plan_joint_motion(body, joints, end_conf, obstacles=[], attachments=[],
                                        og_joint_ids=og_joint_ids)
 
     # Get configuration from Omniverse and set it in the pybullet twin
-    start_conf = robot.get_joint_positions(normalized=False, joint_idx=og_joint_ids)
+    start_conf = robot.get_joint_positions(normalized=False)[og_joint_ids]
     set_joint_positions(body, joints, start_conf)
 
     if not check_initial_end(start_conf, end_conf, collision_fn):
