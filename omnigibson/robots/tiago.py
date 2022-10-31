@@ -204,7 +204,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         pos[self.base_idx] = self.get_joint_positions()[self.base_idx]
         pos[self.trunk_control_idx] = 0
         # TODO: figure out if this is the right thing to do
-        pos[self.camera_control_idx] = np.array([0.4, -1.1])
+        pos[self.camera_control_idx] = np.array([0.0, 0.0])
         for arm in self.arm_names:
             pos[self.gripper_control_idx[arm]] = np.array([0.045, 0.045])  # open gripper
             pos[self.arm_control_idx[arm]] = np.array(

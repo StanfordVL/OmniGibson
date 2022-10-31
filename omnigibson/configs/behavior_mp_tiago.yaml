@@ -32,6 +32,35 @@ robots:
     grasping_mode: sticky #physical
     rigid_trunk: false
     ag_whitelist: ['pumpkin_0', 'pumpkin_1']
+    reset_joint_pos: [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -1.1,
+      -1.1,
+      0.4,
+      1.47,
+      1.47,
+      -1.1,
+      2.71,
+      2.71,
+      1.71,
+      1.71,
+      -1.57,
+      -1.57,
+      1.39,
+      1.39,
+      0.0,
+      0.0,
+      0.045,
+      0.045,
+      0.045,
+      0.045
+    ]
 #    default_trunk_offset: 0.365
 #    default_arm_pose: diagonal30
     controller_config:

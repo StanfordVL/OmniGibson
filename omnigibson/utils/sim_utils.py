@@ -201,6 +201,7 @@ def place_base_pose(obj, pos, quat=None, z_offset=None):
 
     obj.set_position_orientation(pos, quat)
 
+
 def test_valid_pose(obj, pos, quat=None, z_offset=None):
     """
     Test if the object can be placed with no collision.
@@ -230,9 +231,6 @@ def test_valid_pose(obj, pos, quat=None, z_offset=None):
     if isinstance(obj, BaseRobot):
         obj.reset()
         obj.keep_still()
-
-    # TODO: figure out why this causes gpu dynamics issues
-    # og.sim.step_physics()
 
     # Check whether we're in collision after taking a single physics step
     in_collision = check_collision(prims=obj, step_physics=True)
