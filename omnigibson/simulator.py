@@ -548,6 +548,12 @@ class Simulator(SimulationContext, Serializable):
         if force_playing and not self.is_playing():
             self.play()
 
+        # Note that we bypass super().step() because there seems to be some issues with app.update()
+        # In theory, app.update() should be equivalent to step_physics() and then render().
+        # However, emperically, app.update() causes a bug in gpu dynamics.
+        if self.physics_sim_view is not None:
+            self.physics_sim_view.flush()
+
         for i in range(self.n_physics_timesteps_per_render):
             self.step_physics()
 
