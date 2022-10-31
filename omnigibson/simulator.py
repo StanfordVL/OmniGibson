@@ -548,12 +548,11 @@ class Simulator(SimulationContext, Serializable):
         if force_playing and not self.is_playing():
             self.play()
 
-        for i in range(self.n_physics_timesteps_per_render - 1):
-            # No rendering for intermediate steps for efficiency
-            super().step(render=False)
+        for i in range(self.n_physics_timesteps_per_render):
+            self.step_physics()
 
-        # Render on final step unless input says otherwise
-        super().step(render=render)
+        if render:
+            self.render()
 
         # Additionally run non physics things if we have a valid scene
         if self._scene is not None:
@@ -565,14 +564,12 @@ class Simulator(SimulationContext, Serializable):
         #  the result to propagate to the rendering. We could have called super().render() here but it will introduce
         #  a big performance regression.
 
-    def step_physics(self, current_time=None):
+    def step_physics(self):
         """
         Step the physics a single step.
 
-        Args:
-            current_time (None or float): If specified, determines the current time at which the sim is being stepped
         """
-        self._physics_context._step(current_time=self.current_time if current_time is None else current_time)
+        self._physics_context._step(current_time=self.current_time)
 
     # TODO: Do we need this?
     # def sync(self, force_sync=False):
