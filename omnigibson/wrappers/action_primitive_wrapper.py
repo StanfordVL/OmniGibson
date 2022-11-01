@@ -78,7 +78,7 @@ class ActionPrimitiveWrapper(BaseWrapper):
         Returns:
             OrderedDict: Environment observation space after reset occurs
         """
-        self.action_generator.robot.release_grasp_at_once()
+        self.action_generator.robot.release_grasp_immediately()
         self.step_index = 0
         self.done = False
         self.accum_reward = 0

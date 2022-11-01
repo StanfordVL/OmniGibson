@@ -471,7 +471,7 @@ class ManipulationRobot(BaseRobot):
         self._ag_freeze_gripper[arm] = False
         self._ag_release_counter[arm] = 0
 
-    def release_grasp_at_once(self):
+    def release_grasp_immediately(self):
         """
         Magic action to release this robot's grasp for all arms at once.
         As opposed to @_release_grasp, this method would byupass the release window mechanism and immediately release.
