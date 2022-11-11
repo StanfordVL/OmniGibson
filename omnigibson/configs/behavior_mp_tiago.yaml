@@ -16,8 +16,8 @@ scene:
   #  usd_file: /home/gibson/Programs/iGibson3/igibson/data/ig_dataset/scenes/Rs_int/usd/Rs_int_task_putting_away_Halloween_decorations_0_0_fixed_furniture_template.usd
 #  usd_file: /media/gibson/new/eccv2022_tutorial_baseline/iGibson3_eccv2022_tutorial/igibson/data/ig_dataset/scenes/Rs_int/usd/Rs_int_task_putting_away_Halloween_decorations_0_0_fixed_furniture_template.usd
   #  usd_path: /cvgl2/u/jeremyw/iGibson3-baseline/igibson/data/ig_dataset/scenes/Rs_int/usd/Rs_int_task_putting_away_Halloween_decorations_0_0_fixed_furniture_template.usd
-#  load_object_categories: [ 'walls', 'floors', 'bottom_cabinet', 'pot_plant', 'sofa', 'floor_lamp', 'coffee_table', 'breakfast_table', 'standing_tv',
-#                            'loudspeaker', 'swivel_chair', 'shelf', 'table_lamp', 'countertop', 'carpet', 'picture', 'pumpkin', 'candle', 'window', 'door', 'cauldron' ]
+  load_object_categories: [ 'walls', 'floors', 'bottom_cabinet', 'pot_plant', 'sofa', 'floor_lamp', 'coffee_table', 'breakfast_table', 'standing_tv',
+                            'loudspeaker', 'swivel_chair', 'shelf', 'table_lamp', 'countertop', 'carpet', 'picture', 'pumpkin', 'candle', 'window', 'door', 'cauldron' ]
   clutter: false
   build_graph: true
 
