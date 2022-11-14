@@ -38,7 +38,7 @@ class Attached(RelativeObjectState, BooleanState, ContactSubscribedStateMixin):
             STICKY: unidirectional, attach if in contact.
             SYMMETRIC: bidirectional, attach if in contact AND the other object has SYMMETRIC type
                 with the same attachment_category (e.g. "magnet").
-            MALE/FEMALE: bidirectional, attach if in contact AND the other object has the OPPOSITE sex
+            MALE/FEMALE: bidirectional, attach if in contact AND the other object has the opposite end (male / female)
                 with the same attachment_category (e.g. "usb")
 
         Subclasses ContactSubscribedStateMixin
@@ -113,7 +113,7 @@ class Attached(RelativeObjectState, BooleanState, ContactSubscribedStateMixin):
         else:
             if Attached not in other.states or other.states[Attached].attachment_category != self.attachment_category:
                 return False
-            if self.attachment_type == AttachmentType.SYMMETRIC:
+            elif self.attachment_type == AttachmentType.SYMMETRIC:
                 return other.states[Attached].attachment_type == AttachmentType.SYMMETRIC
             elif self.attachment_type == AttachmentType.MALE:
                 return other.states[Attached].attachment_type == AttachmentType.FEMALE

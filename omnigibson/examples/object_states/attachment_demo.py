@@ -171,7 +171,7 @@ def demo_failed_symmetric_attachment_diff_categories():
 def demo_male_female_attachment():
     ######################################################################################
     # Male / female attachment
-    #   can attach if touching, both have different sex but the same attachment category
+    #   can attach if touching, both have the opposite end (male / female) but the same attachment category
     ######################################################################################
     env, obj1, obj2 = setup_scene_for_abilities(
         abilities1={"attachable": {"attachment_type": AttachmentType.MALE, "attachment_category": "usb"}},
@@ -202,10 +202,10 @@ def demo_male_female_attachment():
         env.step(np.array([]))  # empty action array since action space is 0 (no robots in the env)
 
 
-def demo_failed_male_female_attachment_missing_opposite_sex():
+def demo_failed_male_female_attachment_missing_opposite_end():
     ######################################################################################
     # Male / female attachment - FAIL because both objects are male.
-    #   can attach if touching, both have different sex but the same attachment category
+    #   can attach if touching, both have the opposite end (male / female) but the same attachment category
     ######################################################################################
     env, obj1, obj2 = setup_scene_for_abilities(
         abilities1={"attachable": {"attachment_type": AttachmentType.MALE, "attachment_category": "usb"}},
@@ -228,7 +228,7 @@ def demo_failed_male_female_attachment_missing_opposite_sex():
 def demo_failed_male_female_attachment_diff_categories():
     ######################################################################################
     # Male / female attachment - FAIL because the two objects have different attachment category
-    #   can attach if touching, both have different sex but the same attachment category
+    #   can attach if touching, both have the opposite end (male / female) but the same attachment category
     ######################################################################################
     env, obj1, obj2 = setup_scene_for_abilities(
         abilities1={"attachable": {"attachment_type": AttachmentType.MALE, "attachment_category": "usb"}},
@@ -251,7 +251,7 @@ def demo_failed_male_female_attachment_diff_categories():
 def demo_male_female_attachment_dump_load():
     ######################################################################################
     # Male / female attachment with dump_state and load_state
-    #   can attach if touching, both have different sex but the same attachment category
+    #   can attach if touching, both have the opposite end (male / female) but the same attachment category
     ######################################################################################
     env, obj1, obj2 = setup_scene_for_abilities(
         abilities1={"attachable": {"attachment_type": AttachmentType.MALE, "attachment_category": "usb"}},
@@ -302,7 +302,7 @@ demo_names_to_demos = {
     "demo_failed_symmetric_attachment_missing_symmetric": demo_failed_symmetric_attachment_missing_symmetric,
     "demo_failed_symmetric_attachment_diff_categories": demo_failed_symmetric_attachment_diff_categories,
     "demo_male_female_attachment": demo_male_female_attachment,
-    "demo_failed_male_female_attachment_missing_opposite_sex": demo_failed_male_female_attachment_missing_opposite_sex,
+    "demo_failed_male_female_attachment_missing_opposite_end": demo_failed_male_female_attachment_missing_opposite_end,
     "demo_failed_male_female_attachment_diff_categories": demo_failed_male_female_attachment_diff_categories,
     "demo_male_female_attachment_dump_load": demo_male_female_attachment_dump_load,
 }
