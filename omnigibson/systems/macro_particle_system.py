@@ -9,7 +9,7 @@ from omnigibson.systems.system_base import SYSTEMS_REGISTRY
 from omnigibson.systems.particle_system_base import BaseParticleSystem
 from omnigibson.utils.constants import SemanticClass
 from omnigibson.utils.python_utils import classproperty, subclass_factory
-from omnigibson.utils.sampling_utils import sample_cuboid_on_object
+from omnigibson.utils.sampling_utils import sample_cuboid_on_object_symmetric_bimodal_distribution
 from omnigibson.prims.geom_prim import VisualGeomPrim
 from collections import OrderedDict
 import numpy as np
@@ -359,7 +359,7 @@ class VisualParticleSystem(MacroParticleSystem):
     # Default parameters for sampling particle locations
     # See omnigibson/utils/sampling_utils.py for how they are used.
     _SAMPLING_AXIS_PROBABILITIES = (0.25, 0.25, 0.5)
-    _SAMPLING_AABB_OFFSET = 0.1
+    _SAMPLING_AABB_OFFSET = 0.01
     _SAMPLING_BIMODAL_MEAN_FRACTION = 0.9
     _SAMPLING_BIMODAL_STDEV_FRACTION = 0.2
     _SAMPLING_MAX_ATTEMPTS = 20
@@ -559,7 +559,7 @@ class VisualParticleSystem(MacroParticleSystem):
 
         # Sample locations for all particles
         # TODO: Does simulation need to play at this point in time? Answer: yes
-        results = sample_cuboid_on_object(
+        results = sample_cuboid_on_object_symmetric_bimodal_distribution(
             obj=obj,
             num_samples=n_particles,
             cuboid_dimensions=bbox_extents,
@@ -898,6 +898,7 @@ DustSystem = VisualParticleSystem.create(
         visible=False,
         fixed_base=False,
         visual_only=True,
+        include_default_state=False,
     )
 )
 
@@ -913,6 +914,7 @@ StainSystem = VisualParticleSystem.create(
         visible=False,
         fixed_base=False,
         visual_only=True,
+        include_default_state=False,
     ),
     # Default parameters for sampling particle sizes based on attachment group object size
     _BOUNDING_BOX_LOWER_LIMIT_FRACTION_OF_AABB=0.06,
@@ -927,19 +929,20 @@ StainSystem = VisualParticleSystem.create(
 )
 
 
-GrassSystem = VisualParticleSystem.create(
-    particle_name="Grass",
-    n_particles_per_group=20,
-    create_particle_template=lambda prim_path, name: omnigibson.objects.USDObject(
-        prim_path=prim_path,
-        usd_path=os.path.join(og_dataset_path, "objects/grass_patch/kqhokv/usd/kqhokv.usd"),
-        name=name,
-        class_id=SemanticClass.GRASS,
-        visible=False,
-        fixed_base=False,
-        visual_only=True,
-    ),
-    # Also need to override how we sample particles, since grass should only point upwards and placed on "top"
-    # parts of surfaces!
-    _SAMPLING_AXIS_PROBABILITIES=(0, 0, 1.0),
-)
+# GrassSystem = VisualParticleSystem.create(
+#     particle_name="Grass",
+#     n_particles_per_group=20,
+#     create_particle_template=lambda prim_path, name: omnigibson.objects.USDObject(
+#         prim_path=prim_path,
+#         usd_path=os.path.join(og_dataset_path, "objects/grass_patch/kqhokv/usd/kqhokv.usd"),
+#         name=name,
+#         class_id=SemanticClass.GRASS,
+#         visible=False,
+#         fixed_base=False,
+#         visual_only=True,
+#         include_default_state=False,
+#     ),
+#     # Also need to override how we sample particles, since grass should only point upwards and placed on "top"
+#     # parts of surfaces!
+#     _SAMPLING_AXIS_PROBABILITIES=(0, 0, 1.0),
+# )
