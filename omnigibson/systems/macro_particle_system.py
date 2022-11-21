@@ -926,7 +926,7 @@ StainSystem = VisualParticleSystem.create(
     generate_group_particles=stain_generate_group_particles,
 )
 
-
+'''
 GrassSystem = VisualParticleSystem.create(
     particle_name="Grass",
     n_particles_per_group=20,
@@ -943,3 +943,4 @@ GrassSystem = VisualParticleSystem.create(
     # parts of surfaces!
     _SAMPLING_AXIS_PROBABILITIES=(0, 0, 1.0),
 )
+'''

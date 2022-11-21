@@ -36,6 +36,8 @@ for category in CLOTH_CATEGORIES:
         # Get the single visual mesh OBJ file
         original_obj_file = os.path.join(visual_mesh_dir, obj_files[0])
 
+        # (Yunzhu): For object mesh that already comes with many vertices, there may be a better way for subdividing it (e.g., t-shirt, towel).
+        # (Yunzhu): I currently do not use subdivision for t-shirt and towel.
         # Sub-divide to enough resolution
         mesh = trimesh.load(original_obj_file)
         while True:
