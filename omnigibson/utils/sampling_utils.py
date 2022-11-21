@@ -14,8 +14,6 @@ import omnigibson as og
 from omnigibson.macros import create_module_macros
 import omnigibson.utils.transform_utils as T
 
-from IPython import embed
-
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -37,16 +35,16 @@ def fit_plane(points):
     Copied from https://stackoverflow.com/a/18968498
 
     :param points: np.array of shape (k, 3)
-    :return Tuple[np.array, np.array] where first element is the points' centroid and the second is
+    :return Tuple[np.array, np.array] where first element is the points' centroid and the second is the normal of the fitted plane
     """
     assert points.shape[1] <= points.shape[0], "Cannot fit plane with only {} points in {} dimensions.".format(
         points.shape[0], points.shape[1]
     )
     ctr = points.mean(axis=0)
-    x = points - ctr[np.newaxis, :]
-    M = np.dot(x.T, x)
-    normal = np.linalg.svd(M)[0][:, -1]
-    return ctr, normal / np.linalg.norm(normal)
+    x = points - ctr
+    normal = np.linalg.svd(np.dot(x.T, x))[0][:, -1]
+    normal /= np.linalg.norm(normal)
+    return ctr, normal
 
 
 def check_distance_to_plane(points, plane_centroid, plane_normal, hit_to_plane_threshold, refusal_log):
@@ -90,7 +88,7 @@ def draw_debug_markers(hit_positions, radius=0.01):
 def get_parallel_rays(
     source, destination, offset, new_ray_per_horizontal_distance
 ):
-    """Given a ray described by a source and a destination, sample parallel rays and return together with input ray.
+    """Given an input ray described by a source and a destination, sample parallel rays around it as the center.
 
     The parallel rays start at the corners of a square of edge length `offset` centered on `source`, with the square
     orthogonal to the ray direction. That is, the cast rays are the height edges of a square-base cuboid with bases
@@ -129,7 +127,7 @@ def get_parallel_rays(
     ray_grid = np.dstack(np.meshgrid(x_range, y_range, indexing="ij"))
     ray_grid_flattened = ray_grid.reshape(-1, 2)
 
-    # Apply the grid onto the orthogonal vectors to obtain the rays.
+    # Apply the grid onto the orthogonal vectors to obtain the rays in the world frame.
     sources = [source + np.dot(offsets, orthogonal_vectors) for offsets in ray_grid_flattened]
     destinations = [destination + np.dot(offsets, orthogonal_vectors) for offsets in ray_grid_flattened]
 
@@ -267,7 +265,7 @@ def raytest(
     distance = np.linalg.norm(point_diff)
     direction = point_diff / distance
 
-    # For effiency sake, we handle special case of no ignore_bodies, ignore_collisions, and closest_hit
+    # For efficiency's sake, we handle special case of no ignore_bodies, ignore_collisions, and closest_hit
     if hit_number == 0 and ignore_bodies is None and ignore_collisions is None:
         return get_physx_scene_query_interface().raycast_closest(
             origin=start_point,
@@ -326,7 +324,7 @@ def sample_raytest_start_end_symmetric_bimodal_distribution(
     :param bimodal_stdev_fraction: float, the standard deviation of one side of the symmetric bimodal distribution as a
         fraction of the min-max range.
     :param axis_probabilities: Array of shape (3, ), the probability of ray casting along each axis.
-    :param aabb_offset: float, padding for AABB to make sure rays start outside the actual object.
+    :param aabb_offset: float or numpy array, padding for AABB to initiate ray-testing.
     :param max_sampling_attempts: int, how many times sampling will be attempted for each requested point.
 
     Returns:
@@ -362,6 +360,7 @@ def sample_raytest_start_end_symmetric_bimodal_distribution(
             start_points[i][j] = start_point
             end_points[i][j] = end_point
 
+    # Convert the points into the world frame
     orig_shape = start_points.shape
     to_wf_transform = T.pose2mat((bbox_center, bbox_orn))
     start_points = trimesh.transformations.transform_points(start_points.reshape(-1, 3), to_wf_transform).reshape(orig_shape)
@@ -380,7 +379,7 @@ def sample_raytest_start_end_full_grid_topdown(
 
     :param obj: The object to sample points on.
     :param ray_spacing: float, spacing between the rays, or equivalently, size of the grid cell
-    :param aabb_offset: float, padding for AABB to make sure rays start outside the actual object.
+    :param aabb_offset: float or numpy array, padding for AABB to initiate ray-testing.
     Returns:
         start_points: the start points for raycasting, defined in the world frame,
             numpy array of shape [num_samples, max_sampling_attempts, 3]
@@ -403,6 +402,7 @@ def sample_raytest_start_end_full_grid_topdown(
     end_points = np.copy(start_points)
     end_points[:, 2] = -half_extent_with_offset[2]
 
+    # Convert the points into the world frame
     to_wf_transform = T.pose2mat((bbox_center, bbox_orn))
     start_points = trimesh.transformations.transform_points(start_points, to_wf_transform)
     end_points = trimesh.transformations.transform_points(end_points, to_wf_transform)
@@ -448,7 +448,7 @@ def sample_cuboid_on_object_symmetric_bimodal_distribution(
         the parallel ray-testing by 1. This controls how fine-grained the grid ray-casting should be with respect to
         the size of the sampled cuboid.
     :param hit_proportion: float, the minimum percentage of the hits required across the grid.
-    :param aabb_offset: float, padding for AABB to make sure rays start outside the actual object.
+    :param aabb_offset: float or numpy array, padding for AABB to initiate ray-testing.
     :param max_sampling_attempts: int, how many times sampling will be attempted for each requested point.
     :param max_angle_with_z_axis: float, maximum angle between hit normal and positive Z axis allowed. Can be used to
         disallow downward-facing hits when refuse_downwards=True.
@@ -522,7 +522,7 @@ def sample_cuboid_on_object_full_grid_topdown(
         the parallel ray-testing by 1. This controls how fine-grained the grid ray-casting should be with respect to
         the size of the sampled cuboid.
     :param hit_proportion: float, the minimum percentage of the hits required across the grid.
-    :param aabb_offset: float, padding for AABB to make sure rays start outside the actual object.
+    :param aabb_offset: float or numpy array, padding for AABB to initiate ray-testing.
     :param max_angle_with_z_axis: float, maximum angle between hit normal and positive Z axis allowed. Can be used to
         disallow downward-facing hits when refuse_downwards=True.
     :param parallel_ray_normal_angle_tolerance: float, maximum angle difference between the normal of the center hit
@@ -612,7 +612,6 @@ def sample_cuboid_on_object(
         are set to None when no successful sampling happens within the max number of attempts. Refusal details are only
         filled if the debug_sampling flag is globally set to True.
     """
-    bbox_center, bbox_orn, bbox_bf_extent, _ = obj.get_base_aligned_bbox(xy_aligned=True, fallback_to_aabb=True)
 
     assert start_points.shape == end_points.shape, \
         "the start and end points of raycasting are expected to have the same shape."
@@ -638,20 +637,6 @@ def sample_cuboid_on_object(
 
             zero_cuboid_dimension = (this_cuboid_dimensions == 0.0).all()
 
-            # if not zero_cuboid_dimension:
-            #     # Obtain the parallel rays using the direction sampling method.
-            #     bbf_sources, bbf_destinations, grid = np.array(get_parallel_rays(
-            #         start_pos, end_pos, this_cuboid_dimensions[:2] / 2.0, new_ray_per_horizontal_distance,
-            #     ))
-            # else:
-            #     bbf_sources = np.array([start_pos])
-            #     bbf_destinations = np.array([end_pos])
-
-            # # Transform the sources, destinations and grid to the world frame coordinates.
-            # to_wf_transform = T.pose2mat((bbox_center, bbox_orn))
-            # sources = trimesh.transformations.transform_points(bbf_sources, to_wf_transform)
-            # destinations = trimesh.transformations.transform_points(bbf_destinations, to_wf_transform)
-
             if not zero_cuboid_dimension:
                 # Obtain the parallel rays using the direction sampling method.
                 sources, destinations, grid = np.array(get_parallel_rays(
@@ -663,34 +648,31 @@ def sample_cuboid_on_object(
 
             # Time to cast the rays.
             cast_results = raytest_batch(start_points=sources, end_points=destinations)
-            # continue
 
-            # Check whether the object was hit or not
+            # Check whether sufficient number of rays hit the object
             rigid_bodies = [link.prim_path for link in obj.links.values()]
             hits = check_rays_hit_object(
                 cast_results, rigid_bodies, hit_proportion, refusal_reasons["missed_object"])
             if hits is None:
                 continue
 
+            center_idx = int(len(hits) / 2)
+            # Only consider objects whose center idx has a ray hit
+            if not hits[center_idx]:
+                continue
+
             filtered_cast_results = []
-            center_idx = int(len(cast_results) / 2)
             filtered_center_idx = None
-            center_hit = False
             for idx, hit in enumerate(hits):
                 if hit:
                     filtered_cast_results.append(cast_results[idx])
                     if idx == center_idx:
-                        center_hit = True
                         filtered_center_idx = len(filtered_cast_results) - 1
-
-            # Only consider objects whose center idx has a ray hit
-            if not center_hit:
-                continue
 
             # Process the hit positions and normals.
             hit_positions = np.array([ray_res["position"] for ray_res in filtered_cast_results])
             hit_normals = np.array([ray_res["normal"] for ray_res in filtered_cast_results])
-            hit_normals /= np.linalg.norm(hit_normals, axis=1)[:, np.newaxis]
+            hit_normals /= np.linalg.norm(hit_normals, axis=1, keepdims=True)
 
             assert filtered_center_idx is not None
             hit_link = filtered_cast_results[filtered_center_idx]["rigidBody"]
@@ -808,11 +790,9 @@ def compute_rotation_from_grid_sample(two_d_grid, projected_hits, cuboid_centroi
     grid_in_object_coordinates = np.zeros((len(grid_in_planar_coordinates), 3))
     grid_in_object_coordinates[:, :2] = grid_in_planar_coordinates
     grid_in_object_coordinates[:, 2] = -this_cuboid_dimensions[2] / 2.0
-    # grid_in_object_coordinates /= np.linalg.norm(grid_in_object_coordinates, axis=1)[:, None]
 
     projected_hits = projected_hits[hits]
     sampled_grid_relative_vectors = projected_hits - cuboid_centroid
-    # sampled_grid_relative_vectors /= np.linalg.norm(sampled_grid_relative_vectors, axis=1)[:, None]
 
     rotation, _ = R.align_vectors(sampled_grid_relative_vectors, grid_in_object_coordinates)
 
@@ -856,7 +836,7 @@ def check_rays_hit_object(cast_results, body_names, threshold, refusal_log):
     """
     body_names = set(body_names)
     ray_hits = [ray_res["hit"] and ray_res["rigidBody"] in body_names for ray_res in cast_results]
-    if not (sum(ray_hits) / len(cast_results)) >= threshold:
+    if sum(ray_hits) / len(cast_results) < threshold:
         if og.debug_sampling:
             refusal_log.append(f"{sum(ray_hits)} / {len(cast_results)} < {threshold} hits: {[ray_res['rigidBody'] for ray_res in cast_results if ray_res['hit']]}")
 

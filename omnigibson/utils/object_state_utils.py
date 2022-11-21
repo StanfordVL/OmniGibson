@@ -51,7 +51,7 @@ def sample_kinematics(
     binary_state,
     use_ray_casting_method=False,
     max_trials=100,
-    z_offset=0.005,
+    z_offset=0.01,
     skip_falling=False,
 ):
     # Can only sample kinematics for binary_states currently

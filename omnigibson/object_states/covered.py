@@ -222,26 +222,23 @@ class Covered(RelativeObjectState, BooleanState):
             # Check current state and only do something if we're changing state
             if self.get_value(system) != new_value:
                 if new_value:
-                    # We first shoot grid-wise rays downwards onto the object
-                    # For any rays that hit the object, we determine the appropriate z distance that is slightly offset
-                    # above the object's surface and store those positions
-                    # Then we sample particles at each of those positions
-                    # particle_positions = sample_particle_positions_on_object_top_surface(
-                    #     obj=self.obj,
-                    #     particle_spacing=system.particle_radius * 2,
-                    #     z_offset=0.001,
-                    # )
+                    # We densely sample a grid of points by ray-casting from top to bottom to find the valid positions
+                    radius = system.particle_radius
                     results = sample_cuboid_on_object_full_grid_topdown(
                         self.obj,
-                        ray_spacing=system.particle_radius * 2,
+                        # the grid is fully dense - particles are sitting next to each other
+                        ray_spacing=radius * 2,
+                        # assume the particles are extremely small - sample cuboids of size 0 for better performance
                         cuboid_dimensions=np.zeros(3),
-                        cuboid_bottom_padding=system.particle_radius,
+                        # raycast start inside the aabb in x-y plane and outside the aabb in the z-axis
+                        aabb_offset=np.array([-radius, -radius, radius]),
+                        # bottom padding should be the same as the particle radius
+                        cuboid_bottom_padding=radius,
+                        # undo_padding should be False - the sampled positions are above the surface by its radius
                         undo_padding=False
                     )
                     particle_positions = [result[0] for result in results if result[0] is not None]
-                    # from IPython import embed
-                    # print("sample")
-                    # embed()
+                    # Spawn the particles at the valid positions
                     system.generate_particle_instancer(
                         n_particles=len(particle_positions),
                         positions=particle_positions,
