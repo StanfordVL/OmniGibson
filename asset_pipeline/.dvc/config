@@ -1,6 +1,7 @@
 [core]
     remote = cvgl
     autostage = true
+    hardlink_lock = false
 [cache]
     type = symlink
 ['remote "cvgl"']
