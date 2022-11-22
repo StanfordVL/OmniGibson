@@ -62,7 +62,7 @@ gm.DEFAULT_VIEWER_HEIGHT = 720
 gm.IS_PUBLIC_ISAACSIM = True
 
 # Whether to use encrypted assets
-gm.USE_ENCRYPTED_ASSETS = False
+gm.USE_ENCRYPTED_ASSETS = True
 
 # (Demo-purpose) Whether to activate Assistive Grasping mode for Cloth (it's handled differently from RigidBody)
 gm.AG_CLOTH = False
