@@ -21,10 +21,6 @@ import omnigibson.utils.transform_utils as T
 import numpy as np
 
 
-
-DEBUG = False
-
-
 class ClothPrim(GeomPrim):
     """
     Provides high level functions to deal with a cloth prim and its attributes/ properties.
@@ -94,8 +90,6 @@ class ClothPrim(GeomPrim):
         # TODO (eric): hacky way to get cloth rendering to work (otherwise, there exist some rendering artifacts).
         self._prim.CreateAttribute("primvars:isVolume", VT.Bool, False).Set(True)
         self._prim.GetAttribute("primvars:isVolume").Set(False)
-
-        self.area_unfolded, self.diagonal_unfolded = self.calculate_projection_area_and_diagonal_unfolded()
 
     @property
     def particle_positions(self):
@@ -188,113 +182,9 @@ class ClothPrim(GeomPrim):
         # TODO (eric): Just a pass through for now.
         return
 
-
     def wake(self):
         """
         Enable physics for this rigid body
         """
         # TODO (eric): Just a pass through for now.
         return
-
-
-    def calculate_projection_area_and_diagonal(self, dims=[0, 1], plot=DEBUG):
-        """Calculate the projection area and the diagonal length when projecting to axis
-        """
-        points = self.particle_positions[:, dims]
-
-        from scipy.spatial import ConvexHull, convex_hull_plot_2d
-        hull = ConvexHull(points)
-
-        diagonal = 0
-        for i in range(len(hull.vertices)):
-            dist = np.sqrt(np.sum((points[hull.vertices] - points[hull.vertices[i]])**2, axis=1))
-            diagonal = max(diagonal, np.max(dist))
-
-        if plot:
-            import matplotlib.pyplot as plt
-            ax = plt.gca()
-            ax.set_aspect('equal')
-
-            plt.plot(points[:, 0], points[:, 1], 'o')
-            for simplex in hull.simplices:
-                plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
-            plt.plot(points[hull.vertices, 0], points[hull.vertices, 1], 'r--', lw=2)
-            plt.plot(points[hull.vertices[0], 0], points[hull.vertices[0], 1], 'ro')
-            plt.show()
-
-        return hull.area, diagonal
-
-    def calculate_projection_area_and_diagonal_unfolded(self):
-        """Calculate the projection area and the diagonal length of the cloth in an unfolded state
-        """
-
-        # use the largest projection area as the unfolded area
-        area_unfolded = 0.
-        dims = [[0, 1], [0, 2], [1, 2]]
-
-        for i in range(len(dims)):
-            area, diagonal = self.calculate_projection_area_and_diagonal(dims=dims[i])
-            if area > area_unfolded:
-                area_unfolded = area
-                diagonal_unfolded = diagonal
-
-        return area_unfolded, diagonal_unfolded
-
-    def calculate_smoothness(self, normal_z_percentage, normal_z_angle_diff):
-         """Calculate the smoothness of the cloth according to the normal vectors
-
-         Args:
-             normal_z_percentage (float): a least what percentage of normal vectors should point to the gravity direction
-             normal_z_angle_diff (float): rad, the threshold within which the normal vector is considered to be in the gravity direction
-         """
-         eps = 1e-6
-         faceVertexCounts = self.get_attribute("faceVertexCounts")
-         faceVertexIndices = self.get_attribute("faceVertexIndices")
-
-         points = self.particle_positions[faceVertexIndices].reshape((len(faceVertexIndices) // 3, 3, 3))
-
-         v1 = points[:, 2] - points[:, 0]
-         v2 = points[:, 1] - points[:, 0]
-         normal = np.cross(v1, v2)
-         normal = normal / (np.linalg.norm(normal, ord=2, axis=1)[:, None] + eps)
-
-         # projection on the gravity direction
-         proj = np.abs(np.dot(normal, np.array([0., 0., 1])))
-
-         # calculate the percentage of normal vectors that are on the gravity direction
-         percentage = np.sum(proj > np.cos(normal_z_angle_diff)) / len(proj)
-
-         return percentage > normal_z_percentage
-
-    def folded(self):
-        """Function to determine whether the cloth is folded or not
-        """
-        # Criterial #1: the threshold on the area reduction ratio of the convex hull of the projection on the XY plane
-        AREA_REDUCTION_THRESHOLD = 0.5
-
-        # Criterial #2: the threshold on the reduction of the diagonal of the projection's convex hull
-        DIAGONAL_REDUCTION_THRESHOLD = 0.6
-
-        # Criterial #3: smoothness, i.e., the percentage of the normal vectors that lie in the z (gravity) direction
-        NORMAL_Z_PERCENTAGE = 0.5
-        NORMAL_Z_ANGLE_DIFF = np.deg2rad(30.) # normal direction threshold, within which, it still considers to be along the z direction
-
-
-        ### calculate the area and the diagonal of the current state
-        area, diagonal = self.calculate_projection_area_and_diagonal()
-
-        # check area reduction ratio
-        flag_area_reduction = (area / self.area_unfolded) < AREA_REDUCTION_THRESHOLD
-
-        # check the diagonal reduction ratio
-        flag_diagonal_reduction = (diagonal / self.diagonal_unfolded) < DIAGONAL_REDUCTION_THRESHOLD
-
-        # check the smoothness of the cloth
-        flag_smoothness = self.calculate_smoothness(NORMAL_Z_PERCENTAGE, NORMAL_Z_ANGLE_DIFF)
-
-
-        ### only check area and diagonal reduction for now
-        # folded = flag_area_reduction and flag_diagonal_reduction and flag_smoothness
-        folded = flag_area_reduction and flag_diagonal_reduction
-        return folded, flag_area_reduction, flag_diagonal_reduction, flag_smoothness
-
