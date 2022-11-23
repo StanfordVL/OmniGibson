@@ -67,7 +67,7 @@ def demirror():
             obj.transform = X_MIRROR_MATRIX * obj.transform
             end_position = np.mean(rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1))), axis=0)
             diff = np.linalg.norm(end_position - start_positions[obj])
-            assert diff < 1e-2, f"{obj.name} should not have moved, but it moved by {diff} units."
+            assert diff < 1, f"{obj.name} should not have moved, but it moved by {diff} units."
             print("Demirrored ", obj.name)
 
 
