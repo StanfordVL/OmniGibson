@@ -110,10 +110,6 @@ class StatefulObject(BaseObject):
                     abilities = OBJECT_TAXONOMY.get_abilities(taxonomy_class)
         assert isinstance(abilities, dict), "Object abilities must be in dictionary form."
 
-        # All cloth prims should be foldable
-        if prim_type == PrimType.CLOTH:
-            abilities["foldable"] = {}
-
         self._abilities = abilities
         self.prepare_object_states(abilities=abilities, include_default_state=include_default_state)
 
