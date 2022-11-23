@@ -319,17 +319,6 @@ class PhysxParticleInstancer(BasePrim):
         # id = 1 means visible, id = 0 means invisible
         self.set_attribute(attr="ids", val=visibilities)
 
-    def set_particle_visibilities_off(self, indices):
-        """
-        Turn off the particle visibilities for this instancer based on indices
-
-        Args:
-            np.array: each entry is the index of the particle whose visibility should be turned off
-        """
-        current_visibilities = self.particle_visibilities
-        current_visibilities[indices] = 0
-        self.particle_visibilities = current_visibilities
-
     def _dump_state(self):
         return OrderedDict(
             idn=self._idn,

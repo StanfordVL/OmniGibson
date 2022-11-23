@@ -65,7 +65,10 @@ class Filled(RelativeObjectState, BooleanState, LinkBasedStateMixin):
                 # Going from True --> False, hide all particles within the current volume to be garbage collected
                 # by fluid system
                 for inst in fluid_system.particle_instancers.values():
-                    inst.set_particle_visibilities_off(self.check_in_volume(inst.particle_positions).non_zero()[0])
+                    indices = self.check_in_volume(inst.particle_positions).nonzero()[0]
+                    current_visibilities = inst.particle_visibilities
+                    current_visibilities[indices] = 0
+                    inst.particle_visibilities = current_visibilities
 
         return True
 

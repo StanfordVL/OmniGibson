@@ -78,7 +78,9 @@ class Soaked(RelativeObjectState, BooleanState):
                 particle_idxs_to_absorb = np.array(list(particle_idxs))[:particles_to_absorb]
 
                 # Hide particles that have been absorbed
-                fluid_system.particle_instancers[instancer].set_particle_visibilities_off(particle_idxs_to_absorb)
+                current_visibilities = fluid_system.particle_instancers[instancer].particle_visibilities
+                current_visibilities[particle_idxs_to_absorb] = 0
+                fluid_system.particle_instancers[instancer].particle_visibilities = current_visibilities
 
                 # Keep track of the particles that have been absorbed
                 self.absorbed_particle_system_count[fluid_system] += particles_to_absorb

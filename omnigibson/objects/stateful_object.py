@@ -182,9 +182,7 @@ class StatefulObject(BaseObject):
         if abilities is None:
             abilities = {}
 
-        state_types_and_params = []
-        if include_default_state:
-            state_types_and_params = [(state, {}) for state in get_default_states()]
+        state_types_and_params = [(state, {}) for state in get_default_states()] if include_default_state else []
 
         # Map the ability params to the states immediately imported by the abilities
         for ability, params in abilities.items():

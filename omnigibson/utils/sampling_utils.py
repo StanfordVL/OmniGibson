@@ -439,6 +439,8 @@ def sample_cuboid_on_object_symmetric_bimodal_distribution(
     :param num_samples: int, the number of points to try to sample.
     :param cuboid_dimensions: Float sequence of len 3, the size of the empty cuboid we are trying to sample. Can also
         provide list of cuboid dimension triplets in which case each i'th sample will be sampled using the i'th triplet.
+        Alternatively, cuboid_dimensions can be set to be all zeros if the user just want to sample points (instead of
+        cuboids) for significantly better performance. This applies when the user wants to sample very small particles.
     :param bimodal_mean_fraction: float, the mean of one side of the symmetric bimodal distribution as a fraction of the
         min-max range.
     :param bimodal_stdev_fraction: float, the standard deviation of one side of the symmetric bimodal distribution as a
@@ -518,6 +520,8 @@ def sample_cuboid_on_object_full_grid_topdown(
         start and end points. This implicitly determines the number of cuboids that will be sampled.
     :param cuboid_dimensions: Float sequence of len 3, the size of the empty cuboid we are trying to sample. Can also
         provide list of cuboid dimension triplets in which case each i'th sample will be sampled using the i'th triplet.
+        Alternatively, cuboid_dimensions can be set to be all zeros if the user just want to sample points (instead of
+        cuboids) for significantly better performance. This applies when the user wants to sample very small particles.
     :param new_ray_per_horizontal_distance: float, per this distance of the cuboid dimension, increase the grid size of
         the parallel ray-testing by 1. This controls how fine-grained the grid ray-casting should be with respect to
         the size of the sampled cuboid.
@@ -588,6 +592,8 @@ def sample_cuboid_on_object(
         numpy array of shape [num_samples, max_sampling_attempts, 3]
     :param cuboid_dimensions: Float sequence of len 3, the size of the empty cuboid we are trying to sample. Can also
         provide list of cuboid dimension triplets in which case each i'th sample will be sampled using the i'th triplet.
+        Alternatively, cuboid_dimensions can be set to be all zeros if the user just wants to sample points (instead of
+        cuboids) for significantly better performance. This applies when the user wants to sample very small particles.
     :param new_ray_per_horizontal_distance: float, per this distance of the cuboid dimension, increase the grid size of
         the parallel ray-testing by 1. This controls how fine-grained the grid ray-casting should be with respect to
         the size of the sampled cuboid.
