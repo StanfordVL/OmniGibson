@@ -21,6 +21,7 @@ import csv
 import json
 import os
 from collections import OrderedDict
+import pandas as pd
 
 from nltk.corpus import wordnet as wn
 
@@ -37,6 +38,11 @@ Should contain an `Object` column and a `Synset` column.
 '''
 OBJECT_STATS_PATH = "object_stats.csv"
 '''
+This .csv file should contain all of the objects and words used 
+in B-1K. Should contain a `synset` column and a `words` column.
+'''
+B1K_SYNSET_MASTERLIST = "b1k_synset_masterlist.tsv"
+'''
 This .json file should contain all of the synsets from the .csv files above
 as well as their associated iGibson abilities.
 NOTE: Please contact Sanjana (sanjana2@stanford.edu) or Zheng (zhengl@stanford.edu) if
@@ -44,6 +50,14 @@ any of the property annotations is missing.
 '''
 IGIBSON_ABILITY_JSON_PATH = "synsets_to_filtered_properties_pruned_igibson.json"
 ORACLE_ABILITY_JSON_PATH = "synsets_to_filtered_properties.json"
+B1K_ABILITY_JSON_PATH = "synsets_to_filtered_properties_b1k.json"
+'''
+This .csv file should contain all of the custom synsets (synsets that do not
+exist in WordNet) that may be in the activities being loaded, as well as their
+assigned hypernym. Should contain columns `word`, `custom_synset`, and 
+`hypernyms`.
+'''
+CUSTOM_SYNSETS = "custom_synsets.csv"
 
 # Uses iGibson abilities.
 OUTPUT_JSON_PATH1 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_owned.json")
@@ -51,6 +65,8 @@ OUTPUT_JSON_PATH1 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hiera
 OUTPUT_JSON_PATH2 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_articles.json")
 # Uses oracle abilities.
 OUTPUT_JSON_PATH3 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_all.json")
+# Uses B-1K abilities
+OUTPUT_JSON_PATH4 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_b1k.json")
 
 '''
 Load in all of the owned models. Map the synsets to their corresponding object names.
@@ -62,9 +78,9 @@ with open(MODELS_CSV_PATH) as csv_file:
         synset = row["Synset"].strip()
         obj = row["Object"].strip()
         if synset in owned_synsets:
-            owned_synsets[synset].append(obj)
+            owned_synsets[synset]["objects"].append(obj)
         else:
-            owned_synsets[synset] = [obj]
+            owned_synsets[synset] = {"objects": [obj]}
 
 '''
 Load in all of the synsets that appeared in articles.
@@ -77,12 +93,21 @@ with open(OBJECT_STATS_PATH) as csv_file:
         synset = synset[synset.find('\'')+1: synset.rfind('\'')]
         obj = row["Object"].strip()
         if synset in article_synsets:
-            article_synsets[synset].append(obj)
+            article_synsets[synset]["objects"].append(obj)
         else:
-            article_synsets[synset] = [obj]
+            article_synsets[synset] = {"objects": [obj]}
 
 '''
-Combined version of the two above.
+Load in all of the synsets from B-1K
+'''
+b1k_synset_df = pd.read_csv(B1K_SYNSET_MASTERLIST, sep="\t")
+b1k_synsets = {}
+for i, [synset, words] in b1k_synset_df.iterrows():
+    b1k_synsets[synset] = {"objects": 
+        json.loads(words.replace("'", '"')) if not pd.isna(words) else []}
+
+'''
+Combined version of owned and article.
 '''
 all_synsets = {key: value for key, value in owned_synsets.items()}
 for synset in article_synsets:
@@ -94,47 +119,89 @@ for synset in article_synsets:
 
 ######################################################
 
-def add_path(path, node):
+def add_path(path, node, custom_synsets):
     """
     Takes in list of synsets and add it into the overall hierarchy.
 
     @param path: List of strings, where each string is a synset.
       - The list is in the form of [child, parent, grandparent, ...]
     @param node: Dictionary, contains the overall hierarchy we are building
+    @param custom_synsets: Dictionary, maps name to hypernym name
     """
     if not path:
         return
     # Take out the oldest ancestor in the path.
     oldest_synset = path[-1]
-    name = oldest_synset.name()
+    # name = oldest_synset.name()
 
-    # If the current node never had a child before, initialize a list to store them.
-    if "children" not in node:
-        node["children"] = []
-    # Look for an existing child that matches the current synset.
-    for child_node in node["children"]:
-        if child_node["name"] == name:
-            add_path(path[:-1], child_node)
-            return
-    # If this is a child we have yet to find, append it into our hierarchy.
-    node["children"].append({"name": name})
-    add_path(path[:-1], node["children"][-1])
+    try:
+        name = oldest_synset.name()
+        if name == "arborio_rice.n.01":
+            print("ARBORIO")
+    except:
+        name = oldest_synset[8:-2]
+        if oldest_synset == "arborio_rice.n.01": 
+            print("ARBORIO")
+        # print("Name in except block:", name)
+        if "children" not in node:
+            node["children"] = []
+        for child_node in node["children"]:
+            if child_node["name"] == name:
+                # child_node["hasModel"] = True 
+                add_path(path[:-1], child_node, custom_synsets)
+                return 
+        # node["children"].append({"name": name, "hasModel": True})
+        node["children"].append({"name": name})
+        add_path(path[:-1], node["children"][-1], custom_synsets)
+    else:
+        # If the current node never had a child before, initialize a list to store them.
+        if "children" not in node:
+            node["children"] = []
+        # Look for an existing child that matches the current synset.
+        for child_node in node["children"]:
+            if child_node["name"] == name:
+                # child_node["hasModel"] = True
+                add_path(path[:-1], child_node, custom_synsets)
+                return 
+            # node["children"].append({"name": name, "hasModel": True})
+        # If this is a child we have yet to find, append it into our hierarchy.
+        node["children"].append({"name": name})
+        add_path(path[:-1], node["children"][-1], custom_synsets)
 
 
-def generate_paths(paths, path, word):
+def generate_paths(paths, path, word, custom_synsets):
     """
     Given a synset, generate all paths this synset can take up to 'entity.n.01'.
 
     @param paths, List of lists, will be populated with the paths we create here.
     @param path: List, the current path we are building.
     @param word: The current synset we are searching parents for.
+    @param custom_synsets: Dictionary, maps name to hypernym name
     """
-    hypernyms = word.hypernyms()
-    if not hypernyms:
-        paths.append(path)
+    # try:
+    #     if str(word[8:-2]) in custom_synsets:
+    #         pass 
+    # except:
+    #     hypernyms = word.hypernyms() 
+    #     if not hypernyms:
+    #         paths.append(path)
+    #     else:
+    #         for parent in hypernyms: 
+    #             generate_paths(paths, path + [parent], parent, custom_synsets)
+    # else:
+    #     print(word)
+    #     hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
+    #     generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
+    if str(word)[8:-2] in custom_synsets:
+        hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
+        generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
     else:
-        for parent in hypernyms:
-            generate_paths(paths, path + [parent], parent)
+        hypernyms = word.hypernyms()
+        if not hypernyms:
+            paths.append(path)
+        else:
+            for parent in hypernyms:
+                generate_paths(paths, path + [parent], parent, custom_synsets)
 
 '''
 Below is the script that creates the .json hierarchy
@@ -144,9 +211,18 @@ def add_igibson_objects(node, synsets):
     '''
     Go through the hierarchy and add the words associated with the synsets as attributes.
     '''
+    # if node["name"] == "countertop.n.01":
+        # print(synsets[node["name"]])
+        # import sys; sys.exit()
     categories = []
     if node["name"] in synsets:
-        categories = synsets[node["name"]]
+        # if node["name"] == "countertop.n.01":
+            # print("it's in synsets")
+            # print(node["name"])
+            # print(synsets[node["name"]])
+        categories = synsets[node["name"]]["objects"]
+        # if node["name"] == "countertop.n.01":
+        #     print("got the categories")
 
     node["igibson_categories"] = sorted(categories)
 
@@ -156,6 +232,7 @@ def add_igibson_objects(node, synsets):
 
 
 def add_abilities(node, ability_type=None, ability_map=None):
+    # print(node["name"])
     if ability_type is None and ability_map is None:
         raise ValueError("No abilities specified. Abilities can be specified through the ability_type kwarg to get a pre-existing ability map, or the ability_map kwarg to override with custom abilities.")
     if ability_map is None: 
@@ -164,6 +241,9 @@ def add_abilities(node, ability_type=None, ability_map=None):
                 ability_map = json.load(f)
         elif ability_type == "oracle": 
             with open(ORACLE_ABILITY_JSON_PATH) as f:
+                ability_map = json.load(f)
+        elif ability_type == "b1k":
+            with open(B1K_ABILITY_JSON_PATH) as f:
                 ability_map = json.load(f)
         else:
             raise ValueError("Invalid ability type given.")
@@ -225,17 +305,32 @@ def generate_hierarchy(hierarchy_type, ability_type):
         synsets = article_synsets
     elif hierarchy_type == "all": 
         synsets = all_synsets
+    elif hierarchy_type == "b1k":
+        synsets = b1k_synsets
     else:
         raise ValueError("Invalid hierarchy type given.")
+    
+    custom_synsets = {}
+    with open(CUSTOM_SYNSETS, "r") as custom_map:
+        output = csv.DictReader(custom_map)
+        for row in output: 
+            custom_synsets[row["custom_synset"]] = {
+                "hypernyms": row["hypernyms"],
+                "objects": [row["word"]]
+            }
+    
+    synsets.update(custom_synsets)
 
-
-    for synset in synsets:
-        synset = wn.synset(synset)
+    for synset in synsets: 
+        try:
+            syn = wn.synset(synset)
+        except:
+            syn = f"Synset('{synset}')"
         synset_paths = []
-        generate_paths(synset_paths, [synset], synset)
+        generate_paths(synset_paths, [syn], syn, custom_synsets)
         for synset_path in synset_paths:
             # The last word should always be `entity.n.01`, so we can just take it out.
-            add_path(synset_path[:-1], hierarchy)
+            add_path(synset_path[:-1], hierarchy, custom_synsets)
 
     add_igibson_objects(hierarchy, synsets)
     add_abilities(hierarchy, ability_type=ability_type)
@@ -244,17 +339,21 @@ def generate_hierarchy(hierarchy_type, ability_type):
 def save_hierarchies():
     """Save all three hierarchy types 
     """
-    hierarchy_owned = generate_hierarchy("owned", "igibson")
-    with open(OUTPUT_JSON_PATH1, "w") as f:
-        json.dump(hierarchy_owned, f, indent=2)
+    # hierarchy_owned = generate_hierarchy("owned", "b1k")
+    # with open(OUTPUT_JSON_PATH1, "w") as f:
+    #     json.dump(hierarchy_owned, f, indent=2)
 
-    hierarchy_articles = generate_hierarchy("article", "oracle")
-    with open(OUTPUT_JSON_PATH2, "w") as f:
-        json.dump(hierarchy_articles, f, indent=2)
+    # hierarchy_articles = generate_hierarchy("article", "b1k")
+    # with open(OUTPUT_JSON_PATH2, "w") as f:
+    #     json.dump(hierarchy_articles, f, indent=2)
 
-    hierarchy_all = generate_hierarchy("all", "oracle")
-    with open(OUTPUT_JSON_PATH3, "w") as f:
-        json.dump(hierarchy_all, f, indent=2)
+    # hierarchy_all = generate_hierarchy("all", "b1k")
+    # with open(OUTPUT_JSON_PATH3, "w") as f:
+    #     json.dump(hierarchy_all, f, indent=2)
+    
+    hierarchy_b1k = generate_hierarchy("b1k", "b1k")
+    with open(OUTPUT_JSON_PATH4, "w") as f:
+        json.dump(hierarchy_b1k, f, indent=2)
 
 
 if __name__ == "__main__":
