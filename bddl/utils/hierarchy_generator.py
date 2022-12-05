@@ -132,7 +132,6 @@ def add_path(path, node, custom_synsets):
         return
     # Take out the oldest ancestor in the path.
     oldest_synset = path[-1]
-    # name = oldest_synset.name()
 
     try:
         name = oldest_synset.name()
@@ -178,24 +177,11 @@ def generate_paths(paths, path, word, custom_synsets):
     @param word: The current synset we are searching parents for.
     @param custom_synsets: Dictionary, maps name to hypernym name
     """
-    # try:
-    #     if str(word[8:-2]) in custom_synsets:
-    #         pass 
-    # except:
-    #     hypernyms = word.hypernyms() 
-    #     if not hypernyms:
-    #         paths.append(path)
-    #     else:
-    #         for parent in hypernyms: 
-    #             generate_paths(paths, path + [parent], parent, custom_synsets)
-    # else:
-    #     print(word)
-    #     hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
-    #     generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
     if str(word)[8:-2] in custom_synsets:
         hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
         generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
     else:
+        # print(word)
         hypernyms = word.hypernyms()
         if not hypernyms:
             paths.append(path)
@@ -211,18 +197,9 @@ def add_igibson_objects(node, synsets):
     '''
     Go through the hierarchy and add the words associated with the synsets as attributes.
     '''
-    # if node["name"] == "countertop.n.01":
-        # print(synsets[node["name"]])
-        # import sys; sys.exit()
     categories = []
     if node["name"] in synsets:
-        # if node["name"] == "countertop.n.01":
-            # print("it's in synsets")
-            # print(node["name"])
-            # print(synsets[node["name"]])
         categories = synsets[node["name"]]["objects"]
-        # if node["name"] == "countertop.n.01":
-        #     print("got the categories")
 
     node["igibson_categories"] = sorted(categories)
 
