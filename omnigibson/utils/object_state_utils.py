@@ -42,6 +42,7 @@ def sample_kinematics(
     z_offset=0.01,
     skip_falling=False,
 ):
+    # Run import here to avoid circular imports
     # No supporting surface annotation found, fallback to use ray-casting
     from omnigibson.objects.dataset_object import DatasetObject
     if (
