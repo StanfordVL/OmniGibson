@@ -51,7 +51,6 @@ SUPPORTED_PREDICATES = {
     "touching": get_binary_predicate_for_state(object_states.Touching, "touching"),
     "cooked": get_unary_predicate_for_state(object_states.Cooked, "cooked"),
     "burnt": get_unary_predicate_for_state(object_states.Burnt, "burnt"),
-    "soaked": get_unary_predicate_for_state(object_states.Soaked, "soaked"),
     "open": get_unary_predicate_for_state(object_states.Open, "open"),
     "sliced": get_unary_predicate_for_state(object_states.Sliced, "sliced"),
     "toggled_on": get_unary_predicate_for_state(object_states.ToggledOn, "toggled_on"),
