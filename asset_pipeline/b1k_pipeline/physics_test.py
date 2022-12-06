@@ -6,6 +6,10 @@ To run this script, you need to have a valid version of iGibson 2.0 installed in
 
 import os
 import sys
+import pybullet as p
+
+import igibson
+igibson.ig_dataset_path = r"D:\ig_pipeline\artifacts\aggregate"
 
 from igibson.simulator import Simulator
 from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
@@ -20,7 +24,7 @@ def main():
     scene_path = sys.argv[1]
     scene_name = os.path.basename(scene_path)
 
-    s = Simulator(mode="headless")
+    s = Simulator(mode="headless", use_pb_gui=True)
 
     try:
         scene = InteractiveIndoorScene(
@@ -28,6 +32,9 @@ def main():
             build_graph=True,
         )
         s.import_scene(scene)
+
+        while True:
+            p.stepSimulation()
 
         output_dir = os.path.join(rt.maxFilePath, "artifacts")
         os.makedirs(output_dir, exist_ok=True)

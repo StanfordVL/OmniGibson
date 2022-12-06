@@ -1,9 +1,9 @@
 import copy
 import json
 import os
+import sys
 import shutil
 import subprocess
-import sys
 import tempfile
 import xml.etree.ElementTree as ET
 from collections import OrderedDict
@@ -16,6 +16,7 @@ import trimesh
 from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline import mesh_tree
+from b1k_pipeline.utils import parse_name
 
 
 VRAY_MAPPING = {
@@ -219,92 +220,103 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         # Load the meshes.
         parent_canonical_mesh = transform_mesh(G.nodes[parent_node]["lower_mesh_ordered"], base_link_center, canonical_orientation)
         lower_canonical_mesh = transform_mesh(G.nodes[child_node]["lower_mesh_ordered"], base_link_center, canonical_orientation)
-        upper_canonical_mesh = transform_mesh(G.nodes[child_node]["upper_mesh"], base_link_center, canonical_orientation)
 
         # Load the centers.
         parent_center = get_mesh_center(parent_canonical_mesh)
         child_center = get_mesh_center(lower_canonical_mesh)
 
-        if joint_type == "R":
-            # Revolute joint
-            num_v_lower = lower_canonical_mesh.vertices.shape[0]
-            num_v_upper = upper_canonical_mesh.vertices.shape[0]
-            assert num_v_lower == num_v_upper, f"{child_node} lower mesh has {num_v_lower} vertices while upper has {num_v_upper}. These should match."
-            num_v = num_v_lower
-            random_index = np.random.choice(num_v, min(num_v, 20), replace=False)
-            from_vertices = lower_canonical_mesh.vertices[random_index]
-            to_vertices = upper_canonical_mesh.vertices[random_index]
-
-            # Find joint axis and joint limit
-            r = R.align_vectors(
-                to_vertices - np.mean(to_vertices, axis=0),
-                from_vertices - np.mean(from_vertices, axis=0),
-            )[0]
-            upper_limit = r.magnitude()
-            assert upper_limit < np.deg2rad(
-                175
-            ), "upper limit of revolute joint should be <175 degrees"
-            joint_axis = r.as_rotvec() / r.magnitude()
-
-            # Let X = from_vertices_mean, Y = to_vertices_mean, R is rotation, T is translation
-            # R * (X - T) + T = Y
-            # => (I - R) T = Y - R * X
-            # Find the translation part of the joint origin
-            r_mat = r.as_matrix()
-            from_vertices_mean = from_vertices.mean(axis=0)
-            to_vertices_mean = to_vertices.mean(axis=0)
-            left_mat = np.eye(3) - r_mat
-            arbitrary_point_on_joint_axis = np.linalg.lstsq(
-                left_mat, (to_vertices_mean - np.dot(r_mat, from_vertices_mean)), rcond=None
-            )[0]
-
-            # The joint origin has infinite number of solutions along the joint axis
-            # Find the translation part of the joint origin that is closest to the CoM of the link
-            # by projecting the CoM onto the joint axis
-            arbitrary_point_to_center = child_center - arbitrary_point_on_joint_axis
-            joint_origin_in_base = arbitrary_point_on_joint_axis + (
-                np.dot(arbitrary_point_to_center, joint_axis) * joint_axis)
-            joint_origin_in_parent = joint_origin_in_base - parent_center
-
-            # Assign visual and collision mesh origin so that the offset from the joint origin is removed.
-            mesh_offset = -joint_origin_in_base
-            visual_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
-            collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
-
-            meta_links = normalize_meta_links(meta_links, mesh_offset)
-        else:
-            # TODO: Assert that the two are facing the same direction.
-
-            # Prismatic joint
-            diff = upper_canonical_mesh.centroid - lower_canonical_mesh.centroid
-
-            # Find joint axis and joint limit
-            if np.allclose(diff, 0):
-                upper_limit = np.linalg.norm(diff)
-                joint_axis = diff / upper_limit
-            else:
-                upper_limit = 0
-                joint_axis = np.array([0, 0, 1])
-
-            # Assign the joint origin relative to the parent CoM
-            joint_origin_in_parent = -parent_center
-
         # Create the joint in the URDF
         joint_xml = ET.SubElement(tree_root, "joint")
         joint_xml.attrib = {
             "name": f"j_{child_node[3]}",
-            "type": "revolute" if joint_type == "R" else "prismatic",
+            "type": {"P": "prismatic", "R": "revolute", "F": "fixed"}[joint_type]
         }
-        joint_origin_xml = ET.SubElement(joint_xml, "origin")
-        joint_origin_xml.attrib = {"xyz": " ".join([str(item) for item in joint_origin_in_parent])}
-        joint_axis_xml = ET.SubElement(joint_xml, "axis")
-        joint_axis_xml.attrib = {"xyz": " ".join([str(item) for item in joint_axis])}
+
         joint_parent_xml = ET.SubElement(joint_xml, "parent")
         joint_parent_xml.attrib = {"link": parent_node[3]}
         joint_child_xml = ET.SubElement(joint_xml, "child")
         joint_child_xml.attrib = {"link": child_node[3]}
-        joint_limit_xml = ET.SubElement(joint_xml, "limit")
-        joint_limit_xml.attrib = {"lower": str(0.0), "upper": str(upper_limit)}
+
+        if joint_type in ("P", "R"):
+            upper_canonical_mesh = transform_mesh(G.nodes[child_node]["upper_mesh"], base_link_center, canonical_orientation)
+            
+            if joint_type == "R":
+                # Revolute joint
+                num_v_lower = lower_canonical_mesh.vertices.shape[0]
+                num_v_upper = upper_canonical_mesh.vertices.shape[0]
+                assert num_v_lower == num_v_upper, f"{child_node} lower mesh has {num_v_lower} vertices while upper has {num_v_upper}. These should match."
+                num_v = num_v_lower
+                random_index = np.random.choice(num_v, min(num_v, 20), replace=False)
+                from_vertices = lower_canonical_mesh.vertices[random_index]
+                to_vertices = upper_canonical_mesh.vertices[random_index]
+
+                # Find joint axis and joint limit
+                r = R.align_vectors(
+                    to_vertices - np.mean(to_vertices, axis=0),
+                    from_vertices - np.mean(from_vertices, axis=0),
+                )[0]
+                upper_limit = r.magnitude()
+                assert upper_limit < np.deg2rad(
+                    180
+                ), "upper limit of revolute joint should be <180 degrees"
+                joint_axis = r.as_rotvec() / r.magnitude()
+
+                # Let X = from_vertices_mean, Y = to_vertices_mean, R is rotation, T is translation
+                # R * (X - T) + T = Y
+                # => (I - R) T = Y - R * X
+                # Find the translation part of the joint origin
+                r_mat = r.as_matrix()
+                from_vertices_mean = from_vertices.mean(axis=0)
+                to_vertices_mean = to_vertices.mean(axis=0)
+                left_mat = np.eye(3) - r_mat
+                arbitrary_point_on_joint_axis = np.linalg.lstsq(
+                    left_mat, (to_vertices_mean - np.dot(r_mat, from_vertices_mean)), rcond=None
+                )[0]
+
+                # The joint origin has infinite number of solutions along the joint axis
+                # Find the translation part of the joint origin that is closest to the CoM of the link
+                # by projecting the CoM onto the joint axis
+                arbitrary_point_to_center = child_center - arbitrary_point_on_joint_axis
+                joint_origin_in_base = arbitrary_point_on_joint_axis + (
+                    np.dot(arbitrary_point_to_center, joint_axis) * joint_axis)
+                joint_origin_in_parent = joint_origin_in_base - parent_center
+
+                # Assign visual and collision mesh origin so that the offset from the joint origin is removed.
+                mesh_offset = -joint_origin_in_base
+                visual_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
+                collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
+
+                meta_links = normalize_meta_links(meta_links, mesh_offset)
+            elif joint_type == "P":
+                # TODO: Assert that the two are facing the same direction.
+
+                # Prismatic joint
+                diff = upper_canonical_mesh.centroid - lower_canonical_mesh.centroid
+
+                # Find joint axis and joint limit
+                if np.allclose(diff, 0):
+                    upper_limit = np.linalg.norm(diff)
+                    joint_axis = diff / upper_limit
+                else:
+                    upper_limit = 0
+                    joint_axis = np.array([0, 0, 1])
+
+                # Assign the joint origin relative to the parent CoM
+                joint_origin_in_parent = -parent_center
+
+            # Save these joints' data
+            joint_origin_xml = ET.SubElement(joint_xml, "origin")
+            joint_origin_xml.attrib = {"xyz": " ".join([str(item) for item in joint_origin_in_parent])}
+            joint_axis_xml = ET.SubElement(joint_xml, "axis")
+            joint_axis_xml.attrib = {"xyz": " ".join([str(item) for item in joint_axis])}
+            joint_limit_xml = ET.SubElement(joint_xml, "limit")
+            joint_limit_xml.attrib = {"lower": str(0.0), "upper": str(upper_limit)}
+
+        else:
+            # Fixed joints are quite simple.
+            joint_origin_in_parent = child_center - parent_center
+            joint_origin_xml = ET.SubElement(joint_xml, "origin")
+            joint_origin_xml.attrib = {"xyz": " ".join([str(item) for item in joint_origin_in_parent])}
 
     return meta_links
 
@@ -369,13 +381,13 @@ def main():
 
     # Build the mesh tree using our mesh tree library. The scene code also uses this system.
     G = mesh_tree.build_mesh_tree(mesh_list, mesh_root_dir)
-    assert nx.dag_longest_path_length(G) <= 1, "We don't support double joints yet."
+    # assert nx.dag_longest_path_length(G) <= 1, "We don't support double joints yet."
 
     # Go through each object.
     roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
     # Only save the 0th instance.
-    saveable_roots = tqdm.tqdm([root_node for root_node in roots if int(root_node[2]) == 0]) # and not G.nodes[root_node]["is_broken"]])
+    saveable_roots = tqdm.tqdm([root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]])
     for root_node in saveable_roots:
         obj_cat, obj_model, obj_inst_id, _ = root_node
         saveable_roots.set_description(f"{obj_cat}-{obj_model}")

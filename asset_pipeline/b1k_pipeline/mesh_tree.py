@@ -1,4 +1,6 @@
-import copy
+import sys
+sys.path.append(r"D:\ig_pipeline")
+
 import json
 import os
 import re
@@ -8,32 +10,33 @@ import numpy as np
 import tqdm
 import trimesh
 
+import b1k_pipeline.utils
 
-PATTERN = re.compile(r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[a-z0-9_]{6})-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?$")
+
 SCALE_FACTOR = 0.001
 SCALE_MATRIX = trimesh.transformations.scale_matrix(SCALE_FACTOR)
 
-def build_mesh_tree(mesh_list, mesh_root):
+def build_mesh_tree(mesh_list, mesh_root, load_upper=True):
     G = nx.DiGraph()
 
     print("Building mesh tree.")
     pbar = tqdm.tqdm(mesh_list)
     for mesh_name in pbar:
         pbar.set_description(mesh_name)
-        groups = PATTERN.match(mesh_name).groups()
-        (
-            is_broken,
-            is_randomization_fixed,
-            is_loose,
-            obj_cat,
-            obj_model,
-            obj_inst_id,
-            link_name,
-            parent_link_name,
-            joint_type,
-            joint_limit,
-            light_id
-        ) = groups
+        match = b1k_pipeline.utils.parse_name(mesh_name)
+        is_broken = match.group("bad")
+        is_randomization_fixed = match.group("randomization_disabled")
+        is_loose = match.group("loose")
+        obj_cat = match.group("category")
+        obj_model = match.group("model_id")
+        obj_inst_id = match.group("instance_id")
+        link_name = match.group("link_name")
+        parent_link_name = match.group("parent_link_name")
+        joint_type = match.group("joint_type")
+        joint_side = match.group("joint_side")
+
+        if joint_side == "upper" and not load_upper:
+            continue
 
         link_name = "base_link" if link_name is None else link_name
 
@@ -66,7 +69,7 @@ def build_mesh_tree(mesh_list, mesh_root):
                         meta_link["size"] *= SCALE_FACTOR
 
         # Add the data for the position onto the node.
-        if joint_limit == "upper":
+        if joint_side == "upper":
             assert "upper_filename" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
             G.nodes[node_key]["upper_filename"] = mesh_path
             upper_mesh = trimesh.load(mesh_path, process=False, force="mesh", skip_materials=True, maintain_order=True)
@@ -95,8 +98,13 @@ def build_mesh_tree(mesh_list, mesh_root):
 
     # Quick validation.
     for node, data in G.nodes(data=True):
-        assert node[-1] == "base_link" or "upper_filename" in data, f"{node} does not have upper filename."
-        assert node[-1] == "base_link" or "upper_mesh" in data, f"{node} does not have upper mesh."
+        needs_upper = False
+        if node[-1] != "base_link":
+            (_, _, d), = G.in_edges(node, data=True)
+            joint_type = d["joint_type"]
+            needs_upper = load_upper and not data["is_broken"] and joint_type != "F"
+        assert not needs_upper or "upper_filename" in data, f"{node} does not have upper filename."
+        assert not needs_upper or "upper_mesh" in data, f"{node} does not have upper mesh."
         assert "lower_filename" in data, f"{node} does not have lower filename."
         assert "lower_mesh" in data, f"{node} does not have lower mesh."
         assert "lower_mesh_ordered" in data, f"{node} does not have lower mesh."

@@ -25,11 +25,11 @@ KEY_FILE = b1k_pipeline.utils.PIPELINE_ROOT / "keys/b1k-dataset-6966129845c0.jso
 OUTPUT_FILENAME = "sanitycheck.json"
 
 CATEGORY_DUMMY_REQUIREMENTS = {
-  "sink": ["watersource"],
+  # "sink": ["watersource"],
 }
 
 CATEGORY_VOLUME_REQUIREMENTS = {
-  "sink": ["waterdrain"],
+  # "sink": ["waterdrain"],
 }
 
 
@@ -43,19 +43,11 @@ def compute_shear(obj):
 
 
 def get_approved_categories():
-  gc = gspread.service_account(filename=KEY_FILE)
-  sh = gc.open_by_key(SPREADSHEET_ID).worksheet(WORKSHEET_NAME)
+  # gc = gspread.service_account(filename=KEY_FILE)
+  # sh = gc.open_by_key(SPREADSHEET_ID).worksheet(WORKSHEET_NAME)
 
   exists = []
   approved = []
-  for row in sh.get_values()[1:]:
-    name = row[0]
-    if not name:
-      continue
-
-    exists.append(name)
-    if row[3]:
-      approved.append(name)
 
   return exists, approved
 
@@ -75,7 +67,7 @@ class SanityCheck:
     self.errors = collections.defaultdict(list)
 
   def is_valid_object_type(self, row):
-    is_valid_type = row.type in [rt.Editable_Poly, rt.VRayLight, rt.VRayPhysicalCamera, rt.Dummy, rt.VolumeHelper, rt.Physical_Camera, rt.FreeCamera]
+    is_valid_type = row.type in [rt.Editable_Poly, rt.VRayLight, rt.VRayPhysicalCamera, rt.Dummy, rt.Point, rt.Box, rt.VolumeHelper, rt.Physical_Camera, rt.FreeCamera]
     self.expect(is_valid_type, f"{row.object_name} has disallowed type {row.type}.")
     return is_valid_type
 
@@ -85,26 +77,27 @@ class SanityCheck:
     return is_valid_name
 
   def validate_object(self, row):
-    # Check that the category exists on the spreadsheet
-    self.expect(
-      row.name_category in self._existing_categories,
-      f"Category {row.name_category} for object {row.object_name} does not exist on spreadsheet.")
+    # # Check that the category exists on the spreadsheet
+    # self.expect(
+    #   row.name_category in self._existing_categories,
+    #   f"Category {row.name_category} for object {row.object_name} does not exist on spreadsheet.",
+    #   level="WARNING")
 
-    # Check that the category is approved on the spreadsheet
-    self.expect(
-      row.name_category in self._existing_categories,
-      f"Category {row.name_category} for object {row.object_name} is not approved on spreadsheet.",
-      level="WARNING")
+    # # Check that the category is approved on the spreadsheet
+    # self.expect(
+    #   row.name_category in self._existing_categories,
+    #   f"Category {row.name_category} for object {row.object_name} is not approved on spreadsheet.",
+    #   level="WARNING")
 
     # Check that it does not have too many vertices.
-    self.expect(
-      row.vertex_count <= MAX_VERTICES,
-      f"{row.object_name} has too many vertices: {row.vertex_count} > {MAX_VERTICES}")
+    # self.expect(
+    #   row.vertex_count <= MAX_VERTICES,
+    #   f"{row.object_name} has too many vertices: {row.vertex_count} > {MAX_VERTICES}")
 
     # Warn if it has too many but acceptable vertices.
     self.expect(
-      row.vertex_count <= WARN_VERTICES or row.vertex_count > MAX_VERTICES,
-      f"{row.object_name} has too many vertices: {row.vertex_count} > {MAX_VERTICES}",
+      row.vertex_count <= WARN_VERTICES,
+      f"{row.object_name} has too many vertices: {row.vertex_count} > {WARN_VERTICES}",
       level="WARNING")
 
     # Check that the object does not have any modifiers
@@ -290,20 +283,7 @@ def create_macroscript(
     """.format(_func.__module__, func_name)
     rt.macros.new(category, name, tool_tip, button_text, script)
 
-def sanity_check_safe():
-  errors = SanityCheck().run()
-
-  if errors["ERROR"]:
-    print("Errors found:")
-    print("\n".join(errors["ERROR"]))
-  else:
-    print("Sanity check complete - no errors found!")
-
-  if errors["WARNING"]:
-    print("Warnings:")
-    print("\n".join(errors["WARNING"]))
-
-def sanity_check_batch(out_dir):
+def sanity_check_safe(batch=False):
   success = False
   errors = []
   warnings = []
@@ -317,16 +297,28 @@ def sanity_check_batch(out_dir):
     t = traceback.format_exc()
     errors.append("Exception occurred:" + t)
 
-  with open(output_dir / OUTPUT_FILENAME, "w") as f:
-    json.dump({"success": success, "errors": errors, "warnings": warnings}, f, indent=4)
+  # Print results in interactive mode.
+  if not batch:
+    if success:
+      print("Sanity check complete - no errors found!")
+    else:
+      print("Errors found:")
+      print("\n".join(errors))
 
+    if warnings:
+      print("Warnings:")
+      print("\n".join(warnings))
+
+  if batch:
+    output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    with open(output_dir / OUTPUT_FILENAME, "w") as f:
+      json.dump({"success": success, "errors": errors, "warnings": warnings}, f, indent=4)
 
 if __name__ == "__main__":
   opts = rt.maxops.mxsCmdLineArgs
 
   if opts[rt.name('batch')] == "true":
-    output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    sanity_check_batch(output_dir)
+    sanity_check_safe(batch=True)
   else:
     create_macroscript(sanity_check_safe, category="SVL-Tools", name="Sanity Check", button_text="Sanity Check")

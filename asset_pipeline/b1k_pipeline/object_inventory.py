@@ -16,6 +16,7 @@ RELPATH_BASE = os.path.join(os.path.dirname(__file__), "../cad")
 def main():
     needed = set()
     providers = defaultdict(list)
+    needed_by = defaultdict(list)
     skipped_files = []
 
     # Get the providers.
@@ -37,6 +38,8 @@ def main():
         scene_or_obj_dir = os.path.dirname(os.path.dirname(object_file))
         path_to_record = os.path.relpath(scene_or_obj_dir, RELPATH_BASE).replace("\\", "/")
         needed |= set(object_list["needed_objects"])
+        for obj in object_list["needed_objects"]:
+            needed_by[obj].append(path_to_record)
         for provided in object_list["provided_objects"]:
             providers[provided].append(path_to_record)
 
@@ -56,6 +59,7 @@ def main():
     results = {
         "success": success,
         "providers": single_provider,
+        "needed_by": needed_by,
         "error_skipped_files": sorted(skipped_files),
         "error_multiple_provided": multiple_provided,
         "error_missing_objects": sorted(missing_objects),

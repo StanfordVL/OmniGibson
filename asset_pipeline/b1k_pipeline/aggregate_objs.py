@@ -1,7 +1,8 @@
-import json
-import os
-import shutil
 import sys
+sys.path.append(r"D:\ig_pipeline")
+
+import json
+import shutil
 import traceback
 
 import b1k_pipeline.utils
@@ -14,7 +15,7 @@ def main():
     metadata_output_dir = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts" / "pipeline"
     object_inventory_path = metadata_output_dir / "object_inventory.json"
     objects_root_dir = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts" / "aggregate" / "objects"
-    os.makedirs(objects_root_dir, exist_ok=True)
+    objects_root_dir.mkdir(parents=True, exist_ok=True)
 
     success = True
     error_msg = ""

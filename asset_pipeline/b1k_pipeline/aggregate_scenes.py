@@ -1,7 +1,8 @@
-import json
-import os
-import shutil
 import sys
+sys.path.append(r"D:\ig_pipeline")
+
+import json
+import shutil
 import traceback
 import b1k_pipeline.utils
 import yaml
@@ -13,7 +14,7 @@ SUCCESS_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts" / "pipeline" /
 SCENE_ROOT_DIR = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts" / "aggregate" / "scenes"
 
 def main():
-    os.makedirs(SCENE_ROOT_DIR, exist_ok=True)
+    SCENE_ROOT_DIR.mkdir(parents=True, exist_ok=True)
 
     success = True
     error_msg = ""

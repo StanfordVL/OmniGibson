@@ -1,24 +1,24 @@
+import sys
+import traceback
+sys.path.append(r"D:\ig_pipeline")
+
 import os
 import tempfile
 import traceback
-
 import cv2
 import numpy as np
 from pymxs import runtime as rt
-import sys
 import json
 import time
 import re
 from collections import defaultdict
+import b1k_pipeline.utils
 
 btt = rt.BakeToTexture
 
+USE_UNWRELLA = True
 IMG_SIZE = 1024
 NEW_UV_CHANNEL = 99
-
-PATTERN = re.compile(r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[a-z0-9_]{6})-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?(?:-M(?P<meta_type>[a-z]+)_(?P<meta_id>[0-9]+))?$")
-def parse_name(name):
-    return PATTERN.fullmatch(name)
 
 # PBRMetalRough
 # CHANNEL_MAPPING = {
@@ -42,7 +42,7 @@ CHANNEL_MAPPING = {
 #     "Normal": "Bump Map",
 # }
 
-RENDER_PRESET_FILENAME = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "render_presets", "objrender-gi.rps"))
+RENDER_PRESET_FILENAME = str((b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender-gi.rps").absolute())
 
 allow_list = [
 ]
@@ -53,7 +53,6 @@ class ObjectExporter:
     def __init__(self, bakery, out_dir, export_textures=True):
         self.unwrapped_objs = set()
         self.MAP_NAME_TO_IDS = self.get_map_name_to_ids()
-        self.lights = self.get_all_lights()
 
         self.unwrap_times = {}
         self.baking_times = {}
@@ -81,7 +80,7 @@ class ObjectExporter:
         if not self.export_textures:
             return False
 
-        result = parse_name(obj.name)
+        result = b1k_pipeline.utils.parse_name(obj.name)
         # only bake texture for the first instance of a non-broken model
         return result and result.group("instance_id") == "0" and not result.group("bad") and not result.group("joint_side") == "upper"
        
@@ -95,33 +94,64 @@ class ObjectExporter:
                 continue
             if black_list and any(re.fullmatch(p, obj.name) is not None for p in black_list):
                 continue
-            if parse_name(obj.name) is None:
+            if b1k_pipeline.utils.parse_name(obj.name) is None:
                 wrong_objs.append((obj.name, rt.ClassOf(obj)))
                 continue
 
             obj_dir = os.path.join(self.obj_out_dir, obj.name)
             obj_file = os.path.join(obj_dir, obj.name + ".obj")
             json_file = os.path.join(obj_dir, obj.name + ".json")
-            # if os.path.exists(obj_file) and os.path.exists(json_file):
-            #    continue
+            if os.path.exists(obj_file) and os.path.exists(json_file):
+               continue
             objs.append(obj)
+        
+        for light in rt.lights:
+            if b1k_pipeline.utils.parse_name(light.name) is None:
+                wrong_objs.append((light.name, rt.ClassOf(light)))
         
         if len(wrong_objs) != 0:
             for obj_name, obj_type in wrong_objs:
                 print(obj_name, obj_type)
             assert False, wrong_objs
 
-        objs.sort(key=lambda obj: int(parse_name(obj.name).group("instance_id")))
+        objs.sort(key=lambda obj: int(b1k_pipeline.utils.parse_name(obj.name).group("instance_id")))
 
         return objs
 
-    @staticmethod
-    def get_all_lights():
-        lights = []
-        for light in rt.lights:
-            assert rt.classOf(light) == rt.VRayLight, "this light ({}) is not a VRayLight".format(light.name)
-            lights.append(light)
-        return lights
+    def uv_unwrapping_unwrella(self, obj):
+        u = rt.Unwrella()
+        rt.addmodifier(obj, u)
+        u.stretch = 0.15
+        u.rescale = True
+        u.prerotate = True
+        u.packmode = 1  # Efficient
+        u.map_channel = NEW_UV_CHANNEL
+        u.keep_seams = False
+        u.unwrap_mode = 0
+
+        u.padding = 2
+        u.width = 1024
+        u.height = 1024
+        u.preview = False
+
+        assert u.unwrap(), f"Unwrapping error w/ {obj.name}: {u.error}" 
+
+
+    def uv_unwrapping_native(self, obj):
+        rt.select(obj)
+
+        # Select all faces in preparation for uv unwrap
+        rt.polyop.setFaceSelection(obj, rt.name('all'))
+
+        modifier = rt.unwrap_uvw()
+        rt.addmodifier(obj, modifier)
+
+        modifier.unwrap2.setApplyToWholeObject(True)
+
+        # In case the object is already uv unwrapped, we will need to assign to a new UV channel
+        modifier.setMapChannel(NEW_UV_CHANNEL)
+        modifier.unwrap2.flattenMapNoParams()
+
 
     def uv_unwrapping(self, obj):
         if not self.should_bake_texture(obj):
@@ -136,20 +166,10 @@ class ObjectExporter:
         print("uv_unwrapping", obj.name)
         self.unwrapped_objs.add(obj.baseObject)
 
-        rt.select(obj)
-
-        # Select all faces in preparation for uv unwrap
-        rt.polyop.setFaceSelection(obj, rt.name('all'))
-
-        modifier = rt.unwrap_uvw()
-        rt.addmodifier(obj, modifier)
-
-        modifier.unwrap2.setApplyToWholeObject(True)
-
-        # In case the object is already uv unwrapped, we will need to assign to a new UV channel
-        modifier.setMapChannel(NEW_UV_CHANNEL)
-        modifier.unwrap2.flattenMapNoParams()
-        rt.maxOps.collapseNodeTo(obj, 1, True)
+        if USE_UNWRELLA:
+            self.uv_unwrapping_unwrella(obj)
+        else:
+            self.uv_unwrapping_native(obj)
 
         rt.update(obj)
         rt.forceCompleteRedraw()
@@ -243,9 +263,12 @@ class ObjectExporter:
         # Export the canonical orientation
         metadata["orientation"] = [obj.rotation.x, obj.rotation.y, obj.rotation.z, obj.rotation.w]
         metadata["meta_links"] = defaultdict(lambda: defaultdict(dict))
-        obj_name_result = parse_name(obj.name)
-        for light in self.lights:
-            light_name_result = parse_name(light.name)
+        metadata["layer_name"] = obj.layer.name
+        obj_name_result = b1k_pipeline.utils.parse_name(obj.name)
+        assert obj_name_result, f"Unparseable object name {obj.name}"
+        for light in rt.lights:
+            light_name_result = b1k_pipeline.utils.parse_name(light.name)
+            assert light_name_result, f"Unparseable light name {light.name}"
             if obj_name_result.group("category") == light_name_result.group("category") and obj_name_result.group("model_id") == light_name_result.group("model_id") and obj_name_result.group("instance_id") == light_name_result.group("instance_id"):
                 assert light.normalizeColor == 1, "The light's unit is NOT lm."
                 assert light_name_result.group("light_id"), "The light does not have an ID."
@@ -265,12 +288,14 @@ class ObjectExporter:
                 }
 
         for child in obj.children:
-            child_name_result = parse_name(child.name)
+            child_name_result = b1k_pipeline.utils.parse_name(child.name)
             if not child_name_result.group("meta_type"):
                 continue
 
             meta_type = child_name_result.group("meta_type")
-            meta_id = int(child_name_result.group("meta_id"))
+            meta_id_str = child_name_result.group("meta_id")
+            meta_id = 0 if meta_id_str is None else int(meta_id_str)
+            assert meta_id not in metadata["meta_links"][meta_type], f"Meta ID {meta_id} is repeated in object {obj.name}"
             metadata["meta_links"][meta_type][meta_id] = {
                 "position": [child.position.x, child.position.y, child.position.z],
                 "orientation": [child.rotation.x, child.rotation.y, child.rotation.z, child.rotation.w],
@@ -348,7 +373,7 @@ class ObjectExporter:
                 self.export_obj(obj)
                 self.fix_mtl_files(obj)
             except Exception as e:
-                failures[obj.name] = str(e)
+                failures[obj.name] = traceback.format_exc()
 
         failure_msg = "\n".join(f"{obj}: {err}" for obj, err in failures.items())
         assert len(failures) == 0, f"Some objects could not be exported:\n{failure_msg}"

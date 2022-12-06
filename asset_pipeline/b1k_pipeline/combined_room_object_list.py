@@ -1,59 +1,58 @@
+import sys
+sys.path.append(r"D:\ig_pipeline")
+
 from collections import Counter, defaultdict
 import glob
 import json
 import os
 import b1k_pipeline.utils
-import gspread
 from nltk.corpus import wordnet as wn
 import yaml
+import csv
 
 
-SPREADSHEET_ID = "1JJob97Ovsv9HP1Xrs_LYPlTnJaumR2eMELImGykD22A"
-OBJECT_CATEGORY_WORKSHEET_NAME = "Object Category B1K"
-ROOM_NAME_WORKSHEET_NAME = "Allowed Room Types"
+OBJECT_CATEGORY_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "metadata" / "category_mapping.csv"
+ROOM_TYPE_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "metadata" / "allowed_room_types.csv"
 KEY_FILE = b1k_pipeline.utils.PIPELINE_ROOT / "keys" / "b1k-dataset-6966129845c0.json"
 FAKE_SYNSETS = {"knife_block.n.01"}
-PARAMS_FILE = b1k_pipeline.utils.PIPELINE_ROOT / "params.yaml")
+PARAMS_FILE = b1k_pipeline.utils.PIPELINE_ROOT / "params.yaml"
 
-def get_disapproved_categories():
-  gc = gspread.service_account(filename=KEY_FILE)
-  sh = gc.open_by_key(SPREADSHEET_ID).worksheet(OBJECT_CATEGORY_WORKSHEET_NAME)
+def get_category_mapping():
+    cat_to_synset = {}
+    synset_to_cat = defaultdict(list)
+    disapproved_cats = []
+    with open(OBJECT_CATEGORY_FILENAME, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            category = row["category"].strip()
+            synset = row["synset"].strip()
+            disapproved = str(row["approved"].strip()) != "1"
+            if not synset or not category:
+                print(f"Skipping problematic row: {row}")
+                continue
+            if disapproved:
+                disapproved_cats.append(category)
+            cat_to_synset[category] = synset
+            synset_to_cat[synset].append(category)
 
-  exists = []
-  disapproved = []
-  cat_to_synset = {}
-  for row in sh.get_values()[1:]:
-    name = row[0]
-    if not name:
-      continue
+    found_categories = set(cat_to_synset.keys())
 
-    exists.append(name)
-    if str(row[3]) != "1":
-      disapproved.append(name)
+    return found_categories, disapproved_cats, cat_to_synset, synset_to_cat
 
-    synset = row[1].strip()
-    cat_to_synset[name] = synset
-
-  return exists, disapproved, cat_to_synset
 
 def get_approved_room_types():
-  gc = gspread.service_account(filename=KEY_FILE)
-  sh = gc.open_by_key(SPREADSHEET_ID).worksheet(ROOM_NAME_WORKSHEET_NAME)
+    approved = []
+    with open(ROOM_TYPE_FILENAME, newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            approved.append(row[0])
 
-  approved = []
-  for row in sh.get_values()[1:]:
-    name = row[0]
-    if not name:
-      continue
-
-    approved.append(name)
-
-  return approved
+    return approved
 
 DEFAULT_PATH = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts/pipeline/combined_room_object_list.json"
 SUCCESS_PATH = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts/pipeline/combined_room_object_list.success"
 
-RELPATH_BASE = b1k_pipeline.utils.PIPELINE_ROOT / "cad/scenes"
+RELPATH_BASE = b1k_pipeline.utils.PIPELINE_ROOT / "cad" / "scenes"
 
 SCENE_ROOMS_TO_REMOVE = {
     "school_biology": ['chemistry_lab_0', 'classroom_0', 'corridor_0', 'gym_0', 'locker_room_1', 'locker_room_0', 'corridor_5', 'computer_lab_0', 'corridor_1', 'corridor_4', 'infirmary_0'],
@@ -64,7 +63,7 @@ SCENE_ROOMS_TO_REMOVE = {
     "office_cubicles_left": ['private_office_0', 'private_office_7', 'private_office_8', 'private_office_9', 'meeting_room_1', 'shared_office_1', 'private_office_6', 'copy_room_1'],
     "office_cubicles_right": ['shared_office_0', 'private_office_0', 'copy_room_0', 'meeting_room_0', 'private_office_4', 'private_office_5', 'private_office_1', 'private_office_2', 'private_office_3'],
     "house_double_floor_lower": ["bathroom_1", "bedroom_0", "bedroom_1", "bedroom_2", "television_room_0"],
-    "house_double_floor_upper": ['garden_0', 'bathroom_0', 'living_room_0', "kitchen_0", "garage_0", "corridor_0"],
+    # "house_double_floor_upper": ['garden_0', 'bathroom_0', 'living_room_0', "kitchen_0", "garage_0", "corridor_0"],
     # "Beechwood_0_garden": ["living_room_0"],
     # "Rs_garden": ["living_room_0"],
     # "Pomaria_0_garden": ["living_room_0"],
@@ -91,7 +90,7 @@ SCENES_TO_ADD = {
     "restaurant_diner": ["public_restroom_marble"],
     "restaurant_brunch": ["public_restroom_futuristic",  "commercial_kitchen_pans"],
     "restaurant_urban": ["public_restroom_brown", "commercial_kitchen_fire_extinguisher"],
-    "restaurant_hotel": ["public_restroom_futuristic", "commercial_kitchen_fire_extinguisher"],
+    "restaurant_hotel": ["commercial_kitchen_fire_extinguisher"],  # "public_restroom_futuristic"
     "school_gym": ["public_restroom_blue"],
     "school_geography": ["public_restroom_blue"],
     "school_biology": ["public_restroom_blue"],
@@ -127,13 +126,13 @@ def main():
     not_approved_rooms = defaultdict(set)
     invalid_synsets = {}
 
-    exists, disapproved, cat_to_synset = get_disapproved_categories()
+    exists, disapproved, cat_to_synset, synset_to_cat = get_category_mapping()
     approved_rooms = set(get_approved_room_types())
 
     # Get the list of targets 
     with open(PARAMS_FILE, "r") as f:
         params = yaml.load(f, Loader=yaml.SafeLoader)
-        targets = params["scenes"]
+        targets = params["scenes_unfiltered"]
 
     # Add the object lists.
     for target in targets:
@@ -179,8 +178,8 @@ def main():
                         if not synset:
                             raise ValueError("Empty synset")
 
-                        if synset not in FAKE_SYNSETS:
-                            synset_obj = wn.synset(synset)
+                        # if synset not in FAKE_SYNSETS:
+                        #     synset_obj = wn.synset(synset)
                     except:
                         invalid_synsets[cat] = synset
 

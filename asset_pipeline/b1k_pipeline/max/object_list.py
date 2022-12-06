@@ -27,8 +27,12 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     filename = output_dir / OUTPUT_FILENAME
+    results = {"success": success, "needed_objects": needed, "provided_objects": provided, "meshes": meshes, "object_counts": counts, "error_invalid_name": sorted(nomatch)}
     with open(filename, "w") as f:
-        json.dump({"success": success, "needed_objects": needed, "provided_objects": provided, "meshes": meshes, "object_counts": counts, "error_invalid_name": sorted(nomatch)}, f, indent=4)
+        json.dump(results, f, indent=4)
+
+    print("success:", success)
+    print("error_invalid_name:", sorted(nomatch))
 
 if __name__ == "__main__":
     main()

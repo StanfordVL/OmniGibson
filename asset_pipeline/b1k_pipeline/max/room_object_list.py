@@ -1,7 +1,11 @@
+import sys
+sys.path.append(r"D:\ig_pipeline")
+
 import json
 import os
 import re
 from collections import defaultdict, Counter
+import b1k_pipeline.utils
 
 import pymxs
 rt = pymxs.runtime
@@ -19,7 +23,7 @@ def main():
         if rt.classOf(obj) not in [rt.Editable_Poly, rt.Editable_Mesh, rt.VrayProxy]:
             continue
 
-        match = PATTERN.fullmatch(obj.name)
+        match = b1k_pipeline.utils.parse_name(obj.name)
         if not match:
             nomatch.append(obj.name)
             continue
@@ -35,7 +39,7 @@ def main():
             if link_name == "base_link" or not link_name:
                 objects_by_room[room_str][cat] += 1
 
-    success = True # len(nomatch) == 0
+    success = True  # len(nomatch) == 0
 
     output_dir = os.path.join(rt.maxFilePath, "artifacts")
     os.makedirs(output_dir, exist_ok=True)

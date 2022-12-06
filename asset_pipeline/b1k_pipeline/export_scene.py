@@ -20,8 +20,9 @@ def main():
     with open(object_list_filename, "r") as f:
         mesh_list = json.load(f)["meshes"]
 
-    # Build the mesh tree using our mesh tree library. The scene code also uses this system.
-    G = build_mesh_tree(mesh_list, mesh_root_dir)
+    # Build the mesh tree using our mesh tree library.
+    # We don't need the upper side joints since we will only use these objects for bboxes.
+    G = build_mesh_tree(mesh_list, mesh_root_dir, load_upper=False)
 
     # Go through each object.
     roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
@@ -35,6 +36,10 @@ def main():
         obj_cat, obj_model, obj_inst_id, _ = root_node
         obj_name = "-".join([obj_cat, obj_model])
         obj_name_in_scene = "-".join([obj_cat, obj_model, obj_inst_id])
+        obj_rooms = G.nodes[root_node]["metadata"]["layer_name"]
+        # TODO: Verify rooms.
+        if obj_rooms == "0":
+            obj_rooms = ""
 
         # Assert that this object is available in the objects folder.
         assert os.path.exists(os.path.join(objects_root_dir, obj_name.replace("-", "/"))), f"Could not find object {obj_name} in objects directory."
@@ -48,6 +53,7 @@ def main():
             "category": obj_cat,
             "model": obj_model,
             "name": obj_name_in_scene,
+            "rooms": obj_rooms,
         }
         scene_link.attrib["bounding_box"] = " ".join(["%.4f" % item for item in bbox_size])
         joint = ET.SubElement(scene_tree_root, "joint")
