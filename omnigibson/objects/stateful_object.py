@@ -28,6 +28,7 @@ from omnigibson.systems import get_system_from_element_name, get_element_name_fr
 from omnigibson.renderer_settings.renderer_settings import RendererSettings
 from omnigibson.utils.constants import PrimType, EmitterType
 from omnigibson.object_states import Soaked
+from omnigibson.utils.usd_utils import BoundingBoxAPI
 
 
 # Optionally import bddl for object taxonomy.
@@ -457,6 +458,7 @@ class StatefulObject(BaseObject):
         for _, obj_state in self._states.items():
             if isinstance(obj_state, CachingEnabledObjectState):
                 obj_state.clear_cached_value()
+        BoundingBoxAPI.clear()
 
     def set_position_orientation(self, position=None, orientation=None):
         super().set_position_orientation(position=position, orientation=orientation)

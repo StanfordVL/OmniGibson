@@ -4,7 +4,7 @@ import numpy as np
 
 from omnigibson.macros import create_module_macros
 from omnigibson.object_states.object_state_base import CachingEnabledObjectState
-from omnigibson.object_states.pose import Pose
+from omnigibson.object_states.aabb import AABB
 from omnigibson.utils.sampling_utils import raytest_batch
 
 
@@ -80,7 +80,8 @@ def compute_adjacencies(obj, axes, max_distance):
     # Prepare this object's info for ray casting.
     # Use AABB center instead of position because we cannot get valid position
     # for fixed objects if fixed links are merged.
-    object_position, _ = obj.states[Pose].get_value()
+    aabb_lower, aabb_higher = obj.states[AABB].get_value()
+    object_position = (aabb_lower + aabb_higher) / 2.0
     prim_paths = obj.link_prim_paths
 
     # Cast rays repeatedly until the max number of casting is reached
@@ -143,7 +144,7 @@ class VerticalAdjacency(CachingEnabledObjectState):
 
     @staticmethod
     def get_dependencies():
-        return CachingEnabledObjectState.get_dependencies() + [Pose]
+        return CachingEnabledObjectState.get_dependencies() + [AABB]
 
     # Nothing needs to be done to save/load adjacency since it will happen due to pose caching.
 
@@ -184,6 +185,6 @@ class HorizontalAdjacency(CachingEnabledObjectState):
 
     @staticmethod
     def get_dependencies():
-        return CachingEnabledObjectState.get_dependencies() + [Pose]
+        return CachingEnabledObjectState.get_dependencies() + [AABB]
 
     # Nothing needs to be done to save/load adjacency since it will happen due to pose caching.
