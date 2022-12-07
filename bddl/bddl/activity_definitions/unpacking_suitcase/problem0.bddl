@@ -13,7 +13,7 @@
     )
     
     (:init 
-        (onfloor carton.n.02_1 floor.n.01_1) 
+        (ontop carton.n.02_1 floor.n.01_1) 
         (inside sock.n.01_1 carton.n.02_1) 
         (inside sock.n.01_2 carton.n.02_1) 
         (inside perfume.n.02_1 carton.n.02_1) 
@@ -21,12 +21,12 @@
         (inside notebook.n.01_1 carton.n.02_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom sofa.n.01_1 living_room) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (onfloor ?carton.n.02_1 ?floor.n.01_1) 
+            (ontop ?carton.n.02_1 ?floor.n.01_1) 
             (forall 
                 (?sock.n.01 - sock.n.01) 
                 (ontop ?sock.n.01 ?sofa.n.01_1)

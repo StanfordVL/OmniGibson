@@ -15,21 +15,21 @@
     )
     
     (:init 
-        (onfloor christmas_tree.n.05_1 floor.n.01_1)
-        (onfloor carton.n.02_1 floor.n.01_1)
+        (ontop christmas_tree.n.05_1 floor.n.01_1)
+        (ontop carton.n.02_1 floor.n.01_1)
         (inside wreath.n.01_1 carton.n.02_1)
         (inside bow.n.08_1 carton.n.02_1)
         (inside bow.n.08_2 carton.n.02_1)
         (inside bow.n.08_3 carton.n.02_1)
         (inside candle.n.01_1 carton.n.02_1)
         (inside candle.n.01_2 carton.n.02_1)
-        (onfloor wrapping.n.01_1 floor.n.01_1)
-        (onfloor wrapping.n.01_2 floor.n.01_1)
-        (onfloor wrapping.n.01_3 floor.n.01_1)
+        (ontop wrapping.n.01_1 floor.n.01_1)
+        (ontop wrapping.n.01_2 floor.n.01_1)
+        (ontop wrapping.n.01_3 floor.n.01_1)
         (inroom floor.n.01_1 living_room)
         (inroom table.n.02_1 dining_room)
         (inroom sofa.n.01_1 living_room)
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

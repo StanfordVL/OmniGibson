@@ -17,24 +17,24 @@
     )
     
     (:init 
-        (onfloor box.n.01_1 floor.n.01_1) 
-        (onfloor newspaper.n.03_1 floor.n.01_1) 
-        (onfloor newspaper.n.03_2 floor.n.01_1) 
-        (onfloor bottle.n.01_1 floor.n.01_1) 
-        (onfloor bottle.n.01_2 floor.n.01_1) 
+        (ontop box.n.01_1 floor.n.01_1) 
+        (ontop newspaper.n.03_1 floor.n.01_1) 
+        (ontop newspaper.n.03_2 floor.n.01_1) 
+        (ontop bottle.n.01_1 floor.n.01_1) 
+        (ontop bottle.n.01_2 floor.n.01_1) 
         (dusty floor.n.01_1) 
         (stained floor.n.01_1) 
         (dusty cabinet.n.01_1) 
-        (onfloor broom.n.01_1 floor.n.01_1) 
+        (ontop broom.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 table.n.02_1) 
-        (onfloor bin.n.01_1 floor.n.01_1) 
+        (ontop bin.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garage) 
         (inroom cabinet.n.01_1 garage) 
         (inroom sink.n.01_1 storage_room) 
         (inroom shelf.n.01_1 storage_room) 
         (inroom table.n.02_1 storage_room) 
         (inroom floor.n.01_2 storage_room) 
-        (onfloor agent.n.01_1 floor.n.01_2)
+        (ontop agent.n.01_1 floor.n.01_2)
     )
     
     (:goal 
@@ -53,7 +53,7 @@
                 (or 
                     (inside ?newspaper.n.03 ?bin.n.01_1) 
                     (not 
-                        (onfloor ?newspaper.n.03 ?floor.n.01_1)
+                        (ontop ?newspaper.n.03 ?floor.n.01_1)
                     )
                 )
             ) 

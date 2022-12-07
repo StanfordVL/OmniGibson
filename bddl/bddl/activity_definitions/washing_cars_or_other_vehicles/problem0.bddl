@@ -13,14 +13,14 @@
     
     (:init 
         (ontop soap.n.01_1 car.n.01_1) 
-        (onfloor car.n.01_1 floor.n.01_1) 
+        (ontop car.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 car.n.01_1) 
         (ontop rag.n.01_1 car.n.01_1) 
         (dusty car.n.01_1) 
         (stained car.n.01_1) 
         (inroom floor.n.01_1 garage) 
         (inroom sink.n.01_1 storage_room) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

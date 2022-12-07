@@ -16,13 +16,13 @@
     (:init 
         (dusty shelf.n.01_1) 
         (dusty cabinet.n.01_3) 
-        (onfloor jewelry.n.01_1 floor.n.01_1) 
-        (onfloor jewelry.n.01_2 floor.n.01_1) 
+        (ontop jewelry.n.01_1 floor.n.01_1) 
+        (ontop jewelry.n.01_2 floor.n.01_1) 
         (dusty floor.n.01_1) 
-        (onfloor hat.n.01_1 floor.n.01_1) 
-        (onfloor sandal.n.01_1 floor.n.01_1) 
-        (onfloor sandal.n.01_2 floor.n.01_1) 
-        (onfloor umbrella.n.01_1 floor.n.01_1) 
+        (ontop hat.n.01_1 floor.n.01_1) 
+        (ontop sandal.n.01_1 floor.n.01_1) 
+        (ontop sandal.n.01_2 floor.n.01_1) 
+        (ontop umbrella.n.01_1 floor.n.01_1) 
         (inside towel.n.01_1 cabinet.n.01_1) 
         (inroom cabinet.n.01_1 bedroom) 
         (inroom cabinet.n.01_2 bedroom) 
@@ -30,7 +30,7 @@
         (inroom shelf.n.01_1 closet) 
         (inroom floor.n.01_1 closet) 
         (inroom floor.n.01_2 bedroom) 
-        (onfloor agent.n.01_1 floor.n.01_2)
+        (ontop agent.n.01_1 floor.n.01_2)
     )
     
     (:goal 
@@ -50,7 +50,7 @@
                 (?sandal.n.01 - sandal.n.01) 
                 (and 
                     (nextto ?sandal.n.01 ?shelf.n.01_1) 
-                    (onfloor ?sandal.n.01 ?floor.n.01_1)
+                    (ontop ?sandal.n.01 ?floor.n.01_1)
                 )
             ) 
             (not 

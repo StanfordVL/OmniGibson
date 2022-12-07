@@ -14,18 +14,18 @@
     )
     
     (:init 
-        (onfloor pumpkin.n.02_1 floor.n.01_1) 
-        (onfloor pumpkin.n.02_2 floor.n.01_1) 
-        (onfloor caldron.n.01_1 floor.n.01_1) 
+        (ontop pumpkin.n.02_1 floor.n.01_1) 
+        (ontop pumpkin.n.02_2 floor.n.01_1) 
+        (ontop caldron.n.01_1 floor.n.01_1) 
         (ontop sheet.n.03_1 table.n.02_1) 
-        (onfloor candle.n.01_1 floor.n.01_1) 
-        (onfloor candle.n.01_2 floor.n.01_1) 
-        (onfloor candle.n.01_3 floor.n.01_1) 
+        (ontop candle.n.01_1 floor.n.01_1) 
+        (ontop candle.n.01_2 floor.n.01_1) 
+        (ontop candle.n.01_3 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom cabinet.n.01_1 living_room) 
         (inroom table.n.02_1 living_room) 
         (inroom sofa.n.01_1 living_room) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

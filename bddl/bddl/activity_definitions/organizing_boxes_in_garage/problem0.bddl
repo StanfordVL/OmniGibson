@@ -13,10 +13,10 @@
     )
     
     (:init 
-        (onfloor carton.n.02_1 floor.n.01_1) 
-        (onfloor carton.n.02_2 floor.n.01_1) 
-        (onfloor ball.n.01_1 floor.n.01_1) 
-        (onfloor ball.n.01_2 floor.n.01_1) 
+        (ontop carton.n.02_1 floor.n.01_1) 
+        (ontop carton.n.02_2 floor.n.01_1) 
+        (ontop ball.n.01_1 floor.n.01_1) 
+        (ontop ball.n.01_2 floor.n.01_1) 
         (inside plate.n.04_1 shelf.n.01_1) 
         (inside plate.n.04_2 shelf.n.01_1) 
         (inside plate.n.04_3 shelf.n.01_1) 
@@ -24,7 +24,7 @@
         (inroom floor.n.01_1 garage) 
         (inroom shelf.n.01_1 garage) 
         (inroom cabinet.n.01_1 garage) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
@@ -45,7 +45,7 @@
             ) 
             (forall 
                 (?carton.n.02 - carton.n.02) 
-                (onfloor ?carton.n.02 floor.n.01_1)
+                (ontop ?carton.n.02 floor.n.01_1)
             )
         )
     )

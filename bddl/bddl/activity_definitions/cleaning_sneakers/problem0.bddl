@@ -15,13 +15,13 @@
     )
     
     (:init 
-        (onfloor gym_shoe.n.01_1 floor.n.01_2) 
+        (ontop gym_shoe.n.01_1 floor.n.01_2) 
         (stained gym_shoe.n.01_1) 
-        (onfloor gym_shoe.n.01_2 floor.n.01_2) 
+        (ontop gym_shoe.n.01_2 floor.n.01_2) 
         (stained gym_shoe.n.01_2) 
-        (onfloor gym_shoe.n.01_3 floor.n.01_2) 
+        (ontop gym_shoe.n.01_3 floor.n.01_2) 
         (dusty gym_shoe.n.01_3) 
-        (onfloor gym_shoe.n.01_4 floor.n.01_2) 
+        (ontop gym_shoe.n.01_4 floor.n.01_2) 
         (dusty gym_shoe.n.01_4) 
         (inside soap.n.01_1 cabinet.n.01_1) 
         (ontop towel.n.01_1 countertop.n.01_1) 
@@ -38,7 +38,7 @@
         (inroom floor.n.01_1 living_room) 
         (inroom table.n.02_1 living_room) 
         (inroom floor.n.01_2 kitchen) 
-        (onfloor agent.n.01_1 floor.n.01_2)
+        (ontop agent.n.01_1 floor.n.01_2)
     )
     
     (:goal 
@@ -70,7 +70,7 @@
             ) 
             (forall 
                 (?gym_shoe.n.01 - gym_shoe.n.01) 
-                (onfloor ?gym_shoe.n.01 ?floor.n.01_1)
+                (ontop ?gym_shoe.n.01 ?floor.n.01_1)
             )
         )
     )

@@ -11,17 +11,17 @@
     )
     
     (:init 
-        (onfloor wreath.n.01_1 floor.n.01_1) 
-        (onfloor wreath.n.01_2 floor.n.01_1) 
-        (onfloor bow.n.08_1 floor.n.01_1) 
-        (onfloor bow.n.08_2 floor.n.01_1) 
-        (onfloor bow.n.08_3 floor.n.01_1) 
-        (onfloor ribbon.n.01_1 floor.n.01_1) 
-        (onfloor ribbon.n.01_2 floor.n.01_1) 
-        (onfloor ribbon.n.01_3 floor.n.01_1) 
+        (ontop wreath.n.01_1 floor.n.01_1) 
+        (ontop wreath.n.01_2 floor.n.01_1) 
+        (ontop bow.n.08_1 floor.n.01_1) 
+        (ontop bow.n.08_2 floor.n.01_1) 
+        (ontop bow.n.08_3 floor.n.01_1) 
+        (ontop ribbon.n.01_1 floor.n.01_1) 
+        (ontop ribbon.n.01_2 floor.n.01_1) 
+        (ontop ribbon.n.01_3 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom cabinet.n.01_1 living_room) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

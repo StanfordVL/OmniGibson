@@ -12,19 +12,19 @@
     )
     
     (:init 
-        (onfloor shampoo.n.01_1 floor.n.01_1) 
-        (onfloor soap.n.01_1 floor.n.01_1) 
-        (onfloor towel.n.01_1 floor.n.01_1) 
+        (ontop shampoo.n.01_1 floor.n.01_1) 
+        (ontop soap.n.01_1 floor.n.01_1) 
+        (ontop towel.n.01_1 floor.n.01_1) 
         (inroom shower.n.01_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
         (inroom sink.n.01_1 bathroom) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (onfloor ?towel.n.01_1 ?floor.n.01_1) 
-            (onfloor ?shampoo.n.01_1 ?floor.n.01_1) 
+            (ontop ?towel.n.01_1 ?floor.n.01_1) 
+            (ontop ?shampoo.n.01_1 ?floor.n.01_1) 
             (nextto ?soap.n.01_1 ?sink.n.01_1)
         )
     )

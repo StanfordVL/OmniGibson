@@ -15,14 +15,14 @@
     (:init 
         (dusty floor.n.01_1) 
         (stained floor.n.01_1) 
-        (onfloor broom.n.01_1 floor.n.01_1) 
-        (onfloor dustpan.n.02_1 floor.n.01_1) 
-        (onfloor cleansing_agent.n.01_1 floor.n.01_1) 
-        (onfloor scrub_brush.n.01_1 floor.n.01_1) 
+        (ontop broom.n.01_1 floor.n.01_1) 
+        (ontop dustpan.n.02_1 floor.n.01_1) 
+        (ontop cleansing_agent.n.01_1 floor.n.01_1) 
+        (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
         (inroom door.n.01_1 bathroom) 
         (inroom sink.n.01_1 bathroom) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

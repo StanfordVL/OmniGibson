@@ -22,7 +22,7 @@
     )
     
     (:init 
-        (onfloor bin.n.01_1 floor.n.01_1) 
+        (ontop bin.n.01_1 floor.n.01_1) 
         (inside soap.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
         (not 
@@ -30,9 +30,9 @@
         ) 
         (inside dustpan.n.02_1 cabinet.n.01_1) 
         (dusty dustpan.n.02_1) 
-        (onfloor broom.n.01_1 floor.n.01_1) 
+        (ontop broom.n.01_1 floor.n.01_1) 
         (dusty broom.n.01_1) 
-        (onfloor blender.n.01_1 floor.n.01_1) 
+        (ontop blender.n.01_1 floor.n.01_1) 
         (stained blender.n.01_1) 
         (inside casserole.n.02_1 electric_refrigerator.n.01_1) 
         (inside plate.n.04_1 electric_refrigerator.n.01_1) 
@@ -49,7 +49,7 @@
         (inroom sink.n.01_1 kitchen) 
         (inroom window.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

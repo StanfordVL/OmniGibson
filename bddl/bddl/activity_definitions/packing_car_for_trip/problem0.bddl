@@ -13,15 +13,15 @@
     )
     
     (:init 
-        (onfloor car.n.01_1 floor.n.01_1) 
-        (onfloor briefcase.n.01_1 floor.n.01_2) 
+        (ontop car.n.01_1 floor.n.01_1) 
+        (ontop briefcase.n.01_1 floor.n.01_2) 
         (ontop pencil_box.n.01_1 table.n.02_1) 
         (ontop headset.n.01_1 table.n.02_1) 
-        (onfloor duffel_bag.n.01_1 floor.n.01_2) 
+        (ontop duffel_bag.n.01_1 floor.n.01_2) 
         (inroom floor.n.01_1 garage) 
         (inroom floor.n.01_2 storage_room) 
         (inroom table.n.02_1 storage_room) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

@@ -15,7 +15,7 @@
         (inroom door.n.01_2 bathroom) 
         (inroom bed.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
