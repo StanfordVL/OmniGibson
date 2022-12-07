@@ -10,15 +10,15 @@
     )
     
     (:init 
-        (onfloor ashcan.n.01_1 floor.n.01_2) 
-        (onfloor pad.n.01_1 floor.n.01_2) 
-        (onfloor pad.n.01_2 floor.n.01_2) 
-        (onfloor pad.n.01_3 floor.n.01_1) 
-        (onfloor pop.n.02_1 floor.n.01_1) 
-        (onfloor pop.n.02_2 floor.n.01_1) 
+        (ontop ashcan.n.01_1 floor.n.01_2) 
+        (ontop pad.n.01_1 floor.n.01_2) 
+        (ontop pad.n.01_2 floor.n.01_2) 
+        (ontop pad.n.01_3 floor.n.01_1) 
+        (ontop pop.n.02_1 floor.n.01_1) 
+        (ontop pop.n.02_2 floor.n.01_1) 
         (inroom floor.n.01_2 kitchen) 
         (inroom floor.n.01_1 living_room) 
-        (onfloor agent.n.01_1 floor.n.01_2)
+        (ontop agent.n.01_1 floor.n.01_2)
     )
     
     (:goal 

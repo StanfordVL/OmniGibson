@@ -18,15 +18,15 @@
     (:init 
         (ontop highlighter.n.02_1 bed.n.01_1) 
         (ontop pencil.n.01_1 bed.n.01_1) 
-        (onfloor pen.n.01_1 floor.n.01_1) 
-        (onfloor calculator.n.02_1 floor.n.01_1) 
+        (ontop pen.n.01_1 floor.n.01_1) 
+        (ontop calculator.n.02_1 floor.n.01_1) 
         (ontop book.n.02_1 bed.n.01_1) 
         (ontop folder.n.02_1 bed.n.01_1) 
-        (onfloor backpack.n.01_1 floor.n.01_1) 
+        (ontop backpack.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bedroom) 
         (inroom bed.n.01_1 bedroom) 
         (inroom table.n.02_1 bedroom) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

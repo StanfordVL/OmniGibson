@@ -13,10 +13,10 @@
     )
     
     (:init 
-        (onfloor basket.n.01_1 floor.n.01_1) 
-        (onfloor basket.n.01_2 floor.n.01_1) 
-        (onfloor basket.n.01_3 floor.n.01_1) 
-        (onfloor basket.n.01_4 floor.n.01_1) 
+        (ontop basket.n.01_1 floor.n.01_1) 
+        (ontop basket.n.01_2 floor.n.01_1) 
+        (ontop basket.n.01_3 floor.n.01_1) 
+        (ontop basket.n.01_4 floor.n.01_1) 
         (ontop candle.n.01_1 table.n.02_1) 
         (ontop candle.n.01_2 table.n.02_1) 
         (ontop candle.n.01_3 table.n.02_1) 
@@ -36,7 +36,7 @@
         (inroom floor.n.01_1 living_room) 
         (inroom table.n.02_1 living_room) 
         (inroom table.n.02_2 living_room) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

@@ -11,9 +11,9 @@
     )
     
     (:init 
-        (onfloor pot_plant.n.01_1 floor.n.01_1) 
-        (onfloor pot_plant.n.01_2 floor.n.01_1) 
-        (onfloor pot_plant.n.01_3 floor.n.01_2) 
+        (ontop pot_plant.n.01_1 floor.n.01_1) 
+        (ontop pot_plant.n.01_2 floor.n.01_1) 
+        (ontop pot_plant.n.01_3 floor.n.01_2) 
         (not 
             (soaked pot_plant.n.01_1)
         ) 
@@ -28,7 +28,7 @@
         (inroom floor.n.01_2 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
-        (onfloor agent.n.01_1 floor.n.01_2)
+        (ontop agent.n.01_1 floor.n.01_2)
     )
     
     (:goal 

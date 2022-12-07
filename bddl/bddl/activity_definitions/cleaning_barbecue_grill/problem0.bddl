@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (onfloor grill.n.02_1 floor.n.01_1) 
+        (ontop grill.n.02_1 floor.n.01_1) 
         (stained grill.n.02_1) 
         (dusty grill.n.02_1) 
         (ontop bucket.n.01_1 table.n.02_1) 
@@ -20,7 +20,7 @@
         (inroom floor.n.01_1 garage) 
         (inroom table.n.02_1 storage_room) 
         (inroom sink.n.01_1 storage_room)
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

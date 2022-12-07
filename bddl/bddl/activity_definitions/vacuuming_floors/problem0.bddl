@@ -10,10 +10,10 @@
     
     (:init 
         (dusty floor.n.01_1) 
-        (onfloor vacuum.n.04_1 floor.n.01_1) 
-        (onfloor ashcan.n.01_1 floor.n.01_1) 
+        (ontop vacuum.n.04_1 floor.n.01_1) 
+        (ontop ashcan.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bedroom) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

@@ -12,15 +12,15 @@
     (:init 
         (stained shoe.n.01_1) 
         (stained shoe.n.01_2) 
-        (onfloor rag.n.01_1 floor.n.01_1) 
+        (ontop rag.n.01_1 floor.n.01_1) 
         (not 
             (soaked rag.n.01_1)
         ) 
-        (onfloor shoe.n.01_1 floor.n.01_1) 
-        (onfloor shoe.n.01_2 floor.n.01_1) 
+        (ontop shoe.n.01_1 floor.n.01_1) 
+        (ontop shoe.n.01_2 floor.n.01_1) 
         (inroom sink.n.01_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

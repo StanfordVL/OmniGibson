@@ -19,8 +19,8 @@
         (not 
             (stained sink.n.01_1)
         ) 
-        (onfloor receptacle.n.01_1 floor.n.01_1) 
-        (onfloor bucket.n.01_1 floor.n.01_1) 
+        (ontop receptacle.n.01_1 floor.n.01_1) 
+        (ontop bucket.n.01_1 floor.n.01_1) 
         (ontop scraper.n.01_1 countertop.n.01_1) 
         (ontop towel.n.01_1 countertop.n.01_1) 
         (not 
@@ -37,7 +37,7 @@
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

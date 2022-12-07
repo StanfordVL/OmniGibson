@@ -15,7 +15,7 @@
         (ontop modem.n.01_1 table.n.02_1) 
         (inroom table.n.02_1 home_office) 
         (inroom floor.n.01_1 home_office) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

@@ -20,13 +20,13 @@
         (inroom sink.n.01_1 bathroom) 
         (inroom floor.n.01_2 bathroom) 
         (inroom bed.n.01_1 bedroom) 
-        (onfloor agent.n.01_1 floor.n.01_2)
+        (ontop agent.n.01_1 floor.n.01_2)
     )
     
     (:goal 
         (and 
-            (onfloor ?mousetrap.n.01_1 ?floor.n.01_1) 
-            (onfloor ?mousetrap.n.01_2 ?floor.n.01_1) 
+            (ontop ?mousetrap.n.01_1 ?floor.n.01_1) 
+            (ontop ?mousetrap.n.01_2 ?floor.n.01_1) 
             (nextto ?mousetrap.n.01_3 ?toilet.n.02_1) 
             (nextto ?mousetrap.n.01_4 ?toilet.n.02_1)
         )

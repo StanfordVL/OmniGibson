@@ -12,15 +12,15 @@
     )
     
     (:init 
-        (onfloor broom.n.01_1 floor.n.01_2) 
-        (onfloor soap.n.01_1 floor.n.01_1) 
-        (onfloor bucket.n.01_1 floor.n.01_1) 
-        (onfloor piece_of_cloth.n.01_1 floor.n.01_1) 
+        (ontop broom.n.01_1 floor.n.01_2) 
+        (ontop soap.n.01_1 floor.n.01_1) 
+        (ontop bucket.n.01_1 floor.n.01_1) 
+        (ontop piece_of_cloth.n.01_1 floor.n.01_1) 
         (stained floor.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
         (inroom floor.n.01_2 corridor) 
         (inroom sink.n.01_1 bathroom) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 

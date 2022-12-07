@@ -35,8 +35,8 @@
         (stained cup.n.01_1) 
         (stained cup.n.01_2) 
         (ontop hamburger.n.01_1 chair.n.01_2) 
-        (onfloor hamburger.n.01_2 floor.n.01_1) 
-        (onfloor detergent.n.02_1 floor.n.01_1) 
+        (ontop hamburger.n.01_2 floor.n.01_1) 
+        (ontop detergent.n.02_1 floor.n.01_1) 
         (stained chair.n.01_1) 
         (stained chair.n.01_2) 
         (stained table.n.02_1) 
@@ -47,7 +47,7 @@
         (inroom chair.n.01_1 dining_room) 
         (inroom chair.n.01_2 dining_room) 
         (inroom sink.n.01_1 kitchen)
-        (onfloor agent.n.01_1 floor.n.01_2)
+        (ontop agent.n.01_1 floor.n.01_2)
     )
     
     (:goal 
@@ -74,7 +74,7 @@
                 (?hamburger.n.01 - hamburger.n.01) 
                 (inside ?hamburger.n.01 ?sack.n.01_1)
             ) 
-            (onfloor ?sack.n.01_1 ?floor.n.01_1) 
+            (ontop ?sack.n.01_1 ?floor.n.01_1) 
             (not 
                 (stained ?floor.n.01_1)
             ) 

@@ -16,7 +16,7 @@
     )
     
     (:init 
-        (onfloor backpack.n.01_1 floor.n.01_1) 
+        (ontop backpack.n.01_1 floor.n.01_1) 
         (ontop toothbrush.n.01_1 bed.n.01_1) 
         (ontop shampoo.n.01_1 bed.n.01_1) 
         (ontop hardback.n.01_1 bed.n.01_1) 
@@ -27,7 +27,7 @@
         (inroom floor.n.01_1 bedroom) 
         (inroom door.n.01_1 bedroom) 
         (inroom window.n.01_1 bedroom) 
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
@@ -42,7 +42,7 @@
             (inside ?toothpaste.n.01_1 ?backpack.n.01_1) 
             (or 
                 (ontop ?backpack.n.01_1 ?bed.n.01_1) 
-                (onfloor ?backpack.n.01_1 ?floor.n.01_1)
+                (ontop ?backpack.n.01_1 ?floor.n.01_1)
             )
         )
     )

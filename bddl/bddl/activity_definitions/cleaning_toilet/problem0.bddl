@@ -12,12 +12,12 @@
     
     (:init 
         (stained toilet.n.02_1) 
-        (onfloor scrub_brush.n.01_1 floor.n.01_1) 
-        (onfloor detergent.n.02_1 floor.n.01_1) 
+        (ontop scrub_brush.n.01_1 floor.n.01_1) 
+        (ontop detergent.n.02_1 floor.n.01_1) 
         (inroom toilet.n.02_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
         (inroom sink.n.01_1 bathroom)
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
@@ -25,8 +25,8 @@
             (not 
                 (stained ?toilet.n.02_1)
             ) 
-            (onfloor ?scrub_brush.n.01_1 ?floor.n.01_1) 
-            (onfloor ?detergent.n.02_1 ?floor.n.01_1)
+            (ontop ?scrub_brush.n.01_1 ?floor.n.01_1) 
+            (ontop ?detergent.n.02_1 ?floor.n.01_1)
         )
     )
 )
