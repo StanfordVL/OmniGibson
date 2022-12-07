@@ -13,8 +13,8 @@
             (toggled_on modem.n.01_1)
         ) 
         (ontop modem.n.01_1 table.n.02_1) 
-        (inroom table.n.02_1 home_office) 
-        (inroom floor.n.01_1 home_office) 
+        (inroom table.n.02_1 private_office) 
+        (inroom floor.n.01_1 private_office) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
