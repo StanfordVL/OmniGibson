@@ -10,6 +10,7 @@
     	toilet.n.02_1 - toilet.n.02
     	bed.n.01_1 - bed.n.01
     	sink.n.01_1 - sink.n.01
+        water.n.06_1 - water.n.06
     	agent.n.01_1 - agent.n.01
     )
     
@@ -27,6 +28,7 @@
         (inroom shower.n.01_1 bathroom) 
         (inroom toilet.n.02_1 bathroom) 
         (inroom bed.n.01_1 bedroom) 
+        (insource water.n.06_1 sink.n.01_1)
         (inroom sink.n.01_1 bathroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

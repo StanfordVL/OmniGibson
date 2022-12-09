@@ -8,6 +8,7 @@
     	shelf.n.01_1 - shelf.n.01
     	detergent.n.02_1 - detergent.n.02
         sink.n.01_1 - sink.n.01
+        water.n.06_1 - water.n.06
     	agent.n.01_1 - agent.n.01
     )
     
@@ -18,6 +19,7 @@
         (ontop detergent.n.02_1 floor.n.01_1) 
         (inroom shelf.n.01_1 garage) 
         (inroom floor.n.01_1 garage) 
+        (insource water.n.06_1 sink.n.01_1)
         (inroom sink.n.01_1 storage_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )

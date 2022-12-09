@@ -9,6 +9,7 @@
     	floor.n.01_1 - floor.n.01
     	cabinet.n.01_1 - cabinet.n.01
     	sink.n.01_1 - sink.n.01
+        water.n.06_1 - water.n.06
     	agent.n.01_1 - agent.n.01
     )
     
@@ -20,6 +21,7 @@
         (inroom microwave.n.02_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
+        (insource water.n.06_1 sink.n.01_1)
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
