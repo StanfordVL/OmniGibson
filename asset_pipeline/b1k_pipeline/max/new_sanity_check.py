@@ -231,7 +231,7 @@ class SanityCheck:
     columns = set(df.columns)
 
     # Run the single-object validation checks.
-    objs = df[df["type"] == rt.Editable_Poly]
+    objs = df[(df["type"] == rt.Editable_Poly) & df["name_bad"].isnull()]
     objs.apply(self.validate_object, axis="columns")
 
     # Check that instance name-based grouping is equal to instance-based grouping.
