@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
      	soap.n.01_1 - soap.n.01
     	bed.n.01_1 - bed.n.01
     	floor.n.01_1 - floor.n.01
@@ -22,8 +23,8 @@
         (ontop shoe.n.01_4 bed.n.01_1) 
         (stained shoe.n.01_1) 
         (stained shoe.n.01_2) 
-        (dusty shoe.n.01_3) 
-        (dusty shoe.n.01_4) 
+        (covered shoe.n.01_3 dust.n.01_1) 
+        (covered shoe.n.01_4 dust.n.01_1) 
         (insource water.n.06_1 sink.n.01_1)
         (inroom floor.n.01_1 bedroom) 
         (inroom bed.n.01_1 bedroom) 
@@ -42,7 +43,7 @@
             (forall 
                 (?shoe.n.01 - shoe.n.01) 
                 (not 
-                    (dusty ?shoe.n.01)
+                    (covered ?shoe.n.01 dust.n.01_1)
                 )
             ) 
             (ontop ?towel.n.01_1 ?floor.n.01_1)

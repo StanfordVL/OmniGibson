@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
      	vehicle.n.01_1 - vehicle.n.01
     	floor.n.01_1 - floor.n.01
     	vessel.n.03_1 - vessel.n.03
@@ -12,7 +13,7 @@
     
     (:init 
         (ontop vehicle.n.01_1 floor.n.01_1) 
-        (dusty vehicle.n.01_1) 
+        (covered vehicle.n.01_1 dust.n.01_1) 
         (ontop vessel.n.03_1 shelf.n.01_1) 
 	(inside rag.n.01_1 shelf.n.01_1)
         (inroom floor.n.01_1 garage) 
@@ -23,8 +24,9 @@
     (:goal 
         (and 
             (not 
-                (dusty ?vehicle.n.01_1)
+                (covered ?vehicle.n.01_1 dust.n.01_1)
             ) 
         )
     )
 )
+

@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
      	grill.n.02_1 - grill.n.02
     	floor.n.01_1 - floor.n.01
     	rag.n.01_1 - rag.n.01
@@ -15,7 +16,7 @@
     (:init 
         (ontop grill.n.02_1 floor.n.01_1) 
         (stained grill.n.02_1) 
-        (dusty grill.n.02_1) 
+        (covered grill.n.02_1 dust.n.01_1) 
         (ontop bucket.n.01_1 table.n.02_1) 
         (ontop rag.n.01_1 table.n.02_1) 
         (insource water.n.06_1 sink.n.01_1)
@@ -31,7 +32,7 @@
                 (stained ?grill.n.02_1)
             ) 
             (not 
-                (dusty ?grill.n.02_1)
+                (covered ?grill.n.02_1 dust.n.01_1)
             )
         )
     )

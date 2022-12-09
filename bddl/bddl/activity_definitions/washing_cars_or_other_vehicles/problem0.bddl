@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
      	soap.n.01_1 - soap.n.01
     	car.n.01_1 - car.n.01
     	floor.n.01_1 - floor.n.01
@@ -17,7 +18,7 @@
         (ontop car.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 car.n.01_1) 
         (ontop rag.n.01_1 car.n.01_1) 
-        (dusty car.n.01_1) 
+        (covered car.n.01_1 dust.n.01_1) 
         (stained car.n.01_1) 
         (inroom floor.n.01_1 garage) 
         (insource water.n.06_1 sink.n.01_1)
@@ -28,7 +29,7 @@
     (:goal 
         (and 
             (not 
-                (dusty car.n.01_1)
+                (covered car.n.01_1 dust.n.01_1)
             ) 
             (not 
                 (stained car.n.01_1)

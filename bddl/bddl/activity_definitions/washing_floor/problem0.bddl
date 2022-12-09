@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
      	bucket.n.01_1 - bucket.n.01
     	floor.n.01_1 - floor.n.01
     	soap.n.01_1 - soap.n.01
@@ -22,7 +23,7 @@
         (not 
             (stained towel.n.01_1)
         ) 
-        (dusty floor.n.01_1) 
+        (covered floor.n.01_1 dust.n.01_1) 
         (stained floor.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
         (inroom shower.n.01_1 bathroom) 
@@ -37,7 +38,7 @@
         (and 
             (not 
                 (or 
-                    (dusty ?floor.n.01_1) 
+                    (covered ?floor.n.01_1 dust.n.01_1) 
                     (stained ?floor.n.01_1)
                 )
             )

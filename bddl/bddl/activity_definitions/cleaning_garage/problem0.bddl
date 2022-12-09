@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
      	box.n.01_1 - box.n.01
     	floor.n.01_1 floor.n.01_2 - floor.n.01
     	newspaper.n.03_1 newspaper.n.03_2 - newspaper.n.03
@@ -23,9 +24,9 @@
         (ontop newspaper.n.03_2 floor.n.01_1) 
         (ontop bottle.n.01_1 floor.n.01_1) 
         (ontop bottle.n.01_2 floor.n.01_1) 
-        (dusty floor.n.01_1) 
+        (covered floor.n.01_1 dust.n.01_1) 
         (stained floor.n.01_1) 
-        (dusty cabinet.n.01_1) 
+        (covered cabinet.n.01_1 dust.n.01_1) 
         (ontop broom.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 table.n.02_1) 
         (ontop bin.n.01_1 floor.n.01_1) 
@@ -42,10 +43,10 @@
     (:goal 
         (and 
             (not 
-                (dusty ?floor.n.01_1)
+                (covered ?floor.n.01_1 dust.n.01_1)
             ) 
             (not 
-                (dusty ?cabinet.n.01_1)
+                (covered ?cabinet.n.01_1 dust.n.01_1)
             ) 
             (not 
                 (stained ?cabinet.n.01_1)

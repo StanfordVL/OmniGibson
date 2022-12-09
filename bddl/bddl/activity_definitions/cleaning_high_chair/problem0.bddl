@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
         highchair.n.01_1 - highchair.n.01
         piece_of_cloth.n.01_1 - piece_of_cloth.n.01
         cabinet.n.01_1 - cabinet.n.01
@@ -10,7 +11,7 @@
     )
     
     (:init 
-        (dusty highchair.n.01_1) 
+        (covered highchair.n.01_1 dust.n.01_1) 
         (inside piece_of_cloth.n.01_1 cabinet.n.01_1) 
         (ontop highchair.n.01_1 floor.n.01_2) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -22,7 +23,7 @@
     (:goal 
         (and 
             (not 
-                (dusty ?highchair.n.01_1)
+                (covered ?highchair.n.01_1 dust.n.01_1)
             )
         )
     )
