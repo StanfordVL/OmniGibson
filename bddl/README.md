@@ -76,7 +76,7 @@ behavior_activity_instance = BEHAVIORActivityInstance(behavior_activity=behavior
 
 ### With simulator 
 
-To use a BEHAVIOR activity with a simulator, create a subclass of `BEHAVIORActivityInstance` for your simulator. Example for iGibson 2.0. This will require an implementation of sampling functionality or pre-sampled scenes that satisfy the activity's initial condition and implementation for checking each type of binary kinematic predicate (e.g. `ontop`, `nextto`) and unary nonkinematic predicate (e.g. `cooked`, `soaked`). 
+To use a BEHAVIOR activity with a simulator, create a subclass of `BEHAVIORActivityInstance` for your simulator. Example for iGibson 2.0. This will require an implementation of sampling functionality or pre-sampled scenes that satisfy the activity's initial condition and implementation for checking each type of binary kinematic predicate (e.g. `ontop`, `nextto`) and unary nonkinematic predicate (e.g. `cooked`, `saturated`). 
 
 ## Logic evaluator for goal
 
