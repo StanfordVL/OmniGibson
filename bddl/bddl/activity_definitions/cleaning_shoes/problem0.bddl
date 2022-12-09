@@ -24,9 +24,7 @@
         (stained shoe.n.01_2) 
         (dusty shoe.n.01_3) 
         (dusty shoe.n.01_4) 
-        (not 
-            (soaked rag.n.01_1)
-        ) 
+        (insource water.n.06_1 sink.n.01_1)
         (inroom floor.n.01_1 bedroom) 
         (inroom bed.n.01_1 bedroom) 
         (inroom sink.n.01_1 bathroom)

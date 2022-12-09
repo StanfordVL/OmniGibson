@@ -11,6 +11,7 @@
         dustpan.n.02_1 - dustpan.n.02
         broom.n.01_1 - broom.n.01
         blender.n.01_1 - blender.n.01
+        water.n.06_1 - water.n.06
         sink.n.01_1 - sink.n.01
         casserole.n.02_1 - casserole.n.02
         plate.n.04_1 - plate.n.04
@@ -25,9 +26,6 @@
         (ontop bin.n.01_1 floor.n.01_1) 
         (inside soap.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
-        (not 
-            (soaked rag.n.01_1)
-        ) 
         (inside dustpan.n.02_1 cabinet.n.01_1) 
         (dusty dustpan.n.02_1) 
         (ontop broom.n.01_1 floor.n.01_1) 
@@ -42,6 +40,7 @@
         (dusty floor.n.01_1) 
         (dusty cabinet.n.01_1) 
         (dusty cabinet.n.01_2) 
+        (insource water.n.06_1 sink.n.01_1)
         (inroom floor.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom cabinet.n.01_2 kitchen) 
