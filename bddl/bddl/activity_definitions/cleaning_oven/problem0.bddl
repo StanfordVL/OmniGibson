@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
      	receptacle.n.01_1 - receptacle.n.01
     	floor.n.01_1 - floor.n.01
     	soap.n.01_1 - soap.n.01
@@ -22,7 +23,7 @@
         (inside rag.n.01_2 cabinet.n.01_1) 
         (ontop newspaper.n.03_1 floor.n.01_1) 
         (inside scrub_brush.n.01_1 cabinet.n.01_1) 
-        (stained oven.n.01_1) 
+        (covered oven.n.01_1 stain.n.01_1) 
         (inroom oven.n.01_1 kitchen) 
         (insource water.n.06_1 sink.n.01_1)
         (inroom cabinet.n.01_1 kitchen) 
@@ -34,7 +35,7 @@
     (:goal 
         (and 
             (not 
-                (stained ?oven.n.01_1)
+                (covered ?oven.n.01_1 stain.n.01_1)
             )
         )
     )

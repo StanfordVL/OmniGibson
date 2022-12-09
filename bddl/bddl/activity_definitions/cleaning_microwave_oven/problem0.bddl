@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
         dust.n.01_1 - dust.n.01
      	microwave.n.02_1 - microwave.n.02
     	rag.n.01_1 - rag.n.01
@@ -16,7 +17,7 @@
     
     (:init 
         (covered microwave.n.02_1 dust.n.01_1) 
-        (stained microwave.n.02_1) 
+        (covered microwave.n.02_1 stain.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (ontop ashcan.n.01_1 floor.n.01_1) 
         (inroom microwave.n.02_1 kitchen) 
@@ -34,8 +35,9 @@
                 (covered ?microwave.n.02_1 dust.n.01_1)
             ) 
             (not 
-                (stained ?microwave.n.02_1)
+                (covered ?microwave.n.02_1 stain.n.01_1)
             )
         )
     )
 )
+

@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
      	teapot.n.01_1 - teapot.n.01
         kettle.n.01_1 - kettle.n.01
     	pan.n.01_1 pan.n.01_2 pan.n.01_3 - pan.n.01
@@ -17,15 +18,15 @@
     
     (:init 
         (ontop teapot.n.01_1 countertop.n.01_1) 
-        (stained teapot.n.01_1) 
+        (covered teapot.n.01_1 stain.n.01_1) 
         (ontop kettle.n.01_1 countertop.n.01_2) 
-        (stained kettle.n.01_1) 
+        (covered kettle.n.01_1 stain.n.01_1) 
         (ontop pan.n.01_1 countertop.n.01_1) 
-        (stained pan.n.01_1) 
+        (covered pan.n.01_1 stain.n.01_1) 
         (ontop pan.n.01_2 countertop.n.01_1) 
-        (stained pan.n.01_2) 
+        (covered pan.n.01_2 stain.n.01_1) 
         (ontop pan.n.01_3 countertop.n.01_2) 
-        (stained pan.n.01_3) 
+        (covered pan.n.01_3 stain.n.01_1) 
         (ontop scrub_brush.n.01_1 countertop.n.01_2) 
         (inside soap.n.01_1 sink.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -44,7 +45,7 @@
                 (?pan.n.01 - pan.n.01) 
                 (and 
                     (not 
-                        (stained ?pan.n.01)
+                        (covered ?pan.n.01 stain.n.01_1)
                     ) 
                     (exists 
                         (?cabinet.n.01 - cabinet.n.01) 
@@ -56,7 +57,7 @@
                 (?kettle.n.01 - kettle.n.01) 
                 (and 
                     (not 
-                        (stained ?kettle.n.01)
+                        (covered ?kettle.n.01 stain.n.01_1)
                     ) 
                     (exists 
                         (?cabinet.n.01 - cabinet.n.01) 
@@ -68,7 +69,7 @@
                 (?teapot.n.01 - teapot.n.01) 
                 (and 
                     (not 
-                        (stained ?teapot.n.01)
+                        (covered ?teapot.n.01 stain.n.01_1)
                     ) 
                     (exists 
                         (?cabinet.n.01 - cabinet.n.01) 

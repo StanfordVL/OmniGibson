@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
         sink.n.01_1 - sink.n.01
         bathtub.n.01_1 - bathtub.n.01
         toilet.n.02_1 - toilet.n.02
@@ -15,10 +16,10 @@
     )
     
     (:init 
-        (stained sink.n.01_1) 
-        (stained bathtub.n.01_1) 
-        (stained toilet.n.02_1) 
-        (stained floor.n.01_1) 
+        (covered sink.n.01_1 stain.n.01_1) 
+        (covered bathtub.n.01_1 stain.n.01_1) 
+        (covered toilet.n.02_1 stain.n.01_1) 
+        (covered floor.n.01_1 stain.n.01_1) 
         (inside soap.n.01_1 sink.n.01_1) 
         (inside brush.n.02_1 bathtub.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
@@ -34,16 +35,16 @@
     (:goal 
         (and 
             (not 
-                (stained ?toilet.n.02_1)
+                (covered ?toilet.n.02_1 stain.n.01_1)
             ) 
             (not 
-                (stained ?bathtub.n.01_1)
+                (covered ?bathtub.n.01_1 stain.n.01_1)
             ) 
             (not 
-                (stained ?sink.n.01_1)
+                (covered ?sink.n.01_1 stain.n.01_1)
             ) 
             (not 
-                (stained ?floor.n.01_1)
+                (covered ?floor.n.01_1 stain.n.01_1)
             ) 
             (inside ?rag.n.01_1 ?bucket.n.01_1)
         )

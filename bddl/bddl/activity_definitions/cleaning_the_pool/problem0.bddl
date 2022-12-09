@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
      	pool.n.01_1 - pool.n.01
     	floor.n.01_1 - floor.n.01
     	scrub_brush.n.01_1 - scrub_brush.n.01
@@ -14,7 +15,7 @@
     
     (:init 
         (ontop pool.n.01_1 floor.n.01_1) 
-        (stained pool.n.01_1) 
+        (covered pool.n.01_1 stain.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (ontop detergent.n.02_1 floor.n.01_1) 
         (inroom shelf.n.01_1 garage) 
@@ -28,7 +29,7 @@
         (and 
             (ontop ?pool.n.01_1 ?floor.n.01_1) 
             (not 
-                (stained ?pool.n.01_1)
+                (covered ?pool.n.01_1 stain.n.01_1)
             ) 
             (ontop ?scrub_brush.n.01_1 ?shelf.n.01_1) 
             (ontop ?detergent.n.02_1 ?floor.n.01_1)

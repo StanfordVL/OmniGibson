@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
         dust.n.01_1 - dust.n.01
      	stove.n.01_1 - stove.n.01
     	soap.n.01_1 - soap.n.01
@@ -16,7 +17,7 @@
     
     (:init 
         (covered stove.n.01_1 dust.n.01_1) 
-        (stained stove.n.01_1) 
+        (covered stove.n.01_1 stain.n.01_1) 
         (inside soap.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
         (inside dishtowel.n.01_1 cabinet.n.01_1) 
@@ -34,10 +35,11 @@
                 (covered ?stove.n.01_1 dust.n.01_1)
             ) 
             (not 
-                (stained ?stove.n.01_1)
+                (covered ?stove.n.01_1 stain.n.01_1)
             ) 
             (nextto ?rag.n.01_1 ?sink.n.01_1) 
             (nextto ?dishtowel.n.01_1 ?sink.n.01_1)
         )
     )
 )
+
