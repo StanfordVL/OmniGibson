@@ -28,8 +28,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
     def __init__(
         self,
         configs,
-        action_timestep=1 / 10.0,
-        physics_timestep=1 / 240.0,
+        action_timestep=1 / 60.0,
+        physics_timestep=1 / 60.0,
         device=None,
         automatic_reset=False,
     ):

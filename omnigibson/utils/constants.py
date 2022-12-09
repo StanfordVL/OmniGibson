@@ -12,7 +12,7 @@ from pxr import Gf
 from pxr.Sdf import ValueTypeNames as VT
 
 MAX_INSTANCE_COUNT = 1024
-MAX_CLASS_COUNT = 512
+MAX_CLASS_COUNT = 2048
 MAX_VIEWER_SIZE = 2048
 
 
@@ -164,6 +164,13 @@ non_sampleable_category_txt = os.path.join(omnigibson.og_dataset_path, "metadata
 if os.path.isfile(non_sampleable_category_txt):
     with open(non_sampleable_category_txt) as f:
         NON_SAMPLEABLE_OBJECTS = [FLOOR_SYNSET] + [line.strip() for line in f.readlines()]
+MACRO_PARTICLE_SYNSETS = {"stain.n.01", "dust.n.01"}
+WATER_SYNSETS = {"water.n.01"}
+SYSTEM_SYNSETS_TO_SYSTEM_NAMES = {
+    "water.n.01": "Water",
+    "stain.n.01": "Stain",
+    "dust.n.01": "Dust",
+}
 
 MAX_TASK_RELEVANT_OBJS = 50
 TASK_RELEVANT_OBJS_OBS_DIM = 9

@@ -787,8 +787,8 @@ class InteractiveTraversableScene(TraversableScene):
         for obj in self.objects:
             obj.initialize()
             obj.keep_still()
-        for robot in self.robots:
-            robot.initialize()
+        # for robot in self.robots:
+        #     robot.initialize()
 
         # Re-initialize our scene object registry by handle since now handles are populated
         self.object_registry.update(keys="root_handle")

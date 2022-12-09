@@ -117,7 +117,7 @@ class DatasetObject(USDObject):
         self.texture_randomization = texture_randomization
         # self.overwrite_inertial = overwrite_inertial
         # self.scene_instance_folder = scene_instance_folder
-        self.bddl_object_scope = bddl_object_scope
+        # self.bddl_object_scope = bddl_object_scope
         # self.merge_fixed_links = merge_fixed_links
 
         # # These following fields have exactly the same length (i.e. the number
@@ -213,6 +213,16 @@ class DatasetObject(USDObject):
             abilities=abilities,
             **kwargs,
         )
+
+    @property
+    def bddl_object_scope(self):
+        """
+        Get this object's bddl object scope
+
+        Returns:
+            None or str: bddl object scope
+        """
+        return self.get_attribute(attr="ig:objectScope") if "ig:objectScope" in self.property_names else None
 
     def load_supporting_surfaces(self):
         # Initialize dict of supporting surface info
@@ -587,30 +597,31 @@ class DatasetObject(USDObject):
         DEFAULT_ALBEDO_MAP_SUFFIX = frozenset({"DIFFUSE", "COMBINED", "albedo"})
         state_name = object_state.__class__.__name__ if object_state is not None else None
         for material in self.materials:
-            texture_path = material.diffuse_texture
-            assert texture_path is not None, f"DatasetObject [{self.prim_path}] has invalid diffuse texture map."
-
-            # Get updated texture file path for state.
-            texture_path_split = texture_path.split("/")
-            filedir, filename = "/".join(texture_path_split[:-1]), texture_path_split[-1]
-            assert filename[-4:] == ".png", f"Texture file {filename} does not end with .png"
-
-            filename_split = filename[:-4].split("_")
-            # Check all three file names for backward compatibility.
-            if len(filename_split) > 0 and filename_split[-1] not in DEFAULT_ALBEDO_MAP_SUFFIX:
-                filename_split.pop()
-            target_texture_path = f"{filedir}/{'_'.join(filename_split)}"
-            target_texture_path += f"_{state_name}.png" if state_name is not None else ".png"
-
-            if os.path.exists(target_texture_path):
-                # Since we are loading a pre-cached texture map, we need to reset the albedo value to the default
-                self._update_albedo_value(None, material)
-                if material.diffuse_texture != target_texture_path:
-                    material.diffuse_texture = target_texture_path
-            else:
-                print(f"Warning: DatasetObject [{self.prim_path}] does not have texture map: "
-                      f"[{target_texture_path}]. Falling back to directly updating albedo value.")
-                self._update_albedo_value(object_state, material)
+            # TODO: uncomment these once our dataset has the object state-conditioned texture maps
+            # texture_path = material.diffuse_texture
+            # assert texture_path is not None, f"DatasetObject [{self.prim_path}] has invalid diffuse texture map."
+            #
+            # # Get updated texture file path for state.
+            # texture_path_split = texture_path.split("/")
+            # filedir, filename = "/".join(texture_path_split[:-1]), texture_path_split[-1]
+            # assert filename[-4:] == ".png", f"Texture file {filename} does not end with .png"
+            #
+            # filename_split = filename[:-4].split("_")
+            # # Check all three file names for backward compatibility.
+            # if len(filename_split) > 0 and filename_split[-1] not in DEFAULT_ALBEDO_MAP_SUFFIX:
+            #     filename_split.pop()
+            # target_texture_path = f"{filedir}/{'_'.join(filename_split)}"
+            # target_texture_path += f"_{state_name}.png" if state_name is not None else ".png"
+            #
+            # if os.path.exists(target_texture_path):
+            #     # Since we are loading a pre-cached texture map, we need to reset the albedo value to the default
+            #     self._update_albedo_value(None, material)
+            #     if material.diffuse_texture != target_texture_path:
+            #         material.diffuse_texture = target_texture_path
+            # else:
+            #     print(f"Warning: DatasetObject [{self.prim_path}] does not have texture map: "
+            #           f"[{target_texture_path}]. Falling back to directly updating albedo value.")
+            self._update_albedo_value(object_state, material)
 
     def set_bbox_center_position_orientation(self, pos, orn):
         # TODO - check to make sure works
@@ -807,7 +818,8 @@ class DatasetObject(USDObject):
                     continue
 
                 # Get the extent and transform.
-                bb_data = self.native_link_bboxes[link_name][bbox_type]["oriented"]
+                bb_data = self.native_link_bboxes[link_name][bbox_type]["axis_aligned"]
+                # bb_data = self.native_link_bboxes[link_name][bbox_type]["oriented"]
                 extent_in_bbox_frame = np.array(bb_data["extent"])
                 bbox_to_link_origin = np.array(bb_data["transform"])
 

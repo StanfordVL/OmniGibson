@@ -38,10 +38,13 @@ def sample_kinematics(
     objA,
     objB,
     use_ray_casting_method=False,
-    max_trials=100,
-    z_offset=0.01,
+    max_trials=1,
+    z_offset=0.05,
     skip_falling=False,
 ):
+    assert z_offset > 0.5 * 9.81 * (og.sim.get_physics_dt() ** 2) + 0.02,\
+        f"z_offset {z_offset} is too small for the current physics_dt {og.sim.get_physics_dt()}"
+
     # Run import here to avoid circular imports
     # No supporting surface annotation found, fallback to use ray-casting
     from omnigibson.objects.dataset_object import DatasetObject
@@ -72,8 +75,12 @@ def sample_kinematics(
         # original position might be blocking rays (use_ray_casting_method=True)
         old_pos = np.array([200, 200, 200])
         objA.set_position_orientation(old_pos, orientation)
+        objA.keep_still()
         # We also need to step physics to make sure the pose propagates downstream (e.g.: to Bounding Box computations)
         og.sim.step_physics()
+
+        # This would slightly change because of the step_physics call.
+        old_pos, orientation = objA.get_position_orientation()
 
         if use_ray_casting_method:
             if predicate == "onTop":
@@ -164,7 +171,7 @@ def sample_kinematics(
         else:
             pos[2] += z_offset
             objA.set_position_orientation(pos, orientation)
-            # Step physics
+            objA.keep_still()
             og.sim.step_physics()
             success = not objA.in_contact()
 
@@ -179,11 +186,13 @@ def sample_kinematics(
 
     if success and not skip_falling:
         objA.set_position_orientation(pos, orientation)
-
+        objA.keep_still()
         # Let it fall for 0.2 second
         for _ in range(int(0.2 / og.sim.get_physics_dt())):
+            # print("fall", objA.get_position())
             og.sim.step_physics()
             if objA.in_contact():
+                # print("fall until contact")
                 break
 
         # Render at the end
