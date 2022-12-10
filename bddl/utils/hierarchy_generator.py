@@ -230,9 +230,6 @@ def add_abilities(node, ability_type=None, ability_map=None):
             with open(B1K_ABILITY_JSON_PATH) as f:
                 b1k_ability_map = json.load(f)
             ability_map.update(b1k_ability_map)
-            # with open("tmp.json", "w") as f:
-            #     json.dump(ability_map, f, indent=2)
-            # import sys; sys.exit()
         else:
             raise ValueError("Invalid ability type given.")
 
