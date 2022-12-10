@@ -22,6 +22,7 @@ import json
 import os
 from collections import OrderedDict
 import pandas as pd
+import copy
 
 from nltk.corpus import wordnet as wn
 
@@ -67,6 +68,8 @@ OUTPUT_JSON_PATH2 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hiera
 OUTPUT_JSON_PATH3 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_all.json")
 # Uses B-1K abilities
 OUTPUT_JSON_PATH4 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_b1k.json")
+# Uses both B-1K and B-100 abilities, with common synsets taking from B-1K
+OUTPUT_JSON_PATH5 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_corl.json")
 
 '''
 Load in all of the owned models. Map the synsets to their corresponding object names.
@@ -107,6 +110,12 @@ for i, [synset, words] in b1k_synset_df.iterrows():
         json.loads(words.replace("'", '"')) if not pd.isna(words) else []}
 
 '''
+Synsets from B-1K and owned B-100 models
+'''
+corl_synsets = copy.deepcopy(owned_synsets)
+corl_synsets.update(b1k_synsets)
+
+'''
 Combined version of owned and article.
 '''
 all_synsets = {key: value for key, value in owned_synsets.items()}
@@ -135,13 +144,8 @@ def add_path(path, node, custom_synsets):
 
     try:
         name = oldest_synset.name()
-        if name == "arborio_rice.n.01":
-            print("ARBORIO")
     except:
         name = oldest_synset[8:-2]
-        if oldest_synset == "arborio_rice.n.01": 
-            print("ARBORIO")
-        # print("Name in except block:", name)
         if "children" not in node:
             node["children"] = []
         for child_node in node["children"]:
@@ -181,7 +185,6 @@ def generate_paths(paths, path, word, custom_synsets):
         hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
         generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
     else:
-        # print(word)
         hypernyms = word.hypernyms()
         if not hypernyms:
             paths.append(path)
@@ -209,7 +212,6 @@ def add_igibson_objects(node, synsets):
 
 
 def add_abilities(node, ability_type=None, ability_map=None):
-    # print(node["name"])
     if ability_type is None and ability_map is None:
         raise ValueError("No abilities specified. Abilities can be specified through the ability_type kwarg to get a pre-existing ability map, or the ability_map kwarg to override with custom abilities.")
     if ability_map is None: 
@@ -222,6 +224,15 @@ def add_abilities(node, ability_type=None, ability_map=None):
         elif ability_type == "b1k":
             with open(B1K_ABILITY_JSON_PATH) as f:
                 ability_map = json.load(f)
+        elif ability_type == "corl": 
+            with open(IGIBSON_ABILITY_JSON_PATH) as f:
+                ability_map = json.load(f)
+            with open(B1K_ABILITY_JSON_PATH) as f:
+                b1k_ability_map = json.load(f)
+            ability_map.update(b1k_ability_map)
+            # with open("tmp.json", "w") as f:
+            #     json.dump(ability_map, f, indent=2)
+            # import sys; sys.exit()
         else:
             raise ValueError("Invalid ability type given.")
 
@@ -284,6 +295,8 @@ def generate_hierarchy(hierarchy_type, ability_type):
         synsets = all_synsets
     elif hierarchy_type == "b1k":
         synsets = b1k_synsets
+    elif hierarchy_type == "corl":
+        synsets = corl_synsets
     else:
         raise ValueError("Invalid hierarchy type given.")
     
@@ -328,9 +341,13 @@ def save_hierarchies():
     # with open(OUTPUT_JSON_PATH3, "w") as f:
     #     json.dump(hierarchy_all, f, indent=2)
     
-    hierarchy_b1k = generate_hierarchy("b1k", "b1k")
-    with open(OUTPUT_JSON_PATH4, "w") as f:
-        json.dump(hierarchy_b1k, f, indent=2)
+    # hierarchy_b1k = generate_hierarchy("b1k", "b1k")
+    # with open(OUTPUT_JSON_PATH4, "w") as f:
+    #     json.dump(hierarchy_b1k, f, indent=2)
+    
+    hierarchy_corl = generate_hierarchy("corl", "corl")
+    with open(OUTPUT_JSON_PATH5, "w") as f:
+        json.dump(hierarchy_corl, f, indent=2)
 
 
 if __name__ == "__main__":
