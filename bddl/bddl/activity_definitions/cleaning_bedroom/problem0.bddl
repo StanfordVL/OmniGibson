@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
         floor.n.01_1 - floor.n.01
         apparel.n.01_1 apparel.n.01_2 - apparel.n.01
         bed.n.01_1 - bed.n.01
@@ -16,15 +17,15 @@
     )
     
     (:init 
-        (dusty cabinet.n.01_1) 
-        (dusty cabinet.n.01_2) 
+        (covered cabinet.n.01_1 dust.n.01_1) 
+        (covered cabinet.n.01_2 dust.n.01_1) 
         (ontop apparel.n.01_1 bed.n.01_1) 
         (ontop apparel.n.01_2 bed.n.01_1) 
         (ontop jewelry.n.01_1 floor.n.01_1) 
         (ontop perfume.n.02_1 floor.n.01_1) 
         (ontop painting.n.01_1 bed.n.01_1) 
         (not 
-            (dusty vacuum.n.04_1)
+            (covered vacuum.n.04_1 dust.n.01_1)
         ) 
         (ontop vacuum.n.04_1 floor.n.01_1) 
         (ontop hand_towel.n.01_1 floor.n.01_1)
@@ -53,7 +54,7 @@
             (forall 
                 (?cabinet.n.01 - cabinet.n.01) 
                 (not 
-                    (dusty ?cabinet.n.01)
+                    (covered ?cabinet.n.01 dust.n.01_1)
                 )
             ) 
             (nextto ?vacuum.n.04_1 ?bed.n.01_1) 

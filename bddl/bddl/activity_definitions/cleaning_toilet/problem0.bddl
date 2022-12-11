@@ -2,20 +2,23 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
      	toilet.n.02_1 - toilet.n.02
     	scrub_brush.n.01_1 - scrub_brush.n.01
     	floor.n.01_1 - floor.n.01
     	detergent.n.02_1 - detergent.n.02
         sink.n.01_1 - sink.n.01
+        water.n.06_1 - water.n.06
     	agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (stained toilet.n.02_1) 
+        (covered toilet.n.02_1 stain.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (ontop detergent.n.02_1 floor.n.01_1) 
         (inroom toilet.n.02_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
+        (insource water.n.06_1 sink.n.01_1)
         (inroom sink.n.01_1 bathroom)
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -23,7 +26,7 @@
     (:goal 
         (and 
             (not 
-                (stained ?toilet.n.02_1)
+                (covered ?toilet.n.02_1 stain.n.01_1)
             ) 
             (ontop ?scrub_brush.n.01_1 ?floor.n.01_1) 
             (ontop ?detergent.n.02_1 ?floor.n.01_1)

@@ -2,6 +2,8 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
+        dust.n.01_1 - dust.n.01
      	gym_shoe.n.01_1 gym_shoe.n.01_2 gym_shoe.n.01_3 gym_shoe.n.01_4 - gym_shoe.n.01
             countertop.n.01_1 - countertop.n.01
             soap.n.01_1 - soap.n.01
@@ -9,6 +11,7 @@
             towel.n.01_1 - towel.n.01
             brush.n.02_1 - brush.n.02
             sink.n.01_1 - sink.n.01
+        water.n.06_1 - water.n.06
             floor.n.01_1 floor.n.01_2 - floor.n.01
             table.n.02_1 - table.n.02
             agent.n.01_1 - agent.n.01
@@ -16,22 +19,23 @@
     
     (:init 
         (ontop gym_shoe.n.01_1 floor.n.01_2) 
-        (stained gym_shoe.n.01_1) 
+        (covered gym_shoe.n.01_1 stain.n.01_1) 
         (ontop gym_shoe.n.01_2 floor.n.01_2) 
-        (stained gym_shoe.n.01_2) 
+        (covered gym_shoe.n.01_2 stain.n.01_1) 
         (ontop gym_shoe.n.01_3 floor.n.01_2) 
-        (dusty gym_shoe.n.01_3) 
+        (covered gym_shoe.n.01_3 dust.n.01_1) 
         (ontop gym_shoe.n.01_4 floor.n.01_2) 
-        (dusty gym_shoe.n.01_4) 
+        (covered gym_shoe.n.01_4 dust.n.01_1) 
         (inside soap.n.01_1 cabinet.n.01_1) 
         (ontop towel.n.01_1 countertop.n.01_1) 
         (not 
-            (stained towel.n.01_1)
+            (covered towel.n.01_1 stain.n.01_1)
         ) 
         (ontop brush.n.02_1 countertop.n.01_1) 
         (not 
-            (stained brush.n.02_1)
+            (covered brush.n.02_1 stain.n.01_1)
         ) 
+        (insource water.n.06_1 sink.n.01_1)
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -49,13 +53,13 @@
             (forall 
                 (?gym_shoe.n.01 - gym_shoe.n.01) 
                 (not 
-                    (dusty ?gym_shoe.n.01)
+                    (covered ?gym_shoe.n.01 dust.n.01_1)
                 )
             ) 
             (forall 
                 (?gym_shoe.n.01 - gym_shoe.n.01) 
                 (not 
-                    (stained ?gym_shoe.n.01)
+                    (covered ?gym_shoe.n.01 stain.n.01_1)
                 )
             ) 
             (forn 
@@ -75,3 +79,4 @@
         )
     )
 )
+

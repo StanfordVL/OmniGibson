@@ -2,12 +2,14 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
      	broom.n.01_1 - broom.n.01
     	floor.n.01_1 floor.n.01_2 - floor.n.01
     	soap.n.01_1 - soap.n.01
     	bucket.n.01_1 - bucket.n.01
     	piece_of_cloth.n.01_1 - piece_of_cloth.n.01
     	sink.n.01_1 - sink.n.01
+        water.n.06_1 - water.n.06
     	agent.n.01_1 - agent.n.01
     )
     
@@ -16,9 +18,10 @@
         (ontop soap.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (ontop piece_of_cloth.n.01_1 floor.n.01_1) 
-        (stained floor.n.01_1) 
+        (covered floor.n.01_1 stain.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
         (inroom floor.n.01_2 corridor) 
+        (insource water.n.06_1 sink.n.01_1)
         (inroom sink.n.01_1 bathroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -26,7 +29,7 @@
     (:goal 
         (and 
             (not 
-                (stained ?floor.n.01_1)
+                (covered ?floor.n.01_1 stain.n.01_1)
             ) 
             (nextto ?bucket.n.01_1 ?sink.n.01_1) 
             (inside ?soap.n.01_1 ?bucket.n.01_1) 

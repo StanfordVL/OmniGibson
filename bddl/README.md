@@ -34,24 +34,24 @@ python setup.py install
     )
     
     (:init 
-        (onfloor pool.n.01_1 floor.n.01_1) 
+        (ontop pool.n.01_1 floor.n.01_1) 
         (stained pool.n.01_1) 
-        (onfloor scrub_brush.n.01_1 floor.n.01_1) 
-        (onfloor detergent.n.02_1 floor.n.01_1) 
+        (ontop scrub_brush.n.01_1 floor.n.01_1) 
+        (ontop detergent.n.02_1 floor.n.01_1) 
         (inroom shelf.n.01_1 garage) 
         (inroom floor.n.01_1 garage) 
         (inroom sink.n.01_1 storage_room)
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (onfloor ?pool.n.01_1 ?floor.n.01_1) 
+            (ontop ?pool.n.01_1 ?floor.n.01_1) 
             (not 
                 (stained ?pool.n.01_1)
             ) 
             (ontop ?scrub_brush.n.01_1 ?shelf.n.01_1) 
-            (onfloor ?detergent.n.02_1 ?floor.n.01_1)
+            (ontop ?detergent.n.02_1 ?floor.n.01_1)
         )
     )
 )
@@ -76,7 +76,7 @@ behavior_activity_instance = BEHAVIORActivityInstance(behavior_activity=behavior
 
 ### With simulator 
 
-To use a BEHAVIOR activity with a simulator, create a subclass of `BEHAVIORActivityInstance` for your simulator. Example for iGibson 2.0. This will require an implementation of sampling functionality or pre-sampled scenes that satisfy the activity's initial condition and implementation for checking each type of binary kinematic predicate (e.g. `ontop`, `nextto`) and unary nonkinematic predicate (e.g. `cooked`, `soaked`). 
+To use a BEHAVIOR activity with a simulator, create a subclass of `BEHAVIORActivityInstance` for your simulator. Example for iGibson 2.0. This will require an implementation of sampling functionality or pre-sampled scenes that satisfy the activity's initial condition and implementation for checking each type of binary kinematic predicate (e.g. `ontop`, `nextto`) and unary nonkinematic predicate (e.g. `cooked`, `saturated`). 
 
 ## Logic evaluator for goal
 

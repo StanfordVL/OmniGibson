@@ -4,6 +4,7 @@
     (:objects
      	pot_plant.n.01_1 pot_plant.n.01_2 pot_plant.n.01_3 - pot_plant.n.01
     	floor.n.01_1 floor.n.01_2 - floor.n.01
+        water.n.06_1 - water.n.06
     	sink.n.01_1 - sink.n.01
     	table.n.02_1 - table.n.02
     	countertop.n.01_1 - countertop.n.01
@@ -15,14 +16,15 @@
         (ontop pot_plant.n.01_2 floor.n.01_1) 
         (ontop pot_plant.n.01_3 floor.n.01_2) 
         (not 
-            (soaked pot_plant.n.01_1)
+            (saturated pot_plant.n.01_1 water.n.06_1)
         ) 
         (not 
-            (soaked pot_plant.n.01_2)
+            (saturated pot_plant.n.01_2 water.n.06_1)
         ) 
         (not 
-            (soaked pot_plant.n.01_3)
+            (saturated pot_plant.n.01_3 water.n.06_1)
         ) 
+        (insource water.n.06_1 sink.n.01_1)
         (inroom table.n.02_1 dining_room) 
         (inroom floor.n.01_1 dining_room) 
         (inroom floor.n.01_2 kitchen) 
@@ -35,7 +37,7 @@
         (and 
             (forall 
                 (?pot_plant.n.01 - pot_plant.n.01) 
-                (soaked ?pot_plant.n.01)
+                (saturated ?pot_plant.n.01 water.n.06_1)
             )
         )
     )

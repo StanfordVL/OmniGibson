@@ -57,7 +57,7 @@ OBJECT_NAME
 │   │   # 	METALLIC.png (metallic map)
 │   │   # 	NORMAL.png (tangent normal map)
 │   │   # 	ROUGHNESS.png (roughness map)
-|   |   # Also contains diffuse texture maps that will be used when some object state changes happen, e.g. cooked, burnt, or soaked.
+|   |   # Also contains diffuse texture maps that will be used when some object state changes happen, e.g. cooked, burnt, or saturated.
 │   │   DIFFUSE.encrypted.png
 │   │   METALLIC.encrypted.png	
 │   │   NORMAL.encrypted.png
@@ -65,7 +65,7 @@ OBJECT_NAME
 │   │   DIFFUSE_Frozen.encrypted.png
 │   │   DIFFUSE_Cooked.encrypted.png
 │   │   DIFFUSE_Burnt.encrypted.png
-│   │   DIFFUSE_Soaked.encrypted.png
+│   │   DIFFUSE_saturated.encrypted.png
 │   │   DIFFUSE_ToggledOn.encrypted.png
 │
 └───misc

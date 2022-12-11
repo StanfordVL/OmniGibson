@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
      	sweater.n.01_1 sweater.n.01_2 sweater.n.01_3 sweater.n.01_4 - sweater.n.01
     	floor.n.01_1 - floor.n.01
     	bed.n.01_1 - bed.n.01
@@ -14,13 +15,13 @@
         (ontop sweater.n.01_2 floor.n.01_1) 
         (ontop sweater.n.01_3 bed.n.01_1) 
         (ontop sweater.n.01_4 bed.n.01_1) 
-        (dusty sweater.n.01_1) 
-        (dusty sweater.n.01_2) 
-        (dusty sweater.n.01_3) 
-        (dusty sweater.n.01_4) 
+        (covered sweater.n.01_1 dust.n.01_1) 
+        (covered sweater.n.01_2 dust.n.01_1) 
+        (covered sweater.n.01_3 dust.n.01_1) 
+        (covered sweater.n.01_4 dust.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (not 
-            (dusty scrub_brush.n.01_1)
+            (covered scrub_brush.n.01_1 dust.n.01_1)
         ) 
         (inroom floor.n.01_1 bedroom) 
         (inroom bed.n.01_1 bedroom) 
@@ -32,7 +33,7 @@
             (forall 
                 (?sweater.n.01 - sweater.n.01) 
                 (not 
-                    (dusty ?sweater.n.01)
+                    (covered ?sweater.n.01 dust.n.01_1)
                 )
             ) 
             (forall 
