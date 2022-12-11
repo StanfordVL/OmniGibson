@@ -55,9 +55,12 @@ def sample_kinematics(
     ):
         use_ray_casting_method = True
 
-    # Wake objects accordingly
+    # Wake objects accordingly and make sure both are kept still
     objA.wake()
     objB.wake()
+
+    objA.keep_still()
+    objB.keep_still()
 
     # Save the state of the simulator
     state = og.sim.dump_state()
@@ -172,6 +175,7 @@ def sample_kinematics(
             pos[2] += z_offset
             objA.set_position_orientation(pos, orientation)
             objA.keep_still()
+
             og.sim.step_physics()
             success = not objA.in_contact()
 
@@ -187,6 +191,7 @@ def sample_kinematics(
     if success and not skip_falling:
         objA.set_position_orientation(pos, orientation)
         objA.keep_still()
+
         # Let it fall for 0.2 second
         for _ in range(int(0.2 / og.sim.get_physics_dt())):
             # print("fall", objA.get_position())

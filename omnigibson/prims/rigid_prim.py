@@ -16,7 +16,7 @@ import numpy as np
 from omni.isaac.dynamic_control import _dynamic_control
 import carb
 
-from omnigibson.macros import gm
+from omnigibson.macros import gm, create_module_macros
 from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.prims.geom_prim import CollisionGeomPrim, VisualGeomPrim
 from omnigibson.utils.constants import GEOM_TYPES
@@ -25,6 +25,13 @@ from omnigibson.utils.usd_utils import mesh_prim_to_trimesh_mesh
 
 # Import omni sensor based on type
 from omni.isaac.isaac_sensor import _isaac_sensor as _s
+
+
+# Create settings for this module
+m = create_module_macros(module_path=__file__)
+
+m.DEFAULT_CONTACT_OFFSET = 0.001
+m.DEFAULT_REST_OFFSET = 0.0
 
 
 class RigidPrim(XFormPrim):
@@ -157,6 +164,16 @@ class RigidPrim(XFormPrim):
         Helper function to refresh owned visual and collision meshes. Useful for synchronizing internal data if
         additional bodies are added manually
         """
+        # Make sure to clean up all pre-existing names for all collision_meshes
+        if self._collision_meshes is not None:
+            for collision_mesh in self._collision_meshes.values():
+                collision_mesh.remove_names()
+
+        # Make sure to clean up all pre-existing names for all visual_meshes
+        if self._visual_meshes is not None:
+            for visual_mesh in self._visual_meshes.values():
+                visual_mesh.remove_names()
+
         self._collision_meshes, self._visual_meshes = OrderedDict(), OrderedDict()
         prims_to_check = []
         coms, vols = [], []
@@ -167,15 +184,20 @@ class RigidPrim(XFormPrim):
         for prim in prims_to_check:
             if prim.GetPrimTypeInfo().GetTypeName() in GEOM_TYPES:
                 mesh_name, mesh_path = prim.GetName(), prim.GetPrimPath().__str__()
-                mesh = get_prim_at_path(prim_path=mesh_path)
+                mesh_prim = get_prim_at_path(prim_path=mesh_path)
                 mesh_kwargs = {"prim_path": mesh_path, "name": f"{self._name}:{mesh_name}"}
-                if mesh.HasAPI(UsdPhysics.CollisionAPI):
-                    self._collision_meshes[mesh_name] = CollisionGeomPrim(**mesh_kwargs)
+                if mesh_prim.HasAPI(UsdPhysics.CollisionAPI):
+                    mesh = CollisionGeomPrim(**mesh_kwargs)
+                    # We also modify the collision mesh's contact and rest offsets, since omni's default values result
+                    # in lightweight objects sometimes not triggering contacts correctly
+                    mesh.set_contact_offset(m.DEFAULT_CONTACT_OFFSET)
+                    mesh.set_rest_offset(m.DEFAULT_REST_OFFSET)
+                    self._collision_meshes[mesh_name] = mesh
                     # We construct a trimesh object from this mesh in order to infer its center-of-mass and volume
                     # TODO: Cleaner way to aggregate this information? Right now we just skip if we encounter a primitive
-                    mesh_vertices = mesh.GetAttribute("points").Get()
+                    mesh_vertices = mesh_prim.GetAttribute("points").Get()
                     if mesh_vertices is not None and len(mesh_vertices) >= 4:
-                        msh = mesh_prim_to_trimesh_mesh(mesh)
+                        msh = mesh_prim_to_trimesh_mesh(mesh_prim)
                         coms.append(msh.center_mass)
                         vols.append(msh.volume)
                 else:
@@ -186,28 +208,6 @@ class RigidPrim(XFormPrim):
         if len(coms) > 0:
             com = (np.array(coms) * np.array(vols).reshape(-1, 1)).sum(axis=0) / np.sum(vols)
             self.set_attribute("physics:centerOfMass", Gf.Vec3f(*com))
-
-    # def _create_contact_sensor(self):
-    #     """
-    #     Creates a full-body contact sensor to detect collisions with this rigid body
-    #     """
-    #     props = _contact_sensor.SensorProperties()
-    #     props.radius = -1.0       # Negative value implies full body sensor
-    #     props.minThreshold = 0          # Minimum force to detect
-    #     props.maxThreshold = 100000000  # Maximum force to detect
-    #     props.sensorPeriod = 0.0            # Zero means in sync with the simulation period
-    #
-    #     # TODO: Uncomment later, but this significantly slows down everything
-    #     # Create sensor
-    #     self._contact_handle = self._cs.add_sensor_on_body(self._prim_path, props)
-
-
-
-    # def _remove_contact_sensor(self):
-    #     """
-    #     remove the contact sensor owned by this body
-    #     """
-    #     self._cs.remove_sensor(self._contact_handle)
 
     def enable_collisions(self):
         """
