@@ -10,7 +10,6 @@
     	towel.n.01_1 - towel.n.01
     	floor.n.01_1 - floor.n.01
     	sink.n.01_1 - sink.n.01
-        water.n.06_1 - water.n.06
     	countertop.n.01_1 - countertop.n.01
     	stove.n.01_1 - stove.n.01
     	door.n.01_1 - door.n.01
@@ -25,7 +24,6 @@
         (inside food.n.01_3 electric_refrigerator.n.01_1) 
         (ontop cleansing_agent.n.01_1 table.n.02_1) 
         (ontop towel.n.01_1 table.n.02_1) 
-        (insource water.n.06_1 sink.n.01_1)
         (inroom floor.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 

@@ -9,7 +9,6 @@
     	cleansing_agent.n.01_1 - cleansing_agent.n.01
     	window.n.01_1 window.n.01_2 - window.n.01
     	sink.n.01_1 - sink.n.01
-        water.n.06_1 - water.n.06
     	floor.n.01_1 floor.n.01_2 - floor.n.01
     	table.n.02_1 - table.n.02
         agent.n.01_1 - agent.n.01
@@ -26,7 +25,6 @@
         (not 
             (covered sink.n.01_1 dust.n.01_1)
         ) 
-        (insource water.n.06_1 sink.n.01_1)
         (inroom floor.n.01_1 kitchen) 
         (inroom floor.n.01_2 living_room) 
         (inroom window.n.01_1 kitchen) 
