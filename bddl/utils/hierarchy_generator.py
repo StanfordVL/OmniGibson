@@ -28,7 +28,7 @@ from nltk.corpus import wordnet as wn
 
 ### Dependencies
 '''
-This .csv file should contain all of the models we currently own.
+This .csv file should contain all of the b100 models we currently own.
 Should contain an `Object` column and a `Synset` column.
 '''
 MODELS_CSV_PATH = "objectmodeling.csv"
@@ -43,6 +43,10 @@ This .csv file should contain all of the objects and words used
 in B-1K. Should contain a `synset` column and a `words` column.
 '''
 B1K_SYNSET_MASTERLIST = "b1k_synset_masterlist.tsv"
+'''
+This .csv file should contain all of the b1k models we currently own.
+'''
+B1K_OBJECT_MODEL_CSV_PATH = "b1k_objectmodeling.csv"
 '''
 This .json file should contain all of the synsets from the .csv files above
 as well as their associated iGibson abilities.
@@ -110,10 +114,26 @@ for i, [synset, words] in b1k_synset_df.iterrows():
         json.loads(words.replace("'", '"')) if not pd.isna(words) else []}
 
 '''
+Load in all of the owned synsets from B-1K, plus substances since they 
+don't require a model
+'''
+owned_b1k_df = pd.read_csv(B1K_OBJECT_MODEL_CSV_PATH)
+owned_b1k_synsets = {}
+for __, [__, category, __, synset, *__] in owned_b1k_df.iterrows():
+    owned_b1k_synsets[synset] = {"objects": [category]}
+with open(B1K_ABILITY_JSON_PATH, "r") as f:
+    b1k_syns_to_props = json.load(f)
+owned_b1k_synsets.update(
+    {syn: objs for syn, objs in b1k_synsets.items() if "substance" in b1k_syns_to_props[syn]})
+# with open("tmp.json", "w") as f:
+#     json.dump(owned_b1k_synsets, f, indent=2)
+# import sys; sys.exit()
+
+'''
 Synsets from B-1K and owned B-100 models
 '''
 corl_synsets = copy.deepcopy(owned_synsets)
-corl_synsets.update(b1k_synsets)
+corl_synsets.update(owned_b1k_synsets)
 
 '''
 Combined version of owned and article.
