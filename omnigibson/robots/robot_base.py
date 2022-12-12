@@ -255,14 +255,16 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             OrderedDict: keyword-mapped proprioception observations available for this robot.
                 Can be extended by subclasses
         """
-        joints_state = self.get_joints_state(normalized=False)
+        joint_positions = self.get_joint_positions(normalized=False)
+        joint_velocities = self.get_joint_velocities(normalized=False)
+        joint_efforts = self.get_joint_efforts(normalized=False)
         pos, ori = self.get_position(), self.get_rpy()
         return OrderedDict(
-            joint_qpos=joints_state.positions,
-            joint_qpos_sin=np.sin(joints_state.positions),
-            joint_qpos_cos=np.cos(joints_state.positions),
-            joint_qvel=joints_state.velocities,
-            joint_qeffort=joints_state.efforts,
+            joint_qpos=joint_positions,
+            joint_qpos_sin=np.sin(joint_positions),
+            joint_qpos_cos=np.cos(joint_positions),
+            joint_qvel=joint_velocities,
+            joint_qeffort=joint_efforts,
             robot_pos=pos,
             robot_ori_cos=np.cos(ori),
             robot_ori_sin=np.sin(ori),
@@ -429,7 +431,8 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
     @property
     def urdf_path(self):
         """
-        :return: str, file path to the robot urdf file.
+        Returns:
+            str: file path to the robot urdf file.
         """
         raise NotImplementedError
 

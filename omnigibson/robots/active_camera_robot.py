@@ -1,5 +1,4 @@
 from abc import abstractmethod
-
 import numpy as np
 
 from omnigibson.robots.robot_base import BaseRobot
@@ -36,11 +35,12 @@ class ActiveCameraRobot(BaseRobot):
         dic = super()._get_proprioception_dict()
 
         # Add camera pos info
-        joints_state = self.get_joints_state(normalized=False)
-        dic["camera_qpos"] = joints_state.positions[self.camera_control_idx]
-        dic["camera_qpos_sin"] = np.sin(joints_state.positions[self.camera_control_idx])
-        dic["camera_qpos_cos"] = np.cos(joints_state.positions[self.camera_control_idx])
-        dic["camera_qvel"] = joints_state.velocities[self.camera_control_idx]
+        joint_positions = self.get_joint_positions(normalized=False)
+        joint_velocities = self.get_joint_velocities(normalized=False)
+        dic["camera_qpos"] = joint_positions[self.camera_control_idx]
+        dic["camera_qpos_sin"] = np.sin(joint_positions[self.camera_control_idx])
+        dic["camera_qpos_cos"] = np.cos(joint_positions[self.camera_control_idx])
+        dic["camera_qvel"] = joint_velocities[self.camera_control_idx]
 
         return dic
 
@@ -67,7 +67,8 @@ class ActiveCameraRobot(BaseRobot):
     @property
     def _default_camera_joint_controller_config(self):
         """
-        :return: Dict[str, Any] Default camera joint controller config to control this robot's camera
+        Returns:
+            dict: Default camera joint controller config to control this robot's camera
         """
         return {
             "name": "JointController",
@@ -82,8 +83,8 @@ class ActiveCameraRobot(BaseRobot):
     @property
     def _default_camera_null_joint_controller_config(self):
         """
-        :return: Dict[str, Any] Default null joint controller config
-            to control this robot's camera i.e. dummy controller
+        Returns:
+            dict: Default null joint controller config to control this robot's camera i.e. dummy controller
         """
         return {
             "name": "NullJointController",
