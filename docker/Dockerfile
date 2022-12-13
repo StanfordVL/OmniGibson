@@ -28,12 +28,11 @@ RUN micromamba shell init --shell=bash --prefix=/micromamba
 ENV PATH /micromamba/envs/igibson/bin:$PATH
 RUN echo "source /isaac-sim/setup_conda_env.sh" >> /root/.bashrc
 
+# Install some additional niceties for working with notebooks
+RUN micromamba install -n igibson -c conda-forge opencv jupyterlab
+
 # Install OmniGibson
 RUN pip install -e .
-
-# Install some additional niceties for working with notebooks
-RUN micromamba install -n igibson -c conda-forge opencv
-RUN pip install jupyterlab
 
 ENTRYPOINT []
 
