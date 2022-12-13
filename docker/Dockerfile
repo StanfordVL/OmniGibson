@@ -1,0 +1,40 @@
+FROM nvcr.io/nvidia/isaac-sim:2022.1.1
+
+# Set up all the prerequisites.
+RUN apt-get update && apt-get install -y \
+  curl \
+  git \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN echo "bash /isaac-sim/vulkan_check.sh" >> /root/.bashrc
+RUN rm -rf /isaac-sim/exts/omni.isaac.ml_archive/pip_prebundle/gym
+
+# Add OmniGibson
+ADD . /omnigibson
+WORKDIR /omnigibson
+
+# Mount the data directory
+VOLUME ["/data"]
+ENV OMNIGIBSON_DATASET_PATH /data/og_dataset
+ENV OMNIGIBSON_ASSETS_PATH /data/assets
+ENV GIBSON_DATASET_PATH /data/g_dataset
+ENV OMNIGIBSON_KEY_PATH /data/omnigibson.key
+
+# Install Mamba (light conda alternative)
+RUN curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C / bin/micromamba
+ENV MAMBA_ROOT_PREFIX /micromamba
+RUN micromamba create -n igibson -c conda-forge python=3.7
+RUN micromamba shell init --shell=bash --prefix=/micromamba
+ENV PATH /micromamba/envs/igibson/bin:$PATH
+RUN echo "source /isaac-sim/setup_conda_env.sh" >> /root/.bashrc
+
+# Install OmniGibson
+RUN pip install -e .
+
+# Install some additional niceties for working with notebooks
+RUN micromamba install -n igibson -c conda-forge opencv
+RUN pip install jupyterlab
+
+ENTRYPOINT []
+
+CMD ["/bin/bash"]
