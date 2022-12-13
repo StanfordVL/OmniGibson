@@ -9,4 +9,4 @@ docker run \
     -e DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v DATA_PATH:/data \
-    --network=host --rm -it omnigibson
+    --network=host --rm -it stanfordvl/omnigibson
