@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN echo "bash /isaac-sim/vulkan_check.sh" >> /root/.bashrc
 RUN rm -rf /isaac-sim/exts/omni.isaac.ml_archive/pip_prebundle/gym
+RUN rm -rf /isaac-sim/exts/omni.isaac.ml_archive/pip_prebundle/numpy
 
 # Add OmniGibson
 ADD . /omnigibson
@@ -34,7 +35,6 @@ RUN micromamba install -c conda-forge opencv
 
 # Install OmniGibson
 RUN pip install -e .
-RUN pip install numpy --upgrade
 
 ENTRYPOINT []
 
