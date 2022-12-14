@@ -34,6 +34,7 @@ RUN micromamba install -c conda-forge opencv
 
 # Install OmniGibson
 RUN pip install -e .
+RUN pip install numpy --upgrade
 
 ENTRYPOINT []
 
