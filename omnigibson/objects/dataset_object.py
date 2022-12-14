@@ -300,10 +300,10 @@ class DatasetObject(USDObject):
         Args:
             object_state (BooleanState or None): the object state that the diffuse color should match to
         """
+        # TODO: uncomment these once our dataset has the object state-conditioned texture maps
         # DEFAULT_ALBEDO_MAP_SUFFIX = frozenset({"DIFFUSE", "COMBINED", "albedo"})
         # state_name = object_state.__class__.__name__ if object_state is not None else None
         for material in self.materials:
-            # TODO: uncomment these once our dataset has the object state-conditioned texture maps
             # texture_path = material.diffuse_texture
             # assert texture_path is not None, f"DatasetObject [{self.prim_path}] has invalid diffuse texture map."
             #

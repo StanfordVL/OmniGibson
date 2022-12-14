@@ -37,7 +37,6 @@ from omnigibson.utils.constants import (
     SYSTEM_SYNSETS_TO_SYSTEM_NAMES,
 )
 from omnigibson.utils.python_utils import classproperty, assert_valid_key
-from IPython import embed
 from omnigibson.systems.system_base import get_system_from_element_name
 
 

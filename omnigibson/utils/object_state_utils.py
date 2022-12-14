@@ -38,7 +38,7 @@ def sample_kinematics(
     objA,
     objB,
     use_ray_casting_method=False,
-    max_trials=1,
+    max_trials=10,
     z_offset=0.05,
     skip_falling=False,
 ):
