@@ -487,7 +487,7 @@ class DatasetObject(USDObject):
 
         return scales
 
-    def get_base_aligned_bbox(self, link_name=None, visual=False, xy_aligned=False, fallback_to_aabb=False):
+    def get_base_aligned_bbox(self, link_name=None, visual=False, xy_aligned=False, fallback_to_aabb=False, link_bbox_type="axis_aligned"):
         """
         Get a bounding box for this object that's axis-aligned in the object's base frame.
 
@@ -498,6 +498,8 @@ class DatasetObject(USDObject):
             xy_aligned (bool): Whether to align the bounding box to the global XY-plane
             fallback_to_aabb (bool): If set and a link's info is not found, the (global-frame) AABB will be
                 dynamically computed directly from omniverse
+            link_bbox_type (str): Which type of link bbox to use, "axis_aligned" means the bounding box is axis-aligned
+                to the link frame, "oriented" means the bounding box has the minimum volume
 
         Returns:
             4-tuple:
@@ -550,8 +552,7 @@ class DatasetObject(USDObject):
                     continue
 
                 # Get the extent and transform.
-                bb_data = self.native_link_bboxes[link_name][bbox_type]["axis_aligned"]
-                # bb_data = self.native_link_bboxes[link_name][bbox_type]["oriented"]
+                bb_data = self.native_link_bboxes[link_name][bbox_type][link_bbox_type]
                 extent_in_bbox_frame = np.array(bb_data["extent"])
                 bbox_to_link_origin = np.array(bb_data["transform"])
 

@@ -398,6 +398,8 @@ class BehaviorTask(BaseTask):
         """
         assert og.sim.is_playing()
         og.sim.stop()
+
+        # Move the robot object frame to a far away location, similar to other newly imported objects below
         env.robots[0].set_position_orientation([300, 300, 300], [0, 0, 0, 1])
 
         self.sampled_objects = set()
