@@ -50,6 +50,7 @@ SUPPORTED_PREDICATES = {
     "under": get_binary_predicate_for_state(object_states.Under, "under"),
     "touching": get_binary_predicate_for_state(object_states.Touching, "touching"),
     "covered": get_binary_predicate_for_state(object_states.Covered, "covered"),
+    "saturated": get_binary_predicate_for_state(object_states.Saturated, "saturated"),
     "filled": get_binary_predicate_for_state(object_states.Filled, "filled"),
     "cooked": get_unary_predicate_for_state(object_states.Cooked, "cooked"),
     "burnt": get_unary_predicate_for_state(object_states.Burnt, "burnt"),

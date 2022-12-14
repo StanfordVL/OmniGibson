@@ -212,10 +212,8 @@ def sample_kinematics(
 
         # Let it fall for 0.2 second
         for _ in range(int(0.2 / og.sim.get_physics_dt())):
-            # print("fall", objA.get_position())
             og.sim.step_physics()
             if objA.in_contact():
-                # print("fall until contact")
                 break
 
         # Render at the end

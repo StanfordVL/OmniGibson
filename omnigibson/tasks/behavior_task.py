@@ -38,7 +38,7 @@ from omnigibson.utils.constants import (
 )
 from omnigibson.utils.python_utils import classproperty, assert_valid_key
 from IPython import embed
-from omnigibson.systems.system_base import get_system_from_element_name, get_element_name_from_system
+from omnigibson.systems.system_base import get_system_from_element_name
 
 
 class BehaviorTask(BaseTask):
@@ -153,7 +153,8 @@ class BehaviorTask(BaseTask):
 
         # Initialize the current activity
         success, self.feedback = self.initialize_activity(env=env)
-        assert success, f"Failed to initialize Behavior Activity. Feedback:\n{self.feedback}"
+        if not success:
+            print(f"Failed to initialize Behavior Activity. Feedback:\n{self.feedback}")
 
         # Also reset the agent
         self._reset_agent(env=env)
@@ -288,7 +289,7 @@ class BehaviorTask(BaseTask):
                     )
                 if room_type not in og.sim.scene.seg_map.room_sem_name_to_ins_name:
                     # Missing room type
-                    return "Room type [{}] missing in scene [{}].".format(room_type, og.sim.scene.scene_id)
+                    return "Room type [{}] missing in scene [{}].".format(room_type, og.sim.scene.scene_model)
                 if room_type not in self.room_type_to_object_instance:
                     self.room_type_to_object_instance[room_type] = []
                 self.room_type_to_object_instance[room_type].append(obj_inst)
@@ -399,7 +400,6 @@ class BehaviorTask(BaseTask):
         assert og.sim.is_playing()
         og.sim.stop()
         env.robots[0].set_position_orientation([300, 300, 300], [0, 0, 0, 1])
-        og.sim.play()
 
         self.sampled_objects = set()
         num_new_obj = 0
@@ -432,9 +432,18 @@ class BehaviorTask(BaseTask):
             for obj_inst in self.activity_conditions.parsed_objects[obj_cat]:
                 category = np.random.choice(categories)
                 # for sliceable objects, only get the whole objects
-                model_choices = get_object_models_of_category(
-                    category, filter_method="sliceable_whole" if is_sliceable else None
-                )
+                try:
+                    model_choices = get_object_models_of_category(
+                        category, filter_method="sliceable_whole" if is_sliceable else None
+                    )
+                except:
+                    og.sim.play()
+                    return f"Missing object category: {category}"
+
+                if len(model_choices) == 0:
+                    # restore back to the play state
+                    og.sim.play()
+                    return f"Missing valid object models for category: {category}"
 
                 # TODO: This no longer works because model ID changes in the new asset
                 # Filter object models if the object category is openable
@@ -481,6 +490,10 @@ class BehaviorTask(BaseTask):
                 self.object_scope[obj_inst] = simulator_obj
 
         # Play the sim again to initialize all the newly imported objects.
+        og.sim.play()
+        # Also reset the agent
+        env.robots[0].reset()
+        # Take one extra step so that the bounding box of the agent is up-to-date.
         og.sim.step()
 
     def check_scene(self, env):
@@ -542,8 +555,13 @@ class BehaviorTask(BaseTask):
         # Assign object_scope based on a cached scene
         for obj_inst in self.object_scope:
             matched_sim_obj = None
+            # If the object scope points to the agent
             if obj_inst == "agent.n.01_1":
                 matched_sim_obj = self.get_agent(env)
+            # If the object scope points to a system
+            elif self.object_instance_to_category[obj_inst] in SYSTEM_SYNSETS_TO_SYSTEM_NAMES:
+                matched_sim_obj = get_system_from_element_name(
+                    SYSTEM_SYNSETS_TO_SYSTEM_NAMES[self.object_instance_to_category[obj_inst]])
             else:
                 logging.info(f"checking objects...")
                 for sim_obj in og.sim.scene.objects:
@@ -874,7 +892,7 @@ class BehaviorTask(BaseTask):
                         continue
                     # Sample conditions that involve the current batch of objects
                     if condition.body[0] in cur_batch:
-                        num_trials = 100
+                        num_trials = 10
                         for _ in range(num_trials):
                             success = condition.sample(binary_state=positive)
                             if success:

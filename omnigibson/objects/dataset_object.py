@@ -147,16 +147,6 @@ class DatasetObject(USDObject):
             **kwargs,
         )
 
-    @property
-    def bddl_object_scope(self):
-        """
-        Get this object's bddl object scope
-
-        Returns:
-            None or str: bddl object scope
-        """
-        return self.get_attribute(attr="ig:objectScope") if "ig:objectScope" in self.property_names else None
-
     def load_supporting_surfaces(self):
         # Initialize dict of supporting surface info
         self.supporting_surfaces = {}
