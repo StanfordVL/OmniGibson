@@ -4,8 +4,11 @@ FROM nvcr.io/nvidia/isaac-sim:2022.1.1
 RUN apt-get update && apt-get install -y \
   curl \
   git \
-  python3-pip \
-  && rm -rf /var/lib/apt/lists/*
+  software-properties-common \
+  && add-apt-repository ppa:deadsnakes/ppa \
+  && apt-get update \
+  && apt-get install -y python3.8 && rm -rf /var/lib/apt/lists/*
+RUN python -m ensurepip --upgrade
 
 RUN echo "bash /isaac-sim/vulkan_check.sh" >> /root/.bashrc
 RUN rm -rf /isaac-sim/exts/omni.isaac.ml_archive/pip_prebundle/gym
