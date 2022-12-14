@@ -29,7 +29,7 @@ RUN echo "micromamba activate omnigibson" >> /root/.bashrc
 RUN echo "source /isaac-sim/setup_conda_env.sh" >> /root/.bashrc
 
 # Install some additional niceties for working with notebooks
-SHELL ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c"]
+SHELL ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "--login", "-c"]
 RUN micromamba install -c conda-forge opencv
 
 # Install OmniGibson
