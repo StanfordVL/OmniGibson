@@ -25,11 +25,11 @@ RUN curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C
 ENV MAMBA_ROOT_PREFIX /micromamba
 RUN micromamba create -n igibson -c conda-forge python=3.7
 RUN micromamba shell init --shell=bash --prefix=/micromamba
-ENV PATH /micromamba/envs/igibson/bin:$PATH
+RUN echo "micromamba activate igibson" >> /root/.bashrc
 RUN echo "source /isaac-sim/setup_conda_env.sh" >> /root/.bashrc
 
 # Install some additional niceties for working with notebooks
-RUN micromamba install -n igibson -c conda-forge opencv jupyterlab numpy>=1.21
+RUN micromamba install -n igibson -c conda-forge opencv
 
 # Install OmniGibson
 RUN pip install -e .
