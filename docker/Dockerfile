@@ -20,19 +20,11 @@ ENV OMNIGIBSON_ASSETS_PATH /data/assets
 ENV GIBSON_DATASET_PATH /data/g_dataset
 ENV OMNIGIBSON_KEY_PATH /data/omnigibson.key
 
-# Install Mamba (light conda alternative)
-RUN curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C / bin/micromamba
-ENV MAMBA_ROOT_PREFIX /micromamba
-RUN micromamba create -n omnigibson -c conda-forge python=3.7
-RUN micromamba shell init --shell=bash --prefix=/micromamba
-RUN echo "micromamba activate omnigibson" >> /root/.bashrc
+# Add Isaac startup code.
 RUN echo "source /isaac-sim/setup_conda_env.sh" >> /root/.bashrc
 
 # Install OmniGibson
-RUN micromamba activate omnigibson && pip install -e .
-
-# Install some additional niceties for working with notebooks and better versions of things.
-RUN micromamba install -n omnigibson -c conda-forge opencv jupyterlab numpy==1.21
+RUN pip install -e .
 
 ENTRYPOINT []
 
