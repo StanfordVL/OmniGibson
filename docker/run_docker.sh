@@ -21,4 +21,4 @@ docker run \
     -e DISPLAY \
     -e OMNIGIBSON_HEADLESS=1 \
     -v DATA_PATH:/data \
-    --network=host --rm -it stanfordvl/omnigibson
+    --network=host --rm -it stanfordvl/omnigibson:latest
