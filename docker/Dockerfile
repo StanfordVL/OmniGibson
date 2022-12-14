@@ -32,7 +32,7 @@ RUN echo "source /isaac-sim/setup_conda_env.sh" >> /root/.bashrc
 RUN micromamba install -n igibson -c conda-forge opencv
 
 # Install OmniGibson
-RUN micromamba activate igibson && pip install -e .
+RUN eval "$(micromamba shell hook --shell=)" && micromamba activate igibson && pip install -e .
 
 ENTRYPOINT []
 
