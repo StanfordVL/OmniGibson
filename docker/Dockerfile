@@ -5,9 +5,9 @@ RUN apt-get update && apt-get install -y \
   curl \
   git \
   software-properties-common \
-  && add-apt-repository ppa:deadsnakes/ppa \
-  && apt-get update \
-  && apt-get install python3.8 && rm -rf /var/lib/apt/lists/*
+  && sudo add-apt-repository ppa:deadsnakes/ppa \
+  && sudo apt-get update \
+  && sudo apt-get install python3.8 && rm -rf /var/lib/apt/lists/*
 
 RUN echo "bash /isaac-sim/vulkan_check.sh" >> /root/.bashrc
 RUN rm -rf /isaac-sim/exts/omni.isaac.ml_archive/pip_prebundle/gym
