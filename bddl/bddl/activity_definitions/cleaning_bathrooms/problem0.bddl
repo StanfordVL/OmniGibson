@@ -8,7 +8,6 @@
         toilet.n.02_1 - toilet.n.02
         floor.n.01_1 - floor.n.01
         bucket.n.01_1 - bucket.n.01
-        water.n.06_1 - water.n.06
         soap.n.01_1 - soap.n.01
         brush.n.02_1 - brush.n.02
         rag.n.01_1 - rag.n.01
@@ -25,7 +24,6 @@
         (ontop bucket.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (insource water.n.06_1 sink.n.01_1)
         (inroom floor.n.01_1 bathroom) 
         (inroom toilet.n.02_1 bathroom) 
         (inroom sink.n.01_1 bathroom) 

@@ -11,7 +11,6 @@
             towel.n.01_1 - towel.n.01
             brush.n.02_1 - brush.n.02
             sink.n.01_1 - sink.n.01
-        water.n.06_1 - water.n.06
             floor.n.01_1 floor.n.01_2 - floor.n.01
             table.n.02_1 - table.n.02
             agent.n.01_1 - agent.n.01
@@ -35,7 +34,6 @@
         (not 
             (covered brush.n.02_1 stain.n.01_1)
         ) 
-        (insource water.n.06_1 sink.n.01_1)
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 

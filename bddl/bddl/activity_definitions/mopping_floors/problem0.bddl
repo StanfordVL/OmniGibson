@@ -9,7 +9,6 @@
     	bucket.n.01_1 - bucket.n.01
     	piece_of_cloth.n.01_1 - piece_of_cloth.n.01
     	sink.n.01_1 - sink.n.01
-        water.n.06_1 - water.n.06
     	agent.n.01_1 - agent.n.01
     )
     
@@ -21,7 +20,6 @@
         (covered floor.n.01_1 stain.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
         (inroom floor.n.01_2 corridor) 
-        (insource water.n.06_1 sink.n.01_1)
         (inroom sink.n.01_1 bathroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

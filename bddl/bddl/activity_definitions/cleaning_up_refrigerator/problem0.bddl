@@ -12,7 +12,6 @@
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	bowl.n.01_1 - bowl.n.01
     	sink.n.01_1 - sink.n.01
-        water.n.06_1 - water.n.06
         agent.n.01_1 - agent.n.01
         floor.n.01_1 - floor.n.01
     )
@@ -28,7 +27,6 @@
         (covered tray.n.01_2 stain.n.01_1) 
         (covered bowl.n.01_1 dust.n.01_1) 
         (covered electric_refrigerator.n.01_1 stain.n.01_1) 
-        (insource water.n.06_1 sink.n.01_1)
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
