@@ -15,10 +15,12 @@ while true; do
     esac
 done
 
+xhost +local:root
 docker run \
     --gpus all \
     --privileged \
-    -e DISPLAY \
+    -e DISPLAY=${DISPLAY} \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v DATA_PATH:/data \
     --network=host --rm -it stanfordvl/omnigibson:latest
+xhost -local:root
