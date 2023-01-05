@@ -9,7 +9,8 @@ import numpy as np
 from PIL import Image
 
 import omnigibson.utils.transform_utils as T
-
+import omnigibson as og
+import pyfmm
 
 class TraversableMap:
     """
@@ -52,6 +53,7 @@ class TraversableMap:
         self.floor_heights = None
         self.floor_map = None
         self.floor_graph = None
+        self.wall_heuristic = None
 
     def load_trav_map(self, maps_path, floor_heights=(0.0,)):
         """
@@ -83,21 +85,20 @@ class TraversableMap:
                 self.trav_map_size = int(
                     self.trav_map_original_size * self.trav_map_default_resolution / self.trav_map_resolution
                 )
-
+            
             # We resize the traversability map to the new size computed before
             trav_map = cv2.resize(trav_map, (self.trav_map_size, self.trav_map_size))
 
             # We then erode the image. This is needed because the code that computes shortest path uses the global map
             # and a point robot
-            if self.trav_map_erosion != 0:
-                trav_map = cv2.erode(trav_map, np.ones((self.trav_map_erosion, self.trav_map_erosion)))
+            self.trav_map_erosion = 6
+            trav_map = cv2.erode(trav_map, np.ones((self.trav_map_erosion, self.trav_map_erosion)))
 
             # We make the pixels of the image to be either 0 or 255
             trav_map[trav_map < 255] = 0
 
             # We search for the largest connected areas
-            if self.build_graph:
-                self.build_trav_graph(maps_path, floor, trav_map)
+            self.build_trav_graph(maps_path, floor, trav_map)
 
             self.floor_map.append(trav_map)
 
@@ -113,33 +114,42 @@ class TraversableMap:
         graph_file = os.path.join(
             maps_path, "floor_trav_{}_py{}{}.p".format(floor, sys.version_info.major, sys.version_info.minor)
         )
-        if os.path.isfile(graph_file):
-            logging.info("Loading traversable graph")
-            with open(graph_file, "rb") as pfile:
-                g = pickle.load(pfile)
-        else:
-            logging.info("Building traversable graph")
-            g = nx.Graph()
-            for i in range(self.trav_map_size):
-                for j in range(self.trav_map_size):
-                    if trav_map[i, j] == 0:
-                        continue
-                    g.add_node((i, j))
-                    # 8-connected graph
-                    neighbors = [(i - 1, j - 1), (i, j - 1), (i + 1, j - 1), (i - 1, j)]
-                    for n in neighbors:
-                        if (
-                            0 <= n[0] < self.trav_map_size
-                            and 0 <= n[1] < self.trav_map_size
-                            and trav_map[n[0], n[1]] > 0
-                        ):
-                            g.add_edge(n, (i, j), weight=T.l2_distance(n, (i, j)))
+        # Heuristic to keep robot away from walls
+        if self.wall_heuristic is None:
+            logging.info("Loading wall heuristic")
+            self.wall_heuristic = np.zeros((self.trav_map_size, self.trav_map_size))
+            hu = pyfmm.march(trav_map == 0, batch_size=self.trav_map_size*self.trav_map_size)[0] # NOTE : white area means walkable area
+            hu /= np.amax(hu)
+            self.wall_heuristic = np.amax(hu) - hu
+            # breakpoint()
+            heuristic_threshold = 0.75
+            # print(np.max(self.wall_heuristic))
+            # breakpoint()
+            self.wall_heuristic[self.wall_heuristic > heuristic_threshold] *= 100
+            self.wall_heuristic[self.wall_heuristic <= heuristic_threshold] *= 10
 
-            # only take the largest connected component
-            largest_cc = max(nx.connected_components(g), key=len)
-            g = g.subgraph(largest_cc).copy()
-            with open(graph_file, "wb") as pfile:
-                pickle.dump(g, pfile)
+        logging.info("Building traversable graph")
+        g = nx.Graph()
+        for i in range(self.trav_map_size):
+            for j in range(self.trav_map_size):
+                if trav_map[i, j] == 0:
+                    continue
+                g.add_node((i, j))
+                # 8-connected graph
+                neighbors = [(i - 1, j - 1), (i, j - 1), (i + 1, j - 1), (i - 1, j)]
+                for n in neighbors:
+                    if (
+                        0 <= n[0] < self.trav_map_size
+                        and 0 <= n[1] < self.trav_map_size
+                        and trav_map[n[0], n[1]] > 0
+                    ):
+                        g.add_edge(n, (i, j), weight=T.l2_distance(n, (i, j)) + self.wall_heuristic[n[0], n[1]] + self.wall_heuristic[i, j])
+
+        # only take the largest connected component
+        largest_cc = max(nx.connected_components(g), key=len)
+        g = g.subgraph(largest_cc).copy()
+        with open(graph_file, "wb") as pfile:
+            pickle.dump(g, pfile)
 
         self.floor_graph.append(g)
 
@@ -151,6 +161,8 @@ class TraversableMap:
         trav_map[:, :] = 0
         for node in g.nodes:
             trav_map[node[0], node[1]] = 255
+
+        self.build_graph = True
 
     @property
     def n_floors(self):

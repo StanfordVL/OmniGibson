@@ -50,7 +50,7 @@ class InteractiveTraversableScene(TraversableScene):
         usd_path=None,
         # pybullet_filename=None,
         trav_map_resolution=0.1,
-        trav_map_erosion=2,
+        trav_map_erosion=10,
         trav_map_with_objects=True,
         build_graph=True,
         num_waypoints=10,
@@ -165,7 +165,6 @@ class InteractiveTraversableScene(TraversableScene):
         directly by the fpath from @usd_path. Note that if both are specified, @usd_path takes precidence.
         If neither are specified, then a file will automatically be chosen based on self.scene_model and
         self.object_randomization
-
         Args:
             usd_file (None or str): If specified, should be name of usd file to load. (without .usd), default to
                 og_dataset/scenes/<scene_model>/usd/<usd_file>.usd
@@ -196,7 +195,6 @@ class InteractiveTraversableScene(TraversableScene):
     ):
         """
         Handle partial scene loading based on object categories, room types or room instances
-
         :param load_object_categories: only load these object categories into the scene (a list of str)
         :param not_load_object_categories: do not load these object categories into the scene (a list of str)
         :param load_room_types: only load objects in these room types into the scene (a list of str)
@@ -259,10 +257,8 @@ class InteractiveTraversableScene(TraversableScene):
         Helper function to check for scene quality.
         1) Objects should have no collision with each other.
         2) Fixed, articulated objects that cannot fully extend their joints should be less than self.link_collision_tolerance
-
         Args:
             simulator (Simulator): Active simulator object
-
         :return: whether scene passes quality check
         """
         quality_check = True
@@ -358,7 +354,6 @@ class InteractiveTraversableScene(TraversableScene):
     def open_one_obj(self, body_id, mode="random"):
         """
         Attempt to open one object without collision
-
         :param body_id: body id of the object
         :param mode: opening mode (zero, max, or random)
         """
@@ -428,12 +423,10 @@ class InteractiveTraversableScene(TraversableScene):
     def open_all_objs_by_category(self, category, mode="random", p=1.0):
         """
         Attempt to open all objects of a certain category without collision
-
         Args:
             category (str): Object category to check for opening joints
             mode (str): Opening mode, one of {zero, max, random}
             p (float): Probability in range [0, 1] for opening a given object
-
         Returns:
             list of DatasetObject: Object(s) whose joints were "opened"
         """
@@ -453,7 +446,6 @@ class InteractiveTraversableScene(TraversableScene):
     def open_all_objs_by_categories(self, categories, mode="random", prob=1.0):
         """
         Attempt to open all objects of a number of categories without collision
-
         :param categories: object categories (a list of str)
         :param mode: opening mode (zero, max, or random)
         :param prob: opening probability
@@ -474,12 +466,9 @@ class InteractiveTraversableScene(TraversableScene):
         """
         Creates the object specified from a template xform @prim, presumed to be in a template USD file,
         and simultaneously replaces the template prim with the actual object prim
-
-
         Args:
             simulator (Simulator): Active simulation object
             prim: Usd.Prim: Object template Xform prim
-
         Returns:
             None or DatasetObject: Created OmniGibson object if a valid objet is found at @prim
         """
@@ -737,10 +726,15 @@ class InteractiveTraversableScene(TraversableScene):
 
     def _load_objects_from_template(self, simulator):
         """
-        Loads scene objects based on metadata information found in the current USD stage, assumed to be a template
+        Loads scene objects based on metadata information found in the current USD stage, assumed to be a template.
+        We skip external doors
         (property ig:isTemplate is True)
         """
         # Iterate over all the children in the stage world
+        maps_path = os.path.join(self.scene_dir, "layout")
+        simulator.scene.trav_map.load_trav_map(maps_path)
+        floor_map = simulator.scene.trav_map.floor_map[0]
+
         for prim in self._world_prim.GetChildren():
             # Only process prims that are an Xform
             if prim.GetPrimTypeInfo().GetTypeName() == "Xform":
@@ -759,6 +753,13 @@ class InteractiveTraversableScene(TraversableScene):
                     # This is also the only time we'll be able to set fixed object poses
                     pos = info["bbox_center_pos"]
                     ori = info["bbox_center_ori"]
+                    scene = simulator.scene
+                    if obj.category == "door":
+                        # breakpoint()
+                        object_position_door = scene.trav_map.world_to_map(pos[:2])
+                        if floor_map[object_position_door[0], object_position_door[1]] == 255:
+                            continue
+
                     obj.set_bbox_center_position_orientation(pos, ori)
 
     def _load_objects_from_scene_info(self, simulator):
@@ -823,7 +824,6 @@ class InteractiveTraversableScene(TraversableScene):
     def get_num_objects(self):
         """
         Get the number of objects
-
         :return: number of objects
         """
         return len(self.objects)
@@ -831,7 +831,6 @@ class InteractiveTraversableScene(TraversableScene):
     def get_object_handles(self):
         """
         Return the object handles of all scene objects
-
         :return: object handles
         """
         return [obj.handle for obj in self.objects]
