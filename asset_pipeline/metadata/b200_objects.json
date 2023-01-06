@@ -81,6 +81,7 @@
     "brushing_lint_off_clothing": [
         "agent.n.01",
         "bed.n.01",
+        "dust.n.01",
         "floor.n.01",
         "scrub_brush.n.01",
         "sweater.n.01"
@@ -109,14 +110,11 @@
         "agent.n.01",
         "cabinet.n.01",
         "chopping_board.n.01",
-        "cooker.n.01",
         "countertop.n.01",
         "floor.n.01",
         "jar.n.01",
         "knife.n.01",
         "lid.n.02",
-        "pot.n.01",
-        "stove.n.01",
         "vegetable.n.01"
     ],
     "canning_food": [
@@ -129,10 +127,7 @@
         "food.n.02",
         "jar.n.01",
         "knife.n.01",
-        "lid.n.02",
-        "pot.n.01",
-        "sink.n.01",
-        "water.n.06"
+        "lid.n.02"
     ],
     "carrying_out_garden_furniture": [
         "agent.n.01",
@@ -177,7 +172,6 @@
         "floor.n.01",
         "knife.n.01",
         "mushroom.n.05",
-        "sink.n.01",
         "tomato.n.01",
         "vidalia_onion.n.01"
     ],
@@ -196,28 +190,38 @@
     "clean_a_lobster": [
         "agent.n.01",
         "bowl.n.01",
+        "electric_refrigerator.n.01",
         "floor.n.01",
-        "knife.n.01",
-        "lobster.n.01"
+        "hand_towel.n.01",
+        "lobster.n.01",
+        "mud.n.01",
+        "shelf.n.01",
+        "sink.n.01",
+        "water.n.06"
     ],
     "cleaning_a_car": [
         "agent.n.01",
         "bucket.n.01",
         "car.n.01",
+        "dust.n.01",
         "floor.n.01",
         "rag.n.01",
         "shelf.n.01",
         "sink.n.01",
-        "soap.n.01"
+        "soap.n.01",
+        "water.n.06"
     ],
     "cleaning_barbecue_grill": [
         "agent.n.01",
         "bucket.n.01",
+        "dust.n.01",
         "floor.n.01",
         "grill.n.02",
         "rag.n.01",
         "sink.n.01",
-        "table.n.02"
+        "stain.n.01",
+        "table.n.02",
+        "water.n.06"
     ],
     "cleaning_bathrooms": [
         "agent.n.01",
@@ -228,7 +232,9 @@
         "rag.n.01",
         "sink.n.01",
         "soap.n.01",
-        "toilet.n.02"
+        "stain.n.01",
+        "toilet.n.02",
+        "water.n.06"
     ],
     "cleaning_bathtub": [
         "agent.n.01",
@@ -237,13 +243,16 @@
         "floor.n.01",
         "scrub_brush.n.01",
         "sink.n.01",
-        "soap.n.01"
+        "soap.n.01",
+        "stain.n.01",
+        "water.n.06"
     ],
     "cleaning_bedroom": [
         "agent.n.01",
         "apparel.n.01",
         "bed.n.01",
         "cabinet.n.01",
+        "dust.n.01",
         "floor.n.01",
         "hand_towel.n.01",
         "jewelry.n.01",
@@ -261,18 +270,9 @@
         "hand_towel.n.01",
         "shampoo.n.01",
         "sink.n.01",
-        "washer.n.03"
-    ],
-    "cleaning_closet": [
-        "agent.n.01",
-        "cabinet.n.01",
-        "floor.n.01",
-        "hat.n.01",
-        "jewelry.n.01",
-        "sandal.n.01",
-        "shelf.n.01",
-        "towel.n.01",
-        "umbrella.n.01"
+        "stain.n.01",
+        "washer.n.03",
+        "water.n.06"
     ],
     "cleaning_cupboards": [
         "agent.n.01",
@@ -282,6 +282,7 @@
         "bucket.n.01",
         "cabinet.n.01",
         "cleansing_agent.n.01",
+        "dust.n.01",
         "floor.n.01",
         "marker.n.03",
         "pen.n.01",
@@ -294,10 +295,13 @@
         "broom.n.01",
         "cleansing_agent.n.01",
         "door.n.01",
+        "dust.n.01",
         "dustpan.n.02",
         "floor.n.01",
         "scrub_brush.n.01",
-        "sink.n.01"
+        "sink.n.01",
+        "stain.n.01",
+        "water.n.06"
     ],
     "cleaning_freezer": [
         "agent.n.01",
@@ -309,9 +313,11 @@
         "floor.n.01",
         "food.n.01",
         "sink.n.01",
+        "stain.n.01",
         "stove.n.01",
         "table.n.02",
-        "towel.n.01"
+        "towel.n.01",
+        "water.n.06"
     ],
     "cleaning_garage": [
         "agent.n.01",
@@ -320,20 +326,23 @@
         "box.n.01",
         "broom.n.01",
         "cabinet.n.01",
+        "dust.n.01",
         "floor.n.01",
         "newspaper.n.03",
         "rag.n.01",
         "shelf.n.01",
         "sink.n.01",
-        "table.n.02"
+        "stain.n.01",
+        "table.n.02",
+        "water.n.06"
     ],
     "cleaning_high_chair": [
         "agent.n.01",
         "cabinet.n.01",
+        "dust.n.01",
         "floor.n.01",
         "highchair.n.01",
-        "piece_of_cloth.n.01",
-        "sink.n.01"
+        "piece_of_cloth.n.01"
     ],
     "cleaning_kitchen_cupboard": [
         "agent.n.01",
@@ -342,19 +351,22 @@
         "cleansing_agent.n.01",
         "countertop.n.01",
         "cup.n.01",
+        "dust.n.01",
         "floor.n.01",
-        "piece_of_cloth.n.01",
-        "sink.n.01"
+        "piece_of_cloth.n.01"
     ],
     "cleaning_microwave_oven": [
         "agent.n.01",
         "ashcan.n.01",
         "cabinet.n.01",
         "countertop.n.01",
+        "dust.n.01",
         "floor.n.01",
         "microwave.n.02",
         "rag.n.01",
-        "sink.n.01"
+        "sink.n.01",
+        "stain.n.01",
+        "water.n.06"
     ],
     "cleaning_out_drawers": [
         "agent.n.01",
@@ -375,28 +387,20 @@
         "receptacle.n.01",
         "scrub_brush.n.01",
         "sink.n.01",
-        "soap.n.01"
-    ],
-    "cleaning_restaurant_table": [
-        "agent.n.01",
-        "bin.n.01",
-        "bowl.n.01",
-        "breakfast_table.n.01",
-        "dinner_napkin.n.01",
-        "disinfectant.n.01",
-        "floor.n.01",
-        "rag.n.01",
-        "sink.n.01",
+        "soap.n.01",
+        "stain.n.01",
         "water.n.06"
     ],
     "cleaning_shoes": [
         "agent.n.01",
         "bed.n.01",
+        "dust.n.01",
         "floor.n.01",
         "rag.n.01",
         "shoe.n.01",
         "sink.n.01",
         "soap.n.01",
+        "stain.n.01",
         "towel.n.01"
     ],
     "cleaning_sneakers": [
@@ -404,22 +408,28 @@
         "brush.n.02",
         "cabinet.n.01",
         "countertop.n.01",
+        "dust.n.01",
         "floor.n.01",
         "gym_shoe.n.01",
         "sink.n.01",
         "soap.n.01",
+        "stain.n.01",
         "table.n.02",
-        "towel.n.01"
+        "towel.n.01",
+        "water.n.06"
     ],
     "cleaning_stove": [
         "agent.n.01",
         "cabinet.n.01",
         "dishtowel.n.01",
+        "dust.n.01",
         "floor.n.01",
         "rag.n.01",
         "sink.n.01",
         "soap.n.01",
-        "stove.n.01"
+        "stain.n.01",
+        "stove.n.01",
+        "water.n.06"
     ],
     "cleaning_table_after_clearing": [
         "agent.n.01",
@@ -428,14 +438,18 @@
         "floor.n.01",
         "sink.n.01",
         "soap.n.01",
-        "table.n.02"
+        "stain.n.01",
+        "table.n.02",
+        "water.n.06"
     ],
     "cleaning_the_hot_tub": [
         "agent.n.01",
         "floor.n.01",
         "pool.n.01",
         "scrub_brush.n.01",
-        "sink.n.01"
+        "sink.n.01",
+        "stain.n.01",
+        "water.n.06"
     ],
     "cleaning_the_pool": [
         "agent.n.01",
@@ -444,7 +458,9 @@
         "pool.n.01",
         "scrub_brush.n.01",
         "shelf.n.01",
-        "sink.n.01"
+        "sink.n.01",
+        "stain.n.01",
+        "water.n.06"
     ],
     "cleaning_toilet": [
         "agent.n.01",
@@ -452,7 +468,9 @@
         "floor.n.01",
         "scrub_brush.n.01",
         "sink.n.01",
-        "toilet.n.02"
+        "stain.n.01",
+        "toilet.n.02",
+        "water.n.06"
     ],
     "cleaning_up_after_a_meal": [
         "agent.n.01",
@@ -466,19 +484,24 @@
         "plate.n.04",
         "sack.n.01",
         "sink.n.01",
-        "table.n.02"
+        "stain.n.01",
+        "table.n.02",
+        "water.n.06"
     ],
     "cleaning_up_refrigerator": [
         "agent.n.01",
         "bowl.n.01",
         "cabinet.n.01",
         "countertop.n.01",
+        "dust.n.01",
         "electric_refrigerator.n.01",
         "floor.n.01",
         "rag.n.01",
         "sink.n.01",
         "soap.n.01",
-        "tray.n.01"
+        "stain.n.01",
+        "tray.n.01",
+        "water.n.06"
     ],
     "cleaning_up_the_kitchen_only": [
         "agent.n.01",
@@ -489,6 +512,7 @@
         "cabinet.n.01",
         "casserole.n.02",
         "countertop.n.01",
+        "dust.n.01",
         "dustpan.n.02",
         "electric_refrigerator.n.01",
         "floor.n.01",
@@ -496,18 +520,22 @@
         "rag.n.01",
         "sink.n.01",
         "soap.n.01",
+        "stain.n.01",
         "vegetable_oil.n.01",
+        "water.n.06",
         "window.n.01"
     ],
     "cleaning_windows": [
         "agent.n.01",
         "cabinet.n.01",
         "cleansing_agent.n.01",
+        "dust.n.01",
         "floor.n.01",
         "rag.n.01",
         "sink.n.01",
         "table.n.02",
         "towel.n.01",
+        "water.n.06",
         "window.n.01"
     ],
     "cleaning_parks": [
@@ -532,11 +560,15 @@
         "agent.n.01",
         "aluminum_foil.n.01",
         "bin.n.01",
-        "container.n.01",
+        "bowl.n.01",
+        "breakfast_table.n.01",
+        "cabinet.n.01",
+        "electric_refrigerator.n.01",
         "floor.n.01",
         "pizza.n.01",
         "plate.n.04",
-        "rice.n.01"
+        "rice.n.01",
+        "sink.n.01"
     ],
     "clearing_the_table_after_dinner": [
         "agent.n.01",
@@ -551,9 +583,14 @@
     ],
     "clearing_table_after_breakfast": [
         "agent.n.01",
+        "banana.02",
+        "breakfast_table.n.01",
+        "chocolate_milk.n.01",
         "electric_refrigerator.n.01",
         "floor.n.01",
-        "leftovers.n.01",
+        "french_toast.n.01",
+        "mug.n.04",
+        "pitcher.n.02",
         "plate.n.04",
         "shelf.n.01",
         "sink.n.01",
@@ -561,6 +598,7 @@
     ],
     "clearing_table_after_coffee": [
         "agent.n.01",
+        "coffee.n.01",
         "coffee_maker.n.01",
         "countertop.n.01",
         "dishwasher.n.01",
@@ -571,16 +609,22 @@
         "agent.n.01",
         "breakfast_table.n.01",
         "chicken.n.01",
+        "container.n.01",
         "electric_refrigerator.n.01",
         "floor.n.01",
         "plate.n.04",
-        "spinach.n.02"
+        "sink.n.01",
+        "spinach.n.02",
+        "water.n.06"
     ],
     "clearing_table_after_snacks": [
         "agent.n.01",
         "apple.n.01",
+        "bin.n.01",
         "breakfast_table.n.01",
+        "cabinet.n.01",
         "chocolate.n.02",
+        "dinner_napkin.n.01",
         "electric_refrigerator.n.01",
         "floor.n.01",
         "plate.n.04"
@@ -588,6 +632,9 @@
     "clearing_table_after_supper": [
         "agent.n.01",
         "breakfast_table.n.01",
+        "container.n.01",
+        "crumb.n.03",
+        "dishwasher.n.01",
         "electric_refrigerator.n.01",
         "floor.n.01",
         "leftovers.n.01",
@@ -625,6 +672,7 @@
         "agent.n.01",
         "coffee_table.n.01",
         "driveway.n.01",
+        "envelope.n.01",
         "floor.n.01",
         "mailbox.n.01",
         "package.n.02"
@@ -640,7 +688,9 @@
         "receptacle.n.01",
         "scraper.n.01",
         "sink.n.01",
-        "towel.n.01"
+        "stain.n.01",
+        "towel.n.01",
+        "water.n.06"
     ],
     "delivering_groceries_to_doorstep": [
         "agent.n.01",
@@ -648,6 +698,7 @@
         "bread.n.01",
         "chicken.n.01",
         "door.n.01",
+        "driveway.n.01",
         "floor.n.01",
         "milk.n.01"
     ],
@@ -658,18 +709,6 @@
         "floor.n.01",
         "pizza.n.01",
         "pizza_box.n.01"
-    ],
-    "dispose_of_batteries": [
-        "agent.n.01",
-        "battery.n.01",
-        "bin.n.01",
-        "chest_of_drawers.n.01",
-        "floor.n.01",
-        "hand_blower.n.01",
-        "razor.n.01",
-        "shelf.n.01",
-        "sink.n.01",
-        "wall.n.01"
     ],
     "dispose_of_glass": [
         "agent.n.01",
@@ -703,8 +742,8 @@
     "emptying_trash_cans": [
         "agent.n.01",
         "bag.n.01",
+        "bin.n.01",
         "bottle.n.01",
-        "bucket.n.01",
         "countertop.n.01",
         "floor.n.01",
         "newspaper.n.03",
@@ -740,7 +779,6 @@
         "bucket.n.01",
         "fence.n.01",
         "floor.n.01",
-        "glove.n.02",
         "tree.n.01",
         "walnut.n.01"
     ],
@@ -760,15 +798,6 @@
         "floor.n.01",
         "microwave.n.02",
         "soup.n.01"
-    ],
-    "hiding_Easter_eggs": [
-        "agent.n.01",
-        "basket.n.01",
-        "bush.n.01",
-        "easter_egg.n.01",
-        "floor.n.01",
-        "lawn.n.01",
-        "tree.n.01"
     ],
     "installing_a_fax_machine": [
         "agent.n.01",
@@ -828,7 +857,8 @@
         "dishwasher.n.01",
         "floor.n.01",
         "mug.n.04",
-        "plate.n.04"
+        "plate.n.04",
+        "stain.n.01"
     ],
     "locking_every_door": [
         "agent.n.01",
@@ -873,13 +903,14 @@
     ],
     "make_bento": [
         "agent.n.01",
-        "apple.n.01",
+        "bowl.n.01",
         "box.n.01",
-        "cookie.n.01",
         "countertop.n.01",
         "electric_refrigerator.n.01",
         "floor.n.01",
-        "sandwich.n.01"
+        "pickle.n.01",
+        "sushi.n.01",
+        "white_rice.n.01"
     ],
     "make_gift_bags_for_baby_showers": [
         "agent.n.01",
@@ -899,9 +930,11 @@
         "floor.n.01",
         "knife.n.01",
         "lemon.n.01",
+        "sink.n.01",
         "stove.n.01",
         "tea_bag.n.01",
-        "teapot.n.01"
+        "teapot.n.01",
+        "water.n.06"
     ],
     "mopping_floors": [
         "agent.n.01",
@@ -910,7 +943,9 @@
         "floor.n.01",
         "piece_of_cloth.n.01",
         "sink.n.01",
-        "soap.n.01"
+        "soap.n.01",
+        "stain.n.01",
+        "water.n.06"
     ],
     "moving_boxes_to_storage": [
         "agent.n.01",
@@ -924,15 +959,6 @@
         "grass.n.01",
         "lawn.n.01",
         "lawn_mower.n.01"
-    ],
-    "mulching": [
-        "agent.n.01",
-        "floor.n.01",
-        "lawn.n.01",
-        "mulch.n.01",
-        "sack.n.01",
-        "tree.n.01",
-        "trowel.n.01"
     ],
     "opening_doors": [
         "agent.n.01",
@@ -973,15 +999,6 @@
         "folder.n.02",
         "marker.n.03",
         "table.n.02"
-    ],
-    "organizing_office_documents": [
-        "agent.n.01",
-        "cabinet.n.01",
-        "document.n.01",
-        "floor.n.01",
-        "folder.n.02",
-        "post-it.n.01",
-        "wall.n.01"
     ],
     "organizing_school_stuff": [
         "agent.n.01",
@@ -1175,18 +1192,6 @@
         "sandwich.n.01",
         "table.n.02"
     ],
-    "packing_meal_for_delivery": [
-        "agent.n.01",
-        "backpack.n.01",
-        "bag.n.04",
-        "cabinet.n.01",
-        "electric_refrigerator.n.01",
-        "floor.n.01",
-        "kitchen_table.n.01",
-        "meal.n.01",
-        "oven.n.01",
-        "window.n.01"
-    ],
     "packing_moving_van": [
         "agent.n.01",
         "blanket.n.01",
@@ -1248,17 +1253,14 @@
     "packing_recreational_vehicle_for_trip": [
         "agent.n.01",
         "basket.n.01",
-        "chair.n.01",
         "charger.n.02",
         "cord.n.01",
         "driveway.n.01",
         "floor.n.01",
         "foodstuff.n.02",
-        "hose.n.03",
         "knife.n.01",
         "lawn.n.01",
-        "recreational_vehicle.n.01",
-        "wheel.n.01"
+        "recreational_vehicle.n.01"
     ],
     "passing_out_drinks": [
         "agent.n.01",
@@ -1290,19 +1292,6 @@
         "sushi.n.01",
         "table.n.02"
     ],
-    "picking_up_toys": [
-        "agent.n.01",
-        "basket.n.01",
-        "cabinet.n.01",
-        "floor.n.01",
-        "game.n.01",
-        "puzzle.n.02",
-        "shelf.n.01",
-        "tennis_ball.n.01",
-        "toy_box.n.01",
-        "wall.n.01",
-        "window.n.01"
-    ],
     "picking_up_trash": [
         "agent.n.01",
         "ashcan.n.01",
@@ -1331,6 +1320,7 @@
     ],
     "polishing_furniture": [
         "agent.n.01",
+        "dust.n.01",
         "floor.n.01",
         "rag.n.01",
         "shelf.n.01",
@@ -1341,22 +1331,17 @@
         "floor.n.01",
         "rag.n.01",
         "shoe.n.01",
-        "sink.n.01"
+        "sink.n.01",
+        "stain.n.01",
+        "water.n.06"
     ],
     "polishing_silver": [
         "agent.n.01",
         "cabinet.n.01",
+        "dust.n.01",
         "floor.n.01",
         "rag.n.01",
         "spoon.n.01"
-    ],
-    "pour_a_glass_of_wine": [
-        "agent.n.01",
-        "bar.n.02",
-        "chalice.n.01",
-        "floor.n.01",
-        "red_wine.n.01",
-        "wine_bottle.n.01"
     ],
     "pouring_water_in_a_glass": [
         "agent.n.01",
@@ -1466,23 +1451,12 @@
     "prepare_a_raised_bed_garden": [
         "agent.n.01",
         "floor.n.01",
+        "flowerpot.n.01",
         "marigold.n.01",
         "planter.n.03",
+        "sack.n.01_1",
+        "soil.n.02",
         "trowel.n.01"
-    ],
-    "preparing_food_for_a_fundraiser": [
-        "agent.n.01",
-        "cabinet.n.01",
-        "cheese.n.01",
-        "cornbread.n.01",
-        "electric_refrigerator.n.01",
-        "floor.n.01",
-        "hot_sauce__bottle.n.01",
-        "kitchen_table.n.01",
-        "lasagna.n.01",
-        "platter.n.01",
-        "sausage.n.01",
-        "soup__can.n.01"
     ],
     "preserving_food": [
         "agent.n.01",
@@ -1556,15 +1530,6 @@
         "plaything.n.01",
         "table.n.02"
     ],
-    "putting_backpack_in_car_for_school": [
-        "agent.n.01",
-        "backpack.n.01",
-        "book.n.02",
-        "car.n.01",
-        "desk.n.01",
-        "floor.n.01",
-        "pencil_box.n.01"
-    ],
     "putting_bike_in_garage": [
         "agent.n.01",
         "bicycle.n.01",
@@ -1587,13 +1552,6 @@
         "floor.n.01",
         "pasta.n.02",
         "sauce.n.01"
-    ],
-    "putting_meal_in_fridge_at_work": [
-        "agent.n.01",
-        "desk.n.01",
-        "electric_refrigerator.n.01",
-        "floor.n.01",
-        "meal.n.01"
     ],
     "putting_out_cat_food": [
         "agent.n.01",
@@ -1755,21 +1713,13 @@
         "bowl.n.01",
         "coca_cola.n.01",
         "floor.n.01",
-        "popcorn.n.02",
+        "popcorn.n.01",
+        "sack.n.01",
         "shelf.n.01",
         "sofa.n.01",
         "table.n.02",
         "television_receiver.n.01",
         "throw.n.04"
-    ],
-    "setup_a_baby_crib": [
-        "agent.n.01",
-        "blanket.n.01",
-        "crib.n.01",
-        "doll.n.01",
-        "floor.n.01",
-        "shelf.n.01",
-        "teddy.n.01"
     ],
     "setup_a_fish_tank": [
         "agent.n.01",
@@ -1860,29 +1810,6 @@
         "insectifuge.n.01",
         "lawn.n.01"
     ],
-    "stacking_wood": [
-        "agent.n.01",
-        "floor.n.01",
-        "rack.n.01",
-        "wood.n.01"
-    ],
-    "stock_a_bar": [
-        "agent.n.01",
-        "crate.n.01",
-        "floor.n.01",
-        "gin__bottle.n.01",
-        "rum__bottle.n.01",
-        "shelf.n.01",
-        "tarnish.n.01",
-        "vodka__bottle.n.01"
-    ],
-    "store_batteries": [
-        "agent.n.01",
-        "battery.n.01",
-        "chest_of_drawers.n.01",
-        "floor.n.01",
-        "shelf.n.01"
-    ],
     "store_beer": [
         "agent.n.01",
         "beer_bottle.n.01",
@@ -1928,12 +1855,6 @@
         "floor.n.01"
     ],
     "store_firewood": [
-        "agent.n.01",
-        "firewood.n.01",
-        "floor.n.01",
-        "rack.n.01"
-    ],
-    "store_firewood_outdoors": [
         "agent.n.01",
         "firewood.n.01",
         "floor.n.01",
@@ -1987,12 +1908,10 @@
     ],
     "store_tulip_bulbs": [
         "agent.n.01",
-        "bin.n.01",
+        "box.n.01",
         "countertop.n.01",
         "electric_refrigerator.n.01",
         "floor.n.01",
-        "paper_towel.n.01",
-        "scissors.n.01",
         "tulip.n.01"
     ],
     "storing_food": [
@@ -2041,14 +1960,6 @@
         "olive.n.04",
         "sink.n.01"
     ],
-    "throwing_away_leftovers": [
-        "agent.n.01",
-        "ashcan.n.01",
-        "countertop.n.01",
-        "floor.n.01",
-        "hamburger.n.01",
-        "plate.n.04"
-    ],
     "throwing_out_used_napkins": [
         "agent.n.01",
         "bin.n.01",
@@ -2081,26 +1992,10 @@
         "oven.n.01",
         "toaster.n.02"
     ],
-    "turn_off_a_normal_school_calculator": [
-        "agent.n.01",
-        "calculator.n.02",
-        "countertop.n.01",
-        "floor.n.01"
-    ],
     "turning_on_radio": [
         "agent.n.01",
         "floor.n.01",
         "radio.n.01"
-    ],
-    "turning_sprinkler_off": [
-        "agent.n.01",
-        "floor.n.01",
-        "sprinkler.n.01"
-    ],
-    "turning_sprinkler_on": [
-        "agent.n.01",
-        "floor.n.01",
-        "sprinkler.n.01"
     ],
     "unloading_shopping_from_car": [
         "agent.n.01",
@@ -2133,13 +2028,13 @@
     ],
     "unloading_groceries": [
         "agent.n.01",
-        "bag.n.01",
         "bread.n.01",
         "cabinet.n.01",
         "cereal.n.03",
         "egg.n.02",
         "electric_refrigerator.n.01",
         "floor.n.01",
+        "grocery_bag.n.01",
         "yogurt__cup.n.01"
     ],
     "unpacking_suitcase": [
@@ -2155,6 +2050,7 @@
     "vacuuming_floors": [
         "agent.n.01",
         "ashcan.n.01",
+        "dust.n.01",
         "floor.n.01",
         "vacuum.n.04"
     ],
@@ -2162,10 +2058,13 @@
         "agent.n.01",
         "bucket.n.01",
         "car.n.01",
+        "dust.n.01",
         "floor.n.01",
         "rag.n.01",
         "sink.n.01",
-        "soap.n.01"
+        "soap.n.01",
+        "stain.n.01",
+        "water.n.06"
     ],
     "washing_dishes": [
         "agent.n.01",
@@ -2175,18 +2074,23 @@
         "floor.n.01",
         "plate.n.04",
         "scrub_brush.n.01",
-        "sink.n.01"
+        "sink.n.01",
+        "stain.n.01",
+        "water.n.06"
     ],
     "washing_floor": [
         "agent.n.01",
         "bed.n.01",
         "bucket.n.01",
+        "dust.n.01",
         "floor.n.01",
         "shower.n.01",
         "sink.n.01",
         "soap.n.01",
+        "stain.n.01",
         "toilet.n.02",
-        "towel.n.01"
+        "towel.n.01",
+        "water.n.06"
     ],
     "washing_pots_and_pans": [
         "agent.n.01",
@@ -2198,7 +2102,9 @@
         "scrub_brush.n.01",
         "sink.n.01",
         "soap.n.01",
-        "teapot.n.01"
+        "stain.n.01",
+        "teapot.n.01",
+        "water.n.06"
     ],
     "watering_houseplants": [
         "agent.n.01",
@@ -2206,10 +2112,12 @@
         "floor.n.01",
         "pot_plant.n.01",
         "sink.n.01",
-        "table.n.02"
+        "table.n.02",
+        "water.n.06"
     ],
     "waxing_cars_or_other_vehicles": [
         "agent.n.01",
+        "dust.n.01",
         "floor.n.01",
         "rag.n.01",
         "shelf.n.01",
