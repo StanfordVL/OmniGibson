@@ -94,8 +94,8 @@ class VisionSensor(BaseSensor):
         enabled=True,
         noise=None,
         load_config=None,
-        image_height=128,
-        image_width=128,
+        image_height=720,
+        image_width= 1280,
         viewport_name=None,
     ):
         # Create load config from inputs

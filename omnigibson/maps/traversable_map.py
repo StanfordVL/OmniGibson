@@ -38,6 +38,7 @@ class TraversableMap:
         :param waypoint_resolution: resolution of adjacent way points
         """
         # Set internal values
+        trav_map_resolution=0.1
         self.trav_map_default_resolution = 0.01  # each pixel represents 0.01m
         self.trav_map_resolution = trav_map_resolution
         self.trav_map_erosion = trav_map_erosion
@@ -120,13 +121,14 @@ class TraversableMap:
             self.wall_heuristic = np.zeros((self.trav_map_size, self.trav_map_size))
             hu = pyfmm.march(trav_map == 0, batch_size=self.trav_map_size*self.trav_map_size)[0] # NOTE : white area means walkable area
             hu /= np.amax(hu)
-            self.wall_heuristic = np.amax(hu) - hu
+            self.wall_heuristic = (np.amax(hu) - hu) * 10
             # breakpoint()
-            heuristic_threshold = 0.75
+            heuristic_threshold = 7
             # print(np.max(self.wall_heuristic))
             # breakpoint()
-            self.wall_heuristic[self.wall_heuristic > heuristic_threshold] *= 100
-            self.wall_heuristic[self.wall_heuristic <= heuristic_threshold] *= 10
+            self.wall_heuristic[self.wall_heuristic > heuristic_threshold] *= 5
+            self.wall_heuristic[self.wall_heuristic > heuristic_threshold/2] *= 2
+            # self.wall_heuristic[self.wall_heuristic <= heuristic_threshold] *= 3
 
         logging.info("Building traversable graph")
         g = nx.Graph()
@@ -137,13 +139,16 @@ class TraversableMap:
                 g.add_node((i, j))
                 # 8-connected graph
                 neighbors = [(i - 1, j - 1), (i, j - 1), (i + 1, j - 1), (i - 1, j)]
+                # neighbors = [(i, j - 1), (i - 1, j)]
                 for n in neighbors:
                     if (
                         0 <= n[0] < self.trav_map_size
                         and 0 <= n[1] < self.trav_map_size
                         and trav_map[n[0], n[1]] > 0
                     ):
-                        g.add_edge(n, (i, j), weight=T.l2_distance(n, (i, j)) + self.wall_heuristic[n[0], n[1]] + self.wall_heuristic[i, j])
+                        # print(T.l2_distance(n, (i, j)))
+                        g.add_edge(n, (i, j), weight=T.l2_distance(n, (i, j)) * (self.wall_heuristic[n[0], n[1]] + self.wall_heuristic[i, j]))
+                        # g.add_edge(n, (i, j), weight=1 * (self.wall_heuristic[n[0], n[1]] + self.wall_heuristic[i, j]))
 
         # only take the largest connected component
         largest_cc = max(nx.connected_components(g), key=len)
@@ -248,7 +253,7 @@ class TraversableMap:
 
         path_world = self.map_to_world(path_map)
         geodesic_distance = np.sum(np.linalg.norm(path_world[1:] - path_world[:-1], axis=1))
-        path_world = path_world[:: self.waypoint_interval]
+        # path_world = path_world[:: self.waypoint_interval]
 
         if not entire_path:
             path_world = path_world[: self.num_waypoints]
