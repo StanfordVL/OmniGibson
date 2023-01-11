@@ -63,6 +63,10 @@ ig_pipeline/
 
 ```
 
+## Stages
+![A simple diagram of pipeline stages](stages.png)
+TBD
+
 ## Important scripts
 TBD
 

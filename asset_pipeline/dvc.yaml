@@ -2690,16 +2690,6 @@ stages:
       - cad/${item}/artifacts/scene
       - cad/${item}/artifacts/export_scene.success
     foreach: ${scenes}
-  generate_camera_images:
-    do:
-      cmd: python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_camera_images.py
-      deps:
-      - b1k_pipeline/max/generate_camera_images.py
-      - cad/${item}/processed.max
-      outs:
-      - cad/${item}/artifacts/camera_images
-      - cad/${item}/artifacts/generate_camera_images.success
-    foreach: ${final_scenes}
   object_inventory:
     cmd: python b1k_pipeline/object_inventory.py
     deps:

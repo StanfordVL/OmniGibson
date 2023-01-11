@@ -166,17 +166,17 @@ stages:
   #     - cad/${item}/artifacts/top.png
   #     - cad/${item}/artifacts/generate_images.success
 
-  generate_camera_images:
-    # Generate photos of each camera in each scene.
-    foreach: ${final_scenes}
-    do:
-      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_camera_images.py'
-      deps:
-      - b1k_pipeline/max/generate_camera_images.py
-      - cad/${item}/processed.max
-      outs:
-      - cad/${item}/artifacts/camera_images
-      - cad/${item}/artifacts/generate_camera_images.success
+  # generate_camera_images:
+  #   # Generate photos of each camera in each scene.
+  #   foreach: ${final_scenes}
+  #   do:
+  #     cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_camera_images.py'
+  #     deps:
+  #     - b1k_pipeline/max/generate_camera_images.py
+  #     - cad/${item}/processed.max
+  #     outs:
+  #     - cad/${item}/artifacts/camera_images
+  #     - cad/${item}/artifacts/generate_camera_images.success
 
   room_object_list:
     # Generate a list of all objects found in each room in each scene.
