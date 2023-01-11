@@ -72,9 +72,9 @@ stages:
     do:
       cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/export_meshes.py'
       deps:
-      # - b1k_pipeline/max/export_meshes.py
+      - b1k_pipeline/max/export_meshes.py
       - cad/${item}/artifacts/object_list.json
-      # - cad/${item}/artifacts/sanitycheck.success  # TODO: Enable
+      # - cad/${item}/artifacts/sanitycheck.success
       - cad/${item}/processed.max
       outs:
       - cad/${item}/artifacts/meshes
@@ -100,10 +100,20 @@ stages:
       - cad/${item}/artifacts/meshes
       - cad/${item}/artifacts/object_list.success
       - cad/${item}/artifacts/object_list.json
-      # - b1k_pipeline/export_objs.py
-      # - b1k_pipeline/mesh_tree.py
+      - b1k_pipeline/export_objs.py
+      - b1k_pipeline/mesh_tree.py
       outs:
       - cad/${item}/artifacts/objects
+      - cad/${item}/artifacts/export_objs.json
+
+  export_objs_success:
+    foreach: ${combined}
+    do:
+      cmd: 'python b1k_pipeline/check_success.py cad/${item}/artifacts/export_objs.json cad/${item}/artifacts/export_objs.success'
+      deps:
+      - cad/${item}/artifacts/export_objs.json
+      - b1k_pipeline/check_success.py
+      outs:
       - cad/${item}/artifacts/export_objs.success
 
   validate_objs:
@@ -214,7 +224,7 @@ stages:
     # Validate exported scene, e.g. physics stability.
     foreach: ${scenes}
     do:
-      cmd: 'python b1k_pipeline/validate_scene.py ${item}'
+      cmd: 'python -m b1k_pipeline.validate_scene ${item}'
       deps:
       - cad/${item}/artifacts/scene
       - cad/${item}/artifacts/export_scene.success
@@ -241,9 +251,9 @@ stages:
     cmd: 'python b1k_pipeline/aggregate_metadata.py'
     deps:
     - b1k_pipeline/aggregate_metadata.py
-    # - artifacts/aggregate/objects
-    # - artifacts/aggregate/scenes
-    - category_mapping.csv
+    - artifacts/aggregate/objects
+    - artifacts/aggregate/scenes
+    - metadata/category_mapping.csv
     outs:
     - artifacts/aggregate/metadata
     - artifacts/pipeline/aggregate_metadata.json
