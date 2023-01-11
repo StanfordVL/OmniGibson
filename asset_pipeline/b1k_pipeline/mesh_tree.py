@@ -13,11 +13,11 @@ import trimesh
 import b1k_pipeline.utils
 
 
-SCALE_FACTOR = 0.001
-SCALE_MATRIX = trimesh.transformations.scale_matrix(SCALE_FACTOR)
-
 def build_mesh_tree(mesh_list, mesh_root, load_upper=True):
     G = nx.DiGraph()
+
+    scale_factor = 1 if "legacy_" in mesh_root else 0.001
+    scale_matrix = trimesh.transformations.scale_matrix(scale_factor)
 
     print("Building mesh tree.")
     pbar = tqdm.tqdm(mesh_list)
@@ -34,15 +34,24 @@ def build_mesh_tree(mesh_list, mesh_root, load_upper=True):
         parent_link_name = match.group("parent_link_name")
         joint_type = match.group("joint_type")
         joint_side = match.group("joint_side")
+        tags_str = match.group("tag")
 
         if joint_side == "upper" and not load_upper:
             continue
 
         link_name = "base_link" if link_name is None else link_name
 
+        tags = []
+        if tags_str:
+            tags = sorted([x[1:] for x in tags_str.split("-") if x])
+
         node_key = (obj_cat, obj_model, obj_inst_id, link_name)
-        if (obj_cat, obj_model, obj_inst_id, link_name) not in G.nodes:
-            G.add_node((obj_cat, obj_model, obj_inst_id, link_name), is_broken=is_broken, is_loose=is_loose, is_randomization_fixed=is_randomization_fixed)
+        if node_key not in G.nodes:
+            G.add_node(node_key)
+        G.nodes[node_key]["is_broken"] = is_broken
+        G.nodes[node_key]["is_loose"] = is_loose
+        G.nodes[node_key]["is_randomization_fixed"] = is_randomization_fixed
+        G.nodes[node_key]["tags"] = tags
         
         # Get the path for the mesh
         mesh_dir = os.path.join(mesh_root, mesh_name)
@@ -60,30 +69,30 @@ def build_mesh_tree(mesh_list, mesh_root, load_upper=True):
             # Apply the scaling factor.
             for meta_link_type in meta_links:
                 for meta_link in meta_links[meta_link_type].values():
-                    meta_link["position"] = np.array(meta_link["position"]) * SCALE_FACTOR
+                    meta_link["position"] = np.array(meta_link["position"]) * scale_factor
                     if "length" in meta_link:
-                        meta_link["length"] *= SCALE_FACTOR
+                        meta_link["length"] *= scale_factor
                     if "width" in meta_link:
-                        meta_link["width"] *= SCALE_FACTOR
+                        meta_link["width"] *= scale_factor
                     if "size" in meta_link:
-                        meta_link["size"] *= SCALE_FACTOR
+                        meta_link["size"] = (np.asarray(meta_link["size"]) * scale_factor).tolist()
 
         # Add the data for the position onto the node.
         if joint_side == "upper":
             assert "upper_filename" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
             G.nodes[node_key]["upper_filename"] = mesh_path
             upper_mesh = trimesh.load(mesh_path, process=False, force="mesh", skip_materials=True, maintain_order=True)
-            upper_mesh.apply_transform(SCALE_MATRIX)
+            upper_mesh.apply_transform(scale_matrix)
             G.nodes[node_key]["upper_mesh"] = upper_mesh
         else:
             assert "lower_filename" not in G.nodes[node_key]
             G.nodes[node_key]["lower_filename"] = mesh_path, f"Found two lower meshes for {node_key}"
             lower_mesh = trimesh.load(mesh_path, process=False, force="mesh")
-            lower_mesh.apply_transform(SCALE_MATRIX)
+            lower_mesh.apply_transform(scale_matrix)
             G.nodes[node_key]["lower_mesh"] = lower_mesh
 
             lower_mesh_ordered = trimesh.load(mesh_path, process=False, force="mesh", skip_materials=True, maintain_order=True)
-            lower_mesh_ordered.apply_transform(SCALE_MATRIX)
+            lower_mesh_ordered.apply_transform(scale_matrix)
             G.nodes[node_key]["lower_mesh_ordered"] = lower_mesh_ordered
 
             G.nodes[node_key]["metadata"] = metadata
@@ -102,7 +111,7 @@ def build_mesh_tree(mesh_list, mesh_root, load_upper=True):
         if node[-1] != "base_link":
             (_, _, d), = G.in_edges(node, data=True)
             joint_type = d["joint_type"]
-            needs_upper = load_upper and not data["is_broken"] and joint_type != "F"
+            needs_upper = load_upper and not data["is_broken"] and joint_type not in ("F", "A")
         assert not needs_upper or "upper_filename" in data, f"{node} does not have upper filename."
         assert not needs_upper or "upper_mesh" in data, f"{node} does not have upper mesh."
         assert "lower_filename" in data, f"{node} does not have lower filename."

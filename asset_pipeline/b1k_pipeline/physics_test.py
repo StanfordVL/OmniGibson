@@ -4,8 +4,9 @@ This script is used to load a newly-exported scene and check it for physics stab
 To run this script, you need to have a valid version of iGibson 2.0 installed in your environment.
 """
 
-import os
 import sys
+sys.append(r"D:\ig_pipeline")
+
 import pybullet as p
 
 import igibson
@@ -14,15 +15,17 @@ igibson.ig_dataset_path = r"D:\ig_pipeline\artifacts\aggregate"
 from igibson.simulator import Simulator
 from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
 
+from b1k_pipeline.utils import PIPELINE_ROOT
+
 OUTPUT_FILENAME = "physics_test.json"
 SUCCESS_FILENAME = "physics_test.success"
-DATASET_PATH = ""
 
 
 
 def main():
-    scene_path = sys.argv[1]
-    scene_name = os.path.basename(scene_path)
+    target = sys.argv[1]
+    scene_name = target.split("/")[1]
+    output_dir = PIPELINE_ROOT / "cad" / target / "artifacts"
 
     s = Simulator(mode="headless", use_pb_gui=True)
 
@@ -33,18 +36,39 @@ def main():
         )
         s.import_scene(scene)
 
-        while True:
+        # Save the pose of everything
+        initial_poses = {}
+        for b in range(p.getNumBodies()):
+            initial_poses{b} = p.getPositionAndOrientation(b)
+
+        for _ in range(1000):
             p.stepSimulation()
 
-        output_dir = os.path.join(rt.maxFilePath, "artifacts")
-        os.makedirs(output_dir, exist_ok=True)
+        # Recheck the pose of everything
+        errors = []
+        for b in range(p.getNumBodies()):
+            if b not in scene.objects_by_id:
+                continue
 
-        filename = os.path.join(output_dir, OUTPUT_FILENAME)
+            obj_name = scene.objects_by_id[b].name
+            orig_pos, orig_orn = initial_poses[b]
+            pos, orn = p.getPositionAndOrientation(b)
+            diff_pos = np.linalg.norm(np.array(pos) - np.array(orig_pos))
+            diff_orn = (R.from_quat(orn) * R.from_quat(old-1).inv()).magnitude()
+
+            if diff_pos > POS_THRESHOLD:
+                errors.append(f"{obj_name} moved by {diff_pos} meters.")
+            if diff_rot > ORN_THRESHOLD:
+                errors.append(f"{obj_name} rotated by {np.rad2deg(diff_orn)} degrees.")
+
+
+        success = not errors
+        filename = output_dir / OUTPUT_FILENAME
         with open(filename, "w") as f:
-            json.dump({"success": success, "needed_objects": needed, "provided_objects": provided, "object_counts": counts, "error_invalid_name": sorted(nomatch)}, f, indent=4)
+            json.dump({"success": success}, f, indent=4)
 
         if success:
-            with open(os.path.join(output_dir, SUCCESS_FILENAME), "w") as f:
+            with open(output_dir / SUCCESS_FILENAME, "w") as f:
                 pass
 
     finally:

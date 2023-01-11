@@ -32,8 +32,8 @@ CHANNEL_MAPPING = {
     "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
     "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
     "VRayMtlReflectGlossinessBake": "Roughness Map",   # iGibson/Omniverse renderer expects we flip the glossiness map
-    "VRayAOMap": "Refl Color Map",  # Physical Material doesn't have a dedicated AO map
-    "VRaySelfIlluminationMap": "Emission Color Map",
+    # "VRayAOMap": "Refl Color Map",  # Physical Material doesn't have a dedicated AO map
+    # "VRaySelfIlluminationMap": "Emission Color Map",
     "VRayRawRefractionFilterMap": "Transparency Color Map", # or VRayRefractionFilterMap: Transparency Map
     "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
 }
@@ -42,12 +42,25 @@ CHANNEL_MAPPING = {
 #     "Normal": "Bump Map",
 # }
 
-RENDER_PRESET_FILENAME = str((b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender-gi.rps").absolute())
+RENDER_PRESET_FILENAME = str((b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute())
 
 allow_list = [
 ]
 black_list = [
 ]
+
+def unlight_mats_recursively(mat):
+    if mat:
+        if hasattr(mat, "selfIllumination_multiplier"):
+            mat.selfIllumination_multiplier = 0.0
+        for i in range(mat.numsubs):
+            submat = mat[i]
+            unlight_mats_recursively(submat)
+    
+def unlight_all_mats():
+    materials = {x.material for x in rt.objects}
+    for mat in materials:
+        unlight_mats_recursively(mat)
 
 class ObjectExporter:
     def __init__(self, bakery, out_dir, export_textures=True):
@@ -179,10 +192,11 @@ class ObjectExporter:
         self.unwrap_times[obj.name] = end_time - start_time
 
     def texture_baking(self, obj):
-        vray = rt.renderers.current
-        vray.camera_autoExposure = True
-        vray.options_lights = False
-        vray.options_hiddenLights = False
+        # vray = rt.renderers.current
+        # vray.camera_autoExposure = False
+        # vray.options_lights = False
+        # vray.options_hiddenLights = False
+        rt.sceneexposurecontrol.exposurecontrol = None
 
         if not self.should_bake_texture(obj):
             return
@@ -296,12 +310,32 @@ class ObjectExporter:
             meta_id_str = child_name_result.group("meta_id")
             meta_id = 0 if meta_id_str is None else int(meta_id_str)
             assert meta_id not in metadata["meta_links"][meta_type], f"Meta ID {meta_id} is repeated in object {obj.name}"
+            object_transform = child.objecttransform  # This is a 4x3 array
+            position = object_transform.position
+            rotation = object_transform.rotation
             metadata["meta_links"][meta_type][meta_id] = {
-                "position": [child.position.x, child.position.y, child.position.z],
-                "orientation": [child.rotation.x, child.rotation.y, child.rotation.z, child.rotation.w],
+                "position": list(position),
+                "orientation": [rotation.x, rotation.y, rotation.z, rotation.w],
             }
+
+            # TODO: Validate type.
             if rt.classOf(child) == rt.VolumeHelper:
-                metadata["meta_links"][meta_type][meta_id]["size"] = child.size
+                size = rt.Point3(child.size, child.size, child.size) * object_transform
+                metadata["meta_links"][meta_type][meta_id]["type"] = "sphere"
+                metadata["meta_links"][meta_type][meta_id]["size"] = list(size)
+            elif rt.classOf(child) == rt.Box:
+                size = rt.Point3(child.width, child.length, child.height) * object_transform
+                metadata["meta_links"][meta_type][meta_id]["type"] = "box"
+                metadata["meta_links"][meta_type][meta_id]["size"] = list(size)
+            elif rt.classOf(child) == rt.Cylinder:
+                size = rt.Point3(child.radius, child.radius, child.height) * object_transform
+                metadata["meta_links"][meta_type][meta_id]["type"] = "cylinder"
+                metadata["meta_links"][meta_type][meta_id]["size"] = list(size)
+            elif rt.classOf(child) == rt.Cone:
+                assert np.isclose(child.radius2, 0), f"Cone radius should be 0 for {child.name}"
+                size = rt.Point3(child.radius1, child.radius1, child.height) * object_transform
+                metadata["meta_links"][meta_type][meta_id]["type"] = "cone"
+                metadata["meta_links"][meta_type][meta_id]["size"] = list(size)
 
         json_file = os.path.join(obj_dir, obj.name + ".json")
         with open(json_file, "w") as f:
@@ -345,6 +379,9 @@ class ObjectExporter:
     def run(self):
         assert rt.classOf(rt.renderers.current) == rt.V_Ray_5__update_2_3, f"Renderer should be set to V-Ray 5.2.3 CPU instead of {rt.classOf(rt.renderers.current)}"
         assert rt.execute('max modify mode')
+
+        # Remove lights from all materials
+        unlight_all_mats()
 
         objs = self.get_process_objs()
         should_bake_count = sum(1 for x in objs if self.should_bake_texture(x))
@@ -407,8 +444,6 @@ def main():
 
     if success:
         print("Export successful!")
-        with open(os.path.join(out_dir, "export_meshes.success"), "w"):
-            pass
     else:
         print("Export failed.")
         print(error_msg)

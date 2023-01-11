@@ -12,7 +12,7 @@ OBJECT_INVENTORY_PATH = PIPELINE_OUTPUT_DIR / "object_inventory.json"
 OUTPUT_FILENAME = PIPELINE_OUTPUT_DIR / "aggregate_metadata.json"
 SUCCESS_FILENAME = PIPELINE_OUTPUT_DIR / "aggregate_metadata.success"
 
-CATEGORY_MAPPING_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "category_mapping.csv"
+CATEGORY_MAPPING_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "metadata" / "category_mapping.csv"
 
 METADATA_ROOT_DIR = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts" / "aggregate" / "metadata"
 CATEGORIES_FILENAME = METADATA_ROOT_DIR / "categories.txt"
@@ -32,7 +32,7 @@ def main():
         
         # For now, get categories from CSV file
         categories_by_id = {}
-        with open(r"D:\ig_pipeline\category_mapping.csv", newline='') as csvfile:
+        with open(CATEGORY_MAPPING_FILENAME, newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 cat_id = int(row["id"].strip())

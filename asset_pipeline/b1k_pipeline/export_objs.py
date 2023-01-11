@@ -1,10 +1,14 @@
+import collections
+from concurrent import futures
 import copy
 import json
 import os
+import pathlib
 import sys
 import shutil
 import subprocess
 import tempfile
+import traceback
 import xml.etree.ElementTree as ET
 from collections import OrderedDict
 from xml.dom import minidom
@@ -16,7 +20,7 @@ import trimesh
 from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline import mesh_tree
-from b1k_pipeline.utils import parse_name
+from b1k_pipeline.utils import parse_name, PIPELINE_ROOT
 
 
 VRAY_MAPPING = {
@@ -35,7 +39,7 @@ MTL_MAPPING = {
     "map_Pr": "roughness",
     "map_Pm": "metalness",
     "map_Tf": "opacity",
-    "map_Ke": "emission",
+    # "map_Ke": "emission",
     # "map_Ks": "ao",
 }
 
@@ -47,16 +51,39 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
+def timeout(timelimit):
+    def decorator(func):
+        def decorated(*args, **kwargs):
+            with futures.ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(func, *args, **kwargs)
+                try:
+                    result = future.result(timelimit)
+                except futures.TimeoutError:
+                    raise TimeoutError from None
+                executor._threads.clear()
+                futures.thread._threads_queues.clear()
+                return result
+        return decorated
+    return decorator
+
+
 def transform_mesh(orig_mesh, translation, rotation):
     mesh = orig_mesh.copy()
 
     # Rotate the object around the CoM of the base link frame by the transpose of its canonical orientation
     # so that the object has identity orientation in the end
-    rotation_matrix = np.eye(4)
-    rotation_matrix[:3, :3] = R.from_quat(rotation).inv().as_matrix()
-    mesh.apply_transform(trimesh.transformations.translation_matrix(-translation))
-    mesh.apply_transform(rotation_matrix)
-    # mesh.apply_transform(trimesh.transformations.translation_matrix(translation))
+
+    transform = np.eye(4)
+    transform[:3, :3] = R.from_quat(rotation).as_matrix()
+    transform[:3, 3] = translation
+    inv_transform = trimesh.transformations.inverse_matrix(transform)
+    mesh.apply_transform(inv_transform)
+
+    # rotation_matrix = np.eye(4)
+    # rotation_matrix[:3, :3] = R.from_quat(rotation).inv().as_matrix()
+    # mesh.apply_transform(trimesh.transformations.translation_matrix(-translation))
+    # mesh.apply_transform(rotation_matrix)
+    ## mesh.apply_transform(trimesh.transformations.translation_matrix(R.from_quat(rotation).inv().apply(translation)))
 
     return mesh
 
@@ -91,7 +118,64 @@ def get_mesh_center(mesh):
         return mesh.centroid
 
 
-def compute_bounding_box(root_node_data):
+@timeout(10)
+def compute_mesh_stable_poses(mesh):
+    return trimesh.poses.compute_stable_poses(mesh, n_samples=5, threshold=0.03)
+
+def compute_stable_poses(G, root_node):
+    # First assemble a complete collision mesh
+    all_link_meshes = []
+    for link_node in nx.dfs_preorder_nodes(G, root_node):
+        collision_mesh = G.nodes[link_node]["collision_mesh"].copy()
+        mesh_pose_in_base_frame = G.nodes[link_node]["link_frame_in_base"] +  G.nodes[link_node]["mesh_in_link_frame"]
+        transform = trimesh.transformations.translation_matrix(mesh_pose_in_base_frame)
+        collision_mesh.apply_transform(transform)
+        all_link_meshes.append(collision_mesh)
+    combined_collision_mesh = trimesh.util.concatenate(all_link_meshes)
+
+    # Then run trimesh's stable pose computation.
+    poses = []
+    probs = []
+    try:
+        poses, probs = compute_mesh_stable_poses(combined_collision_mesh)
+    except:
+        print("Could not compute stable poses.")
+        pass
+
+    # Return the obtained poses.
+    return list({"prob": prob, "rotation": trimesh.transformations.quaternion_from_matrix(pose)} for pose, prob in zip(poses, probs))
+
+def get_bbox_data_for_mesh(mesh):
+    axis_aligned_bbox = mesh.bounding_box
+    axis_aligned_bbox_dict = {
+        "extent": np.array(axis_aligned_bbox.primitive.extents).tolist(),
+        "transform": np.array(axis_aligned_bbox.primitive.transform).tolist(),
+    }
+
+    oriented_bbox = mesh.bounding_box_oriented
+    oriented_bbox_dict = {
+        "extent": np.array(oriented_bbox.primitive.extents).tolist(),
+        "transform": np.array(oriented_bbox.primitive.transform).tolist(),
+    }
+
+    return {"axis_aligned": axis_aligned_bbox_dict, "oriented": oriented_bbox_dict}
+
+def compute_link_aligned_bounding_boxes(G, root_node):
+    link_bounding_boxes = collections.defaultdict(dict)
+    for link_node in nx.dfs_preorder_nodes(G, root_node):
+        obj_cat, obj_model, obj_inst_id, link_name = link_node
+       
+        # Get the pose and transform it
+        for key in ["collision", "visual"]:
+            try:
+                link_bounding_boxes[link_name][key] = get_bbox_data_for_mesh(
+                    transform_mesh(G.nodes[link_node][key + "_mesh"], G.nodes[link_node]["mesh_in_link_frame"], [0, 0, 0, 1]))
+            except Exception as e:
+                print(f"Problem with {obj_cat}-{obj_model} link {link_name}: {str(e)}")
+
+    return link_bounding_boxes
+
+def compute_object_bounding_box(root_node_data):
     combined_mesh = root_node_data["combined_mesh"]
     combined_mesh_center = get_mesh_center(combined_mesh)
     mesh_orientation = root_node_data["metadata"]["orientation"]
@@ -106,139 +190,158 @@ def compute_bounding_box(root_node_data):
     return bbox_size, base_link_offset, bbox_world_centroid, bbox_world_rotation
 
 
-def process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_dir, tree_root):
+def process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_dir, tree_root, out_metadata):
     _, _, _, link_name = link_node
     raw_meta_links = G.nodes[link_node]["meta_links"]
 
     # Create a canonicalized copy of the lower and upper meshes.
-    canonical_mesh = transform_mesh(G.nodes[link_node]["lower_mesh"], base_link_center, canonical_orientation)
-    meta_links = transform_meta_links(raw_meta_links, base_link_center, canonical_orientation)
+    mesh_center = get_mesh_center(G.nodes[link_node]["lower_mesh_ordered"])
+    canonical_mesh = transform_mesh(G.nodes[link_node]["lower_mesh"], mesh_center, canonical_orientation)
+    meta_links = transform_meta_links(raw_meta_links, mesh_center, canonical_orientation)
 
     # Somehow we need to manually write the vertex normals to cache
     canonical_mesh._cache.cache["vertex_normals"] = canonical_mesh.vertex_normals
 
-    # Save the mesh
-    with tempfile.TemporaryDirectory() as td:
-        obj_relative_path = f"{obj_name}-{link_name}.obj"
-        link_obj_path = os.path.join(td, obj_relative_path)
-        canonical_mesh.export(link_obj_path, file_type="obj")
+    in_edges = list(G.in_edges(link_node))
+    assert len(in_edges) <= 1, f"Something's wrong: there's more than 1 in-edge to node {link_node}"
+    is_real_link = len(in_edges) == 0 or G.edges[in_edges[0]]["joint_type"] != "A"
 
-        # Move the mesh to the correct path
-        obj_link_mesh_folder = os.path.join(obj_dir, "shape")
-        os.makedirs(obj_link_mesh_folder, exist_ok=True)
-        obj_link_visual_mesh_folder = os.path.join(obj_link_mesh_folder, "visual")
-        os.makedirs(obj_link_visual_mesh_folder, exist_ok=True)
-        obj_link_collision_mesh_folder = os.path.join(obj_link_mesh_folder, "collision")
-        os.makedirs(obj_link_collision_mesh_folder, exist_ok=True)
-        obj_link_material_folder = os.path.join(obj_dir, "material")
-        os.makedirs(obj_link_material_folder, exist_ok=True)
+    # Assembly links do not need anything saved.
+    if is_real_link:
+        # Save the mesh
+        with tempfile.TemporaryDirectory() as td:
+            td = pathlib.Path(td)
+            
+            obj_relative_path = f"{obj_name}-{link_name}.obj"
+            link_obj_path = td / obj_relative_path
+            canonical_mesh.export(str(link_obj_path), file_type="obj")
 
-        # Fix texture file paths if necessary.
-        original_material_folder = G.nodes[link_node]["material_dir"]
-        if os.path.exists(original_material_folder):
-            for fname in os.listdir(original_material_folder):
-                # fname is in the same format as room_light-0-0_VRayAOMap.png
-                vray_name = fname[fname.index("VRay") : -4] if "VRay" in fname else None
-                if vray_name in VRAY_MAPPING:
-                    dst_fname = VRAY_MAPPING[vray_name]
-                else:
-                    raise ValueError(f"Unknown texture map: {fname}")
+            # Move the mesh to the correct path
+            obj_link_mesh_folder = obj_dir / "shape"
+            obj_link_mesh_folder.mkdir(parents=True, exist_ok=True)
+            obj_link_visual_mesh_folder = obj_link_mesh_folder / "visual"
+            obj_link_visual_mesh_folder.mkdir(parents=True, exist_ok=True)
+            obj_link_collision_mesh_folder = obj_link_mesh_folder / "collision"
+            obj_link_collision_mesh_folder.mkdir(parents=True, exist_ok=True)
+            obj_link_material_folder = obj_dir / "material"
+            obj_link_material_folder.mkdir(parents=True, exist_ok=True)
 
-                src_texture_file = os.path.join(original_material_folder, fname)
-                dst_texture_file = os.path.join(
-                    obj_link_material_folder, f"{obj_name}-{link_name}-{dst_fname}.png"
-                )
-                shutil.copy(src_texture_file, dst_texture_file)
+            # Fix texture file paths if necessary.
+            original_material_folder = pathlib.Path(G.nodes[link_node]["material_dir"])
+            if original_material_folder.exists():
+                for src_texture_file in original_material_folder.iterdir():
+                    fname = src_texture_file.name
+                    # fname is in the same format as room_light-0-0_VRayAOMap.png
+                    vray_name = fname[fname.index("VRay") : -4] if "VRay" in fname else None
+                    if vray_name in VRAY_MAPPING:
+                        dst_fname = VRAY_MAPPING[vray_name]
+                    else:
+                        raise ValueError(f"Unknown texture map: {fname}")
 
-        visual_shape_file = os.path.join(obj_link_visual_mesh_folder, obj_relative_path)
-        shutil.copy(link_obj_path, visual_shape_file)
+                    dst_texture_file = obj_link_material_folder / f"{obj_name}-{link_name}-{dst_fname}.png"
+                    try:
+                        shutil.copy(src_texture_file, dst_texture_file)
+                    except shutil.SameFileError:
+                        pass
 
-        # Generate collision mesh
-        collision_shape_file = os.path.join(obj_link_collision_mesh_folder, obj_relative_path)
-        vhacd = os.path.join(os.path.dirname(__file__), "vhacd.exe")
-        subprocess.call([vhacd, "--input", visual_shape_file, "--output", collision_shape_file, "--log", "NUL"], shell=False, stdout=subprocess.DEVNULL)
+            visual_shape_file = obj_link_visual_mesh_folder / obj_relative_path
+            try:
+                shutil.copy(link_obj_path, visual_shape_file)
+            except shutil.SameFileError:
+                pass
 
-        # Modify MTL reference in OBJ file
-        mtl_name = f"{obj_name}-{link_name}.mtl"
-        with open(visual_shape_file, "r") as f:
-            new_lines = []
-            for line in f.readlines():
-                if "mtllib material_0.mtl" in line:
-                    line = f"mtllib {mtl_name}\n"
-                new_lines.append(line)
+            # Generate collision mesh
+            collision_shape_file = obj_link_collision_mesh_folder / obj_relative_path
+            vhacd = PIPELINE_ROOT / "b1k_pipeline" / "vhacd.exe"
+            vhacd_cmd = [str(vhacd), "--input", str(visual_shape_file.absolute()), "--output", str(collision_shape_file.absolute()), "--log", "NUL"]
+            print("Running vhacd:", " ".join(vhacd_cmd))
+            assert subprocess.call(vhacd_cmd, shell=False, stdout=subprocess.DEVNULL) == 0
 
-        with open(visual_shape_file, "w") as f:
-            for line in new_lines:
-                f.write(line)
+            # Store the final meshes
+            G.nodes[link_node]["visual_mesh"] = canonical_mesh.copy()
+            G.nodes[link_node]["collision_mesh"] = trimesh.load(str(collision_shape_file), process=False, force="mesh", skip_materials=True, maintain_order=True)
 
-        # Modify texture reference in MTL file
-        src_mtl_file = os.path.join(td, "material_0.mtl")
-        if os.path.exists(src_mtl_file):
-            dst_mtl_file = os.path.join(obj_link_visual_mesh_folder, mtl_name)
-            with open(src_mtl_file, "r") as f:
+            # Modify MTL reference in OBJ file
+            mtl_name = f"{obj_name}-{link_name}.mtl"
+            with open(visual_shape_file, "r") as f:
                 new_lines = []
                 for line in f.readlines():
-                    # TODO: bake multi-channel PBR texture
-                    if "map_Kd material_0.png" in line:
-                        line = ""
-                        for key in MTL_MAPPING:
-                            line += f"{key} ../../material/{obj_name}-{link_name}-{MTL_MAPPING[key]}.png\n"
+                    if "mtllib material_0.mtl" in line:
+                        line = f"mtllib {mtl_name}\n"
                     new_lines.append(line)
 
-            with open(dst_mtl_file, "w") as f:
+            with open(visual_shape_file, "w") as f:
                 for line in new_lines:
                     f.write(line)
 
-    # Create the link in URDF
-    
-    link_xml = ET.SubElement(tree_root, "link")
-    link_xml.attrib = {"name": link_name}
-    visual_xml = ET.SubElement(link_xml, "visual")
-    visual_origin_xml = ET.SubElement(visual_xml, "origin")
-    visual_origin_xml.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
-    visual_geometry_xml = ET.SubElement(visual_xml, "geometry")
-    visual_mesh_xml = ET.SubElement(visual_geometry_xml, "mesh")
-    visual_mesh_xml.attrib = {"filename": os.path.join("shape", "visual", obj_relative_path).replace("\\", "/")}
+            # Modify texture reference in MTL file
+            src_mtl_file = td / "material_0.mtl"
+            if src_mtl_file.exists():
+                dst_mtl_file = obj_link_visual_mesh_folder / mtl_name
+                with open(src_mtl_file, "r") as f:
+                    new_lines = []
+                    for line in f.readlines():
+                        # TODO: bake multi-channel PBR texture
+                        if "map_Kd material_0.png" in line:
+                            line = ""
+                            for key in MTL_MAPPING:
+                                line += f"{key} ../../material/{obj_name}-{link_name}-{MTL_MAPPING[key]}.png\n"
+                        new_lines.append(line)
 
-    collision_xml = ET.SubElement(link_xml, "collision")
-    collision_origin_xml = ET.SubElement(collision_xml, "origin")
-    collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
-    collision_geometry_xml = ET.SubElement(collision_xml, "geometry")
-    collision_mesh_xml = ET.SubElement(collision_geometry_xml, "mesh")
-    collision_mesh_xml.attrib = {"filename": os.path.join("shape", "collision", obj_relative_path).replace("\\", "/")}
+                with open(dst_mtl_file, "w") as f:
+                    for line in new_lines:
+                        f.write(line)
 
-    in_edges = G.in_edges(link_node)
-    assert len(in_edges) <= 1, f"Something's wrong: there's more than 1 in-edge to node {link_node}"
+        # Create the link in URDF
+        link_xml = ET.SubElement(tree_root, "link")
+        link_xml.attrib = {"name": link_name}
+        visual_xml = ET.SubElement(link_xml, "visual")
+        visual_origin_xml = ET.SubElement(visual_xml, "origin")
+        visual_origin_xml.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
+        visual_geometry_xml = ET.SubElement(visual_xml, "geometry")
+        visual_mesh_xml = ET.SubElement(visual_geometry_xml, "mesh")
+        visual_mesh_xml.attrib = {"filename": os.path.join("shape", "visual", obj_relative_path).replace("\\", "/")}
+
+        collision_xml = ET.SubElement(link_xml, "collision")
+        collision_origin_xml = ET.SubElement(collision_xml, "origin")
+        collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
+        collision_geometry_xml = ET.SubElement(collision_xml, "geometry")
+        collision_mesh_xml = ET.SubElement(collision_geometry_xml, "mesh")
+        collision_mesh_xml.attrib = {"filename": os.path.join("shape", "collision", obj_relative_path).replace("\\", "/")}
 
     # This object might be a base link and thus without an in-edge. Nothing to do then.
-    if len(in_edges) == 1:
+    if len(in_edges) == 0:
+        G.nodes[link_node]["link_frame_in_base"] = np.zeros(3)
+        G.nodes[link_node]["mesh_in_link_frame"] = np.zeros(3)
+    else:
         # Grab the lone edge to the parent.
         edge, = in_edges
         parent_node, child_node = edge
         joint_type = G.edges[edge]["joint_type"]
+        parent_frame = G.nodes[parent_node]["link_frame_in_base"]
 
         # Load the meshes.
-        parent_canonical_mesh = transform_mesh(G.nodes[parent_node]["lower_mesh_ordered"], base_link_center, canonical_orientation)
-        lower_canonical_mesh = transform_mesh(G.nodes[child_node]["lower_mesh_ordered"], base_link_center, canonical_orientation)
+        lower_canonical_mesh = transform_mesh(G.nodes[child_node]["lower_mesh_ordered"], base_link_center + parent_frame, canonical_orientation)
 
         # Load the centers.
-        parent_center = get_mesh_center(parent_canonical_mesh)
         child_center = get_mesh_center(lower_canonical_mesh)
 
         # Create the joint in the URDF
-        joint_xml = ET.SubElement(tree_root, "joint")
-        joint_xml.attrib = {
-            "name": f"j_{child_node[3]}",
-            "type": {"P": "prismatic", "R": "revolute", "F": "fixed"}[joint_type]
-        }
+        if is_real_link:
+            joint_xml = ET.SubElement(tree_root, "joint")
+            joint_xml.attrib = {
+                "name": f"j_{child_node[3]}",
+                "type": {"P": "prismatic", "R": "revolute", "F": "fixed"}[joint_type]
+            }
 
-        joint_parent_xml = ET.SubElement(joint_xml, "parent")
-        joint_parent_xml.attrib = {"link": parent_node[3]}
-        joint_child_xml = ET.SubElement(joint_xml, "child")
-        joint_child_xml.attrib = {"link": child_node[3]}
+            joint_parent_xml = ET.SubElement(joint_xml, "parent")
+            joint_parent_xml.attrib = {"link": parent_node[3]}
+            joint_child_xml = ET.SubElement(joint_xml, "child")
+            joint_child_xml.attrib = {"link": child_node[3]}
 
+        mesh_offset = np.zeros(3)
         if joint_type in ("P", "R"):
-            upper_canonical_mesh = transform_mesh(G.nodes[child_node]["upper_mesh"], base_link_center, canonical_orientation)
+            upper_canonical_mesh = transform_mesh(G.nodes[child_node]["upper_mesh"], base_link_center + parent_frame, canonical_orientation)
             
             if joint_type == "R":
                 # Revolute joint
@@ -277,12 +380,11 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                 # Find the translation part of the joint origin that is closest to the CoM of the link
                 # by projecting the CoM onto the joint axis
                 arbitrary_point_to_center = child_center - arbitrary_point_on_joint_axis
-                joint_origin_in_base = arbitrary_point_on_joint_axis + (
-                    np.dot(arbitrary_point_to_center, joint_axis) * joint_axis)
-                joint_origin_in_parent = joint_origin_in_base - parent_center
+                joint_origin = arbitrary_point_on_joint_axis  + (
+                     np.dot(arbitrary_point_to_center, joint_axis) * joint_axis)
 
                 # Assign visual and collision mesh origin so that the offset from the joint origin is removed.
-                mesh_offset = -joint_origin_in_base
+                mesh_offset = child_center - joint_origin
                 visual_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
                 collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
 
@@ -291,10 +393,10 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                 # TODO: Assert that the two are facing the same direction.
 
                 # Prismatic joint
-                diff = upper_canonical_mesh.centroid - lower_canonical_mesh.centroid
+                diff = get_mesh_center(upper_canonical_mesh) - get_mesh_center(lower_canonical_mesh)
 
                 # Find joint axis and joint limit
-                if np.allclose(diff, 0):
+                if not np.allclose(diff, 0):
                     upper_limit = np.linalg.norm(diff)
                     joint_axis = diff / upper_limit
                 else:
@@ -302,29 +404,48 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                     joint_axis = np.array([0, 0, 1])
 
                 # Assign the joint origin relative to the parent CoM
-                joint_origin_in_parent = -parent_center
+                joint_origin = child_center
 
             # Save these joints' data
             joint_origin_xml = ET.SubElement(joint_xml, "origin")
-            joint_origin_xml.attrib = {"xyz": " ".join([str(item) for item in joint_origin_in_parent])}
+            joint_origin_xml.attrib = {"xyz": " ".join([str(item) for item in joint_origin])}
             joint_axis_xml = ET.SubElement(joint_xml, "axis")
             joint_axis_xml.attrib = {"xyz": " ".join([str(item) for item in joint_axis])}
             joint_limit_xml = ET.SubElement(joint_xml, "limit")
             joint_limit_xml.attrib = {"lower": str(0.0), "upper": str(upper_limit)}
-
         else:
             # Fixed joints are quite simple.
-            joint_origin_in_parent = child_center - parent_center
-            joint_origin_xml = ET.SubElement(joint_xml, "origin")
-            joint_origin_xml.attrib = {"xyz": " ".join([str(item) for item in joint_origin_in_parent])}
+            joint_origin = child_center
 
-    return meta_links
+            if joint_type == "F":
+                joint_origin_xml = ET.SubElement(joint_xml, "origin")
+                joint_origin_xml.attrib = {"xyz": " ".join([str(item) for item in joint_origin])}
+            elif joint_type == "A":
+                # Assembly joints just need to be annotated in the metadata
+                part_category, part_model = link_name.split("/")
+                part_pos = parent_frame + joint_origin
+                part_orn = [0, 0, 0, 1]  # TODO: Fix me!
+                G.nodes[link_node]["object_parts"].append({
+                    "category": part_category,
+                    "model": part_model,
+                    "pos": part_pos.tolist(),
+                    "orn": part_orn,
+                })
+            else:
+                raise ValueError("Unexpected joint type: " + str(joint_type))
+        
+        G.nodes[link_node]["link_frame_in_base"] = parent_frame + joint_origin
+        G.nodes[link_node]["mesh_in_link_frame"] = mesh_offset
+
+    if is_real_link:
+        out_metadata["meta_links"][link_name] = meta_links
+        out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]
 
 
 def process_object(G, root_node, output_dir):
     obj_cat, obj_model, obj_inst_id, _ = root_node
-    obj_output_dir = os.path.join(output_dir, obj_cat, obj_model)
-    os.makedirs(obj_output_dir, exist_ok=True)
+    obj_output_dir = output_dir / obj_cat / obj_model
+    obj_output_dir.mkdir(parents=True, exist_ok=True)
 
     # Process the object
     obj_cat, obj_model, obj_inst_id, _ = root_node
@@ -341,64 +462,77 @@ def process_object(G, root_node, output_dir):
     base_link_center = get_mesh_center(base_link_mesh)
 
     meta_links = {}
+    out_metadata = {
+        "meta_links": {},
+        "link_tags": {},
+    }
 
     # Iterate over each link.
     for link_node in nx.dfs_preorder_nodes(G, root_node):
-        _, _, _, link_name = link_node
-        meta_links[link_name] = process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_output_dir, tree_root)
+        process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_output_dir, tree_root, out_metadata)
 
     # Save the URDF file.
-    urdf_path = os.path.join(obj_output_dir, f"{obj_model}.urdf")
+    urdf_path = obj_output_dir / f"{obj_model}.urdf"
     xmlstr = minidom.parseString(ET.tostring(tree_root)).toprettyxml(indent="   ")
     with open(urdf_path, "w") as f:
         f.write(xmlstr)
     tree = ET.parse(urdf_path)
     tree.write(urdf_path, xml_declaration=True)
 
-    bbox_size, base_link_offset, _, _ = compute_bounding_box(G.nodes[root_node])
+    bbox_size, base_link_offset, _, _ = compute_object_bounding_box(G.nodes[root_node])
 
     # Save metadata json
-    metadata = {
+    out_metadata.update({
         "base_link_offset": base_link_offset.tolist(),
         "bbox_size": bbox_size.tolist(),
         "meta_links": meta_links,
-    }
-    obj_misc_folder = os.path.join(obj_output_dir, "misc")
-    os.makedirs(obj_misc_folder, exist_ok=True)
-    metadata_file = os.path.join(obj_misc_folder, "metadata.json")
+        "orientations": compute_stable_poses(G, root_node),
+        "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
+    })
+    obj_misc_folder = obj_output_dir / "misc"
+    obj_misc_folder.mkdir(parents=True, exist_ok=True)
+    metadata_file = obj_misc_folder / "metadata.json"
     with open(metadata_file, "w") as f:
-        json.dump(metadata, f, cls=NumpyEncoder)
+        json.dump(out_metadata, f, cls=NumpyEncoder)
 
 def main():
     target = sys.argv[1]
-    object_list_filename = os.path.join(os.path.dirname(os.path.dirname(__file__)), "cad", target, "artifacts/object_list.json")
-    mesh_root_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "cad", target, "artifacts/meshes")
-    output_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "cad", target, "artifacts/objects")
+    object_list_filename = PIPELINE_ROOT / "cad" / target / "artifacts/object_list.json"
+    mesh_root_dir = PIPELINE_ROOT / "cad" / target / "artifacts/meshes"
+    output_dir = PIPELINE_ROOT / "cad" / target / "artifacts/objects"
 
     # Load the mesh list from the object list json.
-    with open(object_list_filename, "r") as f:
-        mesh_list = json.load(f)["meshes"]
+    error = None
+    try:
+        with open(object_list_filename, "r") as f:
+            mesh_list = json.load(f)["meshes"]
 
-    # Build the mesh tree using our mesh tree library. The scene code also uses this system.
-    G = mesh_tree.build_mesh_tree(mesh_list, mesh_root_dir)
-    # assert nx.dag_longest_path_length(G) <= 1, "We don't support double joints yet."
+        # Build the mesh tree using our mesh tree library. The scene code also uses this system.
+        G = mesh_tree.build_mesh_tree(mesh_list, str(mesh_root_dir))
+        # assert nx.dag_longest_path_length(G) <= 1, "We don't support double joints yet."
 
-    # Go through each object.
-    roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
+        # Go through each object.
+        roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
-    # Only save the 0th instance.
-    saveable_roots = tqdm.tqdm([root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]])
-    for root_node in saveable_roots:
-        obj_cat, obj_model, obj_inst_id, _ = root_node
-        saveable_roots.set_description(f"{obj_cat}-{obj_model}")
+        # Only save the 0th instance.
+        saveable_roots = tqdm.tqdm([root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]])
+        for root_node in saveable_roots:
+            obj_cat, obj_model, obj_inst_id, _ = root_node
+            saveable_roots.set_description(f"{obj_cat}-{obj_model}")
 
-        # Start processing the object.
-        process_object(G, root_node, output_dir)
+            # Start processing the object.
+            process_object(G, root_node, output_dir)
+    except Exception as e:
+        error = traceback.format_exc()
+
+    json_file = PIPELINE_ROOT / "cad" / target / "artifacts/export_objs.json"
+    with open(json_file, "w") as f:
+        json.dump({"success": error is None, "error_msg": error}, f)
 
     # If we got here, we were successful. Let's create the success file.
-    success_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "cad", target, "artifacts/export_objs.success")
-    with open(success_file, "w"):
-        pass
+    # success_file = PIPELINE_ROOT / "cad" / target / "artifacts/export_objs.success"
+    # with open(success_file, "w"):
+    #     pass
 
 if __name__ == "__main__":
     main()

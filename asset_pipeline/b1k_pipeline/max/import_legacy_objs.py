@@ -13,6 +13,7 @@ import random
 import os
 from b1k_pipeline.urdfpy import URDF, Link, Joint
 from b1k_pipeline.max.new_sanity_check import SanityCheck
+import b1k_pipeline.utils
 import trimesh.transformations
 import numpy as np
 from scipy.spatial.transform import Rotation as R
@@ -21,7 +22,7 @@ import yaml
 
 rt = pymxs.runtime
 
-CONFIRM_EACH = True
+CONFIRM_EACH = False
 INTERACTIVE_MODE = True
 JOINT_TYPES = {"prismatic": "P", "revolute": "R", "fixed": "F", "continuous": "R"}
 IN_DATASET_ROOT = r"C:\Users\Cem\research\iGibson-dev\igibson\data\ig_dataset"
@@ -29,7 +30,7 @@ OUTPUT_ROOT = r"D:\ig_pipeline\cad\objects"
 TRANSLATION_PATH = os.path.join(IN_DATASET_ROOT, "metadata", "model_rename.yaml")
 with open(TRANSLATION_PATH, "r") as f:
     TRANSLATION_DICT = yaml.load(f, Loader=yaml.SafeLoader)
-
+RENDER_PRESET_FILENAME = str((b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute())
 
 def create_macroscript(_func, category="", name="", tool_tip="", button_text="", *args):
     """Creates a macroscript"""
@@ -73,6 +74,9 @@ def get_all_maps():
     materials = {x.material for x in rt.objects}
     return {map for mat in materials for map in get_maps_from_mat(mat)}
 
+def load_objs_from_urdf(fn, pose=None):
+    pass
+
 def process_object_dir(model_dir):
     # Process the model name
     old_category_name = os.path.basename(os.path.dirname(model_dir))
@@ -91,6 +95,9 @@ def process_object_dir(model_dir):
 
     # Reset the scene
     rt.resetMaxFile(rt.name("noPrompt"))
+
+    preset_categories = rt.renderpresets.LoadCategories(RENDER_PRESET_FILENAME)
+    assert rt.renderpresets.Load(0, RENDER_PRESET_FILENAME, preset_categories)
 
     # Keep track of whether we need to request user intervention.
     intervention_request_msgs = []
@@ -182,7 +189,7 @@ def process_object_dir(model_dir):
                         obj_name = f"{new_category_name}_{link_name}-TODOfixme-0"
                         intervention_request_msgs.append(f"{obj_name} needs a reasonable category / ID.")
                     else:
-                        parent_name = j.parent
+                        parent_name = re.sub(r'[^a-z0-9_]', '', j.parent.lower())
                         if parent_name == robot.base_link.name:
                             parent_name = "base_link"
                         joint_type_str = JOINT_TYPES[joint_type]

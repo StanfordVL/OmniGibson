@@ -1,12 +1,18 @@
 import json
 import os
 import sys
+import numpy as np
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
 from b1k_pipeline.mesh_tree import build_mesh_tree
-from b1k_pipeline.export_objs import compute_bounding_box
+from b1k_pipeline.export_objs import compute_object_bounding_box
 
+
+OFFSETS = {
+    "restaurant_hotel": np.array([-13697.9,-14270.8,-3387.5]) / 1000.0,
+    "office_vendor_machine": np.array([-427.945,5878.52,0]) / 1000.0,
+}
 
 def main():
     target = sys.argv[1]
@@ -45,7 +51,10 @@ def main():
         assert os.path.exists(os.path.join(objects_root_dir, obj_name.replace("-", "/"))), f"Could not find object {obj_name} in objects directory."
 
         # Get the relevant bbox info.
-        bbox_size, _, bbox_world_center, bbox_world_rot = compute_bounding_box(G.nodes[root_node])
+        bbox_size, _, bbox_world_center, bbox_world_rot = compute_object_bounding_box(G.nodes[root_node])
+
+        if scene_name in OFFSETS:
+            bbox_world_center = bbox_world_center - OFFSETS[scene_name]
 
         # Save pose to scene URDF
         scene_link = ET.SubElement(scene_tree_root, "link")
