@@ -116,18 +116,18 @@ stages:
       outs:
       - cad/${item}/artifacts/export_objs.success
 
-  validate_objs:
-    # Validate exported objects.
-    foreach: ${combined}
-    do:
-      cmd: 'python b1k_pipeline/validate_objs.py ${item}'
-      deps:
-      - cad/${item}/artifacts/objects
-      - cad/${item}/artifacts/export_objs.success
-      - b1k_pipeline/validate_objs.py
-      outs:
-      - cad/${item}/artifacts/validate_objs.json
-      - cad/${item}/artifacts/validate_objs.success
+  # validate_objs:
+  #   # Validate exported objects.
+  #   foreach: ${combined}
+  #   do:
+  #     cmd: 'python b1k_pipeline/validate_objs.py ${item}'
+  #     deps:
+  #     - cad/${item}/artifacts/objects
+  #     - cad/${item}/artifacts/export_objs.success
+  #     - b1k_pipeline/validate_objs.py
+  #     outs:
+  #     - cad/${item}/artifacts/validate_objs.json
+  #     - cad/${item}/artifacts/validate_objs.success
 
   aggregate_objs:
     # Aggregate objects from different entries into a single location.

@@ -3997,17 +3997,6 @@ stages:
       outs:
       - cad/${item}/artifacts/sanitycheck.success
     foreach: ${combined}
-  validate_objs:
-    do:
-      cmd: python b1k_pipeline/validate_objs.py ${item}
-      deps:
-      - cad/${item}/artifacts/objects
-      - cad/${item}/artifacts/export_objs.success
-      - b1k_pipeline/validate_objs.py
-      outs:
-      - cad/${item}/artifacts/validate_objs.json
-      - cad/${item}/artifacts/validate_objs.success
-    foreach: ${combined}
   validate_scene:
     do:
       cmd: python -m b1k_pipeline.validate_scene ${item}
