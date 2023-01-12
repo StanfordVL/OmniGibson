@@ -13,7 +13,7 @@ To start working with this pipeline, clone this repository to the `D:\ig_pipelin
 
 Then, set up the conda environment `pipeline` by running the below command in Powershell:
 ```powershell
-conda create --file environment.yml
+conda env create --file environment.yml
 ```
 
 Also download the necessary packages into the 3ds Max Python environment by running the below command (updating the 3ds Max installation path as necessary):
