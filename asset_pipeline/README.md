@@ -64,7 +64,38 @@ ig_pipeline/
 ```
 
 ## Stages
-![A simple diagram of pipeline stages](stages.png)
+```mermaid
+  graph TD;
+    aggregate_metadata --> pack_dataset
+    aggregate_objs --> aggregate_metadata
+    aggregate_objs --> export_scene
+    aggregate_objs --> pack_dataset
+    aggregate_scenes --> aggregate_metadata
+    aggregate_scenes --> pack_dataset
+    export_meshes --> export_meshes_success
+    export_meshes --> export_objs
+    export_meshes --> export_scene
+    export_meshes_success --> export_objs
+    export_meshes_success --> export_scene
+    export_objs --> aggregate_objs
+    export_objs --> export_objs_success
+    export_objs_success --> aggregate_objs
+    export_scene --> aggregate_scenes
+    export_scene --> validate_scene
+    object_inventory --> aggregate_objs
+    object_list --> export_meshes
+    object_list --> export_objs
+    object_list --> object_inventory
+    object_list --> object_list_success
+    object_list_success --> export_objs
+    room_object_list --> combined_room_object_list
+    sanitycheck --> sanitycheck_success
+    processed.max --> export_meshes
+    processed.max --> object_list
+    processed.max --> room_object_list
+    processed.max --> sanitycheck
+```
+
 TBD
 
 ## Important scripts

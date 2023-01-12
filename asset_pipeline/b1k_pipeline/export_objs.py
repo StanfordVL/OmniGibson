@@ -461,7 +461,6 @@ def process_object(G, root_node, output_dir):
     base_link_mesh = G.nodes[root_node]["lower_mesh"]
     base_link_center = get_mesh_center(base_link_mesh)
 
-    meta_links = {}
     out_metadata = {
         "meta_links": {},
         "link_tags": {},
@@ -485,7 +484,6 @@ def process_object(G, root_node, output_dir):
     out_metadata.update({
         "base_link_offset": base_link_offset.tolist(),
         "bbox_size": bbox_size.tolist(),
-        "meta_links": meta_links,
         "orientations": compute_stable_poses(G, root_node),
         "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
     })
