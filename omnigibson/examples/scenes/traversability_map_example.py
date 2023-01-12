@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 
-from omnigibson.utils.asset_utils import get_scene_path
+from omnigibson.utils.asset_utils import get_og_scene_path as get_scene_path
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -16,17 +16,18 @@ def main(random_selection=False, headless=False, short_exec=False):
     highlighted area reflects the traversable (free-space) area
     """
     logging.info("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
-    scene_id = "Rs"
+    scene_id = "Ihlen_0_int"
     trav_map_size = 200
     trav_map_erosion = 2
 
-    with open(os.path.join(get_scene_path(scene_id), "floors.txt"), "r") as f:
-        floors = sorted(list(map(float, f.readlines())))
-        logging.info("Floor heights: {}".format(floors))
+    # with open(os.path.join(get_scene_path(scene_id), "floors.txt"), "r") as f:
+    #     floors = sorted(list(map(float, f.readlines())))
+    #     logging.info("Floor heights: {}".format(floors))
 
-    for f in range(len(floors)):
-        trav_map = Image.open(os.path.join(get_scene_path(scene_id), "floor_trav_{}.png".format(f)))
-        obstacle_map = Image.open(os.path.join(get_scene_path(scene_id), "floor_{}.png".format(f)))
+    # for f in range(len(floors)):
+    for f in range(1):
+        trav_map = Image.open(os.path.join(get_scene_path(scene_id), "layout", "floor_trav_{}.png".format(f)))
+        obstacle_map = Image.open(os.path.join(get_scene_path(scene_id), "layout", "floor_{}.png".format(f)))
         trav_map = np.array(trav_map.resize((trav_map_size, trav_map_size)))
         obstacle_map = np.array(obstacle_map.resize((trav_map_size, trav_map_size)))
         trav_map[obstacle_map == 0] = 0
@@ -36,6 +37,7 @@ def main(random_selection=False, headless=False, short_exec=False):
             plt.figure(f, figsize=(12, 12))
             plt.imshow(trav_map)
             plt.title("Traversable area of {} scene".format(scene_id))
+            plt.savefig('./trav_map.png')
 
     if not headless:
         plt.show()
