@@ -24,12 +24,10 @@ Also download the necessary packages into the 3ds Max Python environment by runn
 ## Pulling Raw BEHAVIOR-1K 3ds Max Files
 While it can be run on arbitrary 3ds Max files, this pipeline is designed to run on the 3ds Max files that are part of the BEHAVIOR-1K project. **Unfortunately, due to licensing issues, we are unable to release these raw model files to non-Stanford-affilliated users.**
 
-As a Stanford-affilliated user, you can pull the BEHAVIOR-1K raw files from the SAIL cluster. You first need to set up DVC to correctly attempt ssh connections only with your CSID username (this is the username you use to log into GIN and/or the SAIL cluster, **not necessarily the same as your SUID**). To do this, create a file named `config.local` in the `.dvc` directory (this file will automatically be gitignored) and add the below contents:
+As a Stanford-affilliated user, you can pull the BEHAVIOR-1K raw files from the SAIL cluster. You first need to set up DVC to correctly attempt ssh connections only with your CSID username (this is the username you use to log into GIN and/or the SAIL cluster, **not necessarily the same as your SUID**). To do this, run the below command:
 
-```
-['remote "cvgl"']
-    user = YOUR_CSID_USERNAME_HERE
-    jobs = 4
+```powershell
+dvc remote modify --local cvgl user 'YOUR_USERNAME_HERE'
 ```
 
 Then, when you run the `dvc pull` command, it should pull all of the raw files from the `scdt.stanford.edu` server.
