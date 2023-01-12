@@ -94,13 +94,39 @@ ig_pipeline/
     processed.max --> sanitycheck
 ```
 
-TBD
+Here is a description of all stages:
+| Stage Name                | Description                                                                                                                                                                | Requirements             |
+|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|
+| sanitycheck               | Runs a suite of tests against the 3ds Max file and outputs results in JSON file.                                                                                           | 3ds Max                  |
+| sanitycheck_success       | Checks if sanitycheck was successful, outputs an empty .success file.                                                                                                      |                          |
+| object_list               | Outputs a list of meshes (3ds Max objects) and objects (in the iGibson sense) that aare found in the 3ds Max file.                                                         | 3ds Max                  |
+| object_list_success       | Checks if object_list was successful, outputs an empty .success file.                                                                                                      |                          |
+| object_inventory          | Aggregates object list files, makes a list of what objects are provided by which file, and checks if all required objects are provided, there are no name collisions, etc. |                          |
+| generate_object_images    | Renders images of each individual object in the 3ds Max file.                                                                                                              | 3ds Max                  |
+| export_meshes             | Runs UV unwrapping and texture baking and exports OBJ and MTL files for each mesh in 3ds Max file.                                                                         | 3ds Max                  |
+| export_meshes_success     | Checks if export_meshes was successful, outputs an empty .success file.                                                                                                    |                          |
+| export_objs               | Processes the meshes exported from 3ds Max and generates URDF objects with properly organized joints, links, metadata, etc.                                                |                          |
+| export_objs_success       | Checks if export_objs was successful, outputs an empty .success file.                                                                                                      |                          |
+| validate_objs             | Runs validation checks on the exported URDF objects. Currently not active.                                                                                                 |                          |
+| aggregate_objs            | Aggregates objects produced by each "target" into a single "objects" directory.                                                                                            |                          |
+| usdify_objs               | Converts objects into USD from URDF.                                                                                                                                       | Docker, WSL2, Windows 11 |
+| generate_scene_images     | Generates images of scenes from a number of fixed perspectives. Deprecated - use camera images.                                                                            | 3ds Max                  |
+| generate_camera_images    | Generates images of scenes from the camera viewpoints they contain.                                                                                                        | 3ds Max                  |
+| room_object_list          | Exports a room-based object list (e.g. which rooms contain which objects).                                                                                                 | 3ds Max                  |
+| combined_room_object_list | Combines the room object lists (and combines any requested partial scenes' contents) and converts them into WordNet synset format.                                         |                          |
+| export_scene              | Using the exported meshes, creates a scene URDF file that references the appropriate objects.                                                                              |                          |
+| validate_scene            | Runs validation checks (e.g. physics stability) on scene files.                                                                                                            |                          |
+| aggregate_scenes          | Aggregates objects produced by each "target" into a single "scenes" directory.                                                                                             |                          |
+| aggregate_metadata        | Aggregates certain metadata produced by each "target" into a single "metadata" directory.                                                                                  |                          |
+| usdify_scenes             | Converts scenes into USD from URDF.                                                                                                                                        | Dpcker, WSL2, Windows 11 |
+| pack_dataset              | Packs the dataset into a ZIP file for distribution.                                                                                                                        |                          |
+| upload_dataset            | Uploads the dataset ZIP file onto Google Cloud Storage.                                                                                                                    |                          |
 
-## Important scripts
-TBD
+## Scripts
+For details on the provided scripts, visit the [README of the b1k_pipeline module directory](./b1k_pipeline).
 
 ## Running pipeline
 TBD
 
 ## Contributing
-TBD
+To contribute, changes need to be put on a PR and sent to Cem Gokmen (cgokmen) for review. For Stanford affilliates, any relevant data needs to be pushed onto the cvgl storage. For external users, instructions for access to your remote needs to be provided for us to be able to fetch the data.
