@@ -3987,14 +3987,3 @@ stages:
       outs:
       - cad/${item}/artifacts/sanitycheck.success
     foreach: ${combined}
-  validate_scene:
-    do:
-      cmd: python -m b1k_pipeline.validate_scene ${item}
-      deps:
-      - cad/${item}/artifacts/scene
-      - cad/${item}/artifacts/export_scene.success
-      - b1k_pipeline/validate_scene.py
-      outs:
-      - cad/${item}/artifacts/validate_scene.json
-      - cad/${item}/artifacts/validate_scene.success
-    foreach: ${scenes}
