@@ -32,12 +32,18 @@
     
     (:goal 
         (and 
-            (nextto ?date.n.08_1 ?fish.n.02_1) 
-            (nextto ?fish.n.02_1 ?sink.n.01_1) 
-            (nextto ?fish.n.02_2 ?sink.n.01_1) 
-            (nextto ?fish.n.02_3 ?sink.n.01_1) 
-            (nextto ?fish.n.02_4 ?sink.n.01_1) 
-            (nextto ?olive.n.04_1 ?sink.n.01_1)
+            (forall 
+                (?fish.n.02 - fish.n.02)
+                (not
+                    (frozen ?fish.n.02)
+                )
+            )
+            (not
+                (frozen ?date.n.08_1)
+            )
+            (not
+                (frozen ?olive.n.04_1)
+            )
         )
     )
 )
