@@ -1,17 +1,21 @@
-from collections import Counter
 import json
 import os
 import re
+from collections import Counter
 
 import pymxs
+
 rt = pymxs.runtime
 
-PATTERN = re.compile(r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[A-Za-z0-9_]+)-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?(?:-M(?P<meta_type>[a-z]+)_(?P<meta_id>[0-9]+))?$")
+PATTERN = re.compile(
+    r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[A-Za-z0-9_]+)-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?(?:-M(?P<meta_type>[a-z]+)_(?P<meta_id>[0-9]+))?$"
+)
 OUTPUT_FILENAME = "top.png"
 SUCCESS_FILENAME = "generate_images.success"
 
 HIDE_CATEGORIES = ["ceilings", "square_light", "room_light", "downlight"]
 DONT_ZOOM_CATEGORIES = ["ceilings", "floors", "background", "lawn"]
+
 
 def main():
     success = False
@@ -21,7 +25,9 @@ def main():
 
     try:
         # Set the render preset
-        preset_path = r"C:\Users\Cem\Documents\3ds Max 2022\renderpresets\imgrender_cpu.rps"
+        preset_path = (
+            r"C:\Users\Cem\Documents\3ds Max 2022\renderpresets\imgrender_cpu.rps"
+        )
         preset_categories = rt.renderpresets.LoadCategories(preset_path)
         assert rt.renderpresets.Load(0, preset_path, preset_categories)
 
@@ -36,7 +42,7 @@ def main():
                 x.isHidden = True
 
         # Go into top view
-        assert rt.viewport.setType(rt.Name("view_top")) 
+        assert rt.viewport.setType(rt.Name("view_top"))
 
         # Center the camera on non-floor, non-ceiling, non-background, non-lawn objects
         selection = []
@@ -45,7 +51,10 @@ def main():
                 continue
 
             match = PATTERN.fullmatch(x.name)
-            if match is not None and match.group("category").lower() not in DONT_ZOOM_CATEGORIES:
+            if (
+                match is not None
+                and match.group("category").lower() not in DONT_ZOOM_CATEGORIES
+            ):
                 selection.append(x)
         rt.select(selection)
         # assert pymxs.runtime.execute('max tool zoomextents')
@@ -77,6 +86,7 @@ def main():
     # if success:
     #     with open(os.path.join(output_dir, SUCCESS_FILENAME), "w") as f:
     #         pass
+
 
 if __name__ == "__main__":
     main()

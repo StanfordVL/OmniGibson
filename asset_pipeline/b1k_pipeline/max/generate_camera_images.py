@@ -1,16 +1,24 @@
-from collections import Counter
 import json
 import os
 import re
+from collections import Counter
 
 import pymxs
+
 rt = pymxs.runtime
 
-PATTERN = re.compile(r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[A-Za-z0-9_]+)-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?(?:-M(?P<meta_type>[a-z]+)_(?P<meta_id>[0-9]+))?$")
+PATTERN = re.compile(
+    r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[A-Za-z0-9_]+)-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?(?:-M(?P<meta_type>[a-z]+)_(?P<meta_id>[0-9]+))?$"
+)
 OUTPUT_DIR = "camera_images"
 OUTPUT_FILENAME = "{0}.png"
 SUCCESS_FILENAME = "generate_camera_images.success"
-RENDER_PRESET_FILENAME = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "render_presets", "scene_camera.rps"))
+RENDER_PRESET_FILENAME = os.path.abspath(
+    os.path.join(
+        os.path.dirname(os.path.dirname(__file__)), "render_presets", "scene_camera.rps"
+    )
+)
+
 
 def main():
     success = False
@@ -30,16 +38,17 @@ def main():
     # Hide the upper joints
     for x in rt.objects:
         match = PATTERN.fullmatch(x.name)
-        if match is not None and (match.group("joint_side") == "upper" or "light" in match.group("category")):
+        if match is not None and (
+            match.group("joint_side") == "upper" or "light" in match.group("category")
+        ):
             x.isHidden = True
-
 
     # Prepare the viewport
     camera_id = "diag"  # TODO: make this into a loop later.
-    camera, = [x for x in rt.objects if x.name == f"camera-{camera_id}"]
+    (camera,) = [x for x in rt.objects if x.name == f"camera-{camera_id}"]
 
-    assert rt.viewport.setLayout(rt.Name("layout_1")) 
-    assert rt.viewport.setCamera(camera) 
+    assert rt.viewport.setLayout(rt.Name("layout_1"))
+    assert rt.viewport.setCamera(camera)
 
     # Set the exposure control
     ec = rt.VRay_Exposure_Control()
@@ -56,7 +65,9 @@ def main():
         # light.multiplier = 15000
 
     # Render
-    image_path = os.path.abspath(os.path.join(output_dir, OUTPUT_FILENAME.format(camera_id)))
+    image_path = os.path.abspath(
+        os.path.join(output_dir, OUTPUT_FILENAME.format(camera_id))
+    )
     if os.path.exists(image_path):
         os.remove(image_path)
     print("Saving to", image_path)
@@ -64,6 +75,7 @@ def main():
 
     with open(os.path.join(artifacts_dir, SUCCESS_FILENAME), "w") as f:
         pass
+
 
 if __name__ == "__main__":
     main()

@@ -1,45 +1,29 @@
-from collections import defaultdict
 import re
+from collections import defaultdict
+
 import numpy as np
-from scipy.spatial.transform import Rotation as R
 import pymxs
+from scipy.spatial.transform import Rotation as R
 
 rt = pymxs.runtime
 
 
 def quat2arr(q):
-  return np.array([q.x, q.y, q.z, q.w])
+    return np.array([q.x, q.y, q.z, q.w])
 
-
-def create_macroscript(_func, category="", name="", tool_tip="", button_text="", *args):
-    """Creates a macroscript"""
-    try:
-        # gets the qualified name for bound methods
-        # ex: data_types.general_types.GMesh.center_pivot
-        func_name = "{0}.{1}.{2}".format(
-            _func.__module__, args[0].__class__.__name__, _func.__name__)
-    except (IndexError, AttributeError):
-        # gets the qualified name for unbound methods
-        # ex: data_types.general_types.get_selection
-        func_name = "{0}.{1}".format(
-            _func.__module__, _func.__name__)
-
-    script = """
-    (
-        python.Execute "import {}"
-        python.Execute "{}()"
-    )
-    """.format(_func.__module__, func_name)
-    rt.macros.new(category, name, tool_tip, button_text, script)
 
 def find_base_candidate(bases):
     for baseobject, objs in bases.items():
         base = objs[0]
-        desired_offset_pos = np.array(base.objectOffsetPos) / np.array(base.objectOffsetScale)
+        desired_offset_pos = np.array(base.objectOffsetPos) / np.array(
+            base.objectOffsetScale
+        )
         desired_offset_rot_inv = R.from_quat(quat2arr(base.objectOffsetRot)).inv()
         # desired_shear = compute_shear(base.object)
         for obj in objs[1:]:
-            this_offset_pos = np.array(obj.objectOffsetPos) / np.array(obj.objectOffsetScale)
+            this_offset_pos = np.array(obj.objectOffsetPos) / np.array(
+                obj.objectOffsetScale
+            )
             pos_diff = this_offset_pos - desired_offset_pos
             if not np.allclose(pos_diff, 0, atol=1e-2):
                 return baseobject
@@ -48,7 +32,7 @@ def find_base_candidate(bases):
             rot_diff = (this_offset_rot * desired_offset_rot_inv).magnitude()
             if not np.allclose(rot_diff, 0, atol=1e-2):
                 return baseobject
-            
+
             # this_shear = compute_shear(obj)
             # self.expect(
             # np.allclose(this_shear, desired_shear, atol=1e-3),
@@ -56,6 +40,7 @@ def find_base_candidate(bases):
             # )
 
     return None
+
 
 def select_mismatched_pivot():
     objects = rt.objects
@@ -77,6 +62,7 @@ def select_mismatched_pivot():
     rt.IsolateSelection.EnterIsolateSelectionMode()
     print("Selected ", ",".join([x.name for x in objs]))
 
+
 def select_mismatched_pivot_button():
     try:
         select_mismatched_pivot()
@@ -85,4 +71,6 @@ def select_mismatched_pivot_button():
         rt.messageBox(str(e))
         return
 
-create_macroscript(select_mismatched_pivot_button, category="SVL-Tools", name="Select Mismatched Pivot", button_text="Select Mismatched Pivot")
+
+if __name__ == "__main__":
+    select_mismatched_pivot_button()

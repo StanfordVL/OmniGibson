@@ -1,22 +1,29 @@
 import sys
+
 sys.path.append(r"D:\ig_pipeline")
 
-from collections import defaultdict
 import glob
 import pathlib
 import random
 import re
 import string
-import tqdm
+from collections import defaultdict
+
 import pymxs
+import tqdm
+
 import b1k_pipeline.utils
 
 rt = pymxs.runtime
-RENDER_PRESET_FILENAME = str((b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute())
+RENDER_PRESET_FILENAME = str(
+    (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
+)
+
 
 def processed_fn(orig_fn: pathlib.Path):
     return orig_fn
     # return orig_fn.with_name(orig_fn.stem + '_autofix' + orig_fn.suffix)
+
 
 def processFile(filename: pathlib.Path):
     # Load file, fixing the units
@@ -39,7 +46,7 @@ def processFile(filename: pathlib.Path):
     #     if result is None:
     #         print("{} does not match naming convention".format(obj.name))
     #         continue
-         
+
     #     if re.fullmatch("[a-z]{6}", result.group("model_id")) is None:
     #         objs_by_model[(result.group("category"), result.group("model_id"), result.group("bad"))].append(obj)
 
@@ -59,7 +66,16 @@ def processFile(filename: pathlib.Path):
     new_filename = processed_fn(filename)
     rt.saveMaxFile(str(new_filename))
 
-candidates = [pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\objects\legacy_*\processed.max")]
-# has_matching_processed = [processed_fn(x).exists() for x in candidates]
-for i, f in enumerate(tqdm.tqdm(candidates)):
-    processFile(f)
+
+def fix_common_issues_in_all_files():
+    candidates = [
+        pathlib.Path(x)
+        for x in glob.glob(r"D:\ig_pipeline\cad\objects\legacy_*\processed.max")
+    ]
+    # has_matching_processed = [processed_fn(x).exists() for x in candidates]
+    for i, f in enumerate(tqdm.tqdm(candidates)):
+        processFile(f)
+
+
+if __name__ == "__main__":
+    fix_common_issues_in_all_files()

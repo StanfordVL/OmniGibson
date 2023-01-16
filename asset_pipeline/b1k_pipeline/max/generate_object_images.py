@@ -1,25 +1,25 @@
-from collections import Counter, defaultdict
 import json
 import os
 import re
+from collections import Counter, defaultdict
 
 import numpy as np
+import pymxs
 from scipy.spatial.transform import Rotation as R
 
-import pymxs
 rt = pymxs.runtime
 
-PATTERN = re.compile(r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[A-Za-z0-9_]+)-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?(?:-M(?P<meta_type>[a-z]+)_(?P<meta_id>[0-9]+))?$")
-SIDES =  {
+PATTERN = re.compile(
+    r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[A-Za-z0-9_]+)-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?(?:-M(?P<meta_type>[a-z]+)_(?P<meta_id>[0-9]+))?$"
+)
+SIDES = {
     # Facing the object
     # "front": R.from_euler("xy", [-np.pi / 2, np.pi / 2]),
-
     # Top down
     # "top": R.from_euler("Z", -np.pi / 2),
-
     # Diagonal
-    "diagonal": R.from_euler("xy", [-np.pi / 2, np.pi / 2]) * R.from_euler("XYZ", [0, -np.pi / 6, np.pi / 6]),
-
+    "diagonal": R.from_euler("xy", [-np.pi / 2, np.pi / 2])
+    * R.from_euler("XYZ", [0, -np.pi / 6, np.pi / 6]),
     # "top", "left", "right", "front", "back"
 }
 SUCCESS_FILENAME = "generate_object_images.success"
@@ -57,14 +57,28 @@ def main():
         if int(match.group("instance_id")) != 0:
             continue
 
-        groups[(match.group("category"), match.group("model_id"), match.group("instance_id"))].append(obj)
+        groups[
+            (
+                match.group("category"),
+                match.group("model_id"),
+                match.group("instance_id"),
+            )
+        ].append(obj)
 
     for group_key, group in groups.items():
         try:
             # Find the base link obj
             matches = [PATTERN.match(obj.name) for obj in group]
-            bases = [obj for obj, match in zip(group, matches) if match is not None and (not match.group("link_name") or match.group("link_name") == "base_link")]
-            base, = bases
+            bases = [
+                obj
+                for obj, match in zip(group, matches)
+                if match is not None
+                and (
+                    not match.group("link_name")
+                    or match.group("link_name") == "base_link"
+                )
+            ]
+            (base,) = bases
 
             # Hide everything
             for x in rt.objects:
@@ -87,7 +101,7 @@ def main():
             # Render
             for side_name, side_rot in SIDES.items():
                 # Switch the side
-                assert rt.viewport.setType(rt.Name("view_top")) 
+                assert rt.viewport.setType(rt.Name("view_top"))
 
                 # Rotate the camera to match the object.
                 camera_rot = side_rot * obj_rot.inv()
@@ -96,7 +110,7 @@ def main():
                 # Set the zoom extent
                 rt.select([])
                 rt.select(group)
-                assert pymxs.runtime.execute('max tool zoomextents')
+                assert pymxs.runtime.execute("max tool zoomextents")
                 rt.forceCompleteRedraw()
                 rt.windows.processPostedMessages()
 
@@ -111,10 +125,11 @@ def main():
         except:
             failed.append(group_key)
 
-    success = True # (len(failed) == 0)
+    success = True  # (len(failed) == 0)
     if success:
         with open(os.path.join(output_dir, SUCCESS_FILENAME), "w") as f:
             pass
+
 
 if __name__ == "__main__":
     main()

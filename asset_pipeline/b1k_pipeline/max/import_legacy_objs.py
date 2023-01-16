@@ -1,24 +1,27 @@
 import re
 import sys
 import traceback
+
 sys.path.append(r"D:\ig_pipeline")
 
+import glob
 import json
+import os
+import random
 import shutil
 import string
-import glob
 from typing import Dict, List
-import pymxs
-import random
-import os
-from b1k_pipeline.urdfpy import URDF, Link, Joint
-from b1k_pipeline.max.new_sanity_check import SanityCheck
-import b1k_pipeline.utils
-import trimesh.transformations
+
 import numpy as np
-from scipy.spatial.transform import Rotation as R
+import pymxs
 import tqdm
+import trimesh.transformations
 import yaml
+from scipy.spatial.transform import Rotation as R
+
+import b1k_pipeline.utils
+from b1k_pipeline.max.new_sanity_check import SanityCheck
+from b1k_pipeline.urdfpy import URDF, Joint, Link
 
 rt = pymxs.runtime
 
@@ -30,28 +33,9 @@ OUTPUT_ROOT = r"D:\ig_pipeline\cad\objects"
 TRANSLATION_PATH = os.path.join(IN_DATASET_ROOT, "metadata", "model_rename.yaml")
 with open(TRANSLATION_PATH, "r") as f:
     TRANSLATION_DICT = yaml.load(f, Loader=yaml.SafeLoader)
-RENDER_PRESET_FILENAME = str((b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute())
-
-def create_macroscript(_func, category="", name="", tool_tip="", button_text="", *args):
-    """Creates a macroscript"""
-    try:
-        # gets the qualified name for bound methods
-        # ex: data_types.general_types.GMesh.center_pivot
-        func_name = "{0}.{1}.{2}".format(
-            _func.__module__, args[0].__class__.__name__, _func.__name__)
-    except (IndexError, AttributeError):
-        # gets the qualified name for unbound methods
-        # ex: data_types.general_types.get_selection
-        func_name = "{0}.{1}".format(
-            _func.__module__, _func.__name__)
-
-    script = """
-    (
-        python.Execute "import {}"
-        python.Execute "{}()"
-    )
-    """.format(_func.__module__, func_name)
-    rt.macros.new(category, name, tool_tip, button_text, script)
+RENDER_PRESET_FILENAME = str(
+    (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
+)
 
 
 class AutomationError(ValueError):
@@ -69,13 +53,16 @@ def get_maps_from_mat(mat):
                         results.add(submat.object)
                 results.update(get_maps_from_mat(submat))
     return results
-    
+
+
 def get_all_maps():
     materials = {x.material for x in rt.objects}
     return {map for mat in materials for map in get_maps_from_mat(mat)}
 
+
 def load_objs_from_urdf(fn, pose=None):
     pass
+
 
 def process_object_dir(model_dir):
     # Process the model name
@@ -83,10 +70,14 @@ def process_object_dir(model_dir):
     old_model_name = os.path.basename(model_dir)
 
     # Convert to new model name.
-    new_category_name, new_model_name = TRANSLATION_DICT[old_category_name + "/" + old_model_name].split("/")
+    new_category_name, new_model_name = TRANSLATION_DICT[
+        old_category_name + "/" + old_model_name
+    ].split("/")
 
     # Get output path.
-    obj_output_dir = os.path.join(OUTPUT_ROOT, f"legacy_{new_category_name}-{new_model_name}")
+    obj_output_dir = os.path.join(
+        OUTPUT_ROOT, f"legacy_{new_category_name}-{new_model_name}"
+    )
 
     # If the path already exists, assume the file has already been processed.
     if os.path.exists(obj_output_dir):
@@ -127,16 +118,20 @@ def process_object_dir(model_dir):
             for joint in robot.joints
             if joint.joint_type in ("prismatic", "revolute")
         }
-        lfk : Dict[Link, np.ndarray] = robot.link_fk(cfg=joint_cfg)
+        lfk: Dict[Link, np.ndarray] = robot.link_fk(cfg=joint_cfg)
 
         # Get the base link base mesh tranlensform, revert it
         base_link = robot.base_link
 
         if len(base_link.visuals) >= 1:
-            assert np.allclose(base_link.visuals[0].origin[:3, :3], np.eye(3)), "Rotational offsets are not allowed."
+            assert np.allclose(
+                base_link.visuals[0].origin[:3, :3], np.eye(3)
+            ), "Rotational offsets are not allowed."
             real_base_link_transform = np.linalg.inv(base_link.visuals[0].origin)
         else:
-            intervention_request_msgs.append("Base link has no visual mesh. Check if the visuals are reasonable.")
+            intervention_request_msgs.append(
+                "Base link has no visual mesh. Check if the visuals are reasonable."
+            )
             real_base_link_transform = np.eye(4)
 
         # Start tracking objects per link
@@ -145,21 +140,27 @@ def process_object_dir(model_dir):
         def process_link(link, link_pose, is_upper_side):
             found_identity_transform = False
             if len(link.visuals) == 0:
-                intervention_request_msgs.append(f"Encountered link with no visual meshes: {link.name}")
+                intervention_request_msgs.append(
+                    f"Encountered link with no visual meshes: {link.name}"
+                )
                 return None, found_identity_transform
 
             # Actually start the processing.
             first_mesh = None
             for visual in link.visuals:
-                assert visual.geometry.mesh is not None, "Encountered link with primitive visuals."
-                filename = os.path.abspath(os.path.join(model_dir, visual.geometry.mesh.filename))
+                assert (
+                    visual.geometry.mesh is not None
+                ), "Encountered link with primitive visuals."
+                filename = os.path.abspath(
+                    os.path.join(model_dir, visual.geometry.mesh.filename)
+                )
                 joint_type = None
 
                 # Compute the pose
                 pose = real_base_link_transform @ link_pose @ visual.origin
                 if visual.geometry.mesh.scale is not None:
                     S = np.eye(4, dtype=np.float64)
-                    S[:3,:3] = np.diag(visual.geometry.mesh.scale)
+                    S[:3, :3] = np.diag(visual.geometry.mesh.scale)
                     pose = pose @ S
 
                 # Count this for check that at least one thing has trivial pose
@@ -168,16 +169,21 @@ def process_object_dir(model_dir):
 
                 # Convert the pose to a 3ds Max transform
                 pose_formatted = pose[:3].T.tolist()
-                mat = rt.Matrix3(rt.Point3(*pose_formatted[0]), rt.Point3(*pose_formatted[1]), rt.Point3(*pose_formatted[2]), rt.Point3(*pose_formatted[3]))
+                mat = rt.Matrix3(
+                    rt.Point3(*pose_formatted[0]),
+                    rt.Point3(*pose_formatted[1]),
+                    rt.Point3(*pose_formatted[2]),
+                    rt.Point3(*pose_formatted[3]),
+                )
 
                 # Compute the name
                 if link == robot.base_link:
                     obj_name = f"{new_category_name}-{new_model_name}-0-base_link"
                 else:
                     # Get the name based on the joint type/side.
-                    link_name = re.sub(r'[^a-z0-9_]', '', link.name.lower())
-                    joints : List[Joint] = robot.joints
-                    j, = [j for j in joints if j.child == link.name]
+                    link_name = re.sub(r"[^a-z0-9_]", "", link.name.lower())
+                    joints: List[Joint] = robot.joints
+                    (j,) = [j for j in joints if j.child == link.name]
 
                     # Save this for use later.
                     joint_type = j.joint_type
@@ -187,9 +193,11 @@ def process_object_dir(model_dir):
                     if joint_type == "floating":
                         # Floating joints should get converted to plain objects.
                         obj_name = f"{new_category_name}_{link_name}-TODOfixme-0"
-                        intervention_request_msgs.append(f"{obj_name} needs a reasonable category / ID.")
+                        intervention_request_msgs.append(
+                            f"{obj_name} needs a reasonable category / ID."
+                        )
                     else:
-                        parent_name = re.sub(r'[^a-z0-9_]', '', j.parent.lower())
+                        parent_name = re.sub(r"[^a-z0-9_]", "", j.parent.lower())
                         if parent_name == robot.base_link.name:
                             parent_name = "base_link"
                         joint_type_str = JOINT_TYPES[joint_type]
@@ -205,9 +213,13 @@ def process_object_dir(model_dir):
                 if link in lower_objects_by_link:
                     lower_obj = lower_objects_by_link[link]
                     instance_objs = []
-                    success, instance_objs = rt.maxOps.cloneNodes(lower_obj, cloneType=rt.name("instance"), newNodes=pymxs.byref(instance_objs))
+                    success, instance_objs = rt.maxOps.cloneNodes(
+                        lower_obj,
+                        cloneType=rt.name("instance"),
+                        newNodes=pymxs.byref(instance_objs),
+                    )
                     assert success, "Could not clone object for upper end."
-                    obj, = instance_objs
+                    (obj,) = instance_objs
                     obj.transform = mat
                     obj.name = obj_name
                     return obj, found_identity_transform
@@ -219,7 +231,9 @@ def process_object_dir(model_dir):
                 obj_candidates = list(rt.selection)
                 obj = obj_candidates[0]
                 for extra_obj in obj_candidates[1:]:
-                    intervention_request_msgs.append(f"Found extra object during import when importing {obj_name}. Take a look.")
+                    intervention_request_msgs.append(
+                        f"Found extra object during import when importing {obj_name}. Take a look."
+                    )
                     rt.polyop.attach(obj, extra_obj)
                 obj.transform = mat
                 obj.name = obj_name
@@ -233,13 +247,17 @@ def process_object_dir(model_dir):
                 if link == robot.base_link:
                     meta_links = metadata.get("links", {})
                     for metalink_name, metalink_info in meta_links.items():
-                        printable_metalink_name = re.sub(r'[^a-z0-9]','', metalink_name.lower())
+                        printable_metalink_name = re.sub(
+                            r"[^a-z0-9]", "", metalink_name.lower()
+                        )
 
                         metalink_type = metalink_info["geometry"]
 
                         # Get its position w.r.t. the URDF base link, transform it
                         metalink_orig_pos = np.array(metalink_info["xyz"])
-                        metalink_pos = trimesh.transformations.transform_points(metalink_orig_pos[None, :], real_base_link_transform).flatten()
+                        metalink_pos = trimesh.transformations.transform_points(
+                            metalink_orig_pos[None, :], real_base_link_transform
+                        ).flatten()
 
                         if metalink_type is None:
                             # For point metalinks, we use a PointHelper.
@@ -253,12 +271,18 @@ def process_object_dir(model_dir):
                             # For box metalinks, we use a Box.
                             box = rt.Box()
                             box.name = f"{new_category_name}-{new_model_name}-0-base_link-M{printable_metalink_name}"
-                            box.rotation = obj.rotation * rt.Quat(*R.from_euler("xyz", metalink_info["rpy"]).as_quat().tolist())
+                            box.rotation = obj.rotation * rt.Quat(
+                                *R.from_euler("xyz", metalink_info["rpy"])
+                                .as_quat()
+                                .tolist()
+                            )
                             box.position = rt.Point3(*metalink_pos.tolist())
                             box.parent = obj
                             box.width, box.length, box.height = metalink_info["size"]
-                            box.objectoffsetpos = rt.Point3(0, 0, box.height / 2.)
-                            intervention_request_msgs.append(f"Found box metalink {box.name}. Take a look.")
+                            box.objectoffsetpos = rt.Point3(0, 0, box.height / 2.0)
+                            intervention_request_msgs.append(
+                                f"Found box metalink {box.name}. Take a look."
+                            )
                         else:
                             # We don't know how to handle anything else really.
                             raise ValueError(f"Unknown metalink type {metalink_type}")
@@ -276,13 +300,17 @@ def process_object_dir(model_dir):
         # First, get the lower range of everything based on the default lfk.
         found_identity_transform = False
         for link, link_pose in lfk.items():
-            obj, any_identity_transform = process_link(link, link_pose, is_upper_side=False)
+            obj, any_identity_transform = process_link(
+                link, link_pose, is_upper_side=False
+            )
             lower_objects_by_link[link] = obj
-            found_identity_transform = found_identity_transform or any_identity_transform
+            found_identity_transform = (
+                found_identity_transform or any_identity_transform
+            )
         assert found_identity_transform, "No object has identity transform."
 
         # Then, for each joint, add the upper limit.
-        joints : List[Joint] = robot.joints
+        joints: List[Joint] = robot.joints
         for joint in joints:
             if joint.joint_type not in {"prismatic", "revolute", "continuous"}:
                 continue
@@ -316,12 +344,18 @@ def process_object_dir(model_dir):
         os.makedirs(texture_dir, exist_ok=True)
         for map in get_all_maps():
             source_path = map.filename
-            assert os.path.exists(source_path), f"Could not find texture map {source_path}"
+            assert os.path.exists(
+                source_path
+            ), f"Could not find texture map {source_path}"
             source_name, source_ext = os.path.splitext(os.path.basename(source_path))
 
             # Pick a semi-random target path
             while True:
-                target_name = source_name + "-" + ''.join(random.choices(string.ascii_letters, k=6))
+                target_name = (
+                    source_name
+                    + "-"
+                    + "".join(random.choices(string.ascii_letters, k=6))
+                )
                 target_path = os.path.join(texture_dir, target_name + source_ext)
                 if not os.path.exists(target_path):
                     break
@@ -336,7 +370,9 @@ def process_object_dir(model_dir):
         # Stop execution if the sanity check has failed.
         sc = SanityCheck().run()
         if sc["ERROR"]:
-            intervention_request_msgs.append("Sanitycheck issues:\n" + "\n".join(sc["ERROR"]))
+            intervention_request_msgs.append(
+                "Sanitycheck issues:\n" + "\n".join(sc["ERROR"])
+            )
 
         # Finally, save the file.
         max_path = os.path.join(obj_output_dir, "processed.max")
@@ -345,14 +381,18 @@ def process_object_dir(model_dir):
         print("Processed ", obj_output_dir)
 
         if CONFIRM_EACH:
-            intervention_request_msgs.append("Confirm this file - requested due to CONFIRM_EACH=True")
+            intervention_request_msgs.append(
+                "Confirm this file - requested due to CONFIRM_EACH=True"
+            )
 
         # If we are not silencing automation errors, raise now so that the user can examine the file.
         if len(intervention_request_msgs) > 0:
             if INTERACTIVE_MODE:
                 raise AutomationError("\n".join(intervention_request_msgs))
             else:
-                raise ValueError("Failed due to automatione errors happening in headless mode. Retry in interactive.")
+                raise ValueError(
+                    "Failed due to automatione errors happening in headless mode. Retry in interactive."
+                )
     except AutomationError:
         # No cleanup needed for automation errors.
         raise
@@ -361,27 +401,49 @@ def process_object_dir(model_dir):
         shutil.rmtree(obj_output_dir, ignore_errors=True)
         raise
 
+
 def import_legacy_objs():
     # Grab all the files from the dataset.
-    obj_dirs = sorted(p for p in glob.glob(os.path.join(IN_DATASET_ROOT, "objects/*/*")) if os.path.isdir(p))
+    obj_dirs = sorted(
+        p
+        for p in glob.glob(os.path.join(IN_DATASET_ROOT, "objects/*/*"))
+        if os.path.isdir(p)
+    )
 
-    whitelist = {'pot_plant-jatssq', 'washer-omeuop'}
+    whitelist = {"pot_plant-jatssq", "washer-omeuop"}
 
     # Narrow down to objects that don't already exist.
-    split_names = [(os.path.basename(os.path.dirname(model_dir)), os.path.basename(model_dir)) for model_dir in obj_dirs]
-    new_split_names = [TRANSLATION_DICT[old_category_name + "/" + old_model_name].split("/") for old_category_name, old_model_name in split_names]
+    split_names = [
+        (os.path.basename(os.path.dirname(model_dir)), os.path.basename(model_dir))
+        for model_dir in obj_dirs
+    ]
+    new_split_names = [
+        TRANSLATION_DICT[old_category_name + "/" + old_model_name].split("/")
+        for old_category_name, old_model_name in split_names
+    ]
     # is_whitelisted = [f"{cat}-{model}" in whitelist for cat, model in new_split_names]
     is_whitelisted = [True for cat, model in new_split_names]
-    obj_output_dirs = [os.path.join(OUTPUT_ROOT, f"legacy_{new_category_name}-{new_model_name}") for new_category_name, new_model_name in new_split_names]
+    obj_output_dirs = [
+        os.path.join(OUTPUT_ROOT, f"legacy_{new_category_name}-{new_model_name}")
+        for new_category_name, new_model_name in new_split_names
+    ]
 
-    remaining_objs = [obj_dir for obj_dir, obj_output_dir, obj_whitelisted in zip(obj_dirs, obj_output_dirs, is_whitelisted) if obj_whitelisted and not os.path.exists(obj_output_dir)]
+    remaining_objs = [
+        obj_dir
+        for obj_dir, obj_output_dir, obj_whitelisted in zip(
+            obj_dirs, obj_output_dirs, is_whitelisted
+        )
+        if obj_whitelisted and not os.path.exists(obj_output_dir)
+    ]
 
     failures = {}
     for obj_dir in tqdm.tqdm(remaining_objs):
         try:
             process_object_dir(obj_dir)
         except AutomationError as e:
-            print(f"Stopping after object {obj_dir} due to non-automatable fixes needed. Please correct these, save, and re-run script to continue.")
+            print(
+                f"Stopping after object {obj_dir} due to non-automatable fixes needed. Please correct these, save, and re-run script to continue."
+            )
             print(e)
             break
         except Exception as e:
@@ -394,6 +456,7 @@ def import_legacy_objs():
         for i, failure_fn in enumerate(sorted_failure_fns):
             print(f"{i+1} / {len(failures)} - {failure_fn}: {failures[failure_fn]}")
 
+
 def import_legacy_objs_button():
     try:
         import_legacy_objs()
@@ -401,4 +464,6 @@ def import_legacy_objs_button():
         # Print message
         rt.messageBox(str(e))
 
-create_macroscript(import_legacy_objs_button, category="SVL-Tools", name="Cont. Import Legacy", button_text="Cont. Import Legacy")
+
+if __name__ == "__main__":
+    import_legacy_objs_button()
