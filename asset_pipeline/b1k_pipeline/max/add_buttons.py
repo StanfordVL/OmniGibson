@@ -1,8 +1,12 @@
+import os
 import pathlib
+import re
 
 import pymxs
 
 rt = pymxs.runtime
+
+REMACRO = re.compile('^[0-9]+ +"[^"]*" +"([^"]*)" +"[^"]*" +"([^"]*)"', re.M)
 
 ENTRYPOINTS = {
     "align_pivots.py": "Find instances with unaligned pivots and align them.",
@@ -24,12 +28,25 @@ ENTRYPOINTS = {
 
 
 def main():
+    # First delete all SVL-tools macros
+    mss = rt.stringStream("")
+    rt.macros.list(to=mss)
+    matches = REMACRO.findall(str(mss))
+    for category, filename in matches:
+        if category != "SVL_Tools":
+            continue
+        print("Removing", filename)
+        os.unlink(filename)
+
+    # Then re-add everything.
     this_dir = pathlib.Path(__file__).parent
     for entrypoint, tooltip in ENTRYPOINTS.items():
         script_name = entrypoint.replace(".py", "").replace("_", " ").title()
         entrypoint_fullname = str((this_dir / entrypoint).absolute())
         script = f'Python.ExecuteFile "{entrypoint_fullname}"'
-        rt.macros.new("SVL-Tools", script_name, tooltip, script_name, script)
+        rt.macros.new("SVL_Tools", script_name, tooltip, script_name, script)
+
+    rt.MessageBox("Macros regenerated. Please restart 3ds Max.")
 
 
 if __name__ == "__main__":
