@@ -83,6 +83,10 @@ class EntityPrim(XFormPrim):
         # Update joint information
         self.update_joints()
 
+        # # If we're not visual only, set the sleep threshold to be 0
+        # if not self.visual_only:
+        #     self.sleep_threshold = 0.0
+
     def _load(self, simulator=None):
         # By default, this prim cannot be instantiated from scratch!
         raise NotImplementedError("By default, an entity prim cannot be created from scratch.")
@@ -237,7 +241,7 @@ class EntityPrim(XFormPrim):
              bool: Whether this prim is articulated or not
         """
         # An invalid handle implies that there is no articulation available for this object
-        return self._handle != _dynamic_control.INVALID_HANDLE and self.n_joints > 0
+        return self._handle != _dynamic_control.INVALID_HANDLE
 
     @property
     def articulation_root_path(self):
@@ -247,13 +251,6 @@ class EntityPrim(XFormPrim):
                 this corresponds to self.prim_path
         """
         return self._prim_path
-
-    def assert_articulated(self):
-        """
-        Sanity check to make sure this joint is articulated. Used as a gatekeeping function to prevent non-intended
-        behavior (e.g.: trying to grab this joint's state if it's not articulated)
-        """
-        assert self.articulated, "Tried to call method not intended for non-articulated entity prim!"
 
     @property
     def root_link_name(self):
@@ -464,7 +461,7 @@ class EntityPrim(XFormPrim):
         """
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
-        self.assert_articulated()
+        assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
         # Possibly de-normalize the inputs
         if normalized:
@@ -508,7 +505,7 @@ class EntityPrim(XFormPrim):
         """
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
-        self.assert_articulated()
+        assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
         # Possibly de-normalize the inputs
         if normalized:
@@ -548,7 +545,7 @@ class EntityPrim(XFormPrim):
         """
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
-        self.assert_articulated()
+        assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
         # Possibly de-normalize the inputs
         if normalized:
@@ -677,8 +674,11 @@ class EntityPrim(XFormPrim):
         Updates all internal handles for this prim, in case they change since initialization
         """
         self._handle = self._dc.get_articulation(self.articulation_root_path)
-        self._root_handle = self._dc.get_articulation_root_body(self._handle) if \
-            self._handle != _dynamic_control.INVALID_HANDLE else self._dc.get_rigid_body(f"{self._prim_path}/{self.root_link_name}")
+
+        # We only have a root handle if we're not a cloth prim
+        if self._prim_type != PrimType.CLOTH:
+            self._root_handle = self._dc.get_articulation_root_body(self._handle) if \
+                self._handle != _dynamic_control.INVALID_HANDLE else self.root_link.handle
 
         # Update all links and joints as well
         for link in self._links.values():
@@ -703,7 +703,7 @@ class EntityPrim(XFormPrim):
         """
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
-        self.assert_articulated()
+        assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
         joint_positions = self._dc.get_articulation_dof_states(self._handle, _dynamic_control.STATE_POS)["pos"]
 
@@ -722,7 +722,7 @@ class EntityPrim(XFormPrim):
         """
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
-        self.assert_articulated()
+        assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
         joint_velocities = self._dc.get_articulation_dof_states(self._handle, _dynamic_control.STATE_VEL)["vel"]
 
@@ -741,7 +741,7 @@ class EntityPrim(XFormPrim):
         """
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
-        self.assert_articulated()
+        assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
         joint_efforts = self._dc.get_articulation_dof_states(self._handle, _dynamic_control.STATE_EFFORT)["effort"]
 
@@ -1061,7 +1061,8 @@ class EntityPrim(XFormPrim):
         Returns:
             float: threshold for stabilizing this articulation
         """
-        return get_prim_property(self.articulation_root_path, "physxArticulation:stabilizationThreshold")
+        return get_prim_property(self.articulation_root_path, "physxArticulation:stabilizationThreshold") if \
+            self.articulated else self.root_link.stabilization_threshold
 
     @stabilization_threshold.setter
     def stabilization_threshold(self, threshold):
@@ -1071,8 +1072,11 @@ class EntityPrim(XFormPrim):
         Args:
             threshold (float): Stabilization threshold
         """
-        set_prim_property(self.articulation_root_path, "physxArticulation:stabilizationThreshold", threshold)
-        return
+        if self.articulated:
+            set_prim_property(self.articulation_root_path, "physxArticulation:stabilizationThreshold", threshold)
+        else:
+            for link in self._links.values():
+                link.stabilization_threshold = threshold
 
     @property
     def self_collisions(self):
@@ -1099,7 +1103,8 @@ class EntityPrim(XFormPrim):
         Returns:
             float: threshold for sleeping this articulation
         """
-        return get_prim_property(self.articulation_root_path, "physxArticulation:sleepThreshold")
+        return get_prim_property(self.articulation_root_path, "physxArticulation:sleepThreshold") if \
+            self.articulated else self.root_link.sleep_threshold
 
     @sleep_threshold.setter
     def sleep_threshold(self, threshold):
@@ -1109,8 +1114,11 @@ class EntityPrim(XFormPrim):
         Args:
             threshold (float): Sleeping threshold
         """
-        set_prim_property(self.articulation_root_path, "physxArticulation:sleepThreshold", threshold)
-        return
+        if self.articulated:
+            set_prim_property(self.articulation_root_path, "physxArticulation:sleepThreshold", threshold)
+        else:
+            for link in self._links.values():
+                link.sleep_threshold = threshold
 
     def wake(self):
         """
