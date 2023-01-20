@@ -65,6 +65,7 @@ FINAL_SCENES = [
     # "school_biology",
     # "school_chemistry",
     # "school_computer_lab_and_infirmary",
+    "gates_bedroom",
 ]
 
 APPROVED_OBJS = {
@@ -78,7 +79,7 @@ APPROVED_OBJS = {
 "pastry-hz",
 "powdered_sugar-id",
 "scone-as",
-"slotted_spoon-bu",
+# "slotted_spoon-bu",
 "spaghetti-nm",
 }
 
@@ -96,6 +97,7 @@ APPROVED_SCENES = {
     # "house_single_floor",
     "restaurant_hotel",
     "office_vendor_machine",
+    "gates_bedroom"
 }
 
 
