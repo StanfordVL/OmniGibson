@@ -422,6 +422,11 @@ def main():
     rt.setvraysilentmode(True)
     out_dir = os.path.join(rt.maxFilePath, "artifacts")
 
+    export_textures = True
+    property_idx = rt.fileProperties.findProperty(rt.Name("#custom"), "disableTextures")
+    if property_idx != 0:
+        export_textures = bool(rt.fileProperties.getPropertyValue(rt.Name("#custom"), property_idx))
+
     success = True
     error_msg = ""
     unwrap_times = {}
@@ -429,7 +434,7 @@ def main():
     baking_times = {}
     try:
         with tempfile.TemporaryDirectory() as bakery_dir:
-            exp = ObjectExporter(bakery_dir, out_dir)
+            exp = ObjectExporter(bakery_dir, out_dir, export_textures=export_textures)
             exp.run()
             unwrap_times = exp.unwrap_times
             export_times = exp.export_times
