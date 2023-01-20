@@ -43,7 +43,7 @@ def main():
     for entrypoint, tooltip in ENTRYPOINTS.items():
         script_name = entrypoint.replace(".py", "").replace("_", " ").title()
         entrypoint_fullname = str((this_dir / entrypoint).absolute())
-        script = f'Python.ExecuteFile "{entrypoint_fullname}"'
+        script = f'Python.ExecuteFile @"{entrypoint_fullname}"'
         rt.macros.new("SVL_Tools", script_name, tooltip, script_name, script)
 
     rt.MessageBox("Macros regenerated. Please restart 3ds Max.")
