@@ -46,8 +46,7 @@ def main():
             obj_states[body] = link_poses
 
     # Step the simulation by 5 seconds.
-    # for _ in tqdm.tqdm(range(1000)):
-    while True:
+    for _ in tqdm.tqdm(range(1000)):
         s.step()
 
     # Check the state of every object again.
@@ -71,7 +70,7 @@ def main():
                 if delta_orn_mag > MAX_ORN_DELTA:
                     mismatches.append(f"Object {key} link {link_name} orientation changed by {delta_orn_mag} rads from {old_orn} to {new_orn}.")
 
-    success = True   # len(mismatches) == 0
+    success = len(mismatches) == 0
 
     filename = output_dir / OUTPUT_FILENAME
     with open(filename, "w") as f:
