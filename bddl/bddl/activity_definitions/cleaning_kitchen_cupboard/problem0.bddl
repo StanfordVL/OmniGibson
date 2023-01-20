@@ -5,7 +5,7 @@
         dust.n.01_1 - dust.n.01
      	cabinet.n.01_1 cabinet.n.01_2 - cabinet.n.01
         countertop.n.01_1 - countertop.n.01
-    	piece_of_cloth.n.01_1 - piece_of_cloth.n.01
+    	hand_towel.n.01_1 - hand_towel.n.01
     	cleansing_agent.n.01_1 - cleansing_agent.n.01
     	bowl.n.01_1 bowl.n.01_2 - bowl.n.01
     	cup.n.01_1 cup.n.01_2 - cup.n.01
@@ -16,7 +16,7 @@
     (:init 
         (covered cabinet.n.01_1 dust.n.01_1) 
         (covered cabinet.n.01_2 dust.n.01_1) 
-        (ontop piece_of_cloth.n.01_1 countertop.n.01_1) 
+        (ontop hand_towel.n.01_1 countertop.n.01_1) 
         (ontop cleansing_agent.n.01_1 countertop.n.01_1) 
         (inside bowl.n.01_2 cabinet.n.01_2) 
         (inside cup.n.01_1 cabinet.n.01_2) 
@@ -34,7 +34,7 @@
             (forall 
                 (?cabinet.n.01 - cabinet.n.01) 
                 (not 
-                    (covered ?cabinet.n.01 dust.n.01_1)
+                    (covered ?cabinet.n.01 ?dust.n.01_1)
                 )
             ) 
             (exists 
