@@ -27,7 +27,7 @@
         (and 
             (ontop ?pool.n.01_1 ?floor.n.01_1) 
             (not 
-                (covered ?pool.n.01_1 stain.n.01_1)
+                (covered ?pool.n.01_1 ?stain.n.01_1)
             ) 
             (ontop ?scrub_brush.n.01_1 ?shelf.n.01_1) 
             (ontop ?detergent.n.02_1 ?floor.n.01_1)

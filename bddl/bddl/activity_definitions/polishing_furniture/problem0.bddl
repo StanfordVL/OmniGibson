@@ -23,10 +23,10 @@
     (:goal 
         (and 
             (not 
-                (covered ?table.n.02_1 dust.n.01_1)
+                (covered ?table.n.02_1 ?dust.n.01_1)
             ) 
             (not 
-                (covered ?shelf.n.01_1 dust.n.01_1)
+                (covered ?shelf.n.01_1 ?dust.n.01_1)
             ) 
             (under ?rag.n.01_1 ?table.n.02_1)
         )

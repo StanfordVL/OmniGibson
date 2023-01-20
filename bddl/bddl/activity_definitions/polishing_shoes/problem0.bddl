@@ -26,10 +26,10 @@
             (nextto ?rag.n.01_1 ?sink.n.01_1) 
             (and 
                 (not 
-                    (covered ?shoe.n.01_1 stain.n.01_1)
+                    (covered ?shoe.n.01_1 ?stain.n.01_1)
                 ) 
                 (not 
-                    (covered ?shoe.n.01_2 stain.n.01_1)
+                    (covered ?shoe.n.01_2 ?stain.n.01_1)
                 )
             )
         )

@@ -38,10 +38,10 @@
     (:goal 
         (and 
             (not 
-                (covered ?window.n.01_1 dust.n.01_1)
+                (covered ?window.n.01_1 ?dust.n.01_1)
             ) 
             (not 
-                (covered ?window.n.01_2 dust.n.01_1)
+                (covered ?window.n.01_2 ?dust.n.01_1)
             )
         )
     )

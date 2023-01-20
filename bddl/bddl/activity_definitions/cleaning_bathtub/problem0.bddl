@@ -26,7 +26,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?bathtub.n.01_1 stain.n.01_1)
+                (covered ?bathtub.n.01_1 ?stain.n.01_1)
             )
         )
     )

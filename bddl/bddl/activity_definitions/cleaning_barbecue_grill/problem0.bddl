@@ -28,10 +28,10 @@
     (:goal 
         (and 
             (not 
-                (covered ?grill.n.02_1 stain.n.01_1)
+                (covered ?grill.n.02_1 ?stain.n.01_1)
             ) 
             (not 
-                (covered ?grill.n.02_1 dust.n.01_1)
+                (covered ?grill.n.02_1 ?dust.n.01_1)
             )
         )
     )

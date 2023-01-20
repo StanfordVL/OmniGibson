@@ -30,10 +30,10 @@
     (:goal 
         (and 
             (not 
-                (covered ?stove.n.01_1 dust.n.01_1)
+                (covered ?stove.n.01_1 ?dust.n.01_1)
             ) 
             (not 
-                (covered ?stove.n.01_1 stain.n.01_1)
+                (covered ?stove.n.01_1 ?stain.n.01_1)
             ) 
             (nextto ?rag.n.01_1 ?sink.n.01_1) 
             (nextto ?dishtowel.n.01_1 ?sink.n.01_1)
