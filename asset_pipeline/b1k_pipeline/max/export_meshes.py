@@ -423,9 +423,9 @@ def main():
     out_dir = os.path.join(rt.maxFilePath, "artifacts")
 
     export_textures = True
-    property_idx = rt.fileProperties.findProperty(rt.Name("#custom"), "disableTextures")
+    property_idx = rt.fileProperties.findProperty(rt.Name("custom"), "disableTextures")
     if property_idx != 0:
-        export_textures = bool(rt.fileProperties.getPropertyValue(rt.Name("#custom"), property_idx))
+        export_textures = bool(rt.fileProperties.getPropertyValue(rt.Name("custom"), property_idx))
 
     success = True
     error_msg = ""
