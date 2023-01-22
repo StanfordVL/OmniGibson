@@ -177,15 +177,15 @@ def compute_link_aligned_bounding_boxes(G, root_node):
 
 def compute_object_bounding_box(root_node_data):
     combined_mesh = root_node_data["combined_mesh"]
-    combined_mesh_center = get_mesh_center(combined_mesh)
+    base_mesh_center = get_mesh_center(root_node_data["lower_mesh"])
     mesh_orientation = root_node_data["metadata"]["orientation"]
-    canonical_combined_mesh = transform_mesh(combined_mesh, combined_mesh_center, mesh_orientation)
+    canonical_combined_mesh = transform_mesh(combined_mesh, base_mesh_center, mesh_orientation)
     base_link_offset = canonical_combined_mesh.bounding_box.centroid
     bbox_size = canonical_combined_mesh.bounding_box.extents
 
     # Compute the bbox world centroid
     bbox_world_rotation = R.from_quat(mesh_orientation)
-    bbox_world_centroid = combined_mesh_center + bbox_world_rotation.apply(base_link_offset)
+    bbox_world_centroid = base_mesh_center + bbox_world_rotation.apply(base_link_offset)
 
     return bbox_size, base_link_offset, bbox_world_centroid, bbox_world_rotation
 
