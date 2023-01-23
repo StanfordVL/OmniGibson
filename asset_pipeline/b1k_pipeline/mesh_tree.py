@@ -67,15 +67,16 @@ def build_mesh_tree(mesh_list, mesh_root, load_upper=True):
             del metadata["meta_links"]
 
             # Apply the scaling factor.
-            for meta_link_type in meta_links:
-                for meta_link in meta_links[meta_link_type].values():
-                    meta_link["position"] = np.array(meta_link["position"]) * scale_factor
-                    if "length" in meta_link:
-                        meta_link["length"] *= scale_factor
-                    if "width" in meta_link:
-                        meta_link["width"] *= scale_factor
-                    if "size" in meta_link:
-                        meta_link["size"] = (np.asarray(meta_link["size"]) * scale_factor).tolist()
+            for meta_link_id_to_subid in meta_links.values():
+                for meta_link_subid_to_link in meta_link_id_to_subid.values():
+                    for meta_link in meta_link_subid_to_link:
+                        meta_link["position"] = np.array(meta_link["position"]) * scale_factor
+                        if "length" in meta_link:
+                            meta_link["length"] *= scale_factor
+                        if "width" in meta_link:
+                            meta_link["width"] *= scale_factor
+                        if "size" in meta_link:
+                            meta_link["size"] = (np.asarray(meta_link["size"]) * scale_factor).tolist()
 
         # Add the data for the position onto the node.
         if joint_side == "upper":

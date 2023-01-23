@@ -276,7 +276,8 @@ class ObjectExporter:
         metadata = {}
         # Export the canonical orientation
         metadata["orientation"] = [obj.rotation.x, obj.rotation.y, obj.rotation.z, obj.rotation.w]
-        metadata["meta_links"] = defaultdict(lambda: defaultdict(dict))
+        metadata["meta_links"] = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
+        metadata["parts"] = []
         metadata["layer_name"] = obj.layer.name
         obj_name_result = b1k_pipeline.utils.parse_name(obj.name)
         assert obj_name_result, f"Unparseable object name {obj.name}"
@@ -286,10 +287,6 @@ class ObjectExporter:
             if obj_name_result.group("category") == light_name_result.group("category") and obj_name_result.group("model_id") == light_name_result.group("model_id") and obj_name_result.group("instance_id") == light_name_result.group("instance_id"):
                 assert light.normalizeColor == 1, "The light's unit is NOT lm."
                 assert light_name_result.group("light_id"), "The light does not have an ID."
-                # TODO: maybe always use the same intensity?
-                # Reset pivot for lights (we don't trust the original pivots)
-                # TODO: Don't do this. It's included in SC now. This causes issues w/ scale.
-                rt.resetPivot(light)
                 light_id = int(light_name_result.group("light_id"))
                 metadata["meta_links"]["lights"][light_id] = {
                     "type": light.type,
@@ -297,45 +294,65 @@ class ObjectExporter:
                     "width": light.sizeWidth,
                     "color": [light.color.r, light.color.g, light.color.b],
                     "intensity": light.multiplier,
-                    "position": [light.position.x, light.position.y, light.position.z],
-                    "orientation": [light.rotation.x, light.rotation.y, light.rotation.z, light.rotation.w],
+                    "position": [light.objecttransform.position.x, light.objecttransform.position.y, light.objecttransform.position.z],
+                    "orientation": [light.objecttransform.rotation.x, light.objecttransform.rotation.y, light.objecttransform.rotation.z, light.objecttransform.rotation.w],
                 }
 
         for child in obj.children:
+            # Take care of exporting object parts.
+            if rt.classOf(child) == rt.Editable_Poly:
+                metadata["parts"].append(child.name)
+                continue
+
+            is_valid_meta = rt.classOf(child) in {rt.Point, rt.Box, rt.Cylinder, rt.Sphere, rt.Cone}
+            assert is_valid_meta, f"Meta link {child.name} has unexpected type {rt.classOf(child)}"
+
             child_name_result = b1k_pipeline.utils.parse_name(child.name)
             if not child_name_result.group("meta_type"):
                 continue
 
+            meta_info = child_name_result.group("meta_info")
             meta_type = child_name_result.group("meta_type")
             meta_id_str = child_name_result.group("meta_id")
             meta_id = 0 if meta_id_str is None else int(meta_id_str)
             assert meta_id not in metadata["meta_links"][meta_type], f"Meta ID {meta_id} is repeated in object {obj.name}"
+            meta_subid_str = child_name_result.group("meta_subid")
+            meta_subid = 0 if meta_subid_str is None else int(meta_subid_str)
+            assert meta_subid not in metadata["meta_links"][meta_type][meta_id], f"Meta subID {meta_info} is repeated in object {obj.name}"
             object_transform = child.objecttransform  # This is a 4x3 array
             position = object_transform.position
             rotation = object_transform.rotation
-            metadata["meta_links"][meta_type][meta_id] = {
+            metadata["meta_links"][meta_type][meta_id][meta_subid] = {
                 "position": list(position),
                 "orientation": [rotation.x, rotation.y, rotation.z, rotation.w],
             }
 
-            # TODO: Validate type.
-            if rt.classOf(child) == rt.VolumeHelper:
-                size = rt.Point3(child.size, child.size, child.size) * object_transform
-                metadata["meta_links"][meta_type][meta_id]["type"] = "sphere"
-                metadata["meta_links"][meta_type][meta_id]["size"] = list(size)
+            if rt.classOf(child) == rt.Sphere:
+                size = rt.Point3(child.radius, child.radius, child.radius) * object_transform
+                metadata["meta_links"][meta_type][meta_id][meta_subid]["type"] = "sphere"
+                metadata["meta_links"][meta_type][meta_id][meta_subid]["size"] = list(size)
             elif rt.classOf(child) == rt.Box:
                 size = rt.Point3(child.width, child.length, child.height) * object_transform
-                metadata["meta_links"][meta_type][meta_id]["type"] = "box"
-                metadata["meta_links"][meta_type][meta_id]["size"] = list(size)
+                metadata["meta_links"][meta_type][meta_id][meta_subid]["type"] = "box"
+                metadata["meta_links"][meta_type][meta_id][meta_subid]["size"] = list(size)
             elif rt.classOf(child) == rt.Cylinder:
                 size = rt.Point3(child.radius, child.radius, child.height) * object_transform
-                metadata["meta_links"][meta_type][meta_id]["type"] = "cylinder"
-                metadata["meta_links"][meta_type][meta_id]["size"] = list(size)
+                metadata["meta_links"][meta_type][meta_id][meta_subid]["type"] = "cylinder"
+                metadata["meta_links"][meta_type][meta_id][meta_subid]["size"] = list(size)
             elif rt.classOf(child) == rt.Cone:
-                assert np.isclose(child.radius2, 0), f"Cone radius should be 0 for {child.name}"
-                size = rt.Point3(child.radius1, child.radius1, child.height) * object_transform
-                metadata["meta_links"][meta_type][meta_id]["type"] = "cone"
-                metadata["meta_links"][meta_type][meta_id]["size"] = list(size)
+                assert np.isclose(child.radius1, 0), f"Cone radius1 should be 0 for {child.name}"
+                size = rt.Point3(child.radius2, child.radius2, child.height) * object_transform
+                metadata["meta_links"][meta_type][meta_id][meta_subid]["type"] = "cone"
+                metadata["meta_links"][meta_type][meta_id][meta_subid]["size"] = list(size)
+
+        # Convert the subID to a list
+        for keyed_by_id in metadata["meta_links"].values():
+            for id, keyed_by_subid in keyed_by_id.items():
+                found_subids = set(keyed_by_subid.keys())
+                expected_subids = {str(x) for x in range(len(found_subids))}
+                assert found_subids == expected_subids, f"{obj.name} has non-continuous subids {sorted(found_subids)}"
+                int_keyed = {int(subid): meshes for subid, meshes in keyed_by_subid.items()}
+                keyed_by_id[id] = [meshes for _, meshes in sorted(int_keyed.items())]
 
         json_file = os.path.join(obj_dir, obj.name + ".json")
         with open(json_file, "w") as f:
@@ -367,7 +384,6 @@ class ObjectExporter:
                                     
                                 img = (img * 255).astype(np.uint8)
 
-                            # TODO: maybe some of them also need to be squeezed into (H, W, 1) channels
                             cv2.imwrite(map_path, img)
 
                         new_lines.append(line)

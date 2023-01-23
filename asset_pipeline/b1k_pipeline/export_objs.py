@@ -91,22 +91,24 @@ def transform_mesh(orig_mesh, translation, rotation):
 def transform_meta_links(orig_meta_links, translation, rotation):
     meta_links = copy.deepcopy(orig_meta_links)
     rotation_inv = R.from_quat(rotation).inv()
-    for meta_link_type in meta_links:
-        for meta_link in meta_links[meta_link_type].values():
-            meta_link["position"] = meta_link["position"]
-            meta_link["position"] -= translation
-            meta_link["position"] = np.dot(rotation_inv.as_matrix(), meta_link["position"])
-            # meta_link["position"] += translation
-            meta_link["orientation"] = (rotation_inv * R.from_quat(meta_link["orientation"])).as_quat()
+    for meta_link_id_to_subid in meta_links.values():
+        for meta_link_subid_to_link in meta_link_id_to_subid.values():
+            for meta_link in meta_link_subid_to_link:
+                meta_link["position"] = meta_link["position"]
+                meta_link["position"] -= translation
+                meta_link["position"] = np.dot(rotation_inv.as_matrix(), meta_link["position"])
+                # meta_link["position"] += translation
+                meta_link["orientation"] = (rotation_inv * R.from_quat(meta_link["orientation"])).as_quat()
 
     return meta_links
 
 
 def normalize_meta_links(orig_meta_links, offset):
     meta_links = copy.deepcopy(orig_meta_links)
-    for meta_link_type in meta_links:
-        for meta_link in meta_links[meta_link_type].values():
-            meta_link["position"] += offset
+    for meta_link_id_to_subid in meta_links.values():
+        for meta_link_subid_to_link in meta_link_id_to_subid.values():
+            for meta_link in meta_link_subid_to_link:
+                meta_link["position"] += offset
 
     return meta_links
 
