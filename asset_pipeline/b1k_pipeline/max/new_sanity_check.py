@@ -7,7 +7,6 @@ import json
 import pathlib
 import traceback
 
-import gspread
 import numpy as np
 import pandas as pd
 import pymxs
@@ -21,19 +20,42 @@ rt = pymxs.runtime
 MAX_VERTICES = 100000
 WARN_VERTICES = 20000
 
-SPREADSHEET_ID = "1JJob97Ovsv9HP1Xrs_LYPlTnJaumR2eMELImGykD22A"
-WORKSHEET_NAME = "Object Category B1K"
-KEY_FILE = b1k_pipeline.utils.PIPELINE_ROOT / "keys/b1k-dataset-6966129845c0.json"
-
 OUTPUT_FILENAME = "sanitycheck.json"
 
-CATEGORY_DUMMY_REQUIREMENTS = {
-    # "sink": ["watersource"],
+
+ALLOWED_TAGS = {
+    "soft",
+    "glass",
+    "openable",
+    "openable_both_sides",
 }
 
-CATEGORY_VOLUME_REQUIREMENTS = {
-    # "sink": ["waterdrain"],
+ALLOWED_PART_TAGS = {
+    "sub_part",
+    "extra_part",
 }
+
+
+ALLOWED_META_IS_DIMENSIONLESS = {
+    'particleremover': False,
+    'watersource': True,
+    'waterdrain': False,
+    'heatsource': True,
+    'cleaningtoolarea': False,
+    'slicer': False,
+    'togglebutton': True,
+    'attachment': True,
+    'fillable': False,
+}
+
+
+def get_required_meta_links(category):
+    return set()
+
+
+def is_light_required(category):
+    # TODO: Make this more robust.
+    return "light" in category or "lamp" in category
 
 
 def compute_shear(obj):
@@ -78,14 +100,25 @@ class SanityCheck:
             rt.Editable_Poly,
             rt.VRayLight,
             rt.VRayPhysicalCamera,
-            rt.Dummy,
             rt.Point,
             rt.Box,
-            rt.VolumeHelper,
+            rt.Cylinder,
+            rt.Sphere,
+            rt.Cone,
             rt.Physical_Camera,
             rt.FreeCamera,
         ]
+
         self.expect(is_valid_type, f"{row.object_name} has disallowed type {row.type}.")
+        if row.object.parent is None:
+            is_valid_root = row.type in [
+                rt.Editable_Poly,
+                rt.VRayLight,
+                rt.VRayPhysicalCamera,
+                rt.Physical_Camera,
+                rt.FreeCamera,
+            ]
+            self.expect(is_valid_root, f"Root-level object {row.object_name} has disallowed type {row.type}.")
         return is_valid_type
 
     def is_valid_name(self, row):
@@ -97,13 +130,13 @@ class SanityCheck:
         return is_valid_name
 
     def validate_object(self, row):
-        # # Check that the category exists on the spreadsheet
+        # Check that the category exists on the spreadsheet
         # self.expect(
         #   row.name_category in self._existing_categories,
         #   f"Category {row.name_category} for object {row.object_name} does not exist on spreadsheet.",
         #   level="WARNING")
 
-        # # Check that the category is approved on the spreadsheet
+        # Check that the category is approved on the spreadsheet
         # self.expect(
         #   row.name_category in self._existing_categories,
         #   f"Category {row.name_category} for object {row.object_name} is not approved on spreadsheet.",
@@ -146,11 +179,35 @@ class SanityCheck:
             f"Non-light object {row.object_name} should not have light ID.",
         )
 
+        # Check that object does not have any meta type.
+        self.expect(
+            pd.isna(row.name_meta_info),
+            f"Non-meta object {row.object_name} should not have meta info.",
+        )
+
         # Check object name format.
         self.expect(
             len(row.name_model_id) == 6,
             f"{row.object_name} does not have 6-digit model ID.",
         )
+
+        # Check the tags
+        tags = set()
+        tags_str = row.name_tag
+        if tags_str:
+            tags = set([x[1:] for x in tags_str.split("-") if x])
+        invalid_tags = tags - (ALLOWED_TAGS | ALLOWED_PART_TAGS)
+        self.expect(not invalid_tags, f"{row.object_name} has invalid tags {invalid_tags}.")
+
+        part_tags = tags & ALLOWED_PART_TAGS
+        if row.object.parent is None:
+            self.expect(not part_tags, f"{row.object_name} is not under another object but contains part tags {part_tags}.")
+        else:
+            self.expect(part_tags, f"Part object {row.object_name} should be marked with a part tag, one of: {ALLOWED_PART_TAGS}.")
+
+        # Validate meta stuff
+        if int(row.name_instance_id) == 0:
+            self.validate_meta_links(row)
 
     def validate_light(self, row):
         # Validate that the object has a light ID
@@ -256,10 +313,78 @@ class SanityCheck:
                 f"{row.object_name} has different material. Match materials on each instance.",
             )
 
+    def validate_meta_links(self, row):
+        # Don't worry about bad objects or upper links.
+        if row.name_joint_side == "upper":
+            return
+
+        # Get the children using the parent rows
+        children = row.object.children
+
+        # Assert that all of the children are valid meta-links / lights
+        found_ml_types = set()
+        found_ml_subids_for_id = collections.defaultdict(lambda: collections.defaultdict(list))
+        for child in children:
+            # If it's an EditablePoly, then it will be processed as a root object too. Safe to skip.
+            if rt.classOf(child) == rt.Editable_Poly:
+                continue
+
+            # Otherwise, we can validate the individual meta link
+            match = b1k_pipeline.utils.parse_name(child.name)
+            if match is None:
+                self.expect(False, f"{child.name} is an invalid meta link under {row.object_name}.")
+                continue
+            self.expect(match.group("mesh_basename") == row.name_mesh_basename, f"Meta link {child.name} base name doesnt match parent {row.object_name}")
+
+            # Keep track of the meta links we have
+            self.expect(match.group("meta_type"), f"Meta object {child.name} should have a meta link type in its name.")
+            meta_link_type = match.group("meta_type")
+            if meta_link_type not in ALLOWED_META_IS_DIMENSIONLESS:
+                self.expect(False, f"Meta link type {meta_link_type} not in list of allowed meta link types: {ALLOWED_META_IS_DIMENSIONLESS.keys()}")
+                continue
+            
+            found_ml_types.add(meta_link_type)
+
+            # Keep track of subids for this meta ID
+            meta_id = "0"
+            if match.group("meta_id"):
+                meta_id = match.group("meta_id")
+            meta_subid = "0"
+            if match.group("meta_subid"):
+                meta_subid = match.group("meta_subid")
+            found_ml_subids_for_id[meta_link_type][meta_id].append(meta_subid)
+
+            if ALLOWED_META_IS_DIMENSIONLESS[meta_link_type]:
+                self.expect(rt.classOf(child) == rt.Point, f"Dimensionless {meta_link_type} meta link {child.name} should be of Point instead of {rt.classOf(child)}")
+            else:
+                volumetric_allowed_types = {
+                    rt.Box,
+                    rt.Cylinder,
+                    rt.Sphere,
+                    rt.Cone,
+                }
+                self.expect(rt.classOf(child) in volumetric_allowed_types, f"Volumetric {meta_link_type} meta link {child.name} should be one of {volumetric_allowed_types} instead of {rt.classOf(child)}")
+
+                if rt.classOf(child) == rt.Cone:
+                    # Cones should have radius1 as 0 and radius2 nonzero
+                    self.expect(np.isclose(child.radius1, 0), f"Cone {child.name} radius1 should be zero.")
+                    self.expect(not np.isclose(child.radius2, 0), f"Cone {child.name} radius2 should be nonzero.")
+
+        # Check that the meta links match what's needed
+        required_meta_types = get_required_meta_links(row.name_category)
+        missing_meta_types = required_meta_types - found_ml_types
+        self.expect(not missing_meta_types, f"Expected meta types for {row.object_name} are missing: {missing_meta_types}")
+
+        # Check that meta subids are correct:
+        for meta_type, meta_ids_to_subids in found_ml_subids_for_id.items():
+            for meta_id, meta_subids in meta_ids_to_subids.items():
+                expected_subids = {str(x) for x in range(len(meta_subids))}
+                self.expect(set(meta_subids) == expected_subids, f"{row.name_mesh_basename} meta type {meta_type} ID {meta_id} has non-continuous subids {sorted(meta_subids)}")
+
     def run(self):
         self.reset()
 
-        self.expect(rt.units.systemScale == 1, "System scale not set to 1m.")
+        self.expect(rt.units.systemScale == 1, "System scale not set to 1mm.")
 
         self.expect(
             rt.units.systemType == rt.Name("millimeters"),
