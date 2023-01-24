@@ -37,14 +37,13 @@ ALLOWED_PART_TAGS = {
 
 
 ALLOWED_META_IS_DIMENSIONLESS = {
-    'particleremover': False,
     'watersource': True,
-    'waterdrain': False,
-    'heatsource': True,
-    'cleaningtoolarea': False,
-    'slicer': False,
     'togglebutton': True,
     'attachment': True,
+    'heatsource': True,
+    'particleremover': False,
+    'waterdrain': False,
+    'slicer': False,
     'fillable': False,
 }
 
