@@ -159,8 +159,8 @@ class XFormPrim(BasePrim):
         orientation = orientation[[3, 0, 1, 2]]     # Flip from x,y,z,w to w,x,y,z
 
         mat = Gf.Transform()
-        mat.SetRotation(Gf.Rotation(Gf.Quatd(*orientation)))
-        mat.SetTranslation(Gf.Vec3d(*position))
+        mat.SetRotation(Gf.Rotation(Gf.Quatd(*orientation.astype(float))))
+        mat.SetTranslation(Gf.Vec3d(*position.astype(float)))
 
         # mat.SetScale(Gf.Vec3d(*(self.get_world_scale() / self.scale)))
         # TODO (eric): understand why this (mat.setScale) works - this works empirically but it's unclear why.
@@ -316,7 +316,7 @@ class XFormPrim(BasePrim):
             scale (float or np.ndarray): scale to be applied to the prim's dimensions. shape is (3, ).
                                           Defaults to None, which means left unchanged.
         """
-        scale = np.array(scale) if isinstance(scale, Iterable) else np.ones(3) * scale
+        scale = np.array(scale, dtype=float) if isinstance(scale, Iterable) else np.ones(3, dtype=float) * scale
         scale = Gf.Vec3d(*scale)
         properties = self.prim.GetPropertyNames()
         if "xformOp:scale" not in properties:

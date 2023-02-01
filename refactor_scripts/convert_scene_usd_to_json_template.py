@@ -11,7 +11,7 @@ from omnigibson.utils.config_utils import NumpyEncoder
 # if __name__ == "__main__":
 for scene_model in os.listdir(os.path.join(og.og_dataset_path, "scenes")):
     json_path = f"{og.og_dataset_path}/scenes/{scene_model}/json/{scene_model}_best.json"
-    if "background" not in scene_model and not os.path.exists(json_path):
+    if "background" not in scene_model and scene_model[0] != "." and not os.path.exists(json_path):
         scene = InteractiveTraversableSceneOld(scene_model=scene_model)
 
         og.sim.stop()

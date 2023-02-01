@@ -32,7 +32,7 @@ gm.ENABLE_ROBOT_CONTACT_REPORTING = True
 
 # Whether to use omni's GPU dynamics
 # This is necessary for certain features; e.g. particles (fluids / cloth)
-gm.USE_GPU_DYNAMICS = True
+gm.USE_GPU_DYNAMICS = False
 
 # Whether to use high-fidelity rendering (this includes, e.g., isosurfaces)
 gm.ENABLE_HQ_RENDERING = False
@@ -63,7 +63,7 @@ gm.DEFAULT_VIEWER_WIDTH = 1280
 gm.DEFAULT_VIEWER_HEIGHT = 720
 
 # Whether to use encrypted assets
-gm.USE_ENCRYPTED_ASSETS = True
+gm.USE_ENCRYPTED_ASSETS = False
 
 # (Demo-purpose) Whether to activate Assistive Grasping mode for Cloth (it's handled differently from RigidBody)
 gm.AG_CLOTH = False

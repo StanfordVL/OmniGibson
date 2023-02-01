@@ -16,8 +16,6 @@ from omni.isaac.core.utils.rotations import gf_quat_to_np_array
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.maps.segmentation_map import SegmentationMap
 from omnigibson.utils.asset_utils import (
-    get_3dfront_scene_path,
-    get_cubicasa_scene_path,
     get_og_category_ids,
     get_og_category_path,
     get_og_model_path,
@@ -29,8 +27,6 @@ from omnigibson.utils.sim_utils import check_collision
 
 SCENE_SOURCE_PATHS = {
     "IG": get_og_scene_path,
-    "CUBICASA": get_cubicasa_scene_path,
-    "THREEDFRONT": get_3dfront_scene_path,
 }
 
 
@@ -773,7 +769,7 @@ class InteractiveTraversableSceneOld(TraversableSceneOld):
         self.get_scene_loading_info(usd_file=usd_file, usd_path=usd_path)
 
         # Load room semantic and instance segmentation map (must occur AFTER inferring scene directory)
-        self._seg_map = SegmentationMap(scene_dir=self.scene_dir, map_resolution=seg_map_resolution)
+        # self._seg_map = SegmentationMap(scene_dir=self.scene_dir, map_resolution=seg_map_resolution)
 
         # Decide which room(s) and object categories to load
         self.filter_rooms_and_object_categories(
