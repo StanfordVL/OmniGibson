@@ -8,10 +8,13 @@ import sys
 import shutil
 import subprocess
 import tempfile
+import threading
 import traceback
 import xml.etree.ElementTree as ET
 from collections import OrderedDict
 from xml.dom import minidom
+
+from dask.distributed import Client
 
 import networkx as nx
 import numpy as np
@@ -43,12 +46,46 @@ MTL_MAPPING = {
     # "map_Ks": "ao",
 }
 
+# TODO: Make this use a local version if necessary.
+client = Client('10.79.12.70:35422')
+
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.ndarray):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
+
+
+def call_vhacd(obj_file_path, dest_file_path):
+    # This is the function that sends VHACD requests to a worker. It needs to read the contents
+    # of the source file into memory, transmit that to the worker, receive the contents of the
+    # result file and save those at the destination path.
+    with open(obj_file_path, 'rb') as f:
+        file_bytes = f.read()
+    data_future = client.scatter(file_bytes)
+    vhacd_future = client.submit(vhacd_worker, data_future)
+    result = vhacd_future.result()
+    if not result:
+        print("vhacd failed on object", obj_file_path)
+        return
+    with open(dest_file_path, 'wb') as f:
+        f.write(result)
+
+
+def vhacd_worker(file_bytes):
+    # This is the function that runs on the worker. It needs to locally save the sent file bytes,
+    # call VHACD on that file, grab the output file's contents and return it as a bytes object.
+    with tempfile.TemporaryDirectory() as td:
+        in_path = os.path.join(td, "in.obj")
+        out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
+        with open(in_path, 'wb') as f:
+            f.write(file_bytes)
+        vhacd = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
+        vhacd_cmd = [str(vhacd), in_path, "-r", "1000000", "-d", "15", "-v", "60"]
+        assert subprocess.call(vhacd_cmd, shell=False, stdout=subprocess.DEVNULL, cwd=td) == 0
+        with open(out_path, 'rb') as f:
+            return f.read()
 
 
 def timeout(timelimit):
@@ -179,15 +216,15 @@ def compute_link_aligned_bounding_boxes(G, root_node):
 
 def compute_object_bounding_box(root_node_data):
     combined_mesh = root_node_data["combined_mesh"]
-    base_mesh_center = get_mesh_center(root_node_data["lower_mesh"])
+    combined_mesh_center = get_mesh_center(combined_mesh)
     mesh_orientation = root_node_data["metadata"]["orientation"]
-    canonical_combined_mesh = transform_mesh(combined_mesh, base_mesh_center, mesh_orientation)
+    canonical_combined_mesh = transform_mesh(combined_mesh, combined_mesh_center, mesh_orientation)
     base_link_offset = canonical_combined_mesh.bounding_box.centroid
     bbox_size = canonical_combined_mesh.bounding_box.extents
 
     # Compute the bbox world centroid
     bbox_world_rotation = R.from_quat(mesh_orientation)
-    bbox_world_centroid = base_mesh_center + bbox_world_rotation.apply(base_link_offset)
+    bbox_world_centroid = combined_mesh_center + bbox_world_rotation.apply(base_link_offset)
 
     return bbox_size, base_link_offset, bbox_world_centroid, bbox_world_rotation
 
@@ -251,14 +288,14 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                 shutil.copy(link_obj_path, visual_shape_file)
             except shutil.SameFileError:
                 pass
-
+            
             # Generate collision mesh
             collision_shape_file = obj_link_collision_mesh_folder / obj_relative_path
             vhacd = PIPELINE_ROOT / "b1k_pipeline" / "vhacd.exe"
-            vhacd_cmd = [str(vhacd), "--input", str(visual_shape_file.absolute()), "--output", str(collision_shape_file.absolute()), "--log", "NUL"]
-            print("Running vhacd:", " ".join(vhacd_cmd))
-            assert subprocess.call(vhacd_cmd, shell=False, stdout=subprocess.DEVNULL) == 0
-
+            call_vhacd(str(visual_shape_file.absolute()), str(collision_shape_file.absolute()))
+            # vhacd_cmd = [str(vhacd), "--input", str(visual_shape_file.absolute()), "--output", str(collision_shape_file.absolute()), "--log", "NUL", "--resolution", "10000000", "--depth 15"]
+            # print("Running vhacd:", " ".join(vhacd_cmd))
+            # assert subprocess.call(vhacd_cmd, shell=False, stdout=subprocess.DEVNULL) == 0
             # Store the final meshes
             G.nodes[link_node]["visual_mesh"] = canonical_mesh.copy()
             G.nodes[link_node]["collision_mesh"] = trimesh.load(str(collision_shape_file), process=False, force="mesh", skip_materials=True, maintain_order=True)
@@ -515,13 +552,34 @@ def main():
         roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
         # Only save the 0th instance.
-        saveable_roots = tqdm.tqdm([root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]])
+        saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
+        threadpool = []
+        threadpool_mesh_names = []
         for root_node in saveable_roots:
             obj_cat, obj_model, obj_inst_id, _ = root_node
-            saveable_roots.set_description(f"{obj_cat}-{obj_model}")
 
-            # Start processing the object.
-            process_object(G, root_node, output_dir)
+            # Start processing the object. We start by creating an object-specific
+            # copy of the mesh tree.
+            Gprime = G.subgraph(nx.dfs_tree(G, root_node).nodes()).copy()
+
+            t = threading.Thread(target=process_object, args=[Gprime, root_node, output_dir])
+            threadpool.append(t)
+            threadpool_mesh_names.append(root_node)
+            t.start()
+
+        # Show a rudimentary progress bar.
+        # with tqdm.tqdm(total=len(threadpool)) as pbar:
+        #     while True:
+        #         still_running = sum(1 for t in threadpool if t.is_alive())
+        #         completed = len(threadpool) - still_running
+        #         pbar.update(completed)
+        #         time.sleep(1)
+
+        # Actually join the threads.
+        for i, t in enumerate(threadpool):
+            print("waiting on {}".format(threadpool_mesh_names[i]))
+            t.join()
+            print("thread {}/{} finished".format(i + 1, len(threadpool)))
     except Exception as e:
         error = traceback.format_exc()
 
