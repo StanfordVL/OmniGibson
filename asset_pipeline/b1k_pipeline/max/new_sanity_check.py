@@ -33,16 +33,18 @@ ALLOWED_TAGS = {
 ALLOWED_PART_TAGS = {
     "sub_part",
     "extra_part",
+    "connected_part",
 }
 
 
 ALLOWED_META_IS_DIMENSIONLESS = {
-    'watersource': True,
-    'togglebutton': True,
+    'fluidsource': True,
+    'togglebutton': False,
     'attachment': True,
     'heatsource': True,
+    'particleapplier': False,
     'particleremover': False,
-    'waterdrain': False,
+    'fluidsink': False,
     'slicer': False,
     'fillable': False,
 }
