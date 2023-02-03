@@ -13,8 +13,6 @@ import csv
 
 OBJECT_CATEGORY_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "metadata" / "category_mapping.csv"
 ROOM_TYPE_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "metadata" / "allowed_room_types.csv"
-KEY_FILE = b1k_pipeline.utils.PIPELINE_ROOT / "keys" / "b1k-dataset-6966129845c0.json"
-FAKE_SYNSETS = {"knife_block.n.01"}
 PARAMS_FILE = b1k_pipeline.utils.PIPELINE_ROOT / "params.yaml"
 
 def get_category_mapping():
