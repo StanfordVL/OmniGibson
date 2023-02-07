@@ -27,13 +27,13 @@ ALLOWED_TAGS = {
     "soft",
     "glass",
     "openable",
-    "openable_both_sides",
+    "openablebothsides",
 }
 
 ALLOWED_PART_TAGS = {
-    "sub_part",
-    "extra_part",
-    "connected_part",
+    "subpart",
+    "extrapart",
+    "connectedpart",
 }
 
 

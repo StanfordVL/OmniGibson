@@ -7,19 +7,18 @@ stages:
       deps:
       - cad/${item}/processed.max
       # - cad/${item}/textures
-      # - b1k_pipeline/max/new_sanity_check.py
+      - b1k_pipeline/max/new_sanity_check.py
       outs:
       - cad/${item}/artifacts/sanitycheck.json
 
   sanitycheck_success:
-    foreach: ${combined}
-    do:
-      cmd: 'python b1k_pipeline/check_success.py cad/${item}/artifacts/sanitycheck.json cad/${item}/artifacts/sanitycheck.success'
-      deps:
-      - cad/${item}/artifacts/sanitycheck.json
-      - b1k_pipeline/check_success.py
-      outs:
-      - cad/${item}/artifacts/sanitycheck.success
+    cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/sanitycheck.json artifacts/pipeline/sanitycheck.success'
+    deps:
+    - cad/#{combined}/artifacts/sanitycheck.json
+    - b1k_pipeline/check_success_aggregate.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/sanitycheck.success
 
   object_list:
     # List the objects found in the entry.
@@ -29,25 +28,24 @@ stages:
       deps:
       - b1k_pipeline/max/object_list.py
       - cad/${item}/processed.max
-      # - cad/${item}/artifacts/sanitycheck.json
       outs:
       - cad/${item}/artifacts/object_list.json
 
   object_list_success:
-    foreach: ${combined}
-    do:
-      cmd: 'python b1k_pipeline/check_success.py cad/${item}/artifacts/object_list.json cad/${item}/artifacts/object_list.success'
-      deps:
-      - cad/${item}/artifacts/object_list.json
-      - b1k_pipeline/check_success.py
-      outs:
-      - cad/${item}/artifacts/object_list.success
+    cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/object_list.json artifacts/pipeline/object_list.success'
+    deps:
+    - cad/#{combined}/artifacts/object_list.json
+    - b1k_pipeline/check_success_aggregate.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/object_list.success
 
   object_inventory:
     # List all objects found in all entries, with their sources. Cross-reference bad objects w/ providers. Check provider uniqueness.
     cmd: 'python b1k_pipeline/object_inventory.py'
     deps:
     - cad/#{combined}/artifacts/object_list.json
+    - artifacts/pipeline/object_list.success
     - b1k_pipeline/object_inventory.py
     - params.yaml
     outs:
@@ -74,47 +72,44 @@ stages:
       deps:
       - b1k_pipeline/max/export_meshes.py
       - cad/${item}/artifacts/object_list.json
-      # - cad/${item}/artifacts/sanitycheck.success
+      - artifacts/pipeline/sanitycheck.success
       - cad/${item}/processed.max
+      - params.yaml
       outs:
       - cad/${item}/artifacts/meshes
       - cad/${item}/artifacts/export_meshes.json
 
   export_meshes_success:
-    foreach: ${combined}
-    do:
-      cmd: 'python b1k_pipeline/check_success.py cad/${item}/artifacts/export_meshes.json cad/${item}/artifacts/export_meshes.success'
-      deps:
-      - cad/${item}/artifacts/export_meshes.json
-      - b1k_pipeline/check_success.py
-      outs:
-      - cad/${item}/artifacts/export_meshes.success
+    cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/export_meshes.json artifacts/pipeline/export_meshes.success'
+    deps:
+    - cad/#{combined}/artifacts/export_meshes.json
+    - b1k_pipeline/check_success_aggregate.py
+    outs:
+    - artifacts/pipeline/export_meshes.success
 
-  export_objs:
-    # Process exported meshes into iGibson objects.
-    foreach: ${combined}
-    do:
-      cmd: 'python -m b1k_pipeline.export_objs ${item}'
-      deps:
-      - cad/${item}/artifacts/export_meshes.success
-      - cad/${item}/artifacts/meshes
-      - cad/${item}/artifacts/object_list.success
-      - cad/${item}/artifacts/object_list.json
-      - b1k_pipeline/export_objs.py
-      - b1k_pipeline/mesh_tree.py
-      outs:
-      - cad/${item}/artifacts/objects
-      - cad/${item}/artifacts/export_objs.json
+  # export_objs:
+  #   # Process exported meshes into iGibson objects.
+  #   foreach: ${combined}
+  #   do:
+  #     cmd: 'python -m b1k_pipeline.export_objs ${item}'
+  #     deps:
+  #     - cad/${item}/artifacts/export_meshes.success
+  #     - cad/${item}/artifacts/meshes
+  #     - cad/${item}/artifacts/object_list.success
+  #     - cad/${item}/artifacts/object_list.json
+  #     - b1k_pipeline/export_objs.py
+  #     - b1k_pipeline/mesh_tree.py
+  #     outs:
+  #     - cad/${item}/artifacts/objects
+  #     - cad/${item}/artifacts/export_objs.json
 
-  export_objs_success:
-    foreach: ${combined}
-    do:
-      cmd: 'python b1k_pipeline/check_success.py cad/${item}/artifacts/export_objs.json cad/${item}/artifacts/export_objs.success'
-      deps:
-      - cad/${item}/artifacts/export_objs.json
-      - b1k_pipeline/check_success.py
-      outs:
-      - cad/${item}/artifacts/export_objs.success
+  # export_objs_success:
+  #   cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/export_objs.json artifacts/pipeline/export_objs.success'
+  #   deps:
+  #   - cad/#{combined}/artifacts/export_objs.json
+  #   - b1k_pipeline/check_success_aggregate.py
+  #   outs:
+  #   - artifacts/pipeline/export_objs.success
 
   # validate_objs:
   #   # Validate exported objects.
@@ -129,19 +124,42 @@ stages:
   #     - cad/${item}/artifacts/validate_objs.json
   #     - cad/${item}/artifacts/validate_objs.success
 
-  aggregate_objs:
-    # Aggregate objects from different entries into a single location.
-    cmd: 'python b1k_pipeline/aggregate_objs.py'
+  # aggregate_objs:
+  #   # Aggregate objects from different entries into a single location.
+  #   cmd: 'python b1k_pipeline/aggregate_objs.py'
+  #   deps:
+  #   - b1k_pipeline/aggregate_objs.py
+  #   - cad/#{combined}/artifacts/export_objs.success
+  #   - cad/#{combined}/artifacts/objects
+  #   - artifacts/pipeline/object_inventory.json
+  #   - artifacts/pipeline/object_inventory.success
+  #   outs:
+  #   - artifacts/aggregate/objects
+  #   - artifacts/pipeline/aggregate_objs.success
+  #   - artifacts/pipeline/aggregate_objs.json
+
+  export_objs_global:
+    # Process exported meshes into iGibson objects.
+    cmd: 'python -m b1k_pipeline.export_objs_global'
     deps:
-    - b1k_pipeline/aggregate_objs.py
-    - cad/#{combined}/artifacts/export_objs.success
-    - cad/#{combined}/artifacts/objects
-    - artifacts/pipeline/object_inventory.json
-    - artifacts/pipeline/object_inventory.success
+    - cad/#{combined}/artifacts/meshes
+    - cad/#{combined}/artifacts/object_list.json
+    - artifacts/pipeline/object_list.success
+    - artifacts/pipeline/sanitycheck.success
+    - artifacts/pipeline/export_meshes.success
+    - b1k_pipeline/export_objs_global.py
+    - b1k_pipeline/mesh_tree.py
     outs:
     - artifacts/aggregate/objects
-    - artifacts/pipeline/aggregate_objs.success
-    - artifacts/pipeline/aggregate_objs.json
+    - artifacts/pipeline/export_objs.json
+
+  export_objs_global_success:
+    cmd: 'python b1k_pipeline/check_success.py artifacts/pipeline/export_objs.json artifacts/pipeline/export_objs.success'
+    deps:
+    - artifacts/pipeline/export_objs.json
+    - b1k_pipeline/check_success.py
+    outs:
+    - artifacts/pipeline/export_objs.success
 
   # usdify_objs:
   #   # Convert the objects to USD.
@@ -178,30 +196,30 @@ stages:
   #     - cad/${item}/artifacts/camera_images
   #     - cad/${item}/artifacts/generate_camera_images.success
 
-  room_object_list:
-    # Generate a list of all objects found in each room in each scene.
-    foreach: ${scenes_unfiltered}
-    do:
-      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/room_object_list.py'
-      deps:
-      - b1k_pipeline/max/room_object_list.py
-      - cad/${item}/processed.max
-      # - cad/${item}/artifacts/sanitycheck.json
-      outs:
-      - cad/${item}/artifacts/room_object_list.json
-      - cad/${item}/artifacts/room_object_list.success
+  # room_object_list:
+  #   # Generate a list of all objects found in each room in each scene.
+  #   foreach: ${scenes_unfiltered}
+  #   do:
+  #     cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/room_object_list.py'
+  #     deps:
+  #     - b1k_pipeline/max/room_object_list.py
+  #     - cad/${item}/processed.max
+  #     # - cad/${item}/artifacts/sanitycheck.json
+  #     outs:
+  #     - cad/${item}/artifacts/room_object_list.json
+  #     - cad/${item}/artifacts/room_object_list.success
       
-  combined_room_object_list:
-    # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
-    cmd: 'python b1k_pipeline/combined_room_object_list.py'
-    deps:
-    - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
-    - cad/#{scenes_unfiltered}/artifacts/room_object_list.success
-    - b1k_pipeline/combined_room_object_list.py
-    - params.yaml
-    outs:
-    - artifacts/pipeline/combined_room_object_list.json
-    - artifacts/pipeline/combined_room_object_list.success
+  # combined_room_object_list:
+  #   # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
+  #   cmd: 'python b1k_pipeline/combined_room_object_list.py'
+  #   deps:
+  #   - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
+  #   - cad/#{scenes_unfiltered}/artifacts/room_object_list.success
+  #   - b1k_pipeline/combined_room_object_list.py
+  #   - params.yaml
+  #   outs:
+  #   - artifacts/pipeline/combined_room_object_list.json
+  #   - artifacts/pipeline/combined_room_object_list.success
 
   export_scene:
     # Generate scene URDF file from meshes.
@@ -209,7 +227,7 @@ stages:
     do:
       cmd: 'python -m b1k_pipeline.export_scene ${item}'
       deps:
-      - cad/${item}/artifacts/export_meshes.success
+      - artifacts/pipeline/export_meshes.success
       - cad/${item}/artifacts/meshes
       - artifacts/aggregate/objects
       - artifacts/pipeline/aggregate_objs.success
@@ -218,7 +236,15 @@ stages:
       - b1k_pipeline/mesh_tree.py
       outs:
       - cad/${item}/artifacts/scene
-      - cad/${item}/artifacts/export_scene.success
+      - cad/${item}/artifacts/export_scene.json
+
+  export_scene_success:
+    cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/export_scene.json artifacts/pipeline/export_scene.success'
+    deps:
+    - cad/#{scenes}/artifacts/export_scene.json
+    - b1k_pipeline/check_success_aggregate.py
+    outs:
+    - artifacts/pipeline/export_scene.success
 
   validate_scene:
     # Validate exported scene, e.g. physics stability.
@@ -227,11 +253,18 @@ stages:
       cmd: 'python -m b1k_pipeline.validate_scene ${item}'
       deps:
       - cad/${item}/artifacts/scene
-      - cad/${item}/artifacts/export_scene.success
+      - artifacts/aggregate/export_scene.success
       - b1k_pipeline/validate_scene.py
       outs:
       - cad/${item}/artifacts/validate_scene.json
-      - cad/${item}/artifacts/validate_scene.success
+
+  validate_scene_success:
+    cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/validate_scene.json artifacts/pipeline/validate_scene.success'
+    deps:
+    - cad/#{scenes}/artifacts/validate_scene.json
+    - b1k_pipeline/check_success_aggregate.py
+    outs:
+    - artifacts/pipeline/validate_scene.success
 
   aggregate_scenes:
     # Aggregate scenes from different entries into a single location.
@@ -257,6 +290,13 @@ stages:
     outs:
     - artifacts/aggregate/metadata
     - artifacts/pipeline/aggregate_metadata.json
+
+  aggregate_metadata_success:
+    cmd: 'python b1k_pipeline/check_success.py artifacts/pipeline/aggregate_metadata.json artifacts/pipeline/aggregate_metadata.success'
+    deps:
+    - artifacts/pipeline/aggregate_metadata.json
+    - b1k_pipeline/check_success.py
+    outs:
     - artifacts/pipeline/aggregate_metadata.success
 
   # usdify_scenes:
@@ -274,6 +314,9 @@ stages:
     # Zip the dataset.
     cmd: 'python b1k_pipeline/pack_dataset.py'
     deps:
+    - artifacts/pipeline/aggregate_metadata.success
+    - artifacts/pipeline/aggregate_scenes.success
+    - artifacts/pipeline/export_objs.success
     - artifacts/aggregate/metadata
     - artifacts/aggregate/objects
     - artifacts/aggregate/scenes

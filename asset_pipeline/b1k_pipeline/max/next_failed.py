@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append(r"D:\ig_pipeline")
+
 import glob
 import json
 import pathlib
@@ -7,6 +11,8 @@ from collections import defaultdict
 import numpy as np
 import pymxs
 from scipy.spatial.transform import Rotation as R
+
+import b1k_pipeline.utils
 
 rt = pymxs.runtime
 
@@ -36,8 +42,8 @@ def file_eligible(objdir):
 
 def next_failed():
     eligible_max = []
-    for objdir in glob.glob(r"D:\ig_pipeline\cad\objects\*"):
-        objdir = pathlib.Path(objdir)
+    for target in b1k_pipeline.utils.get_targets("objects"):
+        objdir = b1k_pipeline.utils.PIPELINE_ROOT / "cad" / target
         if objdir.exists() and file_eligible(objdir):
             eligible_max.append(objdir / "processed.max")
 
@@ -45,7 +51,15 @@ def next_failed():
     print(len(eligible_max), "files remaining.")
     print("\n".join(str(x) for x in eligible_max))
     if eligible_max:
-        scene_file = eligible_max[0]
+        # Find current file in the list
+        current_max_dir = pathlib.Path(rt.maxFilePath).resolve()
+        next_idx = 0
+        try:
+            next_idx = (next(i for i, max in enumerate(eligible_max) if max.parent.resolve() == current_max_dir) + 1) % len(eligible_max)
+        except:
+            pass
+
+        scene_file = eligible_max[next_idx]
         assert (
             not scene_file.is_symlink()
         ), f"File {scene_file} should not be a symlink."
