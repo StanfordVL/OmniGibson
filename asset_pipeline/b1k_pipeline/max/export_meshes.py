@@ -90,6 +90,8 @@ class ObjectExporter:
         return map_name_to_ids
 
     def should_bake_texture(self, obj):
+        return False
+
         if not self.export_textures:
             return False
 
@@ -287,8 +289,8 @@ class ObjectExporter:
             if obj_name_result.group("category") == light_name_result.group("category") and obj_name_result.group("model_id") == light_name_result.group("model_id") and obj_name_result.group("instance_id") == light_name_result.group("instance_id"):
                 assert light.normalizeColor == 1, "The light's unit is NOT lm."
                 assert light_name_result.group("light_id"), "The light does not have an ID."
-                light_id = int(light_name_result.group("light_id"))
-                metadata["meta_links"]["lights"][light_id] = {
+                light_id = str(int(light_name_result.group("light_id")))
+                metadata["meta_links"]["lights"][light_id]["0"] = {
                     "type": light.type,
                     "length": light.sizeLength,
                     "width": light.sizeWidth,
@@ -314,10 +316,10 @@ class ObjectExporter:
             meta_info = child_name_result.group("meta_info")
             meta_type = child_name_result.group("meta_type")
             meta_id_str = child_name_result.group("meta_id")
-            meta_id = 0 if meta_id_str is None else int(meta_id_str)
+            meta_id = "0" if meta_id_str is None else meta_id_str
             assert meta_id not in metadata["meta_links"][meta_type], f"Meta ID {meta_id} is repeated in object {obj.name}"
             meta_subid_str = child_name_result.group("meta_subid")
-            meta_subid = 0 if meta_subid_str is None else int(meta_subid_str)
+            meta_subid = "0" if meta_subid_str is None else meta_subid_str
             assert meta_subid not in metadata["meta_links"][meta_type][meta_id], f"Meta subID {meta_info} is repeated in object {obj.name}"
             object_transform = child.objecttransform  # This is a 4x3 array
             position = object_transform.position
