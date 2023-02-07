@@ -26,6 +26,8 @@ def main():
     if failures:
         print("Failures found!")
         print("\n".join(failures))
+        print("\nTo edit the failed files, copy and paste the below command, and use the Next Failed button on 3ds Max:")
+        print("dvc unprotect " + " ".join(f"cad/{x}/processed.max" for x in failures))
         return
 
     # Otherwise, save the success file
