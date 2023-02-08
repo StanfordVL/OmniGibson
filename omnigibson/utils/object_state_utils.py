@@ -17,21 +17,24 @@ import omnigibson.utils.transform_utils as T
 m = create_module_macros(module_path=__file__)
 
 m.ON_TOP_RAY_CASTING_SAMPLING_PARAMS = Dict({
-    # "hit_to_plane_threshold": 0.1,  # TODO: Tune this parameter.
-    "max_angle_with_z_axis": 0.17,
     "bimodal_stdev_fraction": 1e-6,
     "bimodal_mean_fraction": 1.0,
-    "max_sampling_attempts": 50,
     "aabb_offset": 0.01,
+    "max_sampling_attempts": 50,
 })
 
 m.INSIDE_RAY_CASTING_SAMPLING_PARAMS = Dict({
-    # "hit_to_plane_threshold": 0.1,  # TODO: Tune this parameter.
-    "max_angle_with_z_axis": 0.17,
     "bimodal_stdev_fraction": 0.4,
     "bimodal_mean_fraction": 0.5,
+    "aabb_offset": 0.0,
     "max_sampling_attempts": 100,
-    "aabb_offset": -0.01,
+})
+
+m.UNDER_RAY_CASTING_SAMPLING_PARAMS = Dict({
+    "bimodal_stdev_fraction": 1e-6,
+    "bimodal_mean_fraction": 0.5,
+    "aabb_offset": 0.01,
+    "max_sampling_attempts": 50,
 })
 
 
@@ -110,8 +113,10 @@ def sample_kinematics(
                 params = m.ON_TOP_RAY_CASTING_SAMPLING_PARAMS
             elif predicate == "inside":
                 params = m.INSIDE_RAY_CASTING_SAMPLING_PARAMS
+            elif predicate == "under":
+                params = m.UNDER_RAY_CASTING_SAMPLING_PARAMS
             else:
-                raise ValueError(f"predicate must be either onTop or inside in order to use ray casting-based "
+                raise ValueError(f"predicate must be onTop, under or inside in order to use ray casting-based "
                                  f"kinematic sampling, but instead got: {predicate}")
 
             # Run import here to avoid circular imports
@@ -127,15 +132,35 @@ def sample_kinematics(
                 parallel_bbox_orn = np.array([0.0, 0.0, 0.0, 1.0])
                 parallel_bbox_extents = aabb_upper - aabb_lower
 
-            sampling_results = sampling_utils.sample_cuboid_on_object_symmetric_bimodal_distribution(
-                objB,
-                num_samples=1,
-                cuboid_dimensions=parallel_bbox_extents,
-                axis_probabilities=[0, 0, 1],
-                refuse_downwards=True,
-                undo_cuboid_bottom_padding=True,
-                **params,
-            )
+            if predicate == "under":
+                start_points, end_points = sampling_utils.sample_raytest_start_end_symmetric_bimodal_distribution(
+                    obj=objB,
+                    num_samples=1,
+                    axis_probabilities=[0, 0, 1],
+                    **params,
+                )
+                sampling_results = sampling_utils.sample_cuboid_on_object(
+                    obj=None,
+                    start_points=start_points,
+                    end_points=end_points,
+                    ignore_objs=[objB],
+                    cuboid_dimensions=parallel_bbox_extents,
+                    refuse_downwards=True,
+                    undo_cuboid_bottom_padding=True,
+                    max_angle_with_z_axis=0.17,
+                    hit_proportion=0.0,  # rays will NOT hit the object itself, but the surface below it.
+                )
+            else:
+                sampling_results = sampling_utils.sample_cuboid_on_object_symmetric_bimodal_distribution(
+                    objB,
+                    num_samples=1,
+                    axis_probabilities=[0, 0, 1],
+                    cuboid_dimensions=parallel_bbox_extents,
+                    refuse_downwards=True,
+                    undo_cuboid_bottom_padding=True,
+                    max_angle_with_z_axis=0.17,
+                    **params,
+                )
 
             sampled_vector = sampling_results[0][0]
             sampled_quaternion = sampling_results[0][2]
