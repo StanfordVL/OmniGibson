@@ -90,8 +90,6 @@ class ObjectExporter:
         return map_name_to_ids
 
     def should_bake_texture(self, obj):
-        return False
-
         if not self.export_textures:
             return False
 
