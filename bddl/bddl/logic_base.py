@@ -27,7 +27,7 @@ class AtomicFormula(Expression):
 class BinaryAtomicFormula(AtomicFormula):
     STATE_NAME = None
 
-    def __init__(self, scope, backend, body, object_map):
+    def __init__(self, scope, backend, body, object_map, generate_ground_options=True):
         super().__init__(scope, backend, body, object_map)
         assert len(body) == 2, 'Param list should have 2 args'
         self.input1, self.input2 = [inp.strip('?') for inp in body]
@@ -35,15 +35,16 @@ class BinaryAtomicFormula(AtomicFormula):
         try:
             if isinstance(self.scope[self.input1], str):
                 self.input1 = self.scope[self.input1]
-        except KeyError:
-            raise UncontrolledCategoryError
+        except KeyError as e:
+            raise UncontrolledCategoryError(e)
         try:
             if isinstance(self.scope[self.input2], str):
                 self.input2 = self.scope[self.input2]
-        except KeyError:
-            raise UncontrolledCategoryError
+        except KeyError as e:
+            raise UncontrolledCategoryError(e)
 
-        self.get_ground_options()
+        if generate_ground_options:
+            self.get_ground_options()
 
     @abstractmethod
     def _evaluate(self, obj1, obj2):
@@ -75,7 +76,7 @@ class BinaryAtomicFormula(AtomicFormula):
 class UnaryAtomicFormula(AtomicFormula):
     STATE_NAME = None
 
-    def __init__(self, scope, backend, body, object_map):
+    def __init__(self, scope, backend, body, object_map, generate_ground_options=True):
         super().__init__(scope, backend, body, object_map)
         assert len(body) == 1, 'Param list should have 1 arg'
         self.input = body[0].strip('?')
@@ -83,10 +84,11 @@ class UnaryAtomicFormula(AtomicFormula):
         try:
             if isinstance(self.scope[self.input], str):
                 self.input = self.scope[self.input]
-        except KeyError:
-            raise UncontrolledCategoryError
-
-        self.get_ground_options()
+        except KeyError as e:
+            raise UncontrolledCategoryError(e)
+        
+        if generate_ground_options:
+            self.get_ground_options()
 
     @abstractmethod
     def _evaluate(self, obj):
