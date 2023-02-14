@@ -67,8 +67,7 @@ def call_vhacd(obj_file_path, dest_file_path):
     vhacd_future = client.submit(vhacd_worker, data_future)
     result = vhacd_future.result()
     if not result:
-        print("vhacd failed on object", obj_file_path)
-        return
+        raise ValueError("vhacd failed on object " + str(obj_file_path))
     with open(dest_file_path, 'wb') as f:
         f.write(result)
 
