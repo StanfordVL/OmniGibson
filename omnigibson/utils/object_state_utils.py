@@ -10,6 +10,7 @@ from omnigibson.macros import create_module_macros, Dict
 from omnigibson.object_states.aabb import AABB
 from omnigibson.object_states.contact_bodies import ContactBodies
 from omnigibson.utils import sampling_utils
+from omnigibson.utils.constants import PrimType
 import omnigibson.utils.transform_utils as T
 
 
@@ -121,7 +122,7 @@ def sample_kinematics(
 
             # Run import here to avoid circular imports
             from omnigibson.objects.dataset_object import DatasetObject
-            if isinstance(objA, DatasetObject):
+            if isinstance(objA, DatasetObject) and objA.prim_type == PrimType.RIGID:
                 # Retrieve base CoM frame-aligned bounding box parallel to the XY plane
                 parallel_bbox_center, parallel_bbox_orn, parallel_bbox_extents, _ = objA.get_base_aligned_bbox(
                     xy_aligned=True

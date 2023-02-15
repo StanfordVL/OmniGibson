@@ -45,9 +45,9 @@ class Unfolded(AbsoluteObjectState, BooleanState):
         return flag_area and flag_diagonal
 
     def _set_value(self, new_value):
-        """
-        Set the unfolded state. Currently, it's not supported yet.
-        """
-        raise NotImplementedError("_set_value of the Unfolded state has not been implemented")
+        if not new_value:
+            raise NotImplementedError("Unfolded does not support set_value(False)")
+
+        self.obj.root_link.reset()
 
     # We don't need to dump / load anything since the cloth objects should handle it themselves

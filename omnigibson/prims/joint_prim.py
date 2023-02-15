@@ -827,9 +827,13 @@ class JointPrim(BasePrim):
                 self.set_vel(state["target_vel"], target=True)
 
     def _serialize(self, state):
-        # We serialize by iterating over the keys and adding them to a list that's concatenated at the end
-        # This is a deterministic mapping because we assume the state is an OrderedDict
-        return np.concatenate(list(state.values())).astype(float)
+        return np.concatenate([
+            state["pos"],
+            state["vel"],
+            state["effort"],
+            state["target_pos"],
+            state["target_vel"],
+        ]).astype(float)
 
     def _deserialize(self, state):
         # We deserialize deterministically by knowing the order of values -- pos, vel, effort

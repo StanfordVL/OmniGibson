@@ -45,22 +45,6 @@ class GeomPrim(XFormPrim):
         # By default, GeomPrim shows up in the rendering.
         self.purpose = "default"
 
-    def _dump_state(self):
-        # No state to dump
-        return OrderedDict()
-
-    def _load_state(self, state):
-        # No state to load
-        pass
-
-    def _serialize(self, state):
-        # No state to serialize
-        return np.array([])
-
-    def _deserialize(self, state):
-        # No state to deserialize
-        return OrderedDict()
-
     def duplicate(self, simulator, prim_path):
         # Cannot directly duplicate a mesh prim
         raise NotImplementedError("Cannot directly duplicate a geom prim!")

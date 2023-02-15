@@ -45,9 +45,10 @@ class Folded(AbsoluteObjectState, BooleanState):
         return flag_area and flag_diagonal
 
     def _set_value(self, new_value):
-        """
-        Set the folded state. Currently, it's not supported yet.
-        """
-        raise NotImplementedError("_set_value of the Folded state has not been implemented")
+        if not new_value:
+            raise NotImplementedError("Folded does not support set_value(False)")
+
+        # TODO (eric): add this support
+        raise NotImplementedError("Folded does not support set_value(True)")
 
     # We don't need to dump / load anything since the cloth objects should handle it themselves
