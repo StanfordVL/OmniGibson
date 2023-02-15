@@ -47,7 +47,7 @@ MTL_MAPPING = {
 }
 
 # TODO: Make this use a local version if necessary.
-client = Client('10.79.12.70:35423')
+client = Client('10.79.12.70:35423', direct_to_workers=True)
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -63,8 +63,13 @@ def call_vhacd(obj_file_path, dest_file_path):
     # result file and save those at the destination path.
     with open(obj_file_path, 'rb') as f:
         file_bytes = f.read()
-    data_future = client.scatter(file_bytes)
-    vhacd_future = client.submit(vhacd_worker, data_future)
+    # data_future = client.scatter(file_bytes)
+    data_future = file_bytes
+    vhacd_future = client.submit(
+        vhacd_worker,
+        data_future,
+        key=obj_file_path,
+        retries=10)
     result = vhacd_future.result()
     if not result:
         raise ValueError("vhacd failed on object " + str(obj_file_path))
@@ -82,9 +87,14 @@ def vhacd_worker(file_bytes):
             f.write(file_bytes)
         vhacd = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
         vhacd_cmd = [str(vhacd), in_path, "-r", "1000000", "-d", "15", "-v", "60"]
-        proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
-        with open(out_path, 'rb') as f:
-            return f.read()
+        try:
+            proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
+            with open(out_path, 'rb') as f:
+                return f.read()
+        except subprocess.CalledProcessError as e:
+            raise ValueError(f"VHACD failed with exit code {e.returncode}. Output:\n{e.output}")
+        except futures.CancelledError as e:
+            raise ValueError("Got ")
 
 
 def timeout(timelimit):
