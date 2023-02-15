@@ -70,6 +70,7 @@ stages:
     cmd: python b1k_pipeline/check_success_aggregate.py artifacts/export_meshes.json
       artifacts/pipeline/export_meshes.success
     deps:
+    - cad/objects/legacy_alarm-dkwmmf/artifacts/export_meshes.json
     - cad/objects/legacy_almond-acooui/artifacts/export_meshes.json
     - cad/objects/legacy_apple-agveuv/artifacts/export_meshes.json
     - cad/objects/legacy_apple-omzprq/artifacts/export_meshes.json
@@ -118,16 +119,29 @@ stages:
     - cad/objects/legacy_bath_towel-feojdm/artifacts/export_meshes.json
     - cad/objects/legacy_bath_towel-iviyls/artifacts/export_meshes.json
     - cad/objects/legacy_bath_towel-lyqgnf/artifacts/export_meshes.json
+    - cad/objects/legacy_bathtub-azdgtl/artifacts/export_meshes.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/export_meshes.json
+    - cad/objects/legacy_bathtub-gulceo/artifacts/export_meshes.json
+    - cad/objects/legacy_bathtub-oobbwn/artifacts/export_meshes.json
+    - cad/objects/legacy_bathtub-wxrafq/artifacts/export_meshes.json
     - cad/objects/legacy_bean-cdinsu/artifacts/export_meshes.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/export_meshes.json
     - cad/objects/legacy_bean-lvbjws/artifacts/export_meshes.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/export_meshes.json
     - cad/objects/legacy_bed-fnzxxr/artifacts/export_meshes.json
+    - cad/objects/legacy_bed-gcgodj/artifacts/export_meshes.json
+    - cad/objects/legacy_bed-guguqb/artifacts/export_meshes.json
+    - cad/objects/legacy_bed-hkmwyc/artifacts/export_meshes.json
+    - cad/objects/legacy_bed-hojitx/artifacts/export_meshes.json
+    - cad/objects/legacy_bed-lslyyi/artifacts/export_meshes.json
     - cad/objects/legacy_bed-mpgavt/artifacts/export_meshes.json
+    - cad/objects/legacy_bed-nwzbyk/artifacts/export_meshes.json
     - cad/objects/legacy_bed-pqptex/artifacts/export_meshes.json
+    - cad/objects/legacy_bed-rhanfx/artifacts/export_meshes.json
     - cad/objects/legacy_bed-smmmaf/artifacts/export_meshes.json
     - cad/objects/legacy_bed-sztpse/artifacts/export_meshes.json
+    - cad/objects/legacy_bed-wbjidf/artifacts/export_meshes.json
+    - cad/objects/legacy_bed-wfxgbb/artifacts/export_meshes.json
     - cad/objects/legacy_bed-wyxtqf/artifacts/export_meshes.json
     - cad/objects/legacy_bed-yghbxh/artifacts/export_meshes.json
     - cad/objects/legacy_bed-zrumze/artifacts/export_meshes.json
@@ -289,6 +303,7 @@ stages:
     - cad/objects/legacy_bulldog_clip-cqxnkn/artifacts/export_meshes.json
     - cad/objects/legacy_bulletin_board-ayaoal/artifacts/export_meshes.json
     - cad/objects/legacy_bulletin_board-rjlpsy/artifacts/export_meshes.json
+    - cad/objects/legacy_burner-lfyqat/artifacts/export_meshes.json
     - cad/objects/legacy_burner-pmntxh/artifacts/export_meshes.json
     - cad/objects/legacy_butter-ovirmc/artifacts/export_meshes.json
     - cad/objects/legacy_calculator-kwmmty/artifacts/export_meshes.json
@@ -582,8 +597,10 @@ stages:
     - cad/objects/legacy_jeans-pvzxyp/artifacts/export_meshes.json
     - cad/objects/legacy_jewel-syneus/artifacts/export_meshes.json
     - cad/objects/legacy_juice-bbewjo/artifacts/export_meshes.json
+    - cad/objects/legacy_kettle-bzisss/artifacts/export_meshes.json
     - cad/objects/legacy_kettle-tsyims/artifacts/export_meshes.json
     - cad/objects/legacy_kettle-tzbnmh/artifacts/export_meshes.json
+    - cad/objects/legacy_kettle-vjbldp/artifacts/export_meshes.json
     - cad/objects/legacy_keyboard-nddmmy/artifacts/export_meshes.json
     - cad/objects/legacy_kitchen_analog_scale-lpjpez/artifacts/export_meshes.json
     - cad/objects/legacy_kitchen_analog_scale-zpmpoq/artifacts/export_meshes.json
@@ -639,6 +656,9 @@ stages:
     - cad/objects/legacy_medicine-zfbnjh/artifacts/export_meshes.json
     - cad/objects/legacy_microwave-abzvij/artifacts/export_meshes.json
     - cad/objects/legacy_microwave-bfbeeb/artifacts/export_meshes.json
+    - cad/objects/legacy_microwave-hjjxmi/artifacts/export_meshes.json
+    - cad/objects/legacy_microwave-rtfebu/artifacts/export_meshes.json
+    - cad/objects/legacy_microwave-snsqrt/artifacts/export_meshes.json
     - cad/objects/legacy_milk-xbvdpc/artifacts/export_meshes.json
     - cad/objects/legacy_mirror-pevdqu/artifacts/export_meshes.json
     - cad/objects/legacy_modem-axqxsv/artifacts/export_meshes.json
@@ -668,6 +688,15 @@ stages:
     - cad/objects/legacy_orange-ucstpm/artifacts/export_meshes.json
     - cad/objects/legacy_orange-yloghd/artifacts/export_meshes.json
     - cad/objects/legacy_oven-fexqbj/artifacts/export_meshes.json
+    - cad/objects/legacy_oven-hxorzh/artifacts/export_meshes.json
+    - cad/objects/legacy_oven-kfftgk/artifacts/export_meshes.json
+    - cad/objects/legacy_oven-leqtlc/artifacts/export_meshes.json
+    - cad/objects/legacy_oven-nkxhvf/artifacts/export_meshes.json
+    - cad/objects/legacy_oven-nvqqkv/artifacts/export_meshes.json
+    - cad/objects/legacy_oven-qriitd/artifacts/export_meshes.json
+    - cad/objects/legacy_oven-qygclv/artifacts/export_meshes.json
+    - cad/objects/legacy_oven-rwuazb/artifacts/export_meshes.json
+    - cad/objects/legacy_oven-tllnvs/artifacts/export_meshes.json
     - cad/objects/legacy_oven-wuinhm/artifacts/export_meshes.json
     - cad/objects/legacy_package-msfzpz/artifacts/export_meshes.json
     - cad/objects/legacy_package-sxlklf/artifacts/export_meshes.json
@@ -707,6 +736,7 @@ stages:
     - cad/objects/legacy_pencil-zzzvln/artifacts/export_meshes.json
     - cad/objects/legacy_pencil_box-acikzo/artifacts/export_meshes.json
     - cad/objects/legacy_pencil_box-otcmih/artifacts/export_meshes.json
+    - cad/objects/legacy_pepper_grinder-tfoogy/artifacts/export_meshes.json
     - cad/objects/legacy_perfume-ipurzb/artifacts/export_meshes.json
     - cad/objects/legacy_piano-bnxcvw/artifacts/export_meshes.json
     - cad/objects/legacy_piano-ojoiqt/artifacts/export_meshes.json
@@ -907,11 +937,15 @@ stages:
     - cad/objects/legacy_sink-czyfhq/artifacts/export_meshes.json
     - cad/objects/legacy_sink-ejooms/artifacts/export_meshes.json
     - cad/objects/legacy_sink-ksecxq/artifacts/export_meshes.json
+    - cad/objects/legacy_sink-vbquye/artifacts/export_meshes.json
+    - cad/objects/legacy_sink-wzpabm/artifacts/export_meshes.json
     - cad/objects/legacy_sink-xiybkb/artifacts/export_meshes.json
+    - cad/objects/legacy_sink-yfaufu/artifacts/export_meshes.json
     - cad/objects/legacy_sink-zexzrc/artifacts/export_meshes.json
     - cad/objects/legacy_soap-ozifwa/artifacts/export_meshes.json
     - cad/objects/legacy_sock-rhgweu/artifacts/export_meshes.json
     - cad/objects/legacy_sofa-ctjgcl/artifacts/export_meshes.json
+    - cad/objects/legacy_sofa-itbkff/artifacts/export_meshes.json
     - cad/objects/legacy_sofa-jhfkdc/artifacts/export_meshes.json
     - cad/objects/legacy_sofa-mnfbbh/artifacts/export_meshes.json
     - cad/objects/legacy_sofa-ocydlq/artifacts/export_meshes.json
@@ -955,8 +989,13 @@ stages:
     - cad/objects/legacy_stool-sghekm/artifacts/export_meshes.json
     - cad/objects/legacy_stool-xcmniq/artifacts/export_meshes.json
     - cad/objects/legacy_stool-ycfbsd/artifacts/export_meshes.json
+    - cad/objects/legacy_stove-dusebh/artifacts/export_meshes.json
+    - cad/objects/legacy_stove-dwhqap/artifacts/export_meshes.json
     - cad/objects/legacy_stove-igwqpj/artifacts/export_meshes.json
+    - cad/objects/legacy_stove-jhyhag/artifacts/export_meshes.json
+    - cad/objects/legacy_stove-kfhkqp/artifacts/export_meshes.json
     - cad/objects/legacy_stove-rgpphy/artifacts/export_meshes.json
+    - cad/objects/legacy_stove-yhjzwg/artifacts/export_meshes.json
     - cad/objects/legacy_straight_chair-amgwaw/artifacts/export_meshes.json
     - cad/objects/legacy_straight_chair-axmhdk/artifacts/export_meshes.json
     - cad/objects/legacy_straight_chair-dmcixv/artifacts/export_meshes.json
@@ -1099,6 +1138,7 @@ stages:
     - cad/objects/legacy_tomato-altlfz/artifacts/export_meshes.json
     - cad/objects/legacy_tomato-wjreyv/artifacts/export_meshes.json
     - cad/objects/legacy_tongs-rcpjld/artifacts/export_meshes.json
+    - cad/objects/legacy_toothbrush-qbkrzg/artifacts/export_meshes.json
     - cad/objects/legacy_toothbrush-vkrjps/artifacts/export_meshes.json
     - cad/objects/legacy_toothpaste-vsclsj/artifacts/export_meshes.json
     - cad/objects/legacy_toothpick-deysav/artifacts/export_meshes.json
@@ -1252,6 +1292,7 @@ stages:
   export_objs_global:
     cmd: python -m b1k_pipeline.export_objs_global
     deps:
+    - cad/objects/legacy_alarm-dkwmmf/artifacts/meshes
     - cad/objects/legacy_almond-acooui/artifacts/meshes
     - cad/objects/legacy_apple-agveuv/artifacts/meshes
     - cad/objects/legacy_apple-omzprq/artifacts/meshes
@@ -1300,16 +1341,29 @@ stages:
     - cad/objects/legacy_bath_towel-feojdm/artifacts/meshes
     - cad/objects/legacy_bath_towel-iviyls/artifacts/meshes
     - cad/objects/legacy_bath_towel-lyqgnf/artifacts/meshes
+    - cad/objects/legacy_bathtub-azdgtl/artifacts/meshes
     - cad/objects/legacy_bathtub-fdjykf/artifacts/meshes
+    - cad/objects/legacy_bathtub-gulceo/artifacts/meshes
+    - cad/objects/legacy_bathtub-oobbwn/artifacts/meshes
+    - cad/objects/legacy_bathtub-wxrafq/artifacts/meshes
     - cad/objects/legacy_bean-cdinsu/artifacts/meshes
     - cad/objects/legacy_bean-dyjvwv/artifacts/meshes
     - cad/objects/legacy_bean-lvbjws/artifacts/meshes
     - cad/objects/legacy_bean-mfkwzi/artifacts/meshes
     - cad/objects/legacy_bed-fnzxxr/artifacts/meshes
+    - cad/objects/legacy_bed-gcgodj/artifacts/meshes
+    - cad/objects/legacy_bed-guguqb/artifacts/meshes
+    - cad/objects/legacy_bed-hkmwyc/artifacts/meshes
+    - cad/objects/legacy_bed-hojitx/artifacts/meshes
+    - cad/objects/legacy_bed-lslyyi/artifacts/meshes
     - cad/objects/legacy_bed-mpgavt/artifacts/meshes
+    - cad/objects/legacy_bed-nwzbyk/artifacts/meshes
     - cad/objects/legacy_bed-pqptex/artifacts/meshes
+    - cad/objects/legacy_bed-rhanfx/artifacts/meshes
     - cad/objects/legacy_bed-smmmaf/artifacts/meshes
     - cad/objects/legacy_bed-sztpse/artifacts/meshes
+    - cad/objects/legacy_bed-wbjidf/artifacts/meshes
+    - cad/objects/legacy_bed-wfxgbb/artifacts/meshes
     - cad/objects/legacy_bed-wyxtqf/artifacts/meshes
     - cad/objects/legacy_bed-yghbxh/artifacts/meshes
     - cad/objects/legacy_bed-zrumze/artifacts/meshes
@@ -1471,6 +1525,7 @@ stages:
     - cad/objects/legacy_bulldog_clip-cqxnkn/artifacts/meshes
     - cad/objects/legacy_bulletin_board-ayaoal/artifacts/meshes
     - cad/objects/legacy_bulletin_board-rjlpsy/artifacts/meshes
+    - cad/objects/legacy_burner-lfyqat/artifacts/meshes
     - cad/objects/legacy_burner-pmntxh/artifacts/meshes
     - cad/objects/legacy_butter-ovirmc/artifacts/meshes
     - cad/objects/legacy_calculator-kwmmty/artifacts/meshes
@@ -1764,8 +1819,10 @@ stages:
     - cad/objects/legacy_jeans-pvzxyp/artifacts/meshes
     - cad/objects/legacy_jewel-syneus/artifacts/meshes
     - cad/objects/legacy_juice-bbewjo/artifacts/meshes
+    - cad/objects/legacy_kettle-bzisss/artifacts/meshes
     - cad/objects/legacy_kettle-tsyims/artifacts/meshes
     - cad/objects/legacy_kettle-tzbnmh/artifacts/meshes
+    - cad/objects/legacy_kettle-vjbldp/artifacts/meshes
     - cad/objects/legacy_keyboard-nddmmy/artifacts/meshes
     - cad/objects/legacy_kitchen_analog_scale-lpjpez/artifacts/meshes
     - cad/objects/legacy_kitchen_analog_scale-zpmpoq/artifacts/meshes
@@ -1821,6 +1878,9 @@ stages:
     - cad/objects/legacy_medicine-zfbnjh/artifacts/meshes
     - cad/objects/legacy_microwave-abzvij/artifacts/meshes
     - cad/objects/legacy_microwave-bfbeeb/artifacts/meshes
+    - cad/objects/legacy_microwave-hjjxmi/artifacts/meshes
+    - cad/objects/legacy_microwave-rtfebu/artifacts/meshes
+    - cad/objects/legacy_microwave-snsqrt/artifacts/meshes
     - cad/objects/legacy_milk-xbvdpc/artifacts/meshes
     - cad/objects/legacy_mirror-pevdqu/artifacts/meshes
     - cad/objects/legacy_modem-axqxsv/artifacts/meshes
@@ -1850,6 +1910,15 @@ stages:
     - cad/objects/legacy_orange-ucstpm/artifacts/meshes
     - cad/objects/legacy_orange-yloghd/artifacts/meshes
     - cad/objects/legacy_oven-fexqbj/artifacts/meshes
+    - cad/objects/legacy_oven-hxorzh/artifacts/meshes
+    - cad/objects/legacy_oven-kfftgk/artifacts/meshes
+    - cad/objects/legacy_oven-leqtlc/artifacts/meshes
+    - cad/objects/legacy_oven-nkxhvf/artifacts/meshes
+    - cad/objects/legacy_oven-nvqqkv/artifacts/meshes
+    - cad/objects/legacy_oven-qriitd/artifacts/meshes
+    - cad/objects/legacy_oven-qygclv/artifacts/meshes
+    - cad/objects/legacy_oven-rwuazb/artifacts/meshes
+    - cad/objects/legacy_oven-tllnvs/artifacts/meshes
     - cad/objects/legacy_oven-wuinhm/artifacts/meshes
     - cad/objects/legacy_package-msfzpz/artifacts/meshes
     - cad/objects/legacy_package-sxlklf/artifacts/meshes
@@ -1889,6 +1958,7 @@ stages:
     - cad/objects/legacy_pencil-zzzvln/artifacts/meshes
     - cad/objects/legacy_pencil_box-acikzo/artifacts/meshes
     - cad/objects/legacy_pencil_box-otcmih/artifacts/meshes
+    - cad/objects/legacy_pepper_grinder-tfoogy/artifacts/meshes
     - cad/objects/legacy_perfume-ipurzb/artifacts/meshes
     - cad/objects/legacy_piano-bnxcvw/artifacts/meshes
     - cad/objects/legacy_piano-ojoiqt/artifacts/meshes
@@ -2089,11 +2159,15 @@ stages:
     - cad/objects/legacy_sink-czyfhq/artifacts/meshes
     - cad/objects/legacy_sink-ejooms/artifacts/meshes
     - cad/objects/legacy_sink-ksecxq/artifacts/meshes
+    - cad/objects/legacy_sink-vbquye/artifacts/meshes
+    - cad/objects/legacy_sink-wzpabm/artifacts/meshes
     - cad/objects/legacy_sink-xiybkb/artifacts/meshes
+    - cad/objects/legacy_sink-yfaufu/artifacts/meshes
     - cad/objects/legacy_sink-zexzrc/artifacts/meshes
     - cad/objects/legacy_soap-ozifwa/artifacts/meshes
     - cad/objects/legacy_sock-rhgweu/artifacts/meshes
     - cad/objects/legacy_sofa-ctjgcl/artifacts/meshes
+    - cad/objects/legacy_sofa-itbkff/artifacts/meshes
     - cad/objects/legacy_sofa-jhfkdc/artifacts/meshes
     - cad/objects/legacy_sofa-mnfbbh/artifacts/meshes
     - cad/objects/legacy_sofa-ocydlq/artifacts/meshes
@@ -2137,8 +2211,13 @@ stages:
     - cad/objects/legacy_stool-sghekm/artifacts/meshes
     - cad/objects/legacy_stool-xcmniq/artifacts/meshes
     - cad/objects/legacy_stool-ycfbsd/artifacts/meshes
+    - cad/objects/legacy_stove-dusebh/artifacts/meshes
+    - cad/objects/legacy_stove-dwhqap/artifacts/meshes
     - cad/objects/legacy_stove-igwqpj/artifacts/meshes
+    - cad/objects/legacy_stove-jhyhag/artifacts/meshes
+    - cad/objects/legacy_stove-kfhkqp/artifacts/meshes
     - cad/objects/legacy_stove-rgpphy/artifacts/meshes
+    - cad/objects/legacy_stove-yhjzwg/artifacts/meshes
     - cad/objects/legacy_straight_chair-amgwaw/artifacts/meshes
     - cad/objects/legacy_straight_chair-axmhdk/artifacts/meshes
     - cad/objects/legacy_straight_chair-dmcixv/artifacts/meshes
@@ -2281,6 +2360,7 @@ stages:
     - cad/objects/legacy_tomato-altlfz/artifacts/meshes
     - cad/objects/legacy_tomato-wjreyv/artifacts/meshes
     - cad/objects/legacy_tongs-rcpjld/artifacts/meshes
+    - cad/objects/legacy_toothbrush-qbkrzg/artifacts/meshes
     - cad/objects/legacy_toothbrush-vkrjps/artifacts/meshes
     - cad/objects/legacy_toothpaste-vsclsj/artifacts/meshes
     - cad/objects/legacy_toothpick-deysav/artifacts/meshes
@@ -2428,6 +2508,7 @@ stages:
     - cad/scenes/Rs_int/artifacts/meshes
     - cad/scenes/Wainscott_0_int/artifacts/meshes
     - cad/scenes/Wainscott_1_int/artifacts/meshes
+    - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
     - cad/objects/legacy_almond-acooui/artifacts/object_list.json
     - cad/objects/legacy_apple-agveuv/artifacts/object_list.json
     - cad/objects/legacy_apple-omzprq/artifacts/object_list.json
@@ -2476,16 +2557,29 @@ stages:
     - cad/objects/legacy_bath_towel-feojdm/artifacts/object_list.json
     - cad/objects/legacy_bath_towel-iviyls/artifacts/object_list.json
     - cad/objects/legacy_bath_towel-lyqgnf/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-azdgtl/artifacts/object_list.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-gulceo/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-oobbwn/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-wxrafq/artifacts/object_list.json
     - cad/objects/legacy_bean-cdinsu/artifacts/object_list.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/object_list.json
     - cad/objects/legacy_bean-lvbjws/artifacts/object_list.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/object_list.json
     - cad/objects/legacy_bed-fnzxxr/artifacts/object_list.json
+    - cad/objects/legacy_bed-gcgodj/artifacts/object_list.json
+    - cad/objects/legacy_bed-guguqb/artifacts/object_list.json
+    - cad/objects/legacy_bed-hkmwyc/artifacts/object_list.json
+    - cad/objects/legacy_bed-hojitx/artifacts/object_list.json
+    - cad/objects/legacy_bed-lslyyi/artifacts/object_list.json
     - cad/objects/legacy_bed-mpgavt/artifacts/object_list.json
+    - cad/objects/legacy_bed-nwzbyk/artifacts/object_list.json
     - cad/objects/legacy_bed-pqptex/artifacts/object_list.json
+    - cad/objects/legacy_bed-rhanfx/artifacts/object_list.json
     - cad/objects/legacy_bed-smmmaf/artifacts/object_list.json
     - cad/objects/legacy_bed-sztpse/artifacts/object_list.json
+    - cad/objects/legacy_bed-wbjidf/artifacts/object_list.json
+    - cad/objects/legacy_bed-wfxgbb/artifacts/object_list.json
     - cad/objects/legacy_bed-wyxtqf/artifacts/object_list.json
     - cad/objects/legacy_bed-yghbxh/artifacts/object_list.json
     - cad/objects/legacy_bed-zrumze/artifacts/object_list.json
@@ -2647,6 +2741,7 @@ stages:
     - cad/objects/legacy_bulldog_clip-cqxnkn/artifacts/object_list.json
     - cad/objects/legacy_bulletin_board-ayaoal/artifacts/object_list.json
     - cad/objects/legacy_bulletin_board-rjlpsy/artifacts/object_list.json
+    - cad/objects/legacy_burner-lfyqat/artifacts/object_list.json
     - cad/objects/legacy_burner-pmntxh/artifacts/object_list.json
     - cad/objects/legacy_butter-ovirmc/artifacts/object_list.json
     - cad/objects/legacy_calculator-kwmmty/artifacts/object_list.json
@@ -2940,8 +3035,10 @@ stages:
     - cad/objects/legacy_jeans-pvzxyp/artifacts/object_list.json
     - cad/objects/legacy_jewel-syneus/artifacts/object_list.json
     - cad/objects/legacy_juice-bbewjo/artifacts/object_list.json
+    - cad/objects/legacy_kettle-bzisss/artifacts/object_list.json
     - cad/objects/legacy_kettle-tsyims/artifacts/object_list.json
     - cad/objects/legacy_kettle-tzbnmh/artifacts/object_list.json
+    - cad/objects/legacy_kettle-vjbldp/artifacts/object_list.json
     - cad/objects/legacy_keyboard-nddmmy/artifacts/object_list.json
     - cad/objects/legacy_kitchen_analog_scale-lpjpez/artifacts/object_list.json
     - cad/objects/legacy_kitchen_analog_scale-zpmpoq/artifacts/object_list.json
@@ -2997,6 +3094,9 @@ stages:
     - cad/objects/legacy_medicine-zfbnjh/artifacts/object_list.json
     - cad/objects/legacy_microwave-abzvij/artifacts/object_list.json
     - cad/objects/legacy_microwave-bfbeeb/artifacts/object_list.json
+    - cad/objects/legacy_microwave-hjjxmi/artifacts/object_list.json
+    - cad/objects/legacy_microwave-rtfebu/artifacts/object_list.json
+    - cad/objects/legacy_microwave-snsqrt/artifacts/object_list.json
     - cad/objects/legacy_milk-xbvdpc/artifacts/object_list.json
     - cad/objects/legacy_mirror-pevdqu/artifacts/object_list.json
     - cad/objects/legacy_modem-axqxsv/artifacts/object_list.json
@@ -3026,6 +3126,15 @@ stages:
     - cad/objects/legacy_orange-ucstpm/artifacts/object_list.json
     - cad/objects/legacy_orange-yloghd/artifacts/object_list.json
     - cad/objects/legacy_oven-fexqbj/artifacts/object_list.json
+    - cad/objects/legacy_oven-hxorzh/artifacts/object_list.json
+    - cad/objects/legacy_oven-kfftgk/artifacts/object_list.json
+    - cad/objects/legacy_oven-leqtlc/artifacts/object_list.json
+    - cad/objects/legacy_oven-nkxhvf/artifacts/object_list.json
+    - cad/objects/legacy_oven-nvqqkv/artifacts/object_list.json
+    - cad/objects/legacy_oven-qriitd/artifacts/object_list.json
+    - cad/objects/legacy_oven-qygclv/artifacts/object_list.json
+    - cad/objects/legacy_oven-rwuazb/artifacts/object_list.json
+    - cad/objects/legacy_oven-tllnvs/artifacts/object_list.json
     - cad/objects/legacy_oven-wuinhm/artifacts/object_list.json
     - cad/objects/legacy_package-msfzpz/artifacts/object_list.json
     - cad/objects/legacy_package-sxlklf/artifacts/object_list.json
@@ -3065,6 +3174,7 @@ stages:
     - cad/objects/legacy_pencil-zzzvln/artifacts/object_list.json
     - cad/objects/legacy_pencil_box-acikzo/artifacts/object_list.json
     - cad/objects/legacy_pencil_box-otcmih/artifacts/object_list.json
+    - cad/objects/legacy_pepper_grinder-tfoogy/artifacts/object_list.json
     - cad/objects/legacy_perfume-ipurzb/artifacts/object_list.json
     - cad/objects/legacy_piano-bnxcvw/artifacts/object_list.json
     - cad/objects/legacy_piano-ojoiqt/artifacts/object_list.json
@@ -3265,11 +3375,15 @@ stages:
     - cad/objects/legacy_sink-czyfhq/artifacts/object_list.json
     - cad/objects/legacy_sink-ejooms/artifacts/object_list.json
     - cad/objects/legacy_sink-ksecxq/artifacts/object_list.json
+    - cad/objects/legacy_sink-vbquye/artifacts/object_list.json
+    - cad/objects/legacy_sink-wzpabm/artifacts/object_list.json
     - cad/objects/legacy_sink-xiybkb/artifacts/object_list.json
+    - cad/objects/legacy_sink-yfaufu/artifacts/object_list.json
     - cad/objects/legacy_sink-zexzrc/artifacts/object_list.json
     - cad/objects/legacy_soap-ozifwa/artifacts/object_list.json
     - cad/objects/legacy_sock-rhgweu/artifacts/object_list.json
     - cad/objects/legacy_sofa-ctjgcl/artifacts/object_list.json
+    - cad/objects/legacy_sofa-itbkff/artifacts/object_list.json
     - cad/objects/legacy_sofa-jhfkdc/artifacts/object_list.json
     - cad/objects/legacy_sofa-mnfbbh/artifacts/object_list.json
     - cad/objects/legacy_sofa-ocydlq/artifacts/object_list.json
@@ -3313,8 +3427,13 @@ stages:
     - cad/objects/legacy_stool-sghekm/artifacts/object_list.json
     - cad/objects/legacy_stool-xcmniq/artifacts/object_list.json
     - cad/objects/legacy_stool-ycfbsd/artifacts/object_list.json
+    - cad/objects/legacy_stove-dusebh/artifacts/object_list.json
+    - cad/objects/legacy_stove-dwhqap/artifacts/object_list.json
     - cad/objects/legacy_stove-igwqpj/artifacts/object_list.json
+    - cad/objects/legacy_stove-jhyhag/artifacts/object_list.json
+    - cad/objects/legacy_stove-kfhkqp/artifacts/object_list.json
     - cad/objects/legacy_stove-rgpphy/artifacts/object_list.json
+    - cad/objects/legacy_stove-yhjzwg/artifacts/object_list.json
     - cad/objects/legacy_straight_chair-amgwaw/artifacts/object_list.json
     - cad/objects/legacy_straight_chair-axmhdk/artifacts/object_list.json
     - cad/objects/legacy_straight_chair-dmcixv/artifacts/object_list.json
@@ -3457,6 +3576,7 @@ stages:
     - cad/objects/legacy_tomato-altlfz/artifacts/object_list.json
     - cad/objects/legacy_tomato-wjreyv/artifacts/object_list.json
     - cad/objects/legacy_tongs-rcpjld/artifacts/object_list.json
+    - cad/objects/legacy_toothbrush-qbkrzg/artifacts/object_list.json
     - cad/objects/legacy_toothbrush-vkrjps/artifacts/object_list.json
     - cad/objects/legacy_toothpaste-vsclsj/artifacts/object_list.json
     - cad/objects/legacy_toothpick-deysav/artifacts/object_list.json
@@ -3659,6 +3779,7 @@ stages:
   object_inventory:
     cmd: python b1k_pipeline/object_inventory.py
     deps:
+    - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
     - cad/objects/legacy_almond-acooui/artifacts/object_list.json
     - cad/objects/legacy_apple-agveuv/artifacts/object_list.json
     - cad/objects/legacy_apple-omzprq/artifacts/object_list.json
@@ -3707,16 +3828,29 @@ stages:
     - cad/objects/legacy_bath_towel-feojdm/artifacts/object_list.json
     - cad/objects/legacy_bath_towel-iviyls/artifacts/object_list.json
     - cad/objects/legacy_bath_towel-lyqgnf/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-azdgtl/artifacts/object_list.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-gulceo/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-oobbwn/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-wxrafq/artifacts/object_list.json
     - cad/objects/legacy_bean-cdinsu/artifacts/object_list.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/object_list.json
     - cad/objects/legacy_bean-lvbjws/artifacts/object_list.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/object_list.json
     - cad/objects/legacy_bed-fnzxxr/artifacts/object_list.json
+    - cad/objects/legacy_bed-gcgodj/artifacts/object_list.json
+    - cad/objects/legacy_bed-guguqb/artifacts/object_list.json
+    - cad/objects/legacy_bed-hkmwyc/artifacts/object_list.json
+    - cad/objects/legacy_bed-hojitx/artifacts/object_list.json
+    - cad/objects/legacy_bed-lslyyi/artifacts/object_list.json
     - cad/objects/legacy_bed-mpgavt/artifacts/object_list.json
+    - cad/objects/legacy_bed-nwzbyk/artifacts/object_list.json
     - cad/objects/legacy_bed-pqptex/artifacts/object_list.json
+    - cad/objects/legacy_bed-rhanfx/artifacts/object_list.json
     - cad/objects/legacy_bed-smmmaf/artifacts/object_list.json
     - cad/objects/legacy_bed-sztpse/artifacts/object_list.json
+    - cad/objects/legacy_bed-wbjidf/artifacts/object_list.json
+    - cad/objects/legacy_bed-wfxgbb/artifacts/object_list.json
     - cad/objects/legacy_bed-wyxtqf/artifacts/object_list.json
     - cad/objects/legacy_bed-yghbxh/artifacts/object_list.json
     - cad/objects/legacy_bed-zrumze/artifacts/object_list.json
@@ -3878,6 +4012,7 @@ stages:
     - cad/objects/legacy_bulldog_clip-cqxnkn/artifacts/object_list.json
     - cad/objects/legacy_bulletin_board-ayaoal/artifacts/object_list.json
     - cad/objects/legacy_bulletin_board-rjlpsy/artifacts/object_list.json
+    - cad/objects/legacy_burner-lfyqat/artifacts/object_list.json
     - cad/objects/legacy_burner-pmntxh/artifacts/object_list.json
     - cad/objects/legacy_butter-ovirmc/artifacts/object_list.json
     - cad/objects/legacy_calculator-kwmmty/artifacts/object_list.json
@@ -4171,8 +4306,10 @@ stages:
     - cad/objects/legacy_jeans-pvzxyp/artifacts/object_list.json
     - cad/objects/legacy_jewel-syneus/artifacts/object_list.json
     - cad/objects/legacy_juice-bbewjo/artifacts/object_list.json
+    - cad/objects/legacy_kettle-bzisss/artifacts/object_list.json
     - cad/objects/legacy_kettle-tsyims/artifacts/object_list.json
     - cad/objects/legacy_kettle-tzbnmh/artifacts/object_list.json
+    - cad/objects/legacy_kettle-vjbldp/artifacts/object_list.json
     - cad/objects/legacy_keyboard-nddmmy/artifacts/object_list.json
     - cad/objects/legacy_kitchen_analog_scale-lpjpez/artifacts/object_list.json
     - cad/objects/legacy_kitchen_analog_scale-zpmpoq/artifacts/object_list.json
@@ -4228,6 +4365,9 @@ stages:
     - cad/objects/legacy_medicine-zfbnjh/artifacts/object_list.json
     - cad/objects/legacy_microwave-abzvij/artifacts/object_list.json
     - cad/objects/legacy_microwave-bfbeeb/artifacts/object_list.json
+    - cad/objects/legacy_microwave-hjjxmi/artifacts/object_list.json
+    - cad/objects/legacy_microwave-rtfebu/artifacts/object_list.json
+    - cad/objects/legacy_microwave-snsqrt/artifacts/object_list.json
     - cad/objects/legacy_milk-xbvdpc/artifacts/object_list.json
     - cad/objects/legacy_mirror-pevdqu/artifacts/object_list.json
     - cad/objects/legacy_modem-axqxsv/artifacts/object_list.json
@@ -4257,6 +4397,15 @@ stages:
     - cad/objects/legacy_orange-ucstpm/artifacts/object_list.json
     - cad/objects/legacy_orange-yloghd/artifacts/object_list.json
     - cad/objects/legacy_oven-fexqbj/artifacts/object_list.json
+    - cad/objects/legacy_oven-hxorzh/artifacts/object_list.json
+    - cad/objects/legacy_oven-kfftgk/artifacts/object_list.json
+    - cad/objects/legacy_oven-leqtlc/artifacts/object_list.json
+    - cad/objects/legacy_oven-nkxhvf/artifacts/object_list.json
+    - cad/objects/legacy_oven-nvqqkv/artifacts/object_list.json
+    - cad/objects/legacy_oven-qriitd/artifacts/object_list.json
+    - cad/objects/legacy_oven-qygclv/artifacts/object_list.json
+    - cad/objects/legacy_oven-rwuazb/artifacts/object_list.json
+    - cad/objects/legacy_oven-tllnvs/artifacts/object_list.json
     - cad/objects/legacy_oven-wuinhm/artifacts/object_list.json
     - cad/objects/legacy_package-msfzpz/artifacts/object_list.json
     - cad/objects/legacy_package-sxlklf/artifacts/object_list.json
@@ -4296,6 +4445,7 @@ stages:
     - cad/objects/legacy_pencil-zzzvln/artifacts/object_list.json
     - cad/objects/legacy_pencil_box-acikzo/artifacts/object_list.json
     - cad/objects/legacy_pencil_box-otcmih/artifacts/object_list.json
+    - cad/objects/legacy_pepper_grinder-tfoogy/artifacts/object_list.json
     - cad/objects/legacy_perfume-ipurzb/artifacts/object_list.json
     - cad/objects/legacy_piano-bnxcvw/artifacts/object_list.json
     - cad/objects/legacy_piano-ojoiqt/artifacts/object_list.json
@@ -4496,11 +4646,15 @@ stages:
     - cad/objects/legacy_sink-czyfhq/artifacts/object_list.json
     - cad/objects/legacy_sink-ejooms/artifacts/object_list.json
     - cad/objects/legacy_sink-ksecxq/artifacts/object_list.json
+    - cad/objects/legacy_sink-vbquye/artifacts/object_list.json
+    - cad/objects/legacy_sink-wzpabm/artifacts/object_list.json
     - cad/objects/legacy_sink-xiybkb/artifacts/object_list.json
+    - cad/objects/legacy_sink-yfaufu/artifacts/object_list.json
     - cad/objects/legacy_sink-zexzrc/artifacts/object_list.json
     - cad/objects/legacy_soap-ozifwa/artifacts/object_list.json
     - cad/objects/legacy_sock-rhgweu/artifacts/object_list.json
     - cad/objects/legacy_sofa-ctjgcl/artifacts/object_list.json
+    - cad/objects/legacy_sofa-itbkff/artifacts/object_list.json
     - cad/objects/legacy_sofa-jhfkdc/artifacts/object_list.json
     - cad/objects/legacy_sofa-mnfbbh/artifacts/object_list.json
     - cad/objects/legacy_sofa-ocydlq/artifacts/object_list.json
@@ -4544,8 +4698,13 @@ stages:
     - cad/objects/legacy_stool-sghekm/artifacts/object_list.json
     - cad/objects/legacy_stool-xcmniq/artifacts/object_list.json
     - cad/objects/legacy_stool-ycfbsd/artifacts/object_list.json
+    - cad/objects/legacy_stove-dusebh/artifacts/object_list.json
+    - cad/objects/legacy_stove-dwhqap/artifacts/object_list.json
     - cad/objects/legacy_stove-igwqpj/artifacts/object_list.json
+    - cad/objects/legacy_stove-jhyhag/artifacts/object_list.json
+    - cad/objects/legacy_stove-kfhkqp/artifacts/object_list.json
     - cad/objects/legacy_stove-rgpphy/artifacts/object_list.json
+    - cad/objects/legacy_stove-yhjzwg/artifacts/object_list.json
     - cad/objects/legacy_straight_chair-amgwaw/artifacts/object_list.json
     - cad/objects/legacy_straight_chair-axmhdk/artifacts/object_list.json
     - cad/objects/legacy_straight_chair-dmcixv/artifacts/object_list.json
@@ -4688,6 +4847,7 @@ stages:
     - cad/objects/legacy_tomato-altlfz/artifacts/object_list.json
     - cad/objects/legacy_tomato-wjreyv/artifacts/object_list.json
     - cad/objects/legacy_tongs-rcpjld/artifacts/object_list.json
+    - cad/objects/legacy_toothbrush-qbkrzg/artifacts/object_list.json
     - cad/objects/legacy_toothbrush-vkrjps/artifacts/object_list.json
     - cad/objects/legacy_toothpaste-vsclsj/artifacts/object_list.json
     - cad/objects/legacy_toothpick-deysav/artifacts/object_list.json
@@ -4854,6 +5014,7 @@ stages:
     cmd: python b1k_pipeline/check_success_aggregate.py artifacts/object_list.json
       artifacts/pipeline/object_list.success
     deps:
+    - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
     - cad/objects/legacy_almond-acooui/artifacts/object_list.json
     - cad/objects/legacy_apple-agveuv/artifacts/object_list.json
     - cad/objects/legacy_apple-omzprq/artifacts/object_list.json
@@ -4902,16 +5063,29 @@ stages:
     - cad/objects/legacy_bath_towel-feojdm/artifacts/object_list.json
     - cad/objects/legacy_bath_towel-iviyls/artifacts/object_list.json
     - cad/objects/legacy_bath_towel-lyqgnf/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-azdgtl/artifacts/object_list.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-gulceo/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-oobbwn/artifacts/object_list.json
+    - cad/objects/legacy_bathtub-wxrafq/artifacts/object_list.json
     - cad/objects/legacy_bean-cdinsu/artifacts/object_list.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/object_list.json
     - cad/objects/legacy_bean-lvbjws/artifacts/object_list.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/object_list.json
     - cad/objects/legacy_bed-fnzxxr/artifacts/object_list.json
+    - cad/objects/legacy_bed-gcgodj/artifacts/object_list.json
+    - cad/objects/legacy_bed-guguqb/artifacts/object_list.json
+    - cad/objects/legacy_bed-hkmwyc/artifacts/object_list.json
+    - cad/objects/legacy_bed-hojitx/artifacts/object_list.json
+    - cad/objects/legacy_bed-lslyyi/artifacts/object_list.json
     - cad/objects/legacy_bed-mpgavt/artifacts/object_list.json
+    - cad/objects/legacy_bed-nwzbyk/artifacts/object_list.json
     - cad/objects/legacy_bed-pqptex/artifacts/object_list.json
+    - cad/objects/legacy_bed-rhanfx/artifacts/object_list.json
     - cad/objects/legacy_bed-smmmaf/artifacts/object_list.json
     - cad/objects/legacy_bed-sztpse/artifacts/object_list.json
+    - cad/objects/legacy_bed-wbjidf/artifacts/object_list.json
+    - cad/objects/legacy_bed-wfxgbb/artifacts/object_list.json
     - cad/objects/legacy_bed-wyxtqf/artifacts/object_list.json
     - cad/objects/legacy_bed-yghbxh/artifacts/object_list.json
     - cad/objects/legacy_bed-zrumze/artifacts/object_list.json
@@ -5073,6 +5247,7 @@ stages:
     - cad/objects/legacy_bulldog_clip-cqxnkn/artifacts/object_list.json
     - cad/objects/legacy_bulletin_board-ayaoal/artifacts/object_list.json
     - cad/objects/legacy_bulletin_board-rjlpsy/artifacts/object_list.json
+    - cad/objects/legacy_burner-lfyqat/artifacts/object_list.json
     - cad/objects/legacy_burner-pmntxh/artifacts/object_list.json
     - cad/objects/legacy_butter-ovirmc/artifacts/object_list.json
     - cad/objects/legacy_calculator-kwmmty/artifacts/object_list.json
@@ -5366,8 +5541,10 @@ stages:
     - cad/objects/legacy_jeans-pvzxyp/artifacts/object_list.json
     - cad/objects/legacy_jewel-syneus/artifacts/object_list.json
     - cad/objects/legacy_juice-bbewjo/artifacts/object_list.json
+    - cad/objects/legacy_kettle-bzisss/artifacts/object_list.json
     - cad/objects/legacy_kettle-tsyims/artifacts/object_list.json
     - cad/objects/legacy_kettle-tzbnmh/artifacts/object_list.json
+    - cad/objects/legacy_kettle-vjbldp/artifacts/object_list.json
     - cad/objects/legacy_keyboard-nddmmy/artifacts/object_list.json
     - cad/objects/legacy_kitchen_analog_scale-lpjpez/artifacts/object_list.json
     - cad/objects/legacy_kitchen_analog_scale-zpmpoq/artifacts/object_list.json
@@ -5423,6 +5600,9 @@ stages:
     - cad/objects/legacy_medicine-zfbnjh/artifacts/object_list.json
     - cad/objects/legacy_microwave-abzvij/artifacts/object_list.json
     - cad/objects/legacy_microwave-bfbeeb/artifacts/object_list.json
+    - cad/objects/legacy_microwave-hjjxmi/artifacts/object_list.json
+    - cad/objects/legacy_microwave-rtfebu/artifacts/object_list.json
+    - cad/objects/legacy_microwave-snsqrt/artifacts/object_list.json
     - cad/objects/legacy_milk-xbvdpc/artifacts/object_list.json
     - cad/objects/legacy_mirror-pevdqu/artifacts/object_list.json
     - cad/objects/legacy_modem-axqxsv/artifacts/object_list.json
@@ -5452,6 +5632,15 @@ stages:
     - cad/objects/legacy_orange-ucstpm/artifacts/object_list.json
     - cad/objects/legacy_orange-yloghd/artifacts/object_list.json
     - cad/objects/legacy_oven-fexqbj/artifacts/object_list.json
+    - cad/objects/legacy_oven-hxorzh/artifacts/object_list.json
+    - cad/objects/legacy_oven-kfftgk/artifacts/object_list.json
+    - cad/objects/legacy_oven-leqtlc/artifacts/object_list.json
+    - cad/objects/legacy_oven-nkxhvf/artifacts/object_list.json
+    - cad/objects/legacy_oven-nvqqkv/artifacts/object_list.json
+    - cad/objects/legacy_oven-qriitd/artifacts/object_list.json
+    - cad/objects/legacy_oven-qygclv/artifacts/object_list.json
+    - cad/objects/legacy_oven-rwuazb/artifacts/object_list.json
+    - cad/objects/legacy_oven-tllnvs/artifacts/object_list.json
     - cad/objects/legacy_oven-wuinhm/artifacts/object_list.json
     - cad/objects/legacy_package-msfzpz/artifacts/object_list.json
     - cad/objects/legacy_package-sxlklf/artifacts/object_list.json
@@ -5491,6 +5680,7 @@ stages:
     - cad/objects/legacy_pencil-zzzvln/artifacts/object_list.json
     - cad/objects/legacy_pencil_box-acikzo/artifacts/object_list.json
     - cad/objects/legacy_pencil_box-otcmih/artifacts/object_list.json
+    - cad/objects/legacy_pepper_grinder-tfoogy/artifacts/object_list.json
     - cad/objects/legacy_perfume-ipurzb/artifacts/object_list.json
     - cad/objects/legacy_piano-bnxcvw/artifacts/object_list.json
     - cad/objects/legacy_piano-ojoiqt/artifacts/object_list.json
@@ -5691,11 +5881,15 @@ stages:
     - cad/objects/legacy_sink-czyfhq/artifacts/object_list.json
     - cad/objects/legacy_sink-ejooms/artifacts/object_list.json
     - cad/objects/legacy_sink-ksecxq/artifacts/object_list.json
+    - cad/objects/legacy_sink-vbquye/artifacts/object_list.json
+    - cad/objects/legacy_sink-wzpabm/artifacts/object_list.json
     - cad/objects/legacy_sink-xiybkb/artifacts/object_list.json
+    - cad/objects/legacy_sink-yfaufu/artifacts/object_list.json
     - cad/objects/legacy_sink-zexzrc/artifacts/object_list.json
     - cad/objects/legacy_soap-ozifwa/artifacts/object_list.json
     - cad/objects/legacy_sock-rhgweu/artifacts/object_list.json
     - cad/objects/legacy_sofa-ctjgcl/artifacts/object_list.json
+    - cad/objects/legacy_sofa-itbkff/artifacts/object_list.json
     - cad/objects/legacy_sofa-jhfkdc/artifacts/object_list.json
     - cad/objects/legacy_sofa-mnfbbh/artifacts/object_list.json
     - cad/objects/legacy_sofa-ocydlq/artifacts/object_list.json
@@ -5739,8 +5933,13 @@ stages:
     - cad/objects/legacy_stool-sghekm/artifacts/object_list.json
     - cad/objects/legacy_stool-xcmniq/artifacts/object_list.json
     - cad/objects/legacy_stool-ycfbsd/artifacts/object_list.json
+    - cad/objects/legacy_stove-dusebh/artifacts/object_list.json
+    - cad/objects/legacy_stove-dwhqap/artifacts/object_list.json
     - cad/objects/legacy_stove-igwqpj/artifacts/object_list.json
+    - cad/objects/legacy_stove-jhyhag/artifacts/object_list.json
+    - cad/objects/legacy_stove-kfhkqp/artifacts/object_list.json
     - cad/objects/legacy_stove-rgpphy/artifacts/object_list.json
+    - cad/objects/legacy_stove-yhjzwg/artifacts/object_list.json
     - cad/objects/legacy_straight_chair-amgwaw/artifacts/object_list.json
     - cad/objects/legacy_straight_chair-axmhdk/artifacts/object_list.json
     - cad/objects/legacy_straight_chair-dmcixv/artifacts/object_list.json
@@ -5883,6 +6082,7 @@ stages:
     - cad/objects/legacy_tomato-altlfz/artifacts/object_list.json
     - cad/objects/legacy_tomato-wjreyv/artifacts/object_list.json
     - cad/objects/legacy_tongs-rcpjld/artifacts/object_list.json
+    - cad/objects/legacy_toothbrush-qbkrzg/artifacts/object_list.json
     - cad/objects/legacy_toothbrush-vkrjps/artifacts/object_list.json
     - cad/objects/legacy_toothpaste-vsclsj/artifacts/object_list.json
     - cad/objects/legacy_toothpick-deysav/artifacts/object_list.json
@@ -6060,6 +6260,7 @@ stages:
     cmd: python b1k_pipeline/check_success_aggregate.py artifacts/sanitycheck.json
       artifacts/pipeline/sanitycheck.success
     deps:
+    - cad/objects/legacy_alarm-dkwmmf/artifacts/sanitycheck.json
     - cad/objects/legacy_almond-acooui/artifacts/sanitycheck.json
     - cad/objects/legacy_apple-agveuv/artifacts/sanitycheck.json
     - cad/objects/legacy_apple-omzprq/artifacts/sanitycheck.json
@@ -6108,16 +6309,29 @@ stages:
     - cad/objects/legacy_bath_towel-feojdm/artifacts/sanitycheck.json
     - cad/objects/legacy_bath_towel-iviyls/artifacts/sanitycheck.json
     - cad/objects/legacy_bath_towel-lyqgnf/artifacts/sanitycheck.json
+    - cad/objects/legacy_bathtub-azdgtl/artifacts/sanitycheck.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/sanitycheck.json
+    - cad/objects/legacy_bathtub-gulceo/artifacts/sanitycheck.json
+    - cad/objects/legacy_bathtub-oobbwn/artifacts/sanitycheck.json
+    - cad/objects/legacy_bathtub-wxrafq/artifacts/sanitycheck.json
     - cad/objects/legacy_bean-cdinsu/artifacts/sanitycheck.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/sanitycheck.json
     - cad/objects/legacy_bean-lvbjws/artifacts/sanitycheck.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/sanitycheck.json
     - cad/objects/legacy_bed-fnzxxr/artifacts/sanitycheck.json
+    - cad/objects/legacy_bed-gcgodj/artifacts/sanitycheck.json
+    - cad/objects/legacy_bed-guguqb/artifacts/sanitycheck.json
+    - cad/objects/legacy_bed-hkmwyc/artifacts/sanitycheck.json
+    - cad/objects/legacy_bed-hojitx/artifacts/sanitycheck.json
+    - cad/objects/legacy_bed-lslyyi/artifacts/sanitycheck.json
     - cad/objects/legacy_bed-mpgavt/artifacts/sanitycheck.json
+    - cad/objects/legacy_bed-nwzbyk/artifacts/sanitycheck.json
     - cad/objects/legacy_bed-pqptex/artifacts/sanitycheck.json
+    - cad/objects/legacy_bed-rhanfx/artifacts/sanitycheck.json
     - cad/objects/legacy_bed-smmmaf/artifacts/sanitycheck.json
     - cad/objects/legacy_bed-sztpse/artifacts/sanitycheck.json
+    - cad/objects/legacy_bed-wbjidf/artifacts/sanitycheck.json
+    - cad/objects/legacy_bed-wfxgbb/artifacts/sanitycheck.json
     - cad/objects/legacy_bed-wyxtqf/artifacts/sanitycheck.json
     - cad/objects/legacy_bed-yghbxh/artifacts/sanitycheck.json
     - cad/objects/legacy_bed-zrumze/artifacts/sanitycheck.json
@@ -6279,6 +6493,7 @@ stages:
     - cad/objects/legacy_bulldog_clip-cqxnkn/artifacts/sanitycheck.json
     - cad/objects/legacy_bulletin_board-ayaoal/artifacts/sanitycheck.json
     - cad/objects/legacy_bulletin_board-rjlpsy/artifacts/sanitycheck.json
+    - cad/objects/legacy_burner-lfyqat/artifacts/sanitycheck.json
     - cad/objects/legacy_burner-pmntxh/artifacts/sanitycheck.json
     - cad/objects/legacy_butter-ovirmc/artifacts/sanitycheck.json
     - cad/objects/legacy_calculator-kwmmty/artifacts/sanitycheck.json
@@ -6572,8 +6787,10 @@ stages:
     - cad/objects/legacy_jeans-pvzxyp/artifacts/sanitycheck.json
     - cad/objects/legacy_jewel-syneus/artifacts/sanitycheck.json
     - cad/objects/legacy_juice-bbewjo/artifacts/sanitycheck.json
+    - cad/objects/legacy_kettle-bzisss/artifacts/sanitycheck.json
     - cad/objects/legacy_kettle-tsyims/artifacts/sanitycheck.json
     - cad/objects/legacy_kettle-tzbnmh/artifacts/sanitycheck.json
+    - cad/objects/legacy_kettle-vjbldp/artifacts/sanitycheck.json
     - cad/objects/legacy_keyboard-nddmmy/artifacts/sanitycheck.json
     - cad/objects/legacy_kitchen_analog_scale-lpjpez/artifacts/sanitycheck.json
     - cad/objects/legacy_kitchen_analog_scale-zpmpoq/artifacts/sanitycheck.json
@@ -6629,6 +6846,9 @@ stages:
     - cad/objects/legacy_medicine-zfbnjh/artifacts/sanitycheck.json
     - cad/objects/legacy_microwave-abzvij/artifacts/sanitycheck.json
     - cad/objects/legacy_microwave-bfbeeb/artifacts/sanitycheck.json
+    - cad/objects/legacy_microwave-hjjxmi/artifacts/sanitycheck.json
+    - cad/objects/legacy_microwave-rtfebu/artifacts/sanitycheck.json
+    - cad/objects/legacy_microwave-snsqrt/artifacts/sanitycheck.json
     - cad/objects/legacy_milk-xbvdpc/artifacts/sanitycheck.json
     - cad/objects/legacy_mirror-pevdqu/artifacts/sanitycheck.json
     - cad/objects/legacy_modem-axqxsv/artifacts/sanitycheck.json
@@ -6658,6 +6878,15 @@ stages:
     - cad/objects/legacy_orange-ucstpm/artifacts/sanitycheck.json
     - cad/objects/legacy_orange-yloghd/artifacts/sanitycheck.json
     - cad/objects/legacy_oven-fexqbj/artifacts/sanitycheck.json
+    - cad/objects/legacy_oven-hxorzh/artifacts/sanitycheck.json
+    - cad/objects/legacy_oven-kfftgk/artifacts/sanitycheck.json
+    - cad/objects/legacy_oven-leqtlc/artifacts/sanitycheck.json
+    - cad/objects/legacy_oven-nkxhvf/artifacts/sanitycheck.json
+    - cad/objects/legacy_oven-nvqqkv/artifacts/sanitycheck.json
+    - cad/objects/legacy_oven-qriitd/artifacts/sanitycheck.json
+    - cad/objects/legacy_oven-qygclv/artifacts/sanitycheck.json
+    - cad/objects/legacy_oven-rwuazb/artifacts/sanitycheck.json
+    - cad/objects/legacy_oven-tllnvs/artifacts/sanitycheck.json
     - cad/objects/legacy_oven-wuinhm/artifacts/sanitycheck.json
     - cad/objects/legacy_package-msfzpz/artifacts/sanitycheck.json
     - cad/objects/legacy_package-sxlklf/artifacts/sanitycheck.json
@@ -6697,6 +6926,7 @@ stages:
     - cad/objects/legacy_pencil-zzzvln/artifacts/sanitycheck.json
     - cad/objects/legacy_pencil_box-acikzo/artifacts/sanitycheck.json
     - cad/objects/legacy_pencil_box-otcmih/artifacts/sanitycheck.json
+    - cad/objects/legacy_pepper_grinder-tfoogy/artifacts/sanitycheck.json
     - cad/objects/legacy_perfume-ipurzb/artifacts/sanitycheck.json
     - cad/objects/legacy_piano-bnxcvw/artifacts/sanitycheck.json
     - cad/objects/legacy_piano-ojoiqt/artifacts/sanitycheck.json
@@ -6897,11 +7127,15 @@ stages:
     - cad/objects/legacy_sink-czyfhq/artifacts/sanitycheck.json
     - cad/objects/legacy_sink-ejooms/artifacts/sanitycheck.json
     - cad/objects/legacy_sink-ksecxq/artifacts/sanitycheck.json
+    - cad/objects/legacy_sink-vbquye/artifacts/sanitycheck.json
+    - cad/objects/legacy_sink-wzpabm/artifacts/sanitycheck.json
     - cad/objects/legacy_sink-xiybkb/artifacts/sanitycheck.json
+    - cad/objects/legacy_sink-yfaufu/artifacts/sanitycheck.json
     - cad/objects/legacy_sink-zexzrc/artifacts/sanitycheck.json
     - cad/objects/legacy_soap-ozifwa/artifacts/sanitycheck.json
     - cad/objects/legacy_sock-rhgweu/artifacts/sanitycheck.json
     - cad/objects/legacy_sofa-ctjgcl/artifacts/sanitycheck.json
+    - cad/objects/legacy_sofa-itbkff/artifacts/sanitycheck.json
     - cad/objects/legacy_sofa-jhfkdc/artifacts/sanitycheck.json
     - cad/objects/legacy_sofa-mnfbbh/artifacts/sanitycheck.json
     - cad/objects/legacy_sofa-ocydlq/artifacts/sanitycheck.json
@@ -6945,8 +7179,13 @@ stages:
     - cad/objects/legacy_stool-sghekm/artifacts/sanitycheck.json
     - cad/objects/legacy_stool-xcmniq/artifacts/sanitycheck.json
     - cad/objects/legacy_stool-ycfbsd/artifacts/sanitycheck.json
+    - cad/objects/legacy_stove-dusebh/artifacts/sanitycheck.json
+    - cad/objects/legacy_stove-dwhqap/artifacts/sanitycheck.json
     - cad/objects/legacy_stove-igwqpj/artifacts/sanitycheck.json
+    - cad/objects/legacy_stove-jhyhag/artifacts/sanitycheck.json
+    - cad/objects/legacy_stove-kfhkqp/artifacts/sanitycheck.json
     - cad/objects/legacy_stove-rgpphy/artifacts/sanitycheck.json
+    - cad/objects/legacy_stove-yhjzwg/artifacts/sanitycheck.json
     - cad/objects/legacy_straight_chair-amgwaw/artifacts/sanitycheck.json
     - cad/objects/legacy_straight_chair-axmhdk/artifacts/sanitycheck.json
     - cad/objects/legacy_straight_chair-dmcixv/artifacts/sanitycheck.json
@@ -7089,6 +7328,7 @@ stages:
     - cad/objects/legacy_tomato-altlfz/artifacts/sanitycheck.json
     - cad/objects/legacy_tomato-wjreyv/artifacts/sanitycheck.json
     - cad/objects/legacy_tongs-rcpjld/artifacts/sanitycheck.json
+    - cad/objects/legacy_toothbrush-qbkrzg/artifacts/sanitycheck.json
     - cad/objects/legacy_toothbrush-vkrjps/artifacts/sanitycheck.json
     - cad/objects/legacy_toothpaste-vsclsj/artifacts/sanitycheck.json
     - cad/objects/legacy_toothpick-deysav/artifacts/sanitycheck.json
