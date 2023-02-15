@@ -215,3 +215,28 @@ def test_next_to():
 
     with pytest.raises(NotImplementedError):
         dishtowel.states[NextTo].set_value(bottom_cabinet, False)
+
+@og_test
+def test_overlaid():
+    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
+    carpet = og.sim.scene.object_registry("name", "carpet")
+
+    breakfast_table.set_position([0., 0., 0.53])
+    carpet.set_position([0.0, 0., 0.67])
+
+    for _ in range(5):
+        og.sim.step()
+
+    assert carpet.states[Overlaid].get_value(breakfast_table)
+
+    carpet.set_position([20., 20., 1.])
+
+    for _ in range(5):
+        og.sim.step()
+
+    assert not carpet.states[Overlaid].get_value(breakfast_table)
+
+    assert carpet.states[Overlaid].set_value(breakfast_table, True)
+
+    with pytest.raises(NotImplementedError):
+        carpet.states[Overlaid].set_value(breakfast_table, False)
