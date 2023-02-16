@@ -47,7 +47,16 @@ MTL_MAPPING = {
 }
 
 # TODO: Make this use a local version if necessary.
-client = Client('10.79.12.70:35423', direct_to_workers=True)
+# from dask_kubernetes.operator import KubeCluster
+# cluster = KubeCluster(name="b1k-pipeline-vhacd", image="docker.io/igibson/vhacd-worker")
+# cluster = KubeCluster.from_yaml('worker-template.yaml')
+# cluster.scale(1)  # add 20 workers
+
+# client = Client(cluster)
+# client = Client('10.79.12.70:35423')
+client = Client('capri32.stanford.edu:8786')
+# VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
+VHACD_EXECUTABLE = "TestVHACD"
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -85,8 +94,7 @@ def vhacd_worker(file_bytes):
         out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
-        vhacd = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
-        vhacd_cmd = [str(vhacd), in_path, "-r", "1000000", "-d", "15", "-v", "60"]
+        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "15", "-v", "60"]
         try:
             proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
             with open(out_path, 'rb') as f:
