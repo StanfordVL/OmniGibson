@@ -23,20 +23,21 @@ ENTRYPOINTS = {
     "randomize_obj_names.py": "Randomize objects named in the legacy format.",
     "rpc_server.py": "Run RPC Server for DVC stages.",
     "select_mismatched_pivot.py": "Select groups of object instances whose pivots dont match.",
+    "spherify.py": "Convert point helpers into spheres.",
     "translate_ig_dataset.py": "Update names of iG2 objects to new format.",
 }
 
 
 def main():
     # First delete all SVL-tools macros
-    mss = rt.stringStream("")
-    rt.macros.list(to=mss)
-    matches = REMACRO.findall(str(mss))
-    for category, filename in matches:
-        if category != "SVL_Tools":
-            continue
-        print("Removing", filename)
-        os.unlink(filename)
+    # mss = rt.stringStream("")
+    # rt.macros.list(to=mss)
+    # matches = REMACRO.findall(str(mss))
+    # for category, filename in matches:
+    #     if category != "SVL_Tools":
+    #         continue
+    #     print("Removing", filename)
+    #     os.unlink(filename)
 
     # Then re-add everything.
     this_dir = pathlib.Path(__file__).parent
