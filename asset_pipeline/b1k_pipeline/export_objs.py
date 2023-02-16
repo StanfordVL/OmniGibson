@@ -47,7 +47,16 @@ MTL_MAPPING = {
 }
 
 # TODO: Make this use a local version if necessary.
-client = Client('10.79.12.70:35422')
+# from dask_kubernetes.operator import KubeCluster
+# cluster = KubeCluster(name="b1k-pipeline-vhacd", image="docker.io/igibson/vhacd-worker")
+# cluster = KubeCluster.from_yaml('worker-template.yaml')
+# cluster.scale(1)  # add 20 workers
+
+# client = Client(cluster)
+# client = Client('10.79.12.70:35423')
+client = Client('capri32.stanford.edu:8786')
+# VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
+VHACD_EXECUTABLE = "TestVHACD"
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -63,12 +72,16 @@ def call_vhacd(obj_file_path, dest_file_path):
     # result file and save those at the destination path.
     with open(obj_file_path, 'rb') as f:
         file_bytes = f.read()
-    data_future = client.scatter(file_bytes)
-    vhacd_future = client.submit(vhacd_worker, data_future)
+    # data_future = client.scatter(file_bytes)
+    data_future = file_bytes
+    vhacd_future = client.submit(
+        vhacd_worker,
+        data_future,
+        key=obj_file_path,
+        retries=10)
     result = vhacd_future.result()
     if not result:
-        print("vhacd failed on object", obj_file_path)
-        return
+        raise ValueError("vhacd failed on object " + str(obj_file_path))
     with open(dest_file_path, 'wb') as f:
         f.write(result)
 
@@ -81,11 +94,15 @@ def vhacd_worker(file_bytes):
         out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
-        vhacd = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
-        vhacd_cmd = [str(vhacd), in_path, "-r", "1000000", "-d", "15", "-v", "60"]
-        assert subprocess.call(vhacd_cmd, shell=False, stdout=subprocess.DEVNULL, cwd=td) == 0
+        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "15", "-v", "60"]
+        try:
+            proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
         with open(out_path, 'rb') as f:
             return f.read()
+        except subprocess.CalledProcessError as e:
+            raise ValueError(f"VHACD failed with exit code {e.returncode}. Output:\n{e.output}")
+        except futures.CancelledError as e:
+            raise ValueError("Got ")
 
 
 def timeout(timelimit):
@@ -532,65 +549,55 @@ def process_object(G, root_node, output_dir):
     with open(metadata_file, "w") as f:
         json.dump(out_metadata, f, cls=NumpyEncoder)
 
-def main():
-    target = sys.argv[1]
+def process_target(target, output_dir, executor):
     object_list_filename = PIPELINE_ROOT / "cad" / target / "artifacts/object_list.json"
     mesh_root_dir = PIPELINE_ROOT / "cad" / target / "artifacts/meshes"
+
+    with open(object_list_filename, "r") as f:
+        mesh_list = json.load(f)["meshes"]
+
+    # Build the mesh tree using our mesh tree library. The scene code also uses this system.
+    G = mesh_tree.build_mesh_tree(mesh_list, str(mesh_root_dir))
+
+    # Go through each object.
+    roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
+
+    # Only save the 0th instance.
+    saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
+    object_futures = {}
+    for root_node in saveable_roots:
+        # Start processing the object. We start by creating an object-specific
+        # copy of the mesh tree.
+        Gprime = G.subgraph(nx.dfs_tree(G, root_node).nodes()).copy()
+
+        object_future = executor.submit(process_object, Gprime, root_node, output_dir)
+        object_futures[object_future] = str(root_node)
+
+    return object_futures
+
+def main():
+    target = sys.argv[1]
     output_dir = PIPELINE_ROOT / "cad" / target / "artifacts/objects"
+    json_file = PIPELINE_ROOT / "cad" / target / "artifacts/export_objs.json"
 
     # Load the mesh list from the object list json.
-    error = None
-    try:
-        with open(object_list_filename, "r") as f:
-            mesh_list = json.load(f)["meshes"]
+    errors = {}
+    
+    with futures.ThreadPoolExecutor() as executor:
+        all_futures = process_target(target, output_dir, executor)
+                
+        with tqdm.tqdm(total=len(all_futures)) as object_pbar:
+            for future in futures.as_completed(all_futures.keys()):
+                try:
+                    result = future.result()
+                except:
+                    name = all_futures[future]
+                    errors[name] = traceback.format_exc()
 
-        # Build the mesh tree using our mesh tree library. The scene code also uses this system.
-        G = mesh_tree.build_mesh_tree(mesh_list, str(mesh_root_dir))
-        # assert nx.dag_longest_path_length(G) <= 1, "We don't support double joints yet."
+                object_pbar.update(1)
 
-        # Go through each object.
-        roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
-
-        # Only save the 0th instance.
-        saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
-        threadpool = []
-        threadpool_mesh_names = []
-        for root_node in saveable_roots:
-            obj_cat, obj_model, obj_inst_id, _ = root_node
-
-            # Start processing the object. We start by creating an object-specific
-            # copy of the mesh tree.
-            Gprime = G.subgraph(nx.dfs_tree(G, root_node).nodes()).copy()
-
-            t = threading.Thread(target=process_object, args=[Gprime, root_node, output_dir])
-            threadpool.append(t)
-            threadpool_mesh_names.append(root_node)
-            t.start()
-
-        # Show a rudimentary progress bar.
-        # with tqdm.tqdm(total=len(threadpool)) as pbar:
-        #     while True:
-        #         still_running = sum(1 for t in threadpool if t.is_alive())
-        #         completed = len(threadpool) - still_running
-        #         pbar.update(completed)
-        #         time.sleep(1)
-
-        # Actually join the threads.
-        for i, t in enumerate(threadpool):
-            print("waiting on {}".format(threadpool_mesh_names[i]))
-            t.join()
-            print("thread {}/{} finished".format(i + 1, len(threadpool)))
-    except Exception as e:
-        error = traceback.format_exc()
-
-    json_file = PIPELINE_ROOT / "cad" / target / "artifacts/export_objs.json"
     with open(json_file, "w") as f:
-        json.dump({"success": error is None, "error_msg": error}, f)
-
-    # If we got here, we were successful. Let's create the success file.
-    # success_file = PIPELINE_ROOT / "cad" / target / "artifacts/export_objs.success"
-    # with open(success_file, "w"):
-    #     pass
+        json.dump({"success": not errors, "errors": errors}, f)
 
 if __name__ == "__main__":
     main()

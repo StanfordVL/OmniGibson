@@ -237,20 +237,7 @@ APPROVED_OBJS = {
 }
 
 REJECTED_OBJS = {
-    "legacy_car-takwdb",
-    "legacy_foot_rule-swlgkg",
-    "legacy_bathtub-enpxbn",
-    "legacy_bathtub-jfhrwj",
-    "legacy_bed-sunfhf",
-    "legacy_bed-xhegju",
-    "legacy_blender-cwkvib",
-    "legacy_facsimile-mcqqhy",
-    "legacy_microwave-vuezel",
-    "legacy_oven-kenajw",
-    "legacy_printer-oyqbtq",
-    "legacy_scanner-juzkjp",
-    "legacy_sink-bnpjjy",
-    "legacy_stove-qbjiva",
+
 }
 
 APPROVED_SCENES = {
