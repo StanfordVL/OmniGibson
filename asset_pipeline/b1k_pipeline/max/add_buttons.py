@@ -15,7 +15,7 @@ ENTRYPOINTS = {
     "find_duplicates.py": "Find duplicate objects in the scene.",
     # "fix_common_issues.py": "Fix common issues like scale.",
     "fix_instance_materials.py": "Update object instances to use single material.",
-    # "import_legacy_objs.py": "Import missing legacy objects from iG2.",
+    "import_legacy_objs.py": "Import missing legacy objects from iG2.",
     "instanceify.py": "Convert objects into instances.",
     "instance_select.py": "Select all instances of objects.",
     "new_sanity_check.py": "Run a number of sanity checks.",
