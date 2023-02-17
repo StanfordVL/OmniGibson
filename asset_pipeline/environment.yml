@@ -2,9 +2,9 @@ name: pipeline
 channels:
   - defaults
 dependencies:
-  - cmake=3.22.1=h9ad04ae_0
-  - pip=21.2.2=py38haa95532_0
-  - python=3.8.0=hff0d562_2
+  - cmake=3.22.1
+  - pip=22.3.1
+  - python=3.10.0
   - pip:
     - bddl==3.0.0b1
     - black>=22.10.0
