@@ -24,6 +24,7 @@ stages:
     - cad/scenes/Beechwood_1_int/artifacts/scene
     - cad/scenes/Benevolence_0_int/artifacts/scene
     - cad/scenes/Benevolence_1_int/artifacts/scene
+    - cad/scenes/Benevolence_2_int/artifacts/scene
     - cad/scenes/Ihlen_0_int/artifacts/scene
     - cad/scenes/Ihlen_1_int/artifacts/scene
     - cad/scenes/Merom_0_int/artifacts/scene
@@ -39,6 +40,7 @@ stages:
     - cad/scenes/Beechwood_1_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_0_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_1_int/artifacts/export_scene.success
+    - cad/scenes/Benevolence_2_int/artifacts/export_scene.success
     - cad/scenes/Ihlen_0_int/artifacts/export_scene.success
     - cad/scenes/Ihlen_1_int/artifacts/export_scene.success
     - cad/scenes/Merom_0_int/artifacts/export_scene.success
@@ -72,6 +74,7 @@ stages:
     cmd: python b1k_pipeline/check_success_aggregate.py artifacts/export_meshes.json
       artifacts/pipeline/export_meshes.success
     deps:
+    - cad/objects/assembleable_shelf-fm/artifacts/export_meshes.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/export_meshes.json
     - cad/objects/legacy_almond-acooui/artifacts/export_meshes.json
     - cad/objects/legacy_apple-agveuv/artifacts/export_meshes.json
@@ -1286,10 +1289,12 @@ stages:
     - cad/objects/legacy_zucchini-dybtwb/artifacts/export_meshes.json
     - cad/objects/legacy_zucchini-ifvmal/artifacts/export_meshes.json
     - cad/objects/legacy_zucchini-udvfaz/artifacts/export_meshes.json
+    - cad/objects/switch-ou/artifacts/export_meshes.json
     - cad/scenes/Beechwood_0_int/artifacts/export_meshes.json
     - cad/scenes/Beechwood_1_int/artifacts/export_meshes.json
     - cad/scenes/Benevolence_0_int/artifacts/export_meshes.json
     - cad/scenes/Benevolence_1_int/artifacts/export_meshes.json
+    - cad/scenes/Benevolence_2_int/artifacts/export_meshes.json
     - cad/scenes/Ihlen_0_int/artifacts/export_meshes.json
     - cad/scenes/Ihlen_1_int/artifacts/export_meshes.json
     - cad/scenes/Merom_0_int/artifacts/export_meshes.json
@@ -1307,6 +1312,7 @@ stages:
   export_objs_global:
     cmd: python -m b1k_pipeline.export_objs_global
     deps:
+    - cad/objects/assembleable_shelf-fm/artifacts/meshes
     - cad/objects/legacy_alarm-dkwmmf/artifacts/meshes
     - cad/objects/legacy_almond-acooui/artifacts/meshes
     - cad/objects/legacy_apple-agveuv/artifacts/meshes
@@ -2521,10 +2527,12 @@ stages:
     - cad/objects/legacy_zucchini-dybtwb/artifacts/meshes
     - cad/objects/legacy_zucchini-ifvmal/artifacts/meshes
     - cad/objects/legacy_zucchini-udvfaz/artifacts/meshes
+    - cad/objects/switch-ou/artifacts/meshes
     - cad/scenes/Beechwood_0_int/artifacts/meshes
     - cad/scenes/Beechwood_1_int/artifacts/meshes
     - cad/scenes/Benevolence_0_int/artifacts/meshes
     - cad/scenes/Benevolence_1_int/artifacts/meshes
+    - cad/scenes/Benevolence_2_int/artifacts/meshes
     - cad/scenes/Ihlen_0_int/artifacts/meshes
     - cad/scenes/Ihlen_1_int/artifacts/meshes
     - cad/scenes/Merom_0_int/artifacts/meshes
@@ -2536,6 +2544,7 @@ stages:
     - cad/scenes/Wainscott_0_int/artifacts/meshes
     - cad/scenes/Wainscott_1_int/artifacts/meshes
     - cad/scenes/house_single_floor/artifacts/meshes
+    - cad/objects/assembleable_shelf-fm/artifacts/object_list.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
     - cad/objects/legacy_almond-acooui/artifacts/object_list.json
     - cad/objects/legacy_apple-agveuv/artifacts/object_list.json
@@ -3750,10 +3759,12 @@ stages:
     - cad/objects/legacy_zucchini-dybtwb/artifacts/object_list.json
     - cad/objects/legacy_zucchini-ifvmal/artifacts/object_list.json
     - cad/objects/legacy_zucchini-udvfaz/artifacts/object_list.json
+    - cad/objects/switch-ou/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
     - cad/scenes/Benevolence_1_int/artifacts/object_list.json
+    - cad/scenes/Benevolence_2_int/artifacts/object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
@@ -3805,6 +3816,7 @@ stages:
     - cad/scenes/Beechwood_1_int/artifacts/export_scene.json
     - cad/scenes/Benevolence_0_int/artifacts/export_scene.json
     - cad/scenes/Benevolence_1_int/artifacts/export_scene.json
+    - cad/scenes/Benevolence_2_int/artifacts/export_scene.json
     - cad/scenes/Ihlen_0_int/artifacts/export_scene.json
     - cad/scenes/Ihlen_1_int/artifacts/export_scene.json
     - cad/scenes/Merom_0_int/artifacts/export_scene.json
@@ -3822,6 +3834,7 @@ stages:
   object_inventory:
     cmd: python b1k_pipeline/object_inventory.py
     deps:
+    - cad/objects/assembleable_shelf-fm/artifacts/object_list.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
     - cad/objects/legacy_almond-acooui/artifacts/object_list.json
     - cad/objects/legacy_apple-agveuv/artifacts/object_list.json
@@ -5036,10 +5049,12 @@ stages:
     - cad/objects/legacy_zucchini-dybtwb/artifacts/object_list.json
     - cad/objects/legacy_zucchini-ifvmal/artifacts/object_list.json
     - cad/objects/legacy_zucchini-udvfaz/artifacts/object_list.json
+    - cad/objects/switch-ou/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
     - cad/scenes/Benevolence_1_int/artifacts/object_list.json
+    - cad/scenes/Benevolence_2_int/artifacts/object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
@@ -5070,6 +5085,7 @@ stages:
     cmd: python b1k_pipeline/check_success_aggregate.py artifacts/object_list.json
       artifacts/pipeline/object_list.success
     deps:
+    - cad/objects/assembleable_shelf-fm/artifacts/object_list.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
     - cad/objects/legacy_almond-acooui/artifacts/object_list.json
     - cad/objects/legacy_apple-agveuv/artifacts/object_list.json
@@ -6284,10 +6300,12 @@ stages:
     - cad/objects/legacy_zucchini-dybtwb/artifacts/object_list.json
     - cad/objects/legacy_zucchini-ifvmal/artifacts/object_list.json
     - cad/objects/legacy_zucchini-udvfaz/artifacts/object_list.json
+    - cad/objects/switch-ou/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
     - cad/scenes/Benevolence_1_int/artifacts/object_list.json
+    - cad/scenes/Benevolence_2_int/artifacts/object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
@@ -6329,6 +6347,7 @@ stages:
     cmd: python b1k_pipeline/check_success_aggregate.py artifacts/sanitycheck.json
       artifacts/pipeline/sanitycheck.success
     deps:
+    - cad/objects/assembleable_shelf-fm/artifacts/sanitycheck.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/sanitycheck.json
     - cad/objects/legacy_almond-acooui/artifacts/sanitycheck.json
     - cad/objects/legacy_apple-agveuv/artifacts/sanitycheck.json
@@ -7543,10 +7562,12 @@ stages:
     - cad/objects/legacy_zucchini-dybtwb/artifacts/sanitycheck.json
     - cad/objects/legacy_zucchini-ifvmal/artifacts/sanitycheck.json
     - cad/objects/legacy_zucchini-udvfaz/artifacts/sanitycheck.json
+    - cad/objects/switch-ou/artifacts/sanitycheck.json
     - cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
     - cad/scenes/Beechwood_1_int/artifacts/sanitycheck.json
     - cad/scenes/Benevolence_0_int/artifacts/sanitycheck.json
     - cad/scenes/Benevolence_1_int/artifacts/sanitycheck.json
+    - cad/scenes/Benevolence_2_int/artifacts/sanitycheck.json
     - cad/scenes/Ihlen_0_int/artifacts/sanitycheck.json
     - cad/scenes/Ihlen_1_int/artifacts/sanitycheck.json
     - cad/scenes/Merom_0_int/artifacts/sanitycheck.json
@@ -7580,6 +7601,7 @@ stages:
     - cad/scenes/Beechwood_1_int/artifacts/validate_scene.json
     - cad/scenes/Benevolence_0_int/artifacts/validate_scene.json
     - cad/scenes/Benevolence_1_int/artifacts/validate_scene.json
+    - cad/scenes/Benevolence_2_int/artifacts/validate_scene.json
     - cad/scenes/Ihlen_0_int/artifacts/validate_scene.json
     - cad/scenes/Ihlen_1_int/artifacts/validate_scene.json
     - cad/scenes/Merom_0_int/artifacts/validate_scene.json

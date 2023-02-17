@@ -1,4 +1,5 @@
 combined:
+- objects/assembleable_shelf-fm
 - objects/legacy_alarm-dkwmmf
 - objects/legacy_almond-acooui
 - objects/legacy_apple-agveuv
@@ -1213,10 +1214,12 @@ combined:
 - objects/legacy_zucchini-dybtwb
 - objects/legacy_zucchini-ifvmal
 - objects/legacy_zucchini-udvfaz
+- objects/switch-ou
 - scenes/Beechwood_0_int
 - scenes/Beechwood_1_int
 - scenes/Benevolence_0_int
 - scenes/Benevolence_1_int
+- scenes/Benevolence_2_int
 - scenes/Ihlen_0_int
 - scenes/Ihlen_1_int
 - scenes/Merom_0_int
@@ -1256,6 +1259,7 @@ combined_unfiltered:
 - objects/ashtray-gr
 - objects/asparagus-ew
 - objects/aspirin-sr
+- objects/assembleable_shelf-fm
 - objects/avocado-hz
 - objects/axe-yy
 - objects/baby_bottle-hv
@@ -3222,6 +3226,7 @@ final_scenes:
 - scenes/Beechwood_1_int
 - scenes/Benevolence_0_int
 - scenes/Benevolence_1_int
+- scenes/Benevolence_2_int
 - scenes/Ihlen_0_int
 - scenes/Ihlen_1_int
 - scenes/Merom_0_int
@@ -3234,6 +3239,7 @@ final_scenes:
 - scenes/Wainscott_1_int
 - scenes/house_single_floor
 objects:
+- objects/assembleable_shelf-fm
 - objects/legacy_alarm-dkwmmf
 - objects/legacy_almond-acooui
 - objects/legacy_apple-agveuv
@@ -4448,6 +4454,7 @@ objects:
 - objects/legacy_zucchini-dybtwb
 - objects/legacy_zucchini-ifvmal
 - objects/legacy_zucchini-udvfaz
+- objects/switch-ou
 objects_unfiltered:
 - objects/acetone-jc
 - objects/acid-ub
@@ -4476,6 +4483,7 @@ objects_unfiltered:
 - objects/ashtray-gr
 - objects/asparagus-ew
 - objects/aspirin-sr
+- objects/assembleable_shelf-fm
 - objects/avocado-hz
 - objects/axe-yy
 - objects/baby_bottle-hv
@@ -6385,6 +6393,7 @@ scenes:
 - scenes/Beechwood_1_int
 - scenes/Benevolence_0_int
 - scenes/Benevolence_1_int
+- scenes/Benevolence_2_int
 - scenes/Ihlen_0_int
 - scenes/Ihlen_1_int
 - scenes/Merom_0_int
