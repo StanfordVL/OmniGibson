@@ -76,6 +76,7 @@ APPROVED_OBJS = {
 "legacy_.*",
 "assembleable_shelf-fm",
 "switch-ou",
+"bottom_cabinet-gjrero",
 # "margarine-vs",
 # "olives-25",
 # "pastry-hz",

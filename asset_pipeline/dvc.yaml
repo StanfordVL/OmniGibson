@@ -75,6 +75,7 @@ stages:
       artifacts/pipeline/export_meshes.success
     deps:
     - cad/objects/assembleable_shelf-fm/artifacts/export_meshes.json
+    - cad/objects/bottom_cabinet-gjrero/artifacts/export_meshes.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/export_meshes.json
     - cad/objects/legacy_almond-acooui/artifacts/export_meshes.json
     - cad/objects/legacy_apple-agveuv/artifacts/export_meshes.json
@@ -1313,6 +1314,7 @@ stages:
     cmd: python -m b1k_pipeline.export_objs_global
     deps:
     - cad/objects/assembleable_shelf-fm/artifacts/meshes
+    - cad/objects/bottom_cabinet-gjrero/artifacts/meshes
     - cad/objects/legacy_alarm-dkwmmf/artifacts/meshes
     - cad/objects/legacy_almond-acooui/artifacts/meshes
     - cad/objects/legacy_apple-agveuv/artifacts/meshes
@@ -2545,6 +2547,7 @@ stages:
     - cad/scenes/Wainscott_1_int/artifacts/meshes
     - cad/scenes/house_single_floor/artifacts/meshes
     - cad/objects/assembleable_shelf-fm/artifacts/object_list.json
+    - cad/objects/bottom_cabinet-gjrero/artifacts/object_list.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
     - cad/objects/legacy_almond-acooui/artifacts/object_list.json
     - cad/objects/legacy_apple-agveuv/artifacts/object_list.json
@@ -3835,6 +3838,7 @@ stages:
     cmd: python b1k_pipeline/object_inventory.py
     deps:
     - cad/objects/assembleable_shelf-fm/artifacts/object_list.json
+    - cad/objects/bottom_cabinet-gjrero/artifacts/object_list.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
     - cad/objects/legacy_almond-acooui/artifacts/object_list.json
     - cad/objects/legacy_apple-agveuv/artifacts/object_list.json
@@ -5086,6 +5090,7 @@ stages:
       artifacts/pipeline/object_list.success
     deps:
     - cad/objects/assembleable_shelf-fm/artifacts/object_list.json
+    - cad/objects/bottom_cabinet-gjrero/artifacts/object_list.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
     - cad/objects/legacy_almond-acooui/artifacts/object_list.json
     - cad/objects/legacy_apple-agveuv/artifacts/object_list.json
@@ -6348,6 +6353,7 @@ stages:
       artifacts/pipeline/sanitycheck.success
     deps:
     - cad/objects/assembleable_shelf-fm/artifacts/sanitycheck.json
+    - cad/objects/bottom_cabinet-gjrero/artifacts/sanitycheck.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/sanitycheck.json
     - cad/objects/legacy_almond-acooui/artifacts/sanitycheck.json
     - cad/objects/legacy_apple-agveuv/artifacts/sanitycheck.json
