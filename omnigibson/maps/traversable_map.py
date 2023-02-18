@@ -7,6 +7,7 @@ import cv2
 import networkx as nx
 import numpy as np
 from PIL import Image
+import pyfmm
 
 from omnigibson.maps.map_base import BaseMap
 import omnigibson.utils.transform_utils as T
@@ -51,6 +52,7 @@ class TraversableMap(BaseMap):
         self.floor_heights = None
         self.floor_map = None
         self.floor_graph = None
+        self.wall_heuristic = None
 
         # Run super method
         super().__init__(map_resolution=map_resolution)
@@ -76,23 +78,23 @@ class TraversableMap(BaseMap):
         for floor in range(len(self.floor_heights)):
             if self.trav_map_with_objects:
                 # TODO: Shouldn't this be generated dynamically?
-                trav_map = np.array(Image.open(os.path.join(maps_path, "floor_trav_{}.png".format(floor))))
+                trav_map = np.array(Image.open(os.path.join(maps_path, "floor_trav_no_door_{}.png".format(floor))))
             else:
                 trav_map = np.array(Image.open(os.path.join(maps_path, "floor_trav_no_obj_{}.png".format(floor))))
 
             # If we do not initialize the original size of the traversability map, we obtain it from the image
             # Then, we compute the final map size as the factor of scaling (default_resolution/resolution) times the
             # original map size
-            if self.trav_map_original_size is None:
-                height, width = trav_map.shape
-                assert height == width, "trav map is not a square"
-                self.trav_map_original_size = height
-                map_size = int(
-                    self.trav_map_original_size * self.map_default_resolution / self.map_resolution
-                )
+            height, width = trav_map.shape
+            assert height == width, "trav map is not a square"
+            self.trav_map_original_size = height
+            map_size = int(
+                self.trav_map_original_size * self.map_default_resolution / self.map_resolution
+            )
 
             # We resize the traversability map to the new size computed before
             trav_map = cv2.resize(trav_map, (map_size, map_size))
+            self.trav_map_size = map_size
 
             # We then erode the image. This is needed because the code that computes shortest path uses the global map
             # and a point robot
@@ -102,10 +104,23 @@ class TraversableMap(BaseMap):
             # We make the pixels of the image to be either 0 or 255
             trav_map[trav_map < 255] = 0
 
+            # Heuristic to keep robot away from walls
+            if self.wall_heuristic is None:
+                logging.info("Loading wall heuristic")
+                self.wall_heuristic = np.zeros((self.trav_map_size, self.trav_map_size))
+                hu = pyfmm.march(trav_map == 0, batch_size=self.trav_map_size*self.trav_map_size)[0] # NOTE : white area means walkable area
+                hu /= np.amax(hu)
+                self.wall_heuristic = (np.amax(hu) - hu) * 10
+                # breakpoint()
+                heuristic_threshold = 7
+                # print(np.max(self.wall_heuristic))
+                # breakpoint()
+                self.wall_heuristic[self.wall_heuristic > heuristic_threshold] *= 5
+                self.wall_heuristic[self.wall_heuristic > heuristic_threshold/2] *= 2
+
             # We search for the largest connected areas
-            if self.build_graph:
-                # Directly set map siz
-                self.floor_graph = self.build_trav_graph(map_size, maps_path, floor, trav_map)
+            self.floor_graph = self.build_trav_graph(map_size, maps_path, floor, trav_map, self.wall_heuristic)
+            self.build_graph = True
 
             self.floor_map.append(trav_map)
 
@@ -113,7 +128,7 @@ class TraversableMap(BaseMap):
 
     # TODO: refactor into C++ for speedup
     @staticmethod
-    def build_trav_graph(map_size, maps_path, floor, trav_map):
+    def build_trav_graph(map_size, maps_path, floor, trav_map, wallhu=None):
         """
         Build traversibility graph and only take the largest connected component
 
@@ -147,7 +162,7 @@ class TraversableMap(BaseMap):
                             and 0 <= n[1] < map_size
                             and trav_map[n[0], n[1]] > 0
                         ):
-                            g.add_edge(n, (i, j), weight=T.l2_distance(n, (i, j)))
+                            g.add_edge(n, (i, j), weight=T.l2_distance(n, (i, j))* (wallhu[n[0], n[1]] + wallhu[i, j]))
 
             # only take the largest connected component
             largest_cc = max(nx.connected_components(g), key=len)

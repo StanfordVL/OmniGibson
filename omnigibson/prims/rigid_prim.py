@@ -136,6 +136,7 @@ class RigidPrim(XFormPrim):
 
         # Grab handle to this rigid body and get name
         self.update_handles()
+        print("=>", self._handle)
         self._body_name = self._dc.get_rigid_body_name(self._handle)
 
     def update_meshes(self):
@@ -208,7 +209,8 @@ class RigidPrim(XFormPrim):
         """
         Updates all internal handles for this prim, in case they change since initialization
         """
-        self._handle = None if self.kinematic_only else self._dc.get_rigid_body(self._prim_path)
+        # self._handle = None if self.kinematic_only else self._dc.get_rigid_body(self._prim_path)
+        self._handle = self._dc.get_rigid_body(self._prim_path)
 
     def contact_list(self):
         """

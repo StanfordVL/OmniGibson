@@ -30,6 +30,8 @@ class SegmentationMap(BaseMap):
         self.scene_dir = scene_dir
         self.map_default_resolution = 0.01
         self.floor_heights = floor_heights
+        self.seg_map_default_resolution = 0.01
+        self.seg_map_resolution = map_resolution
 
         # Other values that will be loaded at runtime
         self.room_sem_name_to_sem_id = None
@@ -55,6 +57,9 @@ class SegmentationMap(BaseMap):
         height, width = img_ins.size
         assert height == width, "room seg map is not a square"
         assert img_ins.size == img_sem.size, "semantic and instance seg maps have different sizes"
+        
+        self.seg_map_size = int(height * self.seg_map_default_resolution / self.seg_map_resolution)
+
         map_size = int(height * self.map_default_resolution / self.map_resolution)
         img_ins = np.array(img_ins.resize((map_size, map_size), Image.NEAREST))
         img_sem = np.array(img_sem.resize((map_size, map_size), Image.NEAREST))
@@ -190,3 +195,49 @@ class SegmentationMap(BaseMap):
             return None
         else:
             return self.room_ins_id_to_ins_name[ins_id]
+
+    def get_aabb_by_room_instance(self, room_instance):
+        """
+        Get AABB of the floor by room instance
+        :param room_instance: room instance (e.g. bathroom_1)
+        """
+        if room_instance not in self.room_ins_name_to_ins_id:
+            logging.warning("room_instance [{}] does not exist.".format(room_instance))
+            return None, None
+
+        ins_id = self.room_ins_name_to_ins_id[room_instance]
+        valid_idx = np.array(np.where(self.room_ins_map == ins_id))
+        u_min = np.min(valid_idx[0])
+        u_max = np.max(valid_idx[0])
+        v_min = np.min(valid_idx[1])
+        v_max = np.max(valid_idx[1])
+        x_a, y_a = self.seg_map_to_world(np.array([u_min, v_min]))
+        x_b, y_b = self.seg_map_to_world(np.array([u_max, v_max]))
+        x_min = np.min([x_a, x_b])
+        x_max = np.max([x_a, x_b])
+        y_min = np.min([y_a, y_b])
+        y_max = np.max([y_a, y_b])
+        # assume only 1 floor
+        floor = 0
+        z = self.floor_heights[floor]
+
+        return np.array([x_min, y_min, z]), np.array([x_max, y_max, z])
+    
+    def seg_map_to_world(self, xy):
+        """
+        Transforms a 2D point in map reference frame into world (simulator) reference frame
+
+        :param xy: 2D location in seg map reference frame (image)
+        :return: 2D location in world reference frame (metric)
+        """
+        axis = 0 if len(xy.shape) == 1 else 1
+        return np.flip((xy - self.seg_map_size / 2.0) * self.seg_map_resolution, axis=axis)
+
+    def world_to_seg_map(self, xy):
+        """
+        Transforms a 2D point in world (simulator) reference frame into map reference frame
+
+        :param xy: 2D location in world reference frame (metric)
+        :return: 2D location in seg map reference frame (image)
+        """
+        return np.flip((xy / self.seg_map_resolution + self.seg_map_size / 2.0)).astype(np.int)

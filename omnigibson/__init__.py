@@ -4,6 +4,9 @@ import os
 import yaml
 import builtins
 
+import nvidia_smi
+import numpy as np
+
 # TODO: Need to fix somehow -- omnigibson gets imported first BEFORE we can actually modify the macros
 from omnigibson.macros import gm
 
@@ -84,6 +87,20 @@ REGISTERED_CONTROLLERS = None
 REGISTERED_TASKS = None
 ALL_SENSOR_MODALITIES = None
 
+def get_id_for_free_GPU_with_most_space():
+    nvidia_smi.nvmlInit()
+
+    deviceCount = nvidia_smi.nvmlDeviceGetCount()
+    gpu_free_space = np.zeros(deviceCount)
+
+    for i in range(deviceCount):
+        handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
+        info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
+        gpu_free_space[i] = info.free
+
+    gpu_id = np.argmax(gpu_free_space)
+    nvidia_smi.nvmlShutdown()
+    return gpu_id
 
 # Helper functions for starting omnigibson
 def print_save_usd_warning(_):
@@ -93,6 +110,8 @@ def print_save_usd_warning(_):
 def create_app():
     global app
     from omni.isaac.kit import SimulationApp
+    gpu_id = get_id_for_free_GPU_with_most_space()
+    # app = SimulationApp({"headless": gm.HEADLESS, "active_gpu": gpu_id, "physics_gpu": gpu_id, "multi_gpu": False})
     app = SimulationApp({"headless": gm.HEADLESS})
     import omni
 

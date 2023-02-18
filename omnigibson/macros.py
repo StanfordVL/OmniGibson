@@ -14,13 +14,13 @@ macros = Dict()
 gm = macros.globals
 
 # Whether to generate a headless or non-headless application upon OmniGibson startup
-gm.HEADLESS = (os.getenv("OMNIGIBSON_HEADLESS", 'False').lower() in ('true', '1', 't'))
+gm.HEADLESS = False
 
 # Whether to use extra settings (verboseness, extra GUI features) for debugging
 gm.DEBUG = True
 
 # Whether to print out disclaimers (i.e.: known failure cases resulting from Omniverse's current bugs / limitations)
-gm.SHOW_DISCLAIMERS = True
+gm.SHOW_DISCLAIMERS = False
 
 # Whether to enable (a) [global / robot] contact checking or not
 # Note: You can enable the robot contact checking, even if global checking is disabled
@@ -32,7 +32,7 @@ gm.ENABLE_ROBOT_CONTACT_REPORTING = True
 
 # Whether to use omni's GPU dynamics
 # This is necessary for certain features; e.g. particles (fluids / cloth)
-gm.USE_GPU_DYNAMICS = False
+gm.USE_GPU_DYNAMICS = True
 
 # Whether to use high-fidelity rendering (this includes, e.g., isosurfaces)
 gm.ENABLE_HQ_RENDERING = False
@@ -63,7 +63,7 @@ gm.DEFAULT_VIEWER_WIDTH = 1280
 gm.DEFAULT_VIEWER_HEIGHT = 720
 
 # Whether to use encrypted assets
-gm.USE_ENCRYPTED_ASSETS = True
+gm.USE_ENCRYPTED_ASSETS = False
 
 # (Demo-purpose) Whether to activate Assistive Grasping mode for Cloth (it's handled differently from RigidBody)
 gm.AG_CLOTH = False

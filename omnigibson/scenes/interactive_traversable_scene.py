@@ -4,7 +4,7 @@ from omnigibson.robots.robot_base import m as robot_macros
 from omnigibson.scenes.traversable_scene import TraversableScene
 from omnigibson.maps.segmentation_map import SegmentationMap
 from omnigibson.utils.asset_utils import get_og_scene_path
-
+from omnigibson.maps.traversable_map import TraversableMap
 
 class InteractiveTraversableScene(TraversableScene):
     """
@@ -154,8 +154,8 @@ class InteractiveTraversableScene(TraversableScene):
 
         # Load the traversability map if we have the connectivity graph
         maps_path = os.path.join(self.scene_dir, "layout")
-        if self.has_connectivity_graph:
-            self._trav_map.load_map(maps_path)
+
+        self._trav_map.load_map(maps_path)
 
     def _should_load_object(self, obj_info):
         category = obj_info["args"].get("category", "object")
