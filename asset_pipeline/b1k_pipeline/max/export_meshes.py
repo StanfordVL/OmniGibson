@@ -315,7 +315,6 @@ class ObjectExporter:
             meta_type = child_name_result.group("meta_type")
             meta_id_str = child_name_result.group("meta_id")
             meta_id = "0" if meta_id_str is None else meta_id_str
-            assert meta_id not in metadata["meta_links"][meta_type], f"Meta ID {meta_id} is repeated in object {obj.name}"
             meta_subid_str = child_name_result.group("meta_subid")
             meta_subid = "0" if meta_subid_str is None else meta_subid_str
             assert meta_subid not in metadata["meta_links"][meta_type][meta_id], f"Meta subID {meta_info} is repeated in object {obj.name}"

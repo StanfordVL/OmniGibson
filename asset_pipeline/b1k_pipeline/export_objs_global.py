@@ -46,6 +46,12 @@ MTL_MAPPING = {
     # "map_Ks": "ao",
 }
 
+ALLOWED_PART_TAGS = {
+    "subpart",
+    "extrapart",
+    "connectedpart",
+}
+
 # TODO: Make this use a local version if necessary.
 # from dask_kubernetes.operator import KubeCluster
 # cluster = KubeCluster(name="b1k-pipeline-vhacd", image="docker.io/igibson/vhacd-worker")
@@ -53,10 +59,10 @@ MTL_MAPPING = {
 # cluster.scale(1)  # add 20 workers
 
 # client = Client(cluster)
-# client = Client('10.79.12.70:35423')
-client = Client('capri32.stanford.edu:8786')
-# VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
-VHACD_EXECUTABLE = "TestVHACD"
+client = Client('sc.stanford.edu:35423')
+# client = Client('capri32.stanford.edu:8786')
+VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
+# VHACD_EXECUTABLE = "TestVHACD"
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -174,6 +180,28 @@ def get_mesh_center(mesh):
         return mesh.centroid
 
 
+def get_part_nodes(G, root_node):
+    root_node_metadata = G.nodes[root_node]["metadata"]
+    part_nodes = []
+    for part_name in root_node_metadata["parts"]:
+        # Find the part node
+        part_name_parsed = parse_name(part_name)
+        part_cat = part_name_parsed.group("category")
+        part_model = part_name_parsed.group("model_id")
+        part_inst_id = part_name_parsed.group("instance_id")
+        part_link_name = part_name_parsed.group("link_name")
+        part_link_name = "base_link" if part_link_name is None else part_link_name
+        if part_link_name != "base_link":
+            continue
+        part_node_key = (part_cat, part_model, part_inst_id, part_link_name)
+        if part_node_key not in G.nodes:
+            print(list(G.nodes))
+        assert part_node_key in G.nodes, f"Could not find part node {part_node_key}"
+        part_nodes.append(part_node_key)
+
+    return part_nodes
+
+
 @timeout(10)
 def compute_mesh_stable_poses(mesh):
     return trimesh.poses.compute_stable_poses(mesh, n_samples=5, threshold=0.03)
@@ -260,7 +288,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
 
     in_edges = list(G.in_edges(link_node))
     assert len(in_edges) <= 1, f"Something's wrong: there's more than 1 in-edge to node {link_node}"
-    is_real_link = len(in_edges) == 0 or G.edges[in_edges[0]]["joint_type"] != "A"
+    is_real_link = len(in_edges) == 0
 
     # Assembly links do not need anything saved.
     if is_real_link:
@@ -476,17 +504,6 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
             if joint_type == "F":
                 joint_origin_xml = ET.SubElement(joint_xml, "origin")
                 joint_origin_xml.attrib = {"xyz": " ".join([str(item) for item in joint_origin])}
-            elif joint_type == "A":
-                # Assembly joints just need to be annotated in the metadata
-                part_category, part_model = link_name.split("/")
-                part_pos = parent_frame + joint_origin
-                part_orn = [0, 0, 0, 1]  # TODO: Fix me!
-                G.nodes[link_node]["object_parts"].append({
-                    "category": part_category,
-                    "model": part_model,
-                    "pos": part_pos.tolist(),
-                    "orn": part_orn,
-                })
             else:
                 raise ValueError("Unexpected joint type: " + str(joint_type))
         
@@ -520,6 +537,7 @@ def process_object(G, root_node, output_dir):
     out_metadata = {
         "meta_links": {},
         "link_tags": {},
+        "object_parts": [],
     }
 
     # Iterate over each link.
@@ -535,6 +553,37 @@ def process_object(G, root_node, output_dir):
     tree.write(urdf_path, xml_declaration=True)
 
     bbox_size, base_link_offset, _, _ = compute_object_bounding_box(G.nodes[root_node])
+
+    # Compute part information
+    for part_node_key in get_part_nodes(G, root_node):
+        # Get the part node bounding box
+        part_bb_size, _, part_bb_in_world_pos, part_bb_in_world_rot = compute_object_bounding_box(G.nodes[part_node_key])
+
+        # Convert into our base link frame
+        our_transform = np.eye(4)
+        our_transform[:3, 3] = base_link_center
+        our_transform[:3, :3] = R.from_quat(canonical_orientation).as_matrix()
+        bb_transform = np.eye(4)
+        bb_transform[:3, 3] = part_bb_in_world_pos
+        bb_transform[:3, :3] = part_bb_in_world_rot.as_matrix()
+        bb_transform_in_our = np.linalg.inv(our_transform) @ bb_transform
+        bb_pos_in_our = trimesh.transformations.translation_from_matrix(bb_transform_in_our)
+        bb_quat_in_our = trimesh.transformations.quaternion_from_matrix(bb_transform_in_our)
+
+        # Get the part type
+        part_tags = set(G.nodes[part_node_key]["tags"]) & ALLOWED_PART_TAGS
+        assert(len(part_tags) == 1), f"Part node {part_node_key} has multiple part tags: {part_tags}"
+        part_type, = part_tags
+
+        # Add the metadata
+        out_metadata["object_parts"].append({
+            "category": part_node_key[0],
+            "model": part_node_key[1],
+            "type": part_type,
+            "bb_pos": bb_pos_in_our,
+            "bb_orn": bb_quat_in_our,
+            "bb_size": part_bb_size,
+        })
 
     # Save metadata json
     out_metadata.update({
@@ -567,8 +616,13 @@ def process_target(target, output_dir, executor):
     object_futures = {}
     for root_node in saveable_roots:
         # Start processing the object. We start by creating an object-specific
-        # copy of the mesh tree.
-        Gprime = G.subgraph(nx.dfs_tree(G, root_node).nodes()).copy()
+        # copy of the mesh tree (also including info about any parts)
+        relevant_nodes = set(nx.dfs_tree(G, root_node).nodes())
+        relevant_nodes |= {
+            node
+            for part_root_node in get_part_nodes(G, root_node)  # Get every part root node
+            for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
+        Gprime = G.subgraph(relevant_nodes).copy()
 
         object_future = executor.submit(process_object, Gprime, root_node, output_dir)
         object_futures[object_future] = str(root_node)

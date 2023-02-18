@@ -86,8 +86,8 @@ def build_mesh_tree(mesh_list, mesh_root, load_upper=True):
             upper_mesh.apply_transform(scale_matrix)
             G.nodes[node_key]["upper_mesh"] = upper_mesh
         else:
-            assert "lower_filename" not in G.nodes[node_key]
-            G.nodes[node_key]["lower_filename"] = mesh_path, f"Found two lower meshes for {node_key}"
+            assert "lower_filename" not in G.nodes[node_key], f"Found two lower meshes for {node_key}"
+            G.nodes[node_key]["lower_filename"] = mesh_path
             lower_mesh = trimesh.load(mesh_path, process=False, force="mesh")
             lower_mesh.apply_transform(scale_matrix)
             G.nodes[node_key]["lower_mesh"] = lower_mesh
@@ -112,7 +112,7 @@ def build_mesh_tree(mesh_list, mesh_root, load_upper=True):
         if node[-1] != "base_link":
             (_, _, d), = G.in_edges(node, data=True)
             joint_type = d["joint_type"]
-            needs_upper = load_upper and not data["is_broken"] and joint_type not in ("F", "A")
+            needs_upper = load_upper and not data["is_broken"] and joint_type != "F"
         assert not needs_upper or "upper_filename" in data, f"{node} does not have upper filename."
         assert not needs_upper or "upper_mesh" in data, f"{node} does not have upper mesh."
         assert "lower_filename" in data, f"{node} does not have lower filename."
