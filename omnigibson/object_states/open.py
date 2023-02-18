@@ -1,4 +1,5 @@
 import random
+import logging
 
 from omnigibson.macros import create_module_macros
 from omnigibson.object_states.object_state_base import BooleanState, AbsoluteObjectState
@@ -75,17 +76,22 @@ def _get_relevant_joints(obj):
             - list of JointPrim: Relevant joints for determining whether @obj is open or closed
             - list of int: Joint directions for each corresponding relevant joint
     """
+    both_sides = False
+    relevant_joints = list(obj.joints.values())
+    joint_directions = [1] * len(relevant_joints)
+
     global m
     if not hasattr(obj, "metadata"):
-        return None, None, None
+        logging.warning("No openable joint metadata found for object %s" % obj.name)
+        return both_sides, relevant_joints, joint_directions
 
     both_sides = obj.metadata[m.BOTH_SIDES_METADATA_FIELD] if m.BOTH_SIDES_METADATA_FIELD in obj.metadata else False
 
     # Get joint IDs and names from metadata annotation. If object doesn't have the openable metadata,
     # we stop here and return Open=False.
     if m.METADATA_FIELD not in obj.metadata:
-        print("No openable joint metadata found for object %s" % obj.name)
-        return None, None, None
+        logging.warning("No openable joint metadata found for object %s" % obj.name)
+        return both_sides, relevant_joints, joint_directions
 
     joint_metadata = obj.metadata[m.METADATA_FIELD].items()
 
@@ -94,8 +100,8 @@ def _get_relevant_joints(obj):
     joint_names = [m[1] for m in joint_metadata]
     joint_directions = [m[2] if len(m) > 2 else 1 for m in joint_metadata]
     if not joint_names:
-        print("No openable joint was listed in metadata for object %s" % obj.name)
-        return None, None, None
+        logging.warning("No openable joint was listed in metadata for object %s" % obj.name)
+        return both_sides, relevant_joints, joint_directions
 
     # Get joint infos and compute openness thresholds.
     relevant_joints = [joint for key, joint in obj.joints.items() if key in joint_names]
