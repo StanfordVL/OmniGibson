@@ -28,7 +28,7 @@ def main():
 
     # Build the mesh tree using our mesh tree library.
     # We don't need the upper side joints since we will only use these objects for bboxes.
-    G = build_mesh_tree(mesh_list, mesh_root_dir, load_upper=False)
+    G = build_mesh_tree(mesh_list, str(mesh_root_dir), load_upper=False)
 
     # Go through each object.
     roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
@@ -84,7 +84,7 @@ def main():
         joint_child.attrib = {"link": obj_name_in_scene}
 
     scene_urdf_file = output_dir / f"{scene_name}_best.urdf"
-    scene_urdf_file.mkdir(parents=True, exist_ok=True)
+    scene_urdf_file.parent.mkdir(parents=True, exist_ok=True)
     xmlstr = minidom.parseString(ET.tostring(scene_tree_root)).toprettyxml(indent="   ")
     with open(scene_urdf_file, "w") as f:
         f.write(xmlstr)
