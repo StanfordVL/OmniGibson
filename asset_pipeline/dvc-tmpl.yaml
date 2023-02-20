@@ -231,21 +231,20 @@ stages:
       - artifacts/pipeline/export_meshes.success
       - cad/${item}/artifacts/meshes
       - artifacts/aggregate/objects
-      - artifacts/pipeline/aggregate_objs.success
       - b1k_pipeline/export_scene.py
-      - b1k_pipeline/export_objs.py
+      - b1k_pipeline/export_objs_global.py
       - b1k_pipeline/mesh_tree.py
       outs:
       - cad/${item}/artifacts/scene
-      - cad/${item}/artifacts/export_scene.json
+      - cad/${item}/artifacts/export_scene.success
 
-  export_scene_success:
-    cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/export_scene.json artifacts/pipeline/export_scene.success'
-    deps:
-    - cad/#{scenes}/artifacts/export_scene.json
-    - b1k_pipeline/check_success_aggregate.py
-    outs:
-    - artifacts/pipeline/export_scene.success
+  # export_scene_success:
+  #   cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/export_scene.json artifacts/pipeline/export_scene.success'
+  #   deps:
+  #   - cad/#{scenes}/artifacts/export_scene.json
+  #   - b1k_pipeline/check_success_aggregate.py
+  #   outs:
+  #   - artifacts/pipeline/export_scene.success
 
   validate_scene:
     # Validate exported scene, e.g. physics stability.

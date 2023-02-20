@@ -3798,36 +3798,13 @@ stages:
       - artifacts/pipeline/export_meshes.success
       - cad/${item}/artifacts/meshes
       - artifacts/aggregate/objects
-      - artifacts/pipeline/aggregate_objs.success
       - b1k_pipeline/export_scene.py
-      - b1k_pipeline/export_objs.py
+      - b1k_pipeline/export_objs_global.py
       - b1k_pipeline/mesh_tree.py
       outs:
       - cad/${item}/artifacts/scene
-      - cad/${item}/artifacts/export_scene.json
+      - cad/${item}/artifacts/export_scene.success
     foreach: ${scenes}
-  export_scene_success:
-    cmd: python b1k_pipeline/check_success_aggregate.py artifacts/export_scene.json
-      artifacts/pipeline/export_scene.success
-    deps:
-    - cad/scenes/Beechwood_0_int/artifacts/export_scene.json
-    - cad/scenes/Beechwood_1_int/artifacts/export_scene.json
-    - cad/scenes/Benevolence_0_int/artifacts/export_scene.json
-    - cad/scenes/Benevolence_1_int/artifacts/export_scene.json
-    - cad/scenes/Benevolence_2_int/artifacts/export_scene.json
-    - cad/scenes/Ihlen_0_int/artifacts/export_scene.json
-    - cad/scenes/Ihlen_1_int/artifacts/export_scene.json
-    - cad/scenes/Merom_0_int/artifacts/export_scene.json
-    - cad/scenes/Merom_1_int/artifacts/export_scene.json
-    - cad/scenes/Pomaria_0_int/artifacts/export_scene.json
-    - cad/scenes/Pomaria_1_int/artifacts/export_scene.json
-    - cad/scenes/Pomaria_2_int/artifacts/export_scene.json
-    - cad/scenes/Rs_int/artifacts/export_scene.json
-    - cad/scenes/Wainscott_0_int/artifacts/export_scene.json
-    - cad/scenes/Wainscott_1_int/artifacts/export_scene.json
-    - b1k_pipeline/check_success_aggregate.py
-    outs:
-    - artifacts/pipeline/export_scene.success
   object_inventory:
     cmd: python b1k_pipeline/object_inventory.py
     deps:
