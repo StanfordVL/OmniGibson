@@ -59,7 +59,6 @@ ALLOWED_PART_TAGS = {
 # cluster.scale(1)  # add 20 workers
 
 # client = Client(cluster)
-client = Client('sc.stanford.edu:35423')
 # client = Client('capri32.stanford.edu:8786')
 VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 # VHACD_EXECUTABLE = "TestVHACD"
@@ -72,7 +71,7 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def call_vhacd(obj_file_path, dest_file_path):
+def call_vhacd(obj_file_path, dest_file_path, dask_client):
     # This is the function that sends VHACD requests to a worker. It needs to read the contents
     # of the source file into memory, transmit that to the worker, receive the contents of the
     # result file and save those at the destination path.
@@ -80,7 +79,7 @@ def call_vhacd(obj_file_path, dest_file_path):
         file_bytes = f.read()
     # data_future = client.scatter(file_bytes)
     data_future = file_bytes
-    vhacd_future = client.submit(
+    vhacd_future = dask_client.submit(
         vhacd_worker,
         data_future,
         key=obj_file_path,
@@ -274,7 +273,7 @@ def compute_object_bounding_box(root_node_data):
     return bbox_size, base_link_offset, bbox_world_centroid, bbox_world_rotation
 
 
-def process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_dir, tree_root, out_metadata):
+def process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_dir, tree_root, out_metadata, dask_client):
     _, _, _, link_name = link_node
     raw_meta_links = G.nodes[link_node]["meta_links"]
 
@@ -334,7 +333,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         # Generate collision mesh
         collision_shape_file = obj_link_collision_mesh_folder / obj_relative_path
         vhacd = PIPELINE_ROOT / "b1k_pipeline" / "vhacd.exe"
-        call_vhacd(str(visual_shape_file.absolute()), str(collision_shape_file.absolute()))
+        call_vhacd(str(visual_shape_file.absolute()), str(collision_shape_file.absolute()), dask_client)
         # vhacd_cmd = [str(vhacd), "--input", str(visual_shape_file.absolute()), "--output", str(collision_shape_file.absolute()), "--log", "NUL", "--resolution", "10000000", "--depth 15"]
         # print("Running vhacd:", " ".join(vhacd_cmd))
         # assert subprocess.call(vhacd_cmd, shell=False, stdout=subprocess.DEVNULL) == 0
@@ -510,7 +509,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]
 
 
-def process_object(G, root_node, output_dir):
+def process_object(G, root_node, output_dir, dask_client):
     obj_cat, obj_model, obj_inst_id, _ = root_node
     obj_output_dir = output_dir / obj_cat / obj_model
     obj_output_dir.mkdir(parents=True, exist_ok=True)
@@ -537,7 +536,7 @@ def process_object(G, root_node, output_dir):
 
     # Iterate over each link.
     for link_node in nx.dfs_preorder_nodes(G, root_node):
-        process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_output_dir, tree_root, out_metadata)
+        process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_output_dir, tree_root, out_metadata, dask_client)
 
     # Save the URDF file.
     urdf_path = obj_output_dir / f"{obj_model}.urdf"
@@ -593,7 +592,7 @@ def process_object(G, root_node, output_dir):
     with open(metadata_file, "w") as f:
         json.dump(out_metadata, f, cls=NumpyEncoder)
 
-def process_target(target, output_dir, executor):
+def process_target(target, output_dir, executor, dask_client):
     object_list_filename = PIPELINE_ROOT / "cad" / target / "artifacts/object_list.json"
     mesh_root_dir = PIPELINE_ROOT / "cad" / target / "artifacts/meshes"
 
@@ -619,7 +618,7 @@ def process_target(target, output_dir, executor):
             for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
         Gprime = G.subgraph(relevant_nodes).copy()
 
-        object_future = executor.submit(process_object, Gprime, root_node, output_dir)
+        object_future = executor.submit(process_object, Gprime, root_node, output_dir, dask_client)
         object_futures[object_future] = str(root_node)
 
     return object_futures
@@ -631,10 +630,12 @@ def main():
     # Load the mesh list from the object list json.
     errors = {}
     all_futures = {}
+
+    dask_client = Client('sc.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor() as executor:
         for target in tqdm.tqdm(get_targets("combined")):
-            all_futures.update(process_target(target, output_dir, executor))
+            all_futures.update(process_target(target, output_dir, executor, dask_client))
                 
         with tqdm.tqdm(total=len(all_futures)) as object_pbar:
             for future in futures.as_completed(all_futures.keys()):
