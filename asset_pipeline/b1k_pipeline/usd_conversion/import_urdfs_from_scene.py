@@ -13,9 +13,9 @@ from omnigibson import app
 from omnigibson.simulator import Simulator
 from pxr import Gf, PhysicsSchemaTools, Sdf, Usd, UsdLux, UsdPhysics
 from pxr.Sdf import ValueTypeNames as VT
-from usd_conversion.expand_collision_obj_and_urdf import split_objs_in_urdf
-from usd_conversion.preprocess_urdf_for_metalinks import update_obj_urdf_with_metalinks
-from usd_conversion.utils import DATASET_ROOT
+from b1k_pipeline.usd_conversion.expand_collision_obj_and_urdf import split_objs_in_urdf
+from b1k_pipeline.usd_conversion.preprocess_urdf_for_metalinks import update_obj_urdf_with_metalinks
+from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
 
 def create_import_config():

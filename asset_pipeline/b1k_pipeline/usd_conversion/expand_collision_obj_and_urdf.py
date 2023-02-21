@@ -35,7 +35,7 @@ def split_obj_file(obj_fpath):
     Splits obj file at @obj_fpath into individual obj files
     """
     # Open file in trimesh
-    obj = trimesh.load(obj_fpath, process=False)
+    obj = trimesh.load(obj_fpath, process=False, force="mesh")
 
     # Split to grab all individual bodies
     obj_bodies = obj.split()

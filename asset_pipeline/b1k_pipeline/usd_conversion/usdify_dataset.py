@@ -12,16 +12,16 @@ gm.USE_GPU_DYNAMICS = False
 gm.USE_ENCRYPTED_ASSETS = True
 
 from omnigibson import app
-from usd_conversion.import_metadata import (
+from b1k_pipeline.usd_conversion.import_metadata import (
     import_models_metadata_from_scene,
     import_obj_metadata,
 )
-from usd_conversion.import_scene_template import import_models_template_from_scene
-from usd_conversion.import_urdfs_from_scene import (
+from b1k_pipeline.usd_conversion.import_scene_template import import_models_template_from_scene
+from b1k_pipeline.usd_conversion.import_urdfs_from_scene import (
     import_obj_urdf,
     import_objects_from_scene_urdf,
 )
-from usd_conversion.utils import DATASET_ROOT
+from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
 IMPORT_RENDER_CHANNELS = True
 

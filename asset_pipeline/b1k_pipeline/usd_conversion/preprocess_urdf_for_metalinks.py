@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import omnigibson.utils.transform_utils as T
-from usd_conversion.utils import DATASET_ROOT
+from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
 
 def pretty_print_xml(current, parent=None, index=-1, depth=0, use_tabs=False):

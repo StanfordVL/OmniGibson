@@ -22,7 +22,7 @@ from omnigibson.utils.usd_utils import BoundingBoxAPI
 from pxr import Gf, PhysxSchema, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade
 from pxr.Sdf import ValueTypeNames as VT
 from pxr.UsdGeom import Tokens
-from usd_conversion.utils import DATASET_ROOT
+from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
 LIGHT_MAPPING = {
     0: "Rect",
