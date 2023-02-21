@@ -7568,7 +7568,8 @@ stages:
     - b1k_pipeline/usd_conversion/import_scene_template.py
     - b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
     - b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
-    - b1k_pipeline/usd_conversion/usdify_dataset.py
+    - b1k_pipeline/usd_conversion/usdify_objects.py
+    - b1k_pipeline/usd_conversion/usdify_scenes.py
     - b1k_pipeline/usd_conversion/utils.py
     outs:
     - artifacts/og_dataset_encrypted.tar.gz

@@ -13,7 +13,15 @@ mv /tmp/og_dataset_zip/aggregate /tmp/og_dataset
 
 # Then, run the conversion script
 cd /ig_pipeline
-python -m b1k_pipeline.usd_conversion.usdify_dataset
+object_list=( artifacts/aggregate/objects/*/* )
+object_count=${#object_list[@]}
+echo "Object count: $object_count"
+USDIFY_BATCH_SIZE=100
+for ((batch_from=0; batch_from<object_count; batch_from+=USDIFY_BATCH_SIZE)); do
+  batch_to=$(( $batch_from+$USDIFY_BATCH_SIZE ))
+  python -m b1k_pipeline.usd_conversion.usdify_objects $i
+done
+python -m b1k_pipeline.usd_conversion.usdify_scenes
 
 # Then, re-zip the dataset
 cd /tmp
