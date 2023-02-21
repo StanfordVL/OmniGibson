@@ -86,7 +86,7 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
 
         # Store simulator reference and create cache
         self._simulator = simulator
-        self.reset()
+        # self.reset()
 
         self._initialize()
         self._initialized = True
