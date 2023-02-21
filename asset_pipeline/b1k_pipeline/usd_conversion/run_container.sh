@@ -36,13 +36,14 @@ if [ ! -e "$EGL_VENDOR_PATH" ]; then
     exit 1;
 fi 
 
-docker pull stanfordvl/omnigibson:latest
+# docker pull stanfordvl/omnigibson:latest
 docker run \
     --gpus all \
     --privileged \
     -e DISPLAY \
     -e OMNIGIBSON_HEADLESS=1 \
-    -v $PIPELINE_PATH:/data/ig_pipeline \
+    -v $DEFAULT_DATA_DIR/datasets:/data \
+    -v $PIPELINE_PATH:/ig_pipeline \
     -v ${ICD_PATH}:/etc/vulkan/icd.d/nvidia_icd.json \
     -v ${LAYERS_PATH}:/etc/vulkan/implicit_layer.d/nvidia_layers.json \
     -v ${EGL_VENDOR_PATH}:/usr/share/glvnd/egl_vendor.d/10_nvidia.json \
@@ -55,4 +56,4 @@ docker run \
     -v $DEFAULT_DATA_DIR/isaac-sim/data:/root/.local/share/ov/data:rw \
     -v $DEFAULT_DATA_DIR/isaac-sim/documents:/root/Documents:rw \
     --network=host --rm -it stanfordvl/omnigibson:latest \
-    /data/ig_pipeline/b1k_pipeline/usd_conversion/run_in_container.sh
+    /bin/bash -i /ig_pipeline/b1k_pipeline/usd_conversion/run_in_container.sh
