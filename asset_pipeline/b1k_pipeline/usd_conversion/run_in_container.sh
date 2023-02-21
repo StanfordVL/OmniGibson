@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+apt-get update
+apt-get install -y zip unzip
+
 # First, unzip the dataset into the temp directory
 # TODO
 unzip /data/ig_pipeline/artifacts/og_dataset.zip -d /tmp/og_dataset_zip

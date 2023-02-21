@@ -5,7 +5,7 @@ Color_Off='\033[0m'
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 DEFAULT_DATA_DIR="$SCRIPT_DIR/omnigibson_data"
-PIPELINE_PATH="$SCRIPT_DIR/../../"
+PIPELINE_PATH=$(readlink -f "$SCRIPT_DIR/../../")
 
 ICD_PATH="/usr/share/vulkan/icd.d/nvidia_icd.json"
 LAYERS_PATH="/usr/share/vulkan/icd.d/nvidia_layers.json"
@@ -41,7 +41,7 @@ docker run \
     --privileged \
     -e DISPLAY \
     -e OMNIGIBSON_HEADLESS=1 \
-    -v $PIPELINE_PATH:/data \
+    -v $PIPELINE_PATH:/data/ig_pipeline \
     -v ${ICD_PATH}:/etc/vulkan/icd.d/nvidia_icd.json \
     -v ${LAYERS_PATH}:/etc/vulkan/implicit_layer.d/nvidia_layers.json \
     -v ${EGL_VENDOR_PATH}:/usr/share/glvnd/egl_vendor.d/10_nvidia.json \
