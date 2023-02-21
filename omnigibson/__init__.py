@@ -93,7 +93,7 @@ def get_id_for_free_GPU_with_most_space():
     deviceCount = nvidia_smi.nvmlDeviceGetCount()
     gpu_free_space = np.zeros(deviceCount)
 
-    for i in range(deviceCount):
+    for i in range(1, deviceCount):
         handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
         info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
         gpu_free_space[i] = info.free

@@ -136,7 +136,6 @@ class RigidPrim(XFormPrim):
 
         # Grab handle to this rigid body and get name
         self.update_handles()
-        print("=>", self._handle)
         self._body_name = self._dc.get_rigid_body_name(self._handle)
 
     def update_meshes(self):
