@@ -7557,6 +7557,13 @@ stages:
     - params.yaml
     outs:
     - artifacts/pipeline/sanitycheck.success
+  usdify_dataset:
+    cmd: b1k_pipeline/usd_conversion/run_container.sh
+    deps:
+    - artifacts/og_dataset.zip
+    - b1k_pipeline/usd_conversion
+    outs:
+    - artifacts/og_dataset_encrypted.tar.gz
   validate_scene:
     do:
       cmd: python -m b1k_pipeline.validate_scene ${item}
