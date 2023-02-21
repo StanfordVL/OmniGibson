@@ -3,9 +3,11 @@ set -e
 
 apt-get update
 apt-get install -y zip unzip
+pip install tqdm
+
+OMNIGIBSON_NO_OMNIVERSE=1 python -c "from omnigibson.utils.asset_utils import download_key; download_key()"
 
 # First, unzip the dataset into the temp directory
-# TODO
 unzip /data/ig_pipeline/artifacts/og_dataset.zip -d /tmp/og_dataset_zip
 mv /tmp/og_dataset_zip/aggregate /tmp/og_dataset
 
