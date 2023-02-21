@@ -1,22 +1,27 @@
-from igibson import app, ig_dataset_path
-from igibson.simulator import Simulator
-import pxr.Vt
-from pxr import Usd
-from pxr import Gf
-from pxr.Sdf import ValueTypeNames as VT
-import numpy as np
-import xml.etree.ElementTree as ET
-import igibson.utils.transform_utils as T
 import json
+import xml.etree.ElementTree as ET
 from os.path import exists
-from pxr.UsdGeom import Tokens
-from omni.isaac.core.utils.stage import add_reference_to_stage, save_stage
+
+import numpy as np
+import omnigibson.utils.transform_utils as T
+import pxr.Vt
 from omni.isaac.core.articulations import Articulation
-from igibson.utils.usd_utils import create_joint
-from omni.isaac.core.utils.prims import get_prim_at_path, get_prim_path, is_prim_path_valid, get_prim_children
-from igibson.utils.constants import JointType
+from omni.isaac.core.utils.prims import (
+    get_prim_at_path,
+    get_prim_children,
+    get_prim_path,
+    is_prim_path_valid,
+)
+from omni.isaac.core.utils.stage import add_reference_to_stage, save_stage
+from omnigibson.simulator import Simulator
+from omnigibson.utils.constants import JointType
+from omnigibson.utils.usd_utils import create_joint
+from pxr import Gf, Usd
+from pxr.Sdf import ValueTypeNames as VT
+from pxr.UsdGeom import Tokens
 
 sim = None
+
 
 def string_to_array(string):
     """
@@ -77,19 +82,39 @@ def import_nested_models_template_from_element(element, model_pose_info):
             #     import_building_usd_fixed(obj_category=category, obj_model=model, name=name)
             else:
                 print(name)
-                bb = string_to_array(ele.get("bounding_box")) if "bounding_box" in ele.keys() else None
+                bb = (
+                    string_to_array(ele.get("bounding_box"))
+                    if "bounding_box" in ele.keys()
+                    else None
+                )
                 pos = model_pose_info[name]["pos"]
                 quat = model_pose_info[name]["quat"]
                 fixed_jnt = model_pose_info[name]["fixed_jnt"]
-                room = ele.get("room", "")
+                room = ele.get("rooms", "")
                 random_group = ele.get("random_group", None)
-                scale = string_to_array(ele.get("scale")) if "scale" in ele.keys() else None
+                scale = (
+                    string_to_array(ele.get("scale")) if "scale" in ele.keys() else None
+                )
                 obj_scope = ele.get("object_scope", None)
-                import_obj_template(obj_category=category, obj_model=model, name=name, bb=bb, pos=pos, quat=quat, fixed_jnt=fixed_jnt, room=room, random_group=random_group, scale=scale, obj_scope=obj_scope)
+                import_obj_template(
+                    obj_category=category,
+                    obj_model=model,
+                    name=name,
+                    bb=bb,
+                    pos=pos,
+                    quat=quat,
+                    fixed_jnt=fixed_jnt,
+                    room=room,
+                    random_group=random_group,
+                    scale=scale,
+                    obj_scope=obj_scope,
+                )
 
         # If there's children nodes, we iterate over those
         for child in ele:
-            import_nested_models_template_from_element(child, model_pose_info=model_pose_info)
+            import_nested_models_template_from_element(
+                child, model_pose_info=model_pose_info
+            )
 
 
 def get_joint_info(joint_element):
@@ -97,44 +122,30 @@ def get_joint_info(joint_element):
     fixed_jnt = joint_element.get("type") == "fixed"
     for ele in joint_element:
         if ele.tag == "origin":
-            quat = T.convert_quat(T.mat2quat(T.euler2mat(string_to_array(ele.get("rpy")))), "wxyz")
+            quat = T.convert_quat(
+                T.mat2quat(T.euler2mat(string_to_array(ele.get("rpy")))), "wxyz"
+            )
             pos = string_to_array(ele.get("xyz"))
         elif ele.tag == "child":
             child = ele.get("link")
     return child, pos, quat, fixed_jnt
 
 
-def import_building_usd_fixed(obj_category, obj_model, name):
-    global sim
-
-    # Check if filepath exists
-    usd_path = f"{ig_dataset_path}/scenes/{obj_model}/usd/{obj_category}/{obj_model}_{obj_category}.usd"
-
-    print(f"usd path: {usd_path}")
-
-    # Import model
-    add_reference_to_stage(
-        usd_path=usd_path,
-        prim_path=f"/World/{name}",
-    )
-
-    # obj = sim.scene.add(Articulation(
-    #     prim_path=f"/World/{name}",
-    #     name=f"{name}",
-    # ))
-
-    # Create fixed joint
-    create_joint(
-        prim_path=f"/World/{name}/rootJoint",
-        joint_type=JointType.JOINT_FIXED,
-        body0=None,
-        body1=f"/World/{name}/base_link",
-        stage=sim.stage,
-    )
-
 # TODO: Handle metalinks
 # TODO: Import heights per link folder into USD folder
-def import_obj_template(obj_category, obj_model, name, bb, pos, quat, fixed_jnt, room, random_group, scale, obj_scope):
+def import_obj_template(
+    obj_category,
+    obj_model,
+    name,
+    bb,
+    pos,
+    quat,
+    fixed_jnt,
+    room,
+    random_group,
+    scale,
+    obj_scope,
+):
     global sim
 
     print(f"obj: {name}, fixed jnt: {fixed_jnt}")
@@ -174,4 +185,3 @@ def import_obj_template(obj_category, obj_model, name, bb, pos, quat, fixed_jnt,
     if obj_scope is not None:
         obj.CreateAttribute("ig:objectScope", VT.String)
         obj.GetAttribute("ig:objectScope").Set(obj_scope)
-

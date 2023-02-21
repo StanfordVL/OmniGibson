@@ -1,24 +1,25 @@
-from igibson import ig_dataset_path
-import igibson.utils.transform_utils as T
-import xml.etree.ElementTree as ET
-import numpy as np
-import os
 import json
-from pathlib import Path
+import os
+import xml.etree.ElementTree as ET
 from datetime import datetime
+from pathlib import Path
+
+import numpy as np
+import omnigibson.utils.transform_utils as T
+from usd_conversion.utils import DATASET_ROOT
 
 
 def pretty_print_xml(current, parent=None, index=-1, depth=0, use_tabs=False):
-    space = '\t' if use_tabs else ' ' * 4
+    space = "\t" if use_tabs else " " * 4
     for i, node in enumerate(current):
         pretty_print_xml(node, current, i, depth + 1)
     if parent is not None:
         if index == 0:
-            parent.text = '\n' + (space * depth)
+            parent.text = "\n" + (space * depth)
         else:
-            parent[index - 1].tail = '\n' + (space * depth)
+            parent[index - 1].tail = "\n" + (space * depth)
         if index == len(parent) - 1:
-            current.tail = '\n' + (space * (depth - 1))
+            current.tail = "\n" + (space * (depth - 1))
 
 
 def array_to_string(array):
@@ -53,8 +54,18 @@ def convert_to_string(inp):
         raise ValueError("Unsupported type received: got {}".format(type(inp)))
 
 
-def create_joint(name, parent, child, pos=(0, 0, 0), rpy=(0, 0, 0), joint_type="fixed",
-                 axis=None, damping=None, friction=None, limits=None):
+def create_joint(
+    name,
+    parent,
+    child,
+    pos=(0, 0, 0),
+    rpy=(0, 0, 0),
+    joint_type="fixed",
+    axis=None,
+    damping=None,
+    friction=None,
+    limits=None,
+):
     """
     Generates XML joint
     Args:
@@ -74,7 +85,11 @@ def create_joint(name, parent, child, pos=(0, 0, 0), rpy=(0, 0, 0), joint_type="
     # Create the initial joint
     jnt = ET.Element("joint", name=name, type=joint_type)
     # Create origin subtag
-    origin = ET.SubElement(jnt, "origin", attrib={"rpy": convert_to_string(rpy), "xyz": convert_to_string(pos)})
+    origin = ET.SubElement(
+        jnt,
+        "origin",
+        attrib={"rpy": convert_to_string(rpy), "xyz": convert_to_string(pos)},
+    )
     # Make sure parent and child are both names (str) -- if they're not str already, we assume it's the element ref
     if not isinstance(parent, str):
         parent = parent.get("name")
@@ -133,7 +148,13 @@ def create_link(name, subelements=None, mass=None, inertia=None):
     return link
 
 
-def create_metalink(root_element, metalink_name, parent_link_name="base_link", pos=(0,0,0), rpy=(0,0,0)):
+def create_metalink(
+    root_element,
+    metalink_name,
+    parent_link_name="base_link",
+    pos=(0, 0, 0),
+    rpy=(0, 0, 0),
+):
     # Create joint
     jnt = create_joint(
         name=f"{metalink_name}_joint",
@@ -169,10 +190,16 @@ def generate_urdf_from_xmltree(root_element, name, dirpath, unique_urdf=False):
     # Write to fpath, making sure the directory exists (if not, create it)
     Path(dirpath).mkdir(parents=True, exist_ok=True)
     # Get file
-    date = datetime.now().isoformat(timespec="microseconds").replace(".", "_").replace(":", "_").replace("-", "_")
+    date = (
+        datetime.now()
+        .isoformat(timespec="microseconds")
+        .replace(".", "_")
+        .replace(":", "_")
+        .replace("-", "_")
+    )
     fname = f"{name}_{date}.urdf" if unique_urdf else f"{name}.urdf"
     fpath = os.path.join(dirpath, fname)
-    with open(fpath, 'w') as f:
+    with open(fpath, "w") as f:
         # Write top level header line first
         f.write('<?xml version="1.0" ?>\n')
         # Convert xml to string form and write to file
@@ -186,7 +213,7 @@ def generate_urdf_from_xmltree(root_element, name, dirpath, unique_urdf=False):
 
 def update_obj_urdf_with_metalinks(obj_category, obj_model):
     # Check if filepath exists
-    model_root_path = f"{ig_dataset_path}/objects/{obj_category}/{obj_model}"
+    model_root_path = f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}"
     urdf_path = f"{model_root_path}/{obj_model}.urdf"
 
     # Load urdf
@@ -198,10 +225,10 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model):
     with open(metadata_fpath, "r") as f:
         metadata = json.load(f)
 
-
     # Pop meta links
-    assert not ("links" in metadata and "meta_links" in metadata), \
-        "Only expected one of links and meta_links to be found in metadata, but found both!"
+    assert not (
+        "links" in metadata and "meta_links" in metadata
+    ), "Only expected one of links and meta_links to be found in metadata, but found both!"
 
     # OLD FORMAT
     if "links" in metadata:
@@ -228,23 +255,25 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model):
         meta_links = metadata.pop("meta_links")
         print("meta_links:", meta_links)
         for meta_link_name, ml_attrs in meta_links.items():
-            for parent_link_name, link_attrs in ml_attrs.items():
-                for name, attrs in link_attrs.items():
-                    pos = attrs.get("position", None)
-                    quat = attrs.get("orientation", None)
-                    pos = [0, 0, 0] if pos is None else pos
-                    quat = [0, 0, 0, 1.0] if quat is None else quat
+            # TODO: Standardize how we handle lights
+            if "lights" not in meta_link_name:
+                for parent_link_name, link_attrs in ml_attrs.items():
+                    for name, attrs in link_attrs.items():
+                        pos = attrs.get("position", None)
+                        quat = attrs.get("orientation", None)
+                        pos = [0, 0, 0] if pos is None else pos
+                        quat = [0, 0, 0, 1.0] if quat is None else quat
 
-                    # TODO: Don't hardcode parent to be base_link!
+                        # TODO: Don't hardcode parent to be base_link!
 
-                    # Create metalink
-                    create_metalink(
-                        root_element=root,
-                        metalink_name=meta_link_name,
-                        parent_link_name=parent_link_name,
-                        pos=pos,
-                        rpy=T.quat2euler(quat),
-                    )
+                        # Create metalink
+                        create_metalink(
+                            root_element=root,
+                            metalink_name=meta_link_name,
+                            parent_link_name=parent_link_name,
+                            pos=pos,
+                            rpy=T.quat2euler(quat),
+                        )
 
     # Grab all elements
 
