@@ -309,7 +309,15 @@ stages:
     cmd: b1k_pipeline/usd_conversion/run_container.sh
     deps:
     - artifacts/og_dataset.zip
-    - b1k_pipeline/usd_conversion
+    - b1k_pipeline/usd_conversion/run_container.sh
+    - b1k_pipeline/usd_conversion/run_in_container.sh
+    - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
+    - b1k_pipeline/usd_conversion/import_metadata.py
+    - b1k_pipeline/usd_conversion/import_scene_template.py
+    - b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
+    - b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
+    - b1k_pipeline/usd_conversion/usdify_dataset.py
+    - b1k_pipeline/usd_conversion/utils.py
     outs:
     - artifacts/og_dataset_encrypted.tar.gz
 
