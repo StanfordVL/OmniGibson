@@ -22,6 +22,7 @@ from omnigibson.utils.usd_utils import BoundingBoxAPI
 from pxr import Gf, PhysxSchema, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade
 from pxr.Sdf import ValueTypeNames as VT
 from pxr.UsdGeom import Tokens
+
 from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
 LIGHT_MAPPING = {
@@ -607,28 +608,6 @@ def import_obj_metadata(obj_category, obj_model, import_render_channels=False):
     base_link_offset = data["metadata"].pop("base_link_offset")
     default_bb = data["metadata"].pop("bbox_size")
 
-    # Pop meta inks
-    if "links" in data["metadata"]:
-        meta_links = data["metadata"].pop("links")
-        print("meta_links:", meta_links)
-        for link_name, atrr in meta_links.items():
-            # # Create new Xform prim that will contain info
-            link_prim = get_prim_at_path(f"{prim.GetPath()}/{link_name}_link")
-
-            link_prim.CreateAttribute("ig:is_metalink", VT.Bool)
-            link_prim.GetAttribute("ig:is_metalink").Set(True)
-
-            # # TODO! Validate that this works
-            # # test on water sink 02: water sink location is 0.1, 0.048, 0.32
-            # # water source location is -0.03724, 0.008, 0.43223
-            # add_xform_properties(prim=link_prim)
-            # link_prim.GetAttribute("xformOp:translate").Set(Gf.Vec3f(*atrr["xyz"]))
-            # if atrr["rpy"] is not None:
-            #     link_prim.GetAttribute("xformOp:orient").Set(Gf.Quatf(*(T.euler2quat(atrr["rpy"])[[3, 0, 1, 2]])))
-
-            # link_prim.CreateAttribute("ig:orientation", VT.Quatf)
-            # link_prim.GetAttribute("ig:orientation").Set(Gf.Quatf(*atrr["rpy"]))
-
     # Manually modify material groups info
     if "material_groups" in data:
         data["material_groups"] = {
@@ -645,52 +624,16 @@ def import_obj_metadata(obj_category, obj_model, import_render_channels=False):
     # Grab light info if any
     meta_links = data["metadata"].get("meta_links", dict())
 
-    # OLD FORMAT
-    if "lights" in meta_links:
-        light_infos = meta_links["lights"]
-        for link_name, link_metadata in light_infos.items():
-            for light_name, light_info in link_metadata.items():
-                # Create the light in the scene
-                light_type = LIGHT_MAPPING[light_info["type"]]
-                light_prim_path = f"/{obj_model}/{link_name}/light{light_name}"
-                light_prim = (
-                    UsdLux.__dict__[f"{light_type}Light"]
-                    .Define(stage, light_prim_path)
-                    .GetPrim()
-                )
-                UsdLux.ShapingAPI.Apply(light_prim).GetShapingConeAngleAttr().Set(180.0)
-                add_xform_properties(prim=light_prim)
-                # Make sure light_prim has XForm properties
-                light = XFormPrim(prim_path=light_prim_path)
-                # Set the values accordingly
-                light.set_local_pose(
-                    translation=np.array(light_info["position"]),
-                    orientation=T.convert_quat(
-                        np.array(light_info["orientation"]), to="wxyz"
-                    ),
-                )
-                light.prim.GetAttribute("color").Set(
-                    Gf.Vec3f(*np.array(light_info["color"]) / 255.0)
-                )
-                light.prim.GetAttribute("intensity").Set(light_info["intensity"])
-                if light_type == "Rect":
-                    light.prim.GetAttribute("height").Set(light_info["length"])
-                    light.prim.GetAttribute("width").Set(light_info["width"])
-                elif light_type == "Disk":
-                    light.prim.GetAttribute("radius").Set(light_info["length"])
-                elif light_type == "Sphere":
-                    light.prim.GetAttribute("radius").Set(light_info["length"])
-                else:
-                    raise ValueError(f"Invalid light type: {light_type}")
-
     # NEW FORMAT
-    else:
-        for link_name, link_metadata in meta_links.items():
-            light_infos = link_metadata.get("lights", dict())
-            for light_name, light_info in light_infos.items():
+    for link_name, link_metadata in meta_links.items():
+        light_infos_all = link_metadata.get("lights", dict())
+        for light_id, light_infos in light_infos_all.items():
+            for light_subid, light_info in enumerate(light_infos):
                 # Create the light in the scene
                 light_type = LIGHT_MAPPING[light_info["type"]]
-                light_prim_path = f"/{obj_model}/{link_name}/light{light_name}"
+                light_prim_path = (
+                    f"/{obj_model}/{link_name}/light_{light_id}_{light_subid}"
+                )
                 light_prim = (
                     UsdLux.__dict__[f"{light_type}Light"]
                     .Define(stage, light_prim_path)
