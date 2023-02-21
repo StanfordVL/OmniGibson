@@ -38,7 +38,7 @@ if __name__ == "__main__":
     assert batch_start < len(
         obj_items
     ), f"Batch start {batch_start} is more than object count {len(obj_items)}"
-    for obj_category, obj_model in tqdm.tqdm(obj_items):
+    for obj_category, obj_model in tqdm.tqdm(obj_items[batch_start:batch_end]):
         print(f"IMPORTING CATEGORY/MODEL {obj_category}/{obj_model}...")
         import_obj_urdf(
             obj_category=obj_category, obj_model=obj_model, skip_if_exist=False

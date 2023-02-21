@@ -19,7 +19,7 @@ echo "Object count: $object_count"
 USDIFY_BATCH_SIZE=100
 for ((batch_from=0; batch_from<object_count; batch_from+=USDIFY_BATCH_SIZE)); do
   batch_to=$(( $batch_from+$USDIFY_BATCH_SIZE ))
-  python -m b1k_pipeline.usd_conversion.usdify_objects $i
+  python -m b1k_pipeline.usd_conversion.usdify_objects $batch_from $batch_to
 done
 python -m b1k_pipeline.usd_conversion.usdify_scenes
 
