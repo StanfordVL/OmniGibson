@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import omnigibson.utils.transform_utils as T
+
 from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
 
@@ -230,27 +231,7 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model):
         "links" in metadata and "meta_links" in metadata
     ), "Only expected one of links and meta_links to be found in metadata, but found both!"
 
-    # OLD FORMAT
-    if "links" in metadata:
-        meta_links = metadata.pop("links")
-        print("meta_links:", meta_links)
-        for link_name, attrs in meta_links.items():
-            pos = attrs.get("xyz", None)
-            rpy = attrs.get("rpy", None)
-            pos = [0, 0, 0] if pos is None else pos
-            rpy = [0, 0, 0] if rpy is None else rpy
-
-            # TODO: Don't hardcode parent to be base_link!
-
-            # Create metalink
-            create_metalink(
-                root_element=root,
-                metalink_name=link_name,
-                parent_link_name="base_link",
-                pos=pos,
-                rpy=rpy,
-            )
-    # NEW FORMAT
+    # Add meta links to URDF
     if "meta_links" in metadata:
         meta_links = metadata.pop("meta_links")
         print("meta_links:", meta_links)
@@ -258,22 +239,23 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model):
             # TODO: Standardize how we handle lights
             if "lights" not in meta_link_name:
                 for parent_link_name, link_attrs in ml_attrs.items():
-                    for name, attrs in link_attrs.items():
-                        pos = attrs.get("position", None)
-                        quat = attrs.get("orientation", None)
-                        pos = [0, 0, 0] if pos is None else pos
-                        quat = [0, 0, 0, 1.0] if quat is None else quat
+                    for meta_id, attr_sets in link_attrs.items():
+                        for meta_subid, attrs in enumerate(attr_sets):
+                            pos = attrs.get("position", None)
+                            quat = attrs.get("orientation", None)
+                            pos = [0, 0, 0] if pos is None else pos
+                            quat = [0, 0, 0, 1.0] if quat is None else quat
 
-                        # TODO: Don't hardcode parent to be base_link!
+                            # TODO: Don't hardcode parent to be base_link!
 
-                        # Create metalink
-                        create_metalink(
-                            root_element=root,
-                            metalink_name=meta_link_name,
-                            parent_link_name=parent_link_name,
-                            pos=pos,
-                            rpy=T.quat2euler(quat),
-                        )
+                            # Create metalink
+                            create_metalink(
+                                root_element=root,
+                                metalink_name=f"{meta_link_name}_{meta_id}_{meta_subid}",
+                                parent_link_name=parent_link_name,
+                                pos=pos,
+                                rpy=T.quat2euler(quat),
+                            )
 
     # Grab all elements
 
