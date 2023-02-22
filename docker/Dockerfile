@@ -11,8 +11,8 @@ RUN rm -rf /isaac-sim/exts/omni.isaac.ml_archive/pip_prebundle/gym
 RUN rm -rf /isaac-sim/kit/extscore/omni.kit.pip_archive/pip_prebundle/numpy
 
 # Add OmniGibson
-ADD . /omnigibson
-WORKDIR /omnigibson
+ADD . /omnigibson-src
+WORKDIR /omnigibson-src
 
 # Mount the data directory
 VOLUME ["/data"]
