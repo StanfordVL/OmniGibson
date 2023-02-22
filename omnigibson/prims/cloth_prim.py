@@ -115,6 +115,14 @@ class ClothPrim(GeomPrim):
         return self._n_particles
 
     @property
+    def kinematic_only(self):
+        """
+        Returns:
+            bool: Whether this object is a kinematic-only object. For ClothPrim, always return False.
+        """
+        return False
+
+    @property
     def particle_positions(self):
         """
         Returns:

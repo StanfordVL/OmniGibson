@@ -34,7 +34,7 @@ def get_obj_cfg(name, category, model, prim_type=PrimType.RIGID, scale=None, abi
         "category": category,
         "model": model,
         "prim_type": prim_type,
-        "position": [100, 100, num_objs * 5],
+        "position": [150, 150, num_objs * 5],
         "scale": scale,
         "abilities": abilities,
     }
@@ -69,7 +69,7 @@ def assert_test_scene():
         # Create the environment
         env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
         og.sim.stop()
-        env.robots[0].set_position_orientation([100, 100, 0], [0, 0, 0, 1])
+        env.robots[0].set_position_orientation([150, 150, 0], [0, 0, 0, 1])
         og.sim.play()
 
 def get_random_pose(pos_low=10.0, pos_hi=20.0):

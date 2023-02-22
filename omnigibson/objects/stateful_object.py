@@ -470,7 +470,9 @@ class StatefulObject(BaseObject):
                     state_instance.load_state(state=state["non_kin"][state_name], serialized=False)
                 else:
                     logging.warning("Missing object state [{}] in the state dump".format(state_name))
-        self.clear_cached_states()
+
+        # Clear cache after loading state
+        self.clear_states_cache()
 
     def _serialize(self, state):
         # Call super method first

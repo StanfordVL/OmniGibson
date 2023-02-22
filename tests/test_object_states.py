@@ -260,7 +260,7 @@ def test_aabb():
     # Need to take one sim step
     og.sim.step()
 
-    assert np.allclose(breakfast_table.states[AABB].get_value(), BoundingBoxAPI.compute_aabb(breakfast_table.prim_path))
+    assert np.allclose(breakfast_table.states[AABB].get_value(), BoundingBoxAPI.compute_aabb(breakfast_table))
     assert np.all((breakfast_table.states[AABB].get_value()[0] < pos1) & (pos1 < breakfast_table.states[AABB].get_value()[1]))
 
     pp = dishtowel.root_link.particle_positions
