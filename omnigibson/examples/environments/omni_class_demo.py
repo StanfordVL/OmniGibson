@@ -1,5 +1,6 @@
-from omnigibson import Omnigibson
 from collections import OrderedDict
+
+from omnigibson import Omnigibson
 
 scene_cfg = OrderedDict()
 scene_cfg["type"] = "InteractiveTraversableScene"
