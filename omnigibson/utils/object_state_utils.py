@@ -65,7 +65,6 @@ def sample_kinematics(
     Returns:
         bool: True if successfully sampled, else False
     """
-
     assert z_offset > 0.5 * 9.81 * (og.sim.get_physics_dt() ** 2) + 0.02,\
         f"z_offset {z_offset} is too small for the current physics_dt {og.sim.get_physics_dt()}"
 
@@ -100,7 +99,7 @@ def sample_kinematics(
         # Orientation needs to be set for stable_z_on_aabb to work correctly
         # Position needs to be set to be very far away because the object's
         # original position might be blocking rays (use_ray_casting_method=True)
-        old_pos = np.array([200, 200, 200])
+        old_pos = np.array([100, 100, 10])
         objA.set_position_orientation(old_pos, orientation)
         objA.keep_still()
         # We also need to step physics to make sure the pose propagates downstream (e.g.: to Bounding Box computations)
