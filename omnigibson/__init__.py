@@ -91,8 +91,8 @@ def print_save_usd_warning(_):
 
 
 class Omnigibson:
-    def __init__(self, gpu_id=None, physics_gpu=None, multi_gpu=True):
-        self.gpu_id = gpu_id
+    def __init__(self, active_gpu=None, physics_gpu=None, multi_gpu=True):
+        self.active_gpu = active_gpu
         self.physics_gpu = physics_gpu
         self.multi_gpu = multi_gpu
 
@@ -118,7 +118,7 @@ class Omnigibson:
             app = SimulationApp(
                 {
                     "headless": gm.HEADLESS,
-                    "active_gpu": self.gpu_id,
+                    "active_gpu": self.active_gpu,
                     "physics_gpu": self.physics_gpu,
                     "multi_gpu": False,
                 }

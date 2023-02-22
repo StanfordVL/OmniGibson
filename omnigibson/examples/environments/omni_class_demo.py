@@ -28,7 +28,7 @@ cfg = OrderedDict(scene=scene_cfg, robots=[robot0_cfg])
 
 # We may want to update these arguments at runtime.
 # The current way of initializing Omni does not make that possible.
-og = Omnigibson(gpu_id=0, physics_gpu=0, multi_gpu=False)
+og = Omnigibson(active_gpu=0, physics_gpu=0, multi_gpu=False)
 
 # Create the environment
 env = og.Environment(configs=cfg, action_timestep=1 / 60.0, physics_timestep=1 / 60.0)
