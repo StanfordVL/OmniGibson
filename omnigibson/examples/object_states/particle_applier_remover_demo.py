@@ -13,9 +13,9 @@ from pxr import Gf
 
 # Set macros for this example
 macros.object_states.particle_modifier.VISUAL_PARTICLES_REMOVAL_LIMIT = 1000
-macros.object_states.particle_modifier.FLUID_PARTICLES_REMOVAL_LIMIT = 8000
+macros.object_states.particle_modifier.PHYSICAL_PARTICLES_REMOVAL_LIMIT = 8000
 macros.object_states.particle_modifier.MAX_VISUAL_PARTICLES_APPLIED_PER_STEP = 10
-macros.object_states.particle_modifier.MAX_FLUID_PARTICLES_APPLIED_PER_STEP = 40
+macros.object_states.particle_modifier.MAX_PHYSICAL_PARTICLES_APPLIED_PER_STEP = 40
 StainSystem._N_PARTICLES_PER_GROUP = 300
 
 # Make sure object states and GPU dynamics are enabled (GPU dynamics needed for fluids)
@@ -97,7 +97,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     }
 
     # Define objects to load: a light, table, and cloth
-    light_cfg = OrderedDict(
+    light_cfg = dict(
         type="LightObject",
         name="light",
         light_type="Sphere",
@@ -106,7 +106,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         position=[-2.0, -2.0, 2.0],
     )
 
-    table_cfg = OrderedDict(
+    table_cfg = dict(
         type="DatasetObject",
         name="table",
         category="breakfast_table",
@@ -135,8 +135,8 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Set the viewer camera appropriately
     og.sim.viewer_camera.set_position_orientation(
-        position=np.array([-1.11136405, -1.12709412,  1.99587299]),
-        orientation=np.array([ 0.44662832, -0.17829795, -0.32506992,  0.81428652]),
+        position=np.array([-1.61340969, -1.79803028,  2.53167412]),
+        orientation=np.array([ 0.46291845, -0.12381886, -0.22679218,  0.84790371]),
     )
 
     # If we're using a projection volume, we manually add in the required metalink required in order to use the volume
@@ -192,7 +192,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         # Lower z needed to allow for adjacency bounding box to overlap properly
         z = 1.175
     else:
-        # Higher z needed for actual physical interaction to accomodate non-negligible particle radius
+        # Higher z needed for actual physical interaction to accommodate non-negligible particle radius
         z = 1.22
     modifier.keep_still()
     modifier.set_position_orientation(
