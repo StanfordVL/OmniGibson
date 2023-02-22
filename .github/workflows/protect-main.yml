@@ -15,7 +15,7 @@ jobs:
         message: |
           Hi, research friend! :wave:
           It looks like you are trying to merge a PR to the `main` branch.
-          This branch is for released code only. **Please PR your code onto `ig-develop` instead.**
+          This branch is for released code only. **Please PR your code onto `og-develop` instead.**
           Thank you!
 
     - name: Fail
