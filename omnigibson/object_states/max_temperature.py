@@ -33,13 +33,13 @@ class MaxTemperature(AbsoluteObjectState):
         return 1
 
     def _dump_state(self):
-        return OrderedDict(temperature=self.value)
+        return OrderedDict(max_temperature=self.value)
 
     def _load_state(self, state):
-        self.value = state["temperature"]
+        self.value = state["max_temperature"]
 
     def _serialize(self, state):
-        return np.array([state["temperature"]], dtype=float)
+        return np.array([state["max_temperature"]], dtype=float)
 
     def _deserialize(self, state):
-        return OrderedDict(temperature=state[0]), 1
+        return OrderedDict(max_temperature=state[0]), 1

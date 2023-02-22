@@ -58,10 +58,19 @@ def assert_test_scene():
                 get_obj_cfg("fridge", "fridge", "dszchb"),
                 get_obj_cfg("plywood", "plywood", "fkmkqa", abilities={"flammable": {}}),
             ],
+            "robots": [
+                {
+                    "type": "Fetch",
+                    "obs_modalities": [],
+                }
+            ]
         }
 
         # Create the environment
         env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+        og.sim.stop()
+        env.robots[0].set_position_orientation([100, 100, 0], [0, 0, 0, 1])
+        og.sim.play()
 
 def get_random_pose(pos_low=10.0, pos_hi=20.0):
     pos = np.random.uniform(pos_low, pos_hi, 3)

@@ -1,7 +1,7 @@
 from omnigibson.object_states import *
 from omnigibson.utils.usd_utils import BoundingBoxAPI
-
 from omnigibson.macros import macros as m
+import omnigibson.utils.transform_utils as T
 import omnigibson as og
 
 from utils import og_test, get_random_pose
@@ -26,7 +26,7 @@ def test_on_top():
 
     assert bowl.states[OnTop].get_value(breakfast_table)
     assert dishtowel.states[OnTop].get_value(breakfast_table)
-    
+
     bowl.set_position([10., 10., 1.])
     dishtowel.set_position([20., 20., 1.])
 
@@ -41,7 +41,7 @@ def test_on_top():
 
     with pytest.raises(NotImplementedError):
         bowl.states[OnTop].set_value(breakfast_table, False)
-    
+
 @og_test
 def test_inside():
     bottom_cabinet = og.sim.scene.object_registry("name", "bottom_cabinet")
@@ -54,10 +54,10 @@ def test_inside():
 
     for _ in range(5):
         og.sim.step()
-    
+
     assert bowl.states[Inside].get_value(bottom_cabinet)
     assert dishtowel.states[Inside].get_value(bottom_cabinet)
-    
+
     bowl.set_position([10., 10., 1.])
     dishtowel.set_position([20., 20., 1.])
 
@@ -88,7 +88,7 @@ def test_under():
 
     assert bowl.states[Under].get_value(breakfast_table)
     assert dishtowel.states[Under].get_value(breakfast_table)
-    
+
     bowl.set_position([10., 10., 1.])
     dishtowel.set_position([20., 20., 1.])
 
@@ -632,8 +632,6 @@ def test_frozen():
 
 @og_test
 def test_on_fire():
-    print("test")
-    embed()
     plywood = og.sim.scene.object_registry("name", "plywood")
 
     assert not plywood.states[OnFire].get_value()
@@ -655,3 +653,40 @@ def test_on_fire():
         og.sim.step()
 
     assert plywood.states[Temperature].get_value() == plywood.states[OnFire].temperature
+
+@og_test
+def test_toggled_on():
+    stove = og.sim.scene.object_registry("name", "stove")
+    robot = og.sim.scene.object_registry("name", "robot0")
+
+    stove.set_position_orientation([1.5, 0.3, 0.45], T.euler2quat([0, 0, -np.pi / 2.0]))
+    robot.set_position_orientation([0.01, -0.02, 0], [0, 0, 0, 1])
+
+    assert not stove.states[ToggledOn].get_value()
+
+    robot.joints["shoulder_lift_joint"].set_pos(np.pi / 36)
+    robot.joints["shoulder_pan_joint"].set_pos(np.pi / 2)
+
+    steps = m.object_states.toggle.CAN_TOGGLE_STEPS
+    for _ in range(steps):
+        og.sim.step()
+
+    # End-effector not close to the button, stays False
+    assert not stove.states[ToggledOn].get_value()
+
+    robot.joints["shoulder_pan_joint"].set_pos(0)
+
+    for _ in range(steps - 1):
+        og.sim.step()
+
+    # End-effector close to the button, but not enough time has passed, still False
+    assert not stove.states[ToggledOn].get_value()
+
+    og.sim.step()
+
+    # Enough time has passed, turns True
+    assert stove.states[ToggledOn].get_value()
+
+    # Setter should work
+    assert stove.states[ToggledOn].set_value(False)
+    assert not stove.states[ToggledOn].get_value()
