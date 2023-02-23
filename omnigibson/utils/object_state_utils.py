@@ -252,7 +252,7 @@ def sample_kinematics(
 # Folded / Unfolded related utils
 m.DEBUG_CLOTH_PROJ_VIS = False
 # Angle threshold for checking smoothness of the cloth; surface normals need to be close enough to the z-axis
-m.NORMAL_Z_ANGLE_DIFF = np.deg2rad(30.0)
+m.NORMAL_Z_ANGLE_DIFF = np.deg2rad(45.0)
 # Subsample cloth particle points to fit a convex hull for efficiency purpose
 m.N_POINTS_CONVEX_HULL = 1000
 
