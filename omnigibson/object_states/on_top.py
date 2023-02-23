@@ -20,13 +20,12 @@ class OnTop(KinematicsMixin, RelativeObjectState, BooleanState):
         state = self._simulator.dump_state(serialized=False)
 
         for _ in range(10):
-            sampling_success = sample_kinematics("onTop", self.obj, other)
-            if self.get_value(other) == new_value:
-                break
+            if sample_kinematics("onTop", self.obj, other) and self.get_value(other):
+                return True
             else:
                 self._simulator.load_state(state, serialized=False)
 
-        return sampling_success
+        return False
 
     def _get_value(self, other):
         touching = self.obj.states[Touching].get_value(other)

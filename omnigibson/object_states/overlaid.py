@@ -65,11 +65,11 @@ class Overlaid(KinematicsMixin, RelativeObjectState, BooleanState):
                     break
 
             if self.get_value(other) == new_value:
-                break
+                return True
             else:
                 self._simulator.load_state(state, serialized=False)
 
-        return sampling_success
+        return False
 
     def _get_value(self, other):
         """
