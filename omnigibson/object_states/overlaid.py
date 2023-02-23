@@ -39,12 +39,11 @@ class Overlaid(KinematicsMixin, RelativeObjectState, BooleanState):
         if not (self.obj.prim_type == PrimType.CLOTH and other.prim_type == PrimType.RIGID):
             raise ValueError("Overlaid state requires obj1 is cloth and obj2 is rigid.")
 
-        sampling_success = False
         state = self._simulator.dump_state(serialized=False)
 
         # Get the top center of the object below
         aabb_low, aabb_hi = other.states[AABB].get_value()
-        top_center = (aabb_low + aabb_hi) / 2 + np.array([0., 0., (aabb_hi - aabb_low)[2] / 2.0])
+        top_center = np.array([(aabb_low[0] + aabb_hi[0]) / 2.0, (aabb_low[1] + aabb_hi[1]) / 2.0, aabb_hi[2]])
 
         # Reset the cloth
         self.obj.root_link.reset()
@@ -65,13 +64,9 @@ class Overlaid(KinematicsMixin, RelativeObjectState, BooleanState):
                 if len(self.obj.states[ContactBodies].get_value()) > 0:
                     break
 
-            if self.get_value(other):
-                sampling_success = True
+            if self.get_value(other) == new_value:
                 break
             else:
-                if omnigibson.debug_sampling:
-                    print("Overlaid checking", sampling_success)
-                    embed()
                 self._simulator.load_state(state, serialized=False)
 
         return sampling_success

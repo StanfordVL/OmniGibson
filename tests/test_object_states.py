@@ -134,7 +134,7 @@ def test_touching():
     assert not breakfast_table.states[Touching].get_value(dishtowel)
 
     with pytest.raises(NotImplementedError):
-        bowl.states[Touching].set_value(breakfast_table, False)
+        bowl.states[Touching].set_value(breakfast_table, None)
 
 @og_test
 def test_contact_bodies():
@@ -168,7 +168,7 @@ def test_contact_bodies():
     assert breakfast_table.root_link not in dishtowel.states[ContactBodies].get_value()
 
     with pytest.raises(NotImplementedError):
-        bowl.states[ContactBodies].set_value(set())
+        bowl.states[ContactBodies].set_value(None)
 
 @og_test
 def test_next_to():
@@ -200,7 +200,7 @@ def test_next_to():
     assert not bottom_cabinet.states[NextTo].get_value(dishtowel)
 
     with pytest.raises(NotImplementedError):
-        bowl.states[NextTo].set_value(bottom_cabinet, False)
+        bowl.states[NextTo].set_value(bottom_cabinet, None)
 
 @og_test
 def test_overlaid():
@@ -603,7 +603,7 @@ def test_frozen():
     assert dishtowel.states[Temperature].get_value() <= dishtowel.states[Frozen].freeze_temperature
 
 @og_test
-def test_frozen():
+def test_heated():
     bagel = og.sim.scene.object_registry("name", "bagel")
     dishtowel = og.sim.scene.object_registry("name", "cookable_dishtowel")
 

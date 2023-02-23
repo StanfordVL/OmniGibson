@@ -80,6 +80,7 @@ def _get_relevant_joints(obj):
 
     default_both_sides = False
     default_relevant_joints = list(obj.joints.values())
+    # 1 means the open direction corresponds to positive joint angle change and -1 means the opposite
     default_joint_directions = [1] * len(default_relevant_joints)
 
     if not hasattr(obj, "metadata"):

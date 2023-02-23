@@ -20,13 +20,7 @@ class Under(KinematicsMixin, RelativeObjectState, BooleanState):
 
         for _ in range(10):
             sampling_success = sample_kinematics("under", self.obj, other)
-            if sampling_success:
-                if self.get_value(other) != new_value:
-                    sampling_success = False
-                if omnigibson.debug_sampling:
-                    print("Under checking", sampling_success)
-                    embed()
-            if sampling_success:
+            if self.get_value(other) == new_value:
                 break
             else:
                 self._simulator.load_state(state, serialized=False)

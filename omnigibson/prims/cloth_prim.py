@@ -241,7 +241,7 @@ class ClothPrim(GeomPrim):
 
     @volume.setter
     def volume(self, volume):
-        raise NotImplementedError("Cannot set volume directly for an link!")
+        raise NotImplementedError("Cannot set volume directly for a link!")
 
     @property
     def mass(self):
@@ -320,7 +320,7 @@ class ClothPrim(GeomPrim):
     def bend_stiffness(self):
         """
         Returns:
-            bend_stiffness (float): spring bend stiffness of the particle system
+            float: spring bend stiffness of the particle system
         """
         return self.get_attribute("physxAutoParticleCloth:springBendStiffness")
 
@@ -336,7 +336,7 @@ class ClothPrim(GeomPrim):
     def damping(self):
         """
         Returns:
-            damping (float): spring damping of the particle system
+            float: spring damping of the particle system
         """
         return self.get_attribute("physxAutoParticleCloth:springDamping")
 
@@ -352,7 +352,7 @@ class ClothPrim(GeomPrim):
     def shear_stiffness(self):
         """
         Returns:
-            shear_stiffness (float): spring shear_stiffness of the particle system
+            float: spring shear_stiffness of the particle system
         """
         return self.get_attribute("physxAutoParticleCloth:springShearStiffness")
 
@@ -368,7 +368,7 @@ class ClothPrim(GeomPrim):
     def stretch_stiffness(self):
         """
         Returns:
-            stretch_stiffness (float): spring stretch_stiffness of the particle system
+            float: spring stretch_stiffness of the particle system
         """
         return self.get_attribute("physxAutoParticleCloth:springStretchStiffness")
 

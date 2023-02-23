@@ -13,23 +13,15 @@ class OnTop(KinematicsMixin, RelativeObjectState, BooleanState):
     def get_dependencies():
         return KinematicsMixin.get_dependencies() + RelativeObjectState.get_dependencies() + [Touching, VerticalAdjacency]
 
-    def _set_value(self, other, new_value, use_ray_casting_method=False):
+    def _set_value(self, other, new_value):
         if not new_value:
             raise NotImplementedError("OnTop does not support set_value(False)")
 
         state = self._simulator.dump_state(serialized=False)
 
         for _ in range(10):
-            sampling_success = sample_kinematics(
-                "onTop", self.obj, other, use_ray_casting_method=use_ray_casting_method
-            )
-            if sampling_success:
-                if self.get_value(other) != new_value:
-                    sampling_success = False
-                if omnigibson.debug_sampling:
-                    print("OnTop checking", sampling_success)
-                    embed()
-            if sampling_success:
+            sampling_success = sample_kinematics("onTop", self.obj, other)
+            if self.get_value(other) == new_value:
                 break
             else:
                 self._simulator.load_state(state, serialized=False)

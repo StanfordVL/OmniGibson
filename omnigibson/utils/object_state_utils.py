@@ -11,6 +11,7 @@ from omnigibson.object_states.aabb import AABB
 from omnigibson.object_states.contact_bodies import ContactBodies
 from omnigibson.utils import sampling_utils
 from omnigibson.utils.constants import PrimType
+from omnigibson.utils.ui_utils import debug_breakpoint
 import omnigibson.utils.transform_utils as T
 
 
@@ -43,7 +44,7 @@ def sample_kinematics(
     predicate,
     objA,
     objB,
-    use_ray_casting_method=False,
+    use_ray_casting_method=True,
     max_trials=10,
     z_offset=0.05,
     skip_falling=False,
@@ -225,8 +226,7 @@ def sample_kinematics(
             success = len(objA.states[ContactBodies].get_value()) == 0
 
         if og.debug_sampling:
-            print("sample_kinematics", success)
-            embed()
+            debug_breakpoint(f"sample_kinematics: {success}")
 
         if success:
             break
