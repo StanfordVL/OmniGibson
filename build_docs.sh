@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# Make sure you run this script EXACTLY as `bash ./build_docs.sh`
-
-# Activate conda env
-source activate omnigibson
-
 # Remove source directory and copy over source files to docs folder
 rm -r docs/src
 mkdir docs/src
