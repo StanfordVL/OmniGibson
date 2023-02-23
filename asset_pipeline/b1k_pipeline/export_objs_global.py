@@ -99,7 +99,7 @@ def vhacd_worker(file_bytes):
         out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
-        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "15", "-v", "60"]
+        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "15", "-v", "60", "-e", "5"]
         try:
             proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
             with open(out_path, 'rb') as f:
