@@ -93,23 +93,10 @@ def bind_material(prim_path, material_path):
     )
 
 
-def get_prototype_path_from_particle_system_path(particle_system_path):
-    """
-    Grabs the particle prototype directory prim path from the particle system path. This is different from before
-    because Omni no longer allows for meshes to be nested within each other.
-
-    Args:
-        particle_system_path (str): Prim path to the particle system of interest
-
-    Returns:
-        str: Corresponding directory to the particle system's prototypes
-    """
-    return f"{particle_system_path}Prototypes"
-
-
 def create_physx_particleset_pointinstancer(
     name,
     particle_system_path,
+    physx_particle_system_path,
     particle_group,
     positions,
     self_collision=True,
@@ -130,7 +117,8 @@ def create_physx_particleset_pointinstancer(
 
     Args:
         name (str): Name for this point instancer
-        particle_system_path (str): Stage path to particle system that simulates the set
+        particle_system_path (str): Stage path to particle system (Scope)
+        physx_particle_system_path (str): Stage path to physx particle system (PhysxParticleSystem)
         particle_group (int): ID for this particle set. Particles from different groups will automatically collide
             with each other. Particles in the same group will have collision behavior dictated by @self_collision
         positions (list of 3-tuple or np.array): Particle (x,y,z) positions either as a list or a (N, 3) numpy array
@@ -161,21 +149,22 @@ def create_physx_particleset_pointinstancer(
     """
     stage = get_current_stage()
     n_particles = len(positions)
-    particle_system = get_prim_at_path(particle_system_path)
+    particle_system = get_prim_at_path(physx_particle_system_path)
 
     # Make sure no prototype doesn't already exist at this point
     prim_path = f"{particle_system_path}/{name}"
-    assert not stage.GetPrimAtPath(prim_path), f"Cannot create PointInstancer prim, prim already exists at {prim_path}!"
+    assert not stage.GetPrimAtPath(prim_path), f"Cannot create an instancer scope, scope already exists at {prim_path}!"
 
+    stage.DefinePrim(prim_path, "Scope")
+
+    instancer_prim_path = f"{prim_path}/instancer"
     # Create point instancer
-    assert not stage.GetPrimAtPath(prim_path)
-    instancer = UsdGeom.PointInstancer.Define(stage, prim_path)
+    assert not stage.GetPrimAtPath(instancer_prim_path), f"Cannot create a PointInstancer prim, prim already exists at {instancer_prim_path}!"
+    instancer = UsdGeom.PointInstancer.Define(stage, instancer_prim_path)
 
     # Create particle instance prototypes if none are specified
-    prototype_root_path = f"{get_prototype_path_from_particle_system_path(particle_system_path=particle_system_path)}/{name}"
-    stage.DefinePrim(prototype_root_path, "Scope")
     if prototype_prim_paths is None:
-        prototype_path = f"{prototype_root_path}/particlePrototype"
+        prototype_path = f"{prim_path}/prototype0"
         UsdGeom.Sphere.Define(stage, prototype_path)
         prototype_prim_paths = [prototype_path]
     else:
@@ -184,7 +173,7 @@ def create_physx_particleset_pointinstancer(
         # if multiple instancers share the same prototype prim for some reason
         new_prototype_prim_paths = []
         for i, p_path in enumerate(prototype_prim_paths):
-            new_path = f"{prototype_root_path}/particlePrototype{i}"
+            new_path = f"{prim_path}/prototype{i}"
             omni.kit.commands.execute("CopyPrim", path_from=p_path, path_to=new_path)
             new_prototype_prim_paths.append(new_path)
         prototype_prim_paths = new_prototype_prim_paths
@@ -230,7 +219,7 @@ def create_physx_particleset_pointinstancer(
 
     particleUtils.configure_particle_set(
         instancer_prim,
-        particle_system_path,
+        physx_particle_system_path,
         self_collision,
         fluid,
         particle_group,

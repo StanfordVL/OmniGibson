@@ -268,6 +268,7 @@ def generate_points_in_volume_checker_function(obj, volume_link, use_visual_mesh
         if mesh_type == "Mesh":
             # For efficiency, we pre-compute the mesh using trimesh and find its corresponding faces and normals
             trimesh_mesh = mesh_prim_to_trimesh_mesh(sub_container_mesh)
+            trimesh_mesh = trimesh_mesh.convex_hull
             face_centroids = trimesh_mesh.vertices[trimesh_mesh.faces].mean(axis=1)
             face_normals = trimesh_mesh.face_normals
 
