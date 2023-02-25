@@ -92,7 +92,6 @@ class Omnigibson:
         self.gpu_id = gpu_id
         self.physics_gpu = physics_gpu
         self.multi_gpu = multi_gpu
-        print(multi_gpu, gpu_id, physics_gpu)
 
         # Automatically start omnigibson's omniverse backend unless explicitly told not to
         if not (os.getenv("OMNIGIBSON_NO_OMNIVERSE", 'False').lower() in {'true', '1', 't'}):
