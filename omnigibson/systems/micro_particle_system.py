@@ -492,12 +492,6 @@ class PhysicalParticleSystem(MicroParticleSystem):
     # Particle instancers -- maps name to particle instancer prims (dict)
     particle_instancers = None
 
-    # Material -- either a MaterialPrim or None if no material is used for this particle system
-    _material = None
-
-    # Color associated with this system (NOTE: external queries should call cls.color)
-    _color = None
-
     # Scaling factor to sample from when generating a new particle
     min_scale = None  # (x,y,z) scaling
     max_scale = None  # (x,y,z) scaling
@@ -545,14 +539,6 @@ class PhysicalParticleSystem(MicroParticleSystem):
         """
         return f"{cls.name}:material"
 
-    @classproperty
-    def material(cls):
-        """
-        Returns:
-            None or MaterialPrim: The bound material to this prim, if there is one
-        """
-        return cls._material
-
     @classmethod
     def initialize(cls, simulator):
         # Run super first
@@ -568,45 +554,7 @@ class PhysicalParticleSystem(MicroParticleSystem):
         # Initialize max instancer idn
         cls.max_instancer_idn = -1
 
-        # Create the particle material (only if we're using high-quality rendering since this takes time)
-        cls._material = cls._create_particle_material_template() if gm.ENABLE_HQ_RENDERING else None
-        if cls._material is not None:
-            # Load the material
-            cls._material.load()
-            # Bind the material to the particle system
-            cls._material.bind(cls.system_prim_path)
-            # Also apply physics to this material
-            particleUtils.add_pbd_particle_material(cls.simulator.stage, cls.mat_path)
-            # Force populate inputs and outputs of the shader
-            cls._material.shader_force_populate()
-            # Potentially modify the material
-            cls._customize_particle_material()
-
         cls.particle_prototypes = cls._create_particle_prototypes()
-
-        # Set custom rendering settings if we're using a fluid isosurface
-        if cls.is_fluid and cls.use_isosurface and gm.ENABLE_HQ_RENDERING:
-            set_carb_settings_for_fluid_isosurface()
-
-            # We also modify the grid smoothing radius to avoid "blobby" appearances
-            cls.system_prim.GetAttribute("physxParticleIsosurface:gridSmoothingRadius").Set(0.0001)
-
-        # Set the color for this system
-        if cls._material is not None:
-            base_color_weight = cls._material.diffuse_reflection_weight
-            transmission_weight = cls._material.enable_specular_transmission * cls._material.specular_transmission_weight
-            total_weight = base_color_weight + transmission_weight
-            if total_weight == 0.0:
-                # If the fluid doesn't have any color, we add a "blue" tint by default
-                color = np.array([0.0, 0.0, 1.0])
-            else:
-                base_color_weight /= total_weight
-                transmission_weight /= total_weight
-                # Weighted sum of base color and transmission color
-                color = base_color_weight * cls._material.diffuse_reflection_color + \
-                        transmission_weight * (0.5 * cls._material.specular_transmission_color + \
-                                               0.5 * cls._material.specular_transmission_scattering_color)
-            cls._color = color
 
     @classmethod
     def reset(cls):
@@ -654,16 +602,6 @@ class PhysicalParticleSystem(MicroParticleSystem):
     @classproperty
     def color(cls):
         return cls._color
-
-    @classproperty
-    def particle_radius(cls):
-        """
-        Returns:
-            float: Radius for the particles to be generated, since all fluids are composed of spheres
-        """
-        # Magic number from omni tutorials
-        # See https://docs.omniverse.nvidia.com/prod_extensions/prod_extensions/ext_physics.html#offset-autocomputation
-        return 0.99 * 0.6 * cls.particle_contact_offset if cls.is_fluid else super().particle_radius
 
     @classproperty
     def is_fluid(cls):
@@ -1155,22 +1093,20 @@ class PhysicalParticleSystem(MicroParticleSystem):
         """
         Args:
             name (str): Particle instancer name
-
         Returns:
             int: Particle instancer identification number
         """
-        return int(name.split("instancer")[-1])
+        return int(name.split(f"{cls.name}Instancer")[-1])
 
     @classmethod
     def particle_instancer_idn_to_name(cls, idn):
         """
         Args:
             idn (idn): Particle instancer identification number
-
         Returns:
             str: Name of the particle instancer auto-generated from its unique identification number
         """
-        return f"instancer{idn}"
+        return f"{cls.name}Instancer{idn}"
 
     @classmethod
     def _sync_particle_instancers(cls, idns, particle_groups, particle_counts):
@@ -1310,12 +1246,104 @@ class PhysicalParticleSystem(MicroParticleSystem):
         """
         cls._sync_particle_instancers(idns=[], particle_groups=[], particle_counts=[])
 
+    @classmethod
+    def create(
+        cls,
+        name,
+        particle_contact_offset,
+        particle_density,
+        **kwargs,
+    ):
+        """
+        Utility function to programmatically generate monolithic fluid system classes.
+
+        Args:
+            name (str): Name of the system
+            particle_contact_offset (float): Contact offset for the generated system
+            particle_density (float): Particle density for the generated system
+            **kwargs (any): keyword-mapped parameters to override / set in the child class, where the keys represent
+                the class attribute to modify and the values represent the functions / value to set
+                (Note: These values should have either @classproperty or @classmethod decorators!)
+
+        Returns:
+            PhysicalParticleSystem: Generated system class
+        """
+
+        # Override the necessary parameters
+        @classproperty
+        def cp_register_system(cls):
+            # We should register this system since it's an "actual" system (not an intermediate class)
+            return True
+
+        @classproperty
+        def cp_particle_contact_offset(cls):
+            return particle_contact_offset
+
+        @classproperty
+        def cp_particle_density(cls):
+            return particle_density
+
+        # Add to any other params specified
+        kwargs["_register_system"] = cp_register_system
+        kwargs["particle_contact_offset"] = cp_particle_contact_offset
+        kwargs["particle_density"] = cp_particle_density
+
+        # Create and return the class
+        return subclass_factory(name=f"{name}System", base_classes=cls, **kwargs)
+
 
 class FluidSystem(PhysicalParticleSystem):
     """
     Particle system class simulating fluids, leveraging isosurface feature in omniverse to render nice PBR fluid
     texture. Individual particles are composed of spheres.
     """
+
+    # Material -- either a MaterialPrim or None if no material is used for this particle system
+    _material = None
+
+    # Color associated with this system (NOTE: external queries should call cls.color)
+    # The default color is blue.
+    _color = np.array([0.0, 0.0, 1.0])
+
+    @classmethod
+    def initialize(cls, simulator):
+        # Run super first
+        super().initialize(simulator=simulator)
+
+        # Create the particle material (only if we're using high-quality rendering since this takes time)
+        # Set custom rendering settings if we're using a fluid isosurface
+        if gm.ENABLE_HQ_RENDERING:
+            cls._material = cls._create_particle_material_template()
+            # Load the material
+            cls._material.load()
+            # Bind the material to the particle system
+            cls._material.bind(cls.system_prim_path)
+            # Also apply physics to this material
+            particleUtils.add_pbd_particle_material(cls.simulator.stage, cls.mat_path)
+            # Force populate inputs and outputs of the shader
+            cls._material.shader_force_populate()
+            # Potentially modify the material
+            cls._customize_particle_material()
+
+            set_carb_settings_for_fluid_isosurface()
+            # We also modify the grid smoothing radius to avoid "blobby" appearances
+            cls.system_prim.GetAttribute("physxParticleIsosurface:gridSmoothingRadius").Set(0.0001)
+
+            # Compute the overall color of the fluid system
+            base_color_weight = cls._material.diffuse_reflection_weight
+            transmission_weight = cls._material.enable_specular_transmission * cls._material.specular_transmission_weight
+            total_weight = base_color_weight + transmission_weight
+            if total_weight == 0.0:
+                # If the fluid doesn't have any color, we add a "blue" tint by default
+                color = np.array([0.0, 0.0, 1.0])
+            else:
+                base_color_weight /= total_weight
+                transmission_weight /= total_weight
+                # Weighted sum of base color and transmission color
+                color = base_color_weight * cls._material.diffuse_reflection_color + \
+                        transmission_weight * (0.5 * cls._material.specular_transmission_color + \
+                                               0.5 * cls._material.specular_transmission_scattering_color)
+            cls._color = color
 
     @classproperty
     def is_fluid(cls):
@@ -1324,6 +1352,24 @@ class FluidSystem(PhysicalParticleSystem):
     @classproperty
     def use_isosurface(cls):
         return True
+
+    @classproperty
+    def material(cls):
+        """
+        Returns:
+            None or MaterialPrim: The bound material to this prim, if there is one
+        """
+        return cls._material
+
+    @classproperty
+    def particle_radius(cls):
+        """
+        Returns:
+            float: Radius for the particles to be generated, since all fluids are composed of spheres
+        """
+        # Magic number from omni tutorials
+        # See https://docs.omniverse.nvidia.com/prod_extensions/prod_extensions/ext_physics.html#offset-autocomputation
+        return 0.99 * 0.6 * cls.particle_contact_offset
 
     @classproperty
     def _material_mtl_name(cls):
@@ -1358,7 +1404,7 @@ class FluidSystem(PhysicalParticleSystem):
     @classmethod
     def create(
         cls,
-        fluid_name,
+        name,
         particle_contact_offset,
         particle_density,
         material_mtl_name=None,
@@ -1369,9 +1415,9 @@ class FluidSystem(PhysicalParticleSystem):
         Utility function to programmatically generate monolithic fluid system classes.
 
         Args:
-            fluid_name (str): Name of the fluid
-            particle_contact_offset (float): Contact offset for the generated fluid system
-            particle_density (float): Particle density for the generated fluid system
+            name (str): Name of the system
+            particle_contact_offset (float): Contact offset for the generated system
+            particle_density (float): Particle density for the generated system
             material_mtl_name (None or str): Material mdl preset name to use for generating this fluid material.
                 NOTE: Should be an entry from OmniSurfacePresets.mdl, minus the "OmniSurface_" string.
                 If None if specified, will default to the generic OmniSurface material
@@ -1388,23 +1434,8 @@ class FluidSystem(PhysicalParticleSystem):
                 (Note: These values should have either @classproperty or @classmethod decorators!)
 
         Returns:
-            FluidSystem: Generated fluid system class
+            FluidSystem: Generated system class
         """
-
-        # Override the necessary parameters
-        @classproperty
-        def cp_register_system(cls):
-            # We should register this system since it's an "actual" system (not an intermediate class)
-            return True
-
-        @classproperty
-        def cp_particle_contact_offset(cls):
-            return particle_contact_offset
-
-        @classproperty
-        def cp_particle_density(cls):
-            return particle_density
-
         @classproperty
         def cp_material_mtl_name(cls):
             return material_mtl_name
@@ -1415,14 +1446,16 @@ class FluidSystem(PhysicalParticleSystem):
                 customize_particle_material(mat=cls._material)
 
         # Add to any other params specified
-        kwargs["_register_system"] = cp_register_system
-        kwargs["particle_contact_offset"] = cp_particle_contact_offset
-        kwargs["particle_density"] = cp_particle_density
         kwargs["_material_mtl_name"] = cp_material_mtl_name
         kwargs["_customize_particle_material"] = cm_customize_particle_material
 
         # Create and return the class
-        return subclass_factory(name=f"{fluid_name}System", base_classes=FluidSystem, **kwargs)
+        return super().create(
+            name=name,
+            particle_contact_offset=particle_contact_offset,
+            particle_density=particle_density,
+            **kwargs,
+        )
 
 def customize_particle_material_factory(attr, value):
     def func(mat):
@@ -1481,8 +1514,8 @@ class GranularSystem(PhysicalParticleSystem):
 
         Args:
             name (str): Name of the system
-            particle_contact_offset (float): Contact offset for the generated fluid system
-            particle_density (float): Particle density for the generated fluid system
+            particle_contact_offset (float): Contact offset for the generated system
+            particle_density (float): Particle density for the generated system
             material_mtl_name (None or str): Material mdl preset name to use for generating this fluid material.
                 NOTE: Should be an entry from OmniSurfacePresets.mdl, minus the "OmniSurface_" string.
                 If None if specified, will default to the generic OmniSurface material
@@ -1503,50 +1536,38 @@ class GranularSystem(PhysicalParticleSystem):
             GranularSystem: Generated granular system class
         """
 
-        # Override the necessary parameters
-        @classproperty
-        def cp_register_system(cls):
-            # We should register this system since it's an "actual" system (not an intermediate class)
-            return True
-
-        @classproperty
-        def cp_particle_contact_offset(cls):
-            return particle_contact_offset
-
-        @classproperty
-        def cp_particle_density(cls):
-            return particle_density
-
         @classmethod
         def cm_create_particle_template(cls):
             return create_particle_template(prim_path=f"{cls.prim_path}/template", name=f"{cls.name}_template")
 
         # Add to any other params specified
-        kwargs["_register_system"] = cp_register_system
-        kwargs["particle_contact_offset"] = cp_particle_contact_offset
-        kwargs["particle_density"] = cp_particle_density
         kwargs["_create_particle_template"] = cm_create_particle_template
 
         # Create and return the class
-        return subclass_factory(name=f"{name}System", base_classes=GranularSystem, **kwargs)
+        return super().create(
+            name=name,
+            particle_contact_offset=particle_contact_offset,
+            particle_density=particle_density,
+            **kwargs,
+        )
 
 
 WaterSystem = FluidSystem.create(
-    fluid_name="Water",
+    name="Water",
     particle_contact_offset=0.012,
     particle_density=500.0,
     material_mtl_name="DeepWater",
 )
 
 MilkSystem = FluidSystem.create(
-    fluid_name="Milk",
+    name="Milk",
     particle_contact_offset=0.008,
     particle_density=500.0,
     material_mtl_name="WholeMilk",
 )
 
 StrawberrySmoothieSystem = FluidSystem.create(
-    fluid_name="StrawberrySmoothie",
+    name="StrawberrySmoothie",
     particle_contact_offset=0.008,
     particle_density=500.0,
     material_mtl_name="SkimMilk",
@@ -1555,7 +1576,7 @@ StrawberrySmoothieSystem = FluidSystem.create(
 
 DicedAppleSystem = GranularSystem.create(
     name="DicedApple",
-    particle_contact_offset=0.005,
+    particle_contact_offset=0.015,
     particle_density=500.0,
     create_particle_template=lambda prim_path, name: og.objects.DatasetObject(
         prim_path=prim_path,
@@ -1570,6 +1591,22 @@ DicedAppleSystem = GranularSystem.create(
     ),
 )
 
+DangoSystem = GranularSystem.create(
+    name="Dango",
+    particle_contact_offset=0.015,
+    particle_density=500.0,
+    create_particle_template=lambda prim_path, name: og.objects.PrimitiveObject(
+        prim_path=prim_path,
+        name=name,
+        primitive_type="Sphere",
+        radius=0.015,
+        rgba=[1.0, 1.0, 1.0, 1.0],
+        visible=False,
+        fixed_base=False,
+        visual_only=True,
+        include_default_states=False,
+    )
+)
 
 
 class ClothSystem(MicroParticleSystem):
