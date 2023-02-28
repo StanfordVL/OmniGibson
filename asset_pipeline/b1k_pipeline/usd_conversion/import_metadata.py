@@ -626,7 +626,6 @@ def import_obj_metadata(obj_category, obj_model, import_render_channels=False):
         light_infos = link_metadata.get("lights", dict())
         for light_id, light_info_list in light_infos.items():
             for i, light_info in enumerate(light_info_list):
-                light_info = light_info[0]
                 # Create the light in the scene
                 light_type = LIGHT_MAPPING[light_info["type"]]
                 light_prim_path = f"/{obj_model}/lights_{light_id}_{i}_link/light"
