@@ -163,7 +163,7 @@ def run_vhacd_search(visual_content):
             return iou
         
         # Then, start binary search on the hull count to find the lowest entry above 0.85
-        lowest_acceptable_log_hull_count = max(binary_search(0.85, compute_iou, 0, 6), 6)
+        lowest_acceptable_log_hull_count = min(binary_search(0.85, compute_iou, 0, 6), 6)
         
         # Return the contents of the lowest acceptable hull count file
         lowest_acceptable_hull_file = memory[lowest_acceptable_log_hull_count][0]
@@ -692,7 +692,7 @@ def main():
     errors = {}
     all_futures = {}
 
-    dask_client = Client('sc.stanford.edu:35423', direct_to_workers=True)
+    dask_client = Client('svl17.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=100) as executor:
         for target in tqdm.tqdm(get_targets("combined")):
