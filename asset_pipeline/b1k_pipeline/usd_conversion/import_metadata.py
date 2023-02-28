@@ -304,9 +304,7 @@ def import_rendering_channels(
     # default_mat_is_used = False
 
     # Grab all visual objs for this object
-    urdf_path = (
-        f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}/{obj_model}_split.urdf"
-    )
+    urdf_path = f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}/{obj_model}_with_metalinks_split.urdf"
     visual_objs = get_visual_objs_from_urdf(urdf_path)
 
     # Extract absolute paths to mtl files for each link
