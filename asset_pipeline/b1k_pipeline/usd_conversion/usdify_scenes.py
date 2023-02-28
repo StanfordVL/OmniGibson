@@ -12,16 +12,11 @@ gm.ENABLE_FLATCACHE = False
 gm.USE_GPU_DYNAMICS = False
 gm.USE_ENCRYPTED_ASSETS = True
 
+import omnigibson as og
 from omnigibson import app
 
-from b1k_pipeline.usd_conversion.import_metadata import (
-    import_models_metadata_from_scene,
-)
-from b1k_pipeline.usd_conversion.import_scene_template import (
-    import_models_template_from_scene,
-)
-from b1k_pipeline.usd_conversion.import_urdfs_from_scene import (
-    import_objects_from_scene_urdf,
+from b1k_pipeline.usd_conversion.convert_scene_urdfs_to_json_templates import (
+    convert_scene_urdf_to_json,
 )
 from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
@@ -31,13 +26,13 @@ IMPORT_RENDER_CHANNELS = True
 if __name__ == "__main__":
     scenes = list(os.listdir(os.path.join(DATASET_ROOT, "scenes")))
     for scene in tqdm.tqdm(scenes):
-        urdf = f"{DATASET_ROOT}/scenes/{scene}/urdf/{scene}_best.urdf"
-        usd_out = f"{DATASET_ROOT}/scenes/{scene}/usd/{scene}_best_template.usd"
+        urdf_path = f"{DATASET_ROOT}/scenes/{scene}/urdf/{scene}_best.urdf"
+        json_path = f"{DATASET_ROOT}/scenes/{scene}/json/{scene}_best.json"
 
-        import_objects_from_scene_urdf(urdf=urdf)
-        import_models_metadata_from_scene(
-            urdf=urdf, import_render_channels=IMPORT_RENDER_CHANNELS
-        )
-        import_models_template_from_scene(urdf=urdf, usd_out=usd_out)
+        # Convert URDF to USD
+        convert_scene_urdf_to_json(urdf=urdf_path, json_path=json_path)
 
-    app.close()
+        # Clear the sim
+        og.sim.clear()
+
+    og.shutdown()

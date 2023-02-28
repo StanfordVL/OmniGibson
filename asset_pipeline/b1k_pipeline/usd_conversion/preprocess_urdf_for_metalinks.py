@@ -235,34 +235,32 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model):
     if "meta_links" in metadata:
         meta_links = metadata.pop("meta_links")
         print("meta_links:", meta_links)
-        for meta_link_name, ml_attrs in meta_links.items():
-            # TODO: Standardize how we handle lights
-            if "lights" not in meta_link_name:
-                for parent_link_name, link_attrs in ml_attrs.items():
-                    for meta_id, attr_sets in link_attrs.items():
-                        for meta_subid, attrs in enumerate(attr_sets):
-                            pos = attrs.get("position", None)
-                            quat = attrs.get("orientation", None)
-                            pos = [0, 0, 0] if pos is None else pos
-                            quat = [0, 0, 0, 1.0] if quat is None else quat
+        for parent_link_name, child_link_attrs in meta_links.items():
+            for meta_link_name, ml_attrs in child_link_attrs.items():
+                for ml_id, attrs in ml_attrs.items():
+                    # TODO: Expand to not just be the first element -- remove assert once updated
+                    assert len(attrs) == 1
+                    attrs = attrs[0]
+                    pos = attrs.get("position", None)
+                    quat = attrs.get("orientation", None)
+                    pos = [0, 0, 0] if pos is None else pos
+                    quat = [0, 0, 0, 1.0] if quat is None else quat
 
-                            # TODO: Don't hardcode parent to be base_link!
-
-                            # Create metalink
-                            create_metalink(
-                                root_element=root,
-                                metalink_name=f"{meta_link_name}_{meta_id}_{meta_subid}",
-                                parent_link_name=parent_link_name,
-                                pos=pos,
-                                rpy=T.quat2euler(quat),
-                            )
+                    # Create metalink
+                    create_metalink(
+                        root_element=root,
+                        metalink_name=f"{meta_link_name}_{ml_id}",
+                        parent_link_name=parent_link_name,
+                        pos=pos,
+                        rpy=T.quat2euler(quat),
+                    )
 
     # Grab all elements
 
     # Export this URDF
-    generate_urdf_from_xmltree(
+    return generate_urdf_from_xmltree(
         root_element=root,
-        name=obj_model,
+        name=f"{obj_model}_with_metalinks",
         dirpath=model_root_path,
         unique_urdf=False,
     )

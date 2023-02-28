@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
-import numpy as np
 from copy import deepcopy
+
+import numpy as np
 import trimesh
 
 
@@ -90,7 +91,9 @@ def split_objs_in_urdf(urdf_fpath, name_suffix="split", mesh_fpath_offset="."):
         parent.remove(col)
         # Create new objs first so we know how many we need to create in the URDF
         obj_fpath = col_copy.find("./geometry/mesh").attrib["filename"]
-        n_new_objs = split_obj_file(obj_fpath=f"{urdf_dir}/{mesh_fpath_offset}/{obj_fpath}")
+        n_new_objs = split_obj_file(
+            obj_fpath=f"{urdf_dir}/{mesh_fpath_offset}/{obj_fpath}"
+        )
         # Create the new objs in the URDF
         for i in range(n_new_objs):
             # Copy collision again

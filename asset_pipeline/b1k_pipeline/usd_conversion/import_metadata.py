@@ -623,46 +623,70 @@ def import_obj_metadata(obj_category, obj_model, import_render_channels=False):
 
     # Grab light info if any
     meta_links = data["metadata"].get("meta_links", dict())
-
-    # NEW FORMAT
     for link_name, link_metadata in meta_links.items():
-        light_infos_all = link_metadata.get("lights", dict())
-        for light_id, light_infos in light_infos_all.items():
-            for light_subid, light_info in enumerate(light_infos):
-                # Create the light in the scene
-                light_type = LIGHT_MAPPING[light_info["type"]]
-                light_prim_path = (
-                    f"/{obj_model}/{link_name}/light_{light_id}_{light_subid}"
-                )
-                light_prim = (
-                    UsdLux.__dict__[f"{light_type}Light"]
-                    .Define(stage, light_prim_path)
-                    .GetPrim()
-                )
-                UsdLux.ShapingAPI.Apply(light_prim).GetShapingConeAngleAttr().Set(180.0)
-                add_xform_properties(prim=light_prim)
-                # Make sure light_prim has XForm properties
-                light = XFormPrim(prim_path=light_prim_path)
-                # Set the values accordingly
-                light.set_local_pose(
-                    translation=np.array(light_info["position"]),
-                    orientation=T.convert_quat(
-                        np.array(light_info["orientation"]), to="wxyz"
-                    ),
-                )
-                light.prim.GetAttribute("color").Set(
-                    Gf.Vec3f(*np.array(light_info["color"]) / 255.0)
-                )
-                light.prim.GetAttribute("intensity").Set(light_info["intensity"])
-                if light_type == "Rect":
-                    light.prim.GetAttribute("height").Set(light_info["length"])
-                    light.prim.GetAttribute("width").Set(light_info["width"])
-                elif light_type == "Disk":
-                    light.prim.GetAttribute("radius").Set(light_info["length"])
-                elif light_type == "Sphere":
-                    light.prim.GetAttribute("radius").Set(light_info["length"])
-                else:
-                    raise ValueError(f"Invalid light type: {light_type}")
+        light_infos = link_metadata.get("lights", dict())
+        for light_id, light_info in light_infos.items():
+            # TODO: Expand to not just be the first element -- remove assert once updated
+            assert len(light_info) == 1
+            light_info = light_info[0]
+            # Create the light in the scene
+            light_type = LIGHT_MAPPING[light_info["type"]]
+            light_prim_path = f"/{obj_model}/lights_{light_id}_link/light"
+            light_prim = (
+                UsdLux.__dict__[f"{light_type}Light"]
+                .Define(stage, light_prim_path)
+                .GetPrim()
+            )
+            UsdLux.ShapingAPI.Apply(light_prim).GetShapingConeAngleAttr().Set(180.0)
+            add_xform_properties(prim=light_prim)
+            # Make sure light_prim has XForm properties
+            light = XFormPrim(prim_path=light_prim_path)
+            # # Set the values accordingly
+            # light.set_local_pose(
+            #     translation=np.array(light_info["position"]),
+            #     orientation=T.convert_quat(np.array(light_info["orientation"]), to="wxyz")
+            # )
+            light.prim.GetAttribute("color").Set(
+                Gf.Vec3f(*np.array(light_info["color"]) / 255.0)
+            )
+            light.prim.GetAttribute("intensity").Set(light_info["intensity"])
+            if light_type == "Rect":
+                light.prim.GetAttribute("height").Set(light_info["length"])
+                light.prim.GetAttribute("width").Set(light_info["width"])
+            elif light_type == "Disk":
+                light.prim.GetAttribute("radius").Set(light_info["length"])
+            elif light_type == "Sphere":
+                light.prim.GetAttribute("radius").Set(light_info["length"])
+            else:
+                raise ValueError(f"Invalid light type: {light_type}")
+
+    # Update metalink info
+    if "meta_links" in data["metadata"]:
+        meta_links = data["metadata"].pop("meta_links")
+        print("meta_links:", meta_links)
+        for parent_link_name, child_link_attrs in meta_links.items():
+            for meta_link_name, ml_attrs in child_link_attrs.items():
+                for ml_id, attrs in ml_attrs.items():
+                    # # Create new Xform prim that will contain info
+                    ml_prim_path = f"{prim.GetPath()}/{meta_link_name}_{ml_id}_link"
+                    link_prim = get_prim_at_path(ml_prim_path)
+                    assert (
+                        link_prim
+                    ), f"Should have found valid metalink prim at prim path: {ml_prim_path}"
+
+                    link_prim.CreateAttribute("ig:is_metalink", VT.Bool)
+                    link_prim.GetAttribute("ig:is_metalink").Set(True)
+
+                    # # TODO! Validate that this works
+                    # # test on water sink 02: water sink location is 0.1, 0.048, 0.32
+                    # # water source location is -0.03724, 0.008, 0.43223
+                    # add_xform_properties(prim=link_prim)
+                    # link_prim.GetAttribute("xformOp:translate").Set(Gf.Vec3f(*atrr["xyz"]))
+                    # if atrr["rpy"] is not None:
+                    #     link_prim.GetAttribute("xformOp:orient").Set(Gf.Quatf(*(T.euler2quat(atrr["rpy"])[[3, 0, 1, 2]])))
+
+                    # link_prim.CreateAttribute("ig:orientation", VT.Quatf)
+                    # link_prim.GetAttribute("ig:orientation").Set(Gf.Quatf(*atrr["rpy"]))
 
     # Iterate over dict and replace any lists of dicts as dicts of dicts (with each dict being indexed by an integer)
     data = recursively_replace_list_of_dict(data)

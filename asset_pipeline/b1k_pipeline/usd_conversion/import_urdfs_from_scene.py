@@ -13,8 +13,11 @@ from omnigibson import app
 from omnigibson.simulator import Simulator
 from pxr import Gf, PhysicsSchemaTools, Sdf, Usd, UsdLux, UsdPhysics
 from pxr.Sdf import ValueTypeNames as VT
+
 from b1k_pipeline.usd_conversion.expand_collision_obj_and_urdf import split_objs_in_urdf
-from b1k_pipeline.usd_conversion.preprocess_urdf_for_metalinks import update_obj_urdf_with_metalinks
+from b1k_pipeline.usd_conversion.preprocess_urdf_for_metalinks import (
+    update_obj_urdf_with_metalinks,
+)
 from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
 
@@ -24,28 +27,6 @@ def create_import_config():
     drive_mode = (
         import_config.default_drive_type.__class__
     )  # Hacky way to get class for default drive type, options are JOINT_DRIVE_{NONE / POSITION / VELOCITY}
-    # import_config.merge_fixed_joints = False
-    # import_config.convex_decomp = False
-    # import_config.import_inertia_tensor = True
-    # import_config.fix_base = False
-    # import_config.default_drive_type = drive_mode.JOINT_DRIVE_NONE
-    # import_config.self_collision = True
-    # import_config.distance_scale = 1.0
-    # # import_config.density = 0
-    #
-    # import_config.set_merge_fixed_joints(False)
-    # import_config.set_convex_decomp(False)
-    # import_config.set_fix_base(True)
-    # import_config.set_import_inertia_tensor(False)
-    # import_config.set_distance_scale(100.0)
-    # import_config.set_density(0.0)
-    # import_config.set_default_drive_type(1)
-    # import_config.set_default_drive_strength(0.0)
-    # import_config.set_default_position_drive_damping(0.0)
-    # import_config.set_self_collision(False)
-    # import_config.set_up_vector(0, 0, 1)
-    # import_config.set_make_default_prim(True)
-    # import_config.set_create_physics_scene(True)
 
     import_config.set_merge_fixed_joints(False)
     import_config.set_convex_decomp(True)
@@ -95,15 +76,14 @@ def import_nested_objs_from_element(element):
 
 def import_obj_urdf(obj_category, obj_model, skip_if_exist=False):
     # Preprocess input URDF to account for metalinks
-    update_obj_urdf_with_metalinks(obj_category=obj_category, obj_model=obj_model)
+    urdf_path = update_obj_urdf_with_metalinks(
+        obj_category=obj_category, obj_model=obj_model
+    )
     # Import URDF
     cfg = create_import_config()
     # Check if filepath exists
     usd_path = f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}/usd/{obj_model}.usd"
     if not (skip_if_exist and exists(usd_path)):
-        urdf_path = (
-            f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}/{obj_model}.urdf"
-        )
         print(f"Converting collision meshes from {obj_category}, {obj_model}...")
         urdf_path = split_objs_in_urdf(urdf_fpath=urdf_path, name_suffix="split")
         print(f"Importing {obj_category}, {obj_model}...")
@@ -114,27 +94,3 @@ def import_obj_urdf(obj_category, obj_model, skip_if_exist=False):
             import_config=cfg,
             dest_path=usd_path,
         )
-        add_reference_to_stage(usd_path=usd_path, import_config=cfg)
-
-
-def add_reference_to_stage(usd_path, import_config):
-    stage = Usd.Stage.Open(usd_path)
-    prim_name = str(stage.GetDefaultPrim().GetName())
-    current_stage = omni.usd.get_context().get_stage()
-    if current_stage:
-        prim_path = omni.usd.get_stage_next_free_path(
-            current_stage,
-            str(current_stage.GetDefaultPrim().GetPath()) + "/" + prim_name,
-            False,
-        )
-        robot_prim = current_stage.OverridePrim(prim_path)
-        if "anon:" in current_stage.GetRootLayer().identifier:
-            robot_prim.GetReferences().AddReference(usd_path)
-        else:
-            robot_prim.GetReferences().AddReference(
-                omni.client.make_relative_url(
-                    current_stage.GetRootLayer().identifier, usd_path
-                )
-            )
-        if import_config.create_physics_scene:
-            UsdPhysics.Scene.Define(current_stage, Sdf.Path("/physicsScene"))
