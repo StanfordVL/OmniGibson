@@ -237,25 +237,21 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model):
         print("meta_links:", meta_links)
         for parent_link_name, child_link_attrs in meta_links.items():
             for meta_link_name, ml_attrs in child_link_attrs.items():
-                for ml_id, attrs in ml_attrs.items():
-                    # TODO: Expand to not just be the first element -- remove assert once updated
-                    assert len(attrs) == 1
-                    attrs = attrs[0]
-                    pos = attrs.get("position", None)
-                    quat = attrs.get("orientation", None)
-                    pos = [0, 0, 0] if pos is None else pos
-                    quat = [0, 0, 0, 1.0] if quat is None else quat
+                for ml_id, attrs_list in ml_attrs.items():
+                    for i, attrs in enumerate(attrs_list):
+                        pos = attrs.get("position", None)
+                        quat = attrs.get("orientation", None)
+                        pos = [0, 0, 0] if pos is None else pos
+                        quat = [0, 0, 0, 1.0] if quat is None else quat
 
-                    # Create metalink
-                    create_metalink(
-                        root_element=root,
-                        metalink_name=f"{meta_link_name}_{ml_id}",
-                        parent_link_name=parent_link_name,
-                        pos=pos,
-                        rpy=T.quat2euler(quat),
-                    )
-
-    # Grab all elements
+                        # Create metalink
+                        create_metalink(
+                            root_element=root,
+                            metalink_name=f"{meta_link_name}_{ml_id}_{i}",
+                            parent_link_name=parent_link_name,
+                            pos=pos,
+                            rpy=T.quat2euler(quat),
+                        )
 
     # Export this URDF
     return generate_urdf_from_xmltree(
