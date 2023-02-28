@@ -55,9 +55,5 @@ def main():
     with open(OUTPUT_FILENAME, "w") as f:
         json.dump({"success": success, "error_msg": error_msg}, f, indent=4)
 
-    if success:
-        with open(SUCCESS_FILENAME, "w") as f:
-            pass
-
 if __name__ == "__main__":
     main()
