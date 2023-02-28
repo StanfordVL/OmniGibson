@@ -1,7 +1,9 @@
 import collections
 from concurrent import futures
 import copy
+import io
 import json
+import logging
 import os
 import pathlib
 import sys
@@ -20,11 +22,14 @@ import networkx as nx
 import numpy as np
 import tqdm
 import trimesh
+import trimesh.voxel.creation
 from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline import mesh_tree
 from b1k_pipeline.utils import parse_name, PIPELINE_ROOT, get_targets
 
+logger = logging.getLogger("trimesh")
+logger.setLevel(logging.ERROR)
 
 VRAY_MAPPING = {
     "VRayRawDiffuseFilterMap": "albedo",
@@ -80,35 +85,90 @@ def call_vhacd(obj_file_path, dest_file_path, dask_client):
     # data_future = client.scatter(file_bytes)
     data_future = file_bytes
     vhacd_future = dask_client.submit(
-        vhacd_worker,
+        run_vhacd_search,
         data_future,
         key=obj_file_path,
-        retries=10)
+        retries=1)
     result = vhacd_future.result()
     if not result:
         raise ValueError("vhacd failed on object " + str(obj_file_path))
     with open(dest_file_path, 'wb') as f:
         f.write(result)
 
-
-def vhacd_worker(file_bytes):
-    # This is the function that runs on the worker. It needs to locally save the sent file bytes,
-    # call VHACD on that file, grab the output file's contents and return it as a bytes object.
+def get_vhacd_mesh(file_bytes, hull_count):
     with tempfile.TemporaryDirectory() as td:
         in_path = os.path.join(td, "in.obj")
         out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
-        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "15", "-v", "60", "-e", "5"]
+        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(hull_count)]
         try:
             proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
-            with open(out_path, 'rb') as f:
-                return f.read()
+            return trimesh.load(out_path, file_type="obj", force="mesh", skip_textures=True)
         except subprocess.CalledProcessError as e:
             raise ValueError(f"VHACD failed with exit code {e.returncode}. Output:\n{e.output}")
-        except futures.CancelledError as e:
-            raise ValueError("Got ")
 
+def binary_search(x, f, low, high):
+    mid = 0
+ 
+    while low <= high:
+        mid = (high + low) // 2
+        val = f(mid)
+        if val < x:
+            low = mid + 1
+        elif val > x:
+            high = mid - 1
+        else:
+            return mid
+    return low
+
+def voxelize(m):
+    pitch = 0.01
+    return trimesh.voxel.creation.local_voxelize(
+        m, pitch=pitch, point=np.array([0, 0, 0]),
+        radius=int(np.ceil(0.5/pitch))
+    ).matrix
+
+def run_vhacd_search(visual_content):
+    # First, run VHACD on the full thing with 128 hulls as an upper bound
+    max_mesh = get_vhacd_mesh(visual_content, 128)
+    translation = -np.mean(max_mesh.bounds, axis=0)
+    scale = np.min(1 / max_mesh.extents)
+    matrix_1 = trimesh.transformations.scale_matrix(scale)
+    matrix_2 = trimesh.transformations.translation_matrix(translation)
+    matrix = matrix_1 @ matrix_2
+    max_mesh.apply_transform(matrix)  
+    v_max_mesh = voxelize(max_mesh)
+
+    # Define a binary-searchable function to find the best entry
+    with tempfile.TemporaryDirectory() as td:
+        memory = {}
+        def compute_iou(log_hull_count):
+            hull_count = 2 ** log_hull_count
+            hull_count_mesh = get_vhacd_mesh(visual_content, hull_count)
+            out_fn = pathlib.Path(td) / f"{hull_count}.obj"
+            hull_count_mesh.export(str(out_fn), file_type="obj")
+            hull_count_mesh.apply_transform(matrix)
+            v_hull_count_mesh = voxelize(hull_count_mesh)
+
+            # Compute their intersection volume
+            intersection = v_max_mesh & v_hull_count_mesh
+            intersection_cnt = np.count_nonzero(intersection)
+            union = v_max_mesh | v_hull_count_mesh
+            union_cnt = np.count_nonzero(union)
+            iou = intersection_cnt / union_cnt
+
+            memory[log_hull_count] = (out_fn, iou)
+
+            return iou
+        
+        # Then, start binary search on the hull count to find the lowest entry above 0.85
+        lowest_acceptable_log_hull_count = max(binary_search(0.85, compute_iou, 0, 6), 6)
+        
+        # Return the contents of the lowest acceptable hull count file
+        lowest_acceptable_hull_file = memory[lowest_acceptable_log_hull_count][0]
+        with open(lowest_acceptable_hull_file, "rb") as f:
+            return f.read()
 
 def timeout(timelimit):
     def decorator(func):
@@ -332,8 +392,8 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         
         # Generate collision mesh
         collision_shape_file = obj_link_collision_mesh_folder / obj_relative_path
-        vhacd = PIPELINE_ROOT / "b1k_pipeline" / "vhacd.exe"
         call_vhacd(str(visual_shape_file.absolute()), str(collision_shape_file.absolute()), dask_client)
+        # vhacd = PIPELINE_ROOT / "b1k_pipeline" / "vhacd.exe"
         # vhacd_cmd = [str(vhacd), "--input", str(visual_shape_file.absolute()), "--output", str(collision_shape_file.absolute()), "--log", "NUL", "--resolution", "10000000", "--depth 15"]
         # print("Running vhacd:", " ".join(vhacd_cmd))
         # assert subprocess.call(vhacd_cmd, shell=False, stdout=subprocess.DEVNULL) == 0
@@ -561,8 +621,8 @@ def process_object(G, root_node, output_dir, dask_client):
         bb_transform[:3, 3] = part_bb_in_world_pos
         bb_transform[:3, :3] = part_bb_in_world_rot.as_matrix()
         bb_transform_in_our = np.linalg.inv(our_transform) @ bb_transform
-        bb_pos_in_our = trimesh.transformations.translation_from_matrix(bb_transform_in_our)
-        bb_quat_in_our = trimesh.transformations.quaternion_from_matrix(bb_transform_in_our)
+        bb_pos_in_our = bb_transform_in_our[:3, 3]
+        bb_quat_in_our = R.from_matrix(bb_transform_in_our[:3, :3]).as_quat()
 
         # Get the part type
         part_tags = set(G.nodes[part_node_key]["tags"]) & ALLOWED_PART_TAGS
@@ -607,7 +667,7 @@ def process_target(target, output_dir, executor, dask_client):
 
     # Only save the 0th instance.
     saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
-    object_futures = {}
+    # object_futures = {}
     for root_node in saveable_roots:
         # Start processing the object. We start by creating an object-specific
         # copy of the mesh tree (also including info about any parts)
@@ -618,10 +678,11 @@ def process_target(target, output_dir, executor, dask_client):
             for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
         Gprime = G.subgraph(relevant_nodes).copy()
 
-        object_future = executor.submit(process_object, Gprime, root_node, output_dir, dask_client)
-        object_futures[object_future] = str(root_node)
+        process_object(Gprime, root_node, output_dir, dask_client)
+        # object_future = executor.submit(process_object, Gprime, root_node, output_dir, dask_client)
+        # object_futures[object_future] = str(root_node)
 
-    return object_futures
+    # return object_futures
 
 def main():
     output_dir = PIPELINE_ROOT / "artifacts/aggregate/objects"
@@ -631,11 +692,12 @@ def main():
     errors = {}
     all_futures = {}
 
-    dask_client = Client('sc.stanford.edu:35423')
+    dask_client = Client('sc.stanford.edu:35423', direct_to_workers=True)
     
-    with futures.ThreadPoolExecutor() as executor:
+    with futures.ThreadPoolExecutor(max_workers=100) as executor:
         for target in tqdm.tqdm(get_targets("combined")):
-            all_futures.update(process_target(target, output_dir, executor, dask_client))
+            all_futures[executor.submit(process_target, target, output_dir, executor, dask_client)] = target
+            # all_futures.update(process_target(target, output_dir, executor, dask_client))
                 
         with tqdm.tqdm(total=len(all_futures)) as object_pbar:
             for future in futures.as_completed(all_futures.keys()):

@@ -13,16 +13,16 @@ import trimesh
 import b1k_pipeline.utils
 
 
-def build_mesh_tree(mesh_list, mesh_root, load_upper=True):
+def build_mesh_tree(mesh_list, mesh_root, load_upper=True, show_progress=False):
     G = nx.DiGraph()
 
     scale_factor = 1 if "legacy_" in mesh_root else 0.001
     scale_matrix = trimesh.transformations.scale_matrix(scale_factor)
 
-    print("Building mesh tree.")
-    pbar = tqdm.tqdm(mesh_list)
+    pbar = tqdm.tqdm(mesh_list) if show_progress else mesh_list
     for mesh_name in pbar:
-        pbar.set_description(mesh_name)
+        if show_progress:
+            pbar.set_description(mesh_name)
         match = b1k_pipeline.utils.parse_name(mesh_name)
         is_broken = match.group("bad")
         is_randomization_fixed = match.group("randomization_disabled")
