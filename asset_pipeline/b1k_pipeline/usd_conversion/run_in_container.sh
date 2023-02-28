@@ -23,6 +23,12 @@ for ((batch_from=0; batch_from<object_count; batch_from+=USDIFY_BATCH_SIZE)); do
 done
 python -m b1k_pipeline.usd_conversion.usdify_scenes
 
+# Do some cleanup to reduce file size
+rm -rf /tmp/og_dataset/objects/*/*/shape
+rm -rf /tmp/og_dataset/objects/*/*/material
+rm -rf /tmp/og_dataset/objects/*/*/*.urdf
+rm -rf /tmp/og_dataset/scenes/*/urdf
+
 # Then, re-zip the dataset
 cd /tmp
 tar -czvf /ig_pipeline/artifacts/og_dataset_encrypted.tar.gz og_dataset
