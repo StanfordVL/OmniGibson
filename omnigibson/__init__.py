@@ -90,10 +90,15 @@ def print_save_usd_warning(_):
     logging.warning("Exporting individual USDs has been disabled in OG due to copyrights.")
 
 
-def create_app():
+def create_app(config):
     global app
     from omni.isaac.kit import SimulationApp
-    app = SimulationApp({"headless": gm.HEADLESS})
+    app = SimulationApp({
+        "headless": gm.HEADLESS, 
+        "active_gpu": config("ACTIVE_GPU"),
+        "physics_gpu": config("ACTIVE_GPU"),
+        "multi_gpu": False,
+    })
     import omni
 
     # Possibly hide windows if in debug mode
@@ -118,12 +123,12 @@ def create_sim():
     return sim
 
 
-def start():
+def start(config):
     global app, sim, Environment, REGISTERED_SCENES, REGISTERED_OBJECTS, REGISTERED_ROBOTS, REGISTERED_CONTROLLERS, \
         REGISTERED_TASKS, ALL_SENSOR_MODALITIES
 
     # First create the app, then create the sim
-    app = create_app()
+    app = create_app(config)
     sim = create_sim()
 
     # Import any remaining items we want to access directly from the main omnigibson import
@@ -139,9 +144,10 @@ def start():
 
 
 # Automatically start omnigibson's omniverse backend unless explicitly told not to
-if not (os.getenv("OMNIGIBSON_NO_OMNIVERSE", 'False').lower() in {'true', '1', 't'}):
+# if not (os.getenv("OMNIGIBSON_NO_OMNIVERSE", 'False').lower() in {'true', '1', 't'}):
+def initialize(config):
     app, sim, Environment, REGISTERED_SCENES, REGISTERED_OBJECTS, REGISTERED_ROBOTS, REGISTERED_CONTROLLERS, \
-        REGISTERED_TASKS, ALL_SENSOR_MODALITIES = start()
+        REGISTERED_TASKS, ALL_SENSOR_MODALITIES = start(config)
 
 
 def shutdown():
