@@ -34,15 +34,6 @@ def load_scene_from_urdf(urdf):
     # First, grab object info from the urdf
     objs_info = get_objects_config_from_scene_urdf(urdf=urdf)
 
-    # Pop all "bad" objects
-    bad_keys = {"bfbeeb", "abzvij"}
-    obj_names = list(objs_info.keys())
-    for obj_name in obj_names:
-        for key in bad_keys:
-            if key in obj_name:
-                objs_info.pop(obj_name)
-                break
-
     # Load all the objects manually into a scene
     scene = Scene(use_floor_plane=False)
     og.sim.import_scene(scene)
