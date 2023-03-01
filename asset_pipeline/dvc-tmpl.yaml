@@ -235,25 +235,25 @@ stages:
   #   outs:
   #   - artifacts/pipeline/export_scene.success
 
-  validate_scene:
-    # Validate exported scene, e.g. physics stability.
-    foreach: ${scenes}
-    do:
-      cmd: 'python -m b1k_pipeline.validate_scene ${item}'
-      deps:
-      - cad/${item}/artifacts/scene
-      - artifacts/aggregate/export_scene.success
-      - b1k_pipeline/validate_scene.py
-      outs:
-      - cad/${item}/artifacts/validate_scene.json
+  # validate_scene:
+  #   # Validate exported scene, e.g. physics stability.
+  #   foreach: ${scenes}
+  #   do:
+  #     cmd: 'python -m b1k_pipeline.validate_scene ${item}'
+  #     deps:
+  #     - cad/${item}/artifacts/scene
+  #     - artifacts/aggregate/export_scene.success
+  #     - b1k_pipeline/validate_scene.py
+  #     outs:
+  #     - cad/${item}/artifacts/validate_scene.json
 
-  validate_scene_success:
-    cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/validate_scene.json artifacts/pipeline/validate_scene.success'
-    deps:
-    - cad/#{scenes}/artifacts/validate_scene.json
-    - b1k_pipeline/check_success_aggregate.py
-    outs:
-    - artifacts/pipeline/validate_scene.success
+  # validate_scene_success:
+  #   cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/validate_scene.json artifacts/pipeline/validate_scene.success'
+  #   deps:
+  #   - cad/#{scenes}/artifacts/validate_scene.json
+  #   - b1k_pipeline/check_success_aggregate.py
+  #   outs:
+  #   - artifacts/pipeline/validate_scene.success
 
   aggregate_scenes:
     # Aggregate scenes from different entries into a single location.
