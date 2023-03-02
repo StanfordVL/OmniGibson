@@ -215,11 +215,12 @@ class DatasetObject(USDObject):
     def _load(self, simulator=None):
         if gm.USE_ENCRYPTED_ASSETS:
             # Create a temporary file to store the decrytped asset, load it, and then delete it.
-            with tempfile.NamedTemporaryFile(suffix=".usd") as fp:
+            with tempfile.TemporaryDirectory() as td:
                 original_usd_path = self._usd_path
                 encrypted_filename = original_usd_path.replace(".usd", ".encrypted.usd")
-                decrypt_file(encrypted_filename, decrypted_file=fp)
-                self._usd_path = fp.name
+                decrypted_filename = os.path.join(td, os.path.basename(original_usd_path))
+                decrypt_file(encrypted_filename, decrypted_filename)
+                self._usd_path = decrypted_filename
                 prim = super()._load(simulator=simulator)
                 self._usd_path = original_usd_path
                 return prim
