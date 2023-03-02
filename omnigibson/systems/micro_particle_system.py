@@ -15,6 +15,7 @@ from pxr import Gf, Vt, UsdShade, UsdGeom, PhysxSchema
 import omnigibson as og
 from omnigibson.macros import gm, create_module_macros
 from omnigibson.prims.prim_base import BasePrim
+from omnigibson.prims.geom_prim import VisualGeomPrim
 from omnigibson.prims.material_prim import MaterialPrim
 from omnigibson.systems.system_base import SYSTEMS_REGISTRY
 from omnigibson.systems.system_base import BaseSystem
@@ -35,9 +36,6 @@ from omni.physx.bindings._physx import (
 import carb
 
 
-# Create settings for this module
-m = create_module_macros(module_path=__file__)
-
 def set_carb_settings_for_fluid_isosurface():
     """
     Sets relevant rendering settings in the carb settings in order to use isosurface effectively
@@ -50,7 +48,7 @@ def set_carb_settings_for_fluid_isosurface():
     isregistry.set_int("persistent/app/viewport/displayOptions", dOptions)
     isregistry.set_bool(SETTING_UPDATE_TO_USD, True)
     isregistry.set_int(SETTING_NUM_THREADS, 8)
-    isregistry.set_bool(SETTING_UPDATE_VELOCITIES_TO_USD, False)
+    isregistry.set_bool(SETTING_UPDATE_VELOCITIES_TO_USD, True)
     isregistry.set_bool(SETTING_UPDATE_PARTICLES_TO_USD, True)     # TODO: Why does setting this value --> True result in no isosurface being rendered?
     isregistry.set_int("persistent/simulation/minFrameRate", 60)
     isregistry.set_bool("rtx-defaults/pathtracing/lightcache/cached/enabled", False)
@@ -472,7 +470,7 @@ class MicroParticleSystem(BaseSystem):
         """
         return create_physx_particle_system(
             prim_path=cls.system_prim_path,
-            physics_scene_path=cls.simulator.get_physics_context().get_current_physics_scene_prim().GetPrimPath().pathString,
+            physics_scene_path=og.sim.get_physics_context().get_current_physics_scene_prim().GetPrimPath().pathString,
             particle_contact_offset=cls.particle_contact_offset,
             visual_only=cls.visual_only,
             smoothing=cls.use_smoothing and gm.ENABLE_HQ_RENDERING,
@@ -625,7 +623,7 @@ class PhysicalParticleSystem(MicroParticleSystem):
         Creates any relevant particle prototypes to be used by this particle system.
 
         Returns:
-            list of Usd.Prim: Mesh prim(s) to use as this system's particle prototype(s)
+            list of VisualGeomPrim: Visual mesh prim(s) to use as this system's particle prototype(s)
         """
         raise NotImplementedError()
 
@@ -787,7 +785,7 @@ class PhysicalParticleSystem(MicroParticleSystem):
             velocities=velocities,
             angular_velocities=None,
             scales=np.random.uniform(cls.min_scale, cls.max_scale, size=(n_particles, 3)) if scales is None else scales,
-            prototype_prim_paths=[pp.GetPrimPath().pathString for pp in cls.particle_prototypes],
+            prototype_prim_paths=[pp.prim_path for pp in cls.particle_prototypes],
             prototype_indices=prototype_indices,
             enabled=not cls.visual_only,
         )
@@ -808,6 +806,7 @@ class PhysicalParticleSystem(MicroParticleSystem):
             cls,
             obj,
             link,
+            use_visual_meshes=True,
             mesh_name_prefixes=None,
             instancer_idn=None,
             particle_group=0,
@@ -824,6 +823,7 @@ class PhysicalParticleSystem(MicroParticleSystem):
         Args:
             obj (EntityPrim): Object whose @link's visual meshes will be converted into sampled particles
             link (RigidPrim): @obj's link whose visual meshes will be converted into sampled particles
+            use_visual_meshes (bool): Whether to use visual meshes of the link to generate particles
             mesh_name_prefixes (None or str): If specified, specifies the substring that must exist in @link's
                 mesh names in order for that mesh to be included in the particle generator function.
                 If None, no filtering will be used.
@@ -858,7 +858,7 @@ class PhysicalParticleSystem(MicroParticleSystem):
         check_in_volume, _ = generate_points_in_volume_checker_function(
             obj=obj,
             volume_link=link,
-            use_visual_meshes=True,
+            use_visual_meshes=use_visual_meshes,
             mesh_name_prefixes=mesh_name_prefixes,
         )
 
@@ -872,9 +872,10 @@ class PhysicalParticleSystem(MicroParticleSystem):
             extent = obj.aabb_extent
         # We sample the range of each extent minus
         sampling_distance = 2 * cls.particle_radius if sampling_distance is None else sampling_distance
-        n_particles_per_axis = ((extent - 2 * cls.particle_radius) / sampling_distance).astype(int) + 1
-        arrs = [np.linspace(lo + cls.particle_radius, hi - cls.particle_radius, n) for lo, hi, n in
-                zip(low, high, n_particles_per_axis)]
+        n_particles_per_axis = (extent / sampling_distance).astype(int)
+        assert np.all(n_particles_per_axis), f"link {link.name} is too small to sample any particle of radius {cls.particle_radius}."
+        arrs = [np.arange(lo + cls.particle_radius, hi - cls.particle_radius + 1e-10, cls.particle_radius * 2)
+                for lo, hi, n in zip(low, high, n_particles_per_axis)]
         # Generate 3D-rectangular grid of points
         particle_positions = np.stack([arr.flatten() for arr in np.meshgrid(*arrs)]).T
         # Check which points are inside the volume and only keep those
@@ -897,103 +898,6 @@ class PhysicalParticleSystem(MicroParticleSystem):
             instancer_idn=instancer_idn,
             particle_group=particle_group,
             positions=particle_positions,
-            self_collision=self_collision,
-            prototype_indices=prototype_indices,
-        )
-
-    @classmethod
-    def generate_particles_from_mesh(
-            cls,
-            mesh_prim_path,
-            instancer_idn=None,
-            particle_group=0,
-            sampling_distance=None,
-            max_samples=5e5,
-            sample_volume=True,
-            self_collision=True,
-            prototype_indices_choices=None,
-    ):
-        """
-        Deprecated in favor of generate_particles_from_link: PhysxParticleSamplingAPI is less robust.
-
-        Generates a new particle instancer with unique identification number @idn, with particles sampled from the mesh
-        located at @mesh_prim_path, and registers it internally
-
-        Args:
-            mesh_prim_path (str): Stage path to the mesh prim which will be converted into sampled particles
-            instancer_idn (None or int): Unique identification number of the particle instancer to assign the generated
-                particles to. This is used to deterministically reproduce individual particle instancer states
-                dynamically, even if we delete / add additional ones at runtime during simulation. If there is no
-                active instancer that matches the requested idn, a new one will be created.
-                If None, this system will add particles to the default particle instancer
-            particle_group (int): ID for this particle set. Particles from different groups will automatically collide
-                with each other. Particles in the same group will have collision behavior dictated by @self_collision.
-                Only used if a new particle instancer is created!
-            sampling_distance (None or float): If specified, sets the distance between sampled particles. If None,
-                a simulator autocomputed value will be used
-            max_samples (int): Maximum number of particles to sample
-            sample_volume (bool): Whether to sample the particles at the mesh's surface or throughout its entire volume
-            self_collision (bool): Whether to enable particle-particle collision within the set
-                (as defined by @particle_group) or not. Only used if a new particle instancer is created!
-            prototype_indices_choices (None or int or list of int): If specified, should specify which prototype(s)
-                should be used for each particle. If None, will use all 0s (i.e.: the first prototype created). If a
-                single number, will use that prototype ID for all sampled particles. If a list of int, will uniformly
-                sample from those IDs for each particle.
-
-        Returns:
-            PhysxParticleInstancer: Particle instancer that includes the generated particles
-        """
-        # Run sanity checks
-        assert cls.initialized, "Must initialize system before generating particle instancers!"
-        assert cls.simulator.is_stopped(), "Can only sample particles from a mesh using Omni's API when simulator is stopped!"
-
-        # Create points prim (this is used initially to generate the particles) and apply particle set API
-        points_prim_path = f"{cls.prim_path}/tempSampledPoints"
-        points = UsdGeom.Points.Define(cls.simulator.stage, points_prim_path).GetPrim()
-        particle_set_api = PhysxSchema.PhysxParticleSetAPI.Apply(points)
-        particle_set_api.CreateParticleSystemRel().SetTargets([cls.prim_path])
-
-        # Apply the sampling API to our mesh prim and apply the sampling
-        mesh_prim = get_prim_at_path(mesh_prim_path)
-        sampling_api = PhysxSchema.PhysxParticleSamplingAPI.Apply(mesh_prim)
-        sampling_api.CreateParticlesRel().AddTarget(points_prim_path)
-        sampling_api.CreateSamplingDistanceAttr().Set(0 if sampling_distance is None else sampling_distance)
-        sampling_api.CreateMaxSamplesAttr().Set(max_samples)
-        sampling_api.CreateVolumeAttr().Set(sample_volume)
-
-        # We apply 1 physics step to propagate the sampling (make sure to pause the sim since particles still propagate
-        # forward even if we don't explicitly call sim.step())
-        with cls.simulator.paused():
-            cls.simulator.step_physics()
-        time.sleep(0.1)  # Empirically validated for ~2500 samples (0.02 time doesn't work)
-        cls.simulator.render()  # Rendering is needed after an initial, nontrivial amount of time for the particles to actually be sampled
-
-        # Grab the actual positions, we will write this to a new instancer that's not tied to the sampler
-        # The points / instancer tied to the sampled mesh seems to operate a bit weirdly, which is why we do it this way
-        attr = "positions" if points.GetPrimTypeInfo().GetTypeName() == "PointInstancer" else "points"
-        pos = points.GetAttribute(attr).Get()
-
-        # Make sure sampling was successful
-        assert pos is not None and len(pos) > 0, "Failed to sample particle points from mesh prim!"
-
-        # Delete the points prim and sampling API, we don't need it anymore, and make the mesh prim invisible again
-        cls.simulator.stage.RemovePrim(points_prim_path)
-        mesh_prim.RemoveAPI(PhysxSchema.PhysxParticleSamplingAPI)
-        UsdGeom.Imageable(mesh_prim).MakeInvisible()
-
-        # Get information about our sampled points
-        n_particles = len(pos)
-        if prototype_indices_choices is not None:
-            prototype_indices = np.ones(n_particles, dtype=int) * prototype_indices_choices if \
-                isinstance(prototype_indices_choices, int) else \
-                np.random.choice(prototype_indices_choices, size=(n_particles,))
-        else:
-            prototype_indices = None
-
-        return cls.generate_particles(
-            instancer_idn=instancer_idn,
-            particle_group=particle_group,
-            positions=pos,
             self_collision=self_collision,
             prototype_indices=prototype_indices,
         )
@@ -1085,8 +989,8 @@ class PhysicalParticleSystem(MicroParticleSystem):
         assert_valid_key(key=name, valid_keys=cls.particle_instancers, name="particle instancer")
         # Remove instancer from our tracking and delete its prim
         instancer = cls.particle_instancers.pop(name)
-        instancer.remove(simulator=cls.simulator)
-        cls.simulator.stage.RemovePrim(f"{cls.prim_path}/{name}")
+        instancer.remove(simulator=og.sim)
+        og.sim.stage.RemovePrim(f"{cls.prim_path}/{name}")
 
     @classmethod
     def particle_instancer_name_to_idn(cls, name):
@@ -1319,7 +1223,7 @@ class FluidSystem(PhysicalParticleSystem):
             # Bind the material to the particle system
             cls._material.bind(cls.system_prim_path)
             # Also apply physics to this material
-            particleUtils.add_pbd_particle_material(cls.simulator.stage, cls.mat_path)
+            particleUtils.add_pbd_particle_material(og.sim.stage, cls.mat_path)
             # Force populate inputs and outputs of the shader
             cls._material.shader_force_populate()
             # Potentially modify the material
@@ -1384,10 +1288,11 @@ class FluidSystem(PhysicalParticleSystem):
     @classmethod
     def _create_particle_prototypes(cls):
         # Simulate particles with simple spheres
-        prototype = UsdGeom.Sphere.Define(cls.simulator.stage, f"{cls.prim_path}/prototype0")
+        prototype = UsdGeom.Sphere.Define(og.sim.stage, f"{cls.prim_path}/prototype0")
         prototype.CreateRadiusAttr().Set(cls.particle_radius)
-        UsdGeom.Imageable(prototype).MakeInvisible()
-        return [prototype.GetPrim()]
+        prototype = VisualGeomPrim(prim_path=prototype.GetPath().pathString, name=prototype.GetPath().pathString)
+        prototype.visible = False
+        return [prototype]
 
     @classmethod
     def _create_particle_material_template(cls):
@@ -1481,11 +1386,18 @@ class GranularSystem(PhysicalParticleSystem):
         assert len(particle_template.links) == 1, "GranularSystem particle template has more than one link"
         assert len(particle_template.root_link.visual_meshes) == 1, "GranularSystem particle template has more than one visual mesh"
 
-        # Modify the scale of the visual mesh so that it matches the particle radius
+        # The prototype is assumed to be the first and only visual mesh belonging to the root link
         visual_geom = list(particle_template.root_link.visual_meshes.values())[0]
-        visual_geom.scale = (cls.particle_radius * 2) / visual_geom.aabb_extent
-        # the prototype is assumed to be the first and only visual mesh belonging to the root link
-        return [visual_geom.prim]
+
+        # Copy it to the standardized prim path
+        prototype_path = f"{cls.prim_path}/prototype0"
+        omni.kit.commands.execute("CopyPrim", path_from=visual_geom.prim_path, path_to=prototype_path)
+
+        # Wrap it with VisualGeomPrim with the correct scale
+        prototype = VisualGeomPrim(prim_path=prototype_path, name=prototype_path)
+        prototype.scale = (cls.particle_radius * 2) / prototype.aabb_extent
+        prototype.visible = False
+        return [prototype]
 
     @classmethod
     def _create_particle_template(cls):

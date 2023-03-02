@@ -349,7 +349,7 @@ class DicingRule(BaseTransitionRule):
 
         from omnigibson.systems.system_base import get_system_from_element_name
         system = get_system_from_element_name("DicedApple")
-        system.generate_particles_from_link(diced_obj, diced_obj.root_link)
+        system.generate_particles_from_link(diced_obj, diced_obj.root_link, use_visual_meshes=False)
 
         # Delete original object from stage.
         t_results.remove.append(diced_obj)
