@@ -85,8 +85,9 @@ def call_vhacd(obj_file_path, dest_file_path, dask_client):
     # data_future = client.scatter(file_bytes)
     data_future = file_bytes
     vhacd_future = dask_client.submit(
-        run_vhacd_search,
+        get_vhacd_mesh,
         data_future,
+        "0.05",
         key=obj_file_path,
         retries=1)
     result = vhacd_future.result()
@@ -101,10 +102,13 @@ def get_vhacd_mesh(file_bytes, hull_count):
         out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
-        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(hull_count)]
+        # vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(hull_count)]
+        vhacd_cmd = ["coacd", "-t", hull_count, in_path, out_path]
         try:
             proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
-            return trimesh.load(out_path, file_type="obj", force="mesh", skip_textures=True)
+            with open(out_path, 'rb') as f:
+                return f.read()
+            # return trimesh.load(out_path, file_type="obj", force="mesh", skip_textures=True)
         except subprocess.CalledProcessError as e:
             raise ValueError(f"VHACD failed with exit code {e.returncode}. Output:\n{e.output}")
 
@@ -143,8 +147,9 @@ def run_vhacd_search(visual_content):
     # Define a binary-searchable function to find the best entry
     with tempfile.TemporaryDirectory() as td:
         memory = {}
-        def compute_iou(log_hull_count):
-            hull_count = 2 ** log_hull_count
+        options = ["0.05"]
+        def compute_iou(hull_count_idx):
+            hull_count = options[hull_count_idx]
             hull_count_mesh = get_vhacd_mesh(visual_content, hull_count)
             out_fn = pathlib.Path(td) / f"{hull_count}.obj"
             hull_count_mesh.export(str(out_fn), file_type="obj")
@@ -158,15 +163,15 @@ def run_vhacd_search(visual_content):
             union_cnt = np.count_nonzero(union)
             iou = intersection_cnt / union_cnt
 
-            memory[log_hull_count] = (out_fn, iou)
+            memory[hull_count_idx] = out_fn
 
             return iou
         
         # Then, start binary search on the hull count to find the lowest entry above 0.85
-        lowest_acceptable_log_hull_count = min(binary_search(0.85, compute_iou, 0, 6), 6)
+        lowest_acceptable_hull_count_idx = min(binary_search(0.85, compute_iou, 0, len(options) - 1), len(options - 1))
         
         # Return the contents of the lowest acceptable hull count file
-        lowest_acceptable_hull_file = memory[lowest_acceptable_log_hull_count][0]
+        lowest_acceptable_hull_file = memory[lowest_acceptable_hull_count_idx]
         with open(lowest_acceptable_hull_file, "rb") as f:
             return f.read()
 
@@ -342,7 +347,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     canonical_mesh = transform_mesh(G.nodes[link_node]["lower_mesh"], mesh_center, canonical_orientation)
     meta_links = transform_meta_links(raw_meta_links, mesh_center, canonical_orientation)
 
-    # Somehow we need to manually write the vertex normals to cache
+    # Somehow we need to manually write the vertex normals to cachein_path
     canonical_mesh._cache.cache["vertex_normals"] = canonical_mesh.vertex_normals
 
     in_edges = list(G.in_edges(link_node))
@@ -692,10 +697,10 @@ def main():
     errors = {}
     all_futures = {}
 
-    dask_client = Client('svl17.stanford.edu:35423')
+    dask_client = Client('svl7.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=100) as executor:
-        for target in tqdm.tqdm(get_targets("combined")):
+        for target in tqdm.tqdm(get_targets("combined")[:10]):
             all_futures[executor.submit(process_target, target, output_dir, executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))
                 
