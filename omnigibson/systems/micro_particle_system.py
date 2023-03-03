@@ -1,17 +1,3 @@
-import logging
-import time
-import os
-from collections import defaultdict
-
-import numpy as np
-from IPython import embed
-
-import omni
-from omni.isaac.core.utils.prims import get_prim_at_path, is_prim_path_valid
-from omni.physx.scripts import particleUtils
-from omni.physx import get_physx_scene_query_interface
-from pxr import Gf, Vt, UsdShade, UsdGeom, PhysxSchema
-
 import omnigibson as og
 from omnigibson.macros import gm, create_module_macros
 from omnigibson.prims.prim_base import BasePrim
@@ -23,8 +9,17 @@ from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_fu
 from omnigibson.utils.python_utils import classproperty, assert_valid_key, subclass_factory
 from omnigibson.utils.sampling_utils import sample_cuboid_on_object_full_grid_topdown
 from omnigibson.utils.usd_utils import array_to_vtarray
-from omnigibson.utils.ui_utils import disclaimer
 from omnigibson.utils.physx_utils import create_physx_particle_system, create_physx_particleset_pointinstancer
+from omnigibson.utils.ui_utils import disclaimer, create_module_logger
+
+import omni
+from omni.isaac.core.utils.prims import get_prim_at_path, is_prim_path_valid
+from omni.physx.scripts import particleUtils
+from omni.physx import get_physx_scene_query_interface
+import numpy as np
+from pxr import Gf, Vt, UsdShade, UsdGeom, PhysxSchema
+from collections import defaultdict
+
 
 # physics settins
 from omni.physx.bindings._physx import (
@@ -34,6 +29,9 @@ from omni.physx.bindings._physx import (
     SETTING_UPDATE_PARTICLES_TO_USD,
 )
 import carb
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 def set_carb_settings_for_fluid_isosurface():
@@ -400,6 +398,10 @@ class MicroParticleSystem(BaseSystem):
     @classproperty
     def system_prim_path(cls):
         return f"{cls.prim_path}/system"
+
+    @classproperty
+    def requires_gpu_dynamics(cls):
+        return True
 
     @classproperty
     def visual_only(cls):
@@ -1106,7 +1108,7 @@ class PhysicalParticleSystem(MicroParticleSystem):
             idx += n_instancers
 
         # Syncing is needed so that each particle instancer can further deserialize its own state
-        logging.debug(f"Syncing {cls.name} particles with {n_instancers} instancers..")
+        log.debug(f"Syncing {cls.name} particles with {n_instancers} instancers..")
         cls._sync_particle_instancers(
             idns=instancer_info["instancer_idns"],
             particle_groups=instancer_info["instancer_particle_groups"],

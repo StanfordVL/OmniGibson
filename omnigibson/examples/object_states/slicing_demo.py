@@ -1,4 +1,3 @@
-import logging
 import numpy as np
 
 import omnigibson as og
@@ -15,7 +14,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     """
     Demo of slicing an apple into two apple slices
     """
-    logging.info("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
+    og.log.info("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
 
     # Create the scene config to load -- empty scene with table, knife, and apple
     table_cfg = dict(
