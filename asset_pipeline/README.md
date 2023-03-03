@@ -26,13 +26,13 @@ Finally, import our 3ds Max export settings by copying the `configs/gw_objexp.in
 ## Pulling Raw BEHAVIOR-1K 3ds Max Files
 While it can be run on arbitrary 3ds Max files, this pipeline is designed to run on the 3ds Max files that are part of the BEHAVIOR-1K project. **Unfortunately, due to licensing issues, we are unable to release these raw model files to non-Stanford-affilliated users.**
 
-As a Stanford-affilliated user, you can pull the BEHAVIOR-1K raw files from the SAIL cluster. You first need to set up DVC to correctly attempt ssh connections only with your CSID username (this is the username you use to log into GIN and/or the SAIL cluster, **not necessarily the same as your SUID**). To do this, run the below command:
+As a Stanford-affilliated user, you can pull the BEHAVIOR-1K raw files from our private Google Cloud Storage. You first need to log in with your Google account using the below command:
 
-```powershell
-dvc remote modify --local cvgl user 'YOUR_USERNAME_HERE'
+```
+gcloud auth application-default login
 ```
 
-Then, when you run the `dvc pull` command, it should pull all of the raw files from the `scdt.stanford.edu` server.
+Then, when you run the `dvc pull` command, it should pull all of the raw files from the Google Cloud Storage server.
 
 ## Repository Structure
 This repository has the below structure:
