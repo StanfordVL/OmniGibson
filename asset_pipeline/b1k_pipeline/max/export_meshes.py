@@ -18,6 +18,8 @@ btt = rt.BakeToTexture
 
 USE_UNWRELLA = True
 IMG_SIZE = 1024
+HQ_IMG_SIZE = 4096
+HQ_IMG_CATEGORIES = {"floors"}
 NEW_UV_CHANNEL = 99
 
 # PBRMetalRough
@@ -217,9 +219,12 @@ class ObjectExporter:
                 # btt.setOutputTo(obj, "CreateNewMaterial", material=rt.PBRMetalRough())
 
             # Make sure the new UV channel is selected
-            texture_map.uvChannel = NEW_UV_CHANNEL 
-            texture_map.imageWidth = IMG_SIZE
-            texture_map.imageHeight = IMG_SIZE
+            texture_map.uvChannel = NEW_UV_CHANNEL
+            img_size = img_size
+            if b1k_pipeline.utils.parse_name(obj.name).group("category") in HQ_IMG_CATEGORIES:
+                img_size = HQ_IMG_SIZE
+            texture_map.imageWidth = img_size
+            texture_map.imageHeight = img_size
             texture_map.edgePadding = 4
             texture_map.fileType = "png"
 
