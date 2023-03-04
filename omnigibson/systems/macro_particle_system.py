@@ -60,6 +60,7 @@ class MacroParticleSystem(BaseSystem):
         particle_template = cls._create_particle_template()
         simulator.import_object(obj=particle_template, register=False, auto_initialize=True)
 
+        # Make sure there is no ambiguity about which mesh to use as the particle from this template
         assert len(particle_template.links) == 1, "MacroParticleSystem particle template has more than one link"
         assert len(particle_template.root_link.visual_meshes) == 1, "MacroParticleSystem particle template has more than one visual mesh"
 

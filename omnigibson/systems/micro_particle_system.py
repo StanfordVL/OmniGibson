@@ -310,9 +310,9 @@ class PhysxParticleInstancer(BasePrim):
 
     @property
     def state_size(self):
-        # idn, particle_group, n_particles (3),
-        # and the corresponding states for each particle (N * 14)
-        return 3 + len(self._n_particles) * (3 + 3 + 4 + 3 + 1)
+        # idn (1), particle_group (1), n_particles (1), and the corresponding states for each particle
+        # N * (pos (3) + vel (3) + orn (4) + scale (3) + prototype_id (1))
+        return 3 + len(self._n_particles) * 14
 
     def _dump_state(self):
         return dict(
@@ -1385,6 +1385,7 @@ class GranularSystem(PhysicalParticleSystem):
         particle_template = cls._create_particle_template()
         og.sim.import_object(obj=particle_template, register=False, auto_initialize=True)
 
+        # Make sure there is no ambiguity about which mesh to use as the particle from this template
         assert len(particle_template.links) == 1, "GranularSystem particle template has more than one link"
         assert len(particle_template.root_link.visual_meshes) == 1, "GranularSystem particle template has more than one visual mesh"
 

@@ -239,12 +239,6 @@ def create_physx_particleset_pointinstancer(
     instancer_prim.GetAttribute("physxParticle:particleEnabled").Set(enabled)
 
     if is_isosurface:
-        og.log.warning("Creating an instancer that uses isosurface. The rendering of these particles will have a delay of one timestep.")
-        # We have to update the physics for a single step here, and then pause the simulator and take an additional sim
-        # step in order for the isosurface to be rendered correctly! (empirically validated, idk why)
-        # TODO: Follow-up / cleanup with omni team to see if this is expected BEHAVIOR
-        # og.sim.step_physics()
-        # with og.sim.paused():
-        #     og.app.update()
+        og.log.warning(f"Creating an instancer that uses isosurface {instancer_prim_path}. The rendering of these particles will have a delay of one timestep.")
 
     return instancer_prim

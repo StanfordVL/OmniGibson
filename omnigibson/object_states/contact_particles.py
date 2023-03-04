@@ -40,7 +40,6 @@ class ContactParticles(RelativeObjectState, KinematicsMixin):
             link_name = None if link is None else link.prim_path.split("/")[-1]
             base, body = "/".join(hit.rigid_body.split("/")[:-1]), hit.rigid_body.split("/")[-1]
             continue_traversal = True
-            # print("hit", base, body)
             # If no links are specified, then we assume checking contact with any link owned by this object
             # Otherwise, we check for exact match of link name
             if (link is None and base == self.obj.prim_path) or (link is not None and link_name == body):
