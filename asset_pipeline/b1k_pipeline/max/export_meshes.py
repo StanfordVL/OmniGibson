@@ -223,6 +223,11 @@ class ObjectExporter:
             texture_map.edgePadding = 4
             texture_map.fileType = "png"
 
+            # Set the apply color mapping option
+            assert texture_map.getOptionsCount() == 1, "Too many baking options found"
+            assert texture_map.getOptionName(1) == 'Apply color mapping', "Apply color mapping option not found"
+            texture_map.setOptionValue(1, False)
+
             # Mapping from the original channel (of VRay, Corona, etc) to the new channel of PhysicalMaterial 
             texture_map.setTargetMapSlot(CHANNEL_MAPPING[map_name])
 
