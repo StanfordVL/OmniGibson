@@ -69,42 +69,44 @@ class ContactParticles(RelativeObjectState, KinematicsMixin):
     def _set_value(self, system, new_value):
         raise NotImplementedError("ContactParticles state currently does not support setting.")
 
-    def cache_info(self, get_value_args):
-        # Run super first
-        info = super().cache_info(get_value_args=get_value_args)
-
-        # Store the system's particle positions for each instancer
-        for arg in get_value_args:
-            if inspect.isclass(arg) and issubclass(arg, PhysicalParticleSystem):
-                info[arg] = {instancer: instancer.particle_positions for instancer in arg.particle_instancers.values()}
-
-        return info
-
-    def _cache_is_valid(self, get_value_args):
-        # Run super first
-        is_valid = super()._cache_is_valid(get_value_args=get_value_args)
-
-        if not is_valid:
-            return False
-
-        for arg, info in self._cache[get_value_args]["info"].items():
-            if inspect.isclass(arg) and issubclass(arg, PhysicalParticleSystem):
-                # TODO: adopt the has_changed mechanism in object_state_base
-                # Check if the particle positions have changed
-
-                # If the instancers don't match, return False
-                if list(arg.particle_instancers.values()) != list(info.keys()):
-                    return False
-
-                # If there are no instancers, skip
-                if len(info.keys()) == 0:
-                    continue
-
-                arg_pos= np.vstack([instancer.particle_positions for instancer in arg.particle_instancers.values()])
-                info_pos = np.vstack([particle_positions for particle_positions in info.values()])
-
-                # If any of the particles moved, return False
-                if np.any(np.linalg.norm(arg_pos - info_pos, axis=1) >= m.POSITIONAL_VALIDATION_EPSILON):
-                    return False
-
-        return True
+    # TODO: investigate whether this caching actually makes things faster because we hypothesize that it will be very
+    # rare for all the particles to be still.
+    # def cache_info(self, get_value_args):
+    #     # Run super first
+    #     info = super().cache_info(get_value_args=get_value_args)
+    #
+    #     # Store the system's particle positions for each instancer
+    #     for arg in get_value_args:
+    #         if inspect.isclass(arg) and issubclass(arg, PhysicalParticleSystem):
+    #             info[arg] = {instancer: instancer.particle_positions for instancer in arg.particle_instancers.values()}
+    #
+    #     return info
+    #
+    # def _cache_is_valid(self, get_value_args):
+    #     # Run super first
+    #     is_valid = super()._cache_is_valid(get_value_args=get_value_args)
+    #
+    #     if not is_valid:
+    #         return False
+    #
+    #     for arg, info in self._cache[get_value_args]["info"].items():
+    #         if inspect.isclass(arg) and issubclass(arg, PhysicalParticleSystem):
+    #             # TODO: adopt the has_changed mechanism in object_state_base
+    #             # Check if the particle positions have changed
+    #
+    #             # If the instancers don't match, return False
+    #             if list(arg.particle_instancers.values()) != list(info.keys()):
+    #                 return False
+    #
+    #             # If there are no instancers, skip
+    #             if len(info.keys()) == 0:
+    #                 continue
+    #
+    #             arg_pos= np.vstack([instancer.particle_positions for instancer in arg.particle_instancers.values()])
+    #             info_pos = np.vstack([particle_positions for particle_positions in info.values()])
+    #
+    #             # If any of the particles moved, return False
+    #             if np.any(np.linalg.norm(arg_pos - info_pos, axis=1) >= m.POSITIONAL_VALIDATION_EPSILON):
+    #                 return False
+    #
+    #     return True

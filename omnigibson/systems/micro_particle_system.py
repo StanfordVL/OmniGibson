@@ -876,6 +876,8 @@ class PhysicalParticleSystem(MicroParticleSystem):
         sampling_distance = 2 * cls.particle_radius if sampling_distance is None else sampling_distance
         n_particles_per_axis = (extent / sampling_distance).astype(int)
         assert np.all(n_particles_per_axis), f"link {link.name} is too small to sample any particle of radius {cls.particle_radius}."
+
+        # 1e-10 is added because the extent might be an exact multiple of particle radius
         arrs = [np.arange(lo + cls.particle_radius, hi - cls.particle_radius + 1e-10, cls.particle_radius * 2)
                 for lo, hi, n in zip(low, high, n_particles_per_axis)]
         # Generate 3D-rectangular grid of points
@@ -1216,40 +1218,42 @@ class FluidSystem(PhysicalParticleSystem):
         # Run super first
         super().initialize(simulator=simulator)
 
-        # Create the particle material (only if we're using high-quality rendering since this takes time)
-        # Set custom rendering settings if we're using a fluid isosurface
-        if gm.ENABLE_HQ_RENDERING:
-            cls._material = cls._create_particle_material_template()
-            # Load the material
-            cls._material.load()
-            # Bind the material to the particle system
-            cls._material.bind(cls.system_prim_path)
-            # Also apply physics to this material
-            particleUtils.add_pbd_particle_material(og.sim.stage, cls.mat_path)
-            # Force populate inputs and outputs of the shader
-            cls._material.shader_force_populate()
-            # Potentially modify the material
-            cls._customize_particle_material()
+        # Create the particle material
+        cls._material = cls._create_particle_material_template()
+        # Load the material
+        cls._material.load()
+        # Bind the material to the particle system (for isosurface) and the prototypes (for non-isosurface)
+        cls._material.bind(cls.system_prim_path)
+        for prototype in cls.particle_prototypes:
+            cls._material.bind(prototype.prim_path)
+        # Also apply physics to this material
+        particleUtils.add_pbd_particle_material(og.sim.stage, cls.mat_path)
+        # Force populate inputs and outputs of the shader
+        cls._material.shader_force_populate()
+        # Potentially modify the material
+        cls._customize_particle_material()
 
+        # Compute the overall color of the fluid system
+        base_color_weight = cls._material.diffuse_reflection_weight
+        transmission_weight = cls._material.enable_specular_transmission * cls._material.specular_transmission_weight
+        total_weight = base_color_weight + transmission_weight
+        if total_weight == 0.0:
+            # If the fluid doesn't have any color, we add a "blue" tint by default
+            color = np.array([0.0, 0.0, 1.0])
+        else:
+            base_color_weight /= total_weight
+            transmission_weight /= total_weight
+            # Weighted sum of base color and transmission color
+            color = base_color_weight * cls._material.diffuse_reflection_color + \
+                    transmission_weight * (0.5 * cls._material.specular_transmission_color + \
+                                           0.5 * cls._material.specular_transmission_scattering_color)
+        cls._color = color
+
+        # Set custom isosurface rendering settings if we are using high-quality rendering
+        if gm.ENABLE_HQ_RENDERING:
             set_carb_settings_for_fluid_isosurface()
             # We also modify the grid smoothing radius to avoid "blobby" appearances
             cls.system_prim.GetAttribute("physxParticleIsosurface:gridSmoothingRadius").Set(0.0001)
-
-            # Compute the overall color of the fluid system
-            base_color_weight = cls._material.diffuse_reflection_weight
-            transmission_weight = cls._material.enable_specular_transmission * cls._material.specular_transmission_weight
-            total_weight = base_color_weight + transmission_weight
-            if total_weight == 0.0:
-                # If the fluid doesn't have any color, we add a "blue" tint by default
-                color = np.array([0.0, 0.0, 1.0])
-            else:
-                base_color_weight /= total_weight
-                transmission_weight /= total_weight
-                # Weighted sum of base color and transmission color
-                color = base_color_weight * cls._material.diffuse_reflection_color + \
-                        transmission_weight * (0.5 * cls._material.specular_transmission_color + \
-                                               0.5 * cls._material.specular_transmission_scattering_color)
-            cls._color = color
 
     @classproperty
     def is_fluid(cls):
