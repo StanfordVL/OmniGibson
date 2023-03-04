@@ -220,7 +220,7 @@ class ObjectExporter:
 
             # Make sure the new UV channel is selected
             texture_map.uvChannel = NEW_UV_CHANNEL
-            img_size = img_size
+            img_size = IMG_SIZE
             if b1k_pipeline.utils.parse_name(obj.name).group("category") in HQ_IMG_CATEGORIES:
                 img_size = HQ_IMG_SIZE
             texture_map.imageWidth = img_size
@@ -229,9 +229,9 @@ class ObjectExporter:
             texture_map.fileType = "png"
 
             # Set the apply color mapping option
-            assert texture_map.getOptionsCount() == 1, "Too many baking options found"
-            assert texture_map.getOptionName(1) == 'Apply color mapping', "Apply color mapping option not found"
-            texture_map.setOptionValue(1, False)
+            if texture_map.getOptionsCount() > 0:
+                assert texture_map.getOptionName(1) == 'Apply color mapping', "Apply color mapping option not found"
+                texture_map.setOptionValue(1, False)
 
             # Mapping from the original channel (of VRay, Corona, etc) to the new channel of PhysicalMaterial 
             texture_map.setTargetMapSlot(CHANNEL_MAPPING[map_name])
