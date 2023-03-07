@@ -1,0 +1,208 @@
+import logging
+import os
+import json
+import sys
+import nltk
+import csv
+import shutil
+
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+from nltk.corpus import wordnet as wn
+
+import igibson
+
+from igibson.object_states.link_based_state_mixin import LinkBasedStateMixin
+from igibson.objects.articulated_object import URDFObject
+from igibson.render.mesh_renderer.mesh_renderer_settings import MeshRendererSettings
+from igibson.scenes.empty_scene import EmptyScene
+from igibson.simulator import Simulator
+from igibson.utils.assets_utils import (
+    get_all_object_categories,
+    get_ig_avg_category_specs,
+    get_ig_model_path,
+    get_object_models_of_category,
+)
+
+from bddl.object_taxonomy import ObjectTaxonomy
+from b1k_pipeline.utils import PIPELINE_ROOT
+
+
+INVENTORY_PATH = PIPELINE_ROOT / "artifacts/pipeline/object_inventory.json"
+with open(INVENTORY_PATH, "r") as f:
+    INVENTORY_DICT = json.load(f)["providers"]
+
+
+def main(record_path):
+    """
+    Minimal example to visualize all the models available in the iG dataset
+    It queries the user to select an object category and a model of that category, loads it and visualizes it
+    No physical simulation
+    """
+    igibson.ignore_visual_shape = False
+    igibson.ig_dataset_path = str(PIPELINE_ROOT / "artifacts/aggregate")
+
+    print("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
+
+    processed_objs = set()
+    if os.path.exists(record_path):
+    # Load the processed objects from the pass record file
+        with open(record_path) as f:
+            processed_objs = {tuple(obj) for obj in json.load(f)}
+
+    # Get all the objects in the dataset
+    all_objs = {
+        (cat, model) for cat in get_all_object_categories()
+        for model in get_object_models_of_category(cat)
+    }
+
+    # Compute the remaining objects to be processed
+    remaining_objs = all_objs - processed_objs
+
+    print(f"{len(remaining_objs)} objects remaining out of {len(all_objs)}.")
+
+    for i, (obj_category, obj_model) in enumerate(sorted(remaining_objs)):
+        print(f"Object {i+1}/{len(remaining_objs)}: {obj_category}-{obj_model}.")
+        sim = Simulator(mode="headless", use_pb_gui=True)
+        sim.import_scene(EmptyScene(floor_plane_rgba=[0.6, 0.6, 0.6, 1]))
+
+        obj_name = "{}_{}".format(obj_category, obj_model)
+        model_path = get_ig_model_path(obj_category, obj_model)
+        filename = os.path.join(model_path, obj_model + ".urdf")
+
+        print("Visualizing category {}, model {}".format(obj_category, obj_model))
+
+        try:
+            simulator_obj = URDFObject(
+                filename,
+                name=obj_name,
+                category=obj_category,
+                model_path=model_path,
+                fixed_base=True
+            )
+
+            sim.import_object(simulator_obj)
+            simulator_obj.set_position([0.0, 0.0, 0.0])
+
+            user_complained_bbox(simulator_obj)
+            user_complained_properties(simulator_obj)
+            user_complained_metas(simulator_obj)
+            user_complained_synset(simulator_obj)
+            user_complained_appearance(simulator_obj)
+            
+            with open(record_path, "w") as f:
+                processed_objs.add((obj_category, obj_model))
+                json.dump(sorted(processed_objs), f)
+        finally:
+            sim.disconnect()
+            shutil.rmtree(PIPELINE_ROOT / "artifacts/aggregate/scene_instances")
+
+def process_complaint(message, simulator_obj):
+    print(message)
+    response = input("Do you think anything is wrong? Enter a complaint (hit enter if all's good): ")
+    if response:
+        object_key = simulator_obj.category + "-" + simulator_obj.model
+        complaint = {
+            "object": object_key,
+            "message": message,
+            "complaint": response,
+            "processed": False
+        }
+        target_name = INVENTORY_DICT[object_key]
+
+        complaints_file = PIPELINE_ROOT / "cad" / target_name / "complaints.json"
+        complaints = []
+        if os.path.exists(complaints_file):
+            with open(complaints_file, "r") as f:
+                complaints = json.load(f)
+        complaints.append(complaint)
+        with open(complaints_file, "w") as f:
+            json.dump(complaints, f, indent=4)
+
+
+def get_synset(category):
+    print(category)
+    # Read the custom synsets from the CSV file
+    custom_synsets = []
+    with open('./metadata/custom_synsets.csv', 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            if category in row[0]:
+                return row[1] + " (custom synset)", row[2] + "(hypernyms): " + (wn.synset(row[2])).definition()
+    synset = wn.synsets(category)[0]
+    return synset.name(), synset.definition()
+
+
+def user_complained_synset(category, model_path):
+    # Get the synset assigned to the object
+    synset, definition = get_synset(category)
+    # Print the synset name and definition
+    message = (
+        "Confirm object synset assignment.\n"
+        f"Object assigned to synset: {synset}\n"
+        f"Definition: {definition}\n"
+        "Reminder: synset should match the object and not its contents.\n"
+        "(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\n"
+        "and not orange_juice.n.01)"
+    )
+    process_complaint(message, model_path)
+
+
+def user_complained_appearance(simulator_obj):
+    message = (
+        "Confirm object visual appearance.\n"
+        "Requirements:\n"
+        "- make sure there is only one rigid body.\n"
+        "- make sure the object has a valid texture or appearance.\n"
+        "- make sure the object has all parts necessary."
+    )
+    process_complaint(message, simulator_obj)
+
+
+def user_complained_properties(simulator_obj):
+    taxonomy = ObjectTaxonomy()
+    synset = taxonomy.get_class_name_from_igibson_category(simulator_obj.category)
+    abilities = taxonomy.get_abilities(synset)
+    message = "Confirm object properties:\n"
+    for ability in abilities:
+        message += f"- {ability}\n"
+    message += "Pay particular attention to deformable and substance properties"
+    process_complaint(message, simulator_obj)
+
+
+def user_complained_metas(simulator_obj):
+    meta_links = simulator_obj.meta_links
+    message = f"Confirm object meta links:\n"
+    for meta_link in meta_links.keys():
+        message += f"- {meta_link}\n"
+    message += "Make sure these match mechanisms you expect from this object."
+    process_complaint(message, simulator_obj)
+
+
+def user_complained_bbox(simulator_obj):
+    bounding_box = simulator_obj.bounding_box
+    message = "Confirm reasonable bounding box size:\n"
+    bb_items = []
+    for k in range(3):
+        size = bounding_box[k]
+        size_m = size
+        size_cm = size / 100
+        size_mm = size / 1000
+        if size_m > 1:
+            bb_items.append("%.2fm" % size_m)
+        elif size_cm > 1:
+            bb_items.append("%.2fcm" % size_cm)
+        else:
+            bb_items.append("%.2fmm" % size_mm)
+    message += ", ".join(bb_items) + "\n"
+    message += "Make sure these sizes are within the same order of magnitude you expect from this object IRL."
+    # TODO: Print avg category specs too
+    process_complaint(message, simulator_obj)
+  
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    if len(sys.argv) != 2:
+        print("Usage: python -m b1k_pipeline.qa_viewer record_file_path.json")
+        sys.exit(1)
+    main(sys.argv[1])
