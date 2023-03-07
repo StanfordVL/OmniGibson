@@ -14,7 +14,7 @@ macros = Dict()
 gm = macros.globals
 
 # Whether to generate a headless or non-headless application upon OmniGibson startup
-gm.HEADLESS = False
+gm.HEADLESS = True
 
 # Whether to use extra settings (verboseness, extra GUI features) for debugging
 gm.DEBUG = True

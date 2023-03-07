@@ -4,7 +4,6 @@ import os
 import yaml
 import builtins
 
-# TODO: Need to fix somehow -- omnigibson gets imported first BEFORE we can actually modify the macros
 from omnigibson.macros import gm
 
 builtins.ISAAC_LAUNCHED_FROM_JUPYTER = (
@@ -84,73 +83,74 @@ REGISTERED_CONTROLLERS = None
 REGISTERED_TASKS = None
 ALL_SENSOR_MODALITIES = None
 
-
 # Helper functions for starting omnigibson
 def print_save_usd_warning(_):
     logging.warning("Exporting individual USDs has been disabled in OG due to copyrights.")
 
+class Omnigibson:
+    def __init__(self, gpu_id=None, physics_gpu=None, multi_gpu=True):
+        self.gpu_id = gpu_id
+        self.physics_gpu = physics_gpu
+        self.multi_gpu = multi_gpu
 
-def create_app(config):
-    global app
-    from omni.isaac.kit import SimulationApp
-    app = SimulationApp({
-        "headless": gm.HEADLESS, 
-        "active_gpu": config["active_gpu"],
-        "physics_gpu": config["active_gpu"],
-        "multi_gpu": False,
-    })
-    import omni
+        # Automatically start omnigibson's omniverse backend unless explicitly told not to
+        if not (os.getenv("OMNIGIBSON_NO_OMNIVERSE", 'False').lower() in {'true', '1', 't'}):
+            self.app, self.sim, self.Environment, self.REGISTERED_SCENES, self.REGISTERED_OBJECTS, self.REGISTERED_ROBOTS, self.REGISTERED_CONTROLLERS, \
+                self.REGISTERED_TASKS, self.ALL_SENSOR_MODALITIES = self.start()
 
-    # Possibly hide windows if in debug mode
-    if not gm.DEBUG:
-        hide_window_names = ["Console", "Main ToolBar", "Stage", "Layer", "Property", "Render Settings", "Content",
-                             "Flow", "Semantics Schema Editor"]
-        for name in hide_window_names:
-            window = omni.ui.Workspace.get_window(name)
-            if window is not None:
-                window.visible = False
-                app.update()
+    def create_app(self):
+        global app
+        from omni.isaac.kit import SimulationApp
 
-    omni.kit.widget.stage.context_menu.ContextMenu.save_prim = print_save_usd_warning
+        if not self.multi_gpu:
+            app = SimulationApp({"headless": gm.HEADLESS, "active_gpu": self.gpu_id, "physics_gpu": self.physics_gpu, "multi_gpu": False})
+        else:
+            app = SimulationApp({"headless": gm.HEADLESS})
+        import omni
 
-    return app
+        # Possibly hide windows if in debug mode
+        if not gm.DEBUG:
+            hide_window_names = ["Console", "Main ToolBar", "Stage", "Layer", "Property", "Render Settings", "Content",
+                                "Flow", "Semantics Schema Editor"]
+            for name in hide_window_names:
+                window = omni.ui.Workspace.get_window(name)
+                if window is not None:
+                    window.visible = False
+                    app.update()
 
+        omni.kit.widget.stage.context_menu.ContextMenu.save_prim = print_save_usd_warning
 
-def create_sim():
-    global sim
-    from omnigibson.simulator import Simulator
-    sim = Simulator()
-    return sim
-
-
-def start(config):
-    global app, sim, Environment, REGISTERED_SCENES, REGISTERED_OBJECTS, REGISTERED_ROBOTS, REGISTERED_CONTROLLERS, \
-        REGISTERED_TASKS, ALL_SENSOR_MODALITIES
-
-    # First create the app, then create the sim
-    app = create_app(config)
-    sim = create_sim()
-
-    # Import any remaining items we want to access directly from the main omnigibson import
-    from omnigibson.envs import Environment
-    from omnigibson.scenes import REGISTERED_SCENES
-    from omnigibson.objects import REGISTERED_OBJECTS
-    from omnigibson.robots import REGISTERED_ROBOTS
-    from omnigibson.controllers import REGISTERED_CONTROLLERS
-    from omnigibson.tasks import REGISTERED_TASKS
-    from omnigibson.sensors import ALL_SENSOR_MODALITIES
-    return app, sim, Environment, REGISTERED_SCENES, REGISTERED_OBJECTS, REGISTERED_ROBOTS, REGISTERED_CONTROLLERS, \
-        REGISTERED_TASKS, ALL_SENSOR_MODALITIES
+        return app
 
 
-# Automatically start omnigibson's omniverse backend unless explicitly told not to
-# if not (os.getenv("OMNIGIBSON_NO_OMNIVERSE", 'False').lower() in {'true', '1', 't'}):
-def initialize(config):
-    app, sim, Environment, REGISTERED_SCENES, REGISTERED_OBJECTS, REGISTERED_ROBOTS, REGISTERED_CONTROLLERS, \
-        REGISTERED_TASKS, ALL_SENSOR_MODALITIES = start(config)
+    def create_sim(self):
+        global sim
+        from omnigibson.simulator import Simulator
+        sim = Simulator()
+        return sim
 
 
-def shutdown():
-    global app
-    app.close()
-    exit(0)
+    def start(self):
+        global app, sim, Environment, REGISTERED_SCENES, REGISTERED_OBJECTS, REGISTERED_ROBOTS, REGISTERED_CONTROLLERS, \
+            REGISTERED_TASKS, ALL_SENSOR_MODALITIES
+
+        # First create the app, then create the sim
+        app = self.create_app()
+        sim = self.create_sim()
+
+        # Import any remaining items we want to access directly from the main omnigibson import
+        from omnigibson.envs import Environment
+        from omnigibson.scenes import REGISTERED_SCENES
+        from omnigibson.objects import REGISTERED_OBJECTS
+        from omnigibson.robots import REGISTERED_ROBOTS
+        from omnigibson.controllers import REGISTERED_CONTROLLERS
+        from omnigibson.tasks import REGISTERED_TASKS
+        from omnigibson.sensors import ALL_SENSOR_MODALITIES
+        return app, sim, Environment, REGISTERED_SCENES, REGISTERED_OBJECTS, REGISTERED_ROBOTS, REGISTERED_CONTROLLERS, \
+            REGISTERED_TASKS, ALL_SENSOR_MODALITIES
+
+
+    def shutdown(self):
+        global app
+        app.close()
+        exit(0)
