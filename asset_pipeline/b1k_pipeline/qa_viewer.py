@@ -82,7 +82,8 @@ def main(dataset_path, record_path):
             )
 
             sim.import_object(simulator_obj)
-            simulator_obj.set_position([0.0, 0.0, 0.0])
+            z_pos = simulator_obj.bounding_box[2] / 2 + simulator_obj.scaled_bbxc_in_blf[2]
+            simulator_obj.set_position([0.0, 0.0, z_pos])
 
             user_complained_synset(simulator_obj)
             user_complained_appearance(simulator_obj)
