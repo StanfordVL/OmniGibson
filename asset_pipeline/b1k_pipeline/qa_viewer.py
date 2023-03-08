@@ -177,9 +177,12 @@ def user_complained_properties(simulator_obj):
 
 
 def user_complained_metas(simulator_obj):
-    meta_links = simulator_obj.meta_links
+    meta_links = sorted({
+        meta_name
+        for link_metas in simulator_obj.metadata["meta_links"].values()
+        for meta_name in link_metas})
     message = f"Confirm object meta links:\n"
-    for meta_link in meta_links.keys():
+    for meta_link in meta_links:
         message += f"- {meta_link}\n"
     message += "Make sure these match mechanisms you expect from this object."
     process_complaint(message, simulator_obj)
