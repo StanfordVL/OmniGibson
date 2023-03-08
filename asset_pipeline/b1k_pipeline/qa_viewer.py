@@ -46,7 +46,7 @@ def main(dataset_path, record_path):
 
     processed_objs = set()
     if os.path.exists(record_path):
-    # Load the processed objects from the pass record file
+        # Load the processed objects from the pass record file
         with open(record_path) as f:
             processed_objs = {tuple(obj) for obj in json.load(f)}
 
