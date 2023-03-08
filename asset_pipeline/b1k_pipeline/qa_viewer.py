@@ -33,14 +33,14 @@ with open(INVENTORY_PATH, "r") as f:
     INVENTORY_DICT = json.load(f)["providers"]
 
 
-def main(record_path):
+def main(dataset_path, record_path):
     """
     Minimal example to visualize all the models available in the iG dataset
     It queries the user to select an object category and a model of that category, loads it and visualizes it
     No physical simulation
     """
     igibson.ignore_visual_shape = False
-    igibson.ig_dataset_path = str(PIPELINE_ROOT / "artifacts/aggregate")
+    igibson.ig_dataset_path = dataset_path
 
     print("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
 
@@ -95,13 +95,14 @@ def main(record_path):
                 json.dump(sorted(processed_objs), f)
         finally:
             sim.disconnect()
-            shutil.rmtree(PIPELINE_ROOT / "artifacts/aggregate/scene_instances")
+            shutil.rmtree(PIPELINE_ROOT / "artifacts/aggregate/scene_instances", ignore_errors=True)
 
 def process_complaint(message, simulator_obj):
     print(message)
     response = input("Do you think anything is wrong? Enter a complaint (hit enter if all's good): ")
     if response:
-        object_key = simulator_obj.category + "-" + simulator_obj.model
+        model = os.path.basename(simulator_obj.model_path)
+        object_key = simulator_obj.category + "-" + model
         complaint = {
             "object": object_key,
             "message": message,
@@ -186,8 +187,8 @@ def user_complained_bbox(simulator_obj):
     for k in range(3):
         size = bounding_box[k]
         size_m = size
-        size_cm = size / 100
-        size_mm = size / 1000
+        size_cm = size * 100
+        size_mm = size * 1000
         if size_m > 1:
             bb_items.append("%.2fm" % size_m)
         elif size_cm > 1:
@@ -202,7 +203,7 @@ def user_complained_bbox(simulator_obj):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    if len(sys.argv) != 2:
-        print("Usage: python -m b1k_pipeline.qa_viewer record_file_path.json")
+    if len(sys.argv) != 3:
+        print("Usage: python -m b1k_pipeline.qa_viewer dataset_path record_file_path.json")
         sys.exit(1)
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
