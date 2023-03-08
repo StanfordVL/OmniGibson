@@ -84,11 +84,11 @@ def main(dataset_path, record_path):
             sim.import_object(simulator_obj)
             simulator_obj.set_position([0.0, 0.0, 0.0])
 
+            user_complained_synset(simulator_obj)
+            user_complained_appearance(simulator_obj)
             user_complained_bbox(simulator_obj)
             user_complained_properties(simulator_obj)
             user_complained_metas(simulator_obj)
-            user_complained_synset(simulator_obj)
-            user_complained_appearance(simulator_obj)
             
             with open(record_path, "w") as f:
                 processed_objs.add((obj_category, obj_model))
@@ -134,9 +134,9 @@ def get_synset(category):
     return synset.name(), synset.definition()
 
 
-def user_complained_synset(category, model_path):
+def user_complained_synset(simulator_obj):
     # Get the synset assigned to the object
-    synset, definition = get_synset(category)
+    synset, definition = get_synset(simulator_obj.category)
     # Print the synset name and definition
     message = (
         "Confirm object synset assignment.\n"
@@ -146,7 +146,7 @@ def user_complained_synset(category, model_path):
         "(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\n"
         "and not orange_juice.n.01)"
     )
-    process_complaint(message, model_path)
+    process_complaint(message, simulator_obj)
 
 
 def user_complained_appearance(simulator_obj):
@@ -161,13 +161,18 @@ def user_complained_appearance(simulator_obj):
 
 
 def user_complained_properties(simulator_obj):
+    BAD_PROPERTIES = {"breakable", "timeSetable", "perishable", "screwable"}
+
     taxonomy = ObjectTaxonomy()
     synset = taxonomy.get_class_name_from_igibson_category(simulator_obj.category)
     abilities = taxonomy.get_abilities(synset)
+    all_abilities = sorted({a for s in taxonomy.taxonomy.nodes for a in taxonomy.get_abilities(s).keys()} - BAD_PROPERTIES)
     message = "Confirm object properties:\n"
     for ability in abilities:
-        message += f"- {ability}\n"
-    message += "Pay particular attention to deformable and substance properties"
+        if ability not in BAD_PROPERTIES:
+            message += f"- {ability}\n"
+    message += f"Full list of iGibson abilities: {', '.join(all_abilities)}\n"
+    message += "Check incorrect or missing properties, especially liquid property\n"
     process_complaint(message, simulator_obj)
 
 
