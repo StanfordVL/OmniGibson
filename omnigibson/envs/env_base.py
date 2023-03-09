@@ -1,4 +1,4 @@
-import gym
+import gymnasium as gym
 import logging
 
 import omnigibson as og
@@ -416,7 +416,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 logging.error(("obs", key, obs["task"][key].dtype, obs["task"][key].shape))
             raise ValueError("Observation space does not match returned observations!")
 
-        return obs
+        return obs, dict()
 
     @property
     def episode_steps(self):
