@@ -386,7 +386,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._current_step = 0
 
     # TODO: Match super class signature?
-    def reset(self):
+    def reset(self, seed=None, options=None):
         """
         Reset episode.
         """
