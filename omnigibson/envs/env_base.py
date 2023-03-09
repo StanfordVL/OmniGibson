@@ -127,7 +127,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Make sure the requested scene is valid
         scene_type = self.scene_config["type"]
-        breakpoint()
+        # breakpoint()
         assert_valid_key(key=scene_type, valid_keys=REGISTERED_SCENES, name="scene type")
 
         # If we're using a BehaviorTask, we may load a pre-cached scene configuration

@@ -2,7 +2,7 @@ from abc import abstractmethod
 from copy import deepcopy
 import numpy as np
 import logging
-import gym
+import gymnasium as gym
 from collections import Iterable
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.controllers import create_controller
