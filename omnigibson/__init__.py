@@ -95,7 +95,7 @@ def create_app(config):
     from omni.isaac.kit import SimulationApp
     app = SimulationApp({
         "headless": gm.HEADLESS, 
-        "multi_gpu": False,
+        "multi_gpu": True,
     })
     import omni
 
