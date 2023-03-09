@@ -14,7 +14,7 @@ from omnigibson import example_config_path
 log = logging.getLogger(__name__)
 
 try:
-    import gym
+    import gymnasium as gym
     import torch as th
     import torch.nn as nn
     from stable_baselines3 import PPO
