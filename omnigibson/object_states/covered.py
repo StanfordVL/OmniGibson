@@ -12,7 +12,7 @@ import numpy as np
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
 
-# Number of physical particles needed in order for Covered --> True
+# Number of visual particles needed in order for Covered --> True
 m.VISUAL_PARTICLE_THRESHOLD = 5
 
 # Maximum number of visual particles to sample when setting an object to be covered = True
@@ -63,7 +63,7 @@ class Covered(RelativeObjectState, BooleanState):
         if issubclass(system, VisualParticleSystem):
             if self._visual_particle_group in system.groups:
                 # We check whether the current number of particles assigned to the group is greater than the threshold
-                value = system.num_group_particles(group=self._visual_particle_group) > m.VISUAL_PARTICLE_THRESHOLD
+                value = system.num_group_particles(group=self._visual_particle_group) >= m.VISUAL_PARTICLE_THRESHOLD
         elif issubclass(system, PhysicalParticleSystem):
             # We only check if we have particle instancers currently
             if len(system.particle_instancers) > 0:

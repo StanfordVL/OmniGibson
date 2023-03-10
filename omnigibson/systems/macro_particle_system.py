@@ -272,7 +272,7 @@ class MacroParticleSystem(BaseSystem):
             XFormPrim: Newly created particle instance, which is added internally as well
         """
         # Generate the new particle
-        name = cls.particle_idn2name(idn=cls.next_available_particle_idn() if idn is None else idn)
+        name = cls.particle_idn2name(idn=cls.next_available_particle_idn if idn is None else idn)
         # Make sure name doesn't already exist
         assert name not in cls.particles.keys(), f"Cannot create particle with name {name} because it already exists!"
         new_particle = cls._load_new_particle(prim_path=f"{prim_path}/{name}", name=name)

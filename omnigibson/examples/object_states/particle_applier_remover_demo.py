@@ -15,7 +15,7 @@ macros.object_states.particle_modifier.VISUAL_PARTICLES_REMOVAL_LIMIT = 1000
 macros.object_states.particle_modifier.PHYSICAL_PARTICLES_REMOVAL_LIMIT = 8000
 macros.object_states.particle_modifier.MAX_VISUAL_PARTICLES_APPLIED_PER_STEP = 10
 macros.object_states.particle_modifier.MAX_PHYSICAL_PARTICLES_APPLIED_PER_STEP = 40
-macros.object_states.covered.MAX_VISUAL_PARTICLES = 200
+macros.object_states.covered.MAX_VISUAL_PARTICLES = 300
 
 # Make sure object states and GPU dynamics are enabled (GPU dynamics needed for fluids)
 gm.ENABLE_OBJECT_STATES = True
@@ -145,7 +145,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         category="dishtowel",
         model="Tag_Dishtowel_Basket_Weave_Red",
         scale=np.ones(3) * 2.0,
-        visual_only=method_type == "Projection" or particle_system == get_system["stain"],  # Fluid + adjacency requires the object to have collision geoms active
+        visual_only=method_type == "Projection" or particle_system == get_system("stain"),  # Fluid + adjacency requires the object to have collision geoms active
         abilities=abilities,
     )
     modifier_root_link_path = f"{modifier.prim_path}/base_link"

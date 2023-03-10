@@ -488,27 +488,28 @@ class ParticleModifier(AbsoluteObjectState, LinkBasedStateMixin, UpdateStateMixi
         return len(self.modified_particle_count) + 1
 
     def _dump_state(self):
-        state = dict()
+        systems_dict = dict()
         for system, val in self.modified_particle_count.items():
-            state[system.name] = val
-        # Add current step
-        state["current_step"] = self._current_step
-        return state
+            systems_dict[system.name] = val
+        return dict(current_step=self._current_step, systems=systems_dict)
 
     def _load_state(self, state):
-        for system_name in state:
-            self.modified_particle_count[get_system(system_name)] = state[system_name]
-        # Set current step
+        for system in self.modified_particle_count:
+            self.modified_particle_count[system] = state["systems"][system.name]
         self._current_step = state["current_step"]
 
     def _serialize(self, state):
-        return np.array(list(state.values()), dtype=float)
+        return np.concatenate([
+            [state["current_step"]],
+            list(state["systems"].values())
+        ]).astype(float)
 
     def _deserialize(self, state):
-        state_dict = dict()
-        for i, system in enumerate(self.modified_particle_count.keys()):
-            state_dict[system.name] = int(state[i])
-        state_dict["current_step"] = int(state[len(self.modified_particle_count)])
+        current_step = int(state[0])
+        systems_dict = dict()
+        for i, system in enumerate(self.modified_particle_count):
+            systems_dict[system.name] = int(state[1 + i])  # system particle count starts from idx 1
+        state_dict = dict(current_step=current_step, systems=systems_dict)
 
         return state_dict, len(self.modified_particle_count) + 1
 
