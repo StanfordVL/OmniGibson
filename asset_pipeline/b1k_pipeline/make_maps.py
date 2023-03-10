@@ -124,7 +124,7 @@ def process_scene(scene_id):
 
         xy_map = world_to_map(xy_world, RESOLUTION, trav_map_size)
         new_trav_map[xy_map[:, 0], xy_map[:, 1]] = 255
-        save_path = fs.path.join("scenes", scene_id, "misc")
+        save_path = fs.path.join("scenes", scene_id, "layout")
         images[fs.path.join(save_path, fname)] = new_trav_map
 
         if fname == "floor_trav_no_obj_0.png":
