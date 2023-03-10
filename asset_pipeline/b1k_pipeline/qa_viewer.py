@@ -33,20 +33,20 @@ with open(INVENTORY_PATH, "r") as f:
     INVENTORY_DICT = json.load(f)["providers"]
 
 
-def main(record_path):
+def main(dataset_path, record_path):
     """
     Minimal example to visualize all the models available in the iG dataset
     It queries the user to select an object category and a model of that category, loads it and visualizes it
     No physical simulation
     """
     igibson.ignore_visual_shape = False
-    igibson.ig_dataset_path = str(PIPELINE_ROOT / "artifacts/aggregate")
+    igibson.ig_dataset_path = dataset_path
 
     print("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
 
     processed_objs = set()
     if os.path.exists(record_path):
-    # Load the processed objects from the pass record file
+        # Load the processed objects from the pass record file
         with open(record_path) as f:
             processed_objs = {tuple(obj) for obj in json.load(f)}
 
@@ -82,26 +82,28 @@ def main(record_path):
             )
 
             sim.import_object(simulator_obj)
-            simulator_obj.set_position([0.0, 0.0, 0.0])
+            z_pos = simulator_obj.bounding_box[2] / 2 + simulator_obj.scaled_bbxc_in_blf[2]
+            simulator_obj.set_position([0.0, 0.0, z_pos])
 
+            user_complained_synset(simulator_obj)
+            user_complained_appearance(simulator_obj)
             user_complained_bbox(simulator_obj)
             user_complained_properties(simulator_obj)
             user_complained_metas(simulator_obj)
-            user_complained_synset(simulator_obj)
-            user_complained_appearance(simulator_obj)
             
             with open(record_path, "w") as f:
                 processed_objs.add((obj_category, obj_model))
                 json.dump(sorted(processed_objs), f)
         finally:
             sim.disconnect()
-            shutil.rmtree(PIPELINE_ROOT / "artifacts/aggregate/scene_instances")
+            shutil.rmtree(PIPELINE_ROOT / "artifacts/aggregate/scene_instances", ignore_errors=True)
 
 def process_complaint(message, simulator_obj):
     print(message)
     response = input("Do you think anything is wrong? Enter a complaint (hit enter if all's good): ")
     if response:
-        object_key = simulator_obj.category + "-" + simulator_obj.model
+        model = os.path.basename(simulator_obj.model_path)
+        object_key = simulator_obj.category + "-" + model
         complaint = {
             "object": object_key,
             "message": message,
@@ -133,9 +135,9 @@ def get_synset(category):
     return synset.name(), synset.definition()
 
 
-def user_complained_synset(category, model_path):
+def user_complained_synset(simulator_obj):
     # Get the synset assigned to the object
-    synset, definition = get_synset(category)
+    synset, definition = get_synset(simulator_obj.category)
     # Print the synset name and definition
     message = (
         "Confirm object synset assignment.\n"
@@ -145,7 +147,7 @@ def user_complained_synset(category, model_path):
         "(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\n"
         "and not orange_juice.n.01)"
     )
-    process_complaint(message, model_path)
+    process_complaint(message, simulator_obj)
 
 
 def user_complained_appearance(simulator_obj):
@@ -160,20 +162,28 @@ def user_complained_appearance(simulator_obj):
 
 
 def user_complained_properties(simulator_obj):
+    BAD_PROPERTIES = {"breakable", "timeSetable", "perishable", "screwable"}
+
     taxonomy = ObjectTaxonomy()
     synset = taxonomy.get_class_name_from_igibson_category(simulator_obj.category)
     abilities = taxonomy.get_abilities(synset)
+    all_abilities = sorted({a for s in taxonomy.taxonomy.nodes for a in taxonomy.get_abilities(s).keys()} - BAD_PROPERTIES)
     message = "Confirm object properties:\n"
     for ability in abilities:
-        message += f"- {ability}\n"
-    message += "Pay particular attention to deformable and substance properties"
+        if ability not in BAD_PROPERTIES:
+            message += f"- {ability}\n"
+    message += f"Full list of iGibson abilities: {', '.join(all_abilities)}\n"
+    message += "Check incorrect or missing properties, especially liquid property\n"
     process_complaint(message, simulator_obj)
 
 
 def user_complained_metas(simulator_obj):
-    meta_links = simulator_obj.meta_links
+    meta_links = sorted({
+        meta_name
+        for link_metas in simulator_obj.metadata["meta_links"].values()
+        for meta_name in link_metas})
     message = f"Confirm object meta links:\n"
-    for meta_link in meta_links.keys():
+    for meta_link in meta_links:
         message += f"- {meta_link}\n"
     message += "Make sure these match mechanisms you expect from this object."
     process_complaint(message, simulator_obj)
@@ -186,8 +196,8 @@ def user_complained_bbox(simulator_obj):
     for k in range(3):
         size = bounding_box[k]
         size_m = size
-        size_cm = size / 100
-        size_mm = size / 1000
+        size_cm = size * 100
+        size_mm = size * 1000
         if size_m > 1:
             bb_items.append("%.2fm" % size_m)
         elif size_cm > 1:
@@ -202,7 +212,7 @@ def user_complained_bbox(simulator_obj):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    if len(sys.argv) != 2:
-        print("Usage: python -m b1k_pipeline.qa_viewer record_file_path.json")
+    if len(sys.argv) != 3:
+        print("Usage: python -m b1k_pipeline.qa_viewer dataset_path record_file_path.json")
         sys.exit(1)
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
