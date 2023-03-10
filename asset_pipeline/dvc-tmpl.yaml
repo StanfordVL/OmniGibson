@@ -313,6 +313,8 @@ stages:
     - b1k_pipeline/pack_dataset.py
     outs:
     - artifacts/og_dataset.zip
+    - artifacts/pipeline/pack_dataset.json
+    - artifacts/pipeline/pack_dataset.success
 
   usdify_dataset:
     # Convert the objects to USD.

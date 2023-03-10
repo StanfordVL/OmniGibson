@@ -6437,6 +6437,8 @@ stages:
     - b1k_pipeline/pack_dataset.py
     outs:
     - artifacts/og_dataset.zip
+    - artifacts/pipeline/pack_dataset.json
+    - artifacts/pipeline/pack_dataset.success
   room_object_list:
     do:
       cmd: python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/room_object_list.py
