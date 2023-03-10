@@ -26,12 +26,13 @@ MAX_ORN_DELTA = np.deg2rad(10)  # 10 degrees
 
 def main():
     target = sys.argv[1]
-    output_dir = PIPELINE_ROOT / "artifacts" / "aggregate" / target
+    input_dir = PIPELINE_ROOT / "artifacts" / "aggregate" / target
+    output_dir = PIPELINE_ROOT / "cad" / target / "artifacts"
     scene_name = target.split("/")[-1]
-    scene_filename = output_dir / f"urdf/{scene_name}_best.urdf"
+    scene_filename = input_dir / f"urdf/{scene_name}_best.urdf"
 
     # Load the scene into iGibson 2
-    s = Simulator(mode="headless", use_pb_gui=True)
+    s = Simulator(mode="headless", use_pb_gui=False)
     scene = InteractiveIndoorScene(scene_name, urdf_path=str(scene_filename))
     s.import_scene(scene)
 

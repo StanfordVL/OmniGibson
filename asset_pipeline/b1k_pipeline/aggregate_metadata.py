@@ -14,6 +14,9 @@ SUCCESS_FILENAME = PIPELINE_OUTPUT_DIR / "aggregate_metadata.success"
 
 CATEGORY_MAPPING_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "metadata" / "category_mapping.csv"
 
+ROOM_CATEGORY_IN_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "metadata" / "allowed_room_types.csv"
+ROOM_CATEGORY_OUT_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts" / "aggregate" / "metadata" / "room_categories.txt"
+
 METADATA_ROOT_DIR = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts" / "aggregate" / "metadata"
 CATEGORIES_FILENAME = METADATA_ROOT_DIR / "categories.txt"
 
@@ -44,10 +47,16 @@ def main():
             categories_by_id[i] if i in categories_by_id else ""
             for i in range(max(categories_by_id.keys()) + 1)
         ]
-
         categories_w_newline = [x + "\n" for x in categories]
         with open(CATEGORIES_FILENAME, "w") as f:
             f.writelines(categories_w_newline)
+
+        # Get the room categories
+        with open(ROOM_CATEGORY_IN_FILENAME, "r") as f:
+            reader = csv.DictReader(f)
+            room_categories = [row["Room Name"].strip() + "\n" for row in reader]
+        with open(ROOM_CATEGORY_OUT_FILENAME, "w") as f:
+            f.writelines(room_categories)
     except Exception as e:
         success = False
         error_msg = traceback.format_exc()

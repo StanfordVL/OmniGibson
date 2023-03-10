@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import pathlib
+import random
 import sys
 import shutil
 import subprocess
@@ -87,7 +88,6 @@ def call_vhacd(obj_file_path, dest_file_path, dask_client):
     vhacd_future = dask_client.submit(
         get_vhacd_mesh,
         data_future,
-        "0.05",
         key=obj_file_path,
         retries=1)
     result = vhacd_future.result()
@@ -96,84 +96,28 @@ def call_vhacd(obj_file_path, dest_file_path, dask_client):
     with open(dest_file_path, 'wb') as f:
         f.write(result)
 
-def get_vhacd_mesh(file_bytes, hull_count):
+
+def get_vhacd_mesh(file_bytes):
     with tempfile.TemporaryDirectory() as td:
         in_path = os.path.join(td, "in.obj")
         out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
-        # vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(hull_count)]
-        vhacd_cmd = ["coacd", "-t", hull_count, in_path, out_path]
+        # Decide params
+        m = trimesh.load(in_path, force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
+        vhacd_cmd = ["coacd", "-t", "0.05"]
+        if m.is_volume:
+            vhacd_cmd += ["--no-preprocess"]
+        else:
+            vhacd_cmd += ["--preprocess-resolution", "100"]
+        vhacd_cmd += [in_path, out_path]
         try:
             proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
             with open(out_path, 'rb') as f:
                 return f.read()
-            # return trimesh.load(out_path, file_type="obj", force="mesh", skip_textures=True)
         except subprocess.CalledProcessError as e:
             raise ValueError(f"VHACD failed with exit code {e.returncode}. Output:\n{e.output}")
 
-def binary_search(x, f, low, high):
-    mid = 0
- 
-    while low <= high:
-        mid = (high + low) // 2
-        val = f(mid)
-        if val < x:
-            low = mid + 1
-        elif val > x:
-            high = mid - 1
-        else:
-            return mid
-    return low
-
-def voxelize(m):
-    pitch = 0.01
-    return trimesh.voxel.creation.local_voxelize(
-        m, pitch=pitch, point=np.array([0, 0, 0]),
-        radius=int(np.ceil(0.5/pitch))
-    ).matrix
-
-def run_vhacd_search(visual_content):
-    # First, run VHACD on the full thing with 128 hulls as an upper bound
-    max_mesh = get_vhacd_mesh(visual_content, 128)
-    translation = -np.mean(max_mesh.bounds, axis=0)
-    scale = np.min(1 / max_mesh.extents)
-    matrix_1 = trimesh.transformations.scale_matrix(scale)
-    matrix_2 = trimesh.transformations.translation_matrix(translation)
-    matrix = matrix_1 @ matrix_2
-    max_mesh.apply_transform(matrix)  
-    v_max_mesh = voxelize(max_mesh)
-
-    # Define a binary-searchable function to find the best entry
-    with tempfile.TemporaryDirectory() as td:
-        memory = {}
-        options = ["0.05"]
-        def compute_iou(hull_count_idx):
-            hull_count = options[hull_count_idx]
-            hull_count_mesh = get_vhacd_mesh(visual_content, hull_count)
-            out_fn = pathlib.Path(td) / f"{hull_count}.obj"
-            hull_count_mesh.export(str(out_fn), file_type="obj")
-            hull_count_mesh.apply_transform(matrix)
-            v_hull_count_mesh = voxelize(hull_count_mesh)
-
-            # Compute their intersection volume
-            intersection = v_max_mesh & v_hull_count_mesh
-            intersection_cnt = np.count_nonzero(intersection)
-            union = v_max_mesh | v_hull_count_mesh
-            union_cnt = np.count_nonzero(union)
-            iou = intersection_cnt / union_cnt
-
-            memory[hull_count_idx] = out_fn
-
-            return iou
-        
-        # Then, start binary search on the hull count to find the lowest entry above 0.85
-        lowest_acceptable_hull_count_idx = min(binary_search(0.85, compute_iou, 0, len(options) - 1), len(options - 1))
-        
-        # Return the contents of the lowest acceptable hull count file
-        lowest_acceptable_hull_file = memory[lowest_acceptable_hull_count_idx]
-        with open(lowest_acceptable_hull_file, "rb") as f:
-            return f.read()
 
 def timeout(timelimit):
     def decorator(func):
@@ -697,10 +641,11 @@ def main():
     errors = {}
     all_futures = {}
 
-    dask_client = Client('svl7.stanford.edu:35423')
+    dask_client = Client('svl16.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=100) as executor:
-        for target in tqdm.tqdm(get_targets("combined")):
+        targets = get_targets("combined")
+        for target in tqdm.tqdm(targets):
             all_futures[executor.submit(process_target, target, output_dir, executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))
                 

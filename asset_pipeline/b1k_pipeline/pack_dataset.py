@@ -1,30 +1,41 @@
+import glob
 import json
 import logging
 import os
 import pathlib
 import shutil
 import traceback
+import fs
+import fs.copy
+import fs.zipfs
+import fs.multifs
+import fs.osfs
+import tqdm
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 OUTPUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "pipeline", "pack_dataset.json")
 SUCCESS_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "pipeline", "pack_dataset.success")
-IN_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "aggregate")
+IN_FILENAME_AGGREGATE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "aggregate")
+IN_FILENAME_PARALLELS = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "parallels", "*.zip")
 OUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "og_dataset.zip")
-
-def make_archive(source: pathlib.Path, destination: pathlib.Path) -> None:
-    base_name = destination.parent / destination.stem
-    fmt = destination.suffix.replace(".", "")
-    root_dir = source.parent
-    base_dir = source.name
-    return shutil.make_archive(str(base_name), fmt, root_dir, base_dir)
 
 def main():
     success = True
     error_msg = ""
     try:
-        assert make_archive(pathlib.Path(IN_FILENAME), pathlib.Path(OUT_FILENAME)), "Could not create zip file."
+        # Get a multi-FS view over all of the parallel filesystems.
+        multi_fs = fs.multifs.MultiFS()
+        multi_fs.add_fs('aggregate', fs.osfs.OSFS(IN_FILENAME_AGGREGATE), priority=1)
+        for parallel_zip in glob.glob(IN_FILENAME_PARALLELS):
+            print("Adding", parallel_zip)
+            multi_fs.add_fs(os.path.basename(parallel_zip), fs.zipfs.ZipFS(parallel_zip), priority=0)
+
+        # Copy all the files to the output zip filesystem.
+        total_files = sum(1 for f in multi_fs.walk.files())
+        with tqdm.tqdm(total=total_files) as pbar, fs.zipfs.ZipFS(OUT_FILENAME, write=True) as out_fs:
+            fs.copy.copy_fs(multi_fs, out_fs, on_copy=lambda *args: pbar.update(1))
     except Exception as e:
         success = False
         error_msg = traceback.format_exc()

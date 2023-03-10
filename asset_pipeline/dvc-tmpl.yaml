@@ -185,30 +185,30 @@ stages:
   #     - cad/${item}/artifacts/camera_images
   #     - cad/${item}/artifacts/generate_camera_images.success
 
-  # room_object_list:
-  #   # Generate a list of all objects found in each room in each scene.
-  #   foreach: ${scenes_unfiltered}
-  #   do:
-  #     cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/room_object_list.py'
-  #     deps:
-  #     - b1k_pipeline/max/room_object_list.py
-  #     - cad/${item}/processed.max
-  #     # - cad/${item}/artifacts/sanitycheck.json
-  #     outs:
-  #     - cad/${item}/artifacts/room_object_list.json
-  #     - cad/${item}/artifacts/room_object_list.success
+  room_object_list:
+    # Generate a list of all objects found in each room in each scene.
+    foreach: ${scenes_unfiltered}
+    do:
+      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/room_object_list.py'
+      deps:
+      - b1k_pipeline/max/room_object_list.py
+      - cad/${item}/processed.max
+      # - cad/${item}/artifacts/sanitycheck.json
+      outs:
+      - cad/${item}/artifacts/room_object_list.json
+      - cad/${item}/artifacts/room_object_list.success
       
-  # combined_room_object_list:
-  #   # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
-  #   cmd: 'python b1k_pipeline/combined_room_object_list.py'
-  #   deps:
-  #   - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
-  #   - cad/#{scenes_unfiltered}/artifacts/room_object_list.success
-  #   - b1k_pipeline/combined_room_object_list.py
-  #   - params.yaml
-  #   outs:
-  #   - artifacts/pipeline/combined_room_object_list.json
-  #   - artifacts/pipeline/combined_room_object_list.success
+  combined_room_object_list:
+    # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
+    cmd: 'python b1k_pipeline/combined_room_object_list.py'
+    deps:
+    - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
+    - cad/#{scenes_unfiltered}/artifacts/room_object_list.success
+    - b1k_pipeline/combined_room_object_list.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/combined_room_object_list.json
+    - artifacts/pipeline/combined_room_object_list.success
 
   export_scene:
     # Generate scene URDF file from meshes.
@@ -234,17 +234,29 @@ stages:
   #   outs:
   #   - artifacts/pipeline/export_scene.success
 
-  # validate_scene:
-  #   # Validate exported scene, e.g. physics stability.
-  #   foreach: ${scenes}
-  #   do:
-  #     cmd: 'python -m b1k_pipeline.validate_scene ${item}'
-  #     deps:
-  #     - cad/${item}/artifacts/scene
-  #     - artifacts/aggregate/export_scene.success
-  #     - b1k_pipeline/validate_scene.py
-  #     outs:
-  #     - cad/${item}/artifacts/validate_scene.json
+  aggregate_scenes:
+    # Aggregate scenes from different entries into a single location.
+    cmd: 'python b1k_pipeline/aggregate_scenes.py'
+    deps:
+    - cad/#{scenes}/artifacts/scene
+    - cad/#{scenes}/artifacts/export_scene.success
+    - b1k_pipeline/aggregate_scenes.py
+    - params.yaml
+    outs:
+    - artifacts/aggregate/scenes
+    - artifacts/pipeline/aggregate_scenes.success
+
+  validate_scene:
+    # Validate exported scene, e.g. physics stability.
+    foreach: ${scenes}
+    do:
+      cmd: 'python -m b1k_pipeline.validate_scene ${item}'
+      deps:
+      - artifacts/aggregate/scenes
+      - artifacts/pipeline/aggregate_scenes.success
+      - b1k_pipeline/validate_scene.py
+      outs:
+      - cad/${item}/artifacts/validate_scene.json
 
   # validate_scene_success:
   #   cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/validate_scene.json artifacts/pipeline/validate_scene.success'
@@ -254,18 +266,16 @@ stages:
   #   outs:
   #   - artifacts/pipeline/validate_scene.success
 
-  aggregate_scenes:
-    # Aggregate scenes from different entries into a single location.
-    cmd: 'python b1k_pipeline/aggregate_scenes.py'
+  make_maps:
+    cmd: 'python -m b1k_pipeline.make_maps'
     deps:
-    - cad/#{scenes}/artifacts/scene
-    - cad/#{scenes}/artifacts/export_scene.success
-    # - cad/#{scenes}/artifacts/validate_scene.success
-    - b1k_pipeline/aggregate_scenes.py
-    - params.yaml
-    outs:
     - artifacts/aggregate/scenes
     - artifacts/pipeline/aggregate_scenes.success
+    - b1k_pipeline/make_maps.py
+    - metadata/allowed_room_types.csv
+    outs:
+    - artifacts/parallels/maps.zip
+    - artifacts/pipeline/make_maps.success
 
   aggregate_metadata:
     # Add metadata and compile everything in the right spot.
@@ -275,6 +285,7 @@ stages:
     - artifacts/aggregate/objects
     - artifacts/aggregate/scenes
     - metadata/category_mapping.csv
+    - metadata/allowed_room_types.csv
     outs:
     - artifacts/aggregate/metadata
     - artifacts/pipeline/aggregate_metadata.json
@@ -291,6 +302,8 @@ stages:
     # Zip the dataset.
     cmd: 'python b1k_pipeline/pack_dataset.py'
     deps:
+    - artifacts/parallels/maps.zip
+    # - artifacts/pipeline/validate_scene.success
     - artifacts/pipeline/aggregate_metadata.success
     - artifacts/pipeline/aggregate_scenes.success
     - artifacts/pipeline/export_objs.success
@@ -298,8 +311,6 @@ stages:
     - artifacts/aggregate/objects
     - artifacts/aggregate/scenes
     - b1k_pipeline/pack_dataset.py
-    # - artifacts/pipeline/usdify_objs.success
-    # - artifacts/pipeline/usdify_scenes.success
     outs:
     - artifacts/og_dataset.zip
 

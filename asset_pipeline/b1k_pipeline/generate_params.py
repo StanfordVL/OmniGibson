@@ -240,7 +240,7 @@ APPROVED_OBJS = {
 }
 
 REJECTED_OBJS = {
-
+    "legacy_toaster-kjwqav",
 }
 
 APPROVED_SCENES = {
