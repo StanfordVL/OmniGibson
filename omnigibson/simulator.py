@@ -169,7 +169,7 @@ class Simulator(SimulationContext, Serializable):
             viewport_name=viewport_name,
         )
         if not self._viewer_camera.loaded:
-            self._viewer_camera.load(simulator=self)
+            self._viewer_camera.load()
 
         # We update its clipping range and focal length so we get a good FOV and so that it doesn't clip
         # nearby objects (default min is 1 m)
@@ -296,7 +296,7 @@ class Simulator(SimulationContext, Serializable):
         self.clear()
 
         self._scene = scene
-        self._scene.load(self)
+        self._scene.load()
 
         # Make sure simulator is not running, then start it so that we can initialize the scene
         assert self.is_stopped(), "Simulator must be stopped after importing a scene!"
@@ -335,7 +335,7 @@ class Simulator(SimulationContext, Serializable):
         assert self.scene is not None, "import_object needs to be called after import_scene"
 
         # Load the object in omniverse by adding it to the scene
-        self.scene.add_object(obj, self, register=register, _is_call_from_simulator=True)
+        self.scene.add_object(obj, register=register, _is_call_from_simulator=True)
 
         # Lastly, additionally add this object automatically to be initialized as soon as another simulator step occurs
         # if requested
@@ -349,7 +349,7 @@ class Simulator(SimulationContext, Serializable):
         Args:
             obj (BaseObject): a non-robot object to load
         """
-        self._scene.remove_object(obj, simulator=self)
+        self._scene.remove_object(obj)
         self.app.update()
 
     def _non_physics_step(self):
@@ -361,7 +361,6 @@ class Simulator(SimulationContext, Serializable):
         if len(self._objects_to_initialize) > 0 and self.is_playing():
             for obj in self._objects_to_initialize:
                 obj.initialize()
-                self._scene.update_object_initial_state(obj)
             self._objects_to_initialize = []
 
         # Propagate states if the feature is enabled
@@ -471,13 +470,6 @@ class Simulator(SimulationContext, Serializable):
                     (added_obj_attr.bb_pos is not None or added_obj_attr.bb_orn is not None):
                 new_obj.set_bbox_center_position_orientation(position=added_obj_attr.bb_pos, orientation=added_obj_attr.bb_orn)
 
-    def reset_scene(self):
-        """
-        Resets ths scene (if it exists) and its corresponding objects
-        """
-        if self.scene is not None and self.scene.initialized:
-            self.scene.reset()
-
     def play(self):
         if not self.is_playing():
             # Track whether we're starting the simulator fresh -- i.e.: whether we were stopped previously
@@ -501,6 +493,10 @@ class Simulator(SimulationContext, Serializable):
             # We need to do this because for some reason omniverse exhibits strange behavior if we do certain operations
             # immediately after playing; e.g.: syncing USD poses when flatcache is enabled
             if was_stopped:
+                if self.scene is not None and self.scene.initialized:
+                    for robot in self.scene.robots:
+                        robot.update_controller_mode()
+
                 self.step_physics()
 
             # Additionally run non physics things if we have a valid scene

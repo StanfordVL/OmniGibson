@@ -82,7 +82,7 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
             name = "{}_{}".format(category, address)
 
         # Store values
-        self.uuid = int(str(id(self))[-8:]) if uuid is None else uuid
+        self.uuid = abs(hash(name)) % (10 ** 8) if uuid is None else uuid
         assert len(str(self.uuid)) <= 8, f"UUID for this object must be at max 8-digits, got: {self.uuid}"
         self.category = category
         self.fixed_base = fixed_base
@@ -97,7 +97,6 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         self.class_id = class_id
 
         # Values to be created at runtime
-        self._simulator = None
         self._highlight_cached_values = None
         self._highlighted = None
 
@@ -121,24 +120,18 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         self._init_info["args"]["name"] = self.name
         self._init_info["args"]["uuid"] = self.uuid
 
-    def load(self, simulator=None):
-        # Run sanity check, any of these objects REQUIRE a simulator to be specified
-        assert simulator is not None, "Simulator must be specified for loading any object subclassed from BaseObject!"
-
-        # Save simulator reference
-        self._simulator = simulator
-
+    def load(self):
         # Run super method ONLY if we're not loaded yet
         if self.loaded:
             prim = self._prim
         else:
-            prim = super().load(simulator=simulator)
+            prim = super().load()
             log.info(f"Loaded {self.name} at {self.prim_path}")
         return prim
 
-    def remove(self, simulator=None):
+    def remove(self):
         # Run super first
-        super().remove(simulator=simulator)
+        super().remove()
 
         # Notify user that the object was removed
         log.info(f"Removed {self.name} from {self.prim_path}")

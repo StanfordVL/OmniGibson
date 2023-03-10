@@ -81,14 +81,14 @@ class Temperature(AbsoluteObjectState, UpdateStateMixin):
                         continue
 
                 new_temperature += (
-                    (heat_source.temperature - self.value) * heat_source.heating_rate * self._simulator.get_rendering_dt()
+                    (heat_source.temperature - self.value) * heat_source.heating_rate * og.sim.get_rendering_dt()
                 )
                 affected_by_heat_source = True
 
         # Apply temperature decay if not affected by any heat source.
         if not affected_by_heat_source:
             new_temperature += (
-                (m.DEFAULT_TEMPERATURE - self.value) * m.TEMPERATURE_DECAY_SPEED * self._simulator.get_rendering_dt()
+                (m.DEFAULT_TEMPERATURE - self.value) * m.TEMPERATURE_DECAY_SPEED * og.sim.get_rendering_dt()
             )
 
         self.value = new_temperature

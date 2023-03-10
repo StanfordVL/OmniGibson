@@ -109,7 +109,7 @@ class FurnitureClosingTask(BaseTask):
 
     def _reset_scene(self, env):
         # Run super first
-        super().reset(env=env)
+        super()._reset_scene(env=env)
 
         # Make sure all objects are awake
         env.scene.wake_scene_objects()

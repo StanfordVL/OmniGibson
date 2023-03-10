@@ -678,7 +678,6 @@ class SerializableNonInstance:
         """
         # Sanity check the idx with the expected state size
         state_dict, idx = cls._deserialize(state=state)
-        assert cls.state_size is not None, "State size must be specified by subclass!"
         assert idx == cls.state_size, f"Invalid state deserialization occurred! Expected {cls.state_size} total " \
                                       f"values to be deserialized, only {idx} were."
 

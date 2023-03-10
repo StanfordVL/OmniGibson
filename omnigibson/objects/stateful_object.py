@@ -5,6 +5,7 @@ import numpy as np
 from pxr.Sdf import ValueTypeNames as VT
 from pxr import Sdf, Gf
 
+import omnigibson as og
 from omnigibson.macros import create_module_macros
 from omnigibson.object_states.factory import (
     get_default_states,
@@ -142,7 +143,7 @@ class StatefulObject(BaseObject):
 
         # Initialize all states
         for state in self._states.values():
-            state.initialize(self._simulator)
+            state.initialize()
 
     def add_state(self, state):
         """
@@ -285,7 +286,7 @@ class StatefulObject(BaseObject):
         flowRender_prim_path = f"{self._prim_path}/{link_name}/flowRender"
 
         # Define prims.
-        stage = self._simulator.stage
+        stage = og.sim.stage
         emitter = stage.DefinePrim(flowEmitter_prim_path, emitter_config["type"])
         simulate = stage.DefinePrim(flowSimulate_prim_path, "FlowSimulate")
         offscreen = stage.DefinePrim(flowOffscreen_prim_path, "FlowOffscreen")
@@ -373,7 +374,7 @@ class StatefulObject(BaseObject):
                 state = self.states[state_type]
                 if state_type in get_texture_change_states():
                     if state_type == Saturated:
-                        for fluid_system in FluidSystem.get_systems().values():
+                        for fluid_system in FluidSystem.get_active_systems().values():
                             if state.get_value(fluid_system):
                                 texture_change_states.append(state)
                                 # Only need to do this once, since soaked handles all fluid systems
@@ -432,20 +433,16 @@ class StatefulObject(BaseObject):
         if not np.allclose(material.diffuse_tint, diffuse_tint):
             material.diffuse_tint = diffuse_tint
 
-    def remove(self, simulator=None):
+    def remove(self):
         """
         Removes this prim from omniverse stage
-
-        Args:
-            simulator (None or SimulationContext): If specified, should be simulator into which this prim will be
-                removed. Otherwise, it will be removed from the default stage
         """
         # Iterate over all states and run their remove call
         for state_instance in self._states.values():
             state_instance.remove()
 
         # Run super
-        super().remove(simulator=simulator)
+        super().remove()
 
     def _dump_state(self):
         # Grab state from super class

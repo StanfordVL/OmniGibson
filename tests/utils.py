@@ -15,11 +15,10 @@ TEMP_RELATED_ABILITIES = {"cookable": {}, "freezable": {}, "burnable": {}, "heat
 def og_test(func):
     def wrapper():
         assert_test_scene()
-        state = og.sim.dump_state()
         try:
             func()
         finally:
-            og.sim.load_state(state)
+            og.sim.scene.reset()
     return wrapper
 
 num_objs = 0
@@ -53,7 +52,7 @@ def assert_test_scene():
                 get_obj_cfg("bowl", "bowl", "ajzltc"),
                 get_obj_cfg("bagel", "bagel", "zlxkry", abilities=TEMP_RELATED_ABILITIES),
                 get_obj_cfg("cookable_dishtowel", "dishtowel", "Tag_Dishtowel_Basket_Weave_Red", prim_type=PrimType.CLOTH, abilities=TEMP_RELATED_ABILITIES),
-                get_obj_cfg("microwave", "microwave", "abzvij"),
+                get_obj_cfg("microwave", "microwave", "7128"),
                 get_obj_cfg("stove", "stove", "101943"),
                 get_obj_cfg("fridge", "fridge", "dszchb"),
                 get_obj_cfg("plywood", "plywood", "fkmkqa", abilities={"flammable": {}}),
@@ -68,9 +67,9 @@ def assert_test_scene():
 
         # Create the environment
         env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
-        og.sim.stop()
         env.robots[0].set_position_orientation([150, 150, 0], [0, 0, 0, 1])
-        og.sim.play()
+        og.sim.step()
+        og.sim.scene.update_initial_state()
 
 def get_random_pose(pos_low=10.0, pos_hi=20.0):
     pos = np.random.uniform(pos_low, pos_hi, 3)

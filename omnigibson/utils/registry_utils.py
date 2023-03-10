@@ -336,10 +336,8 @@ class SerializableRegistry(Registry, Serializable):
 
     def _load_state(self, state):
         # Iterate over all objects and load their states
+        assert {obj.name for obj in self.objects} == state.keys(), "object mismatch when loading state for registry"
         for obj in self.objects:
-            if obj.name not in state:
-                log.warning(f"Object '{obj.name}' is not in the state dict to load from. Skip loading its state.")
-                continue
             obj.load_state(state[obj.name], serialized=False)
 
     def _serialize(self, state):

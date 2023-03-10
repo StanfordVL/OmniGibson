@@ -168,7 +168,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
             cfg=self.task_config,
             cls_type_descriptor="task",
         )
-
         assert og.sim.is_stopped(), "sim should be stopped when load_task starts"
         og.sim.play()
 
@@ -176,9 +175,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # This is needed because when the sim is stopped, no joint state info is stored. So, any desired initial
         # joint configuration needs to get loaded separately AFTER og.sim.play() gets
         # called, since joint info is R/W only when the simulator is playing
-        # We do this by calling reset_scene(), which automatically loads the internally-cached initial state (including
+        # We do this by calling scene.reset(), which automatically loads the internally-cached initial state (including
         # joints) into the simulator
-        og.sim.reset_scene()
+        self.scene.reset()
 
         # Load task. Should load additional task-relevant objects and configure the scene into its default initial state
         self._task.load(env=self)
@@ -207,6 +206,10 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """
         # Only actually load robots if no robot has been imported from the scene loading directly yet
         if len(self.scene.robots) == 0:
+            assert og.sim.is_stopped()
+            og.sim.play()
+            self.scene.reset()
+
             # Iterate over all robots to generate in the robot config
             for i, robot_config in enumerate(self.robots_config):
                 # Add a name for the robot if necessary
@@ -224,10 +227,19 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 # Import the robot into the simulator
                 og.sim.import_object(robot)
 
+            # Auto-initialize all robots
+            og.sim.step()
+
+            self.scene.update_initial_state()
+            og.sim.stop()
+
     def _load_objects(self):
         """
         Load any additional custom objects into the scene
         """
+        assert og.sim.is_stopped()
+        og.sim.play()
+        self.scene.reset()
         for i, obj_config in enumerate(self.objects_config):
             # Add a name for the object if necessary
             if "name" not in obj_config:
@@ -247,6 +259,13 @@ class Environment(gym.Env, GymObservable, Recreatable):
             # Import the robot into the simulator and set the pose
             og.sim.import_object(obj)
             obj.set_position_orientation(position=position, orientation=orientation)
+
+        # Auto-initialize all objects
+        og.sim.step()
+
+        # Update the initial scene state
+        self.scene.update_initial_state()
+        og.sim.stop()
 
     def _load_observation_space(self):
         # Grab robot(s) and task obs spaces

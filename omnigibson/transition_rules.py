@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 import omnigibson as og
-from omnigibson.systems import *
+from omnigibson.systems import get_system
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.object_states import *
 import omnigibson.utils.transform_utils as T
@@ -355,8 +355,7 @@ class DicingRule(BaseTransitionRule):
 
         slicer_obj, diced_obj = individual_objects["slicer"], individual_objects["diceable"]
 
-        from omnigibson.systems.system_base import get_system_from_element_name
-        system = get_system_from_element_name("DicedApple")
+        system = get_system("diced_apple")
         system.generate_particles_from_link(diced_obj, diced_obj.root_link, use_visual_meshes=False)
 
         # Delete original object from stage.
@@ -638,8 +637,8 @@ DEFAULT_RULES = (
     DicingRule(),
     # Strawberry smoothie
     BlenderRule(
-        output_system=StrawberrySmoothieSystem,
-        particle_requirements={MilkSystem: 10},
+        output_system=get_system("strawberry_smoothie"),
+        particle_requirements={get_system("milk"): 10},
         obj_requirements={"strawberry": 5, "ice_cube": 5},
     ),
 )

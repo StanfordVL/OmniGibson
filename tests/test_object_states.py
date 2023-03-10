@@ -313,7 +313,6 @@ def test_adjacency():
         bottom_cabinet.states[HorizontalAdjacency].set_value(None)
         bottom_cabinet.states[VerticalAdjacency].set_value(None)
 
-
 @og_test
 def test_temperature():
     microwave = og.sim.scene.object_registry("name", "microwave")
@@ -323,7 +322,7 @@ def test_temperature():
     bagel = og.sim.scene.object_registry("name", "bagel")
     dishtowel = og.sim.scene.object_registry("name", "cookable_dishtowel")
 
-    microwave.set_position_orientation([0., 0., 0.17], [0, 0, 0, 1])
+    microwave.set_position_orientation([0., 0., 0.15], [0, 0, 0, 1])
     stove.set_position_orientation([1, 0., 0.45], [0, 0, 0, 1])
     fridge.set_position_orientation([2, 0., 0.98], [0, 0, 0, 1])
     plywood.set_position_orientation([3, 0, 0.05], [0, 0, 0, 1])
@@ -340,7 +339,7 @@ def test_temperature():
     assert dishtowel.states[Temperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
 
     # Open the microwave
-    microwave.joints["j_link_0"].set_pos(np.pi / 2)
+    microwave.joints["joint_0"].set_pos(np.pi / 2)
 
     # Set the objects to be inside the microwave
     bagel.set_position_orientation([0, 0, 0.11], [0, 0, 0, 1])
@@ -362,7 +361,7 @@ def test_temperature():
     assert bagel.states[Temperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
     assert dishtowel.states[Temperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
 
-    microwave.joints["j_link_0"].set_pos(0.)
+    microwave.joints["joint_0"].set_pos(0.)
 
     for _ in range(5):
         og.sim.step()
@@ -478,13 +477,13 @@ def test_heat_source_or_sink():
     assert microwave.states[HeatSourceOrSink].requires_closed
     assert microwave.states[HeatSourceOrSink].requires_toggled_on
 
-    microwave.joints["j_link_0"].set_pos(np.pi / 2)
+    microwave.joints["joint_0"].set_pos(np.pi / 2)
     microwave.states[ToggledOn].set_value(False)
 
     og.sim.step()
     assert not microwave.states[HeatSourceOrSink].get_value()
 
-    microwave.joints["j_link_0"].set_pos(0.0)
+    microwave.joints["joint_0"].set_pos(0.0)
     og.sim.step()
     assert not microwave.states[HeatSourceOrSink].get_value()
 
@@ -664,8 +663,14 @@ def test_toggled_on():
 
     assert not stove.states[ToggledOn].get_value()
 
-    robot.joints["shoulder_lift_joint"].set_pos(np.pi / 36)
+    robot.joints["torso_lift_joint"].set_pos(0.0)
     robot.joints["shoulder_pan_joint"].set_pos(np.pi / 2)
+    robot.joints["shoulder_lift_joint"].set_pos(np.pi / 36)
+    robot.joints["upperarm_roll_joint"].set_pos(0.0)
+    robot.joints["elbow_flex_joint"].set_pos(0.0)
+    robot.joints["forearm_roll_joint"].set_pos(0.0)
+    robot.joints["wrist_flex_joint"].set_pos(0.0)
+    robot.joints["wrist_roll_joint"].set_pos(0.0)
 
     steps = m.object_states.toggle.CAN_TOGGLE_STEPS
     for _ in range(steps):
