@@ -54,7 +54,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         uuid=None,
         scale=None,
         visible=True,
-        fixed_base=False,
+        fixed_base=True,
         visual_only=False,
         self_collisions=False,
         load_config=None,
