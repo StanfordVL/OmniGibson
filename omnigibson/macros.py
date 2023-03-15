@@ -27,7 +27,7 @@ gm.SHOW_DISCLAIMERS = True
 # If global checking is enabled but robot checking disabled, global checking will take
 # precedence (i.e.: robot will still have contact checking)
 # TODO: Remove this once we have an optimized solution
-gm.ENABLE_GLOBAL_CONTACT_REPORTING = False
+gm.ENABLE_GLOBAL_CONTACT_REPORTING = True
 gm.ENABLE_ROBOT_CONTACT_REPORTING = True
 
 # Whether to use omni's GPU dynamics
