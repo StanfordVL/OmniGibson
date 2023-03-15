@@ -217,6 +217,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
                     robot_config["name"] = f"robot{i}"
                 # Set prim path
                 robot_config["prim_path"] = f"/World/{robot_config['name']}"
+
+                position, orientation = robot_config.pop("position", None), robot_config.pop("orientation", None)
                 # Make sure robot exists, grab its corresponding kwargs, and create / import the robot
                 robot = create_class_from_registry_and_config(
                     cls_name=robot_config["type"],
@@ -226,6 +228,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 )
                 # Import the robot into the simulator
                 og.sim.import_object(robot)
+                robot.set_position_orientation(position=position, orientation=orientation)
 
             # Auto-initialize all robots
             og.sim.step()

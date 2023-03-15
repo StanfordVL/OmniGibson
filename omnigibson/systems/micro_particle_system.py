@@ -3,9 +3,9 @@ from omnigibson.macros import gm, create_module_macros
 from omnigibson.prims.prim_base import BasePrim
 from omnigibson.prims.geom_prim import VisualGeomPrim
 from omnigibson.prims.material_prim import MaterialPrim
-from omnigibson.systems.system_base import BaseSystem
+from omnigibson.systems.system_base import BaseSystem, REGISTERED_SYSTEMS
 from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_function
-from omnigibson.utils.python_utils import classproperty, assert_valid_key, subclass_factory
+from omnigibson.utils.python_utils import classproperty, assert_valid_key, subclass_factory, snake_case_to_camel_case
 from omnigibson.utils.sampling_utils import sample_cuboid_on_object_full_grid_topdown
 from omnigibson.utils.usd_utils import array_to_vtarray
 from omnigibson.utils.physx_utils import create_physx_particle_system, create_physx_particleset_pointinstancer
@@ -30,6 +30,12 @@ import carb
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
+
+
+def is_physical_particle_system(system_name):
+    assert system_name in REGISTERED_SYSTEMS, f"System {system_name} not in REGISTERED_SYSTEMS."
+    system = REGISTERED_SYSTEMS[system_name]
+    return issubclass(system, PhysicalParticleSystem)
 
 
 def set_carb_settings_for_fluid_isosurface():
@@ -310,7 +316,7 @@ class PhysxParticleInstancer(BasePrim):
     def state_size(self):
         # idn (1), particle_group (1), n_particles (1), and the corresponding states for each particle
         # N * (pos (3) + vel (3) + orn (4) + scale (3) + prototype_id (1))
-        return 3 + len(self._n_particles) * 14
+        return 3 + self._n_particles * 14
 
     def _dump_state(self):
         return dict(
@@ -1173,7 +1179,7 @@ class PhysicalParticleSystem(MicroParticleSystem):
         Utility function to programmatically generate monolithic fluid system classes.
 
         Args:
-            name (str): Name of the system
+            name (str): Name of the system, in snake case.
             particle_contact_offset (float): Contact offset for the generated system
             particle_density (float): Particle density for the generated system
             **kwargs (any): keyword-mapped parameters to override / set in the child class, where the keys represent
@@ -1204,7 +1210,7 @@ class PhysicalParticleSystem(MicroParticleSystem):
         kwargs["particle_density"] = cp_particle_density
 
         # Create and return the class
-        return subclass_factory(name=name, base_classes=cls, **kwargs)
+        return subclass_factory(name=snake_case_to_camel_case(name), base_classes=cls, **kwargs)
 
 
 class FluidSystem(PhysicalParticleSystem):
@@ -1534,7 +1540,7 @@ GranularSystem.create(
 )
 
 
-class cloth(MicroParticleSystem):
+class Cloth(MicroParticleSystem):
     """
     Particle system class to simulate cloth.
     """

@@ -132,6 +132,7 @@ class VisionSensor(BaseSensor):
 
     def _load(self):
         # Define a new camera prim at the current stage
+        # Note that we can't use og.sim.stage here because the vision sensors get loaded first
         return UsdGeom.Camera.Define(get_current_stage(), self._prim_path).GetPrim()
 
     def _post_load(self):

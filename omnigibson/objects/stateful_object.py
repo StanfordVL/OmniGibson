@@ -374,8 +374,8 @@ class StatefulObject(BaseObject):
                 state = self.states[state_type]
                 if state_type in get_texture_change_states():
                     if state_type == Saturated:
-                        for fluid_system in FluidSystem.get_active_systems().values():
-                            if state.get_value(fluid_system):
+                        for particle_system in ParticleRemover.supported_active_systems().values():
+                            if state.get_value(particle_system):
                                 texture_change_states.append(state)
                                 # Only need to do this once, since soaked handles all fluid systems
                                 break

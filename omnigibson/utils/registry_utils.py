@@ -331,8 +331,10 @@ class SerializableRegistry(Registry, Serializable):
         return state
 
     def _load_state(self, state):
-        # Iterate over all objects and load their states
-        assert {obj.name for obj in self.objects} == state.keys(), "object mismatch when loading state for registry"
+        # Iterate over all objects and load their states. The objects in the registry should be a subset of the loaded
+        # state, i.e. all objects should have their states loaded, while the state might contain information about
+        # objects that are not in the registry.
+        assert {obj.name for obj in self.objects}.issubset(state.keys()), "object mismatch when loading state for registry"
         for obj in self.objects:
             obj.load_state(state[obj.name], serialized=False)
 

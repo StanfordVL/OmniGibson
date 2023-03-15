@@ -49,9 +49,9 @@ def main(random_selection=False, headless=False, short_exec=False):
                             # where True means the condition is satisfied
                             # In this case, we only allow our cleaning tool to remove stains and dust particles if
                             # the object is saturated with water, i.e.: it's "soaked" with water particles
-                            get_system("stain"): [check_water_saturation],
-                            get_system("dust"): [],
-                            get_system("water"): [],
+                            "stain": [check_water_saturation],
+                            "dust": [],
+                            "water": [],
                         },
                     },
                 },

@@ -50,7 +50,7 @@ def main():
                             # according to the water.
                             # NOTE: This will only change color if gm.ENABLE_HQ_RENDERING and gm.USE_GPU_DYNAMICS is
                             # enabled!
-                            get_system("water"): [],
+                            "water": [],
                         },
             },
                 },

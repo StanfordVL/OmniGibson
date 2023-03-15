@@ -5,9 +5,9 @@ from omni.isaac.core.utils.prims import get_prim_at_path
 
 import omnigibson as og
 from omnigibson.macros import gm
-from omnigibson.systems.system_base import BaseSystem
+from omnigibson.systems.system_base import BaseSystem, REGISTERED_SYSTEMS
 from omnigibson.utils.constants import SemanticClass
-from omnigibson.utils.python_utils import classproperty, subclass_factory
+from omnigibson.utils.python_utils import classproperty, subclass_factory, snake_case_to_camel_case
 from omnigibson.utils.sampling_utils import sample_cuboid_on_object_symmetric_bimodal_distribution
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import FlatcacheAPI
@@ -17,6 +17,12 @@ from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
+
+
+def is_visual_particle_system(system_name):
+    assert system_name in REGISTERED_SYSTEMS, f"System {system_name} not in REGISTERED_SYSTEMS."
+    system = REGISTERED_SYSTEMS[system_name]
+    return issubclass(system, VisualParticleSystem)
 
 
 class MacroParticleSystem(BaseSystem):
@@ -66,14 +72,15 @@ class MacroParticleSystem(BaseSystem):
     def particle_idns(cls):
         """
         Returns:
-            int: Number of active particles in this system
+            list: idn of all the particles across all groups.
         """
         return [cls.particle_name2idn(particle_name) for particle_name in cls.particles]
 
     @classproperty
     def next_available_particle_idn(cls):
         """
-        Updates the max particle identification number based on the current internal state
+        Returns:
+            int: the next available particle idn across all groups.
         """
         if cls.n_particles == 0:
             return 0
@@ -841,7 +848,7 @@ class VisualParticleSystem(MacroParticleSystem):
             Use: super(cls).__get__(cls).<METHOD_NAME>(<KWARGS>)
 
         Args:
-            name (str): Name of the visual particles
+            name (str): Name of the visual particles, in snake case.
             min_scale (None or 3-array): If specified, sets the minumum bound for the visual particles' relative scale.
                 Else, defaults to 1
             max_scale (None or 3-array): If specified, sets the maximum bound for the visual particles' relative scale.
@@ -891,7 +898,7 @@ class VisualParticleSystem(MacroParticleSystem):
         kwargs["_create_particle_template"] = cm_create_particle_template
 
         # Create and return the class
-        return subclass_factory(name=name, base_classes=cls, **kwargs)
+        return subclass_factory(name=snake_case_to_camel_case(name), base_classes=cls, **kwargs)
 
     @classmethod
     def _dump_state(cls):

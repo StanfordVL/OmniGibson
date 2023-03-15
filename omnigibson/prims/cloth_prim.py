@@ -83,11 +83,14 @@ class ClothPrim(GeomPrim):
         if "mass" in self._load_config and self._load_config["mass"] is not None:
             self.mass = self._load_config["mass"]
 
+        # Internal reference to the monolithic cloth system
+        self._cloth_system = get_system("cloth")
+
         particleUtils.add_physx_particle_cloth(
             stage=og.sim.stage,
             path=self.prim_path,
             dynamic_mesh_path=None,
-            particle_system_path=get_system("cloth").system_prim_path,
+            particle_system_path=self._cloth_system.system_prim_path,
             spring_stretch_stiffness=m.CLOTH_STRETCH_STIFFNESS,
             spring_bend_stiffness=m.CLOTH_BEND_STIFFNESS,
             spring_shear_stiffness=m.CLOTH_SHEAR_STIFFNESS,
@@ -190,7 +193,6 @@ class ClothPrim(GeomPrim):
             list of CsRawData: raw contact info for this cloth body
         """
         contacts = []
-        cloth_system = get_system("cloth")
         def report_hit(hit):
             contacts.append(CsRawData(
                 time=0.0,  # dummy value
@@ -204,7 +206,7 @@ class ClothPrim(GeomPrim):
             return True
 
         for pos in self.particle_positions:
-            og.sim.psqi.overlap_sphere(cloth_system.particle_contact_offset, pos, report_hit, False)
+            og.sim.psqi.overlap_sphere(self._cloth_system.particle_contact_offset, pos, report_hit, False)
 
         return contacts
 

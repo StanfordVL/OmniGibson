@@ -11,7 +11,7 @@ from omnigibson.utils.registry_utils import SerializableRegistry
 from omnigibson.utils.ui_utils import suppress_loggers, create_module_logger
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.objects.stateful_object import StatefulObject
-from omnigibson.systems.system_base import BaseSystem
+from omnigibson.systems import SYSTEM_REGISTRY
 from omnigibson.robots.robot_base import m as robot_macros
 
 # Create module logger
@@ -129,15 +129,6 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
                 prims that we can use as grouping IDs to reference prims, e.g., prim.in_rooms
         """
         return ["prim_type", "states", "category", "fixed_base", "in_rooms", "states", "abilities"]
-
-    @property
-    def system_registry_unique_keys(self):
-        """
-        Returns:
-            list of str: Keys with which to index into the system registry. These should be valid public attributes of
-                prims that we can use as unique IDs to reference prims, e.g., prim.prim_path, prim.name, prim.uuid, etc.
-        """
-        return ["name", "prim_path", "uuid"]
 
     @property
     def loaded(self):
@@ -294,12 +285,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         )
 
         # Add registry for systems -- this is already created externally, so we just update it and pull it directly
-        registry.add(obj=SerializableRegistry(
-            name="system_registry",
-            class_types=BaseSystem,
-            default_key="name",
-            unique_keys=self.system_registry_unique_keys,
-        ))
+        registry.add(obj=SYSTEM_REGISTRY)
 
         # Add registry for objects
         registry.add(obj=SerializableRegistry(

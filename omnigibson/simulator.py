@@ -489,13 +489,17 @@ class Simulator(SimulationContext, Serializable):
                     if obj.initialized:
                         obj.update_handles()
 
-            # If we were stopped, take an additional sim step to make sure simulator is functioning properly
-            # We need to do this because for some reason omniverse exhibits strange behavior if we do certain operations
-            # immediately after playing; e.g.: syncing USD poses when flatcache is enabled
+
             if was_stopped:
+                # We need to update controller mode because kp and kd were set to the original (incorrect) values when
+                # sim was stopped. We need to reset them to default_kp and default_kd defined in ControllableObject.
+                # We also need to take an additional sim step to make sure simulator is functioning properly.
+                # We need to do this because for some reason omniverse exhibits strange behavior if we do certain
+                # operations immediately after playing; e.g.: syncing USD poses when flatcache is enabled
                 if self.scene is not None and self.scene.initialized:
                     for robot in self.scene.robots:
-                        robot.update_controller_mode()
+                        if robot.initialized:
+                            robot.update_controller_mode()
 
                 self.step_physics()
 

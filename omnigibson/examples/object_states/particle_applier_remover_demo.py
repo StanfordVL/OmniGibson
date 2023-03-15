@@ -54,7 +54,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="particle type",
         random_selection=random_selection,
     )
-    particle_system = get_system(particle_type)
 
     modification_method = {
         "Adjacency": ParticleModifyMethod.ADJACENCY,
@@ -89,7 +88,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 # particle applier / remover to apply / remover particles associated with that system
                 # The list should contain functions with signature condition() --> bool,
                 # where True means the condition is satisified
-                particle_system: [],
+                particle_type: [],
             },
             "projection_mesh_params": projection_mesh_params[method_type],
         }
@@ -145,7 +144,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         category="dishtowel",
         model="Tag_Dishtowel_Basket_Weave_Red",
         scale=np.ones(3) * 2.0,
-        visual_only=method_type == "Projection" or particle_system == get_system("stain"),  # Fluid + adjacency requires the object to have collision geoms active
+        visual_only=method_type == "Projection" or particle_type == "stain",  # Fluid + adjacency requires the object to have collision geoms active
         abilities=abilities,
     )
     modifier_root_link_path = f"{modifier.prim_path}/base_link"
@@ -174,7 +173,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # If we're removing particles, set the table's covered state to be True
     if modifier_type == "particleRemover":
-        table.states[Covered].set_value(particle_system, True)
+        table.states[Covered].set_value(get_system(particle_type), True)
 
         # Take a few steps to let particles settle
         for _ in range(25):
@@ -187,7 +186,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     if method_type == "Projection":
         # Higher z to showcase projection volume at work
         z = 1.85
-    elif particle_system == get_system("stain"):
+    elif particle_type == "stain":
         # Lower z needed to allow for adjacency bounding box to overlap properly
         z = 1.175
     else:

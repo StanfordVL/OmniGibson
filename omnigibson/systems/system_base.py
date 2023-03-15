@@ -1,25 +1,12 @@
 import omnigibson as og
 from omnigibson.macros import gm
-from omnigibson.utils.python_utils import classproperty, assert_valid_key, \
+from omnigibson.utils.python_utils import classproperty, assert_valid_key, get_uuid, camel_case_to_snake_case, \
     SerializableNonInstance, UniquelyNamedNonInstance
 from omnigibson.utils.registry_utils import SerializableRegistry
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
-
-# Global dicts that will contain mappings of all the systems
-REGISTERED_SYSTEMS = dict()
-
-
-def get_system(system_name):
-    system = REGISTERED_SYSTEMS[system_name]
-    # If the scene has already been loaded when get_system is called, add the system to the registry and initialize
-    if og.sim and og.sim.scene and og.sim.scene.loaded and og.sim.scene.system_registry("name", system_name) is None:
-        og.sim.scene.system_registry.add(obj=system)
-        system.initialize()
-    return system
-
 
 class BaseSystem(SerializableNonInstance, UniquelyNamedNonInstance):
     """
@@ -28,23 +15,26 @@ class BaseSystem(SerializableNonInstance, UniquelyNamedNonInstance):
     e.g.: water, particles, etc.
     """
     def __init_subclass__(cls, **kwargs):
+        # While class names are camel case, we convert them to snake case to be consistent with object categories.
+        cls._snake_case_name = camel_case_to_snake_case(cls.__name__)
+
         # Run super init
         super().__init_subclass__(**kwargs)
 
-        global REGISTERED_SYSTEMS
         # Register this system if requested
         if cls._register_system:
-            REGISTERED_SYSTEMS[cls.__name__] = cls
-
-        cls._uuid = abs(hash(cls.__name__)) % (10 ** 8)
+            global REGISTERED_SYSTEMS
+            REGISTERED_SYSTEMS[cls._snake_case_name] = cls
+            cls._uuid = get_uuid(cls._snake_case_name)
 
     initialized = False
     _uuid = None
+    _snake_case_name = None
 
     @classproperty
     def name(cls):
         # Class name is the unique name assigned
-        return cls.__name__
+        return cls._snake_case_name
 
     @classproperty
     def uuid(cls):
@@ -100,15 +90,31 @@ class BaseSystem(SerializableNonInstance, UniquelyNamedNonInstance):
         Returns:
             dict: Mapping from system name to system for all systems that are subclasses of this system AND active (initialized)
         """
-        return {system.name: system for system in REGISTERED_SYSTEMS.values() if issubclass(system, cls) and system.initialized}
-
-    @classmethod
-    def get_systems(cls):
-        """
-        Returns:
-            dict: Mapping from system name to system for all systems that are subclasses of this system
-        """
-        return {system.name: system for system in REGISTERED_SYSTEMS.values() if issubclass(system, cls)}
+        return {system.name: system for system in SYSTEM_REGISTRY.objects if issubclass(system, cls)}
 
     def __init__(self):
         raise ValueError("System classes should not be created!")
+
+# Global dict that contains mappings of all the systems
+REGISTERED_SYSTEMS = dict()
+
+# Serializable registry of systems that are active on the stage (initialized)
+SYSTEM_REGISTRY = SerializableRegistry(
+    name="system_registry",
+    class_types=BaseSystem,
+    default_key="name",
+    unique_keys=["name", "prim_path", "uuid"],
+)
+
+def is_system_active(system_name):
+    assert system_name in REGISTERED_SYSTEMS, f"System {system_name} not in REGISTERED_SYSTEMS."
+    system = REGISTERED_SYSTEMS[system_name]
+    return system.initialized
+
+def get_system(system_name):
+    assert system_name in REGISTERED_SYSTEMS, f"System {system_name} not in REGISTERED_SYSTEMS."
+    system = REGISTERED_SYSTEMS[system_name]
+    if not system.initialized:
+        system.initialize()
+        SYSTEM_REGISTRY.add(obj=system)
+    return system

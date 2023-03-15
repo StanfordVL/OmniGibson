@@ -11,7 +11,7 @@ from omnigibson.utils.constants import (
 from pxr import UsdPhysics, PhysxSchema
 from omnigibson.utils.usd_utils import create_joint, CollisionAPI
 from omnigibson.prims.entity_prim import EntityPrim
-from omnigibson.utils.python_utils import Registerable, classproperty
+from omnigibson.utils.python_utils import Registerable, classproperty, get_uuid
 from omnigibson.utils.constants import PrimType, CLASS_NAME_TO_CLASS_ID
 from omnigibson.utils.ui_utils import create_module_logger, suppress_omni_log
 
@@ -82,7 +82,7 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
             name = "{}_{}".format(category, address)
 
         # Store values
-        self.uuid = abs(hash(name)) % (10 ** 8) if uuid is None else uuid
+        self.uuid = get_uuid(name) if uuid is None else uuid
         assert len(str(self.uuid)) <= 8, f"UUID for this object must be at max 8-digits, got: {self.uuid}"
         self.category = category
         self.fixed_base = fixed_base
@@ -214,7 +214,7 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         if self.kinematic_only or ((not has_articulated_joints) and (not has_fixed_joints)):
             # Kinematic only, or non-jointed single body objects
             return None
-        elif has_articulated_joints and not self.fixed_base:
+        elif not self.fixed_base:
             # Non-fixed objects that have articulated joints
             # This is a bit hacky because omniverse is buggy
             # Articulation roots mess up the joint order if it's on a non-fixed base robot, e.g. a
