@@ -239,7 +239,6 @@ class DatasetObject(USDObject):
                 joint.friction = friction
 
     def _load(self, simulator=None):
-        prim = None
         if gm.USE_ENCRYPTED_ASSETS:
             # Create a temporary file to store the decrytped asset, load it, and then delete it.
             with tempfile.NamedTemporaryFile(suffix=".usd") as fp:
