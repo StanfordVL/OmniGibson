@@ -210,7 +210,7 @@ class DatasetObject(USDObject):
         if gm.FORCE_LIGHT_INTENSITY is not None:
             def recursive_light_update(child_prim):
                 if "Light" in child_prim.GetPrimTypeInfo().GetTypeName():
-                    child_prim.GetAttribute("intensity").Set(gm.FORCE_USD_LIGHT_INTENSITY)
+                    child_prim.GetAttribute("intensity").Set(gm.FORCE_LIGHT_INTENSITY)
 
                 for child_child_prim in child_prim.GetChildren():
                     recursive_light_update(child_child_prim)
@@ -222,7 +222,7 @@ class DatasetObject(USDObject):
             def recursive_roughness_update(child_prim):
                 if child_prim.GetPrimTypeInfo().GetTypeName() == "Shader":
                     child_prim.GetAttribute("inputs:reflection_roughness_texture_influence").Set(0.0)
-                    child_prim.GetAttribute("inputs:reflection_roughness_constant").Set(gm.FORCE_USD_ROUGHNESS)
+                    child_prim.GetAttribute("inputs:reflection_roughness_constant").Set(gm.FORCE_ROUGHNESS)
 
                 for child_child_prim in child_prim.GetChildren():
                     recursive_roughness_update(child_child_prim)
