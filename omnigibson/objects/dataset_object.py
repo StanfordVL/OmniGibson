@@ -206,6 +206,9 @@ class DatasetObject(USDObject):
         return rotated_quat
 
     def _initialize(self):
+        # Run super method first
+        super()._initialize()
+
         # Apply any forced light intensity updates.
         if gm.FORCE_LIGHT_INTENSITY is not None:
             def recursive_light_update(child_prim):
@@ -215,7 +218,7 @@ class DatasetObject(USDObject):
                 for child_child_prim in child_prim.GetChildren():
                     recursive_light_update(child_child_prim)
 
-            recursive_light_update(self.root_prim)
+            recursive_light_update(self._prim)
 
         # Apply any forced roughness updates
         if gm.FORCE_ROUGHNESS is not None:
@@ -227,10 +230,7 @@ class DatasetObject(USDObject):
                 for child_child_prim in child_prim.GetChildren():
                     recursive_roughness_update(child_child_prim)
 
-            recursive_roughness_update(self.root_prim)
-
-        # Run super method first
-        super()._initialize()
+            recursive_roughness_update(self._prim)
 
         # Set the joint frictions based on category
         friction = SPECIAL_JOINT_FRICTIONS.get(self.category, DEFAULT_JOINT_FRICTION)
