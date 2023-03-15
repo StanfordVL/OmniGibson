@@ -225,7 +225,7 @@ class DatasetObject(USDObject):
                     child_prim.GetAttribute("inputs:reflection_roughness_constant").Set(gm.FORCE_USD_ROUGHNESS)
 
                 for child_child_prim in child_prim.GetChildren():
-                    recursive_light_update(child_child_prim)
+                    recursive_roughness_update(child_child_prim)
 
             recursive_roughness_update(self.root_prim)
 
