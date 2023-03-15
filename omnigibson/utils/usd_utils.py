@@ -637,17 +637,6 @@ def add_asset_to_stage(asset_path, prim_path):
     # Make sure prim was loaded correctly
     assert prim, f"Failed to load {asset_type.upper()} object from path: {asset_path}"
 
-    # Apply any forced light intensity updates.
-    if gm.FORCE_USD_LIGHT_INTENSITY:
-        def recursive_light_update(child_prim):
-            if "Light" in child_prim.GetPrimTypeInfo().GetTypeName():
-                child_prim.GetAttribute("intensity").Set(gm.FORCE_USD_LIGHT_INTENSITY)
-
-            for child_child_prim in child_prim.GetChildren():
-                recursive_light_update(child_child_prim)
-
-        recursive_light_update(prim)
-
     return prim
 
 

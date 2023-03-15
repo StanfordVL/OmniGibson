@@ -206,6 +206,29 @@ class DatasetObject(USDObject):
         return rotated_quat
 
     def _initialize(self):
+        # Apply any forced light intensity updates.
+        if gm.FORCE_LIGHT_INTENSITY is not None:
+            def recursive_light_update(child_prim):
+                if "Light" in child_prim.GetPrimTypeInfo().GetTypeName():
+                    child_prim.GetAttribute("intensity").Set(gm.FORCE_USD_LIGHT_INTENSITY)
+
+                for child_child_prim in child_prim.GetChildren():
+                    recursive_light_update(child_child_prim)
+
+            recursive_light_update(self.root_prim)
+
+        # Apply any forced roughness updates
+        if gm.FORCE_ROUGHNESS is not None:
+            def recursive_roughness_update(child_prim):
+                if child_prim.GetPrimTypeInfo().GetTypeName() == "Shader":
+                    child_prim.GetAttribute("inputs:reflection_roughness_texture_influence").Set(0.0)
+                    child_prim.GetAttribute("inputs:reflection_roughness_constant").Set(gm.FORCE_USD_ROUGHNESS)
+
+                for child_child_prim in child_prim.GetChildren():
+                    recursive_light_update(child_child_prim)
+
+            recursive_roughness_update(self.root_prim)
+
         # Run super method first
         super()._initialize()
 
@@ -216,6 +239,7 @@ class DatasetObject(USDObject):
                 joint.friction = friction
 
     def _load(self, simulator=None):
+        prim = None
         if gm.USE_ENCRYPTED_ASSETS:
             # Create a temporary file to store the decrytped asset, load it, and then delete it.
             with tempfile.NamedTemporaryFile(suffix=".usd") as fp:

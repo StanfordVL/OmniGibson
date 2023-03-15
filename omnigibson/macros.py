@@ -68,8 +68,11 @@ gm.USE_ENCRYPTED_ASSETS = True
 # (Demo-purpose) Whether to activate Assistive Grasping mode for Cloth (it's handled differently from RigidBody)
 gm.AG_CLOTH = False
 
-# Forced light intensity for all USD-loaded objects
-gm.FORCE_USD_LIGHT_INTENSITY = 500000
+# Forced light intensity for all DatasetObjects. None if the USD-provided intensities should be respected.
+gm.FORCE_LIGHT_INTENSITY = 500000
+
+# Forced roughness for all DatasetObjects. None if the USD-provided roughness maps should be respected.
+gm.FORCE_ROUGHNESS = 0.7
 
 
 # Create helper function for generating sub-dictionaries
