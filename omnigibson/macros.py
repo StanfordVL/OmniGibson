@@ -68,6 +68,9 @@ gm.USE_ENCRYPTED_ASSETS = True
 # (Demo-purpose) Whether to activate Assistive Grasping mode for Cloth (it's handled differently from RigidBody)
 gm.AG_CLOTH = False
 
+# Forced light intensity for all USD-loaded objects
+gm.FORCE_USD_LIGHT_INTENSITY = 500000
+
 
 # Create helper function for generating sub-dictionaries
 def create_module_macros(module_path):
