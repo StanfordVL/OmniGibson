@@ -221,16 +221,10 @@ class DatasetObject(USDObject):
             recursive_light_update(self._prim)
 
         # Apply any forced roughness updates
-        if gm.FORCE_ROUGHNESS is not None:
-            def recursive_roughness_update(child_prim):
-                if child_prim.GetPrimTypeInfo().GetTypeName() == "Shader":
-                    child_prim.GetAttribute("inputs:reflection_roughness_texture_influence").Set(0.0)
-                    child_prim.GetAttribute("inputs:reflection_roughness_constant").Set(gm.FORCE_ROUGHNESS)
-
-                for child_child_prim in child_prim.GetChildren():
-                    recursive_roughness_update(child_child_prim)
-
-            recursive_roughness_update(self._prim)
+        for material in self.materials:
+            shader = material.GetChild("Shader")
+            shader.GetAttribute("inputs:reflection_roughness_texture_influence").Set(0.0)
+            shader.GetAttribute("inputs:reflection_roughness_constant").Set(gm.FORCE_ROUGHNESS)
 
         # Set the joint frictions based on category
         friction = SPECIAL_JOINT_FRICTIONS.get(self.category, DEFAULT_JOINT_FRICTION)
