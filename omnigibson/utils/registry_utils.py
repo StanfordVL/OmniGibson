@@ -331,11 +331,14 @@ class SerializableRegistry(Registry, Serializable):
         return state
 
     def _load_state(self, state):
-        # Iterate over all objects and load their states. The objects in the registry should be a subset of the loaded
-        # state, i.e. all objects should have their states loaded, while the state might contain information about
-        # objects that are not in the registry.
-        assert {obj.name for obj in self.objects}.issubset(state.keys()), "object mismatch when loading state for registry"
+        # Iterate over all objects and load their states. Currently the objects and the state don't have to match, i.e.
+        # there might be objects in the scene that do not appear in the state dict (a warning will be printed), or
+        # the state might contain additional information about objects that are NOT in the scene. For both cases, state
+        # loading will be skipped.
         for obj in self.objects:
+            if obj.name not in state:
+                log.warning(f"Object '{obj.name}' is not in the state dict to load from. Skip loading its state.")
+                continue
             obj.load_state(state[obj.name], serialized=False)
 
     def _serialize(self, state):

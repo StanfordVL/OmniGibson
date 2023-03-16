@@ -610,10 +610,10 @@ class Simulator(SimulationContext, Serializable):
         # Infer what state we're currently in, then stop, yield, and then restore the original state
         sim_is_playing, sim_is_paused = self.is_playing(), self.is_paused()
         if sim_is_playing or sim_is_paused:
-            og.sim.stop()
+            self.stop()
         yield
-        if sim_is_playing: og.sim.play()
-        elif sim_is_paused: og.sim.pause()
+        if sim_is_playing: self.play()
+        elif sim_is_paused: self.pause()
 
     @contextlib.contextmanager
     def playing(self):
@@ -624,10 +624,10 @@ class Simulator(SimulationContext, Serializable):
         # Infer what state we're currently in, then stop, yield, and then restore the original state
         sim_is_stopped, sim_is_paused = self.is_stopped(), self.is_paused()
         if sim_is_stopped or sim_is_paused:
-            og.sim.play()
+            self.play()
         yield
-        if sim_is_stopped: og.sim.stop()
-        elif sim_is_paused: og.sim.pause()
+        if sim_is_stopped: self.stop()
+        elif sim_is_paused: self.pause()
 
     @contextlib.contextmanager
     def paused(self):
@@ -638,10 +638,10 @@ class Simulator(SimulationContext, Serializable):
         # Infer what state we're currently in, then stop, yield, and then restore the original state
         sim_is_stopped, sim_is_playing = self.is_stopped(), self.is_playing()
         if sim_is_stopped or sim_is_playing:
-            og.sim.pause()
+            self.pause()
         yield
-        if sim_is_stopped: og.sim.stop()
-        elif sim_is_playing: og.sim.play()
+        if sim_is_stopped: self.stop()
+        elif sim_is_playing: self.play()
 
     @contextlib.contextmanager
     def slowed(self, dt):

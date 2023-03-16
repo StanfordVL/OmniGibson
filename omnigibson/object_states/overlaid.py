@@ -63,6 +63,7 @@ class Overlaid(KinematicsMixin, RelativeObjectState, BooleanState):
                 og.sim.step_physics()
                 if len(self.obj.states[ContactBodies].get_value()) > 0:
                     break
+            self.obj.keep_still()
 
             if self.get_value(other) == new_value:
                 return True

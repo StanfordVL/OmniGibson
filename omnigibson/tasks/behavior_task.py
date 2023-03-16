@@ -157,9 +157,6 @@ class BehaviorTask(BaseTask):
         if not success:
             print(f"Failed to initialize Behavior Activity. Feedback:\n{self.feedback}")
 
-        # Also reset the agent
-        self._reset_agent(env=env)
-
         # Highlight any task relevant objects if requested
         if self.highlight_task_relevant_objs:
             for obj_name, obj in self.object_scope.items():
@@ -398,8 +395,7 @@ class BehaviorTask(BaseTask):
         Args:
             env (Environment): Current active environment instance
         """
-        assert og.sim.is_playing()
-        og.sim.stop()
+        assert og.sim.is_stopped(), "Simulator should be stopped when importing sampleable objects"
 
         # Move the robot object frame to a far away location, similar to other newly imported objects below
         env.robots[0].set_position_orientation([300, 300, 300], [0, 0, 0, 1])
@@ -491,13 +487,6 @@ class BehaviorTask(BaseTask):
 
                 self.sampled_objects.add(simulator_obj)
                 self.object_scope[obj_inst] = simulator_obj
-
-        # Play the sim again to initialize all the newly imported objects.
-        og.sim.play()
-        # Also reset the agent
-        env.robots[0].reset()
-        # Take one extra step so that the bounding box of the agent is up-to-date.
-        og.sim.step()
 
     def check_scene(self, env):
         """
@@ -926,6 +915,9 @@ class BehaviorTask(BaseTask):
                 - bool: Whether sampling was successful or not
                 - None or str: None if successful, otherwise the associated error message
         """
+        # Auto-initialize all sampleable objects
+        og.sim.play()
+        env.scene.reset()
 
         error_msg = self.group_initial_conditions()
         if error_msg:
@@ -947,6 +939,9 @@ class BehaviorTask(BaseTask):
         if error_msg:
             log.warning(error_msg)
             return False, error_msg
+
+        env.scene.update_initial_state()
+        og.sim.stop()
 
         return True, None
 
