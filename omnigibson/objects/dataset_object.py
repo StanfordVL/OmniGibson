@@ -222,9 +222,8 @@ class DatasetObject(USDObject):
 
         # Apply any forced roughness updates
         for material in self.materials:
-            shader = material.GetChild("Shader")
-            shader.GetAttribute("inputs:reflection_roughness_texture_influence").Set(0.0)
-            shader.GetAttribute("inputs:reflection_roughness_constant").Set(gm.FORCE_ROUGHNESS)
+            material.reflection_roughness_texture_influence = 0.0
+            material.reflection_roughness_constant = gm.FORCE_ROUGHNESS
 
         # Set the joint frictions based on category
         friction = SPECIAL_JOINT_FRICTIONS.get(self.category, DEFAULT_JOINT_FRICTION)
