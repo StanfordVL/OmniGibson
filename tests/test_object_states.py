@@ -339,7 +339,7 @@ def test_temperature():
     assert dishtowel.states[Temperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
 
     # Open the microwave
-    microwave.joints["joint_0"].set_pos(np.pi / 2)
+    microwave.joints["j_link_0"].set_pos(np.pi / 2)
 
     # Set the objects to be inside the microwave
     bagel.set_position_orientation([0, 0, 0.11], [0, 0, 0, 1])
@@ -361,7 +361,7 @@ def test_temperature():
     assert bagel.states[Temperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
     assert dishtowel.states[Temperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
 
-    microwave.joints["joint_0"].set_pos(0.)
+    microwave.joints["j_link_0"].set_pos(0.)
 
     for _ in range(5):
         og.sim.step()
@@ -477,13 +477,13 @@ def test_heat_source_or_sink():
     assert microwave.states[HeatSourceOrSink].requires_closed
     assert microwave.states[HeatSourceOrSink].requires_toggled_on
 
-    microwave.joints["joint_0"].set_pos(np.pi / 2)
+    microwave.joints["j_link_0"].set_pos(np.pi / 2)
     microwave.states[ToggledOn].set_value(False)
 
     og.sim.step()
     assert not microwave.states[HeatSourceOrSink].get_value()
 
-    microwave.joints["joint_0"].set_pos(0.0)
+    microwave.joints["j_link_0"].set_pos(0.0)
     og.sim.step()
     assert not microwave.states[HeatSourceOrSink].get_value()
 

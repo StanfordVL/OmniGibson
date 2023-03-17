@@ -159,9 +159,9 @@ class ParticleModifier(AbsoluteObjectState, LinkBasedStateMixin, UpdateStateMixi
         obj (StatefulObject): Object to which this state will be applied
         method (ParticleModifyMethod): Method to modify particles. Current options supported are ADJACENCY (i.e.:
             "touching" particles) or PROJECTION (i.e.: "spraying" particles)
-        conditions (dict): Dictionary mapping ParticleSystem to None or corresponding condition / list of conditions
-            (where None represents no conditions) necessary in order for this particle modifier to be able to
-            modify particles belonging to @ParticleSystem. Each condition should be a function, whose signature
+        conditions (dict): Dictionary mapping the names of ParticleSystem (str) to None or the corresponding condition /
+            list of conditions (where None represents no conditions) necessary in order for this particle modifier to be
+            able to modify particles belonging to @ParticleSystem. Each condition should be a function, whose signature
             is as follows:
 
                 def condition(obj) --> bool

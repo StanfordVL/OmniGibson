@@ -12,7 +12,9 @@ class BaseSystem(SerializableNonInstance, UniquelyNamedNonInstance):
     """
     Base class for all systems. These are non-instance objects that should be used globally for a given environment.
     This is useful for items in a scene that are non-discrete / cannot be distinguished into individual instances,
-    e.g.: water, particles, etc.
+    e.g.: water, particles, etc. While we keep the python convention of the system class name being camel case
+    (e.g. StrawberrySmoothie), we adopt the snake case for the system registry to unify with the category of BaseObject.
+    For example, get_system("strawberry_smoothie") will return the StrawberrySmoothie class.
     """
     def __init_subclass__(cls, **kwargs):
         # While class names are camel case, we convert them to snake case to be consistent with object categories.

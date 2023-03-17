@@ -6,7 +6,7 @@ def task_tester(task_type):
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
-            "load_object_categories": ["floors", "breakfast_table", "bottom_cabinet", "sofa"],
+            "load_object_categories": ["floors", "breakfast_table"],
         },
         "robots": [
             {
@@ -19,7 +19,7 @@ def task_tester(task_type):
             "type": task_type,
 
             # BehaviorTask-specific
-            "activity_name": "putting_away_Halloween_decorations",
+            "activity_name": "assembling_gift_baskets",
             "online_object_sampling": True
         },
     }

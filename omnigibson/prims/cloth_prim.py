@@ -18,6 +18,7 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.sim_utils import CsRawData
 from omnigibson.utils.usd_utils import array_to_vtarray, mesh_prim_to_trimesh_mesh
 from omnigibson.utils.constants import GEOM_TYPES
+from omnigibson.utils.python_utils import classproperty
 import omnigibson as og
 
 import numpy as np
@@ -83,14 +84,11 @@ class ClothPrim(GeomPrim):
         if "mass" in self._load_config and self._load_config["mass"] is not None:
             self.mass = self._load_config["mass"]
 
-        # Internal reference to the monolithic cloth system
-        self._cloth_system = get_system("cloth")
-
         particleUtils.add_physx_particle_cloth(
             stage=og.sim.stage,
             path=self.prim_path,
             dynamic_mesh_path=None,
-            particle_system_path=self._cloth_system.system_prim_path,
+            particle_system_path=ClothPrim.cloth_system.system_prim_path,
             spring_stretch_stiffness=m.CLOTH_STRETCH_STIFFNESS,
             spring_bend_stiffness=m.CLOTH_BEND_STIFFNESS,
             spring_shear_stiffness=m.CLOTH_SHEAR_STIFFNESS,
@@ -108,6 +106,10 @@ class ClothPrim(GeomPrim):
 
         # Store the default position of the points in the local frame
         self._default_positions = np.array(self.get_attribute(attr="points"))
+
+    @classproperty
+    def cloth_system(cls):
+        return get_system("cloth")
 
     @property
     def n_particles(self):
@@ -206,7 +208,7 @@ class ClothPrim(GeomPrim):
             return True
 
         for pos in self.particle_positions:
-            og.sim.psqi.overlap_sphere(self._cloth_system.particle_contact_offset, pos, report_hit, False)
+            og.sim.psqi.overlap_sphere(ClothPrim.cloth_system.particle_contact_offset, pos, report_hit, False)
 
         return contacts
 
