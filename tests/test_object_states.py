@@ -389,8 +389,8 @@ def test_temperature():
     assert dishtowel.states[Temperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
 
     # Set the objects to be on top of the stove
-    bagel.set_position_orientation([1.3, -0.1, 0.88], [0, 0, 0, 1])
-    dishtowel.set_position_orientation([1.12, -0.1, 0.88], [0, 0, 0, 1])
+    bagel.set_position_orientation([0.71, 0.11, 0.88], [0, 0, 0, 1])
+    dishtowel.set_position_orientation([0.82, 0.11, 0.88], [0, 0, 0, 1])
 
     for _ in range(5):
         og.sim.step()
@@ -659,7 +659,7 @@ def test_toggled_on():
     robot = og.sim.scene.object_registry("name", "robot0")
 
     stove.set_position_orientation([1.5, 0.3, 0.45], T.euler2quat([0, 0, -np.pi / 2.0]))
-    robot.set_position_orientation([0.01, -0.02, 0], [0, 0, 0, 1])
+    robot.set_position_orientation([0.01, 0.38, 0], [0, 0, 0, 1])
 
     assert not stove.states[ToggledOn].get_value()
 
