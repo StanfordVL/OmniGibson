@@ -41,9 +41,9 @@ class DatasetObject(USDObject):
 
     def __init__(
         self,
-        prim_path,
+        name,
         usd_path=None,
-        name=None,
+        prim_path=None,
         category="object",
         model=None,
         class_id=None,
@@ -65,11 +65,11 @@ class DatasetObject(USDObject):
     ):
         """
         Args:
-            prim_path (str): global path in the stage to this object
+            name (str): Name for the object. Names need to be unique per scene
             usd_path (None or str): If specified, global path to the USD file to load. Note that this will override
                 @category + @model!
-            name (None or str): Name for the object. Names need to be unique per scene. If None, a name will be
-                generated at the time the object is added to the scene, using the object's category.
+            prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
+                created at /World/<name>
             category (str): Category for the object. Defaults to "object".
             model (None or str): if @usd_path is not specified, then this must be specified in conjunction with
                 @category to infer the usd filepath to load for this object, which evaluates to the following:
@@ -208,6 +208,22 @@ class DatasetObject(USDObject):
     def _initialize(self):
         # Run super method first
         super()._initialize()
+
+        # Apply any forced light intensity updates.
+        if gm.FORCE_LIGHT_INTENSITY is not None:
+            def recursive_light_update(child_prim):
+                if "Light" in child_prim.GetPrimTypeInfo().GetTypeName():
+                    child_prim.GetAttribute("intensity").Set(gm.FORCE_LIGHT_INTENSITY)
+
+                for child_child_prim in child_prim.GetChildren():
+                    recursive_light_update(child_child_prim)
+
+            recursive_light_update(self._prim)
+
+        # Apply any forced roughness updates
+        for material in self.materials:
+            material.reflection_roughness_texture_influence = 0.0
+            material.reflection_roughness_constant = gm.FORCE_ROUGHNESS
 
         # Set the joint frictions based on category
         friction = SPECIAL_JOINT_FRICTIONS.get(self.category, DEFAULT_JOINT_FRICTION)

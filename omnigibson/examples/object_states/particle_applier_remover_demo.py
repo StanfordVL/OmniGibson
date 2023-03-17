@@ -67,6 +67,7 @@ def main(random_selection=False, headless=False, short_exec=False):
             "type": "Cone",
             # Size of the cone
             "extents": np.array([0.375, 0.375, 0.75]),
+            "visualize": True,
         },
     }
 
