@@ -1,0 +1,14 @@
+[
+    {
+        "object": "bean-lvbjws",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: bean.n.01\nDefinition: any of various edible seeds of plants of the family Leguminosae used for food\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "it's seedpod.n.01",
+        "processed": false
+    },
+    {
+        "object": "bean-lvbjws",
+        "message": "Confirm reasonable bounding box size:\n25.01cm, 3.70cm, 1.87cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": false
+    }
+]

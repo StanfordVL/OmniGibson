@@ -1,0 +1,14 @@
+[
+    {
+        "object": "bucket-wlilma",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: bucket.n.01\nDefinition: a roughly cylindrical vessel that is open at the top\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "don't know if it should be basket since functionailtywise it would be different from a bucket with no holes",
+        "processed": false
+    },
+    {
+        "object": "bucket-wlilma",
+        "message": "Confirm reasonable bounding box size:\n68.92cm, 82.96cm, 52.60cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": false
+    }
+]

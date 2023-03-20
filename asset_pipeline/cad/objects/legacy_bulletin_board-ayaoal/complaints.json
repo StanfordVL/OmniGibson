@@ -1,0 +1,20 @@
+[
+    {
+        "object": "bulletin_board-ayaoal",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "don't know if we want to separate what is on top of the board from the board",
+        "processed": false
+    },
+    {
+        "object": "bulletin_board-ayaoal",
+        "message": "Confirm object properties:\n- dustyable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "stainable ",
+        "processed": false
+    },
+    {
+        "object": "bulletin_board-ayaoal",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "maybe attachment",
+        "processed": false
+    }
+]

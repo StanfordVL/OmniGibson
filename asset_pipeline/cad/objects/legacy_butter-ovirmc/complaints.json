@@ -1,0 +1,14 @@
+[
+    {
+        "object": "butter-ovirmc",
+        "message": "Confirm reasonable bounding box size:\n63.14cm, 1.12m, 34.77cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "way too big",
+        "processed": false
+    },
+    {
+        "object": "butter-ovirmc",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "sliceable ",
+        "processed": false
+    }
+]

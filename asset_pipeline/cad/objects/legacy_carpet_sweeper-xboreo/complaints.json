@@ -1,0 +1,14 @@
+[
+    {
+        "object": "carpet_sweeper-xboreo",
+        "message": "Confirm reasonable bounding box size:\n3.08m, 3.43m, 9.97m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "way too big",
+        "processed": false
+    },
+    {
+        "object": "carpet_sweeper-xboreo",
+        "message": "Confirm object properties:\n- cleaningTool\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "dustyable stainable ",
+        "processed": false
+    }
+]

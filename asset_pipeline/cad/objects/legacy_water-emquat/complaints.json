@@ -1,0 +1,26 @@
+[
+    {
+        "object": "cap-gmdwwe",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: cap.n.01\nDefinition: a tight-fitting headdress\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "on its own i'm not sure why we have it",
+        "processed": false
+    },
+    {
+        "object": "cap-gmdwwe",
+        "message": "Confirm reasonable bounding box size:\n83.51cm, 83.50cm, 55.96cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": false
+    },
+    {
+        "object": "cap-gmdwwe",
+        "message": "Confirm object properties:\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "dustyable stainable ",
+        "processed": false
+    },
+    {
+        "object": "water_bottle-emquat",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "missing cap",
+        "processed": false
+    }
+]

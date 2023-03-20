@@ -1,0 +1,20 @@
+[
+    {
+        "object": "cologne-lyipur",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: cologne.n.01\nDefinition: a commercial center and river port in western Germany on the Rhine River; flourished during the 15th century as a member of the Hanseatic League\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cologne.n.02",
+        "processed": false
+    },
+    {
+        "object": "cologne-lyipur",
+        "message": "Confirm object properties:\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "fluid source?",
+        "processed": false
+    },
+    {
+        "object": "cologne-lyipur",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "particle applier?",
+        "processed": false
+    }
+]

@@ -1,0 +1,14 @@
+[
+    {
+        "object": "bench-nzsfrw",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "not sure the physics of the bench would work, but looks normal",
+        "processed": false
+    },
+    {
+        "object": "bench-nzsfrw",
+        "message": "Confirm reasonable bounding box size:\n87.52cm, 31.96cm, 36.33cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    }
+]

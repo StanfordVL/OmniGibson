@@ -1,0 +1,20 @@
+[
+    {
+        "object": "chili-nidjog",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: chili.n.01\nDefinition: ground beef and chili peppers or chili powder often with tomatoes and kidney beans\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "it's not the stew it's the pepper",
+        "processed": false
+    },
+    {
+        "object": "chili-nidjog",
+        "message": "Confirm reasonable bounding box size:\n20.36cm, 3.39cm, 10.39cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "way too big",
+        "processed": false
+    },
+    {
+        "object": "chili-nidjog",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "sliceable ",
+        "processed": false
+    }
+]

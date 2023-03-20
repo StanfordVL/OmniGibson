@@ -1,0 +1,20 @@
+[
+    {
+        "object": "cream-ompiss",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: cream.n.01\nDefinition: the best people or things in a group\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cream is the wrong one and it is a box of cream",
+        "processed": false
+    },
+    {
+        "object": "cream-ompiss",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none apply to the box",
+        "processed": false
+    },
+    {
+        "object": "cream-ompiss",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "fillable",
+        "processed": false
+    }
+]

@@ -1,0 +1,20 @@
+[
+    {
+        "object": "basil-bebpnf",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "separate plants as one object. It's not one object",
+        "processed": false
+    },
+    {
+        "object": "basil-bebpnf",
+        "message": "Confirm reasonable bounding box size:\n1.84m, 1.79m, 2.67m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": false
+    },
+    {
+        "object": "basil-bebpnf",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- dustyable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "not sure about dustyable",
+        "processed": false
+    }
+]

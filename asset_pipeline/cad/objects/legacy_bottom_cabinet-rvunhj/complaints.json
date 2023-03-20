@@ -1,0 +1,14 @@
+[
+    {
+        "object": "bottom_cabinet-rvunhj",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no synset",
+        "processed": false
+    },
+    {
+        "object": "bottom_cabinet-rvunhj",
+        "message": "Confirm reasonable bounding box size:\n98.29cm, 51.71cm, 1.70m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "depends on the synset",
+        "processed": false
+    }
+]

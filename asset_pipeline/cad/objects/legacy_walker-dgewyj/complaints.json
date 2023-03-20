@@ -1,0 +1,14 @@
+[
+    {
+        "object": "walker-dgewyj",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: walker.n.01\nDefinition: New Zealand runner who in 1975 became the first person to run a mile in less that 3 minutes and 50 seconds (born in 1952)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shoe ",
+        "processed": false
+    },
+    {
+        "object": "walker-dgewyj",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "two",
+        "processed": false
+    }
+]

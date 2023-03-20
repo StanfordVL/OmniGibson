@@ -1,0 +1,14 @@
+[
+    {
+        "object": "armchair-jmunen",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "i am not sure the physics would work with this armchair",
+        "processed": false
+    },
+    {
+        "object": "armchair-jmunen",
+        "message": "Confirm reasonable bounding box size:\n66.95cm, 51.01cm, 53.99cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small armchair height is on average 76 to 102cm",
+        "processed": false
+    }
+]

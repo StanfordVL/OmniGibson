@@ -1,0 +1,32 @@
+[
+    {
+        "object": "cocktail_glass-xevdnl",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no synset",
+        "processed": false
+    },
+    {
+        "object": "cocktail_glass-xevdnl",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no synset",
+        "processed": false
+    },
+    {
+        "object": "cocktail_glass-xevdnl",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "cut out the fluid",
+        "processed": false
+    },
+    {
+        "object": "cocktail_glass-xevdnl",
+        "message": "Confirm reasonable bounding box size:\n50.71cm, 51.49cm, 63.28cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": false
+    },
+    {
+        "object": "cocktail_glass-xevdnl",
+        "message": "Confirm object properties:\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "stainable dustyable ",
+        "processed": false
+    }
+]

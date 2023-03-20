@@ -1,0 +1,14 @@
+[
+    {
+        "object": "carton-causya",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: orange_juice__carton.n.01 (custom synset)\nDefinition: bottle.n.01(hypernyms): a glass or plastic vessel used for storing drinks or other liquids; typically cylindrical without handles and with a narrow neck that can be plugged or capped\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "wrong synset",
+        "processed": false
+    },
+    {
+        "object": "carton-causya",
+        "message": "Confirm object properties:\n- dustyable\n- openable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "stainable",
+        "processed": false
+    }
+]
