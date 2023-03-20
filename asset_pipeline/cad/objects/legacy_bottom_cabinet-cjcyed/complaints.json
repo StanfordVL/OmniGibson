@@ -1,0 +1,20 @@
+[
+    {
+        "object": "bottom_cabinet-cjcyed",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no synset",
+        "processed": false
+    },
+    {
+        "object": "bottom_cabinet-cjcyed",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "not sure why it's missing the top doors",
+        "processed": false
+    },
+    {
+        "object": "bottom_cabinet-cjcyed",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "needs doors",
+        "processed": false
+    }
+]

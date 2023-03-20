@@ -1,0 +1,14 @@
+[
+    {
+        "object": "coffee_table-zzqwse",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: coffee_table.n.01\nDefinition: low table where magazines can be placed and coffee or cocktails are served\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "too tall to be a coffee table ",
+        "processed": false
+    },
+    {
+        "object": "coffee_table-zzqwse",
+        "message": "Confirm object properties:\n- dustyable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "looks openable",
+        "processed": false
+    }
+]

@@ -1,0 +1,20 @@
+[
+    {
+        "object": "bottom_cabinet-bycegi",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no synset",
+        "processed": false
+    },
+    {
+        "object": "bottom_cabinet-bycegi",
+        "message": "Confirm reasonable bounding box size:\n54.22cm, 57.05cm, 1.88m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "might be too tall for just a bottom cabinet, but if not a bottom cabinet it could be a reasonable size",
+        "processed": false
+    },
+    {
+        "object": "bottom_cabinet-bycegi",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "doors needed",
+        "processed": false
+    }
+]

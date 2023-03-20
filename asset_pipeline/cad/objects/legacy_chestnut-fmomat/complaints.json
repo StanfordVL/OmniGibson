@@ -1,0 +1,20 @@
+[
+    {
+        "object": "chestnut-fmomat",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: chestnut.n.01\nDefinition: wood of any of various chestnut trees of the genus Castanea\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "it's the fruit and not the wood",
+        "processed": false
+    },
+    {
+        "object": "chestnut-fmomat",
+        "message": "Confirm reasonable bounding box size:\n5.23cm, 5.24cm, 6.82cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": false
+    },
+    {
+        "object": "chestnut-fmomat",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- sliceable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "stainable dustyable ",
+        "processed": false
+    }
+]

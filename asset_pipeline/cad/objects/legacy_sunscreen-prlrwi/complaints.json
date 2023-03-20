@@ -1,0 +1,14 @@
+[
+    {
+        "object": "sunscreen-prlrwi",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: sunscreen__bottle.n.01 (custom synset)\nDefinition: bottle.n.01(hypernyms): a glass or plastic vessel used for storing drinks or other liquids; typically cylindrical without handles and with a narrow neck that can be plugged or capped\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "maybe connect sunscreen__bottle to sunscreen",
+        "processed": false
+    },
+    {
+        "object": "sunscreen-prlrwi",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand?",
+        "processed": false
+    }
+]

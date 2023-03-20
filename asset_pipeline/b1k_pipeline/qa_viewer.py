@@ -3,7 +3,9 @@ import os
 import json
 import sys
 import nltk
+import numpy as np
 import csv
+import pybullet as p
 import shutil
 
 nltk.download('wordnet')
@@ -85,11 +87,15 @@ def main(dataset_path, record_path):
             z_pos = simulator_obj.bounding_box[2] / 2 + simulator_obj.scaled_bbxc_in_blf[2]
             simulator_obj.set_position([0.0, 0.0, z_pos])
 
+            dist = 3 * np.max(simulator_obj.bounding_box)
+            p.resetDebugVisualizerCamera(cameraDistance=dist, cameraYaw=30, cameraPitch=-30, cameraTargetPosition=[0,0,0])
+
+
             user_complained_synset(simulator_obj)
             user_complained_appearance(simulator_obj)
-            user_complained_bbox(simulator_obj)
-            user_complained_properties(simulator_obj)
-            user_complained_metas(simulator_obj)
+            # user_complained_bbox(simulator_obj)
+            # user_complained_properties(simulator_obj)
+            # user_complained_metas(simulator_obj)
             
             with open(record_path, "w") as f:
                 processed_objs.add((obj_category, obj_model))
@@ -131,13 +137,17 @@ def get_synset(category):
         for row in reader:
             if category in row[0]:
                 return row[1] + " (custom synset)", row[2] + "(hypernyms): " + (wn.synset(row[2])).definition()
-    synset = wn.synsets(category)[0]
+    try:
+        synset = wn.synsets(category)[0]
+    except:
+        return "", ""
     return synset.name(), synset.definition()
 
 
 def user_complained_synset(simulator_obj):
     # Get the synset assigned to the object
     synset, definition = get_synset(simulator_obj.category)
+
     # Print the synset name and definition
     message = (
         "Confirm object synset assignment.\n"
@@ -166,7 +176,12 @@ def user_complained_properties(simulator_obj):
 
     taxonomy = ObjectTaxonomy()
     synset = taxonomy.get_class_name_from_igibson_category(simulator_obj.category)
-    abilities = taxonomy.get_abilities(synset)
+    try:
+        abilities = taxonomy.get_abilities(synset)
+    except:
+        abilities = []
+        print("synset not in taxonomy")
+
     all_abilities = sorted({a for s in taxonomy.taxonomy.nodes for a in taxonomy.get_abilities(s).keys()} - BAD_PROPERTIES)
     message = "Confirm object properties:\n"
     for ability in abilities:

@@ -1,0 +1,14 @@
+[
+    {
+        "object": "apricot-qmwmwm",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: apricot.n.01\nDefinition: Asian tree having clusters of usually white blossoms and edible fruit resembling the peach\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "synset should match to the fruit and not the tree",
+        "processed": false
+    },
+    {
+        "object": "apricot-qmwmwm",
+        "message": "Confirm reasonable bounding box size:\n4.89cm, 4.74cm, 4.88cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "would make sense for it to be a little smaller on average",
+        "processed": false
+    }
+]

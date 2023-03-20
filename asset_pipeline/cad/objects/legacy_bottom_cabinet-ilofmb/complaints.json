@@ -1,0 +1,14 @@
+[
+    {
+        "object": "bottom_cabinet-ilofmb",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no synset",
+        "processed": false
+    },
+    {
+        "object": "bottom_cabinet-ilofmb",
+        "message": "Confirm reasonable bounding box size:\n1.31m, 55.57cm, 1.52m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "might be too big depending on where it is supposed to fit",
+        "processed": false
+    }
+]

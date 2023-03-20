@@ -1,0 +1,26 @@
+[
+    {
+        "object": "container_cranberry-fbcpsl",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cranberries should be separated from the bowl. It's just a bowl",
+        "processed": false
+    },
+    {
+        "object": "container_cranberry-fbcpsl",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "should be separated",
+        "processed": false
+    },
+    {
+        "object": "container_cranberry-fbcpsl",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "depends if we are talkin gabout the berries or the bowl",
+        "processed": false
+    },
+    {
+        "object": "container_cranberry-fbcpsl",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "fillable bowl",
+        "processed": false
+    }
+]

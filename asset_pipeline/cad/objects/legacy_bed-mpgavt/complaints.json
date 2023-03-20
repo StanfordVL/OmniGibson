@@ -1,0 +1,14 @@
+[
+    {
+        "object": "bed-mpgavt",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "maybe remove the blanket not sure",
+        "processed": false
+    },
+    {
+        "object": "bed-mpgavt",
+        "message": "Confirm reasonable bounding box size:\n59.54cm, 75.26cm, 28.12cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    }
+]
