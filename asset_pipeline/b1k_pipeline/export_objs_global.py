@@ -601,7 +601,7 @@ def process_object(G, root_node, output_dir, dask_client):
     with open(metadata_file, "w") as f:
         json.dump(out_metadata, f, cls=NumpyEncoder)
 
-def process_target(target, output_dir, executor, dask_client):
+def process_target(target, output_dir, link_executor, dask_client):
     object_list_filename = PIPELINE_ROOT / "cad" / target / "artifacts/object_list.json"
     mesh_root_dir = PIPELINE_ROOT / "cad" / target / "artifacts/meshes"
 
@@ -616,7 +616,7 @@ def process_target(target, output_dir, executor, dask_client):
 
     # Only save the 0th instance.
     saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
-    # object_futures = {}
+    object_futures = {}
     for root_node in saveable_roots:
         # Start processing the object. We start by creating an object-specific
         # copy of the mesh tree (also including info about any parts)
@@ -627,11 +627,20 @@ def process_target(target, output_dir, executor, dask_client):
             for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
         Gprime = G.subgraph(relevant_nodes).copy()
 
-        process_object(Gprime, root_node, output_dir, dask_client)
-        # object_future = executor.submit(process_object, Gprime, root_node, output_dir, dask_client)
-        # object_futures[object_future] = str(root_node)
+        # process_object(Gprime, root_node, output_dir, dask_client)
+        object_futures[link_executor.submit(process_object, Gprime, root_node, output_dir, dask_client)] = str(root_node)
 
-    # return object_futures
+    # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
+    futures.wait(object_futures.keys())
+
+    # Accumulate the errors
+    error_msg = ""
+    for future, root_node in object_futures.items():
+        exc = future.exception()
+        if exc:
+            error_msg += f"{root_node}: {exc}\n\n"
+    if error_msg:
+        raise ValueError(error_msg)
 
 def main():
     output_dir = PIPELINE_ROOT / "artifacts/aggregate/objects"
@@ -639,22 +648,22 @@ def main():
 
     # Load the mesh list from the object list json.
     errors = {}
-    all_futures = {}
+    target_futures = {}
 
-    dask_client = Client('svl16.stanford.edu:35423')
+    dask_client = Client('svl7.stanford.edu:35423')
     
-    with futures.ThreadPoolExecutor(max_workers=100) as executor:
+    with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
         targets = get_targets("combined")
         for target in tqdm.tqdm(targets):
-            all_futures[executor.submit(process_target, target, output_dir, executor, dask_client)] = target
+            target_futures[target_executor.submit(process_target, target, output_dir, link_executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))
                 
-        with tqdm.tqdm(total=len(all_futures)) as object_pbar:
-            for future in futures.as_completed(all_futures.keys()):
+        with tqdm.tqdm(total=len(target_futures)) as object_pbar:
+            for future in futures.as_completed(target_futures.keys()):
                 try:
                     result = future.result()
                 except:
-                    name = all_futures[future]
+                    name = target_futures[future]
                     errors[name] = traceback.format_exc()
 
                 object_pbar.update(1)

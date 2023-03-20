@@ -36,6 +36,7 @@ stages:
     - cad/scenes/Rs_int/artifacts/scene
     - cad/scenes/Wainscott_0_int/artifacts/scene
     - cad/scenes/Wainscott_1_int/artifacts/scene
+    - cad/scenes/house_single_floor/artifacts/scene
     - cad/scenes/Beechwood_0_int/artifacts/export_scene.success
     - cad/scenes/Beechwood_1_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_0_int/artifacts/export_scene.success
@@ -51,6 +52,7 @@ stages:
     - cad/scenes/Rs_int/artifacts/export_scene.success
     - cad/scenes/Wainscott_0_int/artifacts/export_scene.success
     - cad/scenes/Wainscott_1_int/artifacts/export_scene.success
+    - cad/scenes/house_single_floor/artifacts/export_scene.success
     - b1k_pipeline/aggregate_scenes.py
     - params.yaml
     outs:
@@ -1427,6 +1429,7 @@ stages:
     - cad/scenes/Rs_int/artifacts/export_meshes.json
     - cad/scenes/Wainscott_0_int/artifacts/export_meshes.json
     - cad/scenes/Wainscott_1_int/artifacts/export_meshes.json
+    - cad/scenes/house_single_floor/artifacts/export_meshes.json
     - b1k_pipeline/check_success_aggregate.py
     outs:
     - artifacts/pipeline/export_meshes.success
@@ -2664,6 +2667,7 @@ stages:
     - cad/scenes/Rs_int/artifacts/meshes
     - cad/scenes/Wainscott_0_int/artifacts/meshes
     - cad/scenes/Wainscott_1_int/artifacts/meshes
+    - cad/scenes/house_single_floor/artifacts/meshes
     - cad/objects/assembleable_shelf-fm/artifacts/object_list.json
     - cad/objects/bottom_cabinet-gjrero/artifacts/object_list.json
     - cad/objects/legacy_alarm-dkwmmf/artifacts/object_list.json
@@ -3895,6 +3899,7 @@ stages:
     - cad/scenes/Rs_int/artifacts/object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/object_list.json
+    - cad/scenes/house_single_floor/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success
@@ -5170,6 +5175,7 @@ stages:
     - cad/scenes/Rs_int/artifacts/object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/object_list.json
+    - cad/scenes/house_single_floor/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - b1k_pipeline/object_inventory.py
     - params.yaml
@@ -6420,6 +6426,7 @@ stages:
     - cad/scenes/Rs_int/artifacts/object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/object_list.json
+    - cad/scenes/house_single_floor/artifacts/object_list.json
     - b1k_pipeline/check_success_aggregate.py
     - params.yaml
     outs:
@@ -7694,6 +7701,7 @@ stages:
     - cad/scenes/Rs_int/artifacts/sanitycheck.json
     - cad/scenes/Wainscott_0_int/artifacts/sanitycheck.json
     - cad/scenes/Wainscott_1_int/artifacts/sanitycheck.json
+    - cad/scenes/house_single_floor/artifacts/sanitycheck.json
     - b1k_pipeline/check_success_aggregate.py
     - params.yaml
     outs:
