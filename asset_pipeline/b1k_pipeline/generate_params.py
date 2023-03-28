@@ -95,7 +95,7 @@ APPROVED_SCENES = {
     "Rs_int",
     "Wainscott_0_int",
     "Wainscott_1_int",
-    "house_single_floor",
+    # "house_single_floor",
     # "restaurant_hotel",
     # "office_vendor_machine",
     # "gates_bedroom"
