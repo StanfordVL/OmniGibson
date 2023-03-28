@@ -17,7 +17,6 @@ from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.isaac.core.utils.stage import close_stage, get_current_stage, open_stage
 from omni.usd import create_material_input, get_shader_from_material
 from omnigibson.macros import gm
-from omnigibson.utils.asset_utils import encrypt_file
 from omnigibson.utils.usd_utils import BoundingBoxAPI
 from pxr import Gf, PhysxSchema, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade
 from pxr.Sdf import ValueTypeNames as VT
@@ -741,12 +740,6 @@ def import_obj_metadata(obj_category, obj_model, import_render_channels=False):
 
     # Delete stage reference and clear the sim stage variable, opening the dummy stage along the way
     del stage
-
-    # Possibly encrypt
-    if gm.USE_ENCRYPTED_ASSETS:
-        encrypted_usd_path = usd_path.replace(".usd", ".encrypted.usd")
-        encrypt_file(usd_path, encrypted_filename=encrypted_usd_path)
-        os.remove(usd_path)
 
 
 def recursively_replace_list_of_dict(dic):

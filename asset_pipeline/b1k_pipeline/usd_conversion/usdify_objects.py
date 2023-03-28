@@ -1,6 +1,7 @@
 """
 Script to import scene and objects
 """
+import glob
 import os
 import sys
 
@@ -14,10 +15,12 @@ gm.USE_GPU_DYNAMICS = False
 gm.USE_ENCRYPTED_ASSETS = True
 
 from omnigibson import app
+from omnigibson.utils.asset_utils import encrypt_file
 
 from b1k_pipeline.usd_conversion.import_metadata import import_obj_metadata
 from b1k_pipeline.usd_conversion.import_urdfs_from_scene import import_obj_urdf
-from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
+from b1k_pipeline.usd_conversion.convert_cloth import postprocess_cloth
+from b1k_pipeline.usd_conversion.utils import DATASET_ROOT, CLOTH_CATEGORIES
 
 IMPORT_RENDER_CHANNELS = True
 
@@ -48,5 +51,16 @@ if __name__ == "__main__":
             obj_model=obj_model,
             import_render_channels=IMPORT_RENDER_CHANNELS,
         )
+
+        # Apply cloth conversions if necessary.
+        if obj_category in CLOTH_CATEGORIES:
+            rigid_usd_path = os.path.join(DATASET_ROOT, "objects", obj_category, obj_model, "usd", f"{obj_model}.usd")
+            postprocess_cloth(rigid_usd_path)
+
+        # Encrypt the output files.
+        for usd_path in glob.glob(os.path.join(DATASET_ROOT, "objects", obj_category, obj_model, "usd", "*.usd")):
+            encrypted_usd_path = usd_path.replace(".usd", ".encrypted.usd")
+            encrypt_file(usd_path, encrypted_filename=encrypted_usd_path)
+            os.remove(usd_path)
 
     app.close()
