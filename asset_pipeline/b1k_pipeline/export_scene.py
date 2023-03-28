@@ -14,6 +14,11 @@ OFFSETS = {
     "office_vendor_machine": np.array([-427.945,5878.52,0]) / 1000.0,
 }
 
+SKIP_CATEGORIES = {
+    "door",
+    "window",
+}
+
 def main():
     target = sys.argv[1]
     scene_name = os.path.split(target)[-1]
@@ -40,6 +45,9 @@ def main():
 
     for root_node in roots:
         obj_cat, obj_model, obj_inst_id, _ = root_node
+        if obj_cat in SKIP_CATEGORIES:
+            continue
+
         obj_name = "-".join([obj_cat, obj_model])
         obj_name_in_scene = "-".join([obj_cat, obj_model, obj_inst_id])
         obj_rooms = G.nodes[root_node]["metadata"]["layer_name"]
