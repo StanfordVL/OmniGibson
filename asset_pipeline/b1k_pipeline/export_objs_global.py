@@ -737,8 +737,6 @@ def main():
     
     with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
         targets = get_targets("combined")
-        random.shuffle(targets)
-        targets = targets[:10]
         for target in tqdm.tqdm(targets):
             target_futures[target_executor.submit(process_target, target, output_dir, link_executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))
