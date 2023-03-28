@@ -41,6 +41,8 @@ def world_to_map(xy, trav_map_resolution, trav_map_size):
 def process_scene(scene_id):
     # Don't import this outside the processes so that they don't share any state.
     import igibson
+    import igibson.external.pybullet_tools.utils
+
     igibson.ig_dataset_path = PIPELINE_ROOT / "artifacts/aggregate"
     room_categories_path = os.path.join(igibson.ig_dataset_path, "metadata", "room_categories.txt")
 
@@ -64,9 +66,16 @@ def process_scene(scene_id):
             scene = InteractiveIndoorScene(scene_id, load_object_categories=["ceilings", "walls"])
         s.import_scene(scene)
 
-        old_trav_map = np.zeros((4000, 4000), dtype=np.uint8)
-        new_trav_map = np.zeros_like(old_trav_map)
-        # new_trav_map = np.zeros((int(10 / resolution), int(10 / resolution)), dtype=np.uint8)
+        # Get the maximum magnitude distance from zero
+        aabbs = [igibson.external.pybullet_tools.utils.get_aabb(b) for b in range(p.getNumBodies())]
+        combined_aabb = np.array(igibson.external.pybullet_tools.utils.aabb_union(aabbs))
+        aabb_dist_from_zero = np.abs(combined_aabb)
+        dist_from_center = np.max(aabb_dist_from_zero, axis=0)
+        map_size_in_meters = dist_from_center * 2
+        map_size_in_pixels = map_size_in_meters / RESOLUTION
+        map_size_in_pixels = int(np.ceil(map_size_in_pixels / 2) * 2)  # Round to nearest multiple of 2
+
+        new_trav_map = np.zeros((map_size_in_pixels, map_size_in_pixels), dtype=np.uint8)
         assert new_trav_map.shape[0] == new_trav_map.shape[1]
         trav_map_size = new_trav_map.shape[0]
         half_trav_map_size = trav_map_size // 2
