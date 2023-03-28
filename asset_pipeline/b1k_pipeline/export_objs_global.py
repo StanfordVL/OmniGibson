@@ -27,7 +27,7 @@ import trimesh.voxel.creation
 from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline import mesh_tree
-from b1k_pipeline.utils import parse_name, PIPELINE_ROOT, get_targets
+from b1k_pipeline.utils import parse_name, PIPELINE_ROOT, get_targets, CLOTH_CATEGORIES
 
 logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
@@ -58,6 +58,13 @@ ALLOWED_PART_TAGS = {
     "connectedpart",
 }
 
+CLOTH_SUBDIVISION_THRESHOLD = 0.05
+
+MAX_MESHES = 64
+MAX_VERTEX_COUNT = 60
+REDUCTION_STEP = 5
+VERTEX_COUNT_DOWN_STEP = 50
+
 # TODO: Make this use a local version if necessary.
 # from dask_kubernetes.operator import KubeCluster
 # cluster = KubeCluster(name="b1k-pipeline-vhacd", image="docker.io/igibson/vhacd-worker")
@@ -69,6 +76,8 @@ ALLOWED_PART_TAGS = {
 VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 # VHACD_EXECUTABLE = "TestVHACD"
 
+USE_COACD = False
+
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -77,7 +86,7 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def call_vhacd(obj_file_path, dest_file_path, dask_client):
+def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client):
     # This is the function that sends VHACD requests to a worker. It needs to read the contents
     # of the source file into memory, transmit that to the worker, receive the contents of the
     # result file and save those at the destination path.
@@ -86,7 +95,7 @@ def call_vhacd(obj_file_path, dest_file_path, dask_client):
     # data_future = client.scatter(file_bytes)
     data_future = file_bytes
     vhacd_future = dask_client.submit(
-        get_vhacd_mesh,
+        get_reduced_coacd_mesh if USE_COACD else get_vhacd_mesh,
         data_future,
         key=obj_file_path,
         retries=1)
@@ -96,21 +105,82 @@ def call_vhacd(obj_file_path, dest_file_path, dask_client):
     with open(dest_file_path, 'wb') as f:
         f.write(result)
 
+def vertex_reduce_submeshes(mesh_submeshes):
+    # Otherwise start doing vertex reduction.
+    print("Starting vertex reduction")
+    reduced_submeshes = []
+    for submesh in mesh_submeshes:
+        assert submesh.is_convex, f"Found non-convex mesh"
+        assert submesh.is_volume, f"Found non-volume mesh"
+        
+        # Check its vertex count and reduce as necessary
+        reduction_target_vertex_count = MAX_VERTEX_COUNT + REDUCTION_STEP
+        reduced_submesh = submesh
+        while len(reduced_submesh.vertices) > MAX_VERTEX_COUNT:
+            # Reduction function takes a number of faces as its input. We estimate this, if it doesn't
+            # work out, we keep trying with a smaller estimate.
+            reduction_target_vertex_count -= REDUCTION_STEP
+            if reduction_target_vertex_count < MAX_VERTEX_COUNT / 2:
+                # Don't want to reduce too far
+                raise ValueError("Vertex reduction failed.")
 
-def get_vhacd_mesh(file_bytes):
+            reduction_target_face_count = int(reduction_target_vertex_count / len(submesh.vertices) * len(submesh.faces))
+            reduced_submesh = submesh.simplify_quadratic_decimation(reduction_target_face_count)
+
+        # Add the reduced submesh to our list
+        reduced_submeshes.append(reduced_submesh)
+
+    print("Finished vertex reduction")
+    return reduced_submeshes
+
+def get_reduced_coacd_mesh(file_bytes):
+    import coacd
+
+    # Load the mesh
+    m = trimesh.load(io.BytesIO(file_bytes), file_type="obj", force="mesh", skip_material=True,
+                     merge_tex=True, merge_norm=True)
+    
+    # Run CoACD
+    imesh = coacd.Mesh()
+    imesh.vertices = m.vertices
+    imesh.indices = m.faces
+    submeshes = coacd.run_coacd(
+        imesh,
+        threshold=0.05,
+        preprocess=not m.is_volume,  # If already watertight, no need to preprocess.
+        preprocess_resolution=100,
+    )
+    mesh_submeshes = [
+        trimesh.Trimesh(np.array(p.vertices), np.array(p.indices).reshape((-1, 3))) for p in submeshes
+    ]
+
+    # If we have too many submeshes, revert to v-hacd
+    if len(mesh_submeshes) > MAX_MESHES:
+        return get_vhacd_mesh(file_bytes, high_res=True)
+
+    # Otherwise start doing vertex reduction.
+    # with futures.ProcessPoolExecutor() as exec:
+    #     reduced_submeshes = exec.submit(vertex_reduce_submeshes, mesh_submeshes).result()
+    reduced_submeshes = vertex_reduce_submeshes(mesh_submeshes)
+
+    # Concatenate the reduced submeshes and store it
+    concatenated = trimesh.util.concatenate(reduced_submeshes)
+    out_bytes = io.BytesIO()
+    concatenated.export(out_bytes, file_type="obj", include_normals=False, include_color=False, include_texture=False)
+    return out_bytes.getvalue()
+
+def get_vhacd_mesh(file_bytes, high_res=False):
     with tempfile.TemporaryDirectory() as td:
         in_path = os.path.join(td, "in.obj")
         out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
         # Decide params
-        m = trimesh.load(in_path, force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
-        vhacd_cmd = ["coacd", "-t", "0.05"]
-        if m.is_volume:
-            vhacd_cmd += ["--no-preprocess"]
+        if high_res:
+            vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(MAX_MESHES), "-o", "obj"]
         else:
-            vhacd_cmd += ["--preprocess-resolution", "100"]
-        vhacd_cmd += [in_path, out_path]
+            vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-v", "60", "-o", "obj"]
+
         try:
             proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
             with open(out_path, 'rb') as f:
@@ -269,21 +339,21 @@ def compute_link_aligned_bounding_boxes(G, root_node):
 
 def compute_object_bounding_box(root_node_data):
     combined_mesh = root_node_data["combined_mesh"]
-    combined_mesh_center = get_mesh_center(combined_mesh)
+    lower_mesh_center = get_mesh_center(root_node_data["lower_mesh"])
     mesh_orientation = root_node_data["metadata"]["orientation"]
-    canonical_combined_mesh = transform_mesh(combined_mesh, combined_mesh_center, mesh_orientation)
+    canonical_combined_mesh = transform_mesh(combined_mesh, lower_mesh_center, mesh_orientation)
     base_link_offset = canonical_combined_mesh.bounding_box.centroid
     bbox_size = canonical_combined_mesh.bounding_box.extents
 
     # Compute the bbox world centroid
     bbox_world_rotation = R.from_quat(mesh_orientation)
-    bbox_world_centroid = combined_mesh_center + bbox_world_rotation.apply(base_link_offset)
+    bbox_world_centroid = lower_mesh_center + bbox_world_rotation.apply(base_link_offset)
 
     return bbox_size, base_link_offset, bbox_world_centroid, bbox_world_rotation
 
 
 def process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_dir, tree_root, out_metadata, dask_client):
-    _, _, _, link_name = link_node
+    category_name, _, _, link_name = link_node
     raw_meta_links = G.nodes[link_node]["meta_links"]
 
     # Create a canonicalized copy of the lower and upper meshes.
@@ -291,8 +361,24 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     canonical_mesh = transform_mesh(G.nodes[link_node]["lower_mesh"], mesh_center, canonical_orientation)
     meta_links = transform_meta_links(raw_meta_links, mesh_center, canonical_orientation)
 
-    # Somehow we need to manually write the vertex normals to cachein_path
+    # Somehow we need to manually write the vertex normals to cache
     canonical_mesh._cache.cache["vertex_normals"] = canonical_mesh.vertex_normals
+
+    # Subdivide the mesh if needed
+    if category_name in CLOTH_CATEGORIES:
+        assert link_name == "base_link", f"Cloth object {str(link_node)} should only have a base link."
+        while True:
+            edge_indices = np.where(canonical_mesh.edges_unique_length > CLOTH_SUBDIVISION_THRESHOLD)[0]
+
+            # Faces that have any edges longer than the threshold
+            face_indices_from_edge_length = np.where([len(np.intersect1d(face, edge_indices)) != 0 for face in canonical_mesh.faces_unique_edges])[0]
+            if len(face_indices_from_edge_length) == 0:
+                break
+
+            canonical_mesh = canonical_mesh.subdivide(face_indices_from_edge_length)
+
+        # Somehow we need to manually write the vertex normals to cache
+        canonical_mesh._cache.cache["vertex_normals"] = canonical_mesh.vertex_normals
 
     in_edges = list(G.in_edges(link_node))
     assert len(in_edges) <= 1, f"Something's wrong: there's more than 1 in-edge to node {link_node}"
@@ -341,11 +427,8 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         
         # Generate collision mesh
         collision_shape_file = obj_link_collision_mesh_folder / obj_relative_path
-        call_vhacd(str(visual_shape_file.absolute()), str(collision_shape_file.absolute()), dask_client)
-        # vhacd = PIPELINE_ROOT / "b1k_pipeline" / "vhacd.exe"
-        # vhacd_cmd = [str(vhacd), "--input", str(visual_shape_file.absolute()), "--output", str(collision_shape_file.absolute()), "--log", "NUL", "--resolution", "10000000", "--depth 15"]
-        # print("Running vhacd:", " ".join(vhacd_cmd))
-        # assert subprocess.call(vhacd_cmd, shell=False, stdout=subprocess.DEVNULL) == 0
+        run_remote_convex_decomposition(str(visual_shape_file.absolute()), str(collision_shape_file.absolute()), dask_client)
+
         # Store the final meshes
         G.nodes[link_node]["visual_mesh"] = canonical_mesh.copy()
         G.nodes[link_node]["collision_mesh"] = trimesh.load(str(collision_shape_file), process=False, force="mesh", skip_materials=True, maintain_order=True)
@@ -650,10 +733,12 @@ def main():
     errors = {}
     target_futures = {}
 
-    dask_client = Client('svl7.stanford.edu:35423')
+    dask_client = Client('svl10.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
         targets = get_targets("combined")
+        random.shuffle(targets)
+        targets = targets[:10]
         for target in tqdm.tqdm(targets):
             target_futures[target_executor.submit(process_target, target, output_dir, link_executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))

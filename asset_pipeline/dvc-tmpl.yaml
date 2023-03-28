@@ -270,6 +270,7 @@ stages:
     cmd: 'python -m b1k_pipeline.make_maps'
     deps:
     - artifacts/aggregate/scenes
+    - artifacts/aggregate/metadata
     - artifacts/pipeline/aggregate_scenes.success
     - b1k_pipeline/make_maps.py
     - metadata/allowed_room_types.csv
@@ -282,9 +283,11 @@ stages:
     cmd: 'python b1k_pipeline/aggregate_metadata.py'
     deps:
     - b1k_pipeline/aggregate_metadata.py
+    - artifacts/pipeline/object_inventory.json
     - artifacts/aggregate/objects
     - artifacts/aggregate/scenes
     - metadata/category_mapping.csv
+    - metadata/non_sampleable_categories.csv
     - metadata/allowed_room_types.csv
     outs:
     - artifacts/aggregate/metadata
