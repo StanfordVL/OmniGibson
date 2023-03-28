@@ -7,8 +7,7 @@ from scipy.spatial.transform import Rotation as R
 import tqdm
 
 import igibson
-# igibson.ig_dataset_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts/aggregate")
-igibson.ig_dataset_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "cad/objects/blender-temp/artifacts")
+igibson.ig_dataset_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts/aggregate")
 
 from igibson.simulator import Simulator
 from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
@@ -23,7 +22,7 @@ def main():
     scene = EmptyScene()
     s.import_scene(scene)
 
-    obj = URDFObject(os.path.join(igibson.ig_dataset_path, "objects", "blender", "dhfqid", "dhfqid.urdf"))
+    obj = URDFObject(os.path.join(igibson.ig_dataset_path, "objects", "fridge", "hivvdf", "hivvdf.urdf"))
     s.import_object(obj)
 
     # Step the simulation by 5 seconds.
