@@ -70,7 +70,7 @@ def process_scene(scene_id):
         aabbs = [igibson.external.pybullet_tools.utils.get_aabb(b) for b in range(p.getNumBodies())]
         combined_aabb = np.array(igibson.external.pybullet_tools.utils.aabb_union(aabbs))
         aabb_dist_from_zero = np.abs(combined_aabb)
-        dist_from_center = np.max(aabb_dist_from_zero, axis=0)
+        dist_from_center = np.max(aabb_dist_from_zero)
         map_size_in_meters = dist_from_center * 2
         map_size_in_pixels = map_size_in_meters / RESOLUTION
         map_size_in_pixels = int(np.ceil(map_size_in_pixels / 2) * 2)  # Round to nearest multiple of 2

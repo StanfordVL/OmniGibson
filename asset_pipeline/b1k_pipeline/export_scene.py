@@ -14,10 +14,7 @@ OFFSETS = {
     "office_vendor_machine": np.array([-427.945,5878.52,0]) / 1000.0,
 }
 
-SKIP_CATEGORIES = {
-    "door",
-    "window",
-}
+SKIP_CATEGORIES = {}
 
 def main():
     target = sys.argv[1]
