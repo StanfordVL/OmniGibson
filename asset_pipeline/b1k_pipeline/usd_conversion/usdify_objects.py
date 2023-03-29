@@ -20,7 +20,8 @@ from omnigibson.utils.asset_utils import encrypt_file
 from b1k_pipeline.usd_conversion.import_metadata import import_obj_metadata
 from b1k_pipeline.usd_conversion.import_urdfs_from_scene import import_obj_urdf
 from b1k_pipeline.usd_conversion.convert_cloth import postprocess_cloth
-from b1k_pipeline.usd_conversion.utils import DATASET_ROOT, CLOTH_CATEGORIES
+from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
+from b1k_pipeline.utils import CLOTH_CATEGORIES
 
 IMPORT_RENDER_CHANNELS = True
 
