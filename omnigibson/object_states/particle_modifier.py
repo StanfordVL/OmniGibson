@@ -729,7 +729,7 @@ class ParticleApplier(ParticleModifier):
         points_in_world_frame = get_particle_positions_from_frame(
             pos=pos,
             quat=quat,
-            scale=self.link.scale,
+            scale=self.obj.scale,
             particle_positions=points,
         )
         points = points[np.where(self._check_in_mesh(points_in_world_frame))[0]]
@@ -878,7 +878,7 @@ class ParticleApplier(ParticleModifier):
         points = get_particle_positions_from_frame(
             pos=pos,
             quat=quat,
-            scale=self.link.scale,
+            scale=self.obj.scale,
             particle_positions=self._in_mesh_local_particle_positions,
         )
         directions = self._in_mesh_local_particle_directions @ T.quat2mat(quat).T
@@ -938,7 +938,7 @@ class ParticleApplier(ParticleModifier):
         points = get_particle_positions_from_frame(
             pos=pos,
             quat=quat,
-            scale=self.link.scale,
+            scale=self.obj.scale,
             particle_positions=points,
         )
 

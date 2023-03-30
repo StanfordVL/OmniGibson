@@ -292,7 +292,7 @@ class DatasetObject(USDObject):
             if self._prim_type == PrimType.RIGID:
                 density = mass / self.volume
                 for link in self._links.values():
-                    # If the link has any collision meshes, we overwrite the density and set mass to be 0.0 (ignored)
+                    # If not a meta (virtual) link, set the density based on avg_obj_dims and a zero mass (ignored)
                     if link.has_collision_meshes:
                         link.mass = 0.0
                         link.density = density
