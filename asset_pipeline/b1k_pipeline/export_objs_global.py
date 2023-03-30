@@ -1,20 +1,15 @@
 import collections
 from concurrent import futures
 import copy
-import io
 import json
 import logging
 import os
 import pathlib
-import random
-import sys
 import shutil
 import subprocess
 import tempfile
-import threading
 import traceback
 import xml.etree.ElementTree as ET
-from collections import OrderedDict
 from xml.dom import minidom
 
 from dask.distributed import Client
@@ -60,11 +55,6 @@ ALLOWED_PART_TAGS = {
 
 CLOTH_SUBDIVISION_THRESHOLD = 0.05
 
-MAX_MESHES = 64
-MAX_VERTEX_COUNT = 60
-REDUCTION_STEP = 5
-VERTEX_COUNT_DOWN_STEP = 50
-
 # TODO: Make this use a local version if necessary.
 # from dask_kubernetes.operator import KubeCluster
 # cluster = KubeCluster(name="b1k-pipeline-vhacd", image="docker.io/igibson/vhacd-worker")
@@ -73,10 +63,8 @@ VERTEX_COUNT_DOWN_STEP = 50
 
 # client = Client(cluster)
 # client = Client('capri32.stanford.edu:8786')
-VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 # VHACD_EXECUTABLE = "TestVHACD"
-
-USE_COACD = False
+COACD_RUN_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -95,7 +83,7 @@ def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client):
     # data_future = client.scatter(file_bytes)
     data_future = file_bytes
     vhacd_future = dask_client.submit(
-        get_reduced_coacd_mesh if USE_COACD else get_vhacd_mesh,
+        call_coacd_script,
         data_future,
         key=obj_file_path,
         retries=1)
@@ -105,89 +93,19 @@ def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client):
     with open(dest_file_path, 'wb') as f:
         f.write(result)
 
-def vertex_reduce_submeshes(mesh_submeshes):
-    # Otherwise start doing vertex reduction.
-    print("Starting vertex reduction")
-    reduced_submeshes = []
-    for submesh in mesh_submeshes:
-        assert submesh.is_convex, f"Found non-convex mesh"
-        assert submesh.is_volume, f"Found non-volume mesh"
-        
-        # Check its vertex count and reduce as necessary
-        reduction_target_vertex_count = MAX_VERTEX_COUNT + REDUCTION_STEP
-        reduced_submesh = submesh
-        while len(reduced_submesh.vertices) > MAX_VERTEX_COUNT:
-            # Reduction function takes a number of faces as its input. We estimate this, if it doesn't
-            # work out, we keep trying with a smaller estimate.
-            reduction_target_vertex_count -= REDUCTION_STEP
-            if reduction_target_vertex_count < MAX_VERTEX_COUNT / 2:
-                # Don't want to reduce too far
-                raise ValueError("Vertex reduction failed.")
-
-            reduction_target_face_count = int(reduction_target_vertex_count / len(submesh.vertices) * len(submesh.faces))
-            reduced_submesh = submesh.simplify_quadratic_decimation(reduction_target_face_count)
-
-        # Add the reduced submesh to our list
-        reduced_submeshes.append(reduced_submesh)
-
-    print("Finished vertex reduction")
-    return reduced_submeshes
-
-def get_reduced_coacd_mesh(file_bytes):
-    import coacd
-
-    # Load the mesh
-    m = trimesh.load(io.BytesIO(file_bytes), file_type="obj", force="mesh", skip_material=True,
-                     merge_tex=True, merge_norm=True)
-    
-    # Run CoACD
-    imesh = coacd.Mesh()
-    imesh.vertices = m.vertices
-    imesh.indices = m.faces
-    submeshes = coacd.run_coacd(
-        imesh,
-        threshold=0.05,
-        preprocess=not m.is_volume,  # If already watertight, no need to preprocess.
-        preprocess_resolution=100,
-    )
-    mesh_submeshes = [
-        trimesh.Trimesh(np.array(p.vertices), np.array(p.indices).reshape((-1, 3))) for p in submeshes
-    ]
-
-    # If we have too many submeshes, revert to v-hacd
-    if len(mesh_submeshes) > MAX_MESHES:
-        return get_vhacd_mesh(file_bytes, high_res=True)
-
-    # Otherwise start doing vertex reduction.
-    # with futures.ProcessPoolExecutor() as exec:
-    #     reduced_submeshes = exec.submit(vertex_reduce_submeshes, mesh_submeshes).result()
-    reduced_submeshes = vertex_reduce_submeshes(mesh_submeshes)
-
-    # Concatenate the reduced submeshes and store it
-    concatenated = trimesh.util.concatenate(reduced_submeshes)
-    out_bytes = io.BytesIO()
-    concatenated.export(out_bytes, file_type="obj", include_normals=False, include_color=False, include_texture=False)
-    return out_bytes.getvalue()
-
-def get_vhacd_mesh(file_bytes, high_res=False):
+def call_coacd_script(in_bytes):
     with tempfile.TemporaryDirectory() as td:
-        in_path = os.path.join(td, "in.obj")
-        out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
-        with open(in_path, 'wb') as f:
-            f.write(file_bytes)
-        # Decide params
-        if high_res:
-            vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(MAX_MESHES), "-o", "obj"]
-        else:
-            vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-v", "60", "-o", "obj"]
+        in_filename = os.path.join(td, "in.obj")
+        out_filename = os.path.join(td, "out.obj")
 
-        try:
-            proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
-            with open(out_path, 'rb') as f:
-                return f.read()
-        except subprocess.CalledProcessError as e:
-            raise ValueError(f"VHACD failed with exit code {e.returncode}. Output:\n{e.output}")
+        with open(in_filename, "wb") as f:
+            f.write(in_bytes)
 
+        cmd = ["python", COACD_RUN_SCRIPT_PATH, "in.obj", "out.obj"]
+        subprocess.run(cmd, shell=False, cwd=td, check=True)
+
+        with open(out_filename, "rb") as f:
+            return f.read()
 
 def timeout(timelimit):
     def decorator(func):
@@ -736,7 +654,7 @@ def main():
     dask_client = Client('svl10.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
-        targets = get_targets("combined")
+        targets = get_targets("combined")[:5]
         for target in tqdm.tqdm(targets):
             target_futures[target_executor.submit(process_target, target, output_dir, link_executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))
