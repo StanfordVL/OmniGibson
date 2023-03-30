@@ -67,7 +67,8 @@ def process_scene(scene_id):
         s.import_scene(scene)
 
         # Get the maximum magnitude distance from zero
-        aabbs = [igibson.external.pybullet_tools.utils.get_aabb(b) for b in range(p.getNumBodies())]
+        body_ids = [bid for obj in scene.get_objects() for bid in obj.get_body_ids()]
+        aabbs = [igibson.external.pybullet_tools.utils.get_aabb(b) for b in body_ids]
         combined_aabb = np.array(igibson.external.pybullet_tools.utils.aabb_union(aabbs))
         aabb_dist_from_zero = np.abs(combined_aabb)
         dist_from_center = np.max(aabb_dist_from_zero)
