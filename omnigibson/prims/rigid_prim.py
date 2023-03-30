@@ -101,7 +101,7 @@ class RigidPrim(XFormPrim):
         self.update_meshes()
 
         # Possibly set the mass / density
-        if len(self._collision_meshes) == 0:
+        if not self.has_collision_meshes:
             # We have no collision meshes, this is a meta (virtual) link, so set a negligible mass
             self.mass = 1e-6
         elif "mass" in self._load_config and self._load_config["mass"] is not None:
@@ -387,6 +387,14 @@ class RigidPrim(XFormPrim):
             bool: Whether this link is a visual-only link (i.e.: no gravity or collisions applied)
         """
         return self._visual_only
+
+    @property
+    def has_collision_meshes(self):
+        """
+        Returns:
+            bool: Whether this link has any collision mesh
+        """
+        return len(self._collision_meshes) > 0
 
     @visual_only.setter
     def visual_only(self, val):
