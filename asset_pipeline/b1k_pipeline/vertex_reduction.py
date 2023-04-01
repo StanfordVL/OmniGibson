@@ -40,7 +40,7 @@ def reduce_obj(in_file, out_file):
         reduced_submeshes.append(reduced_submesh)
 
     assert reduced_submeshes, "No reduced meshes found"
-    concatenated = trimesh.util.concatenate(reduced_submeshes)
+    concatenated = trimesh.Scene([reduced_submeshes])
     concatenated.export(out_file, file_type="obj", include_normals=False, include_color=False, include_texture=False)
 
 def main():
