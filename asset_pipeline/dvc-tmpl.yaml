@@ -270,7 +270,7 @@ stages:
     cmd: 'python -m b1k_pipeline.vertex_reduction'
     deps:
     - artifacts/aggregate/objects
-    - artifacts/pipeline/export_obj.success
+    - artifacts/pipeline/export_objs.success
     - b1k_pipeline/vertex_reduction.py
     outs:
     - artifacts/parallels/vertex_reduction.zip

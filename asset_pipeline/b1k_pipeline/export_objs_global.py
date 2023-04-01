@@ -683,7 +683,7 @@ def process_target(target, output_dir, link_executor, dask_client):
         raise ValueError(error_msg)
 
 def main():
-    output_dir = PIPELINE_ROOT / "artifacts/aggregate/objects3"
+    output_dir = PIPELINE_ROOT / "artifacts/aggregate/objects"
     json_file = PIPELINE_ROOT / "artifacts/pipeline/export_objs.json"
 
     # Load the mesh list from the object list json.

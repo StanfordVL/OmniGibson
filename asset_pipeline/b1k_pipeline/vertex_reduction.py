@@ -62,10 +62,10 @@ def main():
                 print(obj, e)
 
     success = len(failures) == 0
-    with open(PIPELINE_ROOT / "artifacts" / "aggregate" / "vertex_reduction.json", "w") as f:
+    with open(PIPELINE_ROOT / "artifacts" / "pipeline" / "vertex_reduction.json", "w") as f:
         json.dump({"success": success, "failures": {x: str(e) for x, e in failures.items()}}, f)
     if success:
-        with open(PIPELINE_ROOT / "artifacts" / "aggregate" / "vertex_reduction.success", "w") as f:
+        with open(PIPELINE_ROOT / "artifacts" / "pipeline" / "vertex_reduction.success", "w") as f:
             pass
 
 if __name__ == "__main__":
