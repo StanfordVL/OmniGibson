@@ -1,6 +1,7 @@
 import collections
 from concurrent import futures
 import copy
+import io
 import json
 import logging
 import os
@@ -22,7 +23,7 @@ import trimesh.voxel.creation
 from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline import mesh_tree
-from b1k_pipeline.utils import parse_name, PIPELINE_ROOT, get_targets, CLOTH_CATEGORIES
+from b1k_pipeline.utils import parse_name, PIPELINE_ROOT, get_targets, SUBDIVIDE_CLOTH_CATEGORIES
 
 logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
@@ -53,6 +54,10 @@ ALLOWED_PART_TAGS = {
     "connectedpart",
 }
 
+COACD_TIMEOUT = 10 * 60  # 10 minutes
+MAX_MESHES = 64
+VHACD_MESHES = 32
+VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 CLOTH_SUBDIVISION_THRESHOLD = 0.05
 
 # TODO: Make this use a local version if necessary.
@@ -64,7 +69,7 @@ CLOTH_SUBDIVISION_THRESHOLD = 0.05
 # client = Client(cluster)
 # client = Client('capri32.stanford.edu:8786')
 # VHACD_EXECUTABLE = "TestVHACD"
-COACD_RUN_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
+# COACD_RUN_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -83,7 +88,7 @@ def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client):
     # data_future = client.scatter(file_bytes)
     data_future = file_bytes
     vhacd_future = dask_client.submit(
-        call_coacd_script,
+        get_vhacd_mesh,
         data_future,
         key=obj_file_path,
         retries=1)
@@ -93,19 +98,49 @@ def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client):
     with open(dest_file_path, 'wb') as f:
         f.write(result)
 
-def call_coacd_script(in_bytes):
+def get_coacd_mesh(file_bytes):
     with tempfile.TemporaryDirectory() as td:
-        in_filename = os.path.join(td, "in.obj")
-        out_filename = os.path.join(td, "out.obj")
+        in_path = os.path.join(td, "in.obj")
+        out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
+        with open(in_path, 'wb') as f:
+            f.write(file_bytes)
+        # Decide params
+        m = trimesh.load(in_path, force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
+        vhacd_cmd = ["coacd", "-t", "0.05"]
+        if m.is_volume:
+            vhacd_cmd += ["--no-preprocess"]
+        else:
+            vhacd_cmd += ["--preprocess-resolution", "100"]
+        vhacd_cmd += [in_path, out_path]
+        try:
+            subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True, timeout=COACD_TIMEOUT)
+            with open(out_path, 'rb') as f:
+                bytes = f.read()
+                stream = io.BytesIO(bytes)
+                m = trimesh.load(stream, file_type="obj", force="mesh", skip_material=True,
+                     merge_tex=True, merge_norm=True)
+                if len(m.split()) <= MAX_MESHES:
+                    return bytes
+        except Exception as e:
+            print("CoACD failed. Switching to V-HACD.", e)
+    return get_vhacd_mesh(file_bytes)
 
-        with open(in_filename, "wb") as f:
-            f.write(in_bytes)
+def get_vhacd_mesh(file_bytes):
+    with tempfile.TemporaryDirectory() as td:
+        in_path = os.path.join(td, "in.obj")
+        out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
+        with open(in_path, 'wb') as f:
+            f.write(file_bytes)
 
-        cmd = ["python", COACD_RUN_SCRIPT_PATH, "in.obj", "out.obj"]
-        subprocess.run(cmd, shell=False, cwd=td, check=True)
+        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(VHACD_MESHES)]
 
-        with open(out_filename, "rb") as f:
-            return f.read()
+        try:
+            subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
+            with open(out_path, 'rb') as f:
+                return f.read()
+        except subprocess.CalledProcessError as e:
+            raise ValueError(f"V-HACD failed with exit code {e.returncode}. Output:\n{e.output}")
+
 
 def timeout(timelimit):
     def decorator(func):
@@ -283,7 +318,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     canonical_mesh._cache.cache["vertex_normals"] = canonical_mesh.vertex_normals
 
     # Subdivide the mesh if needed
-    if category_name in CLOTH_CATEGORIES:
+    if category_name in SUBDIVIDE_CLOTH_CATEGORIES:
         assert link_name == "base_link", f"Cloth object {str(link_node)} should only have a base link."
         while True:
             edge_indices = np.where(canonical_mesh.edges_unique_length > CLOTH_SUBDIVISION_THRESHOLD)[0]
@@ -522,6 +557,9 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
 def process_object(G, root_node, output_dir, dask_client):
     obj_cat, obj_model, obj_inst_id, _ = root_node
     obj_output_dir = output_dir / obj_cat / obj_model
+    if os.path.exists(obj_output_dir):
+        print(obj_output_dir, "skipped")
+        return
     obj_output_dir.mkdir(parents=True, exist_ok=True)
 
     # Process the object
@@ -628,6 +666,7 @@ def process_target(target, output_dir, link_executor, dask_client):
             for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
         Gprime = G.subgraph(relevant_nodes).copy()
 
+        print(f"Start {root_node} from {target}")
         # process_object(Gprime, root_node, output_dir, dask_client)
         object_futures[link_executor.submit(process_object, Gprime, root_node, output_dir, dask_client)] = str(root_node)
 
@@ -644,17 +683,17 @@ def process_target(target, output_dir, link_executor, dask_client):
         raise ValueError(error_msg)
 
 def main():
-    output_dir = PIPELINE_ROOT / "artifacts/aggregate/objects"
+    output_dir = PIPELINE_ROOT / "artifacts/aggregate/objects3"
     json_file = PIPELINE_ROOT / "artifacts/pipeline/export_objs.json"
 
     # Load the mesh list from the object list json.
     errors = {}
     target_futures = {}
 
-    dask_client = Client('svl10.stanford.edu:35423')
+    dask_client = Client('svl1.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
-        targets = get_targets("combined")[:5]
+        targets = get_targets("combined")
         for target in tqdm.tqdm(targets):
             target_futures[target_executor.submit(process_target, target, output_dir, link_executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))
@@ -668,6 +707,14 @@ def main():
                     errors[name] = traceback.format_exc()
 
                 object_pbar.update(1)
+
+                remaining_targets = [v for k, v in target_futures.items() if not k.done()]
+                if len(remaining_targets) < 10:
+                    print("Remaining:", remaining_targets)
+
+        print("Time for executor shutdown")
+
+    print("Finished processing")
 
     with open(json_file, "w") as f:
         json.dump({"success": not errors, "errors": errors}, f)

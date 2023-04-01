@@ -27,10 +27,10 @@ def main():
     try:
         # Get a multi-FS view over all of the parallel filesystems.
         multi_fs = fs.multifs.MultiFS()
-        multi_fs.add_fs('aggregate', fs.osfs.OSFS(IN_FILENAME_AGGREGATE), priority=1)
+        multi_fs.add_fs('aggregate', fs.osfs.OSFS(IN_FILENAME_AGGREGATE), priority=0)
         for parallel_zip in glob.glob(IN_FILENAME_PARALLELS):
             print("Adding", parallel_zip)
-            multi_fs.add_fs(os.path.basename(parallel_zip), fs.zipfs.ZipFS(parallel_zip), priority=0)
+            multi_fs.add_fs(os.path.basename(parallel_zip), fs.zipfs.ZipFS(parallel_zip), priority=1)
 
         # Copy all the files to the output zip filesystem.
         total_files = sum(1 for f in multi_fs.walk.files())

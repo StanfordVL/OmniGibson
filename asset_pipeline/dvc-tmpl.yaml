@@ -266,9 +266,21 @@ stages:
   #   outs:
   #   - artifacts/pipeline/validate_scene.success
 
+  vertex_reduction:
+    cmd: 'python -m b1k_pipeline.vertex_reduction'
+    deps:
+    - artifacts/aggregate/objects
+    - artifacts/pipeline/export_obj.success
+    - b1k_pipeline/vertex_reduction.py
+    outs:
+    - artifacts/parallels/vertex_reduction.zip
+    - artifacts/pipeline/vertex_reduction.json
+    - artifacts/pipeline/vertex_reduction.success
+
   make_maps:
     cmd: 'python -m b1k_pipeline.make_maps'
     deps:
+    - artifacts/aggregate/objects
     - artifacts/aggregate/scenes
     - artifacts/aggregate/metadata
     - artifacts/pipeline/aggregate_scenes.success
@@ -306,6 +318,9 @@ stages:
     cmd: 'python b1k_pipeline/pack_dataset.py'
     deps:
     - artifacts/parallels/maps.zip
+    - artifacts/pipeline/make_maps.success
+    - artifacts/parallels/vertex_reduction.zip
+    - artifacts/pipeline/vertex_reduction.success
     # - artifacts/pipeline/validate_scene.success
     - artifacts/pipeline/aggregate_metadata.success
     - artifacts/pipeline/aggregate_scenes.success
