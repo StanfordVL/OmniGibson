@@ -88,7 +88,7 @@ def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client):
     # data_future = client.scatter(file_bytes)
     data_future = file_bytes
     vhacd_future = dask_client.submit(
-        get_vhacd_mesh,
+        get_coacd_mesh,
         data_future,
         key=obj_file_path,
         retries=1)
@@ -119,7 +119,7 @@ def get_coacd_mesh(file_bytes):
                 stream = io.BytesIO(bytes)
                 m = trimesh.load(stream, file_type="obj", force="mesh", skip_material=True,
                      merge_tex=True, merge_norm=True)
-                if len(m.split()) <= MAX_MESHES:
+                if len(m.split(only_watertight=False)) <= MAX_MESHES:
                     return bytes
         except Exception as e:
             print("CoACD failed. Switching to V-HACD.", e)
