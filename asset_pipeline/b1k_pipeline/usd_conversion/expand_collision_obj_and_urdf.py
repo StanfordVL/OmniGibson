@@ -39,7 +39,7 @@ def split_obj_file(obj_fpath):
     obj = trimesh.load(obj_fpath, process=False, force="mesh")
 
     # Split to grab all individual bodies
-    obj_bodies = obj.split()
+    obj_bodies = obj.split(only_watertight=False)
 
     # Procedurally create new files in the same folder as obj_fpath
     out_fpath = "/".join(obj_fpath.split("/")[:-1])
