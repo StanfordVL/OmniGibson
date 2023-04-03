@@ -40,7 +40,7 @@ def reduce_obj(in_file, out_file):
         reduced_submeshes.append(reduced_submesh)
 
     assert reduced_submeshes, "No reduced meshes found"
-    concatenated = trimesh.Scene([reduced_submeshes])
+    concatenated = trimesh.util.concatenate([reduced_submeshes])
     concatenated.export(out_file, file_type="obj", include_normals=False, include_color=False, include_texture=False)
 
 def main():
@@ -54,7 +54,7 @@ def main():
         out_fs.makedirs(fs.path.dirname(obj), recreate=True)
         # if out_fs.exists(obj) and out_fs.getsize(obj) > 0:
         #     continue
-        with open(PIPELINE_ROOT / "artifacts/aggregate" / obj[1:], "rb") as in_file, out_fs.open(obj, "w") as out_file:
+        with open(PIPELINE_ROOT / "artifacts/aggregate" / obj[1:], "r") as in_file, out_fs.open(obj, "w") as out_file:
             try:
                 reduce_obj(in_file, out_file)
             except Exception as e:
