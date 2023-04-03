@@ -11,7 +11,6 @@ import numpy as np
 import omni
 import omnigibson.utils.transform_utils as T
 import pxr.Vt
-import trimesh
 from omni.isaac.core.prims.xform_prim import XFormPrim
 from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.isaac.core.utils.stage import close_stage, get_current_stage, open_stage
