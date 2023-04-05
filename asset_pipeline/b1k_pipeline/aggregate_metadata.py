@@ -94,16 +94,16 @@ def main():
             categories_by_id[i] if i in categories_by_id else ""
             for i in range(max(categories_by_id.keys()) + 1)
         ]
-        category_ids_w_newline = [x + "" for x in category_ids]
+        category_ids_w_newline = "".join([x + "\n" for x in category_ids])
         with open(CATEGORIES_FILENAME, "w") as f:
-            f.writelines(category_ids_w_newline)
+            f.write(category_ids_w_newline)
 
         # Get the room categories
         with open(ROOM_CATEGORY_IN_FILENAME, "r") as f:
             reader = csv.DictReader(f)
-            room_categories = [row["Room Name"].strip() + "" for row in reader]
+            room_categories = "".join([row["Room Name"].strip() + "\n" for row in reader])
         with open(ROOM_CATEGORY_OUT_FILENAME, "w") as f:
-            f.writelines(room_categories)
+            f.write(room_categories)
 
         # Compile the avg_category_specs.json file
         with open(AVG_CATEGORY_SPECS_OUT_FILENAME, "w") as f:
@@ -112,9 +112,9 @@ def main():
         # Read and dump the non sampleable cats file
         with open(NON_SAMPLEABLE_CATEGORIES_IN_FILENAME, "r") as f:
             reader = csv.DictReader(f)
-            non_sampleable_cats = [row["synset"].strip() + "" for row in reader]
+            non_sampleable_cats = "".join([row["synset"].strip() + "\n" for row in reader])
         with open(NON_SAMPLEABLE_CATEGORIES_OUT_FILENAME, "w") as f:
-            f.writelines(non_sampleable_cats)
+            f.write(non_sampleable_cats)
 
     except Exception as e:
         success = False
