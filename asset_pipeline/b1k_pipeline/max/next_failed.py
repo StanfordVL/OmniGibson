@@ -42,7 +42,7 @@ def file_eligible(objdir):
 
 def next_failed():
     eligible_max = []
-    for target in b1k_pipeline.utils.get_targets("objects"):
+    for target in b1k_pipeline.utils.get_targets("objects_unfiltered"):
         objdir = b1k_pipeline.utils.PIPELINE_ROOT / "cad" / target
         if objdir.exists() and file_eligible(objdir):
             eligible_max.append(objdir / "processed.max")
@@ -59,6 +59,7 @@ def next_failed():
         except:
             pass
 
+        print(f"File {next_idx} of {len(eligible_max)}")
         scene_file = eligible_max[next_idx]
         assert (
             not scene_file.is_symlink()
