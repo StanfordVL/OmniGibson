@@ -59,6 +59,7 @@ MAX_MESHES = 64
 VHACD_MESHES = 32
 VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 CLOTH_SUBDIVISION_THRESHOLD = 0.05
+COACD_EXCLUDE_CATEGORIES = {"floor", "wall", "ceiling"}
 
 # TODO: Make this use a local version if necessary.
 # from dask_kubernetes.operator import KubeCluster
@@ -79,7 +80,7 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client):
+def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client, use_coacd=True):
     # This is the function that sends VHACD requests to a worker. It needs to read the contents
     # of the source file into memory, transmit that to the worker, receive the contents of the
     # result file and save those at the destination path.
@@ -88,7 +89,7 @@ def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client):
     # data_future = client.scatter(file_bytes)
     data_future = file_bytes
     vhacd_future = dask_client.submit(
-        get_coacd_mesh,
+        get_coacd_mesh if use_coacd else get_vhacd_mesh,
         data_future,
         key=obj_file_path,
         retries=1)
@@ -380,7 +381,14 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         
         # Generate collision mesh
         collision_shape_file = obj_link_collision_mesh_folder / obj_relative_path
-        run_remote_convex_decomposition(str(visual_shape_file.absolute()), str(collision_shape_file.absolute()), dask_client)
+
+        # Run convex decomposition. Don't use COACD for wall meshes.
+        use_coacd = category_name not in COACD_EXCLUDE_CATEGORIES
+        run_remote_convex_decomposition(
+            str(visual_shape_file.absolute()),
+            str(collision_shape_file.absolute()),
+            dask_client,
+            use_coacd=use_coacd)
 
         # Store the final meshes
         G.nodes[link_node]["visual_mesh"] = canonical_mesh.copy()
