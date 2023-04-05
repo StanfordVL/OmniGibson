@@ -1,6 +1,9 @@
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
-from omnigibson.systems import *
+import numpy as np
+import omnigibson as og
+from omnigibson.macros import gm
+from omnigibson.systems import get_system, is_system_active
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.object_states import *
 import omnigibson.utils.transform_utils as T
@@ -8,7 +11,8 @@ from omnigibson.utils.usd_utils import BoundingBoxAPI
 
 
 # Tuple of attributes of objects created in transitions.
-_attrs_fields = ["category", "model", "name", "scale", "obj", "pos", "orn"]
+# `states` field is dict mapping object state class to arguments to pass to setter for that class
+_attrs_fields = ["category", "model", "name", "scale", "obj", "pos", "orn", "bb_pos", "bb_orn", "states"]
 ObjectAttrs = namedtuple(
     "ObjectAttrs", _attrs_fields, defaults=(None,) * len(_attrs_fields))
 
@@ -256,9 +260,6 @@ class SlicingRule(BaseTransitionRule):
 
     def condition(self, individual_objects, group_objects):
         slicer_obj, sliced_obj = individual_objects["slicer"], individual_objects["sliceable"]
-        slicer_position = slicer_obj.states[Slicer].get_link_position()
-        if slicer_position is None:
-            return False
 
         contact_list = slicer_obj.states[ContactBodies].get_value()
         sliced_links = set(sliced_obj.links.values())
@@ -266,7 +267,7 @@ class SlicingRule(BaseTransitionRule):
             return False
 
         # Slicer may contact the same body in multiple points, so cut once since removing the object from the simulator
-        return Sliced in sliced_obj.states and not sliced_obj.states[Sliced].get_value()
+        return not sliced_obj.states[Sliced].get_value()
 
     def transition(self, individual_objects, group_objects):
         slicer_obj, sliced_obj = individual_objects["slicer"], individual_objects["sliceable"]
@@ -277,41 +278,93 @@ class SlicingRule(BaseTransitionRule):
         t_results = TransitionResults()
 
         # Load object parts.
-        for _, part_idx in enumerate(sliced_obj.metadata["object_parts"]):
-            # List of dicts gets replaced by {'0':dict, '1':dict, ...}.
-            part = sliced_obj.metadata["object_parts"][part_idx]
-            part_category = part["category"]
-            part_model = part["model"]
+        for part_idx, part in sliced_obj.metadata["object_parts"].items():
+            # List of dicts gets replaced by {'0':dict, '1':dict, ...}
+
+            # Get bounding box info
+            part_bb_pos = np.array(part["bb_pos"])
+            part_bb_orn = np.array(part["bb_orn"])
+
+            # Determine the relative scale to apply to the object part from the original object
+            # Note that proper (rotated) scaling can only be applied when the relative orientation of
+            # the object part is a multiple of 90 degrees wrt the parent object, so we assert that here
+            # Check by making sure the quaternion is some permutation of +/- (1, 0, 0, 0),
+            # +/- (0.707, 0.707, 0, 0), or +/- (0.5, 0.5, 0.5, 0.5)
+            # Because orientations are all normalized (same L2-norm), every orientation should have a unique L1-norm
+            # So we check the L1-norm of the absolute value of the orientation as a proxy for verifying these values
+            assert np.any(np.isclose(np.abs(part_bb_orn).sum(), np.array([1.0, 1.414, 2.0]), atol=1e-3)), \
+                "Sliceable objects should only have relative object part orientations that are factors of 90 degrees!"
+
             # Scale the offset accordingly.
-            part_pos = part["pos"] * sliced_obj.scale
-            part_orn = part["orn"]
-            part_obj_name = f"{sliced_obj.name}_part_{part_idx}"
-            model_root_path = f"{og_dataset_path}/objects/{part_category}/{part_model}"
-            usd_path = f"{model_root_path}/usd/{part_model}.usd"
+            scale = np.abs(T.quat2mat(part_bb_orn) @ sliced_obj.scale)
 
-            # Calculate global part pose.
-            part_pos = np.array(part_pos) + pos
-            part_orn = T.quat_multiply(np.array(part_orn), orn)
+            # Calculate global part bounding box pose.
+            part_bb_pos = pos + T.quat2mat(orn) @ (part_bb_pos * scale)
+            part_bb_orn = T.quat_multiply(orn, part_bb_orn)
 
-            # Circular import.
+            # Avoid circular imports
             from omnigibson.objects.dataset_object import DatasetObject
 
+            part_obj_name = f"{sliced_obj.name}_part_{part_idx}"
             part_obj = DatasetObject(
                 prim_path=f"/World/{part_obj_name}",
-                usd_path=usd_path,
-                category=part_category,
                 name=part_obj_name,
-                scale=sliced_obj.scale,
-                abilities={}
+                category=part["category"],
+                model=part["model"],
+                bounding_box=part["bb_size"] * scale,   # equiv. to scale=(part["bb_size"] / self.native_bbox) * (scale)
             )
 
             # Add the new object to the results.
             new_obj_attrs = ObjectAttrs(
-                obj=part_obj, pos=np.array(part_pos), orn=np.array(part_orn))
+                obj=part_obj,
+                bb_pos=part_bb_pos,
+                bb_orn=part_bb_orn,
+                states={Sliced: (True,)},
+            )
             t_results.add.append(new_obj_attrs)
 
         # Delete original object from stage.
         t_results.remove.append(sliced_obj)
+
+        return t_results
+
+class DicingRule(BaseTransitionRule):
+    """
+    Transition rule to apply to diceable / slicer object pairs.
+    """
+
+    def __init__(self):
+        # Define an individual filter dictionary so we can track all valid combos of slicer - sliceable
+        individual_filters = {ability: AbilityFilter(ability) for ability in ("diceable", "slicer")}
+
+        # Run super
+        super().__init__(individual_filters=individual_filters)
+
+    def condition(self, individual_objects, group_objects):
+        slicer_obj, diced_obj = individual_objects["slicer"], individual_objects["diceable"]
+        slicer_position = slicer_obj.states[Slicer].link.get_position()
+        if slicer_position is None:
+            return False
+
+        contact_list = slicer_obj.states[ContactBodies].get_value()
+        sliced_links = set(diced_obj.links.values())
+        if contact_list.isdisjoint(sliced_links):
+            return False
+
+        # Return if the diceable object still exists
+        return True
+
+    def transition(self, individual_objects, group_objects):
+        t_results = TransitionResults()
+
+        slicer_obj, diced_obj = individual_objects["slicer"], individual_objects["diceable"]
+
+        system_name = f"diced_{diced_obj.category}"
+        system = get_system(system_name)
+        system.generate_particles_from_link(diced_obj, diced_obj.root_link, use_visual_meshes=False)
+
+        # Delete original object from stage.
+        t_results.remove.append(diced_obj)
 
         return t_results
 
@@ -386,7 +439,7 @@ class ContainerRule(BaseTransitionRule):
         self._counter += 1
         scale = self.obj_attrs.scale
 
-        model_root_path = f"{og_dataset_path}/objects/{category}/{model}"
+        model_root_path = f"{gm.DATASET_PATH}/objects/{category}/{model}"
         usd_path = f"{model_root_path}/usd/{model}.usd"
 
         final_obj = DatasetObject(
@@ -464,7 +517,7 @@ class ContainerGarbageRule(BaseTransitionRule):
         self._counter += 1
         scale = self.obj_attrs.scale
 
-        model_root_path = f"{og_dataset_path}/objects/{category}/{model}"
+        model_root_path = f"{gm.DATASET_PATH}/objects/{category}/{model}"
         usd_path = f"{model_root_path}/usd/{model}.usd"
 
         garbage_obj = DatasetObject(
@@ -495,9 +548,9 @@ class BlenderRule(BaseTransitionRule):
         Transition rule to apply when objects are blended together
 
         Args:
-            output_system (PhysicalParticleSystem): Fluid to generate once all the input ingredients are blended
-            particle_requirements (None or dict): If specified, should map fluid system to the minimum number of fluid
-                particles required in order to successfully blend
+            output_system (str): Name of the physical particle to generate once all the input ingredients are blended
+            particle_requirements (None or dict): If specified, should map physical particle system name to the minimum
+                number of physical particles required in order to successfully blend
             obj_requirements (None or dict): If specified, should map object category names to minimum number of that
                 type of object rqeuired in order to successfully blend
         """
@@ -536,15 +589,18 @@ class BlenderRule(BaseTransitionRule):
             # We mutate the group_objects in place so that we only keep the ones inside the blender
             group_objects[obj_category] = inside_objs
 
-        # Check whether we have sufficient fluids as well
-        for system, n_min_particles in self.particle_requirements.items():
-            if len(system.particle_instancers) > 0:
-                particle_positions = np.concatenate([inst.particle_positions for inst in system.particle_instancers.values()], axis=0)
-                n_particles_in_volume = np.sum(self._check_in_volume[blender.name](particle_positions))
-                if n_particles_in_volume < n_min_particles:
-                    return False
-            else:
-                # Fluid doesn't even exist yet, so we know the condition is not met
+        # Check whether we have sufficient physical particles as well
+        for system_name, n_min_particles in self.particle_requirements.items():
+            if not is_system_active(system_name):
+                return False
+
+            system = get_system(system_name)
+            if system.n_particles == 0:
+                return False
+
+            particle_positions = np.concatenate([inst.particle_positions for inst in system.particle_instancers.values()], axis=0)
+            n_particles_in_volume = np.sum(self._check_in_volume[blender.name](particle_positions))
+            if n_particles_in_volume < n_min_particles:
                 return False
 
         # Our condition is whether we have sufficient ingredients or not
@@ -558,17 +614,16 @@ class BlenderRule(BaseTransitionRule):
             for j, obj in enumerate(objs):
                 t_results.remove.append(obj)
 
-        # Hide all fluid particles that are inside the blender
-        for system in self.particle_requirements.keys():
+        # Remove all physical particles that are inside the blender
+        for system_name in self.particle_requirements.keys():
+            system = get_system(system_name)
             # No need to check for whether particle instancers exist because they must due to @self.condition passing!
             for inst in system.particle_instancers.values():
                 indices = self._check_in_volume[blender.name](inst.particle_positions).nonzero()[0]
-                current_visibilities = inst.particle_visibilities
-                current_visibilities[indices] = 0
-                inst.particle_visibilities = current_visibilities
+                inst.remove_particles(idxs=indices)
 
-        # Spawn in blended fluid!
-        blender.states[Filled].set_value(self.output_system, True)
+        # Spawn in blended physical particles!
+        blender.states[Filled].set_value(get_system(self.output_system), True)
 
         return t_results
 
@@ -588,10 +643,11 @@ class BlenderRule(BaseTransitionRule):
 # dynamically
 DEFAULT_RULES = (
     SlicingRule(),
+    DicingRule(),
     # Strawberry smoothie
     BlenderRule(
-        output_system=StrawberrySmoothieSystem,
-        particle_requirements={MilkSystem: 10},
+        output_system="strawberry_smoothie",
+        particle_requirements={"milk": 10},
         obj_requirements={"strawberry": 5, "ice_cube": 5},
     ),
 )

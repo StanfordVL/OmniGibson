@@ -1,24 +1,31 @@
-import logging
 import os
 import matplotlib.pyplot as plt
 import omni
 from omni.isaac.core.utils.prims import get_prim_at_path
 
 import omnigibson as og
-import omnigibson.objects
 from omnigibson.macros import gm
-from omnigibson.systems.system_base import SYSTEMS_REGISTRY
-from omnigibson.systems.particle_system_base import BaseParticleSystem
+from omnigibson.systems.system_base import BaseSystem, REGISTERED_SYSTEMS
 from omnigibson.utils.constants import SemanticClass
-from omnigibson.utils.python_utils import classproperty, subclass_factory
+from omnigibson.utils.python_utils import classproperty, subclass_factory, snake_case_to_camel_case
 from omnigibson.utils.sampling_utils import sample_cuboid_on_object_symmetric_bimodal_distribution
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import FlatcacheAPI
 from omnigibson.prims.geom_prim import VisualGeomPrim
 import numpy as np
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
-class MacroParticleSystem(BaseParticleSystem):
+def is_visual_particle_system(system_name):
+    assert system_name in REGISTERED_SYSTEMS, f"System {system_name} not in REGISTERED_SYSTEMS."
+    system = REGISTERED_SYSTEMS[system_name]
+    return issubclass(system, VisualParticleSystem)
+
+
+class MacroParticleSystem(BaseSystem):
     """
     Global system for modeling "macro" level particles, e.g.: dirt, dust, etc.
     """
@@ -34,29 +41,56 @@ class MacroParticleSystem(BaseParticleSystem):
     min_scale = None              # (x,y,z) scaling
     max_scale = None              # (x,y,z) scaling
 
-    # Max particle identification number -- this monotonically increases until reset() is called
-    max_particle_idn = None
-
     # Color associated with this system (NOTE: external queries should call cls.color)
     _color = None
 
     @classmethod
-    def initialize(cls, simulator):
+    def initialize(cls):
         # Run super method first
-        super().initialize(simulator=simulator)
+        super().initialize()
 
         # Initialize mutable class variables so they don't automatically get overridden by children classes
         cls.particles = dict()
         cls.min_scale = np.ones(3)
         cls.max_scale = np.ones(3)
-        cls.max_particle_idn = -1
 
-        # Load the particle template
+        # Create the system prim -- this is merely a scope prim
+        og.sim.stage.DefinePrim(f"/World/{cls.name}", "Scope")
+
+        # Load the particle template, and make it kinematic only because it's not interacting with anything
         particle_template = cls._create_particle_template()
-        simulator.import_object(obj=particle_template, register=False, auto_initialize=True)
+        og.sim.import_object(obj=particle_template, register=False, auto_initialize=True)
+        particle_template.kinematic_only = True
+
+        # Make sure there is no ambiguity about which mesh to use as the particle from this template
+        assert len(particle_template.links) == 1, "MacroParticleSystem particle template has more than one link"
+        assert len(particle_template.root_link.visual_meshes) == 1, "MacroParticleSystem particle template has more than one visual mesh"
 
         # Class particle objet is assumed to be the first and only visual mesh belonging to the root link
-        cls.set_particle_template_object(obj=list(particle_template.root_link.visual_meshes.values())[0])
+        template = list(particle_template.root_link.visual_meshes.values())[0]
+        template.material.shader_force_populate(render=True)
+        cls.set_particle_template_object(obj=template)
+
+    @classproperty
+    def particle_idns(cls):
+        """
+        Returns:
+            set: idn of all the particles across all groups.
+        """
+        return {cls.particle_name2idn(particle_name) for particle_name in cls.particles}
+
+    @classproperty
+    def next_available_particle_idn(cls):
+        """
+        Returns:
+            int: the next available particle idn across all groups.
+        """
+        if cls.n_particles == 0:
+            return 0
+        else:
+            # We don't fill in any holes, just simply use the next subsequent integer after the largest
+            # current ID
+            return max(cls.particle_idns) + 1
 
     @classmethod
     def _create_particle_template(cls):
@@ -73,9 +107,11 @@ class MacroParticleSystem(BaseParticleSystem):
 
     @classmethod
     def reset(cls):
+        # Call super first
+        super().reset()
+
         # Reset all internal variables
         cls.remove_all_particles()
-        cls.max_particle_idn = -1
 
     @classproperty
     def n_particles(cls):
@@ -96,15 +132,14 @@ class MacroParticleSystem(BaseParticleSystem):
 
     @classproperty
     def state_size(cls):
-        # We have max_particle_idn (1), n_particles (1), each particle pose (7*n), scale (3*n), and
+        # We have n_particles (1), each particle pose (7*n), scale (3*n), and
         # possibly template pose (7), and template scale (3)
-        state_size = 10 * cls.n_particles + 2
+        state_size = 10 * cls.n_particles + 1
         return state_size if cls.particle_object is None else state_size + 10
 
     @classmethod
     def _dump_state(cls):
         return dict(
-            max_particle_idn=cls.max_particle_idn,
             n_particles=cls.n_particles,
             poses=[particle.get_local_pose() for particle in cls.particles.values()],
             scales=[particle.scale for particle in cls.particles.values()],
@@ -124,8 +159,6 @@ class MacroParticleSystem(BaseParticleSystem):
         assert cls.n_particles == state["n_particles"], f"Inconsistent number of particles found when loading " \
                                                         f"particles state! Current number: {cls.n_particles}, " \
                                                         f"loaded number: {state['n_particles']}"
-        cls.max_particle_idn = state["max_particle_idn"]
-
         # Load the poses and scales
         for particle, pose, scale in zip(cls.particles.values(), state["poses"], state["scales"]):
             particle.set_local_pose(*pose)
@@ -140,7 +173,6 @@ class MacroParticleSystem(BaseParticleSystem):
     def _serialize(cls, state):
         # Array is n_particles + poses for all particles, then the template info
         states_flat = [
-            [state["max_particle_idn"]],
             [state["n_particles"]],
             *[np.concatenate(pose) for pose in state["poses"]],
             *state["scales"]
@@ -156,12 +188,11 @@ class MacroParticleSystem(BaseParticleSystem):
     def _deserialize(cls, state):
         # First index is number of particles, rest are the individual particle poses
         state_dict = dict()
-        state_dict["max_particle_idn"] = state[0]
-        n_particles = int(state[1])
+        n_particles = int(state[0])
         state_dict["n_particles"] = n_particles
 
         poses, scales = [], []
-        pose_offset_idx = 2                                 # This is where the pose info begins in the flattened array
+        pose_offset_idx = 1                                 # This is where the pose info begins in the flattened array
         scale_offset_idx = n_particles * 7 + pose_offset_idx  # This is where the scale info begins in the flattened array
         for i in range(n_particles):
             poses.append([
@@ -173,8 +204,8 @@ class MacroParticleSystem(BaseParticleSystem):
         state_dict["poses"] = poses
         state_dict["scales"] = scales
 
-        # Update idx -- two from max_n_particles and n_particles + 10*n_particles for pose + scale
-        idx = 2 + n_particles * 10
+        # Update idx - 1 for n_particles + 10*n_particles for pose + scale
+        idx = 1 + n_particles * 10
 
         template_pose, template_scale = None, None
         # If our state size is larger than the current index we're at, this corresponds to the template info
@@ -251,7 +282,7 @@ class MacroParticleSystem(BaseParticleSystem):
             XFormPrim: Newly created particle instance, which is added internally as well
         """
         # Generate the new particle
-        name = cls.particle_idn2name(idn=cls.get_next_particle_unique_idn() if idn is None else idn)
+        name = cls.particle_idn2name(idn=cls.next_available_particle_idn if idn is None else idn)
         # Make sure name doesn't already exist
         assert name not in cls.particles.keys(), f"Cannot create particle with name {name} because it already exists!"
         new_particle = cls._load_new_particle(prim_path=f"{prim_path}/{name}", name=name)
@@ -266,9 +297,6 @@ class MacroParticleSystem(BaseParticleSystem):
         # Track this particle as well
         cls.particles[new_particle.name] = new_particle
 
-        # Increment idn counter
-        cls.max_particle_idn += 1
-
         return new_particle
 
     @classmethod
@@ -282,7 +310,7 @@ class MacroParticleSystem(BaseParticleSystem):
         assert name in cls.particles, f"Got invalid name for particle to remove {name}"
 
         particle = cls.particles.pop(name)
-        particle.remove(simulator=cls.simulator)
+        particle.remove()
 
     @classmethod
     def _load_new_particle(cls, prim_path, name):
@@ -325,15 +353,6 @@ class MacroParticleSystem(BaseParticleSystem):
             f"Particle idn must be an integer when checking name! Got: {idn}. Type: {type(idn)}"
         return f"{cls.particle_name_prefix}{idn}"
 
-    @classmethod
-    def get_next_particle_unique_idn(cls):
-        """
-        Returns:
-            int: Minimum unique ID number greater than zero that can be assigned to a new particle
-                Note: This is
-        """
-        return cls.max_particle_idn + 1
-
     @classproperty
     def color(cls):
         return np.array(cls._color)
@@ -353,12 +372,13 @@ class VisualParticleSystem(MacroParticleSystem):
     # Maps particle name to dict of {obj, link}
     _particles_info = None
 
+    # Pre-cached information about visual particles so that we have efficient runtime computations
+    # Maps particle name to local pose matrix for computing global poses for the particle
+    _particles_local_mat = None
+
     # Default behavior for this class -- whether to clip generated particles halfway into objects when sampling
     # their locations on the surface of the given object
     _CLIP_INTO_OBJECTS = False
-
-    # Default number of particles to sample per group
-    _N_PARTICLES_PER_GROUP = 20
 
     # Default parameters for sampling particle locations
     # See omnigibson/utils/sampling_utils.py for how they are used.
@@ -369,14 +389,15 @@ class VisualParticleSystem(MacroParticleSystem):
     _SAMPLING_MAX_ATTEMPTS = 20
 
     @classmethod
-    def initialize(cls, simulator):
+    def initialize(cls):
         # Run super method first
-        super().initialize(simulator=simulator)
+        super().initialize()
 
         # Initialize mutable class variables so they don't automatically get overridden by children classes
         cls._group_particles = dict()
         cls._group_objects = dict()
         cls._particles_info = dict()
+        cls._particles_local_mat = dict()
 
     @classproperty
     def groups(cls):
@@ -418,11 +439,6 @@ class VisualParticleSystem(MacroParticleSystem):
         super().set_particle_template_object(obj=obj)
 
     @classmethod
-    def remove_all_particles(cls):
-        # Run super method first
-        super().remove_all_particles()
-
-    @classmethod
     def clear(cls):
         # Run super method first
         super().clear()
@@ -431,6 +447,7 @@ class VisualParticleSystem(MacroParticleSystem):
         cls._group_particles = dict()
         cls._group_objects = dict()
         cls._particles_info = dict()
+        cls._particles_local_mat = dict()
 
     @classmethod
     def remove_particle(cls, name):
@@ -446,6 +463,7 @@ class VisualParticleSystem(MacroParticleSystem):
         # Remove this particle from its respective group as well
         cls._group_particles[cls._particles_info[name]["obj"].name].pop(name)
         cls._particles_info.pop(name)
+        cls._particles_local_mat.pop(name)
 
     @classmethod
     def remove_all_group_particles(cls, group):
@@ -658,23 +676,28 @@ class VisualParticleSystem(MacroParticleSystem):
             cls._group_particles[group][particle.name] = particle
             cls._particles_info[particle.name] = dict(obj=cls._group_objects[group], link=link)
 
+            # Update particle local matrix
+            cls._particles_local_mat[particle.name] = cls._compute_particle_local_mat(name=particle.name)
+
     @classmethod
-    def generate_group_particles_on_object(cls, group, n_particles=None, min_particles_for_success=1):
+    def generate_group_particles_on_object(cls, group, max_samples, min_samples_for_success=1):
         """
-        Generates @n_particles new particle objects and samples their locations on the surface of object @obj. Note
-        that if any objects are in the group already, they will be removed
+        Generates @max_samples new particle objects and samples their locations on the surface of object @obj. Note
+        that if any particles are in the group already, they will be removed
 
         Args:
             group (str): Object on which to sample particle locations
-            n_particles (None or int): Number of particles to sample on the surface of @obj. If None, default number
-                will be used (cls._N_PARTICLES_PER_GROUP)
-            min_particles_for_success (int): Minimum number of particles required to be sampled successfully in order
+            max_samples (int): Maximum number of particles to sample
+            min_samples_for_success (int): Minimum number of particles required to be sampled successfully in order
                 for this generation process to be considered successful
 
         Returns:
             bool: True if enough particles were generated successfully (number of successfully sampled points >=
-                min_particles_for_success), otherwise False
+                min_samples_for_success), otherwise False
         """
+
+        assert max_samples >= min_samples_for_success, "number of particles to sample should exceed the min for success"
+
         # Make sure the group exists
         cls._validate_group(group=group)
 
@@ -684,26 +707,24 @@ class VisualParticleSystem(MacroParticleSystem):
         # Generate requested number of particles
         obj = cls._group_objects[group]
 
-        # Sample scales of the particles to generate
-        n_particles = cls._N_PARTICLES_PER_GROUP if n_particles is None else n_particles
-
         # Sample scales and corresponding bbox extents
-        scales = cls.sample_scales(group=group, n=n_particles)
+        scales = cls.sample_scales(group=group, n=max_samples)
         # For sampling particle positions, we need the global bbox extents, NOT the local extents
         # which is what we would get naively if we directly use @scales
         avg_scale = np.cbrt(np.product(obj.scale))
-        bbox_extents_global = [(cls.particle_object.aabb_extent * scale * avg_scale).tolist() for scale in scales]
+        bbox_extents_global = scales * cls.particle_object.aabb_extent.reshape(1, 3) * avg_scale
 
         # Sample locations for all particles
         # TODO: Does simulation need to play at this point in time? Answer: yes
         results = sample_cuboid_on_object_symmetric_bimodal_distribution(
             obj=obj,
-            num_samples=n_particles,
+            num_samples=max_samples,
             cuboid_dimensions=bbox_extents_global,
             bimodal_mean_fraction=cls._SAMPLING_BIMODAL_MEAN_FRACTION,
             bimodal_stdev_fraction=cls._SAMPLING_BIMODAL_STDEV_FRACTION,
             axis_probabilities=cls._SAMPLING_AXIS_PROBABILITIES,
             undo_cuboid_bottom_padding=True,
+            verify_cuboid_empty=False,
             aabb_offset=cls._SAMPLING_AABB_OFFSET,
             max_sampling_attempts=cls._SAMPLING_MAX_ATTEMPTS,
             refuse_downwards=True,
@@ -719,7 +740,7 @@ class VisualParticleSystem(MacroParticleSystem):
                 particle_scales.append(scale)
                 link_prim_paths.append(hit_link)
 
-        success = len(positions) >= min_particles_for_success
+        success = len(positions) >= min_samples_for_success
         # If we generated a sufficient number of points, generate them in the simulator
         if success:
             cls.generate_group_particles(
@@ -733,10 +754,45 @@ class VisualParticleSystem(MacroParticleSystem):
         return success
 
     @classmethod
+    def get_particles_position_orientation(cls):
+        """
+        Computes all particles' global positions and orientations that belong to this system
+
+        Note: This is more optimized than doing a for loop with self.get_particle_position_orientation()
+
+        Returns:
+            2-tuple:
+                - (n, 3)-array: per-particle (x,y,z) position in the world frame
+                - (n, 4)-array: per-particle (x,y,z,w) quaternion orientation in the world frame
+        """
+        # Iterate over all particles and compute link tfs programmatically, then batch the matrix transform
+        link_tfs = dict()
+        link_tfs_batch = np.zeros((cls.n_particles, 4, 4))
+        particle_local_poses_batch = np.zeros_like(link_tfs_batch)
+        for i, name in enumerate(cls.particles):
+            link = cls._particles_info[name]["link"]
+            if link in link_tfs:
+                link_tf = link_tfs[link]
+            else:
+                link_tf = T.pose2mat(link.get_position_orientation())
+                link_tfs[link] = link_tf
+            link_tfs_batch[i] = link_tf
+            particle_local_poses_batch[i] = cls._particles_local_mat[name]
+
+        # Compute once
+        global_poses = np.matmul(link_tfs_batch, particle_local_poses_batch)
+
+        # Decompose back into positions and orientations
+        return global_poses[:, :3, 3], T.mat2quat(global_poses[:, :3, :3])
+
+    @classmethod
     def get_particle_position_orientation(cls, name):
         """
         Compute particle's global position and orientation. This automatically takes into account the relative
         pose w.r.t. its parent link and the global pose of that parent link.
+
+        Args:
+            name (str): Name of the particle to compute global position and orientation for
 
         Returns:
             2-tuple:
@@ -744,14 +800,29 @@ class VisualParticleSystem(MacroParticleSystem):
                 - 4-array: (x,y,z,w) quaternion orientation in the world frame
         """
         # First, get local pose, scale it by the parent link's scale, and then convert into a matrix
-        particle = cls.particles[name]
         parent_link = cls._particles_info[name]["link"]
-        local_pos, local_quat = particle.get_local_pose()
-        local_mat = T.pose2mat((parent_link.scale * local_pos, local_quat))
+        local_mat = cls._particles_local_mat[name]
         link_tf = T.pose2mat(parent_link.get_position_orientation())
 
         # Multiply the local pose by the link's global transform, then return as pos, quat tuple
-        return T.mat2pose(link_tf @ local_mat)
+        val = T.mat2pose(link_tf @ local_mat)
+        return val
+
+    @classmethod
+    def _compute_particle_local_mat(cls, name):
+        """
+        Computes particle @name's local transform as a homogeneous 4x4 matrix
+
+        Args:
+            name (str): Name of the particle to compute local transform matrix for
+
+        Returns:
+            np.array: (4, 4) homogeneous transform matrix
+        """
+        particle = cls.particles[name]
+        parent_link = cls._particles_info[name]["link"]
+        local_pos, local_quat = particle.get_local_pose()
+        return T.pose2mat((parent_link.scale * local_pos, local_quat))
 
     @classmethod
     def _validate_group(cls, group):
@@ -788,10 +859,10 @@ class VisualParticleSystem(MacroParticleSystem):
             "link_names": link_names,
         }
             for obj, p_idns, link_names in
-            zip(group_objects, particle_idns, particle_attached_link_names) if obj is not None}
+            zip(group_objects, particle_idns, particle_attached_link_names)}
 
         current_group_names = cls.groups
-        desired_group_names = set(obj.name for obj in group_objects if obj is not None)
+        desired_group_names = set(obj.name for obj in group_objects)
         groups_to_delete = current_group_names - desired_group_names
         groups_to_create = desired_group_names - current_group_names
         common_groups = current_group_names.intersection(desired_group_names)
@@ -800,7 +871,7 @@ class VisualParticleSystem(MacroParticleSystem):
         for name in common_groups:
             info = name_to_info_mapping[name]
             if cls.num_group_particles(group=name) != info["n_particles"]:
-                logging.debug(f"Got mismatch in particle group {name} when syncing, "
+                log.debug(f"Got mismatch in particle group {name} when syncing, "
                                 f"deleting and recreating group now.")
                 # Add this group to both the delete and creation pile
                 groups_to_delete.add(name)
@@ -812,7 +883,7 @@ class VisualParticleSystem(MacroParticleSystem):
 
         # Create any groups we don't already have
         for name in groups_to_create:
-            obj = cls.simulator.scene.object_registry("name", name)
+            obj = og.sim.scene.object_registry("name", name)
             info = name_to_info_mapping[name]
             cls.create_attachment_group(obj=obj)
 
@@ -826,7 +897,7 @@ class VisualParticleSystem(MacroParticleSystem):
                 cls._particles_info[particle.name] = dict(obj=obj, link=obj.links[link_name])
 
     @classmethod
-    def create(cls, particle_name, n_particles_per_group, create_particle_template, min_scale=None, max_scale=None, **kwargs):
+    def create(cls, name, create_particle_template, min_scale=None, max_scale=None, **kwargs):
         """
         Utility function to programmatically generate monolithic visual particle system classes.
 
@@ -836,8 +907,7 @@ class VisualParticleSystem(MacroParticleSystem):
             Use: super(cls).__get__(cls).<METHOD_NAME>(<KWARGS>)
 
         Args:
-            particle_name (str): Name of the visual particles
-            n_particles_per_group (int): Number of particles to generate per group of these particles
+            name (str): Name of the visual particles, in snake case.
             min_scale (None or 3-array): If specified, sets the minumum bound for the visual particles' relative scale.
                 Else, defaults to 1
             max_scale (None or 3-array): If specified, sets the maximum bound for the visual particles' relative scale.
@@ -866,10 +936,10 @@ class VisualParticleSystem(MacroParticleSystem):
             return True
 
         @classmethod
-        def cm_initialize(cls, simulator):
+        def cm_initialize(cls):
             # Run super first (we have to use a bit esoteric syntax in order to accommodate this procedural method for
             # using super calls -- cf. https://stackoverflow.com/questions/22403897/what-does-it-mean-by-the-super-object-returned-is-unbound-in-python
-            super(cls).__get__(cls).initialize(simulator=simulator)
+            super(cls).__get__(cls).initialize()
 
             # Potentially override the min / max scales
             if min_scale is not None:
@@ -879,17 +949,15 @@ class VisualParticleSystem(MacroParticleSystem):
 
         @classmethod
         def cm_create_particle_template(cls):
-            name = f"{particle_name}_template"
-            return create_particle_template(prim_path=f"/World/{cls.name}/{name}", name=name)
+            return create_particle_template(prim_path=f"{cls.prim_path}/template", name=f"{cls.name}_template")
 
         # Add to any other params specified
         kwargs["_register_system"] = cp_register_system
-        kwargs["_N_PARTICLES_PER_GROUP"] = n_particles_per_group
         kwargs["initialize"] = cm_initialize
         kwargs["_create_particle_template"] = cm_create_particle_template
 
         # Create and return the class
-        return subclass_factory(name=f"{particle_name}System", base_classes=cls, **kwargs)
+        return subclass_factory(name=snake_case_to_camel_case(name), base_classes=cls, **kwargs)
 
     @classmethod
     def _dump_state(cls):
@@ -919,12 +987,9 @@ class VisualParticleSystem(MacroParticleSystem):
         Args:
             state (dict): Keyword-mapped states of this object to set
         """
-        # Make sure max particle index is updated
-        cls.max_particle_idn = state["max_particle_idn"]
-
         # Synchronize particle groups
         cls._sync_particle_groups(
-            group_objects=[cls.simulator.scene.object_registry("uuid", info["particle_attached_obj_uuid"], None)
+            group_objects=[og.sim.scene.object_registry("uuid", info["particle_attached_obj_uuid"])
                            for info in state["groups"].values()],
             particle_idns=[info["particle_idns"] for info in state["groups"].values()],
             particle_attached_link_names=[info["particle_attached_link_names"] for info in state["groups"].values()],
@@ -937,6 +1002,10 @@ class VisualParticleSystem(MacroParticleSystem):
 
         # Run super
         super()._load_state(state=state)
+
+        # Make sure we update all the local transforms
+        for name in cls.particles:
+            cls._particles_local_mat[name] = cls._compute_particle_local_mat(name=name)
 
     @classmethod
     def _serialize(cls, state):
@@ -966,7 +1035,7 @@ class VisualParticleSystem(MacroParticleSystem):
         idx = 1
         for i in range(n_groups):
             obj_uuid, n_particles = int(state[idx]), int(state[idx + 1])
-            obj = cls.simulator.scene.object_registry("uuid", obj_uuid)
+            obj = og.sim.scene.object_registry("uuid", obj_uuid)
             group_obj_id2link = {i: link_name for i, link_name in enumerate(obj.links.keys())}
             group_objs.append(obj)
             groups_dict[obj.name] = dict(
@@ -976,7 +1045,7 @@ class VisualParticleSystem(MacroParticleSystem):
                 particle_attached_link_names=[group_obj_id2link[int(idn)] for idn in state[idx + 2 + n_particles : idx + 2 + n_particles * 2]],
             )
             idx += 2 + n_particles * 2
-        logging.debug(f"Syncing {cls.name} particles with {n_groups} groups..")
+        log.debug(f"Syncing {cls.name} particles with {n_groups} groups..")
         cls._sync_particle_groups(
             group_objects=group_objs,
             particle_idns=[group_info["particle_idns"] for group_info in groups_dict.values()],
@@ -990,7 +1059,7 @@ class VisualParticleSystem(MacroParticleSystem):
         return state_dict, idx + idx_super
 
 
-# We need to define an overriding method for StainSystem so that the stain scaling values are modified based on
+# We need to define an overriding method for stain so that the stain scaling values are modified based on
 # the parent's native object size
 @classmethod
 def stain_update_particle_scaling(cls, group):
@@ -1020,10 +1089,9 @@ def stain_update_particle_scaling(cls, group):
     return minimum, maximum
 
 
-DustSystem = VisualParticleSystem.create(
-    particle_name="Dust",
-    n_particles_per_group=20,
-    create_particle_template=lambda prim_path, name: omnigibson.objects.PrimitiveObject(
+VisualParticleSystem.create(
+    name="dust",
+    create_particle_template=lambda prim_path, name: og.objects.PrimitiveObject(
         prim_path=prim_path,
         primitive_type="Cube",
         name=name,
@@ -1038,12 +1106,11 @@ DustSystem = VisualParticleSystem.create(
 )
 
 
-StainSystem = VisualParticleSystem.create(
-    particle_name="Stain",
-    n_particles_per_group=20,
-    create_particle_template=lambda prim_path, name: omnigibson.objects.USDObject(
+VisualParticleSystem.create(
+    name="stain",
+    create_particle_template=lambda prim_path, name: og.objects.USDObject(
         prim_path=prim_path,
-        usd_path=os.path.join(og.assets_path, "models", "stain", "stain.usd"),
+        usd_path=os.path.join(gm.ASSET_PATH, "models", "stain", "stain.usd"),
         name=name,
         class_id=SemanticClass.DIRT,
         visible=False,
@@ -1065,9 +1132,8 @@ StainSystem = VisualParticleSystem.create(
 
 
 # GrassSystem = VisualParticleSystem.create(
-#     particle_name="Grass",
-#     n_particles_per_group=20,
-#     create_particle_template=lambda prim_path, name: omnigibson.objects.DatasetObject(
+#     name="Grass",
+#     create_particle_template=lambda prim_path, name: og.objects.DatasetObject(
 #         prim_path=prim_path,
 #         name=name,
 #         category="grass_patch",

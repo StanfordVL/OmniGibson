@@ -11,12 +11,13 @@ import omni
 from omni.isaac.core.utils.prims import get_prim_property, set_prim_property, \
     get_prim_parent, get_prim_at_path
 
+import omnigibson as og
 from omnigibson.prims.cloth_prim import ClothPrim
 from omnigibson.prims.joint_prim import JointPrim
 from omnigibson.prims.rigid_prim import RigidPrim
 from omnigibson.prims.xform_prim import XFormPrim
-from omnigibson.utils.sim_utils import check_collision
 from omnigibson.utils.constants import PrimType, GEOM_TYPES
+from omnigibson.utils.ui_utils import suppress_omni_log
 from omnigibson.macros import gm
 
 
@@ -53,6 +54,7 @@ class EntityPrim(XFormPrim):
         self._n_dof = None                      # dof with dynamic control
         self._links = None
         self._joints = None
+        self._materials = None
         self._visual_only = None
 
         # This needs to be initialized to be used for _load() of PrimitiveObject
@@ -69,6 +71,13 @@ class EntityPrim(XFormPrim):
         # Run super method
         super()._initialize()
 
+        # Force populate inputs and outputs of the shaders of all materials
+        # We suppress errors from omni.hydra if we're using encrypted assets, because we're loading from tmp location,
+        # not the original location
+        with suppress_omni_log(channels=["omni.hydra"] if gm.USE_ENCRYPTED_ASSETS else []):
+            for material in self.materials:
+                material.shader_force_populate(render=False)
+
         # Initialize all the links
         # This must happen BEFORE the handle is generated for this prim, because things changing in the RigidPrims may
         # cause the handle to change!
@@ -81,7 +90,7 @@ class EntityPrim(XFormPrim):
         # Update joint information
         self.update_joints()
 
-    def _load(self, simulator=None):
+    def _load(self):
         # By default, this prim cannot be instantiated from scratch!
         raise NotImplementedError("By default, an entity prim cannot be created from scratch.")
 
@@ -107,6 +116,20 @@ class EntityPrim(XFormPrim):
 
         # Run super
         super()._post_load()
+
+        # Cache material information
+        materials = set()
+        material_paths = set()
+        for link in self._links.values():
+            xforms = [link] + list(link.visual_meshes.values()) if self.prim_type == PrimType.RIGID else [link]
+            for xform in xforms:
+                if xform.has_material():
+                    mat_path = xform.material.prim_path
+                    if mat_path not in material_paths:
+                        materials.add(xform.material)
+                        material_paths.add(mat_path)
+
+        self._materials = materials
 
     def update_links(self):
         """
@@ -175,7 +198,7 @@ class EntityPrim(XFormPrim):
         self.update_handles()
 
         # Handle case separately based on whether the handle is valid (i.e.: whether we are actually articulated or not)
-        if (not self.kinematic_only) and self._handle != _dynamic_control.INVALID_HANDLE:
+        if (not self.kinematic_only) and self._handle is not None:
             root_prim = get_prim_at_path(self._dc.get_rigid_body_path(self._root_handle))
             n_dof = self._dc.get_articulation_dof_count(self._handle)
 
@@ -235,16 +258,16 @@ class EntityPrim(XFormPrim):
              bool: Whether this prim is articulated or not
         """
         # An invalid handle implies that there is no articulation available for this object
-        return self._handle != _dynamic_control.INVALID_HANDLE
+        return self._handle is not None or self.articulation_root_path is not None
 
     @property
     def articulation_root_path(self):
         """
         Returns:
-            str: Absolute USD path to the expected prim that represents the articulation root, if it exists. By default,
+            None or str: Absolute USD path to the expected prim that represents the articulation root, if it exists. By default,
                 this corresponds to self.prim_path
         """
-        return self._prim_path
+        return self._prim_path if self.n_joints > 0 else None
 
     @property
     def root_link_name(self):
@@ -275,8 +298,8 @@ class EntityPrim(XFormPrim):
     def handle(self):
         """
         Returns:
-            int: ID (articulation) handle assigned to this prim from dynamic_control interface. Note that
-                if this prim is not an articulation, it is assigned _dynamic_control.INVALID_HANDLE
+            None or int: ID (articulation) handle assigned to this prim from dynamic_control interface. Note that
+                if this prim is not an articulation, it is None
         """
         return self._handle
 
@@ -319,6 +342,22 @@ class EntityPrim(XFormPrim):
         return num
 
     @property
+    def n_fixed_joints(self):
+        """
+        Returns:
+        int: Number of fixed joints owned by this articulation
+        """
+        # Manually iterate over all links and check for any joints that are not fixed joints!
+        num = 0
+        for link in self._links.values():
+            for child_prim in link.prim.GetChildren():
+                prim_type = child_prim.GetPrimTypeInfo().GetTypeName().lower()
+                if "joint" in prim_type and "fixed" in prim_type:
+                    num += 1
+
+        return num
+
+    @property
     def n_links(self):
         """
         Returns:
@@ -348,18 +387,9 @@ class EntityPrim(XFormPrim):
         Loop through each link and their visual meshes to gather all the materials that belong to this object
 
         Returns:
-            materials: a list of MaterialPrim that belongs to this object
+            set of MaterialPrim: a set of MaterialPrim that belongs to this object
         """
-        materials = set()
-        material_paths = set()
-        for link in self._links.values():
-            xforms = [link] + list(link.visual_meshes.values()) if self.prim_type == PrimType.RIGID else [link]
-            for xform in xforms:
-                if xform.has_material():
-                    mat_path = xform.material.prim_path
-                    if mat_path not in material_paths:
-                        materials.add(xform.material)
-        return materials
+        return self._materials
 
     @property
     def dof_properties(self):
@@ -418,7 +448,7 @@ class EntityPrim(XFormPrim):
         for link in self._links.values():
             link.disable_gravity()
 
-    def set_joint_positions(self, positions, indices=None, normalized=False, target=False):
+    def set_joint_positions(self, positions, indices=None, normalized=False, drive=False):
         """
         Set the joint positions (both actual value and target values) in simulation. Note: only works if the simulator
         is actively running!
@@ -431,8 +461,9 @@ class EntityPrim(XFormPrim):
                 Default is None, which assumes that all joints are being set.
             normalized (bool): Whether the inputted joint positions should be interpreted as normalized values. Default
                 is False
-            target (bool): Whether the positions being set are target values or manual values to immediately set.
-                Default is False, corresponding to an instantaneous setting of the positions
+            drive (bool): Whether the positions being set are values that should be driven naturally by this entity's
+                motors or manual values to immediately set. Default is False, corresponding to an instantaneous
+                setting of the positions
         """
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
@@ -456,13 +487,13 @@ class EntityPrim(XFormPrim):
 
         # Set the DOF states
         dof_states["pos"] = new_positions
-        if not target:
+        if not drive:
             self._dc.set_articulation_dof_states(self._handle, dof_states, _dynamic_control.STATE_POS)
 
         # Also set the target
         self._dc.set_articulation_dof_position_targets(self._handle, new_positions.astype(np.float32))
 
-    def set_joint_velocities(self, velocities, indices=None, normalized=False, target=False):
+    def set_joint_velocities(self, velocities, indices=None, normalized=False, drive=False):
         """
         Set the joint velocities (both actual value and target values) in simulation. Note: only works if the simulator
         is actively running!
@@ -475,8 +506,9 @@ class EntityPrim(XFormPrim):
                 Default is None, which assumes that all joints are being set.
             normalized (bool): Whether the inputted joint velocities should be interpreted as normalized values. Default
                 is False
-            target (bool): Whether the velocities being set are target values or manual values to immediately set.
-                Default is False, corresponding to an instantaneous setting of the velocities
+            drive (bool): Whether the velocities being set are values that should be driven naturally by this entity's
+                motors or manual values to immediately set. Default is False, corresponding to an instantaneous
+                setting of the velocities
         """
         # Run sanity checks -- make sure our handle is initialized and that we are articulated
         assert self._handle is not None, "handles are not initialized yet!"
@@ -498,7 +530,7 @@ class EntityPrim(XFormPrim):
 
         # Set the DOF states
         dof_states["vel"] = new_velocities
-        if not target:
+        if not drive:
             self._dc.set_articulation_dof_states(self._handle, dof_states, _dynamic_control.STATE_VEL)
 
         # Also set the target
@@ -648,12 +680,20 @@ class EntityPrim(XFormPrim):
         """
         Updates all internal handles for this prim, in case they change since initialization
         """
-        self._handle = self._dc.get_articulation(self.articulation_root_path)
+        assert og.sim.is_playing(), "Simulator must be playing if updating handles!"
+
+        # Grab the handle -- we know it might not return a valid value, so we suppress omni's warning here
+        self._handle = None if self.articulation_root_path is None else \
+            self._dc.get_articulation(self.articulation_root_path)
+
+        # Sanity check -- make sure handle is not invalid handle -- it should only ever be None or a valid integer
+        assert self._handle != _dynamic_control.INVALID_HANDLE, \
+            f"Got invalid articulation handle for entity at {self.articulation_root_path}"
 
         # We only have a root handle if we're not a cloth prim
         if self._prim_type != PrimType.CLOTH:
             self._root_handle = self._dc.get_articulation_root_body(self._handle) if \
-                self._handle != _dynamic_control.INVALID_HANDLE else self.root_link.handle
+                self._handle is not None else self.root_link.handle
 
         # Update all links and joints as well
         for link in self._links.values():
@@ -766,17 +806,14 @@ class EntityPrim(XFormPrim):
             orientation = current_orientation
 
         if self._prim_type == PrimType.CLOTH:
-            # Can only set position
             if self._dc is not None and self._dc.is_simulating():
-                # Assume there is only one base link (the cloth)
                 self.root_link.set_position_orientation(position, orientation)
             else:
                 super().set_position_orientation(position, orientation)
         else:
             if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and \
                     self._dc is not None and self._dc.is_simulating():
-                pose = _dynamic_control.Transform(position, orientation)
-                self._dc.set_rigid_body_pose(self._root_handle, pose)
+                self.root_link.set_position_orientation(position, orientation)
             else:
                 super().set_position_orientation(position=position, orientation=orientation)
 
@@ -789,8 +826,7 @@ class EntityPrim(XFormPrim):
         else:
             if self._root_handle is not None and self._root_handle != _dynamic_control.INVALID_HANDLE and \
                     self._dc is not None and self._dc.is_simulating():
-                pose = self._dc.get_rigid_body_pose(self._root_handle)
-                return np.asarray(pose.p), np.asarray(pose.r)
+                return self.root_link.get_position_orientation()
             else:
                 return super().get_position_orientation()
 
@@ -998,7 +1034,8 @@ class EntityPrim(XFormPrim):
         Returns:
             int: How many position iterations to take per physics step by the physx solver
         """
-        return get_prim_property(self.articulation_root_path, "physxArticulation:solverPositionIterationCount")
+        return get_prim_property(self.articulation_root_path, "physxArticulation:solverPositionIterationCount") if \
+            self.articulated else self.root_link.solver_position_iteration_count
 
     @solver_position_iteration_count.setter
     def solver_position_iteration_count(self, count):
@@ -1008,8 +1045,11 @@ class EntityPrim(XFormPrim):
         Args:
             count (int): How many position iterations to take per physics step by the physx solver
         """
-        set_prim_property(self.articulation_root_path, "physxArticulation:solverPositionIterationCount", count)
-        return
+        if self.articulated:
+            set_prim_property(self.articulation_root_path, "physxArticulation:solverPositionIterationCount", count)
+        else:
+            for link in self._links.values():
+                link.solver_position_iteration_count = count
 
     @property
     def solver_velocity_iteration_count(self):
@@ -1017,7 +1057,8 @@ class EntityPrim(XFormPrim):
         Returns:
             int: How many velocity iterations to take per physics step by the physx solver
         """
-        return get_prim_property(self.articulation_root_path, "physxArticulation:solverVelocityIterationCount")
+        return get_prim_property(self.articulation_root_path, "physxArticulation:solverVelocityIterationCount") if \
+            self.articulated else self.root_link.solver_velocity_iteration_count
 
     @solver_velocity_iteration_count.setter
     def solver_velocity_iteration_count(self, count):
@@ -1027,8 +1068,11 @@ class EntityPrim(XFormPrim):
         Args:
             count (int): How many velocity iterations to take per physics step by the physx solver
         """
-        set_prim_property(self.articulation_root_path, "physxArticulation:solverVelocityIterationCount", count)
-        return
+        if self.articulated:
+            set_prim_property(self.articulation_root_path, "physxArticulation:solverVelocityIterationCount", count)
+        else:
+            for link in self._links.values():
+                link.solver_velocity_iteration_count = count
 
     @property
     def stabilization_threshold(self):
@@ -1054,11 +1098,35 @@ class EntityPrim(XFormPrim):
                 link.stabilization_threshold = threshold
 
     @property
+    def sleep_threshold(self):
+        """
+        Returns:
+            float: threshold for sleeping this articulation
+        """
+        return get_prim_property(self.articulation_root_path, "physxArticulation:sleepThreshold") if \
+            self.articulated else self.root_link.sleep_threshold
+
+    @sleep_threshold.setter
+    def sleep_threshold(self, threshold):
+        """
+        Sets threshold for sleeping this articulation
+
+        Args:
+            threshold (float): Sleeping threshold
+        """
+        if self.articulated:
+            set_prim_property(self.articulation_root_path, "physxArticulation:sleepThreshold", threshold)
+        else:
+            for link in self._links.values():
+                link.sleep_threshold = threshold
+
+    @property
     def self_collisions(self):
         """
         Returns:
             bool: Whether self-collisions are enabled for this prim or not
         """
+        assert self.articulated, "Cannot get self-collision for non-articulated EntityPrim!"
         return get_prim_property(self.articulation_root_path, "physxArticulation:enabledSelfCollisions")
 
     @self_collisions.setter
@@ -1069,8 +1137,8 @@ class EntityPrim(XFormPrim):
         Args:
             flag (bool): Whether self collisions are enabled for this prim or not
         """
+        assert self.articulated, "Cannot set self-collision for non-articulated EntityPrim!"
         set_prim_property(self.articulation_root_path, "physxArticulation:enabledSelfCollisions", flag)
-        return
 
     @property
     def kinematic_only(self):
@@ -1093,29 +1161,6 @@ class EntityPrim(XFormPrim):
                 for more information
         """
         self.root_link.kinematic_only = val
-
-    @property
-    def sleep_threshold(self):
-        """
-        Returns:
-            float: threshold for sleeping this articulation
-        """
-        return get_prim_property(self.articulation_root_path, "physxArticulation:sleepThreshold") if \
-            self.articulated else self.root_link.sleep_threshold
-
-    @sleep_threshold.setter
-    def sleep_threshold(self, threshold):
-        """
-        Sets threshold for sleeping this articulation
-
-        Args:
-            threshold (float): Sleeping threshold
-        """
-        if self.articulated:
-            set_prim_property(self.articulation_root_path, "physxArticulation:sleepThreshold", threshold)
-        else:
-            for link in self._links.values():
-                link.sleep_threshold = threshold
 
     def wake(self):
         """

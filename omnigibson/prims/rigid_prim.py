@@ -1,3 +1,4 @@
+import trimesh.triangles
 from omni.isaac.core.utils.prims import get_prim_at_path, get_prim_parent
 from omni.isaac.core.utils.transformations import tf_matrix_from_pose
 from omni.isaac.core.utils.rotations import gf_quat_to_np_array
@@ -89,21 +90,25 @@ class RigidPrim(XFormPrim):
             UsdPhysics.MassAPI.Apply(self._prim)
 
         # Only create contact report api if we're not visual only
-        if (not self._visual_only) and gm.ENABLE_GLOBAL_CONTACT_REPORTING:
+        if not self._visual_only:
             self._physx_contact_report_api_api = PhysxSchema.PhysxContactReportAPI(self._prim) if \
                 self._prim.HasAPI(PhysxSchema.PhysxContactReportAPI) else \
                 PhysxSchema.PhysxContactReportAPI.Apply(self._prim)
-
-        # Possibly set the mass / density
-        if "mass" in self._load_config and self._load_config["mass"] is not None:
-            self.mass = self._load_config["mass"]
-        if "density" in self._load_config and self._load_config["density"] is not None:
-            self.density = self._load_config["density"]
 
         # Store references to owned visual / collision meshes
         # We iterate over all children of this object's prim,
         # and grab any that are presumed to be meshes
         self.update_meshes()
+
+        # Possibly set the mass / density
+        if not self.has_collision_meshes:
+            # A meta (virtual) link has no collision meshes; set a negligible mass and a zero density (ignored)
+            self.mass = 1e-6
+            self.density = 0.0
+        elif "mass" in self._load_config and self._load_config["mass"] is not None:
+            self.mass = self._load_config["mass"]
+        if "density" in self._load_config and self._load_config["density"] is not None:
+            self.density = self._load_config["density"]
 
         # Set the visual-only attribute
         # This automatically handles setting collisions / gravity appropriately
@@ -241,7 +246,6 @@ class RigidPrim(XFormPrim):
             self._dc.set_rigid_body_linear_velocity(self._handle, velocity)
         else:
             self._rigid_api.GetVelocityAttr().Set(Gf.Vec3f(velocity.tolist()))
-        return
 
     def get_linear_velocity(self):
         """
@@ -265,7 +269,6 @@ class RigidPrim(XFormPrim):
             self._dc.set_rigid_body_angular_velocity(self._handle, velocity)
         else:
             self._rigid_api.GetAngularVelocityAttr().Set(Gf.Vec3f(velocity.tolist()))
-        return
 
     def get_angular_velocity(self):
         """
@@ -386,6 +389,14 @@ class RigidPrim(XFormPrim):
         """
         return self._visual_only
 
+    @property
+    def has_collision_meshes(self):
+        """
+        Returns:
+            bool: Whether this link has any collision mesh
+        """
+        return len(self._collision_meshes) > 0
+
     @visual_only.setter
     def visual_only(self, val):
         """
@@ -422,7 +433,14 @@ class RigidPrim(XFormPrim):
             if mesh_type == "Mesh":
                 # We construct a trimesh object from this mesh in order to infer its volume
                 trimesh_mesh = mesh_prim_to_trimesh_mesh(mesh)
-                mesh_volume = trimesh_mesh.volume if trimesh_mesh.is_volume else trimesh_mesh.convex_hull.volume
+                if trimesh_mesh.is_volume:
+                    mesh_volume = trimesh_mesh.volume
+                elif trimesh.triangles.all_coplanar(trimesh_mesh.triangles):
+                    # The mesh is a plane, so we can't make a convex hull -- return 0 volume
+                    mesh_volume = 0.0
+                else:
+                    # Fallback to convex hull approximation
+                    mesh_volume = trimesh_mesh.convex_hull.volume
             elif mesh_type == "Sphere":
                 mesh_volume = 4 / 3 * np.pi * (mesh.GetAttribute("radius").Get() ** 3)
             elif mesh_type == "Cube":
@@ -520,22 +538,40 @@ class RigidPrim(XFormPrim):
         self.set_attribute("physics:rigidBodyEnabled", not val)
 
     @property
-    def sleep_threshold(self):
+    def solver_position_iteration_count(self):
         """
         Returns:
-            float: threshold for sleeping this rigid body
+            int: How many position iterations to take per physics step by the physx solver
         """
-        return self.get_attribute("physxRigidBody:sleepThreshold")
+        return self.get_attribute("physxRigidBody:solverPositionIterationCount")
 
-    @sleep_threshold.setter
-    def sleep_threshold(self, threshold):
+    @solver_position_iteration_count.setter
+    def solver_position_iteration_count(self, count):
         """
-        Sets threshold for sleeping this rigid body
+        Sets how many position iterations to take per physics step by the physx solver
 
         Args:
-            threshold (float): Sleeping threshold
+            count (int): How many position iterations to take per physics step by the physx solver
         """
-        self.set_attribute("physxRigidBody:sleepThreshold", threshold)
+        self.set_attribute("physxRigidBody:solverPositionIterationCount", count)
+
+    @property
+    def solver_velocity_iteration_count(self):
+        """
+        Returns:
+            int: How many velocity iterations to take per physics step by the physx solver
+        """
+        return self.get_attribute("physxRigidBody:solverVelocityIterationCount")
+
+    @solver_velocity_iteration_count.setter
+    def solver_velocity_iteration_count(self, count):
+        """
+        Sets how many velocity iterations to take per physics step by the physx solver
+
+        Args:
+            count (int): How many velocity iterations to take per physics step by the physx solver
+        """
+        self.set_attribute("physxRigidBody:solverVelocityIterationCount", count)
 
     @property
     def stabilization_threshold(self):
@@ -554,6 +590,24 @@ class RigidPrim(XFormPrim):
             threshold (float): stabilizing threshold
         """
         self.set_attribute("physxRigidBody:stabilizationThreshold", threshold)
+
+    @property
+    def sleep_threshold(self):
+        """
+        Returns:
+            float: threshold for sleeping this rigid body
+        """
+        return self.get_attribute("physxRigidBody:sleepThreshold")
+
+    @sleep_threshold.setter
+    def sleep_threshold(self, threshold):
+        """
+        Sets threshold for sleeping this rigid body
+
+        Args:
+            threshold (float): Sleeping threshold
+        """
+        self.set_attribute("physxRigidBody:sleepThreshold", threshold)
 
     @property
     def ccd_enabled(self):
@@ -643,6 +697,16 @@ class RigidPrim(XFormPrim):
         if not self.kinematic_only:
             self.set_linear_velocity(np.array(state["lin_vel"]))
             self.set_angular_velocity(np.array(state["ang_vel"]))
+
+    def _serialize(self, state):
+        # Run super first
+        state_flat = super()._serialize(state=state)
+
+        return np.concatenate([
+            state_flat,
+            state["lin_vel"],
+            state["ang_vel"],
+        ]).astype(float)
 
     def _deserialize(self, state):
         # Call supermethod first

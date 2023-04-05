@@ -1,13 +1,17 @@
-import logging
 import numpy as np
 from omnigibson.objects.stateful_object import StatefulObject
 from omnigibson.utils.python_utils import assert_valid_key
 
 from pxr import Gf, Vt, UsdPhysics, PhysxSchema
+import omnigibson as og
 from omnigibson.utils.constants import PrimType, PRIMITIVE_MESH_TYPES
 from omnigibson.utils.usd_utils import create_primitive_mesh
 from omnigibson.utils.render_utils import create_pbr_material
 from omnigibson.utils.physx_utils import bind_material
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 # Define valid objects that can be created
@@ -23,9 +27,9 @@ class PrimitiveObject(StatefulObject):
 
     def __init__(
         self,
-        prim_path,
+        name,
         primitive_type,
-        name=None,
+        prim_path=None,
         category="object",
         class_id=None,
         uuid=None,
@@ -46,11 +50,11 @@ class PrimitiveObject(StatefulObject):
     ):
         """
         Args:
-            prim_path (str): global path in the stage to this object
+            name (str): Name for the object. Names need to be unique per scene
             primitive_type (str): type of primitive object to create. Should be one of:
                 {"Cone", "Cube", "Cylinder", "Disk", "Plane", "Sphere", "Torus"}
-            name (None or str): Name for the object. Names need to be unique per scene. If None, a name will be
-                generated at the time the object is added to the scene, using the object's category.
+            prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
+                created at /World/<name>
             category (str): Category for the object. Defaults to "object".
             class_id (None or int): What class ID the object should be assigned in semantic segmentation rendering mode.
                 If None, the ID will be inferred from this object's category.
@@ -114,18 +118,15 @@ class PrimitiveObject(StatefulObject):
             **kwargs,
         )
 
-    def _load(self, simulator=None):
-        logging.info(f"Loading the following primitive: {self._primitive_type}")
-
+    def _load(self):
         # Define an Xform at the specified path
-        stage = simulator.stage
-        prim = stage.DefinePrim(self._prim_path, "Xform")
+        prim = og.sim.stage.DefinePrim(self._prim_path, "Xform")
 
         if self._prim_type == PrimType.RIGID:
             # Define a nested mesh corresponding to the root link for this prim
-            base_link = stage.DefinePrim(f"{self._prim_path}/base_link", "Xform")
-            self._vis_geom = create_primitive_mesh(prim_path=f"{self._prim_path}/base_link/visual", primitive_type=self._primitive_type)
-            self._col_geom = create_primitive_mesh(prim_path=f"{self._prim_path}/base_link/collision", primitive_type=self._primitive_type)
+            base_link = og.sim.stage.DefinePrim(f"{self._prim_path}/base_link", "Xform")
+            self._vis_geom = create_primitive_mesh(prim_path=f"{self._prim_path}/base_link/visuals", primitive_type=self._primitive_type)
+            self._col_geom = create_primitive_mesh(prim_path=f"{self._prim_path}/base_link/collisions", primitive_type=self._primitive_type)
 
             # Add collision API to collision geom
             UsdPhysics.CollisionAPI.Apply(self._col_geom.GetPrim())
@@ -144,7 +145,7 @@ class PrimitiveObject(StatefulObject):
             self._col_geom = None
 
         # Create a material for this object for the base link
-        stage.DefinePrim(f"{self._prim_path}/Looks", "Scope")
+        og.sim.stage.DefinePrim(f"{self._prim_path}/Looks", "Scope")
         mat_path = f"{self._prim_path}/Looks/default"
         mat = create_pbr_material(prim_path=mat_path)
         bind_material(prim_path=self._vis_geom.GetPrim().GetPrimPath().pathString, material_path=mat_path)
@@ -155,6 +156,31 @@ class PrimitiveObject(StatefulObject):
         # Run super first
         super()._post_load()
 
+        # Set the collision approximation appropriately
+        if self._primitive_type == "Sphere":
+            col_approximation = "boundingSphere"
+        elif self._primitive_type == "Cube":
+            col_approximation = "boundingCube"
+        else:
+            col_approximation = "convexHull"
+        self.root_link.collision_meshes["collisions"].set_collision_approximation(col_approximation)
+
+        # Possibly set scalings (only if the scale value is not set)
+        if self._load_config["scale"] is not None:
+            log.warning("Custom scale specified for primitive object, so ignoring radius, height, and size arguments!")
+        else:
+            if self._load_config["radius"] is not None:
+                self.radius = self._load_config["radius"]
+            if self._load_config["height"] is not None:
+                self.height = self._load_config["height"]
+            if self._load_config["size"] is not None:
+                self.size = self._load_config["size"]
+
+    def _initialize(self):
+        # Run super first
+        super()._initialize()
+
+        # Set color and opacity
         if self._prim_type == PrimType.RIGID:
             visual_geom_prim = list(self.links["base_link"].visual_meshes.values())[0]
         elif self._prim_type == PrimType.CLOTH:
@@ -164,26 +190,6 @@ class PrimitiveObject(StatefulObject):
 
         visual_geom_prim.color = self._load_config["color"]
         visual_geom_prim.opacity = self._load_config["opacity"]
-
-        # Set the collision approximation appropriately
-        if self._primitive_type == "Sphere":
-            col_approximation = "boundingSphere"
-        elif self._primitive_type == "Cube":
-            col_approximation = "boundingCube"
-        else:
-            col_approximation = "convexHull"
-        self.root_link.collision_meshes["collision"].set_collision_approximation(col_approximation)
-
-        # Possibly set scalings (only if the scale value is not set)
-        if self._load_config["scale"] is not None:
-            logging.warning("Custom scale specified for primitive object, so ignoring radius, height, and size arguments!")
-        else:
-            if self._load_config["radius"] is not None:
-                self.radius = self._load_config["radius"]
-            if self._load_config["height"] is not None:
-                self.height = self._load_config["height"]
-            if self._load_config["size"] is not None:
-                self.size = self._load_config["size"]
 
     @property
     def radius(self):
@@ -210,7 +216,7 @@ class PrimitiveObject(StatefulObject):
         """
         assert_valid_key(key=self._primitive_type, valid_keys=VALID_RADIUS_OBJECTS, name="primitive object with radius")
         # Update the extents variable
-        original_extent = self._extents
+        original_extent = np.array(self._extents)
         self._extents = np.ones(3) * radius * 2.0 if self._primitive_type == "Sphere" else \
             np.array([radius * 2.0, radius * 2.0, self._extents[2]])
         attr_pairs = []
@@ -258,7 +264,7 @@ class PrimitiveObject(StatefulObject):
         """
         assert_valid_key(key=self._primitive_type, valid_keys=VALID_HEIGHT_OBJECTS, name="primitive object with height")
         # Update the extents variable
-        original_extent = self._extents
+        original_extent = np.array(self._extents)
         self._extents[2] = height
 
         # Calculate the correct scaling factor and scale the points and normals appropriately
@@ -298,7 +304,7 @@ class PrimitiveObject(StatefulObject):
         assert_valid_key(key=self._primitive_type, valid_keys=VALID_SIZE_OBJECTS, name="primitive object with size")
 
         # Update the extents variable
-        original_extent = self._extents
+        original_extent = np.array(self._extents)
         self._extents = np.ones(3) * size
 
         # Calculate the correct scaling factor and scale the points and normals appropriately

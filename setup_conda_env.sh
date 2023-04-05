@@ -1,26 +1,32 @@
 #!/usr/bin/env bash
 
-# Make sure that the ISAAC_SIM_PATH variable is set
-if [ x"${ISAAC_SIM_PATH}" == "x" ]; then
-  echo "Please set ISAAC_SIM_PATH!"
+# Helper function to check whether the script is soruced
+is_sourced() {
+  if [ -n "$ZSH_VERSION" ]; then 
+    case $ZSH_EVAL_CONTEXT in *:file:*) return 0;; esac
+  else
+    case ${0##*/} in dash|-dash|bash|-bash|ksh|-ksh|sh|-sh) return 0;; esac
+  fi
+  return 1
+}
+is_sourced && sourced=1 || sourced=0
+
+if [[ $sourced == 0 ]]; then
+  echo "Please source the script to make sure conda env is created successfully!"
   exit
 fi
 
-# We search to see if we've already modified this config; if not, we add a couple additional dependencies
-# Ideally this would be a lot cleaner by having a separate config altogether, but isaac sim complains if we
-# don't use this EXACT file in this EXACT location
-CFG_PATH="${ISAAC_SIM_PATH}/apps/omni.isaac.sim.python.kit"
-if grep -qxF '# OmniGibson additional dependencies' ${CFG_PATH}; then
-  echo 'Already found OmniGibson additional dependencies; skipping modifying isaac-sim python config!'
-else
-  echo '' >> ${CFG_PATH}
-  echo '# OmniGibson additional dependencies' >> ${CFG_PATH}
-  echo '"omni.flowusd" = {}' >> ${CFG_PATH}
-  echo '"omni.particle.system.bundle" = {}' >> ${CFG_PATH}
+# Make sure that the ISAAC_SIM_PATH variable is set
+if [[ x"${ISAAC_SIM_PATH}" == "x" ]]; then
+  echo "Please set ISAAC_SIM_PATH!"
+  return
 fi
 
-# Next, we prune some packages from Isaac Sim that are outdated relative to what we need in OmniGibson
-rm -r "${ISAAC_SIM_PATH}/exts/omni.isaac.ml_archive/pip_prebundle/gym*"
+# Sanity check whether env variable is set correctly
+if [[ ! -f "${ISAAC_SIM_PATH}/setup_conda_env.sh" ]]; then
+  echo "setup_conda_env.sh not found in ${ISAAC_SIM_PATH}! Make sure you have set the correct ISAAC_SIM_PATH"
+  return
+fi
 
 # Create a conda environment with python 3.7
 conda create -y -n omnigibson python=3.7
@@ -55,3 +61,5 @@ pip install -e .
 # Cycle conda environment so that all dependencies are propagated
 conda deactivate
 conda activate omnigibson
+
+echo "OmniGibson successfully installed!"

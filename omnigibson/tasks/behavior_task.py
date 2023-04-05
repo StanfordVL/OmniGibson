@@ -1,4 +1,3 @@
-import logging
 import os
 import numpy as np
 
@@ -19,6 +18,7 @@ from bddl.logic_base import AtomicFormula
 from bddl.object_taxonomy import ObjectTaxonomy
 
 import omnigibson as og
+from omnigibson.macros import gm
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.reward_functions.potential_reward import PotentialReward
 from omnigibson.robots.robot_base import BaseRobot
@@ -36,7 +36,11 @@ from omnigibson.utils.constants import (
     SYSTEM_SYNSETS_TO_SYSTEM_NAMES,
 )
 from omnigibson.utils.python_utils import classproperty, assert_valid_key
-from omnigibson.systems.system_base import get_system_from_element_name
+from omnigibson.systems import get_system
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 class BehaviorTask(BaseTask):
@@ -153,9 +157,6 @@ class BehaviorTask(BaseTask):
         success, self.feedback = self.initialize_activity(env=env)
         if not success:
             print(f"Failed to initialize Behavior Activity. Feedback:\n{self.feedback}")
-
-        # Also reset the agent
-        self._reset_agent(env=env)
 
         # Highlight any task relevant objects if requested
         if self.highlight_task_relevant_objs:
@@ -395,8 +396,7 @@ class BehaviorTask(BaseTask):
         Args:
             env (Environment): Current active environment instance
         """
-        assert og.sim.is_playing()
-        og.sim.stop()
+        assert og.sim.is_stopped(), "Simulator should be stopped when importing sampleable objects"
 
         # Move the robot object frame to a far away location, similar to other newly imported objects below
         env.robots[0].set_position_orientation([300, 300, 300], [0, 0, 0, 1])
@@ -413,7 +413,7 @@ class BehaviorTask(BaseTask):
             if obj_cat in SYSTEM_SYNSETS_TO_SYSTEM_NAMES:
                 assert len(self.activity_conditions.parsed_objects[obj_cat]) == 1, "Systems are singletons"
                 obj_inst = self.activity_conditions.parsed_objects[obj_cat][0]
-                self.object_scope[obj_inst] = get_system_from_element_name(SYSTEM_SYNSETS_TO_SYSTEM_NAMES[obj_cat])
+                self.object_scope[obj_inst] = get_system(SYSTEM_SYNSETS_TO_SYSTEM_NAMES[obj_cat])
                 continue
 
             is_sliceable = self.object_taxonomy.has_ability(obj_cat, "sliceable")
@@ -489,13 +489,6 @@ class BehaviorTask(BaseTask):
                 self.sampled_objects.add(simulator_obj)
                 self.object_scope[obj_inst] = simulator_obj
 
-        # Play the sim again to initialize all the newly imported objects.
-        og.sim.play()
-        # Also reset the agent
-        env.robots[0].reset()
-        # Take one extra step so that the bounding box of the agent is up-to-date.
-        og.sim.step()
-
     def check_scene(self, env):
         """
         Runs sanity checks for the current scene for the given BEHAVIOR task
@@ -510,22 +503,22 @@ class BehaviorTask(BaseTask):
         """
         error_msg = self.parse_non_sampleable_object_room_assignment(env)
         if error_msg:
-            logging.warning(error_msg)
+            log.warning(error_msg)
             return False, error_msg
 
         error_msg = self.build_sampling_order(env)
         if error_msg:
-            logging.warning(error_msg)
+            log.warning(error_msg)
             return False, error_msg
 
         error_msg = self.build_non_sampleable_object_scope(env)
         if error_msg:
-            logging.warning(error_msg)
+            log.warning(error_msg)
             return False, error_msg
 
         error_msg = self.import_sampleable_objects(env)
         if error_msg:
-            logging.warning(error_msg)
+            log.warning(error_msg)
             return False, error_msg
 
         self.object_scope["agent.n.01_1"] = self.get_agent(env)
@@ -560,12 +553,11 @@ class BehaviorTask(BaseTask):
                 matched_sim_obj = self.get_agent(env)
             # If the object scope points to a system
             elif self.object_instance_to_category[obj_inst] in SYSTEM_SYNSETS_TO_SYSTEM_NAMES:
-                matched_sim_obj = get_system_from_element_name(
-                    SYSTEM_SYNSETS_TO_SYSTEM_NAMES[self.object_instance_to_category[obj_inst]])
+                matched_sim_obj = get_system(SYSTEM_SYNSETS_TO_SYSTEM_NAMES[self.object_instance_to_category[obj_inst]])
             else:
-                logging.info(f"checking objects...")
+                log.info(f"checking objects...")
                 for sim_obj in og.sim.scene.objects:
-                    logging.info(f"checking bddl obj scope for obj: {sim_obj.name}")
+                    log.info(f"checking bddl obj scope for obj: {sim_obj.name}")
                     if hasattr(sim_obj, "bddl_object_scope") and sim_obj.bddl_object_scope == obj_inst:
                         matched_sim_obj = sim_obj
                         break
@@ -585,7 +577,7 @@ class BehaviorTask(BaseTask):
                 - bool: Whether this evaluated condition is positive or negative
         """
         if not isinstance(condition.children[0], Negation) and not isinstance(condition.children[0], AtomicFormula):
-            logging.warning(("Skipping over sampling of predicate that is not a negation or an atomic formula"))
+            log.warning(("Skipping over sampling of predicate that is not a negation or an atomic formula"))
             return None, None
 
         if isinstance(condition.children[0], Negation):
@@ -672,7 +664,7 @@ class BehaviorTask(BaseTask):
                             if condition.STATE_NAME in KINEMATICS_STATES and positive and scene_obj in condition.body:
                                 # Use pybullet GUI for debugging
                                 if self.debug_object_sampling is not None and self.debug_object_sampling == condition.body[0]:
-                                    og.debug_sampling = True
+                                    gm.DEBUG = True
 
                                 success = condition.sample(binary_state=positive)
                                 log_msg = " ".join(
@@ -687,7 +679,7 @@ class BehaviorTask(BaseTask):
                                         str(success),
                                     ]
                                 )
-                                logging.warning(log_msg)
+                                log.warning(log_msg)
 
                                 # If any condition fails for this candidate object, skip
                                 if not success:
@@ -769,23 +761,23 @@ class BehaviorTask(BaseTask):
                     obj_inst_to_obj_per_room_inst[obj_inst] = filtered_object_scope[room_type][obj_inst][room_inst]
                 top_nodes = []
                 log_msg = "MBM for room instance [{}]".format(room_inst)
-                logging.warning((log_msg))
+                log.warning((log_msg))
                 for obj_inst in obj_inst_to_obj_per_room_inst:
                     for obj in obj_inst_to_obj_per_room_inst[obj_inst]:
                         # Create an edge between obj instance and each of the simulator obj that supports sampling
                         graph.add_edge(obj_inst, obj)
                         log_msg = "Adding edge: {} <-> {}".format(obj_inst, obj.name)
-                        logging.warning((log_msg))
+                        log.warning((log_msg))
                         top_nodes.append(obj_inst)
                 # Need to provide top_nodes that contain all nodes in one bipartite node set
                 # The matches will have two items for each match (e.g. A -> B, B -> A)
                 matches = nx.bipartite.maximum_matching(graph, top_nodes=top_nodes)
                 if len(matches) == 2 * len(obj_inst_to_obj_per_room_inst):
-                    logging.warning(("Object scope finalized:"))
+                    log.warning(("Object scope finalized:"))
                     for obj_inst, obj in matches.items():
                         if obj_inst in obj_inst_to_obj_per_room_inst:
                             self.object_scope[obj_inst] = obj
-                            logging.warning((obj_inst, obj.name))
+                            log.warning((obj_inst, obj.name))
                     success = True
                     break
             if not success:
@@ -833,7 +825,7 @@ class BehaviorTask(BaseTask):
             None or str: If successful, returns None. Otherwise, returns an error message
         """
         np.random.shuffle(self.ground_goal_state_options)
-        logging.warning(("number of ground_goal_state_options", len(self.ground_goal_state_options)))
+        log.warning(("number of ground_goal_state_options", len(self.ground_goal_state_options)))
         num_goal_condition_set_to_test = 10
 
         goal_condition_success = False
@@ -876,11 +868,6 @@ class BehaviorTask(BaseTask):
                     condition.body
                 )
                 return error_msg
-
-        # Use ray casting for ontop and inside sampling for sampleable objects
-        for condition, positive in self.sampleable_object_conditions:
-            if condition.STATE_NAME in ["inside", "ontop"]:
-                condition.kwargs["use_ray_casting_method"] = True
 
         if len(self.object_sampling_orders) > 0:
             # Pop non-sampleable objects
@@ -929,27 +916,33 @@ class BehaviorTask(BaseTask):
                 - bool: Whether sampling was successful or not
                 - None or str: None if successful, otherwise the associated error message
         """
+        # Auto-initialize all sampleable objects
+        og.sim.play()
+        env.scene.reset()
 
         error_msg = self.group_initial_conditions()
         if error_msg:
-            logging.warning(error_msg)
+            log.warning(error_msg)
             return False, error_msg
 
         error_msg = self.sample_initial_conditions()
         if error_msg:
-            logging.warning(error_msg)
+            log.warning(error_msg)
             return False, error_msg
 
         if validate_goal:
             error_msg = self.sample_goal_conditions()
             if error_msg:
-                logging.warning(error_msg)
+                log.warning(error_msg)
                 return False, error_msg
 
         error_msg = self.sample_initial_conditions_final()
         if error_msg:
-            logging.warning(error_msg)
+            log.warning(error_msg)
             return False, error_msg
+
+        env.scene.update_initial_state()
+        og.sim.stop()
 
         return True, None
 

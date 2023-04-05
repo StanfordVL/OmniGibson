@@ -1,4 +1,3 @@
-import logging
 from omnigibson.objects.stateful_object import StatefulObject
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.usd_utils import add_asset_to_stage
@@ -12,9 +11,9 @@ class USDObject(StatefulObject):
 
     def __init__(
         self,
-        prim_path,
+        name,
         usd_path,
-        name=None,
+        prim_path=None,
         category="object",
         class_id=None,
         uuid=None,
@@ -30,12 +29,11 @@ class USDObject(StatefulObject):
         **kwargs,
     ):
         """
-
         Args:
-            prim_path (str): global path in the stage to this object
+            name (str): Name for the object. Names need to be unique per scene
             usd_path (str): global path to the USD file to load
-            name (None or str): Name for the object. Names need to be unique per scene. If None, a name will be
-                generated at the time the object is added to the scene, using the object's category.
+            prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
+                created at /World/<name>
             category (str): Category for the object. Defaults to "object".
             class_id (None or int): What class ID the object should be assigned in semantic segmentation rendering mode.
                 If None, the ID will be inferred from this object's category.
@@ -79,11 +77,10 @@ class USDObject(StatefulObject):
             **kwargs,
         )
 
-    def _load(self, simulator=None):
+    def _load(self):
         """
         Load the object into pybullet and set it to the correct pose
         """
-        logging.info(f"Loading the following USD: {self._usd_path}")
         return add_asset_to_stage(asset_path=self._usd_path, prim_path=self._prim_path)
 
     def _create_prim_with_same_kwargs(self, prim_path, name, load_config):
@@ -106,7 +103,8 @@ class USDObject(StatefulObject):
     @property
     def usd_path(self):
         """
-        :return str: absolute path to this model's USD file. By default, this is the loaded usd path
-        passed in as an argument
+        Returns:
+            str: absolute path to this model's USD file. By default, this is the loaded usd path
+                passed in as an argument
         """
         return self._usd_path

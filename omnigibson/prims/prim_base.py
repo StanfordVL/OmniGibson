@@ -1,4 +1,3 @@
-import logging
 from abc import ABC, abstractmethod
 from pxr import Gf, Usd, UsdGeom, UsdShade
 from omni.isaac.core.utils.prims import (
@@ -10,9 +9,14 @@ from omni.isaac.core.utils.prims import (
     get_prim_parent,
     get_prim_object_type,
 )
+import omnigibson as og
 from omni.isaac.core.utils.prims import delete_prim
 from omnigibson.utils.python_utils import Serializable, UniquelyNamed, Recreatable
 from omnigibson.utils.sim_utils import check_deletable_prim
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
@@ -53,7 +57,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
 
         # Run some post-loading steps if this prim has already been loaded
         if is_prim_path_valid(prim_path=self._prim_path):
-            logging.debug(f"prim {name} already exists, skipping load")
+            log.debug(f"prim {name} already exists, skipping load")
             self._prim = get_prim_at_path(prim_path=self._prim_path)
             self._loaded = True
             # Run post load.
@@ -83,14 +87,9 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
 
         self._initialized = True
 
-    def load(self, simulator=None):
+    def load(self):
         """
-        Load this prim into omniverse, optionally integrating this prim with simulator context @simulator, and return
-        loaded prim reference.
-
-        Args:
-            simulator (None or SimulationContext): If specified, should be simulator into which this prim will be
-                loaded. Otherwise, it will be loaded into the default stage
+        Load this prim into omniverse, and return loaded prim reference.
 
         Returns:
             Usd.Prim: Prim object loaded into the simulator
@@ -99,7 +98,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
             raise ValueError("Cannot load a single prim multiple times.")
 
         # Load prim
-        self._prim = self._load(simulator=simulator)
+        self._prim = self._load()
         self._loaded = True
 
         # Run any post-loading logic
@@ -115,13 +114,9 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         """
         pass
 
-    def remove(self, simulator=None):
+    def remove(self):
         """
         Removes this prim from omniverse stage
-
-        Args:
-            simulator (None or SimulationContext): If specified, should be simulator into which this prim will be
-                removed. Otherwise, it will be removed from the default stage
         """
         if not self._loaded:
             raise ValueError("Cannot remove a prim that was never loaded.")
@@ -130,17 +125,13 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         if check_deletable_prim(self.prim_path):
             delete_prim(self.prim_path)
 
-        if simulator:
-            # Also clear the name so we can reuse this later
-            self.remove_names(include_all_owned=True, skip_ids={id(simulator)})
+        # Also clear the name so we can reuse this later
+        self.remove_names(include_all_owned=True)
 
     @abstractmethod
-    def _load(self, simulator=None):
+    def _load(self):
         """
         Loads the raw prim into the simulator. Any post-processing should be done in @self._post_load()
-
-        Args:
-            simulator (Simulator): Active simulation context
         """
         raise NotImplementedError()
 
@@ -300,14 +291,13 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
             load_config=load_config,
         )
 
-    def duplicate(self, simulator, prim_path):
+    def duplicate(self, prim_path):
         """
         Duplicates this object, and generates a new instance at @prim_path.
         Note that the created object is automatically loaded into the simulator, but is NOT initialized
         until a sim step occurs!
 
         Args:
-            simulator (Simulator): simulation instance to load this object
             prim_path (str): Absolute path to the newly generated prim
 
         Returns:
@@ -318,7 +308,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
             name=f"{self.name}_copy{self._n_duplicates}",
             load_config=self._load_config,
         )
-        simulator.import_object(new_prim, register=False, auto_initialize=True)
+        og.sim.import_object(new_prim, register=False, auto_initialize=True)
 
         # Increment duplicate count
         self._n_duplicates += 1

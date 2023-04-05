@@ -2,7 +2,6 @@ import networkx as nx
 
 from omnigibson.object_states import *
 from omnigibson.object_states.object_state_base import BaseObjectState
-from omnigibson.object_states.fluid_source import FluidSource
 
 _ALL_STATES = frozenset(
     [
@@ -13,25 +12,21 @@ _ALL_STATES = frozenset(
         Cooked,
         Covered,
         Heated,
-        Attached,
+        AttachedTo,
         Frozen,
         HeatSourceOrSink,
         HorizontalAdjacency,
-        InFOVOfRobot,
-        InHandOfRobot,
-        InReachOfRobot,
-        InSameRoomAsRobot,
         Inside,
-        InsideRoomTypes,
         MaxTemperature,
         NextTo,
-        ObjectsInFOVOfRobot,
         OnFire,
         OnTop,
         Open,
         Overlaid,
         ParticleApplier,
         ParticleRemover,
+        ParticleSink,
+        ParticleSource,
         Pose,
         Saturated,
         Sliced,
@@ -41,20 +36,19 @@ _ALL_STATES = frozenset(
         Touching,
         Under,
         VerticalAdjacency,
-        WaterSource,
-        WaterSink,
         Filled,
         Folded,
         Unfolded,
     ]
-    + ROOM_STATES
 )
 
 _ABILITY_TO_STATE_MAPPING = {
-    "attachable": [Attached],
+    "attachable": [AttachedTo],
     "burnable": [Burnt],
     "particleApplier": [ParticleApplier],
     "particleRemover": [ParticleRemover],
+    "particleSource": [ParticleSource],
+    "particleSink": [ParticleSink],
     "coldSource": [HeatSourceOrSink],
     "cookable": [Cooked],
     "coverable": [Covered],
@@ -63,13 +57,10 @@ _ABILITY_TO_STATE_MAPPING = {
     "heatSource": [HeatSourceOrSink],
     "openable": [Open],
     "flammable": [OnFire],
-    "robot": ROOM_STATES + [ObjectsInFOVOfRobot],
     "saturable": [Saturated],
     "sliceable": [Sliced],
     "slicer": [Slicer],
     "toggleable": [ToggledOn],
-    "waterSource": [WaterSource],
-    "waterSink": [WaterSink],
     "fillable": [Filled],
     "foldable": [Folded],
     "unfoldable": [Unfolded],
@@ -77,10 +68,6 @@ _ABILITY_TO_STATE_MAPPING = {
 
 _DEFAULT_STATE_SET = frozenset(
     [
-        InFOVOfRobot,
-        InHandOfRobot,
-        InReachOfRobot,
-        InSameRoomAsRobot,
         Inside,
         NextTo,
         OnTop,
@@ -147,10 +134,6 @@ def get_visual_states():
 
 def get_default_states():
     return _DEFAULT_STATE_SET
-
-
-def get_fluid_source_states():
-    return [state for state in _ALL_STATES if issubclass(state, FluidSource)]
 
 
 def get_all_states():

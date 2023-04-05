@@ -1,4 +1,3 @@
-import logging
 import os
 
 import numpy as np
@@ -6,7 +5,12 @@ import numpy as np
 from PIL import Image
 
 import omnigibson as og
+from omnigibson.macros import gm
 from omnigibson.maps.map_base import BaseMap
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 class SegmentationMap(BaseMap):
@@ -59,7 +63,7 @@ class SegmentationMap(BaseMap):
         img_ins = np.array(img_ins.resize((map_size, map_size), Image.NEAREST))
         img_sem = np.array(img_sem.resize((map_size, map_size), Image.NEAREST))
 
-        room_categories = os.path.join(og.og_dataset_path, "metadata", "room_categories.txt")
+        room_categories = os.path.join(gm.DATASET_PATH, "metadata", "room_categories.txt")
         with open(room_categories, "r") as fp:
             room_cats = [line.rstrip() for line in fp.readlines()]
 
@@ -112,7 +116,7 @@ class SegmentationMap(BaseMap):
                 - 3-array: (x,y,z) randomly sampled point in a room of type @room_type
         """
         if room_type not in self.room_sem_name_to_sem_id:
-            logging.warning("room_type [{}] does not exist.".format(room_type))
+            log.warning("room_type [{}] does not exist.".format(room_type))
             return None, None
 
         sem_id = self.room_sem_name_to_sem_id[room_type]
@@ -138,7 +142,7 @@ class SegmentationMap(BaseMap):
                 - 3-array: (x,y,z) randomly sampled point in room @room_instance
         """
         if room_instance not in self.room_ins_name_to_ins_id:
-            logging.warning("room_instance [{}] does not exist.".format(room_instance))
+            log.warning("room_instance [{}] does not exist.".format(room_instance))
             return None, None
 
         ins_id = self.room_ins_name_to_ins_id[room_instance]

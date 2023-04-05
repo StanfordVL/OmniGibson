@@ -8,6 +8,7 @@ from omni.isaac.core.utils.prims import (
 )
 import numpy as np
 import carb
+import omnigibson as og
 from omni.isaac.core.utils.stage import get_current_stage
 from omnigibson.prims.prim_base import BasePrim
 from omnigibson.prims.material_prim import MaterialPrim
@@ -53,12 +54,8 @@ class XFormPrim(BasePrim):
             load_config=load_config,
         )
 
-    def _load(self, simulator=None):
-        # Define an Xform prim at the current stage, or the simulator's stage if specified
-        stage = get_current_stage()
-        prim = stage.DefinePrim(self._prim_path, "Xform")
-
-        return prim
+    def _load(self):
+        return og.sim.stage.DefinePrim(self._prim_path, "Xform")
 
     def _post_load(self):
         # run super first
@@ -406,9 +403,7 @@ class XFormPrim(BasePrim):
         self.set_position_orientation(np.array(state["pos"]), np.array(state["ori"]))
 
     def _serialize(self, state):
-        # We serialize by iterating over the keys and adding them to a list that's concatenated at the end
-        # This is a deterministic mapping because we assume the state is an dict
-        return np.concatenate(list(state.values())).astype(float)
+        return np.concatenate([state["pos"], state["ori"]]).astype(float)
 
     def _deserialize(self, state):
         # We deserialize deterministically by knowing the order of values -- pos, ori

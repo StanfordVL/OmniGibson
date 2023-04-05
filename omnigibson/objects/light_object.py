@@ -1,10 +1,14 @@
 from pxr import UsdLux
-import logging
+import omnigibson as og
 from omni.isaac.core.utils.stage import get_current_stage
 from omnigibson.objects.stateful_object import StatefulObject
 from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.utils.python_utils import assert_valid_key
 from omnigibson.utils.constants import PrimType
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 class LightObject(StatefulObject):
@@ -23,9 +27,9 @@ class LightObject(StatefulObject):
 
     def __init__(
         self,
-        prim_path,
+        name,
         light_type,
-        name=None,
+        prim_path=None,
         category="light",
         class_id=None,
         uuid=None,
@@ -40,10 +44,10 @@ class LightObject(StatefulObject):
 
         """
         Args:
-            prim_path (str): global path in the stage to this object
+            name (str): Name for the object. Names need to be unique per scene
             light_type (str): Type of light to create. Valid options are LIGHT_TYPES
-            name (None or str): Name for the object. Names need to be unique per scene. If None, a name will be
-                generated at the time the object is added to the scene, using the object's category.
+            prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
+                created at /World/<name>
             category (str): Category for the object. Defaults to "object".
             class_id (None or int): What class ID the object should be assigned in semantic segmentation rendering mode.
                 If None, the ID will be inferred from this object's category.
@@ -100,18 +104,13 @@ class LightObject(StatefulObject):
             **kwargs,
         )
 
-    def _load(self, simulator=None):
-        logging.info(f"Loading the following light: {self.light_type}")
-
-        # Define a light prim at the current stage, or the simulator's stage if specified
-        stage = get_current_stage()
-
+    def _load(self):
         # Define XForm and base link for this light
-        prim = stage.DefinePrim(self._prim_path, "Xform")
-        base_link = stage.DefinePrim(f"{self._prim_path}/base_link", "Xform")
+        prim = og.sim.stage.DefinePrim(self._prim_path, "Xform")
+        base_link = og.sim.stage.DefinePrim(f"{self._prim_path}/base_link", "Xform")
 
         # Define the actual light link
-        light_prim = UsdLux.__dict__[f"{self.light_type}Light"].Define(stage, f"{self._prim_path}/base_link/light").GetPrim()
+        light_prim = UsdLux.__dict__[f"{self.light_type}Light"].Define(og.sim.stage, f"{self._prim_path}/base_link/light").GetPrim()
 
         return prim
 

@@ -36,7 +36,8 @@ setup(
         "bddl>=3.0.0b1",
         "opencv-python",
         "nest_asyncio",
-        "gym"
+        "imageio",
+        "termcolor",
     ],
     tests_require=[],
     python_requires=">=3",

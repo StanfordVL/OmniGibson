@@ -1,7 +1,40 @@
 import gym
 from abc import ABCMeta, abstractmethod
-
 import numpy as np
+
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
+
+
+def recursively_generate_flat_dict(dic, prefix=None):
+    """
+    Helper function to recursively iterate through dictionary / gym.spaces.Dict @dic and flatten any nested elements,
+    such that the result is a flat dictionary mapping keys to values
+
+    Args:
+        dic (dict or gym.spaces.Dict): (Potentially nested) dictionary to convert into a flattened dictionary
+        prefix (None or str): Prefix to append to the beginning of all strings in the flattened dictionary. None results
+            in no prefix being applied
+
+    Returns:
+        dict: Flattened version of @dic
+    """
+    out = dict()
+    prefix = "" if prefix is None else f"{prefix}::"
+    for k, v in dic.items():
+        if isinstance(v, gym.spaces.Dict) or isinstance(v, dict):
+            out.update(recursively_generate_flat_dict(dic=v, prefix=f"{prefix}{k}"))
+        elif isinstance(v, gym.spaces.Tuple) or isinstance(v, tuple):
+            for i, vv in enumerate(v):
+                # Assume no dicts are nested within tuples
+                out[f"{prefix}{k}::{i}"] = vv
+        else:
+            # Add to out dict
+            out[f"{prefix}{k}"] = v
+
+    return out
 
 
 class GymObservable(metaclass=ABCMeta):
@@ -67,6 +100,6 @@ class GymObservable(metaclass=ABCMeta):
         """
         # Load the observation space and convert it into a gym-compatible dictionary
         self.observation_space = gym.spaces.Dict(self._load_observation_space())
-        print(f"Loaded obs space dictionary for: {self.__class__.__name__}")
+        log.debug(f"Loaded obs space dictionary for: {self.__class__.__name__}")
 
         return self.observation_space

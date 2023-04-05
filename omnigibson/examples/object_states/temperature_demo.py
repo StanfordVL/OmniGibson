@@ -1,4 +1,3 @@
-import logging
 import numpy as np
 
 import omnigibson as og
@@ -16,7 +15,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     The user can move the apples to see them change from frozen, to normal temperature, to cooked and burnt
     This demo also shows how to load objects ToggledOn and how to set the initial temperature of an object
     """
-    logging.info("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
+    og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
 
     # Define specific objects we want to load in with the scene directly
     obj_configs = []
@@ -27,7 +26,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         light_type="Sphere",
         name="light",
         radius=0.01,
-        intensity=1e5,
+        intensity=1e8,
         position=[-2.0, -2.0, 1.0],
     ))
 
@@ -36,8 +35,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         type="DatasetObject",
         name="stove",
         category="stove",
-        model="101943",
-        position=[0, 0, 0.65],
+        model="yhjzwg",
+        position=[0, 0, 0.69],
     ))
 
     # Microwave
@@ -45,9 +44,9 @@ def main(random_selection=False, headless=False, short_exec=False):
         type="DatasetObject",
         name="microwave",
         category="microwave",
-        model="7128",
+        model="hjjxmi",
         scale=0.25,
-        position=[2.5, 0, 0.094],
+        position=[2.5, 0, 0.10],
     ))
 
     # Oven
@@ -55,8 +54,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         type="DatasetObject",
         name="oven",
         category="oven",
-        model="7120",
-        position=[-1.25, 0, 0.80],
+        model="wuinhm",
+        position=[-1.25, 0, 0.88],
     ))
 
     # Tray
@@ -64,9 +63,9 @@ def main(random_selection=False, headless=False, short_exec=False):
         type="DatasetObject",
         name="tray",
         category="tray",
-        model="tray_000",
+        model="xzcnjq",
         scale=0.15,
-        position=[0, 0, 1.24],
+        position=[-0.25, -0.12, 1.26],
     ))
 
     # Fridge
@@ -74,14 +73,14 @@ def main(random_selection=False, headless=False, short_exec=False):
         type="DatasetObject",
         name="fridge",
         category="fridge",
-        model="12252",
+        model="hivvdf",
         abilities={
             "coldSource": {
                 "temperature": -100.0,
                 "requires_inside": True,
             }
         },
-        position=[1.25, 0, 0.90],
+        position=[1.25, 0, 0.81],
     ))
 
     # 5 Apples
@@ -90,8 +89,8 @@ def main(random_selection=False, headless=False, short_exec=False):
             type="DatasetObject",
             name=f"apple{i}",
             category="apple",
-            model="00_0",
-            position=[0, i * 0.05, 1.65],
+            model="agveuv",
+            position=[0, i * 0.1, 5.0],
         ))
 
     # Create the scene config to load -- empty scene with desired objects
@@ -131,11 +130,11 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Set initial temperature of the apples to -50 degrees Celsius, and move the apples to different objects
     for apple in apples:
         apple.states[object_states.Temperature].set_value(-50)
-    apples[0].states[object_states.Inside].set_value(oven, True, use_ray_casting_method=True)
-    apples[1].set_position(stove.states[object_states.HeatSourceOrSink].get_link_position() + np.array([0, 0, 0.1]))
-    apples[2].states[object_states.OnTop].set_value(tray, True, use_ray_casting_method=True)
-    apples[3].states[object_states.Inside].set_value(fridge, True, use_ray_casting_method=True)
-    apples[4].states[object_states.Inside].set_value(microwave, True, use_ray_casting_method=True)
+    apples[0].states[object_states.Inside].set_value(oven, True)
+    apples[1].set_position(stove.states[object_states.HeatSourceOrSink].link.get_position() + np.array([0, 0, 0.1]))
+    apples[2].states[object_states.OnTop].set_value(tray, True)
+    apples[3].states[object_states.Inside].set_value(fridge, True)
+    apples[4].states[object_states.Inside].set_value(microwave, True)
 
     steps = 0
     max_steps = -1 if not short_exec else 1000

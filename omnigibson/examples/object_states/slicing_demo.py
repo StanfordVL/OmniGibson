@@ -1,48 +1,44 @@
-import logging
 import numpy as np
 
 import omnigibson as og
 from omnigibson.macros import gm
 import omnigibson.utils.transform_utils as T
 
-# Make sure object states, contact reporting, and transition rules are enabled
+# Make sure object states and transition rules are enabled
 gm.ENABLE_OBJECT_STATES = True
-gm.ENABLE_GLOBAL_CONTACT_REPORTING = True
 gm.ENABLE_TRANSITION_RULES = True
 
 
 def main(random_selection=False, headless=False, short_exec=False):
     """
-    Demo to use the raycasting-based sampler to load objects onTop and/or inside another
-    Loads a cabinet, a microwave open on top of it, and two plates with apples on top, one inside and one on top of the cabinet
-    Then loads a shelf and cracker boxes inside of it
+    Demo of slicing an apple into two apple slices
     """
-    logging.info("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
+    og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
 
     # Create the scene config to load -- empty scene with table, knife, and apple
     table_cfg = dict(
         type="DatasetObject",
         name="table",
         category="breakfast_table",
-        model="19203",
+        model="rjgmmy",
         scale=0.9,
-        position=[0, 0, 0.532],
+        position=[0, 0, 0.58],
     )
 
     apple_cfg = dict(
         type="DatasetObject",
         name="apple",
         category="apple",
-        model="00_0",
+        model="agveuv",
         scale=1.5,
-        position=[0.085, 0,  0.90],
+        position=[0.085, 0,  0.92],
     )
 
     knife_cfg = dict(
         type="DatasetObject",
         name="knife",
         category="table_knife",
-        model="4",
+        model="lrdmpf",
         scale=2.5,
         position=[0, 0, 10.0],
     )

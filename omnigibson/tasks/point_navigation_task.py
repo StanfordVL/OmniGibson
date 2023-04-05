@@ -1,5 +1,4 @@
 import numpy as np
-import logging
 
 import omnigibson as og
 from omnigibson.objects.primitive_object import PrimitiveObject
@@ -15,6 +14,10 @@ from omnigibson.termination_conditions.timeout import Timeout
 from omnigibson.utils.python_utils import classproperty, assert_valid_key
 from omnigibson.utils.sim_utils import land_object, test_valid_pose
 import omnigibson.utils.transform_utils as T
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 # Valid point navigation reward types
@@ -43,7 +46,8 @@ class PointNavigationTask(BaseTask):
         visualize_goal (bool): Whether to visualize the initial / goal locations
         visualize_path (bool): Whether to visualize the path from initial to goal location, as represented by
             discrete waypoints
-        marker_height (float): If visualizing, specifies the height of the visual markers (m)
+        goal_height (float): If visualizing, specifies the height of the visual goals (m)
+        waypoint_height (float): If visualizing, specifies the height of the visual waypoints (m)
         waypoint_width (float): If visualizing, specifies the width of the visual waypoints (m)
         n_vis_waypoints (int): If visualizing, specifies the number of waypoints to generate
         reward_type (str): Type of reward to use. Valid options are: {"l2", "geodesic"}
@@ -69,9 +73,10 @@ class PointNavigationTask(BaseTask):
             path_range=None,
             visualize_goal=False,
             visualize_path=False,
-            marker_height=0.2,
+            goal_height=0.06,
+            waypoint_height=0.05,
             waypoint_width=0.1,
-            n_vis_waypoints=250,
+            n_vis_waypoints=10,
             reward_type="l2",
             termination_config=None,
             reward_config=None,
@@ -90,7 +95,8 @@ class PointNavigationTask(BaseTask):
         self._randomize_goal_pos = goal_pos is None
         self._visualize_goal = visualize_goal
         self._visualize_path = visualize_path
-        self._marker_height = marker_height
+        self._goal_height = goal_height
+        self._waypoint_height = waypoint_height
         self._waypoint_width = waypoint_width
         self._n_vis_waypoints = n_vis_waypoints
         assert_valid_key(key=reward_type, valid_keys=POINT_NAVIGATION_REWARD_TYPES, name="reward type")
@@ -141,6 +147,12 @@ class PointNavigationTask(BaseTask):
         # Load visualization
         self._load_visualization_markers(env=env)
 
+        # Auto-initialize all markers
+        og.sim.play()
+        env.scene.reset()
+        env.scene.update_initial_state()
+        og.sim.stop()
+
     def _load_visualization_markers(self, env):
         """
         Load visualization, such as initial and target position, shortest path, etc
@@ -148,41 +160,40 @@ class PointNavigationTask(BaseTask):
         Args:
             env (Environment): Active environment instance
         """
-        cyl_size = np.array([self._goal_tolerance, self._goal_tolerance, self._marker_height])
-        self._initial_pos_marker = PrimitiveObject(
-            prim_path="/World/task_initial_pos_marker",
-            primitive_type="Cylinder",
-            name="task_initial_pos_marker",
-            scale=cyl_size,
-            visible=self._visualize_goal,
-            visual_only=True,
-            rgba=np.array([1, 0, 0, 0.3]),
-        )
-        self._goal_pos_marker = PrimitiveObject(
-            prim_path="/World/task_goal_pos_marker",
-            primitive_type="Cylinder",
-            name="task_goal_pos_marker",
-            scale=cyl_size,
-            visible=self._visualize_goal,
-            visual_only=True,
-            rgba=np.array([0, 0, 1, 0.3]),
-        )
+        if self._visualize_goal:
+            self._initial_pos_marker = PrimitiveObject(
+                prim_path="/World/task_initial_pos_marker",
+                primitive_type="Cylinder",
+                name="task_initial_pos_marker",
+                radius=self._goal_tolerance,
+                height=self._goal_height,
+                visual_only=True,
+                rgba=np.array([1, 0, 0, 0.3]),
+            )
+            self._goal_pos_marker = PrimitiveObject(
+                prim_path="/World/task_goal_pos_marker",
+                primitive_type="Cylinder",
+                name="task_goal_pos_marker",
+                radius=self._goal_tolerance,
+                height=self._goal_height,
+                visual_only=True,
+                rgba=np.array([0, 0, 1, 0.3]),
+            )
 
-        # Load the objects into the simulator
-        og.sim.import_object(self._initial_pos_marker)
-        og.sim.import_object(self._goal_pos_marker)
+            # Load the objects into the simulator
+            og.sim.import_object(self._initial_pos_marker)
+            og.sim.import_object(self._goal_pos_marker)
 
         # Additionally generate waypoints along the path if we're building the map in the environment
-        if env.scene.trav_map.build_graph:
+        if env.scene.trav_map.build_graph and self._visualize_path:
             waypoints = []
-            waypoint_size = np.array([self._waypoint_width, self._waypoint_width, self._marker_height])
             for i in range(self._n_vis_waypoints):
                 waypoint = PrimitiveObject(
                     prim_path=f"/World/task_waypoint_marker{i}",
                     primitive_type="Cylinder",
                     name=f"task_waypoint_marker{i}",
-                    scale=waypoint_size,
-                    visible=self._visualize_path,
+                    radius=self._waypoint_width,
+                    height=self._waypoint_height,
                     visual_only=True,
                     rgba=np.array([0, 1, 0, 0.3]),
                 )
@@ -191,9 +202,6 @@ class PointNavigationTask(BaseTask):
 
             # Store waypoints
             self._waypoint_markers = waypoints
-
-        # Take one sim step to initialize all the markers
-        og.sim.step()
 
     def _sample_initial_pose_and_goal_pos(self, env, max_trials=100):
         """
@@ -236,13 +244,13 @@ class PointNavigationTask(BaseTask):
                     break
             # Notify if we weren't able to get a valid start / end point sampled in the requested range
             if not in_range_dist:
-                logging.warning("Failed to sample initial and target positions within requested path range")
+                log.warning("Failed to sample initial and target positions within requested path range")
         else:
             goal_pos = self._goal_pos
 
         # Add additional logging info
-        logging.info("Sampled initial pose: {}, {}".format(initial_pos, initial_quat))
-        logging.info("Sampled goal position: {}".format(goal_pos))
+        log.info("Sampled initial pose: {}, {}".format(initial_pos, initial_quat))
+        log.info("Sampled goal position: {}".format(goal_pos))
         return initial_pos, initial_quat, goal_pos
 
     def _get_geodesic_potential(self, env):
@@ -296,9 +304,6 @@ class PointNavigationTask(BaseTask):
         # We attempt to sample valid initial poses and goal positions
         success, max_trials = False, 100
 
-        # Store the state of the environment now, so that we can restore it after each setting attempt
-        state = og.sim.dump_state(serialized=True)
-
         initial_pos, initial_quat, goal_pos = None, None, None
         for i in range(max_trials):
             initial_pos, initial_quat, goal_pos = self._sample_initial_pose_and_goal_pos(env)
@@ -307,16 +312,13 @@ class PointNavigationTask(BaseTask):
                 env.robots[self._robot_idn], initial_pos, initial_quat, env.initial_pos_z_offset
             ) and test_valid_pose(env.robots[self._robot_idn], goal_pos, None, env.initial_pos_z_offset)
 
-            # Load the original state
-            og.sim.load_state(state=state, serialized=True)
-
             # Don't need to continue iterating if we succeeded
             if success:
                 break
 
         # Notify user if we failed to reset a collision-free sampled pose
         if not success:
-            logging.warning("WARNING: Failed to reset robot without collision")
+            log.warning("WARNING: Failed to reset robot without collision")
 
         # Land the robot
         land_object(env.robots[self._robot_idn], initial_pos, initial_quat, env.initial_pos_z_offset)
@@ -346,7 +348,7 @@ class PointNavigationTask(BaseTask):
 
         # Add additional info
         info["path_length"] = self._path_length
-        info["spl"] = float(info["success"]) * min(1.0, self._geodesic_dist / self._path_length) if done else 0.0
+        info["spl"] = float(info["success"]) * min(1.0, self._geodesic_dist / self._path_length) if done and self._path_length != 0.0 else 0.0
 
         return done, info
 

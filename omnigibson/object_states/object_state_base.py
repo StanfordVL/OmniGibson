@@ -45,7 +45,6 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         self._initialized = False
         self._cache = None
         self._changed = None
-        self._simulator = None
         self._last_t_updated = -1               # Last timestep when this state was updated
 
     @property
@@ -78,14 +77,11 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         """
         pass
 
-    def initialize(self, simulator):
+    def initialize(self):
         """
         Initialize this object state
         """
         assert not self._initialized, "State is already initialized."
-
-        # Store simulator reference and create cache
-        self._simulator = simulator
 
         self._initialize()
         self._initialized = True
@@ -159,9 +155,8 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
 
     def has_changed(self, get_value_args, value, info, t):
         """
-        A helper function to query whether this object state has changed between an arbitrary previous timestep @t with
-        corresponding cached value @value and cache information @info
-        the current timestep.
+        A helper function to query whether this object state has changed between the current timestep and an arbitrary
+        previous timestep @t with the corresponding cached value @value and cache information @info
 
         Note that this may require some non-trivial compute, so we leverage @t, in addition to @get_value_args,
         as a unique key into an internal dictionary, such that specific @t will result in a computation conducted

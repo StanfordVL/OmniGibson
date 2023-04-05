@@ -1,26 +1,25 @@
-import logging
 import numpy as np
 import omnigibson as og
 from omnigibson.object_states import Covered
 from omnigibson.objects import DatasetObject
 from omnigibson.macros import gm, macros
-from omnigibson.systems import *
+from omnigibson.systems import get_system
 from omnigibson.utils.usd_utils import create_joint
 from omnigibson.utils.ui_utils import choose_from_options
 from omnigibson.utils.constants import ParticleModifyMethod
-from omni.isaac.core.utils.stage import add_reference_to_stage
 from pxr import Gf
 
 # Set macros for this example
 macros.object_states.particle_modifier.VISUAL_PARTICLES_REMOVAL_LIMIT = 1000
 macros.object_states.particle_modifier.PHYSICAL_PARTICLES_REMOVAL_LIMIT = 8000
-macros.object_states.particle_modifier.MAX_VISUAL_PARTICLES_APPLIED_PER_STEP = 10
+macros.object_states.particle_modifier.MAX_VISUAL_PARTICLES_APPLIED_PER_STEP = 4
 macros.object_states.particle_modifier.MAX_PHYSICAL_PARTICLES_APPLIED_PER_STEP = 40
-StainSystem._N_PARTICLES_PER_GROUP = 300
+macros.object_states.covered.MAX_VISUAL_PARTICLES = 300
 
 # Make sure object states and GPU dynamics are enabled (GPU dynamics needed for fluids)
 gm.ENABLE_OBJECT_STATES = True
 gm.USE_GPU_DYNAMICS = True
+gm.ENABLE_HQ_RENDERING = True
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -31,8 +30,15 @@ def main(random_selection=False, headless=False, short_exec=False):
     Loads an empty scene with a table, and starts clean to allow particles to be applied or pre-covers the table
     with particles to be removed. The ParticleApplier / ParticleRemover state is applied to an imported cloth object
     and allowed to interact with the table, applying / removing particles from the table.
+
+    NOTE: The key difference between ParticleApplier/Removers and ParticleSource/Sinks is that Applier/Removers
+    requires contact (if using ParticleProjectionMethod.ADJACENCY) or overlap
+    (if using ParticleProjectionMethod.PROJECTION) in order to spawn / remove particles, and generally only spawn
+    particles at the contact points. ParticleSource/Sinks are special cases of ParticleApplier/Removers that
+    always use ParticleProjectionMethod.PROJECTION and always spawn / remove particles within their projection volume,
+    irregardless of overlap with other objects!
     """
-    logging.info("*" * 80 + "\nDescription:" + main.__doc__ + "*" * 80)
+    og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
 
     # Choose what configuration to load
     modifier_type = choose_from_options(
@@ -49,13 +55,12 @@ def main(random_selection=False, headless=False, short_exec=False):
         "particleRemover": "particleremover_link",
     }
 
-    particle_mapping = {system.name: system for system in [StainSystem, WaterSystem]}
+    particle_types = ["stain", "water"]
     particle_type = choose_from_options(
-        options={name: f"{name} particles will be applied or removed from the simulator" for name in particle_mapping},
+        options={name: f"{name} particles will be applied or removed from the simulator" for name in particle_types},
         name="particle type",
         random_selection=random_selection,
     )
-    particle_system = particle_mapping[particle_type]
 
     modification_method = {
         "Adjacency": ParticleModifyMethod.ADJACENCY,
@@ -68,7 +73,8 @@ def main(random_selection=False, headless=False, short_exec=False):
             # Either Cone or Cylinder; shape of the projection where particles can be applied / removed
             "type": "Cone",
             # Size of the cone
-            "extents": np.array([0.375, 0.375, 0.75]),
+            "extents": np.array([0.1875, 0.1875, 0.375]),
+            "visualize": True,
         },
     }
 
@@ -90,7 +96,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 # particle applier / remover to apply / remover particles associated with that system
                 # The list should contain functions with signature condition() --> bool,
                 # where True means the condition is satisified
-                particle_system: [],
+                particle_type: [],
             },
             "projection_mesh_params": projection_mesh_params[method_type],
         }
@@ -102,7 +108,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="light",
         light_type="Sphere",
         radius=0.01,
-        intensity=1e5,
+        intensity=1e8,
         position=[-2.0, -2.0, 2.0],
     )
 
@@ -110,9 +116,9 @@ def main(random_selection=False, headless=False, short_exec=False):
         type="DatasetObject",
         name="table",
         category="breakfast_table",
-        model="265851637a59eb2f882f822c83877cbc",
+        model="kwmfdg",
         scale=[4.0, 4.0, 4.0],
-        position=[0, 0, 0.7],
+        position=[0, 0, 0.98],
     )
 
     # Create the scene config to load -- empty scene with a light and table
@@ -141,28 +147,25 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # If we're using a projection volume, we manually add in the required metalink required in order to use the volume
     modifier = DatasetObject(
-        prim_path="/World/modifier",
         name="modifier",
         category="dishtowel",
-        model="Tag_Dishtowel_Basket_Weave_Red",
+        model="dtfspn",
         scale=np.ones(3) * 2.0,
-        visual_only=method_type == "Projection" or particle_system == StainSystem,  # Fluid + adjacency requires the object to have collision geoms active
+        visual_only=method_type == "Projection",  # Non-fluid adjacency requires the object to have collision geoms active
         abilities=abilities,
     )
     modifier_root_link_path = f"{modifier.prim_path}/base_link"
-    modifier._prim = modifier._load(og.sim)
+    modifier._prim = modifier._load()
     if method_type == "Projection":
         metalink_path = f"{modifier.prim_path}/{modification_metalink[modifier_type]}"
         og.sim.stage.DefinePrim(metalink_path, "Xform")
-        joint_prim = create_joint(
+        create_joint(
             prim_path=f"{modifier_root_link_path}/{modification_metalink[modifier_type]}_joint",
             body0=modifier_root_link_path,
             body1=metalink_path,
             joint_type="FixedJoint",
             enabled=True,
         )
-        local_area_quat = np.array([0, 0.707, 0, 0.707])    # Needs to rotated so the metalink points downwards from cloth
-        joint_prim.GetAttribute("physics:localRot0").Set(Gf.Quatf(*(local_area_quat[[3, 0, 1, 2]])))
     modifier._post_load()
     modifier._loaded = True
     og.sim.import_object(modifier)
@@ -175,7 +178,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # If we're removing particles, set the table's covered state to be True
     if modifier_type == "particleRemover":
-        table.states[Covered].set_value(particle_system, True)
+        table.states[Covered].set_value(get_system(particle_type), True)
 
         # Take a few steps to let particles settle
         for _ in range(25):
@@ -188,7 +191,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     if method_type == "Projection":
         # Higher z to showcase projection volume at work
         z = 1.85
-    elif particle_system == StainSystem:
+    elif particle_type == "stain":
         # Lower z needed to allow for adjacency bounding box to overlap properly
         z = 1.175
     else:
@@ -210,8 +213,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     for t, delta in deltas:
         for i in range(t):
             modifier.set_position(modifier.get_position() + delta)
-            # env.step(np.array([]))
-            og.sim.step()
+            env.step(np.array([]))
 
     # Always shut down environment at the end
     env.close()

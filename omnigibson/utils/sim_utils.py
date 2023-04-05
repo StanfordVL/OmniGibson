@@ -1,12 +1,16 @@
 import numpy as np
 from collections import Iterable, namedtuple
-import logging
 
 import omnigibson as og
+from omnigibson.macros import gm
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import BoundingBoxAPI
 from omni.physx import get_physx_simulation_interface
 from omni.isaac.core.utils.prims import is_prim_ancestral, get_prim_type_name, is_prim_no_delete
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 # Raw Body Contact Information
 # See https://docs.omniverse.nvidia.com/py/isaacsim/source/extensions/omni.isaac.contact_sensor/docs/index.html?highlight=contact%20sensor#omni.isaac.contact_sensor._contact_sensor.CsRawData for more info.
@@ -203,9 +207,9 @@ def get_collisions(prims=None, prims_check=None, prims_exclude=None, step_physic
             collisions = valid_other_collisions.union(valid_intersect_collisions)
 
     # Only going into this if it is for logging --> efficiency
-    if logging.root.level <= logging.DEBUG:
+    if gm.DEBUG:
         for item in collisions:
-            logging.debug("linkA:{}, linkB:{}".format(item[0], item[1]))
+            log.debug("linkA:{}, linkB:{}".format(item[0], item[1]))
 
     return collisions
 
@@ -303,13 +307,7 @@ def test_valid_pose(obj, pos, quat=None, z_offset=None):
 
     # Set the pose of the object
     place_base_pose(obj, pos, quat, z_offset)
-
-    # If we're placing a robot, make sure it's reset and not moving
-    # Run import here to avoid circular imports
-    from omnigibson.robots.robot_base import BaseRobot
-    if isinstance(obj, BaseRobot):
-        obj.reset()
-        obj.keep_still()
+    obj.keep_still()
 
     # Check whether we're in collision after taking a single physics step
     in_collision = check_collision(prims=obj, step_physics=True)
@@ -338,14 +336,7 @@ def land_object(obj, pos, quat=None, z_offset=None):
     # Set the object's pose
     quat = T.euler2quat([0, 0, np.random.uniform(0, np.pi * 2)]) if quat is None else quat
     place_base_pose(obj, pos, quat, z_offset)
-
-    # If we're placing a robot, make sure it's reset and not moving
-    # Run import here to avoid circular imports
-    from omnigibson.robots.robot_base import BaseRobot
-    is_robot = isinstance(obj, BaseRobot)
-    if is_robot:
-        obj.reset()
-        obj.keep_still()
+    obj.keep_still()
 
     # Check to make sure we landed successfully
     # land for maximum 1 second, should fall down ~5 meters
@@ -357,14 +348,11 @@ def land_object(obj, pos, quat=None, z_offset=None):
         land_success = check_collision(prims=obj)
         if land_success:
             # Once we're successful, we can break immediately
-            print(f"Landed object {obj.name} successfully!")
+            log.info(f"Landed object {obj.name} successfully!")
             break
 
     # Print out warning in case we failed to land the object successfully
     if not land_success:
-        logging.warning(f"Object {obj.name} failed to land.")
+        log.warning(f"Object {obj.name} failed to land.")
 
-    # Make sure object isn't moving at the end if we're a robot
-    if is_robot:
-        obj.reset()
-        obj.keep_still()
+    obj.keep_still()

@@ -1,7 +1,8 @@
 from abc import ABCMeta
-import logging
+import numpy as np
 
-from omnigibson.macros import create_module_macros
+import omnigibson as og
+from omnigibson.macros import create_module_macros, gm
 from omnigibson.utils.constants import (
     DEFAULT_COLLISION_GROUP,
     SPECIAL_COLLISION_GROUPS,
@@ -10,13 +11,18 @@ from omnigibson.utils.constants import (
 from pxr import UsdPhysics, PhysxSchema
 from omnigibson.utils.usd_utils import create_joint, CollisionAPI
 from omnigibson.prims.entity_prim import EntityPrim
-from omnigibson.utils.python_utils import Registerable, classproperty
+from omnigibson.utils.python_utils import Registerable, classproperty, get_uuid
 from omnigibson.utils.constants import PrimType, CLASS_NAME_TO_CLASS_ID
+from omnigibson.utils.ui_utils import create_module_logger, suppress_omni_log
 
+from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.isaac.core.utils.semantics import add_update_semantics
 
 # Global dicts that will contain mappings
 REGISTERED_OBJECTS = dict()
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -31,8 +37,8 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
 
     def __init__(
             self,
-            prim_path,
-            name=None,
+            name,
+            prim_path=None,
             category="object",
             class_id=None,
             uuid=None,
@@ -47,9 +53,9 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
     ):
         """
         Args:
-            prim_path (str): global path in the stage to this object
-            name (None or str): Name for the object. Names need to be unique per scene. If None, a name will be
-                generated at the time the object is added to the scene, using the object's category.
+            name (str): Name for the object. Names need to be unique per scene
+            prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
+                created at /World/<name>
             category (str): Category for the object. Defaults to "object".
             class_id (None or int): What class ID the object should be assigned in semantic segmentation rendering mode.
                 If None, the ID will be inferred from this object's category.
@@ -70,18 +76,14 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
                 Note that this base object does NOT pass kwargs down into the Prim-type super() classes, and we assume
                 that kwargs are only shared between all SUBclasses (children), not SUPERclasses (parents).
         """
-        # Generate a name if necessary. Note that the generation order & set of these names is not deterministic.
-        if name is None:
-            address = "%08X" % id(self)
-            name = "{}_{}".format(category, address)
+        # Generate default prim path if none is specified
+        prim_path = f"/World/{name}" if prim_path is None else prim_path
 
         # Store values
-        self.uuid = int(str(id(self))[-8:]) if uuid is None else uuid
+        self.uuid = get_uuid(name) if uuid is None else uuid
         assert len(str(self.uuid)) <= 8, f"UUID for this object must be at max 8-digits, got: {self.uuid}"
         self.category = category
         self.fixed_base = fixed_base
-
-        logging.info(f"Category: {self.category}")
 
         # This sets the collision group of the object. In omnigibson, objects are only permitted to be part of a single
         # collision group, e.g. collisions are only enabled within a single group
@@ -93,7 +95,6 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         self.class_id = class_id
 
         # Values to be created at runtime
-        self._simulator = None
         self._highlight_cached_values = None
         self._highlighted = None
 
@@ -117,15 +118,21 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         self._init_info["args"]["name"] = self.name
         self._init_info["args"]["uuid"] = self.uuid
 
-    def load(self, simulator=None):
-        # Run sanity check, any of these objects REQUIRE a simulator to be specified
-        assert simulator is not None, "Simulator must be specified for loading any object subclassed from BaseObject!"
-
-        # Save simulator reference
-        self._simulator = simulator
-
+    def load(self):
         # Run super method ONLY if we're not loaded yet
-        return super().load(simulator=simulator) if not self.loaded else self._prim
+        if self.loaded:
+            prim = self._prim
+        else:
+            prim = super().load()
+            log.info(f"Loaded {self.name} at {self.prim_path}")
+        return prim
+
+    def remove(self):
+        # Run super first
+        super().remove()
+
+        # Notify user that the object was removed
+        log.info(f"Removed {self.name} from {self.prim_path}")
 
     def _post_load(self):
         # Run super first
@@ -135,11 +142,19 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         if "visible" in self._load_config and self._load_config["visible"] is not None:
             self.visible = self._load_config["visible"]
 
+        # First, remove any articulation root API that already exists at the object-level prim
+        if self._prim.HasAPI(UsdPhysics.ArticulationRootAPI):
+            self._prim.RemoveAPI(UsdPhysics.ArticulationRootAPI)
+            self._prim.RemoveAPI(PhysxSchema.PhysxArticulationAPI)
+
         # Add fixed joint if we're fixing the base
         if self.fixed_base:
-            # For optimization purposes, if we only have a single rigid body, we assume this
-            # is not an articulated object so we merely set this to be a static collider, i.e.: kinematic-only
-            if self.n_joints == 0:
+            # For optimization purposes, if we only have a single rigid body that has either
+            # (no custom scaling OR no fixed joints), we assume this is not an articulated object so we
+            # merely set this to be a static collider, i.e.: kinematic-only
+            # The custom scaling / fixed joints requirement is needed because omniverse complains about scaling that
+            # occurs with respect to fixed joints, as omni will "snap" bodies together otherwise
+            if self.n_joints == 0 and (np.all(np.isclose(self.scale, 1.0, atol=1e-3)) or self.n_fixed_joints == 0):
                 self.kinematic_only = True
             else:
                 # Create fixed joint, and set Body0 to be this object's root prim
@@ -148,30 +163,12 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
                     joint_type="FixedJoint",
                     body1=f"{self._prim_path}/{self._root_link_name}",
                 )
-                # Also set the articulation root to be the object head if it doesn't already exist
-                if not self._prim.HasAPI(UsdPhysics.ArticulationRootAPI):
-                    UsdPhysics.ArticulationRootAPI.Apply(self.prim)
-                    PhysxSchema.PhysxArticulationAPI.Apply(self.prim)
-        else:
-            if self._prim.HasAPI(UsdPhysics.ArticulationRootAPI):
-                # If we only have a link, remove the articulation root API
-                if self.n_links == 1:
-                    self._prim.RemoveAPI(UsdPhysics.ArticulationRootAPI)
-                    self._prim.RemoveAPI(PhysxSchema.PhysxArticulationAPI)
-                else:
-                    # We need to fix (change) the articulation root
-                    # We have to do something very hacky because omniverse is buggy
-                    # Articulation roots mess up the joint order if it's on a non-fixed base robot, e.g. a
-                    # mobile manipulator. So if we have to move it to the actual root link of the robot instead.
-                    # See https://forums.developer.nvidia.com/t/inconsistent-values-from-isaacsims-dc-get-joint-parent-child-body/201452/2
-                    # for more info
-                    self._prim.RemoveAPI(UsdPhysics.ArticulationRootAPI)
-                    self._prim.RemoveAPI(PhysxSchema.PhysxArticulationAPI)
-                    UsdPhysics.ArticulationRootAPI.Apply(self.root_prim)
-                    PhysxSchema.PhysxArticulationAPI.Apply(self.root_prim)
 
-        # Set self collisions if we have articulation API to set
-        if self._prim.HasAPI(UsdPhysics.ArticulationRootAPI) or self.root_prim.HasAPI(UsdPhysics.ArticulationRootAPI):
+        # Potentially add articulation root APIs and also set self collisions
+        root_prim = None if self.articulation_root_path is None else get_prim_at_path(self.articulation_root_path)
+        if root_prim is not None:
+            UsdPhysics.ArticulationRootAPI.Apply(root_prim)
+            PhysxSchema.PhysxArticulationAPI.Apply(root_prim)
             self.self_collisions = self._load_config["self_collisions"]
 
         # TODO: Do we need to explicitly add all links? or is adding articulation root itself sufficient?
@@ -189,9 +186,9 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
             type_label="class",
         )
 
-        # Force populate inputs and outputs of the shaders of all materials
-        for material in self.materials:
-            material.shader_force_populate()
+    def _initialize(self):
+        # Run super first
+        super()._initialize()
 
         # Iterate over all links and grab their relevant material info for highlighting (i.e.: emissivity info)
         self._highlighted = False
@@ -206,14 +203,22 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
 
     @property
     def articulation_root_path(self):
-        # We override this because omniverse is buggy ):
-        # For non-fixed base objects (e.g.: mobile manipulators), using the default articulation root breaks the
-        # kinematic chain for some reason. So, the current workaround is to set the articulation root to be the
-        # actual base link of the robot instead.
-        # See https://forums.developer.nvidia.com/t/inconsistent-values-from-isaacsims-dc-get-joint-parent-child-body/201452/2
-        # for more info
-        return f"{self._prim_path}/{self.root_link_name}" if \
-            (not self.fixed_base) and (self.n_links > 1) else super().articulation_root_path
+        has_articulated_joints, has_fixed_joints = self.n_joints > 0, self.n_fixed_joints > 0
+        if self.kinematic_only or ((not has_articulated_joints) and (not has_fixed_joints)):
+            # Kinematic only, or non-jointed single body objects
+            return None
+        elif not self.fixed_base:
+            # This is all remaining non-fixed objects
+            # This is a bit hacky because omniverse is buggy
+            # Articulation roots mess up the joint order if it's on a non-fixed base robot, e.g. a
+            # mobile manipulator. So if we have to move it to the actual root link of the robot instead.
+            # See https://forums.developer.nvidia.com/t/inconsistent-values-from-isaacsims-dc-get-joint-parent-child-body/201452/2
+            # for more info
+            return f"{self._prim_path}/{self.root_link_name}"
+        else:
+            # Fixed objects that are not kinematic only, or non-fixed objects that have no articulated joints but do
+            # have fixed joints
+            return self._prim_path
 
     @property
     def mass(self):

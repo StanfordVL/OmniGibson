@@ -1,4 +1,3 @@
-import logging
 import os
 
 import numpy as np
@@ -7,6 +6,10 @@ from omnigibson.scenes.traversable_scene import TraversableScene
 from omnigibson.prims.geom_prim import CollisionVisualGeomPrim
 from omnigibson.utils.asset_utils import get_scene_path
 from omnigibson.utils.usd_utils import add_asset_to_stage
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 class StaticTraversableScene(TraversableScene):
@@ -61,9 +64,9 @@ class StaticTraversableScene(TraversableScene):
             floor_plane_color=floor_plane_color,
         )
 
-    def _load(self, simulator):
+    def _load(self):
         # Run super first
-        super()._load(simulator=simulator)
+        super()._load()
 
         # Load the scene mesh (use downsampled one if available)
         filename = os.path.join(get_scene_path(self.scene_model), "mesh_z_up_downsampled.obj")
@@ -86,7 +89,7 @@ class StaticTraversableScene(TraversableScene):
         assert os.path.isfile(floor_height_path), f"floor_heights.txt cannot be found in model: {self.scene_model}"
         with open(floor_height_path, "r") as f:
             self.floor_heights = sorted(list(map(float, f.readlines())))
-            logging.debug("Floors {}".format(self.floor_heights))
+            log.debug("Floors {}".format(self.floor_heights))
 
         # Move the floor plane to the first floor by default
         self.move_floor_plane(floor=0)
