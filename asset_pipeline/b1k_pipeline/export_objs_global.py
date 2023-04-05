@@ -59,7 +59,7 @@ MAX_MESHES = 64
 VHACD_MESHES = 32
 VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 CLOTH_SUBDIVISION_THRESHOLD = 0.05
-COACD_EXCLUDE_CATEGORIES = {"floor", "wall", "ceiling"}
+COACD_EXCLUDE_CATEGORIES = {"floors", "walls", "ceilings"}
 
 # TODO: Make this use a local version if necessary.
 # from dask_kubernetes.operator import KubeCluster
