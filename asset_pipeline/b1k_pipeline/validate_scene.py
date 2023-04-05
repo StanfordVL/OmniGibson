@@ -54,7 +54,7 @@ def main():
     mismatches = []
     for key, obj in scene.objects_by_id.items():
         for body in obj.get_body_ids():
-            link_ids = [-1] # utils.get_all_links(body)
+            link_ids = utils.get_all_links(body)
             new_link_poses = [utils.get_link_pose(body, link) for link in link_ids]
             old_link_poses = obj_states[body]
 
