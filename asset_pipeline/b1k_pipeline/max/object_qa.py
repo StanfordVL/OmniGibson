@@ -2,6 +2,7 @@ import csv
 import json
 import os
 import sys
+import textwrap
 sys.path.append(r"D:\ig_pipeline")
 
 import pymxs
@@ -13,6 +14,8 @@ nltk.download('omw-1.4')
 from nltk.corpus import wordnet as wn
 
 from b1k_pipeline.utils import parse_name, PIPELINE_ROOT
+
+IGNORE_CATEGORIES = {"walls", "floors", "ceilings"}
 
 PASS_NAME = "ruohan-1"
 RECORD_PATH = PIPELINE_ROOT / "qa-logs" / f"{PASS_NAME}.json"
@@ -47,11 +50,14 @@ def main():
     completed_groups = set()
     if os.path.exists(RECORD_PATH):
         with open(RECORD_PATH) as f:
-            completed_groups = {tuple(obj) for obj in json.load(f)}
+            completed_groups = set(json.load(f))
 
     # Find incomplete groups
     parsed_names = [parse_name(x.name) for x in rt.objects]
-    available_groups = {x.group("category") + "-" + x.group("model_id") for x in parsed_names if x is not None and not x.group("bad") and int(x.group("instance_id")) == 0}
+    available_groups = {
+        x.group("category") + "-" + x.group("model_id")
+        for x in parsed_names
+        if x is not None and not x.group("bad") and int(x.group("instance_id")) == 0 and x.group("category") not in IGNORE_CATEGORIES}
     remaining_groups = sorted(available_groups - completed_groups)
     if not remaining_groups:
         rt.messageBox("Scene complete. Move to next scene.")
@@ -69,19 +75,18 @@ def main():
         if n.group("category") + "-" + n.group("model_id") != next_group:
             continue
         next_group_objects.append(obj)
-        print("Picked", obj.name)
-        obj.hidden = False
+        obj.isHidden = False
 
     # Select that object and print
     rt.select(next_group_objects)
     rt.IsolateSelection.EnterIsolateSelectionMode()
     rt.execute("max tool zoomextents")
-    print(f"{len(remaining_groups) + 1} / {len(available_groups)}: {next_group}")
+    print(f"{len(available_groups) - len(remaining_groups) + 1} / {len(available_groups)}: {next_group}")
 
     # Show a popup with the synset info
     category_name = next_group.split("-")[0]
     synset_name, synset_desc = get_synset(category_name)
-    rt.messagebox(f"Category {category_name} is currently mapped to synset {synset_name} ({synset_desc})")
+    print(textwrap.fill(f"Category {category_name} is currently mapped to synset {synset_name} ({synset_desc})"))
 
     # Record that object as completed
     with open(RECORD_PATH, "w") as f:
