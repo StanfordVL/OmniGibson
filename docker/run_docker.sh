@@ -6,7 +6,7 @@ Color_Off='\033[0m'
 # Parse the command line arguments.
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 DEFAULT_DATA_DIR="$SCRIPT_DIR/omnigibson_data"
-DATA_PATH=${1:-$DEFAULT_DATA_DIR}
+DATA_PATH=$DEFAULT_DATA_DIR
 GUI=true
 
 # Parse command line arguments
@@ -105,11 +105,11 @@ done
 
 docker pull stanfordvl/omnigibson:latest
 DOCKER_DISPLAY=""
-OMNIGIBSON_HEADLESS=0
+OMNIGIBSON_HEADLESS=1
 if [ "$GUI" = true ] ; then
     xhost +local:root
     DOCKER_DISPLAY=$DISPLAY
-    OMNIGIBSON_HEADLESS=1
+    OMNIGIBSON_HEADLESS=0
 fi
 docker run \
     --gpus all \
