@@ -35,9 +35,9 @@ EGL_VENDOR_PATH="/usr/share/glvnd/egl_vendor.d/10_nvidia.json"
 
 # Find the ICD file
 if [ -e "$ICD_PATH_1" ]; then
-    $ICD_PATH = $ICD_PATH_1
+    ICD_PATH=$ICD_PATH_1
 elif [ -e "$ICD_PATH_2" ]; then
-    $ICD_PATH = $ICD_PATH_2
+    ICD_PATH=$ICD_PATH_2
 else
     echo "Missing nvidia_icd.json file.";
     echo "Typical paths:";
@@ -51,11 +51,11 @@ fi
 
 # Find the layers file
 if [ -e "$LAYERS_PATH_1" ]; then
-    $LAYERS_PATH = $LAYERS_PATH_1
+    LAYERS_PATH=$LAYERS_PATH_1
 elif [ -e "$LAYERS_PATH_2" ]; then
-    $LAYERS_PATH = $LAYERS_PATH_2
+    LAYERS_PATH=$LAYERS_PATH_2
 elif [ -e "$LAYERS_PATH_3" ]; then
-    $LAYERS_PATH = $LAYERS_PATH_3
+    LAYERS_PATH=$LAYERS_PATH_3
 else
     echo "Missing nvidia_layers.json file."
     echo "Typical paths:";
@@ -104,17 +104,17 @@ while true; do
 done
 
 docker pull stanfordvl/omnigibson:latest
-$DOCKER_DISPLAY=""
-$OMNIGIBSON_HEADLESS=0
+DOCKER_DISPLAY=""
+OMNIGIBSON_HEADLESS=0
 if [ "$GUI" = true ] ; then
     xhost +local:root
-    $DOCKER_DISPLAY=$DISPLAY
-    $OMNIGIBSON_HEADLESS=1
+    DOCKER_DISPLAY=$DISPLAY
+    OMNIGIBSON_HEADLESS=1
 fi
 docker run \
     --gpus all \
     --privileged \
-    -e DISPLAY \
+    -e DISPLAY=${DOCKER_DISPLAY} \
     -e OMNIGIBSON_HEADLESS=${OMNIGIBSON_HEADLESS} \
     -v $DATA_PATH/datasets:/data \
     -v ${ICD_PATH}:/etc/vulkan/icd.d/nvidia_icd.json \
