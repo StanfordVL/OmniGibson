@@ -29,7 +29,8 @@ done
 ICD_PATH_1="/usr/share/vulkan/icd.d/nvidia_icd.json"
 ICD_PATH_2="/etc/vulkan/icd.d/nvidia_icd.json"
 LAYERS_PATH_1="/usr/share/vulkan/icd.d/nvidia_layers.json"
-LAYERS_PATH_2="/etc/vulkan/implicit_layer.d/nvidia_layers.json"
+LAYERS_PATH_2="/usr/share/vulkan/implicit_layer.d/nvidia_layers.json"
+LAYERS_PATH_3="/etc/vulkan/implicit_layer.d/nvidia_layers.json"
 EGL_VENDOR_PATH="/usr/share/glvnd/egl_vendor.d/10_nvidia.json"
 
 # Find the ICD file
@@ -53,10 +54,13 @@ if [ -e "$LAYERS_PATH_1" ]; then
     $LAYERS_PATH = $LAYERS_PATH_1
 elif [ -e "$LAYERS_PATH_2" ]; then
     $LAYERS_PATH = $LAYERS_PATH_2
+elif [ -e "$LAYERS_PATH_3" ]; then
+    $LAYERS_PATH = $LAYERS_PATH_3
 else
     echo "Missing nvidia_layers.json file."
     echo "Typical paths:";
     echo "- /usr/share/vulkan/icd.d/nvidia_layers.json";
+    echo "- /usr/share/vulkan/implicit_layer.d/nvidia_layers.json";
     echo "- /etc/vulkan/implicit_layer.d/nvidia_layers.json";
     echo "You can google nvidia_layers.json for your distro to find the correct path.";
     echo "Consider updating your driver to 525 if you cannot find the file.";
