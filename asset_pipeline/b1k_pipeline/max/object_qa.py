@@ -61,7 +61,7 @@ def main():
     next_group = remaining_groups[0]
     next_group_objects = []
     for obj in rt.objects:
-        n = parse_name(obj)
+        n = parse_name(obj.name)
         if n is None:
             continue
         if n.group("bad") or int(n.group("instance_id")) != 0:
@@ -69,6 +69,8 @@ def main():
         if n.group("category") + "-" + n.group("model_id") != next_group:
             continue
         next_group_objects.append(obj)
+        print("Picked", obj.name)
+        obj.hidden = False
 
     # Select that object and print
     rt.select(next_group_objects)
@@ -83,4 +85,7 @@ def main():
 
     # Record that object as completed
     with open(RECORD_PATH, "w") as f:
-        json.dump(completed_groups | {next_group}, f)
+        json.dump(list(completed_groups | {next_group}), f)
+
+if __name__ == "__main__":
+    main()
