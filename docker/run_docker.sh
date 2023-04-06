@@ -111,7 +111,7 @@ docker run \
     --gpus all \
     --privileged \
     -e DISPLAY \
-    -e OMNIGIBSON_HEADLESS=1 \
+    -e OMNIGIBSON_HEADLESS=${OMNIGIBSON_HEADLESS} \
     -v $DATA_PATH/datasets:/data \
     -v ${ICD_PATH}:/etc/vulkan/icd.d/nvidia_icd.json \
     -v ${LAYERS_PATH}:/etc/vulkan/implicit_layer.d/nvidia_layers.json \
