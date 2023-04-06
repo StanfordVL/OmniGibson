@@ -3,35 +3,71 @@
 BYellow='\033[1;33m'
 Color_Off='\033[0m'
 
+# Parse the command line arguments.
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 DEFAULT_DATA_DIR="$SCRIPT_DIR/omnigibson_data"
 DATA_PATH=${1:-$DEFAULT_DATA_DIR}
+GUI=true
 
-ICD_PATH="/usr/share/vulkan/icd.d/nvidia_icd.json"
-LAYERS_PATH="/usr/share/vulkan/icd.d/nvidia_layers.json"
+# Parse command line arguments
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+
+    case $key in
+        -h|--headless)
+        GUI=false
+        shift
+        ;;
+        *)
+        DATA_PATH="$1"
+        shift
+        ;;
+    esac
+done
+
+ICD_PATH_1="/usr/share/vulkan/icd.d/nvidia_icd.json"
+ICD_PATH_2="/etc/vulkan/icd.d/nvidia_icd.json"
+LAYERS_PATH_1="/usr/share/vulkan/icd.d/nvidia_layers.json"
+LAYERS_PATH_2="/etc/vulkan/implicit_layer.d/nvidia_layers.json"
 EGL_VENDOR_PATH="/usr/share/glvnd/egl_vendor.d/10_nvidia.json"
 
-# Assert the presence of relevant Vulkan files
-if [ ! -e "$ICD_PATH" ]; then
-    echo "Missing ${ICD_PATH} file."
-    echo "(default path: /usr/share/vulkan/icd.d/nvidia_icd.json)";
-    echo "In some distributions this file will be at /etc/vulkan/icd.d/";
+# Find the ICD file
+if [ -e "$ICD_PATH_1" ]; then
+    $ICD_PATH = $ICD_PATH_1
+elif [ -e "$ICD_PATH_2" ]; then
+    $ICD_PATH = $ICD_PATH_2
+else
+    echo "Missing nvidia_icd.json file.";
+    echo "Typical paths:";
+    echo "- /usr/share/vulkan/icd.d/nvidia_icd.json or";
+    echo "- /etc/vulkan/icd.d/nvidia_icd.json";
+    echo "You can google nvidia_icd.json for your distro to find the correct path.";
     echo "Consider updating your driver to 525 if you cannot find the file.";
-    echo "To continue update the file path at the top of the run_docker.sh file and retry";
+    echo "To continue update the ICD_PATH_1 at the top of the run_docker.sh file and retry";
+    exit;
+fi
+
+# Find the layers file
+if [ -e "$LAYERS_PATH_1" ]; then
+    $LAYERS_PATH = $LAYERS_PATH_1
+elif [ -e "$LAYERS_PATH_2" ]; then
+    $LAYERS_PATH = $LAYERS_PATH_2
+else
+    echo "Missing nvidia_layers.json file."
+    echo "Typical paths:";
+    echo "- /usr/share/vulkan/icd.d/nvidia_layers.json";
+    echo "- /etc/vulkan/implicit_layer.d/nvidia_layers.json";
+    echo "You can google nvidia_layers.json for your distro to find the correct path.";
+    echo "Consider updating your driver to 525 if you cannot find the file.";
+    echo "To continue update the LAYERS_PATH_1 at the top of the run_docker.sh file and retry";
     exit;
 fi 
-if [ ! -e "$LAYERS_PATH" ]; then
-    echo "Missing ${LAYERS_PATH} file."
-    echo "(default path: /usr/share/vulkan/icd.d/nvidia_layers.json)";
-    echo "In some distributions this file will be at /etc/vulkan/implicit_layer.d/";
-    echo "Consider updating your driver to 525 if you cannot find the file.";
-    echo "To continue update the file path at the top of the run_docker.sh file and retry";
-    exit;
-fi 
+
 if [ ! -e "$EGL_VENDOR_PATH" ]; then
     echo "Missing ${EGL_VENDOR_PATH} file."
     echo "(default path: /usr/share/vulkan/icd.d/nvidia_icd.json)";
-    echo "To continue update the file path at the top of the run_docker.sh file and retry";
+    echo "To continue update the EGL_VENDOR_PATH at the top of the run_docker.sh file and retry";
     exit;
 fi 
 
@@ -64,6 +100,13 @@ while true; do
 done
 
 docker pull stanfordvl/omnigibson:latest
+$DOCKER_DISPLAY=""
+$OMNIGIBSON_HEADLESS=0
+if [ "$GUI" = true ] ; then
+    xhost +local:root
+    $DOCKER_DISPLAY=$DISPLAY
+    $OMNIGIBSON_HEADLESS=1
+fi
 docker run \
     --gpus all \
     --privileged \
@@ -82,3 +125,6 @@ docker run \
     -v $DATA_PATH/isaac-sim/data:/root/.local/share/ov/data:rw \
     -v $DATA_PATH/isaac-sim/documents:/root/Documents:rw \
     --network=host --rm -it stanfordvl/omnigibson:latest
+if [ "$GUI" = true ] ; then
+    xhost -local:root
+fi
