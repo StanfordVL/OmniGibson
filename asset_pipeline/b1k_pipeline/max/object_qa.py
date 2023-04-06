@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 import sys
@@ -6,10 +7,40 @@ sys.path.append(r"D:\ig_pipeline")
 import pymxs
 rt = pymxs.runtime
 
+import nltk
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+from nltk.corpus import wordnet as wn
+
 from b1k_pipeline.utils import parse_name, PIPELINE_ROOT
 
 PASS_NAME = "ruohan-1"
 RECORD_PATH = PIPELINE_ROOT / "qa-logs" / f"{PASS_NAME}.json"
+
+CATEGORY_TO_SYNSET = {}
+with open(PIPELINE_ROOT / "metadata/category_mapping.csv", "r") as f:
+    r = csv.DictReader(f)
+    for row in r:
+        CATEGORY_TO_SYNSET[row["category"].strip()] = row["synset"].strip()
+
+def get_synset(category):
+    if category not in CATEGORY_TO_SYNSET:
+        return "", ""
+
+    synset = CATEGORY_TO_SYNSET[category]
+
+    # Read the custom synsets from the CSV file
+    custom_synsets = []
+    with open(PIPELINE_ROOT / 'metadata/custom_synsets.csv', 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            if category in row[0]:
+                return row[1] + " (custom synset)", row[2] + "(hypernyms): " + (wn.synset(row[2])).definition()
+    try:
+        synset = wn.synsets(category)[0]
+    except:
+        return "", ""
+    return synset.name(), synset.definition()
 
 def main():
     # Read completed groups record
@@ -44,6 +75,11 @@ def main():
     rt.IsolateSelection.EnterIsolateSelectionMode()
     rt.execute("max tool zoomextents")
     print(f"{len(remaining_groups) + 1} / {len(available_groups)}: {next_group}")
+
+    # Show a popup with the synset info
+    category_name = next_group.split("-")[0]
+    synset_name, synset_desc = get_synset(category_name)
+    rt.messagebox(f"Category {category_name} is currently mapped to synset {synset_name} ({synset_desc})")
 
     # Record that object as completed
     with open(RECORD_PATH, "w") as f:
