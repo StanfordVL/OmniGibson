@@ -24,7 +24,7 @@ IMPORT_RENDER_CHANNELS = True
 
 
 if __name__ == "__main__":
-    og.og_dataset_path = str(DATASET_ROOT)
+    gm.DATASET_PATH = str(DATASET_ROOT)
     scenes = list(os.listdir(os.path.join(DATASET_ROOT, "scenes")))
     for scene in tqdm.tqdm(scenes):
         urdf_path = f"{DATASET_ROOT}/scenes/{scene}/urdf/{scene}_best.urdf"
