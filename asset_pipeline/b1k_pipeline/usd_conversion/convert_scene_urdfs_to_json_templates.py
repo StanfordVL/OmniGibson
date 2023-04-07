@@ -49,6 +49,9 @@ def load_scene_from_urdf(urdf):
             position=obj_info["bbox_pos"], orientation=obj_info["bbox_quat"]
         )
 
+    # Make sure things don't collide during this initial step
+    scene.disable_collisions_for_fixed_objects()
+
     # Take a sim step
     og.sim.step()
 
