@@ -19,7 +19,6 @@ rt = pymxs.runtime
 import xml.etree.ElementTree as ET
 
 IN_DATASET_ROOT = r"C:\Users\Cem\research\iGibson-dev\igibson\data\ig_dataset"
-FILE_PATH = r"C:\Users\Cem\research\iGibson-dev\igibson\data\ig_dataset\scenes\Rs_int\urdf\Rs_int_best.urdf"
 
 TRANSLATION_PATH = os.path.join(IN_DATASET_ROOT, "metadata", "model_rename.yaml")
 with open(TRANSLATION_PATH, "r") as f:
@@ -38,7 +37,7 @@ def fix():
         if match.group("link_name") and match.group("link_name") != "base_link":
             continue
 
-        if match.group("category") in ("ceilings", "floors", "walls"):
+        if match.group("category") in ("ceilings", "floors", "walls", "electric_switch"):
             continue
 
         q = obj.rotation
@@ -102,12 +101,14 @@ def fix():
     assert not missing_in_urdf, f"Missing in urdf: {missing_in_urdf}"
 
     # Check that the length is the same
+    problems = []
     for x in found.keys():
         count_in_urdf = len(found[x])
         count_in_file = len(candidates[x])
-        assert (
-            count_in_file == count_in_urdf
-        ), f"{x} has {count_in_file} in file but {count_in_urdf} in URDF."
+        if not count_in_file == count_in_urdf:
+            problems.append(f"{x} has {count_in_file} in file but {count_in_urdf} in URDF.")
+
+    assert not problems, "\n".join(problems)
 
     positions_from_file = np.asarray(
         [com for objs in candidates.values() for _, com in objs]

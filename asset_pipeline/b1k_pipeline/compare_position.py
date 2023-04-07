@@ -3,7 +3,7 @@ import os
 from collections import defaultdict
 import numpy as np
 
-SCENE_NAME = 'Beechwood_1_int'
+SCENE_NAME = 'Benevolence_0_int'
 
 
 SCENES = [
@@ -50,7 +50,7 @@ def get_unique_coords(p):
 
 def process_scene(scene_name):
     path_new = os.path.join(f'd:/ig_pipeline/cad/scenes/{scene_name}/artifacts/scene/urdf/{scene_name}_best.urdf')
-    path_old = os.path.join(f'd:/ig_dataset/scenes/{scene_name}/urdf/{scene_name}_best.urdf')
+    path_old = os.path.join(f'C:/Users/Cem/research/iGibson-dev/igibson/data/ig_dataset/scenes/{scene_name}/urdf/{scene_name}_best.urdf')
     unique_new = get_unique_coords(path_new)
     # print("new keys", unique_new.keys())
     unique_old = get_unique_coords(path_old)

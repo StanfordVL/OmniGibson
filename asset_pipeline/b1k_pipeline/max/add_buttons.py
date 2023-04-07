@@ -17,6 +17,7 @@ ENTRYPOINTS = {
     "fix_instance_materials.py": "Update object instances to use single material.",
     "fix_legacy_obj_rots.py": "Fix legacy object rotations > 180deg.",
     "import_legacy_objs.py": "Import missing legacy objects from iG2.",
+    "import_scene_obj_orientations.py": "Fix legacy scene orientations.",
     "instanceify.py": "Convert objects into instances.",
     "instance_select.py": "Select all instances of objects.",
     "new_sanity_check.py": "Run a number of sanity checks.",
