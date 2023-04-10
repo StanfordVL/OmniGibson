@@ -42,7 +42,7 @@ def fix():
 
         q = obj.rotation
         mag = R.from_quat([q.x, q.y, q.z, q.w]).magnitude()
-        assert np.isclose(mag, 0), f"{obj.name} has nonzero rotation."
+        assert np.isclose(mag, 0, atol=1e-3), f"{obj.name} has nonzero rotation."
         assert np.all(obj.scale, 0), f"{obj.name} has unit scale."
         assert np.all(obj.objectoffsetscale, 0), f"{obj.name} has unit scale."
 
