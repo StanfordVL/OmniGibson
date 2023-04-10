@@ -21,6 +21,8 @@ def demirror():
     ), "Objects should have 1, 1, 1 scale before this feature is executed."
     bases = defaultdict(set)
     for obj in objects:
+        if rt.classOf(obj) != rt.Editable_Poly:
+            continue
         neg_scale = any(x < 0 for x in obj.objectoffsetscale)
         bases[obj.baseObject].add(neg_scale)
 
