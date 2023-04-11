@@ -447,7 +447,7 @@ class SanityCheck:
         groups_by_base_object.apply(
             lambda group: self.expect(
                 group.groupby(
-                    ["name_category", "name_model_id"],
+                    ["name_category", "name_model_id", "name_link_name"],
                     sort=False,
                     dropna=False,
                 ).ngroups
