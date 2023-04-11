@@ -285,7 +285,7 @@ def compute_link_aligned_bounding_boxes(G, root_node):
         for key in ["collision", "visual"]:
             try:
                 link_bounding_boxes[link_name][key] = get_bbox_data_for_mesh(
-                    transform_mesh(G.nodes[link_node][key + "_mesh"], G.nodes[link_node]["mesh_in_link_frame"], [0, 0, 0, 1]))
+                    transform_mesh(G.nodes[link_node][key + "_mesh"], -G.nodes[link_node]["mesh_in_link_frame"], [0, 0, 0, 1]))
             except Exception as e:
                 print(f"Problem with {obj_cat}-{obj_model} link {link_name}: {str(e)}")
 
@@ -311,7 +311,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     raw_meta_links = G.nodes[link_node]["meta_links"]
 
     # Create a canonicalized copy of the lower and upper meshes.
-    mesh_center = get_mesh_center(G.nodes[link_node]["lower_mesh_ordered"])
+    mesh_center = get_mesh_center(G.nodes[link_node]["lower_mesh"])
     canonical_mesh = transform_mesh(G.nodes[link_node]["lower_mesh"], mesh_center, canonical_orientation)
     meta_links = transform_meta_links(raw_meta_links, mesh_center, canonical_orientation)
 
@@ -698,7 +698,7 @@ def main():
     errors = {}
     target_futures = {}
 
-    dask_client = Client('svl3.stanford.edu:35423')
+    dask_client = Client('svl10.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
         targets = get_targets("combined")
