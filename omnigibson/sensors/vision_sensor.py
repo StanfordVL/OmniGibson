@@ -43,6 +43,7 @@ class VisionSensor(BaseSensor):
 
         - RGB (normal)
         - Depth (normal, linear)
+        - Distance to image plane (in meters)
         - Normals
         - Segmentation (semantic, instance)
         - Optical flow
@@ -56,7 +57,7 @@ class VisionSensor(BaseSensor):
         modalities (str or list of str): Modality(s) supported by this sensor. Default is "all", which corresponds
             to all modalities being used. Otherwise, valid options should be part of cls.all_modalities.
             For this vision sensor, this includes any of:
-                {rgb, depth, depth_linear, normal, seg_semantic, seg_instance, flow, bbox_2d_tight,
+                {rgb, depth, depth_linear, dist_to_image_plane, normal, seg_semantic, seg_instance, flow, bbox_2d_tight,
                 bbox_2d_loose, bbox_3d, camera}
         enabled (bool): Whether this sensor should be enabled by default
         noise (None or BaseSensorNoise): If specified, sensor noise model to apply to this sensor.
@@ -71,6 +72,7 @@ class VisionSensor(BaseSensor):
         rgb=sensors_util.get_rgb,
         depth=sensors_util.get_depth,
         depth_linear=sensors_util.get_depth_linear,
+        dist_to_image_plane=sensors_util.get_distance_to_image_plane,
         normal=sensors_util.get_normals,
         seg_semantic=sensors_util.get_semantic_segmentation,
         seg_instance=sensors_util.get_instance_segmentation,
@@ -86,6 +88,7 @@ class VisionSensor(BaseSensor):
         rgb=sensor_types.Rgb,
         depth=sensor_types.Depth,
         depth_linear=sensor_types.DepthLinear,
+        dist_to_image_plane=sensor_types.DistanceToImagePlane,
         normal=sensor_types.Normal,
         seg_semantic=sensor_types.SemanticSegmentation,
         seg_instance=sensor_types.InstanceSegmentation,
