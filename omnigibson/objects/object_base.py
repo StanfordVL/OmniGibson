@@ -15,8 +15,8 @@ from omnigibson.utils.python_utils import Registerable, classproperty, get_uuid
 from omnigibson.utils.constants import PrimType, CLASS_NAME_TO_CLASS_ID
 from omnigibson.utils.ui_utils import create_module_logger, suppress_omni_log
 
+import omni.replicator.core as rep
 from omni.isaac.core.utils.prims import get_prim_at_path
-from omni.isaac.core.utils.semantics import add_update_semantics
 
 # Global dicts that will contain mappings
 REGISTERED_OBJECTS = dict()
@@ -179,13 +179,6 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
             create_if_not_exist=True,
         )
 
-        # Update semantics
-        add_update_semantics(
-            prim=self._prim,
-            semantic_label=self.category,
-            type_label="class",
-        )
-
     def _initialize(self):
         # Run super first
         super()._initialize()
@@ -200,6 +193,12 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
                 "emissive_color": material.emissive_color,
                 "emissive_intensity": material.emissive_intensity,
             }
+
+        # Add semantics now -- must be done during initialize or else we get invalid mappings when querying through
+        # SyntheticDataGeneration interface
+        rep.modify.semantics([("class", self.category)], input_prims=[self.prim_path])
+        # A single render is needed here to make sure any semantic segmentation information is correctly ordered
+        og.sim.render()
 
     @property
     def articulation_root_path(self):

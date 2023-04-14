@@ -162,13 +162,14 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                         sensor_cls.all_modalities.intersection(self._obs_modalities)
                     obs_modalities = obs_modalities.union(modalities)
                     # Create the sensor and store it internally
+                    sensor_name = f"{link_name}_{prim_type}_sensor"
                     sensor = create_sensor(
                         sensor_type=prim_type,
                         prim_path=str(prim.GetPrimPath()),
-                        name=f"{self.name}:{link_name}_{prim_type}_sensor",
+                        name=f"{self.name}:{sensor_name}",
                         modalities=modalities,
                     )
-                    self._sensors[sensor.name] = sensor
+                    self._sensors[sensor_name] = sensor
 
         # Since proprioception isn't an actual sensor, we need to possibly manually add it here as well
         if self._obs_modalities == "all":
