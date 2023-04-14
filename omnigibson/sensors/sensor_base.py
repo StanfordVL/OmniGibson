@@ -44,6 +44,7 @@ class BaseSensor(XFormPrim, GymObservable, Registerable, metaclass=ABCMeta):
             for modality in modalities:
                 assert_valid_key(key=modality, valid_keys=self.all_modalities, name="modality")
         self._modalities = set(modalities)
+        self._ordered_modalities = sorted(list(self._modalities))
         self._enabled = enabled
         self._noise = noise
 
@@ -117,6 +118,8 @@ class BaseSensor(XFormPrim, GymObservable, Registerable, metaclass=ABCMeta):
         assert_valid_key(key=modality, valid_keys=self.all_modalities, name="modality")
         if modality not in self._modalities:
             self._modalities.add(modality)
+            # Update ordered modalities list
+            self._ordered_modalities = sorted(list(self._modalities))
             # Update observation space
             self.load_observation_space()
 
@@ -130,6 +133,8 @@ class BaseSensor(XFormPrim, GymObservable, Registerable, metaclass=ABCMeta):
         assert_valid_key(key=modality, valid_keys=self._modalities, name="modality")
         if modality in self._modalities:
             self._modalities.remove(modality)
+            # Update ordered modalities list
+            self._ordered_modalities = sorted(list(self._modalities))
             # Update observation space
             self.load_observation_space()
 
@@ -141,6 +146,14 @@ class BaseSensor(XFormPrim, GymObservable, Registerable, metaclass=ABCMeta):
                 in self.get_obs()
         """
         return self._modalities
+
+    @property
+    def ordered_modalities(self):
+        """
+        Returns:
+            list: Alphabetically-ordered modalities provided by this sensor
+        """
+        return self._ordered_modalities
 
     @property
     def _obs_space_mapping(self):

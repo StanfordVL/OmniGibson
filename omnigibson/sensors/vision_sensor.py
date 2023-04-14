@@ -12,19 +12,16 @@ from omnigibson.utils.usd_utils import get_camera_params
 from omnigibson.utils.transform_utils import euler2quat, quat2euler
 
 import omni.ui
+import omni.replicator.core as rep
+from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.isaac.core.utils.stage import get_current_stage
-from pxr import Gf, UsdGeom
+from pxr import Gf, UsdGeom, UsdRender
 from omni.kit.viewport.window import get_viewport_window_instances
 from omni.kit.viewport.utility import create_viewport_window
 
 # Make sure synthetic data extension is enabled
 ext_manager = og.app.app.get_extension_manager()
 ext_manager.set_extension_enabled("omni.syntheticdata", True)
-
-# Continue with omni synethic data imports afterwards
-from omni.syntheticdata import sensors as sensors_util
-import omni.syntheticdata._syntheticdata as sd
-sensor_types = sd.SensorType
 
 
 # Duplicate of simulator's render method, used so that this can be done before simulator is created!
@@ -67,32 +64,20 @@ class VisionSensor(BaseSensor):
         viewport_name (None or str): If specified, will link this camera to the specified viewport, overriding its
             current camera. Otherwise, creates a new viewport
     """
-    _SENSOR_HELPERS = dict(
-        rgb=sensors_util.get_rgb,
-        depth=sensors_util.get_depth,
-        depth_linear=sensors_util.get_depth_linear,
-        normal=sensors_util.get_normals,
-        seg_semantic=sensors_util.get_semantic_segmentation,
-        seg_instance=sensors_util.get_instance_segmentation,
-        flow=sensors_util.get_motion_vector,
-        bbox_2d_tight=sensors_util.get_bounding_box_2d_tight,
-        bbox_2d_loose=sensors_util.get_bounding_box_2d_loose,
-        bbox_3d=sensors_util.get_bounding_box_3d,
-        camera=get_camera_params,
-    )
-
     # Define raw sensor types
     _RAW_SENSOR_TYPES = dict(
-        rgb=sensor_types.Rgb,
-        depth=sensor_types.Depth,
-        depth_linear=sensor_types.DepthLinear,
-        normal=sensor_types.Normal,
-        seg_semantic=sensor_types.SemanticSegmentation,
-        seg_instance=sensor_types.InstanceSegmentation,
-        flow=sensor_types.MotionVector,
-        bbox_2d_tight=sensor_types.BoundingBox2DTight,
-        bbox_2d_loose=sensor_types.BoundingBox2DLoose,
-        bbox_3d=sensor_types.BoundingBox3D,
+        rgb="rgb",
+        depth="distance_to_camera",
+        depth_linear="distance_to_image_plane",
+        normal="normals",
+        seg_semantic="semantic_segmentation",
+        seg_instance="instance_segmentation",
+        seg_instance_id="instance_id_segmentation",
+        flow="motion_vectors",
+        bbox_2d_tight="bounding_box_2d_tight",
+        bbox_2d_loose="bounding_box_2d_loose",
+        bbox_3d="bounding_box_3d",
+        camera_params="camera_params",
     )
 
     # Persistent dictionary of sensors, mapped from prim_path to sensor
@@ -119,6 +104,8 @@ class VisionSensor(BaseSensor):
         # Create variables that will be filled in later at runtime
         self._sd = None             # synthetic data interface
         self._viewport = None       # Viewport from which to grab data
+        self._annotators = None     # Replicator backend nodes that generate the raw data
+        self._render_product_path = None
 
         # Run super method
         super().__init__(
@@ -142,8 +129,9 @@ class VisionSensor(BaseSensor):
         # Add this sensor to the list of global sensors
         self.SENSORS[self._prim_path] = self
 
-        # Get synthetic data interface
-        self._sd = sd.acquire_syntheticdata_interface()
+        # Create the camera backend prim for low-level APIs to actually generate data
+        resolution = (self._load_config["image_width"], self._load_config["image_height"])
+        self._render_product_path = rep.create.render_product(self._prim_path, resolution=resolution)
 
         # Create a new viewport to link to this camera or link to a pre-existing one
         viewport_name = self._load_config["viewport_name"]
@@ -181,8 +169,9 @@ class VisionSensor(BaseSensor):
         for i in range(3):
             render()
 
-        # Set the viewer size (requires taking one render step afterwards)
-        self._viewport.viewport_api.set_texture_resolution((self._load_config["image_width"], self._load_config["image_height"]))
+        # Set the viewer and rendering size (requires taking one render step afterwards)
+        self._viewport.viewport_api.set_texture_resolution(resolution)
+        UsdRender.Product(get_prim_at_path(self._render_product_path)).GetResolutionAttr().Set(Gf.Vec2i(*resolution))
 
         # Requires 3 render updates to propagate changes
         for i in range(3):
@@ -193,7 +182,8 @@ class VisionSensor(BaseSensor):
         super()._initialize()
 
         # Initialize sensors
-        self.initialize_sensors(names=self._modalities)
+        self._annotators = {modality: None for modality in self.all_modalities}
+        self.initialize_sensors(names=self.ordered_modalities)
 
     def initialize_sensors(self, names):
         """Initializes a raw sensor in the simulation.
@@ -202,19 +192,16 @@ class VisionSensor(BaseSensor):
             names (str or list of str): Name of the raw sensor(s) to initialize.
                 If they are not part of self._RAW_SENSOR_TYPES' keys, we will simply pass over them
         """
-        # Standardize the input and grab the intersection with all possible raw sensors
-        names = set([names]) if isinstance(names, str) else set(names)
-        names = names.intersection(set(self._RAW_SENSOR_TYPES.keys()))
-
-        # Initialize sensors
-        sensors = []
+        names = {names} if isinstance(names, str) else set(names)
         for name in names:
-            sensors.append(sensors_util.create_or_retrieve_sensor(self._viewport.viewport_api, self._RAW_SENSOR_TYPES[name]))
+            self._add_modality_to_backend(modality=name)
 
-        # Suppress syntheticdata warning here because we know the first render is invalid
+        # Needs 2 render steps, with some added time in between to force render buffers to populate
+        # Synthetic data also occasionally outputs spurious warnings here so we suppress them
         with suppress_omni_log(channels=["omni.syntheticdata.plugin"]):
             render()
-        render()    # Extra frame required to prevent access violation error
+            time.sleep(0.05)
+            render()
 
     def _get_obs(self):
         # Make sure we're initialized
@@ -224,20 +211,16 @@ class VisionSensor(BaseSensor):
         obs = super()._get_obs()
 
         # Process each sensor modality individually
-        for modality in self.modalities:
-            mod_kwargs = dict()
-            mod_kwargs["viewport"] = self._viewport.viewport_api
-            if modality == "seg_instance":
-                mod_kwargs.update({"parsed": True, "return_mapping": False})
-            elif modality == "bbox_3d":
-                mod_kwargs.update({"parsed": True, "return_corners": True})
-            obs[modality] = self._SENSOR_HELPERS[modality](**mod_kwargs)
+        for modality in self.ordered_modalities:
+            raw_obs = self._annotators[modality].get_data()
+            # Obs is either a dictionary of {"data":, ..., "info": ...} or a direct array
+            obs[modality] = raw_obs["data"] if isinstance(raw_obs, dict) else raw_obs
 
         return obs
 
     def add_modality(self, modality):
         # Check if we already have this modality (if so, no need to initialize it explicitly)
-        should_initialize = modality not in self._modalities
+        should_initialize = modality not in self.modalities
 
         # Run super
         super().add_modality(modality=modality)
@@ -245,6 +228,17 @@ class VisionSensor(BaseSensor):
         # We also need to initialize this new modality
         if should_initialize:
             self.initialize_sensors(names=modality)
+
+    def remove_modality(self, modality):
+        # Check if we don't have this modality (if not, no need to remove it explicitly)
+        should_remove = modality in self.modalities
+
+        # Run super
+        super().remove_modality(modality=modality)
+
+        # We also need to initialize this new modality
+        if should_remove:
+            self._remove_modality_from_backend(modality=modality)
 
     def get_local_pose(self):
         # We have to overwrite this because camera prims can't set their quat for some reason ):
@@ -261,6 +255,30 @@ class VisionSensor(BaseSensor):
 
         # Run super
         super().remove()
+
+    def _add_modality_to_backend(self, modality):
+        """
+        Helper function to add specified modality @modality to the omniverse Replicator backend so that its data is
+        generated during get_obs()
+
+        Args:
+            modality (str): Name of the modality to add to the Replicator backend
+        """
+        if self._annotators.get(modality, None) is None:
+            self._annotators[modality] = rep.AnnotatorRegistry.get_annotator(self._RAW_SENSOR_TYPES[modality])
+            self._annotators[modality].attach([self._render_product_path])
+
+    def _remove_modality_from_backend(self, modality):
+        """
+        Helper function to remove specified modality @modality from the omniverse Replicator backend so that its data is
+        no longer generated during get_obs()
+
+        Args:
+            modality (str): Name of the modality to remove from the Replicator backend
+        """
+        if self._annotators.get(modality, None) is not None:
+            self._annotators[modality].detach([self._render_product_path])
+            self._annotators[modality] = None
 
     @property
     def viewer_visibility(self):
@@ -300,6 +318,7 @@ class VisionSensor(BaseSensor):
         """
         width, _ = self._viewport.viewport_api.get_texture_resolution()
         self._viewport.viewport_api.set_texture_resolution((width, height))
+        UsdRender.Product(get_prim_at_path(self._render_product_path)).GetResolutionAttr().Set(Gf.Vec2i(width, height))
         # Requires 3 updates to propagate changes
         for i in range(3):
             render()
@@ -322,6 +341,7 @@ class VisionSensor(BaseSensor):
         """
         _, height = self._viewport.viewport_api.get_texture_resolution()
         self._viewport.viewport_api.set_texture_resolution((width, height))
+        UsdRender.Product(get_prim_at_path(self._render_product_path)).GetResolutionAttr().Set(Gf.Vec2i(width, height))
         # Requires 3 updates to propagate changes
         for i in range(3):
             render()
@@ -368,16 +388,24 @@ class VisionSensor(BaseSensor):
         self.set_attribute("focalLength", length)
 
     @property
+    def camera_parameters(self):
+        """
+        Returns:
+            dict: Keyword-mapped relevant instrinsic and extrinsic camera parameters for this vision sensor
+        """
+        # Add the camera params modality if it doesn't already exist
+        if "camera_params" not in self._annotators:
+            self.initialize_sensors(names="camera_params")
+
+        # Grab and return the parameters
+        return self._annotators["camera_params"].get_data()
+
+    @property
     def _obs_space_mapping(self):
         # Generate the complex space types for special modalities:
-        # {"bbox_2d_tight", "bbox_2d_loose", "bbox_3d", "camera"}
+        # {"bbox_2d_tight", "bbox_2d_loose", "bbox_3d"}
         bbox_3d_space = gym.spaces.Sequence(space=gym.spaces.Tuple((
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=int),  # uniqueId
-            gym.spaces.Text(min_length=1, max_length=50, charset=VALID_OMNI_CHARS),  # name
-            gym.spaces.Text(min_length=1, max_length=50, charset=VALID_OMNI_CHARS),  # semanticLabel
-            gym.spaces.Text(min_length=0, max_length=50, charset=VALID_OMNI_CHARS),  # metadata
-            gym.spaces.Sequence(space=gym.spaces.Box(low=0, high=MAX_INSTANCE_COUNT, shape=(), dtype=np.uint)),   # instanceIds
-            gym.spaces.Box(low=0, high=MAX_CLASS_COUNT, shape=(), dtype=np.uint),  # semanticId
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=int),  # semanticId
             gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # x_min
             gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # y_min
             gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # z_min
@@ -385,47 +413,30 @@ class VisionSensor(BaseSensor):
             gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # y_max
             gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # z_max
             gym.spaces.Box(low=-np.inf, high=np.inf, shape=(4, 4), dtype=float), # transform
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(8, 3), dtype=float), # corners
+            gym.spaces.Box(low=0, high=1.0, shape=(), dtype=float),  # occlusion ratio
         )))
 
         bbox_2d_space = gym.spaces.Sequence(space=gym.spaces.Tuple((
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=int),  # uniqueId
-            gym.spaces.Text(min_length=1, max_length=50, charset=VALID_OMNI_CHARS),  # name
-            gym.spaces.Text(min_length=1, max_length=50, charset=VALID_OMNI_CHARS),  # semanticLabel
-            gym.spaces.Text(min_length=0, max_length=50, charset=VALID_OMNI_CHARS),  # metadata
-            gym.spaces.Sequence(space=gym.spaces.Box(low=0, high=MAX_INSTANCE_COUNT, shape=(), dtype=np.uint)), # instanceIds
-            gym.spaces.Box(low=0, high=MAX_CLASS_COUNT, shape=(), dtype=np.uint),  # semanticId
+            gym.spaces.Box(low=0, high=np.inf, shape=(), dtype=int),  # semanticId
             gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=int),  # x_min
             gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=int),  # y_min
             gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=int),  # x_max
             gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=int),  # y_max
+            gym.spaces.Box(low=0, high=1.0, shape=(), dtype=float),  # occlusion ratio
         )))
-
-        camera_space = gym.spaces.Dict(dict(
-            pose=gym.spaces.Box(low=-np.inf, high=np.inf, shape=(4, 4), dtype=float),
-            fov=gym.spaces.Box(low=0, high=np.inf, shape=(), dtype=float),
-            focal_length=gym.spaces.Box(low=0, high=np.inf, shape=(), dtype=float),
-            horizontal_aperature=gym.spaces.Box(low=0, high=np.inf, shape=(), dtype=float),
-            view_projection_matrix=gym.spaces.Box(low=-np.inf, high=np.inf, shape=(4, 4), dtype=float),
-            resolution=gym.spaces.Dict(dict(
-                width=gym.spaces.Box(low=1, high=MAX_VIEWER_SIZE, shape=(), dtype=np.uint),
-                height=gym.spaces.Box(low=1, high=MAX_VIEWER_SIZE, shape=(), dtype=np.uint),
-            )),
-            clipping_range=gym.spaces.Box(low=0, high=np.inf, shape=(2,), dtype=float),
-        ))
 
         obs_space_mapping = dict(
             rgb=((self.image_height, self.image_width, 4), 0, 255, np.uint8),
-            depth=((self.image_height, self.image_width), 0.0, 1.0, np.float32),
+            depth=((self.image_height, self.image_width), 0.0, np.inf, np.float32),
             depth_linear=((self.image_height, self.image_width), 0.0, np.inf, np.float32),
-            normal=((self.image_height, self.image_width, 3), -1.0, 1.0, np.float32),
+            normal=((self.image_height, self.image_width, 4), -1.0, 1.0, np.float32),
             seg_semantic=((self.image_height, self.image_width), 0, MAX_CLASS_COUNT, np.uint32),
             seg_instance=((self.image_height, self.image_width), 0, MAX_INSTANCE_COUNT, np.uint32),
-            flow=((self.image_height, self.image_width, 3), -np.inf, np.inf, np.float32),
+            seg_instance_id=((self.image_height, self.image_width), 0, MAX_INSTANCE_COUNT, np.uint32),
+            flow=((self.image_height, self.image_width, 4), -np.inf, np.inf, np.float32),
             bbox_2d_tight=bbox_2d_space,
             bbox_2d_loose=bbox_2d_space,
             bbox_3d=bbox_3d_space,
-            camera=camera_space,
         )
 
         return obs_space_mapping
@@ -448,9 +459,11 @@ class VisionSensor(BaseSensor):
 
     @classproperty
     def all_modalities(cls):
-        return {k for k in cls._SENSOR_HELPERS.keys()}
+        # All native sensors count as valid obs modalities EXCEPT camera params since (a) its data type is not uniform,
+        # and (b) it is accessed directly as a property of this VisionSensor
+        return {k for k in cls._RAW_SENSOR_TYPES.keys() if k != "camera_params"}
 
     @classproperty
     def no_noise_modalities(cls):
-        # bounding boxes and camera state should not have noise
-        return {"bbox_2d_tight", "bbox_2d_loose", "bbox_3d", "camera"}
+        # bounding boxes should not have noise
+        return {"bbox_2d_tight", "bbox_2d_loose", "bbox_3d"}
