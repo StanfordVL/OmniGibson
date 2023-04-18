@@ -698,7 +698,7 @@ def main():
     errors = {}
     target_futures = {}
 
-    dask_client = Client('svl10.stanford.edu:35423')
+    dask_client = Client('svl1.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
         targets = get_targets("combined")
