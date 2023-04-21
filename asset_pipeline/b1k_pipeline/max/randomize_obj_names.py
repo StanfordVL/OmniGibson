@@ -4,13 +4,17 @@ import re
 import string
 from collections import defaultdict
 
+import sys
+
+sys.path.append(r"D:\ig_pipeline")
+
 import pymxs
 import yaml
+import b1k_pipeline.utils
 
 rt = pymxs.runtime
 
-IN_DATASET_ROOT = r"C:\Users\Cem\research\iGibson-dev\igibson\data\ig_dataset"
-TRANSLATION_PATH = os.path.join(IN_DATASET_ROOT, "metadata", "model_rename.yaml")
+TRANSLATION_PATH = b1k_pipeline.utils.PIPELINE_ROOT / "b1k_pipeline/model_rename.yml"
 with open(TRANSLATION_PATH, "r") as f:
     TRANSLATION_DICT = yaml.load(f, Loader=yaml.SafeLoader)
 

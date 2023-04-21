@@ -46,17 +46,29 @@ def fix_instance_materials():
             continue
 
         if len(objs) == 2:
-            print(
-                f"Cannot decide which material is right between 2 objects: {obj_names}. Do it manually."
-            )
-            continue
+            obj1, obj2 = objs
+            mtl1 = obj1.material
+            mtl2 = obj2.material
+            if (rt.classOf(mtl1) == rt.Multimaterial) == (rt.classOf(mtl2) == rt.Multimaterial):
+                # Either both are multi-material or neither.
+                print(
+                    f"Cannot decide which material is right between 2 objects: {obj_names}. Do it manually."
+                )
+                continue
+            elif rt.classOf(mtl1) == rt.Multimaterial:
+                # mtl1 is multi-material, mtl2 is not.
+                target_mtl = mtl1
+            else:
+                # mtl2 is multi-material, mtl1 is not.
+                target_mtl = mtl2
+        else:
+            target_mtl, least_seen_count = count.most_common()[-1]
+            assert (
+                least_seen_count == 1
+            ), f"More than one object with least common material found for instance group including {obj_names}."
 
-        least_seen_mtl, least_seen_count = count.most_common()[-1]
-        assert (
-            least_seen_count == 1
-        ), f"More than one object with least common material found for instance group including {obj_names}."
         for obj in objs:
-            obj.material = least_seen_mtl
+            obj.material = target_mtl
             print("Fixed", obj.name)
 
 

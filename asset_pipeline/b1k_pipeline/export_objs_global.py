@@ -15,6 +15,7 @@ from xml.dom import minidom
 
 from dask.distributed import Client
 
+from fs.zipfs import ZipFS
 import networkx as nx
 import numpy as np
 import tqdm
@@ -23,6 +24,7 @@ import trimesh.voxel.creation
 from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline import mesh_tree
+import b1k_pipeline.utils
 from b1k_pipeline.utils import parse_name, PIPELINE_ROOT, get_targets, SUBDIVIDE_CLOTH_CATEGORIES
 
 logger = logging.getLogger("trimesh")
@@ -648,15 +650,16 @@ def process_object(G, root_node, output_dir, dask_client):
     with open(metadata_file, "w") as f:
         json.dump(out_metadata, f, cls=NumpyEncoder)
 
-def process_target(target, output_dir, link_executor, dask_client):
-    object_list_filename = PIPELINE_ROOT / "cad" / target / "artifacts/object_list.json"
-    mesh_root_dir = PIPELINE_ROOT / "cad" / target / "artifacts/meshes"
+def process_target(target, output_archive_fs, link_executor, dask_client):
+    pipeline_fs = b1k_pipeline.utils.PipelineFS()
 
-    with open(object_list_filename, "r") as f:
+    with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
         mesh_list = json.load(f)["meshes"]
 
     # Build the mesh tree using our mesh tree library. The scene code also uses this system.
-    G = mesh_tree.build_mesh_tree(mesh_list, str(mesh_root_dir))
+    with pipeline_fs.target_output(target).open("meshes.zip", "rb") as f:
+        mesh_archive_fs = ZipFS(f)
+        G = mesh_tree.build_mesh_tree(mesh_list, mesh_archive_fs, scale_factor=1.0 if "legacy_" in target else 0.001)
 
     # Go through each object.
     roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
@@ -676,7 +679,7 @@ def process_target(target, output_dir, link_executor, dask_client):
 
         print(f"Start {root_node} from {target}")
         # process_object(Gprime, root_node, output_dir, dask_client)
-        object_futures[link_executor.submit(process_object, Gprime, root_node, output_dir, dask_client)] = str(root_node)
+        object_futures[link_executor.submit(process_object, Gprime, root_node, output_archive_fs, dask_client)] = str(root_node)
 
     # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
     futures.wait(object_futures.keys())
@@ -691,8 +694,7 @@ def process_target(target, output_dir, link_executor, dask_client):
         raise ValueError(error_msg)
 
 def main():
-    output_dir = PIPELINE_ROOT / "artifacts/aggregate/objects"
-    json_file = PIPELINE_ROOT / "artifacts/pipeline/export_objs.json"
+    archive_fs = b1k_pipeline.utils.ParallelZipFS("objects.zip", write=True)
 
     # Load the mesh list from the object list json.
     errors = {}
@@ -703,7 +705,7 @@ def main():
     with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
         targets = get_targets("combined")
         for target in tqdm.tqdm(targets):
-            target_futures[target_executor.submit(process_target, target, output_dir, link_executor, dask_client)] = target
+            target_futures[target_executor.submit(process_target, target, archive_fs, link_executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))
                 
         with tqdm.tqdm(total=len(target_futures)) as object_pbar:
@@ -724,7 +726,8 @@ def main():
 
     print("Finished processing")
 
-    with open(json_file, "w") as f:
+    pipeline_fs = b1k_pipeline.utils.PipelineFS()
+    with pipeline_fs.pipeline_output().open("export_objs.json", "w") as f:
         json.dump({"success": not errors, "errors": errors}, f)
 
 if __name__ == "__main__":

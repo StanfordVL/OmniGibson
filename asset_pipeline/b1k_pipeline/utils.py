@@ -1,6 +1,9 @@
 import pathlib
 import re
 
+import fs.path
+from fs.osfs import OSFS
+from fs.zipfs import ZipFS
 import yaml
 
 PIPELINE_ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -16,3 +19,19 @@ def parse_name(name):
 
 def get_targets(target_type):
     return list(params[target_type])
+
+class PipelineFS(OSFS):
+    def __init__(self) -> None:
+        super().__init__(PIPELINE_ROOT)
+    
+    def pipeline_output(self):
+        return self.opendir("artifacts/pipeline")
+    
+    def target(self, target):
+        return self.opendir(fs.path.join("cad", target))
+    
+    def target_output(self, target):
+        return self.target(target).makedir("artifacts", recreate=True)
+
+def ParallelZipFS(name, write=False):
+    return ZipFS(PIPELINE_ROOT / "artifacts/parallels" / name, write=write)

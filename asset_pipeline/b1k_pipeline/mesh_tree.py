@@ -13,10 +13,9 @@ import trimesh
 import b1k_pipeline.utils
 
 
-def build_mesh_tree(mesh_list, mesh_root, load_upper=True, show_progress=False):
+def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, scale_factor=1):
     G = nx.DiGraph()
 
-    scale_factor = 1 if "legacy_" in mesh_root else 0.001
     scale_matrix = trimesh.transformations.scale_matrix(scale_factor)
 
     pbar = tqdm.tqdm(mesh_list) if show_progress else mesh_list

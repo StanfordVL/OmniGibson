@@ -14,6 +14,10 @@ import re
 from collections import defaultdict
 import b1k_pipeline.utils
 
+from fs.zipfs import ZipFS
+from fs.osfs import OSFS
+import fs.copy
+
 btt = rt.BakeToTexture
 
 USE_UNWRELLA = True
@@ -65,7 +69,7 @@ def unlight_all_mats():
         unlight_mats_recursively(mat)
 
 class ObjectExporter:
-    def __init__(self, bakery, out_dir, export_textures=True):
+    def __init__(self, bakery, obj_out_dir, export_textures=True):
         self.unwrapped_objs = set()
         self.MAP_NAME_TO_IDS = self.get_map_name_to_ids()
 
@@ -75,9 +79,8 @@ class ObjectExporter:
 
         self.bakery = bakery
         os.makedirs(bakery, exist_ok=True)
-        self.out_dir = out_dir
-        self.obj_out_dir = os.path.join(self.out_dir, "meshes")
-        os.makedirs(self.obj_out_dir, exist_ok=True)
+        self.obj_out_dir = obj_out_dir
+        assert os.path.exists(obj_out_dir)
 
         self.export_textures = export_textures
 
@@ -331,26 +334,28 @@ class ObjectExporter:
             object_transform = child.objecttransform  # This is a 4x3 array
             position = object_transform.position
             rotation = object_transform.rotation
+            scale = np.array(list(object_transform.scale))
+
             metadata["meta_links"][meta_type][meta_id][meta_subid] = {
                 "position": list(position),
                 "orientation": [rotation.x, rotation.y, rotation.z, rotation.w],
             }
 
             if rt.classOf(child) == rt.Sphere:
-                size = rt.Point3(child.radius, child.radius, child.radius) * object_transform
+                size = np.array([child.radius, child.radius, child.radius]) * scale
                 metadata["meta_links"][meta_type][meta_id][meta_subid]["type"] = "sphere"
                 metadata["meta_links"][meta_type][meta_id][meta_subid]["size"] = list(size)
             elif rt.classOf(child) == rt.Box:
-                size = rt.Point3(child.width, child.length, child.height) * object_transform
+                size = np.array([child.width, child.length, child.height]) * scale
                 metadata["meta_links"][meta_type][meta_id][meta_subid]["type"] = "box"
                 metadata["meta_links"][meta_type][meta_id][meta_subid]["size"] = list(size)
             elif rt.classOf(child) == rt.Cylinder:
-                size = rt.Point3(child.radius, child.radius, child.height) * object_transform
+                size = np.array([child.radius, child.radius, child.height]) * scale
                 metadata["meta_links"][meta_type][meta_id][meta_subid]["type"] = "cylinder"
                 metadata["meta_links"][meta_type][meta_id][meta_subid]["size"] = list(size)
             elif rt.classOf(child) == rt.Cone:
                 assert np.isclose(child.radius1, 0), f"Cone radius1 should be 0 for {child.name}"
-                size = rt.Point3(child.radius2, child.radius2, child.height) * object_transform
+                size = np.array([child.radius2, child.radius2, child.height]) * scale
                 metadata["meta_links"][meta_type][meta_id][meta_subid]["type"] = "cone"
                 metadata["meta_links"][meta_type][meta_id][meta_subid]["size"] = list(size)
 
@@ -402,7 +407,7 @@ class ObjectExporter:
                         f.write(line)
 
     def run(self):
-        assert rt.classOf(rt.renderers.current) == rt.V_Ray_5__update_2_3, f"Renderer should be set to V-Ray 5.2.3 CPU instead of {rt.classOf(rt.renderers.current)}"
+        # assert rt.classOf(rt.renderers.current) == rt.V_Ray_5__update_2_3, f"Renderer should be set to V-Ray 5.2.3 CPU instead of {rt.classOf(rt.renderers.current)}"
         assert rt.execute('max modify mode')
 
         # Remove lights from all materials
@@ -458,9 +463,16 @@ def main():
     export_times = {}
     baking_times = {}
     try:
-        with tempfile.TemporaryDirectory() as bakery_dir:
-            exp = ObjectExporter(bakery_dir, out_dir, export_textures=export_textures)
+        with tempfile.TemporaryDirectory() as bakery_dir, tempfile.TemporaryDirectory() as obj_out_dir:
+            exp = ObjectExporter(bakery_dir, obj_out_dir, export_textures=export_textures)
             exp.run()
+
+            print("Move files to archive.")
+            with OSFS(obj_out_dir) as temp_fs, ZipFS(os.path.join(out_dir, "meshes.zip"), write=True) as zip_fs:
+                # Copy the temp_fs to the zip_fs
+                fs.copy.copy_fs(temp_fs, zip_fs)
+            print("Finished copying.")
+
             unwrap_times = exp.unwrap_times
             export_times = exp.export_times
             baking_times = exp.baking_times

@@ -69,14 +69,63 @@ FINAL_SCENES = [
 ]
 
 APPROVED_OBJS = {
-"legacy_.*",
-"assembleable_shelf-fm",
-"switch-ou",
-"bottom_cabinet-gjrero",
+    "legacy_.*"
 }
 
 REJECTED_OBJS = {
-    "legacy_toaster-kjwqav",
+    "vans-pk",
+    "jelly_beans-in",
+    "hammock-ht",
+    "quilt-hh",
+    "slotted_spoon-bu",
+    "tuna-wh",
+    "frame-ow",
+    "leaves-ab",
+    "wallpaper-ll",
+    "vodka-ht",
+    "linseed_oil-by",
+    "kielbasa-ks",
+    "hamster_wheel-fd",
+    "tripod-ti",
+    "lily-yz",
+    "gin-ie",
+    "spices-sr",
+    "steamer_basket-xk",
+    "tank_top-nd",
+    "plastic_cup-dh",
+    "kabobs-nc",
+    "shiitake-ke",
+    "tweezers-kg",
+    "whistle-gk",
+    "tube-kg",
+    "power_strip-le",
+    "tupperware-un",
+    "cleaner-ed",
+    "sugar-rg",
+    "duvet_set-pa",
+    "wire_cutter-rv",
+    "duster-rm",
+    "pipe-ns",
+    "poinsettia-i9",
+    "toolbox-ng",
+    "pallet-ef",
+    "garden_glove-ld",
+    "kiosk-zx",
+    "tablecloth-hb",
+    "pecans-5k",
+    "leek-f0",
+    "spray_paint-om",
+    "ice_skates-oq",
+    "mallet-i1",
+    "sprinkler-nx",
+    "pencil_holder-la",
+    "ramen-va",
+    "evergreen_tree-is",
+    "pencil_case-ne",
+    "tote-se",
+    "vanilla-yz",
+    "heat_gun-ty",
+    "sparkling_water-ry",
 }
 
 APPROVED_SCENES = {
@@ -95,10 +144,6 @@ APPROVED_SCENES = {
     "Rs_int",
     "Wainscott_0_int",
     "Wainscott_1_int",
-    # "house_single_floor",
-    # "restaurant_hotel",
-    # "office_vendor_machine",
-    # "gates_bedroom"
 }
 
 

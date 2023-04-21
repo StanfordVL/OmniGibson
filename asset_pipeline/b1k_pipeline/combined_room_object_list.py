@@ -1,3 +1,4 @@
+import argparse
 import sys
 sys.path.append(r"D:\ig_pipeline")
 
@@ -11,15 +12,11 @@ import yaml
 import csv
 
 
-OBJECT_CATEGORY_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "metadata" / "category_mapping.csv"
-ROOM_TYPE_FILENAME = b1k_pipeline.utils.PIPELINE_ROOT / "metadata" / "allowed_room_types.csv"
-PARAMS_FILE = b1k_pipeline.utils.PIPELINE_ROOT / "params.yaml"
-
-def get_category_mapping():
+def get_category_mapping(pipeline_fs):
     cat_to_synset = {}
     synset_to_cat = defaultdict(list)
     disapproved_cats = []
-    with open(OBJECT_CATEGORY_FILENAME, newline='') as csvfile:
+    with pipeline_fs.open("metadata/category_mapping.csv", newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             category = row["category"].strip()
@@ -38,19 +35,15 @@ def get_category_mapping():
     return found_categories, disapproved_cats, cat_to_synset, synset_to_cat
 
 
-def get_approved_room_types():
+def get_approved_room_types(pipeline_fs):
     approved = []
-    with open(ROOM_TYPE_FILENAME, newline='') as csvfile:
+    with pipeline_fs.open("metadata/allowed_room_types.csv", newline='') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             approved.append(row[0])
 
     return approved
 
-DEFAULT_PATH = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts/pipeline/combined_room_object_list.json"
-SUCCESS_PATH = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts/pipeline/combined_room_object_list.success"
-
-RELPATH_BASE = b1k_pipeline.utils.PIPELINE_ROOT / "cad" / "scenes"
 
 SCENE_ROOMS_TO_REMOVE = {
     "school_biology": ['chemistry_lab_0', 'classroom_0', 'corridor_0', 'gym_0', 'locker_room_1', 'locker_room_0', 'corridor_5', 'computer_lab_0', 'corridor_1', 'corridor_4', 'infirmary_0'],
@@ -111,7 +104,7 @@ SCENES_TO_EXCLUDE = {
     "commercial_kitchen_pans",
 }
 
-def main():
+def main(use_future=False):
     scenes = {}
     skipped_files = []
 
@@ -124,112 +117,115 @@ def main():
     not_approved_rooms = defaultdict(set)
     invalid_synsets = {}
 
-    exists, disapproved, cat_to_synset, synset_to_cat = get_category_mapping()
-    approved_rooms = set(get_approved_room_types())
+    with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
+        exists, disapproved, cat_to_synset, synset_to_cat = get_category_mapping(pipeline_fs)
+        approved_rooms = set(get_approved_room_types(pipeline_fs))
 
-    # Get the list of targets 
-    with open(PARAMS_FILE, "r") as f:
-        params = yaml.load(f, Loader=yaml.SafeLoader)
-        targets = params["scenes_unfiltered"]
+        # Get the list of targets 
+        with pipeline_fs.open("params.yaml", "r") as f:
+            params = yaml.load(f, Loader=yaml.SafeLoader)
+            targets = params["scenes_unfiltered"] if use_future else params["scenes"]
 
-    # Add the object lists.
-    for target in targets:
-        object_file = os.path.join(os.path.dirname(__file__), "../cad", target, "artifacts/room_object_list.json")
+        # Add the object lists.
+        for target in targets:
+            with pipeline_fs.target_output(target) as target_output_fs:
+                with target_output_fs.open("room_object_list.json", "r") as f:
+                    object_list = json.load(f)
 
-        with open(object_file, "r") as f:
-            object_list = json.load(f)
-
-        if not object_list["success"]:
-            skipped_files.append(object_file)
-            continue
-
-        scene_or_obj_dir = os.path.dirname(os.path.dirname(object_file))
-        scene_name = os.path.relpath(scene_or_obj_dir, RELPATH_BASE).replace("\\", "/")
-        scene_info = object_list["objects_by_room"]
-
-        room_types = {rm_name.rsplit("_", 1)[0] for rm_name in scene_info.keys()}
-        this_not_approved_rooms = room_types - approved_rooms
-        for rm in this_not_approved_rooms:
-            not_approved_rooms[scene_name].add(rm)
-
-        scene_synset_info = {}
-        for rm, cats in scene_info.items():
-            synsets = Counter()
-
-            for cat, cnt in cats.items():
-                all_categories.add(cat)
-
-                if cat not in exists:
-                    notfound_categories[scene_name].add(cat)
-
-                if cat in disapproved:
-                    disapproved_categories[scene_name].add(cat)
-
-                if cat not in cat_to_synset:
-                    no_synset[scene_name].add(cat)
-                    synset = cat
-                else:
-                    synset = cat_to_synset[cat]
-                    all_synsets.add(synset)
-
-                    try:
-                        if not synset:
-                            raise ValueError("Empty synset")
-
-                        # if synset not in FAKE_SYNSETS:
-                        #     synset_obj = wn.synset(synset)
-                    except:
-                        invalid_synsets[cat] = synset
-
-                synsets[synset] += cnt
-
-            synsets["floor.n.01"] = 1
-            synsets["wall.n.01"] = 1
-            scene_synset_info[rm] = dict(synsets)
-        
-        if scene_name in SCENE_ROOMS_TO_REMOVE:
-            for rm in SCENE_ROOMS_TO_REMOVE[scene_name]:
-                assert rm in scene_synset_info, f"{scene_name} does not contain removal-requested room {rm}. Valid keys: {list(scene_synset_info.keys())}"
-                del scene_synset_info[rm]
-
-        scenes[scene_name] = scene_synset_info
-
-    # Merge the stuff
-    for base, additions in SCENES_TO_ADD.items():
-        if base not in scenes:
-            continue 
-
-        for addition in additions:
-            if addition not in scenes:
+            if not object_list["success"]:
+                skipped_files.append(target)
                 continue
 
-            base_keys = set(scenes[base].keys())
-            add_keys = set(scenes[addition].keys())
-            assert base_keys.isdisjoint(add_keys), f"Keys colliding between {base} and {addition}: {base_keys} vs {add_keys}"
-            scenes[base].update(scenes[addition])
+            scene_name = target.split("/")[-1]
+            scene_info = object_list["objects_by_room"]
 
-    for scene in SCENES_TO_EXCLUDE:
-        if scene not in scenes:
-            continue
-        del scenes[scene]
+            room_types = {rm_name.rsplit("_", 1)[0] for rm_name in scene_info.keys()}
+            this_not_approved_rooms = room_types - approved_rooms
+            for rm in this_not_approved_rooms:
+                not_approved_rooms[scene_name].add(rm)
 
-    success = len(skipped_files) == 0 and len(notfound_categories) == 0 and len(disapproved_categories) == 0 and len(not_approved_rooms) == 0 and len(invalid_synsets) == 0
-    with open(DEFAULT_PATH, "w") as f:
-        json.dump({
-            "success": success,
-            "scenes": scenes,
-            "all_categories": sorted(all_categories),
-            "all_synsets": sorted(all_synsets),
-            "error_skipped_files": sorted(skipped_files),
-            "error_category_not_on_list": {cat: list(scenes) for cat, scenes in sorted(notfound_categories.items())},
-            "error_category_disapproved": {cat: list(scenes) for cat, scenes in sorted(disapproved_categories.items())},
-            "error_not_approved_rooms": {rm: list(scenes) for rm, scenes in sorted(not_approved_rooms.items())},
-            "error_invalid_synsets": invalid_synsets,
-        }, f, indent=4)
+            scene_synset_info = {}
+            for rm, cats in scene_info.items():
+                synsets = Counter()
 
-    if success:
-        with open(SUCCESS_PATH, "w") as f:
-            pass
+                for cat, cnt in cats.items():
+                    all_categories.add(cat)
+
+                    if cat not in exists:
+                        notfound_categories[scene_name].add(cat)
+
+                    if cat in disapproved:
+                        disapproved_categories[scene_name].add(cat)
+
+                    if cat not in cat_to_synset:
+                        no_synset[scene_name].add(cat)
+                        synset = cat
+                    else:
+                        synset = cat_to_synset[cat]
+                        all_synsets.add(synset)
+
+                        try:
+                            if not synset:
+                                raise ValueError("Empty synset")
+
+                            # if synset not in FAKE_SYNSETS:
+                            #     synset_obj = wn.synset(synset)
+                        except:
+                            invalid_synsets[cat] = synset
+
+                    synsets[synset] += cnt
+
+                synsets["floor.n.01"] = 1
+                synsets["wall.n.01"] = 1
+                scene_synset_info[rm] = dict(synsets)
+            
+            if scene_name in SCENE_ROOMS_TO_REMOVE:
+                for rm in SCENE_ROOMS_TO_REMOVE[scene_name]:
+                    assert rm in scene_synset_info, f"{scene_name} does not contain removal-requested room {rm}. Valid keys: {list(scene_synset_info.keys())}"
+                    del scene_synset_info[rm]
+
+            scenes[scene_name] = scene_synset_info
+
+        # Merge the stuff
+        if use_future:
+            for base, additions in SCENES_TO_ADD.items():
+                if base not in scenes:
+                    continue 
+
+                for addition in additions:
+                    if addition not in scenes:
+                        continue
+
+                    base_keys = set(scenes[base].keys())
+                    add_keys = set(scenes[addition].keys())
+                    assert base_keys.isdisjoint(add_keys), f"Keys colliding between {base} and {addition}: {base_keys} vs {add_keys}"
+                    scenes[base].update(scenes[addition])
+
+        for scene in SCENES_TO_EXCLUDE:
+            if scene not in scenes:
+                continue
+            del scenes[scene]
+
+        success = len(skipped_files) == 0 and len(notfound_categories) == 0 and len(disapproved_categories) == 0 and len(not_approved_rooms) == 0 and len(invalid_synsets) == 0
+        with pipeline_fs.pipeline_output() as pipeline_output_fs:
+            json_path = "combined_room_object_list_future.json" if use_future else "combined_room_object_list.json"
+            with pipeline_output_fs.open(json_path, "w") as f:
+                json.dump({
+                    "success": success,
+                    "scenes": scenes,
+                    "all_categories": sorted(all_categories),
+                    "all_synsets": sorted(all_synsets),
+                    "error_skipped_files": sorted(skipped_files),
+                    "error_category_not_on_list": {cat: list(scenes) for cat, scenes in sorted(notfound_categories.items())},
+                    "error_category_disapproved": {cat: list(scenes) for cat, scenes in sorted(disapproved_categories.items())},
+                    "error_not_approved_rooms": {rm: list(scenes) for rm, scenes in sorted(not_approved_rooms.items())},
+                    "error_invalid_synsets": invalid_synsets,
+                }, f, indent=4)
+
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Produce a list of rooms and objects included in the scenes of the pipeline.')
+    parser.add_argument('--future', action='store_true')
+    args = parser.parse_args()
+
+    main(args.future)

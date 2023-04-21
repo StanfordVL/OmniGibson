@@ -50,7 +50,25 @@ stages:
     - params.yaml
     outs:
     - artifacts/pipeline/object_inventory.json
+
+  object_inventory_success:
+    cmd: 'python b1k_pipeline/check_success.py artifacts/pipeline/object_inventory.json artifacts/pipeline/object_inventory.success'
+    deps:
+    - artifacts/pipeline/object_inventory.json
+    - b1k_pipeline/check_success.py
+    outs:
     - artifacts/pipeline/object_inventory.success
+
+  object_inventory_future:
+    # List all objects found in all entries, with their sources. Cross-reference bad objects w/ providers. Check provider uniqueness.
+    cmd: 'python b1k_pipeline/object_inventory.py --future'
+    deps:
+    - cad/#{combined_unfiltered}/artifacts/object_list.json
+    - artifacts/pipeline/object_list.success
+    - b1k_pipeline/object_inventory.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/object_inventory_future.json
 
   # generate_object_images:
   #   # Generate photos of each object found in each entry.
@@ -75,7 +93,7 @@ stages:
       - artifacts/pipeline/sanitycheck.success
       - cad/${item}/processed.max
       outs:
-      - cad/${item}/artifacts/meshes
+      - cad/${item}/artifacts/meshes.zip
       - cad/${item}/artifacts/export_meshes.json
 
   export_meshes_success:
@@ -141,7 +159,7 @@ stages:
     # Process exported meshes into iGibson objects.
     cmd: 'python -m b1k_pipeline.export_objs_global'
     deps:
-    - cad/#{combined}/artifacts/meshes
+    - cad/#{combined}/artifacts/meshes.zip
     - cad/#{combined}/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/object_inventory.success
@@ -150,7 +168,7 @@ stages:
     - b1k_pipeline/export_objs_global.py
     - b1k_pipeline/mesh_tree.py
     outs:
-    - artifacts/aggregate/objects
+    - artifacts/parallels/objects.zip
     - artifacts/pipeline/export_objs.json
 
   export_objs_global_success:
@@ -202,13 +220,23 @@ stages:
     # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
     cmd: 'python b1k_pipeline/combined_room_object_list.py'
     deps:
+    - cad/#{scenes}/artifacts/room_object_list.json
+    - cad/#{scenes}/artifacts/room_object_list.success
+    - b1k_pipeline/combined_room_object_list.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/combined_room_object_list.json
+
+  combined_room_object_list_future:
+    # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
+    cmd: 'python b1k_pipeline/combined_room_object_list.py --future'
+    deps:
     - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
     - cad/#{scenes_unfiltered}/artifacts/room_object_list.success
     - b1k_pipeline/combined_room_object_list.py
     - params.yaml
     outs:
-    - artifacts/pipeline/combined_room_object_list.json
-    - artifacts/pipeline/combined_room_object_list.success
+    - artifacts/pipeline/combined_room_object_list_future.json
 
   export_scene:
     # Generate scene URDF file from meshes.
@@ -217,13 +245,12 @@ stages:
       cmd: 'python -m b1k_pipeline.export_scene ${item}'
       deps:
       - artifacts/pipeline/export_meshes.success
-      - cad/${item}/artifacts/meshes
-      - artifacts/aggregate/objects
+      - cad/${item}/artifacts/meshes.zip
       - b1k_pipeline/export_scene.py
       - b1k_pipeline/export_objs_global.py
       - b1k_pipeline/mesh_tree.py
       outs:
-      - cad/${item}/artifacts/scene
+      - cad/${item}/artifacts/scene.urdf
       - cad/${item}/artifacts/export_scene.success
 
   # export_scene_success:
@@ -238,7 +265,7 @@ stages:
     # Aggregate scenes from different entries into a single location.
     cmd: 'python b1k_pipeline/aggregate_scenes.py'
     deps:
-    - cad/#{scenes}/artifacts/scene
+    - cad/#{scenes}/scene.urdf
     - cad/#{scenes}/artifacts/export_scene.success
     - b1k_pipeline/aggregate_scenes.py
     - params.yaml
@@ -269,7 +296,7 @@ stages:
   vertex_reduction:
     cmd: 'python -m b1k_pipeline.vertex_reduction'
     deps:
-    - artifacts/aggregate/objects
+    - artifacts/parallels/objects.zip
     - artifacts/pipeline/export_objs.success
     - b1k_pipeline/vertex_reduction.py
     outs:
@@ -280,9 +307,9 @@ stages:
   make_maps:
     cmd: 'python -m b1k_pipeline.make_maps'
     deps:
-    - artifacts/aggregate/objects
-    - artifacts/aggregate/scenes
-    - artifacts/aggregate/metadata
+    - artifacts/parallels/objects.zip
+    - artifacts/parallels/scenes.zip
+    - artifacts/parallels/metadata.zip
     - artifacts/pipeline/aggregate_scenes.success
     - b1k_pipeline/make_maps.py
     - metadata/allowed_room_types.csv
@@ -296,8 +323,8 @@ stages:
     deps:
     - b1k_pipeline/aggregate_metadata.py
     - artifacts/pipeline/object_inventory.json
-    - artifacts/aggregate/objects
-    - artifacts/aggregate/scenes
+    - artifacts/parallels/objects.zip
+    - artifacts/parallels/scenes.zip
     - metadata/category_mapping.csv
     - metadata/non_sampleable_categories.csv
     - metadata/allowed_room_types.csv
@@ -325,9 +352,9 @@ stages:
     - artifacts/pipeline/aggregate_metadata.success
     - artifacts/pipeline/aggregate_scenes.success
     - artifacts/pipeline/export_objs.success
-    - artifacts/aggregate/metadata
-    - artifacts/aggregate/objects
-    - artifacts/aggregate/scenes
+    - artifacts/parallels/metadata.zip
+    - artifacts/parallels/objects.zip
+    - artifacts/parallels/scenes.zip
     - b1k_pipeline/pack_dataset.py
     outs:
     - artifacts/og_dataset.zip
