@@ -34,6 +34,13 @@ INVENTORY_PATH = PIPELINE_ROOT / "artifacts/pipeline/object_inventory.json"
 with open(INVENTORY_PATH, "r") as f:
     INVENTORY_DICT = json.load(f)["providers"]
 
+CATEGORY_TO_SYNSET = {}
+with open(PIPELINE_ROOT / "metadata/category_mapping.csv", "r") as f:
+    r = csv.DictReader(f)
+    for row in r:
+        CATEGORY_TO_SYNSET[row["category"].strip()] = row["synset"].strip()
+        
+
 
 def main(dataset_path, record_path):
     """
@@ -129,10 +136,14 @@ def process_complaint(message, simulator_obj):
 
 
 def get_synset(category):
-    print(category)
+    if category not in CATEGORY_TO_SYNSET:
+        return "", ""
+
+    synset = CATEGORY_TO_SYNSET[category]
+
     # Read the custom synsets from the CSV file
     custom_synsets = []
-    with open('./metadata/custom_synsets.csv', 'r') as csvfile:
+    with open(PIPELINE_ROOT / 'metadata/custom_synsets.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             if category in row[0]:

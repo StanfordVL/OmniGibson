@@ -22,12 +22,15 @@ ENTRYPOINTS = {
     "instance_select.py": "Select all instances of objects.",
     "new_sanity_check.py": "Run a number of sanity checks.",
     "next_failed.py": "Open the next object file that has failed sanity check.",
+    "qa_next_failed.py": "Open the next object file that has unprocessed QA comments.",
     "object_qa.py": "Walk through scene objects for quality assurance.",
     "randomize_obj_names.py": "Randomize objects named in the legacy format.",
+    "resolve_complaints.py": "Resolve QA complaints for this file.",
     "rpc_server.py": "Run RPC Server for DVC stages.",
     "select_mismatched_pivot.py": "Select groups of object instances whose pivots dont match.",
     "spherify.py": "Convert point helpers into spheres.",
     "translate_ig_dataset.py": "Update names of iG2 objects to new format.",
+    "view_complaints.py": "View QA complaints for this file.",
 }
 
 
