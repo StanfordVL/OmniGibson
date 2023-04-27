@@ -12,29 +12,6 @@ import yaml
 import csv
 
 
-def get_category_mapping(pipeline_fs):
-    cat_to_synset = {}
-    synset_to_cat = defaultdict(list)
-    disapproved_cats = []
-    with pipeline_fs.open("metadata/category_mapping.csv", newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            category = row["category"].strip()
-            synset = row["synset"].strip()
-            disapproved = str(row["approved"].strip()) != "1"
-            if not synset or not category:
-                print(f"Skipping problematic row: {row}")
-                continue
-            if disapproved:
-                disapproved_cats.append(category)
-            cat_to_synset[category] = synset
-            synset_to_cat[synset].append(category)
-
-    found_categories = set(cat_to_synset.keys())
-
-    return found_categories, disapproved_cats, cat_to_synset, synset_to_cat
-
-
 def get_approved_room_types(pipeline_fs):
     approved = []
     with pipeline_fs.open("metadata/allowed_room_types.csv", newline='') as csvfile:
@@ -108,17 +85,9 @@ def main(use_future=False):
     scenes = {}
     skipped_files = []
 
-    all_categories = set()
-    all_synsets = set()
-
-    notfound_categories = defaultdict(set)
-    disapproved_categories = defaultdict(set)
-    no_synset = defaultdict(set)
     not_approved_rooms = defaultdict(set)
-    invalid_synsets = {}
 
     with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
-        exists, disapproved, cat_to_synset, synset_to_cat = get_category_mapping(pipeline_fs)
         approved_rooms = set(get_approved_room_types(pipeline_fs))
 
         # Get the list of targets 
@@ -144,47 +113,25 @@ def main(use_future=False):
             for rm in this_not_approved_rooms:
                 not_approved_rooms[scene_name].add(rm)
 
-            scene_synset_info = {}
-            for rm, cats in scene_info.items():
-                synsets = Counter()
+            scene_content_info = {}
+            for rm, models in scene_info.items():
+                contents = Counter()
 
-                for cat, cnt in cats.items():
-                    all_categories.add(cat)
+                for model, cnt in models.items():
+                    cat = model.split("-")[0]
 
-                    if cat not in exists:
-                        notfound_categories[scene_name].add(cat)
+                    contents[model] += cnt
 
-                    if cat in disapproved:
-                        disapproved_categories[scene_name].add(cat)
-
-                    if cat not in cat_to_synset:
-                        no_synset[scene_name].add(cat)
-                        synset = cat
-                    else:
-                        synset = cat_to_synset[cat]
-                        all_synsets.add(synset)
-
-                        try:
-                            if not synset:
-                                raise ValueError("Empty synset")
-
-                            # if synset not in FAKE_SYNSETS:
-                            #     synset_obj = wn.synset(synset)
-                        except:
-                            invalid_synsets[cat] = synset
-
-                    synsets[synset] += cnt
-
-                synsets["floor.n.01"] = 1
-                synsets["wall.n.01"] = 1
-                scene_synset_info[rm] = dict(synsets)
+                # synsets["floor.n.01"] = 1
+                # synsets["wall.n.01"] = 1
+                scene_content_info[rm] = dict(contents)
             
             if scene_name in SCENE_ROOMS_TO_REMOVE:
                 for rm in SCENE_ROOMS_TO_REMOVE[scene_name]:
-                    assert rm in scene_synset_info, f"{scene_name} does not contain removal-requested room {rm}. Valid keys: {list(scene_synset_info.keys())}"
-                    del scene_synset_info[rm]
+                    assert rm in scene_content_info, f"{scene_name} does not contain removal-requested room {rm}. Valid keys: {list(scene_content_info.keys())}"
+                    del scene_content_info[rm]
 
-            scenes[scene_name] = scene_synset_info
+            scenes[scene_name] = scene_content_info
 
         # Merge the stuff
         if use_future:
@@ -206,20 +153,15 @@ def main(use_future=False):
                 continue
             del scenes[scene]
 
-        success = len(skipped_files) == 0 and len(notfound_categories) == 0 and len(disapproved_categories) == 0 and len(not_approved_rooms) == 0 and len(invalid_synsets) == 0
+        success = len(skipped_files) == 0 and len(not_approved_rooms) == 0
         with pipeline_fs.pipeline_output() as pipeline_output_fs:
             json_path = "combined_room_object_list_future.json" if use_future else "combined_room_object_list.json"
             with pipeline_output_fs.open(json_path, "w") as f:
                 json.dump({
                     "success": success,
                     "scenes": scenes,
-                    "all_categories": sorted(all_categories),
-                    "all_synsets": sorted(all_synsets),
                     "error_skipped_files": sorted(skipped_files),
-                    "error_category_not_on_list": {cat: list(scenes) for cat, scenes in sorted(notfound_categories.items())},
-                    "error_category_disapproved": {cat: list(scenes) for cat, scenes in sorted(disapproved_categories.items())},
                     "error_not_approved_rooms": {rm: list(scenes) for rm, scenes in sorted(not_approved_rooms.items())},
-                    "error_invalid_synsets": invalid_synsets,
                 }, f, indent=4)
 
 

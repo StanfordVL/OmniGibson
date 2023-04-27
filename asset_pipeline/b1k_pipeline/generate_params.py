@@ -69,7 +69,7 @@ FINAL_SCENES = [
 ]
 
 APPROVED_OBJS = {
-    "legacy_.*"
+    ".*"
 }
 
 REJECTED_OBJS = {

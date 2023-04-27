@@ -33,7 +33,7 @@ def main():
             nomatch.append(obj.name)
             continue
 
-        cat = match.group("category")
+        model = match.group("category") + "-" + match.group("model_id")
 
         room_strs = obj.layer.name
         for room_str in room_strs.split(","):
@@ -42,7 +42,7 @@ def main():
                 continue
             link_name = match.group("link_name")
             if link_name == "base_link" or not link_name:
-                objects_by_room[room_str][cat] += 1
+                objects_by_room[room_str][model] += 1
 
     success = True  # len(nomatch) == 0
 

@@ -223,6 +223,7 @@ stages:
     - cad/#{scenes}/artifacts/room_object_list.json
     - cad/#{scenes}/artifacts/room_object_list.success
     - b1k_pipeline/combined_room_object_list.py
+    - metadata/allowed_room_types.csv
     - params.yaml
     outs:
     - artifacts/pipeline/combined_room_object_list.json
@@ -234,6 +235,7 @@ stages:
     - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
     - cad/#{scenes_unfiltered}/artifacts/room_object_list.success
     - b1k_pipeline/combined_room_object_list.py
+    - metadata/allowed_room_types.csv
     - params.yaml
     outs:
     - artifacts/pipeline/combined_room_object_list_future.json
