@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
         plate.n.04_1 plate.n.04_2 plate.n.04_3 - plate.n.04
        countertop.n.01_1 - countertop.n.01
         mug.n.04_1 - mug.n.04
@@ -13,17 +14,17 @@
     
     (:init 
         (ontop plate.n.04_1 countertop.n.01_1) 
-        (stained plate.n.04_1) 
+        (covered plate.n.04_1 stain.n.01_1) 
         (ontop plate.n.04_2 countertop.n.01_1) 
-        (stained plate.n.04_2) 
+        (covered plate.n.04_2 stain.n.01_1) 
         (ontop plate.n.04_3 countertop.n.01_1) 
-        (stained plate.n.04_3) 
+        (covered plate.n.04_3 stain.n.01_1) 
         (ontop mug.n.04_1 countertop.n.01_1) 
-        (stained mug.n.04_1) 
+        (covered mug.n.04_1 stain.n.01_1) 
         (ontop bowl.n.01_1 countertop.n.01_1) 
-        (stained bowl.n.01_1) 
+        (covered bowl.n.01_1 stain.n.01_1) 
         (ontop bowl.n.01_2 countertop.n.01_1) 
-        (stained bowl.n.01_2) 
+        (covered bowl.n.01_2 stain.n.01_1) 
         (inroom dishwasher.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -44,3 +45,4 @@
         )
     )
 )
+

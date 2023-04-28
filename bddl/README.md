@@ -1,17 +1,35 @@
 # Behavior Domain Definition Language 
 
+**Note: You are reading the docs for the 3.0.0b1 release, which is a backwards-incompatible version of BDDL containing a subset of BEHAVIOR-1K activities released as part of the BEHAVIOR-1K beta release. Please go to the tags menu to see BEHAVIOR-100 code and files.**
+
 The Behavior Domain Definition Language (BDDL) is a domain-specific language designed for the Benchmark for Everyday Household Activities in Virtual, Interactive, and ecOlogical enviRonments (BEHAVIOR). 
 
 BDDL is a predicate logic-based language inspired by, but distinct from, the Planning Domain Definition Language [1]. It defines each BEHAVIOR activity definition as a BDDL `problem`, consisting of of a categorized object list (`:objects`), an initial condition that has only ground literals (`:init`), and a goal condition that is a logical expression (`:goal`). 
 
 ## Installation
 
-To install this implementation of BDDL, clone this repository locally:
+### Recommended: pip
+The easiest way to install BDDL is through pip. To get this BEHAVIOR-1K beta version, run the below command:
+
+```bash
+pip install --pre -u bddl
 ```
+
+Otherwise, for the latest BEHAVIOR-100 release, you can run the below command:
+
+```bash
+pip install -u bddl==1.*
+```
+
+### From source
+
+To install a modifiable copy of BDDL, clone this repository locally:
+```bash
 git clone https://github.com/StanfordVL/bddl.git
 ```
+
 then run setup: 
-```
+```bash
 cd bddl
 python setup.py install
 ```
@@ -34,24 +52,24 @@ python setup.py install
     )
     
     (:init 
-        (onfloor pool.n.01_1 floor.n.01_1) 
+        (ontop pool.n.01_1 floor.n.01_1) 
         (stained pool.n.01_1) 
-        (onfloor scrub_brush.n.01_1 floor.n.01_1) 
-        (onfloor detergent.n.02_1 floor.n.01_1) 
+        (ontop scrub_brush.n.01_1 floor.n.01_1) 
+        (ontop detergent.n.02_1 floor.n.01_1) 
         (inroom shelf.n.01_1 garage) 
         (inroom floor.n.01_1 garage) 
         (inroom sink.n.01_1 storage_room)
-        (onfloor agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (onfloor ?pool.n.01_1 ?floor.n.01_1) 
+            (ontop ?pool.n.01_1 ?floor.n.01_1) 
             (not 
                 (stained ?pool.n.01_1)
             ) 
             (ontop ?scrub_brush.n.01_1 ?shelf.n.01_1) 
-            (onfloor ?detergent.n.02_1 ?floor.n.01_1)
+            (ontop ?detergent.n.02_1 ?floor.n.01_1)
         )
     )
 )
@@ -76,7 +94,7 @@ behavior_activity_instance = BEHAVIORActivityInstance(behavior_activity=behavior
 
 ### With simulator 
 
-To use a BEHAVIOR activity with a simulator, create a subclass of `BEHAVIORActivityInstance` for your simulator. Example for iGibson 2.0. This will require an implementation of sampling functionality or pre-sampled scenes that satisfy the activity's initial condition and implementation for checking each type of binary kinematic predicate (e.g. `ontop`, `nextto`) and unary nonkinematic predicate (e.g. `cooked`, `soaked`). 
+To use a BEHAVIOR activity with a simulator, create a subclass of `BEHAVIORActivityInstance` for your simulator. Example for iGibson 2.0. This will require an implementation of sampling functionality or pre-sampled scenes that satisfy the activity's initial condition and implementation for checking each type of binary kinematic predicate (e.g. `ontop`, `nextto`) and unary nonkinematic predicate (e.g. `cooked`, `saturated`). 
 
 ## Logic evaluator for goal
 

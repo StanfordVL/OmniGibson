@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        dust.n.01_1 - dust.n.01
      	floor.n.01_1 - floor.n.01
     	vacuum.n.04_1 - vacuum.n.04
         ashcan.n.01_1 - ashcan.n.01
@@ -9,7 +10,7 @@
     )
     
     (:init 
-        (dusty floor.n.01_1) 
+        (covered floor.n.01_1 dust.n.01_1) 
         (ontop vacuum.n.04_1 floor.n.01_1) 
         (ontop ashcan.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bedroom) 
@@ -19,7 +20,7 @@
     (:goal 
         (and 
             (not 
-                (dusty ?floor.n.01_1)
+                (covered ?floor.n.01_1 ?dust.n.01_1)
             )
         )
     )

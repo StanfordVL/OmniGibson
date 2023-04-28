@@ -44,9 +44,10 @@ in B-1K. Should contain a `synset` column and a `words` column.
 '''
 B1K_SYNSET_MASTERLIST = "b1k_synset_masterlist.tsv"
 '''
-This .csv file should contain all of the b1k models we currently own.
+This .csv file should contain all of the objects and words modeled
+in B-1K. Should contain a `category` column and a `synset` column.
 '''
-B1K_OBJECT_MODEL_CSV_PATH = "b1k_objectmodeling.csv"
+B1K_MODELED_SYNSET_MASTERLIST = "b1k_objectmodeling.csv"
 '''
 This .json file should contain all of the synsets from the .csv files above
 as well as their associated iGibson abilities.
@@ -117,14 +118,14 @@ for i, [synset, words, *__] in b1k_synset_df.iterrows():
 Load in all of the owned synsets from B-1K, plus substances since they 
 don't require a model
 '''
-owned_b1k_df = pd.read_csv(B1K_OBJECT_MODEL_CSV_PATH)
-owned_b1k_synsets = {}
-for __, [__, category, __, synset, *__] in owned_b1k_df.iterrows():
-    owned_b1k_synsets[synset] = {"objects": [category]}
+b1k_modeled_synset_df = pd.read_csv(B1K_MODELED_SYNSET_MASTERLIST)
+b1k_modeled_synsets = {}
+for __, [__, category, __, synset, *__] in b1k_modeled_synset_df.iterrows():
+    b1k_modeled_synsets[synset] = {"objects": [category]}
 with open(B1K_ABILITY_JSON_PATH, "r") as f:
     b1k_syns_to_props = json.load(f)
 try:
-    owned_b1k_synsets.update(
+    b1k_modeled_synsets.update(
         {syn: objs for syn, objs in b1k_synsets.items() if "substance" in b1k_syns_to_props[syn]})
 except KeyError as e:
     print(f"{e} not in synset-to-filtered-property file")
@@ -133,7 +134,7 @@ except KeyError as e:
 Synsets from B-1K and owned B-100 models
 '''
 corl_synsets = copy.deepcopy(owned_synsets)
-corl_synsets.update(owned_b1k_synsets)
+corl_synsets.update(b1k_modeled_synsets)
 
 '''
 Combined version of owned and article.

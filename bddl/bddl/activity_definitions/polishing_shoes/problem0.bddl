@@ -2,6 +2,7 @@
     (:domain igibson)
 
     (:objects
+        stain.n.01_1 - stain.n.01
     	shoe.n.01_1 shoe.n.01_2 - shoe.n.01
     	rag.n.01_1 - rag.n.01
     	floor.n.01_1 - floor.n.01
@@ -10,12 +11,9 @@
     )
     
     (:init 
-        (stained shoe.n.01_1) 
-        (stained shoe.n.01_2) 
+        (covered shoe.n.01_1 stain.n.01_1) 
+        (covered shoe.n.01_2 stain.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
-        (not 
-            (soaked rag.n.01_1)
-        ) 
         (ontop shoe.n.01_1 floor.n.01_1) 
         (ontop shoe.n.01_2 floor.n.01_1) 
         (inroom sink.n.01_1 bathroom) 
@@ -26,13 +24,12 @@
     (:goal 
         (and 
             (nextto ?rag.n.01_1 ?sink.n.01_1) 
-            (soaked ?rag.n.01_1) 
             (and 
                 (not 
-                    (stained ?shoe.n.01_1)
+                    (covered ?shoe.n.01_1 ?stain.n.01_1)
                 ) 
                 (not 
-                    (stained ?shoe.n.01_2)
+                    (covered ?shoe.n.01_2 ?stain.n.01_1)
                 )
             )
         )
