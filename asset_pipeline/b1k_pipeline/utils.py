@@ -4,6 +4,7 @@ import re
 import fs.path
 from fs.osfs import OSFS
 from fs.zipfs import ZipFS
+import numpy as np
 import yaml
 
 PIPELINE_ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -35,3 +36,11 @@ class PipelineFS(OSFS):
 
 def ParallelZipFS(name, write=False):
     return ZipFS(PIPELINE_ROOT / "artifacts/parallels" / name, write=write)
+
+def mat2arr(mat):
+    return np.array([
+        [mat.row1.x, mat.row1.y, mat.row1.z],
+        [mat.row2.x, mat.row2.y, mat.row2.z],
+        [mat.row3.x, mat.row3.y, mat.row3.z],
+        [mat.row4.x, mat.row4.y, mat.row4.z],
+    ])

@@ -58,13 +58,12 @@ def is_light_required(category):
     # TODO: Make this more robust.
     return "light" in category or "lamp" in category
 
-
 def compute_shear(obj):
     # Check that object satisfies no-shear rule.
     object_transform = np.hstack(
-        [np.array(obj.objecttransform), [[0], [0], [0], [1]]]
+        [b1k_pipeline.utils.mat2arr(obj.objecttransform), [[0], [0], [0], [1]]]
     ).T
-    transform = np.hstack([np.array(obj.transform), [[0], [0], [0], [1]]]).T
+    transform = np.hstack([b1k_pipeline.utils.mat2arr(obj.transform), [[0], [0], [0], [1]]]).T
     obj_to_pivot = np.linalg.inv(transform) @ object_transform
     shear = trimesh.transformations.decompose_matrix(np.linalg.inv(obj_to_pivot))[1]
     return shear
