@@ -659,8 +659,8 @@ def process_target(target, output_archive_fs, link_executor, dask_client):
 
     # Build the mesh tree using our mesh tree library. The scene code also uses this system.
     with pipeline_fs.target_output(target).open("meshes.zip", "rb") as f:
-        mesh_archive_fs = ZipFS(f)
-        G = mesh_tree.build_mesh_tree(mesh_list, mesh_archive_fs, scale_factor=1.0 if "legacy_" in target else 0.001)
+        with ZipFS(f) as mesh_archive_fs:
+            G = mesh_tree.build_mesh_tree(mesh_list, mesh_archive_fs, scale_factor=1.0 if "legacy_" in target else 0.001)
 
     # Go through each object.
     roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
@@ -701,10 +701,10 @@ def main():
     errors = {}
     target_futures = {}
 
-    dask_client = Client('svl1.stanford.edu:35423')
+    dask_client = Client('svl3.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
-        targets = get_targets("combined")
+        targets = get_targets("combined")[:1]
         for target in tqdm.tqdm(targets):
             target_futures[target_executor.submit(process_target, target, archive_fs, link_executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))

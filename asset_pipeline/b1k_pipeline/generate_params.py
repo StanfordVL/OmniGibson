@@ -72,7 +72,13 @@ APPROVED_OBJS = {
     ".*"
 }
 
-REJECTED_OBJS = set()
+REJECTED_OBJS = {
+    "hair_spray-gs",
+    "deicer-sh",
+    "honey_jar-ia",
+    "valentine_wreath-ik",
+    "wood-we",
+}
 
 APPROVED_SCENES = {
     "Beechwood_0_int",
