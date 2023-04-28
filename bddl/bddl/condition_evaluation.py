@@ -368,7 +368,7 @@ class Implication(Expression):
             get_predicate_for_token(antecedent[0], backend)(
                 scope, 
                 backend, 
-                subexpression[1:],
+                antecedent[1:],
                 object_map,
                 generate_ground_options=generate_ground_options
             )
@@ -377,7 +377,7 @@ class Implication(Expression):
             get_predicate_for_token(consequent[0], backend)(
                 scope, 
                 backend, 
-                subexpression[1:],
+                consequent[1:],
                 object_map,
                 generate_ground_options=generate_ground_options
             )
