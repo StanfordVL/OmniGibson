@@ -109,7 +109,7 @@ Load in all of the synsets from B-1K
 '''
 b1k_synset_df = pd.read_csv(B1K_SYNSET_MASTERLIST, sep="\t")
 b1k_synsets = {}
-for i, [synset, words] in b1k_synset_df.iterrows():
+for i, [synset, words, *__] in b1k_synset_df.iterrows():
     b1k_synsets[synset] = {"objects": 
         json.loads(words.replace("'", '"')) if not pd.isna(words) else []}
 
@@ -123,11 +123,11 @@ for __, [__, category, __, synset, *__] in owned_b1k_df.iterrows():
     owned_b1k_synsets[synset] = {"objects": [category]}
 with open(B1K_ABILITY_JSON_PATH, "r") as f:
     b1k_syns_to_props = json.load(f)
-owned_b1k_synsets.update(
-    {syn: objs for syn, objs in b1k_synsets.items() if "substance" in b1k_syns_to_props[syn]})
-# with open("tmp.json", "w") as f:
-#     json.dump(owned_b1k_synsets, f, indent=2)
-# import sys; sys.exit()
+try:
+    owned_b1k_synsets.update(
+        {syn: objs for syn, objs in b1k_synsets.items() if "substance" in b1k_syns_to_props[syn]})
+except KeyError as e:
+    print(f"{e} not in synset-to-filtered-property file")
 
 '''
 Synsets from B-1K and owned B-100 models
@@ -201,16 +201,32 @@ def generate_paths(paths, path, word, custom_synsets):
     @param word: The current synset we are searching parents for.
     @param custom_synsets: Dictionary, maps name to hypernym name
     """
-    if str(word)[8:-2] in custom_synsets:
-        hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
-        generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
-    else:
+    # if str(word)[8:-2] in custom_synsets:
+    #     hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
+    #     generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
+    # else:
+    #     hypernyms = word.hypernyms()
+    #     if not hypernyms:
+    #         paths.append(path)
+    #     else:
+    #         for parent in hypernyms:
+    #             generate_paths(paths, path + [parent], parent, custom_synsets)
+    try:
+        if str(word[8:-2]) in custom_synsets:
+            pass 
+    except:
         hypernyms = word.hypernyms()
         if not hypernyms:
             paths.append(path)
         else:
-            for parent in hypernyms:
-                generate_paths(paths, path + [parent], parent, custom_synsets)
+            for word in hypernyms:
+                generate_paths(paths, path + [word], word, custom_synsets)
+    else:
+        if str(word[8:-2]) not in custom_synsets:       # TODO remove when new custom synsets have been added
+            pass
+        else:
+            hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
+            generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
 
 '''
 Below is the script that creates the .json hierarchy
@@ -328,12 +344,14 @@ def generate_hierarchy(hierarchy_type, ability_type):
     
     synsets.update(custom_synsets)
 
+    objects = set()
     for synset in synsets: 
         try:
             syn = wn.synset(synset)
         except:
             syn = f"Synset('{synset}')"
         synset_paths = []
+        objects.add(synset)
         generate_paths(synset_paths, [syn], syn, custom_synsets)
         for synset_path in synset_paths:
             # The last word should always be `entity.n.01`, so we can just take it out.
@@ -358,13 +376,13 @@ def save_hierarchies():
     # with open(OUTPUT_JSON_PATH3, "w") as f:
     #     json.dump(hierarchy_all, f, indent=2)
     
-    # hierarchy_b1k = generate_hierarchy("b1k", "b1k")
-    # with open(OUTPUT_JSON_PATH4, "w") as f:
-    #     json.dump(hierarchy_b1k, f, indent=2)
+    hierarchy_b1k = generate_hierarchy("b1k", "b1k")
+    with open(OUTPUT_JSON_PATH4, "w") as f:
+        json.dump(hierarchy_b1k, f, indent=2)
     
-    hierarchy_corl = generate_hierarchy("corl", "corl")
-    with open(OUTPUT_JSON_PATH5, "w") as f:
-        json.dump(hierarchy_corl, f, indent=2)
+    # hierarchy_corl = generate_hierarchy("corl", "corl")
+    # with open(OUTPUT_JSON_PATH5, "w") as f:
+    #     json.dump(hierarchy_corl, f, indent=2)
 
 
 if __name__ == "__main__":
