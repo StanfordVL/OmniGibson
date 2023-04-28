@@ -135,7 +135,8 @@ def get_vhacd_mesh(file_bytes):
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
 
-        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(VHACD_MESHES)]
+        # vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(VHACD_MESHES)]
+        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-v", "60", "-h", str(VHACD_MESHES)]
 
         try:
             subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
@@ -385,7 +386,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         collision_shape_file = obj_link_collision_mesh_folder / obj_relative_path
 
         # Run convex decomposition. Don't use COACD for wall meshes.
-        use_coacd = category_name not in COACD_EXCLUDE_CATEGORIES
+        use_coacd = False
         run_remote_convex_decomposition(
             str(visual_shape_file.absolute()),
             str(collision_shape_file.absolute()),

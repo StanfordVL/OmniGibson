@@ -100,9 +100,10 @@ def main(dataset_path, record_path):
 
             user_complained_synset(simulator_obj)
             user_complained_appearance(simulator_obj)
-            # user_complained_bbox(simulator_obj)
+            user_complained_bbox(simulator_obj)
+            user_complained_softbody(simulator_obj)
             # user_complained_properties(simulator_obj)
-            # user_complained_metas(simulator_obj)
+            user_complained_metas(simulator_obj)
             
             with open(record_path, "w") as f:
                 processed_objs.add((obj_category, obj_model))
@@ -178,6 +179,17 @@ def user_complained_appearance(simulator_obj):
         "- make sure there is only one rigid body.\n"
         "- make sure the object has a valid texture or appearance.\n"
         "- make sure the object has all parts necessary."
+    )
+    process_complaint(message, simulator_obj)
+
+
+def user_complained_softbody(simulator_obj):
+    message = (
+        "Check if the object looks like it absolutely MUST be a soft body.\n"
+        "Requirements:\n"
+        "- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n"
+        "- type 'soft' if it needs to be soft but still needs to have a volume.\n"
+        "- just hit enter without typing anything if the object does NOT have to be a soft body."
     )
     process_complaint(message, simulator_obj)
 
