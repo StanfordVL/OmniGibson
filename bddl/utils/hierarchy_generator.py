@@ -74,7 +74,7 @@ OUTPUT_JSON_PATH3 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hiera
 # Uses B-1K abilities
 OUTPUT_JSON_PATH4 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_b1k.json")
 # Uses both B-1K and B-100 abilities, with common synsets taking from B-1K
-OUTPUT_JSON_PATH5 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_corl.json")
+OUTPUT_JSON_PATH5 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_b1k_modeled.json")
 
 '''
 Load in all of the owned models. Map the synsets to their corresponding object names.
@@ -133,8 +133,8 @@ except KeyError as e:
 '''
 Synsets from B-1K and owned B-100 models
 '''
-corl_synsets = copy.deepcopy(owned_synsets)
-corl_synsets.update(b1k_modeled_synsets)
+b1k_modeled_synsets = copy.deepcopy(owned_synsets)
+b1k_modeled_synsets.update(b1k_modeled_synsets)
 
 '''
 Combined version of owned and article.
@@ -261,7 +261,7 @@ def add_abilities(node, ability_type=None, ability_map=None):
         elif ability_type == "b1k":
             with open(B1K_ABILITY_JSON_PATH) as f:
                 ability_map = json.load(f)
-        elif ability_type == "corl": 
+        elif ability_type == "b1k_modeled": 
             with open(IGIBSON_ABILITY_JSON_PATH) as f:
                 ability_map = json.load(f)
             with open(B1K_ABILITY_JSON_PATH) as f:
@@ -329,8 +329,8 @@ def generate_hierarchy(hierarchy_type, ability_type):
         synsets = all_synsets
     elif hierarchy_type == "b1k":
         synsets = b1k_synsets
-    elif hierarchy_type == "corl":
-        synsets = corl_synsets
+    elif hierarchy_type == "b1k_modeled":
+        synsets = b1k_modeled_synsets
     else:
         raise ValueError("Invalid hierarchy type given.")
     
@@ -377,13 +377,13 @@ def save_hierarchies():
     # with open(OUTPUT_JSON_PATH3, "w") as f:
     #     json.dump(hierarchy_all, f, indent=2)
     
-    hierarchy_b1k = generate_hierarchy("b1k", "b1k")
-    with open(OUTPUT_JSON_PATH4, "w") as f:
-        json.dump(hierarchy_b1k, f, indent=2)
+    # hierarchy_b1k = generate_hierarchy("b1k", "b1k")
+    # with open(OUTPUT_JSON_PATH4, "w") as f:
+    #     json.dump(hierarchy_b1k, f, indent=2)
     
-    # hierarchy_corl = generate_hierarchy("corl", "corl")
-    # with open(OUTPUT_JSON_PATH5, "w") as f:
-    #     json.dump(hierarchy_corl, f, indent=2)
+    hierarchy_b1k_modeled = generate_hierarchy("b1k_modeled", "b1k_modeled")
+    with open(OUTPUT_JSON_PATH5, "w") as f:
+        json.dump(hierarchy_b1k_modeled, f, indent=2)
 
 
 if __name__ == "__main__":
