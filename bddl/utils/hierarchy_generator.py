@@ -43,6 +43,11 @@ in B-1K. Should contain a `synset` column and a `words` column.
 '''
 B1K_SYNSET_MASTERLIST = "b1k_synset_masterlist.tsv"
 '''
+This .csv file should contain all of the objects and words modeled
+in B-1K. Should contain a `category` column and a `synset` column.
+'''
+B1K_MODELED_SYNSET_MASTERLIST = "b1k_objectmodeling.csv"
+'''
 This .json file should contain all of the synsets from the .csv files above
 as well as their associated iGibson abilities.
 NOTE: Please contact Sanjana (sanjana2@stanford.edu) or Zheng (zhengl@stanford.edu) if
@@ -105,6 +110,12 @@ b1k_synsets = {}
 for i, [synset, words] in b1k_synset_df.iterrows():
     b1k_synsets[synset] = {"objects": 
         json.loads(words.replace("'", '"')) if not pd.isna(words) else []}
+    
+'''
+Load in all of the modeled synsets from B-1K
+'''
+b1k_modeled_synset_df = pd.read_csv(B1K_MODELED_SYNSET_MASTERLIST)
+b1k_modeled_synsets = {}
 
 '''
 Combined version of owned and article.
