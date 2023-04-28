@@ -53,12 +53,8 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
         G.nodes[node_key]["tags"] = tags
         
         # Get the path for the mesh
-        mesh_dir = os.path.join(mesh_root, mesh_name)
-        mesh_path = os.path.join(mesh_dir, "{}.obj".format(mesh_name))
-        assert os.path.exists(mesh_path), f"Expected mesh {mesh_name} does not exist in directory."
-        json_path = os.path.join(mesh_dir, "{}.json".format(mesh_name))
-        assert os.path.isfile(json_path), f"Expected metadata for {mesh_name} could not be found."
-        with open(json_path, "r") as metadata_file:
+        mesh_dir = mesh_fs.opendir(mesh_name)
+        with mesh_dir.open("{mesh_name}.json", "r") as metadata_file:
             metadata = json.load(metadata_file)
             meta_links = metadata["meta_links"]
 
