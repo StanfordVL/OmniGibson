@@ -83,6 +83,18 @@ def quat2arr(q):
     return np.array([q.x, q.y, q.z, q.w])
 
 
+class ObjectWrapper(object):
+    def __init__(self, obj):
+        self._obj = obj
+
+    def __getattr__(self, attr):
+        if attr in ["__array__", "__array_struct__", "__array_interface__", "_typ"]:
+            raise AttributeError()
+        return getattr(self._obj, attr)
+
+def classOf(obj_wrapper):
+    return rt.classOf(obj_wrapper._obj)
+
 class SanityCheck:
     def __init__(self):
         self.reset()
@@ -319,14 +331,14 @@ class SanityCheck:
             return
 
         # Get the children using the parent rows
-        children = row.object.children
+        children = [ObjectWrapper(x) for x in row.object.children]
 
         # Assert that all of the children are valid meta-links / lights
         found_ml_types = set()
         found_ml_subids_for_id = collections.defaultdict(lambda: collections.defaultdict(list))
         for child in children:
             # If it's an EditablePoly, then it will be processed as a root object too. Safe to skip.
-            if rt.classOf(child) == rt.Editable_Poly:
+            if classOf(child) == rt.Editable_Poly:
                 continue
 
             # Otherwise, we can validate the individual meta link
@@ -355,7 +367,7 @@ class SanityCheck:
             found_ml_subids_for_id[meta_link_type][meta_id].append(meta_subid)
 
             if ALLOWED_META_IS_DIMENSIONLESS[meta_link_type]:
-                self.expect(rt.classOf(child) == rt.Point, f"Dimensionless {meta_link_type} meta link {child.name} should be of Point instead of {rt.classOf(child)}")
+                self.expect(classOf(child) == rt.Point, f"Dimensionless {meta_link_type} meta link {child.name} should be of Point instead of {classOf(child)}")
             else:
                 volumetric_allowed_types = {
                     rt.Box,
@@ -363,9 +375,9 @@ class SanityCheck:
                     rt.Sphere,
                     rt.Cone,
                 }
-                self.expect(rt.classOf(child) in volumetric_allowed_types, f"Volumetric {meta_link_type} meta link {child.name} should be one of {volumetric_allowed_types} instead of {rt.classOf(child)}")
+                self.expect(classOf(child) in volumetric_allowed_types, f"Volumetric {meta_link_type} meta link {child.name} should be one of {volumetric_allowed_types} instead of {classOf(child)}")
 
-                if rt.classOf(child) == rt.Cone:
+                if classOf(child) == rt.Cone:
                     # Cones should have radius1 as 0 and radius2 nonzero
                     self.expect(np.isclose(child.radius1, 0), f"Cone {child.name} radius1 should be zero.")
                     self.expect(not np.isclose(child.radius2, 0), f"Cone {child.name} radius2 should be nonzero.")
@@ -392,13 +404,13 @@ class SanityCheck:
         )
 
         # First get all of the objects
-        df = pd.DataFrame(data={"object": list(rt.objects)})
+        df = pd.DataFrame(data={"object": [ObjectWrapper(x) for x in rt.objects]})
 
         # Add some helpful data
         df["object_name"] = df["object"].map(lambda x: x.name)
         df["base_object"] = df["object"].map(lambda x: x.baseObject)
         df["vertex_count"] = df["object"].map(lambda x: len(x.vertices))
-        df["type"] = df["object"].map(lambda x: rt.classOf(x))
+        df["type"] = df["object"].map(lambda x: classOf(x))
 
         # Complain about and remove objects that are the wrong type.
         good_type = df.apply(self.is_valid_object_type, axis="columns")
