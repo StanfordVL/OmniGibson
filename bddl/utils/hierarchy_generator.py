@@ -124,13 +124,11 @@ for __, [__, category, __, synset, *__] in b1k_modeled_synset_df.iterrows():
     b1k_modeled_synsets[synset] = {"objects": [category]}
 with open(B1K_ABILITY_JSON_PATH, "r") as f:
     b1k_syns_to_props = json.load(f)
-print("chocolate_biscuit.n.01 in synsets: ", "chocolate_biscuit.n.01" in b1k_modeled_synsets)
 try:
     b1k_modeled_synsets.update(
         {syn: objs for syn, objs in b1k_synsets.items() if "substance" in b1k_syns_to_props[syn]})
 except KeyError as e:
     print(f"{e} not in synset-to-filtered-property file")
-print("chocolate_biscuit.n.01 in synsets: ", "chocolate_biscuit.n.01" in b1k_modeled_synsets)
 import sys
 # sys.exit()
 
