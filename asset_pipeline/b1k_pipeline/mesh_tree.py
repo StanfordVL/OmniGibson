@@ -54,7 +54,8 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
         
         # Get the path for the mesh
         mesh_dir = mesh_fs.opendir(mesh_name)
-        with mesh_dir.open("{mesh_name}.json", "r") as metadata_file:
+        with mesh_dir.open("{mesh_name}.obj", "rb") as mesh_file, \
+             mesh_dir.open("{mesh_name}.json", "r") as metadata_file:
             metadata = json.load(metadata_file)
             meta_links = metadata["meta_links"]
 
@@ -75,25 +76,23 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
 
         # Add the data for the position onto the node.
         if joint_side == "upper":
-            assert "upper_filename" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
-            G.nodes[node_key]["upper_filename"] = mesh_path
-            upper_mesh = trimesh.load(mesh_path, process=False, force="mesh", skip_materials=True, maintain_order=True)
+            assert "upper_mesh" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
+            upper_mesh = trimesh.load(mesh_file, format="obj", process=False, force="mesh", skip_materials=True, maintain_order=True)
             upper_mesh.apply_transform(scale_matrix)
             G.nodes[node_key]["upper_mesh"] = upper_mesh
         else:
-            assert "lower_filename" not in G.nodes[node_key], f"Found two lower meshes for {node_key}"
-            G.nodes[node_key]["lower_filename"] = mesh_path
-            lower_mesh = trimesh.load(mesh_path, process=False, force="mesh")
+            assert "lower_mesh" not in G.nodes[node_key], f"Found two lower meshes for {node_key}"
+            lower_mesh = trimesh.load(mesh_file, format="obj", process=False, force="mesh")
             lower_mesh.apply_transform(scale_matrix)
             G.nodes[node_key]["lower_mesh"] = lower_mesh
 
-            lower_mesh_ordered = trimesh.load(mesh_path, process=False, force="mesh", skip_materials=True, maintain_order=True)
+            lower_mesh_ordered = trimesh.load(mesh_file, format="obj", process=False, force="mesh", skip_materials=True, maintain_order=True)
             lower_mesh_ordered.apply_transform(scale_matrix)
             G.nodes[node_key]["lower_mesh_ordered"] = lower_mesh_ordered
 
             G.nodes[node_key]["metadata"] = metadata
             G.nodes[node_key]["meta_links"] = meta_links
-            G.nodes[node_key]["material_dir"] = os.path.join(mesh_dir, "material")
+            G.nodes[node_key]["material_dir"] = mesh_dir.opendir("material")
 
         # Add the edge in from the parent
         if link_name != "base_link":
@@ -108,9 +107,7 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
             (_, _, d), = G.in_edges(node, data=True)
             joint_type = d["joint_type"]
             needs_upper = load_upper and not data["is_broken"] and joint_type != "F"
-        assert not needs_upper or "upper_filename" in data, f"{node} does not have upper filename."
         assert not needs_upper or "upper_mesh" in data, f"{node} does not have upper mesh."
-        assert "lower_filename" in data, f"{node} does not have lower filename."
         assert "lower_mesh" in data, f"{node} does not have lower mesh."
         assert "lower_mesh_ordered" in data, f"{node} does not have lower mesh."
         assert "metadata" in data, f"{node} does not have metadata."

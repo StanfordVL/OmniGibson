@@ -309,7 +309,7 @@ def compute_object_bounding_box(root_node_data):
     return bbox_size, base_link_offset, bbox_world_centroid, bbox_world_rotation
 
 
-def process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_dir, tree_root, out_metadata, dask_client):
+def process_link(G, link_node, base_link_center, canonical_orientation, obj_name, output_fs, tree_root, out_metadata, dask_client):
     category_name, _, _, link_name = link_node
     raw_meta_links = G.nodes[link_node]["meta_links"]
 
@@ -565,13 +565,8 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]
 
 
-def process_object(G, root_node, output_dir, dask_client):
+def process_object(G, root_node, output_fs, dask_client):
     obj_cat, obj_model, obj_inst_id, _ = root_node
-    obj_output_dir = output_dir / obj_cat / obj_model
-    if os.path.exists(obj_output_dir):
-        print(obj_output_dir, "skipped")
-        return
-    obj_output_dir.mkdir(parents=True, exist_ok=True)
 
     # Process the object
     obj_cat, obj_model, obj_inst_id, _ = root_node
@@ -595,15 +590,15 @@ def process_object(G, root_node, output_dir, dask_client):
 
     # Iterate over each link.
     for link_node in nx.dfs_preorder_nodes(G, root_node):
-        process_link(G, link_node, base_link_center, canonical_orientation, obj_name, obj_output_dir, tree_root, out_metadata, dask_client)
+        process_link(G, link_node, base_link_center, canonical_orientation, obj_name, output_fs, tree_root, out_metadata, dask_client)
 
     # Save the URDF file.
-    urdf_path = obj_output_dir / f"{obj_model}.urdf"
     xmlstr = minidom.parseString(ET.tostring(tree_root)).toprettyxml(indent="   ")
-    with open(urdf_path, "w") as f:
-        f.write(xmlstr)
-    tree = ET.parse(urdf_path)
-    tree.write(urdf_path, xml_declaration=True)
+    xmlio = io.StringIO(xmlstr)
+    tree = ET.parse(xmlio)
+    output_fs.makedir("urdf")
+    with output_fs.open(f"urdf/{obj_model}.urdf", "w") as f:
+        tree.write(f, xml_declaration=True)
 
     bbox_size, base_link_offset, _, _ = compute_object_bounding_box(G.nodes[root_node])
 
@@ -645,10 +640,8 @@ def process_object(G, root_node, output_dir, dask_client):
         "orientations": compute_stable_poses(G, root_node),
         "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
     })
-    obj_misc_folder = obj_output_dir / "misc"
-    obj_misc_folder.mkdir(parents=True, exist_ok=True)
-    metadata_file = obj_misc_folder / "metadata.json"
-    with open(metadata_file, "w") as f:
+    output_fs.makedir("misc")
+    with output_fs.open("misc/metadata.json", "w") as f:
         json.dump(out_metadata, f, cls=NumpyEncoder)
 
 def process_target(target, output_archive_fs, link_executor, dask_client):
@@ -679,8 +672,11 @@ def process_target(target, output_archive_fs, link_executor, dask_client):
         Gprime = G.subgraph(relevant_nodes).copy()
 
         print(f"Start {root_node} from {target}")
-        # process_object(Gprime, root_node, output_dir, dask_client)
-        object_futures[link_executor.submit(process_object, Gprime, root_node, output_archive_fs, dask_client)] = str(root_node)
+        obj_cat, obj_model, obj_inst_id, _ = root_node
+        output_dirname = f"{obj_cat}/{obj_model}"
+        output_archive_fs.makedirs(output_dirname)
+        with output_archive_fs.opendir(output_dirname) as obj_output_dir:
+            object_futures[link_executor.submit(process_object, Gprime, root_node, obj_output_dir, dask_client)] = str(root_node)
 
     # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
     futures.wait(object_futures.keys())
