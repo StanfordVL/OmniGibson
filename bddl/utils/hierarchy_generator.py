@@ -129,8 +129,6 @@ try:
         {syn: objs for syn, objs in b1k_synsets.items() if "substance" in b1k_syns_to_props[syn]})
 except KeyError as e:
     print(f"{e} not in synset-to-filtered-property file")
-import sys
-# sys.exit()
 
 '''
 Synsets from B-1K and owned B-100 models
