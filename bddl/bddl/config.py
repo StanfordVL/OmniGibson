@@ -1,9 +1,8 @@
 import os
 
 # PATHS
-# ACTIVITY_CONFIGS_PATH = os.path.join(
-#     os.path.dirname(__file__), 'activity_definitions')
-ACTIVITY_CONFIGS_PATH = os.path.join("/Users", "sanjanasrivastava", "BEHAVIORProject", "ObjectPropertyAnnotation", "init_goal_cond_annotations", "problem_files_verified_b1k")
+ACTIVITY_CONFIGS_PATH = os.path.join(
+    os.path.dirname(__file__), 'activity_definitions')
 
 # BDDL
 SUPPORTED_BDDL_REQUIREMENTS = [':strips', ':negative-preconditions', ':typing', ':adl']
