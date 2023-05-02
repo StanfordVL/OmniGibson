@@ -133,8 +133,8 @@ except KeyError as e:
 '''
 Synsets from B-1K and owned B-100 models
 '''
-b1k_modeled_synsets = copy.deepcopy(owned_synsets)
-b1k_modeled_synsets.update(b1k_modeled_synsets)
+# b100_modeled_synsets = copy.deepcopy(owned_synsets)
+# b1k_modeled_synsets.update(b100_modeled_synsets)
 
 '''
 Combined version of owned and article.
@@ -343,7 +343,8 @@ def generate_hierarchy(hierarchy_type, ability_type):
                 "objects": [row["word"]]
             }
     
-    synsets.update(custom_synsets)
+    # NOTE - not automatically using custom synsets
+    # synsets.update(custom_synsets)
 
     objects = set()
     for synset in synsets: 
