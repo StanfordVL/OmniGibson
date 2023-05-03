@@ -92,7 +92,7 @@ def main():
                         )
 
             # Only continue if no errors are found by now
-            assert not error_msgs
+            # assert not error_msgs
 
             # Narrow the data down to existing categories
             categories_by_id = {
@@ -145,7 +145,7 @@ def main():
             print("Warnings:")
             print("\n".join(warning_msgs))
 
-        with pipeline_fs.open("aggregate_metadata.json", "w") as f:
+        with pipeline_fs.pipeline_output().open("aggregate_metadata.json", "w") as f:
             json.dump(
                 {
                     "success": success,

@@ -272,7 +272,7 @@ stages:
     - b1k_pipeline/aggregate_scenes.py
     - params.yaml
     outs:
-    - artifacts/aggregate/scenes
+    - artifacts/parallels/scenes.zip
     - artifacts/pipeline/aggregate_scenes.success
 
   validate_scene:
@@ -281,7 +281,7 @@ stages:
     do:
       cmd: 'python -m b1k_pipeline.validate_scene ${item}'
       deps:
-      - artifacts/aggregate/scenes
+      - artifacts/parallels/scenes.zip
       - artifacts/pipeline/aggregate_scenes.success
       - b1k_pipeline/validate_scene.py
       outs:
@@ -331,7 +331,7 @@ stages:
     - metadata/non_sampleable_categories.csv
     - metadata/allowed_room_types.csv
     outs:
-    - artifacts/aggregate/metadata
+    - artifacts/parallels/metadata.zip
     - artifacts/pipeline/aggregate_metadata.json
 
   aggregate_metadata_success:
@@ -346,10 +346,9 @@ stages:
     # Zip the dataset.
     cmd: 'python b1k_pipeline/pack_dataset.py'
     deps:
-    - artifacts/parallels/maps.zip
-    - artifacts/pipeline/make_maps.success
-    - artifacts/parallels/vertex_reduction.zip
-    - artifacts/pipeline/vertex_reduction.success
+    # - artifacts/pipeline/make_maps.success
+    # - artifacts/parallels/vertex_reduction.zip
+    # - artifacts/pipeline/vertex_reduction.success
     # - artifacts/pipeline/validate_scene.success
     - artifacts/pipeline/aggregate_metadata.success
     - artifacts/pipeline/aggregate_scenes.success
@@ -357,6 +356,7 @@ stages:
     - artifacts/parallels/metadata.zip
     - artifacts/parallels/objects.zip
     - artifacts/parallels/scenes.zip
+    # - artifacts/parallels/maps.zip
     - b1k_pipeline/pack_dataset.py
     outs:
     - artifacts/og_dataset.zip

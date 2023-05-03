@@ -18,8 +18,14 @@ logger.setLevel(logging.DEBUG)
 OUTPUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "pipeline", "pack_dataset.json")
 SUCCESS_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "pipeline", "pack_dataset.success")
 IN_FILENAME_AGGREGATE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "aggregate")
-IN_FILENAME_PARALLELS = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "parallels", "*.zip")
+PARALLELS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "parallels")
 OUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "og_dataset.zip")
+PARALLELS = [
+    "objects.zip",
+    "metadata.zip",
+    "scenes.zip",
+    # "maps.zip",
+]
 
 def main():
     success = True
@@ -28,7 +34,8 @@ def main():
         # Get a multi-FS view over all of the parallel filesystems.
         multi_fs = fs.multifs.MultiFS()
         multi_fs.add_fs('aggregate', fs.osfs.OSFS(IN_FILENAME_AGGREGATE), priority=0)
-        for parallel_zip in glob.glob(IN_FILENAME_PARALLELS):
+        for parallel_zip_name in PARALLELS:
+            parallel_zip = os.path.join(PARALLELS_DIR, parallel_zip_name)
             print("Adding", parallel_zip)
             multi_fs.add_fs(os.path.basename(parallel_zip), fs.zipfs.ZipFS(parallel_zip), priority=1)
 

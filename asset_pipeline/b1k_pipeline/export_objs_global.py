@@ -628,7 +628,7 @@ def process_object(G, root_node, output_fs, dask_client):
     with output_fs.makedir("misc").open("metadata.json", "w") as f:
         json.dump(out_metadata, f, cls=NumpyEncoder)
 
-def process_target(target, output_archive_fs, link_executor, dask_client):
+def process_target(target, objects_fs, link_executor, dask_client):
     pipeline_fs = b1k_pipeline.utils.PipelineFS()
 
     with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
@@ -657,7 +657,7 @@ def process_target(target, output_archive_fs, link_executor, dask_client):
 
                 obj_cat, obj_model, obj_inst_id, _ = root_node
                 output_dirname = f"{obj_cat}/{obj_model}"
-                object_futures[link_executor.submit(process_object, Gprime, root_node, output_archive_fs.makedirs(output_dirname), dask_client)] = str(root_node)
+                object_futures[link_executor.submit(process_object, Gprime, root_node, objects_fs.makedirs(output_dirname), dask_client)] = str(root_node)
 
             # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
             futures.wait(object_futures.keys())
@@ -672,37 +672,37 @@ def process_target(target, output_archive_fs, link_executor, dask_client):
         raise ValueError(error_msg)
 
 def main():
-    archive_fs = b1k_pipeline.utils.ParallelZipFS("objects.zip", write=True)
+    with b1k_pipeline.utils.ParallelZipFS("objects.zip", write=True) as archive_fs:
+        objects_dir = archive_fs.makedir("objects")
+        # Load the mesh list from the object list json.
+        errors = {}
+        target_futures = {}
 
-    # Load the mesh list from the object list json.
-    errors = {}
-    target_futures = {}
+        dask_client = Client('svl3.stanford.edu:35423')
+        
+        with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
+            targets = get_targets("combined")
+            for target in tqdm.tqdm(targets):
+                target_futures[target_executor.submit(process_target, target, objects_dir, link_executor, dask_client)] = target
+                # all_futures.update(process_target(target, output_dir, executor, dask_client))
+                    
+            with tqdm.tqdm(total=len(target_futures)) as object_pbar:
+                for future in futures.as_completed(target_futures.keys()):
+                    try:
+                        result = future.result()
+                    except:
+                        name = target_futures[future]
+                        errors[name] = traceback.format_exc()
 
-    dask_client = Client('svl3.stanford.edu:35423')
-    
-    with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
-        targets = get_targets("combined")
-        for target in tqdm.tqdm(targets):
-            target_futures[target_executor.submit(process_target, target, archive_fs, link_executor, dask_client)] = target
-            # all_futures.update(process_target(target, output_dir, executor, dask_client))
-                
-        with tqdm.tqdm(total=len(target_futures)) as object_pbar:
-            for future in futures.as_completed(target_futures.keys()):
-                try:
-                    result = future.result()
-                except:
-                    name = target_futures[future]
-                    errors[name] = traceback.format_exc()
+                    object_pbar.update(1)
 
-                object_pbar.update(1)
+                    remaining_targets = [v for k, v in target_futures.items() if not k.done()]
+                    if len(remaining_targets) < 10:
+                        print("Remaining:", remaining_targets)
 
-                remaining_targets = [v for k, v in target_futures.items() if not k.done()]
-                if len(remaining_targets) < 10:
-                    print("Remaining:", remaining_targets)
+            print("Time for executor shutdown")
 
-        print("Time for executor shutdown")
-
-    print("Finished processing")
+        print("Finished processing")
 
     pipeline_fs = b1k_pipeline.utils.PipelineFS()
     with pipeline_fs.pipeline_output().open("export_objs.json", "w") as f:
