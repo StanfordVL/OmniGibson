@@ -14,6 +14,7 @@ from nltk.corpus import wordnet as wn
 
 import igibson
 
+import igibson.external.pybullet_tools.utils as pb_utils
 from igibson.object_states.link_based_state_mixin import LinkBasedStateMixin
 from igibson.objects.articulated_object import URDFObject
 from igibson.render.mesh_renderer.mesh_renderer_settings import MeshRendererSettings
@@ -77,7 +78,7 @@ def main(dataset_path, record_path):
 
         obj_name = "{}_{}".format(obj_category, obj_model)
         model_path = get_ig_model_path(obj_category, obj_model)
-        filename = os.path.join(model_path, obj_model + ".urdf")
+        filename = os.path.join(model_path, f"urdf/{obj_model}.urdf")
 
         print("Visualizing category {}, model {}".format(obj_category, obj_model))
 
@@ -97,13 +98,13 @@ def main(dataset_path, record_path):
             dist = 3 * np.max(simulator_obj.bounding_box)
             p.resetDebugVisualizerCamera(cameraDistance=dist, cameraYaw=30, cameraPitch=-30, cameraTargetPosition=[0,0,0])
 
-
             user_complained_synset(simulator_obj)
             user_complained_appearance(simulator_obj)
             user_complained_bbox(simulator_obj)
             user_complained_softbody(simulator_obj)
             # user_complained_properties(simulator_obj)
             user_complained_metas(simulator_obj)
+            user_complained_articulation(simulator_obj)
             
             with open(record_path, "w") as f:
                 processed_objs.add((obj_category, obj_model))
@@ -220,10 +221,10 @@ def user_complained_metas(simulator_obj):
         meta_name
         for link_metas in simulator_obj.metadata["meta_links"].values()
         for meta_name in link_metas})
-    message = f"Confirm object meta links:\n"
+    message = f"Confirm object meta links listed below:\n"
     for meta_link in meta_links:
         message += f"- {meta_link}\n"
-    message += "Make sure these match mechanisms you expect from this object."
+    message += "\nMake sure these match mechanisms you expect from this object."
     process_complaint(message, simulator_obj)
 
 
@@ -245,6 +246,21 @@ def user_complained_bbox(simulator_obj):
     message += ", ".join(bb_items) + "\n"
     message += "Make sure these sizes are within the same order of magnitude you expect from this object IRL."
     # TODO: Print avg category specs too
+    process_complaint(message, simulator_obj)
+
+
+def user_complained_articulation(simulator_obj):
+    message = f"Confirm articulation:\n"
+    message += "This object has the below movable links annotated:\n"
+    for bid in simulator_obj.get_body_ids():
+        for joint in pb_utils.get_movable_joints(bid):
+            name = pb_utils.get_link_name(bid, joint)
+            _, upper = pb_utils.get_joint_limits(bid, joint)
+            pb_utils.set_joint_position(bid, joint, upper)
+            message += f"- {name}\n"
+    message += "\nThey have now all been set to their upper (maximum) limits.\n"
+    message += "Verify that these are all the moving parts you expect from this object\n"
+    message += "and that the joint limits look reasonable."
     process_complaint(message, simulator_obj)
   
 

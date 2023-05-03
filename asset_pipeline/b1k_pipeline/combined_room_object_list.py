@@ -30,7 +30,7 @@ SCENE_ROOMS_TO_REMOVE = {
     "school_computer_lab_and_infirmary": ['corridor_3', 'chemistry_lab_0', 'classroom_0', 'corridor_0', 'gym_0', 'locker_room_1', 'locker_room_0', 'corridor_1', 'biology_lab_0'],
     "office_cubicles_left": ['private_office_0', 'private_office_7', 'private_office_8', 'private_office_9', 'meeting_room_1', 'shared_office_1', 'private_office_6', 'copy_room_1'],
     "office_cubicles_right": ['shared_office_0', 'private_office_0', 'copy_room_0', 'meeting_room_0', 'private_office_4', 'private_office_5', 'private_office_1', 'private_office_2', 'private_office_3'],
-    "house_double_floor_lower": ["bathroom_1", "bedroom_0", "bedroom_1", "bedroom_2", "television_room_0"],
+    # "house_double_floor_lower": ["bathroom_1", "bedroom_0", "bedroom_1", "bedroom_2", "television_room_0"],
     # "house_double_floor_upper": ['garden_0', 'bathroom_0', 'living_room_0', "kitchen_0", "garage_0", "corridor_0"],
     # "Beechwood_0_garden": ["living_room_0"],
     # "Rs_garden": ["living_room_0"],
