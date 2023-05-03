@@ -89,7 +89,7 @@ def main():
     xmlstr = minidom.parseString(ET.tostring(scene_tree_root)).toprettyxml(indent="   ")
     xmlio = io.StringIO(xmlstr)
     tree = ET.parse(xmlio)
-    with target_output_fs.open("scene.urdf", "w") as f:
+    with target_output_fs.open("scene.urdf", "wb") as f:
         tree.write(f, xml_declaration=True)
 
     # If we got here, we were successful. Let's create the success file.

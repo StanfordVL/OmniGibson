@@ -3,8 +3,10 @@ import re
 
 import fs.path
 from fs.osfs import OSFS
+from fs.tempfs import TempFS
 from fs.zipfs import ZipFS
 import numpy as np
+import trimesh.resolvers
 import yaml
 
 PIPELINE_ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -35,7 +37,7 @@ class PipelineFS(OSFS):
         return self.target(target).makedir("artifacts", recreate=True)
 
 def ParallelZipFS(name, write=False):
-    return ZipFS(PIPELINE_ROOT / "artifacts/parallels" / name, write=write)
+    return ZipFS(PIPELINE_ROOT / "artifacts/parallels" / name, write=write, temp_fs=TempFS(temp_dir=r"D:\tmp"))
 
 def mat2arr(mat):
     return np.array([
@@ -44,3 +46,54 @@ def mat2arr(mat):
         [mat.row3.x, mat.row3.y, mat.row3.z],
         [mat.row4.x, mat.row4.y, mat.row4.z],
     ])
+
+class FSResolver(trimesh.resolvers.Resolver):
+    """
+    Resolve files from a source path on the file system.
+    """
+
+    def __init__(self, fs):
+        self._fs = fs
+
+    def get(self, name):
+        """
+        Get an asset.
+
+        Parameters
+        -------------
+        name : str
+          Name of the asset
+
+        Returns
+        ------------
+        data : bytes
+          Loaded data from asset
+        """
+        # load the file by path name
+        with self._fs.open(name.strip(), 'rb') as f:
+            data = f.read()
+        return data
+
+    def write(self, name, data):
+        """
+        Write an asset to a file path.
+
+        Parameters
+        -----------
+        name : str
+          Name of the file to write
+        data : str or bytes
+          Data to write to the file
+        """
+        # write files to path name
+        with self._fs.open(name.strip(), 'wb') as f:
+            # handle encodings correctly for str/bytes
+            trimesh.util.write_encoded(file_obj=f, stuff=data)
+
+def load_mesh(fs, name, **kwargs):
+    with fs.open(name, "rb") as f:
+        return trimesh.load(f, resolver=FSResolver(fs), file_type="obj", **kwargs)
+    
+def save_mesh(mesh, fs, name, **kwargs):
+    with fs.open(name, "wb") as f:
+        return mesh.export(f, resolver=FSResolver(fs), file_type="obj", **kwargs)

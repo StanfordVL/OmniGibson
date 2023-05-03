@@ -10,7 +10,7 @@ import numpy as np
 import tqdm
 import trimesh
 
-import b1k_pipeline.utils
+from b1k_pipeline.utils import parse_name, save_mesh, load_mesh
 
 
 def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, scale_factor=1):
@@ -22,7 +22,7 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
     for mesh_name in pbar:
         if show_progress:
             pbar.set_description(mesh_name)
-        match = b1k_pipeline.utils.parse_name(mesh_name)
+        match = parse_name(mesh_name)
         is_broken = match.group("bad")
         is_randomization_fixed = match.group("randomization_disabled")
         is_loose = match.group("loose")
@@ -54,45 +54,46 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
         
         # Get the path for the mesh
         mesh_dir = mesh_fs.opendir(mesh_name)
-        with mesh_dir.open("{mesh_name}.obj", "rb") as mesh_file, \
-             mesh_dir.open("{mesh_name}.json", "r") as metadata_file:
+        mesh_fn = f"{mesh_name}.obj"
+        with mesh_dir.open(f"{mesh_name}.json", "r") as metadata_file:
             metadata = json.load(metadata_file)
-            meta_links = metadata["meta_links"]
 
-            # Delete meta links from metadata to avoid confusion
-            del metadata["meta_links"]
+        meta_links = metadata["meta_links"]
 
-            # Apply the scaling factor.
-            for meta_link_id_to_subid in meta_links.values():
-                for meta_link_subid_to_link in meta_link_id_to_subid.values():
-                    for meta_link in meta_link_subid_to_link:
-                        meta_link["position"] = np.array(meta_link["position"]) * scale_factor
-                        if "length" in meta_link:
-                            meta_link["length"] *= scale_factor
-                        if "width" in meta_link:
-                            meta_link["width"] *= scale_factor
-                        if "size" in meta_link:
-                            meta_link["size"] = (np.asarray(meta_link["size"]) * scale_factor).tolist()
+        # Delete meta links from metadata to avoid confusion
+        del metadata["meta_links"]
+
+        # Apply the scaling factor.
+        for meta_link_id_to_subid in meta_links.values():
+            for meta_link_subid_to_link in meta_link_id_to_subid.values():
+                for meta_link in meta_link_subid_to_link:
+                    meta_link["position"] = np.array(meta_link["position"]) * scale_factor
+                    if "length" in meta_link:
+                        meta_link["length"] *= scale_factor
+                    if "width" in meta_link:
+                        meta_link["width"] *= scale_factor
+                    if "size" in meta_link:
+                        meta_link["size"] = (np.asarray(meta_link["size"]) * scale_factor).tolist()
 
         # Add the data for the position onto the node.
         if joint_side == "upper":
             assert "upper_mesh" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
-            upper_mesh = trimesh.load(mesh_file, format="obj", process=False, force="mesh", skip_materials=True, maintain_order=True)
+            upper_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
             upper_mesh.apply_transform(scale_matrix)
             G.nodes[node_key]["upper_mesh"] = upper_mesh
         else:
             assert "lower_mesh" not in G.nodes[node_key], f"Found two lower meshes for {node_key}"
-            lower_mesh = trimesh.load(mesh_file, format="obj", process=False, force="mesh")
+            lower_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh")
             lower_mesh.apply_transform(scale_matrix)
             G.nodes[node_key]["lower_mesh"] = lower_mesh
 
-            lower_mesh_ordered = trimesh.load(mesh_file, format="obj", process=False, force="mesh", skip_materials=True, maintain_order=True)
+            lower_mesh_ordered = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
             lower_mesh_ordered.apply_transform(scale_matrix)
             G.nodes[node_key]["lower_mesh_ordered"] = lower_mesh_ordered
 
             G.nodes[node_key]["metadata"] = metadata
             G.nodes[node_key]["meta_links"] = meta_links
-            G.nodes[node_key]["material_dir"] = mesh_dir.opendir("material")
+            G.nodes[node_key]["material_dir"] = mesh_dir.opendir("material") if mesh_dir.exists("material") else None
 
         # Add the edge in from the parent
         if link_name != "base_link":

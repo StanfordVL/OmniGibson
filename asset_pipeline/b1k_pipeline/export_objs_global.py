@@ -15,6 +15,8 @@ from xml.dom import minidom
 
 from dask.distributed import Client
 
+import fs.copy
+from fs.tempfs import TempFS
 from fs.zipfs import ZipFS
 import networkx as nx
 import numpy as np
@@ -25,7 +27,7 @@ from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline import mesh_tree
 import b1k_pipeline.utils
-from b1k_pipeline.utils import parse_name, PIPELINE_ROOT, get_targets, SUBDIVIDE_CLOTH_CATEGORIES
+from b1k_pipeline.utils import parse_name, PIPELINE_ROOT, get_targets, SUBDIVIDE_CLOTH_CATEGORIES, load_mesh, save_mesh
 
 logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
@@ -82,24 +84,21 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def run_remote_convex_decomposition(obj_file_path, dest_file_path, dask_client, use_coacd=True):
+def run_remote_convex_decomposition(in_file, out_file, dask_client, use_coacd=True):
     # This is the function that sends VHACD requests to a worker. It needs to read the contents
     # of the source file into memory, transmit that to the worker, receive the contents of the
     # result file and save those at the destination path.
-    with open(obj_file_path, 'rb') as f:
-        file_bytes = f.read()
+    file_bytes = in_file.read()
     # data_future = client.scatter(file_bytes)
     data_future = file_bytes
     vhacd_future = dask_client.submit(
         get_coacd_mesh if use_coacd else get_vhacd_mesh,
         data_future,
-        key=obj_file_path,
         retries=1)
     result = vhacd_future.result()
     if not result:
-        raise ValueError("vhacd failed on object " + str(obj_file_path))
-    with open(dest_file_path, 'wb') as f:
-        f.write(result)
+        raise ValueError("vhacd failed")
+    out_file.write(result)
 
 def get_coacd_mesh(file_bytes):
     with tempfile.TemporaryDirectory() as td:
@@ -242,6 +241,8 @@ def compute_mesh_stable_poses(mesh):
     return trimesh.poses.compute_stable_poses(mesh, n_samples=5, threshold=0.03)
 
 def compute_stable_poses(G, root_node):
+    return []
+
     # First assemble a complete collision mesh
     all_link_meshes = []
     for link_node in nx.dfs_preorder_nodes(G, root_node):
@@ -341,28 +342,21 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     assert len(in_edges) <= 1, f"Something's wrong: there's more than 1 in-edge to node {link_node}"
 
     # Save the mesh
-    with tempfile.TemporaryDirectory() as td:
-        td = pathlib.Path(td)
-        
+    with TempFS() as tfs:      
         obj_relative_path = f"{obj_name}-{link_name}.obj"
-        link_obj_path = td / obj_relative_path
-        canonical_mesh.export(str(link_obj_path), file_type="obj")
+        save_mesh(canonical_mesh, tfs, obj_relative_path)
 
         # Move the mesh to the correct path
-        obj_link_mesh_folder = obj_dir / "shape"
-        obj_link_mesh_folder.mkdir(parents=True, exist_ok=True)
-        obj_link_visual_mesh_folder = obj_link_mesh_folder / "visual"
-        obj_link_visual_mesh_folder.mkdir(parents=True, exist_ok=True)
-        obj_link_collision_mesh_folder = obj_link_mesh_folder / "collision"
-        obj_link_collision_mesh_folder.mkdir(parents=True, exist_ok=True)
-        obj_link_material_folder = obj_dir / "material"
-        obj_link_material_folder.mkdir(parents=True, exist_ok=True)
+        obj_link_mesh_folder_fs = output_fs.makedir("shape", recreate=True)
+        obj_link_visual_mesh_folder_fs = obj_link_mesh_folder_fs.makedir("visual", recreate=True)
+        obj_link_collision_mesh_folder_fs = obj_link_mesh_folder_fs.makedir("collision", recreate=True)
+        obj_link_material_folder_fs = output_fs.makedir("material", recreate=True)
 
         # Fix texture file paths if necessary.
-        original_material_folder = pathlib.Path(G.nodes[link_node]["material_dir"])
-        if original_material_folder.exists():
-            for src_texture_file in original_material_folder.iterdir():
-                fname = src_texture_file.name
+        original_material_fs = G.nodes[link_node]["material_dir"]
+        if original_material_fs:
+            for src_texture_file in original_material_fs.listdir("/"):
+                fname = src_texture_file
                 # fname is in the same format as room_light-0-0_VRayAOMap.png
                 vray_name = fname[fname.index("VRay") : -4] if "VRay" in fname else None
                 if vray_name in VRAY_MAPPING:
@@ -370,51 +364,42 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                 else:
                     raise ValueError(f"Unknown texture map: {fname}")
 
-                dst_texture_file = obj_link_material_folder / f"{obj_name}-{link_name}-{dst_fname}.png"
-                try:
-                    shutil.copy(src_texture_file, dst_texture_file)
-                except shutil.SameFileError:
-                    pass
+                dst_texture_file = f"{obj_name}-{link_name}-{dst_fname}.png"
+                fs.copy.copy_file(original_material_fs, src_texture_file, obj_link_material_folder_fs, dst_texture_file)
 
-        visual_shape_file = obj_link_visual_mesh_folder / obj_relative_path
-        try:
-            shutil.copy(link_obj_path, visual_shape_file)
-        except shutil.SameFileError:
-            pass
+        # Copy the OBJ into the right spot
+        fs.copy.copy_file(tfs, obj_relative_path, obj_link_visual_mesh_folder_fs, obj_relative_path)
         
-        # Generate collision mesh
-        collision_shape_file = obj_link_collision_mesh_folder / obj_relative_path
-
         # Run convex decomposition. Don't use COACD for wall meshes.
         use_coacd = False
-        run_remote_convex_decomposition(
-            str(visual_shape_file.absolute()),
-            str(collision_shape_file.absolute()),
-            dask_client,
-            use_coacd=use_coacd)
+        with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "rb") as visual_file, \
+             obj_link_collision_mesh_folder_fs.open(obj_relative_path, "wb") as collision_file:
+            run_remote_convex_decomposition(
+                visual_file,
+                collision_file,
+                dask_client,
+                use_coacd=use_coacd)
 
         # Store the final meshes
         G.nodes[link_node]["visual_mesh"] = canonical_mesh.copy()
-        G.nodes[link_node]["collision_mesh"] = trimesh.load(str(collision_shape_file), process=False, force="mesh", skip_materials=True, maintain_order=True)
+        G.nodes[link_node]["collision_mesh"] = load_mesh(tfs, obj_relative_path, process=False, force="mesh", skip_materials=True, maintain_order=True)
 
         # Modify MTL reference in OBJ file
         mtl_name = f"{obj_name}-{link_name}.mtl"
-        with open(visual_shape_file, "r") as f:
+        with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "r") as f:
             new_lines = []
             for line in f.readlines():
                 if "mtllib material_0.mtl" in line:
                     line = f"mtllib {mtl_name}\n"
                 new_lines.append(line)
 
-        with open(visual_shape_file, "w") as f:
+        with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "w") as f:
             for line in new_lines:
                 f.write(line)
 
         # Modify texture reference in MTL file
-        src_mtl_file = td / "material_0.mtl"
-        if src_mtl_file.exists():
-            dst_mtl_file = obj_link_visual_mesh_folder / mtl_name
-            with open(src_mtl_file, "r") as f:
+        if tfs.exists("material_0.mtl"):
+            with tfs.open("material_0.mtl", "r") as f:
                 new_lines = []
                 for line in f.readlines():
                     # TODO: bake multi-channel PBR texture
@@ -424,7 +409,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                             line += f"{key} ../../material/{obj_name}-{link_name}-{MTL_MAPPING[key]}.png\n"
                     new_lines.append(line)
 
-            with open(dst_mtl_file, "w") as f:
+            with obj_link_visual_mesh_folder_fs.open(mtl_name, "w") as f:
                 for line in new_lines:
                     f.write(line)
 
@@ -596,8 +581,8 @@ def process_object(G, root_node, output_fs, dask_client):
     xmlstr = minidom.parseString(ET.tostring(tree_root)).toprettyxml(indent="   ")
     xmlio = io.StringIO(xmlstr)
     tree = ET.parse(xmlio)
-    output_fs.makedir("urdf")
-    with output_fs.open(f"urdf/{obj_model}.urdf", "w") as f:
+    
+    with output_fs.makedir("urdf").open(f"{obj_model}.urdf", "wb") as f:
         tree.write(f, xml_declaration=True)
 
     bbox_size, base_link_offset, _, _ = compute_object_bounding_box(G.nodes[root_node])
@@ -640,8 +625,7 @@ def process_object(G, root_node, output_fs, dask_client):
         "orientations": compute_stable_poses(G, root_node),
         "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
     })
-    output_fs.makedir("misc")
-    with output_fs.open("misc/metadata.json", "w") as f:
+    with output_fs.makedir("misc").open("metadata.json", "w") as f:
         json.dump(out_metadata, f, cls=NumpyEncoder)
 
 def process_target(target, output_archive_fs, link_executor, dask_client):
@@ -655,31 +639,28 @@ def process_target(target, output_archive_fs, link_executor, dask_client):
         with ZipFS(f) as mesh_archive_fs:
             G = mesh_tree.build_mesh_tree(mesh_list, mesh_archive_fs, scale_factor=1.0 if "legacy_" in target else 0.001)
 
-    # Go through each object.
-    roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
+            # Go through each object.
+            roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
-    # Only save the 0th instance.
-    saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
-    object_futures = {}
-    for root_node in saveable_roots:
-        # Start processing the object. We start by creating an object-specific
-        # copy of the mesh tree (also including info about any parts)
-        relevant_nodes = set(nx.dfs_tree(G, root_node).nodes())
-        relevant_nodes |= {
-            node
-            for part_root_node in get_part_nodes(G, root_node)  # Get every part root node
-            for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
-        Gprime = G.subgraph(relevant_nodes).copy()
+            # Only save the 0th instance.
+            saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
+            object_futures = {}
+            for root_node in saveable_roots:
+                # Start processing the object. We start by creating an object-specific
+                # copy of the mesh tree (also including info about any parts)
+                relevant_nodes = set(nx.dfs_tree(G, root_node).nodes())
+                relevant_nodes |= {
+                    node
+                    for part_root_node in get_part_nodes(G, root_node)  # Get every part root node
+                    for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
+                Gprime = G.subgraph(relevant_nodes).copy()
 
-        print(f"Start {root_node} from {target}")
-        obj_cat, obj_model, obj_inst_id, _ = root_node
-        output_dirname = f"{obj_cat}/{obj_model}"
-        output_archive_fs.makedirs(output_dirname)
-        with output_archive_fs.opendir(output_dirname) as obj_output_dir:
-            object_futures[link_executor.submit(process_object, Gprime, root_node, obj_output_dir, dask_client)] = str(root_node)
+                obj_cat, obj_model, obj_inst_id, _ = root_node
+                output_dirname = f"{obj_cat}/{obj_model}"
+                object_futures[link_executor.submit(process_object, Gprime, root_node, output_archive_fs.makedirs(output_dirname), dask_client)] = str(root_node)
 
-    # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
-    futures.wait(object_futures.keys())
+            # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
+            futures.wait(object_futures.keys())
 
     # Accumulate the errors
     error_msg = ""
@@ -700,7 +681,7 @@ def main():
     dask_client = Client('svl3.stanford.edu:35423')
     
     with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
-        targets = get_targets("combined")[:1]
+        targets = get_targets("combined")
         for target in tqdm.tqdm(targets):
             target_futures[target_executor.submit(process_target, target, archive_fs, link_executor, dask_client)] = target
             # all_futures.update(process_target(target, output_dir, executor, dask_client))
