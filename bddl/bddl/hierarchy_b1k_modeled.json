@@ -477,6 +477,13 @@
                                             "wetable": {},
                                             "wrinkleable": {}
                                           }
+                                        },
+                                        {
+                                          "name": "elevator_door.n.01",
+                                          "igibson_categories": [
+                                            "elevator_door"
+                                          ],
+                                          "abilities": {}
                                         }
                                       ],
                                       "igibson_categories": [
@@ -3181,13 +3188,6 @@
                                       }
                                     },
                                     {
-                                      "name": "olive_oil__bottle.n.01",
-                                      "igibson_categories": [
-                                        "olive_oil_bottle"
-                                      ],
-                                      "abilities": {}
-                                    },
-                                    {
                                       "name": "wine_bottle.n.01",
                                       "igibson_categories": [
                                         "wine_bottle"
@@ -3344,32 +3344,6 @@
                                       }
                                     },
                                     {
-                                      "name": "champagne__bottle.n.01",
-                                      "igibson_categories": [
-                                        "champagne_bottle"
-                                      ],
-                                      "abilities": {
-                                        "blendable": {},
-                                        "breakable": {},
-                                        "disinfectable": {},
-                                        "dustyable": {},
-                                        "fillable": {},
-                                        "freezable": {},
-                                        "grassyable": {},
-                                        "heatable": {},
-                                        "mixable": {},
-                                        "moldyable": {},
-                                        "openable": {},
-                                        "rustable": {},
-                                        "scratchable": {},
-                                        "stainable": {},
-                                        "stickyable": {},
-                                        "tarnishable": {},
-                                        "wetable": {},
-                                        "wrinkleable": {}
-                                      }
-                                    },
-                                    {
                                       "name": "pill_bottle.n.01",
                                       "igibson_categories": [
                                         "pill_bottle"
@@ -3425,162 +3399,6 @@
                                       "name": "pop_bottle.n.01",
                                       "igibson_categories": [
                                         "coke_bottle"
-                                      ],
-                                      "abilities": {
-                                        "blendable": {},
-                                        "breakable": {},
-                                        "disinfectable": {},
-                                        "dustyable": {},
-                                        "fillable": {},
-                                        "freezable": {},
-                                        "grassyable": {},
-                                        "heatable": {},
-                                        "mixable": {},
-                                        "moldyable": {},
-                                        "openable": {},
-                                        "rustable": {},
-                                        "scratchable": {},
-                                        "stainable": {},
-                                        "stickyable": {},
-                                        "tarnishable": {},
-                                        "wetable": {},
-                                        "wrinkleable": {}
-                                      }
-                                    },
-                                    {
-                                      "name": "vodka__bottle.n.01",
-                                      "igibson_categories": [
-                                        "vodka_bottle"
-                                      ],
-                                      "abilities": {
-                                        "blendable": {},
-                                        "breakable": {},
-                                        "disinfectable": {},
-                                        "dustyable": {},
-                                        "fillable": {},
-                                        "freezable": {},
-                                        "grassyable": {},
-                                        "heatable": {},
-                                        "mixable": {},
-                                        "moldyable": {},
-                                        "openable": {},
-                                        "rustable": {},
-                                        "scratchable": {},
-                                        "stainable": {},
-                                        "stickyable": {},
-                                        "tarnishable": {},
-                                        "wetable": {},
-                                        "wrinkleable": {}
-                                      }
-                                    },
-                                    {
-                                      "name": "lemon_juice__bottle.n.01",
-                                      "igibson_categories": [
-                                        "lemon_juice_bottle"
-                                      ],
-                                      "abilities": {
-                                        "blendable": {},
-                                        "breakable": {},
-                                        "disinfectable": {},
-                                        "dustyable": {},
-                                        "fillable": {},
-                                        "freezable": {},
-                                        "grassyable": {},
-                                        "heatable": {},
-                                        "mixable": {},
-                                        "moldyable": {},
-                                        "openable": {},
-                                        "rustable": {},
-                                        "scratchable": {},
-                                        "stainable": {},
-                                        "stickyable": {},
-                                        "tarnishable": {},
-                                        "wetable": {},
-                                        "wrinkleable": {}
-                                      }
-                                    },
-                                    {
-                                      "name": "hot_sauce__bottle.n.01",
-                                      "igibson_categories": [
-                                        "hot_sauce_bottle"
-                                      ],
-                                      "abilities": {
-                                        "blendable": {},
-                                        "breakable": {},
-                                        "disinfectable": {},
-                                        "dustyable": {},
-                                        "fillable": {},
-                                        "freezable": {},
-                                        "grassyable": {},
-                                        "heatable": {},
-                                        "mixable": {},
-                                        "moldyable": {},
-                                        "openable": {},
-                                        "rustable": {},
-                                        "scratchable": {},
-                                        "stainable": {},
-                                        "stickyable": {},
-                                        "tarnishable": {},
-                                        "wetable": {},
-                                        "wrinkleable": {}
-                                      }
-                                    },
-                                    {
-                                      "name": "orange_juice__carton.n.01",
-                                      "igibson_categories": [
-                                        "orange_juice_carton"
-                                      ],
-                                      "abilities": {
-                                        "blendable": {},
-                                        "breakable": {},
-                                        "disinfectable": {},
-                                        "dustyable": {},
-                                        "fillable": {},
-                                        "freezable": {},
-                                        "grassyable": {},
-                                        "heatable": {},
-                                        "mixable": {},
-                                        "moldyable": {},
-                                        "openable": {},
-                                        "rustable": {},
-                                        "scratchable": {},
-                                        "stainable": {},
-                                        "stickyable": {},
-                                        "tarnishable": {},
-                                        "wetable": {},
-                                        "wrinkleable": {}
-                                      }
-                                    },
-                                    {
-                                      "name": "lotion__bottle.n.01",
-                                      "igibson_categories": [
-                                        "lotion_bottle"
-                                      ],
-                                      "abilities": {
-                                        "blendable": {},
-                                        "breakable": {},
-                                        "disinfectable": {},
-                                        "dustyable": {},
-                                        "fillable": {},
-                                        "freezable": {},
-                                        "grassyable": {},
-                                        "heatable": {},
-                                        "mixable": {},
-                                        "moldyable": {},
-                                        "openable": {},
-                                        "rustable": {},
-                                        "scratchable": {},
-                                        "stainable": {},
-                                        "stickyable": {},
-                                        "tarnishable": {},
-                                        "wetable": {},
-                                        "wrinkleable": {}
-                                      }
-                                    },
-                                    {
-                                      "name": "rum__bottle.n.01",
-                                      "igibson_categories": [
-                                        "rum_bottle"
                                       ],
                                       "abilities": {
                                         "blendable": {},
@@ -3978,6 +3796,20 @@
                                   }
                                 },
                                 {
+                                  "name": "olive_oil__bottle.n.01",
+                                  "igibson_categories": [
+                                    "olive_oil_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "powder__bottle.n.03",
+                                  "igibson_categories": [
+                                    "powder_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
                                   "name": "basin.n.01",
                                   "children": [
                                     {
@@ -4026,6 +3858,39 @@
                                   }
                                 },
                                 {
+                                  "name": "champagne__bottle.n.01",
+                                  "igibson_categories": [
+                                    "champagne_bottle"
+                                  ],
+                                  "abilities": {
+                                    "blendable": {},
+                                    "breakable": {},
+                                    "disinfectable": {},
+                                    "dustyable": {},
+                                    "fillable": {},
+                                    "freezable": {},
+                                    "grassyable": {},
+                                    "heatable": {},
+                                    "mixable": {},
+                                    "moldyable": {},
+                                    "openable": {},
+                                    "rustable": {},
+                                    "scratchable": {},
+                                    "stainable": {},
+                                    "stickyable": {},
+                                    "tarnishable": {},
+                                    "wetable": {},
+                                    "wrinkleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "sake__bottle.n.01",
+                                  "igibson_categories": [
+                                    "sake_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
                                   "name": "barrel.n.02",
                                   "children": [
                                     {
@@ -4035,6 +3900,20 @@
                                     }
                                   ],
                                   "igibson_categories": [],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "insect_repellent__bottle.n.01",
+                                  "igibson_categories": [
+                                    "bug_repellent_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "liquid_soap__bottle.n.01",
+                                  "igibson_categories": [
+                                    "liquid_soap_bottle"
+                                  ],
                                   "abilities": {}
                                 },
                                 {
@@ -4111,6 +3990,505 @@
                                     "wetable": {},
                                     "wrinkleable": {}
                                   }
+                                },
+                                {
+                                  "name": "vodka__bottle.n.01",
+                                  "igibson_categories": [
+                                    "vodka_bottle"
+                                  ],
+                                  "abilities": {
+                                    "blendable": {},
+                                    "breakable": {},
+                                    "disinfectable": {},
+                                    "dustyable": {},
+                                    "fillable": {},
+                                    "freezable": {},
+                                    "grassyable": {},
+                                    "heatable": {},
+                                    "mixable": {},
+                                    "moldyable": {},
+                                    "openable": {},
+                                    "rustable": {},
+                                    "scratchable": {},
+                                    "stainable": {},
+                                    "stickyable": {},
+                                    "tarnishable": {},
+                                    "wetable": {},
+                                    "wrinkleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "lemon_juice__bottle.n.01",
+                                  "igibson_categories": [
+                                    "lemon_juice_bottle"
+                                  ],
+                                  "abilities": {
+                                    "blendable": {},
+                                    "breakable": {},
+                                    "disinfectable": {},
+                                    "dustyable": {},
+                                    "fillable": {},
+                                    "freezable": {},
+                                    "grassyable": {},
+                                    "heatable": {},
+                                    "mixable": {},
+                                    "moldyable": {},
+                                    "openable": {},
+                                    "rustable": {},
+                                    "scratchable": {},
+                                    "stainable": {},
+                                    "stickyable": {},
+                                    "tarnishable": {},
+                                    "wetable": {},
+                                    "wrinkleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "beer__bottle.n.01",
+                                  "igibson_categories": [
+                                    "beer_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "catsup__bottle.n.01",
+                                  "igibson_categories": [
+                                    "catsup_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "cologne__bottle.n.02",
+                                  "igibson_categories": [
+                                    "cologne_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "conditioner__bottle.n.03",
+                                  "igibson_categories": [
+                                    "conditioner_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "jam__jar.n.01",
+                                  "igibson_categories": [
+                                    "jam_jar"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "mayonnaise__jar.n.01",
+                                  "igibson_categories": [
+                                    "mayonnaise_jar"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "medicine__bottle.n.02",
+                                  "igibson_categories": [
+                                    "medicine_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "paint__bucket.n.01",
+                                  "igibson_categories": [
+                                    "paint_bucket"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "perfume__bottle.n.02",
+                                  "igibson_categories": [
+                                    "perfume_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "puree__jar.n.01",
+                                  "igibson_categories": [
+                                    "puree_jar"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "spaghetti_sauce__jar.n.01",
+                                  "igibson_categories": [
+                                    "spaghetti_sauce_jar"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "vinegar__bottle.n.01",
+                                  "igibson_categories": [
+                                    "vinegar_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "orange_juice__bottle.n.01",
+                                  "igibson_categories": [
+                                    "orange_juice_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "grain__jar.n.02",
+                                  "igibson_categories": [
+                                    "grain_jar"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "sauce__bottle.n.01",
+                                  "igibson_categories": [
+                                    "sauce_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "apple_juice__bottle.n.01",
+                                  "igibson_categories": [
+                                    "apple_juice_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "barbecue_sauce__bottle.n.01",
+                                  "igibson_categories": [
+                                    "barbecue_sauce_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "carrot_juice__bottle.n.01",
+                                  "igibson_categories": [
+                                    "carrot_juice_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "garlic_sauce__bottle.n.01",
+                                  "igibson_categories": [
+                                    "garlic_sauce_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "hot_sauce__bottle.n.01",
+                                  "igibson_categories": [
+                                    "hot_sauce_bottle"
+                                  ],
+                                  "abilities": {
+                                    "blendable": {},
+                                    "breakable": {},
+                                    "disinfectable": {},
+                                    "dustyable": {},
+                                    "fillable": {},
+                                    "freezable": {},
+                                    "grassyable": {},
+                                    "heatable": {},
+                                    "mixable": {},
+                                    "moldyable": {},
+                                    "openable": {},
+                                    "rustable": {},
+                                    "scratchable": {},
+                                    "stainable": {},
+                                    "stickyable": {},
+                                    "tarnishable": {},
+                                    "wetable": {},
+                                    "wrinkleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "lime_juice__bottle.n.01",
+                                  "igibson_categories": [
+                                    "lime_juice_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "mayonnaise__bottle.n.01",
+                                  "igibson_categories": [
+                                    "mayonnaise_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "pesto__bottle.n.01",
+                                  "igibson_categories": [
+                                    "pesto_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "tomato_juice__box.n.01",
+                                  "igibson_categories": [
+                                    "tomato_juice_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "tomato_paste__bottle.n.01",
+                                  "igibson_categories": [
+                                    "tomato_paste_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "coffee__bottle.n.01",
+                                  "igibson_categories": [
+                                    "coffee_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "milk__bottle.n.01",
+                                  "igibson_categories": [
+                                    "milk_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "soup__bottle.n.01",
+                                  "igibson_categories": [
+                                    "soup_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "ginger_beer__bottle.n.01",
+                                  "igibson_categories": [
+                                    "ginger_beer_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "lemon_sauce__bottle.n.01",
+                                  "igibson_categories": [
+                                    "lemon_sauce_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "mushroom_sauce__bottle.n.01",
+                                  "igibson_categories": [
+                                    "mushroom_sauce_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "orange_sauce__jar.n.01",
+                                  "igibson_categories": [
+                                    "orange_sauce_jar"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "apple_juice__box.n.01",
+                                  "igibson_categories": [
+                                    "apple_juice_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "lemonade__bottle.n.01",
+                                  "igibson_categories": [
+                                    "lemonade_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "papaya_juice__bottle.n.01",
+                                  "igibson_categories": [
+                                    "papaya_juice_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "soy_milk__bottle.n.01",
+                                  "igibson_categories": [
+                                    "soy_milk_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "tonic__bottle.n.01",
+                                  "igibson_categories": [
+                                    "tonic_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "milk__carton.n.01",
+                                  "igibson_categories": [
+                                    "milk_carton"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "orange_juice__carton.n.01",
+                                  "igibson_categories": [
+                                    "orange_juice_carton"
+                                  ],
+                                  "abilities": {
+                                    "blendable": {},
+                                    "breakable": {},
+                                    "disinfectable": {},
+                                    "dustyable": {},
+                                    "fillable": {},
+                                    "freezable": {},
+                                    "grassyable": {},
+                                    "heatable": {},
+                                    "mixable": {},
+                                    "moldyable": {},
+                                    "openable": {},
+                                    "rustable": {},
+                                    "scratchable": {},
+                                    "stainable": {},
+                                    "stickyable": {},
+                                    "tarnishable": {},
+                                    "wetable": {},
+                                    "wrinkleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "pineapple_juice__carton.n.01",
+                                  "igibson_categories": [
+                                    "pineapple_juice_carton"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "coconut_water__bottle.n.01",
+                                  "igibson_categories": [
+                                    "coconut_water_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "fruit_punch__bottle.n.01",
+                                  "igibson_categories": [
+                                    "fruit_punch_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "lotion__bottle.n.01",
+                                  "igibson_categories": [
+                                    "lotion_bottle"
+                                  ],
+                                  "abilities": {
+                                    "blendable": {},
+                                    "breakable": {},
+                                    "disinfectable": {},
+                                    "dustyable": {},
+                                    "fillable": {},
+                                    "freezable": {},
+                                    "grassyable": {},
+                                    "heatable": {},
+                                    "mixable": {},
+                                    "moldyable": {},
+                                    "openable": {},
+                                    "rustable": {},
+                                    "scratchable": {},
+                                    "stainable": {},
+                                    "stickyable": {},
+                                    "tarnishable": {},
+                                    "wetable": {},
+                                    "wrinkleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "wine_box.n.01",
+                                  "igibson_categories": [
+                                    "wine_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "soy_milk__carton.n.01",
+                                  "igibson_categories": [
+                                    "soy_milk_carton"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "chocolate_milk__carton.n.01",
+                                  "igibson_categories": [
+                                    "chocolate_milk_carton"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "rum__bottle.n.01",
+                                  "igibson_categories": [
+                                    "rum_bottle"
+                                  ],
+                                  "abilities": {
+                                    "blendable": {},
+                                    "breakable": {},
+                                    "disinfectable": {},
+                                    "dustyable": {},
+                                    "fillable": {},
+                                    "freezable": {},
+                                    "grassyable": {},
+                                    "heatable": {},
+                                    "mixable": {},
+                                    "moldyable": {},
+                                    "openable": {},
+                                    "rustable": {},
+                                    "scratchable": {},
+                                    "stainable": {},
+                                    "stickyable": {},
+                                    "tarnishable": {},
+                                    "wetable": {},
+                                    "wrinkleable": {}
+                                  }
+                                },
+                                {
+                                  "name": "soda__bottle.n.01",
+                                  "igibson_categories": [
+                                    "soda_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "tea__bottle.n.01",
+                                  "igibson_categories": [
+                                    "tea_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "vegetable_juice__box.n.01",
+                                  "igibson_categories": [
+                                    "vegetable_juice_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "mustard__bottle.n.01",
+                                  "igibson_categories": [
+                                    "mustard_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "cooking_oil__bottle.n.01",
+                                  "igibson_categories": [
+                                    "cooking_oil_bottle"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "shampoo__bottle.n.01",
+                                  "igibson_categories": [
+                                    "shampoo_bottle"
+                                  ],
+                                  "abilities": {}
                                 }
                               ],
                               "igibson_categories": [],
@@ -4342,31 +4720,6 @@
                                   }
                                 },
                                 {
-                                  "name": "litter_box.n.01",
-                                  "igibson_categories": [
-                                    "litter_boxh"
-                                  ],
-                                  "abilities": {
-                                    "blendable": {},
-                                    "disinfectable": {},
-                                    "dustyable": {},
-                                    "fillable": {},
-                                    "freezable": {},
-                                    "grassyable": {},
-                                    "heatable": {},
-                                    "mixable": {},
-                                    "moldyable": {},
-                                    "rustable": {},
-                                    "scratchable": {},
-                                    "soakable": {},
-                                    "stainable": {},
-                                    "stickyable": {},
-                                    "tarnishable": {},
-                                    "wetable": {},
-                                    "wrinkleable": {}
-                                  }
-                                },
-                                {
                                   "name": "mailbox.n.01",
                                   "igibson_categories": [
                                     "mailbox"
@@ -4398,31 +4751,6 @@
                                     "match_box"
                                   ],
                                   "abilities": {}
-                                },
-                                {
-                                  "name": "pizza_box.n.01",
-                                  "igibson_categories": [
-                                    "pizza_box"
-                                  ],
-                                  "abilities": {
-                                    "blendable": {},
-                                    "disinfectable": {},
-                                    "dustyable": {},
-                                    "fireSource": {},
-                                    "freezable": {},
-                                    "grassyable": {},
-                                    "heatable": {},
-                                    "mixable": {},
-                                    "moldyable": {},
-                                    "rustable": {},
-                                    "scratchable": {},
-                                    "soakable": {},
-                                    "stainable": {},
-                                    "stickyable": {},
-                                    "tarnishable": {},
-                                    "wetable": {},
-                                    "wrinkleable": {}
-                                  }
                                 },
                                 {
                                   "name": "shoebox.n.02",
@@ -4462,6 +4790,7 @@
                                 "heatable": {},
                                 "mixable": {},
                                 "moldyable": {},
+                                "openable": {},
                                 "rustable": {},
                                 "scratchable": {},
                                 "stainable": {},
@@ -4662,6 +4991,13 @@
                                         "wetable": {},
                                         "wrinkleable": {}
                                       }
+                                    },
+                                    {
+                                      "name": "salad__bowl.n.01",
+                                      "igibson_categories": [
+                                        "salad_bowl"
+                                      ],
+                                      "abilities": {}
                                     }
                                   ],
                                   "igibson_categories": [],
@@ -4841,6 +5177,13 @@
                               }
                             },
                             {
+                              "name": "pop__case.n.02",
+                              "igibson_categories": [
+                                "pop_case"
+                              ],
+                              "abilities": {}
+                            },
+                            {
                               "name": "spoon.n.01",
                               "children": [
                                 {
@@ -4915,6 +5258,20 @@
                                 "wetable": {},
                                 "wrinkleable": {}
                               }
+                            },
+                            {
+                              "name": "chocolate__box.n.02",
+                              "igibson_categories": [
+                                "chocolate_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "cracker__box.n.01",
+                              "igibson_categories": [
+                                "cracker_box"
+                              ],
+                              "abilities": {}
                             },
                             {
                               "name": "package.n.02",
@@ -5139,6 +5496,13 @@
                               }
                             },
                             {
+                              "name": "coffee_bean__pouch.n.01",
+                              "igibson_categories": [
+                                "coffee_pouch"
+                              ],
+                              "abilities": {}
+                            },
+                            {
                               "name": "dispenser.n.01",
                               "children": [
                                 {
@@ -5193,6 +5557,13 @@
                                   }
                                 },
                                 {
+                                  "name": "tissue_dispenser.n.01",
+                                  "igibson_categories": [
+                                    "tissue_dispenser"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
                                   "name": "inhaler.n.01",
                                   "igibson_categories": [
                                     "inhaler"
@@ -5214,6 +5585,27 @@
                                     "wetable": {},
                                     "wrinkleable": {}
                                   }
+                                },
+                                {
+                                  "name": "shampoo__dispenser.n.01",
+                                  "igibson_categories": [
+                                    "shampoo_dispenser"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "conditioner__dispenser.n.01",
+                                  "igibson_categories": [
+                                    "conditioner_dispenser"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "isopropanol__dispenser.n.01",
+                                  "igibson_categories": [
+                                    "isopropanol_dispenser"
+                                  ],
+                                  "abilities": {}
                                 }
                               ],
                               "igibson_categories": [
@@ -5549,6 +5941,13 @@
                                 "wetable": {},
                                 "wrinkleable": {}
                               }
+                            },
+                            {
+                              "name": "sugar__jar.n.01",
+                              "igibson_categories": [
+                                "sugar_jar"
+                              ],
+                              "abilities": {}
                             },
                             {
                               "name": "bag.n.01",
@@ -6042,6 +6441,34 @@
                               }
                             },
                             {
+                              "name": "jam_dispenser.n.01",
+                              "igibson_categories": [
+                                "jam_dispenser"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "rice__bag.n.01",
+                              "igibson_categories": [
+                                "rice_bag"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "egg__carton.n.01",
+                              "igibson_categories": [
+                                "egg_carton"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "pop__bottle.n.02",
+                              "igibson_categories": [
+                                "pop_bottle"
+                              ],
+                              "abilities": {}
+                            },
+                            {
                               "name": "can.n.01",
                               "children": [
                                 {
@@ -6094,6 +6521,13 @@
                               }
                             },
                             {
+                              "name": "oatmeal__box.n.01",
+                              "igibson_categories": [
+                                "oatmeal_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
                               "name": "case.n.20",
                               "children": [
                                 {
@@ -6144,6 +6578,20 @@
                               }
                             },
                             {
+                              "name": "packed_cigarette.n.01",
+                              "igibson_categories": [
+                                "cigarette_pack"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "sake_box.n.01",
+                              "igibson_categories": [
+                                "sake_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
                               "name": "pot.n.04",
                               "children": [
                                 {
@@ -6186,6 +6634,31 @@
                                 "moldyable": {},
                                 "rustable": {},
                                 "scratchable": {},
+                                "stainable": {},
+                                "stickyable": {},
+                                "tarnishable": {},
+                                "wetable": {},
+                                "wrinkleable": {}
+                              }
+                            },
+                            {
+                              "name": "litter_box.n.01",
+                              "igibson_categories": [
+                                "litter_boxh"
+                              ],
+                              "abilities": {
+                                "blendable": {},
+                                "disinfectable": {},
+                                "dustyable": {},
+                                "fillable": {},
+                                "freezable": {},
+                                "grassyable": {},
+                                "heatable": {},
+                                "mixable": {},
+                                "moldyable": {},
+                                "rustable": {},
+                                "scratchable": {},
+                                "soakable": {},
                                 "stainable": {},
                                 "stickyable": {},
                                 "tarnishable": {},
@@ -6242,6 +6715,38 @@
                               }
                             },
                             {
+                              "name": "pizza_box.n.01",
+                              "igibson_categories": [
+                                "pizza_box"
+                              ],
+                              "abilities": {
+                                "blendable": {},
+                                "disinfectable": {},
+                                "dustyable": {},
+                                "fireSource": {},
+                                "freezable": {},
+                                "grassyable": {},
+                                "heatable": {},
+                                "mixable": {},
+                                "moldyable": {},
+                                "rustable": {},
+                                "scratchable": {},
+                                "soakable": {},
+                                "stainable": {},
+                                "stickyable": {},
+                                "tarnishable": {},
+                                "wetable": {},
+                                "wrinkleable": {}
+                              }
+                            },
+                            {
+                              "name": "tupperware.n.01",
+                              "igibson_categories": [
+                                "tupperware"
+                              ],
+                              "abilities": {}
+                            },
+                            {
                               "name": "watering_can.n.01",
                               "igibson_categories": [
                                 "watering_can"
@@ -6264,6 +6769,230 @@
                                 "wetable": {},
                                 "wrinkleable": {}
                               }
+                            },
+                            {
+                              "name": "cereal__box.n.03",
+                              "igibson_categories": [
+                                "cereal_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "chip__bag.n.04",
+                              "igibson_categories": [
+                                "chips_bag"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "cpu_board__box.n.01",
+                              "igibson_categories": [
+                                "cpu_board_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "detergent__bottle.n.02",
+                              "igibson_categories": [
+                                "detergent_bottle"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "ink_cartridge__box.n.01",
+                              "igibson_categories": [
+                                "ink_cartridge_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "lotion__tube.n.01",
+                              "igibson_categories": [
+                                "lotion_tube"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "milk__container.n.01",
+                              "igibson_categories": [
+                                "milk_container"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "protein__pack.n.01",
+                              "igibson_categories": [
+                                "protein_powder_pack"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "shampoo_pack.n.01",
+                              "igibson_categories": [
+                                "shampoo_pack"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "sunscreen__pack.n.01",
+                              "igibson_categories": [
+                                "sunscreen_pack"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "toothpaste__tube.n.01",
+                              "igibson_categories": [
+                                "toothpaste_tube"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "cookie__bag.n.01",
+                              "igibson_categories": [
+                                "cookie_bag"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "auricularia__bag.n.01",
+                              "igibson_categories": [
+                                "auricularia_bag"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "shiitake__bag.n.01",
+                              "igibson_categories": [
+                                "shiitake_bag"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "cane_sugar__box.n.01",
+                              "igibson_categories": [
+                                "cane_sugar_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "corn_flake__box.n.01",
+                              "igibson_categories": [
+                                "corn_flake_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "lasagna__box.n.01",
+                              "igibson_categories": [
+                                "lasagna_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "sanitary_napkin__box.n.01",
+                              "igibson_categories": [
+                                "sanitary_napkin_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "tissue__box.n.01",
+                              "igibson_categories": [
+                                "tissue_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "yogurt__box.n.01",
+                              "igibson_categories": [
+                                "yogurt_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "granola_bar__box.n.01",
+                              "igibson_categories": [
+                                "granola_bar_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "flour__bag.n.01",
+                              "igibson_categories": [
+                                "flour_bag"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "mix__container.n.01",
+                              "igibson_categories": [
+                                "mix_container"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "oatmeal__container.n.01",
+                              "igibson_categories": [
+                                "oatmeal_container"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "cocoa__bag.n.01",
+                              "igibson_categories": [
+                                "cocoa_bag"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "cream_cheese__bag.n.01",
+                              "igibson_categories": [
+                                "cream_cheese_bag"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "ice_cream__box.n.01",
+                              "igibson_categories": [
+                                "ice_cream_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "icetea__can.n.01",
+                              "igibson_categories": [
+                                "icetea_can"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "cream__box.n.01",
+                              "igibson_categories": [
+                                "cream_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "rum_box.n.01",
+                              "igibson_categories": [
+                                "rum_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "whiskey_box.n.01",
+                              "igibson_categories": [
+                                "whiskey_box"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "tomato_paste__can.n.01",
+                              "igibson_categories": [
+                                "tomato_paste_can"
+                              ],
+                              "abilities": {}
                             }
                           ],
                           "igibson_categories": [
@@ -8466,26 +9195,19 @@
                                 },
                                 {
                                   "name": "base.n.08",
+                                  "children": [
+                                    {
+                                      "name": "shelf_baseboard.n.01",
+                                      "igibson_categories": [
+                                        "shelf_baseboard"
+                                      ],
+                                      "abilities": {}
+                                    }
+                                  ],
                                   "igibson_categories": [
                                     "pedestal"
                                   ],
-                                  "abilities": {
-                                    "blendable": {},
-                                    "disinfectable": {},
-                                    "dustyable": {},
-                                    "freezable": {},
-                                    "grassyable": {},
-                                    "heatable": {},
-                                    "mixable": {},
-                                    "moldyable": {},
-                                    "rustable": {},
-                                    "scratchable": {},
-                                    "stainable": {},
-                                    "stickyable": {},
-                                    "tarnishable": {},
-                                    "wetable": {},
-                                    "wrinkleable": {}
-                                  }
+                                  "abilities": {}
                                 },
                                 {
                                   "name": "bar.n.13",
@@ -8534,6 +9256,27 @@
                                     "wetable": {},
                                     "wrinkleable": {}
                                   }
+                                },
+                                {
+                                  "name": "shelf_back.n.01",
+                                  "igibson_categories": [
+                                    "shelf_back_panel"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "shelf_top.n.01",
+                                  "igibson_categories": [
+                                    "shelf_top"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "shelf_side.n.01",
+                                  "igibson_categories": [
+                                    "shelf_side"
+                                  ],
+                                  "abilities": {}
                                 }
                               ],
                               "igibson_categories": [],
@@ -11674,6 +12417,111 @@
                               }
                             },
                             {
+                              "name": "photographic_equipment.n.01",
+                              "children": [
+                                {
+                                  "name": "camera.n.01",
+                                  "children": [
+                                    {
+                                      "name": "security_camera.n.01",
+                                      "igibson_categories": [
+                                        "security_camera"
+                                      ],
+                                      "abilities": {}
+                                    },
+                                    {
+                                      "name": "digital_camera.n.01",
+                                      "children": [
+                                        {
+                                          "name": "webcam.n.01",
+                                          "igibson_categories": [
+                                            "webcam"
+                                          ],
+                                          "abilities": {
+                                            "blendable": {},
+                                            "disinfectable": {},
+                                            "dustyable": {},
+                                            "freezable": {},
+                                            "grassyable": {},
+                                            "heatable": {},
+                                            "mixable": {},
+                                            "moldyable": {},
+                                            "rustable": {},
+                                            "scratchable": {},
+                                            "stainable": {},
+                                            "stickyable": {},
+                                            "tarnishable": {},
+                                            "toggleable": {},
+                                            "wetable": {},
+                                            "wrinkleable": {}
+                                          }
+                                        }
+                                      ],
+                                      "igibson_categories": [],
+                                      "abilities": {
+                                        "blendable": {},
+                                        "disinfectable": {},
+                                        "dustyable": {},
+                                        "freezable": {},
+                                        "grassyable": {},
+                                        "heatable": {},
+                                        "mixable": {},
+                                        "moldyable": {},
+                                        "rustable": {},
+                                        "scratchable": {},
+                                        "stainable": {},
+                                        "stickyable": {},
+                                        "tarnishable": {},
+                                        "toggleable": {},
+                                        "wetable": {},
+                                        "wrinkleable": {}
+                                      }
+                                    }
+                                  ],
+                                  "igibson_categories": [
+                                    "camera"
+                                  ],
+                                  "abilities": {
+                                    "blendable": {},
+                                    "disinfectable": {},
+                                    "dustyable": {},
+                                    "freezable": {},
+                                    "grassyable": {},
+                                    "heatable": {},
+                                    "mixable": {},
+                                    "moldyable": {},
+                                    "rustable": {},
+                                    "scratchable": {},
+                                    "stainable": {},
+                                    "stickyable": {},
+                                    "tarnishable": {},
+                                    "toggleable": {},
+                                    "wetable": {},
+                                    "wrinkleable": {}
+                                  }
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {
+                                "blendable": {},
+                                "disinfectable": {},
+                                "dustyable": {},
+                                "freezable": {},
+                                "grassyable": {},
+                                "heatable": {},
+                                "mixable": {},
+                                "moldyable": {},
+                                "rustable": {},
+                                "scratchable": {},
+                                "stainable": {},
+                                "stickyable": {},
+                                "tarnishable": {},
+                                "toggleable": {},
+                                "wetable": {},
+                                "wrinkleable": {}
+                              }
+                            },
+                            {
                               "name": "sports_equipment.n.01",
                               "children": [
                                 {
@@ -12151,104 +12999,6 @@
                                 "stainable": {},
                                 "stickyable": {},
                                 "tarnishable": {},
-                                "wetable": {},
-                                "wrinkleable": {}
-                              }
-                            },
-                            {
-                              "name": "photographic_equipment.n.01",
-                              "children": [
-                                {
-                                  "name": "camera.n.01",
-                                  "children": [
-                                    {
-                                      "name": "digital_camera.n.01",
-                                      "children": [
-                                        {
-                                          "name": "webcam.n.01",
-                                          "igibson_categories": [
-                                            "webcam"
-                                          ],
-                                          "abilities": {
-                                            "blendable": {},
-                                            "disinfectable": {},
-                                            "dustyable": {},
-                                            "freezable": {},
-                                            "grassyable": {},
-                                            "heatable": {},
-                                            "mixable": {},
-                                            "moldyable": {},
-                                            "rustable": {},
-                                            "scratchable": {},
-                                            "stainable": {},
-                                            "stickyable": {},
-                                            "tarnishable": {},
-                                            "toggleable": {},
-                                            "wetable": {},
-                                            "wrinkleable": {}
-                                          }
-                                        }
-                                      ],
-                                      "igibson_categories": [],
-                                      "abilities": {
-                                        "blendable": {},
-                                        "disinfectable": {},
-                                        "dustyable": {},
-                                        "freezable": {},
-                                        "grassyable": {},
-                                        "heatable": {},
-                                        "mixable": {},
-                                        "moldyable": {},
-                                        "rustable": {},
-                                        "scratchable": {},
-                                        "stainable": {},
-                                        "stickyable": {},
-                                        "tarnishable": {},
-                                        "toggleable": {},
-                                        "wetable": {},
-                                        "wrinkleable": {}
-                                      }
-                                    }
-                                  ],
-                                  "igibson_categories": [
-                                    "camera"
-                                  ],
-                                  "abilities": {
-                                    "blendable": {},
-                                    "disinfectable": {},
-                                    "dustyable": {},
-                                    "freezable": {},
-                                    "grassyable": {},
-                                    "heatable": {},
-                                    "mixable": {},
-                                    "moldyable": {},
-                                    "rustable": {},
-                                    "scratchable": {},
-                                    "stainable": {},
-                                    "stickyable": {},
-                                    "tarnishable": {},
-                                    "toggleable": {},
-                                    "wetable": {},
-                                    "wrinkleable": {}
-                                  }
-                                }
-                              ],
-                              "igibson_categories": [],
-                              "abilities": {
-                                "blendable": {},
-                                "disinfectable": {},
-                                "dustyable": {},
-                                "freezable": {},
-                                "grassyable": {},
-                                "heatable": {},
-                                "mixable": {},
-                                "moldyable": {},
-                                "rustable": {},
-                                "scratchable": {},
-                                "stainable": {},
-                                "stickyable": {},
-                                "tarnishable": {},
-                                "toggleable": {},
                                 "wetable": {},
                                 "wrinkleable": {}
                               }
@@ -14836,6 +15586,13 @@
                                 "wetable": {},
                                 "wrinkleable": {}
                               }
+                            },
+                            {
+                              "name": "hose_cart.n.01",
+                              "igibson_categories": [
+                                "hose_cart"
+                              ],
+                              "abilities": {}
                             }
                           ],
                           "igibson_categories": [],
@@ -18823,6 +19580,13 @@
                                               }
                                             },
                                             {
+                                              "name": "deep_fryer.n.01",
+                                              "igibson_categories": [
+                                                "deep_fryer"
+                                              ],
+                                              "abilities": {}
+                                            },
+                                            {
                                               "name": "food_processor.n.01",
                                               "igibson_categories": [
                                                 "food_processor"
@@ -19106,6 +19870,27 @@
                                             "wetable": {},
                                             "wrinkleable": {}
                                           }
+                                        },
+                                        {
+                                          "name": "toilet_paper_dispenser.n.01",
+                                          "igibson_categories": [
+                                            "toilet_paper_dispenser"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
+                                          "name": "paper_towel_dispenser.n.01",
+                                          "igibson_categories": [
+                                            "paper_towel_dispenser"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
+                                          "name": "router__box.n.02",
+                                          "igibson_categories": [
+                                            "router_box"
+                                          ],
+                                          "abilities": {}
                                         }
                                       ],
                                       "igibson_categories": [],
@@ -19199,6 +19984,90 @@
                               "abilities": {
                                 "stainable": {}
                               }
+                            },
+                            {
+                              "name": "grocery.n.02",
+                              "children": [
+                                {
+                                  "name": "cream__box.n.02",
+                                  "igibson_categories": [
+                                    "cream"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "cranberry__box.n.02",
+                                  "igibson_categories": [
+                                    "container_cranberry"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "rice__box.n.01",
+                                  "igibson_categories": [
+                                    "rice_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "pasta__pack.n.02",
+                                  "igibson_categories": [
+                                    "pasta_pack"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "flour__box.n.01",
+                                  "igibson_categories": [
+                                    "flour_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "milk__box.n.01",
+                                  "igibson_categories": [
+                                    "milk_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "packaged_bread.n.01",
+                                  "igibson_categories": [
+                                    "packaged_bread"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "fruit__box.n.01",
+                                  "igibson_categories": [
+                                    "fruit_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "salt__box.n.01",
+                                  "igibson_categories": [
+                                    "salt_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "champagne_box.n.01",
+                                  "igibson_categories": [
+                                    "champagne_box"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
+                                  "name": "packed_ramen.n.01",
+                                  "igibson_categories": [
+                                    "packed_ramen"
+                                  ],
+                                  "abilities": {}
+                                }
+                              ],
+                              "igibson_categories": [],
+                              "abilities": {}
                             },
                             {
                               "name": "clothing.n.01",
@@ -20707,9 +21576,7 @@
                             }
                           ],
                           "igibson_categories": [],
-                          "abilities": {
-                            "stainable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "drygoods.n.01",
@@ -21064,9 +21931,7 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "stainable": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "creation.n.02",
@@ -22595,6 +23460,13 @@
                                                 "wetable": {},
                                                 "wrinkleable": {}
                                               }
+                                            },
+                                            {
+                                              "name": "salad__bowl.n.01",
+                                              "igibson_categories": [
+                                                "salad_bowl"
+                                              ],
+                                              "abilities": {}
                                             }
                                           ],
                                           "igibson_categories": [],
@@ -27230,6 +28102,62 @@
                                           }
                                         },
                                         {
+                                          "name": "half_apple.n.01",
+                                          "igibson_categories": [
+                                            "half_apple"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
+                                          "name": "half_apricot.n.02",
+                                          "igibson_categories": [
+                                            "half_apricot"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
+                                          "name": "half_kiwi.n.03",
+                                          "igibson_categories": [
+                                            "half_kiwi"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
+                                          "name": "half_peach.n.03",
+                                          "igibson_categories": [
+                                            "half_peach"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
+                                          "name": "half_pear.n.01",
+                                          "igibson_categories": [
+                                            "half_pear"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
+                                          "name": "half_pineapple.n.02",
+                                          "igibson_categories": [
+                                            "half_pineapple"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
+                                          "name": "half_plum.n.02",
+                                          "igibson_categories": [
+                                            "half_plum"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
+                                          "name": "half_strawberry.n.01",
+                                          "igibson_categories": [
+                                            "half_strawberry"
+                                          ],
+                                          "abilities": {}
+                                        },
+                                        {
                                           "name": "kiwi.n.03",
                                           "igibson_categories": [
                                             "kiwi"
@@ -27665,6 +28593,13 @@
                                             "wetable": {},
                                             "wrinkleable": {}
                                           }
+                                        },
+                                        {
+                                          "name": "half_watermelon.n.02",
+                                          "igibson_categories": [
+                                            "half_watermelon"
+                                          ],
+                                          "abilities": {}
                                         }
                                       ],
                                       "igibson_categories": [],
@@ -27905,6 +28840,20 @@
                                                     "perishable": {},
                                                     "sliceable": {}
                                                   }
+                                                },
+                                                {
+                                                  "name": "half_chestnut.n.03",
+                                                  "igibson_categories": [
+                                                    "half_chestnut"
+                                                  ],
+                                                  "abilities": {}
+                                                },
+                                                {
+                                                  "name": "half_coconut.n.02",
+                                                  "igibson_categories": [
+                                                    "half_coconut_fruit"
+                                                  ],
+                                                  "abilities": {}
                                                 },
                                                 {
                                                   "name": "pistachio.n.02",
@@ -29858,6 +30807,62 @@
                               }
                             },
                             {
+                              "name": "half_apple.n.01",
+                              "igibson_categories": [
+                                "half_apple"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "half_apricot.n.02",
+                              "igibson_categories": [
+                                "half_apricot"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "half_kiwi.n.03",
+                              "igibson_categories": [
+                                "half_kiwi"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "half_peach.n.03",
+                              "igibson_categories": [
+                                "half_peach"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "half_pear.n.01",
+                              "igibson_categories": [
+                                "half_pear"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "half_pineapple.n.02",
+                              "igibson_categories": [
+                                "half_pineapple"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "half_plum.n.02",
+                              "igibson_categories": [
+                                "half_plum"
+                              ],
+                              "abilities": {}
+                            },
+                            {
+                              "name": "half_strawberry.n.01",
+                              "igibson_categories": [
+                                "half_strawberry"
+                              ],
+                              "abilities": {}
+                            },
+                            {
                               "name": "kiwi.n.03",
                               "igibson_categories": [
                                 "kiwi"
@@ -30293,6 +31298,13 @@
                                 "wetable": {},
                                 "wrinkleable": {}
                               }
+                            },
+                            {
+                              "name": "half_watermelon.n.02",
+                              "igibson_categories": [
+                                "half_watermelon"
+                              ],
+                              "abilities": {}
                             }
                           ],
                           "igibson_categories": [],
@@ -30800,6 +31812,13 @@
                                   }
                                 },
                                 {
+                                  "name": "half_tomato.n.01",
+                                  "igibson_categories": [
+                                    "half_tomato"
+                                  ],
+                                  "abilities": {}
+                                },
+                                {
                                   "name": "potato.n.01",
                                   "children": [
                                     {
@@ -31164,6 +32183,13 @@
                               }
                             },
                             {
+                              "name": "half_mushroom.n.05",
+                              "igibson_categories": [
+                                "half_mushroom"
+                              ],
+                              "abilities": {}
+                            },
+                            {
                               "name": "greens.n.01",
                               "children": [
                                 {
@@ -31357,6 +32383,13 @@
                                     "wetable": {},
                                     "wrinkleable": {}
                                   }
+                                },
+                                {
+                                  "name": "diced_green_onion.n.01",
+                                  "igibson_categories": [
+                                    "diced_green_onion"
+                                  ],
+                                  "abilities": {}
                                 }
                               ],
                               "igibson_categories": [
@@ -33739,28 +34772,19 @@
                         },
                         {
                           "name": "canned_food.n.01",
+                          "children": [
+                            {
+                              "name": "canned_corn.n.01",
+                              "igibson_categories": [
+                                "canned_corn"
+                              ],
+                              "abilities": {}
+                            }
+                          ],
                           "igibson_categories": [
                             "canned_food"
                           ],
-                          "abilities": {
-                            "blendable": {},
-                            "cookable": {},
-                            "disinfectable": {},
-                            "dustyable": {},
-                            "freezable": {},
-                            "grassyable": {},
-                            "heatable": {},
-                            "mixable": {},
-                            "moldyable": {},
-                            "openable": {},
-                            "rustable": {},
-                            "scratchable": {},
-                            "stainable": {},
-                            "stickyable": {},
-                            "tarnishable": {},
-                            "wetable": {},
-                            "wrinkleable": {}
-                          }
+                          "abilities": {}
                         },
                         {
                           "name": "ingredient.n.03",
@@ -35637,9 +36661,7 @@
                         }
                       ],
                       "igibson_categories": [],
-                      "abilities": {
-                        "freezable": {}
-                      }
+                      "abilities": {}
                     },
                     {
                       "name": "nutriment.n.01",
@@ -37506,12 +38528,17 @@
                         "physicalSubstance": {},
                         "substance": {}
                       }
+                    },
+                    {
+                      "name": "bagged_tea.n.01",
+                      "igibson_categories": [
+                        "bagged_tea"
+                      ],
+                      "abilities": {}
                     }
                   ],
                   "igibson_categories": [],
-                  "abilities": {
-                    "freezable": {}
-                  }
+                  "abilities": {}
                 },
                 {
                   "name": "agent.n.03",
@@ -38286,9 +39313,7 @@
                 }
               ],
               "igibson_categories": [],
-              "abilities": {
-                "freezable": {}
-              }
+              "abilities": {}
             },
             {
               "name": "substance.n.01",
