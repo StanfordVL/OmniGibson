@@ -36,6 +36,7 @@ from igibson.utils.assets_utils import (
 
 from b1k_pipeline.utils import PipelineFS
 
+USE_IG_RENDERER = False
 
 def main():
         #  TempFS(temp_dir=r"D:\tmp") as dataset_fs, \
@@ -57,13 +58,20 @@ def main():
             for model in get_object_models_of_category(cat)
         ]
         all_objs.sort()
-        random.shuffle(all_objs)
 
-        for i, (obj_category, obj_model) in enumerate(tqdm.tqdm(all_objs[:3])):
-            sim = Simulator(mode="headless", use_pb_gui=True)
-            sim.import_scene(EmptyScene(floor_plane_rgba=[0.6, 0.6, 0.6, 1]))
-
+        for obj_category, obj_model in tqdm.tqdm(all_objs):
             obj_name = "{}-{}".format(obj_category, obj_model)
+            if out_fs.exists(f"{obj_name}.jpg"):
+                continue
+
+            height, width = 768, 1024
+            if USE_IG_RENDERER:
+                settings = MeshRendererSettings(env_texture_filename=None, enable_shadow=True, msaa=True)
+                sim = Simulator(mode="headless", use_pb_gui=False, image_width=width, image_height=height, vertical_fov=70, rendering_settings=settings)
+            else:
+                sim = Simulator(mode="headless", use_pb_gui=True)
+            sim.import_scene(EmptyScene(render_floor_plane=False))
+
             model_path = get_ig_model_path(obj_category, obj_model)
             filename = os.path.join(model_path, f"urdf/{obj_model}.urdf")
 
@@ -91,19 +99,23 @@ def main():
                 simulator_obj.set_bbox_center_position_orientation(np.array([0, 0, 0.5]), np.array([0, 0, 0, 1]))
 
                 dist = 1
-                p.resetDebugVisualizerCamera(cameraDistance=dist, cameraYaw=30, cameraPitch=-30, cameraTargetPosition=[0,0,simulator_obj.bounding_box[2] / 2])
-                w, h, V, P = p.getDebugVisualizerCamera()[:4]
-                img = p.getCameraImage(w, h, viewMatrix=V, projectionMatrix=P, renderer=p.ER_BULLET_HARDWARE_OPENGL)[2]
-                img = np.reshape(img, (h, w, 4))
-                img = img[:, :, :3]
-                # plt.imshow(img)
-                # plt.show()
+                if USE_IG_RENDERER:
+                    target = [0, 0, simulator_obj.bounding_box[2] / 2]
+                    cam = [dist * np.cos(np.deg2rad(30)), dist * np.sin(np.deg2rad(30)), dist * np.sin(np.deg2rad(30))]
+                    sim.renderer.set_camera(cam, target, [0, 0, 1])
+                    img = sim.renderer.render(modes=("rgb",))[0]
+                    img = np.reshape(img, (height, width, 4))
+                    img = img[:, :, :3] * 255
+                else:
+                    p.resetDebugVisualizerCamera(cameraDistance=dist, cameraYaw=30, cameraPitch=-30, cameraTargetPosition=[0,0,simulator_obj.bounding_box[2] / 2])
+                    w, h, V, P = p.getDebugVisualizerCamera()[:4]
+                    img = p.getCameraImage(w, h, viewMatrix=V, projectionMatrix=P, renderer=p.ER_BULLET_HARDWARE_OPENGL)[2]
+                    img = np.reshape(img, (h, w, 4))
+                    img = img[:, :, :3]
 
                 with out_fs.open(f"{obj_name}.jpg", "wb") as f:
                     im = Image.fromarray(img.astype(np.uint8))
                     im.save(f, format="JPEG")
-
-                print("Successfully saved", obj_name)
 
                 # for bid in simulator_obj.get_body_ids():
                 #     for joint in pb_utils.get_movable_joints(bid):
@@ -111,6 +123,8 @@ def main():
                 #         _, upper = pb_utils.get_joint_limits(bid, joint)
                 #         pb_utils.set_joint_position(bid, joint, upper)
                 #         message += f"- {name}\n"
+            except:
+                print(obj_name, "failed - continuing.")
             finally:
                 sim.disconnect()
   

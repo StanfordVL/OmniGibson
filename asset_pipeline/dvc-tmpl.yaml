@@ -70,17 +70,15 @@ stages:
     outs:
     - artifacts/pipeline/object_inventory_future.json
 
-  # generate_object_images:
-  #   # Generate photos of each object found in each entry.
-  #   foreach: ${combined}
-  #   do:
-  #     cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_object_images.py'
-  #     deps:
-  #     - b1k_pipeline/max/generate_object_images.py
-  #     - cad/${item}/processed.max
-  #     outs:
-  #     - cad/${item}/artifacts/object_images
-  #     - cad/${item}/artifacts/generate_object_images.success
+  generate_object_images:
+    # Generate photos of each object found in each entry.
+    cmd: 'python -m b1k_pipeline.generate_object_images'
+    deps:
+    - b1k_pipeline/max/generate_object_images.py
+    - artifacts/parallels/objects.zip
+    - artifacts/pipeline/export_objs.success
+    outs:
+    - artifacts/pipeline/object_images.zip
 
   export_meshes:
     # Export meshes from 3dsmax as obj/mtl files with baked textures.
