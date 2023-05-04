@@ -121,7 +121,10 @@ don't require a model
 b1k_modeled_synset_df = pd.read_csv(B1K_MODELED_SYNSET_MASTERLIST)
 b1k_modeled_synsets = {}
 for __, [__, category, __, synset, *__] in b1k_modeled_synset_df.iterrows():
-    b1k_modeled_synsets[synset] = {"objects": [category]}
+    if synset not in b1k_modeled_synsets:
+        b1k_modeled_synsets[synset] = {"objects": [category]}
+    else:
+        b1k_modeled_synsets[synset]["objects"].append(category)
 with open(B1K_ABILITY_JSON_PATH, "r") as f:
     b1k_syns_to_props = json.load(f)
 try:
