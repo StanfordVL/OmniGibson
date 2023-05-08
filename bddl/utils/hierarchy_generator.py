@@ -265,7 +265,7 @@ def add_abilities(node, ability_type=None, ability_map=None):
             with open(B1K_ABILITY_JSON_PATH) as f:
                 ability_map = json.load(f)
         elif ability_type == "b1k_modeled": 
-            with open(IGIBSON_ABILITY_JSON_PATH) as f:
+            with open(B1K_ABILITY_JSON_PATH) as f:
                 ability_map = json.load(f)
             with open(B1K_ABILITY_JSON_PATH) as f:
                 b1k_ability_map = json.load(f)
