@@ -8,74 +8,66 @@ from dask.distributed import Client
 import itertools
 import tqdm
 import numpy as np
+import io
+import json
 
 import trimesh
-import pyglet
+import random
 
-VHACD_EXECUTABLE = "coacd"
+from fs.zipfs import ZipFS
 
-resolutions = ["0.1", "0.05"]               ## [-r] <voxelresolution>: Total number of voxels to use. Default is 100,000
-depth = ["8"] # ["5", "10", "20"]                                 ## [-d] <maxRecursionDepth>: Maximum recursion depth. Default value is 10.
+from b1k_pipeline.utils import PipelineFS, get_targets, parse_name
+
+VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
+COACD_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
+CLIENT_NAME = 'svl3.stanford.edu:35423'
+
+COACD_TIMEOUT = 10 * 60 # 10 min
+
+MAX_VERTEX_COUNT = 60
+REDUCTION_STEP = 5
+
+resolutions = ["1000000"]        ## [-r] <voxelresolution>: Total number of voxels to use. Default is 100,000
+depth = ["20"] # ["5", "10", "20"]    ## [-d] <maxRecursionDepth>: Maximum recursion depth. Default value is 10.
+maxHullVertCounts = ["60"]          ## [-v] <maxHullVertCount>: Maximum number of vertices in the output convex hull. Default value is 64
+maxHulls = ["4", "8", "32"]                          ## [-h] <n>: Maximum number of output convex hulls. Default is 32
 fillmode = ["flood"] # ["flood", "surface", "raycast"]                 ## [-f] <fillMode>: Fill mode. Default is 'flood', also 'surface' and 'raycast' are valid.
-errorp = ["10"]                          ## [-e] <volumeErrorPercent>: Volume error allowed as a percentage. Default is 1%. Valid range is 0.001 to 10
-split = ["true"]                                  ## [-p] <true/false>: If false, splits hulls in the middle. If true, tries to find optimal split plane location. False by default.
-edgelength = ["20"]                             ## [-l] <minEdgeLength>: Minimum size of a voxel edge. Default value is 2 voxels.
+errorp = ["10"]                            ## [-e] <volumeErrorPercent>: Volume error allowed as a percentage. Default is 1%. Valid range is 0.001 to 10
+split = ["true"]                           ## [-p] <true/false>: If false, splits hulls in the middle. If true, tries to find optimal split plane location. False by default.
+edgelength = ["2"]                        ## [-l] <minEdgeLength>: Minimum size of a voxel edge. Default value is 2 voxels.
 
-input_files = [ 
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\glove\hsaxtc\shape\visual\glove-hsaxtc-base_link.obj", #glove
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\apple\qusmpx\shape\visual\apple-qusmpx-base_link.obj",  # apple
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\bowl\oyidja\shape\visual\bowl-oyidja-base_link.obj",    # bowl
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\board_game\qdkyzl\shape\visual\board_game-qdkyzl-base_link.obj",  # boardgame
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\door\lvgliq\shape\visual\door-lvgliq-base_link.obj",    # door
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\door\lvgliq\shape\visual\door-lvgliq-link_2.obj",       # door_with_handle
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\window\mjssrd\shape\visual\window-mjssrd-link_1.obj",   # shutter
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\window\fufios\shape\visual\window-fufios-link_0.obj",   # window
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\soup_ladle\xocqxg\shape\visual\soup_ladle-xocqxg-base_link.obj", #soup_laddle
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\salt_shaker\iomwtn\shape\visual\salt_shaker-iomwtn-base_link.obj", #salt_shaker
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\mug\ppzttc\shape\visual\mug-ppzttc-base_link.obj",      # mug
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\treadmill\ahwnhu\shape\visual\treadmill-ahwnhu-base_link.obj",  #treadmill
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\breakfast_table\bmnubh\shape\visual\breakfast_table-bmnubh-base_link.obj", #breakfast_table
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\saw\laysom\shape\visual\saw-laysom-base_link.obj",    #saw
-    r"C:\Users\Arman\Downloads\og_dataset_0_0_5.tar\og_dataset\objects\shelf\vehhll\shape\visual\shelf-vehhll-base_link.obj"    #shelf
-]
+thresholds = ["0.05"] #["0.05", "0.1", "0.5"]  ## [-t] <threshold>: concavity threshold for terminating the decomposition (0.01~1), default = 0.05.
+prep_resolutions = ["100"] #, "100", "75", "25"] ## [-pr] <preprocessed resolution>: resolution for manifold preprocess (20~100), default = 50.
+max_convex_hulls = ["8", "32"] #, "32", "64"]  ## [-c] <maxNumConvexHulls>:  max # convex hulls in the result, -1 for no maximum limitation, works only when merge is enabled, 
+                                          # default = -1 (may introduce convex hull with a concavity larger than the threshold)
 
-output_dir = r"D:\vhacd-test"
-os.makedirs(output_dir, exist_ok=True)
 
-def call_vhacd(obj_file_path, dest_file_path, dask_client, resolution, depth, fillmode, errorp, split, edgelength):
-    # This is the function that sends VHACD requests to a worker. It needs to read the contents
-    # of the source file into memory, transmit that to the worker, receive the contents of the
-    # result file and save those at the destination path.
-    
-    # print(depth)
-    # print(fillmode)
-    # print(errorp)
-    # print(split)
-    # print(edgelength)
-    
-    with open(obj_file_path, 'rb') as f:
-        file_bytes = f.read()
-    # data_future = client.scatter(file_bytes)
-    data_future = file_bytes
-    vhacd_future = dask_client.submit(
-        vhacd_worker,
-        data_future,
-        resolution, depth, fillmode, errorp, split, edgelength,
-        key=dest_file_path,
+def option_bbox(m, dask_client):
+    axis_aligned_bbox = m.bounding_box_oriented
+    bbox = trimesh.creation.box(axis_aligned_bbox.primitive.extents, axis_aligned_bbox.primitive.transform)
+    return [bbox]
+
+
+def option_coacd(m, dask_client, threshold, prep_resolution, max_convex_hull):
+    # Use IO to send the mesh to the worker
+    input_stream = io.BytesIO()
+    m.export(input_stream, file_type="obj")
+    coacd_future = dask_client.submit(
+        coacd_worker,
+        input_stream.getvalue(),
+        threshold, prep_resolution if not m.is_volume else None, max_convex_hull,
         retries=10)
-    result, stdout = vhacd_future.result()
+    result = coacd_future.result()
     if not result:
-        raise ValueError("vhacd failed on object " + str(obj_file_path))
-    with open(dest_file_path, 'wb') as f:
-        f.write(result)
-    
-    # lock.acquire()
-    # print("\nresolution", resolution)
-    # print(stdout)
-    # lock.release()
+        raise ValueError("coacd failed")
+    # Read the result back into a trimesh
+    output_stream = io.BytesIO(result)
+    combined_mesh = trimesh.load(output_stream, file_type="obj", force="mesh", skip_material=True,
+                                 merge_tex=True, merge_norm=True)
+    return combined_mesh.split(only_watertight=False)
 
 
-def vhacd_worker(file_bytes, resolution, depth, fillmode, errorp, split, edgelength):
+def coacd_worker(file_bytes, t, pr, max_hull):
     # This is the function that runs on the worker. It needs to locally save the sent file bytes,
     # call VHACD on that file, grab the output file's contents and return it as a bytes object.
     with tempfile.TemporaryDirectory() as td:
@@ -84,104 +76,194 @@ def vhacd_worker(file_bytes, resolution, depth, fillmode, errorp, split, edgelen
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
 
-        # vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", resolution, "-d", depth, "-f", fillmode, "-e", errorp, "-p", split, "-l", edgelength, "-v", "60", "-h", "64"]
-        vhacd_cmd = [str(VHACD_EXECUTABLE), "-t", resolution, in_path, out_path]
+        vhacd_cmd = ["python", str(COACD_SCRIPT_PATH), in_path, out_path, "--threshold", t, "--max-convex-hull", max_hull]
+        if pr:
+            vhacd_cmd.extend(["--preprocess", "--preprocess-resolution", pr])
+        else:
+            vhacd_cmd.append("--no-preprocess")
         try:
-            proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
+            subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
             with open(out_path, 'rb') as f:
-                return f.read(), proc.stdout
+                return f.read()
         except subprocess.CalledProcessError as e:
             raise ValueError(f"VHACD failed with exit code {e.returncode}. Output:\n{e.output}")
         except futures.CancelledError as e:
-            raise ValueError("Got ")
+            raise ValueError("Got cancelled.")
 
-def process():
-    dask_client = Client('svl7.stanford.edu:35423')
 
-    all_futures = {}
-    errors = {}
-    with futures.ThreadPoolExecutor(max_workers=50) as executor:
-        for param_combo in itertools.product(input_files, resolutions, depth, fillmode, errorp, split, edgelength):
-            input_filename = param_combo[0]
-            output_filename = os.path.join(output_dir, os.path.splitext(os.path.basename(input_filename))[0] + ("-r_%s-d_%s-f_%s-e_%s-p_%s-l_%s.obj" % param_combo[1:]))
-            all_futures[executor.submit(call_vhacd, input_filename, output_filename, dask_client, *param_combo[1:])] = param_combo
+def option_vhacd(m, dask_client, resolution, depth, fillmode, errorp, split, edgelength, maxHullVertCount, maxHull):
+    input_stream = io.BytesIO()
+    m.export(input_stream, file_type="obj")
+    vhacd_future = dask_client.submit(
+        vhacd_worker,
+        input_stream.getvalue(),
+        resolution, depth, fillmode, errorp, split, edgelength, maxHullVertCount, maxHull,
+        retries=5)
+    result = vhacd_future.result()
+    if not result:
+        raise ValueError("vhacd failed")
+    # Read the result back into a trimesh
+    output_stream = io.BytesIO(result)
+    combined_mesh = trimesh.load(output_stream, file_type="obj", force="mesh", skip_material=True,
+                                 merge_tex=True, merge_norm=True)
+    return combined_mesh.split(only_watertight=False)
+
+
+def vhacd_worker(file_bytes, resolution, depth, fillmode, errorp, split, edgelength, maxHullVertCount, maxHull):
+    # This is the function that runs on the worker. It needs to locally save the sent file bytes,
+    # call VHACD on that file, grab the output file's contents and return it as a bytes object.
+    with tempfile.TemporaryDirectory() as td:
+        in_path = os.path.join(td, "in.obj")
+        out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
+        with open(in_path, 'wb') as f:
+            f.write(file_bytes)
+
+        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", resolution, "-d", depth, "-f", fillmode, "-e", errorp, "-p", split, "-l", edgelength, "-v", maxHullVertCount, "-h", maxHull]
+        try:
+            subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
+            with open(out_path, 'rb') as f:
+                return f.read()
+        except subprocess.CalledProcessError as e:
+            raise ValueError(f"VHACD failed with exit code {e.returncode}. Output:\n{e.output}")
+        except futures.CancelledError as e:
+            raise ValueError("Got cancelled.")
+
+
+PROCESSING_OPTIONS = [
+    # Fixed options
+    ("chull", lambda m, dask_client: [m]),
+    ("bbox", option_bbox),
+] + [
+    # VHACD options
+    (
+        "vhacd-r_%s-d_%s-f_%s-e_%s-p_%s-l_%s-v%s-h%s" % param_combo,
+        lambda m, dask_client: option_vhacd(m, dask_client, *param_combo)
+    )
+    for param_combo in itertools.product(resolutions, depth, fillmode, errorp, split, edgelength, maxHullVertCounts, maxHulls)
+] + [
+    # COACD options
+    (
+        "coacd-t_%s-pr_%s-c_%s" % param_combo,
+        lambda m, dask_client: option_coacd(m, dask_client, *param_combo)
+    )
+    for param_combo in itertools.product(thresholds, prep_resolutions, max_convex_hulls)
+]
+
+
+def convexify_and_reduce(m):
+    convex_m = trimesh.convex.convex_hull(m)
+    assert convex_m.is_volume, f"Found non-watertight mesh - should not be possible"
+    
+    # Check its vertex count and reduce as necessary
+    reduced_m = convex_m
+    reduction_target_vertex_count = MAX_VERTEX_COUNT + REDUCTION_STEP
+    while len(reduced_m.vertices) > MAX_VERTEX_COUNT:
+        # Reduction function takes a number of faces as its input. We estimate this, if it doesn't
+        # work out, we keep trying with a smaller estimate.
+        reduction_target_vertex_count -= REDUCTION_STEP
+        if reduction_target_vertex_count < MAX_VERTEX_COUNT / 2:
+            # Don't want to reduce too far
+            raise ValueError("Vertex reduction failed.")
+
+        reduction_target_face_count = int(reduction_target_vertex_count / len(convex_m.vertices) * len(convex_m.faces))
+        reduced_m = convex_m.simplify_quadratic_decimation(reduction_target_face_count)
+        reduced_m = trimesh.convex.convex_hull(reduced_m)
+
+    assert reduced_m.is_volume, "Reduction & convexify resulted in non-volume mesh"
+    return reduced_m
+
+
+def process_object_with_option(m, out_fs, option_name, option_fn, dask_client):
+    # Run the option
+    submeshes = option_fn(m, dask_client)
+
+    # Convexify and reduce each submesh
+    reduced_submeshes = [convexify_and_reduce(submesh) for submesh in submeshes]
+    final_mesh = trimesh.util.concatenate(reduced_submeshes)
+
+    # Save the result
+    with out_fs.open(f"{option_name}.obj", "w") as f:
+        final_mesh.export(f, file_type="obj")
+
+
+def process_target(target, pipeline_fs, link_executor, dask_client):
+    with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
+        mesh_list = json.load(f)["meshes"]
+
+    object_futures = {}
+    # Build the mesh tree using our mesh tree library. The scene code also uses this system.
+    with pipeline_fs.target_output(target).open("meshes.zip", "rb") as in_zip, \
+         pipeline_fs.target_output(target).open("collision_meshes.zip", "wb") as out_zip:
+        with ZipFS(in_zip) as mesh_archive_fs, ZipFS(out_zip, write=True) as collision_mesh_archive_fs:
+            # Go through each object.
+            for mesh_name in mesh_list:
+                # First decide if we need to process this
+                parsed_name = parse_name(mesh_name)
+                should_convert = (
+                    int(parsed_name.group("instance_id")) == 0 and
+                    not parsed_name.group("bad") and
+                    parsed_name.group("joint_side") != "upper")
+                if not should_convert:
+                    continue
+                assert mesh_archive_fs.exists(mesh_name), f"Mesh {mesh_name} does not exist in the archive."
+                print(f"Start {mesh_name} from {target}")
+
+                # Load the mesh
+                with mesh_archive_fs.open(f"{mesh_name}/{mesh_name}.obj", "rb") as f:
+                    # Do this trick again due to the pyfs objects not working with trimesh.
+                    bytes = f.read()
+                    stream = io.BytesIO(bytes)
+                    m = trimesh.load(stream, file_type="obj", force="mesh", skip_material=True,
+                                    merge_tex=True, merge_norm=True)
                 
-        print("Waiting on futures")
-        with tqdm.tqdm(total=len(all_futures)) as object_pbar:
-            for future in futures.as_completed(all_futures.keys()):
-                try:
-                    result = future.result()
-                except:
-                    name = all_futures[future]
-                    errors[name] = traceback.format_exc()
-
-                object_pbar.update(1)
-                print("Waiting on", ", ".join(str(name) for fut, name in all_futures.items() if not fut.done()))
-
-    print(errors)
-
-
-def comp_func(param_combo_a, param_combo_b):
-    scene = trimesh.Scene()
-    s = trimesh.creation.icosphere()
-    transform = np.eye(4)
-    transform[:3, 3] = [0, 0, 3]
-    scene.add_geometry(s, transform=transform)
-
-    mesh_counts = [[], []]
-    for i, fn in enumerate(input_files):
-        for k, (z, param_combo) in enumerate(zip([1, -1], [param_combo_a, param_combo_b])):
-            output_filename = os.path.join(output_dir, os.path.splitext(os.path.basename(fn))[0] + ("-r_%s-d_%s-f_%s-e_%s-p_%s-l_%s.obj" % param_combo))
-            m = trimesh.load(output_filename, force="mesh")
-            aabb = m.bounding_box.extents
-            scale = np.array([1, 1, 1]) / aabb
-            min_scale = np.min(scale)
-
-            translation = [i * 2, 0, z]
-            transform = np.eye(4)
-            transform[:3, :3] = np.eye(3) * min_scale
-            transform[:3, 3] = translation
-            scene.add_geometry(m, transform=transform)
-
-            mesh_counts[k].append(len(m.split()))
-
-    print(f"Mesh counts: A: {np.median(mesh_counts[0])}, B: {np.median(mesh_counts[1])}")
+                # Now queue a target for each of the processing options
+                for option_name, option_fn in PROCESSING_OPTIONS:
+                    future = link_executor.submit(process_object_with_option, m, collision_mesh_archive_fs, option_name, option_fn, dask_client)
+                    object_futures[future] = mesh_name + "--" + option_name
+        
+            # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
+            futures.wait(object_futures.keys())
     
-    # label = pyglet.text.Label('Hello, world',
-    #                 font_name='Times New Roman',
-    #                 font_size=20,
-    #                 width=10, height=10)
-    # label.draw()
-    scene.show()
+            # Accumulate the errors
+            error_msg = ""
+            for future, root_node in object_futures.items():
+                exc = future.exception()
+                if exc:
+                    error_msg += f"{root_node}: {exc}\n\n"
+            if error_msg:
+                raise ValueError(error_msg)
+
+def main():
+    with PipelineFS() as pipeline_fs:
+        errors = {}
+        target_futures = {}
     
-    with open(os.path.join(output_dir, "cmp3.txt"), "a") as f:
-        while True:
-            comp_res = input("Compare top 'a' and bottom scene 'b':").lower()
-            if comp_res == 'a':
-                f.write(str(param_combo_a) + " > " + str(param_combo_b))
-                return False
-            elif comp_res == 'b':
-                f.write(str(param_combo_a) + " < " + str(param_combo_b))
-                return True
-
+        dask_client = Client('svl1.stanford.edu:35423')
+        
+        with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as mesh_executor:
+            targets = ["Rs_int"]  # get_targets("combined")
+            for target in tqdm.tqdm(targets):
+                target_futures[target_executor.submit(process_target, target, pipeline_fs, mesh_executor, dask_client)] = target
+                    
+            with tqdm.tqdm(total=len(target_futures)) as object_pbar:
+                for future in futures.as_completed(target_futures.keys()):
+                    try:
+                        future.result()
+                    except:
+                        name = target_futures[future]
+                        errors[name] = traceback.format_exc()
     
-def _max(arr, cmp):
-    # cmp: return True if elem is smaller / worse
-    curr_max = arr[0]
-    for elem in tqdm.tqdm(arr[1:]):
-        if not cmp(elem, curr_max):
-            curr_max = elem
+                    object_pbar.update(1)
+    
+                    remaining_targets = [v for k, v in target_futures.items() if not k.done()]
+                    if len(remaining_targets) < 10:
+                        print("Remaining:", remaining_targets)
+       
+        print("Finished processing")
 
-    return curr_max
-
-
-def get_max():
-    param_combos = list(itertools.product(resolutions, depth, fillmode, errorp, split, edgelength))
-    random.shuffle(param_combos)
-    best_param_combo = _max(param_combos, comp_func)
-    print(best_param_combo)
+        with pipeline_fs.pipeline_output().open("export_collision_meshes.json", "w") as f:
+            json.dump({"success": not errors, "errors": errors}, f)
 
 
 if __name__ == "__main__":
-    process()
-    get_max()
+    main()
