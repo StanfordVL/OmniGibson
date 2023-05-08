@@ -1,8 +1,6 @@
-import sys
-sys.path.append(r"D:\ig_pipeline")
-
 from asyncio import subprocess
 import subprocess
+import sys
 import xmlrpc.client
 import b1k_pipeline.utils
 

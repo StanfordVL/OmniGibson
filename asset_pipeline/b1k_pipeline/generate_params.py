@@ -30,41 +30,41 @@ FINAL_SCENES = [
     "Rs_int",
     "Wainscott_0_int",
     "Wainscott_1_int",
-    # "Beechwood_0_garden",
-    # "Rs_garden",
-    # "Pomaria_0_garden",
-    # "Merom_0_garden",
-    # "Wainscott_0_garden",
+    "Beechwood_0_garden",
+    "Rs_garden",
+    "Pomaria_0_garden",
+    "Merom_0_garden",
+    "Wainscott_0_garden",
     "house_single_floor",
-    # "house_double_floor_lower",
-    # "house_double_floor_upper",
-    # "grocery_store_asian",
-    # "grocery_store_cafe",
-    # "grocery_store_convenience",
-    # "grocery_store_half_stocked",
-    # "hall_arch_wood",
-    # "hall_train_station",
-    # "hall_glass_ceiling",
-    # "hall_conference_large",
-    # "hotel_suite_large",
-    # "hotel_suite_small",
-    # "hotel_gym_spa",
-    # "office_bike",
-    # "office_cubicles_left",
-    # "office_cubicles_right",
-    # "office_large",
+    "house_double_floor_lower",
+    "house_double_floor_upper",
+    "grocery_store_asian",
+    "grocery_store_cafe",
+    "grocery_store_convenience",
+    "grocery_store_half_stocked",
+    "hall_arch_wood",
+    "hall_train_station",
+    "hall_glass_ceiling",
+    "hall_conference_large",
+    "hotel_suite_large",
+    "hotel_suite_small",
+    "hotel_gym_spa",
+    "office_bike",
+    "office_cubicles_left",
+    "office_cubicles_right",
+    "office_large",
     "office_vendor_machine",
-    # "restaurant_asian",
-    # "restaurant_cafeteria",
-    # "restaurant_diner",
-    # "restaurant_brunch",
-    # "restaurant_urban",
+    "restaurant_asian",
+    "restaurant_cafeteria",
+    "restaurant_diner",
+    "restaurant_brunch",
+    "restaurant_urban",
     "restaurant_hotel",
-    # "school_gym",
-    # "school_geography",
-    # "school_biology",
-    # "school_chemistry",
-    # "school_computer_lab_and_infirmary",
+    "school_gym",
+    "school_geography",
+    "school_biology",
+    "school_chemistry",
+    "school_computer_lab_and_infirmary",
     "gates_bedroom",
 ]
 
@@ -98,6 +98,8 @@ APPROVED_SCENES = {
     "Wainscott_1_int",
 }
 
+REJECTED_SCENES = {}
+
 
 def main():
     root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ROOT_PATH))
@@ -110,7 +112,7 @@ def main():
 
     scenes_path = os.path.join(os.path.dirname(__file__), SCENES_DIR)
     all_scenes_list = os.listdir(scenes_path)
-    approved_scenes = sorted(set(all_scenes_list) & APPROVED_SCENES)
+    approved_scenes = sorted(x for x in all_scenes_list if any(re.fullmatch(exp, x) for exp in APPROVED_SCENES) and not any(re.fullmatch(exp, x) for exp in REJECTED_SCENES))
     scenes = sorted(["scenes/" + x for x in approved_scenes])  #
     scenes_unfiltered = sorted(["scenes/" + x for x in all_scenes_list])  #
 

@@ -1,6 +1,3 @@
-import sys
-sys.path.append(r"D:\ig_pipeline")
-
 from b1k_pipeline.utils import parse_name
 
 import re

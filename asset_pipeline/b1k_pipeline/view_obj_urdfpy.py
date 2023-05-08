@@ -1,4 +1,5 @@
 from ast import Dict
+import sys
 
 import numpy as np
 import trimesh
@@ -38,10 +39,10 @@ def get_cube(limits=None):
 
     return v, e, f
 
-def main():
+def main(model_dir):
     # Load the URDF file into urdfpy
-    model_dir = r"D:\ig_pipeline\artifacts\aggregate\objects\microwave\hjjxmi"
-    urdf_filename = "hjjxmi.urdf"
+    model_id = os.path.basename(model_dir)
+    urdf_filename = "{model_id}.urdf"
     urdf_path = os.path.join(model_dir, urdf_filename)
     robot = URDF.load(urdf_path)
 
@@ -79,4 +80,4 @@ def main():
     scene.show()
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])

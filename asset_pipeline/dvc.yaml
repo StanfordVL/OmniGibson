@@ -1,6 +1,6 @@
 stages:
   aggregate_metadata:
-    cmd: python b1k_pipeline/aggregate_metadata.py
+    cmd: python -m b1k_pipeline.aggregate_metadata
     deps:
     - b1k_pipeline/aggregate_metadata.py
     - artifacts/pipeline/object_inventory.json
@@ -13,7 +13,7 @@ stages:
     - artifacts/parallels/metadata.zip
     - artifacts/pipeline/aggregate_metadata.json
   aggregate_metadata_success:
-    cmd: python b1k_pipeline/check_success.py artifacts/pipeline/aggregate_metadata.json
+    cmd: python -m b1k_pipeline.check_success artifacts/pipeline/aggregate_metadata.json
       artifacts/pipeline/aggregate_metadata.success
     deps:
     - artifacts/pipeline/aggregate_metadata.json
@@ -21,7 +21,7 @@ stages:
     outs:
     - artifacts/pipeline/aggregate_metadata.success
   aggregate_scenes:
-    cmd: python b1k_pipeline/aggregate_scenes.py
+    cmd: python -m b1k_pipeline.aggregate_scenes
     deps:
     - cad/scenes/Beechwood_0_int/scene.urdf
     - cad/scenes/Beechwood_1_int/scene.urdf
@@ -59,7 +59,7 @@ stages:
     - artifacts/parallels/scenes.zip
     - artifacts/pipeline/aggregate_scenes.success
   combined_room_object_list:
-    cmd: python b1k_pipeline/combined_room_object_list.py
+    cmd: python -m b1k_pipeline.combined_room_object_list
     deps:
     - cad/scenes/Beechwood_0_int/artifacts/room_object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/room_object_list.json
@@ -97,7 +97,7 @@ stages:
     outs:
     - artifacts/pipeline/combined_room_object_list.json
   combined_room_object_list_future:
-    cmd: python b1k_pipeline/combined_room_object_list.py --future
+    cmd: python -m b1k_pipeline.combined_room_object_list --future
     deps:
     - cad/scenes/Beechwood_0_garden/artifacts/room_object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/room_object_list.json
@@ -233,7 +233,7 @@ stages:
       - cad/${item}/artifacts/export_meshes.json
     foreach: ${combined}
   export_meshes_success:
-    cmd: python b1k_pipeline/check_success_aggregate.py artifacts/export_meshes.json
+    cmd: python -m b1k_pipeline.check_success_aggregate artifacts/export_meshes.json
       artifacts/pipeline/export_meshes.success
     deps:
     - cad/objects/acetone-jc/artifacts/export_meshes.json
@@ -6075,7 +6075,7 @@ stages:
     - artifacts/parallels/objects.zip
     - artifacts/pipeline/export_objs.json
   export_objs_global_success:
-    cmd: python b1k_pipeline/check_success.py artifacts/pipeline/export_objs.json
+    cmd: python -m b1k_pipeline/check_success artifacts/pipeline/export_objs.json
       artifacts/pipeline/export_objs.success
     deps:
     - artifacts/pipeline/export_objs.json
@@ -6116,7 +6116,7 @@ stages:
     - artifacts/parallels/maps.zip
     - artifacts/pipeline/make_maps.success
   object_inventory:
-    cmd: python b1k_pipeline/object_inventory.py
+    cmd: python -m b1k_pipeline.object_inventory
     deps:
     - cad/objects/acetone-jc/artifacts/object_list.json
     - cad/objects/acid-ub/artifacts/object_list.json
@@ -8065,7 +8065,7 @@ stages:
     outs:
     - artifacts/pipeline/object_inventory.json
   object_inventory_future:
-    cmd: python b1k_pipeline/object_inventory.py --future
+    cmd: python -m b1k_pipeline.object_inventory --future
     deps:
     - cad/objects/acetone-jc/artifacts/object_list.json
     - cad/objects/acid-ub/artifacts/object_list.json
@@ -10062,7 +10062,7 @@ stages:
     outs:
     - artifacts/pipeline/object_inventory_future.json
   object_inventory_success:
-    cmd: python b1k_pipeline/check_success.py artifacts/pipeline/object_inventory.json
+    cmd: python -m b1k_pipeline.check_success artifacts/pipeline/object_inventory.json
       artifacts/pipeline/object_inventory.success
     deps:
     - artifacts/pipeline/object_inventory.json
@@ -10079,7 +10079,7 @@ stages:
       - cad/${item}/artifacts/object_list.json
     foreach: ${combined_unfiltered}
   object_list_success:
-    cmd: python b1k_pipeline/check_success_aggregate.py artifacts/object_list.json
+    cmd: python -m b1k_pipeline.check_success_aggregate artifacts/object_list.json
       artifacts/pipeline/object_list.success
     deps:
     - cad/objects/acetone-jc/artifacts/object_list.json
@@ -12028,7 +12028,7 @@ stages:
     outs:
     - artifacts/pipeline/object_list.success
   pack_dataset:
-    cmd: python b1k_pipeline/pack_dataset.py
+    cmd: python -m b1k_pipeline.pack_dataset
     deps:
     - artifacts/pipeline/aggregate_metadata.success
     - artifacts/pipeline/aggregate_scenes.success
@@ -12062,7 +12062,7 @@ stages:
       - cad/${item}/artifacts/sanitycheck.json
     foreach: ${combined_unfiltered}
   sanitycheck_success:
-    cmd: python b1k_pipeline/check_success_aggregate.py artifacts/sanitycheck.json
+    cmd: python -m b1k_pipeline.check_success_aggregate artifacts/sanitycheck.json
       artifacts/pipeline/sanitycheck.success
     deps:
     - cad/objects/acetone-jc/artifacts/sanitycheck.json

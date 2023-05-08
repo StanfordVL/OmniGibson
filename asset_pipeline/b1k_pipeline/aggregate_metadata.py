@@ -1,8 +1,4 @@
-import sys
-
 import numpy as np
-
-sys.path.append(r"D:\ig_pipeline")
 
 import csv
 import json

@@ -4,9 +4,6 @@ import glob
 import json
 import os
 
-import sys
-sys.path.append(r"D:\ig_pipeline")
-
 import yaml
 import b1k_pipeline.utils
 

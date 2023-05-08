@@ -1,7 +1,5 @@
 import json
 import sys
-sys.path.append(r"D:\ig_pipeline")
-
 import b1k_pipeline.utils
 
 

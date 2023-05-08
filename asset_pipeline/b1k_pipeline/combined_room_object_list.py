@@ -1,6 +1,4 @@
 import argparse
-import sys
-sys.path.append(r"D:\ig_pipeline")
 
 from collections import Counter, defaultdict
 import glob

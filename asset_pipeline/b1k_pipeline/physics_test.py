@@ -5,17 +5,15 @@ To run this script, you need to have a valid version of iGibson 2.0 installed in
 """
 
 import sys
-sys.append(r"D:\ig_pipeline")
-
 import pybullet as p
+from b1k_pipeline.utils import PIPELINE_ROOT
 
 import igibson
-igibson.ig_dataset_path = r"D:\ig_pipeline\artifacts\aggregate"
+igibson.ig_dataset_path = str(PIPELINE_ROOT / "artifacts/aggregate")
 
 from igibson.simulator import Simulator
 from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
 
-from b1k_pipeline.utils import PIPELINE_ROOT
 
 OUTPUT_FILENAME = "physics_test.json"
 SUCCESS_FILENAME = "physics_test.success"

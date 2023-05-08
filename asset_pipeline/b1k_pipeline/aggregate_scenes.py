@@ -1,6 +1,3 @@
-import sys
-sys.path.append(r"D:\ig_pipeline")
-
 import fs.copy
 import fs.path
 import json
