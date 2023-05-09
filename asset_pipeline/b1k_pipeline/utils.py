@@ -55,6 +55,9 @@ class FSResolver(trimesh.resolvers.Resolver):
     def __init__(self, fs):
         self._fs = fs
 
+    def namespaced(self, namespace):
+        return FSResolver(self._fs.opendir(namespace))
+
     def get(self, name):
         """
         Get an asset.
