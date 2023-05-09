@@ -16,11 +16,11 @@ import random
 
 from fs.zipfs import ZipFS
 
-from b1k_pipeline.utils import PipelineFS, get_targets, parse_name
+from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh
 
 VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 COACD_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
-CLIENT_NAME = 'svl3.stanford.edu:35423'
+CLIENT_NAME = 'viscam7.stanford.edu:35423'
 
 COACD_TIMEOUT = 10 * 60 # 10 min
 
@@ -182,8 +182,7 @@ def process_object_with_option(m, out_fs, option_name, option_fn, dask_client):
     final_mesh = trimesh.util.concatenate(reduced_submeshes)
 
     # Save the result
-    with out_fs.open(f"{option_name}.obj", "w") as f:
-        final_mesh.export(f, file_type="obj")
+    save_mesh(final_mesh, out_fs, f"{option_name}.obj")
 
 
 def process_target(target, pipeline_fs, link_executor, dask_client):
@@ -192,9 +191,25 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
 
     object_futures = {}
     # Build the mesh tree using our mesh tree library. The scene code also uses this system.
-    with pipeline_fs.target_output(target).open("meshes.zip", "rb") as in_zip, \
-         pipeline_fs.target_output(target).open("collision_meshes.zip", "wb") as out_zip:
+    target_fs = pipeline_fs.target_output(target)
+    with target_fs.open("meshes.zip", "rb") as in_zip, \
+         target_fs.open("collision_meshes.zip", "wb") as out_zip:
         with ZipFS(in_zip) as mesh_archive_fs, ZipFS(out_zip, write=True) as collision_mesh_archive_fs:
+            # Compute the in-fs hash.
+            in_hash = target_fs.hash("meshes.zip", "md5")
+
+            # Compare it to the saved hash if one exists.
+            if collision_mesh_archive_fs.exists("hash.txt"):
+                with collision_mesh_archive_fs.open("hash.txt", "r") as f:
+                    out_hash = f.read()
+                
+                # Return if the hash has not changed.
+                if in_hash == out_hash:
+                    return
+                
+            # Otherwise, clear the FS first.
+            collision_mesh_archive_fs.removetree("/")
+
             # Go through each object.
             for mesh_name in mesh_list:
                 # First decide if we need to process this
@@ -209,18 +224,17 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
                 print(f"Start {mesh_name} from {target}")
 
                 # Load the mesh
-                with mesh_archive_fs.open(f"{mesh_name}/{mesh_name}.obj", "rb") as f:
-                    # Do this trick again due to the pyfs objects not working with trimesh.
-                    bytes = f.read()
-                    stream = io.BytesIO(bytes)
-                    m = trimesh.load(stream, file_type="obj", force="mesh", skip_material=True,
-                                    merge_tex=True, merge_norm=True)
+                m = load_mesh(mesh_archive_fs, f"{mesh_name}/{mesh_name}.obj", force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
                 
                 # Now queue a target for each of the processing options
                 for option_name, option_fn in PROCESSING_OPTIONS:
                     future = link_executor.submit(process_object_with_option, m, collision_mesh_archive_fs, option_name, option_fn, dask_client)
                     object_futures[future] = mesh_name + "--" + option_name
         
+            # Save the hash
+            with collision_mesh_archive_fs.open("hash.txt", "w") as f:
+                f.write(in_hash)
+
             # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
             futures.wait(object_futures.keys())
     
