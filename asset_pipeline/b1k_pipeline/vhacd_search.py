@@ -252,10 +252,10 @@ def main():
         errors = {}
         target_futures = {}
     
-        dask_client = Client('svl1.stanford.edu:35423')
+        dask_client = Client(CLIENT_NAME)
         
         with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as mesh_executor:
-            targets = ["Rs_int"]  # get_targets("combined")
+            targets = ["scenes/Rs_int"]  # get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[target_executor.submit(process_target, target, pipeline_fs, mesh_executor, dask_client)] = target
                     
