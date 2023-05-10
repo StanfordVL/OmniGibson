@@ -121,7 +121,10 @@ don't require a model
 b1k_modeled_synset_df = pd.read_csv(B1K_MODELED_SYNSET_MASTERLIST)
 b1k_modeled_synsets = {}
 for __, [__, category, __, synset, *__] in b1k_modeled_synset_df.iterrows():
-    b1k_modeled_synsets[synset] = {"objects": [category]}
+    if synset not in b1k_modeled_synsets:
+        b1k_modeled_synsets[synset] = {"objects": [category]}
+    else:
+        b1k_modeled_synsets[synset]["objects"].append(category)
 with open(B1K_ABILITY_JSON_PATH, "r") as f:
     b1k_syns_to_props = json.load(f)
 try:
@@ -262,7 +265,7 @@ def add_abilities(node, ability_type=None, ability_map=None):
             with open(B1K_ABILITY_JSON_PATH) as f:
                 ability_map = json.load(f)
         elif ability_type == "b1k_modeled": 
-            with open(IGIBSON_ABILITY_JSON_PATH) as f:
+            with open(B1K_ABILITY_JSON_PATH) as f:
                 ability_map = json.load(f)
             with open(B1K_ABILITY_JSON_PATH) as f:
                 b1k_ability_map = json.load(f)
