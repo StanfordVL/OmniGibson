@@ -444,8 +444,68 @@ def construct_full_bddl(behavior_activity, activity_definition, object_list, ini
     return bddl
 
 
+def construct_bddl_from_parsed(behavior_activity, activity_definition, parsed_object_list, parsed_init_state, parsed_goal_state, domain="omnigibson"):
+    object_list = "(:objects\n"
+    for object_cat, object_insts in parsed_object_list.items():
+        object_list += f"        " + " ".join(object_insts) + f" - {object_cat}\n"
+    object_list += "    )"
+
+    init_state = f"(:init"
+    for literal in parsed_init_state:
+        if literal[0] == "not": 
+            init_state += f" (not ({' '.join(literal[1])}))"
+        else:
+            init_state += f" ({' '.join(literal)})"
+    init_state += ")"
+    init_state = add_bddl_whitespace(string=init_state, save=False)
+    init_state = "\n    ".join(init_state.split("\n"))
+    
+    goal_state = f"(:goal {build_goal(['and'] + parsed_goal_state)})"
+    goal_state = add_bddl_whitespace(string=goal_state, save=False)
+    goal_state = "\n    ".join(goal_state.split("\n"))
+
+    bddl = f"""(define (problem {behavior_activity}_{activity_definition})
+    (:domain {domain})\n
+    {object_list}
+    {init_state}
+    {goal_state}
+)"""
+    return bddl
+
+
+def build_goal(goal_expr):
+    if type(goal_expr[1]) == list:
+        return f"({goal_expr[0]} {' '.join([build_goal(subexpr) for subexpr in goal_expr[1:]])})"
+    else: 
+        return f"({' '.join(goal_expr)})"
+
+
 if __name__ == '__main__':
     if sys.argv[1] == 'add':
         refined_bddl = add_bddl_whitespace()
     if sys.argv[1] == 'remove':
         refined_bddl = remove_bddl_whitespace()
+    if sys.argv[1] == "construct_from_parsed":
+        activity = "cleaning_up_after_a_meal"
+        __, objs, init, goal = parse_problem(activity, 0, "igibson")
+        reconstruction = construct_bddl_from_parsed(activity, 0, objs, init, goal, domain="igibson")
+        with open(f"activity_definitions/{activity}/problem0.bddl", "r") as f:
+            defn_lines = f.read().split("\n")
+        reconstruction_lines = reconstruction.split("\n")
+        print("Length same:", len(defn_lines) == len(reconstruction_lines))
+        print(len(defn_lines))
+        print(len(reconstruction_lines))
+        # pprint.pprint(defn_lines)
+        # pprint.pprint(reconstruction_lines)
+        # print(reconstruction)
+        for i in range(len(reconstruction_lines)): 
+            # print(defn_lines[i].strip() == reconstruction_lines[i].strip())
+            if defn_lines[i].strip() != reconstruction_lines[i].strip():
+                print(defn_lines[i].strip())
+                print(reconstruction_lines[i].strip())
+                print(f"{i} doesn't match")
+                print()
+                import sys; sys.exit()
+            else:
+                continue
+                # print(i)
