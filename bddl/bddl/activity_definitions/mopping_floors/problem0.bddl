@@ -5,7 +5,7 @@
         stain.n.01_1 - stain.n.01
         water.n.06_1 - water.n.06
         floor.n.01_1 floor.n.01_2 - floor.n.01
-        soap.n.01_1 - soap.n.01
+        liquid_soap.n.01_1 - liquid_soap.n.01
         soap__bottle.n.01_1 - soap__bottle.n.01
         bucket.n.01_1 - bucket.n.01
         swab.n.02_1 - swab.n.02
@@ -14,7 +14,7 @@
     )
     
     (:init 
-        (filled soap__bottle.n.01_1 soap.n.01_1) 
+        (filled soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop soap__bottle.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (ontop swab.n.02_1 floor.n.01_1) 
