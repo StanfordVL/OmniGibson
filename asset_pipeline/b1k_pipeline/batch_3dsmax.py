@@ -2,6 +2,9 @@ from asyncio import subprocess
 import subprocess
 import sys
 import xmlrpc.client
+
+# TODO: Remove this and call it with python -m when ready to rerun everything.
+sys.path.append(r"D:\ig_pipeline")
 import b1k_pipeline.utils
 
 USE_RPC = True

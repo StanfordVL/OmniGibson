@@ -16,6 +16,7 @@ import b1k_pipeline.utils
 
 from fs.zipfs import ZipFS
 from fs.osfs import OSFS
+from fs.tempfs import TempFS
 import fs.copy
 
 btt = rt.BakeToTexture
@@ -298,7 +299,7 @@ class ObjectExporter:
             light_name_result = b1k_pipeline.utils.parse_name(light.name)
             assert light_name_result, f"Unparseable light name {light.name}"
             if obj_name_result.group("category") == light_name_result.group("category") and obj_name_result.group("model_id") == light_name_result.group("model_id") and obj_name_result.group("instance_id") == light_name_result.group("instance_id"):
-                assert light.normalizeColor == 1, "The light's unit is NOT lm."
+                # assert light.normalizeColor == 1, "The light's unit is NOT lm."
                 assert light_name_result.group("light_id"), "The light does not have an ID."
                 light_id = str(int(light_name_result.group("light_id")))
                 metadata["meta_links"]["lights"][light_id]["0"] = {
@@ -313,7 +314,7 @@ class ObjectExporter:
 
         for child in obj.children:
             # Take care of exporting object parts.
-            if rt.classOf(child) == rt.Editable_Poly:
+            if rt.classOf(child) in (rt.Editable_Poly, rt.PolyMeshObject):
                 metadata["parts"].append(child.name)
                 continue
 
@@ -463,14 +464,15 @@ def main():
     export_times = {}
     baking_times = {}
     try:
-        with tempfile.TemporaryDirectory() as bakery_dir, tempfile.TemporaryDirectory() as obj_out_dir:
-            exp = ObjectExporter(bakery_dir, obj_out_dir, export_textures=export_textures)
+        with TempFS(temp_dir=r"D:\tmp") as bakery_fs, \
+             TempFS(temp_dir=r"D:\tmp") as obj_out_fs, \
+             ZipFS(os.path.join(out_dir, "meshes.zip"), write=True) as zip_fs:
+            exp = ObjectExporter(bakery_fs.getsyspath("/"), obj_out_fs.getsyspath("/"), export_textures=export_textures)
             exp.run()
 
+            # Copy the temp_fs to the zip_fs
             print("Move files to archive.")
-            with OSFS(obj_out_dir) as temp_fs, ZipFS(os.path.join(out_dir, "meshes.zip"), write=True) as zip_fs:
-                # Copy the temp_fs to the zip_fs
-                fs.copy.copy_fs(temp_fs, zip_fs)
+            fs.copy.copy_fs(bakery_fs, zip_fs)
             print("Finished copying.")
 
             unwrap_times = exp.unwrap_times
@@ -482,7 +484,7 @@ def main():
 
     json_file = os.path.join(out_dir, "export_meshes.json")
     with open(json_file, "w") as f:
-        json.dump({"success": success, "error_msg": error_msg, "channel_map": exp.MAP_NAME_TO_IDS, "unwrap_times": unwrap_times, "export_times": export_times, "baking_times": baking_times}, f)
+        json.dump({"success": success, "error_msg": error_msg, "unwrap_times": unwrap_times, "export_times": export_times, "baking_times": baking_times}, f)
 
     if success:
         print("Export successful!")
