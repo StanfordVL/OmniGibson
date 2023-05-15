@@ -212,6 +212,7 @@ combined:
 - objects/decanter-ij
 - objects/degreaser-la
 - objects/dehumidifier-rw
+- objects/deicer-sh
 - objects/denture-hi
 - objects/deodorant-ls
 - objects/diamond-jh
@@ -292,6 +293,7 @@ combined:
 - objects/ground_beef
 - objects/ground_coffee-pa
 - objects/gunpowder-zm
+- objects/hair_spray-gs
 - objects/hammock-ht
 - objects/hamster_wheel-fd
 - objects/hand_mixer-gz
@@ -307,6 +309,7 @@ combined:
 - objects/hockey_puck-jk
 - objects/hockey_stick-ja
 - objects/hoe-lg
+- objects/honey_jar-ia
 - objects/hoodie-ev
 - objects/hot_chocolate-ni
 - objects/hotdog_sandwitch-as
@@ -1866,7 +1869,6 @@ combined:
 - objects/tissues-qu
 - objects/toast-tt
 - objects/toaster_oven-kf
-- objects/tong-temp
 - objects/toolbox-ng
 - objects/tortilla-bq
 - objects/tortilla_chips-ub
@@ -1892,7 +1894,6 @@ combined:
 - objects/utility_knife-ba
 - objects/vanilla-yz
 - objects/vans-pk
-- objects/vase-temp
 - objects/vegetable_oil-oa
 - objects/vegetable_peeler-nb
 - objects/vest-mq
@@ -1954,12 +1955,10 @@ combined:
 - scenes/hotel_gym_spa
 - scenes/hotel_suite_large
 - scenes/hotel_suite_small
-- scenes/house_double_floor_lower
 - scenes/house_double_floor_upper
 - scenes/house_single_floor
 - scenes/office_bike
 - scenes/office_cubicles_left
-- scenes/office_cubicles_right
 - scenes/office_large
 - scenes/office_vendor_machine
 - scenes/public_restroom_blue
@@ -1973,6 +1972,7 @@ combined:
 - scenes/restaurant_diner
 - scenes/restaurant_hotel
 - scenes/restaurant_urban
+- scenes/school_gym
 combined_unfiltered:
 - objects/acetone-jc
 - objects/acid-ub
@@ -3844,7 +3844,6 @@ combined_unfiltered:
 - objects/tissues-qu
 - objects/toast-tt
 - objects/toaster_oven-kf
-- objects/tong-temp
 - objects/toolbox-ng
 - objects/tortilla-bq
 - objects/tortilla_chips-ub
@@ -3871,7 +3870,6 @@ combined_unfiltered:
 - objects/valentine_wreath-ik
 - objects/vanilla-yz
 - objects/vans-pk
-- objects/vase-temp
 - objects/vegetable_oil-oa
 - objects/vegetable_peeler-nb
 - objects/vest-mq
@@ -3991,12 +3989,10 @@ final_scenes:
 - scenes/hotel_gym_spa
 - scenes/hotel_suite_large
 - scenes/hotel_suite_small
-- scenes/house_double_floor_lower
 - scenes/house_double_floor_upper
 - scenes/house_single_floor
 - scenes/office_bike
 - scenes/office_cubicles_left
-- scenes/office_cubicles_right
 - scenes/office_large
 - scenes/office_vendor_machine
 - scenes/restaurant_asian
@@ -4005,6 +4001,7 @@ final_scenes:
 - scenes/restaurant_diner
 - scenes/restaurant_hotel
 - scenes/restaurant_urban
+- scenes/school_gym
 objects:
 - objects/acetone-jc
 - objects/acid-ub
@@ -4219,6 +4216,7 @@ objects:
 - objects/decanter-ij
 - objects/degreaser-la
 - objects/dehumidifier-rw
+- objects/deicer-sh
 - objects/denture-hi
 - objects/deodorant-ls
 - objects/diamond-jh
@@ -4299,6 +4297,7 @@ objects:
 - objects/ground_beef
 - objects/ground_coffee-pa
 - objects/gunpowder-zm
+- objects/hair_spray-gs
 - objects/hammock-ht
 - objects/hamster_wheel-fd
 - objects/hand_mixer-gz
@@ -4314,6 +4313,7 @@ objects:
 - objects/hockey_puck-jk
 - objects/hockey_stick-ja
 - objects/hoe-lg
+- objects/honey_jar-ia
 - objects/hoodie-ev
 - objects/hot_chocolate-ni
 - objects/hotdog_sandwitch-as
@@ -5873,7 +5873,6 @@ objects:
 - objects/tissues-qu
 - objects/toast-tt
 - objects/toaster_oven-kf
-- objects/tong-temp
 - objects/toolbox-ng
 - objects/tortilla-bq
 - objects/tortilla_chips-ub
@@ -5899,7 +5898,6 @@ objects:
 - objects/utility_knife-ba
 - objects/vanilla-yz
 - objects/vans-pk
-- objects/vase-temp
 - objects/vegetable_oil-oa
 - objects/vegetable_peeler-nb
 - objects/vest-mq
@@ -7803,7 +7801,6 @@ objects_unfiltered:
 - objects/tissues-qu
 - objects/toast-tt
 - objects/toaster_oven-kf
-- objects/tong-temp
 - objects/toolbox-ng
 - objects/tortilla-bq
 - objects/tortilla_chips-ub
@@ -7830,7 +7827,6 @@ objects_unfiltered:
 - objects/valentine_wreath-ik
 - objects/vanilla-yz
 - objects/vans-pk
-- objects/vase-temp
 - objects/vegetable_oil-oa
 - objects/vegetable_peeler-nb
 - objects/vest-mq
@@ -7895,12 +7891,10 @@ scenes:
 - scenes/hotel_gym_spa
 - scenes/hotel_suite_large
 - scenes/hotel_suite_small
-- scenes/house_double_floor_lower
 - scenes/house_double_floor_upper
 - scenes/house_single_floor
 - scenes/office_bike
 - scenes/office_cubicles_left
-- scenes/office_cubicles_right
 - scenes/office_large
 - scenes/office_vendor_machine
 - scenes/public_restroom_blue
@@ -7914,6 +7908,7 @@ scenes:
 - scenes/restaurant_diner
 - scenes/restaurant_hotel
 - scenes/restaurant_urban
+- scenes/school_gym
 scenes_unfiltered:
 - scenes/Beechwood_0_garden
 - scenes/Beechwood_0_int

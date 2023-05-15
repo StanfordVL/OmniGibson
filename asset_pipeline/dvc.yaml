@@ -52,12 +52,10 @@ stages:
     - cad/scenes/hotel_gym_spa/scene.urdf
     - cad/scenes/hotel_suite_large/scene.urdf
     - cad/scenes/hotel_suite_small/scene.urdf
-    - cad/scenes/house_double_floor_lower/scene.urdf
     - cad/scenes/house_double_floor_upper/scene.urdf
     - cad/scenes/house_single_floor/scene.urdf
     - cad/scenes/office_bike/scene.urdf
     - cad/scenes/office_cubicles_left/scene.urdf
-    - cad/scenes/office_cubicles_right/scene.urdf
     - cad/scenes/office_large/scene.urdf
     - cad/scenes/office_vendor_machine/scene.urdf
     - cad/scenes/public_restroom_blue/scene.urdf
@@ -71,6 +69,7 @@ stages:
     - cad/scenes/restaurant_diner/scene.urdf
     - cad/scenes/restaurant_hotel/scene.urdf
     - cad/scenes/restaurant_urban/scene.urdf
+    - cad/scenes/school_gym/scene.urdf
     - cad/scenes/Beechwood_0_int/artifacts/export_scene.success
     - cad/scenes/Beechwood_1_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_0_int/artifacts/export_scene.success
@@ -100,12 +99,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/export_scene.success
     - cad/scenes/hotel_suite_large/artifacts/export_scene.success
     - cad/scenes/hotel_suite_small/artifacts/export_scene.success
-    - cad/scenes/house_double_floor_lower/artifacts/export_scene.success
     - cad/scenes/house_double_floor_upper/artifacts/export_scene.success
     - cad/scenes/house_single_floor/artifacts/export_scene.success
     - cad/scenes/office_bike/artifacts/export_scene.success
     - cad/scenes/office_cubicles_left/artifacts/export_scene.success
-    - cad/scenes/office_cubicles_right/artifacts/export_scene.success
     - cad/scenes/office_large/artifacts/export_scene.success
     - cad/scenes/office_vendor_machine/artifacts/export_scene.success
     - cad/scenes/public_restroom_blue/artifacts/export_scene.success
@@ -119,6 +116,7 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/export_scene.success
     - cad/scenes/restaurant_hotel/artifacts/export_scene.success
     - cad/scenes/restaurant_urban/artifacts/export_scene.success
+    - cad/scenes/school_gym/artifacts/export_scene.success
     - b1k_pipeline/aggregate_scenes.py
     - params.yaml
     outs:
@@ -156,12 +154,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/room_object_list.json
     - cad/scenes/hotel_suite_large/artifacts/room_object_list.json
     - cad/scenes/hotel_suite_small/artifacts/room_object_list.json
-    - cad/scenes/house_double_floor_lower/artifacts/room_object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/room_object_list.json
     - cad/scenes/house_single_floor/artifacts/room_object_list.json
     - cad/scenes/office_bike/artifacts/room_object_list.json
     - cad/scenes/office_cubicles_left/artifacts/room_object_list.json
-    - cad/scenes/office_cubicles_right/artifacts/room_object_list.json
     - cad/scenes/office_large/artifacts/room_object_list.json
     - cad/scenes/office_vendor_machine/artifacts/room_object_list.json
     - cad/scenes/public_restroom_blue/artifacts/room_object_list.json
@@ -175,6 +171,7 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/room_object_list.json
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.json
     - cad/scenes/restaurant_urban/artifacts/room_object_list.json
+    - cad/scenes/school_gym/artifacts/room_object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/room_object_list.success
     - cad/scenes/Beechwood_1_int/artifacts/room_object_list.success
     - cad/scenes/Benevolence_0_int/artifacts/room_object_list.success
@@ -204,12 +201,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/room_object_list.success
     - cad/scenes/hotel_suite_large/artifacts/room_object_list.success
     - cad/scenes/hotel_suite_small/artifacts/room_object_list.success
-    - cad/scenes/house_double_floor_lower/artifacts/room_object_list.success
     - cad/scenes/house_double_floor_upper/artifacts/room_object_list.success
     - cad/scenes/house_single_floor/artifacts/room_object_list.success
     - cad/scenes/office_bike/artifacts/room_object_list.success
     - cad/scenes/office_cubicles_left/artifacts/room_object_list.success
-    - cad/scenes/office_cubicles_right/artifacts/room_object_list.success
     - cad/scenes/office_large/artifacts/room_object_list.success
     - cad/scenes/office_vendor_machine/artifacts/room_object_list.success
     - cad/scenes/public_restroom_blue/artifacts/room_object_list.success
@@ -223,6 +218,7 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/room_object_list.success
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.success
     - cad/scenes/restaurant_urban/artifacts/room_object_list.success
+    - cad/scenes/school_gym/artifacts/room_object_list.success
     - b1k_pipeline/combined_room_object_list.py
     - metadata/allowed_room_types.csv
     - params.yaml
@@ -581,6 +577,7 @@ stages:
     - cad/objects/decanter-ij/artifacts/export_meshes.json
     - cad/objects/degreaser-la/artifacts/export_meshes.json
     - cad/objects/dehumidifier-rw/artifacts/export_meshes.json
+    - cad/objects/deicer-sh/artifacts/export_meshes.json
     - cad/objects/denture-hi/artifacts/export_meshes.json
     - cad/objects/deodorant-ls/artifacts/export_meshes.json
     - cad/objects/diamond-jh/artifacts/export_meshes.json
@@ -661,6 +658,7 @@ stages:
     - cad/objects/ground_beef/artifacts/export_meshes.json
     - cad/objects/ground_coffee-pa/artifacts/export_meshes.json
     - cad/objects/gunpowder-zm/artifacts/export_meshes.json
+    - cad/objects/hair_spray-gs/artifacts/export_meshes.json
     - cad/objects/hammock-ht/artifacts/export_meshes.json
     - cad/objects/hamster_wheel-fd/artifacts/export_meshes.json
     - cad/objects/hand_mixer-gz/artifacts/export_meshes.json
@@ -676,6 +674,7 @@ stages:
     - cad/objects/hockey_puck-jk/artifacts/export_meshes.json
     - cad/objects/hockey_stick-ja/artifacts/export_meshes.json
     - cad/objects/hoe-lg/artifacts/export_meshes.json
+    - cad/objects/honey_jar-ia/artifacts/export_meshes.json
     - cad/objects/hoodie-ev/artifacts/export_meshes.json
     - cad/objects/hot_chocolate-ni/artifacts/export_meshes.json
     - cad/objects/hotdog_sandwitch-as/artifacts/export_meshes.json
@@ -2235,7 +2234,6 @@ stages:
     - cad/objects/tissues-qu/artifacts/export_meshes.json
     - cad/objects/toast-tt/artifacts/export_meshes.json
     - cad/objects/toaster_oven-kf/artifacts/export_meshes.json
-    - cad/objects/tong-temp/artifacts/export_meshes.json
     - cad/objects/toolbox-ng/artifacts/export_meshes.json
     - cad/objects/tortilla-bq/artifacts/export_meshes.json
     - cad/objects/tortilla_chips-ub/artifacts/export_meshes.json
@@ -2261,7 +2259,6 @@ stages:
     - cad/objects/utility_knife-ba/artifacts/export_meshes.json
     - cad/objects/vanilla-yz/artifacts/export_meshes.json
     - cad/objects/vans-pk/artifacts/export_meshes.json
-    - cad/objects/vase-temp/artifacts/export_meshes.json
     - cad/objects/vegetable_oil-oa/artifacts/export_meshes.json
     - cad/objects/vegetable_peeler-nb/artifacts/export_meshes.json
     - cad/objects/vest-mq/artifacts/export_meshes.json
@@ -2323,12 +2320,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/export_meshes.json
     - cad/scenes/hotel_suite_large/artifacts/export_meshes.json
     - cad/scenes/hotel_suite_small/artifacts/export_meshes.json
-    - cad/scenes/house_double_floor_lower/artifacts/export_meshes.json
     - cad/scenes/house_double_floor_upper/artifacts/export_meshes.json
     - cad/scenes/house_single_floor/artifacts/export_meshes.json
     - cad/scenes/office_bike/artifacts/export_meshes.json
     - cad/scenes/office_cubicles_left/artifacts/export_meshes.json
-    - cad/scenes/office_cubicles_right/artifacts/export_meshes.json
     - cad/scenes/office_large/artifacts/export_meshes.json
     - cad/scenes/office_vendor_machine/artifacts/export_meshes.json
     - cad/scenes/public_restroom_blue/artifacts/export_meshes.json
@@ -2342,6 +2337,7 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/export_meshes.json
     - cad/scenes/restaurant_hotel/artifacts/export_meshes.json
     - cad/scenes/restaurant_urban/artifacts/export_meshes.json
+    - cad/scenes/school_gym/artifacts/export_meshes.json
     - b1k_pipeline/check_success_aggregate.py
     outs:
     - artifacts/pipeline/export_meshes.success
@@ -2561,6 +2557,7 @@ stages:
     - cad/objects/decanter-ij/artifacts/meshes.zip
     - cad/objects/degreaser-la/artifacts/meshes.zip
     - cad/objects/dehumidifier-rw/artifacts/meshes.zip
+    - cad/objects/deicer-sh/artifacts/meshes.zip
     - cad/objects/denture-hi/artifacts/meshes.zip
     - cad/objects/deodorant-ls/artifacts/meshes.zip
     - cad/objects/diamond-jh/artifacts/meshes.zip
@@ -2641,6 +2638,7 @@ stages:
     - cad/objects/ground_beef/artifacts/meshes.zip
     - cad/objects/ground_coffee-pa/artifacts/meshes.zip
     - cad/objects/gunpowder-zm/artifacts/meshes.zip
+    - cad/objects/hair_spray-gs/artifacts/meshes.zip
     - cad/objects/hammock-ht/artifacts/meshes.zip
     - cad/objects/hamster_wheel-fd/artifacts/meshes.zip
     - cad/objects/hand_mixer-gz/artifacts/meshes.zip
@@ -2656,6 +2654,7 @@ stages:
     - cad/objects/hockey_puck-jk/artifacts/meshes.zip
     - cad/objects/hockey_stick-ja/artifacts/meshes.zip
     - cad/objects/hoe-lg/artifacts/meshes.zip
+    - cad/objects/honey_jar-ia/artifacts/meshes.zip
     - cad/objects/hoodie-ev/artifacts/meshes.zip
     - cad/objects/hot_chocolate-ni/artifacts/meshes.zip
     - cad/objects/hotdog_sandwitch-as/artifacts/meshes.zip
@@ -4215,7 +4214,6 @@ stages:
     - cad/objects/tissues-qu/artifacts/meshes.zip
     - cad/objects/toast-tt/artifacts/meshes.zip
     - cad/objects/toaster_oven-kf/artifacts/meshes.zip
-    - cad/objects/tong-temp/artifacts/meshes.zip
     - cad/objects/toolbox-ng/artifacts/meshes.zip
     - cad/objects/tortilla-bq/artifacts/meshes.zip
     - cad/objects/tortilla_chips-ub/artifacts/meshes.zip
@@ -4241,7 +4239,6 @@ stages:
     - cad/objects/utility_knife-ba/artifacts/meshes.zip
     - cad/objects/vanilla-yz/artifacts/meshes.zip
     - cad/objects/vans-pk/artifacts/meshes.zip
-    - cad/objects/vase-temp/artifacts/meshes.zip
     - cad/objects/vegetable_oil-oa/artifacts/meshes.zip
     - cad/objects/vegetable_peeler-nb/artifacts/meshes.zip
     - cad/objects/vest-mq/artifacts/meshes.zip
@@ -4303,12 +4300,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/meshes.zip
     - cad/scenes/hotel_suite_large/artifacts/meshes.zip
     - cad/scenes/hotel_suite_small/artifacts/meshes.zip
-    - cad/scenes/house_double_floor_lower/artifacts/meshes.zip
     - cad/scenes/house_double_floor_upper/artifacts/meshes.zip
     - cad/scenes/house_single_floor/artifacts/meshes.zip
     - cad/scenes/office_bike/artifacts/meshes.zip
     - cad/scenes/office_cubicles_left/artifacts/meshes.zip
-    - cad/scenes/office_cubicles_right/artifacts/meshes.zip
     - cad/scenes/office_large/artifacts/meshes.zip
     - cad/scenes/office_vendor_machine/artifacts/meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/meshes.zip
@@ -4322,6 +4317,7 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/meshes.zip
     - cad/scenes/restaurant_urban/artifacts/meshes.zip
+    - cad/scenes/school_gym/artifacts/meshes.zip
     - cad/objects/acetone-jc/artifacts/object_list.json
     - cad/objects/acid-ub/artifacts/object_list.json
     - cad/objects/adhesive-io/artifacts/object_list.json
@@ -4535,6 +4531,7 @@ stages:
     - cad/objects/decanter-ij/artifacts/object_list.json
     - cad/objects/degreaser-la/artifacts/object_list.json
     - cad/objects/dehumidifier-rw/artifacts/object_list.json
+    - cad/objects/deicer-sh/artifacts/object_list.json
     - cad/objects/denture-hi/artifacts/object_list.json
     - cad/objects/deodorant-ls/artifacts/object_list.json
     - cad/objects/diamond-jh/artifacts/object_list.json
@@ -4615,6 +4612,7 @@ stages:
     - cad/objects/ground_beef/artifacts/object_list.json
     - cad/objects/ground_coffee-pa/artifacts/object_list.json
     - cad/objects/gunpowder-zm/artifacts/object_list.json
+    - cad/objects/hair_spray-gs/artifacts/object_list.json
     - cad/objects/hammock-ht/artifacts/object_list.json
     - cad/objects/hamster_wheel-fd/artifacts/object_list.json
     - cad/objects/hand_mixer-gz/artifacts/object_list.json
@@ -4630,6 +4628,7 @@ stages:
     - cad/objects/hockey_puck-jk/artifacts/object_list.json
     - cad/objects/hockey_stick-ja/artifacts/object_list.json
     - cad/objects/hoe-lg/artifacts/object_list.json
+    - cad/objects/honey_jar-ia/artifacts/object_list.json
     - cad/objects/hoodie-ev/artifacts/object_list.json
     - cad/objects/hot_chocolate-ni/artifacts/object_list.json
     - cad/objects/hotdog_sandwitch-as/artifacts/object_list.json
@@ -6189,7 +6188,6 @@ stages:
     - cad/objects/tissues-qu/artifacts/object_list.json
     - cad/objects/toast-tt/artifacts/object_list.json
     - cad/objects/toaster_oven-kf/artifacts/object_list.json
-    - cad/objects/tong-temp/artifacts/object_list.json
     - cad/objects/toolbox-ng/artifacts/object_list.json
     - cad/objects/tortilla-bq/artifacts/object_list.json
     - cad/objects/tortilla_chips-ub/artifacts/object_list.json
@@ -6215,7 +6213,6 @@ stages:
     - cad/objects/utility_knife-ba/artifacts/object_list.json
     - cad/objects/vanilla-yz/artifacts/object_list.json
     - cad/objects/vans-pk/artifacts/object_list.json
-    - cad/objects/vase-temp/artifacts/object_list.json
     - cad/objects/vegetable_oil-oa/artifacts/object_list.json
     - cad/objects/vegetable_peeler-nb/artifacts/object_list.json
     - cad/objects/vest-mq/artifacts/object_list.json
@@ -6277,12 +6274,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
     - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
-    - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
     - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
-    - cad/scenes/office_cubicles_right/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
@@ -6296,6 +6291,7 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
     - cad/scenes/restaurant_urban/artifacts/object_list.json
+    - cad/scenes/school_gym/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success
@@ -6562,6 +6558,7 @@ stages:
     - cad/objects/decanter-ij/artifacts/object_list.json
     - cad/objects/degreaser-la/artifacts/object_list.json
     - cad/objects/dehumidifier-rw/artifacts/object_list.json
+    - cad/objects/deicer-sh/artifacts/object_list.json
     - cad/objects/denture-hi/artifacts/object_list.json
     - cad/objects/deodorant-ls/artifacts/object_list.json
     - cad/objects/diamond-jh/artifacts/object_list.json
@@ -6642,6 +6639,7 @@ stages:
     - cad/objects/ground_beef/artifacts/object_list.json
     - cad/objects/ground_coffee-pa/artifacts/object_list.json
     - cad/objects/gunpowder-zm/artifacts/object_list.json
+    - cad/objects/hair_spray-gs/artifacts/object_list.json
     - cad/objects/hammock-ht/artifacts/object_list.json
     - cad/objects/hamster_wheel-fd/artifacts/object_list.json
     - cad/objects/hand_mixer-gz/artifacts/object_list.json
@@ -6657,6 +6655,7 @@ stages:
     - cad/objects/hockey_puck-jk/artifacts/object_list.json
     - cad/objects/hockey_stick-ja/artifacts/object_list.json
     - cad/objects/hoe-lg/artifacts/object_list.json
+    - cad/objects/honey_jar-ia/artifacts/object_list.json
     - cad/objects/hoodie-ev/artifacts/object_list.json
     - cad/objects/hot_chocolate-ni/artifacts/object_list.json
     - cad/objects/hotdog_sandwitch-as/artifacts/object_list.json
@@ -8216,7 +8215,6 @@ stages:
     - cad/objects/tissues-qu/artifacts/object_list.json
     - cad/objects/toast-tt/artifacts/object_list.json
     - cad/objects/toaster_oven-kf/artifacts/object_list.json
-    - cad/objects/tong-temp/artifacts/object_list.json
     - cad/objects/toolbox-ng/artifacts/object_list.json
     - cad/objects/tortilla-bq/artifacts/object_list.json
     - cad/objects/tortilla_chips-ub/artifacts/object_list.json
@@ -8242,7 +8240,6 @@ stages:
     - cad/objects/utility_knife-ba/artifacts/object_list.json
     - cad/objects/vanilla-yz/artifacts/object_list.json
     - cad/objects/vans-pk/artifacts/object_list.json
-    - cad/objects/vase-temp/artifacts/object_list.json
     - cad/objects/vegetable_oil-oa/artifacts/object_list.json
     - cad/objects/vegetable_peeler-nb/artifacts/object_list.json
     - cad/objects/vest-mq/artifacts/object_list.json
@@ -8304,12 +8301,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
     - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
-    - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
     - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
-    - cad/scenes/office_cubicles_right/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
@@ -8323,6 +8318,7 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
     - cad/scenes/restaurant_urban/artifacts/object_list.json
+    - cad/scenes/school_gym/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - b1k_pipeline/object_inventory.py
     - params.yaml
@@ -10201,7 +10197,6 @@ stages:
     - cad/objects/tissues-qu/artifacts/object_list.json
     - cad/objects/toast-tt/artifacts/object_list.json
     - cad/objects/toaster_oven-kf/artifacts/object_list.json
-    - cad/objects/tong-temp/artifacts/object_list.json
     - cad/objects/toolbox-ng/artifacts/object_list.json
     - cad/objects/tortilla-bq/artifacts/object_list.json
     - cad/objects/tortilla_chips-ub/artifacts/object_list.json
@@ -10228,7 +10223,6 @@ stages:
     - cad/objects/valentine_wreath-ik/artifacts/object_list.json
     - cad/objects/vanilla-yz/artifacts/object_list.json
     - cad/objects/vans-pk/artifacts/object_list.json
-    - cad/objects/vase-temp/artifacts/object_list.json
     - cad/objects/vegetable_oil-oa/artifacts/object_list.json
     - cad/objects/vegetable_peeler-nb/artifacts/object_list.json
     - cad/objects/vest-mq/artifacts/object_list.json
@@ -10559,6 +10553,7 @@ stages:
     - cad/objects/decanter-ij/artifacts/object_list.json
     - cad/objects/degreaser-la/artifacts/object_list.json
     - cad/objects/dehumidifier-rw/artifacts/object_list.json
+    - cad/objects/deicer-sh/artifacts/object_list.json
     - cad/objects/denture-hi/artifacts/object_list.json
     - cad/objects/deodorant-ls/artifacts/object_list.json
     - cad/objects/diamond-jh/artifacts/object_list.json
@@ -10639,6 +10634,7 @@ stages:
     - cad/objects/ground_beef/artifacts/object_list.json
     - cad/objects/ground_coffee-pa/artifacts/object_list.json
     - cad/objects/gunpowder-zm/artifacts/object_list.json
+    - cad/objects/hair_spray-gs/artifacts/object_list.json
     - cad/objects/hammock-ht/artifacts/object_list.json
     - cad/objects/hamster_wheel-fd/artifacts/object_list.json
     - cad/objects/hand_mixer-gz/artifacts/object_list.json
@@ -10654,6 +10650,7 @@ stages:
     - cad/objects/hockey_puck-jk/artifacts/object_list.json
     - cad/objects/hockey_stick-ja/artifacts/object_list.json
     - cad/objects/hoe-lg/artifacts/object_list.json
+    - cad/objects/honey_jar-ia/artifacts/object_list.json
     - cad/objects/hoodie-ev/artifacts/object_list.json
     - cad/objects/hot_chocolate-ni/artifacts/object_list.json
     - cad/objects/hotdog_sandwitch-as/artifacts/object_list.json
@@ -12213,7 +12210,6 @@ stages:
     - cad/objects/tissues-qu/artifacts/object_list.json
     - cad/objects/toast-tt/artifacts/object_list.json
     - cad/objects/toaster_oven-kf/artifacts/object_list.json
-    - cad/objects/tong-temp/artifacts/object_list.json
     - cad/objects/toolbox-ng/artifacts/object_list.json
     - cad/objects/tortilla-bq/artifacts/object_list.json
     - cad/objects/tortilla_chips-ub/artifacts/object_list.json
@@ -12239,7 +12235,6 @@ stages:
     - cad/objects/utility_knife-ba/artifacts/object_list.json
     - cad/objects/vanilla-yz/artifacts/object_list.json
     - cad/objects/vans-pk/artifacts/object_list.json
-    - cad/objects/vase-temp/artifacts/object_list.json
     - cad/objects/vegetable_oil-oa/artifacts/object_list.json
     - cad/objects/vegetable_peeler-nb/artifacts/object_list.json
     - cad/objects/vest-mq/artifacts/object_list.json
@@ -12301,12 +12296,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
     - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
-    - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
     - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
-    - cad/scenes/office_cubicles_right/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
@@ -12320,6 +12313,7 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
     - cad/scenes/restaurant_urban/artifacts/object_list.json
+    - cad/scenes/school_gym/artifacts/object_list.json
     - b1k_pipeline/check_success_aggregate.py
     - params.yaml
     outs:
@@ -12575,6 +12569,7 @@ stages:
     - cad/objects/decanter-ij/artifacts/sanitycheck.json
     - cad/objects/degreaser-la/artifacts/sanitycheck.json
     - cad/objects/dehumidifier-rw/artifacts/sanitycheck.json
+    - cad/objects/deicer-sh/artifacts/sanitycheck.json
     - cad/objects/denture-hi/artifacts/sanitycheck.json
     - cad/objects/deodorant-ls/artifacts/sanitycheck.json
     - cad/objects/diamond-jh/artifacts/sanitycheck.json
@@ -12655,6 +12650,7 @@ stages:
     - cad/objects/ground_beef/artifacts/sanitycheck.json
     - cad/objects/ground_coffee-pa/artifacts/sanitycheck.json
     - cad/objects/gunpowder-zm/artifacts/sanitycheck.json
+    - cad/objects/hair_spray-gs/artifacts/sanitycheck.json
     - cad/objects/hammock-ht/artifacts/sanitycheck.json
     - cad/objects/hamster_wheel-fd/artifacts/sanitycheck.json
     - cad/objects/hand_mixer-gz/artifacts/sanitycheck.json
@@ -12670,6 +12666,7 @@ stages:
     - cad/objects/hockey_puck-jk/artifacts/sanitycheck.json
     - cad/objects/hockey_stick-ja/artifacts/sanitycheck.json
     - cad/objects/hoe-lg/artifacts/sanitycheck.json
+    - cad/objects/honey_jar-ia/artifacts/sanitycheck.json
     - cad/objects/hoodie-ev/artifacts/sanitycheck.json
     - cad/objects/hot_chocolate-ni/artifacts/sanitycheck.json
     - cad/objects/hotdog_sandwitch-as/artifacts/sanitycheck.json
@@ -14229,7 +14226,6 @@ stages:
     - cad/objects/tissues-qu/artifacts/sanitycheck.json
     - cad/objects/toast-tt/artifacts/sanitycheck.json
     - cad/objects/toaster_oven-kf/artifacts/sanitycheck.json
-    - cad/objects/tong-temp/artifacts/sanitycheck.json
     - cad/objects/toolbox-ng/artifacts/sanitycheck.json
     - cad/objects/tortilla-bq/artifacts/sanitycheck.json
     - cad/objects/tortilla_chips-ub/artifacts/sanitycheck.json
@@ -14255,7 +14251,6 @@ stages:
     - cad/objects/utility_knife-ba/artifacts/sanitycheck.json
     - cad/objects/vanilla-yz/artifacts/sanitycheck.json
     - cad/objects/vans-pk/artifacts/sanitycheck.json
-    - cad/objects/vase-temp/artifacts/sanitycheck.json
     - cad/objects/vegetable_oil-oa/artifacts/sanitycheck.json
     - cad/objects/vegetable_peeler-nb/artifacts/sanitycheck.json
     - cad/objects/vest-mq/artifacts/sanitycheck.json
@@ -14317,12 +14312,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/sanitycheck.json
     - cad/scenes/hotel_suite_large/artifacts/sanitycheck.json
     - cad/scenes/hotel_suite_small/artifacts/sanitycheck.json
-    - cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
     - cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
     - cad/scenes/house_single_floor/artifacts/sanitycheck.json
     - cad/scenes/office_bike/artifacts/sanitycheck.json
     - cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
-    - cad/scenes/office_cubicles_right/artifacts/sanitycheck.json
     - cad/scenes/office_large/artifacts/sanitycheck.json
     - cad/scenes/office_vendor_machine/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_blue/artifacts/sanitycheck.json
@@ -14336,6 +14329,7 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/sanitycheck.json
     - cad/scenes/restaurant_hotel/artifacts/sanitycheck.json
     - cad/scenes/restaurant_urban/artifacts/sanitycheck.json
+    - cad/scenes/school_gym/artifacts/sanitycheck.json
     - b1k_pipeline/check_success_aggregate.py
     - params.yaml
     outs:

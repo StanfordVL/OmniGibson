@@ -73,9 +73,6 @@ APPROVED_OBJS = {
 }
 
 REJECTED_OBJS = {
-    "hair_spray-gs",
-    "deicer-sh",
-    "honey_jar-ia",
     "valentine_wreath-ik",
     "wood-we",
 }
@@ -86,7 +83,12 @@ APPROVED_SCENES = {
 
 REJECTED_SCENES = {
     ".*_garden",
-    "school_.*",
+    "school_biology",
+    "school_chemistry",
+    "school_computer_lab_and_infirmary",
+    "school_geography",
+    "office_cubicles_right",
+    "house_double_floor_lower",
 }
 
 
