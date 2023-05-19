@@ -220,8 +220,12 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
                     out_hash = f.read()
                 
                 # Return if the hash has not changed.
-                if in_hash + script_hash == out_hash:
+                # if in_hash + script_hash == out_hash:
+                if out_hash.startswith(in_hash):
+                    print(target, "already processed, skipping.")
                     return
+                
+                print(f"Reprocessing {target} due to hash mismatch.")
 
     with target_fs.open("meshes.zip", "rb") as in_zip, \
          target_fs.open("collision_meshes.zip", "wb") as out_zip:
