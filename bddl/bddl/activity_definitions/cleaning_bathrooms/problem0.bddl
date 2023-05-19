@@ -33,16 +33,16 @@
     (:goal 
         (and 
             (not 
-                (covered ?toilet.n.02_1 stain.n.01_1)
+                (covered ?toilet.n.02_1 ?stain.n.01_1)
             ) 
             (not 
-                (covered ?bathtub.n.01_1 stain.n.01_1)
+                (covered ?bathtub.n.01_1 ?stain.n.01_1)
             ) 
             (not 
-                (covered ?sink.n.01_1 stain.n.01_1)
+                (covered ?sink.n.01_1 ?stain.n.01_1)
             ) 
             (not 
-                (covered ?floor.n.01_1 stain.n.01_1)
+                (covered ?floor.n.01_1 ?stain.n.01_1)
             ) 
             (inside ?rag.n.01_1 ?bucket.n.01_1)
         )

@@ -33,7 +33,7 @@
             (forall 
                 (?sweater.n.01 - sweater.n.01) 
                 (not 
-                    (covered ?sweater.n.01 dust.n.01_1)
+                    (covered ?sweater.n.01 ?dust.n.01_1)
                 )
             ) 
             (forall 

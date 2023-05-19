@@ -22,12 +22,13 @@ import json
 import os
 from collections import OrderedDict
 import pandas as pd
+import copy
 
 from nltk.corpus import wordnet as wn
 
 ### Dependencies
 '''
-This .csv file should contain all of the models we currently own.
+This .csv file should contain all of the b100 models we currently own.
 Should contain an `Object` column and a `Synset` column.
 '''
 MODELS_CSV_PATH = "objectmodeling.csv"
@@ -42,6 +43,11 @@ This .csv file should contain all of the objects and words used
 in B-1K. Should contain a `synset` column and a `words` column.
 '''
 B1K_SYNSET_MASTERLIST = "b1k_synset_masterlist.tsv"
+'''
+This .csv file should contain all of the objects and words modeled
+in B-1K. Should contain a `category` column and a `synset` column.
+'''
+B1K_MODELED_SYNSET_MASTERLIST = "b1k_objectmodeling.csv"
 '''
 This .json file should contain all of the synsets from the .csv files above
 as well as their associated iGibson abilities.
@@ -67,6 +73,8 @@ OUTPUT_JSON_PATH2 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hiera
 OUTPUT_JSON_PATH3 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_all.json")
 # Uses B-1K abilities
 OUTPUT_JSON_PATH4 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_b1k.json")
+# Uses both B-1K and B-100 abilities, with common synsets taking from B-1K
+OUTPUT_JSON_PATH5 = os.path.join(os.path.dirname(__file__), "..", "bddl", "hierarchy_b1k_modeled.json")
 
 '''
 Load in all of the owned models. Map the synsets to their corresponding object names.
@@ -102,9 +110,34 @@ Load in all of the synsets from B-1K
 '''
 b1k_synset_df = pd.read_csv(B1K_SYNSET_MASTERLIST, sep="\t")
 b1k_synsets = {}
-for i, [synset, words] in b1k_synset_df.iterrows():
+for i, [synset, words, *__] in b1k_synset_df.iterrows():
     b1k_synsets[synset] = {"objects": 
         json.loads(words.replace("'", '"')) if not pd.isna(words) else []}
+
+'''
+Load in all of the owned synsets from B-1K, plus substances since they 
+don't require a model
+'''
+b1k_modeled_synset_df = pd.read_csv(B1K_MODELED_SYNSET_MASTERLIST)
+b1k_modeled_synsets = {}
+for __, [__, category, __, synset, *__] in b1k_modeled_synset_df.iterrows():
+    if synset not in b1k_modeled_synsets:
+        b1k_modeled_synsets[synset] = {"objects": [category]}
+    else:
+        b1k_modeled_synsets[synset]["objects"].append(category)
+with open(B1K_ABILITY_JSON_PATH, "r") as f:
+    b1k_syns_to_props = json.load(f)
+try:
+    b1k_modeled_synsets.update(
+        {syn: objs for syn, objs in b1k_synsets.items() if "substance" in b1k_syns_to_props[syn]})
+except KeyError as e:
+    print(f"{e} not in synset-to-filtered-property file")
+
+'''
+Synsets from B-1K and owned B-100 models
+'''
+# b100_modeled_synsets = copy.deepcopy(owned_synsets)
+# b1k_modeled_synsets.update(b100_modeled_synsets)
 
 '''
 Combined version of owned and article.
@@ -135,13 +168,8 @@ def add_path(path, node, custom_synsets):
 
     try:
         name = oldest_synset.name()
-        if name == "arborio_rice.n.01":
-            print("ARBORIO")
     except:
         name = oldest_synset[8:-2]
-        if oldest_synset == "arborio_rice.n.01": 
-            print("ARBORIO")
-        # print("Name in except block:", name)
         if "children" not in node:
             node["children"] = []
         for child_node in node["children"]:
@@ -177,17 +205,32 @@ def generate_paths(paths, path, word, custom_synsets):
     @param word: The current synset we are searching parents for.
     @param custom_synsets: Dictionary, maps name to hypernym name
     """
-    if str(word)[8:-2] in custom_synsets:
-        hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
-        generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
-    else:
-        # print(word)
+    # if str(word)[8:-2] in custom_synsets:
+    #     hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
+    #     generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
+    # else:
+    #     hypernyms = word.hypernyms()
+    #     if not hypernyms:
+    #         paths.append(path)
+    #     else:
+    #         for parent in hypernyms:
+    #             generate_paths(paths, path + [parent], parent, custom_synsets)
+    try:
+        if str(word[8:-2]) in custom_synsets:
+            pass 
+    except:
         hypernyms = word.hypernyms()
         if not hypernyms:
             paths.append(path)
         else:
-            for parent in hypernyms:
-                generate_paths(paths, path + [parent], parent, custom_synsets)
+            for word in hypernyms:
+                generate_paths(paths, path + [word], word, custom_synsets)
+    else:
+        if str(word[8:-2]) not in custom_synsets:       # TODO remove when new custom synsets have been added
+            pass
+        else:
+            hypernyms = wn.synset(custom_synsets[word[8:-2]]["hypernyms"])
+            generate_paths(paths, path + [hypernyms], hypernyms, custom_synsets)
 
 '''
 Below is the script that creates the .json hierarchy
@@ -209,7 +252,6 @@ def add_igibson_objects(node, synsets):
 
 
 def add_abilities(node, ability_type=None, ability_map=None):
-    # print(node["name"])
     if ability_type is None and ability_map is None:
         raise ValueError("No abilities specified. Abilities can be specified through the ability_type kwarg to get a pre-existing ability map, or the ability_map kwarg to override with custom abilities.")
     if ability_map is None: 
@@ -222,6 +264,12 @@ def add_abilities(node, ability_type=None, ability_map=None):
         elif ability_type == "b1k":
             with open(B1K_ABILITY_JSON_PATH) as f:
                 ability_map = json.load(f)
+        elif ability_type == "b1k_modeled": 
+            with open(B1K_ABILITY_JSON_PATH) as f:
+                ability_map = json.load(f)
+            with open(B1K_ABILITY_JSON_PATH) as f:
+                b1k_ability_map = json.load(f)
+            ability_map.update(b1k_ability_map)
         else:
             raise ValueError("Invalid ability type given.")
 
@@ -284,6 +332,8 @@ def generate_hierarchy(hierarchy_type, ability_type):
         synsets = all_synsets
     elif hierarchy_type == "b1k":
         synsets = b1k_synsets
+    elif hierarchy_type == "b1k_modeled":
+        synsets = b1k_modeled_synsets
     else:
         raise ValueError("Invalid hierarchy type given.")
     
@@ -296,14 +346,17 @@ def generate_hierarchy(hierarchy_type, ability_type):
                 "objects": [row["word"]]
             }
     
-    synsets.update(custom_synsets)
+    # NOTE - not automatically using custom synsets
+    # synsets.update(custom_synsets)
 
+    objects = set()
     for synset in synsets: 
         try:
             syn = wn.synset(synset)
         except:
             syn = f"Synset('{synset}')"
         synset_paths = []
+        objects.add(synset)
         generate_paths(synset_paths, [syn], syn, custom_synsets)
         for synset_path in synset_paths:
             # The last word should always be `entity.n.01`, so we can just take it out.
@@ -328,9 +381,13 @@ def save_hierarchies():
     # with open(OUTPUT_JSON_PATH3, "w") as f:
     #     json.dump(hierarchy_all, f, indent=2)
     
-    hierarchy_b1k = generate_hierarchy("b1k", "b1k")
-    with open(OUTPUT_JSON_PATH4, "w") as f:
-        json.dump(hierarchy_b1k, f, indent=2)
+    # hierarchy_b1k = generate_hierarchy("b1k", "b1k")
+    # with open(OUTPUT_JSON_PATH4, "w") as f:
+    #     json.dump(hierarchy_b1k, f, indent=2)
+    
+    hierarchy_b1k_modeled = generate_hierarchy("b1k_modeled", "b1k_modeled")
+    with open(OUTPUT_JSON_PATH5, "w") as f:
+        json.dump(hierarchy_b1k_modeled, f, indent=2)
 
 
 if __name__ == "__main__":

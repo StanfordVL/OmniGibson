@@ -50,7 +50,7 @@ def get_object_scope(conds):
     return create_scope(conds.parsed_objects)
 
 
-def get_initial_conditions(conds, backend, scope):
+def get_initial_conditions(conds, backend, scope, generate_ground_options=True):
     """Create compiled initial conditions that can be checked and sampled
 
     Args:
@@ -67,11 +67,12 @@ def get_initial_conditions(conds, backend, scope):
             backend,
             scope=scope,
             object_map=conds.parsed_objects,
+            generate_ground_options=generate_ground_options
         )
         return initial_conditions
 
 
-def get_goal_conditions(conds, backend, scope):
+def get_goal_conditions(conds, backend, scope, generate_ground_options=True):
     """Create compiled goal conditions with a populated object scope for checking
 
     Args:
@@ -86,7 +87,11 @@ def get_goal_conditions(conds, backend, scope):
     """
     if bool(conds.parsed_goal_conditions[0]):
         goal_conditions = compile_state(
-            conds.parsed_goal_conditions, backend, scope=scope, object_map=conds.parsed_objects
+            conds.parsed_goal_conditions, 
+            backend, 
+            scope=scope, 
+            object_map=conds.parsed_objects,
+            generate_ground_options=generate_ground_options
         )
         return goal_conditions
 

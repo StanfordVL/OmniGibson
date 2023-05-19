@@ -73,7 +73,8 @@ def truncated_permutations(iterable, r=None, max_permutations=GROUND_GOALS_MAX_P
 ########## CUSTOM ERRORS ############
 
 class UncontrolledCategoryError(Exception):
-    pass
+    def __init__(self, malformed_cat):
+        self.malformed_cat = malformed_cat
 
 class UnsupportedPredicateError(Exception):
     def __init__(self, predicate):

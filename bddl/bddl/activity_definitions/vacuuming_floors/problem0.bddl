@@ -20,7 +20,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?floor.n.01_1 dust.n.01_1)
+                (covered ?floor.n.01_1 ?dust.n.01_1)
             )
         )
     )

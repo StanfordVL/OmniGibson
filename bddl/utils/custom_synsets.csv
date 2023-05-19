@@ -11,44 +11,506 @@ copper mug,copper_mug.n.01,mug.n.01
 hamster wheel,hamster_wheel.n.01,exercise_device.n.01
 knife block,knife_block.n.01,rack.n.05
 pet bed,pet_bed.n.01,bedroom_furniture.n.01
-pizza box,pizza_box.n.01,box.n.01
+pizza box,pizza_box.n.01,container.n.01
 whitewall tire,whitewall_tire.n.01,tire.n.01
 kielbasa,kielbasa.n.01,sausage.n.01
 wool coat,wool_coat.n.01,coat.n.01
 goalkeeper gloves,goalkeeper_gloves.n.01,glove.n.02
 feta,feta.n.01,cheese.n.01
 mojito,mojito.n.01,cocktail.n.01
-carne asada,carne_asada.n.01,steak.n.01
+carne asada,carne_asada.n.01,dish.n.02
 chia seeds,chia_seed.n.01,edible_seed.n.01
 pumpkin pie spice,pumpkin_pie_spice.n.01,spice.n.02
 quinoa,quinoa.n.01,grain.n.02
-ramen,ramen.n.01,noodle.n.01
+ramen,ramen.n.01,dish.n.02
 cookie dough,cookie_dough.n.01,dough.n.01
 jean jacket,jean_jacket.n.01,jacket.n.01
-litter box,litter_box.n.01,box.n.01
+litter box,litter_box.n.01,container.n.01
 dreidel,dreidel.n.01,spinning_top.n.01
-lemon-pepper seasoning,lemon-pepper_seasoning.n.01,seasoning.n.01
+lemon-pepper seasoning,lemon-pepper_seasoning.n.01,flavorer.n.01
 dehumidifier,dehumidifier.n.01,appliance.n.02
-cat food tin,cat_food__tin.n.01,can.n.01
-champagne bottle,champagne__bottle.n.01,bottle.n.01
+cat food tin,cat_food__tin.n.01,container.n.01
+champagne bottle,champagne__bottle.n.01,vessel.n.03
 deodorant spray bottle,deodorant__atomizer.n.01,atomizer.n.01
-detergent bottle,detergent__bottle.n.01,bottle.n.01
-dog food bag,dog_food__bag.n.01,sack.n.01
-gin bottle,gin__bottle.n.01,bottle.n.01
-glue bottle,glue__bottle.n.01,bottle.n.01
-gum box,gum__box.n.01,box.n.01
-honey jar,honey__jar.n.01,jar.n.01
-hot sauce bottle,hot_sauce__bottle.n.01,bottle.n.01
-lotion bottle,lotion__bottle.n.01,bottle.n.01
-orange juice carton,orange_juice__carton.n.01,bottle.n.01
-perfume bottle,perfume__bottle.n.01,bottle.n.01
-rum bottle,rum__bottle.n.01,bottle.n.01
-soup can,soup__can.n.01,can.n.01
-sunflower seed bag,sunflower_seed__bag.n.01,sack.n.01
-sunscreen bottle,sunscreen__bottle.n.01,bottle.n.01
-vodka bottle,vodka__bottle.n.01,bottle.n.01
-lemon juice bottle,lemon_juice__bottle.n.01,bottle.n.01
-vegetable oil bottle,vegetable_oil__bottle.n.01,bottle.n.01
+detergent bottle,detergent__bottle.n.01,vessel.n.03
+dog food bag,dog_food__can.n.01,container.n.01
+gin bottle,gin__bottle.n.01,vessel.n.03
+glue bottle,glue__bottle.n.01,vessel.n.03
+gum box,gum__box.n.01,grocery.n.02
+honey jar,honey__jar.n.01,vessel.n.03
+hot sauce bottle,hot_sauce__bottle.n.01,vessel.n.03
+lotion bottle,lotion__bottle.n.01,vessel.n.03
+orange juice carton,orange_juice__carton.n.01,vessel.n.03
+perfume bottle,perfume__bottle.n.01,vessel.n.03
+rum bottle,rum__bottle.n.01,vessel.n.03
+soup can,soup__can.n.01,container.n.01
+sunflower seed bag,sunflower_seed__bag.n.01,container.n.01
+sunscreen bottle,sunscreen__bottle.n.01,vessel.n.03
+vodka bottle,vodka__bottle.n.01,vessel.n.03
+lemon juice bottle,lemon_juice__bottle.n.01,vessel.n.03
+vegetable oil bottle,vegetable_oil__bottle.n.01,vessel.n.03
 yogurt cup,yogurt__cup.n.01,cup.n.01
-instant coffee jar,instant_coffee__jar.n.01,jar.n.01
-polish bottle,polish__bottle.n.01,bottle.n.01
+instant coffee jar,instant_coffee__jar.n.01,vessel.n.03
+polish bottle,polish__bottle.n.01,vessel.n.03
+skillet,skillet.n.01,pan.n.01
+diced chili,diced__chili.n.02,hot_pepper.n.02
+jelly bean jar,jelly_bean__jar.n.01,vessel.n.03
+polish bottle,polish__bottle.n.03,vessel.n.03
+chicken breast,chicken_breast.n.01,poultry.n.02
+sodium carbonate jar,sodium_carbonate__jar.n.01,vessel.n.03
+fabric softener,fabric_softener.n.01,softener.n.01
+baking powder jar,baking_powder__jar.n.01,vessel.n.03
+red bean,red_bean.n.01,bean.n.01
+diced steak,diced__steak.n.01,cut.n.06
+cooking oil bottle,cooking_oil__bottle.n.01,vessel.n.03
+diced spinach,diced__spinach.n.02,greens.n.01
+diced lettuce,diced__lettuce.n.03,salad_green.n.01
+flour sack,flour__sack.n.01,container.n.01
+cooked_breadcrumb,cooked__breadcrumb.n.01,crumb.n.03
+cup holder,cup_holder.n.01,holder.n.01
+cooked diced green onion,cooked__diced__green_onion.n.01,onion.n.03
+half eggplant,half__eggplant.n.01,solanaceous_vegetable.n.01
+liquid soap bottle,liquid_soap__bottle.n.01,vessel.n.03
+thyme shaker,thyme__shaker.n.02,container.n.01
+acetone bottle,acetone__bottle.n.01,vessel.n.03
+diced feta,diced__feta.n.01,cheese.n.01
+vinegar atomizer,vinegar__atomizer.n.01,dispenser.n.01
+broken light bulb,broken__light_bulb.n.01,electric_lamp.n.01
+whitewall_tire,whitewall_tire.n.01,tire.n.01
+pottable marigold,pottable__marigold.n.01,flower.n.01
+hummus box,hummus__box.n.01,container.n.01
+detergent atomizer,detergent__atomizer.n.02,atomizer.n.01
+hot_cooked_diced_onion,cooked__diced__onion.n.01,onion.n.01
+conditioner bottle,conditioner__bottle.n.03,vessel.n.03
+vinegar cleaning solution,vinegar_cleaning_solution.n.01,cleansing_agent.n.01
+pesticide atomizer,pesticide__atomizer.n.01,atomizer.n.01
+cooked diced beefsteak tomato,cooked__diced__beefsteak_tomato.n.01,tomato.n.01
+cinnamon bottle,cinnamon__bottle.n.01,vessel.n.03
+half_hard_boiled_egg,half__hard-boiled_egg.n.01,boiled_egg.n.01
+sugar_syrup_bottle,sugar_syrup__bottle.n.01,vessel.n.03
+oat_box,oat__box.n.01,container.n.01
+diced_cucumber,diced__cucumber.n.02,vegetable.n.01
+half_lime,half__lime.n.06,citrus.n.01
+sugar_sack,sugar__sack.n.01,container.n.01
+yogurt_carton,yogurt__carton.n.01,vessel.n.03
+red_meat_sauce,red_meat_sauce.n.01,spaghetti_sauce.n.01
+onion_powder_shaker,onion_powder__shaker.n.01,container.n.01
+suitcase,suitcase.n.01,baggage.n.01
+cooked_diced_vidalia_onion,cooked__diced__vidalia_onion.n.01,onion.n.03
+nutmeg_shaker,nutmeg__shaker.n.02,container.n.01
+sealant_tube,sealant__bottle.n.01,vessel.n.03
+sesame_seed_bottle,sesame_seed__bottle.n.01,vessel.n.03
+checkout_counter,checkout_counter.n.01,counter.n.01
+onion_powder,onion_powder.n.01,flavorer.n.01
+cooked_batter,cooked__batter.n.02,concoction.n.01
+tomato_juice_bottle,tomato_juice__bottle.n.01,vessel.n.03
+half_cake,half__cake.n.03,baked_goods.n.01
+diced_whole_potato,diced__whole_potato.n.01,potato.n.01
+soda_water_bottle,soda_water__bottle.n.01,vessel.n.03
+white_rice_sack,white_rice__sack.n.01,container.n.01
+melted_parmesean,melted__parmesan.n.01,cheese.n.01
+cooked_white_rice,cooked__white_rice.n.01,rice.n.01
+pumpkin_seed_bag,pumpkin_seed__bag.n.01,container.n.01
+cooked_pasta,cooked__pasta.n.02,food.n.02
+jam_jar,jam__jar.n.01,vessel.n.03
+pottable_chili,pottable__chili.n.02,hot_pepper.n.02
+sesame_oil_bottle,sesame_oil__bottle.n.01,vessel.n.03
+solvent_bottle,solvent__bottle.n.01,vessel.n.03
+rosemary_shaker,rosemary__shaker.n.01,container.n.01
+rubbing_alcohol_atomizer,rubbing_alcohol__atomizer.n.01,atomizer.n.01
+bird_feed_bag,bird_feed__bag.n.01,container.n.01
+olive_oil_bottle,olive_oil__bottle.n.01,vessel.n.03
+melted_butter,melted__butter.n.01,dairy_product.n.01
+cocoa_box,cocoa__box.n.01,container.n.01
+green_tea_latte,green_tea_latte.n.01,tea.n.01
+cooked_brown_rice,cooked__brown_rice.n.01,rice.n.01
+cooked_sunflower_seed,cooked__sunflower_seed.n.01,edible_seed.n.01
+diced_chicken,diced__chicken.n.01,poultry.n.02
+pottable_daffodil,pottable__daffodil.n.01,narcissus.n.01
+stew_carton,stew__carton.n.01,vessel.n.03
+chia_seed_bag,chia_seed__bag.n.01,container.n.01
+chocolate_box,chocolate_box.n.01,container.n.01
+mayonnaise_jar,mayonnaise__jar.n.01,vessel.n.03
+cooked_diced_chicken,cooked__diced__chicken.n.01,poultry.n.02
+soy_sauce_bottle,soy_sauce__bottle.n.01,vessel.n.03
+shampoo_bottle,shampoo__bottle.n.01,vessel.n.03
+biscut_dough,biscuit_dough.n.01,dough.n.01
+diced_beefsteak_tomato,diced__beefsteak_tomato.n.01,tomato.n.01
+jelly_jar,jelly__jar.n.02,vessel.n.03
+essential_oil_bottle,essential_oil__bottle.n.01,vessel.n.03
+bagel_dough,bagel_dough.n.01,dough.n.01
+curtain_rod,curtain_rod.n.01,rod.n.01
+cooked_quinoa,cooked__quinoa.n.01,grain.n.01
+house_paint_can,house_paint__can.n.01,container.n.01
+mustard_bottle,mustard__bottle.n.02,vessel.n.03
+half_apple_pie,half__apple_pie.n.01,pie.n.01
+diced_carrot,diced__carrot.n.03,root_vegetable.n.01
+insectifuge_atomizer,insectifuge__atomizer.n.01,atomizer.n.01
+cinnamon_sugar,cinnamon_sugar.n.01,sugar.n.01
+diced_beetroot,diced__beetroot.n.01,beet.n.01
+cornstarch_jar,cornstarch__jar.n.01,vessel.n.03
+diced_garlic,diced__garlic.n.02,flavorer.n.01
+bleaching_agent_bottle,bleaching_agent__bottle.n.01,vessel.n.03
+lime_juice_bottle,lime_juice__bottle.n.01,vessel.n.03
+coca_cola_bottle,cola__bottle.n.01,vessel.n.03
+diced_avocado,diced__avocado.n.01,edible_fruit.n.01
+cornmeal_sack,cornmeal__sack.n.01,container.n.01
+diced_sweet_pepper,diced__sweet_pepper.n.02,pepper.n.04
+diced_ham,diced__ham.n.01,cut_of_pork.n.01
+marinara_jar,marinara__jar.n.01,vessel.n.03
+granulated_sugar_jar,granulated_sugar__jar.n.01,vessel.n.03
+ammonia_water_bottle,ammonia_water__bottle.n.01,vessel.n.03
+paprika_shaker,paprika__shaker.n.02,container.n.01
+melted_grated_cheese,melted__grated_cheese.n.01,cheese.n.01
+diced_bell_pepper,diced__bell_pepper.n.02,bell_pepper.n.02
+diced_tomato,diced__tomato.n.01,solanaceous_vegetable.n.01
+cooked_marinade,cooked__marinade.n.01,condiment.n.01
+refried_beans_can,refried_beans__can.n.01,container.n.01
+half_log,half__log.n.01,wood.n.01
+fertilizer_atomizer,fertilizer__atomizer.n.01,atomizer.n.01
+cooked_diced_whole_potato,cooked__diced__whole_potato.n.01,potato.n.01
+noodle_jar,noodle__jar.n.01,vessel.n.03
+pellet_bag,pellet__bag.n.01,container.n.01
+pottable_cactus,pottable__cactus.n.01,succulent.n.01
+mustard_seed_bottle,mustard_seed__bottle.n.01,vessel.n.03
+cooked_diced_chili,cooked__diced__chili.n.02,hot_pepper.n.02
+jimmies_jar,jimmies__jar.n.01,vessel.n.03
+half_lime,half_lime.n.06,citrus.n.01
+gelatin_box,gelatin__box.n.01,container.n.01
+brandy_bottle,brandy__bottle.n.01,vessel.n.03
+cooked_paprika,cooked__paprika.n.02,flavorer.n.01
+cooked_noodle,cooked__noodle.n.01,pasta.n.02
+basil_jar,basil__jar.n.03,vessel.n.03
+granulated_sugar_sack,granulated_sugar__sack.n.01,container.n.01
+cumin_shaker,cumin__shaker.n.02,container.n.01
+diced_pineapple,diced__pineapple.n.02,edible_fruit.n.01
+hair_spray_can,hair_spray__can.n.01,atomizer.n.01
+quinoa_box,quinoa__box.n.01,container.n.01
+diced_broccoli,diced__broccoli.n.02,cruciferous_vegetable.n.01
+coriander_shaker,coriander__shaker.n.03,container.n.01
+diced_cheese,diced__cheese.n.01,dairy_product.n.01
+diced_beef_roast,diced__beef_roast.n.01,roast.n.01
+cream_carton,cream__carton.n.01,vessel.n.03
+cooked_diced_broccoli,cooked__diced__broccoli.n.02,broccoli.n.02
+melted_white_chocolate,melted__white_chocolate.n.01,chocolate.n.02
+cooked_beef,cooked__beef.n.02,meat.n.01
+butter_package,butter__package.n.01,container.n.01
+diced_cabbage,diced__cabbage.n.03,crucifer.n.01
+raw_egg,raw_egg.n.01,food.n.01
+half_bell_pepper,half__bell_pepper.n.02,sweet_pepper.n.02
+cooked_ground_beef,cooked__ground_beef.n.01,beef.n.02
+vinegar_bottle,vinegar__bottle.n.01,vessel.n.03
+cooked_popcorn,cooked__popcorn.n.01,corn.n.01
+cooked_diced_carne_asada,cooked__diced__carne_asada.n.01,dish.n.02
+half_lemon,half__lemon.n.01,citrus.n.01
+salsa_bottle,salsa__bottle.n.01,vessel.n.03
+cream_of_tartar_shaker,cream_of_tartar__shaker.n.01,container.n.01
+shortening_carton,shortening__carton.n.01,container.n.01
+cooked_marinara,cooked__marinara.n.01,spaghetti_sauce.n.01
+diced_mango,diced__mango.n.02,edible_fruit.n.01
+saddle_soap_bottle,saddle_soap__bottle.n.01,vessel.n.03
+glaze_bottle,glaze__bottle.n.01,vessel.n.03
+pizza_dough,pizza_dough.n.01,dough.n.01
+ginger_shaker,ginger__shaker.n.02,container.n.01
+mulch_bag,mulch__bag.n.01,container.n.01
+ink_bottle,ink__bottle.n.01,vessel.n.03
+diced_clove,diced__clove.n.03,garlic.n.02
+cinnamon_shaker,cinnamon__shaker.n.03,container.n.01
+wine_sauce_bottle,wine_sauce__bottle.n.01,vessel.n.03
+brown_sugar_sack,brown_sugar__sack.n.01,container.n.01
+lemon_pepper_seasoning_container,lemon-pepper_seasoning__shaker.n.01,container.n.01
+herbicide_bottle,herbicide__bottle.n.01,vessel.n.03
+hydrogen_peroxide_bottle,hydrogen_peroxide__bottle.n.01,vessel.n.03
+whipped_cream_atomzier,whipped_cream__atomizer.n.01,atomizer.n.01
+whipped_cream_can,whipped_cream__can.n.01,atomizer.n.01
+fabric_softener_bottle,fabric_softener__bottle.n.01,vessel.n.03
+lint_screen,lint_screen.n.01,screen.n.05
+leaf_blower,leaf_blower.n.01,home_appliance.n.01
+mustard_bottle,mustard__bottle.n.01,vessel.n.03
+cream_cheese_box,cream_cheese__box.n.01,container.n.01
+maple_syrup_jar,maple_syrup__jar.n.01,vessel.n.03
+half_orange,half__orange.n.01,citrus.n.01
+kayak_rack,kayak_rack.n.01,rack.n.01
+catsup_bottle,catsup__bottle.n.01,vessel.n.03
+diced_chard,diced__chard.n.01,beet.n.01
+tequila_bottle,tequila__bottle.n.01,vessel.n.03
+coconut_oil_jar,coconut_oil__jar.n.01,vessel.n.03
+diced_bratwurst,diced__bratwurst.n.01,pork_sausage.n.01
+cooked_orzo,cooked__orzo.n.01,pasta.n.02
+ammonia_water_atomizer,ammonia_water__atomizer.n.01,atomizer.n.01
+fried_egg,fried_egg.n.02,dish.n.02
+yeast_jar,yeast__jar.n.01,vessel.n.03
+cooked_diced_clove,cooked__diced__clove.n.03,garlic.n.02
+cayenne_shaker,cayenne__shaker.n.02,container.n.01
+diced_cheddar,diced__cheddar.n.01,cheese.n.01
+lentil_box,lentil__box.n.01,container.n.01
+whole_potato,whole_potato.n.01,potato.n.01
+half_beefsteak_tomato,half__beefsteak_tomato.n.01,tomato.n.01
+peanut_butter_jar,peanut_butter__jar.n.01,vessel.n.03
+salt_bottle,salt__bottle.n.01,vessel.n.03
+sealant_atomizer,sealant__atomizer.n.01,atomizer.n.01
+chlorine_bottle,chlorine__bottle.n.01,vessel.n.03
+chocolate_sauce_bottle,chocolate_sauce__bottle.n.01,vessel.n.03
+spray_paint_can,spray_paint__can.n.01,atomizer.n.01
+pineapple_juice_carton,pineapple_juice__carton.n.01,vessel.n.03
+grated_cheese_sack,grated_cheese__sack.n.01,container.n.01
+pottable_beefsteak_tomato,pottable__beefsteak_tomato.n.01,tomato.n.01
+diced_green_onion,diced__green_onion.n.01,onion.n.03
+whiskey_stone,whiskey_stone.n.01,rock.n.01
+cooked_diced_turkey,cooked__diced__turkey.n.04,poultry.n.02
+petfood_bag,petfood__bag.n.01,container.n.01
+half_mango,half__mango.n.02,edible_fruit.n.01
+cooked_salt,cooked__salt.n.02,flavorer.n.01
+brown_rice_sack,brown_rice__sack.n.01,container.n.01
+wax_jar,wax__jar.n.01,vessel.n.03
+half_whole_potato,half__whole_potato.n.01,potato.n.01
+cooked_cooking_oil,cooked__cooking_oil.n.01,vegetable_oil.n.01
+pasta_box,pasta__box.n.02,container.n.01
+half_mushroom,half_mushroom.n.05,vegetable.n.01
+apple_juice_bottle,apple_juice__bottle.n.01,vessel.n.03
+toilet_soap_bottle,toilet_soap__bottle.n.01,vessel.n.03
+white_sauce_bottle,white_sauce__bottle.n.01,vessel.n.03
+whiskey_bottle,whiskey__bottle.n.01,vessel.n.03
+cooked_cumin,cooked__cumin.n.02,edible_seed.n.01
+pottable_dahlia,pottable__dahlia.n.01,flower.n.01
+diced_zucchini,diced__zucchini.n.02,summer_squash.n.02
+feta_box,feta__box.n.01,container.n.01
+cooked_ramen,cooked__ramen.n.01,dish.n.02
+lemonade_bottle,lemonade__bottle.n.01,vessel.n.03
+broken_glass,broken__glass.n.02,container.n.01
+disinfectant_bottle,disinfectant__bottle.n.01,vessel.n.03
+diced_lemon,diced__lemon.n.01,citrus.n.01
+lemon_stain_remover,lemon_stain_remover.n.01,cleansing_agent.n.01
+cooked_salsa,cooked__salsa.n.01,condiment.n.01
+kiwi,kiwi.n.01,edible_fruit.n.01
+cooked_pasta,cooked__pasta.n.02,food.n.02
+iced_capuccino,iced_cappuccino.n.01,beverage.n.01
+sage_shaker,sage__shaker.n.02,container.n.01
+popcorn_bag,popcorn__bag.n.01,bag.n.01
+clove_jar,clove__jar.n.01,vessel.n.03
+granola_box,granola__box.n.01,container.n.01
+corn_flake_box,corn_flake__box.n.01,container.n.01
+lemon_water,lemon_water.n.01,beverage.n.01
+lubricant_bottle,lubricant__bottle.n.01,vessel.n.03
+frosting_jar,frosting__jar.n.01,vessel.n.03
+rice_cooker,rice_cooker.n.01,kitchen_appliance.n.01
+half_apple,half__apple.n.01,edible_fruit.n.01
+chicken_broth_carton,chicken_broth__carton.n.01,vessel.n.03
+vanilla_bottle,vanilla__bottle.n.02,vessel.n.03
+margarine_box,margarine__box.n.01,container.n.01
+tomato_paste_can,tomato_paste__can.n.01,container.n.01
+vodka_bottle,vodka_bottle.n.01,vessel.n.03
+tomato_sauce_jar,tomato_sauce__jar.n.01,vessel.n.03
+parmesan_bottle,parmesan__bottle.n.01,vessel.n.03
+allspice_shaker,allspice__shaker.n.03,container.n.01
+curry_powder_shaker,curry_powder__shaker.n.01,container.n.01
+cooked_red_wine,cooked__red_wine.n.01,wine.n.01
+diced_kiwi,diced__kiwi.n.01,edible_fruit.n.01
+cooked_oregano,cooked__oregano.n.01,origanum.n.01
+ice_cream_carton,ice_cream__carton.n.01,vessel.n.03
+yeast_bottle,yeast__bottle.n.01,vessel.n.03
+vitamin_pill_bottle,vitamin_pill__bottle.n.01,vessel.n.03
+cooked_diced_bell_pepper,cooked__diced__bell_pepper.n.02,sweet_pepper.n.02
+soil_bag,soil__bag.n.02,container.n.01
+bourbon_bottle,bourbon__bottle.n.01,vessel.n.03
+tupperware,tupperware.n.01,container.n.01
+cooked_black_bean,cooked__black_bean.n.01,dish.n.02
+coffee_bean_jar,coffee_bean__jar.n.01,vessel.n.03
+purse,purse.n.01,bag.n.01
+iced_chocolate,iced_chocolate.n.01,beverage.n.01
+diced_watermelon,diced__watermelon.n.02,edible_fruit.n.01
+half_zucchini,half__zucchini.n.02,summer_squash.n.02
+ground_beef_package,ground_beef__package.n.01,container.n.01
+freezer,freezer.n.01,white_goods.n.01
+oregano_shaker,oregano__shaker.n.01,container.n.01
+water_atomizer,water__atomizer.n.06,dispenser.n.01
+packed_ramen,packed_ramen.n.01,grocery.n.02
+mayonnaise_bottle,mayonnaise__bottle.n.01,vessel.n.03
+soup_bottle,soup__bottle.n.01,vessel.n.03
+lemon_sauce_bottle,lemon_sauce__bottle.n.01,vessel.n.03
+half_kiwi,half_kiwi.n.03,edible_fruit.n.01
+sake_box,sake_box.n.01,container.n.01
+milk_bottle,milk__bottle.n.01,vessel.n.03
+cookie_bag,cookie__bag.n.01,container.n.01
+powder_bottle,powder__bottle.n.03,vessel.n.03
+soy_milk_bottle,soy_milk__bottle.n.01,vessel.n.03
+half_pear,half_pear.n.01,edible_fruit.n.01
+chocolate_box,chocolate__box.n.02,container.n.01
+lasagna_box,lasagna__box.n.01,container.n.01
+soda_bottle,soda__bottle.n.01,vessel.n.03
+shelf_baseboard,shelf_baseboard.n.01,base.n.08
+mix_container,mix__container.n.01,container.n.01
+sake_bottle,sake__bottle.n.01,vessel.n.03
+vegetable_juice_box,vegetable_juice__box.n.01,vessel.n.03
+tonic_bottle,tonic__bottle.n.01,vessel.n.03
+shelf_back,shelf_back.n.01,support.n.10
+fruit_punch_bottle,fruit_punch__bottle.n.01,vessel.n.03
+salt_box,salt__box.n.01,grocery.n.02
+packaged_bread,packaged_bread.n.01,grocery.n.02
+half_coconut,half_coconut.n.02,edible_nut.n.01
+chip_bag,chip__bag.n.04,container.n.01
+chocolate_milk_carton,chocolate_milk__carton.n.01,vessel.n.03
+coffee_bottle,coffee__bottle.n.01,vessel.n.03
+canned_corn,canned_corn.n.01,canned_food.n.01
+tomato_paste_bottle,tomato_paste__bottle.n.01,vessel.n.03
+half_vidalia_onion,half__vidalia_onion.n.01,onion.n.03
+shampoo_dispenser,shampoo__dispenser.n.01,dispenser.n.01
+perfume_bottle,perfume__bottle.n.02,vessel.n.03
+sunscreen_pack,sunscreen__pack.n.01,container.n.01
+rice_box,rice__box.n.01,grocery.n.02
+cream_box,cream__box.n.02,grocery.n.02
+diced_green_onion,diced_green_onion.n.01,onion.n.03
+bagged_tea,bagged_tea.n.01,food.n.01
+auricularia_bag,auricularia__bag.n.01,container.n.01
+tea_bottle,tea__bottle.n.01,vessel.n.03
+cpu_board_box,cpu_board__box.n.01,container.n.01
+cologne_bottle,cologne__bottle.n.02,vessel.n.03
+medicine_bottle,medicine__bottle.n.02,vessel.n.03
+champagne_box,champagne_box.n.01,grocery.n.02
+insect_repellent_bottle,insect_repellent__bottle.n.01,vessel.n.03
+spaghetti_sauce_jar,spaghetti_sauce__jar.n.01,vessel.n.03
+coffee_bean_pouch,coffee_bean__pouch.n.01,container.n.01
+half_watermelon,half_watermelon.n.02,edible_fruit.n.01
+half_pineapple,half_pineapple.n.02,edible_fruit.n.01
+garlic_sauce_bottle,garlic_sauce__bottle.n.01,vessel.n.03
+apple_juice_box,apple_juice__box.n.01,vessel.n.03
+wine_box,wine_box.n.01,vessel.n.03
+toilet_paper_dispenser,toilet_paper_dispenser.n.01,home_appliance.n.01
+coconut_water_bottle,coconut_water__bottle.n.01,vessel.n.03
+elevator_door,elevator_door.n.01,door.n.01
+granola_bar_box,granola_bar__box.n.01,container.n.01
+shelf_top,shelf_top.n.01,support.n.10
+puree_jar,puree__jar.n.01,vessel.n.03
+ice_cream_box,ice_cream__box.n.01,container.n.01
+soy_milk_carton,soy_milk__carton.n.01,vessel.n.03
+beer_bottle,beer__bottle.n.01,vessel.n.03
+pasta_pack,pasta__pack.n.02,grocery.n.02
+cranberry_box,cranberry__box.n.02,grocery.n.02
+router_box,router__box.n.02,home_appliance.n.01
+water_bottle,water__bottle.n.06,vessel.n.03
+grain_jar,grain__jar.n.02,vessel.n.03
+half_strawberry,half_strawberry.n.01,edible_fruit.n.01
+shampoo_pack,shampoo_pack.n.01,container.n.01
+half_chestnut,half_chestnut.n.03,edible_nut.n.01
+papaya_juice_bottle,papaya_juice__bottle.n.01,vessel.n.03
+cereal_box,cereal__box.n.03,container.n.01
+sauce_bottle,sauce__bottle.n.01,vessel.n.03
+cane_sugar_box,cane_sugar__box.n.01,container.n.01
+yogurt_box,yogurt__box.n.01,container.n.01
+packed_cigarette,packed_cigarette.n.01,container.n.01
+icetea_can,icetea__can.n.01,container.n.01
+half_plum,half_plum.n.02,edible_fruit.n.01
+half_apple,half_apple.n.01,edible_fruit.n.01
+toothpaste_tube,toothpaste__tube.n.01,container.n.01
+cream_box,cream__box.n.01,container.n.01
+protein_pack,protein__pack.n.01,container.n.01
+oatmeal_box,oatmeal__box.n.01,container.n.01
+flour_bag,flour__bag.n.01,container.n.01
+sanitary_napkin_box,sanitary_napkin__box.n.01,container.n.01
+whiskey_box,whiskey_box.n.01,container.n.01
+tissue_box,tissue__box.n.01,container.n.01
+carrot_juice_bottle,carrot_juice__bottle.n.01,vessel.n.03
+hose_cart,hose_cart.n.01,implement.n.01
+cracker_box,cracker__box.n.01,container.n.01
+jam_dispenser,jam_dispenser.n.01,container.n.01
+orange_sauce_jar,orange_sauce__jar.n.01,vessel.n.03
+fruit_box,fruit__box.n.01,grocery.n.02
+sugar_jar,sugar__jar.n.01,container.n.01
+paint_bucket,paint__bucket.n.01,vessel.n.03
+rice_bag,rice__bag.n.01,container.n.01
+shitake_bag,shiitake__bag.n.01,container.n.01
+paper_towel_dispenser,paper_towel_dispenser.n.01,home_appliance.n.01
+oatmeal_container,oatmeal__container.n.01,container.n.01
+cream_cheese_bag,cream_cheese__bag.n.01,container.n.01
+ginger_beer_bottle,ginger_beer__bottle.n.01,vessel.n.03
+pop_bottle,pop__bottle.n.02,container.n.01
+conditioner_dispenser,conditioner__dispenser.n.01,dispenser.n.01
+tomato_juice_box,tomato_juice__box.n.01,vessel.n.03
+milk_container,milk__container.n.01,container.n.01
+isopropanol_dispenser,isopropanol__dispenser.n.01,dispenser.n.01
+pop_case,pop__case.n.02,container.n.01
+cocoa_bag,cocoa__bag.n.01,container.n.01
+deep_fryer,deep_fryer.n.01,kitchen_appliance.n.01
+orange_juice_bottle,orange_juice__bottle.n.01,vessel.n.03
+egg_carton,egg__carton.n.01,container.n.01
+milk_box,milk__box.n.01,grocery.n.02
+rum_box,rum_box.n.01,container.n.01
+detergent_bottle,detergent__bottle.n.02,container.n.01
+shelf_side,shelf_side.n.01,support.n.10
+flour_box,flour__box.n.01,grocery.n.02
+half_peach,half_peach.n.03,edible_fruit.n.01
+half_tomato,half_tomato.n.01,solanaceous_vegetable.n.01
+pesto_bottle,pesto__bottle.n.01,vessel.n.03
+lotion_tube,lotion__tube.n.01,container.n.01
+ink_cartridge_box,ink_cartridge__box.n.01,container.n.01
+mushroom_sauce_bottle,mushroom_sauce__bottle.n.01,vessel.n.03
+half_apricot,half_apricot.n.02,edible_fruit.n.01
+security_camera,security_camera.n.01,camera.n.01
+salad_bowl,salad__bowl.n.01,bowl.n.03
+tissue_dispenser,tissue_dispenser.n.01,dispenser.n.01
+barbecue_sauce__bottle,barbecue_sauce__bottle.n.01,vessel.n.03
+blueberry_compote,blueberry_compote.n.01,compote.n.01
+cherry_filling,cherry_filling.n.01,compote.n.01
+chicken_curry,chicken_curry.n.01,curry.n.01
+chickpea__can,chickpea__can.n.02,container.n.01
+chocolate_cookie_dough,chocolate_cookie_dough.n.01,dough.n.01
+cooked__black_pepper,cooked__black_pepper.n.02,pepper.n.03
+cooked__chicken_soup,cooked__chicken_soup.n.01,soup.n.01
+cooked__diced__tomato,cooked__diced__tomato.n.01,solanaceous_vegetable.n.01
+cooked__granulated_sugar,cooked__granulated_sugar.n.01,sugar.n.01
+cooked__kidney_bean,cooked__kidney_bean.n.01,common_bean.n.01
+cooked__olive_oil,cooked__olive_oil.n.01,vegetable_oil.n.01
+cooked__onion_powder,cooked__onion_powder.n.01,flavorer.n.01
+cooked__red_meat_sauce,cooked__red_meat_sauce.n.01,spaghetti_sauce.n.01
+cooked__soup,cooked__soup.n.01,dish.n.02
+cooked__water,cooked__water.n.06,food.n.01
+diced__chicken_breast,diced__chicken_breast.n.01,poultry.n.02
+diced__vidalia_onion,diced__vidalia_onion.n.01,onion.n.03
+half__egg,half__egg.n.02,foodstuff.n.02
+half__feta,half__feta.n.01,cheese.n.01
+melted__cheddar,melted__cheddar.n.01,cheese.n.01
+milk__carton,milk__carton.n.01,vessel.n.03
+poultry_seasoning,poultry_seasoning.n.01,flavorer.n.01
+rosemary__shaker,rosemary__shaker.n.02,container.n.01
+rubbing_alcohol__bottle,rubbing_alcohol__bottle.n.01,vessel.n.03
+sugar_coffee_scrub,sugar_coffee_scrub.n.01,soap.n.01
+tofu,tofu.n.02,curd.n.01
+soap__bottle,soap__bottle.n.01,vessel.n.03
+beer_box,beer_box.n.01,grocery.n.02
+half_lemon,half_lemon.n.01,citrus.n.01
+half_lemon,half__lemon.n.01,citrus.n.01
+boxed_chocolate,boxed_chocolate.n.01,grocery.n.02
+cooked__chickpea,cooked__chickpea.n.02,legume.n.01
+shelf_shelf,shelf_shelf.n.01,support.n.10
+butter__box,butter__box.n.01,grocery.n.02
+bagged_popcorn,bagged_popcorn.n.01,grocery.n.02
+bagged_ice_cream,bagged_ice_cream.n.01,grocery.n.02
+packaged_lemons,packaged_lemons.n.01,grocery.n.02
+candy__box,candy__box.n.01,grocery.n.02
+boxed_coffee,boxed_coffee.n.01,grocery.n.02
+boxed_cake,boxed_cake.n.01,grocery.n.02
+cooked__curry_powder,cooked__curry_powder.n.01,flavorer.n.01
+bagged_chocolate_bar,bagged_chocolate_bar.n.01,grocery.n.02
+half__watermelon,half__watermelon.n.02,melon.n.01
+bagged_chip,bagged_chip.n.01,grocery.n.02
+cooked__saffron,cooked__saffron.n.02,flavorer.n.01
+boxed_raspberries,boxed_raspberries.n.01,grocery.n.02
+cooked__diced__chorizo,cooked__diced__chorizo.n.01,sausage.n.01
+half_orange,half_orange.n.01,citrus.n.01
+half_orange,half__orange.n.01,citrus.n.01
+egg__box,egg__box.n.02,grocery.n.02
+half_pomegranate,half_pomegranate.n.02,edible_fruit.n.01
+half_pomegranate,half__pomegranate.n.02,edible_fruit.n.01
+wrapped_hamburger,wrapped_hamburger.n.01,grocery.n.02
+half_pomelo,half_pomelo.n.02,citrus.n.01
+half_pomelo,half__pomelo.n.02,citrus.n.01
+packaged_oranges,packaged_oranges.n.01,grocery.n.02
+boxed_butter,boxed_butter.n.01,grocery.n.02
+mix__box,mix__box.n.01,grocery.n.02
+brown_sugar__box,brown_sugar__box.n.01,grocery.n.02
+bagged_cookie,bagged_cookie.n.01,grocery.n.02
+saffron__shaker,saffron__shaker.n.02,container.n.01
+boxed_cookie,boxed_cookie.n.01,grocery.n.02
+cooked__white_wine,cooked__white_wine.n.01,wine.n.01
+half_vidalia_onion,half_vidalia_onion.n.01,onion.n.03
+half_vidalia_onion,half__vidalia_onion.n.01,onion.n.03
