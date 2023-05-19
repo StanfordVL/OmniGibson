@@ -1,0 +1,39 @@
+; cooking - but these are fully specialized. no general-across-objects here.
+(:rule
+    (:input
+        (flour.n.01)
+        (granulated_sugar.n.01)
+        (raw_egg.n.01)  ; how do I say I need 2? 
+        (vanilla.n.02)
+        (melted__butter.n.01)
+        (baking_powder.n.01)
+        (salt.n.02)
+    )
+    (:output 
+        (cookie_dough.n.01)
+    )
+    (:transitionrequirement
+        (toggled_on electric_mixer.n.01)
+        (contains flour.n.01 electric_mixer.n.01)
+        (contains granulated_sugar.n.01 electric_mixer.n.01)
+        (contains raw_egg.n.01 electric_mixer.n.01)
+        (contains vanilla.n.02 electric_mixer.n.01)
+        (contains melted__butter.n.01 electric_mixer.n.01)
+        (contains baking_powder.n.01 electric_mixer.n.01)
+        (contains salt.n.02 electric_mixer.n.01)
+    )
+)
+(:rule 
+    (:input 
+        (cookie_dough.n.01)
+    )
+    (:output 
+        (cooked sugar_cookie.n.01)
+    )
+    (:transitionrequirement
+        (toggled_on oven.n.01)
+        (inside cookie_dough.n.01 oven.n.01)
+        ; do I list all the different containers (pan, cookie sheet, etc.)
+        ;   that the cookie dough could possibly be on?
+    )
+)
