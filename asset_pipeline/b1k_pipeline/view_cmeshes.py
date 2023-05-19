@@ -1,106 +1,252 @@
-from concurrent import futures
+from contextlib import contextmanager
+import hashlib
 import os
-import random
-import subprocess
-import tempfile
-import traceback
-from dask.distributed import Client
-import itertools
-import tqdm
+import sys
 import numpy as np
+import tqdm
 
-import trimesh
-import pyglet
-import random
-import shutil
+import matplotlib.pyplot as plt
+import pybullet as p
+import json
+from fs.zipfs import ZipFS
+from fs.tempfs import TempFS
+import b1k_pipeline.utils
 
-
-input_files = [ 
-    r"D:\ig_pipeline\artifacts\aggregate\objects\glove\hsaxtc\shape\visual\glove-hsaxtc-base_link.obj", #glove
-    r"D:\ig_pipeline\artifacts\aggregate\objects\apple\qusmpx\shape\visual\apple-qusmpx-base_link.obj",  # apple
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\bowl\oyidja\shape\visual\bowl-oyidja-base_link.obj",    # bowl
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\board_game\qdkyzl\shape\visual\board_game-qdkyzl-base_link.obj",  # boardgame
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\door\lvgliq\shape\visual\door-lvgliq-base_link.obj",    # door
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\door\lvgliq\shape\visual\door-lvgliq-link_2.obj",       # door_with_handle
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\window\mjssrd\shape\visual\window-mjssrd-link_1.obj",   # shutter
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\window\fufios\shape\visual\window-fufios-link_0.obj",   # window
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\soup_ladle\xocqxg\shape\visual\soup_ladle-xocqxg-base_link.obj", #soup_laddle
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\salt_shaker\iomwtn\shape\visual\salt_shaker-iomwtn-base_link.obj", #salt_shaker
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\mug\ppzttc\shape\visual\mug-ppzttc-base_link.obj",      # mug
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\treadmill\ahwnhu\shape\visual\treadmill-ahwnhu-base_link.obj",  #treadmill
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\breakfast_table\bmnubh\shape\visual\breakfast_table-bmnubh-base_link.obj", #breakfast_table
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\saw\laysom\shape\visual\saw-laysom-base_link.obj",    #saw
-    # r"D:\ig_pipeline\artifacts\aggregate\objects\shelf\vehhll\shape\visual\shelf-vehhll-base_link.obj"    #shelf
-]
-
-dir_cmeshes = r"D:\cmeshes-test"
-dir_saved_cmeshes = r"D:\saved-cmeshes-test"
-os.makedirs(dir_saved_cmeshes, exist_ok=True)
+# These change the stepping logic
+YOUR_ID = 0
+TOTAL_IDS = 1
 
 
-def init_list_of_objects(size):
-    list_of_objects = list()
-    for i in range(0,size):
-        list_of_objects.append( list() ) #different object reference each time
-    return list_of_objects
+@contextmanager
+def suppress_stdout():
+    fd = sys.stdout.fileno()
 
-def view_meshes(dir_item):
-    scene = trimesh.Scene()
-    #s = trimesh.creation.icosphere()
-    transform = np.eye(4)
-    transform[:3, 3] = [0, 0, 3]
-    #scene.add_geometry(s, transform=transform)
-    
-    output_dir = os.path.join(dir_cmeshes, dir_item)
-    cmesh_files = os.listdir(output_dir)
+    def _redirect_stdout(to):
+        sys.stdout.close()  # + implicit flush()
+        os.dup2(to.fileno(), fd)  # fd writes to 'to' file
+        sys.stdout = os.fdopen(fd, "w")  # Python writes to fd
 
-    n_meshes = len(cmesh_files)
+    with os.fdopen(os.dup(fd), "w") as old_stdout:
+        with open(os.devnull, "w") as file:
+            _redirect_stdout(to=file)
+        try:
+            yield  # allow code to be run with the redirected stdout
+        finally:
+            _redirect_stdout(to=old_stdout)  # restore stdout.
+            # buffering and flags such as
+            # CLOEXEC may be different
 
-    mesh_counts = init_list_of_objects(n_meshes)
 
-    for i, fn in enumerate(cmesh_files):
-        output_filename = os.path.join(output_dir, fn)
+def load_mesh(mesh_fs, mesh_fn, index, offset=None, scale=None):
+    # First, load into trimesh
+    m = b1k_pipeline.utils.load_mesh(mesh_fs, mesh_fn, force="mesh", skip_materials=index > 0)
 
-        m = trimesh.load(output_filename, force="mesh")
-        aabb = m.bounding_box.extents
-        scale = np.array([1, 1, 1]) / aabb
-        min_scale = np.min(scale)
+    # Apply the desired offset if one is provided. Otherwise, center.
+    if offset is None:
+        offset = -m.centroid
+    m.apply_translation(offset)
 
-        translation = [i * 2, 0, 0]
-        transform = np.eye(4)
-        transform[:3, :3] = np.eye(3) * min_scale
-        transform[:3, 3] = translation
+    # Scale the object to fit in the [1, 1, 1] bounding box
+    if scale is None:
+        scale = 1 / m.bounding_box.extents.max()
+    m.apply_scale(scale)
 
-        bodies = m.split()
-        for b in bodies:
-            color = [random.randint(0,255), random.randint(0,255), random.randint(0,255), 255]
-            b.visual.face_colors = color
-            scene.add_geometry(b, transform=transform)
-        mesh_counts[i].append(len(bodies))
-    
-    for i in range(len(cmesh_files)):
-        print(f"Mesh counts: {i}: {np.median(mesh_counts[i])}")    
+    hulls = [m]
+    if index != 0:
+        hulls = m.split(only_watertight=True)
 
-    scene.show()
+    # Apply a different color to each part
+    cmap = plt.get_cmap('hsv')
+    colors = cmap(np.linspace(0, 1, len(hulls) + 1))
 
-    # Ask user to choose which is best mesh
-    while True:
-        comp_res = input("Choose a mesh to save 0-"+str(n_meshes)+" or 'x' for none:").lower()
-        if comp_res == 'x':
-            return 
-        for i in range(n_meshes):
-            if comp_res == str(i):
-                # save chosen file
-                src = os.path.join(output_dir, cmesh_files[i])
-                dst = os.path.join(dir_saved_cmeshes, cmesh_files[i])
-                shutil.copyfile(src, dst)
+    for smi, sm in enumerate(hulls):
+        with TempFS() as temp_fs:
+            # Save as an OBJ to a temp directory
+            b1k_pipeline.utils.save_mesh(sm, temp_fs, mesh_fn)
+
+            # Load the obj into pybullet
+            vis_kwargs = {
+                "shapeType": p.GEOM_MESH,
+                "fileName": temp_fs.getsyspath(mesh_fn),
+            }
+            if index > 0:
+                vis_kwargs["rgbaColor"] = colors[smi]
+            vis = p.createVisualShape(**vis_kwargs)
+            bid = p.createMultiBody(baseVisualShapeIndex=vis, basePosition=[index * 1.5, 0, 0])
+            if bid == -1:
+                print("Could not load mesh", mesh_fn)
                 return
+        
+    label = mesh_fn
+    if index == 0:
+        label = "visual"
+    volume = sum(x.volume for x in hulls)
+    p.addUserDebugText(
+        text=f"{index}\n{label[:6]}\nv={len(m.vertices)}\nh={len(hulls)}\nvol=\n{volume:.2e}",
+        textPosition=[index * 1.5, 0, -1],
+        textOrientation=p.getQuaternionFromEuler([np.pi/2, 0, 0]),
+        textSize=0.4,
+    )
+        
+    # Return the offset so that everything can be aligned the same way.
+    return offset, scale
 
 
+def select_mesh(target_output_fs, mesh_name):
+    with suppress_stdout():
+        p.connect(p.GUI)
+    
+    try:
+        p.addUserDebugText(
+            text=mesh_name,
+            textPosition=[1.5, 0, 1],
+            textOrientation=p.getQuaternionFromEuler([np.pi/2, 0, 0]),
+            textSize=0.5,
+        )
+
+        # First, load the visual mesh.
+        with suppress_stdout():
+            with target_output_fs.open("meshes.zip", "rb") as zip_file, \
+                    ZipFS(zip_file) as zip_fs, zip_fs.opendir(mesh_name) as mesh_fs:
+                visual_offset, visual_scale = load_mesh(mesh_fs, f"{mesh_name}.obj", 0)
+
+            # Load in each of the meshes
+            with target_output_fs.open("collision_meshes.zip", "rb") as zip_file, \
+                ZipFS(zip_file) as zip_fs, zip_fs.opendir(mesh_name) as mesh_fs:
+                candidates = []
+                filenames = [x.name for x in mesh_fs.filterdir('/', files=['*.obj'])]
+                for i, fn in enumerate(sorted(filenames)):
+                    # Load the candidate
+                    if load_mesh(mesh_fs, fn, i+1, visual_offset, visual_scale):
+                        candidates.append(fn.replace(".obj", ""))
+                    else:
+                        candidates.append(None)
+
+        # Fix the camera
+        p.resetDebugVisualizerCamera(cameraDistance=6, cameraYaw=0, cameraPitch=0, cameraTargetPosition=[len(candidates) * 1.5 / 2,0,0])
+
+        # Ask user to choose which is best mesh
+        mesh_opt = None
+        print("Choose a collision mesh for the object shown on the far left.")
+        print("Note that we need to pick a mesh for every object for the time being.")
+        print("If none of the collision meshes fits your objects well, still pick the best one.")
+        print("You will be able to leave a complaint for the objects that don't fit well.")
+        while True:
+            valid_inputs = [str(x) for x in range(1, len(candidates) + 1)]
+            comp_res = input(f"Choose a mesh to save 1-{len(candidates)} or 's' to temporarily skip: ").lower()
+            if comp_res == 's':
+                return None, None
+            try:
+                idx = valid_inputs.index(comp_res)
+                mesh_opt = candidates[idx]
+                break
+            except ValueError:
+                continue
+                
+        print("Was at least one of the collision mesh candidates acceptable?")
+        complaint = input("If so, press enter. Otherwise, type a complaint: ").strip()
+        complaint = complaint if complaint else None
+
+        return mesh_opt, complaint
+    finally:
+        with suppress_stdout():
+            p.disconnect()
+
+
+def main():
+    with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
+        all_targets = sorted(b1k_pipeline.utils.get_targets('objects'))
+
+        # Get a list of all the objects that have already been processed
+        print("Getting list of processed objects...")
+        selections = set()
+        for target in tqdm.tqdm(all_targets):
+            with pipeline_fs.target_output(target) as target_output_fs:
+                if not target_output_fs.exists("collision_selection.json"):
+                    continue
+
+                with target_output_fs.open("collision_selection.json", "r") as f:
+                    selections |= set(json.load(f).keys())
+
+        # Now get a list of all the objects that we can process.
+        print("Getting list of objects to process...")
+        candidates = {}
+        total_in_batch = 0
+        for target in tqdm.tqdm(all_targets):
+            with pipeline_fs.target_output(target) as target_output_fs:
+                if not target_output_fs.exists("collision_meshes.zip") or not target_output_fs.exists("object_list.json"):
+                    continue
+
+                with target_output_fs.open("object_list.json", "r") as f:
+                    mesh_list = json.load(f)["meshes"]
+
+                with target_output_fs.open("collision_meshes.zip", "rb") as zip_file, \
+                     ZipFS(zip_file) as zip_fs:
+                    for mesh_name in mesh_list:
+                        parsed_name = b1k_pipeline.utils.parse_name(mesh_name)
+                        if not parsed_name:
+                            print("Bad name", parsed_name)
+                            continue
+                        should_convert = (
+                            int(parsed_name.group("instance_id")) == 0 and
+                            not parsed_name.group("bad") and
+                            parsed_name.group("joint_side") != "upper")
+                        hash_int = int(hashlib.md5(mesh_name.encode()).hexdigest(), 16)
+                        if hash_int % TOTAL_IDS != YOUR_ID:
+                            continue
+                        if not should_convert:
+                            continue
+                        if not zip_fs.exists(mesh_name):
+                            print("Missing mesh", mesh_name)
+                            continue
+
+                        total_in_batch += 1
+
+                        if mesh_name in selections:
+                            continue
+                        candidates[mesh_name] = target
+    
+        print("Total objects (including completed) in your batch:", total_in_batch)
+
+        # Start iterating.
+        for i, (mesh_name, target) in enumerate(candidates.items()):
+            print("\n--------------------------------------------------------------------------")
+            print(f"{i + 1} / {len(candidates)}: {mesh_name} (from {target})\n")
+            with pipeline_fs.target_output(target) as target_output_fs:
+                # Load the meshes and do the selection.
+                result, complaint = select_mesh(target_output_fs, mesh_name)
+                if result is None:
+                    continue
+
+                # Now that we have the result, update the record
+                target_record = {}
+                if target_output_fs.exists("collision_selection.json"):
+                    with target_output_fs.open("collision_selection.json", "r") as f:
+                        target_record = json.load(f)
+                target_record[mesh_name] = result
+                with target_output_fs.open("collision_selection.json", "w") as f:
+                    json.dump(target_record, f, indent=4, sort_keys=True)
+
+            if complaint is not None:
+                parsed_name = b1k_pipeline.utils.parse_name(mesh_name)
+                object_key = parsed_name.group("category") + "-" + parsed_name.group("model_id")
+                complaint = {
+                    "object": object_key,
+                    "message": "Was at least one of the collision mesh candidates acceptable?",
+                    "complaint": complaint,
+                    "processed": False
+                }
+
+                with pipeline_fs.target(target) as target_fs:
+                    complaints_file = "complaints.json"
+                    complaints = []
+                    if target_fs.exists(complaints_file):
+                        with target_fs.open(complaints_file, "r") as f:
+                            complaints = json.load(f)
+                    complaints.append(complaint)
+                    with target_fs.open(complaints_file, "w") as f:
+                        json.dump(complaints, f, indent=4)
 
 
 if __name__ == "__main__":
-    cmesh_dirs = os.listdir(dir_cmeshes)
-    # iterate through each class of object meshes
-    for dir in tqdm.tqdm(cmesh_dirs):
-        view_meshes(dir)
+    main()

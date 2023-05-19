@@ -10,17 +10,19 @@ import tqdm
 import numpy as np
 import io
 import json
+import uuid
 
 import trimesh
 import random
 
+from fs.osfs import OSFS
 from fs.zipfs import ZipFS
 
 from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh
 
 VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 COACD_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
-CLIENT_NAME = 'viscam7.stanford.edu:35423'
+CLIENT_NAME = 'viscam3.stanford.edu:35423'
 
 COACD_TIMEOUT = 10 * 60 # 10 min
 
@@ -48,29 +50,32 @@ def option_bbox(m, dask_client):
     return [bbox]
 
 
-def option_coacd(m, dask_client, threshold, prep_resolution, max_convex_hull):
-    # Use IO to send the mesh to the worker
-    input_stream = io.BytesIO()
-    m.export(input_stream, file_type="obj")
-    coacd_future = dask_client.submit(
-        coacd_worker,
-        input_stream.getvalue(),
-        threshold, prep_resolution if not m.is_volume else None, max_convex_hull,
-        retries=10)
-    result = coacd_future.result()
-    if not result:
-        raise ValueError("coacd failed")
-    # Read the result back into a trimesh
-    output_stream = io.BytesIO(result)
-    combined_mesh = trimesh.load(output_stream, file_type="obj", force="mesh", skip_material=True,
-                                 merge_tex=True, merge_norm=True)
-    return combined_mesh.split(only_watertight=False)
+def generate_option_coacd(threshold, prep_resolution, max_convex_hull):
+    def _option_coacd(m, dask_client):
+        # Use IO to send the mesh to the worker
+        input_stream = io.BytesIO()
+        m.export(input_stream, file_type="obj")
+        coacd_future = dask_client.submit(
+            coacd_worker,
+            input_stream.getvalue(),
+            threshold, prep_resolution if not m.is_volume else None, max_convex_hull,
+            retries=1)
+        result = coacd_future.result()
+        if not result:
+            raise ValueError("coacd failed")
+        # Read the result back into a trimesh
+        output_stream = io.BytesIO(result)
+        combined_mesh = trimesh.load(output_stream, file_type="obj", force="mesh", skip_material=True,
+                                    merge_tex=True, merge_norm=True)
+        return combined_mesh.split(only_watertight=False)
+    
+    return _option_coacd
 
 
 def coacd_worker(file_bytes, t, pr, max_hull):
     # This is the function that runs on the worker. It needs to locally save the sent file bytes,
     # call VHACD on that file, grab the output file's contents and return it as a bytes object.
-    with tempfile.TemporaryDirectory() as td:
+    with tempfile.TemporaryDirectory(prefix=str(uuid.uuid4())) as td:
         in_path = os.path.join(td, "in.obj")
         out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
         with open(in_path, 'wb') as f:
@@ -78,41 +83,43 @@ def coacd_worker(file_bytes, t, pr, max_hull):
 
         vhacd_cmd = ["python", str(COACD_SCRIPT_PATH), in_path, out_path, "--threshold", t, "--max-convex-hull", max_hull]
         if pr:
-            vhacd_cmd.extend(["--preprocess", "--preprocess-resolution", pr])
+            vhacd_cmd.extend(["--preprocess", "true", "--preprocess-resolution", pr])
         else:
-            vhacd_cmd.append("--no-preprocess")
+            vhacd_cmd.extend(["--preprocess", "false"])
         try:
             subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
             with open(out_path, 'rb') as f:
                 return f.read()
         except subprocess.CalledProcessError as e:
-            raise ValueError(f"VHACD failed with exit code {e.returncode}. Output:\n{e.output}")
+            raise ValueError(f"COACD failed with exit code {e.returncode}. Output:\n{e.output}")
         except futures.CancelledError as e:
             raise ValueError("Got cancelled.")
 
 
-def option_vhacd(m, dask_client, resolution, depth, fillmode, errorp, split, edgelength, maxHullVertCount, maxHull):
-    input_stream = io.BytesIO()
-    m.export(input_stream, file_type="obj")
-    vhacd_future = dask_client.submit(
-        vhacd_worker,
-        input_stream.getvalue(),
-        resolution, depth, fillmode, errorp, split, edgelength, maxHullVertCount, maxHull,
-        retries=5)
-    result = vhacd_future.result()
-    if not result:
-        raise ValueError("vhacd failed")
-    # Read the result back into a trimesh
-    output_stream = io.BytesIO(result)
-    combined_mesh = trimesh.load(output_stream, file_type="obj", force="mesh", skip_material=True,
-                                 merge_tex=True, merge_norm=True)
-    return combined_mesh.split(only_watertight=False)
+def generate_option_vhacd(resolution, depth, fillmode, errorp, split, edgelength, maxHullVertCount, maxHull):
+    def _option_vhacd(m, dask_client):
+        input_stream = io.BytesIO()
+        m.export(input_stream, file_type="obj")
+        vhacd_future = dask_client.submit(
+            vhacd_worker,
+            input_stream.getvalue(),
+            resolution, depth, fillmode, errorp, split, edgelength, maxHullVertCount, maxHull,
+            retries=1)
+        result = vhacd_future.result()
+        if not result:
+            raise ValueError("vhacd failed")
+        # Read the result back into a trimesh
+        output_stream = io.BytesIO(result)
+        combined_mesh = trimesh.load(output_stream, file_type="obj", force="mesh", skip_material=True,
+                                    merge_tex=True, merge_norm=True)
+        return combined_mesh.split(only_watertight=False)
+    return _option_vhacd
 
 
 def vhacd_worker(file_bytes, resolution, depth, fillmode, errorp, split, edgelength, maxHullVertCount, maxHull):
     # This is the function that runs on the worker. It needs to locally save the sent file bytes,
     # call VHACD on that file, grab the output file's contents and return it as a bytes object.
-    with tempfile.TemporaryDirectory() as td:
+    with tempfile.TemporaryDirectory(prefix=str(uuid.uuid4())) as td:
         in_path = os.path.join(td, "in.obj")
         out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
         with open(in_path, 'wb') as f:
@@ -120,7 +127,9 @@ def vhacd_worker(file_bytes, resolution, depth, fillmode, errorp, split, edgelen
 
         vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", resolution, "-d", depth, "-f", fillmode, "-e", errorp, "-p", split, "-l", edgelength, "-v", maxHullVertCount, "-h", maxHull]
         try:
-            subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
+            proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
+            if not os.path.exists(out_path):
+                raise ValueError("VHACD failed to produce an output file. VHACD output:\n" + proc.stdout.decode("utf-8"))
             with open(out_path, 'rb') as f:
                 return f.read()
         except subprocess.CalledProcessError as e:
@@ -137,22 +146,29 @@ PROCESSING_OPTIONS = [
     # VHACD options
     (
         "vhacd-r_%s-d_%s-f_%s-e_%s-p_%s-l_%s-v%s-h%s" % param_combo,
-        lambda m, dask_client: option_vhacd(m, dask_client, *param_combo)
+        generate_option_vhacd(*param_combo)
     )
     for param_combo in itertools.product(resolutions, depth, fillmode, errorp, split, edgelength, maxHullVertCounts, maxHulls)
 ] + [
     # COACD options
     (
         "coacd-t_%s-pr_%s-c_%s" % param_combo,
-        lambda m, dask_client: option_coacd(m, dask_client, *param_combo)
+        generate_option_coacd(*param_combo)
     )
     for param_combo in itertools.product(thresholds, prep_resolutions, max_convex_hulls)
 ]
 
 
-def convexify_and_reduce(m):
-    convex_m = trimesh.convex.convex_hull(m)
-    assert convex_m.is_volume, f"Found non-watertight mesh - should not be possible"
+def convexify_and_reduce(m, dask_client):
+    try:
+        # Try directly converting the mesh into a convex hull
+        convex_m = trimesh.convex.convex_hull(m)
+    except:
+        # If that doesn't work, retry with a simplified VHACD run
+        convex_m = trimesh.convex.convex_hull(
+            option_vhacd(m, dask_client, "1000000", "20", "flood", "10", "true", "2", "60", "1")
+        )
+    assert convex_m.is_watertight, f"Found non-watertight mesh - should not be possible"
     
     # Check its vertex count and reduce as necessary
     reduced_m = convex_m
@@ -166,10 +182,10 @@ def convexify_and_reduce(m):
             raise ValueError("Vertex reduction failed.")
 
         reduction_target_face_count = int(reduction_target_vertex_count / len(convex_m.vertices) * len(convex_m.faces))
-        reduced_m = convex_m.simplify_quadratic_decimation(reduction_target_face_count)
+        reduced_m = convex_m.simplify_quadric_decimation(reduction_target_face_count)
         reduced_m = trimesh.convex.convex_hull(reduced_m)
 
-    assert reduced_m.is_volume, "Reduction & convexify resulted in non-volume mesh"
+    assert reduced_m.is_watertight, "Reduction & convexify resulted in non-watertight mesh"
     return reduced_m
 
 
@@ -178,7 +194,7 @@ def process_object_with_option(m, out_fs, option_name, option_fn, dask_client):
     submeshes = option_fn(m, dask_client)
 
     # Convexify and reduce each submesh
-    reduced_submeshes = [convexify_and_reduce(submesh) for submesh in submeshes]
+    reduced_submeshes = [convexify_and_reduce(submesh, dask_client) for submesh in submeshes]
     final_mesh = trimesh.util.concatenate(reduced_submeshes)
 
     # Save the result
@@ -189,28 +205,29 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
     with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
         mesh_list = json.load(f)["meshes"]
 
-    object_futures = {}
-    # Build the mesh tree using our mesh tree library. The scene code also uses this system.
     target_fs = pipeline_fs.target_output(target)
-    with target_fs.open("meshes.zip", "rb") as in_zip, \
-         target_fs.open("collision_meshes.zip", "wb") as out_zip:
-        with ZipFS(in_zip) as mesh_archive_fs, ZipFS(out_zip, write=True) as collision_mesh_archive_fs:
-            # Compute the in-fs hash.
-            in_hash = target_fs.hash("meshes.zip", "md5")
 
-            # Compare it to the saved hash if one exists.
+    # Compute the in-fs hash.
+    script_hash = OSFS(os.path.dirname(__file__)).hash(os.path.basename(__file__), "md5")
+    in_hash = target_fs.hash("meshes.zip", "md5")
+
+    # Compare it to the saved hash if one exists.
+    if target_fs.exists("collision_meshes.zip"):
+        with target_fs.open("collision_meshes.zip", "rb") as out_zip, \
+            ZipFS(out_zip) as collision_mesh_archive_fs:
             if collision_mesh_archive_fs.exists("hash.txt"):
                 with collision_mesh_archive_fs.open("hash.txt", "r") as f:
                     out_hash = f.read()
                 
                 # Return if the hash has not changed.
-                if in_hash == out_hash:
+                if in_hash + script_hash == out_hash:
                     return
-                
-            # Otherwise, clear the FS first.
-            collision_mesh_archive_fs.removetree("/")
 
+    with target_fs.open("meshes.zip", "rb") as in_zip, \
+         target_fs.open("collision_meshes.zip", "wb") as out_zip:
+        with ZipFS(in_zip) as mesh_archive_fs, ZipFS(out_zip, write=True) as collision_mesh_archive_fs:
             # Go through each object.
+            object_futures = {}
             for mesh_name in mesh_list:
                 # First decide if we need to process this
                 parsed_name = parse_name(mesh_name)
@@ -221,23 +238,24 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
                 if not should_convert:
                     continue
                 assert mesh_archive_fs.exists(mesh_name), f"Mesh {mesh_name} does not exist in the archive."
-                print(f"Start {mesh_name} from {target}")
+                # print(f"Start {mesh_name} from {target}")
 
                 # Load the mesh
                 m = load_mesh(mesh_archive_fs, f"{mesh_name}/{mesh_name}.obj", force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
                 
                 # Now queue a target for each of the processing options
+                mesh_dir = collision_mesh_archive_fs.makedir(mesh_name)
                 for option_name, option_fn in PROCESSING_OPTIONS:
-                    future = link_executor.submit(process_object_with_option, m, collision_mesh_archive_fs, option_name, option_fn, dask_client)
+                    future = link_executor.submit(process_object_with_option, m, mesh_dir, option_name, option_fn, dask_client)
                     object_futures[future] = mesh_name + "--" + option_name
         
-            # Save the hash
-            with collision_mesh_archive_fs.open("hash.txt", "w") as f:
-                f.write(in_hash)
-
             # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
             futures.wait(object_futures.keys())
-    
+
+            # Save the hash
+            with collision_mesh_archive_fs.open("hash.txt", "w") as f:
+                f.write(in_hash + script_hash)
+
             # Accumulate the errors
             error_msg = ""
             for future, root_node in object_futures.items():
@@ -255,7 +273,7 @@ def main():
         dask_client = Client(CLIENT_NAME)
         
         with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as mesh_executor:
-            targets = ["scenes/Rs_int"]  # get_targets("combined")
+            targets = get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[target_executor.submit(process_target, target, pipeline_fs, mesh_executor, dask_client)] = target
                     

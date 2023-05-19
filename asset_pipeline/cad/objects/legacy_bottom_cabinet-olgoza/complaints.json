@@ -16,5 +16,11 @@
         "message": "Confirm reasonable bounding box size:\n1.74m, 46.40cm, 96.82cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "depends on the synset",
         "processed": false
+    },
+    {
+        "object": "bottom_cabinet-olgoza",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": false
     }
 ]
