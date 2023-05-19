@@ -10,5 +10,11 @@
         "message": "Confirm reasonable bounding box size:\n1.69m, 98.53cm, 91.34cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
         "processed": false
+    },
+    {
+        "object": "breakfast_table-mwsyqb",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Some gaps in table legs are blocked",
+        "processed": false
     }
 ]

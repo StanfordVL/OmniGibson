@@ -10,5 +10,11 @@
         "message": "Confirm reasonable bounding box size:\n55.33cm, 1.06m, 1.59m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "depends on the synset but looks too big",
         "processed": false
+    },
+    {
+        "object": "bottom_cabinet_no_top-ufhpbn",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Cabinet holes are blocked",
+        "processed": false
     }
 ]
