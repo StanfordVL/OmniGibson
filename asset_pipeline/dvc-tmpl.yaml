@@ -160,7 +160,7 @@ stages:
     - cad/#{combined}/artifacts/meshes.zip
     - cad/#{combined}/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
-    - artifacts/pipeline/object_inventory.success
+    # - artifacts/pipeline/object_inventory.success  # TODO: Reactivate
     - artifacts/pipeline/sanitycheck.success
     - artifacts/pipeline/export_meshes.success
     - b1k_pipeline/export_objs_global.py

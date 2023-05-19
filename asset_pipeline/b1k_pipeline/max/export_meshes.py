@@ -472,7 +472,7 @@ def main():
 
             # Copy the temp_fs to the zip_fs
             print("Move files to archive.")
-            fs.copy.copy_fs(bakery_fs, zip_fs)
+            fs.copy.copy_fs(obj_out_fs, zip_fs)
             print("Finished copying.")
 
             unwrap_times = exp.unwrap_times

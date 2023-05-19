@@ -85,6 +85,10 @@ class NumpyEncoder(json.JSONEncoder):
 
 
 def run_remote_convex_decomposition(in_file, out_file, dask_client, use_coacd=True):
+    # Temporarily save visual mesh as collision mesh too
+    out_file.write(in_file.read())
+    return
+
     # This is the function that sends VHACD requests to a worker. It needs to read the contents
     # of the source file into memory, transmit that to the worker, receive the contents of the
     # result file and save those at the destination path.
@@ -678,7 +682,7 @@ def main():
         errors = {}
         target_futures = {}
 
-        dask_client = Client('svl3.stanford.edu:35423')
+        dask_client = None #  Client('svl3.stanford.edu:35423')
         
         with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
             targets = get_targets("combined")
