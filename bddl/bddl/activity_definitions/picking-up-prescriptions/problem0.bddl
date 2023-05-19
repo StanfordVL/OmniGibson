@@ -1,0 +1,45 @@
+(define (problem picking-up-prescriptions_0)
+    (:domain omnigibson)
+
+    (:objects
+        floor.n.01_1 - floor.n.01
+        pill_bottle.n.01_1 pill_bottle.n.01_2 - pill_bottle.n.01
+        medicine.n.02_1 medicine.n.02_2 - medicine.n.02
+        shelf.n.01_1 shelf.n.01_2 - shelf.n.01
+        plastic_bag.n.01_1 - plastic_bag.n.01
+        desk.n.01_1 - desk.n.01
+        printer.n.02_1 - printer.n.02
+        desktop_computer.n.01_1 - desktop_computer.n.01
+        writing_paper.n.01_1 - writing_paper.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside pill_bottle.n.01_1 shelf.n.01_1) 
+        (inside pill_bottle.n.01_2 shelf.n.01_1) 
+        (inside medicine.n.02_1 shelf.n.01_2) 
+        (inside medicine.n.02_2 shelf.n.01_2) 
+        (ontop plastic_bag.n.01_1 desk.n.01_1) 
+        (ontop printer.n.02_1 desk.n.01_1) 
+        (ontop desktop_computer.n.01_1 desk.n.01_1) 
+        (ontop writing_paper.n.01_1 printer.n.02_1) 
+        (inroom floor.n.01_1 grocery_store) 
+        (inroom shelf.n.01_1 grocery_store) 
+        (inroom shelf.n.01_2 grocery_store) 
+        (inroom desk.n.01_1 grocery_store) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall
+                (?pill_bottle.n.01 - pill_bottle.n.01)
+                (inside ?pill_bottle.n.01 ?plastic_bag.n.01_1)
+            )
+            (forall
+                (?medicine.n.02 - medicine.n.02)
+                (inside ?medicine.n.02 ?plastic_bag.n.01_1)
+            )
+        )
+    )
+)

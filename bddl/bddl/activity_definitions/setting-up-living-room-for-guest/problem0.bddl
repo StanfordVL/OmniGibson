@@ -1,0 +1,53 @@
+(define (problem setting-up-living-room-for-guest_0)
+    (:domain omnigibson)
+
+    (:objects
+     	chip.n.04_1 chip.n.04_2 chip.n.04_3 - chip.n.04
+    	bowl.n.01_1 - bowl.n.01
+    	shelf.n.01_1 - shelf.n.01
+    	novel.n.02_1 novel.n.02_2 novel.n.02_3 - novel.n.02
+    	table.n.02_1 - table.n.02
+    	floor.n.01_1 - floor.n.01
+        dust.n.01_1 - dust.n.01
+    	dustcloth.n.01_1 - dustcloth.n.01
+    	teddy.n.01_1 - teddy.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside chip.n.04_1 bowl.n.01_1) 
+        (inside chip.n.04_2 bowl.n.01_1) 
+        (inside chip.n.04_3 bowl.n.01_1) 
+        (inside bowl.n.01_1 shelf.n.01_1) 
+        (ontop novel.n.02_1 table.n.02_1) 
+        (ontop novel.n.02_2 table.n.02_1) 
+        (ontop novel.n.02_3 floor.n.01_1) 
+        (inside dustcloth.n.01_1 shelf.n.01_1) 
+        (ontop teddy.n.01_1 floor.n.01_1) 
+        (covered table.n.02_1 dust.n.01_1) 
+        (inroom floor.n.01_1 living_room) 
+        (inroom shelf.n.01_1 living_room) 
+        (inroom table.n.02_1 living_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?chip.n.04 - chip.n.04) 
+                (inside ?chip.n.04 ?bowl.n.01_1)
+            ) 
+            (ontop ?bowl.n.01_1 ?table.n.02_1) 
+            (forall 
+                (?novel.n.02 - novel.n.02) 
+                (inside ?novel.n.02 ?shelf.n.01_1)
+            ) 
+            (inside ?dustcloth.n.01_1 ?shelf.n.01_1) 
+            (folded ?dustcloth.n.01_1)
+            (inside ?teddy.n.01_1 ?shelf.n.01_1) 
+            (not 
+                (covered ?table.n.02_1 ?dust.n.01_1)
+            )
+        )
+    )
+)

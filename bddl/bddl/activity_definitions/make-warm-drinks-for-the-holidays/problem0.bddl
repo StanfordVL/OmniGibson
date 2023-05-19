@@ -1,0 +1,41 @@
+(define (problem make-warm-drinks-for-the-holidays_0)
+    (:domain omnigibson)
+
+    (:objects
+        bourbon.n.02_1 - bourbon.n.02
+        honey.n.01_1 - honey.n.01
+        lemon_juice.n.01_1 - lemon_juice.n.01
+        water.n.06_1 - water.n.06
+        beverage.n.01_1 - beverage.n.01
+        tablespoon.n.02_1 - tablespoon.n.02
+        mug.n.04_1 - mug.n.04
+        countertop.n.01_1 countertop.n.01_2 - countertop.n.01
+        bourbon__bottle.n.02_1 - bourbon__bottle.n.02 
+        honey__jar.n.01_1 - honey__jar.n.01 
+        lemon_juice__bottle.n.01_1 - lemon_juice__bottle.n.01 
+        water_bottle.n.01_1 - water_bottle.n.01
+    )
+
+    (:init
+        (filled bourbon__bottle.n.02_1 bourbon.n.02_1)
+        (ontop bourbon__bottle.n.02_1 countertop.n.01_1)
+        (filled honey__jar.n.01_1 honey.n.01_1)
+        (ontop honey__jar.n.01_1 countertop.n.01_1)
+        (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1)
+        (ontop lemon_juice__bottle.n.01_1 countertop.n.01_1)
+        (filled water_bottle.n.01_1 water.n.06_1)
+        (ontop water_bottle.n.01_1 countertop.n.01_1)
+        (ontop tablespoon.n.02_1 countertop.n.01_1)
+        (ontop mug.n.04_1 countertop.n.01_2)
+        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_2 kitchen)
+        (future beverage.n.01_1)
+    )
+
+    (:goal
+        (and
+            (real beverage.n.01_1)
+            (filled mug.n.04_1 beverage.n.01_1)
+        )
+    )
+)

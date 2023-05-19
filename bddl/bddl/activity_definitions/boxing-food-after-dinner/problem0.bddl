@@ -1,0 +1,34 @@
+(define (problem boxing-food-after-dinner_0)
+    (:domain omnigibson)
+
+    (:objects
+        breakfast_table.n.01_1 - breakfast_table.n.01
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        leftovers.n.01_1 leftovers.n.01_2 leftovers.n.01_3 - leftovers.n.01
+        tupperware.n.01_1 - tupperware.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop leftovers.n.01_1 breakfast_table.n.01_1) 
+        (ontop leftovers.n.01_2 breakfast_table.n.01_1) 
+        (ontop leftovers.n.01_3 breakfast_table.n.01_1) 
+        (ontop tupperware.n.01_1 breakfast_table.n.01_1) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom breakfast_table.n.01_1 dining_room) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?leftovers.n.01 - leftovers.n.01)
+                (inside ?leftovers.n.01 ?tupperware.n.01_1)
+            )
+            (inside ?tupperware.n.01_1 ?electric_refrigerator.n.01_1) 
+            (closed ?electric_refrigerator.n.01_1)
+        )
+    )
+)

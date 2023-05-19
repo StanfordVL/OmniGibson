@@ -1,0 +1,39 @@
+(define (problem stock-a-bar_0)
+    (:domain omnigibson)
+
+    (:objects
+        vodka__bottle.n.01_1 vodka__bottle.n.01_2 - vodka__bottle.n.01
+        crate.n.01_1 - crate.n.01
+        rum__bottle.n.01_1 rum__bottle.n.01_2 - rum__bottle.n.01
+        gin__bottle.n.01_1 - gin__bottle.n.01
+        shelf.n.01_1 - shelf.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside vodka__bottle.n.01_1 crate.n.01_1) 
+        (inside rum__bottle.n.01_1 crate.n.01_1) 
+        (inside gin__bottle.n.01_1 crate.n.01_1) 
+        (inside vodka__bottle.n.01_2 crate.n.01_1) 
+        (inside rum__bottle.n.01_2 crate.n.01_1) 
+        (ontop crate.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 bar) 
+        (inroom shelf.n.01_1 bar) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?vodka__bottle.n.01 - vodka__bottle.n.01)
+                (inside ?vodka__bottle.n.01 ?shelf.n.01_1)
+            )
+            (forall 
+                (?rum__bottle.n.01 - rum__bottle.n.01)
+                (inside ?rum__bottle.n.01 ?shelf.n.01_1)
+            )
+            (inside ?gin__bottle.n.01_1 ?shelf.n.01_1)
+        )
+    )
+)

@@ -1,0 +1,31 @@
+(define (problem clean-the-exterior-of-your-garage_1)
+    (:domain omnigibson)
+
+    (:objects
+     	liquid_soap.n.01_1 - liquid_soap.n.01
+    	door.n.01_1 - door.n.01
+    	sponge.n.01_1 - sponge.n.01
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (not 
+            (covered door.n.01_1 liquid_soap.n.01_1)
+        ) 
+        (ontop sponge.n.01_1 floor.n.01_1) 
+        (not 
+            (saturated sponge.n.01_1 liquid_soap.n.01_1)
+        ) 
+        (inroom door.n.01_1 garage) 
+        (inroom floor.n.01_1 garage) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (covered ?door.n.01_1 ?liquid_soap.n.01_1) 
+            (saturated ?sponge.n.01_1 ?liquid_soap.n.01_1)
+        )
+    )
+)

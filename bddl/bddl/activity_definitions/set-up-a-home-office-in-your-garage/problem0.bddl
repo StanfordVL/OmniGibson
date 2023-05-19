@@ -1,0 +1,35 @@
+(define (problem set-up-a-home-office-in-your-garage_0)
+    (:domain omnigibson)
+
+    (:objects
+        table_lamp.n.01_1 - table_lamp.n.01
+        floor.n.01_1 - floor.n.01
+        computer.n.01_1 - computer.n.01
+        router.n.02_1 - router.n.02
+        carton.n.02_1 - carton.n.02
+        swivel_chair.n.01_1 - swivel_chair.n.01
+        wall.n.01_1 - wall.n.01
+        desk.n.01_1 - desk.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside table_lamp.n.01_1 carton.n.02_1) 
+        (inside computer.n.01_1 carton.n.02_1) 
+        (inside router.n.02_1 carton.n.02_1) 
+        (ontop carton.n.02_1 floor.n.01_1)
+        (inroom floor.n.01_1 corridor) 
+        (inroom swivel_chair.n.01_1 garage) 
+        (inroom wall.n.01_1 garage) 
+        (inroom desk.n.01_1 garage) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (ontop ?table_lamp.n.01_1 ?desk.n.01_1) 
+            (ontop ?computer.n.01_1 ?desk.n.01_1) 
+            (ontop ?router.n.02_1 ?floor.n.01_1)
+        )
+    )
+)

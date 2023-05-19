@@ -1,0 +1,64 @@
+(define (problem make-beef-and-broccoli_0)
+    (:domain omnigibson)
+
+    (:objects
+        steak.n.01_1 - steak.n.01
+        cooked__diced__steak.n.01_1 - cooked__diced__steak.n.01
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        broccoli.n.02_1 broccoli.n.02_2 broccoli.n.02_3 - broccoli.n.02
+        cooked__diced__broccoli.n.02_1 - cooked__diced__broccoli.n.02
+        garlic.n.02_1 - garlic.n.02
+        cooked__diced__garlic.n.02_1 - cooked__diced__garlic.n.02
+        wok.n.01_1 - wok.n.01
+        soy_sauce.n.01_1 - soy_sauce.n.01
+        soy_sauce__bottle.n.01_1 - soy_sauce__bottle.n.01
+        oven.n.01_1 - oven.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside steak.n.01_1 electric_refrigerator.n.01_1) 
+        (inside broccoli.n.02_1 electric_refrigerator.n.01_1) 
+        (inside broccoli.n.02_2 electric_refrigerator.n.01_1) 
+        (inside broccoli.n.02_3 electric_refrigerator.n.01_1) 
+        (inside garlic.n.02_1 electric_refrigerator.n.01_1) 
+        (filled soy_sauce__bottle.n.01_1 soy_sauce.n.01_1) 
+        (inside soy_sauce__bottle.n.01_1 electric_refrigerator.n.01_1) 
+        (inroom oven.n.01_1 kitchen) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (future cooked__diced__steak.n.01_1)
+        (future cooked__diced__broccoli.n.02_1)
+        (future cooked__diced__garlic.n.02_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (not 
+            (cooked steak.n.01_1)
+        ) 
+        (not 
+            (cooked broccoli.n.02_1)
+        ) 
+        (not 
+            (cooked broccoli.n.02_2)
+        ) 
+        (not 
+            (cooked broccoli.n.02_3)
+        ) 
+        (not 
+            (cooked garlic.n.02_1)
+        )
+        (inside wok.n.01_1 oven.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (real ?cooked__diced__garlic.n.02_1)
+            (real ?cooked__diced__broccoli.n.02_1)
+            (real ?cooked__diced__steak.n.01_1)
+            (contains ?wok.n.01_1 ?cooked__diced__steak.n.01_1) 
+            (contains ?wok.n.01_1 ?cooked__diced__broccoli.n.02_1) 
+            (contains ?wok.n.01_1 ?soy_sauce.n.01_1) 
+            (contains ?wok.n.01_1 ?cooked__diced__garlic.n.02_1) 
+        )
+    )
+)

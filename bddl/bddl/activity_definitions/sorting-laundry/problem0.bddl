@@ -1,0 +1,157 @@
+(define (problem sorting-laundry_0)
+    (:domain omnigibson)
+
+    (:objects
+        lingerie.n.01_1 lingerie.n.01_2 lingerie.n.01_3 lingerie.n.01_4 - lingerie.n.01
+        hamper.n.02_1 - hamper.n.02
+        sock.n.01_1 sock.n.01_2 sock.n.01_3 sock.n.01_4 - sock.n.01
+        sheet.n.03_1 sheet.n.03_2 - sheet.n.03
+        jersey.n.03_1 jersey.n.03_2 jersey.n.03_3 - jersey.n.03
+        table_linen.n.01_1 table_linen.n.01_2 - table_linen.n.01
+        jean.n.01_1 jean.n.01_2 jean.n.01_3 jean.n.01_4 - jean.n.01
+        floor.n.01_1 - floor.n.01
+        cabinet.n.01_1 cabinet.n.01_2 - cabinet.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside lingerie.n.01_1 hamper.n.02_1) 
+        (inside lingerie.n.01_2 hamper.n.02_1) 
+        (inside lingerie.n.01_3 hamper.n.02_1) 
+        (inside lingerie.n.01_4 hamper.n.02_1) 
+        (inside jean.n.01_1 hamper.n.02_1) 
+        (inside jean.n.01_2 hamper.n.02_1) 
+        (inside jean.n.01_3 hamper.n.02_1) 
+        (inside jean.n.01_4 hamper.n.02_1) 
+        (inside sock.n.01_1 hamper.n.02_1) 
+        (inside sock.n.01_2 hamper.n.02_1) 
+        (inside sock.n.01_3 hamper.n.02_1) 
+        (inside sock.n.01_4 hamper.n.02_1) 
+        (inside sheet.n.03_1 hamper.n.02_1) 
+        (inside sheet.n.03_2 hamper.n.02_1) 
+        (inside jersey.n.03_1 hamper.n.02_1) 
+        (inside jersey.n.03_2 hamper.n.02_1) 
+        (inside jersey.n.03_3 hamper.n.02_1) 
+        (inside table_linen.n.01_1 hamper.n.02_1) 
+        (inside table_linen.n.01_2 hamper.n.02_1) 
+        (ontop hamper.n.02_1 floor.n.01_1) 
+        (inroom floor.n.01_1 utility_room) 
+        (inroom cabinet.n.01_1 utility_room) 
+        (inroom cabinet.n.01_2 utility_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (exists 
+                (?cabinet.n.01 - cabinet.n.01)
+                (forall 
+                    (?lingerie.n.01 - lingerie.n.01)
+                    (and
+                        (folded ?lingerie.n.01)
+                        (inside ?lingerie.n.01 ?cabinet.n.01)
+                        (or 
+                            (nextto ?lingerie.n.01 ?lingerie.n.01_1)
+                            (nextto ?lingerie.n.01 ?lingerie.n.01_2)
+                            (nextto ?lingerie.n.01 ?lingerie.n.01_3)
+                            (nextto ?lingerie.n.01 ?lingerie.n.01_4)
+                        )
+                    )
+                )
+            )
+            (exists 
+                (?cabinet.n.01 - cabinet.n.01)
+                (forall 
+                    (?sock.n.01 - sock.n.01)
+                    (and
+                        (folded ?sock.n.01)
+                        (inside ?sock.n.01 ?cabinet.n.01)
+                        (or 
+                            (nextto ?sock.n.01 ?sock.n.01_1)
+                            (nextto ?sock.n.01 ?sock.n.01_2)
+                            (nextto ?sock.n.01 ?sock.n.01_3)
+                            (nextto ?sock.n.01 ?sock.n.01_4)
+                        )
+                    )
+                )
+            )
+            (exists 
+                (?cabinet.n.01 - cabinet.n.01)
+                (exists 
+                    (?jean.n.01 - jean.n.01)
+                    (inside ?jean.n.01 ?cabinet.n.01)
+                )
+            )
+            (forn
+                (3) 
+                (?jean.n.01 - jean.n.01)
+                (or 
+                    (nextto ?jean.n.01 ?jean.n.01_1)
+                    (nextto ?jean.n.01 ?jean.n.01_2)
+                    (nextto ?jean.n.01 ?jean.n.01_3)
+                    (nextto ?jean.n.01 ?jean.n.01_4)
+                )
+            )
+            (forall 
+                (?jean.n.01 - jean.n.01)
+                (folded ?jean.n.01)
+            )
+            (exists 
+                (?cabinet.n.01 - cabinet.n.01)
+                (exists 
+                    (?jersey.n.03 - jersey.n.03)
+                    (inside ?jersey.n.03 ?cabinet.n.01)
+                )
+            )
+            (forn
+                (2) 
+                (?jersey.n.03 - jersey.n.03)
+                (or 
+                    (nextto ?jersey.n.03 ?jersey.n.03_1)
+                    (nextto ?jersey.n.03 ?jersey.n.03_2)
+                    (nextto ?jersey.n.03 ?jersey.n.03_3)
+                )
+            )
+            (forall 
+                (?jersey.n.03 - jersey.n.03)
+                (folded ?jersey.n.03)
+            )
+            (exists 
+                (?cabinet.n.01 - cabinet.n.01)
+                (exists 
+                    (?sheet.n.03 - sheet.n.03)
+                    (inside ?sheet.n.03 ?cabinet.n.01)
+                )
+            )
+            (exists
+                (?sheet.n.03 - sheet.n.03)
+                (or 
+                    (nextto ?sheet.n.03 ?sheet.n.03_1)
+                    (nextto ?sheet.n.03 ?sheet.n.03_2)
+                )
+            )
+            (forall 
+                (?sheet.n.03 - sheet.n.03)
+                (folded ?sheet.n.03)
+            )
+            (exists 
+                (?cabinet.n.01 - cabinet.n.01)
+                (exists 
+                    (?table_linen.n.01 - table_linen.n.01)
+                    (inside ?table_linen.n.01 ?cabinet.n.01)
+                )
+            )
+            (exists
+                (?table_linen.n.01 - table_linen.n.01)
+                (or 
+                    (nextto ?table_linen.n.01 ?table_linen.n.01_1)
+                    (nextto ?table_linen.n.01 ?table_linen.n.01_2)
+                )
+            )
+            (forall 
+                (?table_linen.n.01 - table_linen.n.01)
+                (folded ?table_linen.n.01)
+            )
+        )
+    )
+)

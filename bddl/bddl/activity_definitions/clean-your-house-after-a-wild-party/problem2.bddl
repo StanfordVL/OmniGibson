@@ -1,0 +1,56 @@
+(define (problem clean-your-house-after-a-wild-party_2)
+    (:domain omnigibson)
+
+    (:objects
+     	dixie_cup.n.01_1 dixie_cup.n.01_2 - dixie_cup.n.01
+    	floor.n.01_1 - floor.n.01
+    	coffee_table.n.01_1 - coffee_table.n.01
+        plate.n.04_1 plate.n.04_2 - plate.n.04
+    	beer_bottle.n.01_1 beer_bottle.n.01_2 beer_bottle.n.01_3 - beer_bottle.n.01
+    	cake.n.03_1 - cake.n.03
+    	cola__bottle.n.01_1 - cola__bottle.n.01
+    	pizza_box.n.01_1 - pizza_box.n.01
+    	broom.n.01_1 - broom.n.01
+    	bucket.n.01_1 - bucket.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop dixie_cup.n.01_1 floor.n.01_1) 
+        (ontop dixie_cup.n.01_2 coffee_table.n.01_1) 
+        (ontop plate.n.04_1 coffee_table.n.01_1)
+        (ontop plate.n.04_2 coffee_table.n.01_1)
+        (ontop beer_bottle.n.01_1 coffee_table.n.01_1) 
+        (ontop cake.n.03_1 coffee_table.n.01_1) 
+        (ontop beer_bottle.n.01_1 floor.n.01_1) 
+        (ontop beer_bottle.n.01_2 floor.n.01_1) 
+        (ontop beer_bottle.n.01_3 coffee_table.n.01_1) 
+        (ontop cola__bottle.n.01_1 floor.n.01_1) 
+        (ontop pizza_box.n.01_1 floor.n.01_1) 
+        (ontop broom.n.01_1 bucket.n.01_1) 
+        (ontop bucket.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 living_room) 
+        (inroom coffee_table.n.01_1 living_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?dixie_cup.n.01 - dixie_cup.n.01) 
+                (ontop ?dixie_cup.n.01 ?bucket.n.01_1)
+            ) 
+            (forall 
+                (?plate.n.04 - plate.n.04)
+                (ontop ?plate.n.04 ?bucket.n.01_1)
+            ) 
+            (forall 
+                (?beer_bottle.n.01 - beer_bottle.n.01) 
+                (ontop ?beer_bottle.n.01 ?bucket.n.01_1)
+            ) 
+            (ontop ?cake.n.03_1 ?bucket.n.01_1) 
+            (ontop ?cola__bottle.n.01_1 ?bucket.n.01_1) 
+            (ontop ?pizza_box.n.01_1 ?bucket.n.01_1)
+        )
+    )
+)

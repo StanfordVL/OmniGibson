@@ -1,0 +1,39 @@
+(define (problem packing-hobby-equipment_0)
+    (:domain omnigibson)
+
+    (:objects
+     	puzzle.n.02_1 puzzle.n.02_2 - puzzle.n.02
+    	sofa.n.01_1 - sofa.n.01
+    	carton.n.02_1 - carton.n.02
+    	floor.n.01_1 - floor.n.01
+    	baseball.n.02_1 - baseball.n.02
+    	soccer_ball.n.01_1 - soccer_ball.n.01
+    	window.n.01_1 - window.n.01
+    	shelf.n.01_1 - shelf.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop puzzle.n.02_1 sofa.n.01_1) 
+        (ontop puzzle.n.02_2 sofa.n.01_1) 
+        (ontop carton.n.02_1 floor.n.01_1) 
+        (ontop baseball.n.02_1 floor.n.01_1) 
+        (ontop soccer_ball.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 living_room) 
+        (inroom window.n.01_1 living_room) 
+        (inroom sofa.n.01_1 living_room) 
+        (inroom shelf.n.01_1 living_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (inside ?baseball.n.02_1 ?carton.n.02_1) 
+            (inside ?soccer_ball.n.01_1 ?carton.n.02_1)  
+            (forall 
+                (?puzzle.n.02 - puzzle.n.02) 
+                (inside ?puzzle.n.02 ?shelf.n.01_1)
+            )
+        )
+    )
+)

@@ -1,0 +1,59 @@
+(define (problem buy-food-for-vegetarians_0)
+    (:domain omnigibson)
+
+    (:objects
+             cash_register.n.01_1 - cash_register.n.01
+            checkout.n.03_1 - checkout.n.03
+            apple_juice__bottle.n.01_1 - apple_juice__bottle.n.01
+            shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 shelf.n.01_4 - shelf.n.01
+            water_bottle.n.01_1 - water_bottle.n.01
+            lentil__box.n.01_1 - lentil__box.n.01
+            quinoa__box.n.01_1 - quinoa__box.n.01
+            mushroom.n.05_1 - mushroom.n.05
+            sweet_potato.n.01_1 - sweet_potato.n.01
+            money.n.01_1 money.n.01_2 money.n.01_3 - money.n.01
+            floor.n.01_1 - floor.n.01
+            agent.n.01_1 - agent.n.01
+        )
+    
+    (:init 
+        (ontop cash_register.n.01_1 checkout.n.03_1) 
+        (closed cash_register.n.01_1) 
+        (ontop apple_juice__bottle.n.01_1 shelf.n.01_1) 
+        (ontop water_bottle.n.01_1 shelf.n.01_1) 
+        (ontop lentil__box.n.01_1 shelf.n.01_2) 
+        (ontop quinoa__box.n.01_1 shelf.n.01_2) 
+        (ontop mushroom.n.05_1 shelf.n.01_3) 
+        (ontop sweet_potato.n.01_1 shelf.n.01_4) 
+        (ontop money.n.01_1 checkout.n.03_1) 
+        (ontop money.n.01_2 checkout.n.03_1) 
+        (ontop money.n.01_3 checkout.n.03_1) 
+        (inroom floor.n.01_1 grocery_store) 
+        (inroom checkout.n.03_1 grocery_store) 
+        (inroom shelf.n.01_1 grocery_store) 
+        (inroom shelf.n.01_2 grocery_store) 
+        (inroom shelf.n.01_3 grocery_store) 
+        (inroom shelf.n.01_4 grocery_store) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    
+    )
+    
+    (:goal 
+        (and 
+            (open ?cash_register.n.01_1) 
+            (ontop ?water_bottle.n.01_1 ?checkout.n.03_1) 
+            (ontop ?apple_juice__bottle.n.01_1 ?checkout.n.03_1) 
+            (ontop ?lentil__box.n.01_1 ?checkout.n.03_1) 
+            (ontop ?quinoa__box.n.01_1 ?checkout.n.03_1) 
+            (ontop ?mushroom.n.05_1 ?checkout.n.03_1) 
+            (ontop ?sweet_potato.n.01_1 ?checkout.n.03_1) 
+            (forall 
+                (?money.n.01 - money.n.01) 
+                (ontop ?money.n.01 ?cash_register.n.01_1)
+    
+            )
+    
+        )
+    
+    )
+)

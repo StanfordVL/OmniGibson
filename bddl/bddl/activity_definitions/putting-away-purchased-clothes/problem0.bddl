@@ -1,0 +1,62 @@
+(define (problem putting-away-purchased-clothes_0)
+    (:domain omnigibson)
+
+    (:objects
+        jean.n.01_1 jean.n.01_2 - jean.n.01
+        floor.n.01_1 - floor.n.01
+        jersey.n.03_1 jersey.n.03_2 - jersey.n.03
+        desk.n.01_1 - desk.n.01
+        sweater.n.01_1 sweater.n.01_2 - sweater.n.01
+        hanger.n.02_1 hanger.n.02_2 hanger.n.02_3 hanger.n.02_4 hanger.n.02_5 hanger.n.02_6 - hanger.n.02
+        wardrobe.n.01_1 - wardrobe.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop jean.n.01_1 floor.n.01_1) 
+        (ontop jean.n.01_2 floor.n.01_1) 
+        (ontop jersey.n.03_1 desk.n.01_1) 
+        (ontop jersey.n.03_2 desk.n.01_1) 
+        (ontop sweater.n.01_1 desk.n.01_1) 
+        (ontop sweater.n.01_2 desk.n.01_1) 
+        (attached hanger.n.02_1 wardrobe.n.01_1)
+        (attached hanger.n.02_2 wardrobe.n.01_1)
+        (attached hanger.n.02_3 wardrobe.n.01_1)
+        (attached hanger.n.02_4 wardrobe.n.01_1)
+        (attached hanger.n.02_5 wardrobe.n.01_1)
+        (attached hanger.n.02_6 wardrobe.n.01_1)
+        (inroom floor.n.01_1 closet) 
+        (inroom desk.n.01_1 closet) 
+        (inroom wardrobe.n.01_1 closet) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forpairs 
+                (?jean.n.01 - jean.n.01)
+                (?hanger.n.02 - hanger.n.02)
+                (and 
+                    (draped ?jean.n.01 ?hanger.n.02)
+                    (attached ?hanger.n.02 ?wardrobe.n.01_1)
+                )
+            )
+            (forpairs 
+                (?jersey.n.03 - jersey.n.03)
+                (?hanger.n.02 - hanger.n.02)
+                (and 
+                    (draped ?jersey.n.03 ?hanger.n.02)
+                    (attached ?hanger.n.02 ?wardrobe.n.01_1)
+                )
+            )
+            (forpairs 
+                (?sweater.n.01 - sweater.n.01)
+                (?hanger.n.02 - hanger.n.02)
+                (and 
+                    (draped ?sweater.n.01 ?hanger.n.02)
+                    (attached ?hanger.n.02 ?wardrobe.n.01_1)
+                )
+            )
+        )
+    )
+)

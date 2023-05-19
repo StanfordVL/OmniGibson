@@ -1,0 +1,70 @@
+(define (problem grill-burgers_0)
+    (:domain omnigibson)
+
+    (:objects
+        grill.n.02_1 - grill.n.02
+        tupperware.n.01_1 - tupperware.n.01
+        sack.n.01_1 - sack.n.01
+        stool.n.01_1 stool.n.01_2 - stool.n.01
+        patty.n.01_1 patty.n.01_2 patty.n.01_3 patty.n.01_4 - patty.n.01
+        spatula.n.01_1 - spatula.n.01
+        toasting_fork.n.01_1 - toasting_fork.n.01
+        tongs.n.01_1 - tongs.n.01
+        cigar_lighter.n.01_1 - cigar_lighter.n.01
+        bap.n.01_1 bap.n.01_2 bap.n.01_3 bap.n.01_4 - bap.n.01
+        driveway.n.01_1 - driveway.n.01
+        lawn.n.01_1 - lawn.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop stool.n.01_1 lawn.n.01_1)
+        (ontop stool.n.01_2 lawn.n.01_1)
+        (ontop tupperware.n.01_1 stool.n.01_1)
+        (inside patty.n.01_1 tupperware.n.01_1) 
+        (inside patty.n.01_2 tupperware.n.01_1) 
+        (inside patty.n.01_3 tupperware.n.01_1) 
+        (inside patty.n.01_4 tupperware.n.01_1) 
+        (not 
+            (cooked patty.n.01_1)
+        ) 
+        (not 
+            (cooked patty.n.01_2)
+        ) 
+        (not 
+            (cooked patty.n.01_3)
+        ) 
+        (not 
+            (cooked patty.n.01_4)
+        ) 
+        (ontop sack.n.01_1 stool.n.01_1)
+        (inside bap.n.01_1 sack.n.01_1)
+        (inside bap.n.01_2 sack.n.01_1)
+        (inside bap.n.01_3 sack.n.01_1)
+        (inside bap.n.01_4 sack.n.01_1)
+        (ontop spatula.n.01_1 stool.n.01_2) 
+        (ontop toasting_fork.n.01_1 stool.n.01_2) 
+        (ontop tongs.n.01_1 stool.n.01_2) 
+        (ontop cigar_lighter.n.01_1 stool.n.01_2)
+        (inroom grill.n.02_1 garden) 
+        (inroom lawn.n.01_1 garden) 
+        (inroom driveway.n.01_1 garden) 
+        (inroom floor.n.01_1 garden) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?patty.n.01 - patty.n.01) 
+                (cooked ?patty.n.01)
+            ) 
+            (forpairs 
+                (?patty.n.01 - patty.n.01) 
+                (?bap.n.01 - bap.n.01) 
+                (ontop ?patty.n.01 ?bap.n.01)
+            ) 
+        )
+    )
+)

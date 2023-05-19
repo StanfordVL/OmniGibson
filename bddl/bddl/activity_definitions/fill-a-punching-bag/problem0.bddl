@@ -1,0 +1,25 @@
+(define (problem fill-a-punching-bag_0)
+    (:domain omnigibson)
+
+    (:objects
+        sand.n.01_1 - sand.n.01
+        bucket.n.01_1 - bucket.n.01
+        punching_bag.n.02_1 - punching_bag.n.02
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (filled bucket.n.01_1 sand.n.01_1) 
+        (ontop punching_bag.n.02_1 floor.n.01_1) 
+        (ontop bucket.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 garage) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (filled ?punching_bag.n.02_1 ?sand.n.01_1) 
+        )
+    )
+)

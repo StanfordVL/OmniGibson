@@ -1,0 +1,32 @@
+(define (problem donating-toys_1)
+    (:domain omnigibson)
+
+    (:objects
+        reception.n.04_1 - reception.n.04
+        floor.n.01_1 - floor.n.01
+        teddy.n.01_1 - teddy.n.01
+        carton.n.02_1 - carton.n.02
+        puzzle.n.02_1 - puzzle.n.02
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop reception.n.04_1 floor.n.01_1) 
+        (ontop teddy.n.01_1 carton.n.02_1) 
+        (ontop carton.n.02_1 floor.n.01_1) 
+        (ontop puzzle.n.02_1 carton.n.02_1) 
+        (inroom floor.n.01_1 storage_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (and 
+                (ontop ?reception.n.04_1 ?floor.n.01_1) 
+                (nextto ?carton.n.02_1 ?reception.n.04_1) 
+                (inside ?teddy.n.01_1 ?carton.n.02_1) 
+                (inside ?puzzle.n.02_1 ?carton.n.02_1)
+            )
+        )
+    )
+)

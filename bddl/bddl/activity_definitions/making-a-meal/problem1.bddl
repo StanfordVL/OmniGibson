@@ -1,0 +1,25 @@
+(define (problem making-a-meal_1)
+    (:domain omnigibson)
+
+    (:objects
+     	pizza.n.01_1 - pizza.n.01
+    	breakfast_table.n.01_1 - breakfast_table.n.01
+    	microwave.n.02_1 - microwave.n.02
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop pizza.n.01_1 breakfast_table.n.01_1) 
+        (inroom breakfast_table.n.01_1 kitchen) 
+        (inroom microwave.n.02_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (inside ?pizza.n.01_1 ?microwave.n.02_1)
+        )
+    )
+)

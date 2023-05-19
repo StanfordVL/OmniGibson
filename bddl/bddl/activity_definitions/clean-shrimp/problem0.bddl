@@ -1,0 +1,44 @@
+(define (problem clean-shrimp_0)
+    (:domain omnigibson)
+
+    (:objects
+        sand.n.01_1 - sand.n.01
+        shrimp.n.03_1 shrimp.n.03_2 shrimp.n.03_3 - shrimp.n.03
+        chopping_board.n.01_1 - chopping_board.n.01
+        oven.n.01_1 - oven.n.01
+        carving_knife.n.01_1 - carving_knife.n.01
+        water.n.06_1 - water.n.06
+        sink.n.01_1 - sink.n.01
+        cabinet.n.01_1 - cabinet.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop shrimp.n.03_2 chopping_board.n.01_1) 
+        (ontop shrimp.n.03_3 chopping_board.n.01_1) 
+        (ontop chopping_board.n.01_1 oven.n.01_1) 
+        (ontop shrimp.n.03_1 chopping_board.n.01_1)
+        (covered shrimp.n.03_1 sand.n.01_1) 
+        (covered shrimp.n.03_2 sand.n.01_1) 
+        (covered shrimp.n.03_3 sand.n.01_1) 
+        (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
+        (insource sink.n.01_1 water.n.06_1) 
+        (inroom oven.n.01_1 kitchen) 
+        (inroom sink.n.01_1 kitchen) 
+        (inroom cabinet.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?shrimp.n.03 - shrimp.n.03)
+                (not 
+                    (covered ?shrimp.n.03 ?sand.n.01_1)
+                )
+            )
+        )
+    )
+)

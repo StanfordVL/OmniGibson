@@ -1,0 +1,56 @@
+(define (problem prepare-and-cook-scallops_0)
+    (:domain omnigibson)
+
+    (:objects
+        water.n.06_1 - water.n.06
+        scallop.n.02_1 scallop.n.02_2 scallop.n.02_3 scallop.n.02_4 scallop.n.02_5 scallop.n.02_6 - scallop.n.02
+        paper_towel.n.01_1 - paper_towel.n.01
+        countertop.n.01_1 - countertop.n.01
+        frying_pan.n.01_1 - frying_pan.n.01
+        stove.n.01_1 - stove.n.01
+        cooking_oil.n.01_1 - cooking_oil.n.01
+        cooking_oil__bottle.n.01_1 - cooking_oil__bottle.n.01
+        garlic.n.02_1 - garlic.n.02
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop scallop.n.02_1 paper_towel.n.01_1) 
+        (ontop scallop.n.02_2 paper_towel.n.01_1) 
+        (ontop scallop.n.02_3 paper_towel.n.01_1) 
+        (ontop scallop.n.02_4 paper_towel.n.01_1) 
+        (ontop scallop.n.02_5 paper_towel.n.01_1) 
+        (ontop scallop.n.02_6 paper_towel.n.01_1) 
+        (ontop paper_towel.n.01_1 countertop.n.01_1) 
+        (ontop frying_pan.n.01_1 stove.n.01_1) 
+        (filled cooking_oil__bottle.n.01_1 cooking_oil.n.01_1) 
+        (ontop cooking_oil__bottle.n.01_1 countertop.n.01_1)
+        (inside garlic.n.02_1 frying_pan.n.01_1) 
+        (inroom stove.n.01_1 kitchen) 
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall
+                (?scallop.n.02 - scallop.n.02)
+                (and
+                    (or 
+                        (inside ?scallop.n.02 ?frying_pan.n.01_1)
+                        (ontop ?scallop.n.02 ?frying_pan.n.01_1)
+                    )
+                    (cooked ?scallop.n.02)
+                )
+            )
+            (or 
+                (inside ?garlic.n.02_1 ?frying_pan.n.01_1)
+                (ontop ?garlic.n.02_1 ?frying_pan.n.01_1)
+            )
+            (cooked ?garlic.n.02_1)
+            (filled ?frying_pan.n.01_1 ?cooking_oil.n.01_1)
+        )
+    )
+)

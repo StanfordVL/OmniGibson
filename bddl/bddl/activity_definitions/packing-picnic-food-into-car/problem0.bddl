@@ -1,0 +1,86 @@
+(define (problem packing-picnic-food-into-car_0)
+    (:domain omnigibson)
+
+    (:objects
+        car.n.01_1 - car.n.01
+        driveway.n.01_1 - driveway.n.01
+        sandwich.n.01_1 sandwich.n.01_2 - sandwich.n.01
+        table.n.02_1 - table.n.02
+        tortilla_chip.n.01_1 tortilla_chip.n.01_2 - tortilla_chip.n.01
+        pie.n.01_1 - pie.n.01 
+        muffin.n.01_1 - muffin.n.01
+        crescent_roll.n.01_1 crescent_roll.n.01_2 - crescent_roll.n.01
+        water_bottle.n.01_1 - water_bottle.n.01
+        bag.n.06_1 bag.n.06_2 - bag.n.06
+        floor.n.01_1 - floor.n.01
+        lawn.n.01_1 - lawn.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop car.n.01_1 driveway.n.01_1) 
+        (ontop sandwich.n.01_1 table.n.02_1) 
+        (ontop sandwich.n.01_2 table.n.02_1) 
+        (ontop tortilla_chip.n.01_1 table.n.02_1)
+        (ontop tortilla_chip.n.01_2 table.n.02_1)
+        (ontop pie.n.01_1 table.n.02_1) 
+        (ontop muffin.n.01_1 table.n.02_1) 
+        (ontop crescent_roll.n.01_1 table.n.02_1) 
+        (ontop crescent_roll.n.01_2 table.n.02_1) 
+        (ontop bag.n.06_1 table.n.02_1)
+        (ontop bag.n.06_2 table.n.02_1)
+        (ontop water_bottle.n.01_1 floor.n.01_1) 
+        (ontop table.n.02_1 lawn.n.01_1) 
+        (inroom floor.n.01_1 garden) 
+        (inroom driveway.n.01_1 garden) 
+        (inroom lawn.n.01_1 garden) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?sandwich.n.01 - sandwich.n.01) 
+                (exists
+                    (?bag.n.06 - bag.n.06)
+                    (inside ?sandwich.n.01 ?bag.n.06)
+                )
+            ) 
+            (forall 
+                (?tortilla_chip.n.01 - tortilla_chip.n.01)
+                (exists
+                    (?bag.n.06 - bag.n.06)
+                    (inside ?tortilla_chip.n.01 ?bag.n.06)
+                )
+            ) 
+            (forall 
+                (?pie.n.01 - pie.n.01) 
+                (exists
+                    (?bag.n.06 - bag.n.06)
+                    (inside ?pie.n.01 ?bag.n.06)
+                )
+            ) 
+            (forall 
+                (?crescent_roll.n.01 - crescent_roll.n.01) 
+                (exists
+                    (?bag.n.06 - bag.n.06)
+                    (inside ?crescent_roll.n.01 ?bag.n.06)
+                )
+            ) 
+            (forall
+                (?water_bottle.n.01 - water_bottle.n.01)
+                (or
+                    (exists
+                        (?bag.n.06 - bag.n.06)
+                        (inside ?water_bottle.n.01 ?bag.n.06)
+                    )
+                    (inside ?water_bottle.n.01 ?car.n.01_1)
+                )
+            )
+            (forall
+                (?bag.n.06 - bag.n.06)
+                (inside ?bag.n.06 ?car.n.01_1)
+            )
+        )
+    )
+)

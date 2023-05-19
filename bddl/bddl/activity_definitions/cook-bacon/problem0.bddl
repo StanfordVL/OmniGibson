@@ -1,0 +1,53 @@
+(define (problem cook-bacon_0)
+    (:domain omnigibson)
+
+    (:objects
+        bacon.n.01_1 bacon.n.01_2 bacon.n.01_3 bacon.n.01_4 bacon.n.01_5 bacon.n.01_6 - bacon.n.01
+        aluminum_foil.n.01_1 - aluminum_foil.n.01
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        griddle.n.01_1 - griddle.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop bacon.n.01_1 aluminum_foil.n.01_1) 
+        (ontop bacon.n.01_2 aluminum_foil.n.01_1) 
+        (ontop bacon.n.01_3 aluminum_foil.n.01_1) 
+        (ontop bacon.n.01_4 aluminum_foil.n.01_1) 
+        (ontop bacon.n.01_5 aluminum_foil.n.01_1) 
+        (ontop bacon.n.01_6 aluminum_foil.n.01_1) 
+        (not 
+            (cooked bacon.n.01_1)
+        ) 
+        (not 
+            (cooked bacon.n.01_2)
+        ) 
+        (not 
+            (cooked bacon.n.01_3)
+        ) 
+        (not 
+            (cooked bacon.n.01_4)
+        ) 
+        (not 
+            (cooked bacon.n.01_5)
+        ) 
+        (not 
+            (cooked bacon.n.01_6)
+        ) 
+        (inside aluminum_foil.n.01_1 electric_refrigerator.n.01_1)
+        (inroom griddle.n.01_1 kitchen) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?bacon.n.01 - bacon.n.01)
+                (cooked ?bacon.n.01)
+            )
+        )
+    )
+)
