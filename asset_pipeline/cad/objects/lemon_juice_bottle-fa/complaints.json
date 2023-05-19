@@ -1,0 +1,14 @@
+[
+    {
+        "object": "lemon_juice_bottle-vsjter",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": false
+    },
+    {
+        "object": "lemon_juice_bottle-vsjter",
+        "message": "Confirm reasonable bounding box size:\n2.55mm, 5.21mm, 2.55mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "1/10",
+        "processed": false
+    }
+]

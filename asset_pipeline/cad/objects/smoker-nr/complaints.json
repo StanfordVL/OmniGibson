@@ -1,0 +1,20 @@
+[
+    {
+        "object": "smoker-uihgsf",
+        "message": "Confirm reasonable bounding box size:\n12.65cm, 7.57cm, 14.99cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "1/10",
+        "processed": false
+    },
+    {
+        "object": "smoker-uihgsf",
+        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "togglebutton;heatsource",
+        "processed": false
+    },
+    {
+        "object": "smoker-uihgsf",
+        "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
+        "complaint": "the cover needs to be articulated",
+        "processed": false
+    }
+]

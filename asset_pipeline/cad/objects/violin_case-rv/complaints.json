@@ -1,0 +1,20 @@
+[
+    {
+        "object": "violin_case-gbnlkx",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": false
+    },
+    {
+        "object": "violin_case-jlasop",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": false
+    },
+    {
+        "object": "violin_case-jlasop",
+        "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
+        "complaint": "needs to be openable",
+        "processed": false
+    }
+]

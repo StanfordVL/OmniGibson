@@ -1,8 +1,32 @@
 [
     {
         "object": "pickup_truck-zppyty",
+        "message": "Confirm reasonable bounding box size:\n20.97m, 48.80m, 18.02m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "pickup_truck-zppyty",
+        "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
+        "complaint": "trunk and door needs to be openable",
+        "processed": false
+    },
+    {
+        "object": "pickup_truck-zppyty",
+        "message": "Confirm reasonable bounding box size:\n20.97m, 48.80m, 18.02m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "pickup_truck-zppyty",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "Meshes did not render",
+        "processed": false
+    },
+    {
+        "object": "pickup_truck-zppyty",
+        "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
+        "complaint": "need to access the inside",
         "processed": false
     }
 ]

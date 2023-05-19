@@ -31,7 +31,7 @@ from bddl.object_taxonomy import ObjectTaxonomy
 from b1k_pipeline.utils import PIPELINE_ROOT
 
 
-INVENTORY_PATH = PIPELINE_ROOT / "artifacts/pipeline/object_inventory.json"
+INVENTORY_PATH = r"D:\object_inventory_future.json"
 with open(INVENTORY_PATH, "r") as f:
     INVENTORY_DICT = json.load(f)["providers"]
 
@@ -72,7 +72,6 @@ def main(dataset_path, record_path):
     print(f"{len(remaining_objs)} objects remaining out of {len(all_objs)}.")
 
     for i, (obj_category, obj_model) in enumerate(sorted(remaining_objs)):
-        print(f"Object {i+1}/{len(remaining_objs)}: {obj_category}-{obj_model}.")
         sim = Simulator(mode="headless", use_pb_gui=True)
         sim.import_scene(EmptyScene(floor_plane_rgba=[0.6, 0.6, 0.6, 1]))
 
@@ -80,7 +79,9 @@ def main(dataset_path, record_path):
         model_path = get_ig_model_path(obj_category, obj_model)
         filename = os.path.join(model_path, f"urdf/{obj_model}.urdf")
 
-        print("Visualizing category {}, model {}".format(obj_category, obj_model))
+        print("\n\n-----------------------------------------------------------------------------")
+        print(f"Object {i+1}/{len(remaining_objs)}: ")
+        print(f"{obj_category}-{obj_model}")
 
         try:
             simulator_obj = URDFObject(
@@ -108,12 +109,13 @@ def main(dataset_path, record_path):
             
             with open(record_path, "w") as f:
                 processed_objs.add((obj_category, obj_model))
-                json.dump(sorted(processed_objs), f)
+                json.dump(sorted(processed_objs), f, indent=4)
         finally:
             sim.disconnect()
             shutil.rmtree(PIPELINE_ROOT / "artifacts/aggregate/scene_instances", ignore_errors=True)
 
 def process_complaint(message, simulator_obj):
+    print("-----------------------")
     print(message)
     response = input("Do you think anything is wrong? Enter a complaint (hit enter if all's good): ")
     if response:
@@ -141,17 +143,17 @@ def get_synset(category):
     if category not in CATEGORY_TO_SYNSET:
         return "", ""
 
-    synset = CATEGORY_TO_SYNSET[category]
+    synset_name = CATEGORY_TO_SYNSET[category]
 
     # Read the custom synsets from the CSV file
     custom_synsets = []
     with open(PIPELINE_ROOT / 'metadata/custom_synsets.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
-            if category in row[0]:
+            if synset_name == row[1]:
                 return row[1] + " (custom synset)", row[2] + "(hypernyms): " + (wn.synset(row[2])).definition()
     try:
-        synset = wn.synsets(category)[0]
+        synset = wn.synset(synset_name)
     except:
         return "", ""
     return synset.name(), synset.definition()
@@ -167,7 +169,7 @@ def user_complained_synset(simulator_obj):
         f"Object assigned to synset: {synset}\n"
         f"Definition: {definition}\n"
         "Reminder: synset should match the object and not its contents.\n"
-        "(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\n"
+        "(e.g. orange juice bottle needs to match bottled__orange_juice.n.01\n"
         "and not orange_juice.n.01)"
     )
     process_complaint(message, simulator_obj)
@@ -222,8 +224,11 @@ def user_complained_metas(simulator_obj):
         for link_metas in simulator_obj.metadata["meta_links"].values()
         for meta_name in link_metas})
     message = f"Confirm object meta links listed below:\n"
-    for meta_link in meta_links:
-        message += f"- {meta_link}\n"
+    if meta_links:
+        for meta_link in meta_links:
+            message += f"- {meta_link}\n"
+    else:
+        message += f"- N/A\n"
     message += "\nMake sure these match mechanisms you expect from this object."
     process_complaint(message, simulator_obj)
 
@@ -244,7 +249,9 @@ def user_complained_bbox(simulator_obj):
         else:
             bb_items.append("%.2fmm" % size_mm)
     message += ", ".join(bb_items) + "\n"
-    message += "Make sure these sizes are within the same order of magnitude you expect from this object IRL."
+    message += "Make sure these sizes are within the same order of magnitude you expect from this object IRL.\n"
+    message += "If the scale is off, please let us know by a factor of how much (for example, 1000 if something\n"
+    message += "that's supposed to be 1mm is 1m instead) in your complaint note."
     # TODO: Print avg category specs too
     process_complaint(message, simulator_obj)
 
@@ -252,12 +259,15 @@ def user_complained_bbox(simulator_obj):
 def user_complained_articulation(simulator_obj):
     message = f"Confirm articulation:\n"
     message += "This object has the below movable links annotated:\n"
-    for bid in simulator_obj.get_body_ids():
-        for joint in pb_utils.get_movable_joints(bid):
+    joint_ids = [(bid, joint) for bid in simulator_obj.get_body_ids() for joint in pb_utils.get_movable_joints(bid)]
+    if joint_ids:
+        for bid, joint in joint_ids:
             name = pb_utils.get_link_name(bid, joint)
             _, upper = pb_utils.get_joint_limits(bid, joint)
             pb_utils.set_joint_position(bid, joint, upper)
             message += f"- {name}\n"
+    else:
+        message += f"- N/A\n"
     message += "\nThey have now all been set to their upper (maximum) limits.\n"
     message += "Verify that these are all the moving parts you expect from this object\n"
     message += "and that the joint limits look reasonable."

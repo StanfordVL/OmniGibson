@@ -1,0 +1,26 @@
+[
+    {
+        "object": "sticker-njigvs",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "strange looking object",
+        "processed": false
+    },
+    {
+        "object": "sticker-njigvs",
+        "message": "Confirm reasonable bounding box size:\n45.90cm, 5.31cm, 54.79cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "not sure about size",
+        "processed": false
+    },
+    {
+        "object": "sticker-wshged",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "can't see object",
+        "processed": false
+    },
+    {
+        "object": "sticker-wshged",
+        "message": "Confirm reasonable bounding box size:\n54.79cm, 0.02mm, 54.79cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "not sure about object",
+        "processed": false
+    }
+]
