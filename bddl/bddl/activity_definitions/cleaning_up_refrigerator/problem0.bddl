@@ -6,7 +6,7 @@
         dust.n.01_1 - dust.n.01
      	rag.n.01_1 rag.n.01_2 - rag.n.01
     	cabinet.n.01_1 - cabinet.n.01
-    	soap.n.01_1 - soap.n.01
+    	bar_soap.n.01_1 - bar_soap.n.01
     	countertop.n.01_1 - countertop.n.01
     	tray.n.01_1 tray.n.01_2 - tray.n.01
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -19,7 +19,7 @@
     (:init 
         (inside rag.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_2 cabinet.n.01_1) 
-        (ontop soap.n.01_1 countertop.n.01_1) 
+        (ontop bar_soap.n.01_1 countertop.n.01_1) 
         (inside tray.n.01_1 electric_refrigerator.n.01_1) 
         (inside tray.n.01_2 electric_refrigerator.n.01_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
@@ -41,7 +41,7 @@
                 (?rag.n.01 - rag.n.01) 
                 (nextto ?rag.n.01 ?sink.n.01_1)
             ) 
-            (inside ?soap.n.01_1 ?sink.n.01_1) 
+            (inside ?bar_soap.n.01_1 ?sink.n.01_1) 
             (forall 
                 (?tray.n.01 - tray.n.01) 
                 (inside ?tray.n.01 ?electric_refrigerator.n.01_1)

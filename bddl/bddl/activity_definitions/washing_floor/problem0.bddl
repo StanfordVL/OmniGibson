@@ -6,7 +6,7 @@
         dust.n.01_1 - dust.n.01
      	bucket.n.01_1 - bucket.n.01
     	floor.n.01_1 - floor.n.01
-    	soap.n.01_1 - soap.n.01
+    	bar_soap.n.01_1 - bar_soap.n.01
     	towel.n.01_1 - towel.n.01
     	shower.n.01_1 - shower.n.01
     	toilet.n.02_1 - toilet.n.02
@@ -17,8 +17,7 @@
     
     (:init 
         (ontop bucket.n.01_1 floor.n.01_1) 
-        (ontop soap.n.01_1 towel.n.01_1) 
-        (ontop soap.n.01_1 floor.n.01_1) 
+        (ontop bar_soap.n.01_1 floor.n.01_1) 
         (ontop towel.n.01_1 floor.n.01_1) 
         (not 
             (covered towel.n.01_1 stain.n.01_1)
