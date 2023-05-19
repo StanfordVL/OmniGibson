@@ -37,10 +37,10 @@ def get_synset(category):
     with open(PIPELINE_ROOT / 'metadata/custom_synsets.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
-            if category in row[0]:
+            if synset == row[1]:
                 return row[1] + " (custom synset)", row[2] + "(hypernyms): " + (wn.synset(row[2])).definition()
     try:
-        synset = wn.synsets(category)[0]
+        synset = wn.synset(synset)
     except:
         return "", ""
     return synset.name(), synset.definition()
