@@ -2,6 +2,7 @@ from concurrent import futures
 import os
 import random
 import subprocess
+import sys
 import tempfile
 import traceback
 from dask.distributed import Client
@@ -22,7 +23,6 @@ from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, s
 
 VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 COACD_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
-CLIENT_NAME = 'viscam3.stanford.edu:35423'
 
 COACD_TIMEOUT = 10 * 60 # 10 min
 
@@ -220,8 +220,12 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
                     out_hash = f.read()
                 
                 # Return if the hash has not changed.
-                if in_hash + script_hash == out_hash:
+                # if in_hash + script_hash == out_hash:
+                if out_hash.startswith(in_hash):
+                    print(target, "already processed, skipping.")
                     return
+                
+                print(f"Reprocessing {target} due to hash mismatch.")
 
     with target_fs.open("meshes.zip", "rb") as in_zip, \
          target_fs.open("collision_meshes.zip", "wb") as out_zip:
@@ -270,7 +274,7 @@ def main():
         errors = {}
         target_futures = {}
     
-        dask_client = Client(CLIENT_NAME)
+        dask_client = Client(sys.argv[1] + ":35423")
         
         with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as mesh_executor:
             targets = get_targets("combined")
