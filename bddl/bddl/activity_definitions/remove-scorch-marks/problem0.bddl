@@ -6,7 +6,7 @@
         sink.n.01_1 - sink.n.01
         vinegar.n.01_1 - vinegar.n.01
         vinegar__bottle.n.01_1 - vinegar__bottle.n.01
-        shirt.n.01_1 - shirt.n.01
+        jersey.n.03_1 - jersey.n.03
         stain.n.01_1 - stain.n.01
         water.n.06_1 - water.n.06
         cabinet.n.01_1 - cabinet.n.01
@@ -18,8 +18,8 @@
         (inside emery_paper.n.01_1 cabinet.n.01_1) 
         (filled vinegar__bottle.n.01_1 vinegar.n.01_1)
         (inside vinegar__bottle.n.01_1 cabinet.n.01_1) 
-        (ontop shirt.n.01_1 floor.n.01_1) 
-        (covered shirt.n.01_1 stain.n.01_1) 
+        (ontop jersey.n.03_1 floor.n.01_1) 
+        (covered jersey.n.03_1 stain.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom cabinet.n.01_1 utility_room) 
         (inroom sink.n.01_1 utility_room) 
@@ -30,7 +30,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?shirt.n.01_1 ?stain.n.01_1)
+                (covered ?jersey.n.03_1 ?stain.n.01_1)
             )
         )
     )

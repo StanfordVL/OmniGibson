@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        planter.n.03_1 - planter.n.03
+        pot.n.04_1 - pot.n.04
         floor.n.01_1 - floor.n.01
         marigold.n.01_1 marigold.n.01_2 marigold.n.01_3 - marigold.n.01
         pot.n.04_1 pot.n.04_2 pot.n.04_3 - pot.n.04
@@ -13,7 +13,7 @@
     )
     
     (:init 
-        (ontop planter.n.03_1 floor.n.01_1) 
+        (ontop pot.n.04_1 floor.n.01_1) 
         (inside marigold.n.01_1 pot.n.04_1)
         (inside marigold.n.01_2 pot.n.04_3)
         (inside marigold.n.01_3 pot.n.04_3)
@@ -32,13 +32,13 @@
     
     (:goal 
         (and 
-            (filled ?planter.n.03_1 ?soil.n.02_1)
+            (filled ?pot.n.04_1 ?soil.n.02_1)
             (forall 
                 (?marigold.n.01 - marigold.n.01)
                 (and 
                     (or 
-                        (inside ?marigold.n.01 ?planter.n.03_1)
-                        (ontop ?marigold.n.01 ?planter.n.03_1)
+                        (inside ?marigold.n.01 ?pot.n.04_1)
+                        (ontop ?marigold.n.01 ?pot.n.04_1)
                     )
                     (touching ?marigold.n.01 ?soil.n.02_1)
                 ) 

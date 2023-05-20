@@ -7,7 +7,7 @@
         carryall.n.01_1 - carryall.n.01
         bath_towel.n.01_1 - bath_towel.n.01
         door.n.01_1 - door.n.01
-        sandwich.n.01_1 - sandwich.n.01
+        club_sandwich.n.01_1 - club_sandwich.n.01
         fruit.n.01_1 - fruit.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -15,9 +15,9 @@
     (:init 
         (ontop carryall.n.01_1 floor.n.01_1) 
         (ontop bath_towel.n.01_1 floor.n.01_1) 
-        (ontop sandwich.n.01_1 carryall.n.01_1) 
+        (ontop club_sandwich.n.01_1 carryall.n.01_1) 
         (ontop sunscreen__bottle.n.01_1 floor.n.01_1) 
-        (ontop fruit.n.01_1 sandwich.n.01_1) 
+        (ontop fruit.n.01_1 club_sandwich.n.01_1) 
         (inroom floor.n.01_1 empty_room) 
         (inroom door.n.01_1 empty_room) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -27,7 +27,7 @@
         (and 
             (folded ?bath_towel.n.01_1)
             (inside ?bath_towel.n.01_1 ?carryall.n.01_1)
-            (inside ?sandwich.n.01_1 ?carryall.n.01_1)
+            (inside ?club_sandwich.n.01_1 ?carryall.n.01_1)
             (inside ?sunscreen__bottle.n.01_1 ?carryall.n.01_1)
             (inside ?fruit.n.01_1 ?carryall.n.01_1)
             (nextto ?carryall.n.01_1 ?door.n.01_1)

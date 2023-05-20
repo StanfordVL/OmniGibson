@@ -6,7 +6,7 @@
         chopping_board.n.01_1 - chopping_board.n.01
         countertop.n.01_1 - countertop.n.01
         packing_box.n.02_1 - packing_box.n.02
-        sandwich.n.01_1 - sandwich.n.01
+        hotdog.n.02_1 - hotdog.n.02
         water_bottle.n.01_1 - water_bottle.n.01
         cabinet.n.01_1 - cabinet.n.01
         chocolate_chip_cookie.n.01_1 - chocolate_chip_cookie.n.01
@@ -19,7 +19,7 @@
         (ontop packing_box.n.02_1 countertop.n.01_1) 
         (ontop half__apple.n.01_1 chopping_board.n.01_1) 
         (ontop half__apple.n.01_2 chopping_board.n.01_1) 
-        (ontop sandwich.n.01_1 chopping_board.n.01_1) 
+        (ontop hotdog.n.02_1 chopping_board.n.01_1) 
         (inside water_bottle.n.01_1 cabinet.n.01_1) 
         (ontop chocolate_chip_cookie.n.01_1 chopping_board.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -34,7 +34,7 @@
                 (?half__apple.n.01 - half__apple.n.01)
                 (inside ?half__apple.n.01 ?packing_box.n.02_1)
             )
-            (inside ?sandwich.n.01_1 ?packing_box.n.02_1) 
+            (inside ?hotdog.n.02_1 ?packing_box.n.02_1) 
             (inside ?chocolate_chip_cookie.n.01_1 ?packing_box.n.02_1) 
             (inside ?water_bottle.n.01_1 ?packing_box.n.02_1)
         )

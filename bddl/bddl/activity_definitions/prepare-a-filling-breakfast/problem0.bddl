@@ -7,7 +7,7 @@
         stove.n.01_1 - stove.n.01
         egg.n.02_1 egg.n.02_2 - egg.n.02
         frying_pan.n.01_1 - frying_pan.n.01
-        pork_sausage.n.01_1 - pork_sausage.n.01
+        bratwurst.n.01_1 - bratwurst.n.01
         carving_knife.n.01_1 - carving_knife.n.01
         orange.n.01_1 - orange.n.01
         half__orange.n.01_1 half__orange.n.01_2 - half__orange.n.01
@@ -21,7 +21,7 @@
         (ontop table_knife.n.01_1 countertop.n.01_1) 
         (inside egg.n.02_1 electric_refrigerator.n.01_1) 
         (inside egg.n.02_2 electric_refrigerator.n.01_1) 
-        (inside pork_sausage.n.01_1 electric_refrigerator.n.01_1) 
+        (inside bratwurst.n.01_1 electric_refrigerator.n.01_1) 
         (ontop frying_pan.n.01_1 countertop.n.01_1) 
         (inside orange.n.01_1 electric_refrigerator.n.01_1) 
         (ontop plate.n.04_1 countertop.n.01_1)
@@ -39,7 +39,7 @@
         (and 
             (real ?half__orange.n.01_1)
             (real ?half__orange.n.01_2)
-            (cooked ?pork_sausage.n.01_1) 
+            (cooked ?bratwurst.n.01_1) 
             (forall 
                 (?egg.n.02 - egg.n.02)
                 (and 
@@ -47,7 +47,7 @@
                     (ontop ?egg.n.02 ?plate.n.04_1)
                 )
             )
-            (ontop ?pork_sausage.n.01_1 ?plate.n.04_1)
+            (ontop ?bratwurst.n.01_1 ?plate.n.04_1)
             (forall 
                 (?half__orange.n.01 - half__orange.n.01)
                 (ontop ?half__orange.n.01 ?plate.n.04_1)

@@ -7,7 +7,7 @@
         pen.n.01_1 - pen.n.01
         pencil.n.01_1 - pencil.n.01
         eraser.n.01_1 - eraser.n.01
-        scissors.n.01_1 - scissors.n.01
+        shears.n.01_1 - shears.n.01
         desk.n.01_1 - desk.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -17,7 +17,7 @@
         (ontop pen.n.01_1 desk.n.01_1) 
         (ontop pencil.n.01_1 desk.n.01_1) 
         (ontop eraser.n.01_1 desk.n.01_1) 
-        (ontop scissors.n.01_1 desk.n.01_1) 
+        (ontop shears.n.01_1 desk.n.01_1) 
         (open pencil_box.n.01_1) 
         (inroom desk.n.01_1 childs_room) 
         (inroom floor.n.01_1 childs_room)
@@ -30,7 +30,7 @@
             (inside ?pen.n.01_1 ?pencil_box.n.01_1) 
             (inside ?pencil.n.01_1 ?pencil_box.n.01_1)
             (inside ?eraser.n.01_1 ?pencil_box.n.01_1) 
-            (inside ?scissors.n.01_1 ?pencil_box.n.01_1) 
+            (inside ?shears.n.01_1 ?pencil_box.n.01_1) 
             (closed ?pencil_box.n.01_1)
         )
     )

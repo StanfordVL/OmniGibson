@@ -4,7 +4,7 @@
     (:objects
         disinfectant.n.01_1 - disinfectant.n.01
         disinfectant__bottle.n.01_1 - disinfectant__bottle.n.01
-        shirt.n.01_1 shirt.n.01_2 shirt.n.01_3 - shirt.n.01
+        jersey.n.03_1 jersey.n.03_2 jersey.n.03_3 - jersey.n.03
         sink.n.01_1 - sink.n.01
         washer.n.03_1 - washer.n.03
         water.n.06_1 - water.n.06
@@ -13,9 +13,9 @@
     )
     
     (:init 
-        (ontop shirt.n.01_1 washer.n.03_1) 
-        (ontop shirt.n.01_2 washer.n.03_1) 
-        (ontop shirt.n.01_3 washer.n.03_1) 
+        (ontop jersey.n.03_1 washer.n.03_1) 
+        (ontop jersey.n.03_2 washer.n.03_1) 
+        (ontop jersey.n.03_3 washer.n.03_1) 
         (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1)
         (ontop disinfectant__bottle.n.01_1 floor.n.01_1)
         (insource sink.n.01_1 water.n.06_1) 
@@ -28,10 +28,10 @@
     (:goal 
         (and 
             (forall 
-                (?shirt.n.01 - shirt.n.01) 
+                (?jersey.n.03 - jersey.n.03) 
                 (and
-                    (covered ?shirt.n.01 ?disinfectant.n.01_1)
-                    (inside ?shirt.n.01 ?washer.n.03_1)
+                    (covered ?jersey.n.03 ?disinfectant.n.01_1)
+                    (inside ?jersey.n.03 ?washer.n.03_1)
                 )
             )
         )
