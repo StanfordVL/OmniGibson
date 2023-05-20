@@ -14,7 +14,7 @@
         flour.n.01_1 - flour.n.01
         parsley.n.02_1 - parsley.n.02
         thyme.n.02_1 - thyme.n.02
-        stew.n.02_1 - stew.n.02
+        lamb_stew.n.02_1 - lamb_stew.n.02
         stove.n.01_1 - stove.n.01
         dutch_oven.n.02_1 - dutch_oven.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
@@ -55,13 +55,13 @@
         (ontop thyme__shaker.n.02_1 countertop.n.01_3)
         (inroom stove.n.01_1 kitchen)
         (ontop dutch_oven.n.02_1 countertop.n.01_3)
-        (future stew.n.02_1)
+        (future lamb_stew.n.02_1)
     )
 
     (:goal
         (and
-            (real ?stew.n.02_1)
-            (filled ?dutch_oven.n.02_1 ?stew.n.02_1)
+            (real ?lamb_stew.n.02_1)
+            (filled ?dutch_oven.n.02_1 ?lamb_stew.n.02_1)
         )
     )
 )

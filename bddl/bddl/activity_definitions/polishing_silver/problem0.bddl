@@ -3,7 +3,7 @@
 
     (:objects
         dust.n.01_1 - dust.n.01
-     	spoon.n.01_1 spoon.n.01_2 spoon.n.01_3 spoon.n.01_4 - spoon.n.01
+     	tablespoon.n.02_1 tablespoon.n.02_2 tablespoon.n.02_3 tablespoon.n.02_4 - tablespoon.n.02
     	rag.n.01_1 - rag.n.01
     	cabinet.n.01_1 - cabinet.n.01
     	floor.n.01_1 - floor.n.01
@@ -11,15 +11,15 @@
     )
     
     (:init 
-        (covered spoon.n.01_1 dust.n.01_1) 
-        (covered spoon.n.01_2 dust.n.01_1) 
-        (covered spoon.n.01_3 dust.n.01_1) 
-        (covered spoon.n.01_4 dust.n.01_1) 
+        (covered tablespoon.n.02_1 dust.n.01_1) 
+        (covered tablespoon.n.02_2 dust.n.01_1) 
+        (covered tablespoon.n.02_3 dust.n.01_1) 
+        (covered tablespoon.n.02_4 dust.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
-        (inside spoon.n.01_1 cabinet.n.01_1) 
-        (inside spoon.n.01_2 cabinet.n.01_1) 
-        (inside spoon.n.01_3 cabinet.n.01_1) 
-        (inside spoon.n.01_4 cabinet.n.01_1) 
+        (inside tablespoon.n.02_1 cabinet.n.01_1) 
+        (inside tablespoon.n.02_2 cabinet.n.01_1) 
+        (inside tablespoon.n.02_3 cabinet.n.01_1) 
+        (inside tablespoon.n.02_4 cabinet.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -28,24 +28,24 @@
     (:goal 
         (and 
             (not 
-                (covered ?spoon.n.01_1 ?dust.n.01_1)
+                (covered ?tablespoon.n.02_1 ?dust.n.01_1)
             ) 
             (not 
-                (covered ?spoon.n.01_2 ?dust.n.01_1)
+                (covered ?tablespoon.n.02_2 ?dust.n.01_1)
             ) 
             (not 
-                (covered ?spoon.n.01_3 ?dust.n.01_1)
+                (covered ?tablespoon.n.02_3 ?dust.n.01_1)
             ) 
             (not 
-                (covered ?spoon.n.01_4 ?dust.n.01_1)
+                (covered ?tablespoon.n.02_4 ?dust.n.01_1)
             ) 
             (not 
                 (inside ?rag.n.01_1 ?cabinet.n.01_1)
             ) 
-            (inside ?spoon.n.01_1 ?cabinet.n.01_1) 
-            (inside ?spoon.n.01_2 ?cabinet.n.01_1) 
-            (inside ?spoon.n.01_3 ?cabinet.n.01_1) 
-            (inside ?spoon.n.01_4 ?cabinet.n.01_1)
+            (inside ?tablespoon.n.02_1 ?cabinet.n.01_1) 
+            (inside ?tablespoon.n.02_2 ?cabinet.n.01_1) 
+            (inside ?tablespoon.n.02_3 ?cabinet.n.01_1) 
+            (inside ?tablespoon.n.02_4 ?cabinet.n.01_1)
         )
     )
 )

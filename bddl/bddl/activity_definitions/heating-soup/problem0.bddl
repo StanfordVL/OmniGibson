@@ -1,11 +1,11 @@
-(define (problem heating-soup_0)
+(define (problem heating-soup)
     (:domain omnigibson)
 
     (:objects
-     	soup.n.01_1 - soup.n.01
-        cooked__soup.n.01_1 - cooked__soup.n.01
+     	chicken_soup.n.01_1 - chicken_soup.n.01
+        cooked__chicken_soup.n.01_1 - cooked__chicken_soup.n.01
         bowl.n.01_1 - bowl.n.01
-    	soup__can.n.01_1 - soup__can.n.01
+    	chicken_soup__can.n.01_1 - chicken_soup__can.n.01
     	microwave.n.02_1 - microwave.n.02
     	countertop.n.01_1 - countertop.n.01
     	floor.n.01_1 - floor.n.01
@@ -13,8 +13,8 @@
     )
     
     (:init 
-        (filled soup__can.n.01_1 soup.n.01_1) 
-        (ontop soup__can.n.01_1 countertop.n.01_1)
+        (filled chicken_soup__can.n.01_1 chicken_soup.n.01_1) 
+        (ontop chicken_soup__can.n.01_1 countertop.n.01_1)
         (not
             (toggled_on microwave.n.02_1) 
         )
@@ -22,14 +22,14 @@
         (inroom microwave.n.02_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (future cooked__soup.n.01_1)
+        (future cooked__chicken_soup.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and
-            (real ?cooked__soup.n.01_1) 
-            (contains ?bowl.n.01_1 ?cooked__soup.n.01_1)
+            (real ?cooked__chicken_soup.n.01_1) 
+            (contains ?bowl.n.01_1 ?cooked__chicken_soup.n.01_1)
         )
     )
 )

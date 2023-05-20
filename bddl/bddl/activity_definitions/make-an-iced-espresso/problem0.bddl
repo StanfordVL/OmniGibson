@@ -7,7 +7,7 @@
         low-fat_milk.n.01_1 - low-fat_milk.n.01
         sugar_syrup.n.01_1 - sugar_syrup.n.01
         ice_cube.n.01_1 ice_cube.n.01_2 - ice_cube.n.01
-        spoon.n.01_1 - spoon.n.01
+        teaspoon.n.02_1 - teaspoon.n.02
         mug.n.04_1 - mug.n.04
         sugar_syrup__bottle.n.01_1 - sugar_syrup__bottle.n.01
         countertop.n.01_1 - countertop.n.01
@@ -27,7 +27,7 @@
         (inside ice_cube.n.01_1 cup.n.01_2) 
         (inside ice_cube.n.01_2 cup.n.01_2) 
         (ontop cup.n.01_2 countertop.n.01_1) 
-        (ontop spoon.n.01_1 countertop.n.01_1) 
+        (ontop teaspoon.n.02_1 countertop.n.01_1) 
         (ontop mug.n.04_1 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (future cafe_au_lait.n.01_1) 

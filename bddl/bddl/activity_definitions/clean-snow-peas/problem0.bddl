@@ -4,7 +4,7 @@
     (:objects
         bowl.n.01_1 - bowl.n.01
         countertop.n.01_1 - countertop.n.01
-        strainer.n.01_1 - strainer.n.01
+        sieve.n.01_1 - sieve.n.01
         pea_pod.n.01_1 pea_pod.n.01_2 pea_pod.n.01_3 pea_pod.n.01_4 pea_pod.n.01_5 - pea_pod.n.01
         dirt.n.02_1 - dirt.n.02
         water.n.06_1 - water.n.06
@@ -17,12 +17,12 @@
     
     (:init 
         (ontop bowl.n.01_1 countertop.n.01_1) 
-        (ontop strainer.n.01_1 countertop.n.01_1) 
-        (inside pea_pod.n.01_1 strainer.n.01_1)
-        (inside pea_pod.n.01_2 strainer.n.01_1)
-        (inside pea_pod.n.01_3 strainer.n.01_1)
-        (inside pea_pod.n.01_4 strainer.n.01_1)
-        (inside pea_pod.n.01_5 strainer.n.01_1)
+        (ontop sieve.n.01_1 countertop.n.01_1) 
+        (inside pea_pod.n.01_1 sieve.n.01_1)
+        (inside pea_pod.n.01_2 sieve.n.01_1)
+        (inside pea_pod.n.01_3 sieve.n.01_1)
+        (inside pea_pod.n.01_4 sieve.n.01_1)
+        (inside pea_pod.n.01_5 sieve.n.01_1)
         (covered pea_pod.n.01_1 dirt.n.02_1)
         (covered pea_pod.n.01_2 dirt.n.02_1)
         (covered pea_pod.n.01_3 dirt.n.02_1)
@@ -52,7 +52,7 @@
                 )
                 (forall 
                     (?pea_pod.n.01 - pea_pod.n.01)
-                    (inside ?pea_pod.n.01 ?strainer.n.01_1)
+                    (inside ?pea_pod.n.01 ?sieve.n.01_1)
                 )
             )
         )
