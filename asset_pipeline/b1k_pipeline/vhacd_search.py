@@ -159,6 +159,7 @@ PROCESSING_OPTIONS = [
 ]
 
 
+convexify_vhacd_substep = generate_option_vhacd("1000000", "20", "flood", "10", "true", "2", "60", "1")
 def convexify_and_reduce(m, dask_client):
     try:
         # Try directly converting the mesh into a convex hull
@@ -166,7 +167,7 @@ def convexify_and_reduce(m, dask_client):
     except:
         # If that doesn't work, retry with a simplified VHACD run
         convex_m = trimesh.convex.convex_hull(
-            option_vhacd(m, dask_client, "1000000", "20", "flood", "10", "true", "2", "60", "1")
+            convexify_vhacd_substep(m, dask_client)
         )
     assert convex_m.is_watertight, f"Found non-watertight mesh - should not be possible"
     
