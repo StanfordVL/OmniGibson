@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "50 * * * *"  # 50 past every hour
   workflow_dispatch:
+  push:
+    branches:
+      - develop
 
 jobs:
   pull-sheets:
