@@ -15,6 +15,7 @@ ALL_SHEETS = [
 ]
 
 def main():
+  OUTPUT_ROOT.mkdir(exist_ok=True)
   client = gspread.service_account(filename=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
   for key, sheet_name, filename in ALL_SHEETS:
     worksheet = client.open_by_key(key).worksheet(sheet_name)
