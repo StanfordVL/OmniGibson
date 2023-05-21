@@ -1,4 +1,4 @@
-name: Build & deploy docs
+name: Sync Google Sheets data
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   pull-sheets:
-    name: Build and deploy documentation
+    name: Sync Google Sheets data
     runs-on: ubuntu-latest
 
     steps:
