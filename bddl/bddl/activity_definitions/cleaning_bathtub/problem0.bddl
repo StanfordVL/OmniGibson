@@ -6,7 +6,7 @@
         water.n.06_1 - water.n.06
         sink.n.01_1 - sink.n.01
      	bathtub.n.01_1 - bathtub.n.01
-    	soap.n.01_1 - soap.n.01
+    	bar_soap.n.01_1 - bar_soap.n.01
     	floor.n.01_1 - floor.n.01
     	bucket.n.01_1 - bucket.n.01
     	scrub_brush.n.01_1 - scrub_brush.n.01
@@ -15,7 +15,7 @@
     
     (:init 
         (covered bathtub.n.01_1 stain.n.01_1) 
-        (ontop soap.n.01_1 floor.n.01_1) 
+        (ontop bar_soap.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inside scrub_brush.n.01_1 bathtub.n.01_1) 
         (insource water.n.06_1 sink.n.01_1)

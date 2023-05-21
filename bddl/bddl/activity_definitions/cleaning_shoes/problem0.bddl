@@ -4,7 +4,7 @@
     (:objects
         stain.n.01_1 - stain.n.01
         dust.n.01_1 - dust.n.01
-     	soap.n.01_1 - soap.n.01
+     	bar_soap.n.01_1 - bar_soap.n.01
     	bed.n.01_1 - bed.n.01
     	floor.n.01_1 - floor.n.01
     	rag.n.01_1 - rag.n.01
@@ -15,7 +15,7 @@
     )
     
     (:init 
-        (ontop soap.n.01_1 bed.n.01_1) 
+        (ontop bar_soap.n.01_1 bed.n.01_1) 
         (ontop rag.n.01_1 bed.n.01_1) 
         (ontop towel.n.01_1 floor.n.01_1) 
         (ontop shoe.n.01_1 bed.n.01_1) 

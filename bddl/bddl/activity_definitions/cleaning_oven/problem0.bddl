@@ -5,7 +5,7 @@
         stain.n.01_1 - stain.n.01
      	receptacle.n.01_1 - receptacle.n.01
     	floor.n.01_1 - floor.n.01
-    	soap.n.01_1 - soap.n.01
+    	bar_soap.n.01_1 - bar_soap.n.01
     	cabinet.n.01_1 - cabinet.n.01
     	rag.n.01_1 rag.n.01_2 - rag.n.01
     	newspaper.n.03_1 - newspaper.n.03
@@ -17,7 +17,7 @@
     
     (:init 
         (ontop receptacle.n.01_1 floor.n.01_1) 
-        (inside soap.n.01_1 cabinet.n.01_1) 
+        (inside bar_soap.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_2 cabinet.n.01_1) 
         (ontop newspaper.n.03_1 floor.n.01_1) 
