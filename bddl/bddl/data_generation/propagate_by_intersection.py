@@ -1,4 +1,5 @@
 import csv
+import pathlib
 from re import L 
 import sys
 import json 
@@ -8,7 +9,7 @@ from unicodedata import name
 from xml.dom.minidom import Element
 from nltk.corpus import wordnet as wn
 
-PROPAGATED_CANONICAL = "propagated_annots_canonical.json"
+PROPAGATED_CANONICAL = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_canonical.json"
 
 
 def get_intersection(synset, property_map, canonical):

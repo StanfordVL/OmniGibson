@@ -8,14 +8,15 @@ Separately, once Master has been compiled, the two hierarchy generation function
 
 
 from calendar import c
-import json 
+import json
+import pathlib 
 from nltk.corpus import wordnet as wn
 import prop_config as pcfg
 
 
-CANONICAL_FN = "syn_prop_annots_canonical.json"
-PROP_TO_SYN_FILE = "properties_to_synsets.json" # gives all applicable synsets for a given property
-SYN_TO_DESC_FILE = "synsets_to_descriptors.json" # gives states for a given synset
+CANONICAL_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "syn_prop_annots_canonical.json"
+PROP_TO_SYN_FILE = pathlib.Path(__file__).parents[1] / "generated_data" / "properties_to_synsets.json" # gives all applicable synsets for a given property
+SYN_TO_DESC_FILE = pathlib.Path(__file__).parents[1] / "generated_data" / "synsets_to_descriptors.json" # gives states for a given synset
 
 DESIRED_PROPS = set(pcfg.CROWD_PROP_NAMES + pcfg.GPT_PROP_NAMES + pcfg.INTERNAL_PROP_NAMES)
 

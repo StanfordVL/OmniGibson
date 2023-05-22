@@ -1,18 +1,18 @@
 import json
+import pathlib
 from nltk.corpus import wordnet as wn
-import os
 import pandas as pd
 import copy
 
-PARAMS_OUTFILE_FN = "propagated_annots_params.json"
-UNRESOLVED_DIR = "unresolved"
-
+PARAMS_OUTFILE_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_params.json"
+UNRESOLVED_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "unresolved"
+PROP_PARAM_ANNOTS_DIR = pathlib.Path(__file__).parents[1] / "prop_param_annots"
 
 def add_cookable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
     # Cooking
     print("COOKING")
     print()
-    cooking_params = pd.read_csv(os.path.join(os.path.dirname(__file__), "cooking.csv"))
+    cooking_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "cooking.csv")
     cooking_params = cooking_params[cooking_params["require_cookable/overcookable_temperature"] == True][["synset", "value_cook(C)", "value_overcook(C)"]]
     for i, [synset, cook_temp, overcook_temp] in cooking_params.iterrows():
         try:
@@ -50,7 +50,7 @@ def add_coldsource_params(propagated_canonical, props_to_syns, synset_nonexisten
     print(); print()
     print("COLDSOURCE")
     print()
-    coldSource_params = pd.read_csv(os.path.join(os.path.dirname(__file__), "coldSource.csv"))
+    coldSource_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "coldSource.csv")
     coldSource_params = coldSource_params[coldSource_params["require_coldsource_temperature"] == True][["synset", "value(C)"]]
     for i, [synset, temp] in coldSource_params.iterrows():
         try:
@@ -88,7 +88,7 @@ def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexisten
     print(); print()
     print("HEATSOURCE")
     print()
-    heatSource_params = pd.read_csv(os.path.join(os.path.dirname(__file__), "heatSource.csv"))
+    heatSource_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "heatSource.csv")
 
     heatSource_params = heatSource_params[heatSource_params["require_heatsource_temperature"] == True][["synset", "value(C)"]]
     # print(heatSource_params)
@@ -137,9 +137,9 @@ def create_get_save_propagated_annots_params(propagated_canonical, props_to_syns
     with open(PARAMS_OUTFILE_FN, "w") as f:
         json.dump(propagated_params_canonical, f, indent=4)
 
-    with open(os.path.join(os.path.join(os.path.dirname(__file__), UNRESOLVED_DIR, "synset_nonexistent.json")), "w") as f:
+    with open(UNRESOLVED_DIR / "synset_nonexistent.json", "w") as f:
         json.dump(synset_nonexistent, f, indent=4)
-    with open(os.path.join(os.path.join(os.path.dirname(__file__), UNRESOLVED_DIR, "param_but_no_prop.json")), "w") as f:
+    with open(UNRESOLVED_DIR / "param_but_no_prop.json", "w") as f:
         json.dump(param_but_no_prop, f, indent=4)
-    with open(os.path.join(os.path.join(os.path.dirname(__file__), UNRESOLVED_DIR, "prop_but_no_param_or_malformed_param.json")), "w") as f:
+    with open(UNRESOLVED_DIR / "prop_but_no_param_or_malformed_param.json", "w") as f:
         json.dump(prop_but_no_param, f, indent=4)

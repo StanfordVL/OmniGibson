@@ -5,9 +5,10 @@ We consider each unique path to a synset "different", with the obvious
 problem that each synset can have multiple hypernyms
 '''
 import json
+import pathlib
 from nltk.corpus import wordnet as wn
 
-HIERARCHY_OUTPUT_FN = "output_hierarchy.json"
+HIERARCHY_OUTPUT_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "output_hierarchy.json"
 
 
 def add_path(path, hierarchy):

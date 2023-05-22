@@ -1,9 +1,8 @@
+import pathlib
 from get_hierarchy_full import get_hierarchy
 from get_syn_prop_annots_canonical import create_get_save_annots_canonical, create_get_save_properties_to_synsets, create_get_save_synsets_to_descriptors
 from propagate_by_intersection import create_get_save_propagated_canonical
 from process_prop_param_annots import create_get_save_propagated_annots_params
-from get_hierarchy_per_activity import create_save_activity_specific_hierarchies
-from collect_all_object_hierarchies import create_save_all_activity_hierarchy_dict
 import pandas as pd
 import csv
 
@@ -13,7 +12,7 @@ Inputs:
     synset_masterlist.tsv
     TODO complete
 '''
-SYN_PROP_DATA_FN = "unified_property_annots.csv"
+SYN_PROP_DATA_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "synsets.csv"
 # # Get owned models 
 # syns_mast = pd.read_csv("synset_masterlist.tsv", sep="\t")
 # owned_models = syns_mast["synset"].rename("Synset")
