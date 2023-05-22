@@ -1,0 +1,37 @@
+name: Sync Google Sheets data
+
+on:
+  schedule:
+    - cron: "50 * * * *"  # 50 past every hour
+  workflow_dispatch:
+  push:
+
+jobs:
+  pull-sheets:
+    name: Sync Google Sheets data
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
+        architecture: x64
+
+    - name: Install requirements
+      run: pip install gspread
+
+    - name: Authenticate on Google Cloud
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: Refresh sheets data
+      run: python -m b1k_pipeline.pull_sheets
+
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "Sync Google Sheets data"

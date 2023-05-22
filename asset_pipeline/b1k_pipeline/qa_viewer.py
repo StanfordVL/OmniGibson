@@ -147,7 +147,7 @@ def get_synset(category):
 
     # Read the custom synsets from the CSV file
     custom_synsets = []
-    with open(PIPELINE_ROOT / 'metadata/custom_synsets.csv', 'r') as csvfile:
+    with open(PIPELINE_ROOT / 'metadata/synsets.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             if synset_name == row[1]:
