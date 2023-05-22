@@ -14,7 +14,7 @@ import b1k_pipeline.utils
 
 # These change the stepping logic
 YOUR_ID = 0
-TOTAL_IDS = 1
+TOTAL_IDS = 10
 
 
 @contextmanager
@@ -155,7 +155,7 @@ def select_mesh(target_output_fs, mesh_name):
 
 def main():
     with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
-        all_targets = sorted(b1k_pipeline.utils.get_targets('objects'))
+        all_targets = sorted(b1k_pipeline.utils.get_targets('combined'))
 
         # Get a list of all the objects that have already been processed
         print("Getting list of processed objects...")
