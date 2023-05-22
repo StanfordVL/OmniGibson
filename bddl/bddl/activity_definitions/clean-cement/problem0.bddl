@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        concrete.n.01_1 - concrete.n.01
+        cement.n.01_1 - cement.n.01
         floor.n.01_1 - floor.n.01
         dirt.n.02_1 - dirt.n.02
         fence.n.01_1 - fence.n.01
@@ -15,8 +15,8 @@
     )
     
     (:init 
-        (ontop concrete.n.01_1 floor.n.01_1) 
-        (covered concrete.n.01_1 dirt.n.02_1) 
+        (ontop cement.n.01_1 floor.n.01_1)
+        (covered cement.n.01_1 dirt.n.02_1)
         (ontop fence.n.01_1 floor.n.01_1) 
         (ontop watering_can.n.01_1 floor.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
@@ -31,7 +31,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?concrete.n.01_1 ?dirt.n.02_1)
+                (covered ?cement.n.01_1 ?dirt.n.02_1)
             )
         )
     )

@@ -3,7 +3,7 @@
 
     (:objects
         pan.n.01_1 - pan.n.01
-        truck.n.01_1 - truck.n.01
+        van.n.05_1 - van.n.05
         saucepot.n.01_1 - saucepot.n.01
         carton.n.02_1 - carton.n.02
         floor.n.01_1 floor.n.01_2 - floor.n.01
@@ -16,9 +16,9 @@
     (:init 
         (inside pan.n.01_1 carton.n.02_1) 
         (inside saucepot.n.01_1 carton.n.02_1) 
-        (inside carton.n.02_1 truck.n.01_1)
-        (ontop truck.n.01_1 floor.n.01_1) 
-        (inside blanket.n.01_1 truck.n.01_1) 
+        (inside carton.n.02_1 van.n.05_1)
+        (ontop van.n.05_1 floor.n.01_1) 
+        (inside blanket.n.01_1 van.n.05_1) 
         (inroom floor.n.01_1 garden) 
         (inroom bed.n.01_1 bedroom) 
         (inroom cabinet.n.01_1 kitchen) 

@@ -7,7 +7,7 @@
         salt.n.02_1 - salt.n.02
         whole_milk.n.01_1 - whole_milk.n.01
         water.n.06_1 - water.n.06
-        batter.n.02_1 - batter.n.02
+        pancake_batter.n.01_1 - pancake_batter.n.01
         mixer.n.04_1 - mixer.n.04
         mixing_bowl.n.01_1 - mixing_bowl.n.01
         flour__sack.n.01_1 - flour__sack.n.01
@@ -39,15 +39,15 @@
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom countertop.n.01_2 kitchen) 
-        (future batter.n.02_1) 
+        (future pancake_batter.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?batter.n.02_1) 
-            (contains ?mixing_bowl.n.01_1 ?batter.n.02_1)
+            (real ?pancake_batter.n.01_1) 
+            (contains ?mixing_bowl.n.01_1 ?pancake_batter.n.01_1)
         )
     )
 )

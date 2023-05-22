@@ -7,7 +7,7 @@
         floor.n.01_1 - floor.n.01
         bicycle.n.01_1 - bicycle.n.01
         bicycle_rack.n.01_1 - bicycle_rack.n.01
-        baggage.n.01_1 baggage.n.01_2 - baggage.n.01
+        bag.n.06_1 bag.n.06_2 - bag.n.06
         life_jacket.n.01_1 life_jacket.n.01_2 - life_jacket.n.01
         fishing_gear.n.01_1 fishing_gear.n.01_2 - fishing_gear.n.01
         sleeping_bag.n.01_1 sleeping_bag.n.01_2 - sleeping_bag.n.01
@@ -21,8 +21,8 @@
         (ontop recreational_vehicle.n.01_1 driveway.n.01_1)
         (attached bicycle.n.01_1 bicycle_rack.n.01_1) 
         (attached bicycle_rack.n.01_1 recreational_vehicle.n.01_1)
-        (inside baggage.n.01_1 recreational_vehicle.n.01_1) 
-        (inside baggage.n.01_2 recreational_vehicle.n.01_1) 
+        (inside bag.n.06_1 recreational_vehicle.n.01_1) 
+        (inside bag.n.06_2 recreational_vehicle.n.01_1) 
         (inside life_jacket.n.01_1 recreational_vehicle.n.01_1) 
         (inside life_jacket.n.01_2 recreational_vehicle.n.01_1) 
         (inside fishing_gear.n.01_1 recreational_vehicle.n.01_1) 
@@ -45,8 +45,8 @@
                 (nextto ?bicycle.n.01 ?wall.n.01_1)
             ) 
             (forall 
-                (?baggage.n.01 - baggage.n.01) 
-                (ontop ?baggage.n.01 ?floor.n.01_1)
+                (?bag.n.06 - bag.n.06) 
+                (ontop ?bag.n.06 ?floor.n.01_1)
             ) 
             (forall 
                 (?life_jacket.n.01 - life_jacket.n.01) 

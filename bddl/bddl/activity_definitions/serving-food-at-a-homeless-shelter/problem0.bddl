@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        potato_salad.n.01_1 potato_salad.n.01_2 - potato_salad.n.01
+        salad.n.01_1 salad.n.01_2 - salad.n.01
         cooked__white_rice.n.01_1 - cooked__white_rice.n.01
         chicken_broth.n.01_1 - chicken_broth.n.01
         mashed_potato.n.02_1 - mashed_potato.n.02
@@ -25,10 +25,10 @@
     )
     
     (:init 
-        (cooked potato_salad.n.01_1) 
-        (cooked potato_salad.n.01_2) 
-        (inside potato_salad.n.01_1 casserole.n.02_1) 
-        (inside potato_salad.n.01_2 casserole.n.02_1) 
+        (cooked salad.n.01_1)
+        (cooked salad.n.01_2)
+        (inside salad.n.01_1 casserole.n.02_1)
+        (inside salad.n.01_2 casserole.n.02_1)
         (filled casserole.n.02_2 cooked__white_rice.n.01_1) 
         (filled casserole.n.02_3 chicken_broth.n.01_1) 
         (filled casserole.n.02_4 mashed_potato.n.02_1)
@@ -73,8 +73,8 @@
                 (?plate.n.04 - plate.n.04)
                 (and
                     (exists 
-                        (?potato_salad.n.01 - potato_salad.n.01)
-                        (ontop ?potato_salad.n.01 ?plate.n.04)
+                        (?salad.n.01 - salad.n.01)
+                        (ontop ?salad.n.01 ?plate.n.04)
                     )
                     (contains ?plate.n.04 ?mashed_potato.n.02_1)
                     (contains ?plate.n.04 ?gravy.n.01_1)

@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        tarnish.n.01_1 - tarnish.n.01
+        tarnish.n.02_1 - tarnish.n.02
         shutter.n.02_1 shutter.n.02_2 - shutter.n.02
         rag.n.01_1 - rag.n.01
         bucket.n.01_1 - bucket.n.01
@@ -14,8 +14,8 @@
     )
     
     (:init 
-        (covered shutter.n.02_1 tarnish.n.01_1) 
-        (covered shutter.n.02_2 tarnish.n.01_1) 
+        (covered shutter.n.02_1 tarnish.n.02_1)
+        (covered shutter.n.02_2 tarnish.n.02_1)
         (ontop shutter.n.02_1 floor.n.01_1)
         (ontop shutter.n.02_2 floor.n.01_1)
         (ontop rag.n.01_1 floor.n.01_1) 
@@ -32,7 +32,7 @@
             (forall
                 (?shutter.n.02 - shutter.n.02)
                 (not 
-                    (covered ?shutter.n.02 ?tarnish.n.01_1)
+                    (covered ?shutter.n.02 ?tarnish.n.02_1)
                 )
             )
         )

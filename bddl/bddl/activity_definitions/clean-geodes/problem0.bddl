@@ -8,7 +8,7 @@
         detergent__bottle.n.01_1 - detergent__bottle.n.01
         toothbrush.n.01_1 - toothbrush.n.01
         countertop.n.01_1 - countertop.n.01
-        mud.n.01_1 - mud.n.01
+        mud.n.03_1 - mud.n.03
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
         water.n.06_1 - water.n.06
@@ -23,7 +23,7 @@
         (filled detergent__bottle.n.01_1 detergent.n.02_1)
         (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
         (ontop detergent__bottle.n.01_1 countertop.n.01_1)
-        (covered geode.n.01_1 mud.n.01_1) 
+        (covered geode.n.01_1 mud.n.03_1)
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen)
         (inroom floor.n.01_1 kitchen) 
@@ -36,7 +36,7 @@
             (forall 
                 (?geode.n.01 - geode.n.01) 
                 (not 
-                    (covered ?geode.n.01 ?mud.n.01_1)
+                    (covered ?geode.n.01 ?mud.n.03_1)
                 )
             )
         )

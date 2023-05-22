@@ -8,7 +8,6 @@
         bowl.n.01_1 - bowl.n.01
         chicken_broth.n.01_1 - chicken_broth.n.01
         chicken_broth__carton.n.01_1 - chicken_broth__carton.n.01
-        garlic.n.02_1 - garlic.n.02
         salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
         black_pepper.n.02_1 - black_pepper.n.02
@@ -26,7 +25,6 @@
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (filled chicken_broth__carton.n.01_1 chicken_broth.n.01_1) 
         (inside chicken_broth__carton.n.01_1 electric_refrigerator.n.01_1)
-        (inside garlic.n.02_1 electric_refrigerator.n.01_1) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (insource pepper__shaker.n.01_1 black_pepper.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)

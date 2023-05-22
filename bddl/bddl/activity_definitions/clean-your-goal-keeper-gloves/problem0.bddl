@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        mud.n.01_1 - mud.n.01
+        mud.n.03_1 - mud.n.03
         goalkeeper_gloves.n.01_1 - goalkeeper_gloves.n.01
         tub.n.02_1 - tub.n.02
         floor.n.01_1 - floor.n.01
@@ -18,7 +18,7 @@
     )
     
     (:init 
-        (covered goalkeeper_gloves.n.01_1 mud.n.01_1) 
+        (covered goalkeeper_gloves.n.01_1 mud.n.03_1)
         (ontop goalkeeper_gloves.n.01_1 floor.n.01_1) 
         (ontop tub.n.02_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
@@ -36,7 +36,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?goalkeeper_gloves.n.01_1 ?mud.n.01_1)
+                (covered ?goalkeeper_gloves.n.01_1 ?mud.n.03_1)
             ) 
         )
     )

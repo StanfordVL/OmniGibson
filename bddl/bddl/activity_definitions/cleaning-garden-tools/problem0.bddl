@@ -16,7 +16,7 @@
         glove.n.02_1 glove.n.02_2 - glove.n.02
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
-        mud.n.01_1 - mud.n.01
+        mud.n.03_1 - mud.n.03
         water.n.06_1 - water.n.06 
         watering_can.n.01_1 - watering_can.n.01
         scrub.n.01_1 - scrub.n.01
@@ -36,8 +36,8 @@
         (ontop rake.n.03_1 floor.n.01_1) 
         (ontop glove.n.02_1 floor.n.01_1) 
         (ontop glove.n.02_2 floor.n.01_1) 
-        (covered glove.n.02_1 mud.n.01_1)
-        (covered glove.n.02_2 mud.n.01_1)
+        (covered glove.n.02_1 mud.n.03_1)
+        (covered glove.n.02_2 mud.n.03_1)
         (inside scrub_brush.n.01_1 packing_box.n.02_1) 
         (ontop pot_plant.n.01_1 floor.n.01_1) 
         (ontop pot_plant.n.01_2 floor.n.01_1) 
@@ -75,7 +75,7 @@
                 (?glove.n.02 - glove.n.02)
                 (and
                     (not
-                        (covered ?glove.n.02 ?mud.n.01_1)
+                        (covered ?glove.n.02 ?mud.n.03_1)
                     )
                     (inside ?glove.n.02 ?packing_box.n.02_1)
                 )

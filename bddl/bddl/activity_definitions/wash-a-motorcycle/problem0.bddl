@@ -8,7 +8,7 @@
         driveway.n.01_1 - driveway.n.01
         water.n.06_1 - water.n.06
         bunchgrass.n.01_1 - bunchgrass.n.01
-        mud.n.01_1 - mud.n.01
+        mud.n.03_1 - mud.n.03
         bucket.n.01_1 - bucket.n.01
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
@@ -24,7 +24,7 @@
         (ontop fence.n.01_1 lawn.n.01_1) 
         (ontop motorcycle.n.01_1 driveway.n.01_1) 
         (covered motorcycle.n.01_1 bunchgrass.n.01_1) 
-        (covered motorcycle.n.01_1 mud.n.01_1) 
+        (covered motorcycle.n.01_1 mud.n.03_1)
         (ontop bucket.n.01_1 driveway.n.01_1) 
         (filled bucket.n.01_1 water.n.06_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
@@ -46,7 +46,7 @@
                 (covered ?motorcycle.n.01_1 ?bunchgrass.n.01_1)
             )
             (not 
-                (covered ?motorcycle.n.01_1 ?mud.n.01_1)
+                (covered ?motorcycle.n.01_1 ?mud.n.03_1)
             )
         )
     )

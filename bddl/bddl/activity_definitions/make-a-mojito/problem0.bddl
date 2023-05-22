@@ -4,7 +4,7 @@
     (:objects
         soda_water__bottle.n.01_1 - soda_water__bottle.n.01
         countertop.n.01_1 - countertop.n.01
-        soda_water.n.01_1 - soda_water.n.01
+        soda_water.n.03_1 - soda_water.n.03
         rum.n.01_1 - rum.n.01
         rum__bottle.n.01_1 - rum__bottle.n.01
         granulated_sugar.n.01_1 - granulated_sugar.n.01
@@ -22,7 +22,7 @@
     
     (:init 
         (inside soda_water__bottle.n.01_1 electric_refrigerator.n.01_1) 
-        (filled soda_water__bottle.n.01_1 soda_water.n.01_1) 
+        (filled soda_water__bottle.n.01_1 soda_water.n.03_1)
         (filled rum__bottle.n.01_1 rum.n.01_1) 
         (inside rum__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (filled granulated_sugar__sack.n.01_1 granulated_sugar.n.01_1) 
@@ -45,7 +45,7 @@
         (and 
             (real ?half__lime.n.01_1)
             (real ?half__lime.n.01_2)
-            (filled ?goblet.n.01_1 ?soda_water.n.01_1)
+            (filled ?goblet.n.01_1 ?soda_water.n.03_1)
             (contains ?goblet.n.01_1 ?rum.n.01_1)
             (contains ?goblet.n.01_1 ?granulated_sugar.n.01_1)
             (forall 

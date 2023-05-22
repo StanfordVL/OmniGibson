@@ -7,24 +7,24 @@
         wardrobe.n.01_1 - wardrobe.n.01
         boot.n.01_1 boot.n.01_2 - boot.n.01
         jean.n.01_1 - jean.n.01
-        chest.n.02_1 chest.n.02_2 - chest.n.02
+        cedar_chest.n.01_1 cedar_chest.n.01_2 - cedar_chest.n.01
         bed.n.01_1 - bed.n.01
         wallet.n.01_1 - wallet.n.01
         floor.n.01_1 floor.n.01_2 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
-    
+
     (:init 
         (inside shirt.n.01_1 wardrobe.n.01_1) 
         (inside coat.n.01_1 wardrobe.n.01_1) 
         (inside coat.n.01_2 wardrobe.n.01_1) 
-        (inside boot.n.01_1 chest.n.02_1) 
-        (inside boot.n.01_2 chest.n.02_1) 
-        (inside jean.n.01_1 chest.n.02_2) 
-        (inside wallet.n.01_1 chest.n.02_1) 
+        (inside boot.n.01_1 cedar_chest.n.01_1) 
+        (inside boot.n.01_2 cedar_chest.n.01_1) 
+        (inside jean.n.01_1 cedar_chest.n.01_2) 
+        (inside wallet.n.01_1 cedar_chest.n.01_1) 
         (ontop wardrobe.n.01_1 floor.n.01_1) 
-        (inroom chest.n.02_1 closet) 
-        (inroom chest.n.02_2 closet) 
+        (inroom cedar_chest.n.01_1 closet) 
+        (inroom cedar_chest.n.01_2 closet) 
         (inroom floor.n.01_1 closet) 
         (inroom floor.n.01_2 childs_room) 
         (inroom bed.n.01_1 childs_room)

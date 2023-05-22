@@ -3,8 +3,8 @@
 
     (:objects
         chicken.n.01_1 - chicken.n.01
-        batter.n.02_1 - batter.n.02
-        cooked__batter.n.02_1 - cooked__batter.n.02
+        fritter_batter.n.01_1 - fritter_batter.n.01
+        cooked__fritter_batter.n.01_1 - cooked__fritter_batter.n.01
         breadcrumb.n.01_1 - breadcrumb.n.01
         cooked__breadcrumb.n.01_1 - cooked__breadcrumb.n.01
         frying_pan.n.01_1 - frying_pan.n.01
@@ -54,7 +54,7 @@
         (filled hot_sauce__bottle.n.01_1 hot_sauce.n.01_1)
         (inside hot_sauce__bottle.n.01_1 electric_refrigerator.n.01_1)
         (ontop plate.n.04_1 countertop.n.01_1)
-        (filled tupperware.n.01_1 batter.n.02_1)
+        (filled tupperware.n.01_1 fritter_batter.n.01_1)
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
         (filled bowl.n.01_1 breadcrumb.n.01_1)
         (ontop bowl.n.01_1 countertop.n.01_1)
@@ -63,7 +63,7 @@
         (inroom floor.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (future melted__butter.n.01_1)
-        (future cooked__batter.n.02_1)
+        (future cooked__fritter_batter.n.01_1)
         (future cooked__breadcrumb.n.01_1)
         (future cooked__cooking_oil.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
@@ -71,7 +71,7 @@
     
     (:goal 
         (and 
-            (real ?cooked__batter.n.02_1)
+            (real ?cooked__fritter_batter.n.01_1)
             (or 
                 (real ?cooked__breadcrumb.n.01_1)
                 (real ?breadcrumb.n.01_1)
@@ -82,7 +82,7 @@
             )
             (real ?melted__butter.n.01_1)
             (cooked ?chicken.n.01_1)
-            (covered ?chicken.n.01_1 ?cooked__batter.n.02_1)
+            (covered ?chicken.n.01_1 ?cooked__fritter_batter.n.01_1)
             (or
                 (covered ?chicken.n.01_1 ?cooked__breadcrumb.n.01_1)
                 (covered ?chicken.n.01_1 ?breadcrumb.n.01_1)

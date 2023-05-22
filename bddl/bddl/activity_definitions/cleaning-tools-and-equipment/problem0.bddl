@@ -14,7 +14,7 @@
         sink.n.01_1 - sink.n.01
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
-        mud.n.01_1 - mud.n.01
+        mud.n.03_1 - mud.n.03
         bucket.n.01_1 - bucket.n.01
         trowel.n.01_1 - trowel.n.01
         water.n.06_1 - water.n.06
@@ -32,7 +32,7 @@
         (inside liquid_soap__bottle.n.01_1 cabinet.n.01_1)
         (ontop bucket.n.01_1 floor.n.01_1) 
         (ontop trowel.n.01_1 floor.n.01_1) 
-        (covered trowel.n.01_1 mud.n.01_1) 
+        (covered trowel.n.01_1 mud.n.03_1)
         (insource sink.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom washer.n.03_1 utility_room) 
@@ -50,7 +50,7 @@
                 (covered ?drill.n.01_1 ?dust.n.01_1)
             )
             (not 
-                (covered ?trowel.n.01_1 ?mud.n.01_1)
+                (covered ?trowel.n.01_1 ?mud.n.03_1)
             )
         )
     )
