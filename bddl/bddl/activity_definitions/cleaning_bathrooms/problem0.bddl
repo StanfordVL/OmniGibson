@@ -9,7 +9,7 @@
         floor.n.01_1 - floor.n.01
         bucket.n.01_1 - bucket.n.01
         bar_soap.n.01_1 - bar_soap.n.01
-        brush.n.02_1 - brush.n.02
+        scrub_brush.n.01_1 - scrub_brush.n.01
         rag.n.01_1 - rag.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -20,7 +20,7 @@
         (covered toilet.n.02_1 stain.n.01_1) 
         (covered floor.n.01_1 stain.n.01_1) 
         (inside bar_soap.n.01_1 sink.n.01_1) 
-        (inside brush.n.02_1 bathtub.n.01_1) 
+        (inside scrub_brush.n.01_1 bathtub.n.01_1)
         (ontop bucket.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 

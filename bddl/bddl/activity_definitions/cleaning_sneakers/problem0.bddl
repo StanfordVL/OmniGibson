@@ -9,7 +9,7 @@
             bar_soap.n.01_1 - bar_soap.n.01
             cabinet.n.01_1 - cabinet.n.01
             towel.n.01_1 - towel.n.01
-            brush.n.02_1 - brush.n.02
+            scrub_brush.n.01_1 - scrub_brush.n.01
             sink.n.01_1 - sink.n.01
             floor.n.01_1 floor.n.01_2 - floor.n.01
             table.n.02_1 - table.n.02
@@ -30,9 +30,9 @@
         (not 
             (covered towel.n.01_1 stain.n.01_1)
         ) 
-        (ontop brush.n.02_1 countertop.n.01_1) 
+        (ontop scrub_brush.n.01_1 countertop.n.01_1)
         (not 
-            (covered brush.n.02_1 stain.n.01_1)
+            (covered scrub_brush.n.01_1 stain.n.01_1)
         ) 
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -46,8 +46,8 @@
     (:goal 
         (and 
             (ontop ?towel.n.01_1 ?countertop.n.01_1) 
-            (nextto ?brush.n.02_1 ?towel.n.01_1) 
             (inside ?bar_soap.n.01_1 ?sink.n.01_1) 
+            (nextto ?scrub_brush.n.01_1 ?towel.n.01_1)
             (forall 
                 (?gym_shoe.n.01 - gym_shoe.n.01) 
                 (not 

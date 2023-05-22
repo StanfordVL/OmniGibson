@@ -4,7 +4,6 @@
     (:objects
         stain.n.01_1 - stain.n.01
         dust.n.01_1 - dust.n.01
-     	box.n.01_1 - box.n.01
     	floor.n.01_1 floor.n.01_2 - floor.n.01
     	newspaper.n.03_1 newspaper.n.03_2 - newspaper.n.03
     	bottle.n.01_1 bottle.n.01_2 - bottle.n.01
@@ -19,8 +18,7 @@
     )
     
     (:init 
-        (ontop box.n.01_1 floor.n.01_1) 
-        (ontop newspaper.n.03_1 floor.n.01_1) 
+        (ontop newspaper.n.03_1 floor.n.01_1)
         (ontop newspaper.n.03_2 floor.n.01_1) 
         (ontop bottle.n.01_1 floor.n.01_1) 
         (ontop bottle.n.01_2 floor.n.01_1) 

@@ -6,7 +6,7 @@
      	towel.n.01_1 towel.n.01_2 - towel.n.01
     	cabinet.n.01_1 - cabinet.n.01
     	rag.n.01_1 rag.n.01_2 - rag.n.01
-    	cleansing_agent.n.01_1 - cleansing_agent.n.01
+    	detergent.n.02_1 - detergent.n.02
     	window.n.01_1 window.n.01_2 - window.n.01
     	sink.n.01_1 - sink.n.01
     	floor.n.01_1 floor.n.01_2 - floor.n.01
@@ -19,7 +19,7 @@
         (inside towel.n.01_2 cabinet.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_2 cabinet.n.01_1) 
-        (inside cleansing_agent.n.01_1 cabinet.n.01_1) 
+        (inside detergent.n.02_1 cabinet.n.01_1)
         (covered window.n.01_1 dust.n.01_1) 
         (covered window.n.01_2 dust.n.01_1) 
         (not 

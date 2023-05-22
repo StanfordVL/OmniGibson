@@ -9,7 +9,6 @@
     	bucket.n.01_1 bucket.n.01_2 - bucket.n.01
     	bowl.n.01_1 bowl.n.01_2 bowl.n.01_3 bowl.n.01_4 - bowl.n.01
     	catsup.n.01_1 - catsup.n.01
-    	beverage.n.01_1 beverage.n.01_2 - beverage.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -21,9 +20,7 @@
         (ontop bowl.n.01_2 table.n.02_1) 
         (ontop bowl.n.01_3 table.n.02_1) 
         (ontop bowl.n.01_4 table.n.02_1) 
-        (ontop catsup.n.01_1 table.n.02_1) 
-        (ontop beverage.n.01_1 table.n.02_1) 
-        (ontop beverage.n.01_2 floor.n.01_1) 
+        (ontop catsup.n.01_1 table.n.02_1)
         (ontop bucket.n.01_2 floor.n.01_1) 
         (inroom floor.n.01_1 dining_room) 
         (inroom chair.n.01_1 dining_room) 

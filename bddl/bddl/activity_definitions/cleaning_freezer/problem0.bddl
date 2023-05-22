@@ -5,7 +5,7 @@
         stain.n.01_1 - stain.n.01
      	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	food.n.01_1 food.n.01_2 food.n.01_3 - food.n.01
-    	cleansing_agent.n.01_1 - cleansing_agent.n.01
+    	detergent.n.02_1 - detergent.n.02
     	table.n.02_1 - table.n.02
     	towel.n.01_1 - towel.n.01
     	floor.n.01_1 - floor.n.01
@@ -22,7 +22,7 @@
         (inside food.n.01_1 electric_refrigerator.n.01_1) 
         (inside food.n.01_2 electric_refrigerator.n.01_1) 
         (inside food.n.01_3 electric_refrigerator.n.01_1) 
-        (ontop cleansing_agent.n.01_1 table.n.02_1) 
+        (ontop detergent.n.02_1 table.n.02_1)
         (ontop towel.n.01_1 table.n.02_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
