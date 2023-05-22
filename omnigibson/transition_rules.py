@@ -4,11 +4,14 @@ from collections import namedtuple, defaultdict
 import numpy as np
 from copy import copy
 import itertools
+from bddl.parsing import scan_tokens
+from bddl.activity import create_scope, compile_state
 import omnigibson as og
 from omnigibson.macros import gm, create_module_macros
 from omnigibson.systems import get_system, is_system_active, PhysicalParticleSystem, VisualParticleSystem, REGISTERED_SYSTEMS
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.object_states import *
+from omnigibson.utils.bddl_utils import OmniGibsonBDDLBackend, process_single_condition
 from omnigibson.utils.python_utils import Registerable, classproperty, subclass_factory
 from omnigibson.utils.registry_utils import Registry
 import omnigibson.utils.transform_utils as T
@@ -35,6 +38,37 @@ m.DEFAULT_GARBAGE_SYSTEM = "sludge"
 _attrs_fields = ["category", "model", "name", "scale", "obj", "pos", "orn", "bb_pos", "bb_orn", "states"]
 ObjectAttrs = namedtuple(
     "ObjectAttrs", _attrs_fields, defaults=(None,) * len(_attrs_fields))
+
+# TODO: New paradigm:
+"""
+RuleCandidateFilter: Static filter used to infer valid object candidates for a given rule. NOT state-dependent. Calculated ONCE when rule becomes active
+RuleRequirement: Dynamic filter used to infer valid object combinations from inputted object candidates that satisfy a given rule. IS state-dependent. Calculated once per sim step
+
+Flow:
+# init time
+candidates = RuleCandidateFilters(...)
+requirements = RuleRequirement(...)
+--> e.g: TouchingAnyRequirement("sliceable", "slicer") --> prunes "sliceable" candidates. TODO: How to do this if specific combos are needed?
+
+--> candidates = {
+   "blender": [...],
+   "strawberry": [...],
+   "ice": [...],
+}
+
+# run time
+valid_candidates = RuleRequirement(individual_candidates)
+combos --> converts valid_candidates into cartesian combo of individual candidates + group candidates
+for (individual combo, group info) in combos(valid_candidates):
+    rule.transition(individual_combo, group_info)
+"""
+
+# TODO: Update active rules every time a new system becomes active or an object is removed
+# TODO: Refactor filters so they only get used once, then cache all outputs in actual concrete rule instances
+# TODO: Refactor slicing rule
+# TODO: Add BDDLTransitionRule --> Infers things programmatically from BDDL syntax
+# TODO: Refactor generic rule for future users to add
+# TODO: Hook up object scope assignment with BehaviorTask synchronization
 
 # Tuple of lists of objects to be added or removed returned from transitions.
 TransitionResults = namedtuple(
@@ -1231,3 +1265,201 @@ BlenderRule.add_recipe(
     input_systems=["milk"],
     output_system="strawberry_smoothie"
 )
+
+
+
+
+
+# TODO: Unify inputs and transition requirements as pre-conditions
+# TODO: Intelligently infer "real" system vs. object vs. ability
+
+class BDDLRuleTemplate(BaseTransitionRule):
+
+    # dict: maps bddl object scope system name to relevant required input / output systems used for this rule
+    _input_systems = None
+    _output_systems = None
+
+    # Conditions dynamically loaded at runtime, so we store them as an internal variable
+    _individual_filters = None
+
+    # Compile backend -- note: this is shared across ALL subclassed rules!
+    _backend = OmniGibsonBDDLBackend()
+
+    # Relevant object scope -- maps bddl_object_scope name to actual system / object instances
+    object_scope = None
+
+    # List of BDDL conditions to check when determining whether transition should occur or not
+    bddl_conditions = None
+
+    # List of BDDL conditions to sample positively when a transition occurs
+    bddl_transitions = None
+
+    @classmethod
+    def create(
+        cls,
+        name,
+        bddl_file,
+        **kwargs,
+    ):
+        """
+        Utility function to programmaticlaly generate monolithic blender rule classes
+
+        Args:
+            name (str): Name of the rule to generate (should include "Rule" at the end)
+            bddl_file (str): Absolute path to the BDDL file used for generating the Transition Rule
+
+        Returns:
+            BDDLRuleTemplate: Generated BDDL rule class
+        """
+
+        @classproperty
+        def cp_bddl_file(cls):
+            return bddl_file
+        kwargs["bddl_file"] = cp_bddl_file
+
+        # Create and return the class
+        return subclass_factory(name=name, base_classes=cls, **kwargs)
+
+    def __init_subclass__(cls, **kwargs):
+        # Run super first
+        super().__init_subclass__(**kwargs)
+
+        # Parse the bddl
+        cls._parse_bddl()
+
+    @classproperty
+    def bddl_file(cls):
+        """
+        Returns:
+            str: Absolute path to the relevant bddl file for this transition rule
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def _parse_bddl(cls):
+        """
+        Helper function parse the raw BDDL into a usable set of information that can be converted into OmniGibson logic
+        """
+        # 5-tuple: "define", rule 2-tuple, inputs, transition_requirements, outputs
+        _, rule_info, inputs, requirements, outputs = scan_tokens(filename=cls.bddl_file)
+        # First entry in inputs, reqs, and outputs are headers, so we strip those
+        inputs, requirements, outputs = inputs[1:], requirements[1:], outputs[1:]
+
+        # Compile object scope
+        # Maps: bddl_object_scope: [bddl_object_scope_id]
+        objs = {"_".join(entry[1].split("_")[:-1]): [entry[1]] for entries in (inputs, requirements, outputs) for entry
+                in entries if entry[0] == "real"}
+        cls.object_scope = create_scope(objs)
+
+        # Store relevant input system mappings
+        # Note that all inputs specify systems, so we grab the second entry and parse them to get its system
+        cls._input_systems = dict()
+        for (predicate, system_scope_name) in inputs:
+            assert predicate == "real", f"Unexpected input predicate when parsing bddl for transition rule: {predicate}"
+            system = REGISTERED_SYSTEMS[system_scope_name.split(".")[0]]
+            cls._input_systems[system_scope_name] = system
+            # Also add to object scope
+            cls.object_scope[system_scope_name] = system
+
+        # Parse requirements of any "real" predicates -- this will be converted into a category filter for grabbing
+        # relevant rule object candidates
+        filtered_requirements = []
+        cls._individual_filters = dict()
+        for requirement in requirements:
+            if requirement[0] == "real":
+                category = requirement[1].split(".")[0]
+                cls._individual_filters[requirements[1]] = CategoryFilter(category=category)
+            else:
+                filtered_requirements.append(requirement)
+
+        # Parse outputs as BDDL conditions, which will be sampled positively when executed
+        filtered_outputs = []
+        cls._output_systems = dict()
+        for output in outputs:
+            if output[0] == "real":
+                # Add any output systems to object scope as well
+                system_scope_name = output[1]
+                system = REGISTERED_SYSTEMS[system_scope_name.split(".")[0]]
+                cls._output_systems[system_scope_name] = system
+                # Also add to object scope
+                cls.object_scope[system_scope_name] = system
+            else:
+                filtered_outputs.append(output)
+
+        # Compile BDDL conditions
+        cls.bddl_conditions = compile_state(filtered_requirements, cls._backend, scope=cls.object_scope)
+        cls.bddl_transitions = [process_single_condition(condition)
+                                for condition in compile_state(filtered_outputs, cls._backend, scope=cls.object_scope)]
+
+    @classproperty
+    def required_systems(cls):
+        return [system.name for system in cls._input_systems.values()]
+
+    @classproperty
+    def individual_filters(cls):
+        return cls._individual_filters
+
+    @classmethod
+    def condition(cls, individual_objects, group_objects):
+        # Set the object scope accordingly
+        for bddl_obj_scope_name, obj in individual_objects.items():
+            cls.object_scope[bddl_obj_scope_name] = obj
+
+        # True if all conditions are met, otherwise, False
+        for condition in cls.bddl_conditions:
+            if not condition.evaluate():
+                return False
+
+        return True
+
+    @classmethod
+    def transition(cls, individual_objects, group_objects):
+        t_results = TransitionResults()
+
+        # Set the object scope accordingly
+        for bddl_obj_scope_name, obj in individual_objects.items():
+            cls.object_scope[bddl_obj_scope_name] = obj
+
+        # Make sure any output systems are initialized properly by grabbing them directly
+        for system_scope_name, system in cls._output_systems.values():
+            cls._output_systems[system_scope_name] = get_system(system.name)
+
+        # Sample positively all transitions
+        for condition, positive in cls.bddl_transitions:
+            condition.sample(binary_state=positive)
+
+        return t_results
+
+    @classproperty
+    def _do_not_register_classes(cls):
+        # Don't register this class since it's an abstract template
+        classes = super()._do_not_register_classes
+        classes.add("BDDLRuleTemplate")
+        return classes
+
+# TODO: Handle toggled on / magic wand stateful 2-step condition
+# TODO: Inputs should be required categories, only check for contains
+# TODO: Make blender rule monolithic, handle "all" recipes
+# TODO: Add ability to dynamically add recipe
+# TODO: Add ability to parse bddl and convert into new recipe
+# TODO: Have blender rule output proportional volume
+# TODO: Add garbage fallback, and add corresponding garbage substance
+# TODO: Filters should only check for "blender" abilities
+
+# TODO: Add separate monolithic rule for magic stirring rod
+# TODO: StirringRod rule should filter for combos of fillable and magic_wands
+# TODO: Unify shared logic between Blender rule and magic wand rule
+
+
+"""
+Blender / magic wand shared, except for:
+
+blender: requires blender ability objects + toggledon req
+wand: requires wand + fillable objects, + touching req
+
+both convert XXX objects itno 1 substance
+
+Heat Transformation rule:
+can convert XXX objects and / or substances into 1 rigid body
+condition: 
+"""
