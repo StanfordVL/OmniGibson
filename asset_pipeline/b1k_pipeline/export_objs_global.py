@@ -684,7 +684,7 @@ def main():
 
         dask_client = None #  Client('svl3.stanford.edu:35423')
         
-        with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as link_executor:
+        with futures.ProcessPoolExecutor(max_workers=50) as target_executor, futures.ProcessPoolExecutor(max_workers=50) as link_executor:
             targets = get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[target_executor.submit(process_target, target, objects_dir, link_executor, dask_client)] = target
