@@ -4,7 +4,7 @@
     (:objects
         wine_bottle.n.01_1 wine_bottle.n.01_2 - wine_bottle.n.01
         cheddar.n.02_1 - cheddar.n.02
-        diced__cheddar.n.02_1 - diced__cheddar.n.02
+        diced__cheddar.n.01_1 - diced__cheddar.n.01
         feta.n.01_1 - feta.n.01
         diced__feta.n.01_1 - diced__feta.n.01
         plate.n.04_1 plate.n.04_2 plate.n.04_3 - plate.n.04
@@ -63,13 +63,13 @@
         (inroom breakfast_table.n.01_1 dining_room) 
         (inroom floor.n.01_1 dining_room) 
         (future diced__feta.n.01_1)
-        (future diced__cheddar.n.02_1)
+        (future diced__cheddar.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?diced__cheddar.n.02_1)
+            (real ?diced__cheddar.n.01_1)
             (real ?diced__feta.n.01_1)
             (filled ?carafe.n.01_1 ?white_wine.n.01_1)
             (ontop ?carafe.n.01_1 ?breakfast_table.n.01_1)
@@ -80,7 +80,7 @@
                 (and 
                     (contains ?plate.n.04 ?almond.n.02_1)
                     (not 
-                        (contains ?plate.n.04 ?diced__cheddar.n.02_1)
+                        (contains ?plate.n.04 ?diced__cheddar.n.01_1)
                     )
                     (not 
                         (contains ?plate.n.04 ?diced__feta.n.01_1)
@@ -96,7 +96,7 @@
             (exists 
                 (?plate.n.04 - plate.n.04)
                 (and 
-                    (contains ?plate.n.04 ?diced__cheddar.n.02_1)
+                    (contains ?plate.n.04 ?diced__cheddar.n.01_1)
                     (contains ?plate.n.04 ?diced__feta.n.01_1)
                     (not 
                         (contains ?plate.n.04 ?almond.n.02_1)
@@ -120,7 +120,7 @@
                         (contains ?plate.n.04 ?almond.n.02_1)
                     )
                     (not 
-                        (contains ?plate.n.04 ?diced__cheddar.n.02_1)
+                        (contains ?plate.n.04 ?diced__cheddar.n.01_1)
                     )
                     (not 
                         (contains ?plate.n.04 ?diced__feta.n.01_1)

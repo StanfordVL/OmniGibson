@@ -5,7 +5,7 @@
         wrinkle.n.01_1 - wrinkle.n.01
         water.n.06_1 - water.n.06
         detergent.n.02_1 - detergent.n.02
-        detergent__bottle.n.02_1 - detergent__bottle.n.02
+        detergent__bottle.n.01_1 - detergent__bottle.n.01
         iron.n.04_1 - iron.n.04
         jean.n.01_1 - jean.n.01
         polo_shirt.n.01_1 - polo_shirt.n.01
@@ -21,8 +21,8 @@
         (ontop jean.n.01_1 floor.n.01_1) 
         (ontop polo_shirt.n.01_1 floor.n.01_1) 
         (ontop iron.n.04_1 floor.n.01_1)
-        (filled detergent__bottle.n.02_1 detergent.n.02_1)
-        (ontop detergent__bottle.n.02_1 floor.n.01_1)
+        (filled detergent__bottle.n.01_1 detergent.n.02_1)
+        (ontop detergent__bottle.n.01_1 floor.n.01_1)
         (insource sink.n.01_1 water.n.06_1)
         (inroom shelf.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 

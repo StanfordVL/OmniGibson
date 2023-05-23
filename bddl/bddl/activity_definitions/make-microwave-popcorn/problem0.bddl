@@ -4,9 +4,9 @@
     (:objects
         cooking_oil.n.01_1 - cooking_oil.n.01
         cooked__cooking_oil.n.01_1 - cooked__cooking_oil.n.01
-        popcorn.n.01_1 - popcorn.n.01
+        popcorn.n.02_1 - popcorn.n.02
         salt.n.02_1 - salt.n.02
-        cooked__salt.n.02_1 - cooked__salt.n.02
+        cooked__salt.n.01_1 - cooked__salt.n.01
         cooked__popcorn.n.01_1 - cooked__popcorn.n.01
         popcorn__bag.n.01_1 - popcorn__bag.n.01
         microwave.n.02_1 - microwave.n.02
@@ -20,10 +20,7 @@
     (:init
         (filled cooking_oil__bottle.n.01_1 cooking_oil.n.01_1)
         (ontop cooking_oil__bottle.n.01_1 countertop.n.01_1)
-        (not
-            (cooked popcorn.n.01_1)
-        )
-        (filled popcorn__bag.n.01_1 popcorn.n.01_1)
+        (filled popcorn__bag.n.01_1 popcorn.n.02_1)
         (ontop popcorn__bag.n.01_1 countertop.n.01_1)
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
@@ -31,7 +28,7 @@
         (inroom countertop.n.01_1 kitchen)
         (inroom floor.n.01_1 kitchen)
         (future cooked__popcorn.n.01_1)
-        (future cooked__salt.n.02_1)
+        (future cooked__salt.n.01_1)
         (future cooked__cooking_oil.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -40,12 +37,12 @@
         (and
             (real ?cooked__popcorn.n.01_1)
             (or 
-                (real ?cooked__salt.n.02_1)
+                (real ?cooked__salt.n.01_1)
                 (real ?salt.n.02_1)
             )
             (or 
                 (real ?cooked__cooking_oil.n.01_1)
-                (real ?cooked__salt.n.02_1)
+                (real ?cooked__salt.n.01_1)
             )
             (filled ?popcorn__bag.n.01_1 ?cooked__popcorn.n.01_1)
             (or 
@@ -54,7 +51,7 @@
             )
             (or 
                 (contains ?popcorn__bag.n.01_1 ?salt.n.02_1)
-                (contains ?popcorn__bag.n.01_1 ?cooked__salt.n.02_1)
+                (contains ?popcorn__bag.n.01_1 ?cooked__salt.n.01_1)
             )
         )
     )

@@ -3,7 +3,7 @@
 
     (:objects
         polish.n.03_1 - polish.n.03
-        polish__bottle.n.03_1 - polish__bottle.n.03
+        polish__bottle.n.01_1 - polish__bottle.n.01
         copper.n.01_1 - copper.n.01
         rag.n.01_1 - rag.n.01
         cabinet.n.01_1 - cabinet.n.01
@@ -15,8 +15,8 @@
     (:init 
         (inside rag.n.01_1 cabinet.n.01_1) 
         (ontop copper.n.01_1 clothes_dryer.n.01_1)
-        (filled polish__bottle.n.03_1 polish.n.03_1)
-        (inside polish__bottle.n.03_1 cabinet.n.01_1)
+        (filled polish__bottle.n.01_1 polish.n.03_1)
+        (inside polish__bottle.n.01_1 cabinet.n.01_1)
         (inroom cabinet.n.01_1 utility_room) 
         (inroom floor.n.01_1 utility_room) 
         (inroom clothes_dryer.n.01_1 utility_room)

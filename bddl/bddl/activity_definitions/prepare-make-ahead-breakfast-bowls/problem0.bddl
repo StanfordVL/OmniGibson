@@ -3,7 +3,7 @@
 
     (:objects
         bell_pepper.n.02_1 - bell_pepper.n.02
-        cooked__diced__bell_pepper.n.02_1 - cooked__diced__bell_pepper.n.02
+        cooked__diced__bell_pepper.n.01_1 - cooked__diced__bell_pepper.n.01
         tupperware.n.01_1 - tupperware.n.01
         potato.n.01_1 - potato.n.01
         half__potato.n.01_1 half__potato.n.01_2 - half__potato.n.01
@@ -54,7 +54,7 @@
         (future half__feta.n.01_2)
         (future half__potato.n.01_1)
         (future half__potato.n.01_2)
-        (future cooked__diced__bell_pepper.n.02_1)
+        (future cooked__diced__bell_pepper.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -64,7 +64,7 @@
             (real ?half__feta.n.01_2)
             (real ?half__potato.n.01_1)
             (real ?half__potato.n.01_2)
-            (real ?cooked__diced__bell_pepper.n.02_1)
+            (real ?cooked__diced__bell_pepper.n.01_1)
             (forpairs 
                 (?egg.n.02 - egg.n.02)
                 (?bowl.n.01 - bowl.n.01)
@@ -76,7 +76,7 @@
             (forall 
                 (?bowl.n.01 - bowl.n.01)
                 (and
-                    (contains ?bowl.n.01 ?cooked__diced__bell_pepper.n.02_1)
+                    (contains ?bowl.n.01 ?cooked__diced__bell_pepper.n.01_1)
                     (contains ?bowl.n.01 ?salt.n.02_1)
                     (contains ?bowl.n.01 ?olive_oil.n.01_1)
                 )

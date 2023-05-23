@@ -5,7 +5,7 @@
         shopping_basket.n.01_1 - shopping_basket.n.01
         pineapple.n.02_1 - pineapple.n.02
         mango.n.02_1 mango.n.02_2 - mango.n.02
-        half__mango.n.02_1 - half__mango.n.02
+        half__mango.n.01_1 - half__mango.n.01
         cantaloup.n.02_1 - cantaloup.n.02
         eggplant.n.01_1 eggplant.n.01_2 - eggplant.n.01
         zucchini.n.02_1 zucchini.n.02_2 zucchini.n.02_3 - zucchini.n.02
@@ -15,7 +15,7 @@
     )
     
     (:init 
-        (ontop half__mango.n.02_1 mango.n.02_1)
+        (ontop half__mango.n.01_1 mango.n.02_1)
         (covered zucchini.n.02_3 stain.n.01_1)
         (covered eggplant.n.01_2 stain.n.01_1)
         (inroom shopping_basket.n.01_1 grocery_store) 
@@ -74,7 +74,7 @@
                 (inside ?mango.n.02 ?shopping_basket.n.01_1)
             )
             (not 
-                (inside ?half__mango.n.02_1 ?shopping_basket.n.01_1)
+                (inside ?half__mango.n.01_1 ?shopping_basket.n.01_1)
             )
             (inside ?cantaloup.n.02_1 ?shopping_basket.n.01_1)
         )

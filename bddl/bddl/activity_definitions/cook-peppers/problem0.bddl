@@ -3,7 +3,7 @@
 
     (:objects
         bell_pepper.n.02_1 bell_pepper.n.02_2 bell_pepper.n.02_3 bell_pepper.n.02_4 - bell_pepper.n.02
-        cooked__diced__bell_pepper.n.02_1 - cooked__diced__bell_pepper.n.02
+        cooked__diced__bell_pepper.n.01_1 - cooked__diced__bell_pepper.n.01
         chopping_board.n.01_1 - chopping_board.n.01
         olive_oil.n.01_1 - olive_oil.n.01
         olive_oil__bottle.n.01_1 - olive_oil__bottle.n.01
@@ -46,14 +46,14 @@
         (inroom grill.n.02_1 kitchen) 
         (inroom shelf.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (future cooked__diced__bell_pepper.n.02_1)
+        (future cooked__diced__bell_pepper.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?cooked__diced__bell_pepper.n.02_1)
-            (contains ?frying_pan.n.01_1 ?cooked__diced__bell_pepper.n.02_1)
+            (real ?cooked__diced__bell_pepper.n.01_1)
+            (contains ?frying_pan.n.01_1 ?cooked__diced__bell_pepper.n.01_1)
             (contains ?frying_pan.n.01_1 ?olive_oil.n.01_1)
         )
     )

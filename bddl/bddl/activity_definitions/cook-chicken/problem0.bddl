@@ -8,7 +8,7 @@
         oven.n.01_1 - oven.n.01
         stockpot.n.01_1 - stockpot.n.01
         clove.n.03_1 clove.n.03_2 clove.n.03_3 clove.n.03_4 - clove.n.03
-        diced__clove.n.03_1 - diced__clove.n.03
+        diced__clove.n.01_1 - diced__clove.n.01
         bowl.n.01_1 - bowl.n.01
         chicken_broth.n.01_1 - chicken_broth.n.01
         chicken_broth__carton.n.01_1 - chicken_broth__carton.n.01
@@ -43,16 +43,16 @@
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (future cooked__diced__chicken.n.01_1)
-        (future diced__clove.n.03_1)
+        (future diced__clove.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?diced__clove.n.03_1)
+            (real ?diced__clove.n.01_1)
             (real ?cooked__diced__chicken.n.01_1)
             (contains ?stockpot.n.01_1 ?chicken_broth.n.01_1)
-            (contains ?stockpot.n.01_1 ?diced__clove.n.03_1)
+            (contains ?stockpot.n.01_1 ?diced__clove.n.01_1)
             (contains ?stockpot.n.01_1 ?cooked__diced__chicken.n.01_1)
             (contains ?stockpot.n.01_1 ?salt.n.02_1)
         )

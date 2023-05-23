@@ -10,7 +10,7 @@
         applesauce.n.01_1 - applesauce.n.01
         stove.n.01_1 - stove.n.01
         saucepan.n.01_1 - saucepan.n.01
-        cinnamon__shaker.n.03_1 - cinnamon__shaker.n.03
+        cinnamon__shaker.n.01_1 - cinnamon__shaker.n.01
         sugar__sack.n.01_1 - sugar__sack.n.01
         countertop.n.01_1 countertop.n.01_2 - countertop.n.01
         sink.n.01_1 - sink.n.01
@@ -26,8 +26,8 @@
         (ontop apple.n.01_3 countertop.n.01_1) 
         (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1) 
         (ontop lemon_juice__bottle.n.01_1 countertop.n.01_1) 
-        (insource cinnamon__shaker.n.03_1 cinnamon.n.03_1) 
-        (ontop cinnamon__shaker.n.03_1 countertop.n.01_2) 
+        (insource cinnamon__shaker.n.01_1 cinnamon.n.03_1) 
+        (ontop cinnamon__shaker.n.01_1 countertop.n.01_2) 
         (filled sugar__sack.n.01_1 granulated_sugar.n.01_1) 
         (ontop sugar__sack.n.01_1 countertop.n.01_2) 
         (ontop tablespoon.n.02_1 countertop.n.01_2) 

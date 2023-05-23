@@ -11,7 +11,7 @@
         cooked__olive_oil.n.01_1 - cooked__olive_oil.n.01
         olive_oil__bottle.n.01_1 - olive_oil__bottle.n.01
         bell_pepper.n.02_1 - bell_pepper.n.02
-        cooked__diced__bell_pepper.n.02_1 - cooked__diced__bell_pepper.n.02
+        cooked__diced__bell_pepper.n.01_1 - cooked__diced__bell_pepper.n.01
         beefsteak_tomato.n.01_1 - beefsteak_tomato.n.01
         vidalia_onion.n.01_1 - vidalia_onion.n.01
         cooked__diced__vidalia_onion.n.01_1 - cooked__diced__vidalia_onion.n.01
@@ -19,20 +19,20 @@
         chopping_board.n.01_1 - chopping_board.n.01
         carving_knife.n.01_1 - carving_knife.n.01
         black_pepper.n.02_1 - black_pepper.n.02
-        cooked__black_pepper.n.02_1 - cooked__black_pepper.n.02
+        cooked__black_pepper.n.01_1 - cooked__black_pepper.n.01
         pepper__shaker.n.01_1 - pepper__shaker.n.01
         salt.n.02_1 - salt.n.02
-        cooked__salt.n.02_1 - cooked__salt.n.02
+        cooked__salt.n.01_1 - cooked__salt.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
         oregano.n.01_1 - oregano.n.01
         cooked__oregano.n.01_1 - cooked__oregano.n.01
         oregano__shaker.n.01_1 - oregano__shaker.n.01
         cumin.n.02_1 - cumin.n.02
-        cooked__cumin.n.02_1 - cooked__cumin.n.02
-        cumin__shaker.n.02_1 - cumin__shaker.n.02
+        cooked__cumin.n.01_1 - cooked__cumin.n.01
+        cumin__shaker.n.01_1 - cumin__shaker.n.01
         paprika.n.02_1 - paprika.n.02
-        cooked__paprika.n.02_1 - cooked__paprika.n.02
-        paprika__shaker.n.02_1 - paprika__shaker.n.02
+        cooked__paprika.n.01_1 - cooked__paprika.n.01
+        paprika__shaker.n.01_1 - paprika__shaker.n.01
         salsa.n.01_1 - salsa.n.01
         cooked__salsa.n.01_1 - cooked__salsa.n.01
         salsa__bottle.n.01_1 - salsa__bottle.n.01
@@ -65,10 +65,10 @@
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
         (insource oregano__shaker.n.01_1 oregano.n.01_1)
         (inside oregano__shaker.n.01_1 cabinet.n.01_1)
-        (insource cumin__shaker.n.02_1 cumin.n.02_1)
-        (inside cumin__shaker.n.02_1 cabinet.n.01_1)
-        (insource paprika__shaker.n.02_1 paprika.n.02_1)
-        (inside paprika__shaker.n.02_1 cabinet.n.01_1)
+        (insource cumin__shaker.n.01_1 cumin.n.02_1)
+        (inside cumin__shaker.n.01_1 cabinet.n.01_1)
+        (insource paprika__shaker.n.01_1 paprika.n.02_1)
+        (inside paprika__shaker.n.01_1 cabinet.n.01_1)
         (filled salsa__bottle.n.01_1 salsa.n.01_1)
         (inside salsa__bottle.n.01_1 electric_refrigerator.n.01_1)
         (inside lime.n.06_1 electric_refrigerator.n.01_1)
@@ -79,14 +79,14 @@
         (inroom floor.n.01_1 kitchen) 
         (future cooked__diced__chicken.n.01_1)
         (future cooked__olive_oil.n.01_1)
-        (future cooked__diced__bell_pepper.n.02_1)
+        (future cooked__diced__bell_pepper.n.01_1)
         (future cooked__diced__beefsteak_tomato.n.01_1)
         (future cooked__diced__vidalia_onion.n.01_1)
-        (future cooked__black_pepper.n.02_1)
-        (future cooked__salt.n.02_1)
+        (future cooked__black_pepper.n.01_1)
+        (future cooked__salt.n.01_1)
         (future cooked__oregano.n.01_1)
-        (future cooked__cumin.n.02_1)
-        (future cooked__paprika.n.02_1)
+        (future cooked__cumin.n.01_1)
+        (future cooked__paprika.n.01_1)
         (future cooked__salsa.n.01_1)
         (future half__lime.n.01_1)
         (future half__lime.n.01_2)
@@ -100,14 +100,14 @@
                 (real ?olive_oil.n.01_1)
                 (real ?cooked__olive_oil.n.01_1)
             )
-            (real ?cooked__diced__bell_pepper.n.02_1)
+            (real ?cooked__diced__bell_pepper.n.01_1)
             (real ?cooked__diced__beefsteak_tomato.n.01_1)
             (real ?cooked__diced__vidalia_onion.n.01_1)
-            (real ?cooked__black_pepper.n.02_1)
-            (real ?cooked__salt.n.02_1)
+            (real ?cooked__black_pepper.n.01_1)
+            (real ?cooked__salt.n.01_1)
             (real ?cooked__oregano.n.01_1)
-            (real ?cooked__cumin.n.02_1)
-            (real ?cooked__paprika.n.02_1)
+            (real ?cooked__cumin.n.01_1)
+            (real ?cooked__paprika.n.01_1)
             (real ?cooked__salsa.n.01_1)
             (real ?half__lime.n.01_1)
             (real ?half__lime.n.01_2)
@@ -116,14 +116,14 @@
                 (contains ?frying_pan.n.01_1 ?olive_oil.n.01_1)
                 (contains ?frying_pan.n.01_1 ?cooked__olive_oil.n.01_1)
             )
-            (contains ?frying_pan.n.01_1 ?cooked__diced__bell_pepper.n.02_1)
+            (contains ?frying_pan.n.01_1 ?cooked__diced__bell_pepper.n.01_1)
             (contains ?frying_pan.n.01_1 ?cooked__diced__beefsteak_tomato.n.01_1)
             (contains ?frying_pan.n.01_1 ?cooked__diced__vidalia_onion.n.01_1)
-            (contains ?frying_pan.n.01_1 ?cooked__black_pepper.n.02_1)
-            (contains ?frying_pan.n.01_1 ?cooked__salt.n.02_1)
+            (contains ?frying_pan.n.01_1 ?cooked__black_pepper.n.01_1)
+            (contains ?frying_pan.n.01_1 ?cooked__salt.n.01_1)
             (contains ?frying_pan.n.01_1 ?cooked__oregano.n.01_1)
-            (contains ?frying_pan.n.01_1 ?cooked__cumin.n.02_1)
-            (contains ?frying_pan.n.01_1 ?cooked__paprika.n.02_1)
+            (contains ?frying_pan.n.01_1 ?cooked__cumin.n.01_1)
+            (contains ?frying_pan.n.01_1 ?cooked__paprika.n.01_1)
             (contains ?frying_pan.n.01_1 ?cooked__salsa.n.01_1)
             (forall 
                 (?half__lime.n.01 - half__lime.n.01)

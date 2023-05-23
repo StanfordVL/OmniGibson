@@ -6,7 +6,7 @@
         shelf.n.01_1 - shelf.n.01
         apple_juice__bottle.n.01_1 apple_juice__bottle.n.01_2 apple_juice__bottle.n.01_3 apple_juice__bottle.n.01_4 apple_juice__bottle.n.01_5 - apple_juice__bottle.n.01
         canned_food.n.01_1 canned_food.n.01_2 canned_food.n.01_3 canned_food.n.01_4 - canned_food.n.01
-        pasta__box.n.02_1 pasta__box.n.02_2 pasta__box.n.02_3 pasta__box.n.02_4 pasta__box.n.02_5 pasta__box.n.02_6 - pasta__box.n.02
+        pasta__box.n.01_1 pasta__box.n.01_2 pasta__box.n.01_3 pasta__box.n.01_4 pasta__box.n.01_5 pasta__box.n.01_6 - pasta__box.n.01
         packing_box.n.02_1 packing_box.n.02_2 packing_box.n.02_3 packing_box.n.02_4 - packing_box.n.02
         worktable.n.01_1 - worktable.n.01
         floor.n.01_1 - floor.n.01
@@ -31,12 +31,12 @@
         (inside canned_food.n.01_2 shelf.n.01_1) 
         (inside canned_food.n.01_3 shelf.n.01_1) 
         (inside canned_food.n.01_4 shelf.n.01_1) 
-        (inside pasta__box.n.02_1 shelf.n.01_1) 
-        (inside pasta__box.n.02_2 shelf.n.01_1) 
-        (inside pasta__box.n.02_3 shelf.n.01_1) 
-        (inside pasta__box.n.02_4 shelf.n.01_1) 
-        (inside pasta__box.n.02_5 shelf.n.01_1) 
-        (inside pasta__box.n.02_6 shelf.n.01_1) 
+        (inside pasta__box.n.01_1 shelf.n.01_1) 
+        (inside pasta__box.n.01_2 shelf.n.01_1) 
+        (inside pasta__box.n.01_3 shelf.n.01_1) 
+        (inside pasta__box.n.01_4 shelf.n.01_1) 
+        (inside pasta__box.n.01_5 shelf.n.01_1) 
+        (inside pasta__box.n.01_6 shelf.n.01_1) 
         (inroom shelf.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
         (inroom worktable.n.01_1 grocery_store) 
@@ -52,8 +52,8 @@
             ) 
             (forpairs 
                 (?packing_box.n.02 - packing_box.n.02)
-                (?pasta__box.n.02 - pasta__box.n.02)
-                (inside ?pasta__box.n.02 ?packing_box.n.02)
+                (?pasta__box.n.01 - pasta__box.n.01)
+                (inside ?pasta__box.n.01 ?packing_box.n.02)
             ) 
             (forpairs 
                 (?packing_box.n.02 - packing_box.n.02)

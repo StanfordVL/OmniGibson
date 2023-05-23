@@ -10,15 +10,15 @@
         tablespoon.n.02_1 - tablespoon.n.02
         mug.n.04_1 - mug.n.04
         countertop.n.01_1 countertop.n.01_2 - countertop.n.01
-        bourbon__bottle.n.02_1 - bourbon__bottle.n.02 
+        bourbon__bottle.n.01_1 - bourbon__bottle.n.01 
         honey__jar.n.01_1 - honey__jar.n.01 
         lemon_juice__bottle.n.01_1 - lemon_juice__bottle.n.01 
         water_bottle.n.01_1 - water_bottle.n.01
     )
 
     (:init
-        (filled bourbon__bottle.n.02_1 bourbon.n.02_1)
-        (ontop bourbon__bottle.n.02_1 countertop.n.01_1)
+        (filled bourbon__bottle.n.01_1 bourbon.n.02_1)
+        (ontop bourbon__bottle.n.01_1 countertop.n.01_1)
         (filled honey__jar.n.01_1 honey.n.01_1)
         (ontop honey__jar.n.01_1 countertop.n.01_1)
         (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1)

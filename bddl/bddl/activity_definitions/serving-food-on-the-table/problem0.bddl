@@ -6,7 +6,7 @@
         console_table.n.01_1 - console_table.n.01
         cooked__diced__chicken.n.01_1 - cooked__diced__chicken.n.01
         cooked__penne.n.01_1 - cooked__penne.n.01
-        cooked__chickpea.n.03_1 - cooked__chickpea.n.03
+        cooked__chickpea.n.01_1 - cooked__chickpea.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
         plate.n.04_1 - plate.n.04
         tablefork.n.01_1 tablefork.n.01_2 - tablefork.n.01
@@ -22,7 +22,7 @@
         (ontop casserole.n.02_1 console_table.n.01_1) 
         (filled casserole.n.02_1 cooked__diced__chicken.n.01_1) 
         (filled bowl.n.01_1 cooked__penne.n.01_1) 
-        (filled bowl.n.01_2 cooked__chickpea.n.03_1)
+        (filled bowl.n.01_2 cooked__chickpea.n.01_1)
         (ontop plate.n.04_1 breakfast_table.n.01_1)
         (ontop tablefork.n.01_1 plate.n.04_1)
         (ontop napkin.n.01_1 breakfast_table.n.01_1) 
@@ -44,7 +44,7 @@
         (and 
             (contains ?plate.n.04_1 ?cooked__diced__chicken.n.01_1)
             (contains ?plate.n.04_1 ?cooked__penne.n.01_1)
-            (contains ?plate.n.04_1 ?cooked__chickpea.n.03_1)
+            (contains ?plate.n.04_1 ?cooked__chickpea.n.01_1)
             (ontop ?bap.n.01_1 ?plate.n.04_1)
             (ontop ?plate.n.04_1 ?breakfast_table.n.01_1)
             (nextto ?tablespoon.n.02_1 ?plate.n.04_1)

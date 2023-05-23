@@ -8,7 +8,7 @@
     	mayonnaise.n.01_1 - mayonnaise.n.01
     	mayonnaise__jar.n.01_1 - mayonnaise__jar.n.01
     	mustard.n.02_1 - mustard.n.02
-    	mustard__bottle.n.02_1 - mustard__bottle.n.02
+    	mustard__bottle.n.01_1 - mustard__bottle.n.01
     	hamburger.n.01_1 - hamburger.n.01
     	cheddar.n.02_1 - cheddar.n.02
     	floor.n.01_1 - floor.n.01
@@ -20,8 +20,8 @@
         (ontop lettuce.n.03_1 breakfast_table.n.01_1) 
         (covered mayonnaise__jar.n.01_1 mayonnaise.n.01_1) 
         (ontop mayonnaise__jar.n.01_1 breakfast_table.n.01_1) 
-        (covered mustard__bottle.n.02_1 mustard.n.02_1) 
-        (ontop mustard__bottle.n.02_1 breakfast_table.n.01_1) 
+        (covered mustard__bottle.n.01_1 mustard.n.02_1) 
+        (ontop mustard__bottle.n.01_1 breakfast_table.n.01_1) 
         (ontop hamburger.n.01_1 breakfast_table.n.01_1) 
         (ontop cheddar.n.02_1 breakfast_table.n.01_1) 
         (ontop bap.n.01_2 breakfast_table.n.01_1) 
@@ -53,8 +53,8 @@
                 (covered ?bap.n.01_2 ?mustard.n.02)
             ) 
             (forall 
-                (?mustard__bottle.n.02 - mustard__bottle.n.02) 
-                (ontop ?mustard__bottle.n.02 ?breakfast_table.n.01_1)
+                (?mustard__bottle.n.01 - mustard__bottle.n.01) 
+                (ontop ?mustard__bottle.n.01 ?breakfast_table.n.01_1)
             ) 
             (forall 
                 (?hamburger.n.01 - hamburger.n.01) 

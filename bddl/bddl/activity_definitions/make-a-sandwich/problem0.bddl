@@ -3,7 +3,7 @@
 
     (:objects
         jelly.n.02_1 - jelly.n.02
-        jelly__jar.n.02_1 - jelly__jar.n.02
+        jelly__jar.n.01_1 - jelly__jar.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         peanut_butter.n.01_1 - peanut_butter.n.01
         peanut_butter__jar.n.01_1 - peanut_butter__jar.n.01
@@ -18,8 +18,8 @@
     )
     
     (:init 
-        (filled jelly__jar.n.02_1 jelly.n.02_1) 
-        (inside jelly__jar.n.02_1 electric_refrigerator.n.01_1) 
+        (filled jelly__jar.n.01_1 jelly.n.02_1) 
+        (inside jelly__jar.n.01_1 electric_refrigerator.n.01_1) 
         (filled peanut_butter__jar.n.01_1 peanut_butter.n.01_1) 
         (inside peanut_butter__jar.n.01_1 electric_refrigerator.n.01_1) 
         (inside bread_slice.n.01_1 sack.n.01_1)

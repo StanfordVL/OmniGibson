@@ -9,7 +9,7 @@
         water_glass.n.02_1 water_glass.n.02_2 water_glass.n.02_3 water_glass.n.02_4 - water_glass.n.02
         casserole.n.02_1 casserole.n.02_2 casserole.n.02_3 casserole.n.02_4 - casserole.n.02
         tupperware.n.01_1 tupperware.n.01_2 tupperware.n.01_3 tupperware.n.01_4 - tupperware.n.01
-        cooked__diced__broccoli.n.02_1 - cooked__diced__broccoli.n.02
+        cooked__diced__broccoli.n.01_1 - cooked__diced__broccoli.n.01
         chicken_leg.n.01_1 chicken_leg.n.01_2 chicken_leg.n.01_3 chicken_leg.n.01_4 - chicken_leg.n.01
         cooked__quinoa.n.01_1 - cooked__quinoa.n.01
         chocolate_biscuit.n.01_1 chocolate_biscuit.n.01_2 chocolate_biscuit.n.01_3 chocolate_biscuit.n.01_4 chocolate_biscuit.n.01_5 chocolate_biscuit.n.01_6 chocolate_biscuit.n.01_7 chocolate_biscuit.n.01_8 - chocolate_biscuit.n.01
@@ -43,7 +43,7 @@
         (inside ladle.n.01_2 cabinet.n.01_1) 
         (inside tongs.n.01_1 cabinet.n.01_1) 
         (inside tongs.n.01_2 cabinet.n.01_1) 
-        (filled tupperware.n.01_1 cooked__diced__broccoli.n.02_1)
+        (filled tupperware.n.01_1 cooked__diced__broccoli.n.01_1)
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
         (cooked chicken_leg.n.01_1)
         (cooked chicken_leg.n.01_2)
@@ -71,14 +71,14 @@
         (inroom floor.n.01_1 kitchen) 
         (inroom microwave.n.02_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen)
-        (future cooked__diced__broccoli.n.02_1)
+        (future cooked__diced__broccoli.n.01_1)
         (future cooked__quinoa.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?cooked__diced__broccoli.n.02_1)
+            (real ?cooked__diced__broccoli.n.01_1)
             (real ?cooked__quinoa.n.01_1)
             (forall 
                 (?napkin.n.01 - napkin.n.01)
@@ -106,7 +106,7 @@
                         (?ladle.n.01 - ladle.n.01)
                         (inside ?ladle.n.01 ?casserole.n.02)
                     )
-                    (contains ?casserole.n.02 ?cooked__diced__broccoli.n.02_1)
+                    (contains ?casserole.n.02 ?cooked__diced__broccoli.n.01_1)
                     (not 
                         (contains ?casserole.n.02 ?chicken_leg.n.01_1)
                     )
@@ -133,7 +133,7 @@
                         )
                     )
                     (not
-                        (contains ?casserole.n.02 ?cooked__diced__broccoli.n.02_1)
+                        (contains ?casserole.n.02 ?cooked__diced__broccoli.n.01_1)
                     )
                     (not 
                         (contains ?casserole.n.02 ?cooked__quinoa.n.01_1)
@@ -155,7 +155,7 @@
                         (inside ?chicken_leg.n.01_1 ?casserole.n.02)
                     )
                     (not 
-                        (contains ?casserole.n.02 ?cooked__diced__broccoli.n.02_1)
+                        (contains ?casserole.n.02 ?cooked__diced__broccoli.n.01_1)
                     )
                     (not 
                         (inside ?chocolate_biscuit.n.01_1 ?casserole.n.02)
@@ -174,7 +174,7 @@
                         (inside ?chocolate_biscuit.n.01 ?casserole.n.02)
                     )
                     (not
-                        (contains ?casserole.n.02 ?cooked__diced__broccoli.n.02_1)
+                        (contains ?casserole.n.02 ?cooked__diced__broccoli.n.01_1)
                     )
                     (not 
                         (contains ?casserole.n.02 ?cooked__quinoa.n.01_1)

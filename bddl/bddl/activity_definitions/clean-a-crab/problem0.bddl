@@ -5,7 +5,7 @@
         tupperware.n.01_1 - tupperware.n.01
         cabinet.n.01_1 - cabinet.n.01
         crab.n.05_1 - crab.n.05
-        sand.n.01_1 - sand.n.01
+        sand.n.04_1 - sand.n.04
         rag.n.01_1 - rag.n.01
         countertop.n.01_1 - countertop.n.01
         sink.n.01_1 - sink.n.01
@@ -17,7 +17,7 @@
     (:init 
         (inside tupperware.n.01_1 cabinet.n.01_1) 
         (inside crab.n.05_1 tupperware.n.01_1)
-        (covered crab.n.05_1 sand.n.01_1) 
+        (covered crab.n.05_1 sand.n.04_1)
         (insource sink.n.01_1 water.n.06_1) 
         (ontop rag.n.01_1 countertop.n.01_1)
         (inroom cabinet.n.01_1 kitchen) 
@@ -30,7 +30,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?crab.n.05_1 ?sand.n.01_1)
+                (covered ?crab.n.05_1 ?sand.n.04_1)
             )
         )
     )

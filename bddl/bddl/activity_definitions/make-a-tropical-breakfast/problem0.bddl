@@ -5,11 +5,11 @@
         yogurt.n.01_1 - yogurt.n.01
         maple_syrup.n.01_1 - maple_syrup.n.01
         mango.n.02_1 - mango.n.02
-        diced__mango.n.02_1 - diced__mango.n.02
+        diced__mango.n.01_1 - diced__mango.n.01
         carving_knife.n.01_1 - carving_knife.n.01
         chopping_board.n.01_1 - chopping_board.n.01
         kiwi.n.03_1 - kiwi.n.03
-        diced__kiwi.n.03_1 - diced__kiwi.n.03
+        diced__kiwi.n.01_1 - diced__kiwi.n.01
         raspberry.n.02_1 - raspberry.n.02
         chia_seed.n.01_1 - chia_seed.n.01
         electric_mixer.n.01_1 - electric_mixer.n.01
@@ -38,8 +38,8 @@
         (ontop chopping_board.n.01_1 countertop.n.01_2) 
         (ontop electric_mixer.n.01_1 countertop.n.01_2) 
         (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
-        (future diced__mango.n.02_1) 
-        (future diced__kiwi.n.03_1) 
+        (future diced__mango.n.01_1) 
+        (future diced__kiwi.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom countertop.n.01_2 kitchen) 
@@ -50,11 +50,11 @@
     
     (:goal 
         (and 
-            (real ?diced__mango.n.02_1) 
-            (real ?diced__kiwi.n.03_1) 
+            (real ?diced__mango.n.01_1) 
+            (real ?diced__kiwi.n.01_1) 
             (contains ?mixing_bowl.n.01_1 ?yogurt.n.01_1) 
             (contains ?mixing_bowl.n.01_1 ?maple_syrup.n.01_1) 
-            (contains ?mixing_bowl.n.01_1 ?diced__mango.n.02_1) 
+            (contains ?mixing_bowl.n.01_1 ?diced__mango.n.01_1) 
             (contains ?mixing_bowl.n.01_1 ?chia_seed.n.01_1) 
             (ontop ?mixing_bowl.n.01_1 ?raspberry.n.02_1)
         )

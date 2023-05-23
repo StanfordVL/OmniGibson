@@ -11,7 +11,7 @@
         lemon_juice__bottle.n.01_1 - lemon_juice__bottle.n.01
         vinegar__bottle.n.01_1 - vinegar__bottle.n.01
         polish.n.03_1 - polish.n.03
-        polish__bottle.n.03_1 - polish__bottle.n.03
+        polish__bottle.n.01_1 - polish__bottle.n.01
         rag.n.01_1 - rag.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -25,8 +25,8 @@
         (filled lemon_juice__bottle.n.01_1 vinegar.n.01_1) 
         (ontop lemon_juice__bottle.n.01_1 floor.n.01_1) 
         (ontop vinegar__bottle.n.01_1 floor.n.01_1) 
-        (filled polish__bottle.n.03_1 polish.n.03_1)
-        (ontop polish__bottle.n.03_1 floor.n.01_1)
+        (filled polish__bottle.n.01_1 polish.n.03_1)
+        (ontop polish__bottle.n.01_1 floor.n.01_1)
         (ontop rag.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 empty_room) 
         (ontop agent.n.01_1 floor.n.01_1)

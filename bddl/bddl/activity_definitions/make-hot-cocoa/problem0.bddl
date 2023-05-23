@@ -17,7 +17,7 @@
         teaspoon.n.02_1 - teaspoon.n.02
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         milk__carton.n.01_1 - milk__carton.n.01
-        vanilla__bottle.n.02_1 - vanilla__bottle.n.02
+        vanilla__bottle.n.01_1 - vanilla__bottle.n.01
         agent.n.01_1 - agent.n.01
         floor.n.01_1 - floor.n.01
     )
@@ -33,8 +33,8 @@
         (inside marshmallow.n.01_2 sack.n.01_1) 
         (inside marshmallow.n.01_3 sack.n.01_1) 
         (inside sack.n.01_1 electric_refrigerator.n.01_1) 
-        (filled vanilla__bottle.n.02_1 vanilla.n.02_1) 
-        (inside vanilla__bottle.n.02_1 electric_refrigerator.n.01_1) 
+        (filled vanilla__bottle.n.01_1 vanilla.n.02_1) 
+        (inside vanilla__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (ontop saucepan.n.01_1 countertop.n.01_2) 
         (ontop mug.n.04_1 countertop.n.01_2)
         (ontop teaspoon.n.02_1 countertop.n.01_2)

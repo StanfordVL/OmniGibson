@@ -3,27 +3,27 @@
 
     (:objects
         clove.n.03_1 clove.n.03_2 clove.n.03_3 - clove.n.03
-        cooked__diced__clove.n.03_1 - cooked__diced__clove.n.03
+        cooked__diced__clove.n.01_1 - cooked__diced__clove.n.01
         kidney_bean.n.01_1 - kidney_bean.n.01
         cooked__kidney_bean.n.01_1 - cooked__kidney_bean.n.01
         beefsteak_tomato.n.01_1 - beefsteak_tomato.n.01
         cooked__diced__beefsteak_tomato.n.01_1 - cooked__diced__beefsteak_tomato.n.01
         salt.n.02_1 - salt.n.02
-        cooked__salt.n.02_1 - cooked__salt.n.02
+        cooked__salt.n.01_1 - cooked__salt.n.01
         oregano.n.01_1 - oregano.n.01
         cooked__oregano.n.01_1 - cooked__oregano.n.01
         black_pepper.n.02_1 - black_pepper.n.02
-        cooked__black_pepper.n.02_1 - cooked__black_pepper.n.02
+        cooked__black_pepper.n.01_1 - cooked__black_pepper.n.01
         pepper__shaker.n.01_1 - pepper__shaker.n.01
         water.n.06_1 - water.n.06
         white_rice.n.01_1 - white_rice.n.01
         cooked__white_rice.n.01_1 - cooked__white_rice.n.01
         turkey.n.04_1 - turkey.n.04
-        cooked__diced__turkey.n.04_1 - cooked__diced__turkey.n.04
+        cooked__diced__turkey.n.01_1 - cooked__diced__turkey.n.01
         vidalia_onion.n.01_1 - vidalia_onion.n.01
         cooked__diced__vidalia_onion.n.01_1 - cooked__diced__vidalia_onion.n.01
         bell_pepper.n.02_1 - bell_pepper.n.02
-        cooked__diced__bell_pepper.n.02_1 - cooked__diced__bell_pepper.n.02
+        cooked__diced__bell_pepper.n.01_1 - cooked__diced__bell_pepper.n.01
         stove.n.01_1 - stove.n.01
         stockpot.n.01_1 - stockpot.n.01
         mason_jar.n.01_1 - mason_jar.n.01 
@@ -74,12 +74,12 @@
         (future cooked__kidney_bean.n.01_1)
         (future cooked__diced__vidalia_onion.n.01_1)
         (future cooked__diced__beefsteak_tomato.n.01_1)
-        (future cooked__diced__turkey.n.04_1)
-        (future cooked__diced__bell_pepper.n.02_1)
-        (future cooked__diced__clove.n.03_1)
-        (future cooked__salt.n.02_1)
+        (future cooked__diced__turkey.n.01_1)
+        (future cooked__diced__bell_pepper.n.01_1)
+        (future cooked__diced__clove.n.01_1)
+        (future cooked__salt.n.01_1)
         (future cooked__oregano.n.01_1)
-        (future cooked__black_pepper.n.02_1)
+        (future cooked__black_pepper.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
 
@@ -89,11 +89,11 @@
             (real ?cooked__kidney_bean.n.01_1)
             (real ?cooked__diced__vidalia_onion.n.01_1)
             (real ?cooked__diced__beefsteak_tomato.n.01_1)
-            (real ?cooked__diced__turkey.n.04_1)
-            (real ?cooked__diced__bell_pepper.n.02_1)
-            (real ?cooked__diced__clove.n.03_1)
+            (real ?cooked__diced__turkey.n.01_1)
+            (real ?cooked__diced__bell_pepper.n.01_1)
+            (real ?cooked__diced__clove.n.01_1)
             (or 
-                (real ?cooked__salt.n.02_1)
+                (real ?cooked__salt.n.01_1)
                 (real ?salt.n.02_1)
             )
             (or
@@ -101,19 +101,19 @@
                 (real ?oregano.n.01_1)
             )
             (or 
-                (real ?cooked__black_pepper.n.02_1)
+                (real ?cooked__black_pepper.n.01_1)
                 (real ?black_pepper.n.02_1)
             )
             (contains ?stockpot.n.01_1 ?cooked__white_rice.n.01_1)
             (contains ?stockpot.n.01_1 ?cooked__kidney_bean.n.01_1)
             (contains ?stockpot.n.01_1 ?cooked__diced__vidalia_onion.n.01_1)
             (contains ?stockpot.n.01_1 ?cooked__diced__beefsteak_tomato.n.01_1)
-            (contains ?stockpot.n.01_1 ?cooked__diced__turkey.n.04_1)
-            (contains ?stockpot.n.01_1 ?cooked__diced__bell_pepper.n.02_1)
-            (contains ?stockpot.n.01_1 ?cooked__diced__clove.n.03_1)
+            (contains ?stockpot.n.01_1 ?cooked__diced__turkey.n.01_1)
+            (contains ?stockpot.n.01_1 ?cooked__diced__bell_pepper.n.01_1)
+            (contains ?stockpot.n.01_1 ?cooked__diced__clove.n.01_1)
             (or 
                 (contains ?stockpot.n.01_1 ?salt.n.02_1)
-                (contains ?stockpot.n.01_1 ?cooked__salt.n.02_1)
+                (contains ?stockpot.n.01_1 ?cooked__salt.n.01_1)
             )
             (or
                 (contains ?stockpot.n.01_1 ?oregano.n.01_1)
@@ -121,7 +121,7 @@
             )
             (or
                 (contains ?stockpot.n.01_1 ?black_pepper.n.02_1)
-                (contains ?stockpot.n.01_1 ?cooked__black_pepper.n.02_1)
+                (contains ?stockpot.n.01_1 ?cooked__black_pepper.n.01_1)
             )
         )
     )

@@ -8,7 +8,7 @@
         hand_towel.n.01_1 - hand_towel.n.01
         sandal.n.01_1 sandal.n.01_2 - sandal.n.01
         conditioner.n.03_1 - conditioner.n.03
-        conditioner__bottle.n.03_1 - conditioner__bottle.n.03
+        conditioner__bottle.n.01_1 - conditioner__bottle.n.01
         stain.n.01_1 - stain.n.01
         water.n.06_1 - water.n.06
         floor.n.01_1 - floor.n.01
@@ -18,8 +18,8 @@
     (:init 
         (filled saddle_soap__bottle.n.01_1 saddle_soap.n.01_1) 
         (ontop saddle_soap__bottle.n.01_1 floor.n.01_1) 
-        (filled conditioner__bottle.n.03_1 conditioner.n.03_1)
-        (ontop conditioner__bottle.n.03_1 floor.n.01_1)
+        (filled conditioner__bottle.n.01_1 conditioner.n.03_1)
+        (ontop conditioner__bottle.n.01_1 floor.n.01_1)
         (ontop hand_towel.n.01_1 floor.n.01_1) 
         (ontop sandal.n.01_1 floor.n.01_1) 
         (ontop sandal.n.01_2 floor.n.01_1) 

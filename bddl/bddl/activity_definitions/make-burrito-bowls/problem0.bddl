@@ -6,7 +6,7 @@
         cooked__white_rice.n.01_1 - cooked__white_rice.n.01
         tupperware.n.01_1 tupperware.n.01_2 tupperware.n.01_3 - tupperware.n.01
         cooked__diced__carne_asada.n.01_1 - cooked__diced__carne_asada.n.01
-        cooked__diced__bell_pepper.n.02_1 - cooked__diced__bell_pepper.n.02
+        cooked__diced__bell_pepper.n.01_1 - cooked__diced__bell_pepper.n.01
         diced__beefsteak_tomato.n.01_1 - diced__beefsteak_tomato.n.01
         cooked__diced__beefsteak_tomato.n.01_1 - cooked__diced__beefsteak_tomato.n.01
         coriander.n.03_1 - coriander.n.03
@@ -28,7 +28,7 @@
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
         (filled tupperware.n.01_2 cooked__diced__carne_asada.n.01_1)
         (inside tupperware.n.01_2 electric_refrigerator.n.01_1)
-        (filled tupperware.n.01_3 cooked__diced__bell_pepper.n.02_1)
+        (filled tupperware.n.01_3 cooked__diced__bell_pepper.n.01_1)
         (inside tupperware.n.01_3 electric_refrigerator.n.01_1)
         (filled bowl.n.01_4 diced__beefsteak_tomato.n.01_1)
         (inside bowl.n.01_4 electric_refrigerator.n.01_1)
@@ -64,7 +64,7 @@
                         (contains ?bowl.n.01 ?diced__beefsteak_tomato.n.01_1)
                         (contains ?bowl.n.01 ?cooked__diced__beefsteak_tomato.n.01_1)
                     )
-                    (contains ?bowl.n.01 ?cooked__diced__bell_pepper.n.02_1)
+                    (contains ?bowl.n.01 ?cooked__diced__bell_pepper.n.01_1)
                     (contains ?bowl.n.01 ?coriander.n.03_1)
                     (contains ?bowl.n.01 ?grated_cheese.n.01_1)
                 )
