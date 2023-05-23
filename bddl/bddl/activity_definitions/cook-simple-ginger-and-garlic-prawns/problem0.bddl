@@ -4,7 +4,7 @@
     (:objects
      	shrimp.n.03_1 - shrimp.n.03
     	frying_pan.n.01_1 - frying_pan.n.01
-    	garlic.n.02_1 - garlic.n.02
+    	clove.n.03_1 clove.n.03_2 - clove.n.03
     	lime.n.06_1 - lime.n.06
     	casserole.n.02_1 - casserole.n.02
     	stove.n.01_1 - stove.n.01
@@ -15,9 +15,10 @@
     
     (:init 
         (ontop shrimp.n.03_1 frying_pan.n.01_1) 
-        (ontop garlic.n.02_1 frying_pan.n.01_1) 
+        (ontop clove.n.03_1 frying_pan.n.01_1)
+        (ontop clove.n.03_2 frying_pan.n.01_1)
         (ontop lime.n.06_1 frying_pan.n.01_1) 
-        (touching casserole.n.02_1 stove.n.01_1) 
+        (ontop casserole.n.02_1 stove.n.01_1)
         (toggled_on stove.n.01_1) 
         (ontop frying_pan.n.01_1 stove.n.01_1) 
         (ontop butter.n.01_1 frying_pan.n.01_1) 
@@ -36,12 +37,13 @@
         (and 
             (and 
                 (covered ?shrimp.n.03_1 ?butter.n.01_1) 
-                (touching ?lime.n.06_1 ?shrimp.n.03_1) 
-                (ontop ?frying_pan.n.01_1 ?stove.n.01_1) 
-                (touching ?casserole.n.02_1 ?stove.n.01_1) 
+                (ontop ?lime.n.06_1 ?casserole.n.02_1)
                 (ontop ?shrimp.n.03_1 ?casserole.n.02_1) 
-                (touching ?garlic.n.02_1 ?shrimp.n.03_1)
-            ) 
+                (ontop ?clove.n.03_1 ?casserole.n.02_1)
+                (ontop ?clove.n.03_2 ?casserole.n.02_1)
+                (ontop ?frying_pan.n.01_1 ?stove.n.01_1)
+                (ontop ?casserole.n.02_1 ?stove.n.01_1)
+            )
             (and 
                 (cooked ?shrimp.n.03_1) 
                 (not 

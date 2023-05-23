@@ -8,7 +8,7 @@
         cooked__diced__chard.n.02_1 - cooked__diced__chard.n.02
         plate.n.04_1 - plate.n.04
         saucepot.n.01_1 - saucepot.n.01
-        clove.n.03_1 - clove.n.03
+        clove.n.03_1 clove.n.03_2 - clove.n.03
         diced__clove.n.03_1 - diced__clove.n.03
         salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
@@ -29,7 +29,8 @@
         (ontop chard.n.02_1 chopping_board.n.01_1)
         (inside plate.n.04_1 cabinet.n.01_1) 
         (inside saucepot.n.01_1 cabinet.n.01_1) 
-        (inside clove.n.03_1 cabinet.n.01_1) 
+        (inside clove.n.03_1 cabinet.n.01_1)
+        (inside clove.n.03_2 cabinet.n.01_1)
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (filled olive_oil__bottle.n.01_1 olive_oil.n.01_1) 
         (insource cayenne__shaker.n.02_1 cayenne.n.02_1) 

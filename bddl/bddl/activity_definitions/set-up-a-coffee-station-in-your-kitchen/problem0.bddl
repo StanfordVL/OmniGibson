@@ -6,7 +6,7 @@
     	countertop.n.01_1 - countertop.n.01
     	instant_coffee__jar.n.01_1 - instant_coffee__jar.n.01
     	cabinet.n.01_1 - cabinet.n.01
-    	coffee_filter.n.01_1 - coffee_filter.n.01
+    	paper_coffee_filter.n.01_1 - paper_coffee_filter.n.01
     	teacup.n.02_1 - teacup.n.02
     	dishwasher.n.01_1 - dishwasher.n.01
     	saucer.n.02_1 - saucer.n.02
@@ -18,7 +18,7 @@
     (:init 
         (ontop coffee_maker.n.01_1 countertop.n.01_1) 
         (inside instant_coffee__jar.n.01_1 cabinet.n.01_1) 
-        (inside coffee_filter.n.01_1 cabinet.n.01_1) 
+        (inside paper_coffee_filter.n.01_1 cabinet.n.01_1) 
         (inside teacup.n.02_1 dishwasher.n.01_1) 
         (inside saucer.n.02_1 dishwasher.n.01_1) 
         (ontop water_bottle.n.01_1 countertop.n.01_1) 
@@ -33,7 +33,7 @@
         (and 
             (ontop ?coffee_maker.n.01_1 ?countertop.n.01_1) 
             (nextto ?instant_coffee__jar.n.01_1 ?coffee_maker.n.01_1) 
-            (ontop ?coffee_filter.n.01_1 ?coffee_maker.n.01_1) 
+            (ontop ?paper_coffee_filter.n.01_1 ?coffee_maker.n.01_1) 
             (ontop ?saucer.n.02_1 ?countertop.n.01_1) 
             (ontop ?teacup.n.02_1 ?saucer.n.02_1) 
             (ontop ?water_bottle.n.01_1 ?countertop.n.01_1)

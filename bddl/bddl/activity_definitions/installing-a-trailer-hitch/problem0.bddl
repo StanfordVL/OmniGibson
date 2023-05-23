@@ -2,17 +2,17 @@
     (:domain omnigibson)
 
     (:objects
-        truck.n.01_1 - truck.n.01
+        trailer_truck.n.01_1 - trailer_truck.n.01
         floor.n.01_1 - floor.n.01
         hook.n.05_1 - hook.n.05
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop truck.n.01_1 floor.n.01_1) 
+        (ontop trailer_truck.n.01_1 floor.n.01_1) 
         (ontop hook.n.05_1 floor.n.01_1) 
         (not 
-            (attached hook.n.05_1 truck.n.01_1)
+            (attached hook.n.05_1 trailer_truck.n.01_1)
         )
         (inroom floor.n.01_1 garage) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -20,7 +20,7 @@
     
     (:goal 
         (and 
-            (attached ?hook.n.05_1 ?truck.n.01_1)
+            (attached ?hook.n.05_1 ?trailer_truck.n.01_1)
         )
     )
 )

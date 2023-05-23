@@ -5,7 +5,7 @@
         ground_coffee.n.01_1 - ground_coffee.n.01
         water.n.06_1 - water.n.06
         drip_coffee.n.01_1 - drip_coffee.n.01
-        coffee_filter.n.01_1 - coffee_filter.n.01
+        paper_coffee_filter.n.01_1 - paper_coffee_filter.n.01
         mason_jar.n.01_1 - mason_jar.n.01
         countertop.n.01_1 - countertop.n.01
         sink.n.01_1 - sink.n.01
@@ -19,7 +19,7 @@
         (ontop mason_jar.n.01_1 countertop.n.01_1) 
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
-        (ontop coffee_filter.n.01_1 countertop.n.01_1) 
+        (ontop paper_coffee_filter.n.01_1 countertop.n.01_1) 
         (ontop mason_jar.n.01_1 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 

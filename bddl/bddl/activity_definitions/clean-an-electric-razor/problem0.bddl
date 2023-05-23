@@ -8,7 +8,7 @@
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
     	tissue.n.02_1 - tissue.n.02
     	hair.n.01_1 - hair.n.01
-        lotion.n.02_1 - lotion.n.02
+        lotion.n.01_1 - lotion.n.01
     	water.n.06_1 - water.n.06
         wall.n.01_1 - wall.n.01
     	floor.n.01_1 - floor.n.01
@@ -21,7 +21,7 @@
         (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
         (ontop tissue.n.02_1 floor.n.01_1) 
         (covered razor.n.01_1 hair.n.01_1) 
-        (covered razor.n.01_1 lotion.n.02_1) 
+        (covered razor.n.01_1 lotion.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
@@ -35,7 +35,7 @@
                 (covered ?razor.n.01_1 ?hair.n.01_1)
             )
             (not 
-                (covered ?razor.n.01_1 ?lotion.n.02_1)
+                (covered ?razor.n.01_1 ?lotion.n.01_1)
             )
         )
     )

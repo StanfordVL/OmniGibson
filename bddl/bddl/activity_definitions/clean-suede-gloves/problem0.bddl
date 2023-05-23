@@ -3,7 +3,7 @@
 
     (:objects
         stain.n.01_1 - stain.n.01
-        suede.n.01_1 - suede.n.01
+        kid_glove.n.01_1 - kid_glove.n.01
         stool.n.01_1 - stool.n.01
         vinegar.n.01_1 - vinegar.n.01
         vinegar__bottle.n.01_1 - vinegar__bottle.n.01
@@ -13,8 +13,8 @@
     )
     
     (:init 
-        (covered suede.n.01_1 stain.n.01_1) 
-        (ontop suede.n.01_1 stool.n.01_1) 
+        (covered kid_glove.n.01_1 stain.n.01_1)
+        (ontop kid_glove.n.01_1 stool.n.01_1)
         (filled vinegar__bottle.n.01_1 vinegar.n.01_1) 
         (ontop hand_towel.n.01_1 stool.n.01_1) 
         (ontop vinegar__bottle.n.01_1 stool.n.01_1) 
@@ -26,7 +26,7 @@
     (:goal 
         (and
             (not
-                (covered ?suede.n.01_1 ?stain.n.01_1)
+                (covered ?kid_glove.n.01_1 ?stain.n.01_1)
             )
         )
     )

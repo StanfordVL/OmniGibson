@@ -12,7 +12,7 @@
         saffron__shaker.n.02_1 - saffron__shaker.n.02
         cooked__saffron.n.02_1 - cooked__saffron.n.02
         saucepot.n.01_1 - saucepot.n.01
-        garlic.n.02_1 - garlic.n.02
+        clove.n.03_1 clove.n.03_2 clove.n.03_3 - clove.n.03
         chorizo.n.01_1 chorizo.n.01_2 - chorizo.n.01
         cooked__diced__chorizo.n.01_1 - cooked__diced__chorizo.n.01
         paprika.n.02_1 - paprika.n.02
@@ -43,7 +43,9 @@
     (:init 
         (insource saffron__shaker.n.02_1 saffron.n.02_1) 
         (ontop saffron__shaker.n.02_1 countertop.n.01_1)
-        (inside garlic.n.02_1 electric_refrigerator.n.01_1) 
+        (inside clove.n.03_1 electric_refrigerator.n.01_1)
+        (inside clove.n.03_2 electric_refrigerator.n.01_1)
+        (inside clove.n.03_3 electric_refrigerator.n.01_1)
         (inside chorizo.n.01_1 tupperware.n.01_1) 
         (inside chorizo.n.01_2 tupperware.n.01_1) 
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
@@ -240,8 +242,13 @@
                 (contains ?frying_pan.n.01_1 ?cooked__white_wine.n.01_1)
                 (contains ?frying_pan.n.01_1 ?white_wine.n.01_1)
             )
-            (cooked ?garlic.n.02_1)
-            (inside ?garlic.n.02_1 ?frying_pan.n.01_1) 
+            (forall
+                (?clove.n.03 - clove.n.03)
+                (and
+                    (cooked ?clove.n.03)
+                    (inside ?clove.n.03 ?frying_pan.n.01_1)
+                )
+            )
         )
     )
 )

@@ -6,7 +6,7 @@
         floor.n.01_1 - floor.n.01
         teddy.n.01_1 teddy.n.01_2 - teddy.n.01
         train_set.n.01_1 - train_set.n.01
-        game.n.09_1 game.n.09_2 - game.n.09
+        board_game.n.01_1 board_game.n.01_2 - board_game.n.01
         coffee_table.n.01_1 - coffee_table.n.01
         shelf.n.01_1 - shelf.n.01
         agent.n.01_1 - agent.n.01
@@ -18,8 +18,8 @@
         (ontop teddy.n.01_1 floor.n.01_1) 
         (ontop train_set.n.01_1 coffee_table.n.01_1) 
         (ontop teddy.n.01_2 floor.n.01_1) 
-        (ontop game.n.09_1 coffee_table.n.01_1) 
-        (ontop game.n.09_2 floor.n.01_1) 
+        (ontop board_game.n.01_1 coffee_table.n.01_1) 
+        (ontop board_game.n.01_2 floor.n.01_1) 
         (inroom shelf.n.01_1 childs_room) 
         (inroom floor.n.01_1 living_room) 
         (inroom coffee_table.n.01_1 living_room) 
@@ -47,10 +47,10 @@
                 )            
             )
             (forall
-                (?game.n.09 - game.n.09)
+                (?board_game.n.01 - board_game.n.01)
                 (or 
-                    (inside ?game.n.09 ?shelf.n.01_1)
-                    (ontop ?game.n.09 ?shelf.n.01_1)
+                    (inside ?board_game.n.01 ?shelf.n.01_1)
+                    (ontop ?board_game.n.01 ?shelf.n.01_1)
                 )
             )
             (or

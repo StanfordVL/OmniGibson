@@ -4,7 +4,7 @@
     (:objects
         skateboard.n.01_1 - skateboard.n.01
         bed.n.01_1 - bed.n.01
-        wheel.n.01_1 wheel.n.01_2 wheel.n.01_3 wheel.n.01_4 - wheel.n.01
+        skateboard_wheel.n.01_1 skateboard_wheel.n.01_2 skateboard_wheel.n.01_3 skateboard_wheel.n.01_4 - skateboard_wheel.n.01
         rag.n.01_1 - rag.n.01
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
@@ -17,17 +17,17 @@
     
     (:init 
         (ontop skateboard.n.01_1 bed.n.01_1) 
-        (attached wheel.n.01_1 skateboard.n.01_1) 
-        (attached wheel.n.01_2 skateboard.n.01_1) 
-        (attached wheel.n.01_3 skateboard.n.01_1) 
-        (attached wheel.n.01_4 skateboard.n.01_1) 
+        (attached skateboard_wheel.n.01_1 skateboard.n.01_1) 
+        (attached skateboard_wheel.n.01_2 skateboard.n.01_1) 
+        (attached skateboard_wheel.n.01_3 skateboard.n.01_1) 
+        (attached skateboard_wheel.n.01_4 skateboard.n.01_1) 
         (ontop rag.n.01_1 bed.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
-        (covered wheel.n.01_1 grease.n.01_1) 
-        (covered wheel.n.01_2 grease.n.01_1) 
-        (covered wheel.n.01_3 grease.n.01_1) 
-        (covered wheel.n.01_4 grease.n.01_1) 
+        (covered skateboard_wheel.n.01_1 grease.n.01_1) 
+        (covered skateboard_wheel.n.01_2 grease.n.01_1) 
+        (covered skateboard_wheel.n.01_3 grease.n.01_1) 
+        (covered skateboard_wheel.n.01_4 grease.n.01_1) 
         (insource sink.n.01_1 water.n.06_1)
         (inroom sink.n.01_1 bathroom)
         (inroom bed.n.01_1 bedroom) 
@@ -38,9 +38,9 @@
     (:goal 
         (and 
             (forall
-                (?wheel.n.01 - wheel.n.01)
+                (?skateboard_wheel.n.01 - skateboard_wheel.n.01)
                 (not 
-                    (covered ?wheel.n.01 ?grease.n.01_1)
+                    (covered ?skateboard_wheel.n.01 ?grease.n.01_1)
                 )
             )
         )

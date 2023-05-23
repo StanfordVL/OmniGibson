@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        soda_water.n.01_1 - soda_water.n.01
+        soda_water.n.03_1 - soda_water.n.03
         heavy_cream.n.01_1 - heavy_cream.n.01
         sugar_syrup.n.01_1 - sugar_syrup.n.01
         ice_cube.n.01_1 ice_cube.n.01_2 - ice_cube.n.01
@@ -20,7 +20,7 @@
     )
     
     (:init 
-        (filled carafe.n.01_1 soda_water.n.01_1) 
+        (filled carafe.n.01_1 soda_water.n.03_1)
         (inside carafe.n.01_1 electric_refrigerator.n.01_1) 
         (filled cream__carton.n.01_1 heavy_cream.n.01_1) 
         (inside cream__carton.n.01_1 electric_refrigerator.n.01_1) 

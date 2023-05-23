@@ -5,7 +5,7 @@
         rag.n.01_1 - rag.n.01
         sink.n.01_1 - sink.n.01
         coffee_maker.n.01_1 - coffee_maker.n.01
-        coffee_filter.n.01_1 - coffee_filter.n.01
+        paper_coffee_filter.n.01_1 - paper_coffee_filter.n.01
         coffee_grounds.n.01_1 - coffee_grounds.n.01
         espresso.n.01_1 - espresso.n.01
         liquid_soap.n.01_1 - liquid_soap.n.01
@@ -22,8 +22,8 @@
     (:init 
         (ontop rag.n.01_1 countertop.n.01_1)
         (ontop coffee_maker.n.01_1 countertop.n.01_1) 
-        (ontop coffee_filter.n.01_1 coffee_maker.n.01_1) 
-        (covered coffee_filter.n.01_1 espresso.n.01_1) 
+        (ontop paper_coffee_filter.n.01_1 coffee_maker.n.01_1) 
+        (covered paper_coffee_filter.n.01_1 espresso.n.01_1) 
         (covered coffee_maker.n.01_1 coffee_grounds.n.01_1)
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
@@ -40,7 +40,7 @@
     
     (:goal 
         (and 
-            (inside ?coffee_filter.n.01_1 ?bin.n.01_1)
+            (inside ?paper_coffee_filter.n.01_1 ?bin.n.01_1)
             (not
                 (covered ?coffee_maker.n.01_1 ?coffee_grounds.n.01_1)
             )

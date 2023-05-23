@@ -12,7 +12,7 @@
     	lobster.n.01_1 - lobster.n.01
     	sweet_corn.n.02_1 - sweet_corn.n.02
     	countertop.n.01_1 - countertop.n.01
-    	garlic.n.02_1 - garlic.n.02
+    	clove.n.03_1 clove.n.03_2 clove.n.03_3 clove.n.03_4 clove.n.03_5 - clove.n.03
     	salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
     	floor.n.01_1 - floor.n.01
@@ -28,7 +28,11 @@
         (ontop lobster.n.01_1 bowl.n.01_1) 
         (ontop sweet_corn.n.02_1 bowl.n.01_1) 
         (ontop bowl.n.01_1 countertop.n.01_1) 
-        (ontop garlic.n.02_1 stockpot.n.01_1) 
+        (ontop clove.n.03_1 countertop.n.01_1)
+        (ontop clove.n.03_2 countertop.n.01_1)
+        (ontop clove.n.03_3 countertop.n.01_1)
+        (ontop clove.n.03_4 countertop.n.01_1)
+        (ontop clove.n.03_5 countertop.n.01_1)
         (insource salt__shaker.n.01_1 salt.n.02_1) 
         (not 
             (hot stockpot.n.01_1)
@@ -89,8 +93,8 @@
                 (ontop ?bowl.n.01 ?countertop.n.01_1)
             ) 
             (forall 
-                (?garlic.n.02 - garlic.n.02) 
-                (ontop ?garlic.n.02 ?stockpot.n.01_1)
+                (?clove.n.03 - clove.n.03) 
+                (ontop ?clove.n.03 ?stockpot.n.01_1)
             ) 
             (forall 
                 (?salt.n.02 - salt.n.02) 

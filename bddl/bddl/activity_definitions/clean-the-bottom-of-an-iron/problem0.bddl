@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        tarnish.n.01_1 - tarnish.n.01
+        tarnish.n.02_1 - tarnish.n.02
         iron.n.04_1 - iron.n.04
         ironing_board.n.01_1 - ironing_board.n.01
         emery_paper.n.01_1 - emery_paper.n.01
@@ -13,7 +13,7 @@
     )
     
     (:init 
-        (covered iron.n.04_1 tarnish.n.01_1) 
+        (covered iron.n.04_1 tarnish.n.02_1)
         (toggled_on iron.n.04_1) 
         (ontop iron.n.04_1 ironing_board.n.01_1) 
         (ontop ironing_board.n.01_1 floor.n.01_1) 
@@ -27,7 +27,7 @@
     (:goal 
         (and
             (not 
-                (covered ?iron.n.04_1 ?tarnish.n.01_1)
+                (covered ?iron.n.04_1 ?tarnish.n.02_1)
             )
         )
     )

@@ -3,16 +3,16 @@
 
     (:objects
         dirt.n.02_1 - dirt.n.02
-        baggage.n.01_1 - baggage.n.01
+        bag.n.06_1 - bag.n.06
         rag.n.01_1 - rag.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (covered baggage.n.01_1 dirt.n.02_1) 
-        (ontop rag.n.01_1 baggage.n.01_1) 
-        (ontop baggage.n.01_1 floor.n.01_1) 
+        (covered bag.n.06_1 dirt.n.02_1) 
+        (ontop rag.n.01_1 bag.n.06_1) 
+        (ontop bag.n.06_1 floor.n.01_1) 
         (inroom floor.n.01_1 corridor) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -20,7 +20,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?baggage.n.01_1 ?dirt.n.02_1)
+                (covered ?bag.n.06_1 ?dirt.n.02_1)
             )
         )
     )

@@ -8,7 +8,6 @@
         mason_jar.n.01_1 - mason_jar.n.01
         pitcher.n.02_1 - pitcher.n.02
         booth.n.01_1 - booth.n.01
-        cashbox.n.01_1 - cashbox.n.01
         plastic_wrap.n.01_1 - plastic_wrap.n.01
         cookie_sheet.n.01_1 - cookie_sheet.n.01
         tupperware.n.01_1 tupperware.n.01_2 - tupperware.n.01
@@ -27,8 +26,7 @@
         (filled mason_jar.n.01_1 lemonade.n.01_1) 
         (closed mason_jar.n.01_1)
         (inside mason_jar.n.01_1 carton.n.02_2) 
-        (inside cashbox.n.01_1 carton.n.02_1) 
-        (overlaid plastic_wrap.n.01_1 cookie_sheet.n.01_1) 
+        (overlaid plastic_wrap.n.01_1 cookie_sheet.n.01_1)
         (inside cookie_sheet.n.01_1 carton.n.02_2)
         (ontop brownie.n.03_1 cookie_sheet.n.01_1) 
         (ontop brownie.n.03_2 cookie_sheet.n.01_1) 

@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        camera.n.01_1 - camera.n.01
+        digital_camera.n.01_1 - digital_camera.n.01
         sink.n.01_1 - sink.n.01
         lens.n.01_1 - lens.n.01
         rag.n.01_1 - rag.n.01
@@ -15,8 +15,8 @@
     )
     
     (:init 
-        (ontop camera.n.01_1 countertop.n.01_1) 
-        (attached lens.n.01_1 camera.n.01_1) 
+        (ontop digital_camera.n.01_1 countertop.n.01_1) 
+        (attached lens.n.01_1 digital_camera.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (not 
             (covered lens.n.01_1 disinfectant.n.01_1)
@@ -33,7 +33,7 @@
     (:goal 
         (and 
             (covered ?lens.n.01_1 ?disinfectant.n.01_1)
-            (attached ?lens.n.01_1 ?camera.n.01_1)
+            (attached ?lens.n.01_1 ?digital_camera.n.01_1)
         )
     )
 )

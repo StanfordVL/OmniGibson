@@ -3,7 +3,7 @@
 
     (:objects
         lawn.n.01_1 - lawn.n.01
-        nozzle.n.01_1 - nozzle.n.01
+        pesticide__atomizer.n.01_1 - pesticide__atomizer.n.01
         disinfectant__bottle.n.01_1 - disinfectant__bottle.n.01
         disinfectant.n.01_1 - disinfectant.n.01
         sponge.n.01_1 - sponge.n.01
@@ -16,13 +16,13 @@
     )
     
     (:init 
-        (ontop nozzle.n.01_1 floor.n.01_1) 
+        (ontop pesticide__atomizer.n.01_1 floor.n.01_1) 
         (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1) 
         (ontop disinfectant__bottle.n.01_1 driveway.n.01_1) 
         (ontop sponge.n.01_1 driveway.n.01_1)
         (ontop bucket.n.01_1 driveway.n.01_1)
         (filled bucket.n.01_1 water.n.06_1) 
-        (covered nozzle.n.01_1 stain.n.01_1) 
+        (covered pesticide__atomizer.n.01_1 stain.n.01_1) 
         (inroom lawn.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
@@ -32,7 +32,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?nozzle.n.01_1 ?stain.n.01_1)
+                (covered ?pesticide__atomizer.n.01_1 ?stain.n.01_1)
             ) 
         )
     )

@@ -4,7 +4,7 @@
     (:objects
         bowl.n.01_1 - bowl.n.01
         floor.n.01_1 - floor.n.01
-        mud.n.01_1 - mud.n.01
+        mud.n.03_1 - mud.n.03
         lobster.n.01_1 - lobster.n.01
         water.n.06_1 - water.n.06
         hand_towel.n.01_1 - hand_towel.n.01
@@ -15,7 +15,7 @@
     )
     
     (:init 
-        (covered lobster.n.01_1 mud.n.01_1)
+        (covered lobster.n.01_1 mud.n.03_1)
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inside lobster.n.01_1 bowl.n.01_1)
         (inside hand_towel.n.01_1 shelf.n.01_1)
@@ -30,7 +30,7 @@
     (:goal 
         (and 
             (not 
-                (covered lobster.n.01_1 mud.n.01_1)
+                (covered lobster.n.01_1 mud.n.03_1)
             )
         )
     )

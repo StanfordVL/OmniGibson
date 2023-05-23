@@ -5,7 +5,7 @@
         hamburger.n.01_1 hamburger.n.01_2 hamburger.n.01_3 hamburger.n.01_4 - hamburger.n.01
         kitchen_table.n.01_1 - kitchen_table.n.01
         backpack.n.01_1 - backpack.n.01
-        bag.n.01_1 bag.n.01_2 bag.n.01_3 bag.n.01_4 - bag.n.01
+        sack.n.01_1 sack.n.01_2 sack.n.01_3 sack.n.01_4 - sack.n.01
         floor.n.01_1 - floor.n.01
         oven.n.01_1 - oven.n.01
         cabinet.n.01_1 - cabinet.n.01
@@ -24,10 +24,10 @@
         (ontop hamburger.n.01_3 kitchen_table.n.01_1) 
         (ontop hamburger.n.01_4 kitchen_table.n.01_1) 
         (ontop backpack.n.01_1 kitchen_table.n.01_1) 
-        (ontop bag.n.01_1 kitchen_table.n.01_1)
-        (ontop bag.n.01_2 kitchen_table.n.01_1)
-        (ontop bag.n.01_3 kitchen_table.n.01_1)
-        (ontop bag.n.01_4 kitchen_table.n.01_1)
+        (ontop sack.n.01_1 kitchen_table.n.01_1)
+        (ontop sack.n.01_2 kitchen_table.n.01_1)
+        (ontop sack.n.01_3 kitchen_table.n.01_1)
+        (ontop sack.n.01_4 kitchen_table.n.01_1)
         (inroom floor.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -41,12 +41,12 @@
         (and 
             (forpairs
                 (?hamburger.n.01 - hamburger.n.01)
-                (?bag.n.01 - bag.n.01)
-                (inside ?hamburger.n.01 ?bag.n.01)
+                (?sack.n.01 - sack.n.01)
+                (inside ?hamburger.n.01 ?sack.n.01)
             )
             (forall 
-                (?bag.n.01 - bag.n.01)
-                (inside ?bag.n.01 ?backpack.n.01_1)
+                (?sack.n.01 - sack.n.01)
+                (inside ?sack.n.01 ?backpack.n.01_1)
             )
         )
     )

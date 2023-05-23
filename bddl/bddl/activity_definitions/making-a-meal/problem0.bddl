@@ -3,8 +3,8 @@
 
     (:objects
         microwave.n.02_1 - microwave.n.02
-        pasta.n.02_1 - pasta.n.02
-        cooked__pasta.n.02_1 - cooked__pasta.n.02
+        penne.n.01_1 - penne.n.01
+        cooked__penne.n.01_1 - cooked__penne.n.01
         pasta__box.n.02_1 - pasta__box.n.02
         tupperware.n.01_1 - tupperware.n.01
         stockpot.n.01_1 - stockpot.n.01
@@ -24,7 +24,7 @@
     )
     
     (:init 
-        (filled pasta__box.n.02_1 pasta.n.02_1) 
+        (filled pasta__box.n.02_1 penne.n.01_1) 
         (inside pasta__box.n.02_1 cabinet.n.01_1)
         (inside meatball.n.01_1 tupperware.n.01_1)
         (not 
@@ -55,7 +55,7 @@
         (inroom electric_refrigerator.n.01_1 kitchen)
         (inroom floor.n.01_1 kitchen) 
         (inroom microwave.n.02_1 kitchen) 
-        (future cooked__pasta.n.02_1)
+        (future cooked__penne.n.01_1)
         (future cooked__marinara.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -63,7 +63,7 @@
     (:goal 
         (and 
             (real ?cooked__marinara.n.01_1)
-            (real ?cooked__pasta.n.02_1)
+            (real ?cooked__penne.n.01_1)
             (forall 
                 (?meatball.n.01 - meatball.n.01)
                 (and
@@ -71,7 +71,7 @@
                     (inside ?meatball.n.01 ?bowl.n.01_1)
                 )
             )
-            (contains ?bowl.n.01_1 ?cooked__pasta.n.02_1)
+            (contains ?bowl.n.01_1 ?cooked__penne.n.01_1)
             (contains ?bowl.n.01_1 ?cooked__marinara.n.01_1)
         )
     )

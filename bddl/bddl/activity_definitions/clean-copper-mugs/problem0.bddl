@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        copper_mug.n.01_1 copper_mug.n.01_2 - copper_mug.n.01
+        mug.n.04_1 mug.n.04_2 - mug.n.04
         countertop.n.01_1 - countertop.n.01
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
@@ -16,13 +16,13 @@
     )
     
     (:init 
-        (ontop copper_mug.n.01_1 countertop.n.01_1) 
-        (ontop copper_mug.n.01_2 countertop.n.01_1) 
+        (ontop mug.n.04_1 countertop.n.01_1)
+        (ontop mug.n.04_2 countertop.n.01_1)
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
         (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
         (ontop sponge.n.01_1 countertop.n.01_1) 
-        (covered copper_mug.n.01_1 stain.n.01_1) 
-        (covered copper_mug.n.01_2 stain.n.01_1) 
+        (covered mug.n.04_1 stain.n.01_1)
+        (covered mug.n.04_2 stain.n.01_1)
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom dishwasher.n.01_1 kitchen) 
@@ -34,9 +34,9 @@
     (:goal 
         (and 
             (forall 
-                (?copper_mug.n.01 - copper_mug.n.01) 
+                (?mug.n.04 - mug.n.04)
                 (not 
-                    (covered ?copper_mug.n.01 ?stain.n.01_1)
+                    (covered ?mug.n.04 ?stain.n.01_1)
                 )
             ) 
         )

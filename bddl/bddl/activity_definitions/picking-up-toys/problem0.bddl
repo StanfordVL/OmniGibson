@@ -4,7 +4,7 @@
     (:objects
         wicker_basket.n.01_1 - wicker_basket.n.01
         floor.n.01_1 - floor.n.01
-        game.n.01_1 game.n.01_2 game.n.01_3 - game.n.01
+        board_game.n.01_1 board_game.n.01_2 board_game.n.01_3 - board_game.n.01
         jigsaw_puzzle.n.01_1 jigsaw_puzzle.n.01_2 - jigsaw_puzzle.n.01
         tennis_ball.n.01_1 - tennis_ball.n.01
         shelf.n.01_1 - shelf.n.01
@@ -16,9 +16,9 @@
     
     (:init 
         (ontop wicker_basket.n.01_1 floor.n.01_1) 
-        (ontop game.n.01_1 floor.n.01_1) 
-        (ontop game.n.01_2 floor.n.01_1) 
-        (ontop game.n.01_3 floor.n.01_1) 
+        (ontop board_game.n.01_1 floor.n.01_1) 
+        (ontop board_game.n.01_2 floor.n.01_1) 
+        (ontop board_game.n.01_3 floor.n.01_1) 
         (ontop jigsaw_puzzle.n.01_1 floor.n.01_1) 
         (ontop jigsaw_puzzle.n.01_2 floor.n.01_1) 
         (ontop tennis_ball.n.01_1 shelf.n.01_1) 
@@ -43,8 +43,8 @@
             (exists
                 (?toy_box.n.01 - toy_box.n.01)
                 (forall 
-                    (?game.n.01 - game.n.01) 
-                    (inside ?game.n.01 ?toy_box.n.01)
+                    (?board_game.n.01 - board_game.n.01) 
+                    (inside ?board_game.n.01 ?toy_box.n.01)
                 ) 
             )
             (inside ?wicker_basket.n.01_1 ?shelf.n.01_1) 

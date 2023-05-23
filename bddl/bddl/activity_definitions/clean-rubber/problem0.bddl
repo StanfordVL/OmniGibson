@@ -5,7 +5,7 @@
         rag.n.01_1 - rag.n.01
         hose.n.03_1 - hose.n.03
         stain.n.01_1 - stain.n.01
-        mud.n.01_1 - mud.n.01
+        mud.n.03_1 - mud.n.03
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
         water.n.06_1 - water.n.06
@@ -22,7 +22,7 @@
         (ontop bucket.n.01_1 floor.n.01_1)
         (ontop hose.n.03_1 floor.n.01_1) 
         (covered hose.n.03_1 stain.n.01_1) 
-        (covered hose.n.03_1 mud.n.01_1) 
+        (covered hose.n.03_1 mud.n.03_1)
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -33,7 +33,7 @@
                 (covered ?hose.n.03_1 ?stain.n.01_1)
             )
             (not 
-                (covered ?hose.n.03_1 ?mud.n.01_1)
+                (covered ?hose.n.03_1 ?mud.n.03_1)
             )
         )
     )

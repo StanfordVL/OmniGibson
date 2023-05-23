@@ -10,7 +10,7 @@
         stove.n.01_1 - stove.n.01
         cooking_oil.n.01_1 - cooking_oil.n.01
         cooking_oil__bottle.n.01_1 - cooking_oil__bottle.n.01
-        garlic.n.02_1 - garlic.n.02
+        clove.n.03_1 clove.n.03_2 clove.n.03_3 - clove.n.03
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -26,7 +26,9 @@
         (ontop frying_pan.n.01_1 stove.n.01_1) 
         (filled cooking_oil__bottle.n.01_1 cooking_oil.n.01_1) 
         (ontop cooking_oil__bottle.n.01_1 countertop.n.01_1)
-        (inside garlic.n.02_1 frying_pan.n.01_1) 
+        (inside clove.n.03_1 frying_pan.n.01_1)
+        (inside clove.n.03_2 frying_pan.n.01_1)
+        (inside clove.n.03_3 frying_pan.n.01_1)
         (inroom stove.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -45,12 +47,17 @@
                     (cooked ?scallop.n.02)
                 )
             )
-            (or 
-                (inside ?garlic.n.02_1 ?frying_pan.n.01_1)
-                (ontop ?garlic.n.02_1 ?frying_pan.n.01_1)
+            (forall
+                (?clove.n.03 - clove.n.03)
+                (and
+                    (or
+                        (inside ?clove.n.03 ?frying_pan.n.01_1)
+                        (ontop ?clove.n.03 ?frying_pan.n.01_1)
+                    )
+                    (cooked ?clove.n.03)
+                )
             )
-            (cooked ?garlic.n.02_1)
-            (filled ?frying_pan.n.01_1 ?cooking_oil.n.01_1)
+            (contains ?frying_pan.n.01_1 ?cooking_oil.n.01_1)
         )
     )
 )
