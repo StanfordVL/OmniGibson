@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        sandwich.n.01_1 sandwich.n.01_2 sandwich.n.01_3 sandwich.n.01_4 - sandwich.n.01
+        hamburger.n.01_1 hamburger.n.01_2 hamburger.n.01_3 hamburger.n.01_4 - hamburger.n.01
         kitchen_table.n.01_1 - kitchen_table.n.01
         backpack.n.01_1 - backpack.n.01
         sack.n.01_1 sack.n.01_2 sack.n.01_3 sack.n.01_4 - sack.n.01
@@ -15,14 +15,14 @@
     )
     
     (:init 
-        (cooked sandwich.n.01_1) 
-        (cooked sandwich.n.01_2) 
-        (cooked sandwich.n.01_3) 
-        (cooked sandwich.n.01_4) 
-        (ontop sandwich.n.01_1 kitchen_table.n.01_1) 
-        (ontop sandwich.n.01_2 kitchen_table.n.01_1) 
-        (ontop sandwich.n.01_3 kitchen_table.n.01_1) 
-        (ontop sandwich.n.01_4 kitchen_table.n.01_1) 
+        (cooked hamburger.n.01_1) 
+        (cooked hamburger.n.01_2) 
+        (cooked hamburger.n.01_3) 
+        (cooked hamburger.n.01_4) 
+        (ontop hamburger.n.01_1 kitchen_table.n.01_1) 
+        (ontop hamburger.n.01_2 kitchen_table.n.01_1) 
+        (ontop hamburger.n.01_3 kitchen_table.n.01_1) 
+        (ontop hamburger.n.01_4 kitchen_table.n.01_1) 
         (ontop backpack.n.01_1 kitchen_table.n.01_1) 
         (ontop sack.n.01_1 kitchen_table.n.01_1)
         (ontop sack.n.01_2 kitchen_table.n.01_1)
@@ -40,9 +40,9 @@
     (:goal 
         (and 
             (forpairs
-                (?sandwich.n.01 - sandwich.n.01)
+                (?hamburger.n.01 - hamburger.n.01)
                 (?sack.n.01 - sack.n.01)
-                (inside ?sandwich.n.01 ?sack.n.01)
+                (inside ?hamburger.n.01 ?sack.n.01)
             )
             (forall 
                 (?sack.n.01 - sack.n.01)

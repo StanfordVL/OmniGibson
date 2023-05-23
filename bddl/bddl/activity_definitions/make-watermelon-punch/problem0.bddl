@@ -5,8 +5,8 @@
         watermelon.n.02_1 - watermelon.n.02
         lemonade.n.01_1 - lemonade.n.01
         lemon_juice.n.01_1 - lemon_juice.n.01
-        soft_drink.n.01_1 - soft_drink.n.01
-        punch.n.02_1 - punch.n.02
+        tonic.n.01_1 - tonic.n.01
+        fruit_punch.n.01_1 - fruit_punch.n.01
         blender.n.01_1 - blender.n.01
         pitcher.n.02_1 - pitcher.n.02
         countertop.n.01_1 countertop.n.01_2 - countertop.n.01
@@ -31,8 +31,8 @@
         (inside lemonade__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1) 
         (ontop lemon_juice__bottle.n.01_1 countertop.n.01_1) 
-        (filled soda__can.n.01_1 soft_drink.n.01_1)
-        (inside soda__can.n.01_1 electric_refrigerator.n.01_1)
+        (filled soda__can.n.01_1 tonic.n.01_1) 
+        (inside soda__can.n.01_1 electric_refrigerator.n.01_1) 
         (ontop blender.n.01_1 countertop.n.01_1) 
         (ontop pitcher.n.02_1 countertop.n.01_2) 
         (inside ice_cube.n.01_1 bowl.n.01_1) 
@@ -42,7 +42,7 @@
         (inside ice_cube.n.01_5 bowl.n.01_1) 
         (inside ice_cube.n.01_6 bowl.n.01_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
-        (future punch.n.02_1) 
+        (future fruit_punch.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -53,8 +53,8 @@
     
     (:goal 
         (and 
-            (real ?punch.n.02_1) 
-            (contains ?pitcher.n.02_1 ?punch.n.02_1) 
+            (real ?fruit_punch.n.01_1) 
+            (contains ?pitcher.n.02_1 ?fruit_punch.n.01_1) 
             (forall 
                 (?ice_cube.n.01 - ice_cube.n.01) 
                 (inside ?ice_cube.n.01 ?pitcher.n.02_1)

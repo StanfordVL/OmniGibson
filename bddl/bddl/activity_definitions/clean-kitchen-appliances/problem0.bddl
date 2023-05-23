@@ -14,7 +14,7 @@
         food_processor.n.01_1 - food_processor.n.01
         flour.n.01_1 - flour.n.01
         crock_pot.n.01_1 - crock_pot.n.01
-        soup.n.01_1 - soup.n.01
+        chowder.n.01_1 - chowder.n.01
         toaster.n.02_1 - toaster.n.02
         crumb.n.03_1 - crumb.n.03
         blender.n.01_1 - blender.n.01
@@ -39,7 +39,7 @@
         (ontop food_processor.n.01_1 countertop.n.01_2) 
         (covered food_processor.n.01_1 flour.n.01_1)
         (ontop crock_pot.n.01_1 countertop.n.01_2) 
-        (covered crock_pot.n.01_1 soup.n.01_1)
+        (covered crock_pot.n.01_1 chowder.n.01_1)
         (ontop toaster.n.02_1 countertop.n.01_2)
         (covered toaster.n.02_1 crumb.n.03_1)
         (ontop blender.n.01_1 countertop.n.01_1) 
@@ -65,7 +65,7 @@
             )
             (covered ?food_processor.n.01_1 ?disinfectant.n.01_1)
             (not
-                (covered ?crock_pot.n.01_1 ?soup.n.01_1)
+                (covered ?crock_pot.n.01_1 ?chowder.n.01_1)
             )
             (covered ?crock_pot.n.01_1 ?disinfectant.n.01_1)
             (not

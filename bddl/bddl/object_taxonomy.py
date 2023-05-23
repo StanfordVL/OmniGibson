@@ -7,12 +7,12 @@ from IPython import embed
 import bddl
 
 DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
-    bddl.__package__, 'hierarchy_owned.json')
+    bddl.__package__, "generated_data/output_hierarchy.json")
 
 
 class ObjectTaxonomy(object):
-    def __init__(self, hierarchy_type="owned"):
-        hierarchy_file = pkgutil.get_data(bddl.__package__, f"hierarchy_{hierarchy_type}.json")
+    def __init__(self, hierarchy_type="default"):
+        hierarchy_file = DEFAULT_HIERARCHY_FILE 
         self.taxonomy = self._parse_taxonomy(hierarchy_file)
 
     @staticmethod

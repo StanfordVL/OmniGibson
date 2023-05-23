@@ -15,10 +15,10 @@
     (:init 
         (covered television_receiver.n.01_1 dust.n.01_1) 
         (covered laptop.n.01_1 dust.n.01_1) 
-        (covered printer.n.03_1 dust.n.01_1)
+        (covered printer.n.03_1 dust.n.01_1) 
         (ontop rag.n.01_1 desk.n.01_1) 
         (ontop laptop.n.01_1 desk.n.01_1) 
-        (ontop printer.n.03_1 desk.n.01_1)
+        (ontop printer.n.03_1 desk.n.01_1) 
         (inroom television_receiver.n.01_1 bedroom) 
         (inroom desk.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 

@@ -7,7 +7,7 @@
         desk.n.01_1 - desk.n.01
         mail.n.04_1 mail.n.04_2 - mail.n.04
         folder.n.02_1 folder.n.02_2 - folder.n.02
-        scissors.n.01_1 - scissors.n.01
+        shears.n.01_1 - shears.n.01
         floor.n.01_1 - floor.n.01
         pencil.n.01_1 - pencil.n.01
         pen.n.01_1 pen.n.01_2 - pen.n.01
@@ -28,7 +28,7 @@
         (ontop mail.n.04_2 desk.n.01_1) 
         (ontop folder.n.02_1 desk.n.01_1) 
         (ontop folder.n.02_2 swivel_chair.n.01_1) 
-        (ontop scissors.n.01_1 floor.n.01_1) 
+        (ontop shears.n.01_1 floor.n.01_1) 
         (ontop pencil.n.01_1 desk.n.01_1) 
         (ontop pen.n.01_1 swivel_chair.n.01_1) 
         (ontop pen.n.01_2 floor.n.01_1) 
@@ -74,7 +74,7 @@
                 (inside ?paperback_book.n.01 ?bookcase.n.01_1)
             ) 
             (inside ?pencil.n.01_1 ?pencil_box.n.01_1) 
-            (inside ?scissors.n.01_1 ?pencil_box.n.01_1) 
+            (inside ?shears.n.01_1 ?pencil_box.n.01_1) 
             (ontop ?stapler.n.01_1 ?desk.n.01_1) 
             (ontop ?tray.n.01_1 ?desk.n.01_1) 
             (ontop ?notebook.n.01_1 ?desk.n.01_1) 

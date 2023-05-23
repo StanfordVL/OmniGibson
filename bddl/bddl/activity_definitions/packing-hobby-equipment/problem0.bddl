@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-     	puzzle.n.02_1 puzzle.n.02_2 - puzzle.n.02
+     	jigsaw_puzzle.n.01_1 jigsaw_puzzle.n.01_2 - jigsaw_puzzle.n.01
     	sofa.n.01_1 - sofa.n.01
     	carton.n.02_1 - carton.n.02
     	floor.n.01_1 - floor.n.01
@@ -14,8 +14,8 @@
     )
     
     (:init 
-        (ontop puzzle.n.02_1 sofa.n.01_1) 
-        (ontop puzzle.n.02_2 sofa.n.01_1) 
+        (ontop jigsaw_puzzle.n.01_1 sofa.n.01_1) 
+        (ontop jigsaw_puzzle.n.01_2 sofa.n.01_1) 
         (ontop carton.n.02_1 floor.n.01_1) 
         (ontop baseball.n.02_1 floor.n.01_1) 
         (ontop soccer_ball.n.01_1 floor.n.01_1) 
@@ -31,8 +31,8 @@
             (inside ?baseball.n.02_1 ?carton.n.02_1) 
             (inside ?soccer_ball.n.01_1 ?carton.n.02_1)  
             (forall 
-                (?puzzle.n.02 - puzzle.n.02) 
-                (inside ?puzzle.n.02 ?shelf.n.01_1)
+                (?jigsaw_puzzle.n.01 - jigsaw_puzzle.n.01) 
+                (inside ?jigsaw_puzzle.n.01 ?shelf.n.01_1)
             )
         )
     )

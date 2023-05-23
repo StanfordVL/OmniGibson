@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-     	rice.n.01_1 - rice.n.01
+     	white_rice.n.01_1 - white_rice.n.01
     	sack.n.01_1 - sack.n.01
     	floor.n.01_1 - floor.n.01
     	bin.n.01_1 - bin.n.01
@@ -11,7 +11,7 @@
     )
     
     (:init 
-        (ontop rice.n.01_1 sack.n.01_1) 
+        (ontop white_rice.n.01_1 sack.n.01_1) 
         (ontop sack.n.01_1 floor.n.01_1) 
         (inside bin.n.01_1 cabinet.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -21,7 +21,7 @@
     
     (:goal 
         (and 
-            (inside ?rice.n.01_1 ?bin.n.01_1) 
+            (inside ?white_rice.n.01_1 ?bin.n.01_1) 
             (inside ?bin.n.01_1 ?cabinet.n.01_1) 
             (ontop ?sack.n.01_1 ?floor.n.01_1)
         )

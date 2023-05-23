@@ -4,7 +4,7 @@
     (:objects
      	insectifuge__atomizer.n.01_1 - insectifuge__atomizer.n.01
     	coffee_table.n.01_1 - coffee_table.n.01
-    	scissors.n.01_1 - scissors.n.01
+    	shears.n.01_1 - shears.n.01
     	backpack.n.01_1 - backpack.n.01
     	water_bottle.n.01_1 - water_bottle.n.01
     	inhaler.n.01_1 - inhaler.n.01
@@ -14,7 +14,7 @@
     
     (:init 
         (ontop insectifuge__atomizer.n.01_1 coffee_table.n.01_1) 
-        (ontop scissors.n.01_1 coffee_table.n.01_1) 
+        (ontop shears.n.01_1 coffee_table.n.01_1) 
         (ontop backpack.n.01_1 coffee_table.n.01_1) 
         (ontop water_bottle.n.01_1 coffee_table.n.01_1) 
         (ontop inhaler.n.01_1 coffee_table.n.01_1) 
@@ -30,8 +30,8 @@
                 (ontop ?insectifuge__atomizer.n.01 ?backpack.n.01_1)
             ) 
             (forall 
-                (?scissors.n.01 - scissors.n.01) 
-                (ontop ?scissors.n.01 ?backpack.n.01_1)
+                (?shears.n.01 - shears.n.01) 
+                (ontop ?shears.n.01 ?backpack.n.01_1)
             ) 
             (forall 
                 (?backpack.n.01 - backpack.n.01) 

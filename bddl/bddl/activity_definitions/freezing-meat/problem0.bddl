@@ -7,7 +7,7 @@
             package.n.02_1 package.n.02_2 package.n.02_3 - package.n.02
             pork.n.01_1 - pork.n.01
             carton.n.02_1 - carton.n.02
-            sausage.n.01_1 - sausage.n.01
+            pepperoni.n.01_1 - pepperoni.n.01
             bacon.n.01_1 - bacon.n.01
             sink.n.01_1 - sink.n.01
             water.n.06_1 - water.n.06
@@ -27,9 +27,9 @@
         (not 
             (frozen pork.n.01_1)
         ) 
-        (ontop sausage.n.01_1 carton.n.02_1) 
+        (ontop pepperoni.n.01_1 carton.n.02_1) 
         (not 
-            (frozen sausage.n.01_1)
+            (frozen pepperoni.n.01_1)
         ) 
         (ontop bacon.n.01_1 carton.n.02_1) 
         (not 
@@ -62,12 +62,12 @@
             (and 
                 (exists 
                     (?wax_paper.n.01 - wax_paper.n.01) 
-                    (overlaid ?wax_paper.n.01 ?sausage.n.01_1)
+                    (overlaid ?wax_paper.n.01 ?pepperoni.n.01_1)
     
                 ) 
                 (exists 
                     (?package.n.02 - package.n.02) 
-                    (ontop ?sausage.n.01_1 ?package.n.02)
+                    (ontop ?pepperoni.n.01_1 ?package.n.02)
     
                 )
     
@@ -97,7 +97,7 @@
     
             ) 
             (frozen ?pork.n.01_1) 
-            (frozen ?sausage.n.01_1) 
+            (frozen ?pepperoni.n.01_1) 
             (frozen ?bacon.n.01_1) 
             (nextto ?carton.n.02_1 ?sink.n.01_1)
     

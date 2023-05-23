@@ -6,7 +6,7 @@
         desk.n.01_1 - desk.n.01
         floor.n.01_1 - floor.n.01
         packing_box.n.02_1 packing_box.n.02_2 - packing_box.n.02
-        puzzle.n.02_1 puzzle.n.02_2 puzzle.n.02_3 - puzzle.n.02
+        jigsaw_puzzle.n.01_1 jigsaw_puzzle.n.01_2 jigsaw_puzzle.n.01_3 - jigsaw_puzzle.n.01
         shelf.n.01_1 shelf.n.01_2 - shelf.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -17,9 +17,9 @@
         (ontop board_game.n.01_3 floor.n.01_1) 
         (ontop packing_box.n.02_1 desk.n.01_1) 
         (ontop packing_box.n.02_2 floor.n.01_1) 
-        (ontop puzzle.n.02_1 desk.n.01_1) 
-        (ontop puzzle.n.02_2 floor.n.01_1) 
-        (inside puzzle.n.02_3 packing_box.n.02_1) 
+        (ontop jigsaw_puzzle.n.01_1 desk.n.01_1) 
+        (ontop jigsaw_puzzle.n.01_2 floor.n.01_1) 
+        (inside jigsaw_puzzle.n.01_3 packing_box.n.02_1) 
         (inroom floor.n.01_1 childs_room) 
         (inroom shelf.n.01_1 childs_room) 
         (inroom shelf.n.01_2 childs_room) 
@@ -33,8 +33,8 @@
                 (?packing_box.n.02 - packing_box.n.02)
                 (and 
                     (forall 
-                        (?puzzle.n.02 - puzzle.n.02)
-                        (inside ?puzzle.n.02 ?packing_box.n.02)
+                        (?jigsaw_puzzle.n.01 - jigsaw_puzzle.n.01)
+                        (inside ?jigsaw_puzzle.n.01 ?packing_box.n.02)
                     )
                     (forall 
                         (?board_game.n.01 - board_game.n.01)
@@ -52,9 +52,9 @@
                         (inside ?board_game.n.01 ?packing_box.n.02)
                     )
                     (forall 
-                        (?puzzle.n.02 - puzzle.n.02)
+                        (?jigsaw_puzzle.n.01 - jigsaw_puzzle.n.01)
                         (not
-                            (inside ?puzzle.n.02 ?packing_box.n.02)
+                            (inside ?jigsaw_puzzle.n.01 ?packing_box.n.02)
                         )
                     )
                 )

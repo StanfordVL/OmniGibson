@@ -6,7 +6,7 @@
         honey.n.01_1 - honey.n.01
         lemon_juice.n.01_1 - lemon_juice.n.01
         water.n.06_1 - water.n.06
-        beverage.n.01_1 - beverage.n.01
+        hot_toddy.n.01_1 - hot_toddy.n.01
         tablespoon.n.02_1 - tablespoon.n.02
         mug.n.04_1 - mug.n.04
         countertop.n.01_1 countertop.n.01_2 - countertop.n.01
@@ -29,13 +29,13 @@
         (ontop mug.n.04_1 countertop.n.01_2)
         (inroom countertop.n.01_1 kitchen)
         (inroom countertop.n.01_2 kitchen)
-        (future beverage.n.01_1)
+        (future hot_toddy.n.01_1)
     )
 
     (:goal
         (and
-            (real beverage.n.01_1)
-            (filled mug.n.04_1 beverage.n.01_1)
+            (real hot_toddy.n.01_1)
+            (filled mug.n.04_1 hot_toddy.n.01_1)
         )
     )
 )

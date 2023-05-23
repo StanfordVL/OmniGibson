@@ -3,7 +3,7 @@
 
     (:objects
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-        sandwich.n.01_1 sandwich.n.01_2 - sandwich.n.01
+        club_sandwich.n.01_1 club_sandwich.n.01_2 - club_sandwich.n.01
         plate.n.04_1 - plate.n.04
         desk.n.01_1 - desk.n.01
         floor.n.01_1 - floor.n.01
@@ -12,8 +12,8 @@
     
     (:init 
         (closed electric_refrigerator.n.01_1) 
-        (ontop sandwich.n.01_1 plate.n.04_1) 
-        (ontop sandwich.n.01_2 plate.n.04_1) 
+        (ontop club_sandwich.n.01_1 plate.n.04_1) 
+        (ontop club_sandwich.n.01_2 plate.n.04_1) 
         (ontop plate.n.04_1 desk.n.01_1)
         (inroom floor.n.01_1 private_office) 
         (inroom desk.n.01_1 private_office) 
@@ -24,8 +24,8 @@
     (:goal 
         (and 
             (forall 
-                (?sandwich.n.01 - sandwich.n.01)
-                (inside ?sandwich.n.01 ?electric_refrigerator.n.01_1)
+                (?club_sandwich.n.01 - club_sandwich.n.01)
+                (inside ?club_sandwich.n.01 ?electric_refrigerator.n.01_1)
             )
         )
     )
