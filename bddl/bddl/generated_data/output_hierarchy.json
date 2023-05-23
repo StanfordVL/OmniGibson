@@ -1510,6 +1510,10 @@
                             {
                               "name": "white_rice__sack.n.01",
                               "hasModel": true
+                            },
+                            {
+                              "name": "chicken_soup__can.n.01",
+                              "hasModel": true
                             }
                           ]
                         },
@@ -10969,7 +10973,13 @@
                                           "children": [
                                             {
                                               "name": "starch.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "children": [
+                                                {
+                                                  "name": "cornstarch.n.01",
+                                                  "hasModel": true
+                                                }
+                                              ]
                                             }
                                           ]
                                         }
@@ -11763,6 +11773,10 @@
                         },
                         {
                           "name": "soil.n.02",
+                          "hasModel": true
+                        },
+                        {
+                          "name": "sand.n.04",
                           "hasModel": true
                         }
                       ]
@@ -16755,7 +16769,13 @@
                               "children": [
                                 {
                                   "name": "starch.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "cornstarch.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
                                 }
                               ]
                             }
@@ -17171,7 +17191,13 @@
                                               "children": [
                                                 {
                                                   "name": "starch.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "children": [
+                                                    {
+                                                      "name": "cornstarch.n.01",
+                                                      "hasModel": true
+                                                    }
+                                                  ]
                                                 }
                                               ]
                                             }
@@ -17965,6 +17991,10 @@
                             },
                             {
                               "name": "soil.n.02",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "sand.n.04",
                               "hasModel": true
                             }
                           ]

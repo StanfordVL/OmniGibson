@@ -10475,9 +10475,7 @@
   },
   "carbohydrate.n.01": {
     "freezable": {},
-    "heatable": {},
-    "nonDeformable": {},
-    "substance": {}
+    "heatable": {}
   },
   "carbon.n.01": {
     "freezable": {},
@@ -12223,6 +12221,22 @@
   },
   "chicken_soup.n.01": {
     "cookable": {},
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "mixable": {},
+    "moldyable": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
+  "chicken_soup__can.n.01": {
     "disinfectable": {},
     "dustyable": {},
     "freezable": {},
@@ -15838,6 +15852,22 @@
     "disinfectable": {},
     "dustyable": {},
     "flammable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "mixable": {},
+    "moldyable": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
+  "cornstarch.n.01": {
+    "disinfectable": {},
+    "dustyable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -19625,9 +19655,7 @@
   },
   "earth.n.02": {
     "freezable": {},
-    "heatable": {},
-    "nonDeformable": {},
-    "substance": {}
+    "heatable": {}
   },
   "easel.n.01": {
     "disinfectable": {},
@@ -37624,12 +37652,20 @@
     "wrinkleable": {}
   },
   "polysaccharide.n.01": {
-    "cookable": {},
+    "disinfectable": {},
+    "dustyable": {},
     "freezable": {},
+    "grassyable": {},
     "heatable": {},
-    "nonDeformable": {},
-    "substance": {},
-    "visualSubstance": {}
+    "mixable": {},
+    "moldyable": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
   },
   "polyvinyl_chloride.n.01": {
     "disinfectable": {},
@@ -41310,6 +41346,22 @@
     "rustable": {},
     "scratchable": {},
     "sliceable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
+  "sand.n.04": {
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "mixable": {},
+    "moldyable": {},
+    "rustable": {},
+    "scratchable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -45875,12 +45927,20 @@
     "wrinkleable": {}
   },
   "starch.n.01": {
-    "cookable": {},
+    "disinfectable": {},
+    "dustyable": {},
     "freezable": {},
+    "grassyable": {},
     "heatable": {},
-    "nonDeformable": {},
-    "substance": {},
-    "visualSubstance": {}
+    "mixable": {},
+    "moldyable": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
   },
   "starches.n.01": {
     "freezable": {},
