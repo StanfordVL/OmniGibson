@@ -2,6 +2,8 @@
     "acetone__bottle.n.01": {
         "breakable": {},
         "openable": {},
+        "nonSubstance": {},
+        "nonDeformable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -36,22 +38,8 @@
     },
     "acorn.n.01": {
         "flammable": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
-    "action.n.07": {
+        "nonSubstance": {},
+        "nonDeformable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -68,6 +56,8 @@
         "freezable": {}
     },
     "adapter.n.02": {
+        "nonSubstance": {},
+        "nonDeformable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -109,6 +99,8 @@
         "freezable": {}
     },
     "aerosol.n.02": {
+        "nonSubstance": {},
+        "nonDeformable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -126,14 +118,8 @@
     },
     "agave.n.01": {
         "sliceable": {},
-        "liquid": {},
+        "nonSubstance": {},
         "nonDeformable": {},
-        "boilable": {},
-        "substance": {},
-        "heatable": {},
-        "freezable": {}
-    },
-    "agent.n.01": {
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -201,6 +187,8 @@
     },
     "air_freshener__atomizer.n.01": {
         "toggleable": {},
+        "nonSubstance": {},
+        "nonDeformable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -685,6 +673,7 @@
         "cookable": {},
         "physicalSubstance": {},
         "nonDeformable": {},
+        "waterCook": {},
         "substance": {},
         "heatable": {},
         "freezable": {}
@@ -2811,6 +2800,7 @@
         "cookable": {},
         "physicalSubstance": {},
         "nonDeformable": {},
+        "waterCook": {},
         "substance": {},
         "heatable": {},
         "freezable": {}
@@ -6884,6 +6874,7 @@
         "cookable": {},
         "physicalSubstance": {},
         "nonDeformable": {},
+        "waterCook": {},
         "substance": {},
         "heatable": {},
         "freezable": {}
@@ -9614,6 +9605,7 @@
         "cookable": {},
         "nonSubstance": {},
         "nonDeformable": {},
+        "waterCook": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -20303,6 +20295,7 @@
     "kidney_bean.n.01": {
         "flammable": {},
         "physicalSubstance": {},
+        "waterCook": {},
         "substance": {},
         "heatable": {},
         "freezable": {}
@@ -20954,6 +20947,7 @@
         "cookable": {},
         "physicalSubstance": {},
         "nonDeformable": {},
+        "waterCook": {},
         "substance": {},
         "heatable": {},
         "freezable": {}
@@ -23570,6 +23564,7 @@
         "cookable": {},
         "physicalSubstance": {},
         "nonDeformable": {},
+        "waterCook": {},
         "substance": {},
         "heatable": {},
         "freezable": {}
@@ -23987,6 +23982,7 @@
     "orzo.n.01": {
         "flammable": {},
         "physicalSubstance": {},
+        "waterCook": {},
         "substance": {},
         "heatable": {},
         "freezable": {}

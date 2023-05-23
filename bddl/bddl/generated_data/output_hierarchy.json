@@ -1522,13 +1522,13 @@
                           "hasModel": true,
                           "children": [
                             {
+                              "name": "adapter.n.02",
+                              "hasModel": true
+                            },
+                            {
                               "name": "mechanism.n.05",
                               "hasModel": true,
                               "children": [
-                                {
-                                  "name": "action.n.07",
-                                  "hasModel": true
-                                },
                                 {
                                   "name": "cooling_system.n.02",
                                   "hasModel": true,
@@ -1684,10 +1684,6 @@
                                   ]
                                 }
                               ]
-                            },
-                            {
-                              "name": "adapter.n.02",
-                              "hasModel": true
                             },
                             {
                               "name": "filter.n.01",
@@ -16348,13 +16344,291 @@
           ]
         },
         {
-          "name": "causal_agent.n.01",
+          "name": "thing.n.12",
           "hasModel": true,
           "children": [
             {
-              "name": "agent.n.01",
-              "hasModel": true
+              "name": "unit.n.05",
+              "hasModel": true,
+              "children": [
+                {
+                  "name": "molecule.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "macromolecule.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "lipid.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "oil.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "almond_oil.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "essential_oil.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "grease.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "linseed_oil.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "wax.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "beeswax.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "paraffin.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "fat.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "edible_fat.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "vegetable_oil.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "canola_oil.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "coconut_oil.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "cooked__cooking_oil.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "cooked__olive_oil.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "cooking_oil.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "olive_oil.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "peanut_oil.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "sesame_oil.n.01",
+                                          "hasModel": true
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "shortening.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "carbohydrate.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "cane_sugar.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "polysaccharide.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "starch.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "cornstarch.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "protein.n.01",
+                          "hasModel": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             },
+            {
+              "name": "part.n.03",
+              "hasModel": true,
+              "children": [
+                {
+                  "name": "body_part.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "process.n.05",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "horn.n.02",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "antler.n.01",
+                              "hasModel": true
+                            }
+                          ]
+                        },
+                        {
+                          "name": "tail.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "oxtail.n.01",
+                              "hasModel": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "tissue.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "animal_tissue.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "connective_tissue.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "bone.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "structure.n.04",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "filament.n.03",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "hair.n.04",
+                              "hasModel": true
+                            }
+                          ]
+                        },
+                        {
+                          "name": "tube.n.04",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "vessel.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "herb__jar.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "cavity.n.04",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "socket.n.01",
+                              "hasModel": true
+                            }
+                          ]
+                        },
+                        {
+                          "name": "valve.n.01",
+                          "hasModel": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "fragment.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "ember.n.01",
+                      "hasModel": true
+                    }
+                  ]
+                },
+                {
+                  "name": "hunk.n.02",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "nodule.n.03",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "geode.n.01",
+                          "hasModel": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "causal_agent.n.01",
+          "hasModel": true,
+          "children": [
             {
               "name": "agent.n.03",
               "hasModel": true,
@@ -16640,288 +16914,6 @@
             {
               "name": "person.n.01",
               "hasModel": true
-            }
-          ]
-        },
-        {
-          "name": "thing.n.12",
-          "hasModel": true,
-          "children": [
-            {
-              "name": "unit.n.05",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "molecule.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "macromolecule.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "lipid.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "oil.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "almond_oil.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "essential_oil.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "grease.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "linseed_oil.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "wax.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "beeswax.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "paraffin.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "fat.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "edible_fat.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "vegetable_oil.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "canola_oil.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "coconut_oil.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "cooked__cooking_oil.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "cooked__olive_oil.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "cooking_oil.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "olive_oil.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "peanut_oil.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "sesame_oil.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "name": "shortening.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "carbohydrate.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "cane_sugar.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "polysaccharide.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "starch.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "cornstarch.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "protein.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "part.n.03",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "body_part.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "process.n.05",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "horn.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "antler.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "tail.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "oxtail.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "tissue.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "animal_tissue.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "connective_tissue.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "bone.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "structure.n.04",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "filament.n.03",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "hair.n.04",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "tube.n.04",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "vessel.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "herb__jar.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "cavity.n.04",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "socket.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "valve.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "fragment.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "ember.n.01",
-                      "hasModel": true
-                    }
-                  ]
-                },
-                {
-                  "name": "hunk.n.02",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "nodule.n.03",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "geode.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
             }
           ]
         },
