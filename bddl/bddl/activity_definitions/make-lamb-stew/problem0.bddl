@@ -14,7 +14,7 @@
         flour.n.01_1 - flour.n.01
         parsley.n.02_1 - parsley.n.02
         thyme.n.02_1 - thyme.n.02
-        lamb_stew.n.02_1 - lamb_stew.n.02
+        lamb_stew.n.01_1 - lamb_stew.n.01
         stove.n.01_1 - stove.n.01
         dutch_oven.n.02_1 - dutch_oven.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
@@ -22,7 +22,7 @@
         butter__package.n.01_1 - butter__package.n.01 
         flour__sack.n.01_1 - flour__sack.n.01 
         tupperware.n.01_1 - tupperware.n.01 
-        thyme__shaker.n.02_1 - thyme__shaker.n.02
+        thyme__shaker.n.01_1 - thyme__shaker.n.01
         chopping_board.n.01_1 - chopping_board.n.01
         carving_knife.n.01_1 - carving_knife.n.01
         countertop.n.01_1 countertop.n.01_2 countertop.n.01_3 - countertop.n.01
@@ -51,17 +51,17 @@
         (ontop flour__sack.n.01_1 countertop.n.01_2)
         (inside parsley.n.02_1 tupperware.n.01_1)
         (ontop tupperware.n.01_1 countertop.n.01_3)
-        (insource thyme__shaker.n.02_1 thyme.n.02_1)
-        (ontop thyme__shaker.n.02_1 countertop.n.01_3)
+        (insource thyme__shaker.n.01_1 thyme.n.02_1)
+        (ontop thyme__shaker.n.01_1 countertop.n.01_3)
         (inroom stove.n.01_1 kitchen)
         (ontop dutch_oven.n.02_1 countertop.n.01_3)
-        (future lamb_stew.n.02_1)
+        (future lamb_stew.n.01_1)
     )
 
     (:goal
         (and
-            (real ?lamb_stew.n.02_1)
-            (filled ?dutch_oven.n.02_1 ?lamb_stew.n.02_1)
+            (real ?lamb_stew.n.01_1)
+            (filled ?dutch_oven.n.02_1 ?lamb_stew.n.01_1)
         )
     )
 )

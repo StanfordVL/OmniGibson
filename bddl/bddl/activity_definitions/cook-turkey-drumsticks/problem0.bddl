@@ -5,7 +5,7 @@
         turkey_leg.n.01_1 turkey_leg.n.01_2 - turkey_leg.n.01
         casserole.n.02_1 - casserole.n.02
         thyme.n.02_1 - thyme.n.02
-        thyme__shaker.n.02_1 - thyme__shaker.n.02
+        thyme__shaker.n.01_1 - thyme__shaker.n.01
         salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
         black_pepper.n.02_1 - black_pepper.n.02
@@ -28,8 +28,8 @@
         (ontop casserole.n.02_1 oven.n.01_1) 
         (inside turkey_leg.n.01_1 electric_refrigerator.n.01_1) 
         (inside turkey_leg.n.01_2 electric_refrigerator.n.01_1) 
-        (insource thyme__shaker.n.02_1 thyme.n.02_1)
-        (inside thyme__shaker.n.02_1 cabinet.n.01_1)
+        (insource thyme__shaker.n.01_1 thyme.n.02_1)
+        (inside thyme__shaker.n.01_1 cabinet.n.01_1)
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (inside salt__shaker.n.01_1 cabinet.n.01_1)
         (insource pepper__shaker.n.01_1 black_pepper.n.02_1)

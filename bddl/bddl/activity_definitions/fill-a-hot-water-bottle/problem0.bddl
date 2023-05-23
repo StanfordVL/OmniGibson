@@ -3,7 +3,7 @@
 
     (:objects
         water.n.06_1 - water.n.06
-        cooked__water.n.06_1 - cooked__water.n.06
+        cooked__water.n.01_1 - cooked__water.n.01
         sink.n.01_1 - sink.n.01
         water_bottle.n.01_1 - water_bottle.n.01
         floor.n.01_1 - floor.n.01
@@ -19,14 +19,14 @@
         (inroom microwave.n.02_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen)
-        (future cooked__water.n.06_1)
+        (future cooked__water.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?cooked__water.n.06_1)
-            (filled ?water_bottle.n.01_1 ?cooked__water.n.06_1)
+            (real ?cooked__water.n.01_1)
+            (filled ?water_bottle.n.01_1 ?cooked__water.n.01_1)
         )
     )
 )

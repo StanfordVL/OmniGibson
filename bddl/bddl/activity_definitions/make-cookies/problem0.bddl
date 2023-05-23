@@ -11,8 +11,8 @@
         salt.n.02_1 - salt.n.02
         cinnamon.n.03_1 - cinnamon.n.03
         nutmeg.n.02_1 - nutmeg.n.02
-        cinnamon__shaker.n.03_1 - cinnamon__shaker.n.03
-        nutmeg__shaker.n.02_1 - nutmeg__shaker.n.02
+        cinnamon__shaker.n.01_1 - cinnamon__shaker.n.01
+        nutmeg__shaker.n.01_1 - nutmeg__shaker.n.01
         electric_mixer.n.01_1 - electric_mixer.n.01
         mixing_bowl.n.01_1 - mixing_bowl.n.01
         spice_cookie.n.01_1 spice_cookie.n.01_2 spice_cookie.n.01_3 spice_cookie.n.01_4 spice_cookie.n.01_5 spice_cookie.n.01_6 - spice_cookie.n.01
@@ -24,7 +24,7 @@
         baking_powder__jar.n.01_1 - baking_powder__jar.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
         countertop.n.01_1 - countertop.n.01
-        vanilla__bottle.n.02_1 - vanilla__bottle.n.02
+        vanilla__bottle.n.01_1 - vanilla__bottle.n.01
         cabinet.n.01_1 cabinet.n.01_2 - cabinet.n.01
         tupperware.n.01_1 - tupperware.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -40,18 +40,18 @@
         (inside raw_egg.n.01_1 tupperware.n.01_1) 
         (inside raw_egg.n.01_2 tupperware.n.01_1) 
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
-        (filled vanilla__bottle.n.02_1 vanilla.n.02_1) 
-        (inside vanilla__bottle.n.02_1 cabinet.n.01_1) 
+        (filled vanilla__bottle.n.01_1 vanilla.n.02_1) 
+        (inside vanilla__bottle.n.01_1 cabinet.n.01_1) 
         (inside butter.n.01_1 butter__package.n.01_1) 
         (inside butter__package.n.01_1 electric_refrigerator.n.01_1)
         (filled baking_powder__jar.n.01_1 baking_powder.n.01_1) 
         (inside baking_powder__jar.n.01_1 cabinet.n.01_2) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (inside salt__shaker.n.01_1 cabinet.n.01_1)
-        (insource cinnamon__shaker.n.03_1 cinnamon.n.03_1) 
-        (inside cinnamon__shaker.n.03_1 cabinet.n.01_1) 
-        (insource nutmeg__shaker.n.02_1 nutmeg.n.02_1) 
-        (inside nutmeg__shaker.n.02_1 cabinet.n.01_1) 
+        (insource cinnamon__shaker.n.01_1 cinnamon.n.03_1) 
+        (inside cinnamon__shaker.n.01_1 cabinet.n.01_1) 
+        (insource nutmeg__shaker.n.01_1 nutmeg.n.02_1) 
+        (inside nutmeg__shaker.n.01_1 cabinet.n.01_1) 
         (ontop electric_mixer.n.01_1 countertop.n.01_1) 
         (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (inroom oven.n.01_1 kitchen) 

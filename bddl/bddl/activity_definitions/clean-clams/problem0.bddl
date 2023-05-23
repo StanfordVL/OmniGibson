@@ -7,7 +7,7 @@
         countertop.n.01_1 - countertop.n.01
         bowl.n.01_1 - bowl.n.01
         rag.n.01_1 - rag.n.01
-        sand.n.01_1 - sand.n.01
+        sand.n.04_1 - sand.n.04
         water.n.06_1 - water.n.06
         sink.n.01_1 - sink.n.01
         floor.n.01_1 - floor.n.01
@@ -17,8 +17,8 @@
     (:init 
         (inside clam.n.01_1 bowl.n.01_1) 
         (inside clam.n.01_2 bowl.n.01_1) 
-        (covered clam.n.01_1 sand.n.01_1)
-        (covered clam.n.01_2 sand.n.01_1)
+        (covered clam.n.01_1 sand.n.04_1)
+        (covered clam.n.01_2 sand.n.04_1)
         (ontop rag.n.01_1 countertop.n.01_1)
         (ontop bowl.n.01_1 countertop.n.01_1)
         (insource sink.n.01_1 water.n.06_1)
@@ -34,7 +34,7 @@
             (forall 
                 (?clam.n.01 - clam.n.01)
                 (not 
-                    (covered ?clam.n.01 ?sand.n.01_1)
+                    (covered ?clam.n.01 ?sand.n.04_1)
                 )
             )
         )

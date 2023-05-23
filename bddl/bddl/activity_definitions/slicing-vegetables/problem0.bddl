@@ -3,13 +3,13 @@
 
     (:objects
         bell_pepper.n.02_1 bell_pepper.n.02_2 - bell_pepper.n.02
-        diced__bell_pepper.n.02_1 - diced__bell_pepper.n.02
+        diced__bell_pepper.n.01_1 - diced__bell_pepper.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         beetroot.n.01_1 beetroot.n.01_2 - beetroot.n.01
         diced__beetroot.n.01_1 - diced__beetroot.n.01
         chopping_board.n.01_1 - chopping_board.n.01
         zucchini.n.02_1 - zucchini.n.02
-        diced__zucchini.n.02_1 - diced__zucchini.n.02
+        diced__zucchini.n.01_1 - diced__zucchini.n.01
         carving_knife.n.01_1 - carving_knife.n.01
         countertop.n.01_1 - countertop.n.01
         floor.n.01_1 - floor.n.01
@@ -28,15 +28,15 @@
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (future diced__beetroot.n.01_1)
-        (future diced__bell_pepper.n.02_1)
-        (future diced__zucchini.n.02_1)
+        (future diced__bell_pepper.n.01_1)
+        (future diced__zucchini.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?diced__zucchini.n.02_1)
-            (real ?diced__bell_pepper.n.02_1)
+            (real ?diced__zucchini.n.01_1)
+            (real ?diced__bell_pepper.n.01_1)
             (real ?diced__beetroot.n.01_1)
         )
     )

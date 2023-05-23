@@ -4,7 +4,7 @@
     (:objects
         water.n.06_1 - water.n.06
         mussel.n.01_1 mussel.n.01_2 mussel.n.01_3 mussel.n.01_4 - mussel.n.01
-        sand.n.01_1 - sand.n.01
+        sand.n.04_1 - sand.n.04
         countertop.n.01_1 - countertop.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         sack.n.01_1 - sack.n.01
@@ -23,10 +23,10 @@
         (frozen mussel.n.01_2)
         (frozen mussel.n.01_3)
         (frozen mussel.n.01_4)
-        (covered mussel.n.01_1 sand.n.01_1)
-        (covered mussel.n.01_2 sand.n.01_1)
-        (covered mussel.n.01_3 sand.n.01_1)
-        (covered mussel.n.01_4 sand.n.01_1)
+        (covered mussel.n.01_1 sand.n.04_1)
+        (covered mussel.n.01_2 sand.n.04_1)
+        (covered mussel.n.01_3 sand.n.04_1)
+        (covered mussel.n.01_4 sand.n.04_1)
         (ontop sack.n.01_1 countertop.n.01_1)
         (filled mixing_bowl.n.01_1 water.n.06_1)
         (ontop mixing_bowl.n.01_1 countertop.n.01_1)
@@ -45,7 +45,7 @@
                     (covered ?mussel.n.01 ?water.n.06_1)
                     (ontop ?mussel.n.01 ?paper_towel.n.01_1)
                     (not 
-                        (covered ?mussel.n.01 ?sand.n.01_1)
+                        (covered ?mussel.n.01 ?sand.n.04_1)
                     )
                 )
             )

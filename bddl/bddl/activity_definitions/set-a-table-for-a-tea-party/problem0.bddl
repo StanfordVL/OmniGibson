@@ -5,7 +5,7 @@
         napkin.n.01_1 - napkin.n.01
         console_table.n.01_1 - console_table.n.01
         pastry.n.02_1 pastry.n.02_2 - pastry.n.02
-        diced__ham.n.01_1 - diced__ham.n.01
+        diced__virginia_ham.n.01_1 - diced__virginia_ham.n.01
         place_mat.n.01_1 - place_mat.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
         tray.n.01_1 tray.n.01_2 - tray.n.01
@@ -20,7 +20,7 @@
         tablefork.n.01_1 - tablefork.n.01
         teaspoon.n.02_1 - teaspoon.n.02
         diced__cheddar.n.01_1 - diced__cheddar.n.01
-        diced__cucumber.n.02_1 - diced__cucumber.n.02
+        diced__cucumber.n.01_1 - diced__cucumber.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -43,9 +43,9 @@
         (ontop tablefork.n.01_1 plate.n.04_1) 
         (ontop teaspoon.n.02_1 plate.n.04_1) 
         (ontop plate.n.04_1 console_table.n.01_1) 
-        (contains tray.n.01_2 diced__ham.n.01_1) 
+        (contains tray.n.01_2 diced__virginia_ham.n.01_1)
         (contains tray.n.01_2 diced__cheddar.n.01_1) 
-        (contains tray.n.01_2 diced__cucumber.n.02_1) 
+        (contains tray.n.01_2 diced__cucumber.n.01_1) 
         (ontop tray.n.01_2 console_table.n.01_1) 
         (inroom breakfast_table.n.01_1 dining_room) 
         (inroom console_table.n.01_1 dining_room) 
@@ -74,8 +74,8 @@
             )
             (ontop ?tray.n.01_1 ?breakfast_table.n.01_1) 
             (contains ?tray.n.01_2 ?diced__cheddar.n.01_1) 
-            (contains ?tray.n.01_2 ?diced__cucumber.n.02_1) 
-            (contains ?tray.n.01_2 ?diced__ham.n.01_1)
+            (contains ?tray.n.01_2 ?diced__cucumber.n.01_1) 
+            (contains ?tray.n.01_2 ?diced__virginia_ham.n.01_1)
             (nextto ?tray.n.01_2 ?tray.n.01_1) 
 
             (nextto ?teacup.n.02_1 ?plate.n.04_1) 

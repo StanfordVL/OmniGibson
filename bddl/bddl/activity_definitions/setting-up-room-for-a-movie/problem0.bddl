@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        popcorn.n.01_1 - popcorn.n.01
+        popcorn.n.02_1 - popcorn.n.02
         sack.n.01_1 - sack.n.01
         bowl.n.01_1 - bowl.n.01
         coca_cola.n.01_1 coca_cola.n.01_2 coca_cola.n.01_3 - coca_cola.n.01
@@ -16,7 +16,7 @@
     )
     
     (:init 
-        (filled sack.n.01_1 popcorn.n.01_1) 
+        (filled sack.n.01_1 popcorn.n.02_1) 
         (inside sack.n.01_1 shelf.n.01_1)
         (ontop coca_cola.n.01_1 shelf.n.01_1) 
         (ontop coca_cola.n.01_2 shelf.n.01_1) 
@@ -38,7 +38,7 @@
                 (ontop ?coca_cola.n.01 ?table.n.02_1)
             ) 
             (ontop ?throw.n.04_1 ?sofa.n.01_1) 
-            (filled ?bowl.n.01_1 ?popcorn.n.01_1) 
+            (filled ?bowl.n.01_1 ?popcorn.n.02_1) 
             (ontop ?bowl.n.01_1 ?table.n.02_1)
         )
     )

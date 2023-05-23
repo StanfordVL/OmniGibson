@@ -10,7 +10,7 @@
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
         polish.n.03_1 - polish.n.03
-        polish__bottle.n.03_1 - polish__bottle.n.03
+        polish__bottle.n.01_1 - polish__bottle.n.01
         hand_towel.n.01_1 - hand_towel.n.01
         sink.n.01_1 - sink.n.01
         floor.n.01_1 - floor.n.01
@@ -20,8 +20,8 @@
     (:init 
         (covered pewter.n.01_1 dust.n.01_1) 
         (ontop pewter.n.01_1 countertop.n.01_1) 
-        (filled polish__bottle.n.03_1 polish.n.03_1)
-        (ontop polish__bottle.n.03_1 countertop.n.01_1)
+        (filled polish__bottle.n.01_1 polish.n.03_1)
+        (ontop polish__bottle.n.01_1 countertop.n.01_1)
         (ontop bowl.n.01_1 countertop.n.01_1) 
         (filled bowl.n.01_1 water.n.06_1)  
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 

@@ -6,7 +6,7 @@
         countertop.n.01_1 - countertop.n.01
         vinegar__bottle.n.01_1 - vinegar__bottle.n.01
         pickle.n.01_1 - pickle.n.01
-        mustard__bottle.n.02_1 - mustard__bottle.n.02
+        mustard__bottle.n.01_1 - mustard__bottle.n.01
         peanut_butter__jar.n.01_1 - peanut_butter__jar.n.01
         tomato_sauce__jar.n.01_1 - tomato_sauce__jar.n.01
         mayonnaise__jar.n.01_1 - mayonnaise__jar.n.01
@@ -23,7 +23,7 @@
         (ontop wicker_basket.n.01_2 countertop.n.01_1) 
         (ontop vinegar__bottle.n.01_1 countertop.n.01_1) 
         (inside pickle.n.01_1 electric_refrigerator.n.01_1) 
-        (inside mustard__bottle.n.02_1 electric_refrigerator.n.01_1) 
+        (inside mustard__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (inside peanut_butter__jar.n.01_1 cabinet.n.01_1) 
         (inside tomato_sauce__jar.n.01_1 electric_refrigerator.n.01_1) 
         (inside mayonnaise__jar.n.01_1 electric_refrigerator.n.01_1) 
@@ -46,7 +46,7 @@
         (and 
             (ontop ?vinegar__bottle.n.01_1 ?breakfast_table.n.01_1) 
             (ontop ?pickle.n.01_1 ?breakfast_table.n.01_1) 
-            (ontop ?mustard__bottle.n.02_1 ?breakfast_table.n.01_1) 
+            (ontop ?mustard__bottle.n.01_1 ?breakfast_table.n.01_1) 
             (ontop ?tomato_sauce__jar.n.01_1 ?breakfast_table.n.01_1) 
             (ontop ?peanut_butter__jar.n.01_1 ?breakfast_table.n.01_1) 
             (ontop ?mayonnaise__jar.n.01_1 ?breakfast_table.n.01_1)

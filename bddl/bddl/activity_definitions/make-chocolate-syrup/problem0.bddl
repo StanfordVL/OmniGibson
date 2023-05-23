@@ -14,7 +14,7 @@
         salt__shaker.n.01_1 - salt__shaker.n.01
         cocoa__box.n.01_1 - cocoa__box.n.01
         countertop.n.01_1 countertop.n.01_2 - countertop.n.01
-        vanilla__bottle.n.02_1 - vanilla__bottle.n.02
+        vanilla__bottle.n.01_1 - vanilla__bottle.n.01
         sink.n.01_1 - sink.n.01
         tablespoon.n.02_1 - tablespoon.n.02
         agent.n.01_1 - agent.n.01
@@ -27,8 +27,8 @@
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
-        (filled vanilla__bottle.n.02_1 vanilla.n.02_1) 
-        (ontop vanilla__bottle.n.02_1 countertop.n.01_1) 
+        (filled vanilla__bottle.n.01_1 vanilla.n.02_1) 
+        (ontop vanilla__bottle.n.01_1 countertop.n.01_1) 
         (filled cocoa__box.n.01_1 cocoa_powder.n.01_1) 
         (ontop cocoa__box.n.01_1 countertop.n.01_1) 
         (inroom stove.n.01_1 kitchen) 

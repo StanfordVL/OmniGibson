@@ -9,7 +9,7 @@
         fecal_matter.n.01_1 - fecal_matter.n.01
         hay.n.01_1 - hay.n.01
         water.n.06_1 - water.n.06
-        water__atomizer.n.06_1 - water__atomizer.n.06
+        water__atomizer.n.01_1 - water__atomizer.n.01
         vinegar__atomizer.n.01_1 - vinegar__atomizer.n.01
         vinegar.n.01_1 - vinegar.n.01
         liquid_soap.n.01_1 - liquid_soap.n.01
@@ -27,8 +27,8 @@
         (ontop bin.n.01_1 floor.n.01_1)
         (covered hutch.n.01_1 fecal_matter.n.01_1) 
         (inside hay.n.01_1 hutch.n.01_1) 
-        (insource water__atomizer.n.06_1 water.n.06_1) 
-        (ontop water__atomizer.n.06_1 floor.n.01_1)
+        (insource water__atomizer.n.01_1 water.n.06_1) 
+        (ontop water__atomizer.n.01_1 floor.n.01_1)
         (insource vinegar__atomizer.n.01_1 vinegar.n.01_1) 
         (ontop vinegar__atomizer.n.01_1 floor.n.01_1)
         (ontop rag.n.01_1 floor.n.01_1) 

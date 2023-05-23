@@ -7,7 +7,7 @@
         bunchgrass.n.01_1 - bunchgrass.n.01
         broom.n.01_1 - broom.n.01
         driveway.n.01_1 - driveway.n.01
-        sand.n.01_1 - sand.n.01
+        sand.n.04_1 - sand.n.04
         bucket.n.01_1 - bucket.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -17,7 +17,7 @@
         (ontop ashcan.n.01_2 floor.n.01_1) 
         (covered floor.n.01_1 bunchgrass.n.01_1) 
         (ontop broom.n.01_1 driveway.n.01_1) 
-        (covered floor.n.01_1 sand.n.01_1) 
+        (covered floor.n.01_1 sand.n.04_1)
         (ontop bucket.n.01_1 driveway.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
@@ -30,7 +30,7 @@
                 (covered ?floor.n.01_1 ?bunchgrass.n.01_1)
             )
             (not
-                (covered ?floor.n.01_1 ?sand.n.01_1)
+                (covered ?floor.n.01_1 ?sand.n.04_1)
             )
         )
     )

@@ -12,7 +12,7 @@
         plate.n.04_1 - plate.n.04
         orzo.n.01_1 - orzo.n.01
         cooked__orzo.n.01_1 - cooked__orzo.n.01
-        pasta__box.n.02_1 - pasta__box.n.02
+        pasta__box.n.01_1 - pasta__box.n.01
         salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
         seawater.n.01_1 - seawater.n.01
@@ -36,8 +36,8 @@
         (ontop brownie.n.03_1 countertop.n.01_1) 
         (ontop brownie.n.03_2 countertop.n.01_1) 
         (ontop white_bread.n.01_1 countertop.n.01_1) 
-        (filled pasta__box.n.02_1 orzo.n.01_1) 
-        (ontop pasta__box.n.02_1 countertop.n.01_1)
+        (filled pasta__box.n.01_1 orzo.n.01_1) 
+        (ontop pasta__box.n.01_1 countertop.n.01_1)
         (not 
             (cooked fish.n.02_1)
         ) 

@@ -6,7 +6,7 @@
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         butter.n.01_1 - butter.n.01
         clove.n.03_1 clove.n.03_2 clove.n.03_3 - clove.n.03
-        diced__clove.n.03_1 - diced__clove.n.03
+        diced__clove.n.01_1 - diced__clove.n.01
         soy_sauce.n.01_1 - soy_sauce.n.01
         soy_sauce__bottle.n.01_1 - soy_sauce__bottle.n.01
         frying_pan.n.01_1 - frying_pan.n.01
@@ -31,7 +31,7 @@
         (filled soy_sauce__bottle.n.01_1 soy_sauce.n.01_1)
         (inside soy_sauce__bottle.n.01_1 electric_refrigerator.n.01_1)
         (future melted__butter.n.01_1)
-        (future diced__clove.n.03_1)
+        (future diced__clove.n.01_1)
         (ontop frying_pan.n.01_1 countertop.n.01_1)
         (ontop chopping_board.n.01_1 countertop.n.01_1)
         (ontop carving_knife.n.01_1 chopping_board.n.01_1)
@@ -45,10 +45,10 @@
     (:goal 
         (and 
             (real ?melted__butter.n.01_1)
-            (real ?diced__clove.n.03_1)
+            (real ?diced__clove.n.01_1)
             (inside ?bok_choy.n.01_1 ?frying_pan.n.01_1)
             (contains ?frying_pan.n.01_1 ?melted__butter.n.01_1)
-            (contains ?frying_pan.n.01_1 ?diced__clove.n.03_1)
+            (contains ?frying_pan.n.01_1 ?diced__clove.n.01_1)
             (cooked ?bok_choy.n.01_1)
         )
     )

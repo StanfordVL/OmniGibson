@@ -5,7 +5,7 @@
         steak.n.01_1 - steak.n.01
         frying_pan.n.01_1 - frying_pan.n.01
         thyme.n.02_1 - thyme.n.02
-        thyme__shaker.n.02_1 - thyme__shaker.n.02
+        thyme__shaker.n.01_1 - thyme__shaker.n.01
         plate.n.04_1 - plate.n.04
         countertop.n.01_1 - countertop.n.01
         cooking_oil.n.01_1 - cooking_oil.n.01
@@ -21,8 +21,8 @@
         (not 
             (cooked steak.n.01_1)
         )
-        (insource thyme__shaker.n.02_1 thyme.n.02_1)
-        (ontop thyme__shaker.n.02_1 countertop.n.01_1) 
+        (insource thyme__shaker.n.01_1 thyme.n.02_1)
+        (ontop thyme__shaker.n.01_1 countertop.n.01_1) 
         (ontop plate.n.04_1 countertop.n.01_1) 
         (filled cooking_oil__bottle.n.01_1 cooking_oil.n.01_1) 
         (ontop cooking_oil__bottle.n.01_1 countertop.n.01_1)

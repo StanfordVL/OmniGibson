@@ -5,7 +5,7 @@
         tupperware.n.01_1 - tupperware.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         scallop.n.02_1 scallop.n.02_2 scallop.n.02_3 - scallop.n.02
-        sand.n.01_1 - sand.n.01
+        sand.n.04_1 - sand.n.04
         rag.n.01_1 - rag.n.01
         cabinet.n.01_1 - cabinet.n.01
         water.n.06_1 - water.n.06
@@ -16,9 +16,9 @@
     
     (:init 
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
-        (covered scallop.n.02_1 sand.n.01_1) 
-        (covered scallop.n.02_2 sand.n.01_1) 
-        (covered scallop.n.02_3 sand.n.01_1) 
+        (covered scallop.n.02_1 sand.n.04_1)
+        (covered scallop.n.02_2 sand.n.04_1)
+        (covered scallop.n.02_3 sand.n.04_1)
         (inside scallop.n.02_1 tupperware.n.01_1) 
         (inside scallop.n.02_2 tupperware.n.01_1) 
         (inside scallop.n.02_3 tupperware.n.01_1) 
@@ -36,7 +36,7 @@
             (forall 
                 (?scallop.n.02 - scallop.n.02) 
                 (not 
-                    (covered ?scallop.n.02 ?sand.n.01_1)
+                    (covered ?scallop.n.02 ?sand.n.04_1)
                 )
             )
         )

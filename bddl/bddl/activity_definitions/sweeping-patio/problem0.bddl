@@ -3,7 +3,7 @@
 
     (:objects
         broom.n.01_1 - broom.n.01
-        sand.n.01_1 - sand.n.01
+        sand.n.04_1 - sand.n.04
         driveway.n.01_1 - driveway.n.01
         entire_leaf.n.01_1 entire_leaf.n.01_2 entire_leaf.n.01_3 entire_leaf.n.01_4 entire_leaf.n.01_5 - entire_leaf.n.01
         plastic_bag.n.01_1 - plastic_bag.n.01
@@ -15,7 +15,7 @@
     
     (:init 
         (ontop broom.n.01_1 driveway.n.01_1) 
-        (covered driveway.n.01_1 sand.n.01_1) 
+        (covered driveway.n.01_1 sand.n.04_1)
         (ontop entire_leaf.n.01_1 driveway.n.01_1) 
         (ontop entire_leaf.n.01_2 driveway.n.01_1) 
         (ontop entire_leaf.n.01_3 driveway.n.01_1) 
@@ -37,7 +37,7 @@
                 (inside ?entire_leaf.n.01 ?plastic_bag.n.01_1)
             ) 
             (not 
-                (covered ?driveway.n.01_1 ?sand.n.01_1)
+                (covered ?driveway.n.01_1 ?sand.n.04_1)
             )
         )
     )

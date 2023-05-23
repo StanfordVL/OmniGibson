@@ -13,7 +13,7 @@
         stove.n.01_1 - stove.n.01
         frying_pan.n.01_1 - frying_pan.n.01
         salt.n.02_1 - salt.n.02
-        cooked__salt.n.02_1 - cooked__salt.n.02
+        cooked__salt.n.01_1 - cooked__salt.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
         bowl.n.01_1 - bowl.n.01
         lemon-pepper_seasoning__shaker.n.01_1 - lemon-pepper_seasoning__shaker.n.01
@@ -75,7 +75,7 @@
         (future cooked__lemon-pepper_seasoning.n.01_1) 
         (future cooked__olive_oil.n.01_1) 
         (future cooked__melted__butter.n.01_1) 
-        (future cooked__salt.n.02_1) 
+        (future cooked__salt.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom countertop.n.01_2 kitchen) 
@@ -100,7 +100,7 @@
             ) 
             (or 
                 (real ?salt.n.02_1) 
-                (real ?cooked__salt.n.02_1)
+                (real ?cooked__salt.n.01_1)
             ) 
             (forall 
                 (?chicken_wing.n.01 - chicken_wing.n.01) 
@@ -120,7 +120,7 @@
                     ) 
                     (or 
                         (covered ?chicken_wing.n.01 ?salt.n.02_1) 
-                        (covered ?chicken_wing.n.01 ?cooked__salt.n.02_1)
+                        (covered ?chicken_wing.n.01 ?cooked__salt.n.01_1)
                     )
                 )
             )

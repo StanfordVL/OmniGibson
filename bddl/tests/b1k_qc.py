@@ -12,7 +12,7 @@ from bddl.parsing import parse_problem, construct_bddl_from_parsed
 import bddl.activity
 from bddl_debug_backend import DebugBackend, DebugGenericObject
 
-PROBLEM_FILE_DIR = "../activity_definitions"
+PROBLEM_FILE_DIR = "../bddl/activity_definitions"
 PROPS_TO_SYNS_JSON = "../generated_data/properties_to_synsets.json"
 SYNS_TO_PROPS_JSON = "../generated_data/propagated_annots_canonical.json"
 

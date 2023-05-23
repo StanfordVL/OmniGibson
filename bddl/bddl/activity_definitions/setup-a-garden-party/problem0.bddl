@@ -6,7 +6,7 @@
         handcart.n.01_1 - handcart.n.01
         lemonade__bottle.n.01_1 - lemonade__bottle.n.01
         goblet.n.01_1 goblet.n.01_2 goblet.n.01_3 - goblet.n.01
-        diced__watermelon.n.02_1 - diced__watermelon.n.02
+        diced__watermelon.n.01_1 - diced__watermelon.n.01
         tupperware.n.01_1 - tupperware.n.01
         carving_knife.n.01_1 - carving_knife.n.01
         platter.n.01_1 - platter.n.01
@@ -23,7 +23,7 @@
         (ontop goblet.n.01_2 handcart.n.01_1) 
         (ontop goblet.n.01_3 handcart.n.01_1) 
         (ontop carving_knife.n.01_1 handcart.n.01_1)
-        (filled tupperware.n.01_1 diced__watermelon.n.02_1) 
+        (filled tupperware.n.01_1 diced__watermelon.n.01_1) 
         (ontop tupperware.n.01_1 coffee_table.n.01_1)
         (ontop platter.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 garden) 
@@ -41,7 +41,7 @@
                 (?goblet.n.01 - goblet.n.01) 
                 (ontop ?goblet.n.01 ?coffee_table.n.01_1)
             ) 
-            (contains ?platter.n.01_1 ?diced__watermelon.n.02_1)
+            (contains ?platter.n.01_1 ?diced__watermelon.n.01_1)
             (ontop ?platter.n.01_1 ?coffee_table.n.01_1)
         )
     )

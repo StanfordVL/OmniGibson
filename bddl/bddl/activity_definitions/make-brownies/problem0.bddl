@@ -21,7 +21,7 @@
         flour__sack.n.01_1 - flour__sack.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
         countertop.n.01_1 countertop.n.01_2 countertop.n.01_3 - countertop.n.01
-        vanilla__bottle.n.02_1 - vanilla__bottle.n.02
+        vanilla__bottle.n.01_1 - vanilla__bottle.n.01
         bowl.n.01_1 - bowl.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         tablespoon.n.02_1 - tablespoon.n.02
@@ -36,8 +36,8 @@
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (filled cocoa__box.n.01_1 cocoa_powder.n.01_1) 
         (ontop cocoa__box.n.01_1 countertop.n.01_1) 
-        (filled vanilla__bottle.n.02_1 vanilla.n.02_1) 
-        (ontop vanilla__bottle.n.02_1 countertop.n.01_1) 
+        (filled vanilla__bottle.n.01_1 vanilla.n.02_1) 
+        (ontop vanilla__bottle.n.01_1 countertop.n.01_1) 
         (inside raw_egg.n.01_1 bowl.n.01_1) 
         (filled flour__sack.n.01_1 flour.n.01_1) 
         (ontop flour__sack.n.01_1 countertop.n.01_2) 

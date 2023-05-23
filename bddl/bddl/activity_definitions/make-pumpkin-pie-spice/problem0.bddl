@@ -10,10 +10,10 @@
         pumpkin_pie_spice.n.01_1 - pumpkin_pie_spice.n.01
         whisk.n.01_1 - whisk.n.01
         mixing_bowl.n.01_1 - mixing_bowl.n.01
-        cinnamon__shaker.n.03_1 - cinnamon__shaker.n.03
-        ginger__shaker.n.02_1 - ginger__shaker.n.02
-        nutmeg__shaker.n.02_1 - nutmeg__shaker.n.02
-        allspice__shaker.n.03_1 - allspice__shaker.n.03
+        cinnamon__shaker.n.01_1 - cinnamon__shaker.n.01
+        ginger__shaker.n.01_1 - ginger__shaker.n.01
+        nutmeg__shaker.n.01_1 - nutmeg__shaker.n.01
+        allspice__shaker.n.01_1 - allspice__shaker.n.01
         clove__jar.n.01_1 - clove__jar.n.01
         countertop.n.01_1 - countertop.n.01
         cabinet.n.01_1 - cabinet.n.01
@@ -22,14 +22,14 @@
     )
     
     (:init 
-        (insource cinnamon__shaker.n.03_1 cinnamon.n.03_1) 
-        (inside cinnamon__shaker.n.03_1 cabinet.n.01_1) 
-        (insource ginger__shaker.n.02_1 ginger.n.02_1) 
-        (inside ginger__shaker.n.02_1 cabinet.n.01_1) 
-        (insource nutmeg__shaker.n.02_1 nutmeg.n.02_1) 
-        (inside nutmeg__shaker.n.02_1 cabinet.n.01_1) 
-        (insource allspice__shaker.n.03_1 allspice.n.03_1) 
-        (inside allspice__shaker.n.03_1 cabinet.n.01_1) 
+        (insource cinnamon__shaker.n.01_1 cinnamon.n.03_1) 
+        (inside cinnamon__shaker.n.01_1 cabinet.n.01_1) 
+        (insource ginger__shaker.n.01_1 ginger.n.02_1) 
+        (inside ginger__shaker.n.01_1 cabinet.n.01_1) 
+        (insource nutmeg__shaker.n.01_1 nutmeg.n.02_1) 
+        (inside nutmeg__shaker.n.01_1 cabinet.n.01_1) 
+        (insource allspice__shaker.n.01_1 allspice.n.03_1)
+        (inside allspice__shaker.n.01_1 cabinet.n.01_1)
         (filled clove__jar.n.01_1 clove.n.04_1)
         (inside clove__jar.n.01_1 cabinet.n.01_1) 
         (ontop whisk.n.01_1 countertop.n.01_1) 

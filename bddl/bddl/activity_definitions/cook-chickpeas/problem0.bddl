@@ -3,7 +3,7 @@
 
     (:objects
         chickpea.n.03_1 - chickpea.n.03
-        cooked__chickpea.n.03_1 - cooked__chickpea.n.03
+        cooked__chickpea.n.01_1 - cooked__chickpea.n.01
         bowl.n.01_1 - bowl.n.01
         stove.n.01_1 - stove.n.01
         water.n.06_1 - water.n.06
@@ -27,13 +27,13 @@
         (inroom floor.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
-        (future cooked__chickpea.n.03_1)
+        (future cooked__chickpea.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?cooked__chickpea.n.03_1)
+            (real ?cooked__chickpea.n.01_1)
         )
     )
 )

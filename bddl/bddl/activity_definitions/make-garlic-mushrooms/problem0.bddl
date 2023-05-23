@@ -11,11 +11,11 @@
         mushroom.n.05_1 mushroom.n.05_10 mushroom.n.05_11 mushroom.n.05_12 mushroom.n.05_13 mushroom.n.05_14 mushroom.n.05_2 mushroom.n.05_3 mushroom.n.05_4 mushroom.n.05_5 mushroom.n.05_6 mushroom.n.05_7 mushroom.n.05_8 mushroom.n.05_9 - mushroom.n.05
         half__mushroom.n.01_1 half__mushroom.n.01_10 half__mushroom.n.01_11 half__mushroom.n.01_12 half__mushroom.n.01_13 half__mushroom.n.01_14 half__mushroom.n.01_15 half__mushroom.n.01_16 half__mushroom.n.01_17 half__mushroom.n.01_18 half__mushroom.n.01_19 half__mushroom.n.01_2 half__mushroom.n.01_20 half__mushroom.n.01_21 half__mushroom.n.01_22 half__mushroom.n.01_23 half__mushroom.n.01_24 half__mushroom.n.01_25 half__mushroom.n.01_26 half__mushroom.n.01_27 half__mushroom.n.01_28 half__mushroom.n.01_3 half__mushroom.n.01_4 half__mushroom.n.01_5 half__mushroom.n.01_6 half__mushroom.n.01_7 half__mushroom.n.01_8 half__mushroom.n.01_9 - half__mushroom.n.01
         green_onion.n.01_1 green_onion.n.01_2 - green_onion.n.01
-        cooked__diced__clove.n.03_1 - cooked__diced__clove.n.03
+        cooked__diced__clove.n.01_1 - cooked__diced__clove.n.01
         cooked__diced__green_onion.n.01_1 - cooked__diced__green_onion.n.01
         spatula.n.02_1 - spatula.n.02
         salt.n.02_1 - salt.n.02
-        cooked__salt.n.02_1 - cooked__salt.n.02
+        cooked__salt.n.01_1 - cooked__salt.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
         tupperware.n.01_1 tupperware.n.01_2 - tupperware.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
@@ -92,8 +92,8 @@
         (future half__mushroom.n.01_28)
         (future cooked__olive_oil.n.01_1)
         (future cooked__diced__green_onion.n.01_1)
-        (future cooked__diced__clove.n.03_1)
-        (future cooked__salt.n.02_1)
+        (future cooked__diced__clove.n.01_1)
+        (future cooked__salt.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -128,14 +128,14 @@
             (real ?half__mushroom.n.01_27)
             (real ?half__mushroom.n.01_28)
             (real ?cooked__diced__green_onion.n.01_1)
-            (real ?cooked__diced__clove.n.03_1)
+            (real ?cooked__diced__clove.n.01_1)
             (or
                 (real ?olive_oil.n.01_1)
                 (real ?cooked__olive_oil.n.01_1)
             )
             (or 
                 (real ?salt.n.02_1)
-                (real ?cooked__salt.n.02_1)
+                (real ?cooked__salt.n.01_1)
             )
             (forall 
                 (?half__mushroom.n.01 - half__mushroom.n.01)
@@ -144,7 +144,7 @@
                     (inside ?half__mushroom.n.01 ?frying_pan.n.01_1)
                 )
             )
-            (contains ?frying_pan.n.01_1 ?cooked__diced__clove.n.03_1)
+            (contains ?frying_pan.n.01_1 ?cooked__diced__clove.n.01_1)
             (contains ?frying_pan.n.01_1 ?cooked__diced__green_onion.n.01_1)
             (or 
                 (contains ?frying_pan.n.01_1 ?olive_oil.n.01_1)
@@ -152,7 +152,7 @@
             )
             (or 
                 (contains ?frying_pan.n.01_1 ?salt.n.02_1)
-                (contains ?frying_pan.n.01_1 ?cooked__salt.n.02_1)
+                (contains ?frying_pan.n.01_1 ?cooked__salt.n.01_1)
             )
         )
     )

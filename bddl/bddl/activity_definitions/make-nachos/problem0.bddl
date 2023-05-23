@@ -11,8 +11,8 @@
         cooked__diced__beefsteak_tomato.n.01_1 - cooked__diced__beefsteak_tomato.n.01
         cooked__ground_beef.n.01_1 - cooked__ground_beef.n.01
         paprika.n.02_1 - paprika.n.02
-        cooked__paprika.n.02_1 - cooked__paprika.n.02
-        paprika__shaker.n.02_1 - paprika__shaker.n.02
+        cooked__paprika.n.01_1 - cooked__paprika.n.01
+        paprika__shaker.n.01_1 - paprika__shaker.n.01
         green_onion.n.01_1 - green_onion.n.01
         diced__green_onion.n.01_1 - diced__green_onion.n.01
         cooked__diced__green_onion.n.01_1 - cooked__diced__green_onion.n.01
@@ -52,8 +52,8 @@
         (filled salsa__bottle.n.01_1 salsa.n.01_1) 
         (inside salsa__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (inside avocado.n.01_1 electric_refrigerator.n.01_1) 
-        (insource paprika__shaker.n.02_1 paprika.n.02_1) 
-        (inside paprika__shaker.n.02_1 cabinet.n.01_1) 
+        (insource paprika__shaker.n.01_1 paprika.n.02_1) 
+        (inside paprika__shaker.n.01_1 cabinet.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
         (inroom oven.n.01_1 kitchen) 
@@ -66,7 +66,7 @@
         (future cooked__diced__beefsteak_tomato.n.01_1) 
         (future diced__green_onion.n.01_1) 
         (future cooked__diced__green_onion.n.01_1) 
-        (future cooked__paprika.n.02_1) 
+        (future cooked__paprika.n.01_1) 
         (future cooked__salsa.n.01_1) 
         (future diced__avocado.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
@@ -85,7 +85,7 @@
                 (real ?cooked__diced__green_onion.n.01_1)
             ) 
             (or 
-                (real ?cooked__paprika.n.02_1) 
+                (real ?cooked__paprika.n.01_1) 
                 (real ?paprika.n.02_1)
             ) 
             (or 
@@ -107,7 +107,7 @@
                     ) 
                     (or 
                         (covered ?tortilla_chip.n.01 ?paprika.n.02_1) 
-                        (covered ?tortilla_chip.n.01 ?cooked__paprika.n.02_1)
+                        (covered ?tortilla_chip.n.01 ?cooked__paprika.n.01_1)
                     ) 
                     (or 
                         (covered ?tortilla_chip.n.01 ?salsa.n.01_1) 

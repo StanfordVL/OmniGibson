@@ -6,7 +6,7 @@
         cabinet.n.01_1 - cabinet.n.01
         bell_pepper.n.02_1 bell_pepper.n.02_2 - bell_pepper.n.02
         shelf.n.01_1 - shelf.n.01
-        half__zucchini.n.02_1 half__zucchini.n.02_2 - half__zucchini.n.02
+        half__zucchini.n.01_1 half__zucchini.n.01_2 - half__zucchini.n.01
         carrot.n.03_1 carrot.n.03_2 - carrot.n.03
         floor.n.01_1 - floor.n.01
         chopping_board.n.01_1 - chopping_board.n.01
@@ -22,8 +22,8 @@
         (inside bell_pepper.n.02_1 shelf.n.01_1) 
         (inside bell_pepper.n.02_2 shelf.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1)
-        (ontop half__zucchini.n.02_1 chopping_board.n.01_1) 
-        (ontop half__zucchini.n.02_2 chopping_board.n.01_1) 
+        (ontop half__zucchini.n.01_1 chopping_board.n.01_1) 
+        (ontop half__zucchini.n.01_2 chopping_board.n.01_1) 
         (ontop carrot.n.03_1 shelf.n.01_1) 
         (ontop carrot.n.03_2 shelf.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
@@ -49,10 +49,10 @@
             (exists
                 (?tupperware.n.01 - tupperware.n.01)
                 (forall 
-                    (?half__zucchini.n.02 - half__zucchini.n.02)
+                    (?half__zucchini.n.01 - half__zucchini.n.01)
                     (and
-                        (inside ?half__zucchini.n.02 ?tupperware.n.01)
-                        (frozen ?half__zucchini.n.02)
+                        (inside ?half__zucchini.n.01 ?tupperware.n.01)
+                        (frozen ?half__zucchini.n.01)
                     )
                 )
             )
