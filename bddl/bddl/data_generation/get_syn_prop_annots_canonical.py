@@ -11,7 +11,7 @@ from calendar import c
 import json
 import pathlib 
 from nltk.corpus import wordnet as wn
-import prop_config as pcfg
+import bddl.data_generation.prop_config as pcfg
 
 
 CANONICAL_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "syn_prop_annots_canonical.json"

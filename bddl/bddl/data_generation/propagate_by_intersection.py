@@ -1,12 +1,5 @@
-import csv
 import pathlib
-from re import L 
-import sys
 import json 
-import pprint
-from collections import Counter
-from unicodedata import name
-from xml.dom.minidom import Element
 from nltk.corpus import wordnet as wn
 
 PROPAGATED_CANONICAL = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_canonical.json"

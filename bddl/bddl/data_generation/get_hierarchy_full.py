@@ -30,16 +30,15 @@ def add_path(path, hierarchy):
 def generate_paths(paths, path, synset, syn_prop_dict):
   # Annotated as not custom, or not present (i.e. not leaf, i.e. not custom)
   if (synset not in syn_prop_dict) or (not syn_prop_dict[synset]["is_custom"]):
-    hypernyms = wn.synset(synset).hypernyms()   # This fails iff a custom synset is incorrectly stored as non-custom
-    if not hypernyms:
-      paths.append(path)
-    else:
-      for hypernym in hypernyms:
-        generate_paths(paths, path + [hypernym.name()], hypernym.name(), syn_prop_dict)
+    hypernyms = [x.name() for x in wn.synset(synset).hypernyms()]   # This fails iff a custom synset is incorrectly stored as non-custom
   else:
-    hypernym = syn_prop_dict[synset]["hypernym"]
-    # NOTE assumes every custom synset's hypernym is a WordNet synset
-    generate_paths(paths, path + [hypernym], hypernym, syn_prop_dict)
+    hypernyms = syn_prop_dict[synset]["hypernyms"].split(",")
+
+  if not hypernyms:
+    paths.append(path)
+  else:
+    for hypernym in hypernyms:
+      generate_paths(paths, path + [hypernym], hypernym, syn_prop_dict)
 
 
 # API
@@ -49,7 +48,7 @@ def get_hierarchy(syn_prop_dict):
   objects = set()
   for synset in syn_prop_dict.keys():
     # NOTE skip custom synsets without hypernym annotations
-    if syn_prop_dict[synset]["hypernym"] == "":
+    if syn_prop_dict[synset]["is_custom"] and syn_prop_dict[synset]["hypernyms"] == "":
       continue
     objects.add(synset)
     paths = []
