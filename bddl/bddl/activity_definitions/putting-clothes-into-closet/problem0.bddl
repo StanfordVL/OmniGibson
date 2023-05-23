@@ -4,7 +4,7 @@
     (:objects
         carton.n.02_1 carton.n.02_2 - carton.n.02
         floor.n.01_1 - floor.n.01
-        shirt.n.01_1 - shirt.n.01
+        jersey.n.03_1 - jersey.n.03
         dress.n.01_1 - dress.n.01
         jacket.n.01_1 - jacket.n.01
         polo_shirt.n.01_1 - polo_shirt.n.01
@@ -17,7 +17,7 @@
     (:init 
         (ontop carton.n.02_1 floor.n.01_1) 
         (ontop carton.n.02_2 floor.n.01_1) 
-        (inside shirt.n.01_1 carton.n.02_1) 
+        (inside jersey.n.03_1 carton.n.02_1) 
         (inside dress.n.01_1 carton.n.02_2) 
         (ontop jacket.n.01_1 floor.n.01_1)
         (ontop polo_shirt.n.01_1 floor.n.01_1) 
@@ -36,7 +36,7 @@
             (draped ?jacket.n.01_1 ?hanger.n.02_1)
             (draped ?polo_shirt.n.01_1 ?hanger.n.02_1) 
             (draped ?dress.n.01_1 ?hanger.n.02_1) 
-            (draped ?shirt.n.01_1 ?hanger.n.02_1) 
+            (draped ?jersey.n.03_1 ?hanger.n.02_1) 
         )
     )
 )

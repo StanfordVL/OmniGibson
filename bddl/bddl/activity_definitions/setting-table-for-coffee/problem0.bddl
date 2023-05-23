@@ -11,7 +11,7 @@
         breakfast_table.n.01_1 - breakfast_table.n.01
         granulated_sugar.n.01_1 - granulated_sugar.n.01
         bowl.n.01_1 - bowl.n.01
-        spoon.n.01_1 spoon.n.01_2 - spoon.n.01
+        teaspoon.n.02_1 teaspoon.n.02_2 - teaspoon.n.02
         floor.n.01_1 - floor.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         agent.n.01_1 - agent.n.01
@@ -24,8 +24,8 @@
         (ontop napkin.n.01_1 breakfast_table.n.01_1) 
         (ontop napkin.n.01_2 breakfast_table.n.01_1) 
         (filled bowl.n.01_1 granulated_sugar.n.01_1) 
-        (inside spoon.n.01_1 shelf.n.01_1) 
-        (inside spoon.n.01_2 shelf.n.01_1) 
+        (inside teaspoon.n.02_1 shelf.n.01_1) 
+        (inside teaspoon.n.02_2 shelf.n.01_1) 
         (ontop bowl.n.01_1 countertop.n.01_1) 
         (inroom breakfast_table.n.01_1 dining_room) 
         (inroom shelf.n.01_1 kitchen) 
@@ -45,8 +45,8 @@
                 (ontop ?napkin.n.01 ?breakfast_table.n.01_1)
             ) 
             (forall 
-                (?spoon.n.01 - spoon.n.01) 
-                (ontop ?spoon.n.01 ?breakfast_table.n.01_1)
+                (?teaspoon.n.02 - teaspoon.n.02) 
+                (ontop ?teaspoon.n.02 ?breakfast_table.n.01_1)
             ) 
             (ontop ?bowl.n.01_1 ?breakfast_table.n.01_1)
             (filled ?bowl.n.01_1 ?granulated_sugar.n.01_1)

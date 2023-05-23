@@ -4,7 +4,7 @@
     (:objects
         fertilizer.n.01_1 - fertilizer.n.01
         fertilizer__atomizer.n.01_1 - fertilizer__atomizer.n.01
-        planter.n.03_1 - planter.n.03
+        pot.n.04_1 - pot.n.04
         soil.n.02_1 - soil.n.02
         floor.n.01_1 - floor.n.01
         potato.n.01_1 potato.n.01_2 potato.n.01_3 - potato.n.01
@@ -13,8 +13,8 @@
     
     (:init 
         (insource fertilizer__atomizer.n.01_1 fertilizer.n.01_1) 
-        (ontop planter.n.03_1 floor.n.01_1)
-        (filled planter.n.03_1 soil.n.02_1) 
+        (ontop pot.n.04_1 floor.n.01_1)
+        (filled pot.n.04_1 soil.n.02_1) 
         (ontop fertilizer__atomizer.n.01_1 floor.n.01_1) 
         (ontop potato.n.01_1 soil.n.02_1)
         (ontop potato.n.01_2 soil.n.02_1)

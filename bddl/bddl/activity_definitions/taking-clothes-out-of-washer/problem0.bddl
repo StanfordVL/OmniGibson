@@ -6,7 +6,7 @@
         washer.n.03_1 - washer.n.03
         underwear.n.01_1 underwear.n.01_2 - underwear.n.01
         sock.n.01_1 sock.n.01_2 - sock.n.01
-        shirt.n.01_1 shirt.n.01_2 - shirt.n.01
+        polo_shirt.n.01_1 polo_shirt.n.01_2 - polo_shirt.n.01
         water.n.06_1 - water.n.06
         clothes_dryer.n.01_1 - clothes_dryer.n.01
         floor.n.01_1 - floor.n.01
@@ -26,10 +26,10 @@
         (covered sock.n.01_1 water.n.06_1)
         (inside sock.n.01_2 washer.n.03_1) 
         (covered sock.n.01_2 water.n.06_1)
-        (inside shirt.n.01_1 washer.n.03_1) 
-        (covered shirt.n.01_1 water.n.06_1)
-        (inside shirt.n.01_2 washer.n.03_1) 
-        (covered shirt.n.01_2 water.n.06_1)
+        (inside polo_shirt.n.01_1 washer.n.03_1) 
+        (covered polo_shirt.n.01_1 water.n.06_1)
+        (inside polo_shirt.n.01_2 washer.n.03_1) 
+        (covered polo_shirt.n.01_2 water.n.06_1)
         (inroom washer.n.03_1 utility_room) 
         (inroom clothes_dryer.n.01_1 utility_room)
         (inroom floor.n.01_1 utility_room) 
@@ -51,8 +51,8 @@
                 (inside ?sock.n.01 ?clothes_dryer.n.01_1)
             )
             (forall 
-                (?shirt.n.01 - shirt.n.01)
-                (inside ?shirt.n.01 ?clothes_dryer.n.01_1)
+                (?polo_shirt.n.01 - polo_shirt.n.01)
+                (inside ?polo_shirt.n.01 ?clothes_dryer.n.01_1)
             )
         )
     )

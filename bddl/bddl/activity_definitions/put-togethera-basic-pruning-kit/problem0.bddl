@@ -4,7 +4,6 @@
     (:objects
      	pruner.n.02_1 - pruner.n.02
     	floor.n.01_1 - floor.n.01
-    	pruning_saw.n.01_1 - pruning_saw.n.01
     	shears.n.01_1 - shears.n.01
     	toolbox.n.01_1 - toolbox.n.01
     	agent.n.01_1 - agent.n.01
@@ -12,7 +11,6 @@
     
     (:init 
         (ontop pruner.n.02_1 floor.n.01_1) 
-        (ontop pruning_saw.n.01_1 floor.n.01_1) 
         (ontop shears.n.01_1 floor.n.01_1) 
         (ontop toolbox.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garage) 
@@ -23,7 +21,6 @@
         (and 
             (ontop ?toolbox.n.01_1 ?floor.n.01_1) 
             (inside ?pruner.n.02_1 ?toolbox.n.01_1) 
-            (inside ?pruning_saw.n.01_1 ?toolbox.n.01_1) 
             (inside ?shears.n.01_1 ?toolbox.n.01_1)
         )
     )

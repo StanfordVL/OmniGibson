@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        rice.n.01_1 - rice.n.01
+        white_rice.n.01_1 - white_rice.n.01
         bowl.n.01_1 - bowl.n.01
         kitchen_table.n.01_1 - kitchen_table.n.01
         chicken.n.01_1 - chicken.n.01
@@ -20,7 +20,7 @@
     )
     
     (:init 
-        (filled bowl.n.01_1 rice.n.01_1) 
+        (filled bowl.n.01_1 white_rice.n.01_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inside chicken.n.01_1 tupperware.n.01_1) 
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
@@ -30,7 +30,7 @@
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 kitchen_table.n.01_1)
         (not 
-            (cooked rice.n.01_1)
+            (cooked white_rice.n.01_1)
         ) 
         (not 
             (cooked chicken.n.01_1)
@@ -45,7 +45,7 @@
     
     (:goal 
         (and 
-            (cooked ?rice.n.01_1)
+            (cooked ?white_rice.n.01_1)
             (cooked ?chicken.n.01_1)
             (covered ?chicken.n.01_1 ?salt.n.02_1)
             (covered ?chicken.n.01_1 ?olive_oil.n.01_1)

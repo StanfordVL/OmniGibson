@@ -4,7 +4,7 @@
     (:objects
         car.n.01_1 - car.n.01
         driveway.n.01_1 - driveway.n.01
-        sandwich.n.01_1 sandwich.n.01_2 - sandwich.n.01
+        hamburger.n.01_1 hamburger.n.01_2 - hamburger.n.01
         table.n.02_1 - table.n.02
         tortilla_chip.n.01_1 tortilla_chip.n.01_2 - tortilla_chip.n.01
         pie.n.01_1 - pie.n.01 
@@ -19,8 +19,8 @@
     
     (:init 
         (ontop car.n.01_1 driveway.n.01_1) 
-        (ontop sandwich.n.01_1 table.n.02_1) 
-        (ontop sandwich.n.01_2 table.n.02_1) 
+        (ontop hamburger.n.01_1 table.n.02_1) 
+        (ontop hamburger.n.01_2 table.n.02_1) 
         (ontop tortilla_chip.n.01_1 table.n.02_1)
         (ontop tortilla_chip.n.01_2 table.n.02_1)
         (ontop pie.n.01_1 table.n.02_1) 
@@ -40,10 +40,10 @@
     (:goal 
         (and 
             (forall 
-                (?sandwich.n.01 - sandwich.n.01) 
+                (?hamburger.n.01 - hamburger.n.01) 
                 (exists
                     (?bag.n.06 - bag.n.06)
-                    (inside ?sandwich.n.01 ?bag.n.06)
+                    (inside ?hamburger.n.01 ?bag.n.06)
                 )
             ) 
             (forall 

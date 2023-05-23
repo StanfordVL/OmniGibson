@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-     	sandwich.n.01_1 - sandwich.n.01
+     	club_sandwich.n.01_1 - club_sandwich.n.01
     	countertop.n.01_1 - countertop.n.01
     	apple_juice__bottle.n.01_1 - apple_juice__bottle.n.01
     	sack.n.01_1 - sack.n.01
@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (ontop sandwich.n.01_1 countertop.n.01_1) 
+        (ontop club_sandwich.n.01_1 countertop.n.01_1) 
         (ontop apple_juice__bottle.n.01_1 countertop.n.01_1) 
         (ontop sack.n.01_1 countertop.n.01_1) 
         (ontop plastic_wrap.n.01_1 countertop.n.01_1) 
@@ -24,8 +24,8 @@
     (:goal 
         (and 
             (forall 
-                (?sandwich.n.01 - sandwich.n.01) 
-                (ontop ?sandwich.n.01 ?sack.n.01_1)
+                (?club_sandwich.n.01 - club_sandwich.n.01) 
+                (ontop ?club_sandwich.n.01 ?sack.n.01_1)
             ) 
             (forall 
                 (?apple_juice__bottle.n.01 - apple_juice__bottle.n.01) 
@@ -37,7 +37,7 @@
             ) 
             (forall 
                 (?plastic_wrap.n.01 - plastic_wrap.n.01) 
-                (overlaid ?plastic_wrap.n.01 ?sandwich.n.01_1)
+                (overlaid ?plastic_wrap.n.01 ?club_sandwich.n.01_1)
             )
         )
     )
