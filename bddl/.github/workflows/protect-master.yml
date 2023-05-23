@@ -1,12 +1,12 @@
-name: Disallow PRs to main branch
+name: Disallow PRs to master branch
 
 on: [pull_request]
 
 jobs:
-  protect-main:
-    name: Disallow PRs to main branch
+  protect-master:
+    name: Disallow PRs to master branch
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'main' }}
+    if: ${{ github.base_ref == 'master' }}
 
     steps:
     - name: Comment on PR
@@ -14,7 +14,7 @@ jobs:
       with:
         message: |
           Hi, research friend! :wave:
-          It looks like you are trying to merge a PR to the `main` branch.
+          It looks like you are trying to merge a PR to the `master` branch.
           This branch is for released code only. **Please PR your code onto `develop` instead.**
           Thank you!
 
