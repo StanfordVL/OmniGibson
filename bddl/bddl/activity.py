@@ -1,10 +1,11 @@
-import bddl
+import os
 from bddl.condition_evaluation import (
     compile_state,
     create_scope,
     evaluate_state,
     get_ground_state_options,
 )
+from bddl.config import ACTIVITY_CONFIGS_PATH
 from bddl.object_taxonomy import ObjectTaxonomy
 from bddl.parsing import (
     gen_natural_language_condition,
@@ -155,3 +156,15 @@ def get_natural_goal_conditions(conds):
         list<str>: natural language translations, one per condition in conditions
     """
     return gen_natural_language_conditions(conds.parsed_goal_conditions)
+
+
+def get_all_activities():
+    """Return a list of all activities included in this version of BDDL.
+    
+    Args:
+        None
+        
+    Returns:
+        list<str>: list containing the name of each included activity
+    """
+    return [os.path.isdir(x) for x in os.path.listdir(ACTIVITY_CONFIGS_PATH)]
