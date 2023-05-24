@@ -15,6 +15,8 @@ from bddl_debug_backend import DebugBackend, DebugGenericObject
 PROBLEM_FILE_DIR = "../bddl/activity_definitions"
 PROPS_TO_SYNS_JSON = "../generated_data/properties_to_synsets.json"
 SYNS_TO_PROPS_JSON = "../generated_data/propagated_annots_canonical.json"
+CSVS_DIR = "tm_csvs"
+
 
 # PREDICATES
 
@@ -23,7 +25,6 @@ def is_water_sourced(objects, init, goal):
     for obj_cat in objects:
         obj_list.extend(objects[obj_cat])
     objs = set(obj_list)
-    # print("OBJS:", objs)
     # NOTE Assumes that if water is in goal, it'll be in objects
     if "water.n.06_1" in objs:
         # Find a placement for the water in the init
@@ -59,141 +60,6 @@ def is_water_sourced(objects, init, goal):
     return True
 
 
-def detect_double_and(init, goal):
-    pass
-    
-# Double open parentheses - NOTE doing this by hand because I would need the compiled version to get all of them
-#   and I don't want to deal with it
-# def detect_double_open_parens_after_and(goal):
-#     for subexpr in goal: 
-#         if subexpr[0] == "and":
-#             # Check if there's only one child and it's a list
-#             if len(subexpr) == 2:
-
-#     return False
-
-# )( - NOTE didn't actually find any
-
-
-def switch_subst_non_subst(act, init, goal):
-    substance_placements = ["saturated", "filled", "contains", "covered"]
-    for sec in [init, goal]:
-        for line in sec:
-            pred, *objs = line 
-            if pred in substance_placements:
-                obj1, obj2 = objs 
-                line[1] = obj2
-                line[2] = obj1
-    return init, goal
-
-
-# TODO assert no hungs in :init - well actually, deal with this once 
-#   simulator team has gotten back with a design
-
-
-def melted_subst_state_to_synset(activity):
-    '''
-    Converts objects in melted state in init to melted__* substances. 
-        Since if it was in melted state in init it was a substance, fingers 
-        crossed that there was only one instance
-        NOTE: this does NOT change the uses to substance-appropriate ones. 
-            Too complicated.
-    Converts objects in melted state in goal to melted__* substances
-
-    TODO this isn't done. It's easier to change by hand because of containers.
-    '''
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
-    with open(defn_fn, "r") as f: 
-        defn = f.read()
-    for literal in init: 
-        if literal[0] == "melted": 
-            melting_subst = literal[1]
-            # Replace the object with melted__object
-            melting_cat = instance_to_cat(melting_subst)
-            melted_syn_defn_raw = defn.replace(melting_cat, f"melted__{melting_cat}")
-            melted_syn_defn = melted_syn_defn_raw.replace(f"(melted {melting_subst})", "")
-    with open(defn_fn, "w") as f:
-        f.write(melted_syn_defn)
-    
-
-def sliced_state_to_synset(activity, synset, replacement, first_appearance): 
-    '''
-    For all objects in a sliced state: 
-        If replacement is sliced: 
-            If sliced in init: change to sliced synset
-            If sliced in goal: add sliced synset to objects, add future statement, 
-                add real statement, replace synset in goal with sliced synset
-        If replacement is diced: 
-            Same thing as sliced, but diced. 
-            Will also need to change states to substance-appropriate states, but that
-                needs to be manual.
-
-    NOTE: various decisions need to be made manually, so this will be called as a tool 
-        during manual review
-    
-    Doesn't removed `sliced` lines, it's too complicated. Will do manually
-    '''
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
-    with open(defn_fn, "r") as f:
-        defn = f.read() 
-    if first_appearance == "init": 
-        # Replace synset completely (it'll never go back to being whole)
-        defn = defn.replace(synset, f"{replacement}__{synset}")
-        # Remove (sliced synset) line
-        defn = defn.replace(f"(sliced {replacement}__{synset})", "")
-    elif first_appearance == "goal":
-        # Add object line
-        if replacement == "diced":
-            instances_string = f"{replacement}__{synset}_1"
-        elif replacement == "half": # TODO need to double them!
-            num_instances = len(objects[synset]) * 2
-            instances = [f"{replacement}__{synset}_{index + 1}" for index in range(num_instances)]
-            instances_string = " ".join(instances)
-        else:
-            raise ValueError("Invalid replacement parameter.")
-        defn = defn.replace(
-            f"- {synset}\n",
-            f"- {synset}\n        {instances_string} - {replacement}__{synset}\n"
-        )
-
-        # Add future lines
-        if replacement == "diced": 
-            future_section = f"        (future {replacement}__{synset}_1)"
-        elif replacement == "half": 
-            num_instances = len(objects[synset]) * 2
-            future_section = ""
-            for index in range(num_instances): 
-                future_section += f"        (future {replacement}__{synset}_{index + 1})\n"
-        else:
-            raise ValueError("Invalid replacement parameter.")
-        defn = defn.replace("        (ontop agent.n.01_1", f"{future_section}\n        (ontop agent.n.01_1")
-
-        # Replace synset in goal section
-        defn_parts = defn.split("(:goal")
-        defn_parts[1] = defn_parts[1].replace(synset, f"{replacement}__{synset}")
-        defn = "(:goal".join(defn_parts)
-
-        # Add real lines
-        if replacement == "diced": 
-            real_section = f"            (real ?{replacement}__{synset}_1)\n"
-        elif replacement == "half": 
-            num_instances = len(objects[synset]) * 2
-            real_section = ""
-            for index in range(num_instances): 
-                real_section += f"            (real ?{replacement}__{synset}_{index + 1})\n"
-        else:
-            raise ValueError("Invalid replacement parameter.")
-        defn = defn.replace("(:goal \n        (and \n", f"(:goal \n        (and \n{real_section}")
-
-    else:
-        raise ValueError("Invalid first_appearance parameter,") 
-    
-    with open(defn_fn, "w") as f:
-        f.write(defn)
-
-
 def add_goal_question_marks(activity): 
     defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
     with open(defn_fn, "r") as f:
@@ -203,44 +69,6 @@ def add_goal_question_marks(activity):
     defn_parts[1] = defn_parts[1].replace("- ?", "- ")
     defn_parts[1] = defn_parts[1].replace("??", "?")
     defn = "(:goal".join(defn_parts)
-    with open(defn_fn, "w") as f:
-        f.write(defn)
-
-
-def hot_substance_state_to_synset(activity, substance_synset):
-    '''
-    Replaces (hot substance) with just a hot__substance synset
-    Does per substance per activity, because sometimes it's more appropriate 
-        to just remove. Even doing in a batch and then going through each one
-        to remove would require looking at each one.
-    If (hot substance) in init: 
-        Replace synset everywhere with hot synset 
-    If (hot substance) in goal and not in init: 
-        Future/real hot synset
-        Goal state still needs to be dealt with by hand, in case we want some of the 
-            non-hot substance to still exist
-    '''
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
-    with open(defn_fn, "r") as f:
-        defn = f.read()
-    # Hot substance in in it
-    if ["hot", substance_synset + "_1"] in init: 
-        defn = defn.replace(substance_synset, f"hot__{substance_synset}")
-        defn = defn.replace(f"\n        (hot hot__{substance_synset}_1)", "")
-    elif ["hot", f"?{substance_synset}_1"] in goal: 
-        with open(defn_fn, "r") as f: 
-            defn = f.read()
-        # Add hot synset as an object under non-hot synset
-        defn = defn.replace(f"{substance_synset}_1 - {substance_synset}", f"{substance_synset}_1 - {substance_synset}\n        hot__{substance_synset}_1 - hot__{substance_synset}")
-        # Add future atom to init
-        defn = defn.replace("(ontop agent.n.01_1", f"(future hot__{substance_synset}_1)\n        (ontop agent.n.01_1")
-        # Add real atom to goal
-        defn_parts = defn.split("(and")
-        defn_parts[1] = f"\n            (real ?hot__{substance_synset}_1)" + defn_parts[1]
-        defn = "(and".join(defn_parts)
-        # NOTE not replacing synset in goal because it's possible we don't want to do that everywhere, in case we want to keep some 
-        #   non-hot substance
     with open(defn_fn, "w") as f:
         f.write(defn)
 
@@ -305,7 +133,7 @@ FUTURE_SYNSET = "future"
 
 # Helpers
 
-def traverse_goal_for_objects(expr, objects=None):
+def _traverse_goal_for_objects(expr, objects=None):
     objects = objects if objects is not None else set()
     # Check that category declarations in quantifiers are really categories, and equal
     if expr[0] in ["forall", "exists", "forpairs"]:
@@ -316,7 +144,7 @@ def traverse_goal_for_objects(expr, objects=None):
             term, __, cat = expr[2]
             assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
             assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
-        traverse_goal_for_objects(expr[-1], objects=objects)
+        _traverse_goal_for_objects(expr[-1], objects=objects)
     if expr[0] in ["forn", "fornpairs"]:
         term, __, cat = expr[2]
         assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
@@ -325,7 +153,7 @@ def traverse_goal_for_objects(expr, objects=None):
             term, __, cat = expr[3]
             assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
             assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
-        traverse_goal_for_objects(expr[-1], objects=objects)
+        _traverse_goal_for_objects(expr[-1], objects=objects)
     
     # Check the subexpr for atomic formulae in base case, else recurse 
     if type(expr[-1]) is not list: 
@@ -335,18 +163,19 @@ def traverse_goal_for_objects(expr, objects=None):
     else: 
         if expr[0] in ["and", "or"]:
             for subexpr in expr[1:]:
-                traverse_goal_for_objects(subexpr, objects=objects)
+                _traverse_goal_for_objects(subexpr, objects=objects)
         else:
-            traverse_goal_for_objects(expr[-1], objects=objects)
+            _traverse_goal_for_objects(expr[-1], objects=objects)
 
 
-def get_defn_elements_from_file(activity):
+def _get_defn_elements_from_file(activity):
     defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
     with open(defn_fn, "r") as f:
         __, objects, init, goal = parse_problem(activity, 0, "omnigibson", predefined_problem=f.read())
     return activity, objects, init, goal
 
-def get_objects_from_object_list(objects):
+
+def _get_objects_from_object_list(objects):
     instances, categories = set(), set()
     for cat, insts in objects.items():
         categories.add(cat)
@@ -354,57 +183,26 @@ def get_objects_from_object_list(objects):
             instances.add(inst)
     return instances, categories
 
-def instance_to_cat(instance):
-    return "_".join(instance.split("_")[:-1])
 
-def add_agent(activity, floor_instance_id=1):
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
-    with open(defn_fn, "r") as f:
-        defn = f.read()
-    assert "(ontop agent.n.01_1 floor.n.01_" not in defn, "Agent line already exists."
-    if "floor.n.01" in objects: 
-        max_floor_id = len(objects["floor.n.01"])
-        if floor_instance_id <= max_floor_id:
-            objects["agent.n.01"] = ["agent.n.01_1"]
-            init.append(["ontop", "agent.n.01_1", f"floor.n.01_{floor_instance_id}"])
-        elif floor_instance_id == max_floor_id + 1:
-            confirm = ""
-            while confirm not in ["y", "n"]:
-                confirm = input(f"There are {max_floor_id} floors already, but you are asking for the next one. Do you want this? [y/n]: ")
-            if confirm == "y": 
-                room = input("Room: ")
-                room_confirm = input(f"Confirm {room}? [y/n]: ")
-                while room_confirm != "y": 
-                    room = input("Room: ")
-                    room_confirm = input(f"Confirm {room}? [y/n]: ")
-                for literal in init: 
-                    if (literal[0] == "inroom") and (re.match(r"floor\.n\.01_[0-9]+", literal[1]) is not None) and (literal[2] == room):
-                        print("There is already a floor in that room. Pick a different room or add the agent to that floor.")
-                        return 
-                objects["floor.n.01"].append(f"floor.n.01_{max_floor_id + 1}")
-                objects["agent.n.01"] = ["agent.n.01_1"]
-                init.append(["inroom", f"floor.n.01_{max_floor_id + 1}", room])
-                init.append(["ontop", "agent.n.01_1", f"floor.n.01_{max_floor_id + 1}"])
-            else:
-                print("Then please try this function again.")
-                return 
-        else:
-            raise ValueError("Given floor_instance_id is higher than max floor id + 1")
-    else:
-        room = input("Room: ")
-        room_confirm = input(f"Confirm {room}? [y/n]: ")
-        while room_confirm != "y": 
-            room = input("Room: ")
-            room_confirm = input(f"Confirm {room}? [y/n]: ")
-        objects["agent.n.01"] = ["agent.n.01_1"]
-        objects["floor.n.01"] = ["floor.n.01_1"]
-        init.append(["inroom", f"floor.n.01_1", room])
-        init.append(["ontop", "agent.n.01_1", f"floor.n.01_1"])
+def _get_instances_in_init(init):
+    '''
+    Take a parsed :init condition and return a set of all instances in it.
+    '''
+    init_insts = set()
+    for literal in init: 
+        formula = literal[1] if literal[0] == "not" else literal
+        for inst in formula[1:]: 
+            assert (re.match(OBJECT_INSTANCE_RE, inst) is not None) or (inst in ROOMS), f":init has category: {inst}" 
+            if inst not in ROOMS:
+                init_insts.add(inst)
+    return init_insts
 
-    agent_defn = construct_bddl_from_parsed(activity, 0, objects, init, goal)
-    with open(defn_fn, "w") as f:
-        f.write(agent_defn)
+
+def get_objects_in_goal(goal):
+    goal_objects = set()
+    goal = ["and"] + goal
+    _traverse_goal_for_objects(goal, goal_objects)
+    return goal_objects
 
 
 # Checkers
@@ -431,27 +229,6 @@ def object_list_correctly_formatted(activity):
             assert category == re.match(OBJECT_CAT_AND_INST_RE, inst).group(), f"Mismatched category and object: {category} and {inst}"
 
 
-def get_instances_in_init(init):
-    '''
-    Take a parsed :init condition and return a set of all instances in it.
-    '''
-    init_insts = set()
-    for literal in init: 
-        formula = literal[1] if literal[0] == "not" else literal
-        for inst in formula[1:]: 
-            assert (re.match(OBJECT_INSTANCE_RE, inst) is not None) or (inst in ROOMS), f":init has category: {inst}" 
-            if inst not in ROOMS:
-                init_insts.add(inst)
-    return init_insts
-
-
-def get_objects_in_goal(goal):
-    goal_objects = set()
-    goal = ["and"] + goal
-    traverse_goal_for_objects(goal, goal_objects)
-    return goal_objects
-
-
 def all_objects_appropriate(activity):
     '''
     Checks the following: 
@@ -462,9 +239,9 @@ def all_objects_appropriate(activity):
         instances and categories in :objects
     4. There are no categories in :init
     '''
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    instances, categories = get_objects_from_object_list(objects)
-    init_insts = get_instances_in_init(init)
+    __, objects, init, goal = _get_defn_elements_from_file(activity)
+    instances, categories = _get_objects_from_object_list(objects)
+    init_insts = _get_instances_in_init(init)
     
     assert init_insts.issubset(instances), f":init has object instances not in :objects: {init_insts.difference(instances)}"
     assert instances.issubset(init_insts), f":objects has object instances not in :init: {instances.difference(init_insts)}"
@@ -483,8 +260,8 @@ def all_objects_placed(activity):
 
     NOTE should only be executed AFTER all_objects_appropraite
     '''
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    insts = get_instances_in_init(init)
+    __, objects, init, goal = _get_defn_elements_from_file(activity)
+    insts = _get_instances_in_init(init)
     insts = set([inst for inst in insts if ["future", inst] not in init])
 
     # Make sure everything not set to `future` is placed relative to a ROOM
@@ -509,9 +286,9 @@ def all_objects_placed(activity):
 def all_synsets_valid(activity):
     with open(SYNS_TO_PROPS_JSON, "r") as f:
         syns_to_props = json.load(f)
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    instances, categories = get_objects_from_object_list(objects)
-    init_insts = get_instances_in_init(init)
+    __, objects, init, goal = _get_defn_elements_from_file(activity)
+    instances, categories = _get_objects_from_object_list(objects)
+    init_insts = _get_instances_in_init(init)
     goal_objects = get_objects_in_goal(goal)
     object_terms = instances.union(categories).union(init_insts).union(goal_objects)
     for term in object_terms: 
@@ -519,21 +296,9 @@ def all_synsets_valid(activity):
         assert proposed_syn in syns_to_props, f"Invalid synset: {proposed_syn}"
 
 
-def no_substance_container_synsets(activity):
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    instances, categories = get_objects_from_object_list(objects)
-    init_insts = get_instances_in_init(init)
-    goal_objects = get_objects_in_goal(goal)
-    object_terms = instances.union(categories).union(init_insts).union(goal_objects)
-    substance_container_synsets = set([
-        object_term for object_term in object_terms if "__container" in object_term
-    ])
-    assert not substance_container_synsets, f"Substance container synsets present: {substance_container_synsets}"
-
-
 def no_unused_scene_objects(activity):
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    instances, __ = get_objects_from_object_list(objects)
+    __, objects, init, goal = _get_defn_elements_from_file(activity)
+    instances, __ = _get_objects_from_object_list(objects)
     inroomed_objects = [atom[1] for atom in init if "inroom" in atom]
     defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
     with open(defn_fn, "r") as f: 
@@ -545,11 +310,11 @@ def no_unused_scene_objects(activity):
             raise AssertionError(f"Potential unused scene object {inroomed_object}")
 
 
-# Check uncontrolled categories (get this from bddl repo)
+# Check uncontrolled categories
 
 def future_and_real_present(activity): 
-    __, objects, init, goal = get_defn_elements_from_file(activity)
-    init_objects = get_instances_in_init(init)
+    __, objects, init, goal = _get_defn_elements_from_file(activity)
+    init_objects = _get_instances_in_init(init)
     future_objects = set([literal[1] for literal in init if literal[0] == "future"])
     real_objects = set([expression[1].strip("?") for expression in goal if expression[0] == "real"])
     for expression in goal:
@@ -587,17 +352,10 @@ def no_qmarks_in_init(activity):
 
 
 def no_contradictory_init_atoms(activity):
-    __, __, init, __ = get_defn_elements_from_file(activity)
+    __, __, init, __ = _get_defn_elements_from_file(activity)
     for literal in init: 
         if literal[0] == "not":
             assert literal[1] not in init, f"Contradictory init statements: {literal[1]}"
-
-
-def no_broken_predicate(activity): 
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
-    with open(defn_fn, "r") as f:
-        defn = f.read() 
-    assert "(broken " not in defn, "`broken` predicate used" 
 
 
 def no_uncontrolled_category(activity):
@@ -614,7 +372,7 @@ def no_uncontrolled_category(activity):
 
 
 def agent_present(activity):
-    __, __, init, __ = get_defn_elements_from_file(activity)
+    __, __, init, __ = _get_defn_elements_from_file(activity)
     for literal in init: 
         if (literal[0] == "ontop") and (literal[1] == "agent.n.01_1"):
             break
@@ -623,62 +381,18 @@ def agent_present(activity):
 
 
 def get_unique_items_from_transition_map():
-    path = "comp_decomp_results/csvs/*.csv"
     obj_set = set()
-    for fname in glob.glob(path):
+    for fname in glob.glob(CSVS_DIR):
         with open(fname) as f:
             for row in f:
                 first = row.split(',')[0]
                 if '.n.' in first:
                     obj_set.add(first.rpartition('_')[0])
-                    # print(first.rpartition('_')[0])
 
     obj_set.remove('')
     
     for obj in obj_set:
         print(obj)
-
-
-def check_tmrecipe_reduced_proportions():
-    activities_to_check = []
-    for activity in os.listdir("comp_decomp_results/csvs"):
-        print()
-        print(activity)
-        with open(os.path.join("comp_decomp_results", "csvs", activity), "r") as f:
-            reader = csv.reader(f)
-            cats = []
-            checking_inputs = False
-            for line in reader: 
-                if not len(line): continue
-                if line[0] == "input-objects":
-                    cats = []
-                    checking_inputs = True
-                elif line[0] == "output-objects":
-                    checking_inputs = False
-                    cats_counts = tuple(v for v in Counter(cats).values() if v > 1)
-                    if len(cats_counts) > 1:
-                        reduced = input(f"Is {cats_counts} reduced? [y/n]: ")
-                        if reduced != "y":
-                            activities_to_check.append([activity, reduced])
-                elif checking_inputs and re.match(OBJECT_CAT_AND_INST_RE, line[0]) is not None: 
-                    cats.append(re.match(OBJECT_CAT_AND_INST_RE, line[0]).group())
-    print(activities_to_check)
-    with open("tmp_activities_to_check.json", "w") as f:
-        json.dump(activities_to_check, f)
-    return activities_to_check
-
-
-        # cats = [match.group() for match in [re.match(OBJECT_CAT_AND_INST_RE, line[0]) for line in reader if len(line)] if match is not None]
-    
-        # for line in reader: 
-            # if re.match(OBJECT_INSTANCE_RE, line[0]) is not None: 
-            #     cat = re.match(OBJECT_CAT_AND_INST_RE, line[0]).group()
-            #     if cat in objects: 
-            #         objects[cat].append(line[0])
-            #     else: 
-            #         objects[cat] = [line[0]]
-
-    
 
 
 # MAIN 
@@ -691,15 +405,9 @@ def verify_definition(activity, csv=False):
     no_repeat_object_lines(activity)
     no_qmarks_in_init(activity)
     no_contradictory_init_atoms(activity)
-    # TODO uncomment after assemblies have been handled - may no longer be needed
-    # no_broken_predicate(activity)
     no_uncontrolled_category(activity)
-    # TODO uncomment the line below once all synsets have been added to final_propagated.json
-    # all_synsets_valid(activity)
-    # TODO uncomment the line below when ready to check for containers
-    # no_substance_container_synsets(activity)
-    # TODO uncomment after this function is fixed
-    # no_unused_scene_objects(activity)
+    all_synsets_valid(activity)
+    no_unused_scene_objects(activity)
     agent_present(activity)
     if csv:
         no_filled_in_tm_recipe_goal(activity)
@@ -818,8 +526,8 @@ def sync_csv(activity):
     csv_objs.discard('')
     # print(csv_objs)
 
-    __, objects, init, _ = get_defn_elements_from_file(activity)
-    bddl_objs, _ = get_objects_from_object_list(objects)
+    __, objects, init, _ = _get_defn_elements_from_file(activity)
+    bddl_objs, _ = _get_objects_from_object_list(objects)
     # print(bddl_objs)
     for literal in init: 
         formula = literal[1] if literal[0] == "not" else literal
@@ -862,10 +570,11 @@ def no_filled_in_tm_recipe_goal(activity):
         assert "filled" not in container_line, f"filled in TM CSV container line: {container_line}"
 
 
-CSVS_DIR = "comp_decomp_results/csvs"
 def batch_sync_csv():
     for fname in os.listdir(CSVS_DIR):
         activity = fname[:-len(".csv")]
+        print()
+        print(activity)
         try:
             sync_csv(activity)
         except FileNotFoundError:
@@ -876,6 +585,9 @@ def batch_sync_csv():
             print()
             print(activity)
             print(e)
+            to_continue = input("continue? y/n: ")
+            while to_continue != "y":
+                to_continue = input("continue? y/n: ")
             continue
         
 
