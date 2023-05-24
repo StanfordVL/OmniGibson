@@ -36,7 +36,7 @@
     (:goal 
         (and 
             (real ?fruit_punch.n.01_1) 
-            (filled ?water_glass.n.02_1 ?fruit_punch.n.01_1)
+            (contains ?water_glass.n.02_1 ?fruit_punch.n.01_1)
         )
     )
 )

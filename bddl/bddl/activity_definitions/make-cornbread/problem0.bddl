@@ -50,10 +50,10 @@
 
     (:goal
         (and
-            (cooked cornbread.n.01_1)
-            (hot cornbread.n.01_1)
-            (real cornbread.n.01_1)
-            (inside cornbread.n.01_1 casserole.n.02_1)
+            (cooked ?cornbread.n.01_1)
+            (hot ?cornbread.n.01_1)
+            (real ?cornbread.n.01_1)
+            (inside ?cornbread.n.01_1 ?casserole.n.02_1)
         )
     )
 )

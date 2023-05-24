@@ -34,7 +34,7 @@
     (:goal
         (and
             (real ?broth.n.01_1)
-            (filled ?stockpot.n.01_1 ?broth.n.01_1)
+            (contains ?stockpot.n.01_1 ?broth.n.01_1)
         )
     )
 )

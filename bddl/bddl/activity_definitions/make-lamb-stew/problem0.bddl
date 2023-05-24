@@ -61,7 +61,7 @@
     (:goal
         (and
             (real ?lamb_stew.n.01_1)
-            (filled ?dutch_oven.n.02_1 ?lamb_stew.n.01_1)
+            (contains ?dutch_oven.n.02_1 ?lamb_stew.n.01_1)
         )
     )
 )
