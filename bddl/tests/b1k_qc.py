@@ -13,8 +13,8 @@ import bddl.activity
 from bddl_debug_backend import DebugBackend, DebugGenericObject
 
 PROBLEM_FILE_DIR = "../bddl/activity_definitions"
-PROPS_TO_SYNS_JSON = "../generated_data/properties_to_synsets.json"
-SYNS_TO_PROPS_JSON = "../generated_data/propagated_annots_canonical.json"
+PROPS_TO_SYNS_JSON = "../bddl/generated_data/properties_to_synsets.json"
+SYNS_TO_PROPS_JSON = "../bddl/generated_data/propagated_annots_canonical.json"
 CSVS_DIR = "tm_csvs"
 
 
@@ -290,10 +290,12 @@ def all_synsets_valid(activity):
     instances, categories = _get_objects_from_object_list(objects)
     init_insts = _get_instances_in_init(init)
     goal_objects = get_objects_in_goal(goal)
-    object_terms = instances.union(categories).union(init_insts).union(goal_objects)
-    for term in object_terms: 
-        proposed_syn = "_".join(term.split("_")[:-1])
-        assert proposed_syn in syns_to_props, f"Invalid synset: {proposed_syn}"
+    object_insts = set([re.match(OBJECT_CAT_AND_INST_RE, inst).group() for inst in instances.union(init_insts).union(goal_objects)])
+    object_terms = object_insts.union(categories)
+    for proposed_syn in object_terms: 
+        # proposed_syn = re.match(OBJECT_CAT_AND_INST_RE, term).group()
+        # print(proposed_syn)
+        assert (proposed_syn in syns_to_props) or (proposed_syn == "agent.n.01"), f"Invalid synset: {proposed_syn}"
 
 
 def no_unused_scene_objects(activity):
@@ -417,22 +419,6 @@ def verify_definition(activity, csv=False):
 # Master planning sheet
 BATCH_DEFINITIONS_FILE = "b1k_master_planning.csv"
 
-def batch_verify():
-    plan_df = pd.read_csv(BATCH_DEFINITIONS_FILE)
-    batch = plan_df["task_name"]
-    for activity in batch: 
-        print()
-        print(activity)
-        try:
-            verify_definition(activity.replace(" ", "-"))
-        except FileNotFoundError:
-            continue
-        except AssertionError as e:
-            print()
-            print(activity)
-            print(e)
-            continue
-
 def batch_verify_all(): 
 
     plan_df = pd.read_csv(BATCH_DEFINITIONS_FILE)
@@ -440,10 +426,11 @@ def batch_verify_all():
     for activity in batch: 
         print() 
         print(activity)
-        try:
-            verify_definition(activity.replace(" ", "-"))
-        except FileNotFoundError:
-            continue
+        # try:
+        verify_definition(activity.replace(" ", "_"))
+        # except FileNotFoundError:
+        #     print("file not found:", activity.replace(" ", "_"))
+        #     continue
 
 
 def unpack_nested_lines(sec):
