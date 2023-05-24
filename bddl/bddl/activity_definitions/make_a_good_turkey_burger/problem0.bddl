@@ -1,0 +1,73 @@
+(define (problem make_a_good_turkey_burger-0)
+    (:domain omnigibson)
+
+    (:objects
+     	bap.n.01_1 bap.n.01_2 - bap.n.01
+    	breakfast_table.n.01_1 - breakfast_table.n.01
+    	lettuce.n.03_1 - lettuce.n.03
+    	mayonnaise.n.01_1 - mayonnaise.n.01
+    	mayonnaise__jar.n.01_1 - mayonnaise__jar.n.01
+    	mustard.n.02_1 - mustard.n.02
+    	mustard__bottle.n.01_1 - mustard__bottle.n.01
+    	hamburger.n.01_1 - hamburger.n.01
+    	cheddar.n.02_1 - cheddar.n.02
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop bap.n.01_1 breakfast_table.n.01_1) 
+        (ontop lettuce.n.03_1 breakfast_table.n.01_1) 
+        (covered mayonnaise__jar.n.01_1 mayonnaise.n.01_1) 
+        (ontop mayonnaise__jar.n.01_1 breakfast_table.n.01_1) 
+        (covered mustard__bottle.n.01_1 mustard.n.02_1) 
+        (ontop mustard__bottle.n.01_1 breakfast_table.n.01_1) 
+        (ontop hamburger.n.01_1 breakfast_table.n.01_1) 
+        (ontop cheddar.n.02_1 breakfast_table.n.01_1) 
+        (ontop bap.n.01_2 breakfast_table.n.01_1) 
+        (inroom breakfast_table.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (exists 
+                (?bap.n.01 - bap.n.01) 
+                (ontop ?bap.n.01_1 ?breakfast_table.n.01_1)
+            ) 
+            (forall 
+                (?lettuce.n.03 - lettuce.n.03) 
+                (ontop ?lettuce.n.03 ?bap.n.01_1)
+            ) 
+            (forall 
+                (?mayonnaise.n.01 - mayonnaise.n.01) 
+                (covered ?bap.n.01_2 ?mayonnaise.n.01)
+            ) 
+            (forall 
+                (?mayonnaise__jar.n.01 - mayonnaise__jar.n.01) 
+                (ontop ?mayonnaise__jar.n.01 ?breakfast_table.n.01_1)
+            ) 
+            (forall 
+                (?mustard.n.02 - mustard.n.02) 
+                (covered ?bap.n.01_2 ?mustard.n.02)
+            ) 
+            (forall 
+                (?mustard__bottle.n.01 - mustard__bottle.n.01) 
+                (ontop ?mustard__bottle.n.01 ?breakfast_table.n.01_1)
+            ) 
+            (forall 
+                (?hamburger.n.01 - hamburger.n.01) 
+                (ontop ?hamburger.n.01 ?lettuce.n.03_1)
+            ) 
+            (forall 
+                (?cheddar.n.02 - cheddar.n.02) 
+                (ontop ?cheddar.n.02 ?hamburger.n.01_1)
+            ) 
+            (forall 
+                (?bap.n.01 - bap.n.01) 
+                (ontop ?bap.n.01_2 ?cheddar.n.02_1)
+            )
+        )
+    )
+)

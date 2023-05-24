@@ -1,10 +1,12 @@
-import bddl
+import os
+import re
 from bddl.condition_evaluation import (
     compile_state,
     create_scope,
     evaluate_state,
     get_ground_state_options,
 )
+from bddl.config import ACTIVITY_CONFIGS_PATH
 from bddl.object_taxonomy import ObjectTaxonomy
 from bddl.parsing import (
     gen_natural_language_condition,
@@ -12,6 +14,8 @@ from bddl.parsing import (
     parse_domain,
     parse_problem,
 )
+
+INSTANCE_EXPR = re.compile(r"problem(\d+).bddl")
 
 
 class Conditions(object):
@@ -155,3 +159,27 @@ def get_natural_goal_conditions(conds):
         list<str>: natural language translations, one per condition in conditions
     """
     return gen_natural_language_conditions(conds.parsed_goal_conditions)
+
+
+def get_all_activities():
+    """Return a list of all activities included in this version of BDDL.
+        
+    Returns:
+        list<str>: list containing the name of each included activity
+    """
+    return [x for x in os.listdir(ACTIVITY_CONFIGS_PATH) if os.path.isdir(os.path.join(ACTIVITY_CONFIGS_PATH, x))]
+
+
+def get_instance_count(act):
+    """Return the number of instances of a given activity that are included in this version of BDDL.
+    
+    Args:
+        act (str): name of the activity to check
+        
+    Returns:
+        int: number of instances of the given activity
+    """
+    problem_files = [INSTANCE_EXPR.fullmatch(x) for x in os.listdir(os.path.join(ACTIVITY_CONFIGS_PATH, act))]
+    ids = set(int(x.group(1)) for x in problem_files if x is not None)
+    assert ids == set(range(len(ids))), f"Non-contiguous instance IDs found for problem {act}"
+    return len(ids)

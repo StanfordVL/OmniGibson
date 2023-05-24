@@ -1,0 +1,56 @@
+(define (problem cook_simple_ginger_and_garlic_prawns-0)
+    (:domain omnigibson)
+
+    (:objects
+     	shrimp.n.03_1 - shrimp.n.03
+    	frying_pan.n.01_1 - frying_pan.n.01
+    	clove.n.03_1 clove.n.03_2 - clove.n.03
+    	lime.n.06_1 - lime.n.06
+    	casserole.n.02_1 - casserole.n.02
+    	stove.n.01_1 - stove.n.01
+    	butter.n.01_1 - butter.n.01
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop shrimp.n.03_1 frying_pan.n.01_1) 
+        (ontop clove.n.03_1 frying_pan.n.01_1)
+        (ontop clove.n.03_2 frying_pan.n.01_1)
+        (ontop lime.n.06_1 frying_pan.n.01_1) 
+        (ontop casserole.n.02_1 stove.n.01_1)
+        (toggled_on stove.n.01_1) 
+        (ontop frying_pan.n.01_1 stove.n.01_1) 
+        (ontop butter.n.01_1 frying_pan.n.01_1) 
+        (not 
+            (cooked shrimp.n.03_1)
+        ) 
+        (not 
+            (hot frying_pan.n.01_1)
+        ) 
+        (inroom floor.n.01_1 kitchen) 
+        (inroom stove.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (and 
+                (covered ?shrimp.n.03_1 ?butter.n.01_1) 
+                (ontop ?lime.n.06_1 ?casserole.n.02_1)
+                (ontop ?shrimp.n.03_1 ?casserole.n.02_1) 
+                (ontop ?clove.n.03_1 ?casserole.n.02_1)
+                (ontop ?clove.n.03_2 ?casserole.n.02_1)
+                (ontop ?frying_pan.n.01_1 ?stove.n.01_1)
+                (ontop ?casserole.n.02_1 ?stove.n.01_1)
+            )
+            (and 
+                (cooked ?shrimp.n.03_1) 
+                (not 
+                    (toggled_on ?stove.n.01_1)
+                ) 
+                (hot ?frying_pan.n.01_1)
+            )
+        )
+    )
+)

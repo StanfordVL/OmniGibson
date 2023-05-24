@@ -1,0 +1,29 @@
+(define (problem store_christmas_lights-0)
+    (:domain omnigibson)
+
+    (:objects
+        fairy_light.n.01_1 fairy_light.n.01_2 - fairy_light.n.01
+        wall.n.01_1 - wall.n.01
+        packing_box.n.02_1 - packing_box.n.02
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (attached fairy_light.n.01_1 wall.n.01_1) 
+        (attached fairy_light.n.01_2 wall.n.01_1) 
+        (ontop packing_box.n.02_1 floor.n.01_1) 
+        (inroom floor.n.01_1 garage) 
+        (inroom wall.n.01_1 garage) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?fairy_light.n.01 - fairy_light.n.01) 
+                (inside ?fairy_light.n.01 ?packing_box.n.02_1)
+            ) 
+        )
+    )
+)

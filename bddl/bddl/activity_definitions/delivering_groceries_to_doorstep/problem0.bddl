@@ -1,0 +1,35 @@
+(define (problem delivering_groceries_to_doorstep-0)
+    (:domain omnigibson)
+
+    (:objects
+        brown_bread.n.02_1 - brown_bread.n.02
+        sack.n.01_1 - sack.n.01
+        milk__carton.n.01_1 - milk__carton.n.01
+        chicken.n.01_1 - chicken.n.01
+        floor.n.01_1 - floor.n.01
+        driveway.n.01_1 - driveway.n.01
+        door.n.01_1 - door.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside brown_bread.n.02_1 sack.n.01_1)
+        (inside milk__carton.n.01_1 sack.n.01_1)
+        (inside chicken.n.01_1 sack.n.01_1)
+        (ontop sack.n.01_1 driveway.n.01_1)
+        (inroom door.n.01_1 corridor) 
+        (inroom floor.n.01_1 corridor) 
+        (inroom driveway.n.01_1 garden)
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (nextto ?sack.n.01_1 ?door.n.01_1)
+            (ontop ?sack.n.01_1 ?floor.n.01_1)
+            (inside ?brown_bread.n.02_1 ?sack.n.01_1)
+            (inside ?milk__carton.n.01_1 ?sack.n.01_1)
+            (inside ?chicken.n.01_1 ?sack.n.01_1)
+        )
+    )
+)

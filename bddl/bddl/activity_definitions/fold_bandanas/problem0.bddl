@@ -1,0 +1,23 @@
+(define (problem fold_bandanas-0)
+    (:domain omnigibson)
+
+    (:objects
+        bandanna.n.01_1 - bandanna.n.01
+        sofa.n.01_1 - sofa.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop bandanna.n.01_1 sofa.n.01_1) 
+        (inroom floor.n.01_1 living_room) 
+        (inroom sofa.n.01_1 living_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (folded ?bandanna.n.01_1)
+        )
+    )
+)

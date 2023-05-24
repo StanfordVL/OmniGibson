@@ -1,0 +1,58 @@
+(define (problem cook_oxtails-0)
+    (:domain omnigibson)
+
+    (:objects
+     	oxtail.n.01_1 oxtail.n.01_2 - oxtail.n.01
+    	chopping_board.n.01_1 - chopping_board.n.01
+    	stockpot.n.01_1 - stockpot.n.01
+    	cabinet.n.01_1 - cabinet.n.01
+    	lid.n.02_1 - lid.n.02
+    	sink.n.01_1 - sink.n.01
+    	burner.n.02_1 - burner.n.02
+    	oven.n.01_1 - oven.n.01
+    	water.n.06_1 - water.n.06
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (not 
+            (cooked oxtail.n.01_1)
+        ) 
+        (not 
+            (cooked oxtail.n.01_2)
+        ) 
+        (ontop oxtail.n.01_1 chopping_board.n.01_1) 
+        (ontop oxtail.n.01_2 chopping_board.n.01_1) 
+        (inside stockpot.n.01_1 cabinet.n.01_1) 
+        (inside lid.n.02_1 cabinet.n.01_1) 
+        (touching chopping_board.n.01_1 sink.n.01_1) 
+        (ontop burner.n.02_1 oven.n.01_1) 
+        (not 
+            (toggled_on burner.n.02_1)
+        ) 
+        (insource sink.n.01_1 water.n.06_1) 
+        (inroom sink.n.01_1 kitchen) 
+        (inroom cabinet.n.01_1 kitchen) 
+        (inroom oven.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?oxtail.n.01 - oxtail.n.01) 
+                (cooked ?oxtail.n.01)
+            ) 
+            (forall 
+                (?oxtail.n.01 - oxtail.n.01) 
+                (inside ?oxtail.n.01 ?stockpot.n.01_1)
+            ) 
+            (toggled_on ?burner.n.02_1) 
+            (ontop ?lid.n.02_1 ?stockpot.n.01_1) 
+            (filled ?stockpot.n.01_1 ?water.n.06_1) 
+            (ontop ?stockpot.n.01_1 ?burner.n.02_1)
+        )
+    )
+)

@@ -1,0 +1,27 @@
+(define (problem sanding_wood_furniture-0)
+    (:domain omnigibson)
+
+    (:objects
+        incision.n.01_1 - incision.n.01
+        shelf.n.01_1 - shelf.n.01
+        emery_paper.n.01_1 - emery_paper.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (covered shelf.n.01_1 incision.n.01_1) 
+        (inside emery_paper.n.01_1 shelf.n.01_1) 
+        (inroom shelf.n.01_1 living_room) 
+        (inroom floor.n.01_1 living_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (not 
+                (covered ?shelf.n.01_1 ?incision.n.01_1)
+            )
+        )
+    )
+)

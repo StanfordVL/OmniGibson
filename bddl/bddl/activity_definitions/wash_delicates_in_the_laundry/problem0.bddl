@@ -1,0 +1,71 @@
+(define (problem wash_delicates_in_the_laundry-0)
+    (:domain omnigibson)
+
+    (:objects
+        washer.n.03_1 - washer.n.03
+        lingerie.n.01_1 lingerie.n.01_2 lingerie.n.01_3 lingerie.n.01_4 - lingerie.n.01
+        stain.n.01_1 - stain.n.01
+        dust.n.01_1 - dust.n.01
+        sweater.n.01_1 - sweater.n.01
+        detergent.n.02_1 - detergent.n.02
+        detergent__bottle.n.01_1 - detergent__bottle.n.01
+        underwear.n.01_1 underwear.n.01_2 - underwear.n.01
+        floor.n.01_1 - floor.n.01
+        wall.n.01_1 - wall.n.01
+        clothes_dryer.n.01_1 - clothes_dryer.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside lingerie.n.01_1 washer.n.03_1) 
+        (covered lingerie.n.01_1 stain.n.01_1) 
+        (inside lingerie.n.01_2 washer.n.03_1) 
+        (covered lingerie.n.01_2 stain.n.01_1) 
+        (inside lingerie.n.01_3 washer.n.03_1) 
+        (covered lingerie.n.01_3 dust.n.01_1) 
+        (inside lingerie.n.01_4 washer.n.03_1) 
+        (covered lingerie.n.01_4 dust.n.01_1) 
+        (inside sweater.n.01_1 washer.n.03_1) 
+        (covered sweater.n.01_1 stain.n.01_1) 
+        (inside underwear.n.01_1 washer.n.03_1) 
+        (covered underwear.n.01_1 stain.n.01_1) 
+        (inside underwear.n.01_2 washer.n.03_1) 
+        (covered underwear.n.01_2 stain.n.01_1) 
+        (filled detergent__bottle.n.01_1 detergent.n.02_1) 
+        (ontop detergent__bottle.n.01_1 washer.n.03_1)
+        (inroom floor.n.01_1 utility_room) 
+        (inroom washer.n.03_1 utility_room) 
+        (inroom wall.n.01_1 utility_room) 
+        (inroom clothes_dryer.n.01_1 utility_room)
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?lingerie.n.01 - lingerie.n.01)
+                (and
+                    (not
+                        (covered ?lingerie.n.01 ?stain.n.01_1)
+                    )
+                    (not
+                        (covered ?lingerie.n.01 ?dust.n.01_1)
+                    )
+                )
+            )
+            (forall 
+                (?sweater.n.01 - sweater.n.01)
+                (not
+                    (covered ?sweater.n.01 ?stain.n.01_1)
+                )
+            )
+            (forall 
+                (?underwear.n.01 - underwear.n.01)
+                (not
+                    (covered ?underwear.n.01 ?stain.n.01_1)
+                )
+            )
+        )
+    
+    )
+)

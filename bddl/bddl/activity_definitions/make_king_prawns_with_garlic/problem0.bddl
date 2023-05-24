@@ -1,0 +1,90 @@
+(define (problem make_king_prawns_with_garlic-0)
+    (:domain omnigibson)
+
+    (:objects
+        stove.n.01_1 - stove.n.01
+        frying_pan.n.01_1 - frying_pan.n.01
+        olive_oil.n.01_1 - olive_oil.n.01
+        olive_oil__bottle.n.01_1 - olive_oil__bottle.n.01
+        shrimp.n.03_1 shrimp.n.03_2 shrimp.n.03_3 shrimp.n.03_4 shrimp.n.03_5 shrimp.n.03_6 - shrimp.n.03
+        clove.n.03_1 clove.n.03_2 clove.n.03_3 - clove.n.03
+        bowl.n.01_1 - bowl.n.01
+        cooked__diced__clove.n.01_1 - cooked__diced__clove.n.01
+        carving_knife.n.01_1 - carving_knife.n.01
+        chopping_board.n.01_1 - chopping_board.n.01
+        salt.n.02_1 - salt.n.02
+        salt__shaker.n.01_1 - salt__shaker.n.01
+        sack.n.01_1 - sack.n.01
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        countertop.n.01_1 - countertop.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop frying_pan.n.01_1 countertop.n.01_1) 
+        (filled olive_oil__bottle.n.01_1 olive_oil.n.01_1) 
+        (inside sack.n.01_1 electric_refrigerator.n.01_1)
+        (inside shrimp.n.03_1 sack.n.01_1) 
+        (inside shrimp.n.03_2 sack.n.01_1) 
+        (inside shrimp.n.03_3 sack.n.01_1) 
+        (inside shrimp.n.03_4 sack.n.01_1) 
+        (inside shrimp.n.03_5 sack.n.01_1) 
+        (inside shrimp.n.03_6 sack.n.01_1) 
+        (not 
+            (cooked shrimp.n.03_1)
+        ) 
+        (not 
+            (cooked shrimp.n.03_2)
+        ) 
+        (not 
+            (cooked shrimp.n.03_3)
+        ) 
+        (not 
+            (cooked shrimp.n.03_4)
+        ) 
+        (not 
+            (cooked shrimp.n.03_5)
+        ) 
+        (not 
+            (cooked shrimp.n.03_6)
+        ) 
+        (frozen shrimp.n.03_1)
+        (frozen shrimp.n.03_2)
+        (frozen shrimp.n.03_3)
+        (frozen shrimp.n.03_4)
+        (frozen shrimp.n.03_5)
+        (frozen shrimp.n.03_6)
+        (ontop chopping_board.n.01_1 countertop.n.01_1)
+        (ontop carving_knife.n.01_1 chopping_board.n.01_1)
+        (inside clove.n.03_1 bowl.n.01_1) 
+        (inside clove.n.03_2 bowl.n.01_1) 
+        (inside clove.n.03_3 bowl.n.01_1) 
+        (inside bowl.n.01_1 electric_refrigerator.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1)
+        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (ontop olive_oil__bottle.n.01_1 countertop.n.01_1)
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom stove.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (future cooked__diced__clove.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (real ?cooked__diced__clove.n.01_1)
+            (forall 
+                (?shrimp.n.03 - shrimp.n.03)
+                (and 
+                    (cooked ?shrimp.n.03)
+                    (inside ?shrimp.n.03 ?frying_pan.n.01_1)
+                )
+            )
+            (contains ?frying_pan.n.01_1 ?cooked__diced__clove.n.01_1)
+            (contains ?frying_pan.n.01_1 ?salt.n.02_1)
+            (contains ?frying_pan.n.01_1 ?olive_oil.n.01_1)
+        )
+    )
+)

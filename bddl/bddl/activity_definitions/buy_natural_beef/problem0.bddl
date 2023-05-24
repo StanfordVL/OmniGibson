@@ -1,0 +1,53 @@
+(define (problem buy_natural_beef-0)
+    (:domain omnigibson)
+
+    (:objects
+        cash_register.n.01_1 - cash_register.n.01
+        checkout.n.03_1 - checkout.n.03
+        ground_beef__package.n.01_1 ground_beef__package.n.01_2 ground_beef__package.n.01_3 - ground_beef__package.n.01
+        cooler.n.01_1 - cooler.n.01
+        label.n.01_1 label.n.01_2 - label.n.01
+        money.n.01_1 money.n.01_2 money.n.01_3 - money.n.01
+        floor.n.01_1 - floor.n.01
+        shelf.n.01_1 - shelf.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop cash_register.n.01_1 checkout.n.03_1) 
+        (closed cash_register.n.01_1) 
+        (ontop ground_beef__package.n.01_1 cooler.n.01_1) 
+        (ontop ground_beef__package.n.01_2 cooler.n.01_1) 
+        (ontop ground_beef__package.n.01_3 cooler.n.01_1) 
+        (ontop label.n.01_1 ground_beef__package.n.01_1) 
+        (ontop label.n.01_2 ground_beef__package.n.01_2) 
+        (ontop money.n.01_1 checkout.n.03_1) 
+        (ontop money.n.01_2 checkout.n.03_1) 
+        (ontop money.n.01_3 checkout.n.03_1) 
+        (ontop cooler.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 grocery_store) 
+        (inroom shelf.n.01_1 grocery_store) 
+        (inroom checkout.n.03_1 grocery_store) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    
+    )
+    
+    (:goal 
+        (and 
+            (open ?cash_register.n.01_1) 
+            (ontop ?ground_beef__package.n.01_1 ?checkout.n.03_1) 
+            (ontop ?ground_beef__package.n.01_2 ?checkout.n.03_1) 
+            (forall 
+                (?money.n.01 - money.n.01) 
+                (ontop ?money.n.01 ?cash_register.n.01_1)
+    
+            ) 
+            (not 
+                (ontop ?ground_beef__package.n.01_3 ?checkout.n.03_1)
+    
+            )
+    
+        )
+    
+    )
+)

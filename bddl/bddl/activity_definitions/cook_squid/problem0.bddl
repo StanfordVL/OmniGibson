@@ -1,0 +1,50 @@
+(define (problem cook_squid-0)
+    (:domain omnigibson)
+
+    (:objects
+     	olive_oil.n.01_1 - olive_oil.n.01
+    	frying_pan.n.01_1 - frying_pan.n.01
+    	squid.n.01_1 - squid.n.01
+    	plate.n.04_1 - plate.n.04
+    	stove.n.01_1 - stove.n.01
+    	salt__shaker.n.01_1 - salt__shaker.n.01
+    	salt.n.02_1 - salt.n.02
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (covered frying_pan.n.01_1 olive_oil.n.01_1) 
+        (ontop squid.n.01_1 frying_pan.n.01_1) 
+        (not 
+            (hot frying_pan.n.01_1)
+        ) 
+        (touching plate.n.04_1 stove.n.01_1) 
+        (touching salt__shaker.n.01_1 stove.n.01_1) 
+        (insource salt.n.02_1 salt__shaker.n.01_1) 
+        (ontop frying_pan.n.01_1 stove.n.01_1) 
+        (not 
+            (cooked squid.n.01_1)
+        ) 
+        (toggled_on stove.n.01_1) 
+        (inroom stove.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (nextto ?plate.n.04_1 ?stove.n.01_1) 
+            (ontop ?squid.n.01_1 ?plate.n.04_1) 
+            (covered ?frying_pan.n.01_1 ?olive_oil.n.01_1) 
+            (covered ?squid.n.01_1 ?salt.n.02_1) 
+            (ontop ?frying_pan.n.01_1 ?stove.n.01_1)
+            (nextto ?salt__shaker.n.01_1 ?stove.n.01_1) 
+            (cooked ?squid.n.01_1) 
+            (hot ?frying_pan.n.01_1) 
+            (not 
+                (toggled_on ?stove.n.01_1)
+            )
+        )
+    )
+)

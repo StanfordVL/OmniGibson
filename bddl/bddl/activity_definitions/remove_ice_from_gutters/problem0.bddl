@@ -1,0 +1,27 @@
+(define (problem remove_ice_from_gutters-0)
+    (:domain omnigibson)
+
+    (:objects
+        water.n.06_1 - water.n.06
+        bucket.n.01_1 - bucket.n.01
+        floor.n.01_1 - floor.n.01
+        ice.n.01_1 - ice.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init  
+        (filled bucket.n.01_1 water.n.06_1) 
+        (ontop bucket.n.01_1 floor.n.01_1) 
+        (ontop ice.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 garden) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (not
+                (ontop ?ice.n.01_1 ?floor.n.01_1)
+            )
+        )
+    )
+)

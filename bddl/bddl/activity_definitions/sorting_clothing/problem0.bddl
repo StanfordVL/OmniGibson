@@ -1,0 +1,100 @@
+(define (problem sorting_clothing-0)
+    (:domain omnigibson)
+
+    (:objects
+        skirt.n.01_1 skirt.n.01_2 - skirt.n.01
+        bed.n.01_1 - bed.n.01
+        stain.n.01_1 - stain.n.01
+        jean.n.01_1 jean.n.01_2 - jean.n.01
+        sweatshirt.n.01_1 - sweatshirt.n.01
+        hamper.n.02_1 hamper.n.02_2 hamper.n.02_3 - hamper.n.02
+        floor.n.01_1 - floor.n.01
+        shelf.n.01_1 - shelf.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop skirt.n.01_1 bed.n.01_1) 
+        (covered skirt.n.01_1 stain.n.01_1) 
+        (ontop skirt.n.01_2 bed.n.01_1) 
+        (ontop jean.n.01_1 bed.n.01_1) 
+        (covered jean.n.01_1 stain.n.01_1) 
+        (ontop jean.n.01_2 bed.n.01_1) 
+        (ontop sweatshirt.n.01_1 bed.n.01_1) 
+        (ontop hamper.n.02_1 floor.n.01_1) 
+        (ontop hamper.n.02_2 floor.n.01_1) 
+        (ontop hamper.n.02_3 floor.n.01_1) 
+        (inroom bed.n.01_1 bedroom) 
+        (inroom shelf.n.01_1 bedroom) 
+        (inroom floor.n.01_1 bedroom) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (exists 
+                (?hamper.n.02 - hamper.n.02)
+                (and
+                    (forall 
+                        (?skirt.n.01 - skirt.n.01)
+                        (inside ?skirt.n.01 ?hamper.n.02)
+                    )
+                    (forall 
+                        (?jean.n.01 - jean.n.01)
+                        (not
+                            (inside ?jean.n.01 ?hamper.n.02)
+                        )
+                    )
+                    (forall 
+                        (?sweatshirt.n.01 - sweatshirt.n.01)
+                        (not
+                            (inside ?sweatshirt.n.01 ?hamper.n.02)
+                        )
+                    )
+                )
+            )
+            (exists 
+                (?hamper.n.02 - hamper.n.02)
+                (and
+                    (forall 
+                        (?jean.n.01 - jean.n.01)
+                        (inside ?jean.n.01 ?hamper.n.02)
+                    )
+                    (forall 
+                        (?skirt.n.01 - skirt.n.01)
+                        (not
+                            (inside ?skirt.n.01 ?hamper.n.02)
+                        )
+                    )
+                    (forall 
+                        (?sweatshirt.n.01 - sweatshirt.n.01)
+                        (not
+                            (inside ?sweatshirt.n.01 ?hamper.n.02)
+                        )
+                    )
+                )
+            )
+            (exists 
+                (?hamper.n.02 - hamper.n.02)
+                (and
+                    (forall 
+                        (?sweatshirt.n.01 - sweatshirt.n.01)
+                        (inside ?sweatshirt.n.01 ?hamper.n.02)
+                    )
+                    (forall 
+                        (?skirt.n.01 - skirt.n.01)
+                        (not
+                            (inside ?skirt.n.01 ?hamper.n.02)
+                        )
+                    )
+                    (forall 
+                        (?jean.n.01 - jean.n.01)
+                        (not
+                            (inside ?jean.n.01 ?hamper.n.02)
+                        )
+                    )
+                )
+            )
+        )
+    )
+)

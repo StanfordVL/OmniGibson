@@ -1,0 +1,31 @@
+(define (problem store_produce-0)
+    (:domain omnigibson)
+
+    (:objects
+        produce.n.01_1 produce.n.01_2 produce.n.01_3 produce.n.01_4 - produce.n.01
+        plastic_bag.n.01_1 - plastic_bag.n.01
+        floor.n.01_1 - floor.n.01
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside produce.n.01_1 plastic_bag.n.01_1) 
+        (inside produce.n.01_2 plastic_bag.n.01_1) 
+        (inside produce.n.01_3 plastic_bag.n.01_1) 
+        (inside produce.n.01_4 plastic_bag.n.01_1) 
+        (ontop plastic_bag.n.01_1 floor.n.01_1) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?produce.n.01 - produce.n.01)
+                (inside ?produce.n.01 ?electric_refrigerator.n.01_1) 
+            )
+        )
+    )
+)

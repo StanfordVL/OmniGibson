@@ -1,0 +1,86 @@
+(define (problem cook_broccoli-0)
+    (:domain omnigibson)
+
+    (:objects
+        broccoli.n.02_1 broccoli.n.02_2 broccoli.n.02_3 broccoli.n.02_4 broccoli.n.02_5 broccoli.n.02_6 broccoli.n.02_7 broccoli.n.02_8 - broccoli.n.02
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        casserole.n.01_1 - casserole.n.01
+        clove.n.03_1 clove.n.03_2 clove.n.03_3 clove.n.03_4 - clove.n.03
+        salt.n.02_1 - salt.n.02
+        tupperware.n.01_1 - tupperware.n.01
+        bowl.n.01_1 - bowl.n.01
+        salt__shaker.n.01_1 - salt__shaker.n.01
+        oven.n.01_1 - oven.n.01
+        countertop.n.01_1 - countertop.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside broccoli.n.02_1 tupperware.n.01_1) 
+        (inside broccoli.n.02_2 tupperware.n.01_1) 
+        (inside broccoli.n.02_3 tupperware.n.01_1) 
+        (inside broccoli.n.02_4 tupperware.n.01_1) 
+        (inside broccoli.n.02_5 tupperware.n.01_1) 
+        (inside broccoli.n.02_6 tupperware.n.01_1) 
+        (inside broccoli.n.02_7 tupperware.n.01_1) 
+        (inside broccoli.n.02_8 tupperware.n.01_1) 
+        (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
+        (inside clove.n.03_1 bowl.n.01_1) 
+        (inside clove.n.03_2 bowl.n.01_1) 
+        (inside clove.n.03_3 bowl.n.01_1) 
+        (inside clove.n.03_4 bowl.n.01_1) 
+        (inside bowl.n.01_1 electric_refrigerator.n.01_1)
+        (not 
+            (cooked broccoli.n.02_1)
+        ) 
+        (not 
+            (cooked broccoli.n.02_2)
+        ) 
+        (not 
+            (cooked broccoli.n.02_3)
+        ) 
+        (not 
+            (cooked broccoli.n.02_4)
+        ) 
+        (not 
+            (cooked broccoli.n.02_5)
+        ) 
+        (not 
+            (cooked broccoli.n.02_6)
+        ) 
+        (not 
+            (cooked broccoli.n.02_7)
+        ) 
+        (not 
+            (cooked broccoli.n.02_8)
+        ) 
+        (insource salt__shaker.n.01_1 salt.n.02_1)
+        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (ontop casserole.n.01_1 countertop.n.01_1)
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom oven.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (inroom countertop.n.01_1 kitchen)
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?broccoli.n.02 - broccoli.n.02)
+                (and 
+                    (cooked ?broccoli.n.02)
+                    (covered ?broccoli.n.02 ?salt.n.02)
+                )
+            )
+            (forall 
+                (?clove.n.03 - clove.n.03)
+                (and 
+                    (cooked ?clove.n.03)
+                    (covered ?clove.n.03 ?salt.n.02)
+                )
+            )
+        )
+    )
+)

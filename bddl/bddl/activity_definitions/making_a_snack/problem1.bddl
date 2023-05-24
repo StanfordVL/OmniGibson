@@ -1,0 +1,31 @@
+(define (problem making_a_snack-1)
+    (:domain omnigibson)
+
+    (:objects
+     	bowl.n.01_1 - bowl.n.01
+    	shelf.n.01_1 - shelf.n.01
+    	jelly_bean.n.01_1 - jelly_bean.n.01
+    	marshmallow.n.01_1 - marshmallow.n.01
+    	countertop.n.01_1 - countertop.n.01
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside bowl.n.01_1 shelf.n.01_1) 
+        (inside jelly_bean.n.01_1 shelf.n.01_1) 
+        (inside marshmallow.n.01_1 shelf.n.01_1) 
+        (inroom shelf.n.01_1 kitchen) 
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (ontop ?jelly_bean.n.01_1 ?bowl.n.01_1) 
+            (ontop ?marshmallow.n.01_1 ?bowl.n.01_1) 
+            (ontop ?bowl.n.01_1 ?countertop.n.01_1)
+        )
+    )
+)

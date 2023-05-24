@@ -1,0 +1,36 @@
+(define (problem store_eggs-0)
+    (:domain omnigibson)
+
+    (:objects
+     	egg.n.01_1 egg.n.02_2 egg.n.02_3 egg.n.02_4 egg.n.02_5 egg.n.02_6 - egg.n.02
+    	tupperware.n.01_1 - tupperware.n.01
+    	countertop.n.01_1 - countertop.n.01
+    	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop egg.n.02_1 countertop.n.01_1) 
+        (ontop egg.n.02_2 countertop.n.01_1) 
+        (ontop egg.n.02_3 countertop.n.01_1) 
+        (ontop egg.n.02_4 countertop.n.01_1) 
+        (ontop egg.n.02_5 countertop.n.01_1) 
+        (ontop egg.n.02_6 countertop.n.01_1) 
+        (ontop tupperware.n.01_1 countertop.n.01_1) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?egg.n.02 - egg.n.02) 
+                (inside ?egg.n.02 ?tupperware.n.01_1)
+            ) 
+            (inside ?tupperware.n.01_1 ?electric_refrigerator.n.01_1)
+        )
+    )
+)

@@ -1,0 +1,36 @@
+(define (problem cleaning_pet_bed-0)
+    (:domain omnigibson)
+
+    (:objects
+        pet_bed.n.01_1 - pet_bed.n.01
+        floor.n.01_1 - floor.n.01
+        hair.n.01_1 - hair.n.01
+        petfood.n.01_1 - petfood.n.01
+        vacuum.n.04_1 - vacuum.n.04
+        rug.n.01_1 - rug.n.01
+        shelf.n.01_1 - shelf.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop pet_bed.n.01_1 floor.n.01_1) 
+        (covered pet_bed.n.01_1 hair.n.01_1) 
+        (covered pet_bed.n.01_1 petfood.n.01_1) 
+        (ontop vacuum.n.04_1 floor.n.01_1) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 playroom) 
+        (inroom shelf.n.01_1 playroom) 
+        (inroom rug.n.01_1 playroom)
+    )
+    
+    (:goal 
+        (and 
+            (not 
+                (covered ?pet_bed.n.01_1 ?hair.n.01_1)
+            ) 
+            (not 
+                (covered ?pet_bed.n.01_1 ?petfood.n.01_1)
+            ) 
+        )
+    )
+)

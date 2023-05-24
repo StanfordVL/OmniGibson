@@ -1,0 +1,62 @@
+(define (problem cook_pork_ribs-0)
+    (:domain omnigibson)
+
+    (:objects
+        chopping_board.n.01_1 - chopping_board.n.01
+        grill.n.02_1 - grill.n.02
+        barbecue_sauce.n.01_1 - barbecue_sauce.n.01
+        barbecue_sauce__bottle.n.01_1 - barbecue_sauce__bottle.n.01
+        rib.n.03_1 rib.n.03_2 rib.n.03_3 rib.n.03_4 - rib.n.03
+        tongs.n.01_1 - tongs.n.01
+        cigar_lighter.n.01_1 - cigar_lighter.n.01
+        shelf.n.01_1 - shelf.n.01
+        oven.n.01_1 - oven.n.01
+        countertop.n.01_1 - countertop.n.01
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (filled barbecue_sauce__bottle.n.01_1 barbecue_sauce.n.01_1)
+        (inside barbecue_sauce__bottle.n.01_1 electric_refrigerator.n.01_1)
+        (not 
+            (cooked rib.n.03_1)
+        ) 
+        (not 
+            (cooked rib.n.03_2)
+        ) 
+        (not 
+            (cooked rib.n.03_3)
+        ) 
+        (not 
+            (cooked rib.n.03_4)
+        ) 
+        (inside rib.n.03_1 electric_refrigerator.n.01_1)
+        (inside rib.n.03_2 electric_refrigerator.n.01_1)
+        (inside rib.n.03_3 electric_refrigerator.n.01_1)
+        (inside rib.n.03_4 electric_refrigerator.n.01_1)
+        (inside cigar_lighter.n.01_1 shelf.n.01_1) 
+        (ontop chopping_board.n.01_1 countertop.n.01_1) 
+        (ontop tongs.n.01_1 chopping_board.n.01_1)
+        (inroom grill.n.02_1 kitchen) 
+        (inroom oven.n.01_1 kitchen) 
+        (inroom shelf.n.01_1 kitchen) 
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?rib.n.03 - rib.n.03)
+                (and 
+                    (cooked ?rib.n.03)
+                    (covered ?rib.n.03 ?barbecue_sauce.n.01_1)
+                )
+            )
+        )
+    )
+)

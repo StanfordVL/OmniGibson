@@ -1,0 +1,35 @@
+(define (problem installing_smoke_detectors-0)
+    (:domain omnigibson)
+
+    (:objects
+        wall.n.01_1 wall.n.01_2 - wall.n.01
+        floor.n.01_1 - floor.n.01
+        fire_alarm.n.02_1 fire_alarm.n.02_2 - fire_alarm.n.02
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop fire_alarm.n.02_1 floor.n.01_1) 
+        (ontop fire_alarm.n.02_2 floor.n.01_1) 
+        (not
+            (attached fire_alarm.n.02_1 wall.n.01_1)
+        )
+        (not
+            (attached fire_alarm.n.02_2 wall.n.01_2)
+        )
+        (inroom wall.n.01_1 bathroom) 
+        (inroom wall.n.01_2 dining_room) 
+        (inroom floor.n.01_1 dining_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forpairs 
+                (?fire_alarm.n.02 - fire_alarm.n.02)
+                (?wall.n.01 - wall.n.01)
+                (attached ?fire_alarm.n.02 ?wall.n.01)
+            )
+        )
+    )
+)

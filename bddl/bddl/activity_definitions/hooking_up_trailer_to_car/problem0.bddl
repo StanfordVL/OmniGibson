@@ -1,0 +1,28 @@
+(define (problem hooking_up_trailer_to_car-0)
+    (:domain omnigibson)
+
+    (:objects
+        driveway.n.01_1 - driveway.n.01
+        car.n.01_1 - car.n.01
+        trailer.n.03_1 - trailer.n.03
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop car.n.01_1 driveway.n.01_1) 
+        (ontop trailer.n.03_1 driveway.n.01_1) 
+        (not 
+            (attached trailer.n.03_1 car.n.01_1)
+        )
+        (inroom driveway.n.01_1 garden) 
+        (inroom floor.n.01_1 garden) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (attached ?trailer.n.03_1 ?car.n.01_1) 
+        )
+    )
+)

@@ -1,0 +1,48 @@
+(define (problem chopping_wood-0)
+    (:domain omnigibson)
+
+    (:objects
+        log.n.01_1 log.n.01_2 log.n.01_3 log.n.01_4 - log.n.01
+        half__log.n.01_1 half__log.n.01_2 half__log.n.01_3 half__log.n.01_4 half__log.n.01_5 half__log.n.01_6 half__log.n.01_7 half__log.n.01_8 - half__log.n.01
+        lawn.n.01_1 - lawn.n.01
+        ax.n.01_1 - ax.n.01
+        chopping_block.n.01_1 - chopping_block.n.01
+        tree.n.01_1 - tree.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop log.n.01_1 lawn.n.01_1) 
+        (ontop log.n.01_2 lawn.n.01_1) 
+        (ontop log.n.01_3 lawn.n.01_1) 
+        (ontop log.n.01_4 lawn.n.01_1) 
+        (ontop ax.n.01_1 log.n.01_1) 
+        (ontop chopping_block.n.01_1 lawn.n.01_1) 
+        (inroom lawn.n.01_1 garden) 
+        (inroom tree.n.01_1 garden) 
+        (inroom floor.n.01_1 garden) 
+        (future half__log.n.01_1)
+        (future half__log.n.01_2)
+        (future half__log.n.01_3)
+        (future half__log.n.01_4)
+        (future half__log.n.01_5)
+        (future half__log.n.01_6)
+        (future half__log.n.01_7)
+        (future half__log.n.01_8)
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (real ?half__log.n.01_1)
+            (real ?half__log.n.01_2)
+            (real ?half__log.n.01_3)
+            (real ?half__log.n.01_4)
+            (real ?half__log.n.01_5)
+            (real ?half__log.n.01_6)
+            (real ?half__log.n.01_7)
+            (real ?half__log.n.01_8)
+        )
+    )
+)

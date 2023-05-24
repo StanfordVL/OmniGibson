@@ -114,6 +114,8 @@
     "heatable": {},
     "mixable": {},
     "moldyable": {},
+    "nonDeformable": {},
+    "nonSubstance": {},
     "openable": {},
     "rustable": {},
     "scratchable": {},
@@ -157,6 +159,8 @@
     "heatable": {},
     "mixable": {},
     "moldyable": {},
+    "nonDeformable": {},
+    "nonSubstance": {},
     "rustable": {},
     "scratchable": {},
     "stainable": {},
@@ -255,22 +259,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "action.n.07": {
-    "disinfectable": {},
-    "dustyable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "activity.n.01": {
     "disinfectable": {},
     "dustyable": {},
@@ -295,6 +283,8 @@
     "heatable": {},
     "mixable": {},
     "moldyable": {},
+    "nonDeformable": {},
+    "nonSubstance": {},
     "rustable": {},
     "scratchable": {},
     "stainable": {},
@@ -368,6 +358,8 @@
     "heatable": {},
     "mixable": {},
     "moldyable": {},
+    "nonDeformable": {},
+    "nonSubstance": {},
     "rustable": {},
     "scratchable": {},
     "stainable": {},
@@ -425,15 +417,6 @@
     "wrinkleable": {}
   },
   "agave.n.01": {
-    "boilable": {},
-    "freezable": {},
-    "heatable": {},
-    "liquid": {},
-    "nonDeformable": {},
-    "sliceable": {},
-    "substance": {}
-  },
-  "agent.n.01": {
     "disinfectable": {},
     "dustyable": {},
     "freezable": {},
@@ -441,8 +424,11 @@
     "heatable": {},
     "mixable": {},
     "moldyable": {},
+    "nonDeformable": {},
+    "nonSubstance": {},
     "rustable": {},
     "scratchable": {},
+    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -511,6 +497,8 @@
     "heatable": {},
     "mixable": {},
     "moldyable": {},
+    "nonDeformable": {},
+    "nonSubstance": {},
     "rustable": {},
     "scratchable": {},
     "stainable": {},
@@ -1352,7 +1340,8 @@
     "heatable": {},
     "nonDeformable": {},
     "physicalSubstance": {},
-    "substance": {}
+    "substance": {},
+    "waterCook": {}
   },
   "area.n.01": {
     "disinfectable": {},
@@ -4361,15 +4350,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "bite.n.04": {
-    "cookable": {},
-    "freezable": {},
-    "heatable": {},
-    "nonDeformable": {},
-    "physicalSubstance": {},
-    "sliceable": {},
-    "substance": {}
-  },
   "bivalve.n.01": {
     "cookable": {},
     "disinfectable": {},
@@ -4396,7 +4376,8 @@
     "heatable": {},
     "nonDeformable": {},
     "physicalSubstance": {},
-    "substance": {}
+    "substance": {},
+    "waterCook": {}
   },
   "black_pepper.n.02": {
     "cookable": {},
@@ -8948,7 +8929,8 @@
     "heatable": {},
     "nonDeformable": {},
     "physicalSubstance": {},
-    "substance": {}
+    "substance": {},
+    "waterCook": {}
   },
   "brown_rice__sack.n.01": {
     "disinfectable": {},
@@ -12323,6 +12305,7 @@
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
+    "waterCook": {},
     "wetable": {},
     "wrinkleable": {}
   },
@@ -17549,13 +17532,23 @@
     "wrinkleable": {}
   },
   "desert_plant.n.01": {
-    "boilable": {},
+    "disinfectable": {},
+    "dustyable": {},
     "freezable": {},
+    "grassyable": {},
     "heatable": {},
-    "liquid": {},
+    "mixable": {},
+    "moldyable": {},
     "nonDeformable": {},
+    "nonSubstance": {},
+    "rustable": {},
+    "scratchable": {},
     "sliceable": {},
-    "substance": {}
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
   },
   "desiccant.n.01": {
     "disinfectable": {},
@@ -28125,7 +28118,8 @@
     "freezable": {},
     "heatable": {},
     "physicalSubstance": {},
-    "substance": {}
+    "substance": {},
+    "waterCook": {}
   },
   "kielbasa.n.01": {
     "cookable": {},
@@ -29097,7 +29091,8 @@
     "heatable": {},
     "nonDeformable": {},
     "physicalSubstance": {},
-    "substance": {}
+    "substance": {},
+    "waterCook": {}
   },
   "lentil__box.n.01": {
     "disinfectable": {},
@@ -31263,15 +31258,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "meal.n.01": {
-    "cookable": {},
-    "freezable": {},
-    "heatable": {},
-    "nonDeformable": {},
-    "physicalSubstance": {},
-    "sliceable": {},
-    "substance": {}
-  },
   "meal.n.03": {
     "freezable": {},
     "heatable": {}
@@ -33273,7 +33259,8 @@
     "heatable": {},
     "nonDeformable": {},
     "physicalSubstance": {},
-    "substance": {}
+    "substance": {},
+    "waterCook": {}
   },
   "noodle__jar.n.01": {
     "breakable": {},
@@ -34028,7 +34015,8 @@
     "freezable": {},
     "heatable": {},
     "physicalSubstance": {},
-    "substance": {}
+    "substance": {},
+    "waterCook": {}
   },
   "outdoor_game.n.01": {
     "disinfectable": {},

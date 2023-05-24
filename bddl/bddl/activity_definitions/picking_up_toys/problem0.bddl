@@ -1,0 +1,54 @@
+(define (problem picking_up_toys-0)
+    (:domain omnigibson)
+
+    (:objects
+        wicker_basket.n.01_1 - wicker_basket.n.01
+        floor.n.01_1 - floor.n.01
+        board_game.n.01_1 board_game.n.01_2 board_game.n.01_3 - board_game.n.01
+        jigsaw_puzzle.n.01_1 jigsaw_puzzle.n.01_2 - jigsaw_puzzle.n.01
+        tennis_ball.n.01_1 - tennis_ball.n.01
+        shelf.n.01_1 - shelf.n.01
+        window.n.01_1 - window.n.01
+        wall.n.01_1 - wall.n.01
+        toy_box.n.01_1 toy_box.n.01_2 - toy_box.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop wicker_basket.n.01_1 floor.n.01_1) 
+        (ontop board_game.n.01_1 floor.n.01_1) 
+        (ontop board_game.n.01_2 floor.n.01_1) 
+        (ontop board_game.n.01_3 floor.n.01_1) 
+        (ontop jigsaw_puzzle.n.01_1 floor.n.01_1) 
+        (ontop jigsaw_puzzle.n.01_2 floor.n.01_1) 
+        (ontop tennis_ball.n.01_1 shelf.n.01_1) 
+        (inroom floor.n.01_1 childs_room) 
+        (inroom window.n.01_1 childs_room) 
+        (inroom wall.n.01_1 childs_room) 
+        (inroom shelf.n.01_1 childs_room)
+        (inroom toy_box.n.01_1 childs_room) 
+        (inroom toy_box.n.01_2 childs_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (exists
+                (?toy_box.n.01 - toy_box.n.01)
+                (forall 
+                    (?jigsaw_puzzle.n.01 - jigsaw_puzzle.n.01) 
+                    (inside ?jigsaw_puzzle.n.01 ?toy_box.n.01)
+                ) 
+            )
+            (exists
+                (?toy_box.n.01 - toy_box.n.01)
+                (forall 
+                    (?board_game.n.01 - board_game.n.01) 
+                    (inside ?board_game.n.01 ?toy_box.n.01)
+                ) 
+            )
+            (inside ?wicker_basket.n.01_1 ?shelf.n.01_1) 
+            (inside ?tennis_ball.n.01_1 ?wicker_basket.n.01_1)
+        )
+    )
+)

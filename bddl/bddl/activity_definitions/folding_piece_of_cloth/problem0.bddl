@@ -1,0 +1,25 @@
+(define (problem folding_piece_of_cloth-0)
+    (:domain omnigibson)
+
+    (:objects
+        sheet.n.03_1 - sheet.n.03
+        clothes_dryer.n.01_1 - clothes_dryer.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside sheet.n.03_1 clothes_dryer.n.01_1)
+        (unfolded sheet.n.03_1) 
+        (inroom floor.n.01_1 utility_room) 
+        (inroom clothes_dryer.n.01_1 utility_room)
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (ontop ?sheet.n.03_1 ?clothes_dryer.n.01_1)
+            (folded ?sheet.n.03_1)
+        )
+    )
+)

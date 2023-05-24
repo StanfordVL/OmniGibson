@@ -1,0 +1,60 @@
+(define (problem ironing_clothes-0)
+    (:domain omnigibson)
+
+    (:objects
+        wrinkle.n.01_1 - wrinkle.n.01
+        polo_shirt.n.01_1 - polo_shirt.n.01
+        blouse.n.01_1 - blouse.n.01
+        cardigan.n.01_1 - cardigan.n.01
+        dress.n.01_1 - dress.n.01
+        jersey.n.03_1 - jersey.n.03
+        ironing_board.n.01_1 - ironing_board.n.01
+        hamper.n.02_1 - hamper.n.02
+        floor.n.01_1 - floor.n.01
+        iron.n.04_1 - iron.n.04
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (covered polo_shirt.n.01_1 wrinkle.n.01_1) 
+        (covered blouse.n.01_1 wrinkle.n.01_1) 
+        (covered cardigan.n.01_1 wrinkle.n.01_1) 
+        (covered dress.n.01_1 wrinkle.n.01_1) 
+        (covered jersey.n.03_1 wrinkle.n.01_1) 
+        (ontop hamper.n.02_1 floor.n.01_1)
+        (inside polo_shirt.n.01_1 hamper.n.02_1) 
+        (inside blouse.n.01_1 floor.n.01_1) 
+        (inside cardigan.n.01_1 hamper.n.02_1) 
+        (inside dress.n.01_1 hamper.n.02_1) 
+        (inside jersey.n.03_1 hamper.n.02_1)
+        (ontop ironing_board.n.01_1 floor.n.01_1) 
+        (ontop iron.n.04_1 ironing_board.n.01_1) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 bedroom)
+    )
+    
+    (:goal 
+        (and 
+            (not 
+                (covered ?polo_shirt.n.01_1 ?wrinkle.n.01_1)
+            ) 
+            (not 
+                (covered ?blouse.n.01_1 ?wrinkle.n.01_1)
+            ) 
+            (not 
+                (covered ?cardigan.n.01_1 ?wrinkle.n.01_1)
+            ) 
+            (not 
+                (covered ?dress.n.01_1 ?wrinkle.n.01_1)
+            ) 
+            (not 
+                (covered ?jersey.n.03_1 ?wrinkle.n.01_1)
+            ) 
+            (folded ?polo_shirt.n.01_1) 
+            (folded ?blouse.n.01_1) 
+            (folded ?cardigan.n.01_1) 
+            (folded ?dress.n.01_1) 
+            (folded ?jersey.n.03_1)
+        )
+    )
+)

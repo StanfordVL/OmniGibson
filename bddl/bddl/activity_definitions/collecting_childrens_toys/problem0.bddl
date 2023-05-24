@@ -1,0 +1,62 @@
+(define (problem collecting_childrens_toys-0)
+    (:domain omnigibson)
+
+    (:objects
+        die.n.01_1 die.n.01_2 - die.n.01
+        floor.n.01_1 - floor.n.01
+        teddy.n.01_1 teddy.n.01_2 - teddy.n.01
+        train_set.n.01_1 - train_set.n.01
+        board_game.n.01_1 board_game.n.01_2 - board_game.n.01
+        coffee_table.n.01_1 - coffee_table.n.01
+        shelf.n.01_1 - shelf.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop die.n.01_1 floor.n.01_1) 
+        (ontop die.n.01_2 floor.n.01_1) 
+        (ontop teddy.n.01_1 floor.n.01_1) 
+        (ontop train_set.n.01_1 coffee_table.n.01_1) 
+        (ontop teddy.n.01_2 floor.n.01_1) 
+        (ontop board_game.n.01_1 coffee_table.n.01_1) 
+        (ontop board_game.n.01_2 floor.n.01_1) 
+        (inroom shelf.n.01_1 childs_room) 
+        (inroom floor.n.01_1 living_room) 
+        (inroom coffee_table.n.01_1 living_room) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (or 
+                (inside ?train_set.n.01_1 ?shelf.n.01_1)
+                (ontop ?train_set.n.01_1 ?shelf.n.01_1)
+            )
+            (forall
+                (?die.n.01 - die.n.01)
+                (or 
+                    (inside ?die.n.01 ?shelf.n.01_1)
+                    (ontop ?die.n.01 ?shelf.n.01_1)
+                )
+            )            
+            (forall
+                (?teddy.n.01 - teddy.n.01)
+                (or 
+                    (inside ?teddy.n.01 ?shelf.n.01_1)
+                    (ontop ?teddy.n.01 ?shelf.n.01_1)
+                )            
+            )
+            (forall
+                (?board_game.n.01 - board_game.n.01)
+                (or 
+                    (inside ?board_game.n.01 ?shelf.n.01_1)
+                    (ontop ?board_game.n.01 ?shelf.n.01_1)
+                )
+            )
+            (or
+                (inside ?train_set.n.01_1 ?shelf.n.01_1)
+                (ontop ?train_set.n.01_1 ?shelf.n.01_1)
+            )
+        )
+    )
+)

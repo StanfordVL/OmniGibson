@@ -1,0 +1,37 @@
+(define (problem make_carne_asada-0)
+    (:domain omnigibson)
+
+    (:objects
+     	carne_asada.n.01_1 - carne_asada.n.01
+    	countertop.n.01_1 - countertop.n.01
+    	ground_beef__package.n.01_1 - ground_beef__package.n.01
+    	cooking_oil__bottle.n.01_1 - cooking_oil__bottle.n.01
+    	chili.n.02_1 - chili.n.02
+    	frying_pan.n.01_1 - frying_pan.n.01
+    	stove.n.01_1 - stove.n.01
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (not 
+            (cooked carne_asada.n.01_1)
+        ) 
+        (ontop carne_asada.n.01_1 countertop.n.01_1) 
+        (ontop ground_beef__package.n.01_1 countertop.n.01_1) 
+        (ontop cooking_oil__bottle.n.01_1 countertop.n.01_1) 
+        (ontop chili.n.02_1 countertop.n.01_1) 
+        (ontop frying_pan.n.01_1 stove.n.01_1) 
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom stove.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (cooked ?carne_asada.n.01_1) 
+            (ontop ?carne_asada.n.01_1 ?stove.n.01_1)
+        )
+    )
+)

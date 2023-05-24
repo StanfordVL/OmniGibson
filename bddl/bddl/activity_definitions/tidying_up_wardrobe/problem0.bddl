@@ -1,0 +1,96 @@
+(define (problem tidying_up_wardrobe-0)
+    (:domain omnigibson)
+
+    (:objects
+        hanger.n.02_1 hanger.n.02_2 hanger.n.02_3 hanger.n.02_4 - hanger.n.02
+        wardrobe.n.01_1 - wardrobe.n.01
+        jersey.n.03_1 - jersey.n.03
+        wicker_basket.n.01_1 - wicker_basket.n.01
+        belt.n.01_1 - belt.n.01
+        underwear.n.01_1 - underwear.n.01
+        scarf.n.01_1 - scarf.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (attached hanger.n.02_1 wardrobe.n.01_1) 
+        (attached hanger.n.02_2 wardrobe.n.01_1) 
+        (attached hanger.n.02_3 wardrobe.n.01_1) 
+        (attached hanger.n.02_4 wardrobe.n.01_1) 
+        (inside jersey.n.03_1 wicker_basket.n.01_1) 
+        (inside belt.n.01_1 wicker_basket.n.01_1) 
+        (inside underwear.n.01_1 wicker_basket.n.01_1) 
+        (inside scarf.n.01_1 wicker_basket.n.01_1) 
+        (inroom wicker_basket.n.01_1 closet) 
+        (inroom wardrobe.n.01_1 closet) 
+        (inroom floor.n.01_1 closet) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (exists 
+                (?hanger.n.02 - hanger.n.02)
+                (and 
+                    (draped ?jersey.n.03_1 ?hanger.n.02_1)
+                    (not 
+                        (draped ?belt.n.01_1 ?hanger.n.02_1)
+                    )
+                    (not 
+                        (draped ?underwear.n.01_1 ?hanger.n.02_1)
+                    )
+                    (not 
+                        (draped ?scarf.n.01_1 ?hanger.n.02_1)
+                    )
+                )
+            )
+            (exists 
+                (?hanger.n.02 - hanger.n.02)
+                (and 
+                    (draped ?belt.n.01_1 ?hanger.n.02_1)
+                    (not 
+                        (draped ?jersey.n.03_1 ?hanger.n.02_1)
+                    )
+                    (not 
+                        (draped ?underwear.n.01_1 ?hanger.n.02_1)
+                    )
+                    (not 
+                        (draped ?scarf.n.01_1 ?hanger.n.02_1)
+                    )
+                )
+            )
+            (exists 
+                (?hanger.n.02 - hanger.n.02)
+                (and 
+                    (draped ?underwear.n.01_1 ?hanger.n.02_1)
+                    (not 
+                        (draped ?belt.n.01_1 ?hanger.n.02_1)
+                    )
+                    (not 
+                        (draped ?jersey.n.03_1 ?hanger.n.02_1)
+                    )
+                    (not 
+                        (draped ?scarf.n.01_1 ?hanger.n.02_1)
+                    )
+                )
+            )
+            (exists 
+                (?hanger.n.02 - hanger.n.02)
+                (and 
+                    (draped ?scarf.n.01_1 ?hanger.n.02_1)
+                    (not 
+                        (draped ?belt.n.01_1 ?hanger.n.02_1)
+                    )
+                    (not 
+                        (draped ?underwear.n.01_1 ?hanger.n.02_1)
+                    )
+                    (not 
+                        (draped ?jersey.n.03_1 ?hanger.n.02_1)
+                    )
+                )
+            )
+            (nextto ?wicker_basket.n.01_1 ?wardrobe.n.01_1)
+        )
+    )
+)

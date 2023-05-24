@@ -1,0 +1,26 @@
+(define (problem putting_up_wallpaper-0)
+    (:domain omnigibson)
+
+    (:objects
+        wallpaper.n.01_1 - wallpaper.n.01
+        floor.n.01_1 - floor.n.01
+        wall.n.01_1 - wall.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop wallpaper.n.01_1 floor.n.01_1) 
+        (not 
+            (attached wallpaper.n.01_1 wall.n.01_1)
+        )
+        (inroom wall.n.01_1 bedroom) 
+        (inroom floor.n.01_1 bedroom) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (attached ?wallpaper.n.01_1 ?wall.n.01_1) 
+        )
+    )
+)

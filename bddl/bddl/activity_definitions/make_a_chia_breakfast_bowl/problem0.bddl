@@ -1,0 +1,80 @@
+(define (problem make_a_chia_breakfast_bowl-0)
+    (:domain omnigibson)
+
+    (:objects
+     	granola.n.01_1 - granola.n.01
+    	granola__box.n.01_1 - granola__box.n.01
+    	breakfast_table.n.01_1 - breakfast_table.n.01
+    	yogurt.n.01_1 - yogurt.n.01
+    	cup__of__yogurt.n.01_1 - cup__of__yogurt.n.01
+    	blackberry.n.01_1 - blackberry.n.01
+    	bowl.n.01_1 - bowl.n.01
+    	blueberry.n.02_1 - blueberry.n.02
+    	raspberry.n.02_1 - raspberry.n.02
+    	chia_seed.n.01_1 - chia_seed.n.01
+    	chia_seed__bag.n.01_1 - chia_seed__bag.n.01
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (covered granola__box.n.01_1 granola.n.01_1) 
+        (ontop granola__box.n.01_1 breakfast_table.n.01_1) 
+        (covered cup__of__yogurt.n.01_1 yogurt.n.01_1) 
+        (ontop cup__of__yogurt.n.01_1 breakfast_table.n.01_1) 
+        (ontop blackberry.n.01_1 bowl.n.01_1) 
+        (ontop blueberry.n.02_1 bowl.n.01_1) 
+        (ontop raspberry.n.02_1 bowl.n.01_1) 
+        (ontop bowl.n.01_1 breakfast_table.n.01_1) 
+        (covered chia_seed__bag.n.01_1 chia_seed.n.01_1) 
+        (ontop chia_seed__bag.n.01_1 breakfast_table.n.01_1) 
+        (inroom breakfast_table.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?granola.n.01 - granola.n.01) 
+                (filled ?bowl.n.01_1 ?granola.n.01)
+            ) 
+            (forall 
+                (?granola__box.n.01 - granola__box.n.01) 
+                (ontop ?granola__box.n.01 ?breakfast_table.n.01_1)
+            ) 
+            (forall 
+                (?yogurt.n.01 - yogurt.n.01) 
+                (filled ?bowl.n.01_1 ?yogurt.n.01)
+            ) 
+            (forall 
+                (?cup__of__yogurt.n.01 - cup__of__yogurt.n.01) 
+                (ontop ?cup__of__yogurt.n.01 ?breakfast_table.n.01_1)
+            ) 
+            (forall 
+                (?blackberry.n.01 - blackberry.n.01) 
+                (ontop ?blackberry.n.01 ?bowl.n.01_1)
+            ) 
+            (forall 
+                (?blueberry.n.02 - blueberry.n.02) 
+                (ontop ?blueberry.n.02 ?bowl.n.01_1)
+            ) 
+            (forall 
+                (?raspberry.n.02 - raspberry.n.02) 
+                (ontop ?raspberry.n.02 ?bowl.n.01_1)
+            ) 
+            (forall 
+                (?bowl.n.01 - bowl.n.01) 
+                (ontop ?bowl.n.01 ?breakfast_table.n.01_1)
+            ) 
+            (forall 
+                (?chia_seed.n.01 - chia_seed.n.01) 
+                (covered ?bowl.n.01_1 ?chia_seed.n.01)
+            ) 
+            (forall 
+                (?chia_seed__bag.n.01 - chia_seed__bag.n.01) 
+                (ontop ?chia_seed__bag.n.01 ?breakfast_table.n.01_1)
+            )
+        )
+    )
+)

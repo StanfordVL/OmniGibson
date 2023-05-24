@@ -1,0 +1,67 @@
+(define (problem make-lamb-stew_0)
+    (:domain omnigibson)
+
+    (:objects
+        lamb.n.01_1 - lamb.n.01
+        olive_oil.n.01_1 - olive_oil.n.01
+        vidalia_onion.n.01_1 - vidalia_onion.n.01
+        carrot.n.03_1 - carrot.n.03
+        potato.n.01_1 - potato.n.01
+        beef_broth.n.01_1 - beef_broth.n.01
+        salt.n.02_1 - salt.n.02
+        black_pepper.n.02_1 - black_pepper.n.02
+        butter.n.01_1 - butter.n.01
+        flour.n.01_1 - flour.n.01
+        parsley.n.02_1 - parsley.n.02
+        thyme.n.02_1 - thyme.n.02
+        lamb_stew.n.01_1 - lamb_stew.n.01
+        stove.n.01_1 - stove.n.01
+        dutch_oven.n.02_1 - dutch_oven.n.02
+        salt__shaker.n.01_1 - salt__shaker.n.01
+        pepper__shaker.n.01_1 - pepper__shaker.n.01
+        butter__package.n.01_1 - butter__package.n.01 
+        flour__sack.n.01_1 - flour__sack.n.01 
+        tupperware.n.01_1 - tupperware.n.01 
+        thyme__shaker.n.01_1 - thyme__shaker.n.01
+        chopping_board.n.01_1 - chopping_board.n.01
+        carving_knife.n.01_1 - carving_knife.n.01
+        countertop.n.01_1 countertop.n.01_2 countertop.n.01_3 - countertop.n.01
+        cup.n.01_1 - cup.n.01
+        olive_oil__bottle.n.01_1 - olive_oil__bottle.n.01
+    )
+
+    (:init
+        (ontop lamb.n.01_1 chopping_board.n.01_1)
+        (ontop chopping_board.n.01_1 countertop.n.01_1)
+        (ontop carving_knife.n.01_1 countertop.n.01_1)
+        (filled olive_oil__bottle.n.01_1 olive_oil.n.01_1)
+        (ontop olive_oil__bottle.n.01_1 countertop.n.01_1)
+        (ontop vidalia_onion.n.01_1 countertop.n.01_1)
+        (ontop carrot.n.03_1 countertop.n.01_1)
+        (ontop potato.n.01_1 countertop.n.01_1)
+        (filled cup.n.01_1 beef_broth.n.01_1)
+        (ontop cup.n.01_1 countertop.n.01_2)
+        (insource salt__shaker.n.01_1 salt.n.02_1)
+        (ontop salt__shaker.n.01_1 countertop.n.01_2)
+        (insource pepper__shaker.n.01_1 black_pepper.n.02_1)
+        (ontop pepper__shaker.n.01_1 countertop.n.01_2)
+        (inside butter.n.01_1 butter__package.n.01_1)
+        (ontop butter__package.n.01_1 countertop.n.01_2)
+        (filled flour__sack.n.01_1 flour.n.01_1)
+        (ontop flour__sack.n.01_1 countertop.n.01_2)
+        (inside parsley.n.02_1 tupperware.n.01_1)
+        (ontop tupperware.n.01_1 countertop.n.01_3)
+        (insource thyme__shaker.n.01_1 thyme.n.02_1)
+        (ontop thyme__shaker.n.01_1 countertop.n.01_3)
+        (inroom stove.n.01_1 kitchen)
+        (ontop dutch_oven.n.02_1 countertop.n.01_3)
+        (future lamb_stew.n.01_1)
+    )
+
+    (:goal
+        (and
+            (real ?lamb_stew.n.01_1)
+            (contains ?dutch_oven.n.02_1 ?lamb_stew.n.01_1)
+        )
+    )
+)

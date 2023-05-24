@@ -1,0 +1,99 @@
+(define (problem sorting_clothes-0)
+    (:domain omnigibson)
+
+    (:objects
+        jean.n.01_1 jean.n.01_2 jean.n.01_3 - jean.n.01
+        bed.n.01_1 - bed.n.01
+        polo_shirt.n.01_1 polo_shirt.n.01_2 - polo_shirt.n.01
+        blouse.n.01_1 blouse.n.01_2 - blouse.n.01
+        shelf.n.01_1 shelf.n.01_2 - shelf.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop jean.n.01_1 bed.n.01_1) 
+        (ontop jean.n.01_2 bed.n.01_1) 
+        (ontop jean.n.01_3 bed.n.01_1) 
+        (ontop polo_shirt.n.01_1 bed.n.01_1) 
+        (ontop polo_shirt.n.01_2 bed.n.01_1) 
+        (ontop blouse.n.01_1 bed.n.01_1) 
+        (ontop blouse.n.01_2 bed.n.01_1) 
+        (inroom bed.n.01_1 bedroom) 
+        (inroom shelf.n.01_1 bedroom) 
+        (inroom shelf.n.01_2 bedroom) 
+        (inroom floor.n.01_1 bedroom) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (exists 
+                (?jean.n.01 - jean.n.01) 
+                (and
+                    (inside ?jean.n.01 ?shelf.n.01_2)
+                    (folded ?jean.n.01)
+                )
+            ) 
+            (forn
+                (2)
+                (?jean.n.01 - jean.n.01)
+                (or 
+                    (nextto ?jean.n.01 ?jean.n.01_1)
+                    (nextto ?jean.n.01 ?jean.n.01_2)
+                    (nextto ?jean.n.01 ?jean.n.01_3)
+                )
+            )
+            (exists 
+                (?polo_shirt.n.01 - polo_shirt.n.01) 
+                (and
+                    (inside ?polo_shirt.n.01 ?shelf.n.01_2)
+                    (folded ?polo_shirt.n.01)
+                )
+            ) 
+            (exists
+                (?polo_shirt.n.01 - polo_shirt.n.01)
+                (or 
+                    (nextto ?polo_shirt.n.01 ?polo_shirt.n.01_1)
+                    (nextto ?polo_shirt.n.01 ?polo_shirt.n.01_2)
+                )
+            )
+            (exists 
+                (?blouse.n.01 - blouse.n.01) 
+                (and
+                    (inside ?blouse.n.01 ?shelf.n.01_2)
+                    (folded ?blouse.n.01)
+                )
+            ) 
+            (exists
+                (?blouse.n.01 - blouse.n.01)
+                (or 
+                    (nextto ?blouse.n.01 ?blouse.n.01_1)
+                    (nextto ?blouse.n.01 ?blouse.n.01_2)
+                )
+            )
+            (exists 
+                (?shelf.n.01 - shelf.n.01)
+                (and 
+                    (inside ?jean.n.01_1 ?shelf.n.01)
+                    (not 
+                        (inside ?polo_shirt.n.01_1 ?shelf.n.01)
+                    )
+                    (not 
+                        (inside ?blouse.n.01_1 ?shelf.n.01)
+                    )
+                )
+            )
+            (exists 
+                (?shelf.n.01 - shelf.n.01)
+                (and 
+                    (inside ?polo_shirt.n.01_1 ?shelf.n.01)
+                    (inside ?blouse.n.01_1 ?shelf.n.01)
+                    (not 
+                        (inside ?jean.n.01_1 ?shelf.n.01)
+                    )
+                )
+            )
+        )
+    )
+)
