@@ -6,7 +6,7 @@
         wardrobe.n.01_1 - wardrobe.n.01
         jersey.n.03_1 - jersey.n.03
         wicker_basket.n.01_1 - wicker_basket.n.01
-        belt.n.01_1 - belt.n.01
+        belt.n.02_1 - belt.n.02
         underwear.n.01_1 - underwear.n.01
         scarf.n.01_1 - scarf.n.01
         floor.n.01_1 - floor.n.01
@@ -19,7 +19,7 @@
         (attached hanger.n.02_3 wardrobe.n.01_1) 
         (attached hanger.n.02_4 wardrobe.n.01_1) 
         (inside jersey.n.03_1 wicker_basket.n.01_1) 
-        (inside belt.n.01_1 wicker_basket.n.01_1) 
+        (inside belt.n.02_1 wicker_basket.n.01_1)
         (inside underwear.n.01_1 wicker_basket.n.01_1) 
         (inside scarf.n.01_1 wicker_basket.n.01_1) 
         (inroom wicker_basket.n.01_1 closet) 
@@ -35,7 +35,7 @@
                 (and 
                     (draped ?jersey.n.03_1 ?hanger.n.02_1)
                     (not 
-                        (draped ?belt.n.01_1 ?hanger.n.02_1)
+                        (draped ?belt.n.02_1 ?hanger.n.02_1)
                     )
                     (not 
                         (draped ?underwear.n.01_1 ?hanger.n.02_1)
@@ -48,7 +48,7 @@
             (exists 
                 (?hanger.n.02 - hanger.n.02)
                 (and 
-                    (draped ?belt.n.01_1 ?hanger.n.02_1)
+                    (draped ?belt.n.02_1 ?hanger.n.02_1)
                     (not 
                         (draped ?jersey.n.03_1 ?hanger.n.02_1)
                     )
@@ -65,7 +65,7 @@
                 (and 
                     (draped ?underwear.n.01_1 ?hanger.n.02_1)
                     (not 
-                        (draped ?belt.n.01_1 ?hanger.n.02_1)
+                        (draped ?belt.n.02_1 ?hanger.n.02_1)
                     )
                     (not 
                         (draped ?jersey.n.03_1 ?hanger.n.02_1)
@@ -80,7 +80,7 @@
                 (and 
                     (draped ?scarf.n.01_1 ?hanger.n.02_1)
                     (not 
-                        (draped ?belt.n.01_1 ?hanger.n.02_1)
+                        (draped ?belt.n.02_1 ?hanger.n.02_1)
                     )
                     (not 
                         (draped ?underwear.n.01_1 ?hanger.n.02_1)
