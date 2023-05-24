@@ -7680,6 +7680,236 @@
                       ]
                     },
                     {
+                      "name": "creation.n.02",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "representation.n.02",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "stage_set.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "scenery.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "backdrop.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "model.n.04",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "globe.n.03",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "figure.n.04",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "dummy.n.03",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "mannequin.n.02",
+                                          "hasModel": true
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "figurine.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "nativity_figurine.n.01",
+                                          "hasModel": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "mock-up.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "document.n.02",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "letter.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "map.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "photograph.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "drawing.n.02",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "plan.n.03",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "picture.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "likeness.n.02",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "portrait.n.02",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "art.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "plastic_art.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "sculpture.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "bust.n.03",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "statue.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "graphic_art.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "painting.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "product.n.02",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "work.n.02",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "publication.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "book.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "catalog.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "reference_book.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "handbook.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "textbook.n.01",
+                                          "hasModel": true
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "magazine.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "comic_book.n.01",
+                                          "hasModel": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "book.n.02",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "hardback.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "notebook.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "novel.n.02",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "paperback_book.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "magazine.n.02",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "newspaper.n.03",
+                              "hasModel": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
                       "name": "fabric.n.01",
                       "hasModel": true,
                       "children": [
@@ -8078,220 +8308,6 @@
                                 {
                                   "name": "stucco.n.01",
                                   "hasModel": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "creation.n.02",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "art.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "plastic_art.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "sculpture.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "bust.n.03",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "statue.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "graphic_art.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "painting.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "product.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "work.n.02",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "publication.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "book.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "catalog.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "reference_book.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "handbook.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "name": "textbook.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "name": "magazine.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "comic_book.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "book.n.02",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "hardback.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "notebook.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "novel.n.02",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "paperback_book.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "magazine.n.02",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "newspaper.n.03",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "representation.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "model.n.04",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "globe.n.03",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "figure.n.04",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "dummy.n.03",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "mannequin.n.02",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "name": "figurine.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "nativity_figurine.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "mock-up.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "document.n.02",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "letter.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "map.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "photograph.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "drawing.n.02",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "plan.n.03",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "picture.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "likeness.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "portrait.n.02",
-                                      "hasModel": true
-                                    }
-                                  ]
                                 }
                               ]
                             }
@@ -9802,30 +9818,6 @@
                                   "hasModel": true,
                                   "children": [
                                     {
-                                      "name": "vegetable.n.02",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "artichoke.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "beet.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "beetroot.n.01",
-                                              "hasModel": true
-                                            },
-                                            {
-                                              "name": "diced__beetroot.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "gramineous_plant.n.01",
                                       "hasModel": true,
                                       "children": [
@@ -9853,6 +9845,26 @@
                                             },
                                             {
                                               "name": "bunchgrass.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "vegetable.n.02",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "beet.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "beetroot.n.01",
+                                              "hasModel": true
+                                            },
+                                            {
+                                              "name": "diced__beetroot.n.01",
                                               "hasModel": true
                                             }
                                           ]
@@ -19058,6 +19070,182 @@
           ]
         },
         {
+          "name": "group.n.01",
+          "hasModel": true,
+          "children": [
+            {
+              "name": "biological_group.n.01",
+              "hasModel": true,
+              "children": [
+                {
+                  "name": "taxonomic_group.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "genus.n.02",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "fungus_genus.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "auricularia.n.01",
+                              "hasModel": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "kingdom.n.05",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "fungi.n.01",
+                          "hasModel": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "social_group.n.01",
+              "hasModel": true,
+              "children": [
+                {
+                  "name": "organization.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "unit.n.03",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "military_unit.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "army_unit.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "artillery.n.02",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "battery.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "arrangement.n.02",
+              "hasModel": true,
+              "children": [
+                {
+                  "name": "flower_arrangement.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "bouquet.n.01",
+                      "hasModel": true
+                    },
+                    {
+                      "name": "wreath.n.01",
+                      "hasModel": true
+                    }
+                  ]
+                },
+                {
+                  "name": "ordering.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "series.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "chain.n.01",
+                          "hasModel": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "array.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "table.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "periodic_table.n.01",
+                          "hasModel": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "collection.n.01",
+              "hasModel": true,
+              "children": [
+                {
+                  "name": "set.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "chess_set.n.01",
+                      "hasModel": true
+                    }
+                  ]
+                },
+                {
+                  "name": "mail.n.04",
+                  "hasModel": true
+                },
+                {
+                  "name": "vegetation.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "scrub.n.01",
+                      "hasModel": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "halogen.n.01",
+              "hasModel": true,
+              "children": [
+                {
+                  "name": "chlorine.n.01",
+                  "hasModel": true
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "psychological_feature.n.01",
           "hasModel": true,
           "children": [
@@ -19078,16 +19266,6 @@
                           "hasModel": true,
                           "children": [
                             {
-                              "name": "support.n.03",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "anchor.n.02",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
                               "name": "temptation.n.01",
                               "hasModel": true,
                               "children": [
@@ -19104,58 +19282,28 @@
                   ]
                 },
                 {
-                  "name": "process.n.02",
+                  "name": "structure.n.03",
                   "hasModel": true,
                   "children": [
                     {
-                      "name": "basic_cognitive_process.n.01",
+                      "name": "arrangement.n.03",
                       "hasModel": true,
                       "children": [
                         {
-                          "name": "perception.n.03",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "sensation.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "smell.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "aroma.n.02",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "representational_process.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "symbol.n.02",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "emblem.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "national_flag.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "name": "calendar.n.01",
+                          "hasModel": true
                         }
                       ]
+                    }
+                  ]
+                },
+                {
+                  "name": "practice.n.05",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "convention.n.02",
+                      "hasModel": true
                     }
                   ]
                 },
@@ -19163,34 +19311,6 @@
                   "name": "content.n.05",
                   "hasModel": true,
                   "children": [
-                    {
-                      "name": "representation.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "percept.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "visual_percept.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "view.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "background.n.02",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
                     {
                       "name": "knowledge_domain.n.01",
                       "hasModel": true,
@@ -19250,28 +19370,36 @@
                   ]
                 },
                 {
-                  "name": "structure.n.03",
+                  "name": "process.n.02",
                   "hasModel": true,
                   "children": [
                     {
-                      "name": "arrangement.n.03",
+                      "name": "basic_cognitive_process.n.01",
                       "hasModel": true,
                       "children": [
                         {
-                          "name": "calendar.n.01",
-                          "hasModel": true
+                          "name": "representational_process.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "symbol.n.02",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "emblem.n.02",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "national_flag.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "name": "practice.n.05",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "convention.n.02",
-                      "hasModel": true
                     }
                   ]
                 }
@@ -19524,182 +19652,6 @@
                       ]
                     }
                   ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "group.n.01",
-          "hasModel": true,
-          "children": [
-            {
-              "name": "biological_group.n.01",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "taxonomic_group.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "genus.n.02",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "fungus_genus.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "auricularia.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "kingdom.n.05",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "fungi.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "social_group.n.01",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "organization.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "unit.n.03",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "military_unit.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "army_unit.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "artillery.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "battery.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "arrangement.n.02",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "flower_arrangement.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "bouquet.n.01",
-                      "hasModel": true
-                    },
-                    {
-                      "name": "wreath.n.01",
-                      "hasModel": true
-                    }
-                  ]
-                },
-                {
-                  "name": "ordering.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "series.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "chain.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "array.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "table.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "periodic_table.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "collection.n.01",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "set.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "chess_set.n.01",
-                      "hasModel": true
-                    }
-                  ]
-                },
-                {
-                  "name": "mail.n.04",
-                  "hasModel": true
-                },
-                {
-                  "name": "vegetation.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "scrub.n.01",
-                      "hasModel": true
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "halogen.n.01",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "chlorine.n.01",
-                  "hasModel": true
                 }
               ]
             }
