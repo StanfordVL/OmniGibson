@@ -160,11 +160,8 @@ def get_natural_goal_conditions(conds):
 
 def get_all_activities():
     """Return a list of all activities included in this version of BDDL.
-    
-    Args:
-        None
         
     Returns:
         list<str>: list containing the name of each included activity
     """
-    return [os.path.isdir(x) for x in os.path.listdir(ACTIVITY_CONFIGS_PATH)]
+    return [x for x in os.listdir(ACTIVITY_CONFIGS_PATH) if os.path.isdir(os.path.join(ACTIVITY_CONFIGS_PATH, x))]
