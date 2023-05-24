@@ -169,6 +169,7 @@ def get_all_activities():
     """
     return [x for x in os.listdir(ACTIVITY_CONFIGS_PATH) if os.path.isdir(os.path.join(ACTIVITY_CONFIGS_PATH, x))]
 
+
 def get_instance_count(act):
     """Return the number of instances of a given activity that are included in this version of BDDL.
     
