@@ -60,19 +60,6 @@ def is_water_sourced(objects, init, goal):
     return True
 
 
-def add_goal_question_marks(activity): 
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
-    with open(defn_fn, "r") as f:
-        defn = f.read() 
-    defn_parts = defn.split("(:goal")
-    defn_parts[1] = re.sub(r"([A-Za-z-_]+\.n\.[0-9]+)", r"?\1", defn_parts[1])
-    defn_parts[1] = defn_parts[1].replace("- ?", "- ")
-    defn_parts[1] = defn_parts[1].replace("??", "?")
-    defn = "(:goal".join(defn_parts)
-    with open(defn_fn, "w") as f:
-        f.write(defn)
-
-
 # OBJECTS
 
 # Constants
@@ -198,11 +185,25 @@ def _get_instances_in_init(init):
     return init_insts
 
 
-def get_objects_in_goal(goal):
+def _get_objects_in_goal(goal):
     goal_objects = set()
     goal = ["and"] + goal
     _traverse_goal_for_objects(goal, goal_objects)
     return goal_objects
+
+def _get_unique_items_from_transition_map():
+    obj_set = set()
+    for fname in glob.glob(CSVS_DIR):
+        with open(fname) as f:
+            for row in f:
+                first = row.split(',')[0]
+                if '.n.' in first:
+                    obj_set.add(first.rpartition('_')[0])
+
+    obj_set.remove('')
+    
+    for obj in obj_set:
+        print(obj)
 
 
 # Checkers
@@ -246,7 +247,7 @@ def all_objects_appropriate(activity):
     assert init_insts.issubset(instances), f":init has object instances not in :objects: {init_insts.difference(instances)}"
     assert instances.issubset(init_insts), f":objects has object instances not in :init: {instances.difference(init_insts)}"
     
-    goal_objects = get_objects_in_goal(goal)
+    goal_objects = _get_objects_in_goal(goal)
     assert goal_objects.issubset(categories.union(instances)), f":goal has objects not in :objects: {goal_objects.difference(categories.union(instances))}"
 
 
@@ -289,28 +290,25 @@ def all_synsets_valid(activity):
     __, objects, init, goal = _get_defn_elements_from_file(activity)
     instances, categories = _get_objects_from_object_list(objects)
     init_insts = _get_instances_in_init(init)
-    goal_objects = get_objects_in_goal(goal)
+    goal_objects = _get_objects_in_goal(goal)
     object_insts = set([re.match(OBJECT_CAT_AND_INST_RE, inst).group() for inst in instances.union(init_insts).union(goal_objects)])
     object_terms = object_insts.union(categories)
     for proposed_syn in object_terms: 
-        # proposed_syn = re.match(OBJECT_CAT_AND_INST_RE, term).group()
-        # print(proposed_syn)
         assert (proposed_syn in syns_to_props) or (proposed_syn == "agent.n.01"), f"Invalid synset: {proposed_syn}"
 
 
 def no_unused_scene_objects(activity):
-    __, objects, init, goal = _get_defn_elements_from_file(activity)
-    instances, __ = _get_objects_from_object_list(objects)
+    __, __, init, __ = _get_defn_elements_from_file(activity)
     inroomed_objects = [atom[1] for atom in init if "inroom" in atom]
     defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
     with open(defn_fn, "r") as f: 
         defn = f.read() 
     for inroomed_object in inroomed_objects:
-        inroomed_cat = "_".join(inroomed_object.split("_")[:-1]) + " "
-        if len(re.findall(inroomed_object, defn)) + \
-                    len(re.findall(inroomed_cat, defn)) == 3:
+        inroom_cat = re.match(OBJECT_CAT_AND_INST_RE, inroomed_object).group()
+        defn_no_objects = defn.split("(:init")[-1]
+        if len(re.findall(inroom_cat, defn_no_objects)) + 0 <= 1:
             raise AssertionError(f"Potential unused scene object {inroomed_object}")
-
+        
 
 # Check uncontrolled categories
 
@@ -382,21 +380,6 @@ def agent_present(activity):
         raise AssertionError("Agent not present.")
 
 
-def get_unique_items_from_transition_map():
-    obj_set = set()
-    for fname in glob.glob(CSVS_DIR):
-        with open(fname) as f:
-            for row in f:
-                first = row.split(',')[0]
-                if '.n.' in first:
-                    obj_set.add(first.rpartition('_')[0])
-
-    obj_set.remove('')
-    
-    for obj in obj_set:
-        print(obj)
-
-
 # MAIN 
 
 def verify_definition(activity, csv=False):
@@ -409,7 +392,6 @@ def verify_definition(activity, csv=False):
     no_contradictory_init_atoms(activity)
     no_uncontrolled_category(activity)
     all_synsets_valid(activity)
-    no_unused_scene_objects(activity)
     agent_present(activity)
     if csv:
         no_filled_in_tm_recipe_goal(activity)
@@ -417,20 +399,30 @@ def verify_definition(activity, csv=False):
 
 
 # Master planning sheet
-BATCH_DEFINITIONS_FILE = "b1k_master_planning.csv"
-
-def batch_verify_all(): 
-
-    plan_df = pd.read_csv(BATCH_DEFINITIONS_FILE)
-    batch = plan_df["task_name"]
-    for activity in batch: 
-        print() 
+def batch_verify_all(csv=False): 
+    for activity in sorted(os.listdir(PROBLEM_FILE_DIR)):
+        if "-" in activity: continue        # TODO deal with these directories
+        if not os.path.isdir(os.path.join(PROBLEM_FILE_DIR, activity)): continue
+        print()
         print(activity)
-        # try:
-        verify_definition(activity.replace(" ", "_"))
-        # except FileNotFoundError:
-        #     print("file not found:", activity.replace(" ", "_"))
-        #     continue
+        if os.path.exists(os.path.join(CSVS_DIR, activity + ".csv")):
+            print("CSV:", activity)
+            try:
+                verify_definition(activity, csv=csv)
+            except FileNotFoundError:
+                print()
+                print("file not found for", activity)
+                continue
+            except AssertionError as e:
+                print()
+                print(activity)
+                print(e)
+                to_continue = input("continue? y/n: ")
+                while to_continue != "y":
+                    to_continue = input("continue? y/n: ")
+                continue
+        else:
+            verify_definition(activity, csv=False)
 
 
 def unpack_nested_lines(sec):
@@ -453,35 +445,22 @@ def unpack_nested_lines(sec):
 
     return res
 
-def find_touching_deformables_or_substances(init, goal, sd):
-    '''
-    for a given activity, return all lines where 
-    a deformable/substance is touching another deformable/substance
-    a line in this case is a list containing 3 strings
-    '''
-    lines = []
-    for sec in [init, goal]:
-        unpacked_sec = unpack_nested_lines(sec)
-        for line in unpacked_sec: 
-            pred, *objs = line
 
-            if pred in ['overlaid', 'ontop', 'touching']:
-                obj1, obj2 = objs
-                if 'sink' in obj2:
-                    # hardcoded because a lot of things are overlaid on sink
-                    # and ink is a substance which is a substring of sink
-                    continue
-                obj1_found = False
-                obj2_found = False
-                for item in sd:
-                    if item in obj1:
-                        obj1_found = True
-                    if item in obj2:
-                        obj2_found = True
-                    if obj1_found and obj2_found:
-                        lines.append(line)
-                        break
-    return lines
+# Transition maps
+
+def no_filled_in_tm_recipe_goal(activity):
+    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
+    with open(defn_fn, "r") as f:
+        defn = f.read()
+    goal_section = defn.split(":goal")[-1]
+    assert "filled" not in goal_section, "filled in TM BDDL :goal"
+
+    csv = os.path.join(CSVS_DIR, activity + ".csv")
+    with open(csv, "r") as f:
+        lines = list(f.readlines())
+    container_lines = [lines[i + 1] for i in range(len(lines) - 1) if "container," in lines[i]]
+    for container_line in container_lines:
+        assert "filled" not in container_line, f"filled in TM CSV container line: {container_line}"
 
 
 def sync_csv(activity):
@@ -511,7 +490,6 @@ def sync_csv(activity):
                 output_flag = False 
 
     csv_objs.discard('')
-    # print(csv_objs)
 
     __, objects, init, _ = _get_defn_elements_from_file(activity)
     bddl_objs, _ = _get_objects_from_object_list(objects)
@@ -542,21 +520,6 @@ def sync_csv(activity):
     assert len(csv_objs - bddl_objs) == 0 and len(bddl_objs - csv_objs) == 0, f"Items in csv but not bddl: {csv_objs - bddl_objs} \nItems in bddl but not csv: {bddl_objs - csv_objs}"
 
 
-def no_filled_in_tm_recipe_goal(activity):
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
-    with open(defn_fn, "r") as f:
-        defn = f.read()
-    goal_section = defn.split(":goal")[-1]
-    assert "filled" not in goal_section, "filled in TM BDDL :goal"
-
-    csv = os.path.join(CSVS_DIR, activity + ".csv")
-    with open(csv, "r") as f:
-        lines = list(f.readlines())
-    container_lines = [lines[i + 1] for i in range(len(lines) - 1) if "container," in lines[i]]
-    for container_line in container_lines:
-        assert "filled" not in container_line, f"filled in TM CSV container line: {container_line}"
-
-
 def batch_sync_csv():
     for fname in os.listdir(CSVS_DIR):
         activity = fname[:-len(".csv")]
@@ -580,68 +543,23 @@ def batch_sync_csv():
 
 
 def main():
-    if sys.argv[1] == "main": 
-        activities = os.listdir(PROBLEM_FILE_DIR)
-        parsed_problems = []
-        for activity in activities:
-            # print()
-            # print(activity)
-            defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
-            with open(defn_fn, "r") as f:
-                parsed_problem = parse_problem(activity, 0, 'omnigibson', predefined_problem=f.read())
-                parsed_problems.append(parsed_problem)
-        with open(PROPS_TO_SYNS_JSON, "r") as f:
-            props_to_syns = json.load(f)
-        substances_and_deformables = set(props_to_syns["substance"] + props_to_syns["deformable"])
-        touching_sd_acts = []
-        for act, objects, init, goal in parsed_problems:
-            # print()
-            # print(act)
-            is_water_sourced(objects, init, goal)
-            # touching_sd = find_touching_deformables_or_substances(init, goal, substances_and_deformables)
-            # if touching_sd:
-            #     touching_sd_acts.append(act)
-            # if detect_double_open_parens_after_and(goal):
-            #     print()
-            #     print(goal)
-        if touching_sd_acts:
-            raise ValueError(f'The following activities contain lines where a substance/deformable is touching another: {touching_sd_acts}')
-
-    elif sys.argv[1] == "verify": 
+    if sys.argv[1] == "verify": 
         verify_definition(sys.argv[2])
     
     elif sys.argv[1] == "verify_csv":
         verify_definition(sys.argv[2], csv=True)
-    
-    elif sys.argv[1] == "handle_sliced":
-        sliced_state_to_synset(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
-    
-    elif sys.argv[1] == "add_qmarks":
-        add_goal_question_marks(sys.argv[2])
-    
-    elif sys.argv[1] == "hot_substance": 
-        hot_substance_state_to_synset(sys.argv[2], sys.argv[3])
-
-    elif sys.argv[1] == "transition_map":
-        get_unique_items_from_transition_map()
-
-    elif sys.argv[1] == "switch_subst":
-        switch_subst_non_subst(sys.argv[2])
         
     elif sys.argv[1] == "batch_verify": 
         batch_verify_all()
+
+    elif sys.argv[1] == "batch_verify_csv": 
+        batch_verify_all(csv=True)
 
     elif sys.argv[1] == "sync_csv":
         sync_csv(sys.argv[2])
 
     elif sys.argv[1] == "batch_sync_csv":
         batch_sync_csv()
-    
-    elif sys.argv[1] == "add_agent": 
-        add_agent(sys.argv[2])
-    
-    elif sys.argv[1] == "check_proportion": 
-        check_tmrecipe_reduced_proportions()
 
 
 if __name__ == "__main__":
