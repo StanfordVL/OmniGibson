@@ -13020,6 +13020,10 @@
                           ]
                         },
                         {
+                          "name": "beaten_egg.n.01",
+                          "hasModel": true
+                        },
+                        {
                           "name": "dairy_product.n.01",
                           "hasModel": true,
                           "children": [
@@ -13226,7 +13230,7 @@
                           "hasModel": true
                         },
                         {
-                          "name": "half__egg.n.01",
+                          "name": "raw_egg.n.01",
                           "hasModel": true
                         }
                       ]
@@ -13457,10 +13461,6 @@
                             },
                             {
                               "name": "french_toast.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "fried_egg.n.01",
                               "hasModel": true
                             },
                             {
@@ -14007,10 +14007,6 @@
                     },
                     {
                       "name": "cooked__water.n.01",
-                      "hasModel": true
-                    },
-                    {
-                      "name": "raw_egg.n.01",
                       "hasModel": true
                     },
                     {
@@ -19036,68 +19032,6 @@
                   ]
                 },
                 {
-                  "name": "content.n.05",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "knowledge_domain.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "discipline.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "science.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "natural_science.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "physics.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "electronics.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "belief.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "doctrine.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "theological_doctrine.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "virgin_birth.n.02",
-                                  "hasModel": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
                   "name": "process.n.02",
                   "hasModel": true,
                   "children": [
@@ -19122,6 +19056,34 @@
                                       "hasModel": true
                                     }
                                   ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "content.n.05",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "belief.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "doctrine.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "theological_doctrine.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "virgin_birth.n.02",
+                                  "hasModel": true
                                 }
                               ]
                             }
