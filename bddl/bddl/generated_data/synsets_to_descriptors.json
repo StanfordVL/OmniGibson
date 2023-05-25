@@ -609,60 +609,6 @@
             "wrinkly"
         ]
     ],
-    "acquisition.n.02": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "act.n.02": [
         [
             "disinfected",
@@ -5071,68 +5017,6 @@
         [
             "hot",
             "hot"
-        ]
-    ],
-    "atom.n.02": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
         ]
     ],
     "atomizer.n.01": [
@@ -12525,6 +12409,10 @@
             "dusty"
         ],
         [
+            "on_fire",
+            "on_fire"
+        ],
+        [
             "frozen",
             "frozen"
         ],
@@ -14135,12 +14023,56 @@
     ],
     "body_covering.n.01": [
         [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
             "frozen",
             "frozen"
         ],
         [
+            "grassy",
+            "grassy"
+        ],
+        [
             "hot",
             "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
         ]
     ],
     "body_part.n.01": [
@@ -22214,60 +22146,6 @@
         ]
     ],
     "boulder.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "boundary.n.01": [
         [
             "disinfected",
             "disinfected"
@@ -32831,64 +32709,6 @@
             "wrinkly"
         ]
     ],
-    "care.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "open",
-            "open"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "carne_asada.n.01": [
         [
             "cooked",
@@ -36588,34 +36408,6 @@
         ]
     ],
     "chemical_element.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "hot",
-            "hot"
-        ]
-    ],
-    "chemical_process.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "hot",
-            "hot"
-        ]
-    ],
-    "chemical_reaction.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
         [
             "frozen",
             "frozen"
@@ -42749,20 +42541,6 @@
             "wrinkly"
         ]
     ],
-    "colloid.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "hot",
-            "hot"
-        ]
-    ],
     "coloring.n.01": [
         [
             "boiling",
@@ -42897,20 +42675,6 @@
         [
             "wrinkly",
             "wrinkly"
-        ]
-    ],
-    "combustion.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "hot",
-            "hot"
         ]
     ],
     "comic_book.n.01": [
@@ -44136,60 +43900,6 @@
         ]
     ],
     "conduit.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "cone.n.02": [
         [
             "disinfected",
             "disinfected"
@@ -48813,12 +48523,56 @@
     ],
     "covering.n.01": [
         [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
             "frozen",
             "frozen"
         ],
         [
+            "grassy",
+            "grassy"
+        ],
+        [
             "hot",
             "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
         ]
     ],
     "covering.n.02": [
@@ -61767,60 +61521,6 @@
             "hot"
         ]
     ],
-    "extremity.n.04": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "exudate.n.01": [
         [
             "boiling",
@@ -62723,7 +62423,7 @@
             "wrinkly"
         ]
     ],
-    "fennel.n.01": [
+    "fennel.n.02": [
         [
             "cooked",
             "cooked"
@@ -63577,20 +63277,6 @@
             "wrinkly"
         ]
     ],
-    "fire.n.03": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "hot",
-            "hot"
-        ]
-    ],
     "fire_alarm.n.02": [
         [
             "disinfected",
@@ -64005,64 +63691,6 @@
         [
             "moldy",
             "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "first_aid.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "open",
-            "open"
         ],
         [
             "rusty",
@@ -66175,60 +65803,6 @@
             "wrinkly"
         ]
     ],
-    "forefront.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "fork.n.01": [
         [
             "disinfected",
@@ -66961,60 +66535,6 @@
             "hot"
         ]
     ],
-    "freshener.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "friedcake.n.01": [
         [
             "disinfected",
@@ -67074,60 +66594,6 @@
         ]
     ],
     "fritter_batter.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "front.n.01": [
         [
             "disinfected",
             "disinfected"
@@ -67547,68 +67013,6 @@
             "wrinkly"
         ]
     ],
-    "fungi.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "sliced",
-            "sliced"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "fungus.n.01": [
         [
             "frozen",
@@ -67663,60 +67067,6 @@
         [
             "sliced",
             "sliced"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "funnel.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
         ],
         [
             "stained",
@@ -69053,20 +68403,6 @@
             "wrinkly"
         ]
     ],
-    "gel.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "hot",
-            "hot"
-        ]
-    ],
     "gelatin.n.02": [
         [
             "cooked",
@@ -69420,60 +68756,6 @@
         ]
     ],
     "geological_formation.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "gift.n.01": [
         [
             "disinfected",
             "disinfected"
@@ -70809,64 +70091,6 @@
             "wrinkly"
         ]
     ],
-    "gooseberry.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "gooseberry.n.02": [
         [
             "disinfected",
@@ -71169,68 +70393,6 @@
         [
             "dusty",
             "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "grain.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "on_fire",
-            "on_fire"
         ],
         [
             "frozen",
@@ -73353,16 +72515,6 @@
         [
             "wrinkly",
             "wrinkly"
-        ]
-    ],
-    "hair.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "hot",
-            "hot"
         ]
     ],
     "hair.n.04": [
@@ -84832,68 +83984,6 @@
         ]
     ],
     "kielbasa.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "sliced",
-            "sliced"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "kingdom.n.05": [
         [
             "cooked",
             "cooked"
@@ -99045,20 +98135,6 @@
             "hot"
         ]
     ],
-    "natural_process.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "hot",
-            "hot"
-        ]
-    ],
     "necklace.n.01": [
         [
             "disinfected",
@@ -102477,20 +101553,6 @@
         [
             "boiling",
             "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "hot",
-            "hot"
-        ]
-    ],
-    "oxidation.n.01": [
-        [
-            "on_fire",
-            "on_fire"
         ],
         [
             "frozen",
@@ -120019,60 +119081,6 @@
             "wrinkly"
         ]
     ],
-    "region.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "region.n.03": [
         [
             "disinfected",
@@ -130226,60 +129234,6 @@
         ]
     ],
     "shutter.n.02": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "side.n.04": [
         [
             "disinfected",
             "disinfected"
@@ -141161,60 +140115,6 @@
             "wrinkly"
         ]
     ],
-    "surface.n.02": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "sushi.n.01": [
         [
             "cooked",
@@ -144027,6 +142927,10 @@
             "dusty"
         ],
         [
+            "on_fire",
+            "on_fire"
+        ],
+        [
             "frozen",
             "frozen"
         ],
@@ -145497,60 +144401,6 @@
         [
             "hot",
             "hot"
-        ]
-    ],
-    "thing.n.08": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
         ]
     ],
     "thing.n.12": [
@@ -148822,60 +147672,6 @@
         ]
     ],
     "transducer.n.01": [
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "transferred_property.n.01": [
         [
             "disinfected",
             "disinfected"
