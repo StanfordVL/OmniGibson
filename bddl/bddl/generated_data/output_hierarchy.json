@@ -6130,6 +6130,10 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "case__of__eyeshadow.n.01",
+                                  "hasModel": true
+                                },
+                                {
                                   "name": "case__of__pop.n.01",
                                   "hasModel": true
                                 },
@@ -7593,16 +7597,6 @@
                           "children": [
                             {
                               "name": "gravestone.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "projection.n.04",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "knob.n.01",
                               "hasModel": true
                             }
                           ]
@@ -9986,16 +9980,6 @@
                                       "hasModel": true
                                     },
                                     {
-                                      "name": "luffa.n.02",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "loofah.n.02",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "true_pepper.n.01",
                                       "hasModel": true,
                                       "children": [
@@ -10049,10 +10033,6 @@
                                           "children": [
                                             {
                                               "name": "chives.n.01",
-                                              "hasModel": true
-                                            },
-                                            {
-                                              "name": "leek.n.01",
                                               "hasModel": true
                                             }
                                           ]
@@ -14294,10 +14274,6 @@
                     {
                       "name": "gasoline.n.01",
                       "hasModel": true
-                    },
-                    {
-                      "name": "igniter.n.01",
-                      "hasModel": true
                     }
                   ]
                 },
@@ -15373,6 +15349,10 @@
                             },
                             {
                               "name": "half__mushroom.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "leek.n.02",
                               "hasModel": true
                             },
                             {
@@ -16669,34 +16649,6 @@
                       "name": "physical_phenomenon.n.01",
                       "hasModel": true,
                       "children": [
-                        {
-                          "name": "energy.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "radiation.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "electromagnetic_radiation.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "actinic_radiation.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "light.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
                         {
                           "name": "atmospheric_phenomenon.n.01",
                           "hasModel": true,
@@ -19122,22 +19074,6 @@
                       ]
                     },
                     {
-                      "name": "speech_act.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "description.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "label.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
                       "name": "acquiring.n.01",
                       "hasModel": true,
                       "children": [
@@ -19586,16 +19522,6 @@
                           ]
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "name": "containerful.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "kettle.n.02",
-                      "hasModel": true
                     }
                   ]
                 },
