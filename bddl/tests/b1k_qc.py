@@ -406,7 +406,6 @@ def batch_verify_all(csv=False):
         print()
         print(activity)
         if os.path.exists(os.path.join(CSVS_DIR, activity + ".csv")):
-            print("CSV:", activity)
             try:
                 verify_definition(activity, csv=csv)
             except FileNotFoundError:
