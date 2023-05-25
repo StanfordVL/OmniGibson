@@ -196,6 +196,10 @@
                                       "hasModel": true
                                     },
                                     {
+                                      "name": "copper_pot.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
                                       "name": "coffeepot.n.01",
                                       "hasModel": true,
                                       "children": [
@@ -1786,22 +1790,6 @@
                                       "hasModel": true
                                     },
                                     {
-                                      "name": "measuring_stick.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "rule.n.12",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "foot_rule.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "gauge.n.01",
                                       "hasModel": true
                                     },
@@ -1832,6 +1820,16 @@
                                     {
                                       "name": "meter.n.02",
                                       "hasModel": true
+                                    },
+                                    {
+                                      "name": "measuring_stick.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "rule.n.12",
+                                          "hasModel": true
+                                        }
+                                      ]
                                     },
                                     {
                                       "name": "scale.n.07",
@@ -3417,6 +3415,10 @@
                                           "children": [
                                             {
                                               "name": "caldron.n.01",
+                                              "hasModel": true
+                                            },
+                                            {
+                                              "name": "copper_pot.n.01",
                                               "hasModel": true
                                             },
                                             {
@@ -11368,20 +11370,6 @@
                       ]
                     },
                     {
-                      "name": "conductor.n.02",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "copper.n.01",
-                          "hasModel": true
-                        },
-                        {
-                          "name": "silver.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    },
-                    {
                       "name": "fiber.n.01",
                       "hasModel": true,
                       "children": [
@@ -11614,6 +11602,16 @@
                       ]
                     },
                     {
+                      "name": "conductor.n.02",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "silver.n.01",
+                          "hasModel": true
+                        }
+                      ]
+                    },
+                    {
                       "name": "sorbent.n.01",
                       "hasModel": true,
                       "children": [
@@ -11657,10 +11655,6 @@
                       "children": [
                         {
                           "name": "aluminum.n.01",
-                          "hasModel": true
-                        },
-                        {
-                          "name": "copper.n.01",
                           "hasModel": true
                         },
                         {
@@ -17602,20 +17596,6 @@
                           ]
                         },
                         {
-                          "name": "conductor.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "copper.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "silver.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
                           "name": "fiber.n.01",
                           "hasModel": true,
                           "children": [
@@ -17848,6 +17828,16 @@
                           ]
                         },
                         {
+                          "name": "conductor.n.02",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "silver.n.01",
+                              "hasModel": true
+                            }
+                          ]
+                        },
+                        {
                           "name": "sorbent.n.01",
                           "hasModel": true,
                           "children": [
@@ -17891,10 +17881,6 @@
                           "children": [
                             {
                               "name": "aluminum.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "copper.n.01",
                               "hasModel": true
                             },
                             {
@@ -19072,16 +19058,6 @@
                           "hasModel": true
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "name": "practice.n.05",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "convention.n.02",
-                      "hasModel": true
                     }
                   ]
                 },

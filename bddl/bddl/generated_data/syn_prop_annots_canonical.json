@@ -10903,22 +10903,6 @@
         "heatable": {},
         "freezable": {}
     },
-    "convention.n.02": {
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
     "cooked__black_bean.n.01": {
         "flammable": {},
         "physicalSubstance": {},
@@ -11648,7 +11632,7 @@
         "heatable": {},
         "freezable": {}
     },
-    "copper_wire.n.01": {
+    "copper_pot.n.01": {
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -11664,9 +11648,7 @@
         "heatable": {},
         "freezable": {}
     },
-    "copper.n.01": {
-        "nonSubstance": {},
-        "nonDeformable": {},
+    "copper_wire.n.01": {
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -15553,22 +15535,6 @@
         "freezable": {}
     },
     "footstool.n.01": {
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
-    "foot_rule.n.01": {
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -28342,6 +28308,22 @@
         "nonSubstance": {},
         "nonDeformable": {},
         "particleRemover": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "rule.n.12": {
         "wetable": {},
         "mixable": {},
         "stickyable": {},
