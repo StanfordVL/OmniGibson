@@ -7,7 +7,7 @@
         flour.n.01_1 - flour.n.01
         salt.n.02_1 - salt.n.02
         food_processor.n.01_1 - food_processor.n.01
-        pastry_dough.n.01_1 - pastry_dough.n.01
+        pastry.n.01_1 - pastry.n.01
         butter__package.n.01_1 - butter__package.n.01
         flour__sack.n.01_1 - flour__sack.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
@@ -35,14 +35,14 @@
         (inroom countertop.n.01_1 kitchen) 
         (inroom countertop.n.01_2 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
-        (future pastry_dough.n.01_1) 
+        (future pastry.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?pastry_dough.n.01_1)
+            (real ?pastry.n.01_1)
         )
     )
 )
