@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        fence.n.01_1 - fence.n.01
+        rail_fence.n.01_1 - rail_fence.n.01
         floor.n.01_1 - floor.n.01
         carton.n.02_1 - carton.n.02
         wall.n.01_1 - wall.n.01
@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (ontop fence.n.01_1 floor.n.01_1) 
+        (ontop rail_fence.n.01_1 floor.n.01_1) 
         (ontop carton.n.02_1 floor.n.01_1) 
         (inside fairy_light.n.01_1 carton.n.02_1) 
         (inside fairy_light.n.01_2 carton.n.02_1) 

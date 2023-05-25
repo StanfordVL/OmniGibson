@@ -7,7 +7,7 @@
         lemon_juice.n.01_1 - lemon_juice.n.01
         vinegar_cleaning_solution.n.01_1 - vinegar_cleaning_solution.n.01
         tablespoon.n.02_1 - tablespoon.n.02
-        flask.n.01_1 - flask.n.01
+        erlenmeyer_flask.n.01_1 - erlenmeyer_flask.n.01
         vinegar__bottle.n.01_1 - vinegar__bottle.n.01
         countertop.n.01_1 - countertop.n.01
         sink.n.01_1 - sink.n.01
@@ -23,7 +23,7 @@
         (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1) 
         (ontop lemon_juice__bottle.n.01_1 countertop.n.01_1) 
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
-        (ontop flask.n.01_1 countertop.n.01_1) 
+        (ontop erlenmeyer_flask.n.01_1 countertop.n.01_1) 
         (ontop vinegar__bottle.n.01_1 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
@@ -35,7 +35,7 @@
     (:goal 
         (and 
             (real ?vinegar_cleaning_solution.n.01_1) 
-            (contains ?flask.n.01_1 ?vinegar_cleaning_solution.n.01_1)
+            (contains ?erlenmeyer_flask.n.01_1 ?vinegar_cleaning_solution.n.01_1)
         )
     )
 )

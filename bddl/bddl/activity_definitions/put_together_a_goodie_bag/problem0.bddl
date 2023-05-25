@@ -7,7 +7,7 @@
         candy.n.01_1 candy.n.01_2 - candy.n.01
         countertop.n.01_1 - countertop.n.01
         postcard.n.01_1 postcard.n.01_2 - postcard.n.01
-        chocolate_candy.n.01_1 chocolate_candy.n.01_2 - chocolate_candy.n.01
+        chocolate_kiss.n.01_1 chocolate_kiss.n.01_2 - chocolate_kiss.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         ribbon.n.01_1 ribbon.n.01_2 - ribbon.n.01
         oven.n.01_1 - oven.n.01
@@ -22,8 +22,8 @@
         (ontop candy.n.01_2 countertop.n.01_1) 
         (ontop postcard.n.01_1 countertop.n.01_1) 
         (ontop postcard.n.01_2 countertop.n.01_1) 
-        (inside chocolate_candy.n.01_1 electric_refrigerator.n.01_1) 
-        (inside chocolate_candy.n.01_2 electric_refrigerator.n.01_1) 
+        (inside chocolate_kiss.n.01_1 electric_refrigerator.n.01_1) 
+        (inside chocolate_kiss.n.01_2 electric_refrigerator.n.01_1) 
         (ontop ribbon.n.01_1 oven.n.01_1) 
         (ontop ribbon.n.01_2 oven.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -43,8 +43,8 @@
             ) 
             (forpairs 
                 (?sack.n.01 - sack.n.01) 
-                (?chocolate_candy.n.01 - chocolate_candy.n.01) 
-                (inside ?chocolate_candy.n.01 ?sack.n.01) 
+                (?chocolate_kiss.n.01 - chocolate_kiss.n.01) 
+                (inside ?chocolate_kiss.n.01 ?sack.n.01) 
             ) 
             (forpairs 
                 (?sack.n.01 - sack.n.01) 

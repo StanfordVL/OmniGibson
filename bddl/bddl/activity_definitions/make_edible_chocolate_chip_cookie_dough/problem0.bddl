@@ -18,7 +18,7 @@
         salt__shaker.n.01_1 - salt__shaker.n.01
         countertop.n.01_1 countertop.n.01_2 - countertop.n.01
         vanilla__bottle.n.01_1 - vanilla__bottle.n.01
-        chocolate_candy.n.01_1 - chocolate_candy.n.01
+        jimmies.n.01_1 - jimmies.n.01
         sack.n.01_1 - sack.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         oven.n.01_1 - oven.n.01
@@ -41,7 +41,7 @@
         (ontop salt__shaker.n.01_1 countertop.n.01_2)
         (filled vanilla__bottle.n.01_1 vanilla.n.02_1) 
         (inside vanilla__bottle.n.01_1 electric_refrigerator.n.01_1) 
-        (filled sack.n.01_1 chocolate_candy.n.01_1)
+        (filled sack.n.01_1 jimmies.n.01_1)
         (inside sack.n.01_1 cabinet.n.01_1)
         (ontop electric_mixer.n.01_1 countertop.n.01_2) 
         (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 

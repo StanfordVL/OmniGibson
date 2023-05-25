@@ -3,7 +3,7 @@
 
     (:objects
         champagne__bottle.n.01_1 - champagne__bottle.n.01
-        handcart.n.01_1 - handcart.n.01
+        serving_cart.n.01_1 - serving_cart.n.01
         lemonade__bottle.n.01_1 - lemonade__bottle.n.01
         goblet.n.01_1 goblet.n.01_2 goblet.n.01_3 - goblet.n.01
         diced__watermelon.n.01_1 - diced__watermelon.n.01
@@ -17,18 +17,18 @@
     )
     
     (:init 
-        (ontop champagne__bottle.n.01_1 handcart.n.01_1) 
-        (ontop lemonade__bottle.n.01_1 handcart.n.01_1) 
-        (ontop goblet.n.01_1 handcart.n.01_1) 
-        (ontop goblet.n.01_2 handcart.n.01_1) 
-        (ontop goblet.n.01_3 handcart.n.01_1) 
-        (ontop carving_knife.n.01_1 handcart.n.01_1)
+        (ontop champagne__bottle.n.01_1 serving_cart.n.01_1) 
+        (ontop lemonade__bottle.n.01_1 serving_cart.n.01_1) 
+        (ontop goblet.n.01_1 serving_cart.n.01_1) 
+        (ontop goblet.n.01_2 serving_cart.n.01_1) 
+        (ontop goblet.n.01_3 serving_cart.n.01_1) 
+        (ontop carving_knife.n.01_1 serving_cart.n.01_1)
         (filled tupperware.n.01_1 diced__watermelon.n.01_1) 
         (ontop tupperware.n.01_1 coffee_table.n.01_1)
         (ontop platter.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
-        (inroom handcart.n.01_1 garden) 
+        (inroom serving_cart.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

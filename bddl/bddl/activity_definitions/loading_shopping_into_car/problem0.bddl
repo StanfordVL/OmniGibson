@@ -4,7 +4,7 @@
     (:objects
         car.n.01_1 - car.n.01
         driveway.n.01_1 - driveway.n.01
-        fruit.n.01_1 fruit.n.01_2 fruit.n.01_3 - fruit.n.01
+        pineapple.n.02_1 pineapple.n.02_2 pineapple.n.02_3 - pineapple.n.02
         plastic_bag.n.01_1 plastic_bag.n.01_2 - plastic_bag.n.01
         chicken.n.01_1 - chicken.n.01
         wine_bottle.n.01_1 wine_bottle.n.01_2 - wine_bottle.n.01
@@ -16,9 +16,9 @@
     
     (:init 
         (ontop car.n.01_1 driveway.n.01_1) 
-        (inside fruit.n.01_1 plastic_bag.n.01_1) 
-        (inside fruit.n.01_2 plastic_bag.n.01_1) 
-        (inside fruit.n.01_3 plastic_bag.n.01_1) 
+        (inside pineapple.n.02_1 plastic_bag.n.01_1) 
+        (inside pineapple.n.02_2 plastic_bag.n.01_1) 
+        (inside pineapple.n.02_3 plastic_bag.n.01_1) 
         (inside egg.n.02_1 plastic_bag.n.01_2) 
         (inside jerky.n.01_1 plastic_bag.n.01_2) 
         (inside chicken.n.01_1 plastic_bag.n.01_2)

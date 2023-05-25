@@ -9,7 +9,7 @@
         coffee_table.n.01_1 - coffee_table.n.01
         cup.n.01_1 cup.n.01_2 cup.n.01_3 - cup.n.01
         sink.n.01_1 sink.n.01_2 - sink.n.01
-        bin.n.01_1 bin.n.01_2 - bin.n.01
+        recycling_bin.n.01_1 recycling_bin.n.01_2 - recycling_bin.n.01
         broom.n.01_1 - broom.n.01
         vacuum.n.04_1 - vacuum.n.04
         swab.n.02_1 - swab.n.02
@@ -35,12 +35,12 @@
         (ontop cup.n.01_1 coffee_table.n.01_1) 
         (inside cup.n.01_2 sink.n.01_1) 
         (ontop cup.n.01_3 floor.n.01_1) 
-        (ontop bin.n.01_1 floor.n.01_2) 
-        (ontop bin.n.01_2 floor.n.01_1) 
+        (ontop recycling_bin.n.01_1 floor.n.01_2) 
+        (ontop recycling_bin.n.01_2 floor.n.01_1) 
         (ontop beer_bottle.n.01_1 floor.n.01_3)
         (ontop beer_bottle.n.01_2 floor.n.01_3)
-        (open bin.n.01_1) 
-        (open bin.n.01_2) 
+        (open recycling_bin.n.01_1) 
+        (open recycling_bin.n.01_2) 
         (ontop broom.n.01_1 floor.n.01_2) 
         (ontop vacuum.n.04_1 floor.n.01_3) 
         (inside swab.n.02_1 cabinet.n.01_1) 
@@ -102,8 +102,8 @@
             (forall 
                 (?beer_bottle.n.01 - beer_bottle.n.01)
                 (exists 
-                    (?bin.n.01 - bin.n.01)
-                    (inside ?beer_bottle.n.01 ?bin.n.01)
+                    (?recycling_bin.n.01 - recycling_bin.n.01)
+                    (inside ?beer_bottle.n.01 ?recycling_bin.n.01)
                 )
             )
         )

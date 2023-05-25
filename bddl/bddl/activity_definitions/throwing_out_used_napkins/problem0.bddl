@@ -4,7 +4,7 @@
     (:objects
         napkin.n.01_1 napkin.n.01_2 - napkin.n.01
         floor.n.01_1 - floor.n.01
-        bin.n.01_1 - bin.n.01
+        ashcan.n.01_1 - ashcan.n.01
         stain.n.01_1 - stain.n.01
         cooking_oil.n.01_1 - cooking_oil.n.01
         countertop.n.01_1 - countertop.n.01
@@ -14,7 +14,7 @@
     (:init 
         (ontop napkin.n.01_1 countertop.n.01_1) 
         (ontop napkin.n.01_2 countertop.n.01_1) 
-        (ontop bin.n.01_1 floor.n.01_1) 
+        (ontop ashcan.n.01_1 floor.n.01_1) 
         (covered napkin.n.01_1 stain.n.01_1) 
         (covered napkin.n.01_2 stain.n.01_1)
         (covered napkin.n.01_2 cooking_oil.n.01_1)
@@ -25,8 +25,8 @@
     
     (:goal 
         (and 
-            (inside ?napkin.n.01_1 ?bin.n.01_1) 
-            (ontop ?bin.n.01_1 ?floor.n.01_1)
+            (inside ?napkin.n.01_1 ?ashcan.n.01_1) 
+            (ontop ?ashcan.n.01_1 ?floor.n.01_1)
         )
     )
 )

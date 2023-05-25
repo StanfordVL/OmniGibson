@@ -11,7 +11,7 @@
     	broom.n.01_1 - broom.n.01
     	rag.n.01_1 - rag.n.01
     	table.n.02_1 - table.n.02
-    	bin.n.01_1 - bin.n.01
+    	recycling_bin.n.01_1 - recycling_bin.n.01
     	sink.n.01_1 - sink.n.01
     	shelf.n.01_1 - shelf.n.01
     	agent.n.01_1 - agent.n.01
@@ -27,7 +27,7 @@
         (covered cabinet.n.01_1 dust.n.01_1) 
         (ontop broom.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 table.n.02_1) 
-        (ontop bin.n.01_1 floor.n.01_1) 
+        (ontop recycling_bin.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garage) 
         (inroom cabinet.n.01_1 garage) 
         (inroom sink.n.01_1 storage_room) 
@@ -51,7 +51,7 @@
             (forall 
                 (?newspaper.n.03 - newspaper.n.03) 
                 (or 
-                    (inside ?newspaper.n.03 ?bin.n.01_1) 
+                    (inside ?newspaper.n.03 ?recycling_bin.n.01_1) 
                     (not 
                         (ontop ?newspaper.n.03 ?floor.n.01_1)
                     )

@@ -9,7 +9,7 @@
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
         water.n.06_1 - water.n.06
         sponge.n.01_1 - sponge.n.01
-        tea.n.05_1 - tea.n.05
+        tea.n.01_1 - tea.n.01
         low-fat_milk.n.01_1 - low-fat_milk.n.01
         countertop.n.01_1 - countertop.n.01
         floor.n.01_1 - floor.n.01
@@ -24,8 +24,8 @@
         (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
         (ontop sponge.n.01_1 countertop.n.01_1)
         (covered mug.n.04_1 low-fat_milk.n.01_1)
-        (covered teacup.n.02_1 tea.n.05_1) 
-        (covered teacup.n.02_2 tea.n.05_1) 
+        (covered teacup.n.02_1 tea.n.01_1) 
+        (covered teacup.n.02_2 tea.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (ontop agent.n.01_1 floor.n.01_1)
         (inroom floor.n.01_1 kitchen) 
@@ -44,7 +44,7 @@
             (forall 
                 (?teacup.n.02 - teacup.n.02) 
                 (not 
-                    (covered ?teacup.n.02 ?tea.n.05_1)
+                    (covered ?teacup.n.02 ?tea.n.01_1)
                 )
             )
         )

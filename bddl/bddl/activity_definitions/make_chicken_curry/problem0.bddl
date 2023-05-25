@@ -4,7 +4,7 @@
     (:objects
         chicken_breast.n.02_1 chicken_breast.n.02_2 chicken_breast.n.02_3 chicken_breast.n.02_4 - chicken_breast.n.02
         cooking_oil.n.01_1 - cooking_oil.n.01
-        tomato.n.01_1 tomato.n.01_2 - tomato.n.01
+        beefsteak_tomato.n.01_1 beefsteak_tomato.n.01_2 - beefsteak_tomato.n.01
         vidalia_onion.n.01_1 - vidalia_onion.n.01
         curry_powder.n.01_1 - curry_powder.n.01
         chicken_curry.n.01_1 - chicken_curry.n.01
@@ -26,8 +26,8 @@
         (inside chicken_breast.n.02_2 electric_refrigerator.n.01_1) 
         (inside chicken_breast.n.02_3 electric_refrigerator.n.01_1) 
         (inside chicken_breast.n.02_4 electric_refrigerator.n.01_1) 
-        (inside tomato.n.01_1 electric_refrigerator.n.01_1) 
-        (inside tomato.n.01_2 electric_refrigerator.n.01_1) 
+        (inside beefsteak_tomato.n.01_1 electric_refrigerator.n.01_1) 
+        (inside beefsteak_tomato.n.01_2 electric_refrigerator.n.01_1) 
         (ontop vidalia_onion.n.01_1 countertop.n.01_1) 
         (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 

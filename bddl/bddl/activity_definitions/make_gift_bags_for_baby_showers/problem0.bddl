@@ -6,7 +6,6 @@
         floor.n.01_1 - floor.n.01
         doll.n.01_1 doll.n.01_2 doll.n.01_3 - doll.n.01
         shelf.n.01_1 - shelf.n.01
-        tissue.n.02_1 tissue.n.02_2 tissue.n.02_3 - tissue.n.02
         cabinet.n.01_1 - cabinet.n.01
         wafer.n.02_1 wafer.n.02_2 wafer.n.02_3 - wafer.n.02
         sack.n.01_1 sack.n.01_2 sack.n.01_3 - sack.n.01
@@ -18,9 +17,6 @@
         (inside doll.n.01_1 shelf.n.01_1) 
         (inside doll.n.01_2 shelf.n.01_1) 
         (inside doll.n.01_3 shelf.n.01_1) 
-        (inside tissue.n.02_1 cabinet.n.01_1) 
-        (inside tissue.n.02_2 cabinet.n.01_1) 
-        (inside tissue.n.02_3 cabinet.n.01_1) 
         (inside wafer.n.02_1 cabinet.n.01_1) 
         (inside wafer.n.02_2 cabinet.n.01_1) 
         (inside wafer.n.02_3 cabinet.n.01_1) 
@@ -49,11 +45,6 @@
                 (?sack.n.01 - sack.n.01) 
                 (inside ?wafer.n.02 ?sack.n.01)
             ) 
-            (forpairs 
-                (?tissue.n.02 - tissue.n.02) 
-                (?sack.n.01 - sack.n.01) 
-                (ontop ?tissue.n.02 ?sack.n.01)
-            )
         )
     )
 )

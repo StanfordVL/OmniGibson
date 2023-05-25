@@ -11,7 +11,7 @@
         watering_can.n.01_1 - watering_can.n.01
         detergent.n.02_1 - detergent.n.02
         detergent__bottle.n.01_1 - detergent__bottle.n.01
-        bin.n.01_1 - bin.n.01
+        ashcan.n.01_1 - ashcan.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -30,7 +30,7 @@
         (filled detergent__bottle.n.01_1 detergent.n.02_1)
         (ontop detergent__bottle.n.01_1 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1) 
-        (ontop bin.n.01_1 floor.n.01_1)
+        (ontop ashcan.n.01_1 floor.n.01_1)
         (inside feather.n.01_1 chicken_coop.n.01_1)
         (inside feather.n.01_2 chicken_coop.n.01_1)
         (inside feather.n.01_3 chicken_coop.n.01_1)
@@ -45,7 +45,7 @@
             ) 
             (forall 
                 (?feather.n.01 - feather.n.01)
-                (inside ?feather.n.01 ?bin.n.01_1)
+                (inside ?feather.n.01 ?ashcan.n.01_1)
             )
         )
     )

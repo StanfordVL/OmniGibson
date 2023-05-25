@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        bin.n.01_1 - bin.n.01
+        recycling_bin.n.01_1 - recycling_bin.n.01
         floor.n.01_1 - floor.n.01
         newspaper.n.03_1 - newspaper.n.03
         paper.n.01_1 paper.n.01_2 - paper.n.01
@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (ontop bin.n.01_1 floor.n.01_1) 
+        (ontop recycling_bin.n.01_1 floor.n.01_1) 
         (ontop newspaper.n.03_1 coffee_table.n.01_1) 
         (ontop wrapping_paper.n.01_1 floor.n.01_1)
         (ontop paper.n.01_1 coffee_table.n.01_1)
@@ -24,11 +24,11 @@
     
     (:goal 
         (and 
-            (inside ?newspaper.n.03_1 ?bin.n.01_1)
-            (inside ?wrapping_paper.n.01_1 ?bin.n.01_1)
+            (inside ?newspaper.n.03_1 ?recycling_bin.n.01_1)
+            (inside ?wrapping_paper.n.01_1 ?recycling_bin.n.01_1)
             (forall
                 (?paper.n.01 - paper.n.01)
-                (inside ?paper.n.01 ?bin.n.01_1)
+                (inside ?paper.n.01 ?recycling_bin.n.01_1)
             )
         )
     )

@@ -3,7 +3,7 @@
 
     (:objects
         bunchgrass.n.01_1 - bunchgrass.n.01
-        fence.n.01_1 - fence.n.01
+        rail_fence.n.01_1 - rail_fence.n.01
         dixie_cup.n.01_1 dixie_cup.n.01_2 dixie_cup.n.01_3 - dixie_cup.n.01
         tree.n.01_1 - tree.n.01
         bench.n.01_1 - bench.n.01
@@ -16,7 +16,7 @@
     )
     
     (:init 
-        (covered fence.n.01_1 bunchgrass.n.01_1) 
+        (covered rail_fence.n.01_1 bunchgrass.n.01_1) 
         (ontop leaf_blower.n.01_1 lawn.n.01_1) 
         (ontop rag.n.01_1 bench.n.01_1) 
         (ontop dixie_cup.n.01_1 bench.n.01_1)
@@ -26,7 +26,7 @@
         (inroom tree.n.01_1 garden) 
         (inroom lawn.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
-        (inroom fence.n.01_1 garden) 
+        (inroom rail_fence.n.01_1 garden) 
         (inroom bench.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -34,7 +34,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?fence.n.01_1 ?bunchgrass.n.01_1)
+                (covered ?rail_fence.n.01_1 ?bunchgrass.n.01_1)
             ) 
             (forall 
                 (?dixie_cup.n.01 - dixie_cup.n.01)

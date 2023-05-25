@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        vegetable.n.01_1 vegetable.n.01_2 vegetable.n.01_3 - vegetable.n.01
+        asparagus.n.02_1 asparagus.n.02_2 asparagus.n.02_3 - asparagus.n.02
         chopping_board.n.01_1 - chopping_board.n.01
         mason_jar.n.01_1 mason_jar.n.01_2 mason_jar.n.01_3 - mason_jar.n.01
         cabinet.n.01_1 - cabinet.n.01
@@ -14,9 +14,9 @@
     )
     
     (:init 
-        (ontop vegetable.n.01_1 chopping_board.n.01_1) 
-        (ontop vegetable.n.01_2 chopping_board.n.01_1) 
-        (ontop vegetable.n.01_3 chopping_board.n.01_1) 
+        (ontop asparagus.n.02_1 chopping_board.n.01_1) 
+        (ontop asparagus.n.02_2 chopping_board.n.01_1) 
+        (ontop asparagus.n.02_3 chopping_board.n.01_1) 
         (inside mason_jar.n.01_1 cabinet.n.01_1) 
         (inside mason_jar.n.01_2 cabinet.n.01_1) 
         (inside mason_jar.n.01_3 cabinet.n.01_1) 
@@ -34,9 +34,9 @@
     (:goal 
         (and 
             (forpairs 
-                (?vegetable.n.01 - vegetable.n.01)
+                (?asparagus.n.02 - asparagus.n.02)
                 (?mason_jar.n.01 - mason_jar.n.01)
-                (inside ?vegetable.n.01 ?mason_jar.n.01)
+                (inside ?asparagus.n.02 ?mason_jar.n.01)
             )
             (forpairs 
                 (?lid.n.02 - lid.n.02)
