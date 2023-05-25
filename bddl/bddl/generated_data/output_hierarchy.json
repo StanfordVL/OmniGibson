@@ -924,6 +924,10 @@
                                   ]
                                 },
                                 {
+                                  "name": "gunnysack.n.01",
+                                  "hasModel": true
+                                },
+                                {
                                   "name": "ice_pack.n.01",
                                   "hasModel": true
                                 },
@@ -1938,6 +1942,10 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "battery.n.02",
+                                  "hasModel": true
+                                },
+                                {
                                   "name": "circuit.n.01",
                                   "hasModel": true
                                 },
@@ -2346,16 +2354,6 @@
                                       ]
                                     },
                                     {
-                                      "name": "knot.n.02",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "bow.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "buckle.n.01",
                                       "hasModel": true
                                     },
@@ -2439,10 +2437,6 @@
                                 },
                                 {
                                   "name": "brake.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "brake.n.05",
                                   "hasModel": true
                                 },
                                 {
@@ -3606,6 +3600,32 @@
                               ]
                             },
                             {
+                              "name": "writing_implement.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "charcoal.n.02",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "crayon.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "marker.n.03",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "pen.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "pencil.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
                               "name": "bar.n.03",
                               "hasModel": true,
                               "children": [
@@ -3645,28 +3665,6 @@
                                 },
                                 {
                                   "name": "crossbar.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "writing_implement.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "crayon.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "marker.n.03",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "pen.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "pencil.n.01",
                                   "hasModel": true
                                 }
                               ]
@@ -9852,62 +9850,6 @@
                                       ]
                                     },
                                     {
-                                      "name": "vegetable.n.02",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "beet.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "beetroot.n.01",
-                                              "hasModel": true
-                                            },
-                                            {
-                                              "name": "diced__beetroot.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "name": "crucifer.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "bok_choy.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "cabbage.n.03",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "cauliflower.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "cooked__diced__cabbage.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "diced__cabbage.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "turnip_plant.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "turnip.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "legume.n.01",
                                       "hasModel": true,
                                       "children": [
@@ -9996,10 +9938,6 @@
                                           "hasModel": true
                                         }
                                       ]
-                                    },
-                                    {
-                                      "name": "chinese_gooseberry.n.01",
-                                      "hasModel": true
                                     },
                                     {
                                       "name": "climber.n.01",
@@ -10094,72 +10032,6 @@
                                   ]
                                 },
                                 {
-                                  "name": "woody_plant.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "shrub.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "capsicum.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "cayenne.n.01",
-                                              "hasModel": true
-                                            },
-                                            {
-                                              "name": "sweet_pepper.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "name": "cranberry.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "gooseberry.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "lavender.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "subshrub.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "pinwheel.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "name": "spurge.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "poinsettia.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "name": "rose.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "name": "tree.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                },
-                                {
                                   "name": "bulbous_plant.n.01",
                                   "hasModel": true,
                                   "children": [
@@ -10204,6 +10076,68 @@
                                           "hasModel": true
                                         }
                                       ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "woody_plant.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "shrub.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "cranberry.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "gooseberry.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "lavender.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "subshrub.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "pinwheel.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "spurge.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "poinsettia.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "rose.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "capsicum.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "sweet_pepper.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "tree.n.01",
+                                      "hasModel": true
                                     }
                                   ]
                                 },
@@ -10338,138 +10272,12 @@
                                   "hasModel": true,
                                   "children": [
                                     {
-                                      "name": "bivalve.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "clam.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "oyster.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "gastropod.n.01",
                                       "hasModel": true,
                                       "children": [
                                         {
                                           "name": "conch.n.01",
                                           "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "arthropod.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "crustacean.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "decapod_crustacean.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "lobster.n.02",
-                                              "hasModel": true
-                                            },
-                                            {
-                                              "name": "shrimp.n.03",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "young.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "young_mammal.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "lamb.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "chordate.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "vertebrate.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "aquatic_vertebrate.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "fish.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "food_fish.n.01",
-                                              "hasModel": true,
-                                              "children": [
-                                                {
-                                                  "name": "salmon.n.01",
-                                                  "hasModel": true
-                                                },
-                                                {
-                                                  "name": "trout.n.02",
-                                                  "hasModel": true
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "name": "bony_fish.n.01",
-                                              "hasModel": true,
-                                              "children": [
-                                                {
-                                                  "name": "teleost_fish.n.01",
-                                                  "hasModel": true,
-                                                  "children": [
-                                                    {
-                                                      "name": "soft-finned_fish.n.01",
-                                                      "hasModel": true,
-                                                      "children": [
-                                                        {
-                                                          "name": "salmonid.n.01",
-                                                          "hasModel": true,
-                                                          "children": [
-                                                            {
-                                                              "name": "salmon.n.01",
-                                                              "hasModel": true
-                                                            },
-                                                            {
-                                                              "name": "trout.n.02",
-                                                              "hasModel": true
-                                                            }
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
                                         }
                                       ]
                                     }
@@ -10968,13 +10776,13 @@
                                       ]
                                     },
                                     {
+                                      "name": "protein.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
                                       "name": "carbohydrate.n.01",
                                       "hasModel": true,
                                       "children": [
-                                        {
-                                          "name": "cane_sugar.n.01",
-                                          "hasModel": true
-                                        },
                                         {
                                           "name": "polysaccharide.n.01",
                                           "hasModel": true,
@@ -10992,10 +10800,6 @@
                                           ]
                                         }
                                       ]
-                                    },
-                                    {
-                                      "name": "protein.n.01",
-                                      "hasModel": true
                                     }
                                   ]
                                 },
@@ -13658,10 +13462,6 @@
                               "hasModel": true
                             },
                             {
-                              "name": "casserole.n.01",
-                              "hasModel": true
-                            },
-                            {
                               "name": "curry.n.01",
                               "hasModel": true,
                               "children": [
@@ -15392,6 +15192,10 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "diced__beet.n.01",
+                                  "hasModel": true
+                                },
+                                {
                                   "name": "diced__carrot.n.01",
                                   "hasModel": true
                                 },
@@ -15508,6 +15312,32 @@
                               "hasModel": true,
                               "children": [
                                 {
+                                  "name": "cabbage.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "bok_choy.n.02",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "cooked__diced__head_cabbage.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "diced__head_cabbage.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "head_cabbage.n.02",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "kale.n.03",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                },
+                                {
                                   "name": "broccoli_rabe.n.02",
                                   "hasModel": true
                                 },
@@ -15534,20 +15364,6 @@
                                 {
                                   "name": "diced__broccoli.n.01",
                                   "hasModel": true
-                                },
-                                {
-                                  "name": "cabbage.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "head_cabbage.n.02",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "kale.n.03",
-                                      "hasModel": true
-                                    }
-                                  ]
                                 },
                                 {
                                   "name": "mustard.n.03",
@@ -15908,6 +15724,10 @@
                           "hasModel": true
                         },
                         {
+                          "name": "lamb.n.05",
+                          "hasModel": true
+                        },
+                        {
                           "name": "pork.n.01",
                           "hasModel": true
                         },
@@ -16054,13 +15874,43 @@
                       ]
                     },
                     {
-                      "name": "coconut.n.01",
-                      "hasModel": true
-                    },
-                    {
                       "name": "seafood.n.01",
                       "hasModel": true,
                       "children": [
+                        {
+                          "name": "shellfish.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "clam.n.03",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "crab.n.05",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "crayfish.n.02",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "huitre.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "lobster.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "mussel.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "scallop.n.02",
+                              "hasModel": true
+                            }
+                          ]
+                        },
                         {
                           "name": "saltwater_fish.n.01",
                           "hasModel": true,
@@ -16094,33 +15944,11 @@
                           ]
                         },
                         {
-                          "name": "shellfish.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "crab.n.05",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "crayfish.n.02",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "lobster.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "mussel.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "scallop.n.02",
-                              "hasModel": true
-                            }
-                          ]
+                          "name": "octopus.n.01",
+                          "hasModel": true
                         },
                         {
-                          "name": "octopus.n.01",
+                          "name": "prawn.n.01",
                           "hasModel": true
                         },
                         {
@@ -16128,6 +15956,10 @@
                           "hasModel": true
                         }
                       ]
+                    },
+                    {
+                      "name": "coconut.n.01",
+                      "hasModel": true
                     },
                     {
                       "name": "pasta.n.02",
@@ -16206,12 +16038,22 @@
                       ]
                     },
                     {
-                      "name": "fish.n.02",
+                      "name": "leftovers.n.01",
                       "hasModel": true
                     },
                     {
-                      "name": "leftovers.n.01",
-                      "hasModel": true
+                      "name": "fish.n.02",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "salmon.n.03",
+                          "hasModel": true
+                        },
+                        {
+                          "name": "trout.n.01",
+                          "hasModel": true
+                        }
+                      ]
                     },
                     {
                       "name": "yogurt.n.01",
@@ -16458,13 +16300,13 @@
                           ]
                         },
                         {
+                          "name": "protein.n.01",
+                          "hasModel": true
+                        },
+                        {
                           "name": "carbohydrate.n.01",
                           "hasModel": true,
                           "children": [
-                            {
-                              "name": "cane_sugar.n.01",
-                              "hasModel": true
-                            },
                             {
                               "name": "polysaccharide.n.01",
                               "hasModel": true,
@@ -16482,10 +16324,6 @@
                               ]
                             }
                           ]
-                        },
-                        {
-                          "name": "protein.n.01",
-                          "hasModel": true
                         }
                       ]
                     }
@@ -17172,13 +17010,13 @@
                                           ]
                                         },
                                         {
+                                          "name": "protein.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
                                           "name": "carbohydrate.n.01",
                                           "hasModel": true,
                                           "children": [
-                                            {
-                                              "name": "cane_sugar.n.01",
-                                              "hasModel": true
-                                            },
                                             {
                                               "name": "polysaccharide.n.01",
                                               "hasModel": true,
@@ -17196,10 +17034,6 @@
                                               ]
                                             }
                                           ]
-                                        },
-                                        {
-                                          "name": "protein.n.01",
-                                          "hasModel": true
                                         }
                                       ]
                                     },
@@ -19112,46 +18946,6 @@
               ]
             },
             {
-              "name": "social_group.n.01",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "organization.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "unit.n.03",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "military_unit.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "army_unit.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "artillery.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "battery.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
               "name": "arrangement.n.02",
               "hasModel": true,
               "children": [
@@ -19166,22 +18960,6 @@
                     {
                       "name": "wreath.n.01",
                       "hasModel": true
-                    }
-                  ]
-                },
-                {
-                  "name": "ordering.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "series.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "chain.n.01",
-                          "hasModel": true
-                        }
-                      ]
                     }
                   ]
                 },
@@ -19637,10 +19415,6 @@
                   "name": "happening.n.01",
                   "hasModel": true,
                   "children": [
-                    {
-                      "name": "case.n.01",
-                      "hasModel": true
-                    },
                     {
                       "name": "sound.n.04",
                       "hasModel": true,
