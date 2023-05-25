@@ -1,0 +1,129 @@
+(define (problem make_a_louisiana_seafood_boil-0)
+    (:domain omnigibson)
+
+    (:objects
+     	stockpot.n.01_1 - stockpot.n.01
+    	stove.n.01_1 - stove.n.01
+    	water.n.06_1 - water.n.06
+    	prawn.n.01_1 - prawn.n.01
+    	bowl.n.01_1 - bowl.n.01
+    	crab.n.05_1 - crab.n.05
+    	crayfish.n.02_1 - crayfish.n.02
+    	lobster.n.01_1 - lobster.n.01
+    	sweet_corn.n.02_1 - sweet_corn.n.02
+    	countertop.n.01_1 - countertop.n.01
+    	clove.n.03_1 clove.n.03_2 clove.n.03_3 clove.n.03_4 clove.n.03_5 - clove.n.03
+    	salt.n.02_1 - salt.n.02
+        salt__shaker.n.01_1 - salt__shaker.n.01
+    	floor.n.01_1 - floor.n.01
+    	agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop stockpot.n.01_1 stove.n.01_1) 
+        (filled stockpot.n.01_1 water.n.06_1) 
+        (ontop prawn.n.01_1 bowl.n.01_1)
+        (ontop crab.n.05_1 bowl.n.01_1) 
+        (ontop crayfish.n.02_1 bowl.n.01_1) 
+        (ontop lobster.n.01_1 bowl.n.01_1) 
+        (ontop sweet_corn.n.02_1 bowl.n.01_1) 
+        (ontop bowl.n.01_1 countertop.n.01_1) 
+        (ontop clove.n.03_1 countertop.n.01_1)
+        (ontop clove.n.03_2 countertop.n.01_1)
+        (ontop clove.n.03_3 countertop.n.01_1)
+        (ontop clove.n.03_4 countertop.n.01_1)
+        (ontop clove.n.03_5 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (not 
+            (hot stockpot.n.01_1)
+        ) 
+        (not 
+            (cooked prawn.n.01_1)
+        ) 
+        (not 
+            (cooked crab.n.05_1)
+        ) 
+        (not 
+            (cooked crayfish.n.02_1)
+        ) 
+        (not 
+            (cooked lobster.n.01_1)
+        ) 
+        (not 
+            (cooked sweet_corn.n.02_1)
+        ) 
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom stove.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?stockpot.n.01 - stockpot.n.01) 
+                (ontop ?stockpot.n.01 ?stove.n.01_1)
+            ) 
+            (forall 
+                (?water.n.06 - water.n.06) 
+                (filled ?stockpot.n.01_1 ?water.n.06)
+            ) 
+            (forall 
+                (?prawn.n.01 - prawn.n.01)
+                (ontop ?prawn.n.01 ?stockpot.n.01_1)
+            ) 
+            (forall 
+                (?crab.n.05 - crab.n.05) 
+                (ontop ?crab.n.05 ?stockpot.n.01_1)
+            ) 
+            (forall 
+                (?crayfish.n.02 - crayfish.n.02) 
+                (ontop ?crayfish.n.02 ?stockpot.n.01_1)
+            ) 
+            (forall 
+                (?lobster.n.01 - lobster.n.01) 
+                (ontop ?lobster.n.01 ?stockpot.n.01_1)
+            ) 
+            (forall 
+                (?sweet_corn.n.02 - sweet_corn.n.02) 
+                (ontop ?sweet_corn.n.02 ?stockpot.n.01_1)
+            ) 
+            (forall 
+                (?bowl.n.01 - bowl.n.01) 
+                (ontop ?bowl.n.01 ?countertop.n.01_1)
+            ) 
+            (forall 
+                (?clove.n.03 - clove.n.03) 
+                (ontop ?clove.n.03 ?stockpot.n.01_1)
+            ) 
+            (forall 
+                (?salt.n.02 - salt.n.02) 
+                (covered ?stockpot.n.01_1 ?salt.n.02)
+            ) 
+            (forall 
+                (?stockpot.n.01 - stockpot.n.01) 
+                (hot ?stockpot.n.01)
+            ) 
+            (forall 
+                (?prawn.n.01 - prawn.n.01)
+                (cooked ?prawn.n.01)
+            ) 
+            (forall 
+                (?crab.n.05 - crab.n.05) 
+                (cooked ?crab.n.05)
+            ) 
+            (forall 
+                (?crayfish.n.02 - crayfish.n.02) 
+                (cooked ?crayfish.n.02)
+            ) 
+            (forall 
+                (?lobster.n.01 - lobster.n.01) 
+                (cooked ?lobster.n.01)
+            ) 
+            (forall 
+                (?sweet_corn.n.02 - sweet_corn.n.02) 
+                (cooked ?sweet_corn.n.02_1)
+            )
+        )
+    )
+)

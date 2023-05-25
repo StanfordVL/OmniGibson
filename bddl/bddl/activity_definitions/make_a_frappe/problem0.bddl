@@ -4,7 +4,7 @@
     (:objects
         water.n.06_1 - water.n.06
         instant_coffee.n.01_1 - instant_coffee.n.01
-        cane_sugar.n.01_1 - cane_sugar.n.01
+        cane_sugar.n.02_1 - cane_sugar.n.02
         ice_cube.n.01_1 ice_cube.n.01_2 ice_cube.n.01_3 ice_cube.n.01_4 - ice_cube.n.01
         milkshake.n.01_1 - milkshake.n.01
         blender.n.01_1 - blender.n.01
@@ -27,7 +27,7 @@
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (filled instant_coffee__jar.n.01_1 instant_coffee.n.01_1) 
         (ontop instant_coffee__jar.n.01_1 countertop.n.01_1) 
-        (filled sugar__sack.n.01_1 cane_sugar.n.01_1) 
+        (filled sugar__sack.n.01_1 cane_sugar.n.02_1)
         (ontop sugar__sack.n.01_1 countertop.n.01_1) 
         (inside ice_cube.n.01_1 bowl.n.01_1) 
         (inside ice_cube.n.01_2 bowl.n.01_1) 

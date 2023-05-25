@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        cabbage.n.03_1 - cabbage.n.03
+        head_cabbage.n.02_1 - head_cabbage.n.02
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         wicker_basket.n.01_1 - wicker_basket.n.01
         floor.n.01_1 - floor.n.01
@@ -14,10 +14,10 @@
     )
     
     (:init 
-        (inside cabbage.n.03_1 electric_refrigerator.n.01_1) 
+        (inside head_cabbage.n.02_1 electric_refrigerator.n.01_1)
         (ontop wicker_basket.n.01_1 floor.n.01_1) 
         (inside paper_towel.n.01_1 wicker_basket.n.01_1) 
-        (covered cabbage.n.03_1 dirt.n.02_1) 
+        (covered head_cabbage.n.02_1 dirt.n.02_1)
         (insource sink.n.01_1 water.n.06_1)
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -28,7 +28,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?cabbage.n.03_1 ?dirt.n.02_1)
+                (covered ?head_cabbage.n.02_1 ?dirt.n.02_1)
             )
         )
     )

@@ -6,7 +6,7 @@
         sink.n.01_1 - sink.n.01
         dirt.n.02_1 - dirt.n.02
         sand.n.04_1 - sand.n.04
-        oyster.n.01_1 oyster.n.01_2 oyster.n.01_3 oyster.n.01_4 oyster.n.01_5 oyster.n.01_6 - oyster.n.01
+        huitre.n.01_1 huitre.n.01_2 huitre.n.01_3 huitre.n.01_4 huitre.n.01_5 huitre.n.01_6 - huitre.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         countertop.n.01_1 - countertop.n.01
         tupperware.n.01_1 - tupperware.n.01
@@ -18,24 +18,24 @@
     
     (:init 
         (ontop bowl.n.01_1 countertop.n.01_1) 
-        (covered oyster.n.01_1 dirt.n.02_1) 
-        (covered oyster.n.01_2 dirt.n.02_1) 
-        (covered oyster.n.01_3 dirt.n.02_1) 
-        (covered oyster.n.01_4 dirt.n.02_1) 
-        (covered oyster.n.01_5 dirt.n.02_1) 
-        (covered oyster.n.01_6 dirt.n.02_1) 
-        (covered oyster.n.01_1 sand.n.04_1)
-        (covered oyster.n.01_2 sand.n.04_1)
-        (covered oyster.n.01_3 sand.n.04_1)
-        (covered oyster.n.01_4 sand.n.04_1)
-        (covered oyster.n.01_5 sand.n.04_1)
-        (covered oyster.n.01_6 sand.n.04_1)
-        (inside oyster.n.01_1 tupperware.n.01_1) 
-        (inside oyster.n.01_2 tupperware.n.01_1) 
-        (inside oyster.n.01_3 tupperware.n.01_1) 
-        (inside oyster.n.01_4 tupperware.n.01_1) 
-        (inside oyster.n.01_5 tupperware.n.01_1) 
-        (inside oyster.n.01_6 tupperware.n.01_1) 
+        (covered huitre.n.01_1 dirt.n.02_1)
+        (covered huitre.n.01_2 dirt.n.02_1)
+        (covered huitre.n.01_3 dirt.n.02_1)
+        (covered huitre.n.01_4 dirt.n.02_1)
+        (covered huitre.n.01_5 dirt.n.02_1)
+        (covered huitre.n.01_6 dirt.n.02_1)
+        (covered huitre.n.01_1 sand.n.04_1)
+        (covered huitre.n.01_2 sand.n.04_1)
+        (covered huitre.n.01_3 sand.n.04_1)
+        (covered huitre.n.01_4 sand.n.04_1)
+        (covered huitre.n.01_5 sand.n.04_1)
+        (covered huitre.n.01_6 sand.n.04_1)
+        (inside huitre.n.01_1 tupperware.n.01_1)
+        (inside huitre.n.01_2 tupperware.n.01_1)
+        (inside huitre.n.01_3 tupperware.n.01_1)
+        (inside huitre.n.01_4 tupperware.n.01_1)
+        (inside huitre.n.01_5 tupperware.n.01_1)
+        (inside huitre.n.01_6 tupperware.n.01_1)
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
         (ontop rag.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
@@ -49,15 +49,15 @@
     (:goal 
         (and 
             (forall 
-                (?oyster.n.01 - oyster.n.01) 
+                (?huitre.n.01 - huitre.n.01)
                 (and
                     (not 
-                        (covered ?oyster.n.01 ?dirt.n.02_1)
+                        (covered ?huitre.n.01 ?dirt.n.02_1)
                     )
                     (not 
-                        (covered ?oyster.n.01 ?sand.n.04_1)
+                        (covered ?huitre.n.01 ?sand.n.04_1)
                     )
-                    (inside ?oyster.n.01 ?tupperware.n.01_1)
+                    (inside ?huitre.n.01 ?tupperware.n.01_1)
                 )
             ) 
             (inside ?tupperware.n.01_1 ?electric_refrigerator.n.01_1)

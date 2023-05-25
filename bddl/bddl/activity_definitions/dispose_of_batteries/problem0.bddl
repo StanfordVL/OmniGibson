@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        battery.n.01_1 battery.n.01_2 - battery.n.01
+        battery.n.02_1 battery.n.02_2 - battery.n.02
         cabinet.n.01_1 - cabinet.n.01
         ashcan.n.01_1 - ashcan.n.01
         razor.n.01_1 - razor.n.01
@@ -12,9 +12,9 @@
     )
     
     (:init 
-        (ontop battery.n.01_1 floor.n.01_1)
+        (ontop battery.n.02_1 floor.n.01_1)
         (inside hand_blower.n.01_1 cabinet.n.01_1)
-        (ontop battery.n.01_2 floor.n.01_1)
+        (ontop battery.n.02_2 floor.n.01_1)
         (ontop razor.n.01_1 cabinet.n.01_1)
         (inside ashcan.n.01_1 floor.n.01_1) 
         (inroom cabinet.n.01_1 bedroom) 
@@ -25,8 +25,8 @@
     (:goal 
         (and 
             (forall 
-                (?battery.n.01 - battery.n.01) 
-                (inside ?battery.n.01 ?ashcan.n.01_1)
+                (?battery.n.02 - battery.n.02)
+                (inside ?battery.n.02 ?ashcan.n.01_1)
             )
         )
     )
