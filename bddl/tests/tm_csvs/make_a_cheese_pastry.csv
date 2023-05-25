@@ -1,0 +1,39 @@
+STEP 1,Unnamed: 1
+input-objects,
+raw_egg.n.01_1,
+cane_sugar.n.01_1,
+lemon_juice.n.01_1,
+vanilla.n.02_1,
+cream_cheese.n.01_1,
+salt.n.02_1,
+output-objects,
+cheese_pastry_filling.n.01_1,
+tool,
+electric_mixer.n.01_1,
+container,
+mixing_bowl.n.01_1,contains
+STEP 2,
+input-objects,
+water.n.06_1,
+butter.n.01_1,
+flour.n.01_1,
+salt.n.02_1,
+output-objects,
+pastry_dough.n.01_1,
+tool,
+food_processor.n.01_1,
+STEP 3,
+input-objects,
+pastry_dough.n.01_1,not cooked
+cheese_pastry_filling.n.01_1,
+output-objects,
+cheese_pastry.n.01_1,cooked
+cheese_pastry.n.01_2,cooked
+cheese_pastry.n.01_3,cooked
+cheese_pastry.n.01_4,cooked
+cheese_pastry.n.01_5,cooked
+cheese_pastry.n.01_6,cooked
+tool,
+oven.n.01_1,
+container,
+cookie_sheet.n.01_1,ontop
