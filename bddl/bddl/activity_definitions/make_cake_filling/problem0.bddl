@@ -8,7 +8,7 @@
         lemon_juice.n.01_1 - lemon_juice.n.01
         water.n.06_1 - water.n.06
         cherry_filling.n.01_1 - cherry_filling.n.01
-        mixer.n.04_1 - mixer.n.04
+        electric_mixer.n.01_1 - electric_mixer.n.01
         mixing_bowl.n.01_1 - mixing_bowl.n.01
         sugar__sack.n.01_1 - sugar__sack.n.01
         cornstarch__jar.n.01_1 - cornstarch__jar.n.01
@@ -47,7 +47,7 @@
         (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1) 
         (ontop lemon_juice__bottle.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
-        (ontop mixer.n.04_1 countertop.n.01_2) 
+        (ontop electric_mixer.n.01_1 countertop.n.01_2) 
         (ontop mixing_bowl.n.01_1 countertop.n.01_2) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 

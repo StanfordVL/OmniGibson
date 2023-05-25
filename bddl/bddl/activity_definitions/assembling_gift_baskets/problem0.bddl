@@ -1,22 +1,22 @@
 (define (problem assembling_gift_baskets-0)
-    (:domain igibson)
+    (:domain omnigibson)
 
     (:objects
-     	basket.n.01_1 basket.n.01_2 basket.n.01_3 basket.n.01_4 - basket.n.01
+     	wicker_basket.n.01_1 wicker_basket.n.01_2 wicker_basket.n.01_3 wicker_basket.n.01_4 - wicker_basket.n.01
     	floor.n.01_1 - floor.n.01
     	candle.n.01_1 candle.n.01_2 candle.n.01_3 candle.n.01_4 - candle.n.01
     	cookie.n.01_1 cookie.n.01_2 cookie.n.01_3 cookie.n.01_4 - cookie.n.01
-    	cheese.n.01_1 cheese.n.01_2 cheese.n.01_3 cheese.n.01_4 - cheese.n.01
+    	parmesan.n.01_1 parmesan.n.01_2 parmesan.n.01_3 parmesan.n.01_4 - parmesan.n.01
     	bow.n.08_1 bow.n.08_2 bow.n.08_3 bow.n.08_4 - bow.n.08
         table.n.02_1 table.n.02_2 - table.n.02
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop basket.n.01_1 floor.n.01_1) 
-        (ontop basket.n.01_2 floor.n.01_1) 
-        (ontop basket.n.01_3 floor.n.01_1) 
-        (ontop basket.n.01_4 floor.n.01_1) 
+        (ontop wicker_basket.n.01_1 floor.n.01_1) 
+        (ontop wicker_basket.n.01_2 floor.n.01_1) 
+        (ontop wicker_basket.n.01_3 floor.n.01_1) 
+        (ontop wicker_basket.n.01_4 floor.n.01_1) 
         (ontop candle.n.01_1 table.n.02_1) 
         (ontop candle.n.01_2 table.n.02_1) 
         (ontop candle.n.01_3 table.n.02_1) 
@@ -25,10 +25,10 @@
         (ontop cookie.n.01_2 table.n.02_1) 
         (ontop cookie.n.01_3 table.n.02_1) 
         (ontop cookie.n.01_4 table.n.02_1) 
-        (ontop cheese.n.01_1 table.n.02_2) 
-        (ontop cheese.n.01_2 table.n.02_2) 
-        (ontop cheese.n.01_3 table.n.02_2) 
-        (ontop cheese.n.01_4 table.n.02_2) 
+        (ontop parmesan.n.01_1 table.n.02_2) 
+        (ontop parmesan.n.01_2 table.n.02_2) 
+        (ontop parmesan.n.01_3 table.n.02_2) 
+        (ontop parmesan.n.01_4 table.n.02_2) 
         (ontop bow.n.08_1 table.n.02_2) 
         (ontop bow.n.08_2 table.n.02_2) 
         (ontop bow.n.08_3 table.n.02_2) 
@@ -42,24 +42,24 @@
     (:goal 
         (and 
             (forpairs 
-                (?basket.n.01 - basket.n.01) 
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (?candle.n.01 - candle.n.01) 
-                (inside ?candle.n.01 ?basket.n.01)
+                (inside ?candle.n.01 ?wicker_basket.n.01)
             ) 
             (forpairs 
-                (?basket.n.01 - basket.n.01) 
-                (?cheese.n.01 - cheese.n.01) 
-                (inside ?cheese.n.01 ?basket.n.01)
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
+                (?parmesan.n.01 - parmesan.n.01) 
+                (inside ?parmesan.n.01 ?wicker_basket.n.01)
             ) 
             (forpairs 
-                (?basket.n.01 - basket.n.01) 
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (?cookie.n.01 - cookie.n.01) 
-                (inside ?cookie.n.01 ?basket.n.01)
+                (inside ?cookie.n.01 ?wicker_basket.n.01)
             ) 
             (forpairs 
-                (?basket.n.01 - basket.n.01) 
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (?bow.n.08 - bow.n.08) 
-                (inside ?bow.n.08 ?basket.n.01)
+                (inside ?bow.n.08 ?wicker_basket.n.01)
             )
         )
     )

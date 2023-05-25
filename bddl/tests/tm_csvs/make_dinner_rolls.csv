@@ -1,0 +1,26 @@
+STEP 1,Unnamed: 1,Unnamed: 2
+input-objects,,
+flour.n.01_1,,
+yeast.n.01_1,,
+salt.n.02_1,,
+granulated_sugar.n.01_1,,
+butter.n.01_1,,
+whole_milk.n.01_1,,
+output-objects,,
+dough.n.01_1,not cooked,
+tool,,
+electric_mixer.n.01_1,,
+container,,
+mixing_bowl.n.01_1,inside,
+STEP 2,,
+input-objects,,
+dough.n.01_1,not cooked,
+output-objects,,
+bap.n.01_1,cooked
+bap.n.01_2,cooked
+bap.n.01_3,cooked
+bap.n.01_4,cooked
+tool,,
+oven.n.01_1,,
+container,,
+cookie_sheet.n.01_1,ontop,

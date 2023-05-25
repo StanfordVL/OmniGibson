@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        fence.n.01_1 - fence.n.01
+        rail_fence.n.01_1 - rail_fence.n.01
         lawn.n.01_1 - lawn.n.01
         motorcycle.n.01_1 - motorcycle.n.01
         driveway.n.01_1 - driveway.n.01
@@ -21,7 +21,7 @@
     )
     
     (:init 
-        (ontop fence.n.01_1 lawn.n.01_1) 
+        (ontop rail_fence.n.01_1 lawn.n.01_1) 
         (ontop motorcycle.n.01_1 driveway.n.01_1) 
         (covered motorcycle.n.01_1 bunchgrass.n.01_1) 
         (covered motorcycle.n.01_1 mud.n.03_1)

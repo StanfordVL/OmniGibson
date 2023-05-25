@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        fence.n.01_1 - fence.n.01
+        rail_fence.n.01_1 - rail_fence.n.01
         lawn.n.01_1 - lawn.n.01
         artichoke.n.02_1 - artichoke.n.02
         chard.n.02_1 - chard.n.02
@@ -13,7 +13,7 @@
     )
     
     (:init 
-        (ontop fence.n.01_1 lawn.n.01_1) 
+        (ontop rail_fence.n.01_1 lawn.n.01_1) 
         (ontop artichoke.n.02_1 lawn.n.01_1)
         (ontop chard.n.02_1 lawn.n.01_1)
         (ontop beetroot.n.01_1 lawn.n.01_1) 

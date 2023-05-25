@@ -1,0 +1,38 @@
+STEP 1,Unnamed: 1
+input-objects,
+butter.n.01_1,
+output-objects,
+melted__butter.n.01_1,
+tool,
+microwave.n.02_1,
+container,
+bowl.n.01_1,contains
+STEP 2,
+input-objects,
+raw_egg.n.01_1,
+raw_egg.n.01_2,
+melted__butter.n.01_1,
+vanilla.n.02_1,
+flour.n.01_1,
+baking_powder.n.01_1,
+salt.n.02_1,
+granulated_sugar.n.01_1,
+whole_milk.n.01_1,
+output-objects,
+waffle_batter.n.01_1,
+tool,
+electric_mixer.n.01_1,
+container,
+mixing_bowl.n.01_1,inside
+STEP 3,
+input-objects,
+waffle_batter.n.01_1,
+output-objects,
+waffle.n.01_1,cooked
+waffle.n.01_2,cooked
+waffle.n.01_3,cooked
+waffle.n.01_4,cooked
+tool,
+waffle_iron.n.01_1,toggled_on
+container,
+plate.n.04_1,ontop

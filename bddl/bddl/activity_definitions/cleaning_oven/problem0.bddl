@@ -1,9 +1,9 @@
 (define (problem cleaning_oven-0)
-    (:domain igibson)
+    (:domain omnigibson)
 
     (:objects
         stain.n.01_1 - stain.n.01
-     	receptacle.n.01_1 - receptacle.n.01
+     	dustpan.n.02_1 - dustpan.n.02
     	floor.n.01_1 - floor.n.01
     	bar_soap.n.01_1 - bar_soap.n.01
     	cabinet.n.01_1 - cabinet.n.01
@@ -16,7 +16,7 @@
     )
     
     (:init 
-        (ontop receptacle.n.01_1 floor.n.01_1) 
+        (ontop dustpan.n.02_1 floor.n.01_1) 
         (inside bar_soap.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
         (inside rag.n.01_2 cabinet.n.01_1) 

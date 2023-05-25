@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        fence.n.01_1 - fence.n.01
+        rail_fence.n.01_1 - rail_fence.n.01
         floor.n.01_1 - floor.n.01
         walnut.n.01_1 walnut.n.01_2 walnut.n.01_3 walnut.n.01_4 walnut.n.01_5 walnut.n.01_6 walnut.n.01_7 walnut.n.01_8 - walnut.n.01
         bucket.n.01_1 bucket.n.01_2 - bucket.n.01
@@ -11,7 +11,7 @@
     )
     
     (:init 
-        (ontop fence.n.01_1 floor.n.01_1) 
+        (ontop rail_fence.n.01_1 floor.n.01_1) 
         (ontop walnut.n.01_1 floor.n.01_1) 
         (ontop walnut.n.01_2 floor.n.01_1) 
         (ontop walnut.n.01_3 floor.n.01_1) 

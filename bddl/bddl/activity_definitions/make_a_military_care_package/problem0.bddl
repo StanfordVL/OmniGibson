@@ -10,7 +10,7 @@
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
         flashlight.n.01_1 - flashlight.n.01
         toothbrush.n.01_1 - toothbrush.n.01
-        medicine.n.02_1 - medicine.n.02
+        analgesic.n.01_1 - analgesic.n.01
         lotion__bottle.n.01_1 - lotion__bottle.n.01
         cookie.n.01_1 - cookie.n.01
         chocolate_box.n.01_1 - chocolate_box.n.01
@@ -26,7 +26,7 @@
         (ontop liquid_soap__bottle.n.01_1 coffee_table.n.01_1) 
         (ontop flashlight.n.01_1 coffee_table.n.01_1) 
         (ontop toothbrush.n.01_1 coffee_table.n.01_1) 
-        (ontop medicine.n.02_1 coffee_table.n.01_1) 
+        (ontop analgesic.n.01_1 coffee_table.n.01_1) 
         (ontop lotion__bottle.n.01_1 coffee_table.n.01_1) 
         (ontop cookie.n.01_1 coffee_table.n.01_1) 
         (ontop chocolate_box.n.01_1 coffee_table.n.01_1) 
@@ -43,7 +43,7 @@
             (inside ?liquid_soap__bottle.n.01_1 ?carton.n.02_1)
             (inside ?flashlight.n.01_1 ?carton.n.02_1)
             (inside ?toothbrush.n.01_1 ?carton.n.02_1)
-            (inside ?medicine.n.02_1 ?carton.n.02_1)
+            (inside ?analgesic.n.01_1 ?carton.n.02_1)
             (inside ?lotion__bottle.n.01_1 ?carton.n.02_1)
             (inside ?cookie.n.01_1 ?carton.n.02_1)
             (inside ?chocolate_box.n.01_1 ?carton.n.02_1)

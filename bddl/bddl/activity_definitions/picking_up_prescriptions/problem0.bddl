@@ -4,7 +4,7 @@
     (:objects
         floor.n.01_1 - floor.n.01
         pill_bottle.n.01_1 pill_bottle.n.01_2 - pill_bottle.n.01
-        medicine.n.02_1 medicine.n.02_2 - medicine.n.02
+        antihistamine.n.01_1 antihistamine.n.01_2 - antihistamine.n.01
         shelf.n.01_1 shelf.n.01_2 - shelf.n.01
         plastic_bag.n.01_1 - plastic_bag.n.01
         desk.n.01_1 - desk.n.01
@@ -17,8 +17,8 @@
     (:init 
         (inside pill_bottle.n.01_1 shelf.n.01_1) 
         (inside pill_bottle.n.01_2 shelf.n.01_1) 
-        (inside medicine.n.02_1 shelf.n.01_2) 
-        (inside medicine.n.02_2 shelf.n.01_2) 
+        (inside antihistamine.n.01_1 shelf.n.01_2) 
+        (inside antihistamine.n.01_2 shelf.n.01_2) 
         (ontop plastic_bag.n.01_1 desk.n.01_1) 
         (ontop printer.n.03_1 desk.n.01_1) 
         (ontop desktop_computer.n.01_1 desk.n.01_1) 
@@ -37,8 +37,8 @@
                 (inside ?pill_bottle.n.01 ?plastic_bag.n.01_1)
             )
             (forall
-                (?medicine.n.02 - medicine.n.02)
-                (inside ?medicine.n.02 ?plastic_bag.n.01_1)
+                (?antihistamine.n.01 - antihistamine.n.01)
+                (inside ?antihistamine.n.01 ?plastic_bag.n.01_1)
             )
         )
     )

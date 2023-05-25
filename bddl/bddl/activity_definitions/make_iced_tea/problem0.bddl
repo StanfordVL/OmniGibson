@@ -7,7 +7,7 @@
         kettle.n.01_1 - kettle.n.01
         mug.n.04_1 - mug.n.04
         ice_cube.n.01_1 ice_cube.n.01_2 - ice_cube.n.01
-        tea.n.05_1 - tea.n.05
+        tea.n.01_1 - tea.n.01
         water_glass.n.02_1 - water_glass.n.02
         countertop.n.01_1 - countertop.n.01
         cup.n.01_1 - cup.n.01
@@ -33,15 +33,15 @@
         (inroom cabinet.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
-        (future tea.n.05_1) 
+        (future tea.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?tea.n.05_1) 
-            (contains ?water_glass.n.02_1 ?tea.n.05_1) 
+            (real ?tea.n.01_1) 
+            (contains ?water_glass.n.02_1 ?tea.n.01_1) 
             (forall 
                 (?ice_cube.n.01 - ice_cube.n.01) 
                 (inside ?ice_cube.n.01 ?water_glass.n.02_1)

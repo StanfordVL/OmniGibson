@@ -5,7 +5,7 @@
         cement.n.01_1 - cement.n.01
         floor.n.01_1 - floor.n.01
         dirt.n.02_1 - dirt.n.02
-        fence.n.01_1 - fence.n.01
+        rail_fence.n.01_1 - rail_fence.n.01
         watering_can.n.01_1 - watering_can.n.01
         scrub_brush.n.01_1 - scrub_brush.n.01
         water.n.06_1 - water.n.06
@@ -17,7 +17,7 @@
     (:init 
         (ontop cement.n.01_1 floor.n.01_1)
         (covered cement.n.01_1 dirt.n.02_1)
-        (ontop fence.n.01_1 floor.n.01_1) 
+        (ontop rail_fence.n.01_1 floor.n.01_1) 
         (ontop watering_can.n.01_1 floor.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (insource watering_can.n.01_1 water.n.06_1) 
@@ -25,7 +25,7 @@
         (ontop detergent__bottle.n.01_1 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
-        (inroom fence.n.01_1 garden)
+        (inroom rail_fence.n.01_1 garden)
     )
     
     (:goal 

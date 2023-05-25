@@ -1,0 +1,25 @@
+STEP 1,Unnamed: 1
+input-objects,
+butter.n.01_1,
+output-objects,
+melted__butter.n.01_1,
+tool,
+microwave.n.02_1,toggled_on
+container,
+bowl.n.01_1,
+STEP 2,
+input-objects,
+flour.n.01_1,
+granulated_sugar.n.01_1,
+raw_egg.n.01_1,
+raw_egg.n.01_2,
+vanilla.n.02_1,
+butter.n.01_1,melted
+baking_powder.n.01_1,
+salt.n.02_1,
+output-objects,
+cookie_dough.n.01_1,not cooked
+tool,
+electric_mixer.n.01_1,
+container,
+mixing_bowl.n.01_1,inside

@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-     	hand_tool.n.01_1 - hand_tool.n.01
+     	screwdriver.n.01_1 - screwdriver.n.01
     	sink.n.01_1 - sink.n.01
     	mirror.n.01_1 - mirror.n.01
     	door.n.01_1 - door.n.01
@@ -13,9 +13,9 @@
     )
     
     (:init 
-        (attached hand_tool.n.01_1 sink.n.01_1) 
-        (attached hand_tool.n.01_1 mirror.n.01_1) 
-        (attached hand_tool.n.01_1 door.n.01_1) 
+        (attached screwdriver.n.01_1 sink.n.01_1) 
+        (attached screwdriver.n.01_1 mirror.n.01_1) 
+        (attached screwdriver.n.01_1 door.n.01_1) 
         (ontop screw.n.04_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 bathroom) 

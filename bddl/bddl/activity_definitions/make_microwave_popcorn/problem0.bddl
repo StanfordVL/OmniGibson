@@ -44,7 +44,7 @@
                 (real ?cooked__cooking_oil.n.01_1)
                 (real ?cooked__salt.n.01_1)
             )
-            (filled ?popcorn__bag.n.01_1 ?cooked__popcorn.n.01_1)
+            (contains ?popcorn__bag.n.01_1 ?cooked__popcorn.n.01_1)
             (or 
                 (contains ?popcorn__bag.n.01_1 ?cooked__cooking_oil.n.01_1)
                 (contains ?popcorn__bag.n.01_1 ?cooking_oil.n.01_1)

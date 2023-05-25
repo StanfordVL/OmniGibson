@@ -4,7 +4,7 @@
     (:objects
      	dirt.n.02_1 - dirt.n.02
     	pinecone.n.01_1 pinecone.n.01_2 pinecone.n.01_3 pinecone.n.01_4 pinecone.n.01_5 - pinecone.n.01
-        basket.n.01_1 - basket.n.01
+        wicker_basket.n.01_1 - wicker_basket.n.01
     	countertop.n.01_1 - countertop.n.01
     	rag.n.01_1 - rag.n.01
     	water.n.06_1 - water.n.06
@@ -19,12 +19,12 @@
         (covered pinecone.n.01_3 dirt.n.02_1) 
         (covered pinecone.n.01_4 dirt.n.02_1) 
         (covered pinecone.n.01_5 dirt.n.02_1) 
-        (inside pinecone.n.01_1 basket.n.01_1) 
-        (inside pinecone.n.01_2 basket.n.01_1) 
-        (inside pinecone.n.01_3 basket.n.01_1) 
-        (inside pinecone.n.01_4 basket.n.01_1) 
-        (inside pinecone.n.01_5 basket.n.01_1) 
-        (ontop basket.n.01_1 countertop.n.01_1)
+        (inside pinecone.n.01_1 wicker_basket.n.01_1) 
+        (inside pinecone.n.01_2 wicker_basket.n.01_1) 
+        (inside pinecone.n.01_3 wicker_basket.n.01_1) 
+        (inside pinecone.n.01_4 wicker_basket.n.01_1) 
+        (inside pinecone.n.01_5 wicker_basket.n.01_1) 
+        (ontop wicker_basket.n.01_1 countertop.n.01_1)
         (ontop rag.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1)
         (inroom sink.n.01_1 kitchen) 

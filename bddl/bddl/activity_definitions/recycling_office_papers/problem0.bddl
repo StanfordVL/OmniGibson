@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        bin.n.01_1 - bin.n.01
+        recycling_bin.n.01_1 - recycling_bin.n.01
         floor.n.01_1 - floor.n.01
         legal_document.n.01_1 legal_document.n.01_2 legal_document.n.01_3 - legal_document.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
@@ -10,7 +10,7 @@
     )
     
     (:init 
-        (ontop bin.n.01_1 floor.n.01_1) 
+        (ontop recycling_bin.n.01_1 floor.n.01_1) 
         (ontop legal_document.n.01_1 floor.n.01_1) 
         (ontop legal_document.n.01_2 floor.n.01_1)
         (ontop legal_document.n.01_3 breakfast_table.n.01_1)
@@ -23,7 +23,7 @@
         (and 
             (forall 
                 (?legal_document.n.01 - legal_document.n.01) 
-                (inside ?legal_document.n.01_1 ?bin.n.01_1)
+                (inside ?legal_document.n.01_1 ?recycling_bin.n.01_1)
             )
         )
     )

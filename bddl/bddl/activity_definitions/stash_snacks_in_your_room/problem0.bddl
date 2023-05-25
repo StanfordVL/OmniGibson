@@ -6,7 +6,7 @@
     	bed.n.01_1 - bed.n.01
     	candy.n.01_1 candy.n.01_2 - candy.n.01
     	jerky.n.01_1 jerky.n.01_2 - jerky.n.01
-    	chocolate_candy.n.01_1 - chocolate_candy.n.01
+    	chocolate_bar.n.01_1 - chocolate_bar.n.01
     	granola_bar.n.01_1 granola_bar.n.01_2 - granola_bar.n.01
         sack.n.01_1 - sack.n.01
     	chocolate_biscuit.n.01_1 chocolate_biscuit.n.01_2 - chocolate_biscuit.n.01
@@ -24,7 +24,7 @@
         (ontop candy.n.01_2 bed.n.01_1) 
         (ontop jerky.n.01_1 bed.n.01_1) 
         (ontop jerky.n.01_2 bed.n.01_1) 
-        (ontop chocolate_candy.n.01_1 bed.n.01_1) 
+        (ontop chocolate_bar.n.01_1 bed.n.01_1) 
         (ontop granola_bar.n.01_1 bed.n.01_1) 
         (ontop granola_bar.n.01_2 sack.n.01_1)
         (ontop chocolate_biscuit.n.01_1 sack.n.01_1)
@@ -53,8 +53,8 @@
                 (inside ?jerky.n.01 ?cabinet.n.01_1)
             ) 
             (forall 
-                (?chocolate_candy.n.01 - chocolate_candy.n.01) 
-                (ontop ?chocolate_candy.n.01 ?desk.n.01_1)
+                (?chocolate_bar.n.01 - chocolate_bar.n.01) 
+                (ontop ?chocolate_bar.n.01 ?desk.n.01_1)
             ) 
             (forall 
                 (?granola_bar.n.01 - granola_bar.n.01) 

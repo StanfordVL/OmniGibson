@@ -1,0 +1,31 @@
+STEP 1,Unnamed: 1
+input-objects,
+raspberry.n.02_1,
+raspberry.n.02_2,
+raspberry.n.02_3,
+raspberry.n.02_4,
+raspberry.n.02_5,
+raspberry.n.02_6,
+strawberry.n.01_1,
+strawberry.n.01_2,
+strawberry.n.01_3,
+strawberry.n.01_4,
+lemon_juice.n.01_1,
+yogurt.n.01_1,
+honey.n.01_1,
+output-objects,
+smoothie.n.01_1,
+tool,
+blender.n.01_1,
+STEP 2,
+input-objects,
+smoothie.n.01_1,
+output-objects,
+ice_lolly.n.01_1,frozen
+ice_lolly.n.01_2,frozen
+ice_lolly.n.01_3,frozen
+ice_lolly.n.01_4,frozen
+tool,
+deep-freeze.n.02_1,
+container,
+mold.n.02_1,inside
