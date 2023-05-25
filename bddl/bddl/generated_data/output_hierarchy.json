@@ -9622,6 +9622,16 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "bulb.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "daffodil_bulb.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                },
+                                {
                                   "name": "trunk.n.01",
                                   "hasModel": true
                                 }
@@ -10070,76 +10080,10 @@
                                       "hasModel": true,
                                       "children": [
                                         {
-                                          "name": "daffodil.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
                                           "name": "pottable__daffodil.n.01",
                                           "hasModel": true
                                         }
                                       ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "woody_plant.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "shrub.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "cranberry.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "gooseberry.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "lavender.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "subshrub.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "pinwheel.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "name": "spurge.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "poinsettia.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "name": "rose.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "capsicum.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "sweet_pepper.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "name": "tree.n.01",
-                                      "hasModel": true
                                     }
                                   ]
                                 },
@@ -10194,6 +10138,64 @@
                                 {
                                   "name": "evergreen.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "woody_plant.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "shrub.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "gooseberry.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "lavender.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "subshrub.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "pinwheel.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "spurge.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "poinsettia.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "rose.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "capsicum.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "sweet_pepper.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "tree.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
                                 },
                                 {
                                   "name": "weed.n.01",
@@ -10442,37 +10444,37 @@
               ]
             },
             {
-              "name": "location.n.01",
+              "name": "geological_formation.n.01",
               "hasModel": true,
               "children": [
                 {
-                  "name": "point.n.02",
+                  "name": "natural_depression.n.01",
                   "hasModel": true,
                   "children": [
                     {
-                      "name": "geographic_point.n.01",
+                      "name": "hole.n.05",
                       "hasModel": true,
                       "children": [
                         {
-                          "name": "workplace.n.01",
+                          "name": "pit.n.01",
                           "hasModel": true,
                           "children": [
                             {
-                              "name": "farm.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "dairy.n.01",
-                                  "hasModel": true
-                                }
-                              ]
+                              "name": "fire_pit.n.01",
+                              "hasModel": true
                             }
                           ]
                         }
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "name": "location.n.01",
+              "hasModel": true,
+              "children": [
                 {
                   "name": "region.n.01",
                   "hasModel": true,
@@ -10574,34 +10576,6 @@
                     {
                       "name": "path.n.04",
                       "hasModel": true
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "geological_formation.n.01",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "natural_depression.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "hole.n.05",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "pit.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "fire_pit.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
                     }
                   ]
                 }
@@ -19550,10 +19524,6 @@
                       "hasModel": true,
                       "children": [
                         {
-                          "name": "cup.n.03",
-                          "hasModel": true
-                        },
-                        {
                           "name": "depression.n.08",
                           "hasModel": true,
                           "children": [
@@ -19610,6 +19580,22 @@
                   "hasModel": true,
                   "children": [
                     {
+                      "name": "sanitary_condition.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "dirtiness.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "dirt.n.02",
+                              "hasModel": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
                       "name": "physical_condition.n.01",
                       "hasModel": true,
                       "children": [
@@ -19621,28 +19607,6 @@
                               "name": "ill_health.n.01",
                               "hasModel": true,
                               "children": [
-                                {
-                                  "name": "illness.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "disease.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "plant_disease.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "cotton_ball.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
                                 {
                                   "name": "affliction.n.02",
                                   "hasModel": true,
@@ -19660,22 +19624,6 @@
                                   ]
                                 }
                               ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "sanitary_condition.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "dirtiness.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "dirt.n.02",
-                              "hasModel": true
                             }
                           ]
                         }
