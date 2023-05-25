@@ -380,6 +380,13 @@ def agent_present(activity):
         raise AssertionError("Agent not present.")
 
 
+def problem_name_correct(activity, definition_id=0):
+    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, f'problem{definition_id}.bddl')
+    with open(defn_fn, "r") as f:
+        problem_name, *__ = parse_problem(activity, 0, "omnigibson", predefined_problem=f.read())
+    assert (problem_name == f"{activity}-{definition_id}") or (problem_name == f"{activity.lower()}-{definition_id}"), f"Wrong problem name '{problem_name}' for activity '{activity}'"
+
+
 # MAIN 
 
 def verify_definition(activity, csv=False):
@@ -393,6 +400,7 @@ def verify_definition(activity, csv=False):
     no_uncontrolled_category(activity)
     all_synsets_valid(activity)
     agent_present(activity)
+    problem_name_correct(activity)
     if csv:
         no_filled_in_tm_recipe_goal(activity)
         sync_csv(activity)
