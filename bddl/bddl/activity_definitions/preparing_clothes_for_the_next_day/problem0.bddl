@@ -3,7 +3,7 @@
 
     (:objects
         jersey.n.03_1 - jersey.n.03
-        coat.n.01_1 coat.n.01_2 - coat.n.01
+        coat.n.02_1 coat.n.02_2 - coat.n.02
         wardrobe.n.01_1 - wardrobe.n.01
         boot.n.01_1 boot.n.01_2 - boot.n.01
         jean.n.01_1 - jean.n.01
@@ -16,8 +16,8 @@
 
     (:init 
         (inside jersey.n.03_1 wardrobe.n.01_1) 
-        (inside coat.n.01_1 wardrobe.n.01_1) 
-        (inside coat.n.01_2 wardrobe.n.01_1) 
+        (inside coat.n.02_1 wardrobe.n.01_1)
+        (inside coat.n.02_2 wardrobe.n.01_1)
         (inside boot.n.01_1 cedar_chest.n.01_1) 
         (inside boot.n.01_2 cedar_chest.n.01_1) 
         (inside jean.n.01_1 cedar_chest.n.01_2) 
@@ -33,7 +33,7 @@
     
     (:goal 
         (and 
-            (ontop ?coat.n.01_1 ?bed.n.01_1) 
+            (ontop ?coat.n.02_1 ?bed.n.01_1)
             (ontop ?jersey.n.03_1 ?bed.n.01_1) 
             (forall 
                 (?boot.n.01 - boot.n.01)

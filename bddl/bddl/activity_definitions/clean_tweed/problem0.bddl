@@ -3,7 +3,7 @@
 
     (:objects
         stain.n.01_1 - stain.n.01
-        wool_coat.n.01_1 wool_coat.n.01_2 - wool_coat.n.01
+        wool_coat.n.02_1 wool_coat.n.02_2 - wool_coat.n.02
         bucket.n.01_1 bucket.n.01_2 - bucket.n.01
         water.n.06_1 - water.n.06
         shampoo.n.01_1 - shampoo.n.01
@@ -16,10 +16,10 @@
     )
     
     (:init 
-        (covered wool_coat.n.01_1 stain.n.01_1) 
-        (covered wool_coat.n.01_2 stain.n.01_1) 
-        (ontop wool_coat.n.01_1 countertop.n.01_1) 
-        (ontop wool_coat.n.01_2 countertop.n.01_1) 
+        (covered wool_coat.n.02_1 stain.n.01_1)
+        (covered wool_coat.n.02_2 stain.n.01_1)
+        (ontop wool_coat.n.02_1 countertop.n.01_1)
+        (ontop wool_coat.n.02_2 countertop.n.01_1)
         (ontop sponge.n.01_1 countertop.n.01_1)
         (filled shampoo__bottle.n.01_1 shampoo.n.01_1) 
         (ontop shampoo__bottle.n.01_1 countertop.n.01_1)
@@ -35,9 +35,9 @@
     (:goal 
         (and 
             (forall 
-                (?wool_coat.n.01 - wool_coat.n.01) 
+                (?wool_coat.n.02 - wool_coat.n.02)
                 (not 
-                    (covered ?wool_coat.n.01 ?stain.n.01_1)
+                    (covered ?wool_coat.n.02 ?stain.n.01_1)
                 )
             ) 
         )

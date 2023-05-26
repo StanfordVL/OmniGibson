@@ -13,7 +13,7 @@
     	countertop.n.01_1 - countertop.n.01
     	stove.n.01_1 - stove.n.01
     	door.n.01_1 - door.n.01
-    	chair.n.01_1 - chair.n.01
+    	chair.n.04_1 - chair.n.04
     	agent.n.01_1 - agent.n.01
     )
     
@@ -31,7 +31,7 @@
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom door.n.01_1 kitchen) 
         (inroom table.n.02_1 kitchen) 
-        (inroom chair.n.01_1 kitchen) 
+        (inroom chair.n.04_1 kitchen)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

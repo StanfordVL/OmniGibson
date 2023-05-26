@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        lawn_chair.n.01_1 lawn_chair.n.01_2 - lawn_chair.n.01
+        lawn_chair.n.04_1 lawn_chair.n.04_2 - lawn_chair.n.04
         floor.n.01_1 - floor.n.01
         barrow.n.03_1 - barrow.n.03
         lawn.n.01_1 - lawn.n.01
@@ -11,8 +11,8 @@
     )
     
     (:init 
-        (ontop lawn_chair.n.01_1 floor.n.01_1) 
-        (ontop lawn_chair.n.01_2 floor.n.01_1) 
+        (ontop lawn_chair.n.04_1 floor.n.01_1)
+        (ontop lawn_chair.n.04_2 floor.n.01_1)
         (ontop barrow.n.03_1 floor.n.01_1) 
         (inroom lawn.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
@@ -23,8 +23,8 @@
     (:goal 
         (and 
             (forall 
-                (?lawn_chair.n.01 - lawn_chair.n.01) 
-                (ontop ?lawn_chair.n.01 ?lawn.n.01_1)
+                (?lawn_chair.n.04 - lawn_chair.n.04)
+                (ontop ?lawn_chair.n.04 ?lawn.n.01_1)
             ) 
             (ontop ?barrow.n.03_1 ?lawn.n.01_1)
         )

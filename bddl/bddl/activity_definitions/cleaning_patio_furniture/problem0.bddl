@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        lawn_chair.n.01_1 lawn_chair.n.01_2 lawn_chair.n.01_3 lawn_chair.n.01_4 - lawn_chair.n.01
+        lawn_chair.n.04_1 lawn_chair.n.04_2 lawn_chair.n.04_3 lawn_chair.n.04_4 - lawn_chair.n.04
         floor.n.01_1 - floor.n.01
         coffee_table.n.01_1 - coffee_table.n.01
         bucket.n.01_1 - bucket.n.01
@@ -16,10 +16,10 @@
     )
     
     (:init 
-        (ontop lawn_chair.n.01_1 floor.n.01_1) 
-        (ontop lawn_chair.n.01_2 floor.n.01_1) 
-        (ontop lawn_chair.n.01_3 floor.n.01_1) 
-        (ontop lawn_chair.n.01_4 floor.n.01_1) 
+        (ontop lawn_chair.n.04_1 floor.n.01_1)
+        (ontop lawn_chair.n.04_2 floor.n.01_1)
+        (ontop lawn_chair.n.04_3 floor.n.01_1)
+        (ontop lawn_chair.n.04_4 floor.n.01_1)
         (ontop coffee_table.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 coffee_table.n.01_1) 
         (filled bucket.n.01_1 water.n.06_1) 
@@ -27,25 +27,25 @@
         (ontop liquid_soap__bottle.n.01_1 coffee_table.n.01_1)
         (inside rag.n.01_1 bucket.n.01_1) 
         (covered coffee_table.n.01_1 dirt.n.02_1) 
-        (covered lawn_chair.n.01_1 mildew.n.02_1) 
-        (covered lawn_chair.n.01_2 mildew.n.02_1) 
-        (covered lawn_chair.n.01_3 mildew.n.02_1) 
-        (covered lawn_chair.n.01_4 mildew.n.02_1) 
+        (covered lawn_chair.n.04_1 mildew.n.02_1)
+        (covered lawn_chair.n.04_2 mildew.n.02_1)
+        (covered lawn_chair.n.04_3 mildew.n.02_1)
+        (covered lawn_chair.n.04_4 mildew.n.02_1)
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom coffee_table.n.01_1 garden) 
-        (inroom lawn_chair.n.01_1 garden)
-        (inroom lawn_chair.n.01_1 garden)
-        (inroom lawn_chair.n.01_1 garden)
-        (inroom lawn_chair.n.01_1 garden)
+        (inroom lawn_chair.n.04_1 garden)
+        (inroom lawn_chair.n.04_1 garden)
+        (inroom lawn_chair.n.04_1 garden)
+        (inroom lawn_chair.n.04_1 garden)
     )
     
     (:goal 
         (and 
             (forall 
-                (?lawn_chair.n.01 - lawn_chair.n.01)
+                (?lawn_chair.n.04 - lawn_chair.n.04)
                 (not
-                    (covered ?lawn_chair.n.01 ?mildew.n.02_1)
+                    (covered ?lawn_chair.n.04 ?mildew.n.02_1)
                 )
             )
             (not 

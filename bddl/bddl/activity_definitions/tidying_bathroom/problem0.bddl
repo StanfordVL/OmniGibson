@@ -8,7 +8,6 @@
         toilet_tissue.n.01_1 toilet_tissue.n.01_2 - toilet_tissue.n.01
         floor.n.01_1 - floor.n.01
         toilet.n.01_1 - toilet.n.01
-        freshener.n.01_1 - freshener.n.01
         deodorant__atomizer.n.01_1 - deodorant__atomizer.n.01
         toothbrush.n.01_1 - toothbrush.n.01
         hair_spray__can.n.01_1 - hair_spray__can.n.01
@@ -31,8 +30,7 @@
         (inside toilet_tissue.n.01_2 wicker_basket.n.01_1) 
         (ontop wicker_basket.n.01_1 floor.n.01_1) 
         (ontop packing_box.n.02_1 toilet.n.01_1) 
-        (ontop freshener.n.01_1 floor.n.01_1) 
-        (ontop deodorant__atomizer.n.01_1 floor.n.01_1) 
+        (ontop deodorant__atomizer.n.01_1 floor.n.01_1)
         (ontop toothbrush.n.01_1 toilet.n.01_1) 
         (inside hair_spray__can.n.01_1 wicker_basket.n.01_1) 
         (ontop hamper.n.02_1 floor.n.01_1) 
@@ -66,8 +64,7 @@
                 (?tank_top.n.01 - tank_top.n.01) 
                 (inside ?tank_top.n.01 ?hamper.n.02_1)
             ) 
-            (ontop ?freshener.n.01_1 ?toilet.n.01_1) 
-            (inside ?deodorant__atomizer.n.01_1 ?packing_box.n.02_1) 
+            (inside ?deodorant__atomizer.n.01_1 ?packing_box.n.02_1)
             (inside ?toothbrush.n.01_1 ?packing_box.n.02_1) 
             (inside ?hair_spray__can.n.01_1 ?packing_box.n.02_1) 
             (inside ?lingerie.n.01_1 ?hamper.n.02_1) 

@@ -5,7 +5,7 @@
         cash_register.n.01_1 - cash_register.n.01
         checkout.n.03_1 - checkout.n.03
         credit_card.n.01_1 - credit_card.n.01
-        dairy.n.01_1 dairy.n.01_2 - dairy.n.01
+        dairy_product.n.01_1 dairy_product.n.01_2 - dairy_product.n.01
         shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 - shelf.n.01
         produce.n.01_1 produce.n.01_2 produce.n.01_3 - produce.n.01
         sack.n.01_1 sack.n.01_2 - sack.n.01
@@ -17,8 +17,8 @@
         (ontop cash_register.n.01_1 checkout.n.03_1) 
         (closed cash_register.n.01_1) 
         (ontop credit_card.n.01_1 checkout.n.03_1) 
-        (ontop dairy.n.01_1 shelf.n.01_1) 
-        (ontop dairy.n.01_2 shelf.n.01_1) 
+        (ontop dairy_product.n.01_1 shelf.n.01_1)
+        (ontop dairy_product.n.01_2 shelf.n.01_1)
         (ontop produce.n.01_1 shelf.n.01_2) 
         (ontop produce.n.01_2 shelf.n.01_2) 
         (ontop produce.n.01_3 shelf.n.01_3) 
@@ -38,8 +38,8 @@
             (exists 
                 (?sack.n.01 - sack.n.01) 
                 (forall 
-                    (?dairy.n.01 - dairy.n.01)
-                    (inside ?dairy.n.01 ?sack.n.01)
+                    (?dairy_product.n.01 - dairy_product.n.01)
+                    (inside ?dairy_product.n.01 ?sack.n.01)
                 )
             ) 
             (exists 
@@ -52,9 +52,9 @@
             (forall
                 (?produce.n.01 - produce.n.01)
                 (forall 
-                    (?dairy.n.01 - dairy.n.01)
+                    (?dairy_product.n.01 - dairy_product.n.01)
                     (not 
-                        (nextto ?produce.n.01 ?dairy.n.01)
+                        (nextto ?produce.n.01 ?dairy_product.n.01)
                     )
                 )
             )

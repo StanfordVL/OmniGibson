@@ -4,7 +4,6 @@
     (:objects
         carton.n.02_1 - carton.n.02
         coffee_table.n.01_1 - coffee_table.n.01
-        gift.n.01_1 - gift.n.01
         vodka__bottle.n.01_1 - vodka__bottle.n.01
         shampoo__bottle.n.01_1 - shampoo__bottle.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
@@ -20,8 +19,7 @@
     
     (:init 
         (ontop carton.n.02_1 floor.n.01_1) 
-        (ontop gift.n.01_1 coffee_table.n.01_1) 
-        (ontop vodka__bottle.n.01_1 coffee_table.n.01_1) 
+        (ontop vodka__bottle.n.01_1 coffee_table.n.01_1)
         (ontop shampoo__bottle.n.01_1 coffee_table.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 coffee_table.n.01_1) 
         (ontop flashlight.n.01_1 coffee_table.n.01_1) 
@@ -37,7 +35,6 @@
     
     (:goal 
         (and 
-            (inside ?gift.n.01_1 ?carton.n.02_1)
             (inside ?vodka__bottle.n.01_1 ?carton.n.02_1)
             (inside ?shampoo__bottle.n.01_1 ?carton.n.02_1)
             (inside ?liquid_soap__bottle.n.01_1 ?carton.n.02_1)

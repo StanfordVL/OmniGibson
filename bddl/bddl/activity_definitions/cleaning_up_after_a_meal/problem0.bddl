@@ -6,7 +6,7 @@
      	bowl.n.01_1 bowl.n.01_2 - bowl.n.01
     	table.n.02_1 - table.n.02
     	sack.n.01_1 - sack.n.01
-    	chair.n.01_1 chair.n.01_2 - chair.n.01
+    	chair.n.04_1 chair.n.04_2 - chair.n.04
     	plate.n.04_1 plate.n.04_2 plate.n.04_3 plate.n.04_4 - plate.n.04
     	cup.n.01_1 cup.n.01_2 - cup.n.01
     	hamburger.n.01_1 hamburger.n.01_2 - hamburger.n.01
@@ -35,18 +35,18 @@
         (ontop cup.n.01_2 table.n.02_1) 
         (covered cup.n.01_1 stain.n.01_1) 
         (covered cup.n.01_2 stain.n.01_1) 
-        (ontop hamburger.n.01_1 chair.n.01_2) 
+        (ontop hamburger.n.01_1 chair.n.04_2)
         (ontop hamburger.n.01_2 floor.n.01_1) 
         (ontop detergent.n.02_1 floor.n.01_1) 
-        (covered chair.n.01_1 stain.n.01_1) 
-        (covered chair.n.01_2 stain.n.01_1) 
+        (covered chair.n.04_1 stain.n.01_1)
+        (covered chair.n.04_2 stain.n.01_1)
         (covered table.n.02_1 stain.n.01_1) 
         (inroom dishwasher.n.01_1 kitchen) 
         (inroom floor.n.01_1 dining_room) 
         (inroom floor.n.01_2 kitchen) 
         (inroom table.n.02_1 dining_room) 
-        (inroom chair.n.01_1 dining_room) 
-        (inroom chair.n.01_2 dining_room) 
+        (inroom chair.n.04_1 dining_room)
+        (inroom chair.n.04_2 dining_room)
         (inroom sink.n.01_1 kitchen)
         (ontop agent.n.01_1 floor.n.01_2)
     )
@@ -80,7 +80,7 @@
                 (covered ?floor.n.01_1 ?stain.n.01_1)
             ) 
             (not 
-                (covered ?chair.n.01_2 ?stain.n.01_1)
+                (covered ?chair.n.04_2 ?stain.n.01_1)
             ) 
             (not 
                 (covered ?floor.n.01_1 ?stain.n.01_1)

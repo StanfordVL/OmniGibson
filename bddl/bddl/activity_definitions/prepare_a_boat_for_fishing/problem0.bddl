@@ -3,7 +3,7 @@
 
     (:objects
         stain.n.01_1 - stain.n.01
-        boat.n.01_1 - boat.n.01
+        boat.n.02_1 - boat.n.02
         driveway.n.01_1 - driveway.n.01
         fishing_gear.n.01_1 - fishing_gear.n.01
         fishing_rod.n.01_1 - fishing_rod.n.01
@@ -18,8 +18,8 @@
     )
     
     (:init 
-        (covered boat.n.01_1 stain.n.01_1) 
-        (ontop boat.n.01_1 driveway.n.01_1) 
+        (covered boat.n.02_1 stain.n.01_1)
+        (ontop boat.n.02_1 driveway.n.01_1)
         (ontop fishing_gear.n.01_1 driveway.n.01_1) 
         (ontop fishing_rod.n.01_1 driveway.n.01_1) 
         (ontop bucket.n.01_1 driveway.n.01_1) 
@@ -36,10 +36,10 @@
     (:goal 
         (and 
             (not 
-                (covered ?boat.n.01_1 ?stain.n.01_1)
+                (covered ?boat.n.02_1 ?stain.n.01_1)
             ) 
-            (inside ?fishing_gear.n.01_1 ?boat.n.01_1) 
-            (inside ?fishing_rod.n.01_1 ?boat.n.01_1) 
+            (inside ?fishing_gear.n.01_1 ?boat.n.02_1)
+            (inside ?fishing_rod.n.01_1 ?boat.n.02_1)
         )
     )
 )

@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        fur_coat.n.01_1 - fur_coat.n.01
+        fur_coat.n.02_1 - fur_coat.n.02
         stain.n.01_1 - stain.n.01
         rag.n.01_1 rag.n.01_2 - rag.n.01
         water.n.06_1 - water.n.06
@@ -16,8 +16,8 @@
     )
     
     (:init 
-        (ontop fur_coat.n.01_1 floor.n.01_1)
-        (covered fur_coat.n.01_1 stain.n.01_1)
+        (ontop fur_coat.n.02_1 floor.n.01_1)
+        (covered fur_coat.n.02_1 stain.n.01_1)
         (ontop rag.n.01_1 floor.n.01_1)
         (ontop rag.n.01_2 floor.n.01_1)
         (filled toilet_soap__bottle.n.01_1 toilet_soap.n.01_1)
@@ -33,9 +33,9 @@
     (:goal 
         (and 
             (not 
-                (covered ?fur_coat.n.01_1 ?stain.n.01_1)
+                (covered ?fur_coat.n.02_1 ?stain.n.01_1)
             )
-            (covered ?fur_coat.n.01_1 ?conditioner.n.03_1)
+            (covered ?fur_coat.n.02_1 ?conditioner.n.03_1)
         )
     )
 )

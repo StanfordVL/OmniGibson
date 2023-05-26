@@ -3,7 +3,7 @@
 
     (:objects
      	floor.n.01_1 - floor.n.01
-    	chair.n.01_1 chair.n.01_2 - chair.n.01
+    	chair.n.04_1 chair.n.04_2 - chair.n.04
     	table.n.02_1 - table.n.02
     	cup.n.01_1 cup.n.01_2 - cup.n.01
     	bucket.n.01_1 bucket.n.01_2 - bucket.n.01
@@ -23,8 +23,8 @@
         (ontop catsup.n.01_1 table.n.02_1)
         (ontop bucket.n.01_2 floor.n.01_1) 
         (inroom floor.n.01_1 dining_room) 
-        (inroom chair.n.01_1 dining_room) 
-        (inroom chair.n.01_2 dining_room) 
+        (inroom chair.n.04_1 dining_room)
+        (inroom chair.n.04_2 dining_room)
         (inroom table.n.02_1 dining_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
