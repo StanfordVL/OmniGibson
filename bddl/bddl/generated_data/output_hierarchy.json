@@ -196,6 +196,10 @@
                                       "hasModel": true
                                     },
                                     {
+                                      "name": "copper_pot.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
                                       "name": "coffeepot.n.01",
                                       "hasModel": true,
                                       "children": [
@@ -1786,22 +1790,6 @@
                                       "hasModel": true
                                     },
                                     {
-                                      "name": "measuring_stick.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "rule.n.12",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "foot_rule.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "gauge.n.01",
                                       "hasModel": true
                                     },
@@ -1832,6 +1820,16 @@
                                     {
                                       "name": "meter.n.02",
                                       "hasModel": true
+                                    },
+                                    {
+                                      "name": "measuring_stick.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "rule.n.12",
+                                          "hasModel": true
+                                        }
+                                      ]
                                     },
                                     {
                                       "name": "scale.n.07",
@@ -3417,6 +3415,10 @@
                                           "children": [
                                             {
                                               "name": "caldron.n.01",
+                                              "hasModel": true
+                                            },
+                                            {
+                                              "name": "copper_pot.n.01",
                                               "hasModel": true
                                             },
                                             {
@@ -5146,16 +5148,6 @@
                                     {
                                       "name": "costume.n.01",
                                       "hasModel": true
-                                    },
-                                    {
-                                      "name": "disguise.n.02",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "mask.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
                                     }
                                   ]
                                 },
@@ -6128,6 +6120,10 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "case__of__eyeshadow.n.01",
+                                  "hasModel": true
+                                },
+                                {
                                   "name": "case__of__pop.n.01",
                                   "hasModel": true
                                 },
@@ -6830,16 +6826,6 @@
                                 {
                                   "name": "costume.n.01",
                                   "hasModel": true
-                                },
-                                {
-                                  "name": "disguise.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "mask.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
                                 }
                               ]
                             },
@@ -7064,6 +7050,16 @@
                               ]
                             },
                             {
+                              "name": "mask.n.04",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "face_mask.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
                               "name": "shelter.n.02",
                               "hasModel": true,
                               "children": [
@@ -7236,10 +7232,6 @@
                               "hasModel": true
                             }
                           ]
-                        },
-                        {
-                          "name": "mask.n.01",
-                          "hasModel": true
                         },
                         {
                           "name": "floor_cover.n.01",
@@ -7591,16 +7583,6 @@
                           "children": [
                             {
                               "name": "gravestone.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "projection.n.04",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "knob.n.01",
                               "hasModel": true
                             }
                           ]
@@ -9620,6 +9602,16 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "bulb.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "daffodil_bulb.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                },
+                                {
                                   "name": "trunk.n.01",
                                   "hasModel": true
                                 }
@@ -9719,10 +9711,6 @@
                           "children": [
                             {
                               "name": "feather.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "hair.n.01",
                               "hasModel": true
                             }
                           ]
@@ -9834,10 +9822,6 @@
                                                 {
                                                   "name": "heap__of__oatmeal.n.01",
                                                   "hasModel": true
-                                                },
-                                                {
-                                                  "name": "oat.n.01",
-                                                  "hasModel": true
                                                 }
                                               ]
                                             },
@@ -9888,20 +9872,8 @@
                                         {
                                           "name": "cooked__oregano.n.01",
                                           "hasModel": true
-                                        },
-                                        {
-                                          "name": "oregano.n.01",
-                                          "hasModel": true
                                         }
                                       ]
-                                    },
-                                    {
-                                      "name": "fennel.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "okra.n.02",
-                                      "hasModel": true
                                     },
                                     {
                                       "name": "mint.n.02",
@@ -9982,16 +9954,6 @@
                                       "hasModel": true
                                     },
                                     {
-                                      "name": "luffa.n.02",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "loofah.n.02",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "true_pepper.n.01",
                                       "hasModel": true,
                                       "children": [
@@ -10046,10 +10008,6 @@
                                             {
                                               "name": "chives.n.01",
                                               "hasModel": true
-                                            },
-                                            {
-                                              "name": "leek.n.01",
-                                              "hasModel": true
                                             }
                                           ]
                                         },
@@ -10068,76 +10026,10 @@
                                       "hasModel": true,
                                       "children": [
                                         {
-                                          "name": "daffodil.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
                                           "name": "pottable__daffodil.n.01",
                                           "hasModel": true
                                         }
                                       ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "woody_plant.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "shrub.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "cranberry.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "gooseberry.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "lavender.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "subshrub.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "pinwheel.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "name": "spurge.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "poinsettia.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "name": "rose.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "capsicum.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "sweet_pepper.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "name": "tree.n.01",
-                                      "hasModel": true
                                     }
                                   ]
                                 },
@@ -10192,6 +10084,60 @@
                                 {
                                   "name": "evergreen.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "woody_plant.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "shrub.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "lavender.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "subshrub.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "pinwheel.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "spurge.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "poinsettia.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "rose.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "capsicum.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "sweet_pepper.n.01",
+                                              "hasModel": true
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "tree.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
                                 },
                                 {
                                   "name": "weed.n.01",
@@ -10440,77 +10386,37 @@
               ]
             },
             {
-              "name": "location.n.01",
+              "name": "geological_formation.n.01",
               "hasModel": true,
               "children": [
                 {
-                  "name": "point.n.02",
+                  "name": "natural_depression.n.01",
                   "hasModel": true,
                   "children": [
                     {
-                      "name": "geographic_point.n.01",
+                      "name": "hole.n.05",
                       "hasModel": true,
                       "children": [
                         {
-                          "name": "workplace.n.01",
+                          "name": "pit.n.01",
                           "hasModel": true,
                           "children": [
                             {
-                              "name": "farm.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "dairy.n.01",
-                                  "hasModel": true
-                                }
-                              ]
+                              "name": "fire_pit.n.01",
+                              "hasModel": true
                             }
                           ]
                         }
                       ]
                     }
                   ]
-                },
-                {
-                  "name": "region.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "extremity.n.04",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "boundary.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "surface.n.02",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "side.n.04",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "front.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "forefront.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
+                }
+              ]
+            },
+            {
+              "name": "location.n.01",
+              "hasModel": true,
+              "children": [
                 {
                   "name": "region.n.03",
                   "hasModel": true,
@@ -10572,34 +10478,6 @@
                     {
                       "name": "path.n.04",
                       "hasModel": true
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "geological_formation.n.01",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "natural_depression.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "hole.n.05",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "pit.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "fire_pit.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
                     }
                   ]
                 }
@@ -11368,20 +11246,6 @@
                       ]
                     },
                     {
-                      "name": "conductor.n.02",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "copper.n.01",
-                          "hasModel": true
-                        },
-                        {
-                          "name": "silver.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    },
-                    {
                       "name": "fiber.n.01",
                       "hasModel": true,
                       "children": [
@@ -11469,16 +11333,6 @@
                         },
                         {
                           "name": "steel_wool.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    },
-                    {
-                      "name": "atom.n.02",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "grain.n.01",
                           "hasModel": true
                         }
                       ]
@@ -11614,6 +11468,16 @@
                       ]
                     },
                     {
+                      "name": "conductor.n.02",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "silver.n.01",
+                          "hasModel": true
+                        }
+                      ]
+                    },
+                    {
                       "name": "sorbent.n.01",
                       "hasModel": true,
                       "children": [
@@ -11657,14 +11521,6 @@
                       "children": [
                         {
                           "name": "aluminum.n.01",
-                          "hasModel": true
-                        },
-                        {
-                          "name": "copper.n.01",
-                          "hasModel": true
-                        },
-                        {
-                          "name": "nickel.n.01",
                           "hasModel": true
                         },
                         {
@@ -12060,16 +11916,6 @@
                       ]
                     },
                     {
-                      "name": "colloid.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "gel.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    },
-                    {
                       "name": "plaster.n.01",
                       "hasModel": true,
                       "children": [
@@ -12436,6 +12282,10 @@
                                       ]
                                     },
                                     {
+                                      "name": "marjoram.n.02",
+                                      "hasModel": true
+                                    },
+                                    {
                                       "name": "mint.n.04",
                                       "hasModel": true
                                     },
@@ -12737,6 +12587,10 @@
                             },
                             {
                               "name": "cooked__quinoa.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "oat.n.02",
                               "hasModel": true
                             },
                             {
@@ -13052,6 +12906,10 @@
                           ]
                         },
                         {
+                          "name": "beaten_egg.n.01",
+                          "hasModel": true
+                        },
+                        {
                           "name": "dairy_product.n.01",
                           "hasModel": true,
                           "children": [
@@ -13242,10 +13100,6 @@
                             {
                               "name": "cornmeal.n.01",
                               "hasModel": true
-                            },
-                            {
-                              "name": "oatmeal.n.02",
-                              "hasModel": true
                             }
                           ]
                         },
@@ -13258,7 +13112,7 @@
                           "hasModel": true
                         },
                         {
-                          "name": "half__egg.n.01",
+                          "name": "raw_egg.n.01",
                           "hasModel": true
                         }
                       ]
@@ -13489,10 +13343,6 @@
                             },
                             {
                               "name": "french_toast.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "fried_egg.n.01",
                               "hasModel": true
                             },
                             {
@@ -14042,10 +13892,6 @@
                       "hasModel": true
                     },
                     {
-                      "name": "raw_egg.n.01",
-                      "hasModel": true
-                    },
-                    {
                       "name": "soda_water.n.03",
                       "hasModel": true
                     },
@@ -14401,10 +14247,6 @@
                     },
                     {
                       "name": "gasoline.n.01",
-                      "hasModel": true
-                    },
-                    {
-                      "name": "igniter.n.01",
                       "hasModel": true
                     }
                   ]
@@ -15472,11 +15314,19 @@
                               "hasModel": true
                             },
                             {
+                              "name": "fennel.n.02",
+                              "hasModel": true
+                            },
+                            {
                               "name": "gumbo.n.03",
                               "hasModel": true
                             },
                             {
                               "name": "half__mushroom.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "leek.n.02",
                               "hasModel": true
                             },
                             {
@@ -16762,40 +16612,6 @@
           "hasModel": true,
           "children": [
             {
-              "name": "natural_process.n.01",
-              "hasModel": true,
-              "children": [
-                {
-                  "name": "chemical_process.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "chemical_reaction.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "oxidation.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "combustion.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "fire.n.03",
-                                  "hasModel": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
               "name": "phenomenon.n.01",
               "hasModel": true,
               "children": [
@@ -16807,34 +16623,6 @@
                       "name": "physical_phenomenon.n.01",
                       "hasModel": true,
                       "children": [
-                        {
-                          "name": "energy.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "radiation.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "electromagnetic_radiation.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "actinic_radiation.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "light.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
                         {
                           "name": "atmospheric_phenomenon.n.01",
                           "hasModel": true,
@@ -17602,20 +17390,6 @@
                           ]
                         },
                         {
-                          "name": "conductor.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "copper.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "silver.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
                           "name": "fiber.n.01",
                           "hasModel": true,
                           "children": [
@@ -17703,16 +17477,6 @@
                             },
                             {
                               "name": "steel_wool.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "atom.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "grain.n.01",
                               "hasModel": true
                             }
                           ]
@@ -17848,6 +17612,16 @@
                           ]
                         },
                         {
+                          "name": "conductor.n.02",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "silver.n.01",
+                              "hasModel": true
+                            }
+                          ]
+                        },
+                        {
                           "name": "sorbent.n.01",
                           "hasModel": true,
                           "children": [
@@ -17891,14 +17665,6 @@
                           "children": [
                             {
                               "name": "aluminum.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "copper.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "nickel.n.01",
                               "hasModel": true
                             },
                             {
@@ -18294,16 +18060,6 @@
                           ]
                         },
                         {
-                          "name": "colloid.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "gel.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
                           "name": "plaster.n.01",
                           "hasModel": true,
                           "children": [
@@ -18520,22 +18276,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "name": "transferred_property.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "acquisition.n.02",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "gift.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    }
-                  ]
                 }
               ]
             },
@@ -18621,22 +18361,6 @@
                           "children": [
                             {
                               "name": "credit_card.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "record.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "written_record.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "note.n.01",
                               "hasModel": true
                             }
                           ]
@@ -18930,16 +18654,6 @@
                           ]
                         }
                       ]
-                    },
-                    {
-                      "name": "kingdom.n.05",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "fungi.n.01",
-                          "hasModel": true
-                        }
-                      ]
                     }
                   ]
                 }
@@ -19076,78 +18790,6 @@
                   ]
                 },
                 {
-                  "name": "practice.n.05",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "convention.n.02",
-                      "hasModel": true
-                    }
-                  ]
-                },
-                {
-                  "name": "content.n.05",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "knowledge_domain.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "discipline.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "science.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "natural_science.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "physics.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "electronics.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "belief.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "doctrine.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "theological_doctrine.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "virgin_birth.n.02",
-                                  "hasModel": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
                   "name": "process.n.02",
                   "hasModel": true,
                   "children": [
@@ -19172,6 +18814,34 @@
                                       "hasModel": true
                                     }
                                   ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "content.n.05",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "belief.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "doctrine.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "theological_doctrine.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "virgin_birth.n.02",
+                                  "hasModel": true
                                 }
                               ]
                             }
@@ -19230,16 +18900,6 @@
                                       ]
                                     }
                                   ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "care.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "first_aid.n.01",
-                                  "hasModel": true
                                 }
                               ]
                             }
@@ -19354,32 +19014,6 @@
                               ]
                             }
                           ]
-                        },
-                        {
-                          "name": "concealment.n.03",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "mask.n.02",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "speech_act.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "description.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "label.n.01",
-                              "hasModel": true
-                            }
-                          ]
                         }
                       ]
                     },
@@ -19492,16 +19126,6 @@
                           ]
                         }
                       ]
-                    },
-                    {
-                      "name": "cone.n.02",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "funnel.n.01",
-                          "hasModel": true
-                        }
-                      ]
                     }
                   ]
                 },
@@ -19574,10 +19198,6 @@
                       "hasModel": true,
                       "children": [
                         {
-                          "name": "cup.n.03",
-                          "hasModel": true
-                        },
-                        {
                           "name": "depression.n.08",
                           "hasModel": true,
                           "children": [
@@ -19634,6 +19254,22 @@
                   "hasModel": true,
                   "children": [
                     {
+                      "name": "sanitary_condition.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "dirtiness.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "dirt.n.02",
+                              "hasModel": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
                       "name": "physical_condition.n.01",
                       "hasModel": true,
                       "children": [
@@ -19645,28 +19281,6 @@
                               "name": "ill_health.n.01",
                               "hasModel": true,
                               "children": [
-                                {
-                                  "name": "illness.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "disease.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "plant_disease.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "cotton_ball.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
                                 {
                                   "name": "affliction.n.02",
                                   "hasModel": true,
@@ -19684,22 +19298,6 @@
                                   ]
                                 }
                               ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "sanitary_condition.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "dirtiness.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "dirt.n.02",
-                              "hasModel": true
                             }
                           ]
                         }
@@ -19872,16 +19470,6 @@
                   ]
                 },
                 {
-                  "name": "containerful.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "kettle.n.02",
-                      "hasModel": true
-                    }
-                  ]
-                },
-                {
                   "name": "supply.n.01",
                   "hasModel": true
                 }
@@ -19940,16 +19528,6 @@
               ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "name": "thing.n.08",
-      "hasModel": true,
-      "children": [
-        {
-          "name": "freshener.n.01",
-          "hasModel": true
         }
       ]
     }

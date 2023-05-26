@@ -2,7 +2,8 @@
     (:domain omnigibson)
 
     (:objects
-        produce.n.01_1 produce.n.01_2 produce.n.01_3 produce.n.01_4 - produce.n.01
+        mango.n.01_1 mango.n.01_2 - mango.n.01 
+        pomegranate.n.02_1 pomegranate.n.02_2 - pomegranate.n.02
         plastic_bag.n.01_1 - plastic_bag.n.01
         floor.n.01_1 - floor.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -10,10 +11,10 @@
     )
     
     (:init 
-        (inside produce.n.01_1 plastic_bag.n.01_1) 
-        (inside produce.n.01_2 plastic_bag.n.01_1) 
-        (inside produce.n.01_3 plastic_bag.n.01_1) 
-        (inside produce.n.01_4 plastic_bag.n.01_1) 
+        (inside mango.n.01_1 plastic_bag.n.01_1) 
+        (inside mango.n.01_2 plastic_bag.n.01_1) 
+        (inside pomegranate.n.02_1 plastic_bag.n.01_1) 
+        (inside pomegranate.n.02_2 plastic_bag.n.01_1) 
         (ontop plastic_bag.n.01_1 floor.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -23,8 +24,12 @@
     (:goal 
         (and 
             (forall 
-                (?produce.n.01 - produce.n.01)
-                (inside ?produce.n.01 ?electric_refrigerator.n.01_1) 
+                (?pomegranate.n.02 - pomegranate.n.02)
+                (inside ?pomegranate.n.02 ?electric_refrigerator.n.01_1) 
+            )
+            (forall 
+                (?mango.n.01 - mango.n.01)
+                (inside ?mango.n.01 ?electric_refrigerator.n.01_1) 
             )
         )
     )
