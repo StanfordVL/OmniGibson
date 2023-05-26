@@ -318,6 +318,10 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "floor_wax__bottle.n.01",
+                                  "hasModel": true
+                                },
+                                {
                                   "name": "frosting__jar.n.01",
                                   "hasModel": true
                                 },
@@ -625,10 +629,6 @@
                                 },
                                 {
                                   "name": "vodka_bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "wax__jar.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -2144,6 +2144,84 @@
                               ]
                             },
                             {
+                              "name": "source_of_illumination.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "lamp.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "candle.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "beeswax_candle.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "dip.n.07",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "pillar_candle.n.01",
+                                          "hasModel": true
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "electric_lamp.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "broken__light_bulb.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "flashlight.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "light_bulb.n.01",
+                                          "hasModel": true
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "name": "lantern.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "spirit_lamp.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "spotlight.n.02",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "light.n.02",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "fairy_light.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "icicle_lights.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "room_light.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
                               "name": "acoustic_device.n.01",
                               "hasModel": true,
                               "children": [
@@ -2450,80 +2528,6 @@
                                 {
                                   "name": "brace.n.09",
                                   "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "source_of_illumination.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "lamp.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "electric_lamp.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "broken__light_bulb.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "flashlight.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "light_bulb.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "name": "candle.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "dip.n.07",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "pillar_candle.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "name": "lantern.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "spirit_lamp.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "spotlight.n.02",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "light.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "fairy_light.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "icicle_lights.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "room_light.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
                                 }
                               ]
                             },
@@ -10592,6 +10596,10 @@
                                               "hasModel": true
                                             },
                                             {
+                                              "name": "floor_wax.n.01",
+                                              "hasModel": true
+                                            },
+                                            {
                                               "name": "paraffin.n.01",
                                               "hasModel": true
                                             }
@@ -16088,6 +16096,10 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "floor_wax.n.01",
+                                  "hasModel": true
+                                },
+                                {
                                   "name": "paraffin.n.01",
                                   "hasModel": true
                                 }
@@ -16733,6 +16745,10 @@
                                               "children": [
                                                 {
                                                   "name": "beeswax.n.01",
+                                                  "hasModel": true
+                                                },
+                                                {
+                                                  "name": "floor_wax.n.01",
                                                   "hasModel": true
                                                 },
                                                 {

@@ -3715,6 +3715,22 @@
     "sliceable": {},
     "substance": {}
   },
+  "beeswax_candle.n.01": {
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "mixable": {},
+    "moldyable": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
   "beet.n.02": {
     "cookable": {},
     "disinfectable": {},
@@ -20875,6 +20891,38 @@
     "stickyable": {},
     "tarnishable": {},
     "toggleable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
+  "floor_wax.n.01": {
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "mixable": {},
+    "moldyable": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
+  "floor_wax__bottle.n.01": {
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "mixable": {},
+    "moldyable": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
     "wetable": {},
     "wrinkleable": {}
   },
@@ -49954,27 +50002,7 @@
   },
   "wax.n.01": {
     "freezable": {},
-    "heatable": {},
-    "nonDeformable": {},
-    "substance": {}
-  },
-  "wax__jar.n.01": {
-    "breakable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "openable": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
+    "heatable": {}
   },
   "wax_paper.n.01": {
     "cloth": {},
