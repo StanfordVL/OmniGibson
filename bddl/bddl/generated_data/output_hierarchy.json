@@ -5148,16 +5148,6 @@
                                     {
                                       "name": "costume.n.01",
                                       "hasModel": true
-                                    },
-                                    {
-                                      "name": "disguise.n.02",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "mask.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
                                     }
                                   ]
                                 },
@@ -6836,16 +6826,6 @@
                                 {
                                   "name": "costume.n.01",
                                   "hasModel": true
-                                },
-                                {
-                                  "name": "disguise.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "mask.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
                                 }
                               ]
                             },
@@ -7070,6 +7050,16 @@
                               ]
                             },
                             {
+                              "name": "mask.n.04",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "face_mask.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
                               "name": "shelter.n.02",
                               "hasModel": true,
                               "children": [
@@ -7242,10 +7232,6 @@
                               "hasModel": true
                             }
                           ]
-                        },
-                        {
-                          "name": "mask.n.01",
-                          "hasModel": true
                         },
                         {
                           "name": "floor_cover.n.01",
@@ -9836,10 +9822,6 @@
                                                 {
                                                   "name": "heap__of__oatmeal.n.01",
                                                   "hasModel": true
-                                                },
-                                                {
-                                                  "name": "oat.n.01",
-                                                  "hasModel": true
                                                 }
                                               ]
                                             },
@@ -11550,10 +11532,6 @@
                           "hasModel": true
                         },
                         {
-                          "name": "nickel.n.01",
-                          "hasModel": true
-                        },
-                        {
                           "name": "noble_metal.n.01",
                           "hasModel": true,
                           "children": [
@@ -12616,6 +12594,10 @@
                               "hasModel": true
                             },
                             {
+                              "name": "oat.n.02",
+                              "hasModel": true
+                            },
+                            {
                               "name": "quinoa.n.01",
                               "hasModel": true
                             },
@@ -13121,10 +13103,6 @@
                           "children": [
                             {
                               "name": "cornmeal.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "oatmeal.n.02",
                               "hasModel": true
                             }
                           ]
@@ -17694,10 +17672,6 @@
                               "hasModel": true
                             },
                             {
-                              "name": "nickel.n.01",
-                              "hasModel": true
-                            },
-                            {
                               "name": "noble_metal.n.01",
                               "hasModel": true,
                               "children": [
@@ -18396,22 +18370,6 @@
                           ]
                         }
                       ]
-                    },
-                    {
-                      "name": "record.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "written_record.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "note.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
                     }
                   ]
                 }
@@ -19058,16 +19016,6 @@
                                   ]
                                 }
                               ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "concealment.n.03",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "mask.n.02",
-                              "hasModel": true
                             }
                           ]
                         }
