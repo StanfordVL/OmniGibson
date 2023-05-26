@@ -218,6 +218,10 @@
                                       "hasModel": true
                                     },
                                     {
+                                      "name": "pewter_teapot.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
                                       "name": "saucepot.n.01",
                                       "hasModel": true
                                     },
@@ -1406,7 +1410,7 @@
                               "hasModel": true
                             },
                             {
-                              "name": "pellet__bag.n.01",
+                              "name": "pellet_food__bag.n.01",
                               "hasModel": true
                             },
                             {
@@ -3444,6 +3448,10 @@
                                               "hasModel": true
                                             },
                                             {
+                                              "name": "pewter_teapot.n.01",
+                                              "hasModel": true
+                                            },
+                                            {
                                               "name": "saucepot.n.01",
                                               "hasModel": true
                                             },
@@ -4062,6 +4070,10 @@
                                       "hasModel": true,
                                       "children": [
                                         {
+                                          "name": "radio_receiver.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
                                           "name": "television_receiver.n.01",
                                           "hasModel": true
                                         }
@@ -4620,22 +4632,6 @@
                                           "hasModel": true
                                         }
                                       ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "name": "telecommunication.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "broadcasting.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "radio.n.01",
-                                      "hasModel": true
                                     }
                                   ]
                                 }
@@ -5705,6 +5701,10 @@
                                 },
                                 {
                                   "name": "bottle__of__powder.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "bottle__of__protein_powder.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -8050,22 +8050,6 @@
                               ]
                             },
                             {
-                              "name": "marking.n.02",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "spot.n.05",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "plaque.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
                               "name": "device.n.04",
                               "hasModel": true,
                               "children": [
@@ -9764,10 +9748,6 @@
                           "hasModel": true
                         }
                       ]
-                    },
-                    {
-                      "name": "radiator.n.01",
-                      "hasModel": true
                     }
                   ]
                 },
@@ -9952,16 +9932,6 @@
                                       "hasModel": true
                                     },
                                     {
-                                      "name": "true_pepper.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "pepper.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "morning_glory.n.01",
                                       "hasModel": true,
                                       "children": [
@@ -10094,16 +10064,6 @@
                                         {
                                           "name": "lavender.n.01",
                                           "hasModel": true
-                                        },
-                                        {
-                                          "name": "subshrub.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "pinwheel.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
                                         },
                                         {
                                           "name": "spurge.n.01",
@@ -10660,10 +10620,6 @@
                                       ]
                                     },
                                     {
-                                      "name": "protein.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
                                       "name": "carbohydrate.n.01",
                                       "hasModel": true,
                                       "children": [
@@ -11033,10 +10989,6 @@
                             },
                             {
                               "name": "log.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "pecan.n.01",
                               "hasModel": true
                             },
                             {
@@ -11935,16 +11887,6 @@
                         },
                         {
                           "name": "stucco.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    },
-                    {
-                      "name": "alloy.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "pewter.n.01",
                           "hasModel": true
                         }
                       ]
@@ -13881,6 +13823,10 @@
                             },
                             {
                               "name": "dog_food.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "pellet_food.n.01",
                               "hasModel": true
                             }
                           ]
@@ -16172,10 +16118,6 @@
                           ]
                         },
                         {
-                          "name": "protein.n.01",
-                          "hasModel": true
-                        },
-                        {
                           "name": "carbohydrate.n.01",
                           "hasModel": true,
                           "children": [
@@ -16828,10 +16770,6 @@
                                           ]
                                         },
                                         {
-                                          "name": "protein.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
                                           "name": "carbohydrate.n.01",
                                           "hasModel": true,
                                           "children": [
@@ -17201,10 +17139,6 @@
                                 },
                                 {
                                   "name": "log.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "pecan.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -18103,16 +18037,6 @@
                             },
                             {
                               "name": "stucco.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "alloy.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "pewter.n.01",
                               "hasModel": true
                             }
                           ]
@@ -19148,10 +19072,6 @@
                             {
                               "name": "mothball.n.01",
                               "hasModel": true
-                            },
-                            {
-                              "name": "pellet.n.01",
-                              "hasModel": true
                             }
                           ]
                         }
@@ -19294,40 +19214,6 @@
                             {
                               "name": "dirt.n.02",
                               "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "physical_condition.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "pathological_state.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "ill_health.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "affliction.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "deformity.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "pigeon_breast.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
                             }
                           ]
                         }
