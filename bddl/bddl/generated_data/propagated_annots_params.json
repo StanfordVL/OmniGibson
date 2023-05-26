@@ -187,27 +187,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "acquiring.n.01": {
-        "cloth": {},
-        "deformable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "foldable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "unfoldable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "act.n.02": {
         "disinfectable": {},
         "dustyable": {},
@@ -1247,24 +1226,6 @@
         "physicalSubstance": {},
         "substance": {},
         "waterCook": {}
-    },
-    "area.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
     },
     "area.n.05": {
         "disinfectable": {},
@@ -13957,7 +13918,9 @@
     "concave_shape.n.01": {
         "freezable": {},
         "heatable": {},
-        "nonDeformable": {}
+        "nonDeformable": {},
+        "substance": {},
+        "visualSubstance": {}
     },
     "conch.n.01": {
         "disinfectable": {},
@@ -14057,24 +14020,6 @@
         "heatable": {},
         "mixable": {},
         "moldyable": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "conductor.n.02": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
@@ -14271,24 +14216,6 @@
         "heatable": {},
         "mixable": {},
         "moldyable": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "contact.n.02": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
@@ -26299,6 +26226,22 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "jacket.n.05": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "mixable": {},
+        "moldyable": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "jade.n.01": {
         "disinfectable": {},
         "dustyable": {},
@@ -32133,24 +32076,6 @@
         "nonDeformable": {},
         "substance": {}
     },
-    "noble_metal.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "nodule.n.03": {
         "disinfectable": {},
         "dustyable": {},
@@ -32947,14 +32872,6 @@
         "tarnishable": {},
         "wetable": {},
         "wrinkleable": {}
-    },
-    "ovule.n.01": {
-        "cookable": {},
-        "freezable": {},
-        "heatable": {},
-        "nonDeformable": {},
-        "physicalSubstance": {},
-        "substance": {}
     },
     "oxidant.n.01": {
         "boilable": {},
@@ -38361,27 +38278,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "reception.n.04": {
-        "cloth": {},
-        "deformable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "foldable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "unfoldable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "recess.n.04": {
         "disinfectable": {},
         "dustyable": {},
@@ -39290,24 +39186,6 @@
         "liquid": {},
         "nonDeformable": {},
         "substance": {}
-    },
-    "rub.n.02": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
     },
     "rubber_band.n.01": {
         "disinfectable": {},
@@ -40342,24 +40220,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "scoop.n.02": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "scoop.n.06": {
         "disinfectable": {},
         "dustyable": {},
@@ -40442,25 +40302,6 @@
         "wrinkleable": {}
     },
     "screen.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "toggleable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "screen.n.03": {
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -40741,24 +40582,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "seat.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "seat.n.03": {
         "disinfectable": {},
         "dustyable": {},
@@ -40887,14 +40710,6 @@
     "seed.n.01": {
         "freezable": {},
         "heatable": {}
-    },
-    "seed.n.02": {
-        "cookable": {},
-        "freezable": {},
-        "heatable": {},
-        "nonDeformable": {},
-        "physicalSubstance": {},
-        "substance": {}
     },
     "self-propelled_vehicle.n.01": {
         "disinfectable": {},
@@ -41153,22 +40968,6 @@
     "shape.n.02": {
         "freezable": {},
         "heatable": {}
-    },
-    "share.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
     },
     "sharpener.n.01": {
         "disinfectable": {},
@@ -41452,23 +41251,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "shell.n.05": {
-        "breakable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "shell.n.08": {
         "disinfectable": {},
         "dustyable": {},
@@ -41477,8 +41259,6 @@
         "heatable": {},
         "mixable": {},
         "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
@@ -42064,24 +41844,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "silver.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "silver.n.02": {
         "disinfectable": {},
         "dustyable": {},
@@ -42435,22 +42197,6 @@
         "moldyable": {},
         "nonDeformable": {},
         "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "slice.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
@@ -43387,24 +43133,6 @@
         "liquid": {},
         "nonDeformable": {},
         "substance": {}
-    },
-    "space.n.03": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
     },
     "space_heater.n.01": {
         "breakable": {},
@@ -47778,24 +47506,6 @@
         "rustable": {},
         "scratchable": {},
         "sliceable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "touch.n.05": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonDeformable": {},
-        "nonSubstance": {},
-        "rustable": {},
-        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},

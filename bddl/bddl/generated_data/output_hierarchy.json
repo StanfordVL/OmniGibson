@@ -2830,10 +2830,6 @@
                                     {
                                       "name": "monitor.n.04",
                                       "hasModel": true
-                                    },
-                                    {
-                                      "name": "screen.n.03",
-                                      "hasModel": true
                                     }
                                   ]
                                 },
@@ -7023,7 +7019,13 @@
                                 },
                                 {
                                   "name": "shell.n.08",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "jacket.n.05",
+                                      "hasModel": true
+                                    }
+                                  ]
                                 }
                               ]
                             },
@@ -9568,16 +9570,6 @@
                                       ]
                                     }
                                   ]
-                                },
-                                {
-                                  "name": "ovule.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "seed.n.02",
-                                      "hasModel": true
-                                    }
-                                  ]
                                 }
                               ]
                             },
@@ -9742,10 +9734,6 @@
                               "hasModel": true
                             }
                           ]
-                        },
-                        {
-                          "name": "shell.n.05",
-                          "hasModel": true
                         }
                       ]
                     }
@@ -10406,22 +10394,6 @@
                                   ]
                                 }
                               ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "area.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "space.n.03",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "seat.n.01",
-                              "hasModel": true
                             }
                           ]
                         }
@@ -11426,16 +11398,6 @@
                       ]
                     },
                     {
-                      "name": "conductor.n.02",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "silver.n.01",
-                          "hasModel": true
-                        }
-                      ]
-                    },
-                    {
                       "name": "sorbent.n.01",
                       "hasModel": true,
                       "children": [
@@ -11480,16 +11442,6 @@
                         {
                           "name": "aluminum.n.01",
                           "hasModel": true
-                        },
-                        {
-                          "name": "noble_metal.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "silver.n.01",
-                              "hasModel": true
-                            }
-                          ]
                         }
                       ]
                     },
@@ -17576,16 +17528,6 @@
                           ]
                         },
                         {
-                          "name": "conductor.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "silver.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
                           "name": "sorbent.n.01",
                           "hasModel": true,
                           "children": [
@@ -17630,16 +17572,6 @@
                             {
                               "name": "aluminum.n.01",
                               "hasModel": true
-                            },
-                            {
-                              "name": "noble_metal.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "silver.n.01",
-                                  "hasModel": true
-                                }
-                              ]
                             }
                           ]
                         },
@@ -18176,16 +18108,6 @@
                               ]
                             }
                           ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "share.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "slice.n.01",
-                          "hasModel": true
                         }
                       ]
                     },
@@ -18970,32 +18892,6 @@
                           ]
                         }
                       ]
-                    },
-                    {
-                      "name": "acquiring.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "reception.n.04",
-                          "hasModel": true
-                        }
-                      ]
-                    },
-                    {
-                      "name": "touch.n.05",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "contact.n.02",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "rub.n.02",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
                     }
                   ]
                 },
@@ -19160,10 +19056,6 @@
                               "hasModel": true
                             }
                           ]
-                        },
-                        {
-                          "name": "scoop.n.02",
-                          "hasModel": true
                         }
                       ]
                     },
