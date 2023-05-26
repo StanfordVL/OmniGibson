@@ -7,7 +7,8 @@
         credit_card.n.01_1 - credit_card.n.01
         dairy.n.01_1 dairy.n.01_2 - dairy.n.01
         shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 - shelf.n.01
-        produce.n.01_1 produce.n.01_2 produce.n.01_3 - produce.n.01
+        apple.n.01_1 apple.n.01_2 - apple.n.01 
+        pineapple.n.02_1 - pineapple.n.02 
         sack.n.01_1 sack.n.01_2 - sack.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
@@ -19,9 +20,9 @@
         (ontop credit_card.n.01_1 checkout.n.03_1) 
         (ontop dairy.n.01_1 shelf.n.01_1) 
         (ontop dairy.n.01_2 shelf.n.01_1) 
-        (ontop produce.n.01_1 shelf.n.01_2) 
-        (ontop produce.n.01_2 shelf.n.01_2) 
-        (ontop produce.n.01_3 shelf.n.01_3) 
+        (ontop apple.n.01_1 shelf.n.01_2) 
+        (ontop pineapple.n.02_1 shelf.n.01_2) 
+        (ontop apple.n.01_2 shelf.n.01_3) 
         (ontop sack.n.01_1 checkout.n.03_1) 
         (ontop sack.n.01_2 checkout.n.03_1) 
         (inroom floor.n.01_1 grocery_store) 
@@ -44,17 +45,32 @@
             ) 
             (exists 
                 (?sack.n.01 - sack.n.01) 
-                (forall 
-                    (?produce.n.01 - produce.n.01)
-                    (inside ?produce.n.01 ?sack.n.01)
+                (and
+                    (forall 
+                        (?apple.n.01 - apple.n.01)
+                        (inside ?apple.n.01 ?sack.n.01)
+                    )
+                    (forall 
+                        (?pineapple.n.02 - pineapple.n.02)
+                        (inside ?pineapple.n.02 ?sack.n.01)
+                    )
                 )
             )
             (forall
-                (?produce.n.01 - produce.n.01)
+                (?apple.n.01 - apple.n.01)
                 (forall 
                     (?dairy.n.01 - dairy.n.01)
                     (not 
-                        (nextto ?produce.n.01 ?dairy.n.01)
+                        (nextto ?apple.n.01 ?dairy.n.01)
+                    )
+                )
+            )
+            (forall
+                (?pineapple.n.02 - pineapple.n.02)
+                (forall 
+                    (?dairy.n.01 - dairy.n.01)
+                    (not 
+                        (nextto ?pineapple.n.02 ?dairy.n.01)
                     )
                 )
             )
