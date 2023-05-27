@@ -144,10 +144,6 @@
                                       "hasModel": true
                                     },
                                     {
-                                      "name": "whiskey_bottle.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
                                       "name": "wine_bottle.n.01",
                                       "hasModel": true
                                     }
@@ -629,10 +625,6 @@
                                 },
                                 {
                                   "name": "vodka__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "vodka_bottle.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -2335,6 +2327,10 @@
                                               "children": [
                                                 {
                                                   "name": "laptop.n.01",
+                                                  "hasModel": true
+                                                },
+                                                {
+                                                  "name": "tablet.n.05",
                                                   "hasModel": true
                                                 }
                                               ]
@@ -7468,10 +7464,6 @@
                                       ]
                                     }
                                   ]
-                                },
-                                {
-                                  "name": "toilet.n.01",
-                                  "hasModel": true
                                 }
                               ]
                             },
@@ -8694,16 +8686,6 @@
                           ]
                         },
                         {
-                          "name": "cake.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "tablet.n.03",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
                           "name": "slab.n.01",
                           "hasModel": true,
                           "children": [
@@ -9230,16 +9212,6 @@
                                         {
                                           "name": "coffee_bean.n.01",
                                           "hasModel": true
-                                        },
-                                        {
-                                          "name": "bean.n.02",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "soy.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
                                         }
                                       ]
                                     },
@@ -9734,6 +9706,10 @@
                               "hasModel": true
                             }
                           ]
+                        },
+                        {
+                          "name": "shell.n.05",
+                          "hasModel": true
                         }
                       ]
                     }
@@ -9832,16 +9808,6 @@
                                       ]
                                     },
                                     {
-                                      "name": "origanum.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "cooked__oregano.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "mint.n.02",
                                       "hasModel": true,
                                       "children": [
@@ -9870,10 +9836,6 @@
                                               "hasModel": true
                                             }
                                           ]
-                                        },
-                                        {
-                                          "name": "summer_squash.n.01",
-                                          "hasModel": true
                                         }
                                       ]
                                     },
@@ -9918,16 +9880,6 @@
                                     {
                                       "name": "ivy.n.01",
                                       "hasModel": true
-                                    },
-                                    {
-                                      "name": "morning_glory.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "sweet_potato.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
                                     }
                                   ]
                                 },
@@ -10066,16 +10018,6 @@
                                         {
                                           "name": "rose.n.01",
                                           "hasModel": true
-                                        },
-                                        {
-                                          "name": "capsicum.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "sweet_pepper.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
                                         }
                                       ]
                                     },
@@ -11854,22 +11796,6 @@
                       ]
                     },
                     {
-                      "name": "suspension.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "vapor.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "steam.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
                       "name": "petrolatum.n.01",
                       "hasModel": true,
                       "children": [
@@ -12165,6 +12091,10 @@
                                     },
                                     {
                                       "name": "bay_leaf.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "cooked__marjoram.n.01",
                                       "hasModel": true
                                     },
                                     {
@@ -16184,16 +16114,6 @@
                           ]
                         },
                         {
-                          "name": "cavity.n.04",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "socket.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
                           "name": "valve.n.01",
                           "hasModel": true
                         }
@@ -17984,22 +17904,6 @@
                           ]
                         },
                         {
-                          "name": "suspension.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "vapor.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "steam.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
                           "name": "petrolatum.n.01",
                           "hasModel": true,
                           "children": [
@@ -18100,46 +18004,6 @@
                                         {
                                           "name": "silver.n.02",
                                           "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "sum.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "gain.n.04",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "financial_gain.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "income.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "net_income.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "accumulation.n.04",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "store.n.02",
-                                              "hasModel": true
-                                            }
-                                          ]
                                         }
                                       ]
                                     }
@@ -18298,10 +18162,6 @@
                           "hasModel": true
                         }
                       ]
-                    },
-                    {
-                      "name": "stamp.n.03",
-                      "hasModel": true
                     },
                     {
                       "name": "award.n.02",
@@ -18698,34 +18558,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "name": "content.n.05",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "belief.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "doctrine.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "theological_doctrine.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "virgin_birth.n.02",
-                                  "hasModel": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
                 }
               ]
             },
@@ -18794,34 +18626,6 @@
                                   "hasModel": true
                                 }
                               ]
-                            },
-                            {
-                              "name": "athletic_game.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "outdoor_game.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "field_game.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "football.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "soccer.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
                             }
                           ]
                         },
@@ -18838,74 +18642,8 @@
                                   "hasModel": true
                                 }
                               ]
-                            },
-                            {
-                              "name": "sport.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "contact_sport.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "football.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "soccer.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "athletic_game.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "outdoor_game.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "field_game.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "football.n.01",
-                                              "hasModel": true,
-                                              "children": [
-                                                {
-                                                  "name": "soccer.n.01",
-                                                  "hasModel": true
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
                             }
                           ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "happening.n.01",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "sound.n.04",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "whistle.n.01",
-                          "hasModel": true
                         }
                       ]
                     }
@@ -19276,10 +19014,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "name": "supply.n.01",
-                  "hasModel": true
                 }
               ]
             },
