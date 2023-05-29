@@ -12124,14 +12124,24 @@
     },
     "chocolate_cookie_dough.n.01": {
         "deformable": {},
+        "disinfectable": {},
+        "dustyable": {},
         "flammable": {},
         "foldable": {},
         "freezable": {},
+        "grassyable": {},
         "heatable": {},
-        "physicalSubstance": {},
+        "mixable": {},
+        "moldyable": {},
+        "rustable": {},
+        "scratchable": {},
         "softBody": {},
-        "substance": {},
-        "unfoldable": {}
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "unfoldable": {},
+        "wetable": {},
+        "wrinkleable": {}
     },
     "chocolate_kiss.n.01": {
         "disinfectable": {},
@@ -18038,8 +18048,20 @@
         "substance": {}
     },
     "dough.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
         "freezable": {},
-        "heatable": {}
+        "grassyable": {},
+        "heatable": {},
+        "mixable": {},
+        "moldyable": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
     },
     "doughnut.n.02": {
         "disinfectable": {},
