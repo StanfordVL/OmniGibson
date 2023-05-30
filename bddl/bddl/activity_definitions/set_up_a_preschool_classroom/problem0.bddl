@@ -18,7 +18,7 @@
         wall_clock.n.01_1 - wall_clock.n.01
         wall.n.01_1 - wall.n.01
         map.n.01_1 - map.n.01
-        straight_chair.n.04_1 straight_chair.n.04_10 straight_chair.n.04_2 straight_chair.n.04_3 straight_chair.n.04_4 straight_chair.n.04_5 straight_chair.n.04_6 straight_chair.n.04_7 straight_chair.n.04_8 straight_chair.n.04_9 - straight_chair.n.04
+        straight_chair.n.01_1 straight_chair.n.01_10 straight_chair.n.01_2 straight_chair.n.01_3 straight_chair.n.01_4 straight_chair.n.01_5 straight_chair.n.01_6 straight_chair.n.01_7 straight_chair.n.01_8 straight_chair.n.01_9 - straight_chair.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -60,16 +60,16 @@
         (inroom desk.n.01_10 classroom) 
         (inroom wall_clock.n.01_1 classroom) 
         (inroom map.n.01_1 classroom) 
-        (inroom straight_chair.n.04_1 classroom)
-        (inroom straight_chair.n.04_2 classroom)
-        (inroom straight_chair.n.04_3 classroom)
-        (inroom straight_chair.n.04_4 classroom)
-        (inroom straight_chair.n.04_5 classroom)
-        (inroom straight_chair.n.04_6 classroom)
-        (inroom straight_chair.n.04_7 classroom)
-        (inroom straight_chair.n.04_8 classroom)
-        (inroom straight_chair.n.04_9 classroom)
-        (inroom straight_chair.n.04_10 classroom)
+        (inroom straight_chair.n.01_1 classroom)
+        (inroom straight_chair.n.01_2 classroom)
+        (inroom straight_chair.n.01_3 classroom)
+        (inroom straight_chair.n.01_4 classroom)
+        (inroom straight_chair.n.01_5 classroom)
+        (inroom straight_chair.n.01_6 classroom)
+        (inroom straight_chair.n.01_7 classroom)
+        (inroom straight_chair.n.01_8 classroom)
+        (inroom straight_chair.n.01_9 classroom)
+        (inroom straight_chair.n.01_10 classroom)
         (inroom floor.n.01_1 classroom) 
         (inroom wall.n.01_1 classroom)
         (ontop agent.n.01_1 floor.n.01_1)

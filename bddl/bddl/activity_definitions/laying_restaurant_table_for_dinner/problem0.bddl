@@ -10,7 +10,7 @@
         tablespoon.n.02_1 tablespoon.n.02_2 tablespoon.n.02_3 tablespoon.n.02_4 - tablespoon.n.02
         wineglass.n.01_1 wineglass.n.01_2 wineglass.n.01_3 wineglass.n.01_4 - wineglass.n.01
         water_glass.n.02_1 water_glass.n.02_2 water_glass.n.02_3 water_glass.n.02_4 - water_glass.n.02
-        armchair.n.04_1 armchair.n.04_2 armchair.n.04_3 armchair.n.04_4 - armchair.n.04
+        armchair.n.01_1 armchair.n.01_2 armchair.n.01_3 armchair.n.01_4 - armchair.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
         kitchen_table.n.01_1 - kitchen_table.n.01
         floor.n.01_1 - floor.n.01
@@ -49,10 +49,10 @@
         (inroom breakfast_table.n.01_1 dining_room) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom armchair.n.04_1 dining_room)
-        (inroom armchair.n.04_2 dining_room)
-        (inroom armchair.n.04_3 dining_room)
-        (inroom armchair.n.04_4 dining_room)
+        (inroom armchair.n.01_1 dining_room)
+        (inroom armchair.n.01_2 dining_room)
+        (inroom armchair.n.01_3 dining_room)
+        (inroom armchair.n.01_4 dining_room)
         (inroom kitchen_table.n.01_1 kitchen)
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -69,8 +69,8 @@
             )
             (forpairs
                 (?plate.n.04 - plate.n.04)
-                (?armchair.n.04 - armchair.n.04)
-                (nextto ?plate.n.04 ?armchair.n.04)
+                (?armchair.n.01 - armchair.n.01)
+                (nextto ?plate.n.04 ?armchair.n.01)
             )
             (forpairs
                 (?wineglass.n.01 - wineglass.n.01)
