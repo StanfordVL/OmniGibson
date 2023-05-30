@@ -1433,6 +1433,7 @@
         "wrinkleable": {}
     },
     "arugula.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -2263,6 +2264,7 @@
         "wrinkleable": {}
     },
     "bagel_dough.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -2563,6 +2565,7 @@
         "wrinkleable": {}
     },
     "banana_bread.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -2656,6 +2659,7 @@
         "wrinkleable": {}
     },
     "bap.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -3291,6 +3295,9 @@
         "wrinkleable": {}
     },
     "bean.n.01": {
+        "cookable": {
+            "cook_temperature": 58.0
+        },
         "freezable": {},
         "heatable": {}
     },
@@ -3340,6 +3347,7 @@
         "wrinkleable": {}
     },
     "beaten_egg.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -3445,6 +3453,9 @@
         "wrinkleable": {}
     },
     "beef.n.02": {
+        "cookable": {
+            "cook_temperature": 63.0
+        },
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
@@ -3498,12 +3509,14 @@
     },
     "beef_stew.n.01": {
         "boilable": {},
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "liquid": {},
         "substance": {}
     },
     "beefsteak_tomato.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -3776,6 +3789,9 @@
         "wrinkleable": {}
     },
     "berry.n.01": {
+        "cookable": {
+            "cook_temperature": 58.0
+        },
         "freezable": {},
         "heatable": {}
     },
@@ -3978,6 +3994,7 @@
         "wrinkleable": {}
     },
     "bird.n.02": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -4063,6 +4080,7 @@
         "wrinkleable": {}
     },
     "biscuit_dough.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -4376,6 +4394,7 @@
         "wrinkleable": {}
     },
     "blueberry_compote.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -6936,6 +6955,7 @@
         "visualSubstance": {}
     },
     "bouillon_cube.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -8334,6 +8354,7 @@
         "wrinkleable": {}
     },
     "breast.n.03": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -8575,6 +8596,7 @@
         "visualSubstance": {}
     },
     "brown_bread.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -9137,6 +9159,7 @@
         "wrinkleable": {}
     },
     "butter_cookie.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -9162,6 +9185,7 @@
         "substance": {}
     },
     "buttermilk_pancake.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -9199,6 +9223,7 @@
         "wrinkleable": {}
     },
     "cabbage.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -9311,6 +9336,7 @@
     },
     "cafe_au_lait.n.01": {
         "boilable": {},
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "liquid": {},
@@ -9351,6 +9377,7 @@
         "wrinkleable": {}
     },
     "cake_mix.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "nonDeformable": {},
@@ -10780,6 +10807,7 @@
         "wrinkleable": {}
     },
     "cauliflower.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -11347,6 +11375,7 @@
         "wrinkleable": {}
     },
     "cheddar.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -11368,6 +11397,7 @@
         "heatable": {}
     },
     "cheese_pastry.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -11393,6 +11423,7 @@
         "substance": {}
     },
     "cheese_sauce.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -11409,6 +11440,7 @@
         "wrinkleable": {}
     },
     "cheese_tart.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -11497,6 +11529,7 @@
     },
     "cherry_filling.n.01": {
         "boilable": {},
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -11658,6 +11691,7 @@
         "wrinkleable": {}
     },
     "chicken_breast.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -11721,6 +11755,7 @@
     },
     "chicken_curry.n.01": {
         "boilable": {},
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "liquid": {},
@@ -11784,6 +11819,7 @@
         "wrinkleable": {}
     },
     "chicken_tender.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -11801,6 +11837,7 @@
         "wrinkleable": {}
     },
     "chicken_wing.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -12031,6 +12068,7 @@
         "heatable": {}
     },
     "chocolate_bar.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -12085,6 +12123,7 @@
         "wrinkleable": {}
     },
     "chocolate_cake.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -12102,10 +12141,12 @@
         "wrinkleable": {}
     },
     "chocolate_candy.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
     "chocolate_chip_cookie.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -12123,6 +12164,7 @@
         "wrinkleable": {}
     },
     "chocolate_cookie_dough.n.01": {
+        "cookable": {},
         "deformable": {},
         "disinfectable": {},
         "dustyable": {},
@@ -12144,6 +12186,7 @@
         "wrinkleable": {}
     },
     "chocolate_kiss.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -12215,6 +12258,7 @@
         "wrinkleable": {}
     },
     "chopped__lettuce.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -12447,6 +12491,7 @@
         "wrinkleable": {}
     },
     "cinnamon_roll.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -12464,6 +12509,7 @@
         "wrinkleable": {}
     },
     "cinnamon_sugar.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -12902,6 +12948,7 @@
         "wrinkleable": {}
     },
     "club_sandwich.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -13014,6 +13061,7 @@
         "wrinkleable": {}
     },
     "coca_cola.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -13396,6 +13444,7 @@
         "wrinkleable": {}
     },
     "cola.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -13630,6 +13679,9 @@
         "substance": {}
     },
     "common_bean.n.02": {
+        "cookable": {
+            "cook_temperature": 58.0
+        },
         "freezable": {},
         "heatable": {}
     },
@@ -13732,6 +13784,7 @@
         "wrinkleable": {}
     },
     "compote.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {}
@@ -14159,6 +14212,7 @@
         "wrinkleable": {}
     },
     "convenience_food.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "nonDeformable": {},
@@ -14182,6 +14236,7 @@
         "wrinkleable": {}
     },
     "cooked__black_bean.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14189,6 +14244,7 @@
         "substance": {}
     },
     "cooked__black_pepper.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14196,6 +14252,7 @@
         "visualSubstance": {}
     },
     "cooked__breadcrumb.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14213,6 +14270,7 @@
         "wrinkleable": {}
     },
     "cooked__brown_rice.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14220,6 +14278,7 @@
         "substance": {}
     },
     "cooked__chicken_soup.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -14237,6 +14296,7 @@
     },
     "cooked__chickpea.n.01": {
         "boilable": {},
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14244,6 +14304,7 @@
         "substance": {}
     },
     "cooked__cooking_oil.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14261,6 +14322,7 @@
         "wrinkleable": {}
     },
     "cooked__cumin.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14268,6 +14330,7 @@
         "visualSubstance": {}
     },
     "cooked__curry_powder.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14285,6 +14348,7 @@
         "wrinkleable": {}
     },
     "cooked__diced__beefsteak_tomato.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14292,6 +14356,7 @@
         "substance": {}
     },
     "cooked__diced__bell_pepper.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14299,6 +14364,7 @@
         "substance": {}
     },
     "cooked__diced__bratwurst.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14306,6 +14372,7 @@
         "substance": {}
     },
     "cooked__diced__broccoli.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14313,6 +14380,7 @@
         "substance": {}
     },
     "cooked__diced__carne_asada.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14320,6 +14388,7 @@
         "substance": {}
     },
     "cooked__diced__carrot.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14337,6 +14406,7 @@
         "wrinkleable": {}
     },
     "cooked__diced__chard.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14344,6 +14414,7 @@
         "substance": {}
     },
     "cooked__diced__chicken.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14351,6 +14422,7 @@
         "substance": {}
     },
     "cooked__diced__chili.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14358,6 +14430,7 @@
         "substance": {}
     },
     "cooked__diced__chorizo.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14365,6 +14438,7 @@
         "substance": {}
     },
     "cooked__diced__clove.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14372,6 +14446,7 @@
         "substance": {}
     },
     "cooked__diced__green_onion.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14379,6 +14454,7 @@
         "substance": {}
     },
     "cooked__diced__head_cabbage.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -14395,6 +14471,7 @@
         "wrinkleable": {}
     },
     "cooked__diced__potato.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14402,6 +14479,7 @@
         "substance": {}
     },
     "cooked__diced__steak.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14409,6 +14487,7 @@
         "substance": {}
     },
     "cooked__diced__turkey.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14416,6 +14495,7 @@
         "substance": {}
     },
     "cooked__diced__vidalia_onion.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14423,6 +14503,7 @@
         "substance": {}
     },
     "cooked__diced__virginia_ham.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14430,6 +14511,7 @@
         "substance": {}
     },
     "cooked__diced__zucchini.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14437,6 +14519,7 @@
         "substance": {}
     },
     "cooked__flour.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -14453,6 +14536,7 @@
         "wrinkleable": {}
     },
     "cooked__fritter_batter.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14470,6 +14554,7 @@
         "wrinkleable": {}
     },
     "cooked__granulated_sugar.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14487,6 +14572,7 @@
         "wrinkleable": {}
     },
     "cooked__ground_beef.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14494,6 +14580,7 @@
         "substance": {}
     },
     "cooked__kidney_bean.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14501,6 +14588,7 @@
         "substance": {}
     },
     "cooked__lemon-pepper_seasoning.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -14517,6 +14605,7 @@
         "wrinkleable": {}
     },
     "cooked__marinade.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14535,6 +14624,7 @@
     },
     "cooked__marinara.n.01": {
         "boilable": {},
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14542,6 +14632,7 @@
         "substance": {}
     },
     "cooked__marjoram.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14549,6 +14640,7 @@
         "visualSubstance": {}
     },
     "cooked__melted__butter.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -14565,6 +14657,7 @@
         "wrinkleable": {}
     },
     "cooked__noodle.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14572,6 +14665,7 @@
         "substance": {}
     },
     "cooked__olive_oil.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14589,6 +14683,7 @@
         "wrinkleable": {}
     },
     "cooked__onion_powder.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14606,6 +14701,7 @@
         "wrinkleable": {}
     },
     "cooked__orzo.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14613,6 +14709,7 @@
         "substance": {}
     },
     "cooked__paprika.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14620,6 +14717,7 @@
         "visualSubstance": {}
     },
     "cooked__penne.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -14636,6 +14734,7 @@
         "wrinkleable": {}
     },
     "cooked__popcorn.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14643,6 +14742,7 @@
         "substance": {}
     },
     "cooked__pumpkin_seed.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14650,6 +14750,7 @@
         "substance": {}
     },
     "cooked__quinoa.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -14657,6 +14758,7 @@
         "substance": {}
     },
     "cooked__ramen.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14674,6 +14776,7 @@
         "wrinkleable": {}
     },
     "cooked__red_meat_sauce.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14691,6 +14794,7 @@
         "wrinkleable": {}
     },
     "cooked__red_wine.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -14708,6 +14812,7 @@
         "wrinkleable": {}
     },
     "cooked__saffron.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -15911,6 +16016,7 @@
         "wrinkleable": {}
     },
     "crumb.n.03": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -16135,6 +16241,7 @@
         "wrinkleable": {}
     },
     "currant.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -16168,6 +16275,7 @@
     },
     "curry.n.01": {
         "boilable": {},
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "liquid": {},
@@ -17063,6 +17171,7 @@
         "wrinkleable": {}
     },
     "diced__apple.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -17079,12 +17188,14 @@
         "wrinkleable": {}
     },
     "diced__avocado.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
         "substance": {}
     },
     "diced__beef_roast.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17102,12 +17213,14 @@
         "wrinkleable": {}
     },
     "diced__beefsteak_tomato.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
         "substance": {}
     },
     "diced__beet.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17125,6 +17238,7 @@
         "wrinkleable": {}
     },
     "diced__bell_pepper.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17142,6 +17256,7 @@
         "wrinkleable": {}
     },
     "diced__bratwurst.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17159,6 +17274,7 @@
         "wrinkleable": {}
     },
     "diced__broccoli.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17176,6 +17292,7 @@
         "wrinkleable": {}
     },
     "diced__carrot.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -17183,6 +17300,7 @@
         "substance": {}
     },
     "diced__celery.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -17199,6 +17317,7 @@
         "wrinkleable": {}
     },
     "diced__chard.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -17215,6 +17334,7 @@
         "wrinkleable": {}
     },
     "diced__cheddar.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17232,6 +17352,7 @@
         "wrinkleable": {}
     },
     "diced__chicken.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -17239,6 +17360,7 @@
         "substance": {}
     },
     "diced__chicken_breast.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17256,6 +17378,7 @@
         "wrinkleable": {}
     },
     "diced__chili.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17273,6 +17396,7 @@
         "wrinkleable": {}
     },
     "diced__clove.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -17280,12 +17404,14 @@
         "substance": {}
     },
     "diced__cucumber.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
         "substance": {}
     },
     "diced__feta.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17303,6 +17429,7 @@
         "wrinkleable": {}
     },
     "diced__green_onion.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17320,6 +17447,7 @@
         "wrinkleable": {}
     },
     "diced__head_cabbage.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -17336,6 +17464,7 @@
         "wrinkleable": {}
     },
     "diced__kiwi.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -17352,12 +17481,14 @@
         "wrinkleable": {}
     },
     "diced__lemon.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
         "substance": {}
     },
     "diced__lettuce.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -17365,12 +17496,14 @@
         "substance": {}
     },
     "diced__mango.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
         "substance": {}
     },
     "diced__pineapple.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -17387,12 +17520,14 @@
         "wrinkleable": {}
     },
     "diced__potato.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
         "substance": {}
     },
     "diced__spinach.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -17400,6 +17535,7 @@
         "substance": {}
     },
     "diced__steak.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17417,6 +17553,7 @@
         "wrinkleable": {}
     },
     "diced__vidalia_onion.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -17424,6 +17561,7 @@
         "substance": {}
     },
     "diced__virginia_ham.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -17431,12 +17569,14 @@
         "substance": {}
     },
     "diced__watermelon.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
         "substance": {}
     },
     "diced__zucchini.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -17555,6 +17695,7 @@
         "substance": {}
     },
     "dip.n.07": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -18064,6 +18205,7 @@
         "wrinkleable": {}
     },
     "doughnut.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -18245,6 +18387,7 @@
         "wrinkleable": {}
     },
     "dried_apricot.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -18348,6 +18491,7 @@
     },
     "drip_coffee.n.01": {
         "boilable": {},
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "liquid": {},
@@ -18462,6 +18606,7 @@
         "wrinkleable": {}
     },
     "drupe.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -18630,6 +18775,7 @@
         "wrinkleable": {}
     },
     "dumpling.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -18906,6 +19052,7 @@
         "wrinkleable": {}
     },
     "edible_cookie_dough.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -18922,6 +19069,7 @@
         "wrinkleable": {}
     },
     "edible_fat.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -19027,6 +19175,7 @@
     },
     "eggnog.n.01": {
         "boilable": {},
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "liquid": {},
@@ -19879,6 +20028,7 @@
         "wrinkleable": {}
     },
     "fat.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -19984,6 +20134,7 @@
         "wrinkleable": {}
     },
     "fennel.n.04": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -21182,6 +21333,7 @@
         "wrinkleable": {}
     },
     "frank.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -21198,6 +21350,7 @@
         "wrinkleable": {}
     },
     "frankfurter_bun.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -21251,6 +21404,7 @@
         "wrinkleable": {}
     },
     "french_fries.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -21311,6 +21465,7 @@
         "nonDeformable": {}
     },
     "friedcake.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -21328,6 +21483,7 @@
         "wrinkleable": {}
     },
     "fritter_batter.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -21418,6 +21574,7 @@
         "substance": {}
     },
     "fruitcake.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -22484,6 +22641,7 @@
         "wrinkleable": {}
     },
     "gooseberry.n.02": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -22671,12 +22829,14 @@
         "wrinkleable": {}
     },
     "granulated_salt.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
         "substance": {}
     },
     "granulated_sugar.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -22811,6 +22971,7 @@
         "wrinkleable": {}
     },
     "grated_cheese.n.01": {
+        "cookable": {},
         "flammable": {},
         "freezable": {},
         "heatable": {},
@@ -22969,6 +23130,7 @@
     },
     "green_tea_latte.n.01": {
         "boilable": {},
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "liquid": {},
@@ -22993,6 +23155,9 @@
         "wrinkleable": {}
     },
     "greens.n.01": {
+        "cookable": {
+            "cook_temperature": 58.0
+        },
         "freezable": {},
         "heatable": {}
     },
@@ -23096,6 +23261,7 @@
         "wrinkleable": {}
     },
     "ground_coffee.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "physicalSubstance": {},
@@ -23205,6 +23371,7 @@
         "wrinkleable": {}
     },
     "gumbo.n.03": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23393,6 +23560,7 @@
         "wrinkleable": {}
     },
     "half__apple.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23409,6 +23577,7 @@
         "wrinkleable": {}
     },
     "half__apple_pie.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -23426,6 +23595,7 @@
         "wrinkleable": {}
     },
     "half__beefsteak_tomato.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23442,6 +23612,7 @@
         "wrinkleable": {}
     },
     "half__bell_pepper.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23458,6 +23629,7 @@
         "wrinkleable": {}
     },
     "half__chestnut.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23474,6 +23646,7 @@
         "wrinkleable": {}
     },
     "half__coconut.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23490,6 +23663,7 @@
         "wrinkleable": {}
     },
     "half__eggplant.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23506,6 +23680,7 @@
         "wrinkleable": {}
     },
     "half__feta.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23522,6 +23697,7 @@
         "wrinkleable": {}
     },
     "half__hard-boiled_egg.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -23539,6 +23715,7 @@
         "wrinkleable": {}
     },
     "half__lemon.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23555,6 +23732,7 @@
         "wrinkleable": {}
     },
     "half__lime.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23588,6 +23766,7 @@
         "wrinkleable": {}
     },
     "half__mango.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23604,6 +23783,7 @@
         "wrinkleable": {}
     },
     "half__mushroom.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -23621,6 +23801,7 @@
         "wrinkleable": {}
     },
     "half__orange.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23637,6 +23818,7 @@
         "wrinkleable": {}
     },
     "half__pineapple.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23653,6 +23835,7 @@
         "wrinkleable": {}
     },
     "half__plum.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23669,6 +23852,7 @@
         "wrinkleable": {}
     },
     "half__pomegranate.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23685,6 +23869,7 @@
         "wrinkleable": {}
     },
     "half__pomelo.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23701,6 +23886,7 @@
         "wrinkleable": {}
     },
     "half__potato.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -23718,6 +23904,7 @@
         "wrinkleable": {}
     },
     "half__vidalia_onion.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
@@ -26973,6 +27160,7 @@
         "wrinkleable": {}
     },
     "kiss.n.03": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -27666,6 +27854,7 @@
         "substance": {}
     },
     "legume.n.03": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -30606,6 +30795,7 @@
         "substance": {}
     },
     "mix.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "nonDeformable": {},
@@ -30882,6 +31072,7 @@
         "wrinkleable": {}
     },
     "morsel.n.02": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -33018,6 +33209,9 @@
         "wrinkleable": {}
     },
     "pancake.n.01": {
+        "cookable": {
+            "cook_temperature": 175.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -34105,6 +34299,9 @@
         "wrinkleable": {}
     },
     "pepper.n.03": {
+        "cookable": {
+            "cook_temperature": 58.0
+        },
         "freezable": {},
         "heatable": {},
         "substance": {},
@@ -36184,6 +36381,7 @@
         "wrinkleable": {}
     },
     "pork_sausage.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -36644,6 +36842,7 @@
         "wrinkleable": {}
     },
     "poultry.n.02": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -37429,6 +37628,7 @@
         "wrinkleable": {}
     },
     "quick_bread.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -37869,6 +38069,7 @@
         "wrinkleable": {}
     },
     "ready-mix.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {},
         "nonDeformable": {},
@@ -39336,6 +39537,7 @@
         "wrinkleable": {}
     },
     "salad_green.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -39540,6 +39742,7 @@
         "wrinkleable": {}
     },
     "sandwich.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -39687,6 +39890,9 @@
         "wrinkleable": {}
     },
     "sausage.n.01": {
+        "cookable": {
+            "cook_temperature": 58.0
+        },
         "freezable": {},
         "heatable": {}
     },
@@ -43024,6 +43230,7 @@
         "nonDeformable": {}
     },
     "spice.n.02": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -44854,6 +45061,7 @@
         "wrinkleable": {}
     },
     "sweet_pepper.n.02": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -44878,6 +45086,7 @@
         "wrinkleable": {}
     },
     "sweet_roll.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -45588,6 +45797,7 @@
         "wrinkleable": {}
     },
     "taste.n.05": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -48083,6 +48293,7 @@
         "heatable": {}
     },
     "vegetable_oil.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {}
     },
@@ -49658,6 +49869,7 @@
         "wrinkleable": {}
     },
     "white_sauce.n.01": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -49987,6 +50199,7 @@
         "wrinkleable": {}
     },
     "wing.n.09": {
+        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {},
