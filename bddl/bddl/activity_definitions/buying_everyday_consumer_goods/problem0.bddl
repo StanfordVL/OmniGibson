@@ -59,9 +59,9 @@
             (forall
                 (?apple.n.01 - apple.n.01)
                 (forall 
-                    (?dairy.n.01 - dairy.n.01)
+                    (?dairy_product.n.01 - dairy_product.n.01)
                     (not 
-                        (nextto ?apple.n.01 ?dairy.n.01)
+                        (nextto ?apple.n.01 ?dairy_product.n.01)
                     )
                 )
             )

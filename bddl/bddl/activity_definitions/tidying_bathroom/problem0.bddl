@@ -17,7 +17,6 @@
         tank_top.n.01_1 tank_top.n.01_2 - tank_top.n.01
         legging.n.01_1 - legging.n.01
         wall.n.01_1 - wall.n.01
-        toilet.n.02_1 - toilet.n.02
         agent.n.01_1 - agent.n.01
     )
     
@@ -41,8 +40,7 @@
         (ontop legging.n.01_1 floor.n.01_1) 
         (inroom toilet.n.02_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
-        (inroom toilet.n.02_1 bathroom)
-        (inroom wall.n.01_1 bathroom) 
+        (inroom wall.n.01_1 bathroom)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

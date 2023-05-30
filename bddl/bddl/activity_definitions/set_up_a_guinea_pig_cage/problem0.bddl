@@ -5,7 +5,7 @@
         hutch.n.01_1 - hutch.n.01
         floor.n.01_1 - floor.n.01
         pellet_food.n.01_1 - pellet_food.n.01
-        pellet_food__bag.n.01.n.01_1 - pellet_food__bag.n.01.n.01
+        pellet_food__bag.n.01_1 - pellet_food__bag.n.01
         bowl.n.01_1 - bowl.n.01
         water_bottle.n.01_1 - water_bottle.n.01
         coffee_table.n.01_1 - coffee_table.n.01
@@ -15,8 +15,8 @@
     
     (:init 
         (ontop hutch.n.01_1 floor.n.01_1) 
-        (filled pellet_food__bag.n.01.n.01_1 pellet_food.n.01_1)
-        (ontop pellet_food__bag.n.01.n.01_1 floor.n.01_1)
+        (filled pellet_food__bag.n.01_1 pellet_food.n.01_1)
+        (ontop pellet_food__bag.n.01_1 floor.n.01_1)
         (ontop water_bottle.n.01_1 coffee_table.n.01_1) 
         (ontop bowl.n.01_1 coffee_table.n.01_1)
         (ontop hay.n.01_1 coffee_table.n.01_1) 
