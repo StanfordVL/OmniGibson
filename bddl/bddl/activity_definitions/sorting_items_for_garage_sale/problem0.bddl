@@ -10,7 +10,7 @@
         packing_box.n.02_1 packing_box.n.02_2 packing_box.n.02_3 packing_box.n.02_4 - packing_box.n.02
         cooking_utensil.n.01_1 cooking_utensil.n.01_2 - cooking_utensil.n.01
         tennis_racket.n.01_1 tennis_racket.n.01_2 - tennis_racket.n.01
-        coat.n.02_1 coat.n.02_2 - coat.n.02
+        coat.n.01_1 coat.n.01_2 - coat.n.01
         blanket.n.01_1 - blanket.n.01
         gym_shoe.n.01_1 gym_shoe.n.01_2 - gym_shoe.n.01
         shelf.n.01_1 - shelf.n.01
@@ -38,8 +38,8 @@
         (ontop cooking_utensil.n.01_2 floor.n.01_1) 
         (ontop tennis_racket.n.01_1 floor.n.01_1) 
         (ontop tennis_racket.n.01_2 tennis_racket.n.01_1) 
-        (ontop coat.n.02_1 floor.n.01_1)
-        (ontop coat.n.02_2 floor.n.01_1)
+        (ontop coat.n.01_1 floor.n.01_1)
+        (ontop coat.n.01_2 floor.n.01_1)
         (ontop blanket.n.01_1 floor.n.01_1) 
         (ontop gym_shoe.n.01_1 textbook.n.01_3) 
         (ontop gym_shoe.n.01_2 textbook.n.01_3) 
@@ -96,10 +96,10 @@
                     (inside ?blanket.n.01_1 ?packing_box.n.02) 
                     (folded ?blanket.n.01_1)
                     (forall 
-                        (?coat.n.02 - coat.n.02)
+                        (?coat.n.01 - coat.n.01)
                         (and
-                            (inside ?coat.n.02 ?packing_box.n.02)
-                            (folded ?coat.n.02)
+                            (inside ?coat.n.01 ?packing_box.n.02)
+                            (folded ?coat.n.01)
                         )
                     ) 
                 )
