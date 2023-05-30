@@ -76,5 +76,29 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: none of the choices is good",
         "processed": false
+    },
+    {
+        "object": "floors-qdlnea",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: floor too big, need segmentation",
+        "processed": false
+    },
+    {
+        "object": "locker-bxlkyo",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: does not model door handle",
+        "processed": false
+    },
+    {
+        "object": "shower_stall-vcwkma",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: does not model door handle",
+        "processed": false
+    },
+    {
+        "object": "soap_dispenser-zoyyia",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: floating mesh on top of bottle",
+        "processed": false
     }
 ]

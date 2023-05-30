@@ -40,5 +40,23 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: none is good",
         "processed": false
+    },
+    {
+        "object": "walls-xftoqy",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: wall too big, need segmentation",
+        "processed": false
+    },
+    {
+        "object": "floors-nwjrkc",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: corner not perpendicular",
+        "processed": false
+    },
+    {
+        "object": "sink-jbborl",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: sink surface not flat",
+        "processed": false
     }
 ]

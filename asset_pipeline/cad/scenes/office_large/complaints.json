@@ -40,5 +40,17 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: middle square not perpendicular",
         "processed": false
+    },
+    {
+        "object": "cup-wfavfd",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: object is faulty (there is liquid inside the cup)",
+        "processed": false
+    },
+    {
+        "object": "door-stvajh",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: missing door handle",
+        "processed": false
     }
 ]
