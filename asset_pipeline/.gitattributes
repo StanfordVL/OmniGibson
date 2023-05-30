@@ -1,2 +1,3 @@
-*.json merge=json_merge
+cad/*/*/artifacts/collision_selection.json merge=json-obj
+cad/*/*/complaints.json merge=json-list
 *.dvc merge=dvc

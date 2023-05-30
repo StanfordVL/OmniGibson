@@ -180,12 +180,6 @@
         "processed": false
     },
     {
-        "object": "locker-gemgfz",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
         "object": "map-umftoc",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
@@ -219,6 +213,42 @@
         "object": "wall_clock-fqvgny",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
+        "processed": false
+    },
+    {
+        "object": "bottom_cabinet-kctcuj",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: incorrect handle",
+        "processed": false
+    },
+    {
+        "object": "classroom_mock_up-zfwwfn",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "\\",
+        "processed": false
+    },
+    {
+        "object": "door-rwmofs",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: missing door handle",
+        "processed": false
+    },
+    {
+        "object": "door-uatmde",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: missing door handle",
+        "processed": false
+    },
+    {
+        "object": "stadium_stand-psxwbh",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: does not handle every row correctly",
+        "processed": false
+    },
+    {
+        "object": "stadium_stand-mtoaja",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: object too big, stairs not modeled correctly",
         "processed": false
     }
 ]

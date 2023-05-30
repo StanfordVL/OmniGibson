@@ -48,12 +48,6 @@
         "processed": false
     },
     {
-        "object": "display_fridge-wlxyjn",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
         "object": "freezer-aayduy",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
@@ -75,6 +69,30 @@
         "object": "walls-ifljlu",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "walls need splitting",
+        "processed": false
+    },
+    {
+        "object": "grocery_shelf-duckhq",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: uneven back",
+        "processed": false
+    },
+    {
+        "object": "magazine_rack-arrjbg",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: slanted surface",
+        "processed": false
+    },
+    {
+        "object": "coffee_maker-xybbzt",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "does not moddel front correctly",
+        "processed": false
+    },
+    {
+        "object": "oden_cooker-fjpams",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "does not model cup to be fillable",
         "processed": false
     }
 ]

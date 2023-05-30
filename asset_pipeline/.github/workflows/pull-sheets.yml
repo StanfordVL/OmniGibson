@@ -5,6 +5,8 @@ on:
     - cron: "50 * * * *"  # 50 past every hour
   workflow_dispatch:
   push:
+    branches:
+      - main
 
 jobs:
   pull-sheets:
