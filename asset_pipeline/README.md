@@ -17,11 +17,16 @@ conda env create --file environment.yml
 ```
 
 Also download the necessary packages into the 3ds Max Python environment by running the below command (updating the 3ds Max installation path as necessary):
+
+```powershell
+& 'C:\Program Files\Autodesk\3ds Max 2022\Python37\python.exe' -m ensurepip
+```
+
 ```powershell
 & 'C:\Program Files\Autodesk\3ds Max 2022\Python37\python.exe' -m pip install -r requirements_3dsmax.txt
 ```
 
-Finally, import our 3ds Max export settings by copying the `configs/gw_objexp.ini` file into `%LocalAppData%\Autodesk\3dsMax\2022 - 64bit\ENU\en-US\plugcfg` on your machine, overwriting any existing file if necessary.
+Finally, import our 3ds Max export settings by copying the `configs/gw_objexp.ini` file into `%LocalAppData%\Autodesk\3dsMax\2022 - 64bit\ENU\en-US\plugcfg` on your machine, overwriting any existing file if necessary (if the folder doesn't exist, launch 3ds Max).
 
 ## Pulling Raw BEHAVIOR-1K 3ds Max Files
 While it can be run on arbitrary 3ds Max files, this pipeline is designed to run on the 3ds Max files that are part of the BEHAVIOR-1K project. **Unfortunately, due to licensing issues, we are unable to release these raw model files to non-Stanford-affilliated users.**
