@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        wool_coat.n.02_1 - wool_coat.n.02
+        wool_coat.n.01_1 - wool_coat.n.01
         dust.n.01_1 - dust.n.01
         lint.n.01_1 - lint.n.01
         scrub_brush.n.01_1 - scrub_brush.n.01
@@ -16,9 +16,9 @@
     )
     
     (:init 
-        (ontop wool_coat.n.02_1 clothes_dryer.n.01_1)
-        (covered wool_coat.n.02_1 dust.n.01_1)
-        (covered wool_coat.n.02_1 lint.n.01_1)
+        (ontop wool_coat.n.01_1 clothes_dryer.n.01_1)
+        (covered wool_coat.n.01_1 dust.n.01_1)
+        (covered wool_coat.n.01_1 lint.n.01_1)
         (ontop scrub_brush.n.01_1 washer.n.03_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop detergent__bottle.n.01_1 clothes_dryer.n.01_1)
@@ -32,10 +32,10 @@
     (:goal 
         (and 
             (not 
-                (covered ?wool_coat.n.02_1 ?dust.n.01_1)
+                (covered ?wool_coat.n.01_1 ?dust.n.01_1)
             ) 
             (not 
-                (covered ?wool_coat.n.02_1 ?lint.n.01_1)
+                (covered ?wool_coat.n.01_1 ?lint.n.01_1)
             ) 
         )
     )

@@ -14,11 +14,11 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init 
+    (:init
+        (ontop chopping_board.n.01_1 oven.n.01_1)
+        (ontop prawn.n.01_1 chopping_board.n.01_1)
         (ontop prawn.n.01_2 chopping_board.n.01_1)
         (ontop prawn.n.01_3 chopping_board.n.01_1)
-        (ontop chopping_board.n.01_1 oven.n.01_1) 
-        (ontop prawn.n.01_1 chopping_board.n.01_1)
         (covered prawn.n.01_1 sand.n.04_1)
         (covered prawn.n.01_2 sand.n.04_1)
         (covered prawn.n.01_3 sand.n.04_1)

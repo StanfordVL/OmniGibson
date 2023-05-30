@@ -7,6 +7,7 @@
         polish.n.03_1 - polish.n.03
         polish__bottle.n.01_1 - polish__bottle.n.01
         cabinet.n.01_1 - cabinet.n.01
+        dishtowel.n.01_1 - dishtowel.n.01
         clothes_dryer.n.01_1 - clothes_dryer.n.01
         dust.n.01_1 - dust.n.01
         water.n.06_1 - water.n.06
@@ -16,6 +17,7 @@
     
     (:init
         (ontop belt.n.02_1 clothes_dryer.n.01_1)
+        (ontop dishtowel.n.01_1 clothes_dryer.n.01_1)
         (filled polish__bottle.n.01_1 polish.n.03_1) 
         (inside polish__bottle.n.01_1 cabinet.n.01_1)
         (covered belt.n.02_1 dust.n.01_1)
