@@ -6,7 +6,7 @@
         lawn.n.01_1 - lawn.n.01
         artichoke.n.02_1 - artichoke.n.02
         chard.n.02_1 - chard.n.02
-        beetroot.n.02_1 - beetroot.n.02
+        beet.n.02_1 - beet.n.02
         wicker_basket.n.01_1 wicker_basket.n.01_2 - wicker_basket.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
@@ -16,7 +16,7 @@
         (ontop rail_fence.n.01_1 lawn.n.01_1) 
         (ontop artichoke.n.02_1 lawn.n.01_1)
         (ontop chard.n.02_1 lawn.n.01_1)
-        (ontop beetroot.n.02_1 lawn.n.01_1)
+        (ontop beet.n.02_1 lawn.n.01_1)
         (ontop wicker_basket.n.01_1 lawn.n.01_1) 
         (ontop wicker_basket.n.01_2 lawn.n.01_1) 
         (inroom lawn.n.01_1 garden) 
@@ -36,7 +36,7 @@
             )
             (exists 
                 (?wicker_basket.n.01 - wicker_basket.n.01)
-                (inside ?beetroot.n.02_1 ?wicker_basket.n.01)
+                (inside ?beet.n.02_1 ?wicker_basket.n.01)
             )
         )
     )
