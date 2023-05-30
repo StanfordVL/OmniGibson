@@ -90,7 +90,7 @@ def get_annots_canonical(syn_prop_dict):
         for prop, applies in prop_binaries.items():
             if prop in DESIRED_PROPS and bool(applies) and float(applies): 
                 synset_canonical[prop] = {}
-            elif prop == "objectType":
+            elif prop == "objectType" and applies in DESIRED_PROPS:
                 synset_canonical[applies] = {}
         canonical[synset] = synset_canonical
     canonical_with_programmatic = add_programmatic_properties(canonical)
