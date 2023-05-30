@@ -53,7 +53,8 @@ PROP_TO_DESC = { #added by hand from B1K Object States Google Doc found here htt
     "fireSource": None,
     "overcookable": "overcooked",
     "substance": None,
-    "physicalSubstance": None,
+    "microPhysicalSubstance": None,
+    "macroPhysicalSubstance": None,
     "visualSubstance": None,
     "deformable": None,
     "softBody": None,
@@ -70,7 +71,7 @@ PROP_TO_DESC = { #added by hand from B1K Object States Google Doc found here htt
     "blendable": None,
     "rope": None,
     "fillable": None,
-    "nonDeformable": None,
+    "rigidBody": None,
     "nonSubstance": None,
     "particleRemover": None,
     "particleApplier": None,
@@ -89,6 +90,8 @@ def get_annots_canonical(syn_prop_dict):
         for prop, applies in prop_binaries.items():
             if prop in DESIRED_PROPS and bool(applies) and float(applies): 
                 synset_canonical[prop] = {}
+            elif prop == "objectType":
+                synset_canonical[applies] = {}
         canonical[synset] = synset_canonical
     canonical_with_programmatic = add_programmatic_properties(canonical)
     return canonical_with_programmatic
@@ -106,7 +109,7 @@ def add_programmatic_properties(synset_content): # runs programmatic addition ov
     for synset in synset_content:
         if "liquid" in synset_content[synset]:
             synset_content[synset]["boilable"] = {}
-        if ("visualSubstance" in synset_content[synset]) or ("physicalSubstance" in synset_content[synset]) or ("liquid" in synset_content[synset]):
+        if ("visualSubstance" in synset_content[synset]) or ("microPhysicalSubstance" in synset_content[synset]) or ("macroPhysicalSubstance" in synset_content[synset]) or ("liquid" in synset_content[synset]):
             synset_content[synset]["substance"] = {}
         if ("cloth" in synset_content[synset]) or ("rope" in synset_content[synset]) or ("softBody" in synset_content[synset]):
             synset_content[synset]["deformable"] = {}
