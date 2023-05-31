@@ -4,7 +4,6 @@
     (:objects
         half__apple.n.01_1 half__apple.n.01_2 - half__apple.n.01
         plate.n.04_1 - plate.n.04
-        chocolate_kiss.n.01_1 - chocolate_kiss.n.01
         dinner_napkin.n.01_1 - dinner_napkin.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
         compost_bin.n.01_1 - compost_bin.n.01
@@ -17,8 +16,7 @@
     (:init 
         (ontop half__apple.n.01_1 dinner_napkin.n.01_1) 
         (ontop half__apple.n.01_2 dinner_napkin.n.01_1) 
-        (ontop chocolate_kiss.n.01_1 plate.n.04_1) 
-        (ontop plate.n.04_1 breakfast_table.n.01_1) 
+        (ontop plate.n.04_1 breakfast_table.n.01_1)
         (ontop dinner_napkin.n.01_1 breakfast_table.n.01_1) 
         (ontop compost_bin.n.01_1 floor.n.01_2)
         (inroom breakfast_table.n.01_1 dining_room) 
@@ -31,8 +29,7 @@
     
     (:goal 
         (and 
-            (inside ?chocolate_kiss.n.01_1 ?cabinet.n.01_1)
-            (forall 
+            (forall
                 (?half__apple.n.01 - half__apple.n.01)
                 (inside ?half__apple.n.01 ?compost_bin.n.01_1)
             )

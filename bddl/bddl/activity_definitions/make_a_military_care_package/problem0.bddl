@@ -4,13 +4,13 @@
     (:objects
         carton.n.02_1 - carton.n.02
         coffee_table.n.01_1 - coffee_table.n.01
-        vodka__bottle.n.01_1 - vodka__bottle.n.01
-        shampoo__bottle.n.01_1 - shampoo__bottle.n.01
-        liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
+        bottle__of__vodka.n.01_1 - bottle__of__vodka.n.01
+        bottle__of__shampoo.n.01_1 - bottle__of__shampoo.n.01
+        bottle__of__liquid_soap.n.01_1 - bottle__of__liquid_soap.n.01
         flashlight.n.01_1 - flashlight.n.01
         toothbrush.n.01_1 - toothbrush.n.01
-        analgesic.n.01_1 - analgesic.n.01
-        lotion__bottle.n.01_1 - lotion__bottle.n.01
+        bottle__of__analgesics.n.01_1 - bottle__of__analgesics.n.01
+        lbottle__of__lotion.n.01_1 - lbottle__of__lotion.n.01
         cookie.n.01_1 - cookie.n.01
         chocolate_box.n.01_1 - chocolate_box.n.01
         floor.n.01_1 - floor.n.01
@@ -19,13 +19,13 @@
     
     (:init 
         (ontop carton.n.02_1 floor.n.01_1) 
-        (ontop vodka__bottle.n.01_1 coffee_table.n.01_1)
-        (ontop shampoo__bottle.n.01_1 coffee_table.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 coffee_table.n.01_1) 
+        (ontop bottle__of__vodka.n.01_1 coffee_table.n.01_1)
+        (ontop bottle__of__shampoo.n.01_1 coffee_table.n.01_1) 
+        (ontop bottle__of__liquid_soap.n.01_1 coffee_table.n.01_1) 
         (ontop flashlight.n.01_1 coffee_table.n.01_1) 
         (ontop toothbrush.n.01_1 coffee_table.n.01_1) 
-        (ontop analgesic.n.01_1 coffee_table.n.01_1) 
-        (ontop lotion__bottle.n.01_1 coffee_table.n.01_1) 
+        (ontop bottle__of__analgesics.n.01_1 coffee_table.n.01_1)
+        (ontop lbottle__of__lotion.n.01_1 coffee_table.n.01_1) 
         (ontop cookie.n.01_1 coffee_table.n.01_1) 
         (ontop chocolate_box.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 
@@ -35,13 +35,13 @@
     
     (:goal 
         (and 
-            (inside ?vodka__bottle.n.01_1 ?carton.n.02_1)
-            (inside ?shampoo__bottle.n.01_1 ?carton.n.02_1)
-            (inside ?liquid_soap__bottle.n.01_1 ?carton.n.02_1)
+            (inside ?bottle__of__vodka.n.01_1 ?carton.n.02_1)
+            (inside ?bottle__of__shampoo.n.01_1 ?carton.n.02_1)
+            (inside ?bottle__of__liquid_soap.n.01_1 ?carton.n.02_1)
             (inside ?flashlight.n.01_1 ?carton.n.02_1)
             (inside ?toothbrush.n.01_1 ?carton.n.02_1)
-            (inside ?analgesic.n.01_1 ?carton.n.02_1)
-            (inside ?lotion__bottle.n.01_1 ?carton.n.02_1)
+            (inside ?bottle__of__analgesics.n.01_1 ?carton.n.02_1)
+            (inside ?lbottle__of__lotion.n.01_1 ?carton.n.02_1)
             (inside ?cookie.n.01_1 ?carton.n.02_1)
             (inside ?chocolate_box.n.01_1 ?carton.n.02_1)
         )

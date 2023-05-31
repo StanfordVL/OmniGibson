@@ -16,9 +16,9 @@
         (ontop pot.n.04_1 floor.n.01_1)
         (filled pot.n.04_1 soil.n.02_1) 
         (ontop fertilizer__atomizer.n.01_1 floor.n.01_1) 
-        (ontop potato.n.01_1 soil.n.02_1)
-        (ontop potato.n.01_2 soil.n.02_1)
-        (ontop potato.n.01_3 soil.n.02_1)
+        (ontop potato.n.01_1 floor.n.01_1)
+        (ontop potato.n.01_2 floor.n.01_1)
+        (ontop potato.n.01_3 floor.n.01_1)
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -27,7 +27,10 @@
         (and
             (forall 
                 (?potato.n.01 - potato.n.01)
-                (covered ?potato.n.01 ?fertilizer.n.01_1)
+                (and
+                    (covered ?potato.n.01 ?fertilizer.n.01_1)
+                    (covered ?potato.n.01 ?soil.n.02_1)
+                )
             )
         )
     )

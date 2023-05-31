@@ -4,7 +4,7 @@
     (:objects
         carrot.n.03_1 carrot.n.03_2 carrot.n.03_3 - carrot.n.03
         vidalia_onion.n.01_1 vidalia_onion.n.01_2 - vidalia_onion.n.01
-        pea.n.01_1 pea.n.01_10 pea.n.01_11 pea.n.01_12 pea.n.01_13 pea.n.01_14 pea.n.01_2 pea.n.01_3 pea.n.01_4 pea.n.01_5 pea.n.01_6 pea.n.01_7 pea.n.01_8 pea.n.01_9 - pea.n.01
+        pea.n.01_1 - pea.n.01
         ground_beef.n.01_1 - ground_beef.n.01
         beef_broth.n.01_1 - beef_broth.n.01
         beef_stew.n.01_1 - beef_stew.n.01
@@ -29,20 +29,7 @@
         (inside vidalia_onion.n.01_1 wicker_basket.n.01_1) 
         (inside vidalia_onion.n.01_2 wicker_basket.n.01_1) 
         (ontop wicker_basket.n.01_1 countertop.n.01_1) 
-        (inside pea.n.01_1 tupperware.n.01_2)
-        (inside pea.n.01_2 tupperware.n.01_2)
-        (inside pea.n.01_3 tupperware.n.01_2)
-        (inside pea.n.01_4 tupperware.n.01_2)
-        (inside pea.n.01_5 tupperware.n.01_2)
-        (inside pea.n.01_6 tupperware.n.01_2)
-        (inside pea.n.01_7 tupperware.n.01_2)
-        (inside pea.n.01_8 tupperware.n.01_2)
-        (inside pea.n.01_9 tupperware.n.01_2)
-        (inside pea.n.01_10 tupperware.n.01_2)
-        (inside pea.n.01_11 tupperware.n.01_2)
-        (inside pea.n.01_12 tupperware.n.01_2)
-        (inside pea.n.01_13 tupperware.n.01_2)
-        (inside pea.n.01_14 tupperware.n.01_2)
+        (filled tupperware.n.01_2 pea.n.01_1)
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
         (filled tupperware.n.01_1 ground_beef.n.01_1) 
         (inside tupperware.n.01_2 electric_refrigerator.n.01_1) 

@@ -6,6 +6,7 @@
      	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	seafood.n.01_1 seafood.n.01_2 seafood.n.01_3 - seafood.n.01
     	detergent.n.02_1 - detergent.n.02
+        detergent__bottle.n.01_1 - detergent__bottle.n.01
     	table.n.02_1 - table.n.02
     	towel.n.01_1 - towel.n.01
     	floor.n.01_1 - floor.n.01
@@ -22,7 +23,8 @@
         (inside seafood.n.01_1 electric_refrigerator.n.01_1) 
         (inside seafood.n.01_2 electric_refrigerator.n.01_1) 
         (inside seafood.n.01_3 electric_refrigerator.n.01_1) 
-        (ontop detergent.n.02_1 table.n.02_1)
+        (filled detergent__bottle.n.01_1 detergent.n.02_1)
+        (ontop detergent__bottle.n.01_1 table.n.02_1)
         (ontop towel.n.01_1 table.n.02_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
