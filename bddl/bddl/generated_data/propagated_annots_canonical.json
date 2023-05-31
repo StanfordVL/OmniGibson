@@ -4839,6 +4839,23 @@
     "wetable": {},
     "wrinkleable": {}
   },
+  "bottle__of__analgesics.n.01": {
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "mixable": {},
+    "moldyable": {},
+    "rigidBody": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
   "bottle__of__antihistamines.n.01": {
     "disinfectable": {},
     "dustyable": {},
@@ -13061,23 +13078,12 @@
     "wrinkleable": {}
   },
   "coal.n.01": {
-    "disinfectable": {},
-    "dustyable": {},
     "fireSource": {},
     "flammable": {},
     "freezable": {},
-    "grassyable": {},
     "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
+    "microPhysicalSubstance": {},
+    "substance": {}
   },
   "coaster.n.03": {
     "disinfectable": {},
@@ -14351,6 +14357,12 @@
   "cooked__chickpea.n.01": {
     "cookable": {},
     "flammable": {},
+    "freezable": {},
+    "heatable": {},
+    "macroPhysicalSubstance": {},
+    "substance": {}
+  },
+  "cooked__coconut.n.01": {
     "freezable": {},
     "heatable": {},
     "macroPhysicalSubstance": {},
@@ -20832,23 +20844,12 @@
     "heatable": {}
   },
   "fossil_fuel.n.01": {
-    "disinfectable": {},
-    "dustyable": {},
     "fireSource": {},
     "flammable": {},
     "freezable": {},
-    "grassyable": {},
     "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
+    "microPhysicalSubstance": {},
+    "substance": {}
   },
   "foundation.n.03": {
     "disinfectable": {},
@@ -47092,7 +47093,9 @@
   "vegetable_matter.n.01": {
     "fireSource": {},
     "freezable": {},
-    "heatable": {}
+    "heatable": {},
+    "microPhysicalSubstance": {},
+    "substance": {}
   },
   "vegetable_oil.n.01": {
     "boilable": {},
@@ -49604,6 +49607,23 @@
     "mixable": {},
     "moldyable": {},
     "openable": {},
+    "rigidBody": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
+  "yogurt__cup.n.01": {
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "mixable": {},
+    "moldyable": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
