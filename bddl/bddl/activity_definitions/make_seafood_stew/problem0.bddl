@@ -18,7 +18,7 @@
         stockpot.n.01_1 - stockpot.n.01
         tomato_sauce__jar.n.01_1 - tomato_sauce__jar.n.01
         tupperware.n.01_1 tupperware.n.01_2 tupperware.n.01_3 - tupperware.n.01
-        oregano__shaker.n.01_1 - oregano__shaker.n.01
+        marjoram__shaker.n.01_1 - marjoram__shaker.n.01
         mason_jar.n.01_1 - mason_jar.n.01
         chopping_board.n.01_1 - chopping_board.n.01
         carving_knife.n.01_1 - carving_knife.n.01
@@ -110,8 +110,8 @@
         ) 
         (inside scallop.n.02_4 tupperware.n.01_3) 
         (inside tupperware.n.01_3 electric_refrigerator.n.01_1) 
-        (insource oregano__shaker.n.01_1 marjoram.n.02_1)
-        (inside oregano__shaker.n.01_1 cabinet.n.01_1) 
+        (insource marjoram__shaker.n.01_1 marjoram.n.02_1)
+        (inside marjoram__shaker.n.01_1 cabinet.n.01_1)
         (inside parsley.n.02_1 mason_jar.n.01_1) 
         (inside mason_jar.n.01_1 electric_refrigerator.n.01_1) 
         (inroom stove.n.01_1 kitchen) 

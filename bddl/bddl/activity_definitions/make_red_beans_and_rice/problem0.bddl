@@ -28,7 +28,7 @@
         stockpot.n.01_1 - stockpot.n.01
         mason_jar.n.01_1 - mason_jar.n.01 
         salt__shaker.n.01_1 - salt__shaker.n.01
-        oregano__shaker.n.01_1 - oregano__shaker.n.01 
+        marjoram__shaker.n.01_1 - marjoram__shaker.n.01
         white_rice__sack.n.01_1 - white_rice__sack.n.01
         chopping_board.n.01_1 chopping_board.n.01_2 - chopping_board.n.01
         carving_knife.n.01_1 - carving_knife.n.01
@@ -49,8 +49,8 @@
         (ontop beefsteak_tomato.n.01_1 countertop.n.01_1)
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
-        (insource oregano__shaker.n.01_1 marjoram.n.02_1)
-        (ontop oregano__shaker.n.01_1 countertop.n.01_1)
+        (insource marjoram__shaker.n.01_1 marjoram.n.02_1)
+        (ontop marjoram__shaker.n.01_1 countertop.n.01_1)
         (insource pepper__shaker.n.01_1 black_pepper.n.02_1)
         (ontop pepper__shaker.n.01_1 countertop.n.01_1)
         (filled white_rice__sack.n.01_1 white_rice.n.01_1)
