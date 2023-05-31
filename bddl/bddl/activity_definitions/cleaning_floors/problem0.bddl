@@ -8,6 +8,7 @@
     	broom.n.01_1 - broom.n.01
     	dustpan.n.02_1 - dustpan.n.02
         detergent.n.02_1 - detergent.n.02
+        detergent__bottle.n.01_1 - detergent__bottle.n.01
     	scrub_brush.n.01_1 - scrub_brush.n.01
     	door.n.01_1 - door.n.01
     	sink.n.01_1 - sink.n.01
@@ -19,7 +20,8 @@
         (covered floor.n.01_1 stain.n.01_1) 
         (ontop broom.n.01_1 floor.n.01_1) 
         (ontop dustpan.n.02_1 floor.n.01_1) 
-        (ontop detergent.n.02_1 floor.n.01_1)
+        (filled detergent__bottle.n.01_1 detergent.n.02_1)
+        (ontop detergent__bottle.n.01_1 floor.n.01_1)
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
         (inroom door.n.01_1 bathroom) 

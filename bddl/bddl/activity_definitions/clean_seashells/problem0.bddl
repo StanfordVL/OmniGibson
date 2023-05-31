@@ -3,7 +3,7 @@
 
     (:objects
         sand.n.04_1 - sand.n.04
-        shell.n.02_1 shell.n.02_2 shell.n.02_3 - shell.n.02
+        seashell.n.01_1 seashell.n.01_2 seashell.n.01_3 - seashell.n.01
         rag.n.01_1 - rag.n.01
         countertop.n.01_1 - countertop.n.01
         water.n.06_1 - water.n.06
@@ -13,12 +13,12 @@
     )
     
     (:init 
-        (covered shell.n.02_1 sand.n.04_1)
-        (ontop shell.n.02_1 countertop.n.01_1) 
-        (covered shell.n.02_2 sand.n.04_1)
-        (ontop shell.n.02_2 countertop.n.01_1) 
-        (covered shell.n.02_3 sand.n.04_1)
-        (ontop shell.n.02_3 countertop.n.01_1) 
+        (covered seashell.n.01_1 sand.n.04_1)
+        (ontop seashell.n.01_1 countertop.n.01_1) 
+        (covered seashell.n.01_2 sand.n.04_1)
+        (ontop seashell.n.01_2 countertop.n.01_1) 
+        (covered seashell.n.01_3 sand.n.04_1)
+        (ontop seashell.n.01_3 countertop.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 bathroom) 
@@ -30,9 +30,9 @@
     (:goal 
         (and 
             (forall 
-                (?shell.n.02 - shell.n.02)
+                (?seashell.n.01 - seashell.n.01)
                 (not 
-                    (covered ?shell.n.02 ?sand.n.04_1)
+                    (covered ?seashell.n.01 ?sand.n.04_1)
                 )
             )
         )

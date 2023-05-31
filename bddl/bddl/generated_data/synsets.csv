@@ -724,6 +724,7 @@ cooked__white_rice.n.01,rice.n.01,1,0,0,1,0,0,0,,,,0,,0,0,,,,,,0,0,microPhysical
 cooked__white_wine.n.01,wine.n.01,1,0,0,1,0,0,0,,,,0,,,,,,,,,0,0,liquid
 cooked__wine_sauce.n.01,sauce.n.01,1,0,0,0,,0,0,,,,0,,,,,,,,,0,0,liquid
 cookie_cutter.n.01,kitchen_utensil.n.01,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,,0,0,rigidBody
+cookie_dough.n.01,dough.n.01,1,,,,,,,,,,,,,,,,,,,,,softBody
 cookie_sheet.n.01,cooking_utensil.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 cooking_oil__bottle.n.01,vessel.n.03,1,1,1,0,1,0,0,,,,0,,,,,,,,,0,0,rigidBody
 cooking_oil.n.01,vegetable_oil.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,,0,0,liquid
@@ -1340,6 +1341,7 @@ marinara__jar.n.01,vessel.n.03,1,1,1,0,1,0,0,,,,0,,,,,,,,,0,0,rigidBody
 marinara.n.01,spaghetti_sauce.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,,0,0,liquid
 marker.n.03,writing_implement.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 marjoram.n.02,herb.n.02,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,,0,0,microPhysicalSubstance
+marjoram__shaker.n.01,container.n.01,1,0,1,0,0,0,0,,,,0,,0,0,0,1,0,1,,0,0,rigidBody
 marshmallow.n.01,candy.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,,0,0,softBody
 martini.n.01,cocktail.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,0,,,,,,0,0,liquid
 mashed_potato.n.02,starches.n.01,1,0,0,0,,0,1,,,,0,,,,,,,,,0,0,liquid
@@ -1448,7 +1450,6 @@ orange_juice__carton.n.01,vessel.n.03,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,r
 orange_juice.n.01,fruit_juice.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,,0,0,liquid
 orange_zest.n.01,orange_peel.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,,0,0,microPhysicalSubstance
 orange.n.01,citrus.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,,0,0,rigidBody
-oregano__shaker.n.01,container.n.01,1,0,1,0,0,0,0,,,,0,,0,0,0,1,0,1,,0,0,rigidBody
 orzo.n.01,pasta.n.02,0,0,0,1,0,0,1,,,,0,,0,0,,,,,,0,1,macroPhysicalSubstance
 oven.n.01,kitchen_appliance.n.01,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,,1,0,rigidBody
 overall.n.01,work-clothing.n.01,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,,,0,0,cloth

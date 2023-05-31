@@ -3,7 +3,7 @@
 
     (:objects
         dust.n.01_1 - dust.n.01
-        screen.n.03_1 - screen.n.03
+        screen.n.01_1 - screen.n.01
         rag.n.01_1 - rag.n.01
         wall.n.01_1 - wall.n.01
         floor.n.01_1 - floor.n.01
@@ -11,9 +11,9 @@
     )
     
     (:init 
-        (covered screen.n.03_1 dust.n.01_1) 
+        (covered screen.n.01_1 dust.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
-        (attached screen.n.03_1 wall.n.01_1) 
+        (attached screen.n.01_1 wall.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
         (inroom wall.n.01_1 bathroom) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -22,7 +22,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?screen.n.03_1 ?dust.n.01_1)
+                (covered ?screen.n.01_1 ?dust.n.01_1)
             ) 
         )
     )

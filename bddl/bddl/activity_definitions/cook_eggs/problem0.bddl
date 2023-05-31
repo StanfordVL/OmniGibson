@@ -6,7 +6,6 @@
         stove.n.01_1 - stove.n.01
         water.n.06_1 - water.n.06
         raw_egg.n.01_1 raw_egg.n.01_2 - raw_egg.n.01
-        fried_egg.n.01_1 fried_egg.n.01_2 - fried_egg.n.01
         bowl.n.01_1 - bowl.n.01
         sink.n.01_1 - sink.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -19,8 +18,6 @@
         (inside raw_egg.n.01_1 bowl.n.01_1) 
         (inside raw_egg.n.01_2 bowl.n.01_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1)
-        (future fried_egg.n.01_1)
-        (future fried_egg.n.01_2)
         (insource sink.n.01_1 water.n.06_1)
         (inroom stove.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
@@ -31,11 +28,9 @@
     
     (:goal 
         (and 
-            (real ?fried_egg.n.01_1)
-            (real ?fried_egg.n.01_2)
             (forall 
-                (?fried_egg.n.01 - fried_egg.n.01) 
-                (cooked ?fried_egg.n.01)
+                (?raw_egg.n.01 - raw_egg.n.01) 
+                (cooked ?raw_egg.n.01)
             )
         )
     )

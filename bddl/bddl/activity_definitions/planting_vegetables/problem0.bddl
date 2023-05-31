@@ -24,7 +24,7 @@
     (:goal 
         (and 
             (contains ?pot.n.04_1 ?pumpkin_seed.n.01_1)
-            (filled ?pot.n.04_1 ?soil.n.02_1)
+            (contains ?pot.n.04_1 ?soil.n.02_1)
         )
     )
 )

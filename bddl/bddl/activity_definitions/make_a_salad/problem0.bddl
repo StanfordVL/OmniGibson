@@ -19,7 +19,7 @@
         vinegar__bottle.n.01_1 - vinegar__bottle.n.01
         salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
-        crouton.n.01_1 crouton.n.01_2 crouton.n.01_3 crouton.n.01_4 crouton.n.01_5 crouton.n.01_6 - crouton.n.01
+        crouton.n.01_1 - crouton.n.01
         tupperware.n.01_1 - tupperware.n.01
         chopping_board.n.01_1 - chopping_board.n.01
         carving_knife.n.01_1 - carving_knife.n.01
@@ -39,12 +39,7 @@
         (ontop vinegar__bottle.n.01_1 countertop.n.01_1) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
-        (inside crouton.n.01_1 tupperware.n.01_1) 
-        (inside crouton.n.01_2 tupperware.n.01_1) 
-        (inside crouton.n.01_3 tupperware.n.01_1) 
-        (inside crouton.n.01_4 tupperware.n.01_1) 
-        (inside crouton.n.01_5 tupperware.n.01_1) 
-        (inside crouton.n.01_6 tupperware.n.01_1) 
+        (filled tupperware.n.01_1 crouton.n.01_1)
         (ontop tupperware.n.01_1 countertop.n.01_1)
         (future diced__lettuce.n.01_1)
         (future diced__spinach.n.01_1)
@@ -71,10 +66,7 @@
             (contains ?bowl.n.01_1 ?chickpea.n.03_1)
             (contains ?bowl.n.01_1 ?salt.n.02_1)
             (contains ?bowl.n.01_1 ?vinegar.n.01_1)
-            (forall 
-                (?crouton.n.01 - crouton.n.01)
-                (inside ?crouton.n.01 ?bowl.n.01_1)
-            )
+            (contains ?bowl.n.01_1 ?crouton.n.01_1)
         )
     )
 )

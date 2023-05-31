@@ -2,9 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        wax.n.01_1 - wax.n.01
         adhesive_material.n.01_1 - adhesive_material.n.01
-        wax__jar.n.01_1 - wax__jar.n.01
         rubbing_alcohol.n.01_1 - rubbing_alcohol.n.01
         rubbing_alcohol__bottle.n.01_1 - rubbing_alcohol__bottle.n.01
         door.n.01_1 - door.n.01
@@ -14,12 +12,10 @@
     )
     
     (:init 
-        (filled wax__jar.n.01_1 wax.n.01_1) 
         (covered door.n.01_1 adhesive_material.n.01_1)
         (filled rubbing_alcohol__bottle.n.01_1 rubbing_alcohol.n.01_1)
         (ontop rubbing_alcohol__bottle.n.01_1 floor.n.01_1)
-        (ontop wax__jar.n.01_1 floor.n.01_1) 
-        (ontop sponge.n.01_1 floor.n.01_1) 
+        (ontop sponge.n.01_1 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom door.n.01_1 bathroom) 
         (inroom floor.n.01_1 bathroom)
@@ -27,8 +23,7 @@
     
     (:goal 
         (and 
-            (covered ?door.n.01_1 ?wax.n.01_1)
-            (not 
+            (not
                 (covered ?door.n.01_1 ?adhesive_material.n.01_1)
             )
         )

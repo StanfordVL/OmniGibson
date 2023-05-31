@@ -2,15 +2,15 @@
     (:domain omnigibson)
 
     (:objects
-     	beer_bottle.n.01_1 - beer_bottle.n.01
+     	bottle__of__beer.n.01_1 - bottle__of__beer.n.01
     	shelf.n.01_1 - shelf.n.01
     	beer_glass.n.01_1 beer_glass.n.01_2 - beer_glass.n.01
     	cabinet.n.01_1 - cabinet.n.01
-    	wine_bottle.n.01_1 - wine_bottle.n.01
-    	brandy__bottle.n.01_1 - brandy__bottle.n.01
+    	bottle__of__wine.n.01_1 - bottle__of__wine.n.01
+    	bottle__of__brandy.n.01_1 - bottle__of__brandy.n.01
     	dishtowel.n.01_1 - dishtowel.n.01
-    	tonic.n.01_1 - tonic.n.01
-    	lemonade__bottle.n.01_1 - lemonade__bottle.n.01
+    	bottle__of__tonic.n.01_1 - bottle__of__tonic.n.01
+    	bottle__of__lemonade.n.01_1 - bottle__of__lemonade.n.01
     	teaspoon.n.02_1 - teaspoon.n.02
     	shot_glass.n.01_1 - shot_glass.n.01
     	floor.n.01_1 - floor.n.01
@@ -19,14 +19,14 @@
     )
     
     (:init 
-        (ontop beer_bottle.n.01_1 shelf.n.01_1)
+        (ontop bottle__of__beer.n.01_1 shelf.n.01_1)
         (ontop beer_glass.n.01_1 cabinet.n.01_1)
-        (ontop wine_bottle.n.01_1 shelf.n.01_1)
+        (ontop bottle__of__wine.n.01_1 shelf.n.01_1)
         (ontop beer_glass.n.01_2 cabinet.n.01_1)
-        (ontop brandy__bottle.n.01_1 shelf.n.01_1)
+        (ontop bottle__of__brandy.n.01_1 shelf.n.01_1)
         (ontop dishtowel.n.01_1 shelf.n.01_1)
-        (ontop tonic.n.01_1 shelf.n.01_1)
-        (ontop lemonade__bottle.n.01_1 shelf.n.01_1)
+        (ontop bottle__of__tonic.n.01_1 shelf.n.01_1)
+        (ontop bottle__of__lemonade.n.01_1 shelf.n.01_1)
         (ontop teaspoon.n.02_1 shelf.n.01_1)
         (ontop shot_glass.n.01_1 shelf.n.01_1)
         (inroom floor.n.01_1 kitchen)
@@ -39,12 +39,12 @@
     
     (:goal 
         (and 
-            (nextto ?wine_bottle.n.01_1 ?beer_bottle.n.01_1) 
+            (nextto ?bottle__of__wine.n.01_1 ?bottle__of__beer.n.01_1) 
             (ontop ?shot_glass.n.01_1 ?serving_cart.n.01_1)
-            (ontop ?brandy__bottle.n.01_1 ?serving_cart.n.01_1)
-            (ontop ?beer_bottle.n.01_1 ?serving_cart.n.01_1)
-            (ontop ?tonic.n.01_1 ?serving_cart.n.01_1)
-            (ontop ?lemonade__bottle.n.01_1 ?serving_cart.n.01_1)
+            (ontop ?bottle__of__brandy.n.01_1 ?serving_cart.n.01_1)
+            (ontop ?bottle__of__beer.n.01_1 ?serving_cart.n.01_1)
+            (ontop ?bottle__of__tonic.n.01_1 ?serving_cart.n.01_1)
+            (ontop ?bottle__of__lemonade.n.01_1 ?serving_cart.n.01_1)
             (ontop ?beer_glass.n.01_1 ?serving_cart.n.01_1)
             (ontop ?beer_glass.n.01_2 ?serving_cart.n.01_1)
             (ontop ?dishtowel.n.01_1 ?serving_cart.n.01_1)

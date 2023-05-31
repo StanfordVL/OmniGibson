@@ -6,7 +6,7 @@
         stove.n.01_1 - stove.n.01
         spatula.n.01_1 - spatula.n.01
         cabinet.n.01_1 - cabinet.n.01
-        dumpling.n.02_1 dumpling.n.02_2 dumpling.n.02_3 dumpling.n.02_4 - dumpling.n.02
+        dumpling.n.01_1 dumpling.n.01_2 dumpling.n.01_3 dumpling.n.01_4 - dumpling.n.01
         tupperware.n.01_1 - tupperware.n.01
         cooking_oil.n.01_1 - cooking_oil.n.01
         cooking_oil__bottle.n.01_1 - cooking_oil__bottle.n.01
@@ -20,26 +20,26 @@
     (:init 
         (inside frying_pan.n.01_1 cabinet.n.01_1) 
         (inside spatula.n.01_1 cabinet.n.01_1) 
-        (inside dumpling.n.02_1 tupperware.n.01_1) 
+        (inside dumpling.n.01_1 tupperware.n.01_1) 
         (not 
-            (cooked dumpling.n.02_1)
+            (cooked dumpling.n.01_1)
         ) 
-        (frozen dumpling.n.02_1)
-        (inside dumpling.n.02_2 tupperware.n.01_1) 
+        (frozen dumpling.n.01_1)
+        (inside dumpling.n.01_2 tupperware.n.01_1) 
         (not 
-            (cooked dumpling.n.02_2)
+            (cooked dumpling.n.01_2)
         ) 
-        (frozen dumpling.n.02_2)
-        (inside dumpling.n.02_3 tupperware.n.01_1) 
+        (frozen dumpling.n.01_2)
+        (inside dumpling.n.01_3 tupperware.n.01_1) 
         (not 
-            (cooked dumpling.n.02_3)
+            (cooked dumpling.n.01_3)
         ) 
-        (frozen dumpling.n.02_3)
-        (inside dumpling.n.02_4 tupperware.n.01_1) 
+        (frozen dumpling.n.01_3)
+        (inside dumpling.n.01_4 tupperware.n.01_1) 
         (not 
-            (cooked dumpling.n.02_4)
+            (cooked dumpling.n.01_4)
         ) 
-        (frozen dumpling.n.02_4)
+        (frozen dumpling.n.01_4)
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
         (filled cooking_oil__bottle.n.01_1 cooking_oil.n.01_1) 
         (inside cooking_oil__bottle.n.01_1 cabinet.n.01_1)
@@ -55,10 +55,10 @@
     (:goal 
         (and 
             (forall 
-                (?dumpling.n.02 - dumpling.n.02)
+                (?dumpling.n.01 - dumpling.n.01)
                 (and
-                    (cooked ?dumpling.n.02)    
-                    (covered ?dumpling.n.02 ?cooking_oil.n.01_1)            
+                    (cooked ?dumpling.n.01)    
+                    (covered ?dumpling.n.01 ?cooking_oil.n.01_1)            
                 ) 
             ) 
         )

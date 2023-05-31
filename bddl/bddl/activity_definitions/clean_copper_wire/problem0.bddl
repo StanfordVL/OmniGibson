@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        copper.n.01_1 - copper.n.01
+        copper_wire.n.01_1 - copper_wire.n.01
         countertop.n.01_1 - countertop.n.01
         salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
@@ -18,8 +18,8 @@
     )
     
     (:init 
-        (covered copper.n.01_1 rust.n.01_1)
-        (ontop copper.n.01_1 countertop.n.01_1) 
+        (covered copper_wire.n.01_1 rust.n.01_1)
+        (ontop copper_wire.n.01_1 countertop.n.01_1) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
         (filled cornstarch__jar.n.01_1 cornstarch.n.01_1)
@@ -36,7 +36,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?copper.n.01_1 ?rust.n.01_1)
+                (covered ?copper_wire.n.01_1 ?rust.n.01_1)
             )
         )
     )

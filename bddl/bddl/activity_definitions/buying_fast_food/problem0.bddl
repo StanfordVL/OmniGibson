@@ -10,7 +10,7 @@
         hamburger.n.01_1 hamburger.n.01_2 - hamburger.n.01
         shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 - shelf.n.01
         french_fries.n.02_1 french_fries.n.02_2 - french_fries.n.02
-        pop.n.02_1 pop.n.02_2 - pop.n.02
+        can__of__soda.n.01_1 can__of__soda.n.01_2 - can__of__soda.n.01
         package.n.02_1 - package.n.02
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
@@ -24,8 +24,8 @@
         (inside hamburger.n.01_2 shelf.n.01_1) 
         (inside french_fries.n.02_1 shelf.n.01_2)
         (inside french_fries.n.02_2 shelf.n.01_2)
-        (inside pop.n.02_1 shelf.n.01_3) 
-        (inside pop.n.02_2 shelf.n.01_3) 
+        (inside can__of__soda.n.01_1 shelf.n.01_3) 
+        (inside can__of__soda.n.01_2 shelf.n.01_3) 
         (inside package.n.02_1 checkout.n.03_1) 
         (inroom floor.n.01_1 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
@@ -44,8 +44,8 @@
                 (inside ?hamburger.n.01 ?package.n.02_1)
             )
             (forall 
-                (?pop.n.02 - pop.n.02)
-                (ontop ?pop.n.02 ?checkout.n.03_1)
+                (?can__of__soda.n.01 - can__of__soda.n.01)
+                (ontop ?can__of__soda.n.01 ?checkout.n.03_1)
             )
             (inside ?french_fries.n.02_1 ?package.n.02_1)
             (ontop ?package.n.02_1 ?checkout.n.03_1)

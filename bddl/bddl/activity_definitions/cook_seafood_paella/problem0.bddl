@@ -18,9 +18,10 @@
         paprika.n.02_1 - paprika.n.02
         paprika__shaker.n.01_1 - paprika__shaker.n.01
         cooked__paprika.n.01_1 - cooked__paprika.n.01
-        shrimp.n.03_1 shrimp.n.03_2 shrimp.n.03_3 shrimp.n.03_4 shrimp.n.03_5 shrimp.n.03_6 - shrimp.n.03
-        clam.n.01_1 clam.n.01_2 clam.n.01_3 clam.n.01_4 clam.n.01_5 clam.n.01_6 - clam.n.01
-        pea.n.01_1 pea.n.01_10 pea.n.01_11 pea.n.01_12 pea.n.01_2 pea.n.01_3 pea.n.01_4 pea.n.01_5 pea.n.01_6 pea.n.01_7 pea.n.01_8 pea.n.01_9 - pea.n.01
+        prawn.n.01_1 prawn.n.01_2 prawn.n.01_3 prawn.n.01_4 prawn.n.01_5 prawn.n.01_6 - prawn.n.01
+        clam.n.03_1 clam.n.03_2 clam.n.03_3 clam.n.03_4 clam.n.03_5 clam.n.03_6 - clam.n.03
+        pea.n.01_1 - pea.n.01
+        cooked__pea.n.01_1 - cooked__pea.n.01
         tupperware.n.01_1 tupperware.n.01_2 tupperware.n.01_3 - tupperware.n.01
         bowl.n.01_1 - bowl.n.01
         carving_knife.n.01_1 - carving_knife.n.01
@@ -52,12 +53,12 @@
         (insource paprika__shaker.n.01_1 paprika.n.02_1) 
         (ontop paprika__shaker.n.01_1 countertop.n.01_1)
         (ontop saucepot.n.01_1 stove.n.01_1) 
-        (inside shrimp.n.03_1 tupperware.n.01_2) 
-        (inside shrimp.n.03_2 tupperware.n.01_2) 
-        (inside shrimp.n.03_3 tupperware.n.01_2) 
-        (inside shrimp.n.03_4 tupperware.n.01_2) 
-        (inside shrimp.n.03_5 tupperware.n.01_2) 
-        (inside shrimp.n.03_6 tupperware.n.01_2) 
+        (inside prawn.n.01_1 tupperware.n.01_2)
+        (inside prawn.n.01_2 tupperware.n.01_2)
+        (inside prawn.n.01_3 tupperware.n.01_2)
+        (inside prawn.n.01_4 tupperware.n.01_2)
+        (inside prawn.n.01_5 tupperware.n.01_2)
+        (inside prawn.n.01_6 tupperware.n.01_2)
         (inside tupperware.n.01_2 electric_refrigerator.n.01_1)
         (ontop chopping_board.n.01_1 countertop.n.01_1)
         (ontop carving_knife.n.01_1 chopping_board.n.01_1)
@@ -65,48 +66,48 @@
         (ontop white_rice__sack.n.01_1 floor.n.01_1)
         (inside cup.n.01_1 cabinet.n.01_1)
         (ontop frying_pan.n.01_1 stove.n.01_1) 
-        (inside clam.n.01_1 tupperware.n.01_3) 
-        (inside clam.n.01_2 tupperware.n.01_3) 
-        (inside clam.n.01_3 tupperware.n.01_3) 
-        (inside clam.n.01_4 tupperware.n.01_3) 
-        (inside clam.n.01_5 tupperware.n.01_3) 
-        (inside clam.n.01_6 tupperware.n.01_3) 
+        (inside clam.n.03_1 tupperware.n.01_3)
+        (inside clam.n.03_2 tupperware.n.01_3)
+        (inside clam.n.03_3 tupperware.n.01_3)
+        (inside clam.n.03_4 tupperware.n.01_3)
+        (inside clam.n.03_5 tupperware.n.01_3)
+        (inside clam.n.03_6 tupperware.n.01_3)
         (inside tupperware.n.01_3 electric_refrigerator.n.01_1)
         (not 
-            (cooked shrimp.n.03_1)
+            (cooked prawn.n.01_1)
         ) 
         (not 
-            (cooked shrimp.n.03_2)
+            (cooked prawn.n.01_2)
         ) 
         (not 
-            (cooked shrimp.n.03_3)
+            (cooked prawn.n.01_3)
         ) 
         (not 
-            (cooked shrimp.n.03_4)
+            (cooked prawn.n.01_4)
         ) 
         (not 
-            (cooked shrimp.n.03_5)
+            (cooked prawn.n.01_5)
         ) 
         (not 
-            (cooked shrimp.n.03_6)
+            (cooked prawn.n.01_6)
         ) 
         (not 
-            (cooked clam.n.01_1)
+            (cooked clam.n.03_1)
         ) 
         (not 
-            (cooked clam.n.01_2)
+            (cooked clam.n.03_2)
         ) 
         (not 
-            (cooked clam.n.01_3)
+            (cooked clam.n.03_3)
         ) 
         (not 
-            (cooked clam.n.01_4)
+            (cooked clam.n.03_4)
         ) 
         (not 
-            (cooked clam.n.01_5)
+            (cooked clam.n.03_5)
         ) 
         (not 
-            (cooked clam.n.01_6)
+            (cooked clam.n.03_6)
         ) 
         (not 
             (cooked chorizo.n.01_1)
@@ -114,54 +115,7 @@
         (not 
             (cooked chorizo.n.01_2)
         ) 
-        (inside pea.n.01_1 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_1)
-        )
-        (inside pea.n.01_2 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_2)
-        )
-        (inside pea.n.01_3 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_3)
-        )
-        (inside pea.n.01_4 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_4)
-        )
-        (inside pea.n.01_5 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_5)
-        )
-        (inside pea.n.01_6 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_6)
-        )
-        (inside pea.n.01_7 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_7)
-        )
-        (inside pea.n.01_8 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_8)
-        )
-        (inside pea.n.01_9 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_9)
-        )
-        (inside pea.n.01_10 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_10)
-        )
-        (inside pea.n.01_11 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_11)
-        )
-        (inside pea.n.01_12 bowl.n.01_1)
-        (not 
-            (cooked pea.n.01_12)
-        )
+        (filled bowl.n.01_1 pea.n.01_1)
         (inside bowl.n.01_1 electric_refrigerator.n.01_1)
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
@@ -180,6 +134,7 @@
         (future cooked__salt.n.01_1)
         (future cooked__white_wine.n.01_1)
         (future cooked__paprika.n.01_1)
+        (future cooked__pea.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -187,6 +142,7 @@
         (and 
             (real ?cooked__white_rice.n.01_1)
             (real ?cooked__diced__chorizo.n.01_1)
+            (real ?cooked__pea.n.01_1)
             (or 
                 (real ?saffron.n.02_1)
                 (real ?cooked__saffron.n.01_1)
@@ -213,27 +169,21 @@
                 (contains ?frying_pan.n.01_1 ?salt.n.02_1)
             )
             (forall
-                (?shrimp.n.03 - shrimp.n.03)
+                (?prawn.n.01 - prawn.n.01)
                 (and 
-                    (cooked ?shrimp.n.03)
-                    (inside ?shrimp.n.03 ?frying_pan.n.01_1)
+                    (cooked ?prawn.n.01)
+                    (inside ?prawn.n.01 ?frying_pan.n.01_1)
                 )
             )
             (forall
-                (?clam.n.01 - clam.n.01)
+                (?clam.n.03 - clam.n.03)
                 (and 
-                    (cooked ?clam.n.01)
-                    (inside ?clam.n.01 ?frying_pan.n.01_1)
-                )
-            )
-            (forall 
-                (?pea.n.01 - pea.n.01)
-                (and 
-                    (cooked ?pea.n.01)
-                    (inside ?pea.n.01 ?frying_pan.n.01_1)
+                    (cooked ?clam.n.03)
+                    (inside ?clam.n.03 ?frying_pan.n.01_1)
                 )
             )
             (contains ?frying_pan.n.01_1 ?cooked__diced__chorizo.n.01_1)
+            (contains ?frying_pan.n.01_1 ?cooked__pea.n.01_1)
             (or
                 (contains ?frying_pan.n.01_1 ?paprika.n.02_1) 
                 (contains ?frying_pan.n.01_1 ?cooked__paprika.n.01_1) 

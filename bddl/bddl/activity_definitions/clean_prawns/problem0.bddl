@@ -2,22 +2,28 @@
     (:domain omnigibson)
 
     (:objects
-     	shell.n.02_1 - shell.n.02
-    	shrimp.n.03_1 - shrimp.n.03
+    	prawn.n.01_1 prawn.n.01_2 prawn.n.01_3 - prawn.n.01
+        rag.n.01_1 - rag.n.01
     	bowl.n.01_1 - bowl.n.01
     	countertop.n.01_1 - countertop.n.01
     	water.n.06_1 - water.n.06
     	sink.n.01_1 - sink.n.01
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	cabinet.n.01_1 - cabinet.n.01
+        sand.n.04_1 - sand.n.04
     	floor.n.01_1 - floor.n.01
     	agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (attached shell.n.02_1 shrimp.n.03_1) 
-        (ontop bowl.n.01_1 countertop.n.01_1) 
-        (ontop shrimp.n.03_1 bowl.n.01_1) 
+        (ontop bowl.n.01_1 countertop.n.01_1)
+        (ontop rag.n.01_1 countertop.n.01_1)
+        (inside prawn.n.01_1 bowl.n.01_1)
+        (inside prawn.n.01_2 bowl.n.01_1)
+        (inside prawn.n.01_3 bowl.n.01_1)
+        (covered prawn.n.01_1 sand.n.04_1)
+        (covered prawn.n.01_2 sand.n.04_1)
+        (covered prawn.n.01_3 sand.n.04_1)
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
@@ -29,8 +35,11 @@
     
     (:goal 
         (and 
-            (not 
-                (attached ?shell.n.02_1 ?shrimp.n.03_1)
+            (forall 
+                (?prawn.n.01 - prawn.n.01) 
+                (not
+                    (covered ?prawn.n.01 ?sand.n.04_1)
+                )
             )
         )
     )

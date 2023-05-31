@@ -5,7 +5,6 @@
         stove.n.01_1 - stove.n.01
         saucepot.n.01_1 - saucepot.n.01
         egg.n.02_1 - egg.n.02
-        hard-boiled_egg.n.01_1 - hard-boiled_egg.n.01
         floor.n.01_1 - floor.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         sink.n.01_1 - sink.n.01
@@ -21,13 +20,12 @@
         (inroom floor.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen)
         (inroom sink.n.01_1 kitchen)
-        (future hard-boiled_egg.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?hard-boiled_egg.n.01_1) 
+            (cooked ?egg.n.02_1)
         )
     )
 )

@@ -84,7 +84,7 @@
             (forall 
                 (?pot.n.04 - pot.n.04)
                 (and 
-                    (filled ?pot.n.04 ?soil.n.02_1)
+                    (contains ?pot.n.04 ?soil.n.02_1)
                     (contains ?pot.n.04 ?fertilizer.n.01_1)
                 )
             )

@@ -5,8 +5,8 @@
         bell_pepper.n.02_1 bell_pepper.n.02_2 - bell_pepper.n.02
         diced__bell_pepper.n.01_1 - diced__bell_pepper.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-        beetroot.n.01_1 beetroot.n.01_2 - beetroot.n.01
-        diced__beetroot.n.01_1 - diced__beetroot.n.01
+        beet.n.02_1 beet.n.02_2 - beet.n.02
+        diced__beet.n.01_1 - diced__beet.n.01
         chopping_board.n.01_1 - chopping_board.n.01
         zucchini.n.02_1 - zucchini.n.02
         diced__zucchini.n.01_1 - diced__zucchini.n.01
@@ -19,15 +19,15 @@
     (:init 
         (inside bell_pepper.n.02_1 electric_refrigerator.n.01_1)
         (inside bell_pepper.n.02_2 electric_refrigerator.n.01_1)
-        (inside beetroot.n.01_1 electric_refrigerator.n.01_1) 
-        (inside beetroot.n.01_2 electric_refrigerator.n.01_1) 
+        (inside beet.n.02_1 electric_refrigerator.n.01_1)
+        (inside beet.n.02_2 electric_refrigerator.n.01_1)
         (inside zucchini.n.02_1 electric_refrigerator.n.01_1) 
         (ontop carving_knife.n.01_1 countertop.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (future diced__beetroot.n.01_1)
+        (future diced__beet.n.01_1)
         (future diced__bell_pepper.n.01_1)
         (future diced__zucchini.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
@@ -37,7 +37,7 @@
         (and 
             (real ?diced__zucchini.n.01_1)
             (real ?diced__bell_pepper.n.01_1)
-            (real ?diced__beetroot.n.01_1)
+            (real ?diced__beet.n.01_1)
         )
     )
 )

@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        sweet_potato.n.01_1 sweet_potato.n.01_2 - sweet_potato.n.01
+        sweet_potato.n.02_1 sweet_potato.n.02_2 - sweet_potato.n.02
         aluminum_foil.n.01_1 - aluminum_foil.n.01
         oven.n.01_1 - oven.n.01
         salt.n.02_1 - salt.n.02
@@ -12,14 +12,14 @@
     )
     
     (:init 
-        (ontop sweet_potato.n.01_1 aluminum_foil.n.01_1) 
-        (ontop sweet_potato.n.01_2 aluminum_foil.n.01_1) 
+        (ontop sweet_potato.n.02_1 aluminum_foil.n.01_1)
+        (ontop sweet_potato.n.02_2 aluminum_foil.n.01_1)
         (ontop aluminum_foil.n.01_1 oven.n.01_1) 
         (not 
-            (cooked sweet_potato.n.01_1)
+            (cooked sweet_potato.n.02_1)
         ) 
         (not 
-            (cooked sweet_potato.n.01_2)
+            (cooked sweet_potato.n.02_2)
         ) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 oven.n.01_1)
@@ -31,10 +31,10 @@
     (:goal 
         (and 
             (forall 
-                (?sweet_potato.n.01 - sweet_potato.n.01)
+                (?sweet_potato.n.02 - sweet_potato.n.02)
                 (and 
-                    (cooked ?sweet_potato.n.01)
-                    (covered ?sweet_potato.n.01 ?salt.n.02_1)
+                    (cooked ?sweet_potato.n.02)
+                    (covered ?sweet_potato.n.02 ?salt.n.02_1)
                 )
             )
         )

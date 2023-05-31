@@ -3,7 +3,7 @@
 
     (:objects
         stain.n.01_1 - stain.n.01
-        loofah.n.02_1 - loofah.n.02
+        loofa.n.01_1 - loofa.n.01
         water.n.06_1 - water.n.06
         rag.n.01_1 - rag.n.01
         bleaching_agent.n.01_1 - bleaching_agent.n.01
@@ -14,10 +14,10 @@
     )
     
     (:init 
-        (covered loofah.n.02_1 stain.n.01_1) 
+        (covered loofa.n.01_1 stain.n.01_1)
         (filled bleaching_agent__bottle.n.01_1 bleaching_agent.n.01_1)
         (ontop bleaching_agent__bottle.n.01_1 floor.n.01_1)
-        (inside loofah.n.02_1 sink.n.01_1) 
+        (inside loofa.n.01_1 sink.n.01_1)
         (inside rag.n.01_1 sink.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 bathroom) 
@@ -28,7 +28,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?loofah.n.02_1 ?stain.n.01_1)
+                (covered ?loofa.n.01_1 ?stain.n.01_1)
             ) 
         )
     )
