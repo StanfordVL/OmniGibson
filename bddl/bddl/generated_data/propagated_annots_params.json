@@ -30820,6 +30820,7 @@
     "mold.n.02": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -48635,11 +48636,22 @@
     },
     "walnut.n.01": {
         "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
         "freezable": {},
+        "grassyable": {},
         "heatable": {},
-        "macroPhysicalSubstance": {},
+        "mixable": {},
+        "moldyable": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
         "sliceable": {},
-        "substance": {}
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
     },
     "wardrobe.n.01": {
         "disinfectable": {},
