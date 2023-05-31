@@ -10,7 +10,7 @@
         flashlight.n.01_1 - flashlight.n.01
         toothbrush.n.01_1 - toothbrush.n.01
         bottle__of__analgesics.n.01_1 - bottle__of__analgesics.n.01
-        lbottle__of__lotion.n.01_1 - lbottle__of__lotion.n.01
+        bottle__of__lotion.n.01_1 - bottle__of__lotion.n.01
         cookie.n.01_1 - cookie.n.01
         chocolate_box.n.01_1 - chocolate_box.n.01
         floor.n.01_1 - floor.n.01
@@ -25,7 +25,7 @@
         (ontop flashlight.n.01_1 coffee_table.n.01_1) 
         (ontop toothbrush.n.01_1 coffee_table.n.01_1) 
         (ontop bottle__of__analgesics.n.01_1 coffee_table.n.01_1)
-        (ontop lbottle__of__lotion.n.01_1 coffee_table.n.01_1) 
+        (ontop bottle__of__lotion.n.01_1 coffee_table.n.01_1) 
         (ontop cookie.n.01_1 coffee_table.n.01_1) 
         (ontop chocolate_box.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 
@@ -41,7 +41,7 @@
             (inside ?flashlight.n.01_1 ?carton.n.02_1)
             (inside ?toothbrush.n.01_1 ?carton.n.02_1)
             (inside ?bottle__of__analgesics.n.01_1 ?carton.n.02_1)
-            (inside ?lbottle__of__lotion.n.01_1 ?carton.n.02_1)
+            (inside ?bottle__of__lotion.n.01_1 ?carton.n.02_1)
             (inside ?cookie.n.01_1 ?carton.n.02_1)
             (inside ?chocolate_box.n.01_1 ?carton.n.02_1)
         )
