@@ -3,7 +3,7 @@
 
     (:objects
         dust.n.01_1 - dust.n.01
-        pewter.n.01_1 - pewter.n.01
+        pewter_teapot.n.01_1 - pewter_teapot.n.01
         countertop.n.01_1 - countertop.n.01
         bowl.n.01_1 - bowl.n.01
         water.n.06_1 - water.n.06
@@ -18,8 +18,8 @@
     )
     
     (:init 
-        (covered pewter.n.01_1 dust.n.01_1) 
-        (ontop pewter.n.01_1 countertop.n.01_1) 
+        (covered pewter_teapot.n.01_1 dust.n.01_1)
+        (ontop pewter_teapot.n.01_1 countertop.n.01_1)
         (filled polish__bottle.n.01_1 polish.n.03_1)
         (ontop polish__bottle.n.01_1 countertop.n.01_1)
         (ontop bowl.n.01_1 countertop.n.01_1) 
@@ -37,9 +37,9 @@
     (:goal 
         (and 
             (not 
-                (covered ?pewter.n.01_1 ?dust.n.01_1)
+                (covered ?pewter_teapot.n.01_1 ?dust.n.01_1)
             ) 
-            (covered ?pewter.n.01_1 ?polish.n.03_1)
+            (covered ?pewter_teapot.n.01_1 ?polish.n.03_1)
         )
     )
 )

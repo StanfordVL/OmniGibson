@@ -5,7 +5,7 @@
         mixing_bowl.n.01_1 mixing_bowl.n.01_2 mixing_bowl.n.01_3 - mixing_bowl.n.01
         kitchen_table.n.01_1 - kitchen_table.n.01
         sack.n.01_1 sack.n.01_2 - sack.n.01
-        bok_choy.n.01_1 bok_choy.n.01_2 bok_choy.n.01_3 - bok_choy.n.01
+        bok_choy.n.02_1 bok_choy.n.02_2 bok_choy.n.02_3 - bok_choy.n.02
         chard.n.02_1 chard.n.02_2 chard.n.02_3 - chard.n.02
         sweet_corn.n.02_1 sweet_corn.n.02_2 sweet_corn.n.02_3 - sweet_corn.n.02
         artichoke.n.02_1 artichoke.n.02_2 - artichoke.n.02
@@ -20,9 +20,9 @@
         (ontop mixing_bowl.n.01_3 kitchen_table.n.01_1) 
         (ontop sack.n.01_1 kitchen_table.n.01_1)
         (ontop sack.n.01_2 kitchen_table.n.01_1)
-        (inside bok_choy.n.01_1 sack.n.01_1)
-        (inside bok_choy.n.01_2 sack.n.01_1)
-        (inside bok_choy.n.01_3 sack.n.01_1)
+        (inside bok_choy.n.02_1 sack.n.01_1)
+        (inside bok_choy.n.02_2 sack.n.01_1)
+        (inside bok_choy.n.02_3 sack.n.01_1)
         (inside chard.n.02_1 sack.n.01_1)
         (inside chard.n.02_2 sack.n.01_1)
         (inside chard.n.02_3 sack.n.01_1)
@@ -44,8 +44,8 @@
                 (?mixing_bowl.n.01 - mixing_bowl.n.01)
                 (and 
                     (forall 
-                        (?bok_choy.n.01 - bok_choy.n.01)
-                        (inside ?bok_choy.n.01 ?mixing_bowl.n.01)
+                        (?bok_choy.n.02 - bok_choy.n.02)
+                        (inside ?bok_choy.n.02 ?mixing_bowl.n.01)
                     )
                     (forall 
                         (?chard.n.02 - chard.n.02)
@@ -74,7 +74,7 @@
                         (inside ?sweet_corn.n.02_1 ?mixing_bowl.n.01)
                     )
                     (not 
-                        (inside ?bok_choy.n.01_1 ?mixing_bowl.n.01)
+                        (inside ?bok_choy.n.02_1 ?mixing_bowl.n.01)
                     )
                 )
             )
@@ -89,7 +89,7 @@
                         (inside ?artichoke.n.02_1 ?mixing_bowl.n.01)
                     )
                     (not 
-                        (inside ?bok_choy.n.01_1 ?mixing_bowl.n.01)
+                        (inside ?bok_choy.n.02_1 ?mixing_bowl.n.01)
                     )
                 )
             )

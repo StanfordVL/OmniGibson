@@ -3,7 +3,6 @@
 
     (:objects
         raw_egg.n.01_1 raw_egg.n.01_2 - raw_egg.n.01
-        fried_egg.n.01_1 fried_egg.n.01_2 - fried_egg.n.01
         bowl.n.01_1 bowl.n.01_2 - bowl.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         butter.n.01_1 - butter.n.01
@@ -32,8 +31,6 @@
         (inside bratwurst.n.01_2 electric_refrigerator.n.01_1) 
         (ontop plate.n.04_1 countertop.n.01_1) 
         (future melted__butter.n.01_1)
-        (future fried_egg.n.01_1)
-        (future fried_egg.n.01_2)
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
@@ -44,14 +41,12 @@
     (:goal 
         (and 
             (real ?melted__butter.n.01_1)
-            (real ?fried_egg.n.01_1)
-            (real ?fried_egg.n.01_2)
             (forall 
-                (?fried_egg.n.01 - fried_egg.n.01)
+                (?raw_egg.n.01 - raw_egg.n.01)
                 (and 
-                    (cooked ?fried_egg.n.01)
-                    (ontop ?fried_egg.n.01 ?plate.n.04_1) 
-                    (covered ?fried_egg.n.01 ?melted__butter.n.01_1)              
+                    (cooked ?raw_egg.n.01)
+                    (ontop ?raw_egg.n.01 ?plate.n.04_1)
+                    (covered ?raw_egg.n.01 ?melted__butter.n.01_1)
                 )
             )
             (forall 

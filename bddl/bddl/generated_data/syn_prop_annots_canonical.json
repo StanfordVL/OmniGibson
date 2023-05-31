@@ -3258,6 +3258,7 @@
         "freezable": {}
     },
     "bottle__of__analgesics.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -3460,7 +3461,7 @@
         "heatable": {},
         "freezable": {}
     },
-    "bottle__of__bleach.n.01": {
+    "bottle__of__bleach_agent.n.01": {
         "fillable": {},
         "rigidBody": {},
         "wetable": {},
@@ -11806,6 +11807,26 @@
     "cookie_cutter.n.01": {
         "slicer": {},
         "rigidBody": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "cookie_dough.n.01": {
+        "softBody": {},
+        "deformable": {},
+        "foldable": {},
+        "unfoldable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -21698,6 +21719,26 @@
         "heatable": {},
         "freezable": {}
     },
+    "marjoram__shaker.n.01": {
+        "fillable": {},
+        "particleApplier": {},
+        "needsOrientation": {},
+        "rigidBody": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
     "marshmallow.n.01": {
         "cookable": {},
         "sliceable": {},
@@ -23287,26 +23328,6 @@
     "orange.n.01": {
         "cookable": {},
         "sliceable": {},
-        "rigidBody": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
-    "oregano__shaker.n.01": {
-        "fillable": {},
-        "particleApplier": {},
-        "needsOrientation": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},

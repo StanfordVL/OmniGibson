@@ -3,7 +3,7 @@
 
     (:objects
         raw_egg.n.01_1 - raw_egg.n.01
-        cane_sugar.n.01_1 - cane_sugar.n.01
+        cane_sugar.n.02_1 - cane_sugar.n.02
         lemon_juice.n.01_1 - lemon_juice.n.01
         vanilla.n.02_1 - vanilla.n.02
         cream_cheese.n.01_1 - cream_cheese.n.01
@@ -36,7 +36,7 @@
     (:init 
         (inside raw_egg.n.01_1 bowl.n.01_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
-        (filled sugar__sack.n.01_1 cane_sugar.n.01_1) 
+        (filled sugar__sack.n.01_1 cane_sugar.n.02_1)
         (ontop sugar__sack.n.01_1 countertop.n.01_1) 
         (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1) 
         (inside lemon_juice__bottle.n.01_1 electric_refrigerator.n.01_1) 

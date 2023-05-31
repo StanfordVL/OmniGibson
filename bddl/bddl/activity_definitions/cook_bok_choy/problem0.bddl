@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        bok_choy.n.01_1 - bok_choy.n.01
+        bok_choy.n.02_1 - bok_choy.n.02
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         butter.n.01_1 - butter.n.01
         clove.n.03_1 clove.n.03_2 clove.n.03_3 - clove.n.03
@@ -20,13 +20,13 @@
     )
     
     (:init 
-        (inside bok_choy.n.01_1 electric_refrigerator.n.01_1) 
+        (inside bok_choy.n.02_1 electric_refrigerator.n.01_1)
         (inside butter.n.01_1 electric_refrigerator.n.01_1) 
         (inside clove.n.03_1 electric_refrigerator.n.01_1) 
         (inside clove.n.03_2 electric_refrigerator.n.01_1) 
         (inside clove.n.03_3 electric_refrigerator.n.01_1) 
         (not 
-            (cooked bok_choy.n.01_1)
+            (cooked bok_choy.n.02_1)
         ) 
         (filled soy_sauce__bottle.n.01_1 soy_sauce.n.01_1)
         (inside soy_sauce__bottle.n.01_1 electric_refrigerator.n.01_1)
@@ -46,10 +46,10 @@
         (and 
             (real ?melted__butter.n.01_1)
             (real ?diced__clove.n.01_1)
-            (inside ?bok_choy.n.01_1 ?frying_pan.n.01_1)
+            (inside ?bok_choy.n.02_1 ?frying_pan.n.01_1)
             (contains ?frying_pan.n.01_1 ?melted__butter.n.01_1)
             (contains ?frying_pan.n.01_1 ?diced__clove.n.01_1)
-            (cooked ?bok_choy.n.01_1)
+            (cooked ?bok_choy.n.02_1)
         )
     )
 )

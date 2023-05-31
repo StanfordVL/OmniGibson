@@ -4,8 +4,7 @@
     (:objects
         whiskey.n.01_1 - whiskey.n.01
         whiskey__bottle.n.01_1 - whiskey__bottle.n.01
-        egg.n.02_1 egg.n.02_2 - egg.n.02
-        fried_egg.n.01_1 fried_egg.n.01_2 - fried_egg.n.01
+        raw_egg.n.01_1 raw_egg.n.01_2 - raw_egg.n.01
         bowl.n.01_1 bowl.n.01_2 - bowl.n.01
         steak.n.01_1 - steak.n.01
         diced__potato.n.01_1 - diced__potato.n.01
@@ -23,13 +22,13 @@
     (:init 
         (filled whiskey__bottle.n.01_1 whiskey.n.01_1) 
         (inside whiskey__bottle.n.01_1 cabinet.n.01_1) 
-        (inside egg.n.02_1 bowl.n.01_1) 
-        (inside egg.n.02_2 bowl.n.01_1) 
+        (inside raw_egg.n.01_1 bowl.n.01_1) 
+        (inside raw_egg.n.01_2 bowl.n.01_1) 
         (not
-            (cooked egg.n.02_1)
+            (cooked raw_egg.n.01_1)
         )
         (not
-            (cooked egg.n.02_2)
+            (cooked raw_egg.n.01_2)
         )
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inside steak.n.01_1 bowl.n.01_2) 
@@ -43,8 +42,6 @@
         (inside bowl.n.01_2 electric_refrigerator.n.01_1) 
         (inside plate.n.04_1 cabinet.n.01_1) 
         (inside frying_pan.n.01_1 cabinet.n.01_1)
-        (future fried_egg.n.01_1)
-        (future fried_egg.n.01_2)
         (future cooked__diced__potato.n.01_1)
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -56,20 +53,13 @@
     
     (:goal 
         (and 
-            (real ?fried_egg.n.01_1)
-            (real ?fried_egg.n.01_2)
             (real ?cooked__diced__potato.n.01_1)
             (cooked ?steak.n.01_1) 
             (forall 
-                (?fried_egg.n.01 - fried_egg.n.01)
+                (?raw_egg.n.01 - raw_egg.n.01)
                 (and
-                    (cooked ?fried_egg.n.01)
-                    (or 
-                        (ontop ?fried_egg.n.01 ?plate.n.04_1)
-                        (ontop ?fried_egg.n.01 ?steak.n.01_1)
-                        (ontop ?fried_egg.n.01 ?fried_egg.n.01_1)
-                        (ontop ?fried_egg.n.01 ?fried_egg.n.01_2)
-                    )
+                    (cooked ?raw_egg.n.01)
+                    (ontop ?raw_egg.n.01 ?plate.n.04_1)
                 )
             )
             (ontop ?steak.n.01_1 ?plate.n.04_1) 

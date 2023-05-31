@@ -24,9 +24,9 @@
         salt.n.02_1 - salt.n.02
         cooked__salt.n.01_1 - cooked__salt.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
-        oregano.n.01_1 - oregano.n.01
-        cooked__oregano.n.01_1 - cooked__oregano.n.01
-        oregano__shaker.n.01_1 - oregano__shaker.n.01
+        marjoram.n.02_1 - marjoram.n.02
+        cooked__marjoram.n.02_1 - cooked__marjoram.n.02
+        marjoram__shaker.n.01_1 - marjoram__shaker.n.01
         cumin.n.02_1 - cumin.n.02
         cooked__cumin.n.01_1 - cooked__cumin.n.01
         cumin__shaker.n.01_1 - cumin__shaker.n.01
@@ -63,8 +63,8 @@
         (ontop pepper__shaker.n.01_1 countertop.n.01_1)
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
-        (insource oregano__shaker.n.01_1 oregano.n.01_1)
-        (inside oregano__shaker.n.01_1 cabinet.n.01_1)
+        (insource marjoram__shaker.n.01_1 marjoram.n.02_1)
+        (inside marjoram__shaker.n.01_1 cabinet.n.01_1)
         (insource cumin__shaker.n.01_1 cumin.n.02_1)
         (inside cumin__shaker.n.01_1 cabinet.n.01_1)
         (insource paprika__shaker.n.01_1 paprika.n.02_1)
@@ -84,7 +84,7 @@
         (future cooked__diced__vidalia_onion.n.01_1)
         (future cooked__black_pepper.n.01_1)
         (future cooked__salt.n.01_1)
-        (future cooked__oregano.n.01_1)
+        (future cooked__marjoram.n.02_1)
         (future cooked__cumin.n.01_1)
         (future cooked__paprika.n.01_1)
         (future cooked__salsa.n.01_1)
@@ -105,7 +105,7 @@
             (real ?cooked__diced__vidalia_onion.n.01_1)
             (real ?cooked__black_pepper.n.01_1)
             (real ?cooked__salt.n.01_1)
-            (real ?cooked__oregano.n.01_1)
+            (real ?cooked__marjoram.n.02_1)
             (real ?cooked__cumin.n.01_1)
             (real ?cooked__paprika.n.01_1)
             (real ?cooked__salsa.n.01_1)
@@ -121,7 +121,7 @@
             (contains ?frying_pan.n.01_1 ?cooked__diced__vidalia_onion.n.01_1)
             (contains ?frying_pan.n.01_1 ?cooked__black_pepper.n.01_1)
             (contains ?frying_pan.n.01_1 ?cooked__salt.n.01_1)
-            (contains ?frying_pan.n.01_1 ?cooked__oregano.n.01_1)
+            (contains ?frying_pan.n.01_1 ?cooked__marjoram.n.02_1)
             (contains ?frying_pan.n.01_1 ?cooked__cumin.n.01_1)
             (contains ?frying_pan.n.01_1 ?cooked__paprika.n.01_1)
             (contains ?frying_pan.n.01_1 ?cooked__salsa.n.01_1)

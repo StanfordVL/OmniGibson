@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        daffodil.n.01_1 daffodil.n.01_2 daffodil.n.01_3 - daffodil.n.01
+        daffodil_bulb.n.01_1 daffodil_bulb.n.01_2 daffodil_bulb.n.01_3 - daffodil_bulb.n.01
         countertop.n.01_1 - countertop.n.01
         cabinet.n.01_1 - cabinet.n.01
         mixing_bowl.n.01_1 - mixing_bowl.n.01
@@ -11,9 +11,9 @@
     )
     
     (:init 
-        (ontop daffodil.n.01_1 countertop.n.01_1) 
-        (ontop daffodil.n.01_2 countertop.n.01_1) 
-        (ontop daffodil.n.01_3 countertop.n.01_1) 
+        (ontop daffodil_bulb.n.01_1 countertop.n.01_1) 
+        (ontop daffodil_bulb.n.01_2 countertop.n.01_1) 
+        (ontop daffodil_bulb.n.01_3 countertop.n.01_1) 
         (ontop mixing_bowl.n.01_1 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen)
@@ -24,8 +24,8 @@
     (:goal 
         (and 
             (forall 
-                (?daffodil.n.01 - daffodil.n.01)
-                (inside ?daffodil.n.01 ?mixing_bowl.n.01_1)
+                (?daffodil_bulb.n.01 - daffodil_bulb.n.01)
+                (inside ?daffodil_bulb.n.01 ?mixing_bowl.n.01_1)
             )
             (inside ?mixing_bowl.n.01_1 ?cabinet.n.01_1)
         )

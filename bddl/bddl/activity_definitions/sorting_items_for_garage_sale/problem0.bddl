@@ -38,8 +38,8 @@
         (ontop cooking_utensil.n.01_2 floor.n.01_1) 
         (ontop tennis_racket.n.01_1 floor.n.01_1) 
         (ontop tennis_racket.n.01_2 tennis_racket.n.01_1) 
-        (ontop coat.n.01_1 floor.n.01_1) 
-        (ontop coat.n.01_2 floor.n.01_1) 
+        (ontop coat.n.01_1 floor.n.01_1)
+        (ontop coat.n.01_2 floor.n.01_1)
         (ontop blanket.n.01_1 floor.n.01_1) 
         (ontop gym_shoe.n.01_1 textbook.n.01_3) 
         (ontop gym_shoe.n.01_2 textbook.n.01_3) 
@@ -96,7 +96,7 @@
                     (inside ?blanket.n.01_1 ?packing_box.n.02) 
                     (folded ?blanket.n.01_1)
                     (forall 
-                        (?coat.n.01 - coat.n.01) 
+                        (?coat.n.01 - coat.n.01)
                         (and
                             (inside ?coat.n.01 ?packing_box.n.02)
                             (folded ?coat.n.01)

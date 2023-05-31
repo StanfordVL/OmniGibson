@@ -4,9 +4,9 @@
     (:objects
         potato.n.01_1 potato.n.01_2 potato.n.01_3 potato.n.01_4 potato.n.01_5 - potato.n.01
         carton.n.02_1 - carton.n.02
-        bok_choy.n.01_1 bok_choy.n.01_2 - bok_choy.n.01
+        bok_choy.n.02_1 bok_choy.n.02_2 - bok_choy.n.02
         butternut_squash.n.01_1 butternut_squash.n.01_2 - butternut_squash.n.01
-        sweet_potato.n.01_1 sweet_potato.n.01_2 sweet_potato.n.01_3 - sweet_potato.n.01
+        sweet_potato.n.02_1 sweet_potato.n.02_2 sweet_potato.n.02_3 - sweet_potato.n.02
         sack.n.01_1 sack.n.01_2 sack.n.01_3 - sack.n.01
         table.n.02_1 - table.n.02
         floor.n.01_1 - floor.n.01
@@ -19,13 +19,13 @@
         (inside potato.n.01_3 carton.n.02_1)
         (inside potato.n.01_4 carton.n.02_1)
         (inside potato.n.01_5 carton.n.02_1)
-        (inside bok_choy.n.01_1 carton.n.02_1) 
-        (inside bok_choy.n.01_2 carton.n.02_1) 
+        (inside bok_choy.n.02_1 carton.n.02_1)
+        (inside bok_choy.n.02_2 carton.n.02_1)
         (inside butternut_squash.n.01_1 carton.n.02_1) 
         (inside butternut_squash.n.01_2 carton.n.02_1) 
-        (inside sweet_potato.n.01_1 carton.n.02_1) 
-        (inside sweet_potato.n.01_2 carton.n.02_1) 
-        (inside sweet_potato.n.01_3 carton.n.02_1) 
+        (inside sweet_potato.n.02_1 carton.n.02_1)
+        (inside sweet_potato.n.02_2 carton.n.02_1)
+        (inside sweet_potato.n.02_3 carton.n.02_1)
         (ontop sack.n.01_1 table.n.02_1) 
         (ontop sack.n.01_2 sack.n.01_1)
         (ontop sack.n.01_3 table.n.02_1) 
@@ -48,8 +48,8 @@
                 (?sack.n.01 - sack.n.01)
                 (and
                     (forall 
-                        (?sweet_potato.n.01 - sweet_potato.n.01)
-                        (inside ?sweet_potato.n.01 ?sack.n.01)
+                        (?sweet_potato.n.02 - sweet_potato.n.02)
+                        (inside ?sweet_potato.n.02 ?sack.n.01)
                     )
                     (forall
                         (?potato.n.01 - potato.n.01)

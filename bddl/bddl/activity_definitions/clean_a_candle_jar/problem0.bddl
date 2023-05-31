@@ -5,7 +5,7 @@
         mason_jar.n.01_1 - mason_jar.n.01
         sink.n.01_1 - sink.n.01
         paper_towel.n.01_1 - paper_towel.n.01
-        wax.n.01_1 - wax.n.01
+        wax_remnant.n.01_1 - wax_remnant.n.01
         table_knife.n.01_1 - table_knife.n.01
         countertop.n.01_1 - countertop.n.01
         liquid_soap.n.01_1 - liquid_soap.n.01
@@ -18,7 +18,7 @@
     (:init 
         (ontop mason_jar.n.01_1 countertop.n.01_1) 
         (ontop paper_towel.n.01_1 countertop.n.01_1)
-        (covered mason_jar.n.01_1 wax.n.01_1) 
+        (covered mason_jar.n.01_1 wax_remnant.n.01_1) 
         (ontop table_knife.n.01_1 countertop.n.01_1)
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
         (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
@@ -32,7 +32,7 @@
     (:goal 
         (and 
             (not
-                (covered ?mason_jar.n.01_1 ?wax.n.01_1)
+                (covered ?mason_jar.n.01_1 ?wax_remnant.n.01_1)
             )
         )
     )
