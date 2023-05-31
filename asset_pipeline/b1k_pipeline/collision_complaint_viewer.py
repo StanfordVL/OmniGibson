@@ -1,3 +1,4 @@
+from collections import defaultdict
 from contextlib import contextmanager
 import hashlib
 import os
@@ -88,7 +89,7 @@ def load_mesh(mesh_fs, mesh_fn, index, offset=None, scale=None):
     return offset, scale
 
 
-def select_mesh(target_output_fs, mesh_name):
+def select_mesh(target_output_fs, mesh_name, object_complaints):
     with suppress_stdout():
         p.connect(p.GUI)
     
@@ -120,7 +121,11 @@ def select_mesh(target_output_fs, mesh_name):
 
         # Fix the camera
         p.resetDebugVisualizerCamera(cameraDistance=6, cameraYaw=0, cameraPitch=0, cameraTargetPosition=[len(candidates) * 1.5 / 2,0,0])
-               
+
+        parsed_name = b1k_pipeline.utils.parse_name(mesh_name)
+        object_key = parsed_name.group("category") + "-" + parsed_name.group("model_id")
+        print("\n".join(object_complaints[object_key]))
+
         input("Press enter to continue.")
     finally:
         with suppress_stdout():
@@ -129,12 +134,13 @@ def select_mesh(target_output_fs, mesh_name):
 
 def main():
     with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
-        all_targets = sorted(b1k_pipeline.utils.get_targets('combined'))
+        all_targets = sorted(b1k_pipeline.utils.get_targets('scenes'))
 
         # Now get a list of all the objects that we can process.
         print("Getting list of objects to process...")
         candidates = {}
         total_in_batch = 0
+        object_complaints = defaultdict(list)
         for target in tqdm.tqdm(all_targets):
             with pipeline_fs.target_output(target) as target_output_fs, pipeline_fs.target(target) as target_fs:
                 if not target_output_fs.exists("collision_meshes.zip") or not target_output_fs.exists("object_list.json"):
@@ -143,15 +149,17 @@ def main():
                 with target_output_fs.open("object_list.json", "r") as f:
                     mesh_list = json.load(f)["meshes"]
 
-                complaint_objects = set()
                 complaints_file = "complaints.json"
                 if target_fs.exists(complaints_file):
                     with target_fs.open(complaints_file, "r") as f:
-                        complaints = json.load(f)
+                        try:
+                            complaints = json.load(f)
+                        except:
+                            raise ValueError(f"Could not load complaints from {target}")
                         for c in complaints:
                             if c["message"] != "Was at least one of the collision mesh candidates acceptable?":
                                 continue
-                            complaint_objects.add(c["object"])
+                            object_complaints[c["object"]].append(c["complaint"])
 
                 with target_output_fs.open("collision_meshes.zip", "rb") as zip_file, \
                      ZipFS(zip_file) as zip_fs:
@@ -163,11 +171,12 @@ def main():
                         should_convert = (
                             int(parsed_name.group("instance_id")) == 0 and
                             not parsed_name.group("bad") and
-                            parsed_name.group("joint_side") != "upper")
+                            parsed_name.group("joint_side") != "upper" and
+                            parsed_name.group("category") not in ("walls", "floors", "ceilings"))
                         if not should_convert:
                             continue
                         object_key = parsed_name.group("category") + "-" + parsed_name.group("model_id")
-                        if object_key not in complaint_objects:
+                        if object_key not in object_complaints:
                             continue
                         if not zip_fs.exists(mesh_name):
                             print("Missing mesh", mesh_name)
@@ -184,7 +193,7 @@ def main():
             print("\n--------------------------------------------------------------------------")
             print(f"{i + 1} / {len(candidates)}: {mesh_name} (from {target})\n")
             with pipeline_fs.target_output(target) as target_output_fs:
-                select_mesh(target_output_fs, mesh_name)
+                select_mesh(target_output_fs, mesh_name, object_complaints)
 
 
 if __name__ == "__main__":
