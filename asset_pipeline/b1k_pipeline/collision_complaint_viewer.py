@@ -2,6 +2,7 @@ from collections import defaultdict
 from contextlib import contextmanager
 import hashlib
 import os
+import random
 import sys
 import numpy as np
 import tqdm
@@ -134,7 +135,8 @@ def select_mesh(target_output_fs, mesh_name, object_complaints):
 
 def main():
     with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
-        all_targets = sorted(b1k_pipeline.utils.get_targets('scenes'))
+        all_targets = b1k_pipeline.utils.get_targets('scenes')
+        random.shuffle(all_targets)
 
         # Now get a list of all the objects that we can process.
         print("Getting list of objects to process...")
