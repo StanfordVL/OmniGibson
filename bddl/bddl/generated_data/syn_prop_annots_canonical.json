@@ -981,6 +981,7 @@
     },
     "bag__of__auricularia.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -999,6 +1000,7 @@
     },
     "bag__of__breadcrumbs.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1017,6 +1019,7 @@
     },
     "bag__of__brown_rice.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1035,6 +1038,7 @@
     },
     "bag__of__chips.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1053,6 +1057,7 @@
     },
     "bag__of__cocoa.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1071,6 +1076,7 @@
     },
     "bag__of__cookies.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1089,6 +1095,7 @@
     },
     "bag__of__cream_cheese.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1107,6 +1114,7 @@
     },
     "bag__of__fertilizer.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1125,6 +1133,7 @@
     },
     "bag__of__flour.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1143,6 +1152,7 @@
     },
     "bag__of__ice_cream.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1161,6 +1171,7 @@
     },
     "bag__of__oranges.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1179,6 +1190,7 @@
     },
     "bag__of__popcorn.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1197,6 +1209,7 @@
     },
     "bag__of__rice.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1215,6 +1228,7 @@
     },
     "bag__of__shiitake.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1233,6 +1247,7 @@
     },
     "bag__of__snacks.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1251,6 +1266,7 @@
     },
     "bag__of__starch.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1269,6 +1285,7 @@
     },
     "bag__of__tea.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1287,6 +1304,7 @@
     },
     "bag__of__yeast.n.01": {
         "flammable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -8500,6 +8518,7 @@
         "freezable": {}
     },
     "carton__of__chocolate_milk.n.01": {
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -8518,6 +8537,7 @@
     },
     "carton__of__eggs.n.01": {
         "breakable": {},
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -8535,6 +8555,7 @@
         "freezable": {}
     },
     "carton__of__milk.n.01": {
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -8552,6 +8573,7 @@
         "freezable": {}
     },
     "carton__of__orange_juice.n.01": {
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -8569,6 +8591,7 @@
         "freezable": {}
     },
     "carton__of__pineapple_juice.n.01": {
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -8586,6 +8609,7 @@
         "freezable": {}
     },
     "carton__of__soy_milk.n.01": {
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -11593,6 +11617,15 @@
         "heatable": {},
         "freezable": {}
     },
+    "cooked__marjoram.n.01": {
+        "flammable": {},
+        "cookable": {},
+        "sliceable": {},
+        "microPhysicalSubstance": {},
+        "substance": {},
+        "heatable": {},
+        "freezable": {}
+    },
     "cooked__melted__butter.n.01": {
         "cookable": {},
         "liquid": {},
@@ -11627,15 +11660,6 @@
         "heatable": {},
         "freezable": {}
     },
-    "cooked__marjoram.n.01": {
-        "flammable": {},
-        "cookable": {},
-        "sliceable": {},
-        "microPhysicalSubstance": {},
-        "substance": {},
-        "heatable": {},
-        "freezable": {}
-    },
     "cooked__orzo.n.01": {
         "flammable": {},
         "cookable": {},
@@ -11650,6 +11674,12 @@
         "cookable": {},
         "sliceable": {},
         "microPhysicalSubstance": {},
+        "substance": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "cooked__pea.n.01": {
+        "macroPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
         "freezable": {}
@@ -26999,6 +27029,7 @@
     "ravioli.n.01": {
         "flammable": {},
         "cookable": {},
+        "sliceable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -27809,6 +27840,7 @@
     },
     "saffron.n.02": {
         "cookable": {},
+        "sliceable": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -27816,6 +27848,7 @@
     },
     "sage__shaker.n.01": {
         "fillable": {},
+        "sliceable": {},
         "particleApplier": {},
         "needsOrientation": {},
         "rigidBody": {},
@@ -29679,6 +29712,7 @@
     "sliced__chocolate_cake.n.01": {
         "flammable": {},
         "cookable": {},
+        "sliceable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -29700,6 +29734,7 @@
     },
     "sliced__cucumber.n.01": {
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -29718,6 +29753,7 @@
     },
     "sliced__lemon.n.01": {
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -29736,6 +29772,7 @@
     },
     "sliced__lime.n.01": {
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -29754,6 +29791,7 @@
     },
     "sliced__melon.n.01": {
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -29772,6 +29810,7 @@
     },
     "sliced__onion.n.01": {
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -29790,6 +29829,7 @@
     },
     "sliced__papaya.n.01": {
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -29809,6 +29849,7 @@
     "sliced__roast_beef.n.01": {
         "flammable": {},
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -29827,6 +29868,7 @@
     },
     "sliced__tomato.n.01": {
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -30288,6 +30330,7 @@
     "sour_bread.n.01": {
         "flammable": {},
         "cookable": {},
+        "sliceable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -30482,6 +30525,7 @@
     },
     "spice_cookie_dough.n.01": {
         "cookable": {},
+        "sliceable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -30504,6 +30548,7 @@
     "spice_cookie.n.01": {
         "flammable": {},
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -30562,6 +30607,7 @@
     "sponge_cake.n.01": {
         "flammable": {},
         "cookable": {},
+        "sliceable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -31304,6 +31350,7 @@
         "freezable": {}
     },
     "sugar_cookie_dough.n.01": {
+        "sliceable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -31326,6 +31373,7 @@
     "sugar_cookie.n.01": {
         "flammable": {},
         "cookable": {},
+        "sliceable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -32348,6 +32396,7 @@
     },
     "thyme__shaker.n.01": {
         "fillable": {},
+        "sliceable": {},
         "particleApplier": {},
         "needsOrientation": {},
         "rigidBody": {},
@@ -33241,6 +33290,7 @@
         "freezable": {}
     },
     "tube__of__lotion.n.01": {
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -33258,6 +33308,7 @@
         "freezable": {}
     },
     "tube__of__toothpaste.n.01": {
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -35418,6 +35469,7 @@
         "freezable": {}
     },
     "chicken_soup__can.n.01": {
+        "openable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
