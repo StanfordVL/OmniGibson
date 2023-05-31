@@ -34,5 +34,17 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: door handle incorrectly modeled",
         "processed": false
+    },
+    {
+        "object": "walls-hvqsio",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wall mesh holes not rectangular",
+        "processed": false
+    },
+    {
+        "object": "walls-rwfind",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wall mesh holes maybe not rectangular",
+        "processed": false
     }
 ]

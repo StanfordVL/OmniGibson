@@ -66,6 +66,12 @@
         "processed": false
     },
     {
+        "object": "boiler-lbcxwi",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": false
+    },
+    {
         "object": "commercial_kitchen_sink-ollneo",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "no sink cavity",
@@ -73,6 +79,12 @@
     },
     {
         "object": "commercial_kitchen_sink-ollneo",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": false
+    },
+    {
+        "object": "door-bandpe",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": false
@@ -99,6 +111,12 @@
         "object": "metal_bottom_cabinet-melxmd",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: msising handle",
+        "processed": false
+    },
+    {
+        "object": "wall_socket-ilzahp",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "unsure if should pick finer mesh",
         "processed": false
     }
 ]

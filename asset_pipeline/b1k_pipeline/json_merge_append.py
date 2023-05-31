@@ -25,8 +25,9 @@ def combine_obj(ancestor, ours, theirs):
     for k in ancestor.keys():
         assert k in ours and k in theirs
 
-    # Check that ours and theirs do not have overlapping keys
-    assert len(set(ours.keys()) & set(theirs.keys())) == 0
+    # Check that ours and theirs have the same value for overlapping keys
+    collision_keys = (set(ours.keys()) & set(theirs.keys())) - set(ancestor.keys())
+    assert not collision_keys, f"Collision keys: {collision_keys}"
 
     # Combine by appending the elements in ours and theirs that are not in ancestor
     for k, v in itertools.chain(theirs.items(), ours.items()):
