@@ -14,8 +14,8 @@
     (:init 
         (ontop lamp.n.02_1 floor.n.01_1) 
         (ontop lamp.n.02_2 floor.n.01_1) 
-        (ontop chair.n.01_1 floor.n.01_1) 
-        (ontop chair.n.01_2 bed.n.01_1) 
+        (ontop chair.n.01_1 floor.n.01_1)
+        (ontop chair.n.01_2 bed.n.01_1)
         (inroom window.n.01_1 bedroom) 
         (inroom bed.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
@@ -27,7 +27,7 @@
         (and 
             (nextto ?lamp.n.02_1 ?door.n.01_1) 
             (nextto ?lamp.n.02_2 ?window.n.01_1) 
-            (touching ?chair.n.01_1 ?bed.n.01_1) 
+            (touching ?chair.n.01_1 ?bed.n.01_1)
             (nextto ?chair.n.01_2 ?window.n.01_1)
         )
     )

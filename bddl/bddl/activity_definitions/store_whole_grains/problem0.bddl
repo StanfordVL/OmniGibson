@@ -11,7 +11,7 @@
     )
     
     (:init 
-        (ontop white_rice.n.01_1 sack.n.01_1) 
+        (filled sack.n.01_1 white_rice.n.01_1)
         (ontop sack.n.01_1 floor.n.01_1) 
         (inside mason_jar.n.01_1 cabinet.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -21,7 +21,7 @@
     
     (:goal 
         (and 
-            (inside ?white_rice.n.01_1 ?mason_jar.n.01_1) 
+            (contains ?mason_jar.n.01_1 ?white_rice.n.01_1)
             (inside ?mason_jar.n.01_1 ?cabinet.n.01_1) 
             (ontop ?sack.n.01_1 ?floor.n.01_1)
         )

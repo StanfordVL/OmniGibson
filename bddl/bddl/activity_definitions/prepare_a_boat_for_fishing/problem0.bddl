@@ -18,8 +18,8 @@
     )
     
     (:init 
-        (covered boat.n.01_1 stain.n.01_1) 
-        (ontop boat.n.01_1 driveway.n.01_1) 
+        (covered boat.n.01_1 stain.n.01_1)
+        (ontop boat.n.01_1 driveway.n.01_1)
         (ontop fishing_gear.n.01_1 driveway.n.01_1) 
         (ontop fishing_rod.n.01_1 driveway.n.01_1) 
         (ontop bucket.n.01_1 driveway.n.01_1) 
@@ -38,8 +38,8 @@
             (not 
                 (covered ?boat.n.01_1 ?stain.n.01_1)
             ) 
-            (inside ?fishing_gear.n.01_1 ?boat.n.01_1) 
-            (inside ?fishing_rod.n.01_1 ?boat.n.01_1) 
+            (inside ?fishing_gear.n.01_1 ?boat.n.01_1)
+            (inside ?fishing_rod.n.01_1 ?boat.n.01_1)
         )
     )
 )

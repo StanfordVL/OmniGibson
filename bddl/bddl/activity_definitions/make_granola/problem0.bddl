@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        oat.n.01_1 - oat.n.01
+        oat.n.02_1 - oat.n.02
         honey.n.01_1 - honey.n.01
         cinnamon.n.03_1 - cinnamon.n.03
         pecan.n.03_1 - pecan.n.03
@@ -22,7 +22,7 @@
     )
     
     (:init 
-        (filled oat__box.n.01_1 oat.n.01_1) 
+        (filled oat__box.n.01_1 oat.n.02_1)
         (inside oat__box.n.01_1 cabinet.n.01_1) 
         (filled honey__jar.n.01_1 honey.n.01_1) 
         (inside honey__jar.n.01_1 cabinet.n.01_1) 

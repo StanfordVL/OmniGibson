@@ -5,8 +5,6 @@
         chili.n.02_1 - chili.n.02
         diced__chili.n.01_1 - diced__chili.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-        egg.n.02_1 - egg.n.02
-        half__egg.n.01_1 half__egg.n.01_2 - half__egg.n.01
         countertop.n.01_1 - countertop.n.01
         salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
@@ -32,10 +30,6 @@
         (not 
             (cooked chili.n.02_1)
         )
-        (inside egg.n.02_1 electric_refrigerator.n.01_1) 
-        (not 
-            (cooked egg.n.02_1)
-        )
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (filled soy_sauce__bottle.n.01_1 soy_sauce.n.01_1) 
         (inside chinese_anise.n.02_1 mason_jar.n.01_1) 
@@ -54,27 +48,14 @@
         (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (future diced__chili.n.01_1)
-        (future half__egg.n.01_1)
-        (future half__egg.n.01_2)
         (future cooked__white_rice.n.01_1)
-
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
-        (and 
-            (real ?half__egg.n.01_1)
-            (real ?half__egg.n.01_2)
+        (and
             (real ?diced__chili.n.01_1)
             (real ?cooked__white_rice.n.01_1)
-            (forall 
-                (?half__egg.n.01 - half__egg.n.01)
-                (and
-                    (inside ?half__egg.n.01 ?wok.n.01_1)
-                    (covered ?half__egg.n.01 ?soy_sauce.n.01_1)
-                    (cooked ?half__egg.n.01)
-                )
-            )
             (contains ?wok.n.01_1 ?salt.n.02_1) 
             (filled ?wok.n.01_1 ?cooked__white_rice.n.01_1)
             (contains ?wok.n.01_1 ?sesame_oil.n.01_1) 

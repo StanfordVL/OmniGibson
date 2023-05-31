@@ -10,8 +10,8 @@
     )
     
     (:init 
-        (ontop coat.n.01_1 floor.n.01_1) 
-        (ontop coat.n.01_2 floor.n.01_1) 
+        (ontop coat.n.01_1 floor.n.01_1)
+        (ontop coat.n.01_2 floor.n.01_1)
         (attached hanger.n.02_1 wardrobe.n.01_1) 
         (attached hanger.n.02_2 wardrobe.n.01_1) 
         (inroom wardrobe.n.01_1 closet) 
@@ -22,7 +22,7 @@
     (:goal 
         (and 
             (forpairs 
-                (?coat.n.01 - coat.n.01) 
+                (?coat.n.01 - coat.n.01)
                 (?hanger.n.02 - hanger.n.02) 
                 (draped ?coat.n.01 ?hanger.n.02)
             ) 

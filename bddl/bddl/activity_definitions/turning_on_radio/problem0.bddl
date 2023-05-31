@@ -2,23 +2,23 @@
     (:domain omnigibson)
 
     (:objects
-     	radio.n.01_1 - radio.n.01
+     	radio_receiver.n.01_1 - radio_receiver.n.01
     	floor.n.01_1 - floor.n.01
     	agent.n.01_1 - agent.n.01
     )
     
     (:init 
         (not 
-            (toggled_on radio.n.01_1)
+            (toggled_on radio_receiver.n.01_1)
         ) 
-        (ontop radio.n.01_1 floor.n.01_1) 
+        (ontop radio_receiver.n.01_1 floor.n.01_1)
         (inroom floor.n.01_1 corridor) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (toggled_on ?radio.n.01_1) 
+            (toggled_on ?radio_receiver.n.01_1)
         )
     )
 )

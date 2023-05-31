@@ -26,7 +26,7 @@
         (ontop newspaper.n.03_1 floor.n.01_1)
         (ontop ashcan.n.01_1 floor.n.01_1)
         (covered hutch.n.01_1 fecal_matter.n.01_1) 
-        (inside hay.n.01_1 hutch.n.01_1) 
+        (covered hutch.n.01_1 hay.n.01_1)
         (insource water__atomizer.n.01_1 water.n.06_1) 
         (ontop water__atomizer.n.01_1 floor.n.01_1)
         (insource vinegar__atomizer.n.01_1 vinegar.n.01_1) 
@@ -46,7 +46,9 @@
             (not 
                 (covered ?hutch.n.01_1 ?fecal_matter.n.01_1)
             )
-            (inside ?hay.n.01_1 ?ashcan.n.01_1)
+            (not
+                (covered ?hutch.n.01_1 ?hay.n.01_1)
+            )
             (covered ?hutch.n.01_1 ?disinfectant.n.01_1)
         )
     )

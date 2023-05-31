@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        oyster.n.01_1 oyster.n.01_2 oyster.n.01_3 - oyster.n.01
+        huitre.n.01_1 huitre.n.01_2 huitre.n.01_3 - huitre.n.01
         stockpot.n.01_1 - stockpot.n.01
         salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
@@ -18,17 +18,17 @@
     
     (:init 
         (not 
-            (cooked oyster.n.01_1)
+            (cooked huitre.n.01_1)
         ) 
         (not 
-            (cooked oyster.n.01_2)
+            (cooked huitre.n.01_2)
         ) 
         (not 
-            (cooked oyster.n.01_3)
+            (cooked huitre.n.01_3)
         ) 
-        (inside oyster.n.01_1 bowl.n.01_1) 
-        (inside oyster.n.01_2 bowl.n.01_1) 
-        (inside oyster.n.01_3 bowl.n.01_1) 
+        (inside huitre.n.01_1 bowl.n.01_1)
+        (inside huitre.n.01_2 bowl.n.01_1)
+        (inside huitre.n.01_3 bowl.n.01_1)
         (inside bowl.n.01_1 electric_refrigerator.n.01_1)
         (ontop stockpot.n.01_1 countertop.n.01_1) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
@@ -45,14 +45,14 @@
     (:goal 
         (and 
             (forall 
-                (?oyster.n.01 - oyster.n.01) 
-                (inside ?oyster.n.01 ?stockpot.n.01_1)
+                (?huitre.n.01 - huitre.n.01)
+                (inside ?huitre.n.01 ?stockpot.n.01_1)
             ) 
             (forall 
-                (?oyster.n.01 - oyster.n.01) 
+                (?huitre.n.01 - huitre.n.01)
                 (and 
-                    (cooked ?oyster.n.01)
-                    (covered ?oyster.n.01 ?salt.n.02_1)
+                    (cooked ?huitre.n.01)
+                    (covered ?huitre.n.01 ?salt.n.02_1)
                 )
             ) 
         )

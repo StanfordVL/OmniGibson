@@ -7,7 +7,7 @@
         cooking_oil.n.01_1 - cooking_oil.n.01
         cooking_oil__bottle.n.01_1 - cooking_oil__bottle.n.01
         grill.n.02_1 - grill.n.02
-        coriander.n.03_1 - coriander.n.03
+        coriander.n.02_1 - coriander.n.02
         coriander__shaker.n.01_1 - coriander__shaker.n.01
         plate.n.04_1 - plate.n.04
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -36,7 +36,7 @@
         (not 
             (cooked kabob.n.01_4)
         ) 
-        (insource coriander__shaker.n.01_1 coriander.n.03_1)
+        (insource coriander__shaker.n.01_1 coriander.n.02_1)
         (inside coriander__shaker.n.01_1 electric_refrigerator.n.01_1)
         (inside plate.n.04_1 cabinet.n.01_1)
         (inroom cabinet.n.01_1 kitchen) 
@@ -53,7 +53,7 @@
                 (and
                     (cooked ?kabob.n.01)
                     (covered ?kabob.n.01 ?cooking_oil.n.01_1)
-                    (covered ?kabob.n.01 ?coriander.n.03_1)
+                    (covered ?kabob.n.01 ?coriander.n.02_1)
                     (ontop ?kabob.n.01 ?plate.n.04_1)
                 )
             )

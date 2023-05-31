@@ -3,7 +3,7 @@
 
     (:objects
         sand.n.04_1 - sand.n.04
-        shrimp.n.03_1 shrimp.n.03_2 shrimp.n.03_3 - shrimp.n.03
+        prawn.n.01_1 prawn.n.01_2 prawn.n.01_3 - prawn.n.01
         chopping_board.n.01_1 - chopping_board.n.01
         oven.n.01_1 - oven.n.01
         carving_knife.n.01_1 - carving_knife.n.01
@@ -14,14 +14,14 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init 
-        (ontop shrimp.n.03_2 chopping_board.n.01_1) 
-        (ontop shrimp.n.03_3 chopping_board.n.01_1) 
-        (ontop chopping_board.n.01_1 oven.n.01_1) 
-        (ontop shrimp.n.03_1 chopping_board.n.01_1)
-        (covered shrimp.n.03_1 sand.n.04_1)
-        (covered shrimp.n.03_2 sand.n.04_1)
-        (covered shrimp.n.03_3 sand.n.04_1)
+    (:init
+        (ontop chopping_board.n.01_1 oven.n.01_1)
+        (ontop prawn.n.01_1 chopping_board.n.01_1)
+        (ontop prawn.n.01_2 chopping_board.n.01_1)
+        (ontop prawn.n.01_3 chopping_board.n.01_1)
+        (covered prawn.n.01_1 sand.n.04_1)
+        (covered prawn.n.01_2 sand.n.04_1)
+        (covered prawn.n.01_3 sand.n.04_1)
         (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom oven.n.01_1 kitchen) 
@@ -34,9 +34,9 @@
     (:goal 
         (and 
             (forall 
-                (?shrimp.n.03 - shrimp.n.03)
+                (?prawn.n.01 - prawn.n.01)
                 (not 
-                    (covered ?shrimp.n.03 ?sand.n.04_1)
+                    (covered ?prawn.n.01 ?sand.n.04_1)
                 )
             )
         )

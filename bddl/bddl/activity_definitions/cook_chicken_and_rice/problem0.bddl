@@ -3,6 +3,7 @@
 
     (:objects
         white_rice.n.01_1 - white_rice.n.01
+        cooked__white_rice.n.01_1 - cooked__white_rice.n.01
         bowl.n.01_1 - bowl.n.01
         kitchen_table.n.01_1 - kitchen_table.n.01
         chicken.n.01_1 - chicken.n.01
@@ -30,9 +31,6 @@
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 kitchen_table.n.01_1)
         (not 
-            (cooked white_rice.n.01_1)
-        ) 
-        (not 
             (cooked chicken.n.01_1)
         ) 
         (insource sink.n.01_1 water.n.06_1)
@@ -41,11 +39,12 @@
         (inroom floor.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
+        (future cooked__white_rice.n.01_1)
     )
     
     (:goal 
         (and 
-            (cooked ?white_rice.n.01_1)
+            (real cooked__white_rice.n.01_1)
             (cooked ?chicken.n.01_1)
             (covered ?chicken.n.01_1 ?salt.n.02_1)
             (covered ?chicken.n.01_1 ?olive_oil.n.01_1)

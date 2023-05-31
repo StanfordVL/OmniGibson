@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        shell.n.08_1 shell.n.08_2 - shell.n.08
+        jacket.n.05_1 jacket.n.05_2 - jacket.n.05
         stain.n.01_1 - stain.n.01
         coffee_table.n.01_1 - coffee_table.n.01
         lemon_juice.n.01_1 - lemon_juice.n.01
@@ -13,10 +13,10 @@
     )
     
     (:init 
-        (ontop shell.n.08_1 coffee_table.n.01_1) 
-        (covered shell.n.08_1 stain.n.01_1)
-        (ontop shell.n.08_2 coffee_table.n.01_1) 
-        (covered shell.n.08_2 stain.n.01_1)
+        (ontop jacket.n.05_1 coffee_table.n.01_1)
+        (covered jacket.n.05_1 stain.n.01_1)
+        (ontop jacket.n.05_2 coffee_table.n.01_1)
+        (covered jacket.n.05_2 stain.n.01_1)
         (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1)
         (ontop lemon_juice__bottle.n.01_1 coffee_table.n.01_1)
         (ontop rag.n.01_1 coffee_table.n.01_1) 
@@ -28,9 +28,9 @@
     (:goal 
         (and 
             (forall 
-                (?shell.n.08 - shell.n.08)
+                (?jacket.n.05 - jacket.n.05)
                 (not 
-                    (covered ?shell.n.08 ?stain.n.01_1)
+                    (covered ?jacket.n.05 ?stain.n.01_1)
                 )
             )
         )

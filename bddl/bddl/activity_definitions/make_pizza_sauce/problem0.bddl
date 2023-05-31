@@ -4,7 +4,7 @@
     (:objects
         beefsteak_tomato.n.01_1 - beefsteak_tomato.n.01
         tomato_paste.n.01_1 - tomato_paste.n.01
-        oregano.n.01_1 - oregano.n.01
+        marjoram.n.02_1 - marjoram.n.02
         clove.n.03_1 clove.n.03_2 - clove.n.03
         salt.n.02_1 - salt.n.02
         basil.n.03_1 - basil.n.03
@@ -12,7 +12,7 @@
         stove.n.01_1 - stove.n.01
         bowl.n.01_1 - bowl.n.01
         tomato_paste__can.n.01_1 - tomato_paste__can.n.01
-        oregano__shaker.n.01_1 - oregano__shaker.n.01
+        marjoram__shaker.n.01_1 - marjoram__shaker.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
         cabinet.n.01_1 - cabinet.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -26,8 +26,8 @@
         (filled tomato_paste__can.n.01_1 tomato_paste.n.01_1) 
         (inside tomato_paste__can.n.01_1 cabinet.n.01_1) 
         (inside beefsteak_tomato.n.01_1 electric_refrigerator.n.01_1)
-        (insource oregano__shaker.n.01_1 oregano.n.01_1) 
-        (inside oregano__shaker.n.01_1 cabinet.n.01_1) 
+        (insource marjoram__shaker.n.01_1 marjoram.n.02_1)
+        (inside marjoram__shaker.n.01_1 cabinet.n.01_1)
         (ontop clove.n.03_1 countertop.n.01_1)
         (ontop clove.n.03_2 countertop.n.01_1)
         (insource salt__shaker.n.01_1 salt.n.02_1)

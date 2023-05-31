@@ -12,7 +12,7 @@
     
     (:init 
         (ontop wicker_basket.n.01_1 floor.n.01_1) 
-        (inside fur_coat.n.01_1 wicker_basket.n.01_1) 
+        (inside fur_coat.n.01_1 wicker_basket.n.01_1)
         (attached hanger.n.02_1 wardrobe.n.01_1)
         (inroom floor.n.01_1 closet) 
         (inroom wardrobe.n.01_1 closet) 
@@ -21,7 +21,7 @@
     
     (:goal 
         (and 
-            (draped ?fur_coat.n.01_1 ?hanger.n.02_1) 
+            (draped ?fur_coat.n.01_1 ?hanger.n.02_1)
             (attached ?hanger.n.02_1 ?wardrobe.n.01_1)
         )
     )

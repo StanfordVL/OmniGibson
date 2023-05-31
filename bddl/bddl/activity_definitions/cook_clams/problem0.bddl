@@ -5,7 +5,7 @@
         saucepan.n.01_1 - saucepan.n.01
         stove.n.01_1 - stove.n.01
         bowl.n.01_1 - bowl.n.01
-        clam.n.01_1 clam.n.01_2 clam.n.01_3 - clam.n.01
+        clam.n.03_1 clam.n.03_2 clam.n.03_3 - clam.n.03
         salt.n.02_1 - salt.n.02
         salt__shaker.n.01_1 - salt__shaker.n.01
         lemon_juice.n.01_1 - lemon_juice.n.01
@@ -19,17 +19,17 @@
     (:init 
         (ontop saucepan.n.01_1 stove.n.01_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
-        (inside clam.n.01_1 bowl.n.01_1) 
-        (inside clam.n.01_2 bowl.n.01_1) 
-        (inside clam.n.01_3 bowl.n.01_1) 
+        (inside clam.n.03_1 bowl.n.01_1)
+        (inside clam.n.03_2 bowl.n.01_1)
+        (inside clam.n.03_3 bowl.n.01_1)
         (not 
-            (cooked clam.n.01_1)
+            (cooked clam.n.03_1)
         ) 
         (not 
-            (cooked clam.n.01_2)
+            (cooked clam.n.03_2)
         ) 
         (not 
-            (cooked clam.n.01_3)
+            (cooked clam.n.03_3)
         ) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
@@ -45,11 +45,11 @@
     (:goal 
         (and 
             (forall 
-                (?clam.n.01 - clam.n.01) 
+                (?clam.n.03 - clam.n.03)
                 (and
-                    (cooked ?clam.n.01)
-                    (covered ?clam.n.01 ?salt.n.02_1)
-                    (covered ?clam.n.01 ?lemon_juice.n.01_1)
+                    (cooked ?clam.n.03)
+                    (covered ?clam.n.03 ?salt.n.02_1)
+                    (covered ?clam.n.03 ?lemon_juice.n.01_1)
                 )
             )
         )

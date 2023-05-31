@@ -4,7 +4,7 @@
     (:objects
         pet_bed.n.01_1 - pet_bed.n.01
         floor.n.01_1 - floor.n.01
-        hair.n.01_1 - hair.n.01
+        hair.n.04_1 - hair.n.04
         petfood.n.01_1 - petfood.n.01
         vacuum.n.04_1 - vacuum.n.04
         rug.n.01_1 - rug.n.01
@@ -14,7 +14,7 @@
     
     (:init 
         (ontop pet_bed.n.01_1 floor.n.01_1) 
-        (covered pet_bed.n.01_1 hair.n.01_1) 
+        (covered pet_bed.n.01_1 hair.n.04_1)
         (covered pet_bed.n.01_1 petfood.n.01_1) 
         (ontop vacuum.n.04_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
@@ -26,7 +26,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?pet_bed.n.01_1 ?hair.n.01_1)
+                (covered ?pet_bed.n.01_1 ?hair.n.04_1)
             ) 
             (not 
                 (covered ?pet_bed.n.01_1 ?petfood.n.01_1)

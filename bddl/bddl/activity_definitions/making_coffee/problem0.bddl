@@ -30,7 +30,7 @@
     (:goal 
         (and 
             (real ?drip_coffee.n.01_1) 
-            (filled ?mug.n.04_1 ?drip_coffee.n.01_1)
+            (contains ?mug.n.04_1 ?drip_coffee.n.01_1)
         )
     )
 )
