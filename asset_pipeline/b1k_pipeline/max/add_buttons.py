@@ -20,6 +20,7 @@ ENTRYPOINTS = {
     "import_scene_obj_orientations.py": "Fix legacy scene orientations.",
     "instanceify.py": "Convert objects into instances.",
     "instance_select.py": "Select all instances of objects.",
+    "merge_collision.py": "Merge collision objects into a single object and parent them.",
     "new_sanity_check.py": "Run a number of sanity checks.",
     "next_failed.py": "Open the next object file that has failed sanity check.",
     "qa_next_failed.py": "Open the next object file that has unprocessed QA comments.",

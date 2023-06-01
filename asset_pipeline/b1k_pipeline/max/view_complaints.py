@@ -1,3 +1,8 @@
+import sys
+sys.path.append(r"D:\ig_pipeline")
+
+import b1k_pipeline.utils
+
 import json
 import pathlib
 import pymxs
@@ -11,17 +16,21 @@ def main():
     if not complaint_path.exists():
         print("No complaints!")
         return
+    
+    selected_objs = list(rt.selection) if len(rt.selection) > 0 else list(rt.objects)
+    selected_names = [obj.name for obj in selected_objs]
+    selected_obj_matches = [b1k_pipeline.utils.parse_name(name) for name in selected_names]
+    selected_keys = {f"{match.group('category')}-{match.group('model_id')}" for match in selected_obj_matches if match is not None}
 
     with open(complaint_path, "r") as f:
-        x = json.load(f)
-        for complaint in x:
-            if complaint["processed"]:
-                continue
+        all_complaints = json.load(f)
 
-            if not complaint["message"].startswith("Confirm object visual appearance."):
-                continue
-
-            rt.messagebox(complaint)
+    complaints = [complaint for complaint in all_complaints if complaint["object"] in selected_keys and not complaint["processed"]]
+    if len(complaints) == 0:
+        print("No complaints for objects", ", ".join(selected_keys))
+    else:
+        for complaint in complaints:
+            print(complaint)
 
 if __name__ == "__main__":
     main()
