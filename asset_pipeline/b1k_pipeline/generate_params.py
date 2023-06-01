@@ -96,13 +96,19 @@ def main():
     root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ROOT_PATH))
 
     objects_path = os.path.join(os.path.dirname(__file__), OBJS_DIR)
-    all_object_list = os.listdir(objects_path)
+    all_object_list = [
+        x for x in os.listdir(objects_path)
+        if os.path.exists(os.path.join(objects_path, x, "processed.max"))
+    ]
     approved_objects = sorted(x for x in all_object_list if any(re.fullmatch(exp, x) for exp in APPROVED_OBJS) and not any(re.fullmatch(exp, x) for exp in REJECTED_OBJS))
     objects = sorted(["objects/" + x for x in approved_objects])
     objects_unfiltered = sorted(["objects/" + x for x in all_object_list])
 
     scenes_path = os.path.join(os.path.dirname(__file__), SCENES_DIR)
-    all_scenes_list = os.listdir(scenes_path)
+    all_scenes_list = [
+        x for x in os.listdir(scenes_path)
+        if os.path.exists(os.path.join(scenes_path, x, "processed.max"))
+    ]
     approved_scenes = sorted(x for x in all_scenes_list if any(re.fullmatch(exp, x) for exp in APPROVED_SCENES) and not any(re.fullmatch(exp, x) for exp in REJECTED_SCENES))
     scenes = sorted(["scenes/" + x for x in approved_scenes])  #
     scenes_unfiltered = sorted(["scenes/" + x for x in all_scenes_list])  #
