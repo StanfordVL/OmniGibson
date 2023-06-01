@@ -582,7 +582,7 @@ class BaseTransitionRule(Registerable):
         Object candidate filters that this transition rule cares about.
         For each name, filter key-value pair, the global transition rule step will produce a
         single dictionary of valid filtered objects.
-        For example, if the group filters are:
+        For example, if the candidate filters are:
 
             {"apple": CategoryFilter("apple"), "knife": CategoryFilter("knife")},
 
@@ -1044,7 +1044,7 @@ class MixingRule(BaseTransitionRule):
         return True
 
     @classmethod
-    def refresh(cls):
+    def refresh(cls, object_candidates):
         # Cache active recipes given the current set of objects
         cls._ACTIVE_RECIPES = dict()
         cls._CATEGORY_IDXS = dict()
@@ -1280,7 +1280,7 @@ class BDDLRuleTemplate(BaseTransitionRule):
     _output_systems = None
 
     # Conditions dynamically loaded at runtime, so we store them as an internal variable
-    _individual_filters = None
+    _candidate_filters = None
 
     # Compile backend -- note: this is shared across ALL subclassed rules!
     _backend = OmniGibsonBDDLBackend()
@@ -1364,11 +1364,11 @@ class BDDLRuleTemplate(BaseTransitionRule):
         # Parse requirements of any "real" predicates -- this will be converted into a category filter for grabbing
         # relevant rule object candidates
         filtered_requirements = []
-        cls._individual_filters = dict()
+        cls._candidate_filters = dict()
         for requirement in requirements:
             if requirement[0] == "real":
                 category = requirement[1].split(".")[0]
-                cls._individual_filters[requirements[1]] = CategoryFilter(category=category)
+                cls._candidate_filters[requirements[1]] = CategoryFilter(category=category)
             else:
                 filtered_requirements.append(requirement)
 
@@ -1396,8 +1396,8 @@ class BDDLRuleTemplate(BaseTransitionRule):
         return [system.name for system in cls._input_systems.values()]
 
     @classproperty
-    def individual_filters(cls):
-        return cls._individual_filters
+    def candidate_filters(cls):
+        return cls._candidate_filters
 
     @classmethod
     def condition(cls, individual_objects, group_objects):
@@ -1436,20 +1436,6 @@ class BDDLRuleTemplate(BaseTransitionRule):
         classes = super()._do_not_register_classes
         classes.add("BDDLRuleTemplate")
         return classes
-
-# TODO: Handle toggled on / magic wand stateful 2-step condition
-# TODO: Inputs should be required categories, only check for contains
-# TODO: Make blender rule monolithic, handle "all" recipes
-# TODO: Add ability to dynamically add recipe
-# TODO: Add ability to parse bddl and convert into new recipe
-# TODO: Have blender rule output proportional volume
-# TODO: Add garbage fallback, and add corresponding garbage substance
-# TODO: Filters should only check for "blender" abilities
-
-# TODO: Add separate monolithic rule for magic stirring rod
-# TODO: StirringRod rule should filter for combos of fillable and magic_wands
-# TODO: Unify shared logic between Blender rule and magic wand rule
-
 
 """
 Blender / magic wand shared, except for:
