@@ -3,7 +3,7 @@
 
     (:objects
         stockpot.n.01_1 - stockpot.n.01
-        lamb.n.01_1 - lamb.n.01
+        lamb.n.05_1 - lamb.n.05
         wax_paper.n.01_1 - wax_paper.n.01
         mint.n.04_1 mint.n.04_2 mint.n.04_3 mint.n.04_4 - mint.n.04
         bowl.n.01_1 bowl.n.01_2 - bowl.n.01
@@ -19,11 +19,11 @@
     
     (:init 
         (inside stockpot.n.01_1 cabinet.n.01_1) 
-        (ontop lamb.n.01_1 wax_paper.n.01_1) 
+        (ontop lamb.n.05_1 wax_paper.n.01_1)
         (not 
-            (cooked lamb.n.01_1)
+            (cooked lamb.n.05_1)
         ) 
-        (frozen lamb.n.01_1)
+        (frozen lamb.n.05_1)
         (inside wax_paper.n.01_1 electric_refrigerator.n.01_1)
         (inside mint.n.04_1 bowl.n.01_1) 
         (inside mint.n.04_2 bowl.n.01_1) 
@@ -44,17 +44,17 @@
     
     (:goal 
         (and 
-            (cooked ?lamb.n.01_1)
-            (covered ?lamb.n.01_1 ?salt.n.02_1)
+            (cooked ?lamb.n.05_1)
+            (covered ?lamb.n.05_1 ?salt.n.02_1)
             (forall 
                 (?mint.n.04 - mint.n.04)
-                (ontop ?mint.n.04 ?lamb.n.01_1)
+                (ontop ?mint.n.04 ?lamb.n.05_1)
             )
             (forall 
                 (?clove.n.03 - clove.n.03)
                 (and 
                     (cooked ?clove.n.03)
-                    (touching ?clove.n.03 ?lamb.n.01_1)
+                    (touching ?clove.n.03 ?lamb.n.05_1)
                 )
             )
         )

@@ -9,7 +9,7 @@
         chard.n.02_1 chard.n.02_2 chard.n.02_3 - chard.n.02
         sweet_corn.n.02_1 sweet_corn.n.02_2 sweet_corn.n.02_3 - sweet_corn.n.02
         artichoke.n.02_1 artichoke.n.02_2 - artichoke.n.02
-        leek.n.01_1 leek.n.01_2 - leek.n.01
+        leek.n.02_1 leek.n.02_2 - leek.n.02
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -31,8 +31,8 @@
         (inside sweet_corn.n.02_3 sack.n.01_2)
         (inside artichoke.n.02_1 sweet_corn.n.02_1) 
         (inside artichoke.n.02_2 sack.n.01_2)
-        (inside leek.n.01_1 sack.n.01_1)
-        (inside leek.n.01_2 sack.n.01_1)
+        (inside leek.n.02_1 sack.n.01_1)
+        (inside leek.n.02_2 sack.n.01_1)
         (inroom kitchen_table.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -55,7 +55,7 @@
                         (inside ?sweet_corn.n.02_1 ?mixing_bowl.n.01)
                     )
                     (not 
-                        (inside ?leek.n.01_1 ?mixing_bowl.n.01)
+                        (inside ?leek.n.02_1 ?mixing_bowl.n.01)
                     )
                 )
             )
@@ -63,8 +63,8 @@
                 (?mixing_bowl.n.01 - mixing_bowl.n.01)
                 (and 
                     (forall 
-                        (?leek.n.01 - leek.n.01)
-                        (inside ?leek.n.01 ?mixing_bowl.n.01)
+                        (?leek.n.02 - leek.n.02)
+                        (inside ?leek.n.02 ?mixing_bowl.n.01)
                     )
                     (forall 
                         (?artichoke.n.02 - artichoke.n.02)
