@@ -18,7 +18,6 @@ from b1k_pipeline.usd_conversion.expand_collision_obj_and_urdf import split_objs
 from b1k_pipeline.usd_conversion.preprocess_urdf_for_metalinks import (
     update_obj_urdf_with_metalinks,
 )
-from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
 
 def create_import_config():
@@ -44,45 +43,15 @@ def create_import_config():
     return import_config
 
 
-def import_objects_from_scene_urdf(urdf):
-    tree = ET.parse(urdf)
-    root = tree.getroot()
-    import_nested_objs_from_element(root)
-
-
-def import_nested_objs_from_element(element):
-    obj_infos = set()
-    # Check if this element is a link
-    for ele in element:
-        if ele.tag == "link":
-            # This is a valid object, import the model
-            category = ele.get("category")
-            model = ele.get("model")
-            name = ele.get("name").replace("-", "_")
-            print(f"Link: name: {name}, category: {category}, model: {model}")
-            obj_info = (category, model)
-            # Skip world link
-            if name == "world":
-                pass
-            elif obj_info not in obj_infos:
-                import_obj_urdf(
-                    obj_category=category, obj_model=model, skip_if_exist=False
-                )
-                obj_infos.add(obj_info)
-        # If there's children nodes, we iterate over those
-        for child in ele:
-            import_nested_objs_from_element(child)
-
-
-def import_obj_urdf(obj_category, obj_model, skip_if_exist=False):
+def import_obj_urdf(obj_category, obj_model, dataset_root, skip_if_exist=False):
     # Preprocess input URDF to account for metalinks
     urdf_path = update_obj_urdf_with_metalinks(
-        obj_category=obj_category, obj_model=obj_model
+        obj_category=obj_category, obj_model=obj_model, dataset_root=dataset_root
     )
     # Import URDF
     cfg = create_import_config()
     # Check if filepath exists
-    usd_path = f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}/usd/{obj_model}.usd"
+    usd_path = f"{dataset_root}/objects/{obj_category}/{obj_model}/usd/{obj_model}.usd"
     if not (skip_if_exist and exists(usd_path)):
         print(f"Converting collision meshes from {obj_category}, {obj_model}...")
         urdf_path = split_objs_in_urdf(urdf_fpath=urdf_path, name_suffix="split")

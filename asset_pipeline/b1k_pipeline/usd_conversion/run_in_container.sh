@@ -18,9 +18,9 @@ echo "Object count: $object_count"
 USDIFY_BATCH_SIZE=100
 for ((batch_from=0; batch_from<object_count; batch_from+=USDIFY_BATCH_SIZE)); do
   batch_to=$(( $batch_from+$USDIFY_BATCH_SIZE ))
-  python -m b1k_pipeline.usd_conversion.usdify_objects $batch_from $batch_to
+  python -m b1k_pipeline.usd_conversion.usdify_objects_process $batch_from $batch_to /tmp/og_dataset
 done
-python -m b1k_pipeline.usd_conversion.usdify_scenes
+python -m b1k_pipeline.usd_conversion.usdify_scenes /tmp/og_dataset
 
 # Do some cleanup to reduce file size
 rm -rf /tmp/og_dataset/objects/*/*/shape

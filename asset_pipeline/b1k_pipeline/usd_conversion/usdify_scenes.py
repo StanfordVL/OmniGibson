@@ -2,6 +2,7 @@
 Script to import scene and objects
 """
 import os
+import sys
 
 import tqdm
 from omnigibson.macros import gm
@@ -18,17 +19,17 @@ from omnigibson import app
 from b1k_pipeline.usd_conversion.convert_scene_urdfs_to_json_templates import (
     convert_scene_urdf_to_json,
 )
-from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
 
 IMPORT_RENDER_CHANNELS = True
 
 
 if __name__ == "__main__":
-    gm.DATASET_PATH = str(DATASET_ROOT)
-    scenes = list(os.listdir(os.path.join(DATASET_ROOT, "scenes")))
+    dataset_root = sys.argv[1]
+    gm.DATASET_PATH = str(dataset_root)
+    scenes = list(os.listdir(os.path.join(dataset_root, "scenes")))
     for scene in tqdm.tqdm(scenes):
-        urdf_path = f"{DATASET_ROOT}/scenes/{scene}/urdf/{scene}_best.urdf"
-        json_path = f"{DATASET_ROOT}/scenes/{scene}/json/{scene}_best.json"
+        urdf_path = f"{dataset_root}/scenes/{scene}/urdf/{scene}_best.urdf"
+        json_path = f"{dataset_root}/scenes/{scene}/json/{scene}_best.json"
 
         # Convert URDF to USD
         convert_scene_urdf_to_json(urdf=urdf_path, json_path=json_path)

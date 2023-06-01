@@ -21,8 +21,6 @@ from pxr import Gf, PhysxSchema, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade
 from pxr.Sdf import ValueTypeNames as VT
 from pxr.UsdGeom import Tokens
 
-from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
-
 LIGHT_MAPPING = {
     0: "Rect",
     2: "Sphere",
@@ -137,62 +135,6 @@ def string_to_array(string):
     return np.array([float(x) for x in string.split(" ")])
 
 
-def import_models_metadata_from_scene(urdf, import_render_channels=False):
-    tree = ET.parse(urdf)
-    root = tree.getroot()
-    import_nested_models_metadata_from_element(
-        root, model_pose_info={}, import_render_channels=import_render_channels
-    )
-
-
-def import_nested_models_metadata_from_element(
-    element, model_pose_info, import_render_channels=False
-):
-    obj_infos = set()
-    # First pass through, populate the joint pose info
-    for ele in element:
-        if ele.tag == "joint":
-            name, pos, quat = get_joint_info(ele)
-            name = name.replace("-", "_")
-            model_pose_info[name] = {
-                "pos": pos,
-                "quat": quat,
-            }
-
-    # Second pass through, import object models
-    for ele in element:
-        if ele.tag == "link":
-            # This is a valid object, import the model
-            name = ele.get("name").replace("-", "_")
-            category = ele.get("category")
-            model = ele.get("model")
-            obj_info = (category, model)
-            if name == "world":
-                # Skip this
-                pass
-            # # Process ceiling, walls, floor separately
-            # elif category in {"ceilings", "walls", "floors"} and obj_info not in obj_infos:
-            #     import_building_metadata(obj_category=category, obj_model=model, name=name, import_render_channels=import_render_channels)
-            #     obj_infos.add(obj_info)
-            elif obj_info not in obj_infos:
-                print(name)
-                # bb = string_to_array(ele.get("bounding_box"))
-                # pos = model_pose_info[name]["pos"]
-                # quat = model_pose_info[name]["quat"]
-                import_obj_metadata(
-                    obj_category=category,
-                    obj_model=model,
-                    import_render_channels=import_render_channels,
-                )
-                obj_infos.add(obj_info)
-
-        # If there's children nodes, we iterate over those
-        for child in ele:
-            import_nested_models_metadata_from_element(
-                child, model_pose_info=model_pose_info
-            )
-
-
 def get_joint_info(joint_element):
     child, pos, quat = None, None, None
     for ele in joint_element:
@@ -241,8 +183,8 @@ def get_visual_objs_from_urdf(urdf_path):
     return visual_objs
 
 
-def copy_object_state_textures(obj_category, obj_model):
-    obj_root_dir = f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}"
+def copy_object_state_textures(obj_category, obj_model, dataset_root):
+    obj_root_dir = f"{dataset_root}/objects/{obj_category}/{obj_model}"
     old_mat_fpath = f"{obj_root_dir}/material"
     new_mat_fpath = f"{obj_root_dir}/usd/materials"
     for mat_file in os.listdir(old_mat_fpath):
@@ -256,7 +198,7 @@ def copy_object_state_textures(obj_category, obj_model):
 
 
 def import_rendering_channels(
-    obj_prim, obj_category, obj_model, model_root_path, usd_path
+    obj_prim, obj_category, obj_model, model_root_path, usd_path, dataset_root
 ):
     usd_dir = "/".join(usd_path.split("/")[:-1])
     # # mat_dir = f"{model_root_path}/material/{obj_category}" if \
@@ -302,7 +244,7 @@ def import_rendering_channels(
     # default_mat_is_used = False
 
     # Grab all visual objs for this object
-    urdf_path = f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}/{obj_model}_with_metalinks_split.urdf"
+    urdf_path = f"{dataset_root}/objects/{obj_category}/{obj_model}/{obj_model}_with_metalinks_split.urdf"
     visual_objs = get_visual_objs_from_urdf(urdf_path)
 
     # Extract absolute paths to mtl files for each link
@@ -327,7 +269,7 @@ def import_rendering_channels(
             # Get absolute path and open the obj file if it exists:
             if obj_file is not None:
                 obj_path = (
-                    f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}/{obj_file}"
+                    f"{dataset_root}/objects/{obj_category}/{obj_model}/{obj_file}"
                 )
                 with open(obj_path, "r") as f:
                     mtls = []
@@ -441,7 +383,7 @@ def import_rendering_channels(
             )
 
     # Lastly, we copy object_state texture maps that are state-conditioned; e.g.: cooked, soaked, etc.
-    copy_object_state_textures(obj_category=obj_category, obj_model=obj_model)
+    copy_object_state_textures(obj_category=obj_category, obj_model=obj_model, dataset_root=dataset_root)
 
     # ###################################
     #
@@ -575,9 +517,9 @@ def add_xform_properties(prim):
 
 # TODO: Handle metalinks
 # TODO: Import heights per link folder into USD folder
-def import_obj_metadata(obj_category, obj_model, import_render_channels=False):
+def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_channels=False):
     # Check if filepath exists
-    model_root_path = f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}"
+    model_root_path = f"{dataset_root}/objects/{obj_category}/{obj_model}"
     usd_path = f"{model_root_path}/usd/{obj_model}.usd"
 
     # Load model
@@ -732,6 +674,7 @@ def import_obj_metadata(obj_category, obj_model, import_render_channels=False):
             obj_model=obj_model,
             model_root_path=model_root_path,
             usd_path=usd_path,
+            dataset_root=dataset_root,
         )
 
     # Save stage
@@ -809,57 +752,3 @@ def recursively_replace_list_of_dict(dic):
             dic[k] = recursively_replace_list_of_dict(v)
 
     return dic
-
-
-def import_building_metadata(
-    obj_category, obj_model, name, import_render_channels=False
-):
-    # Check if filepath exists
-    model_root_path = f"{DATASET_ROOT}/scenes/{obj_model}"
-    usd_path = f"{model_root_path}/usd/{obj_category}/{obj_model}_{obj_category}.usd"
-
-    # Load model
-    open_stage(usd_path)
-    stage = get_current_stage()
-    prim = stage.GetDefaultPrim()
-
-    data = dict()
-    for data_group in {"material_groups"}:
-        data_path = f"{model_root_path}/misc/{obj_category}_{data_group}.json"
-        if exists(data_path):
-            # Load data
-            with open(data_path, "r") as f:
-                data[data_group] = json.load(f)
-
-    # Manually modify material groups info
-    if "material_groups" in data:
-        data["material_groups"] = {
-            "groups": data["material_groups"][0],
-            "links": data["material_groups"][1],
-        }
-
-    # Iterate over dict and replace any lists of dicts as dicts of dicts (with each dict being indexed by an integer)
-    data = recursively_replace_list_of_dict(data)
-
-    # Store attributes
-    prim.CreateAttribute("ig:category", VT.String)
-    prim.CreateAttribute("ig:model", VT.String)
-    prim.GetAttribute("ig:category").Set(obj_category)
-    prim.GetAttribute("ig:model").Set(obj_model)
-
-    # Store remaining data as metadata
-    prim.SetCustomData(data)
-
-    # Add material channels
-    # mat_prim_path = f"{str(prim.GetPrimPath())}/Looks/material_material_0"
-    # mat_prim = get_prim_at_path(mat_prim_path)
-    # print(f"mat prim: {mat_prim}")
-    # TODO : Pass for now -- need to update handling of paths better, since a single link can have multiple visual meshes + materials
-    # if import_render_channels:
-    #     import_rendering_channels(obj_prim=prim, obj_category=obj_category, model_root_path=model_root_path, usd_path=usd_path)
-
-    # Save stage
-    stage.Save()
-
-    # Delete stage reference
-    del stage

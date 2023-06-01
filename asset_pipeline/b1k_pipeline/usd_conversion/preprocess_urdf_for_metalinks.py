@@ -7,8 +7,6 @@ from pathlib import Path
 import numpy as np
 import omnigibson.utils.transform_utils as T
 
-from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
-
 
 def pretty_print_xml(current, parent=None, index=-1, depth=0, use_tabs=False):
     space = "\t" if use_tabs else " " * 4
@@ -212,9 +210,9 @@ def generate_urdf_from_xmltree(root_element, name, dirpath, unique_urdf=False):
     return fpath
 
 
-def update_obj_urdf_with_metalinks(obj_category, obj_model):
+def update_obj_urdf_with_metalinks(obj_category, obj_model, dataset_root):
     # Check if filepath exists
-    model_root_path = f"{DATASET_ROOT}/objects/{obj_category}/{obj_model}"
+    model_root_path = f"{dataset_root}/objects/{obj_category}/{obj_model}"
     urdf_path = f"{model_root_path}/{obj_model}.urdf"
 
     # Load urdf

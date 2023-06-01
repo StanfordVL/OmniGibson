@@ -1,67 +1,39 @@
-"""
-Script to import scene and objects
-"""
-import glob
-import os
-import sys
+import subprocess
+import fs.copy
+from fs.multifs import MultiFS
+from fs.zipfs import ZipFS
+from fs.tempfs import TempFS
 
-import tqdm
-from omnigibson.macros import gm
+from b1k_pipeline.utils import ParallelZipFS, PipelineFS
 
-# Set some macros. Is this kosher?
-gm.HEADLESS = True
-gm.ENABLE_FLATCACHE = False
-gm.USE_GPU_DYNAMICS = False
-gm.USE_ENCRYPTED_ASSETS = True
-
-from omnigibson import app
-from omnigibson.utils.asset_utils import encrypt_file
-
-from b1k_pipeline.usd_conversion.import_metadata import import_obj_metadata
-from b1k_pipeline.usd_conversion.import_urdfs_from_scene import import_obj_urdf
-from b1k_pipeline.usd_conversion.convert_cloth import postprocess_cloth
-from b1k_pipeline.usd_conversion.utils import DATASET_ROOT
-from b1k_pipeline.utils import CLOTH_CATEGORIES
-
-IMPORT_RENDER_CHANNELS = True
+USDIFY_BATCH_SIZE = 100
 
 
-if __name__ == "__main__":
-    batch_start = int(sys.argv[1])
-    batch_end = int(sys.argv[2])
-    obj_cats = os.listdir(os.path.join(DATASET_ROOT, "objects"))
-    obj_items = sorted(
-        [
-            (obj_category, obj_model)
-            for obj_category in obj_cats
-            for obj_model in os.listdir(
-                os.path.join(DATASET_ROOT, "objects", obj_category)
-            )
-        ]
-    )
-    assert batch_start < len(
-        obj_items
-    ), f"Batch start {batch_start} is more than object count {len(obj_items)}"
-    for obj_category, obj_model in tqdm.tqdm(obj_items[batch_start:batch_end]):
-        print(f"IMPORTING CATEGORY/MODEL {obj_category}/{obj_model}...")
-        import_obj_urdf(
-            obj_category=obj_category, obj_model=obj_model, skip_if_exist=False
-        )
-        import_obj_metadata(
-            obj_category=obj_category,
-            obj_model=obj_model,
-            import_render_channels=IMPORT_RENDER_CHANNELS,
-        )
+def main():
+    with ParallelZipFS("objects.zip") as objects_fs, \
+         ParallelZipFS("metadata.zip") as metadata_fs, \
+         ParallelZipFS("objects_usd.zip", write=True) as out_fs, \
+         PipelineFS() as pipeline_fs, \
+         TempFS(temp_dir=r"E:\tmp") as tmp_fs:
+        # Create a multifs containing both ZIPs
+        multi_fs = MultiFS()
+        multi_fs.add_fs("objects", objects_fs, priority=0)
+        multi_fs.add_fs("metadata", metadata_fs, priority=1)
 
-        # Apply cloth conversions if necessary.
-        if obj_category in CLOTH_CATEGORIES:
-            rigid_usd_path = os.path.join(DATASET_ROOT, "objects", obj_category, obj_model, "usd", f"{obj_model}.usd")
-            postprocess_cloth(rigid_usd_path)
+        # Copy everything over to the tmpfs
+        fs.copy.copy_fs(multi_fs, tmp_fs)
 
-        # Encrypt the output files.
-        for usd_path in glob.glob(os.path.join(DATASET_ROOT, "objects", obj_category, obj_model, "usd", "*.usd")):
-            encrypted_usd_path = usd_path.replace(".usd", ".encrypted.usd")
-            encrypt_file(usd_path, encrypted_filename=encrypted_usd_path)
-            os.remove(usd_path)
+        # Start the batched run
+        object_count = tmp_fs.glob("objects/*/*").count().directories
+        print("Total count: ", object_count)
+        for start in range(0, object_count, USDIFY_BATCH_SIZE):
+            end = start + USDIFY_BATCH_SIZE
+            cmd = [
+                "conda", "run", "--live-output", "-n", "omnigibson",
+                "python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process",
+                tmp_fs.getsyspath("/"), out_fs.getsyspath("/"), str(start), str(end)]
+            print("Running batch from", start, "to", end)
+            subprocess.run(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True)
 
-    app.close()
+        # Save the success file.
+        pipeline_fs.touch("usdify_objects.success")
