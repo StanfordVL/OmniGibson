@@ -1,22 +1,33 @@
 @echo off
-
-:: Make sure that the ISAAC_SIM_PATH variable is set
-if  "%ISAAC_SIM_PATH%" == "" (
-    echo "Please set ISAAC_SIM_PATH!" 
-    exit /b
+:: Make sure that the ISAAC_SIM_PATH variable is set correctly
+dir /b /o:-n %userprofile%\AppData\Local\ov\pkg\isaac_sim* > NUL
+if errorlevel 0 (
+    for /f "tokens=* usebackq" %%f in (`dir /b /o:-n %userprofile%\AppData\Local\ov\pkg\isaac_sim*`) do set ISAAC_SIM_PATH=%userprofile%\AppData\Local\ov\pkg\%%f
+    setlocal enabledelayedexpansion
+    echo We found Isaac Sim installed at [4m!ISAAC_SIM_PATH![0m. OmniGibson will use it by default.
+    endlocal
+    set /p ISAAC_SIM_PATH=If you want to use a different one, please type in the path containing isaac-sim.bat here ^(press enter to skip^) ^>^>^> 
+) else (
+    echo We did not find Isaac Sim under %userprofile%\AppData\Local\ov\pkg.
+    echo If you haven't installed Isaac Sim yet, please do so before running this setup script.
+    set /p ISAAC_SIM_PATH=If you have already installed it in a custom location, please type in the path containing isaac-sim.bat here ^>^>^> 
 )
-
-:: Sanity check whether env variable is set correctly 
+:check_isaac_sim_path
 if not exist %ISAAC_SIM_PATH%\isaac-sim.bat (
-    echo isaac-sim.bat not found in %ISAAC_SIM_PATH%! Make sure you have set the correct ISAAC_SIM_PATH
-    exit /b
+    set /p ISAAC_SIM_PATH=isaac-sim.bat not found in [4m%ISAAC_SIM_PATH%[0m! Make sure you have entered the correct path ^>^>^>
+    goto :check_isaac_sim_path
 )
+echo:
+echo Using Isaac Sim at [4m%ISAAC_SIM_PATH%[0m
+echo:
 
 :: Choose venv name
 set conda_name=omnigibson
 echo The new conda environment will be named [4momnigibson[0m by default.
-set /p conda_name=If you want to use a different name, please type in here (press enter to skip): 
-echo Using %conda_name% as the conda environment name
+set /p conda_name=If you want to use a different name, please type in here ^(press enter to skip^) ^>^>^> 
+echo:
+echo Using [4m%conda_name%[0m as the conda environment name
+echo:
 
 :: Create a conda environment with python 3.7
 call conda create -y -n %conda_name% python=3.7 || goto :error
