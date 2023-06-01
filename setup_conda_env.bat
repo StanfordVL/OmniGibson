@@ -15,7 +15,7 @@ if not exist %ISAAC_SIM_PATH%\isaac-sim.bat (
 :: Choose venv name
 set conda_name=omnigibson
 echo The new conda environment will be named [4momnigibson[0m by default.
-set /p conda_name=If you want to use a different name, please enter it here (press enter to skip): 
+set /p conda_name=If you want to use a different name, please type in here (press enter to skip): 
 echo Using %conda_name% as the conda environment name
 
 :: Create a conda environment with python 3.7
