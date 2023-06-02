@@ -26,18 +26,16 @@ def main():
         # Copy everything over to the tmpfs
         print("Copying input to TempFS...")
         fs.copy.copy_dir(multi_fs, "/metadata", tmp_fs, "/metadata")
-        objdir_glob = tmp_fs.glob("objects/*/*")
-        for item in tqdm.tqdm(objdir_glob, total=objdir_glob.count().directories):
-            if tmp_fs.opendir(item.path).glob("urdf/*.urdf").count().files == 0:
+        objdir_glob = list(multi_fs.glob("objects/*/*/"))
+        for item in tqdm.tqdm(objdir_glob):
+            if multi_fs.opendir(item.path).glob("urdf/*.urdf").count().files == 0:
                 continue
-            if "acetone" not in item.path:
-                continue
-            fs.copy.copy_dir(tmp_fs, item.path, out_fs, item.path)
+            fs.copy.copy_dir(multi_fs, item.path, tmp_fs, item.path)
 
         # Temporarily move URDF into root of objects
         print("Moving URDF files...")
-        urdf_glob = tmp_fs.glob("objects/*/*/urdf/*.urdf")
-        for item in tqdm.tqdm(urdf_glob, total=urdf_glob.count().files):
+        urdf_glob = list(tmp_fs.glob("objects/*/*/urdf/*.urdf"))
+        for item in tqdm.tqdm(urdf_glob):
             orig_path = item.path
             obj_root_dir = fs.path.dirname(fs.path.dirname(orig_path))
             new_path = fs.path.join(obj_root_dir, fs.path.basename(orig_path))
@@ -47,7 +45,7 @@ def main():
         sub_env["OMNIGIBSON_HEADLESS"] = "True"
 
         # Start the batched run
-        object_count = tmp_fs.glob("objects/*/*").count().directories
+        object_count = tmp_fs.glob("objects/*/*/").count().directories
         print("Total count: ", object_count)
         for start in range(0, object_count, USDIFY_BATCH_SIZE):
             end = start + USDIFY_BATCH_SIZE
@@ -60,8 +58,8 @@ def main():
 
         # Move the USDs to the output FS
         print("Copying USDs to output FS...")
-        usd_glob = tmp_fs.glob("objects/*/*/usd")
-        for item in tqdm.tqdm(usd_glob, total=usd_glob.count().directories):
+        usd_glob = list(tmp_fs.glob("objects/*/*/usd/"))
+        for item in tqdm.tqdm(usd_glob):
             fs.copy.copy_dir(tmp_fs, item.path, out_fs, item.path)
 
         # Save the success file.
