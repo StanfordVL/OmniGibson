@@ -170,7 +170,7 @@ stages:
     - artifacts/pipeline/export_objs.json
 
   export_objs_global_success:
-    cmd: 'python -m b1k_pipeline/check_success artifacts/pipeline/export_objs.json artifacts/pipeline/export_objs.success'
+    cmd: 'python -m b1k_pipeline.check_success artifacts/pipeline/export_objs.json artifacts/pipeline/export_objs.success'
     deps:
     - artifacts/pipeline/export_objs.json
     - b1k_pipeline/check_success.py
@@ -298,7 +298,7 @@ stages:
     deps:
     - artifacts/parallels/objects.zip
     - artifacts/parallels/metadata.zip
-    - artifacts/pipeline/export_objs.success
+    # - artifacts/pipeline/export_objs.success
     - artifacts/pipeline/aggregate_metadata.success
     - b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
     - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
@@ -330,8 +330,6 @@ stages:
     deps:
     - b1k_pipeline/aggregate_metadata.py
     - artifacts/pipeline/object_inventory.json
-    - artifacts/parallels/objects.zip
-    - artifacts/parallels/scenes.zip
     - metadata/category_mapping.csv
     - metadata/non_sampleable_categories.csv
     - metadata/allowed_room_types.csv
