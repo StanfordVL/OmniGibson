@@ -200,7 +200,7 @@ def copy_object_state_textures(obj_category, obj_model, dataset_root):
 def import_rendering_channels(
     obj_prim, obj_category, obj_model, model_root_path, usd_path, dataset_root
 ):
-    usd_dir = "/".join(usd_path.split("/")[:-1])
+    usd_dir = os.path.dirname(usd_path)
     # # mat_dir = f"{model_root_path}/material/{obj_category}" if \
     # #     obj_category in {"ceilings", "walls", "floors"} else f"{model_root_path}/material"
     # mat_dir = f"{model_root_path}/material"
@@ -300,7 +300,7 @@ def import_rendering_channels(
                         if line[:4] == "map_":
                             map_type, map_file = line.split(" ")
                             map_file = map_file.split("\n")[0]
-                            map_filename = map_file.split("/")[-1]
+                            map_filename = os.path.dirname(map_file)
                             mat_files[mtl_name].append(map_filename)
                             mat_old_paths[mtl_name].append(map_file)
                             mtl_infos[mtl_name][

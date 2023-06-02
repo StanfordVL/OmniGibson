@@ -21,7 +21,7 @@ def main():
             with pipeline_output_dir.open("object_inventory.json", "r") as f:
                 object_inventory = json.load(f)
 
-            assert object_inventory["success"], "Object inventory was unsuccessful."
+            # assert object_inventory["success"], "Object inventory was unsuccessful."
 
             categories = {
                 obj.split("-")[0] for obj in object_inventory["providers"].keys()

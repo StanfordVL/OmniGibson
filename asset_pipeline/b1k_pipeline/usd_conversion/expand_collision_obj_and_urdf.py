@@ -1,3 +1,4 @@
+import os
 import xml.etree.ElementTree as ET
 from copy import deepcopy
 
@@ -42,8 +43,8 @@ def split_obj_file(obj_fpath):
     obj_bodies = obj.split(only_watertight=False)
 
     # Procedurally create new files in the same folder as obj_fpath
-    out_fpath = "/".join(obj_fpath.split("/")[:-1])
-    out_fname_root = obj_fpath.split("/")[-1].split(".")[0]
+    out_fpath = os.path.dirname(obj_fpath)
+    out_fname_root = os.path.splitext(os.path.basename(obj_fpath))[0]
 
     for i, obj_body in enumerate(obj_bodies):
         # Write to a new file
@@ -59,8 +60,8 @@ def split_objs_in_urdf(urdf_fpath, name_suffix="split", mesh_fpath_offset="."):
     """
     tree = ET.parse(urdf_fpath)
     root = tree.getroot()
-    urdf_dir = "/".join(urdf_fpath.split("/")[:-1])
-    out_fname_root = urdf_fpath.split("/")[-1].split(".")[0]
+    urdf_dir = os.path.dirname(urdf_fpath)
+    out_fname_root = os.path.splitext(os.path.basename(urdf_fpath))[0]
 
     def recursively_find_collision_meshes(ele):
         # Finds all collision meshes starting at @ele

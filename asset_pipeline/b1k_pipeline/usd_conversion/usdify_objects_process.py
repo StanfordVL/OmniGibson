@@ -26,9 +26,9 @@ IMPORT_RENDER_CHANNELS = True
 
 
 if __name__ == "__main__":
-    batch_start = int(sys.argv[1])
-    batch_end = int(sys.argv[2])
-    dataset_root = sys.argv[3]
+    dataset_root = sys.argv[1]
+    batch_start = int(sys.argv[2])
+    batch_end = int(sys.argv[3])
     obj_cats = os.listdir(os.path.join(dataset_root, "objects"))
     obj_items = sorted(
         [
