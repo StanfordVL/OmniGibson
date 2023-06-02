@@ -8,6 +8,7 @@ dependencies:
   - pip:
     - bddl==3.0.0b1
     - black>=22.10.0
+    - distributed>=2023.1.1
     - dvc>=2.45.1
     - dvc-gs>=2.22.0
     - fs>=2.4.16

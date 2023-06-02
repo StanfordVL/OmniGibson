@@ -1,4 +1,4 @@
-FROM stanfordvl/omnigibson-dev:latest
+FROM stanfordvl/omnigibson:latest
 
 ADD environment.yml /tmp/environment.yml
 
@@ -6,4 +6,4 @@ ADD environment.yml /tmp/environment.yml
 RUN micromamba env create --file /tmp/environment.yml
 
 # Launch a dask worker - the first argument needs to be the scheduler.
-SHELL ["micromamba", "run", "-n", "pipeline", "/bin/bash", "--login", "-c", "dask-worker", "--nworkers", "1", "--nprocs", "1"]
+ENTRYPOINT ["micromamba", "run", "-n", "pipeline", "dask-worker", "--nworkers=1", "--nthreads=1"]
