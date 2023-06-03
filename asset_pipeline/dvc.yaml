@@ -6320,11 +6320,11 @@ stages:
       - cad/${item}/artifacts/export_scene.success
     foreach: ${scenes}
   generate_object_images:
-    cmd: python -m b1k_pipeline.generate_object_images
+    cmd: python -m b1k_pipeline.generate_object_images_og
     deps:
-    - b1k_pipeline/max/generate_object_images.py
-    - artifacts/parallels/objects.zip
-    - artifacts/pipeline/export_objs.success
+    - b1k_pipeline/max/generate_object_images_og.py
+    - artifacts/parallels/objects_usd.zip
+    - artifacts/pipeline/usdify_objects.success
     outs:
     - artifacts/pipeline/object_images.zip
   make_maps:

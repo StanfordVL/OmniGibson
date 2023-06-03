@@ -63,7 +63,7 @@ def main():
             fs.copy.copy_dir(tmp_fs, item.path, out_fs, item.path)
 
         # Save the success file.
-        pipeline_fs.touch("usdify_objects.success")
+        pipeline_fs.pipeline_output().touch("usdify_objects.success")
 
 if __name__ == "__main__":
     main()
