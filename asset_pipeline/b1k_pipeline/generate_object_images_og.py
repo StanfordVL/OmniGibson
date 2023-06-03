@@ -27,7 +27,7 @@ CENTER_HEIGHT = 1.0 # meters
 
 def main():
     with PipelineFS() as pipeline_fs, \
-         ParallelZipFS("objects_usd2.zip") as usd_fs, \
+         ParallelZipFS("objects_usd.zip") as usd_fs, \
          TempFS(temp_dir=r"E:\tmp") as dataset_fs, \
          ZipFS(pipeline_fs.pipeline_output().open("object_images.zip", "wb"), write=True) as out_fs:
         # Set the dataset path
@@ -35,9 +35,7 @@ def main():
         
         # Copy over all the objects to the dataset FS
         print("Copying over the objects...")
-        dataset_fs.makedirs("objects/almond")
-        copy_dir(usd_fs, "objects/almond/acooui", dataset_fs, "objects/almond/acooui")
-        # copy_fs(objects_fs, dataset_fs)
+        copy_fs(usd_fs, dataset_fs)
         
         # Create the scene config to load -- empty scene
         cfg = {"scene": {"type": "Scene"}}
