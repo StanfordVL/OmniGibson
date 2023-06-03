@@ -300,7 +300,7 @@ def import_rendering_channels(
                         if line[:4] == "map_":
                             map_type, map_file = line.split(" ")
                             map_file = map_file.split("\n")[0]
-                            map_filename = os.path.dirname(map_file)
+                            map_filename = os.path.basename(map_file)
                             mat_files[mtl_name].append(map_filename)
                             mat_old_paths[mtl_name].append(map_file)
                             mtl_infos[mtl_name][
