@@ -81,6 +81,7 @@ def set_mtl_metalness(mtl_prim, texture):
 
 
 def set_mtl_opacity(mtl_prim, texture):
+    return
     mtl = "opacity_texture"
     create_material_input(mtl_prim, mtl, texture, VT.Asset)
     create_material_input(mtl_prim, "enable_opacity", True, VT.Bool)
