@@ -3,13 +3,14 @@
 #SBATCH --account=cvgl
 #SBATCH --partition=svl --qos=normal
 #SBATCH --time=48:00:00
+#SBATCH --array=1-8
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=20G
 #SBATCH --gres=gpu:2080ti:1
 #SBATCH --job-name="ig_pipeline-worker"
-#SBATCH --output=scheduler-logs/%x_%A.out
-#SBATCH --error=scheduler-logs/%x_%A.err
+#SBATCH --output=scheduler-logs/%x_%A_%a.out
+#SBATCH --error=scheduler-logs/%x_%A_%a.err
 
 # VALUES TO SET #######################################
 DOCKER_IMAGE="stanfordvl/ig_pipeline:latest"     # Can also use, e.g.: stanfordvl/omnigibson:latest
@@ -34,7 +35,7 @@ case $1 in
 esac
 
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR="/cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker/"
 DATA_PATH="${SCRIPT_DIR}/data"
 ISAAC_CACHE_PATH="/scr-ssd/${SLURM_JOB_USER}/isaac_cache"
 
@@ -152,7 +153,7 @@ if [ ! -e ${SQSH_SOURCE} ]; then
 fi
 
 # Create the image if it doesn't already exist
-CONTAINER_NAME=ig_pipeline_${SLURM_JOB_ID}
+CONTAINER_NAME=ig_pipeline_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}
 echo "Creating container ${CONTAINER_NAME}..."
 enroot create${FORCE_CREATE} --name ${CONTAINER_NAME} ${SQSH_SOURCE}
 
