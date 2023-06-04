@@ -536,7 +536,6 @@
         "freezable": {}
     },
     "applesauce.n.01": {
-        "fireSource": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -763,6 +762,7 @@
         "freezable": {}
     },
     "asphalt.n.01": {
+        "meltable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -1095,6 +1095,7 @@
     "bag__of__cream_cheese.n.01": {
         "flammable": {},
         "openable": {},
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1152,6 +1153,7 @@
     "bag__of__ice_cream.n.01": {
         "flammable": {},
         "openable": {},
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -1711,6 +1713,7 @@
         "freezable": {}
     },
     "bar_soap.n.01": {
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -2373,6 +2376,7 @@
         "freezable": {}
     },
     "beeswax_candle.n.01": {
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -2907,6 +2911,7 @@
     "bleu.n.01": {
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -6981,7 +6986,6 @@
     },
     "branch.n.02": {
         "flammable": {},
-        "fireSource": {},
         "sliceable": {},
         "rigidBody": {},
         "wetable": {},
@@ -7737,7 +7741,6 @@
     },
     "butter.n.01": {
         "cookable": {},
-        "fireSource": {},
         "sliceable": {},
         "rigidBody": {},
         "wetable": {},
@@ -8304,6 +8307,7 @@
     },
     "cane_sugar.n.02": {
         "cookable": {},
+        "meltable": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -8349,7 +8353,6 @@
     },
     "canola_oil.n.01": {
         "cookable": {},
-        "fireSource": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -8562,7 +8565,6 @@
         "freezable": {}
     },
     "card.n.04": {
-        "fireSource": {},
         "sliceable": {},
         "slicer": {},
         "rigidBody": {},
@@ -8815,7 +8817,6 @@
     },
     "carton.n.02": {
         "openable": {},
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -9457,7 +9458,6 @@
     },
     "charcoal.n.01": {
         "flammable": {},
-        "fireSource": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -9537,6 +9537,7 @@
         "flammable": {},
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -9749,6 +9750,7 @@
         "freezable": {}
     },
     "chewing_gum.n.01": {
+        "meltable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -10142,6 +10144,7 @@
     },
     "chocolate_bar.n.01": {
         "cookable": {},
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -10264,6 +10267,7 @@
     },
     "chocolate_kiss.n.01": {
         "cookable": {},
+        "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -10400,7 +10404,6 @@
         "freezable": {}
     },
     "christmas_tree.n.05": {
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -10429,6 +10432,7 @@
         "breakable": {},
         "toggleable": {},
         "heatSource": {},
+        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -10447,7 +10451,6 @@
     },
     "cigar.n.01": {
         "flammable": {},
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -10465,7 +10468,6 @@
         "freezable": {}
     },
     "cigarette.n.01": {
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -10505,7 +10507,6 @@
     "cinnamon_bark.n.01": {
         "flammable": {},
         "cookable": {},
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -10822,7 +10823,6 @@
     },
     "coal.n.01": {
         "flammable": {},
-        "fireSource": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -10982,7 +10982,6 @@
     },
     "coconut_oil.n.01": {
         "cookable": {},
-        "fireSource": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -11297,7 +11296,6 @@
         "freezable": {}
     },
     "compost.n.01": {
-        "fireSource": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -12359,6 +12357,7 @@
     "cottage_cheese.n.01": {
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -12387,7 +12386,6 @@
     },
     "cotton.n.02": {
         "flammable": {},
-        "fireSource": {},
         "particleRemover": {},
         "cloth": {},
         "deformable": {},
@@ -13131,6 +13129,7 @@
     "deep_fryer.n.01": {
         "toggleable": {},
         "heatSource": {},
+        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -13240,6 +13239,7 @@
         "freezable": {}
     },
     "deodorant__stick.n.01": {
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -13557,6 +13557,7 @@
         "flammable": {},
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -13610,6 +13611,7 @@
         "flammable": {},
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -13764,7 +13766,6 @@
     },
     "dinner_napkin.n.01": {
         "flammable": {},
-        "fireSource": {},
         "particleRemover": {},
         "cloth": {},
         "deformable": {},
@@ -13787,6 +13788,7 @@
     },
     "dip.n.07": {
         "cookable": {},
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -15580,7 +15582,6 @@
         "freezable": {}
     },
     "flat_coat.n.01": {
-        "fireSource": {},
         "visualSubstance": {},
         "substance": {},
         "heatable": {},
@@ -16212,7 +16213,6 @@
     },
     "gasoline.n.01": {
         "flammable": {},
-        "fireSource": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -16564,6 +16564,7 @@
         "freezable": {}
     },
     "glue_stick.n.01": {
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -16840,6 +16841,7 @@
     },
     "granulated_sugar.n.01": {
         "cookable": {},
+        "meltable": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -17166,6 +17168,7 @@
         "freezable": {}
     },
     "grout.n.01": {
+        "meltable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -17499,6 +17502,7 @@
     "half__feta.n.01": {
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -18909,6 +18913,7 @@
         "breakable": {},
         "coldSource": {},
         "slicer": {},
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -20345,7 +20350,6 @@
         "freezable": {}
     },
     "lacquer.n.01": {
-        "fireSource": {},
         "visualSubstance": {},
         "substance": {},
         "heatable": {},
@@ -21149,7 +21153,6 @@
         "freezable": {}
     },
     "linseed_oil.n.01": {
-        "fireSource": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -21191,7 +21194,6 @@
         "freezable": {}
     },
     "lint.n.01": {
-        "fireSource": {},
         "visualSubstance": {},
         "substance": {},
         "heatable": {},
@@ -21534,6 +21536,7 @@
     },
     "lump_sugar.n.01": {
         "cookable": {},
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -21844,7 +21847,6 @@
     },
     "margarine.n.01": {
         "cookable": {},
-        "fireSource": {},
         "sliceable": {},
         "liquid": {},
         "boilable": {},
@@ -22091,7 +22093,6 @@
     "match.n.01": {
         "flammable": {},
         "heatSource": {},
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -22783,6 +22784,7 @@
     "mozzarella.n.01": {
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "softBody": {},
         "deformable": {},
         "foldable": {},
@@ -22867,7 +22869,6 @@
         "freezable": {}
     },
     "mulch.n.01": {
-        "fireSource": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -22999,7 +23000,6 @@
         "freezable": {}
     },
     "nail_polish.n.01": {
-        "fireSource": {},
         "visualSubstance": {},
         "substance": {},
         "heatable": {},
@@ -23297,6 +23297,7 @@
     "nut_butter.n.01": {
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -23410,7 +23411,6 @@
     },
     "olive_oil.n.01": {
         "cookable": {},
-        "fireSource": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -24164,7 +24164,6 @@
     },
     "paraffin.n.01": {
         "flammable": {},
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -24510,7 +24509,6 @@
     },
     "peanut_oil.n.01": {
         "cookable": {},
-        "fireSource": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -24579,7 +24577,6 @@
         "freezable": {}
     },
     "peat.n.01": {
-        "fireSource": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -24682,7 +24679,6 @@
         "freezable": {}
     },
     "pellet_food.n.01": {
-        "fireSource": {},
         "slicer": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -25243,7 +25239,6 @@
         "freezable": {}
     },
     "pickle.n.01": {
-        "fireSource": {},
         "sliceable": {},
         "rigidBody": {},
         "wetable": {},
@@ -25363,6 +25358,7 @@
         "freezable": {}
     },
     "pillar_candle.n.01": {
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -25626,7 +25622,6 @@
         "freezable": {}
     },
     "pizza_box.n.01": {
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -27535,6 +27530,7 @@
     "ricotta.n.01": {
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "heatable": {},
@@ -27558,6 +27554,7 @@
         "freezable": {}
     },
     "ripsaw.n.01": {
+        "slicer": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -30702,7 +30699,6 @@
         "freezable": {}
     },
     "sparkler.n.02": {
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -31909,6 +31905,7 @@
     "swiss_cheese.n.01": {
         "cookable": {},
         "sliceable": {},
+        "meltable": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -32984,7 +32981,6 @@
         "freezable": {}
     },
     "toilet_tissue.n.01": {
-        "fireSource": {},
         "sliceable": {},
         "particleRemover": {},
         "cloth": {},
@@ -33395,7 +33391,6 @@
     },
     "tree.n.01": {
         "flammable": {},
-        "fireSource": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -33502,7 +33497,6 @@
         "freezable": {}
     },
     "trunk.n.01": {
-        "fireSource": {},
         "sliceable": {},
         "rigidBody": {},
         "wetable": {},
@@ -33800,6 +33794,7 @@
         "freezable": {}
     },
     "utility_knife.n.01": {
+        "slicer": {},
         "rigidBody": {},
         "wetable": {},
         "mixable": {},
@@ -33944,6 +33939,7 @@
         "freezable": {}
     },
     "vaseline.n.01": {
+        "meltable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -34861,6 +34857,7 @@
         "freezable": {}
     },
     "wax_remnant.n.01": {
+        "meltable": {},
         "visualSubstance": {},
         "substance": {},
         "heatable": {},
@@ -35199,7 +35196,6 @@
     },
     "wick.n.02": {
         "flammable": {},
-        "fireSource": {},
         "rope": {},
         "deformable": {},
         "wetable": {},
