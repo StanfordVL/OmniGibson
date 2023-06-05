@@ -435,7 +435,7 @@ butter.n.01,"dairy_product.n.01,food.n.02",0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,,
 buttermilk_pancake.n.01,pancake.n.01,0,0,0,1,0,0,1,0,0,0,1,0,0,0,,,,,,0,0,rigidBody
 buttermilk.n.01,milk.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,liquid
 butternut_squash.n.01,winter_squash.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,,0,0,rigidBody
-cabinet.n.01,furniture.n.01,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,,1,0,rigidBody
+cabinet.n.01,furniture.n.01,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,,1,0,rigidBody
 cabinet.n.03,compartment.n.02,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 cabinet.n.04,housing.n.02,0,1,0,0,1,0,0,0,0,0,0,0,0,0,,,,,,0,0,rigidBody
 cable.n.02,conductor.n.04,0,0,0,0,0,0,0,0,0,0,1,0,0,0,,,,,,0,0,rope
@@ -611,7 +611,7 @@ clipboard.n.01,writing_board.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigid
 clipper.n.04,scissors.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,0,0,rigidBody
 cloche.n.01,protective_covering.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 clothes_dryer.n.01,"dryer.n.01,white_goods.n.01",0,0,0,0,0,1,0,1,0,0,0,0,0,0,,,,,,0,0,rigidBody
-clothesline.n.01,cord.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
+clothesline.n.01,cord.n.01,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,,0,0,rigidBody
 clothespin.n.01,fastener.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,0,0,rigidBody
 clout_nail.n.01,nail.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,0,0,rigidBody
 clove__jar.n.01,vessel.n.03,1,1,1,0,1,0,0,0,0,0,0,0,0,0,,,,,,0,0,rigidBody
@@ -803,7 +803,7 @@ deodorant__stick.n.01,grocery.n.02,1,0,0,0,0,0,0,0,0,0,0,0,0,1,,,,,,0,0,rigidBod
 deodorant.n.01,toiletry.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,liquid
 desiccant.n.01,chemical_agent.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 desk_phone.n.01,telephone.n.01,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
-desk.n.01,table.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
+desk.n.01,table.n.02,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,,0,0,rigidBody
 desktop_computer.n.01,personal_computer.n.01,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 dessert_spoon.n.01,spoon.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,0,0,rigidBody
 detergent__atomizer.n.01,dispenser.n.01,1,0,1,0,0,1,0,0,0,0,0,0,0,0,,,,,,0,0,rigidBody
@@ -1055,7 +1055,7 @@ ground_beef__package.n.01,container.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,0,0,ri
 ground_beef.n.01,beef.n.02,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,,0,0,microPhysicalSubstance
 ground_coffee.n.01,coffee.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,,,,,,0,0,microPhysicalSubstance
 grouper.n.01,saltwater_fish.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,,,,,,0,0,rigidBody
-grout.n.01,plaster.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,1,,,,,,0,0,liquid
+grout.n.01,plaster.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,0,0,liquid
 guacamole.n.01,dip.n.04,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,,0,0,liquid
 guitar.n.01,stringed_instrument.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 gum__box.n.01,grocery.n.02,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
@@ -1798,7 +1798,7 @@ shelf_baseboard.n.01,support.n.10,1,0,0,0,0,0,0,,0,0,0,0,0,0,,,,,,0,0,rigidBody
 shelf_shelf.n.01,support.n.10,1,0,0,0,0,0,0,,0,0,0,0,0,0,,,,,,0,0,rigidBody
 shelf_side.n.01,support.n.10,1,0,0,0,0,0,0,,0,0,0,0,0,0,,,,,,0,0,rigidBody
 shelf_top.n.01,support.n.10,1,0,0,0,0,0,0,,0,0,0,0,0,0,,,,,,0,0,rigidBody
-shelf.n.01,support.n.10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,1,0,rigidBody
+shelf.n.01,support.n.10,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,,1,0,rigidBody
 shell.n.02,animal_material.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 shell.n.04,hull.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,0,0,rigidBody
 shell.n.05,covering.n.01,0,,0,,0,0,0,,0,0,0,0,0,0,,,,,,,,rigidBody
@@ -2037,7 +2037,7 @@ toy_figure.n.01,plaything.n.01,1,1,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,0,0,rigidBody
 trailer.n.03,conveyance.n.03,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 trailer_truck.n.01,truck.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,,,,,,0,rigidBody
 train_set.n.01,plaything.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
-trampoline.n.01,gymnastic_apparatus.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
+trampoline.n.01,gymnastic_apparatus.n.01,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,,0,0,rigidBody
 tray.n.01,receptacle.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 treadmill.n.01,exercise_device.n.01,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,,1,0,rigidBody
 tree.n.01,woody_plant.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
