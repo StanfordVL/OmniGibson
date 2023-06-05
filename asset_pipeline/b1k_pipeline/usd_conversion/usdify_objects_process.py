@@ -6,7 +6,6 @@ import os
 import pathlib
 import sys
 
-import tqdm
 from omnigibson.macros import gm
 
 # Set some macros. Is this kosher?
@@ -21,15 +20,15 @@ from omnigibson.utils.asset_utils import encrypt_file
 from b1k_pipeline.usd_conversion.import_metadata import import_obj_metadata
 from b1k_pipeline.usd_conversion.import_urdfs_from_scene import import_obj_urdf
 from b1k_pipeline.usd_conversion.convert_cloth import postprocess_cloth
-from b1k_pipeline.utils import CLOTH_CATEGORIES
 
 IMPORT_RENDER_CHANNELS = True
+CLOTH_CATEGORIES = ["t_shirt", "dishtowel", "carpet"]
 
 
 if __name__ == "__main__":
-    dataset_root = sys.argv[1]
+    dataset_root = str(pathlib.Path(sys.argv[1]))
     batch = sys.argv[2:]
-    for path in tqdm.tqdm(batch):
+    for path in batch:
         obj_category, obj_model = pathlib.Path(path).parts[-2:]
         assert (pathlib.Path(dataset_root) / "objects" / obj_category / obj_model).exists()
         print(f"IMPORTING CATEGORY/MODEL {obj_category}/{obj_model}...")

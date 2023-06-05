@@ -23,22 +23,26 @@ def main():
          ParallelZipFS("objects.zip") as objects_fs, \
          ParallelZipFS("metadata.zip") as metadata_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as dataset_fs:
-        with ParallelZipFS("objects_usd.zip", tmp_dir=r"/scr/cgokmen/cgokmen/tmp") as out_fs:
-            # Create a multifs containing both ZIPs
-            multi_fs = MultiFS()
-            multi_fs.add_fs("objects", objects_fs, priority=0)
-            multi_fs.add_fs("metadata", metadata_fs, priority=1)
-
+        with ParallelZipFS("objects_usd.zip", write=True, tmp_dir=r"/scr/cgokmen/cgokmen/tmp") as out_fs:
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
-            fs.copy.copy_dir(multi_fs, "/metadata", dataset_fs, "/metadata")
-            objdir_glob = list(multi_fs.glob("objects/*/*/"))
+            fs.copy.copy_fs(metadata_fs, dataset_fs)
+            objdir_glob = list(objects_fs.glob("objects/*/*/"))
             for item in tqdm.tqdm(objdir_glob):
-                if multi_fs.opendir(item.path).glob("urdf/*.urdf").count().files == 0:
+                if objects_fs.opendir(item.path).glob("urdf/*.urdf").count().files == 0:
                     continue
                 if "antler" not in item.path:
                     continue
-                fs.copy.copy_dir(multi_fs, item.path, dataset_fs, item.path)
+                fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path))
+
+            # Temporarily move URDF into root of objects
+            print("Moving URDF files...")
+            urdf_glob = list(dataset_fs.glob("objects/*/*/urdf/*.urdf"))
+            for item in tqdm.tqdm(urdf_glob):
+                orig_path = item.path
+                obj_root_dir = fs.path.dirname(fs.path.dirname(orig_path))
+                new_path = fs.path.join(obj_root_dir, fs.path.basename(orig_path))
+                dataset_fs.move(orig_path, new_path)
 
             print("Launching cluster...")
             dask_client = Client(n_workers=0, host="", scheduler_port=8786)
@@ -72,7 +76,7 @@ def main():
             print("Copying USDs to output FS...")
             usd_glob = list(dataset_fs.glob("objects/*/*/usd/"))
             for item in tqdm.tqdm(usd_glob):
-                fs.copy.copy_dir(dataset_fs, item.path, out_fs, item.path)
+                fs.copy.copy_fs(dataset_fs.opendir(item.path), out_fs.makedirs(item.path))
 
             print("Done processing. Archiving things now.")
 
