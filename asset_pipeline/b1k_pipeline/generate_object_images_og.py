@@ -3,8 +3,6 @@ import numpy as np
 from PIL import Image
 import os
 
-import tqdm
-
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.utils.asset_utils import (
@@ -25,7 +23,7 @@ def main():
 
     # Set the dataset path
     gm.DATASET_PATH = dataset_path
-    
+
     # Create the scene config to load -- empty scene
     cfg = {"scene": {"type": "Scene"}}
 
@@ -33,11 +31,11 @@ def main():
     env = og.Environment(configs=cfg)
 
     # Make it brighter
-    dome_light = og.sim.scene.objects[0]
-    dome_light.intensity = 1e4
+    # dome_light = og.sim.scene.objects[0]
+    # dome_light.intensity = 1e4
 
     all_models = [(category, model) for category in get_all_object_categories() for model in get_object_models_of_category(category)][batch_start:batch_end]
-    for obj_category, obj_model in tqdm.tqdm(all_models):
+    for obj_category, obj_model in all_models:
         og.sim.stop()
         obj = DatasetObject(
             name="obj",

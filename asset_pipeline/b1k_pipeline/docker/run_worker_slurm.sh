@@ -3,7 +3,7 @@
 #SBATCH --account=cvgl
 #SBATCH --partition=svl --qos=normal
 #SBATCH --time=48:00:00
-#SBATCH --array=1-8
+#SBATCH --array=1-16
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=20G
@@ -35,7 +35,7 @@ case $1 in
 esac
 
 
-SCRIPT_DIR="/cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker/"
+SCRIPT_DIR="/cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker"
 DATA_PATH="${SCRIPT_DIR}/data"
 ISAAC_CACHE_PATH="/scr-ssd/${SLURM_JOB_USER}/isaac_cache"
 
@@ -107,21 +107,22 @@ declare -A MOUNTS=(
     [${ICD_PATH}]=/etc/vulkan/icd.d/nvidia_icd.json
     [${LAYERS_PATH}]=/etc/vulkan/implicit_layer.d/nvidia_layers.json
     [${EGL_VENDOR_PATH}]=/usr/share/glvnd/egl_vendor.d/10_nvidia.json
-    [${ISAAC_CACHE_PATH}/isaac-sim/kit/cache/Kit]=/isaac-sim/kit/cache/Kit
-    [${ISAAC_CACHE_PATH}/isaac-sim/cache/ov]=/root/.cache/ov
-    [${ISAAC_CACHE_PATH}/isaac-sim/cache/pip]=/root/.cache/pip
-    [${ISAAC_CACHE_PATH}/isaac-sim/cache/glcache]=/root/.cache/nvidia/GLCache
-    [${ISAAC_CACHE_PATH}/isaac-sim/cache/computecache]=/root/.nv/ComputeCache
-    [${ISAAC_CACHE_PATH}/isaac-sim/logs]=/root/.nvidia-omniverse/logs
-    [${ISAAC_CACHE_PATH}/isaac-sim/config]=/root/.nvidia-omniverse/config
-    [${ISAAC_CACHE_PATH}/isaac-sim/data]=/root/.local/share/ov/data
-    [${ISAAC_CACHE_PATH}/isaac-sim/documents]=/root/Documents
+    [${ISAAC_CACHE_PATH}/kit/cache/Kit]=/isaac-sim/kit/cache/Kit
+    [${ISAAC_CACHE_PATH}/cache/ov]=/root/.cache/ov
+    [${ISAAC_CACHE_PATH}/cache/pip]=/root/.cache/pip
+    [${ISAAC_CACHE_PATH}/cache/glcache]=/root/.cache/nvidia/GLCache
+    [${ISAAC_CACHE_PATH}/cache/computecache]=/root/.nv/ComputeCache
+    [${ISAAC_CACHE_PATH}/logs]=/root/.nvidia-omniverse/logs
+    [${ISAAC_CACHE_PATH}/config]=/root/.nvidia-omniverse/config
+    [${ISAAC_CACHE_PATH}/data]=/root/.local/share/ov/data
+    [${ISAAC_CACHE_PATH}/documents]=/root/Documents
 )
 
 MOUNT_KWARGS=""
 for mount in "${!MOUNTS[@]}"; do
     # Verify mount path in local directory exists, otherwise, create it
     if [ ! -e "$mount" ]; then
+
         mkdir -p ${mount}
     fi
     # Add to mount kwargs we'll pass to enroot command later
