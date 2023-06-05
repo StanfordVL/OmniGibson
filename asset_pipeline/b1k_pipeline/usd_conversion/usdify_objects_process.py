@@ -3,6 +3,7 @@ Script to import scene and objects
 """
 import glob
 import os
+import pathlib
 import sys
 
 import tqdm
@@ -27,22 +28,10 @@ IMPORT_RENDER_CHANNELS = True
 
 if __name__ == "__main__":
     dataset_root = sys.argv[1]
-    batch_start = int(sys.argv[2])
-    batch_end = int(sys.argv[3])
-    obj_cats = os.listdir(os.path.join(dataset_root, "objects"))
-    obj_items = sorted(
-        [
-            (obj_category, obj_model)
-            for obj_category in obj_cats
-            for obj_model in os.listdir(
-                os.path.join(dataset_root, "objects", obj_category)
-            )
-        ]
-    )
-    assert batch_start < len(
-        obj_items
-    ), f"Batch start {batch_start} is more than object count {len(obj_items)}"
-    for obj_category, obj_model in tqdm.tqdm(obj_items[batch_start:batch_end]):
+    batch = sys.argv[2:]
+    for path in tqdm.tqdm(batch):
+        obj_category, obj_model = pathlib.Path(path).parts[-2:]
+        assert (pathlib.Path(dataset_root) / "objects" / obj_category / obj_model).exists()
         print(f"IMPORTING CATEGORY/MODEL {obj_category}/{obj_model}...")
         import_obj_urdf(
             obj_category=obj_category, obj_model=obj_model, dataset_root=dataset_root, skip_if_exist=False

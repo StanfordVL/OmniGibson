@@ -5,7 +5,7 @@ from fs.copy import copy_dir
 from fs.tempfs import TempFS
 from fs.zipfs import ZipFS
 
-from b1k_pipeline.utils import PipelineFS, ParallelZipFS
+from b1k_pipeline.utils import PipelineFS, ParallelZipFS, TMP_DIR
 
 import tqdm
 
@@ -23,8 +23,8 @@ def run_on_batch(dataset_path, start, end, output_path):
 def main():
     with PipelineFS() as pipeline_fs, \
          ParallelZipFS("objects_usd.zip") as usd_fs, \
-         TempFS(temp_dir="/cvgl2/u/cgokmen/tmp/") as dataset_fs, \
-         TempFS(temp_dir="/cvgl2/u/cgokmen/tmp/") as out_temp_fs:
+         TempFS(temp_dir=str(TMP_DIR)) as dataset_fs, \
+         TempFS(temp_dir=str(TMP_DIR)) as out_temp_fs:
         with ZipFS(pipeline_fs.pipeline_output().open("object_images.zip", "wb"), write=True, temp_fs=out_temp_fs) as out_fs:
             # Copy everything over to the dataset FS
             print("Copy everything over to the dataset FS...")

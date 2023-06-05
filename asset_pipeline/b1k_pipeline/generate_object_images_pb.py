@@ -34,12 +34,12 @@ from igibson.utils.assets_utils import (
     get_object_models_of_category,
 )
 
-from b1k_pipeline.utils import PipelineFS
+from b1k_pipeline.utils import PipelineFS, TMP_DIR
 
 USE_IG_RENDERER = False
 
 def main():
-        #  TempFS(temp_dir=r"D:\tmp") as dataset_fs, \
+        #  TempFS(temp_dir=str(TMP_DIR)) as dataset_fs, \
 
     with PipelineFS() as pipeline_fs, \
          OSFS(r"D:\dataset-5-3") as dataset_fs, \
