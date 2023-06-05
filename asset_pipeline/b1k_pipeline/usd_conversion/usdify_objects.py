@@ -15,7 +15,7 @@ BATCH_SIZE = 100
 def run_on_batch(dataset_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
-    return subprocess.run(cmd, capture_output=True, cwd="/cvgl2/u/cgokmen/ig_pipeline")
+    return subprocess.run(cmd, capture_output=True, check=True, cwd="/cvgl2/u/cgokmen/ig_pipeline")
 
 
 def main():
@@ -23,7 +23,7 @@ def main():
          ParallelZipFS("objects.zip") as objects_fs, \
          ParallelZipFS("metadata.zip") as metadata_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as dataset_fs:
-        with ParallelZipFS("objects_usd.zip", write=True, tmp_dir=r"/scr/cgokmen/cgokmen/tmp") as out_fs:
+        with ParallelZipFS("objects_usd.zip", write=True, temp_fs=TempFS(r"/scr/cgokmen/cgokmen/tmp")) as out_fs:
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
             fs.copy.copy_fs(metadata_fs, dataset_fs)
@@ -68,7 +68,7 @@ def main():
             print("Queued all batches. Waiting for them to finish...")
             for future in tqdm.tqdm(as_completed(futures), total=len(futures)):
                 try:
-                    print(future.result())
+                    future.result()
                 except Exception as e:
                     print(e)
 

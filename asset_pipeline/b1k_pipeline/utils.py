@@ -37,9 +37,11 @@ class PipelineFS(OSFS):
     def target_output(self, target):
         return self.target(target).makedir("artifacts", recreate=True)
 
-def ParallelZipFS(name, write=False, tmp_dir=str(TMP_DIR)):
-    TMP_DIR.mkdir(exist_ok=True)
-    return ZipFS(PIPELINE_ROOT / "artifacts/parallels" / name, write=write, temp_fs=TempFS(temp_dir=tmp_dir))
+def ParallelZipFS(name, write=False, temp_fs=None):
+    if not temp_fs:
+        TMP_DIR.mkdir(exist_ok=True)
+        temp_fs = TempFS(temp_dir=str(TMP_DIR))
+    return ZipFS(PIPELINE_ROOT / "artifacts/parallels" / name, write=write, temp_fs=temp_fs)
 
 def mat2arr(mat):
     return np.array([

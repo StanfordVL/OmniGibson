@@ -1,7 +1,7 @@
 import subprocess
 from dask.distributed import Client, Scheduler, as_completed
 
-from fs.copy import copy_dir
+from fs.copy import copy_fs
 from fs.tempfs import TempFS
 from fs.zipfs import ZipFS
 
@@ -14,8 +14,8 @@ from IPython import embed
 BATCH_SIZE = 100
 
 
-def run_on_batch(dataset_path, start, end, output_path):
-    python_cmd = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_path, str(start), str(end), output_path]
+def run_on_batch(dataset_path, output_path, batch):
+    python_cmd = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_path, output_path] + batch
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
     return subprocess.run(cmd, capture_output=True, cwd="/cvgl2/u/cgokmen/ig_pipeline")
 
@@ -32,35 +32,25 @@ def main():
             for item in tqdm.tqdm(objdir_glob):
                 if usd_fs.opendir(item.path).glob("usd/*.usd").count().files == 0:
                     continue
-                if "antler" not in item.path:
-                    continue
-                copy_dir(usd_fs, item.path, dataset_fs, item.path)
+                copy_fs(usd_fs.opendir(item.path), dataset_fs.opendir(item.path))
 
-            # Start the cluster
-            # scheduler = Scheduler(
-            #     host="",
-            #     port=8786,
-            #     dashboard=True,
-            #     dashboard_address=":8787",
-            # )
-            # client = Client(scheduler)
             dask_client = Client(n_workers=0, host="", scheduler_port=8786)
             subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh capri32.stanford.edu:8786"', shell=True, check=True)
             dask_client.wait_for_workers(1)
 
             # Start the batched run
-            object_count = dataset_fs.glob("objects/*/*/").count().directories
+            object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
             print("Queueing batches.")
-            print("Total count: ", object_count)
+            print("Total count: ", len(object_glob))
             futures = []
-            for start in range(0, object_count, BATCH_SIZE):
+            for start in range(0, len(object_glob), BATCH_SIZE):
                 end = start + BATCH_SIZE
+                batch = object_glob[start:end]
                 worker_future = dask_client.submit(
                     run_on_batch,
                     dataset_fs.getsyspath("/"),
-                    start,
-                    end,
                     out_temp_fs.getsyspath("/"),
+                    batch,
                     pure=False)
                 futures.append(worker_future)
 
@@ -71,6 +61,8 @@ def main():
                     print(future.result())
                 except Exception as e:
                     print(e)
+
+            print("Archiving results...")
 
         # At this point, out_temp_fs's contents will be zipped. Save the success file.
         pipeline_fs.pipeline_output().touch("generate_images.success")

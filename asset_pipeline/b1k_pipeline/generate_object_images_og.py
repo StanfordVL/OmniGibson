@@ -1,3 +1,4 @@
+import pathlib
 import sys
 import numpy as np
 from PIL import Image
@@ -17,9 +18,8 @@ CENTER_HEIGHT = 1.0 # meters
 
 def main():
     dataset_path = sys.argv[1]
-    batch_start = int(sys.argv[2])
-    batch_end = int(sys.argv[3])
-    output_path = sys.argv[4]
+    output_path = sys.argv[2]
+    batch = sys.argv[3:]
 
     # Set the dataset path
     gm.DATASET_PATH = dataset_path
@@ -31,11 +31,11 @@ def main():
     env = og.Environment(configs=cfg)
 
     # Make it brighter
-    # dome_light = og.sim.scene.objects[0]
-    # dome_light.intensity = 1e4
+    dome_light = og.sim.scene.skybox
+    dome_light.intensity = 0.5e4
 
-    all_models = [(category, model) for category in get_all_object_categories() for model in get_object_models_of_category(category)][batch_start:batch_end]
-    for obj_category, obj_model in all_models:
+    for item in batch:
+        obj_category, obj_model = pathlib.Path(item).parts[-2:]
         og.sim.stop()
         obj = DatasetObject(
             name="obj",
