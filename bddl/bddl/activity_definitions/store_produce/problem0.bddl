@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        mango.n.01_1 mango.n.01_2 - mango.n.01 
+        mango.n.02_1 mango.n.02_2 - mango.n.02 
         pomegranate.n.02_1 pomegranate.n.02_2 - pomegranate.n.02
         plastic_bag.n.01_1 - plastic_bag.n.01
         floor.n.01_1 - floor.n.01
@@ -11,8 +11,8 @@
     )
     
     (:init 
-        (inside mango.n.01_1 plastic_bag.n.01_1) 
-        (inside mango.n.01_2 plastic_bag.n.01_1) 
+        (inside mango.n.02_1 plastic_bag.n.01_1) 
+        (inside mango.n.02_2 plastic_bag.n.01_1) 
         (inside pomegranate.n.02_1 plastic_bag.n.01_1) 
         (inside pomegranate.n.02_2 plastic_bag.n.01_1) 
         (ontop plastic_bag.n.01_1 floor.n.01_1) 
@@ -28,8 +28,8 @@
                 (inside ?pomegranate.n.02 ?electric_refrigerator.n.01_1) 
             )
             (forall 
-                (?mango.n.01 - mango.n.01)
-                (inside ?mango.n.01 ?electric_refrigerator.n.01_1) 
+                (?mango.n.02 - mango.n.02)
+                (inside ?mango.n.02 ?electric_refrigerator.n.01_1) 
             )
         )
     )
