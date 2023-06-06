@@ -3,7 +3,7 @@
 #SBATCH --account=cvgl
 #SBATCH --partition=svl --qos=normal
 #SBATCH --time=48:00:00
-#SBATCH --array=1-1
+#SBATCH --array=1-16
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=20G

@@ -32,7 +32,7 @@ def main():
             for item in tqdm.tqdm(objdir_glob):
                 if usd_fs.opendir(item.path).glob("usd/*.usd").count().files == 0:
                     continue
-                copy_fs(usd_fs.opendir(item.path), dataset_fs.opendir(item.path))
+                copy_fs(usd_fs.opendir(item.path), dataset_fs.makedirs(item.path))
 
             dask_client = Client(n_workers=0, host="", scheduler_port=8786)
             subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh capri32.stanford.edu:8786"', shell=True, check=True)

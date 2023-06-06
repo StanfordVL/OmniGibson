@@ -23,15 +23,13 @@ def main():
          ParallelZipFS("objects.zip") as objects_fs, \
          ParallelZipFS("metadata.zip") as metadata_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as dataset_fs:
-        with ParallelZipFS("objects_usd.zip", write=True, temp_fs=TempFS(r"/scr/cgokmen/cgokmen/tmp")) as out_fs:
+        with ParallelZipFS("objects_usd.zip", write=True, temp_fs=TempFS(temp_dir=r"/scr/cgokmen/cgokmen/tmp")) as out_fs:
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
             fs.copy.copy_fs(metadata_fs, dataset_fs)
             objdir_glob = list(objects_fs.glob("objects/*/*/"))
             for item in tqdm.tqdm(objdir_glob):
                 if objects_fs.opendir(item.path).glob("urdf/*.urdf").count().files == 0:
-                    continue
-                if "antler" not in item.path:
                     continue
                 fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path))
 
