@@ -9,8 +9,8 @@
         raw_egg.n.01_1 - raw_egg.n.01
         flour.n.01_1 - flour.n.01
         salt.n.02_1 - salt.n.02
-        walnut.n.01_1 - walnut.n.01
-        spatula.n.01_1 - spatula.n.01
+        walnut.n.01_1 walnut.n.01_2 walnut.n.01_3 walnut.n.01_4 walnut.n.01_5 walnut.n.01_6 walnut.n.01_7 - walnut.n.01
+        electric_mixer.n.01_1 - electric_mixer.n.01
         mixing_bowl.n.01_1 - mixing_bowl.n.01
         brownie.n.03_1 brownie.n.03_2 brownie.n.03_3 brownie.n.03_4 brownie.n.03_5 brownie.n.03_6 - brownie.n.03
         oven.n.01_1 - oven.n.01
@@ -22,9 +22,10 @@
         salt__shaker.n.01_1 - salt__shaker.n.01
         countertop.n.01_1 countertop.n.01_2 countertop.n.01_3 - countertop.n.01
         vanilla__bottle.n.01_1 - vanilla__bottle.n.01
-        bowl.n.01_1 - bowl.n.01
+        bowl.n.01_1 bowl.n.01_2 - bowl.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         tablespoon.n.02_1 - tablespoon.n.02
+        microwave.n.02_1 - microwave.n.02
         agent.n.01_1 - agent.n.01
         floor.n.01_1 - floor.n.01
     )
@@ -43,13 +44,21 @@
         (ontop flour__sack.n.01_1 countertop.n.01_2) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_2)
-        (ontop walnut.n.01_1 countertop.n.01_2) 
-        (ontop spatula.n.01_1 countertop.n.01_2) 
+        (inside walnut.n.01_1 bowl.n.01_2) 
+        (inside walnut.n.01_2 bowl.n.01_2) 
+        (inside walnut.n.01_3 bowl.n.01_2) 
+        (inside walnut.n.01_4 bowl.n.01_2) 
+        (inside walnut.n.01_5 bowl.n.01_2) 
+        (inside walnut.n.01_6 bowl.n.01_2) 
+        (inside walnut.n.01_7 bowl.n.01_2) 
+        (ontop bowl.n.01_2 countertop.n.01_2)
+        (ontop electric_mixer.n.01_1 countertop.n.01_2) 
         (ontop mixing_bowl.n.01_1 countertop.n.01_2) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 
+        (inroom microwave.n.02_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom countertop.n.01_2 kitchen) 
         (inroom countertop.n.01_3 kitchen) 
