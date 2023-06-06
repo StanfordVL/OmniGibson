@@ -10,7 +10,7 @@ from collections import Counter
 
 from bddl.parsing import parse_problem, construct_bddl_from_parsed
 import bddl.activity
-from bddl_debug_backend import DebugBackend, DebugGenericObject
+from bddl_debug_backend import DebugBackend, DebugGenericObject, UNARIES, BINARIES, VALID_ATTACHMENTS, VALID_ROOMS
 
 PROBLEM_FILE_DIR = "../bddl/activity_definitions"
 PROPS_TO_SYNS_JSON = "../bddl/generated_data/properties_to_synsets.json"
@@ -190,6 +190,28 @@ def _get_objects_in_goal(goal):
     goal = ["and"] + goal
     _traverse_goal_for_objects(goal, goal_objects)
     return goal_objects
+
+
+def _traverse_goal_for_atoms(expr, goal_atoms):
+    if all(type(subexpr) == str for subexpr in expr):
+        goal_atoms.append(expr)
+    elif expr[0] in ["and", "or"]:
+        for subexpr in expr[1:]:
+            _traverse_goal_for_atoms(subexpr)
+    elif expr[0] in ["forall", "exists", "forn", "forpairs", "fornpairs"]:
+        _traverse_goal_for_atoms(expr[-1])
+    elif expr[0] in ["imply"]:
+        _traverse_goal_for_atoms(expr[1])
+        _traverse_goal_for_atoms(expr[2])
+    else:
+        raise ValueError(f"Unhandled logic operator {expr[0]}")
+
+
+def _get_atoms_in_goal(goal):
+    goal_atoms = []
+    _traverse_goal_for_atoms(goal, goal_atoms)
+    return goal_atoms
+
 
 def _get_unique_items_from_transition_map():
     obj_set = set()
@@ -387,6 +409,90 @@ def problem_name_correct(activity, definition_id=0):
     assert (problem_name == f"{activity}-{definition_id}") or (problem_name == f"{activity.lower()}-{definition_id}"), f"Wrong problem name '{problem_name}' for activity '{activity}'"
 
 
+def check_property_alignment(atom):
+    with open(SYNS_TO_PROPS_JSON, "r") as f:
+        syns_to_props = json.load(f) 
+    pred, *object_insts = atom 
+    # objects = [re.match(OBJECT_CAT_AND_INST_RE, object_inst).group().strip("?") for object_inst in object_insts]
+    objects = []
+    for object_inst in object_insts: 
+        syn_match = re.match(OBJECT_CAT_AND_INST_RE, object_inst)
+        if syn_match is not None:
+            objects.append(syn_match.group())
+        elif True: # object_inst in VALID_ROOMS:    # TODO uncomment when VALID_ROOMS is populated
+            if pred == "inroom":
+                objects.append(object_inst)
+            else:
+                raise AssertionError(f"Nonsynset {object_inst} outside inroom")
+        else:
+            raise AssertionError(f"Invalid room {object_inst}")
+    assert (pred in UNARIES) or (pred in BINARIES), f"Invalid predicate: {pred}"
+    assert ((pred in UNARIES) and (len(objects) == 1)) or ((pred in BINARIES) and (len(objects) == 2)), f"Atom has wrong arity: {atom}"
+
+    # Unaries
+    if pred == "cooked": 
+        assert "cookable" in syns_to_props[objects[0]], f"Inapplicable cooked: {atom}"
+    if pred == "frozen": 
+        assert "freezable" in syns_to_props[objects[0]], f"Inapplicable frozen: {atom}"
+    if pred == "closed" or pred == "open":
+        assert "openable" in syns_to_props[objects[0]], f"Inapplicable closed/open: {atom}"
+    if pred == "folded" or pred == "unfolded":
+        assert "foldable" in syns_to_props[objects[0]], f"Inapplicable folded/unfolded: {atom}"
+    if pred == "toggled_on":
+        assert "toggleable" in syns_to_props[objects[0]], f"Inapplicable toggled_on: {atom}"
+    if pred == "hot": 
+        assert "heatable" in syns_to_props[objects[0]], f"Inapplicable hot: {atom}"
+    if pred == "on_fire": 
+        assert "flammable" in syns_to_props[objects[0]], f"Inapplicable on_fire: {atom}"
+    if pred == "assembled": 
+        assert "assembleable" in syns_to_props[objects[0]], f"Inapplicable assembled: {atom}"
+    if pred == "broken": 
+        assert "breakable" in syns_to_props[objects[0]], f"Inapplicable broken: {atom}"
+    
+    # Binaries
+    if pred == "saturated":
+        assert ("particleRemover" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable saturated: {atom}"
+    if pred == "covered":
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable covered: {atom}"
+    if pred == "filled" or pred == "empty":
+        assert ("fillable" in syns_to_props[objects[0]]) and (("physicalSubstance" in syns_to_props[objects[1]]) or ("liquid" in syns_to_props[objects[1]])), f"Inapplicable filled/empty: {atom}"
+    if pred == "contains":
+        assert ("fillable" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable contains: {atom}"
+    if pred == "ontop":
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable ontop: {atom}"
+    if pred == "nextto":
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable nextto: {atom}"
+    if pred == "under":
+        assert ("rigidBody" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable under: {atom}"
+    if pred == "touching": 
+        assert ("rigidBody" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable touching: {atom}"
+    if pred == "inside": 
+        assert ("rigidBody" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
+    if pred == "overlaid": 
+        assert ("deformable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
+    if pred == "attached":
+        assert tuple(objects) in VALID_ATTACHMENTS, f"Inapplicable attached: {atom}"
+    if pred == "draped": 
+        assert ("deformable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
+    if pred == "insource": 
+        assert (("particleSource" in syns_to_props[objects[0]]) or ("particleApplier" in syns_to_props[objects[0]])) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable insource: {atom}"
+    if pred == "inroom": 
+        assert ("sceneObject" in syns_to_props[objects[0]]), f"Inapplicable inroom: {atom}"     # NOTE we already know the room is valid
+
+
+    # TODO scene objects not being the moving input (first for rigid, second for substance) unless inroom 
+
+
+def synsets_properties_aligned(activity):
+    __, __, init, goal = _get_defn_elements_from_file(activity)
+    for literal in init: 
+        init_atom = literal[1] if literal[0] == "not" else literal
+        check_property_alignment(init_atom)
+    goal_atoms = _get_atoms_in_goal(goal)
+    for goal_atom in goal_atoms:
+        check_property_alignment(goal_atom)
+
+
 # MAIN 
 
 def verify_definition(activity, csv=False):
@@ -399,6 +505,7 @@ def verify_definition(activity, csv=False):
     no_contradictory_init_atoms(activity)
     no_uncontrolled_category(activity)
     all_synsets_valid(activity)
+    synsets_properties_aligned(activity)
     agent_present(activity)
     problem_name_correct(activity)
     if csv:
