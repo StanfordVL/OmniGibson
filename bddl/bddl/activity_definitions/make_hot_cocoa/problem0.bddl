@@ -18,6 +18,7 @@
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         milk__carton.n.01_1 - milk__carton.n.01
         vanilla__bottle.n.01_1 - vanilla__bottle.n.01
+        stove.n.01_1 - stove.n.01
         agent.n.01_1 - agent.n.01
         floor.n.01_1 - floor.n.01
     )
@@ -39,6 +40,7 @@
         (ontop mug.n.04_1 countertop.n.01_2)
         (ontop teaspoon.n.02_1 countertop.n.01_2)
         (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom stove.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom countertop.n.01_2 kitchen) 
         (future cocoa.n.01_1) 

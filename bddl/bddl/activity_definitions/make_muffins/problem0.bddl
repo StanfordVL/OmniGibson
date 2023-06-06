@@ -13,7 +13,7 @@
         mixing_bowl.n.01_1 - mixing_bowl.n.01
         muffin.n.01_1 muffin.n.01_2 muffin.n.01_3 muffin.n.01_4 muffin.n.01_5 muffin.n.01_6 - muffin.n.01
         oven.n.01_1 - oven.n.01
-        tray.n.01_1 - tray.n.01
+        cookie_sheet.n.01_1 - cookie_sheet.n.01
         flour__sack.n.01_1 - flour__sack.n.01
         baking_powder__jar.n.01_1 - baking_powder__jar.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
@@ -51,7 +51,7 @@
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom countertop.n.01_2 kitchen) 
-        (ontop tray.n.01_1 countertop.n.01_2) 
+        (ontop cookie_sheet.n.01_1 countertop.n.01_2) 
         (future muffin.n.01_5) 
         (future muffin.n.01_6) 
         (future muffin.n.01_1) 
@@ -73,7 +73,7 @@
                 (?muffin.n.01 - muffin.n.01) 
                 (and 
                     (cooked ?muffin.n.01) 
-                    (ontop ?muffin.n.01 ?tray.n.01_1)
+                    (ontop ?muffin.n.01 ?cookie_sheet.n.01_1)
                 )
             )
         )
