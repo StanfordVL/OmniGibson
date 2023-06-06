@@ -79,6 +79,9 @@ PROP_TO_DESC = { #added by hand from B1K Object States Google Doc found here htt
     "particleSink": None,
     "needsOrientation": None,
     "waterCook": None,
+    "nonDeformable": None,
+    "nonSubstance": None,
+    "sceneObject": None,
 }
 
 ########### GET INPUT CANONICALS ###########
@@ -92,6 +95,10 @@ def get_annots_canonical(syn_prop_dict):
                 synset_canonical[prop] = {}
             elif prop == "objectType" and applies in DESIRED_PROPS:
                 synset_canonical[applies] = {}
+                if applies not in ["liquid", "visualSubstance", "macroPhysicalSubstance", "microPhysicalSubstance"]:
+                    synset_canonical["nonSubstance"] = {}
+                if applies not in ["softBody", "cloth", "rope"]:
+                    synset_canonical["nonDeformable"] = {}
         canonical[synset] = synset_canonical
     canonical_with_programmatic = add_programmatic_properties(canonical)
     return canonical_with_programmatic
