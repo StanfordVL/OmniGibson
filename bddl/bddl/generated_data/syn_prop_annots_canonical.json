@@ -12746,6 +12746,7 @@
         "freezable": {}
     },
     "cookie_sheet.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16231,9 +16232,8 @@
     "feta.n.01": {
         "cookable": {},
         "sliceable": {},
-        "softBody": {},
+        "rigidBody": {},
         "nonSubstance": {},
-        "deformable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -19921,6 +19921,7 @@
         "freezable": {}
     },
     "hutch.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24175,6 +24176,7 @@
         "freezable": {}
     },
     "mulch__bag.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27274,6 +27276,7 @@
     },
     "plate.n.04": {
         "breakable": {},
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27293,6 +27296,7 @@
     },
     "platter.n.01": {
         "breakable": {},
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27671,6 +27675,7 @@
         "freezable": {}
     },
     "popcorn__bag.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -29631,6 +29636,7 @@
         "freezable": {}
     },
     "sack.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -33509,6 +33515,7 @@
         "freezable": {}
     },
     "sunflower_seed__bag.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34021,6 +34028,7 @@
     },
     "tank.n.02": {
         "fillable": {},
+        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35263,6 +35271,7 @@
         "freezable": {}
     },
     "tray.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36794,6 +36803,7 @@
     },
     "watering_can.n.01": {
         "fillable": {},
+        "particleApplier": {},
         "particleSource": {},
         "needsOrientation": {},
         "rigidBody": {},
