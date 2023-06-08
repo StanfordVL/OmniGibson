@@ -82,6 +82,8 @@ PROP_TO_DESC = { #added by hand from B1K Object States Google Doc found here htt
     "nonDeformable": None,
     "nonSubstance": None,
     "sceneObject": None,
+    "drapeable": None,
+    "physicalSubstance": None
 }
 
 ########### GET INPUT CANONICALS ###########
