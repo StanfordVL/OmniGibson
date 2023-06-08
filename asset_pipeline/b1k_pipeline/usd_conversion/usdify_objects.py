@@ -72,9 +72,9 @@ def main():
 
             # Move the USDs to the output FS
             print("Copying USDs to output FS...")
-            usd_glob = list(dataset_fs.glob("objects/*/*/usd/"))
+            usd_glob = [x.path for x in dataset_fs.glob("objects/*/*/usd/")]
             for item in tqdm.tqdm(usd_glob):
-                fs.copy.copy_fs(dataset_fs.opendir(item.path), out_fs.makedirs(item.path))
+                fs.copy.copy_fs(dataset_fs.opendir(item), out_fs.makedirs(item))
 
             print("Done processing. Archiving things now.")
 
