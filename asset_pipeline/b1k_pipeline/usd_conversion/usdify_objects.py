@@ -15,7 +15,7 @@ BATCH_SIZE = 100
 def run_on_batch(dataset_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
-    return subprocess.run(cmd, capture_output=True, check=True, cwd="/cvgl2/u/cgokmen/ig_pipeline")
+    return subprocess.run(cmd, capture_output=True, check=True, cwd="/scr/ig_pipeline")
 
 
 def main():
@@ -23,7 +23,7 @@ def main():
          ParallelZipFS("objects.zip") as objects_fs, \
          ParallelZipFS("metadata.zip") as metadata_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as dataset_fs:
-        with ParallelZipFS("objects_usd.zip", write=True, temp_fs=TempFS(temp_dir=r"/scr/cgokmen/cgokmen/tmp")) as out_fs:
+        with ParallelZipFS("objects_usd.zip", write=True) as out_fs:
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
             fs.copy.copy_fs(metadata_fs, dataset_fs)
@@ -44,8 +44,10 @@ def main():
 
             print("Launching cluster...")
             dask_client = Client(n_workers=0, host="", scheduler_port=8786)
-            subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh capri32.stanford.edu:8786"', shell=True, check=True)
-            dask_client.wait_for_workers(1)
+            # subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh capri32.stanford.edu:8786"', shell=True, check=True)
+            subprocess.run('cd /scr/ig_pipeline/b1k_pipeline/docker; ./run_worker_local.sh cgokmen-lambda.stanford.edu:8786', shell=True, check=True)
+            print("Waiting for workers")
+            dask_client.wait_for_workers(8)
 
             # Start the batched run
             object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
