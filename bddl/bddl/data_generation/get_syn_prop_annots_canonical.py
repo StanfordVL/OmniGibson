@@ -97,8 +97,6 @@ def get_annots_canonical(syn_prop_dict):
                 synset_canonical[applies] = {}
                 if applies not in ["liquid", "visualSubstance", "macroPhysicalSubstance", "microPhysicalSubstance"]:
                     synset_canonical["nonSubstance"] = {}
-                if applies not in ["softBody", "cloth", "rope"]:
-                    synset_canonical["nonDeformable"] = {}
         canonical[synset] = synset_canonical
     canonical_with_programmatic = add_programmatic_properties(canonical)
     return canonical_with_programmatic
@@ -118,11 +116,13 @@ def add_programmatic_properties(synset_content): # runs programmatic addition ov
             synset_content[synset]["boilable"] = {}
         if ("visualSubstance" in synset_content[synset]) or ("microPhysicalSubstance" in synset_content[synset]) or ("macroPhysicalSubstance" in synset_content[synset]) or ("liquid" in synset_content[synset]):
             synset_content[synset]["substance"] = {}
+        if ("microPhysicalSubstance" in synset_content[synset]) or ("macroPhysicalSubstance" in synset_content[synset]) or ("liquid" in synset_content[synset]):
+            synset_content[synset]["physicalSubstance"] = {}
         if ("cloth" in synset_content[synset]) or ("rope" in synset_content[synset]) or ("softBody" in synset_content[synset]):
             synset_content[synset]["deformable"] = {}
-            if ("cloth" in synset_content[synset]) or ("softBody" in synset_content[synset]):
-                synset_content[synset].update({"foldable": {}, "unfoldable": {}})           # NOTE turns out foldable needs to be based on cloth
-        if synset_content[synset].get('substance') == None: # non-substances are both wetable and mixable
+        if ("cloth" in synset_content[synset]) or ("rope" in synset_content[synset]):
+            synset_content[synset]["drapeable"] = {}
+        if "nonSubstance" in synset_content[synset]: # non-substances are both wetable and mixable
                 synset_content[synset].update({
                     "wetable": {},
                     "mixable": {},

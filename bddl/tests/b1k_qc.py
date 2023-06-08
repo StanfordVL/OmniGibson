@@ -437,7 +437,7 @@ def check_property_alignment(atom):
     if pred == "closed" or pred == "open":
         assert "openable" in syns_to_props[objects[0]], f"Inapplicable closed/open: {atom}"
     if pred == "folded" or pred == "unfolded":
-        assert "foldable" in syns_to_props[objects[0]], f"Inapplicable folded/unfolded: {atom}"
+        assert "drapeable" in syns_to_props[objects[0]], f"Inapplicable folded/unfolded: {atom}"
     if pred == "toggled_on":
         assert "toggleable" in syns_to_props[objects[0]], f"Inapplicable toggled_on: {atom}"
     if pred == "hot": 
@@ -454,9 +454,9 @@ def check_property_alignment(atom):
         assert ("particleRemover" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable saturated: {atom}"
     if pred == "covered":
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable covered: {atom}"
-    if pred == "filled" or pred == "empty":
-        assert ("fillable" in syns_to_props[objects[0]]) and (("physicalSubstance" in syns_to_props[objects[1]]) or ("liquid" in syns_to_props[objects[1]])), f"Inapplicable filled/empty: {atom}"
-    if pred == "contains":
+    if pred == "filled":
+        assert ("fillable" in syns_to_props[objects[0]]) and ("physicalSubstance" in syns_to_props[objects[1]]), f"Inapplicable filled/empty: {atom}"
+    if pred == "contains" or pred == "empty":
         assert ("fillable" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable contains: {atom}"
     if pred == "ontop":
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable ontop: {atom}"
@@ -469,11 +469,11 @@ def check_property_alignment(atom):
     if pred == "inside": 
         assert ("rigidBody" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
     if pred == "overlaid": 
-        assert ("deformable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
+        assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "attached":
         assert tuple(objects) in VALID_ATTACHMENTS, f"Inapplicable attached: {atom}"
     if pred == "draped": 
-        assert ("deformable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
+        assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "insource": 
         assert (("particleSource" in syns_to_props[objects[0]]) or ("particleApplier" in syns_to_props[objects[0]])) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable insource: {atom}"
     if pred == "inroom": 
