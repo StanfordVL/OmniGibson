@@ -9405,27 +9405,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "brown_sugar__box.n.01": {
-    "disinfectable": {},
-    "dustyable": {},
-    "fillable": {},
-    "flammable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "openable": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "brown_sugar__sack.n.01": {
     "disinfectable": {},
     "dustyable": {},
@@ -17728,7 +17707,7 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "deodorant__stick.n.01": {
+  "deodorant_stick.n.01": {
     "disinfectable": {},
     "dustyable": {},
     "freezable": {},
@@ -18892,6 +18871,7 @@
   "dog_food__bag.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "flammable": {},
     "freezable": {},
     "grassyable": {},
@@ -19278,6 +19258,7 @@
     "mixable": {},
     "moldyable": {},
     "nonSubstance": {},
+    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -19995,26 +19976,6 @@
     "mixable": {},
     "moldyable": {},
     "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
-  "egg__box.n.01": {
-    "disinfectable": {},
-    "dustyable": {},
-    "flammable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "openable": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -21118,6 +21079,7 @@
   "feta__box.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "flammable": {},
     "freezable": {},
     "grassyable": {},
@@ -23066,6 +23028,7 @@
   "gelatin__box.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "flammable": {},
     "freezable": {},
     "grassyable": {},
@@ -23177,7 +23140,7 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "gift__box.n.01": {
+  "gift_box.n.01": {
     "disinfectable": {},
     "dustyable": {},
     "fillable": {},
@@ -24326,25 +24289,6 @@
     "substance": {},
     "visualSubstance": {}
   },
-  "gum__box.n.01": {
-    "disinfectable": {},
-    "dustyable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "openable": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "gumbo.n.03": {
     "cookable": {},
     "disinfectable": {},
@@ -24485,7 +24429,6 @@
   "hair_spray__can.n.01": {
     "disinfectable": {},
     "dustyable": {},
-    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -32140,27 +32083,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "mix__box.n.01": {
-    "breakable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "flammable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "toggleable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "mixed_drink.n.01": {
     "boilable": {},
     "freezable": {},
@@ -35832,28 +35754,6 @@
     "liquid": {},
     "physicalSubstance": {},
     "substance": {}
-  },
-  "perfume__bottle.n.01": {
-    "breakable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "fillable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "openable": {},
-    "particleApplier": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
   },
   "periodic_table.n.01": {
     "disinfectable": {},
@@ -42384,6 +42284,7 @@
     "mixable": {},
     "moldyable": {},
     "nonSubstance": {},
+    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -51484,6 +51385,7 @@
     "mixable": {},
     "moldyable": {},
     "nonSubstance": {},
+    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},

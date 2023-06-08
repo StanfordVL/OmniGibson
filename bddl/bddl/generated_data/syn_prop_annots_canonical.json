@@ -7561,27 +7561,6 @@
         "heatable": {},
         "freezable": {}
     },
-    "brown_sugar__box.n.01": {
-        "fillable": {},
-        "flammable": {},
-        "openable": {},
-        "rigidBody": {},
-        "nonSubstance": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
     "brown_sugar__sack.n.01": {
         "fillable": {},
         "flammable": {},
@@ -13733,7 +13712,7 @@
         "heatable": {},
         "freezable": {}
     },
-    "deodorant__stick.n.01": {
+    "deodorant_stick.n.01": {
         "meltable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -14592,6 +14571,7 @@
         "freezable": {}
     },
     "dog_food__bag.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -14862,6 +14842,7 @@
         "freezable": {}
     },
     "drink__dispenser.n.01": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15291,26 +15272,6 @@
         "softBody": {},
         "nonSubstance": {},
         "deformable": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
-    "egg__box.n.01": {
-        "flammable": {},
-        "openable": {},
-        "rigidBody": {},
-        "nonSubstance": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -15924,6 +15885,7 @@
         "freezable": {}
     },
     "feta__box.n.01": {
+        "fillable": {},
         "flammable": {},
         "openable": {},
         "rigidBody": {},
@@ -16926,6 +16888,7 @@
         "freezable": {}
     },
     "gelatin__box.n.01": {
+        "fillable": {},
         "flammable": {},
         "openable": {},
         "rigidBody": {},
@@ -16984,7 +16947,7 @@
         "heatable": {},
         "freezable": {}
     },
-    "gift__box.n.01": {
+    "gift_box.n.01": {
         "fillable": {},
         "flammable": {},
         "openable": {},
@@ -17918,25 +17881,6 @@
         "heatable": {},
         "freezable": {}
     },
-    "gum__box.n.01": {
-        "openable": {},
-        "rigidBody": {},
-        "nonSubstance": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
     "gumbo.n.03": {
         "cookable": {},
         "rigidBody": {},
@@ -18041,7 +17985,6 @@
         "freezable": {}
     },
     "hair_spray__can.n.01": {
-        "fillable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -23488,27 +23431,6 @@
         "heatable": {},
         "freezable": {}
     },
-    "mix__box.n.01": {
-        "breakable": {},
-        "flammable": {},
-        "toggleable": {},
-        "rigidBody": {},
-        "nonSubstance": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
     "mixing_bowl.n.01": {
         "fillable": {},
         "rigidBody": {},
@@ -26036,28 +25958,6 @@
     },
     "perch.n.01": {
         "sliceable": {},
-        "rigidBody": {},
-        "nonSubstance": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
-    "perfume__bottle.n.01": {
-        "breakable": {},
-        "fillable": {},
-        "openable": {},
-        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30449,6 +30349,7 @@
         "freezable": {}
     },
     "shampoo__dispenser.n.01": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36657,6 +36558,7 @@
     },
     "whipped_cream__can.n.01": {
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
