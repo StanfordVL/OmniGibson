@@ -99,6 +99,7 @@
         "freezable": {}
     },
     "aerosol.n.02": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15137,6 +15138,7 @@
         "freezable": {}
     },
     "drink_dispenser.n.01": {
+        "particleSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15156,6 +15158,7 @@
     },
     "drinking_fountain.n.02": {
         "toggleable": {},
+        "particleSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20521,6 +20524,7 @@
         "freezable": {}
     },
     "jam_dispenser.n.01": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21476,6 +21480,7 @@
     },
     "lab_exhaust_hood.n.01": {
         "toggleable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -22369,6 +22374,7 @@
         "freezable": {}
     },
     "lint_roller.n.01": {
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36683,6 +36689,8 @@
         "freezable": {}
     },
     "water_dispenser.n.01": {
+        "particleApplier": {},
+        "particleSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36702,6 +36710,7 @@
     },
     "water_faucet.n.01": {
         "toggleable": {},
+        "particleSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
