@@ -582,7 +582,6 @@
     "allspice__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -9148,7 +9147,10 @@
     },
     "breakfast_food.n.01": {
         "freezable": {},
-        "heatable": {}
+        "heatable": {},
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "breakfast_table.n.01": {
         "disinfectable": {},
@@ -11931,11 +11933,17 @@
     "cereal.n.01": {
         "cookable": {},
         "freezable": {},
-        "heatable": {}
+        "heatable": {},
+        "microPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "cereal.n.03": {
         "freezable": {},
-        "heatable": {}
+        "heatable": {},
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "cereal_box.n.01": {
         "disinfectable": {},
@@ -14449,7 +14457,10 @@
     },
     "cold_cereal.n.01": {
         "freezable": {},
-        "heatable": {}
+        "heatable": {},
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "cold_cuts.n.01": {
         "cookable": {},
@@ -16062,7 +16073,6 @@
     "coriander__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -16695,7 +16705,6 @@
     "cream_of_tartar__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -17077,7 +17086,6 @@
     "cumin__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -17271,7 +17279,6 @@
     "curry_powder__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -17838,7 +17845,6 @@
     "deodorant__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -18044,7 +18050,6 @@
     "detergent__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -19369,7 +19374,8 @@
     "dried_fruit.n.01": {
         "cookable": {},
         "freezable": {},
-        "heatable": {}
+        "heatable": {},
+        "sliceable": {}
     },
     "drill.n.01": {
         "disinfectable": {},
@@ -19399,7 +19405,7 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "drink_dispenser.n.01": {
+    "drink__dispenser.n.01": {
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -21229,7 +21235,6 @@
     "fertilizer__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -23433,7 +23438,6 @@
     "ginger__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -23928,7 +23932,10 @@
     },
     "gramineous_plant.n.01": {
         "freezable": {},
-        "heatable": {}
+        "heatable": {},
+        "microPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "grandfather_clock.n.01": {
         "disinfectable": {},
@@ -24119,7 +24126,10 @@
     },
     "grass.n.01": {
         "freezable": {},
-        "heatable": {}
+        "heatable": {},
+        "microPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "grate.n.01": {
         "disinfectable": {},
@@ -25849,7 +25859,6 @@
         "cookable": {},
         "disinfectable": {},
         "dustyable": {},
-        "flammable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -26072,7 +26081,6 @@
         "needsOrientation": {},
         "nonSubstance": {},
         "openable": {},
-        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -27335,7 +27343,6 @@
     "insectifuge__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27598,6 +27605,25 @@
         "physicalSubstance": {},
         "substance": {}
     },
+    "jam__dispenser.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "particleApplier": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "jam__jar.n.01": {
         "breakable": {},
         "disinfectable": {},
@@ -27610,25 +27636,6 @@
         "moldyable": {},
         "nonSubstance": {},
         "openable": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "jam_dispenser.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -27661,7 +27668,6 @@
     "jar__of__bath_salt.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27681,7 +27687,6 @@
     "jar__of__beans.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27701,7 +27706,6 @@
     "jar__of__cumin.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27721,7 +27725,6 @@
     "jar__of__curry_powder.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27741,7 +27744,6 @@
     "jar__of__dill_seed.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27761,7 +27763,6 @@
     "jar__of__grains.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27782,7 +27783,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27803,7 +27803,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27824,7 +27823,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27845,7 +27843,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27866,7 +27863,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27887,7 +27883,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27908,7 +27903,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27929,7 +27923,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27950,7 +27943,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -27971,7 +27963,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -28292,7 +28283,6 @@
     "jug__of__milk.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -31315,7 +31305,6 @@
     "marjoram__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -33794,7 +33783,6 @@
     "nutmeg__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -34027,7 +34015,6 @@
     "onion_powder__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -35146,7 +35133,6 @@
     "paprika__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -36010,7 +35996,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -36265,7 +36250,6 @@
     "pesticide__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -36796,6 +36780,24 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "pile.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "pill.n.01": {
         "freezable": {},
         "heatable": {},
@@ -37174,6 +37176,7 @@
     "pizza_box.n.01": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -40816,7 +40819,6 @@
     "rosemary__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -40994,7 +40996,6 @@
     "rubbing_alcohol__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -41271,7 +41272,6 @@
     "saffron__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -41300,7 +41300,6 @@
     "sage__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -41479,7 +41478,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -42279,7 +42277,6 @@
     "sealant__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -48469,7 +48466,6 @@
     "thyme__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -49809,29 +49805,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "tube.n.04": {
-        "breakable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "fillable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "needsOrientation": {},
-        "nonSubstance": {},
-        "openable": {},
-        "particleApplier": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "tube__of__lotion.n.01": {
         "disinfectable": {},
         "dustyable": {},
@@ -50697,29 +50670,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "vessel.n.01": {
-        "breakable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "fillable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "mixable": {},
-        "moldyable": {},
-        "needsOrientation": {},
-        "nonSubstance": {},
-        "openable": {},
-        "particleApplier": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "vessel.n.02": {
         "disinfectable": {},
         "dustyable": {},
@@ -50833,7 +50783,6 @@
     "vinegar__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -51484,7 +51433,6 @@
     "water__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -51921,7 +51869,6 @@
     "whipped_cream__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {},
