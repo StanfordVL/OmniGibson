@@ -1007,6 +1007,7 @@
     },
     "baby_shoe.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -1725,6 +1726,25 @@
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "balsamic_vinegar__bottle.n.01": {
+        "breakable": {},
+        "fillable": {},
+        "rigidBody": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -9459,6 +9479,7 @@
     "card.n.04": {
         "sliceable": {},
         "slicer": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -9529,6 +9550,7 @@
         "freezable": {}
     },
     "carpet_sweeper.n.01": {
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -10325,6 +10347,7 @@
         "freezable": {}
     },
     "chaise_longue.n.01": {
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -10634,6 +10657,7 @@
         "freezable": {}
     },
     "cheesecloth.n.01": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -11172,6 +11196,7 @@
     },
     "chlorine__bottle.n.01": {
         "breakable": {},
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -11801,6 +11826,7 @@
     "clothes_dryer.n.01": {
         "toggleable": {},
         "heatSource": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -12370,6 +12396,7 @@
         "freezable": {}
     },
     "collar.n.01": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -13658,6 +13685,7 @@
         "cookable": {},
         "sliceable": {},
         "meltable": {},
+        "particleRemover": {},
         "microPhysicalSubstance": {},
         "nonDeformable": {},
         "substance": {},
@@ -13710,6 +13738,7 @@
         "freezable": {}
     },
     "cotton.n.04": {
+        "particleRemover": {},
         "rope": {},
         "nonSubstance": {},
         "deformable": {},
@@ -13962,6 +13991,7 @@
     },
     "crewneck_sweater.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -15565,6 +15595,7 @@
     },
     "doily.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -15672,7 +15703,7 @@
     },
     "drawers.n.01": {
         "flammable": {},
-        "openable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -15714,6 +15745,7 @@
     },
     "dress_shirt.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -16836,6 +16868,7 @@
         "freezable": {}
     },
     "felt.n.01": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -18442,6 +18475,7 @@
     },
     "gown.n.05": {
         "flammable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -19893,6 +19927,7 @@
     "hand_dryer.n.01": {
         "toggleable": {},
         "heatSource": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -22309,6 +22344,7 @@
     },
     "kid_glove.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -22710,6 +22746,7 @@
     },
     "leaf_blower.n.01": {
         "toggleable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -23581,6 +23618,7 @@
     },
     "loin.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -23620,6 +23658,7 @@
     },
     "long_trousers.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -23642,6 +23681,7 @@
     },
     "loofa.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "softBody": {},
         "nonSubstance": {},
         "deformable": {},
@@ -23980,6 +24020,7 @@
     },
     "maillot.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -24468,6 +24509,7 @@
         "freezable": {}
     },
     "mattress_pad.n.01": {
+        "particleRemover": {},
         "softBody": {},
         "nonSubstance": {},
         "deformable": {},
@@ -25460,6 +25502,7 @@
     },
     "national_flag.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -26073,6 +26116,7 @@
         "freezable": {}
     },
     "overall.n.01": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -26455,6 +26499,7 @@
         "freezable": {}
     },
     "pajama.n.02": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -26572,6 +26617,7 @@
     },
     "paper_coffee_filter.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -29369,6 +29415,7 @@
     },
     "power_washer.n.01": {
         "toggleable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -30490,6 +30537,7 @@
         "freezable": {}
     },
     "roaster.n.04": {
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "nonDeformable": {},
@@ -33059,6 +33107,7 @@
         "freezable": {}
     },
     "slacks.n.01": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -34671,6 +34720,7 @@
         "freezable": {}
     },
     "stocking.n.01": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -35008,6 +35058,7 @@
         "freezable": {}
     },
     "suit.n.01": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -36042,6 +36093,7 @@
     },
     "throw.n.04": {
         "flammable": {},
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -36133,6 +36185,7 @@
         "freezable": {}
     },
     "tie.n.09": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -39408,6 +39461,7 @@
         "freezable": {}
     },
     "yoga_mat.n.01": {
+        "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
