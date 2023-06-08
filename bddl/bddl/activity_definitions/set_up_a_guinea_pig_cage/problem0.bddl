@@ -3,7 +3,7 @@
 
     (:objects
         hutch.n.01_1 - hutch.n.01
-        gunnysack.n.01_1 - gunnysack.n.01
+        carton.n.02_1 - carton.n.02
         floor.n.01_1 - floor.n.01
         pellet_food.n.01_1 - pellet_food.n.01
         pellet_food__bag.n.01_1 - pellet_food__bag.n.01
@@ -20,8 +20,8 @@
         (ontop pellet_food__bag.n.01_1 floor.n.01_1)
         (ontop water_bottle.n.01_1 coffee_table.n.01_1) 
         (ontop bowl.n.01_1 coffee_table.n.01_1)
-        (filled gunnysack.n.01_1 hay.n.01_1)
-        (ontop gunnysack.n.01_1 floor.n.01_1)
+        (filled carton.n.02_1 hay.n.01_1)
+        (ontop carton.n.02_1 floor.n.01_1)
         (inroom coffee_table.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)

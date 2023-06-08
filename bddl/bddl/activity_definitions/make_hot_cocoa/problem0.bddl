@@ -54,7 +54,7 @@
             (contains ?mug.n.04_1 ?cocoa.n.01_1)
             (forall 
                 (?marshmallow.n.01 - marshmallow.n.01) 
-                (contains ?mug.n.04_1 ?marshmallow.n.01)
+                (inside ?marshmallow.n.01 ?mug.n.04_1)
             )
         )
     )

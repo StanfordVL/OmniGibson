@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        sand.n.04_1 - sand.n.04
+        white_rice.n.01_1 - white_rice.n.01
         bucket.n.01_1 - bucket.n.01
         punching_bag.n.02_1 - punching_bag.n.02
         floor.n.01_1 - floor.n.01
@@ -10,7 +10,7 @@
     )
     
     (:init 
-        (filled bucket.n.01_1 sand.n.04_1)
+        (filled bucket.n.01_1 white_rice.n.01_1)
         (ontop punching_bag.n.02_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garage) 
@@ -19,7 +19,7 @@
     
     (:goal 
         (and 
-            (filled ?punching_bag.n.02_1 ?sand.n.04_1)
+            (filled ?punching_bag.n.02_1 ?white_rice.n.01_1)
         )
     )
 )

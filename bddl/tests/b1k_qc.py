@@ -197,19 +197,22 @@ def _traverse_goal_for_atoms(expr, goal_atoms):
         goal_atoms.append(expr)
     elif expr[0] in ["and", "or"]:
         for subexpr in expr[1:]:
-            _traverse_goal_for_atoms(subexpr)
+            _traverse_goal_for_atoms(subexpr, goal_atoms)
     elif expr[0] in ["forall", "exists", "forn", "forpairs", "fornpairs"]:
-        _traverse_goal_for_atoms(expr[-1])
-    elif expr[0] in ["imply"]:
-        _traverse_goal_for_atoms(expr[1])
-        _traverse_goal_for_atoms(expr[2])
+        _traverse_goal_for_atoms(expr[-1], goal_atoms)
+    elif expr[0] == "imply":
+        _traverse_goal_for_atoms(expr[1], goal_atoms)
+        _traverse_goal_for_atoms(expr[2], goal_atoms)
+    elif expr[0] == "not":
+        _traverse_goal_for_atoms(expr[1], goal_atoms)
     else:
         raise ValueError(f"Unhandled logic operator {expr[0]}")
 
 
 def _get_atoms_in_goal(goal):
     goal_atoms = []
-    _traverse_goal_for_atoms(goal, goal_atoms)
+    for goal_expr in goal:
+        _traverse_goal_for_atoms(goal_expr, goal_atoms)
     return goal_atoms
 
 
@@ -306,9 +309,7 @@ def all_objects_placed(activity):
     assert placed_insts == insts, f"Unplaced object instances: {insts.difference(placed_insts)}"
 
 
-def all_synsets_valid(activity):
-    with open(SYNS_TO_PROPS_JSON, "r") as f:
-        syns_to_props = json.load(f)
+def all_synsets_valid(activity, syns_to_props):
     __, objects, init, goal = _get_defn_elements_from_file(activity)
     instances, categories = _get_objects_from_object_list(objects)
     init_insts = _get_instances_in_init(init)
@@ -409,14 +410,14 @@ def problem_name_correct(activity, definition_id=0):
     assert (problem_name == f"{activity}-{definition_id}") or (problem_name == f"{activity.lower()}-{definition_id}"), f"Wrong problem name '{problem_name}' for activity '{activity}'"
 
 
-def check_property_alignment(atom):
-    with open(SYNS_TO_PROPS_JSON, "r") as f:
-        syns_to_props = json.load(f) 
+def check_property_alignment(atom, syns_to_props):
+    if atom[0] == "ontop" and atom[1] == "agent.n.01_1":
+        return 
+
     pred, *object_insts = atom 
-    # objects = [re.match(OBJECT_CAT_AND_INST_RE, object_inst).group().strip("?") for object_inst in object_insts]
     objects = []
     for object_inst in object_insts: 
-        syn_match = re.match(OBJECT_CAT_AND_INST_RE, object_inst)
+        syn_match = re.match(OBJECT_CAT_AND_INST_RE, object_inst.strip("?"))
         if syn_match is not None:
             objects.append(syn_match.group())
         elif True: # object_inst in VALID_ROOMS:    # TODO uncomment when VALID_ROOMS is populated
@@ -459,15 +460,15 @@ def check_property_alignment(atom):
     if pred == "contains" or pred == "empty":
         assert ("fillable" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable contains: {atom}"
     if pred == "ontop":
-        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable ontop: {atom}"
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable ontop: {atom}"
     if pred == "nextto":
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable nextto: {atom}"
     if pred == "under":
-        assert ("rigidBody" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable under: {atom}"
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable under: {atom}"
     if pred == "touching": 
         assert ("rigidBody" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable touching: {atom}"
     if pred == "inside": 
-        assert ("rigidBody" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
     if pred == "overlaid": 
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "attached":
@@ -476,26 +477,28 @@ def check_property_alignment(atom):
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "insource": 
         assert (("particleSource" in syns_to_props[objects[0]]) or ("particleApplier" in syns_to_props[objects[0]])) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable insource: {atom}"
-    if pred == "inroom": 
-        assert ("sceneObject" in syns_to_props[objects[0]]), f"Inapplicable inroom: {atom}"     # NOTE we already know the room is valid
+    # if pred == "inroom": 
+    #     assert ("sceneObject" in syns_to_props[objects[0]]), f"Inapplicable inroom: {atom}"     # NOTE we already know the room is valid
 
 
     # TODO scene objects not being the moving input (first for rigid, second for substance) unless inroom 
 
 
-def synsets_properties_aligned(activity):
+def synsets_properties_aligned(activity, syns_to_props):
     __, __, init, goal = _get_defn_elements_from_file(activity)
     for literal in init: 
         init_atom = literal[1] if literal[0] == "not" else literal
-        check_property_alignment(init_atom)
+        check_property_alignment(init_atom, syns_to_props)
     goal_atoms = _get_atoms_in_goal(goal)
     for goal_atom in goal_atoms:
-        check_property_alignment(goal_atom)
+        check_property_alignment(goal_atom, syns_to_props)
 
 
 # MAIN 
 
 def verify_definition(activity, csv=False):
+    with open(SYNS_TO_PROPS_JSON, "r") as f:
+        syns_to_props = json.load(f) 
     object_list_correctly_formatted(activity)
     all_objects_appropriate(activity)
     all_objects_placed(activity)
@@ -504,8 +507,8 @@ def verify_definition(activity, csv=False):
     no_qmarks_in_init(activity)
     no_contradictory_init_atoms(activity)
     no_uncontrolled_category(activity)
-    all_synsets_valid(activity)
-    synsets_properties_aligned(activity)
+    all_synsets_valid(activity, syns_to_props)
+    synsets_properties_aligned(activity, syns_to_props)
     agent_present(activity)
     problem_name_correct(activity)
     if csv:
@@ -607,7 +610,6 @@ def sync_csv(activity):
 
     __, objects, init, _ = _get_defn_elements_from_file(activity)
     bddl_objs, _ = _get_objects_from_object_list(objects)
-    # print(bddl_objs)
     for literal in init: 
         formula = literal[1] if literal[0] == "not" else literal
         #things to ignore

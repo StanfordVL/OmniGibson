@@ -99,6 +99,7 @@
         "freezable": {}
     },
     "aerosol.n.02": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -186,6 +187,7 @@
     },
     "air_freshener__atomizer.n.01": {
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -333,6 +335,7 @@
     "ammonia_water__atomizer.n.01": {
         "fillable": {},
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -753,6 +756,7 @@
         "freezable": {}
     },
     "ashcan.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -772,6 +776,7 @@
         "freezable": {}
     },
     "ashtray.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -821,6 +826,7 @@
     "atomizer.n.01": {
         "fillable": {},
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2172,6 +2178,7 @@
     },
     "bathtub.n.01": {
         "particleSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2296,6 +2303,7 @@
         "freezable": {}
     },
     "bed.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2656,6 +2664,7 @@
         "freezable": {}
     },
     "bench.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2834,6 +2843,7 @@
         "freezable": {}
     },
     "bird_feeder.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7731,6 +7741,7 @@
         "freezable": {}
     },
     "brown_rice__sack.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -7779,6 +7790,7 @@
         "freezable": {}
     },
     "brown_sugar__sack.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -7960,8 +7972,9 @@
     },
     "bunchgrass.n.01": {
         "flammable": {},
-        "visualSubstance": {},
+        "microPhysicalSubstance": {},
         "substance": {},
+        "physicalSubstance": {},
         "heatable": {},
         "freezable": {}
     },
@@ -8223,6 +8236,7 @@
     "cabinet.n.01": {
         "openable": {},
         "assembleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8832,6 +8846,7 @@
         "freezable": {}
     },
     "canteen.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -9296,6 +9311,7 @@
         "freezable": {}
     },
     "carton.n.02": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -10350,6 +10366,7 @@
     },
     "chicken_broth__carton.n.01": {
         "breakable": {},
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -10516,6 +10533,7 @@
         "freezable": {}
     },
     "chickpea__can.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -10839,6 +10857,7 @@
     },
     "chocolate_sauce__bottle.n.01": {
         "breakable": {},
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -11737,6 +11756,7 @@
         "freezable": {}
     },
     "coffee_table.n.01": {
+        "breakable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -11925,6 +11945,7 @@
         "freezable": {}
     },
     "compost_bin.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12026,6 +12047,7 @@
         "freezable": {}
     },
     "conditioner__dispenser.n.01": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12708,6 +12730,7 @@
         "freezable": {}
     },
     "cookie_dough.n.01": {
+        "cookable": {},
         "softBody": {},
         "nonSubstance": {},
         "deformable": {},
@@ -12727,6 +12750,7 @@
         "freezable": {}
     },
     "cookie_sheet.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -13141,6 +13165,7 @@
         "freezable": {}
     },
     "countertop.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -13236,6 +13261,7 @@
     },
     "cream__carton.n.01": {
         "breakable": {},
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -13384,6 +13410,7 @@
         "freezable": {}
     },
     "crib.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14062,6 +14089,7 @@
     },
     "desk.n.01": {
         "assembleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14119,6 +14147,7 @@
     "detergent__atomizer.n.01": {
         "fillable": {},
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14677,6 +14706,7 @@
     "dishwasher.n.01": {
         "openable": {},
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14874,6 +14904,7 @@
         "freezable": {}
     },
     "dog_food__can.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14942,6 +14973,7 @@
     },
     "door.n.01": {
         "openable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15710,6 +15742,7 @@
     "electric_refrigerator.n.01": {
         "openable": {},
         "coldSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16209,9 +16242,8 @@
     "feta.n.01": {
         "cookable": {},
         "sliceable": {},
-        "softBody": {},
+        "rigidBody": {},
         "nonSubstance": {},
-        "deformable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -16480,6 +16512,7 @@
         "breakable": {},
         "toggleable": {},
         "heatSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16498,6 +16531,7 @@
         "freezable": {}
     },
     "floor.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16562,6 +16596,7 @@
         "freezable": {}
     },
     "flour__sack.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -16591,6 +16626,7 @@
     "flower.n.02": {
         "cookable": {},
         "sliceable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16977,6 +17013,7 @@
         "freezable": {}
     },
     "fuel__can.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -17677,6 +17714,7 @@
     },
     "grandfather_clock.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -17773,6 +17811,7 @@
         "freezable": {}
     },
     "granulated_sugar__sack.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -17858,6 +17897,7 @@
         "freezable": {}
     },
     "grated_cheese__sack.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -18088,6 +18128,7 @@
         "freezable": {}
     },
     "ground_beef__package.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18300,6 +18341,7 @@
         "freezable": {}
     },
     "hair_spray__can.n.01": {
+        "fillable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -19815,6 +19857,7 @@
         "freezable": {}
     },
     "house_paint__can.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -19892,6 +19935,7 @@
         "freezable": {}
     },
     "hutch.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19940,6 +19984,7 @@
     },
     "ice_cream__carton.n.01": {
         "breakable": {},
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -20265,6 +20310,7 @@
     "insectifuge__atomizer.n.01": {
         "fillable": {},
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20359,6 +20405,7 @@
         "freezable": {}
     },
     "isopropanol__dispenser.n.01": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20503,6 +20550,7 @@
         "freezable": {}
     },
     "jam_dispenser.n.01": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21458,6 +21506,7 @@
     },
     "lab_exhaust_hood.n.01": {
         "toggleable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21694,6 +21743,7 @@
         "freezable": {}
     },
     "lawn.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -22351,6 +22401,7 @@
         "freezable": {}
     },
     "lint_roller.n.01": {
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -22675,6 +22726,7 @@
     },
     "loudspeaker.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23659,6 +23711,7 @@
         "openable": {},
         "toggleable": {},
         "heatSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23684,6 +23737,7 @@
     },
     "milk__carton.n.01": {
         "breakable": {},
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -23732,6 +23786,7 @@
     },
     "mirror.n.01": {
         "breakable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24139,6 +24194,7 @@
         "freezable": {}
     },
     "mulch__bag.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24912,6 +24968,7 @@
         "openable": {},
         "toggleable": {},
         "heatSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26210,6 +26267,8 @@
     "pepper__shaker.n.01": {
         "breakable": {},
         "fillable": {},
+        "particleApplier": {},
+        "needsOrientation": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26228,6 +26287,7 @@
         "freezable": {}
     },
     "pepper_mill.n.01": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26618,6 +26678,7 @@
     },
     "photograph.n.01": {
         "flammable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26637,6 +26698,7 @@
     },
     "piano.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27235,6 +27297,7 @@
     },
     "plate.n.04": {
         "breakable": {},
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27254,6 +27317,7 @@
     },
     "platter.n.01": {
         "breakable": {},
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27632,6 +27696,7 @@
         "freezable": {}
     },
     "popcorn__bag.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -27856,6 +27921,7 @@
     },
     "pot_plant.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28373,6 +28439,7 @@
         "freezable": {}
     },
     "punching_bag.n.02": {
+        "fillable": {},
         "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -28627,6 +28694,7 @@
         "freezable": {}
     },
     "rail_fence.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28773,6 +28841,7 @@
     },
     "range_hood.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28917,6 +28986,7 @@
         "freezable": {}
     },
     "recycling_bin.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -29428,6 +29498,7 @@
     "rubbing_alcohol__atomizer.n.01": {
         "fillable": {},
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29496,6 +29567,7 @@
     "rug.n.01": {
         "flammable": {},
         "particleRemover": {},
+        "sceneObject": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -29589,6 +29661,7 @@
         "freezable": {}
     },
     "sack.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -29656,6 +29729,8 @@
     },
     "saffron__shaker.n.01": {
         "fillable": {},
+        "particleApplier": {},
+        "needsOrientation": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29850,6 +29925,8 @@
     "salt__shaker.n.01": {
         "breakable": {},
         "fillable": {},
+        "particleApplier": {},
+        "needsOrientation": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30394,6 +30471,7 @@
         "freezable": {}
     },
     "scrub.n.01": {
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30444,6 +30522,7 @@
     "sealant__atomizer.n.01": {
         "fillable": {},
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30911,6 +30990,7 @@
     },
     "shelf.n.01": {
         "assembleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -31117,6 +31197,7 @@
         "freezable": {}
     },
     "shortening__carton.n.01": {
+        "fillable": {},
         "flammable": {},
         "openable": {},
         "rigidBody": {},
@@ -31227,6 +31308,7 @@
     },
     "shower.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -31361,6 +31443,7 @@
     "sink.n.01": {
         "fillable": {},
         "particleSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32135,6 +32218,7 @@
     },
     "sofa.n.01": {
         "particleRemover": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32171,6 +32255,7 @@
         "freezable": {}
     },
     "soil__bag.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -33059,6 +33144,7 @@
     },
     "stew__carton.n.01": {
         "breakable": {},
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -33176,6 +33262,7 @@
     "stove.n.01": {
         "toggleable": {},
         "heatSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33340,6 +33427,7 @@
         "freezable": {}
     },
     "sugar__sack.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -33365,6 +33453,7 @@
         "freezable": {}
     },
     "sugar_cookie_dough.n.01": {
+        "cookable": {},
         "sliceable": {},
         "softBody": {},
         "nonSubstance": {},
@@ -33457,6 +33546,7 @@
         "freezable": {}
     },
     "sunflower_seed__bag.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33650,6 +33740,8 @@
         "freezable": {}
     },
     "swimming_pool.n.01": {
+        "fillable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33968,6 +34060,7 @@
     },
     "tank.n.02": {
         "fillable": {},
+        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34180,6 +34273,7 @@
     },
     "television_receiver.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34834,6 +34928,7 @@
         "freezable": {}
     },
     "toilet.n.02": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34881,6 +34976,7 @@
         "freezable": {}
     },
     "tomato_paste__can.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -35078,6 +35174,7 @@
         "freezable": {}
     },
     "towel_rack.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35209,6 +35306,7 @@
         "freezable": {}
     },
     "tray.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35228,6 +35326,7 @@
     },
     "treadmill.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35247,6 +35346,7 @@
     },
     "tree.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35494,6 +35594,7 @@
         "freezable": {}
     },
     "tupperware.n.01": {
+        "fillable": {},
         "flammable": {},
         "openable": {},
         "rigidBody": {},
@@ -36055,6 +36156,7 @@
     "vinegar__atomizer.n.01": {
         "fillable": {},
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36265,6 +36367,8 @@
         "freezable": {}
     },
     "wading_pool.n.01": {
+        "fillable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36402,6 +36506,7 @@
     },
     "wall_clock.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36553,6 +36658,7 @@
         "openable": {},
         "toggleable": {},
         "particleSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36591,6 +36697,7 @@
     "water__atomizer.n.01": {
         "fillable": {},
         "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36649,6 +36756,7 @@
         "freezable": {}
     },
     "water_dispenser.n.01": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36735,6 +36843,7 @@
     },
     "watering_can.n.01": {
         "fillable": {},
+        "particleApplier": {},
         "particleSource": {},
         "needsOrientation": {},
         "rigidBody": {},
@@ -37030,6 +37139,7 @@
         "freezable": {}
     },
     "white_rice__sack.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -37234,6 +37344,7 @@
     },
     "window.n.01": {
         "openable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -37651,6 +37762,7 @@
     },
     "yogurt__carton.n.01": {
         "breakable": {},
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -37716,6 +37828,7 @@
         "freezable": {}
     },
     "chicken_soup__can.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -37788,6 +37901,7 @@
         "freezable": {}
     },
     "yogurt__cup.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
