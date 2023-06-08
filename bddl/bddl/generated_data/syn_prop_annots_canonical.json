@@ -7969,8 +7969,9 @@
     },
     "bunchgrass.n.01": {
         "flammable": {},
-        "visualSubstance": {},
+        "microPhysicalSubstance": {},
         "substance": {},
+        "physicalSubstance": {},
         "heatable": {},
         "freezable": {}
     },
@@ -9306,6 +9307,7 @@
         "freezable": {}
     },
     "carton.n.02": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -10527,6 +10529,7 @@
         "freezable": {}
     },
     "chickpea__can.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -10850,6 +10853,7 @@
     },
     "chocolate_sauce__bottle.n.01": {
         "breakable": {},
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -12722,6 +12726,7 @@
         "freezable": {}
     },
     "cookie_dough.n.01": {
+        "cookable": {},
         "softBody": {},
         "nonSubstance": {},
         "deformable": {},
@@ -14890,6 +14895,7 @@
         "freezable": {}
     },
     "dog_food__can.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16994,6 +17000,7 @@
         "freezable": {}
     },
     "fuel__can.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18107,6 +18114,7 @@
         "freezable": {}
     },
     "ground_beef__package.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18319,6 +18327,7 @@
         "freezable": {}
     },
     "hair_spray__can.n.01": {
+        "fillable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -19834,6 +19843,7 @@
         "freezable": {}
     },
     "house_paint__can.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -26256,6 +26266,7 @@
         "freezable": {}
     },
     "pepper_mill.n.01": {
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32208,6 +32219,7 @@
         "freezable": {}
     },
     "soil__bag.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -33404,6 +33416,7 @@
         "freezable": {}
     },
     "sugar_cookie_dough.n.01": {
+        "cookable": {},
         "sliceable": {},
         "softBody": {},
         "nonSubstance": {},
@@ -34921,6 +34934,7 @@
         "freezable": {}
     },
     "tomato_paste__can.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -37763,6 +37777,7 @@
         "freezable": {}
     },
     "chicken_soup__can.n.01": {
+        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -37835,6 +37850,7 @@
         "freezable": {}
     },
     "yogurt__cup.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},

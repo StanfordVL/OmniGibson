@@ -9933,8 +9933,9 @@
     "flammable": {},
     "freezable": {},
     "heatable": {},
-    "substance": {},
-    "visualSubstance": {}
+    "microPhysicalSubstance": {},
+    "physicalSubstance": {},
+    "substance": {}
   },
   "burette.n.01": {
     "breakable": {},
@@ -11394,6 +11395,7 @@
   "carton.n.02": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -12854,6 +12856,7 @@
   "chicken_soup__can.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -12944,6 +12947,7 @@
   "chickpea__can.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -13277,6 +13281,7 @@
     "breakable": {},
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -15032,6 +15037,7 @@
     "substance": {}
   },
   "concoction.n.01": {
+    "cookable": {},
     "freezable": {},
     "heatable": {}
   },
@@ -16006,6 +16012,7 @@
     "wrinkleable": {}
   },
   "cookie_dough.n.01": {
+    "cookable": {},
     "deformable": {},
     "disinfectable": {},
     "dustyable": {},
@@ -19176,6 +19183,7 @@
   "dog_food__can.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -19260,6 +19268,7 @@
     "substance": {}
   },
   "dough.n.01": {
+    "cookable": {},
     "deformable": {},
     "disinfectable": {},
     "dustyable": {},
@@ -22829,6 +22838,7 @@
   "fuel__can.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -24486,6 +24496,7 @@
   "ground_beef__package.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -24740,6 +24751,7 @@
   "hair_spray__can.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -26711,6 +26723,7 @@
   "house_paint__can.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -35995,6 +36008,7 @@
     "mixable": {},
     "moldyable": {},
     "nonSubstance": {},
+    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -44612,6 +44626,7 @@
   "soil__bag.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "flammable": {},
     "freezable": {},
     "grassyable": {},
@@ -46628,6 +46643,7 @@
     "wrinkleable": {}
   },
   "sugar_cookie_dough.n.01": {
+    "cookable": {},
     "deformable": {},
     "disinfectable": {},
     "dustyable": {},
@@ -48907,6 +48923,7 @@
   "tomato_paste__can.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -53054,6 +53071,7 @@
   "yogurt__cup.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
