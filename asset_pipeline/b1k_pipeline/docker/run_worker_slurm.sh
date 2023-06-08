@@ -2,6 +2,7 @@
 # This job should be run on the SC headnode.
 #SBATCH --account=cvgl
 #SBATCH --partition=svl --qos=normal
+#SBATCH --nodelist=svl1,svl2,svl3,svl4,svl5
 #SBATCH --time=48:00:00
 #SBATCH --array=1-16
 #SBATCH --ntasks=1
