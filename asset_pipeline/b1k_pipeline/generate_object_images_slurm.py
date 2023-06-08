@@ -17,7 +17,7 @@ BATCH_SIZE = 100
 def run_on_batch(dataset_path, output_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_path, output_path] + batch
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
-    return subprocess.run(cmd, capture_output=True, cwd="/cvgl2/u/cgokmen/ig_pipeline")
+    return subprocess.run(cmd, capture_output=True, cwd="/scr/ig_pipeline")
 
 
 def main():
@@ -35,8 +35,10 @@ def main():
                 copy_fs(usd_fs.opendir(item.path), dataset_fs.makedirs(item.path))
 
             dask_client = Client(n_workers=0, host="", scheduler_port=8786)
-            subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh capri32.stanford.edu:8786"', shell=True, check=True)
-            dask_client.wait_for_workers(1)
+            # subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh capri32.stanford.edu:8786"', shell=True, check=True)
+            subprocess.run('cd /scr/ig_pipeline/b1k_pipeline/docker; ./run_worker_local.sh cgokmen-lambda.stanford.edu:8786', shell=True, check=True)
+            print("Waiting for workers")
+            dask_client.wait_for_workers(16)
 
             # Start the batched run
             object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
