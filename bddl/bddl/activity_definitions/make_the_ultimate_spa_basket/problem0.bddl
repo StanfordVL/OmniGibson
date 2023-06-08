@@ -5,7 +5,7 @@
         wicker_basket.n.01_1 - wicker_basket.n.01
         console_table.n.01_1 - console_table.n.01
         lotion__bottle.n.01_1 - lotion__bottle.n.01
-        perfume__bottle.n.01_1 - perfume__bottle.n.01
+        bottle__of__perfume.n.01_1 - bottle__of__perfume.n.01
         essential_oil__bottle.n.01_1 - essential_oil__bottle.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
@@ -14,7 +14,7 @@
     (:init 
         (ontop wicker_basket.n.01_1 console_table.n.01_1) 
         (ontop lotion__bottle.n.01_1 console_table.n.01_1) 
-        (ontop perfume__bottle.n.01_1 console_table.n.01_1) 
+        (ontop bottle__of__perfume.n.01_1 console_table.n.01_1)
         (ontop essential_oil__bottle.n.01_1 console_table.n.01_1) 
         (inroom console_table.n.01_1 spa)
         (inroom floor.n.01_1 spa) 
@@ -25,7 +25,7 @@
         (and 
             (inside ?essential_oil__bottle.n.01_1 ?wicker_basket.n.01_1) 
             (inside ?lotion__bottle.n.01_1 ?wicker_basket.n.01_1)
-            (inside ?perfume__bottle.n.01_1 ?wicker_basket.n.01_1) 
+            (inside ?bottle__of__perfume.n.01_1 ?wicker_basket.n.01_1)
         )
     )
 )
