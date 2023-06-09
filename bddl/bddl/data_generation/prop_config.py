@@ -32,5 +32,6 @@ INTERNAL_PROP_NAMES = [
     "particleApplier",
     "particleSource",
     "needsOrientation",
-    "waterCook"
+    "waterCook",
+    "mixingTool"
 ]
