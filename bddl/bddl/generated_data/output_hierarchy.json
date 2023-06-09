@@ -62,10 +62,6 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "beef_broth__carton.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "barrel.n.02",
                                   "hasModel": true,
                                   "children": [
@@ -244,10 +240,6 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "chicken_broth__carton.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "chlorine__bottle.n.01",
                                   "hasModel": true
                                 },
@@ -281,10 +273,6 @@
                                 },
                                 {
                                   "name": "cornstarch__jar.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "cream__carton.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -338,11 +326,11 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "glue__bottle.n.01",
+                                  "name": "granulated_sugar__jar.n.01",
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "granulated_sugar__jar.n.01",
+                                  "name": "herb__jar.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -363,10 +351,6 @@
                                 },
                                 {
                                   "name": "hydrogen_peroxide__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "ice_cream__carton.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -444,10 +428,6 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "milk__carton.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "mop_bucket.n.01",
                                   "hasModel": true
                                 },
@@ -482,23 +462,11 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "orange_juice__carton.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "parmesan__bottle.n.01",
                                   "hasModel": true
                                 },
                                 {
                                   "name": "peanut_butter__jar.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "perfume__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "pineapple_juice__carton.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -529,6 +497,10 @@
                                 },
                                 {
                                   "name": "saddle_soap__bottle.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "salad__bowl.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -573,10 +545,6 @@
                                 },
                                 {
                                   "name": "soy_sauce__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "stew__carton.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -650,10 +618,6 @@
                                 {
                                   "name": "yeast__jar.n.01",
                                   "hasModel": true
-                                },
-                                {
-                                  "name": "yogurt__carton.n.01",
-                                  "hasModel": true
                                 }
                               ]
                             },
@@ -682,19 +646,11 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "conditioner__dispenser.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "deodorant__atomizer.n.01",
                                   "hasModel": true
                                 },
                                 {
                                   "name": "detergent__atomizer.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "drink_dispenser.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -718,10 +674,6 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "isopropanol__dispenser.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "pesticide__atomizer.n.01",
                                   "hasModel": true
                                 },
@@ -731,10 +683,6 @@
                                 },
                                 {
                                   "name": "sealant__atomizer.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "shampoo__dispenser.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -755,10 +703,6 @@
                                 },
                                 {
                                   "name": "water__atomizer.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "water_dispenser.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -910,11 +854,19 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "bag__of__popcorn.n.01",
+                                  "name": "brown_rice__sack.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "brown_sugar__sack.n.01",
                                   "hasModel": true
                                 },
                                 {
                                   "name": "carryall.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "cornmeal__sack.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -926,6 +878,18 @@
                                       "hasModel": true
                                     }
                                   ]
+                                },
+                                {
+                                  "name": "flour__sack.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "granulated_sugar__sack.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "grated_cheese__sack.n.01",
+                                  "hasModel": true
                                 },
                                 {
                                   "name": "gunnysack.n.01",
@@ -940,15 +904,19 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "popcorn__bag.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "sack.n.01",
                                   "hasModel": true
                                 },
                                 {
                                   "name": "sleeping_bag.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "sugar__sack.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "white_rice__sack.n.01",
                                   "hasModel": true
                                 }
                               ]
@@ -977,6 +945,120 @@
                                 },
                                 {
                                   "name": "wallet.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "box.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "beef_broth__carton.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "carton.n.02",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "strongbox.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "cashbox.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "cash_register.n.01",
+                                          "hasModel": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "chest.n.02",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "cedar_chest.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "toolbox.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "toy_box.n.01",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "cereal_box.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "chicken_broth__carton.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "cream__carton.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "ice_cream__carton.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "mailbox.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "matchbox.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "milk__carton.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "orange_juice__carton.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "crate.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "packing_box.n.02",
+                                      "hasModel": true
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "pencil_box.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "pineapple_juice__carton.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "shoebox.n.02",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "shortening__carton.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "stew__carton.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "yogurt__carton.n.01",
                                   "hasModel": true
                                 }
                               ]
@@ -1024,14 +1106,6 @@
                               "hasModel": true
                             },
                             {
-                              "name": "brown_rice__sack.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "brown_sugar__sack.n.01",
-                              "hasModel": true
-                            },
-                            {
                               "name": "butter__package.n.01",
                               "hasModel": true
                             },
@@ -1042,80 +1116,6 @@
                             {
                               "name": "canister.n.02",
                               "hasModel": true
-                            },
-                            {
-                              "name": "box.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "carton.n.02",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "strongbox.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "cashbox.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "cash_register.n.01",
-                                          "hasModel": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "chest.n.02",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "cedar_chest.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "toolbox.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "toy_box.n.01",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "cereal_box.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "mailbox.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "matchbox.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "crate.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "packing_box.n.02",
-                                      "hasModel": true
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "pencil_box.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "shoebox.n.02",
-                                  "hasModel": true
-                                }
-                              ]
                             },
                             {
                               "name": "case.n.20",
@@ -1139,10 +1139,6 @@
                                   "children": [
                                     {
                                       "name": "mixing_bowl.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "salad__bowl.n.01",
                                       "hasModel": true
                                     },
                                     {
@@ -1200,10 +1196,6 @@
                               "hasModel": true
                             },
                             {
-                              "name": "chocolate_box.n.01",
-                              "hasModel": true
-                            },
-                            {
                               "name": "cinnamon__shaker.n.01",
                               "hasModel": true
                             },
@@ -1216,15 +1208,11 @@
                               "hasModel": true
                             },
                             {
+                              "name": "conditioner__dispenser.n.01",
+                              "hasModel": true
+                            },
+                            {
                               "name": "coriander__shaker.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "corn_flake__box.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "cornmeal__sack.n.01",
                               "hasModel": true
                             },
                             {
@@ -1270,7 +1258,7 @@
                               ]
                             },
                             {
-                              "name": "dog_food__bag.n.01",
+                              "name": "drink__dispenser.n.01",
                               "hasModel": true
                             },
                             {
@@ -1282,7 +1270,7 @@
                               "hasModel": true
                             },
                             {
-                              "name": "flour__sack.n.01",
+                              "name": "fuel__can.n.01",
                               "hasModel": true
                             },
                             {
@@ -1295,14 +1283,6 @@
                             },
                             {
                               "name": "granola__box.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "granulated_sugar__sack.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "grated_cheese__sack.n.01",
                               "hasModel": true
                             },
                             {
@@ -1336,7 +1316,11 @@
                               "hasModel": true
                             },
                             {
-                              "name": "jam_dispenser.n.01",
+                              "name": "isopropanol__dispenser.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "jam__dispenser.n.01",
                               "hasModel": true
                             },
                             {
@@ -1422,6 +1406,10 @@
                               "hasModel": true
                             },
                             {
+                              "name": "popcorn__bag.n.01",
+                              "hasModel": true
+                            },
+                            {
                               "name": "pot.n.04",
                               "hasModel": true
                             },
@@ -1462,7 +1450,7 @@
                               "hasModel": true
                             },
                             {
-                              "name": "shortening__carton.n.01",
+                              "name": "shampoo__dispenser.n.01",
                               "hasModel": true
                             },
                             {
@@ -1492,10 +1480,6 @@
                               "hasModel": true
                             },
                             {
-                              "name": "sugar__sack.n.01",
-                              "hasModel": true
-                            },
-                            {
                               "name": "sunflower_seed__bag.n.01",
                               "hasModel": true
                             },
@@ -1512,11 +1496,11 @@
                               "hasModel": true
                             },
                             {
-                              "name": "watering_can.n.01",
+                              "name": "water__dispenser.n.01",
                               "hasModel": true
                             },
                             {
-                              "name": "white_rice__sack.n.01",
+                              "name": "watering_can.n.01",
                               "hasModel": true
                             },
                             {
@@ -1525,6 +1509,10 @@
                             },
                             {
                               "name": "yogurt__cup.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "dog_food__can.n.01",
                               "hasModel": true
                             }
                           ]
@@ -4492,14 +4480,6 @@
                                       "hasModel": true,
                                       "children": [
                                         {
-                                          "name": "dog_food__can.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "fuel__can.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
                                           "name": "boat.n.01",
                                           "hasModel": true,
                                           "children": [
@@ -5272,6 +5252,10 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "bag__of__popcorn.n.01",
+                                  "hasModel": true
+                                },
+                                {
                                   "name": "bag__of__rice.n.01",
                                   "hasModel": true
                                 },
@@ -5313,10 +5297,6 @@
                                 },
                                 {
                                   "name": "bagged_popcorn.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "beer_box.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -6044,15 +6024,7 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "brown_sugar__box.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "bucket__of__paint.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "butter__box.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -6100,10 +6072,6 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "candy__box.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "carton__of__chocolate_milk.n.01",
                                   "hasModel": true
                                 },
@@ -6140,19 +6108,11 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "deodorant__stick.n.01",
+                                  "name": "deodorant_stick.n.01",
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "egg__box.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "gift__box.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "gum__box.n.01",
+                                  "name": "gift_box.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -6224,10 +6184,6 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "mix__box.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "pack__of__cigarettes.n.01",
                                   "hasModel": true
                                 },
@@ -6273,6 +6229,38 @@
                                 },
                                 {
                                   "name": "wrapped_hamburger.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "can__of__dog_food.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "package__of__ground_beef.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "bag__of__mulch.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "sack__of__white_rice.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "box__of__aluminium_foil.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "jar__of__tomato_sauce.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "can__of__cat_food.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "jar__of__sodium_carbonate.n.01",
                                   "hasModel": true
                                 }
                               ]
@@ -8408,10 +8396,6 @@
                                               "hasModel": true
                                             },
                                             {
-                                              "name": "salad__bowl.n.01",
-                                              "hasModel": true
-                                            },
-                                            {
                                               "name": "soup_bowl.n.01",
                                               "hasModel": true
                                             }
@@ -9406,10 +9390,6 @@
                                               "hasModel": true
                                             },
                                             {
-                                              "name": "heap__of__raisins.n.01",
-                                              "hasModel": true
-                                            },
-                                            {
                                               "name": "raisin.n.01",
                                               "hasModel": true
                                             }
@@ -9771,10 +9751,6 @@
                                               "children": [
                                                 {
                                                   "name": "barley.n.02",
-                                                  "hasModel": true
-                                                },
-                                                {
-                                                  "name": "heap__of__oatmeal.n.01",
                                                   "hasModel": true
                                                 }
                                               ]
@@ -11254,10 +11230,6 @@
                               "hasModel": true
                             }
                           ]
-                        },
-                        {
-                          "name": "heap__of__gravel.n.01",
-                          "hasModel": true
                         },
                         {
                           "name": "limestone.n.01",
@@ -14634,10 +14606,6 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "heap__of__raisins.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "raisin.n.01",
                                   "hasModel": true
                                 }
@@ -15746,10 +15714,6 @@
                                 {
                                   "name": "granola.n.01",
                                   "hasModel": true
-                                },
-                                {
-                                  "name": "heap__of__granola.n.01",
-                                  "hasModel": true
                                 }
                               ]
                             }
@@ -16122,22 +16086,6 @@
                             {
                               "name": "hair.n.04",
                               "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "tube.n.04",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "vessel.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "herb__jar.n.01",
-                                  "hasModel": true
-                                }
-                              ]
                             }
                           ]
                         },
@@ -17380,10 +17328,6 @@
                               ]
                             },
                             {
-                              "name": "heap__of__gravel.n.01",
-                              "hasModel": true
-                            },
-                            {
                               "name": "limestone.n.01",
                               "hasModel": true
                             }
@@ -18469,6 +18413,28 @@
                   "children": [
                     {
                       "name": "chess_set.n.01",
+                      "hasModel": true
+                    }
+                  ]
+                },
+                {
+                  "name": "pile.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "heap__of__granola.n.01",
+                      "hasModel": true
+                    },
+                    {
+                      "name": "heap__of__gravel.n.01",
+                      "hasModel": true
+                    },
+                    {
+                      "name": "heap__of__oatmeal.n.01",
+                      "hasModel": true
+                    },
+                    {
+                      "name": "heap__of__raisins.n.01",
                       "hasModel": true
                     }
                   ]
