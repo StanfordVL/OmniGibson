@@ -231,6 +231,10 @@ def _get_unique_items_from_transition_map():
         print(obj)
 
 
+def is_specific_container_synset(synset): 
+    return "__" in synset and "__of__" not in synset and "diced__" not in synset and "cooked__" not in synset and "half__" not in synset
+
+
 # Checkers
 
 def object_list_correctly_formatted(activity):
@@ -494,6 +498,28 @@ def synsets_properties_aligned(activity, syns_to_props):
         check_property_alignment(goal_atom, syns_to_props)
 
 
+def no_unnecessary_specific_containers(activity, syns_to_props):
+    __, objects, init, goal = _get_defn_elements_from_file(activity)
+    specific_fillable_containers = [obj_cat for obj_cat in objects.keys() if obj_cat != "agent.n.01" and "fillable" in syns_to_props[obj_cat] and is_specific_container_synset(obj_cat)]
+    
+    atoms = []
+    for literal in init: 
+        atoms.append(literal[1] if literal[0] == "not" else literal)
+    goal_atoms = [[term.strip("?") for term in goal_atom] for goal_atom in _get_atoms_in_goal(goal)]
+    atoms.extend(goal_atoms)
+    fill_atoms = [atom for atom in atoms if (atom[0] in ["filled", "contains", "insource", "inside"])]
+
+    for specific_fillable_container in specific_fillable_containers:
+        for atom in fill_atoms: 
+            # print(atom)
+            if (atom[0] in ["filled", "contains", "insource"]) and (re.match(OBJECT_CAT_AND_INST_RE, atom[1]).group() == specific_fillable_container):
+                break 
+            if (atom[0] == "inside") and (re.match(OBJECT_CAT_AND_INST_RE, atom[2]).group() == specific_fillable_container):
+                break
+        else:
+            raise AssertionError(f"Substance-specific fillable container {specific_fillable_container} that does not fill/contain anything/have anything inside. Switch to container__of version.")
+
+
 # MAIN 
 
 def verify_definition(activity, csv=False):
@@ -509,6 +535,7 @@ def verify_definition(activity, csv=False):
     no_uncontrolled_category(activity)
     all_synsets_valid(activity, syns_to_props)
     synsets_properties_aligned(activity, syns_to_props)
+    no_unnecessary_specific_containers(activity, syns_to_props)
     agent_present(activity)
     problem_name_correct(activity)
     if csv:
@@ -523,6 +550,7 @@ def batch_verify_all(csv=False):
         if not os.path.isdir(os.path.join(PROBLEM_FILE_DIR, activity)): continue
         print()
         print(activity)
+        count += 1
         if os.path.exists(os.path.join(CSVS_DIR, activity + ".csv")):
             try:
                 verify_definition(activity, csv=csv)
