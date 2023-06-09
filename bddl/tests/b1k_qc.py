@@ -237,7 +237,7 @@ def is_specific_container_synset(synset):
 
 # Checkers
 
-def object_list_correctly_formatted(activity):
+def object_list_correctly_formatted(defn):
     '''
     Verify that object list has the following properties for each line: 
     - Each ending term matches category regex
@@ -245,9 +245,6 @@ def object_list_correctly_formatted(activity):
     - First through third-to-last terms match instance regex
     - First through third-to-last terms are of the same category as the ending term
     '''
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
-    with open(defn_fn, "r") as f:
-        defn = f.read()
     objects_section = defn.split("(:objects\n")[-1].split("\n    )")[0].split("\n")
     for line in objects_section:
         elements = line.strip().split(" ")
@@ -259,7 +256,7 @@ def object_list_correctly_formatted(activity):
             assert category == re.match(OBJECT_CAT_AND_INST_RE, inst).group(), f"Mismatched category and object: {category} and {inst}"
 
 
-def all_objects_appropriate(activity):
+def all_objects_appropriate(objects, init, goal):
     '''
     Checks the following: 
     1. All objects in :objects are in :init
@@ -269,7 +266,6 @@ def all_objects_appropriate(activity):
         instances and categories in :objects
     4. There are no categories in :init
     '''
-    __, objects, init, goal = _get_defn_elements_from_file(activity)
     instances, categories = _get_objects_from_object_list(objects)
     init_insts = _get_instances_in_init(init)
     
@@ -280,7 +276,7 @@ def all_objects_appropriate(activity):
     assert goal_objects.issubset(categories.union(instances)), f":goal has objects not in :objects: {goal_objects.difference(categories.union(instances))}"
 
 
-def all_objects_placed(activity): 
+def all_objects_placed(init): 
     '''
     Make sure everything is placed relative to a ROOM, even transitively.
     This is because when I hand-edit, I may accidentally not put every new scene object in an inroom.
@@ -290,7 +286,6 @@ def all_objects_placed(activity):
 
     NOTE should only be executed AFTER all_objects_appropraite
     '''
-    __, objects, init, goal = _get_defn_elements_from_file(activity)
     insts = _get_instances_in_init(init)
     insts = set([inst for inst in insts if ["future", inst] not in init])
 
@@ -313,8 +308,7 @@ def all_objects_placed(activity):
     assert placed_insts == insts, f"Unplaced object instances: {insts.difference(placed_insts)}"
 
 
-def all_synsets_valid(activity, syns_to_props):
-    __, objects, init, goal = _get_defn_elements_from_file(activity)
+def all_synsets_valid(objects, init, goal, syns_to_props):
     instances, categories = _get_objects_from_object_list(objects)
     init_insts = _get_instances_in_init(init)
     goal_objects = _get_objects_in_goal(goal)
@@ -322,25 +316,11 @@ def all_synsets_valid(activity, syns_to_props):
     object_terms = object_insts.union(categories)
     for proposed_syn in object_terms: 
         assert (proposed_syn in syns_to_props) or (proposed_syn == "agent.n.01"), f"Invalid synset: {proposed_syn}"
-
-
-def no_unused_scene_objects(activity):
-    __, __, init, __ = _get_defn_elements_from_file(activity)
-    inroomed_objects = [atom[1] for atom in init if "inroom" in atom]
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
-    with open(defn_fn, "r") as f: 
-        defn = f.read() 
-    for inroomed_object in inroomed_objects:
-        inroom_cat = re.match(OBJECT_CAT_AND_INST_RE, inroomed_object).group()
-        defn_no_objects = defn.split("(:init")[-1]
-        if len(re.findall(inroom_cat, defn_no_objects)) + 0 <= 1:
-            raise AssertionError(f"Potential unused scene object {inroomed_object}")
         
 
 # Check uncontrolled categories
 
-def future_and_real_present(activity): 
-    __, objects, init, goal = _get_defn_elements_from_file(activity)
+def future_and_real_present(objects, init, goal): 
     init_objects = _get_instances_in_init(init)
     future_objects = set([literal[1] for literal in init if literal[0] == "future"])
     real_objects = set([expression[1].strip("?") for expression in goal if expression[0] == "real"])
@@ -353,14 +333,9 @@ def future_and_real_present(activity):
     assert real_objects.issubset(future_objects.union(init_objects)), f"{real_objects.difference(future_objects)} in real clauses but not future clauses or init"
 
 
-def no_repeat_object_lines(activity): 
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
-    with open(defn_fn, "r") as f:
-        defn = f.read()
-    # print(defn.split("(:objects")[1].split(":(init")[0].split("\n")[1:-4])
+def no_repeat_object_lines(defn): 
     from pprint import pprint
     objects_lines = [line.strip() for line in defn.split("(:objects")[1].split("(:init")[0].split("\n")[1:-3]]
-    # pprint(objects_lines)
     seen_cats = set() 
     for objects_line in objects_lines:
         if objects_line == ")":
@@ -370,36 +345,28 @@ def no_repeat_object_lines(activity):
         seen_cats.add(cat)
 
 
-def no_qmarks_in_init(activity): 
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
-    with open(defn_fn, "r") as f:
-        defn = f.read() 
+def no_qmarks_in_init(defn): 
     init = defn.split("(:init")[1].split("(:goal")[0]
     assert "?" not in init, "Inappropriate ? in :init."
 
 
-def no_contradictory_init_atoms(activity):
-    __, __, init, __ = _get_defn_elements_from_file(activity)
+def no_contradictory_init_atoms(init):
     for literal in init: 
         if literal[0] == "not":
             assert literal[1] not in init, f"Contradictory init statements: {literal[1]}"
 
 
-def no_uncontrolled_category(activity):
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
-    with open(defn_fn, "r") as f:
-        defn=f.read()
+def no_uncontrolled_category(activity, defn):
     conds = bddl.activity.Conditions(activity, 0, "omnigibson", predefined_problem=defn)
     scope = bddl.activity.get_object_scope(conds)
-    init = bddl.activity.get_initial_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
+    bddl.activity.get_initial_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
     # Pretend scope has been filled 
     for name in scope: 
         scope[name] = DebugGenericObject(name)
-    goal = bddl.activity.get_goal_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
+    bddl.activity.get_goal_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
 
 
-def agent_present(activity):
-    __, __, init, __ = _get_defn_elements_from_file(activity)
+def agent_present(init):
     for literal in init: 
         if (literal[0] == "ontop") and (literal[1] == "agent.n.01_1"):
             break
@@ -488,8 +455,7 @@ def check_property_alignment(atom, syns_to_props):
     # TODO scene objects not being the moving input (first for rigid, second for substance) unless inroom 
 
 
-def synsets_properties_aligned(activity, syns_to_props):
-    __, __, init, goal = _get_defn_elements_from_file(activity)
+def synsets_properties_aligned(init, goal, syns_to_props):
     for literal in init: 
         init_atom = literal[1] if literal[0] == "not" else literal
         check_property_alignment(init_atom, syns_to_props)
@@ -498,8 +464,7 @@ def synsets_properties_aligned(activity, syns_to_props):
         check_property_alignment(goal_atom, syns_to_props)
 
 
-def no_unnecessary_specific_containers(activity, syns_to_props):
-    __, objects, init, goal = _get_defn_elements_from_file(activity)
+def no_unnecessary_specific_containers(objects, init, goal, syns_to_props):
     specific_fillable_containers = [obj_cat for obj_cat in objects.keys() if obj_cat != "agent.n.01" and "fillable" in syns_to_props[obj_cat] and is_specific_container_synset(obj_cat)]
     
     atoms = []
@@ -522,21 +487,23 @@ def no_unnecessary_specific_containers(activity, syns_to_props):
 
 # MAIN 
 
-def verify_definition(activity, csv=False):
-    with open(SYNS_TO_PROPS_JSON, "r") as f:
-        syns_to_props = json.load(f) 
-    object_list_correctly_formatted(activity)
-    all_objects_appropriate(activity)
-    all_objects_placed(activity)
-    future_and_real_present(activity)
-    no_repeat_object_lines(activity)
-    no_qmarks_in_init(activity)
-    no_contradictory_init_atoms(activity)
-    no_uncontrolled_category(activity)
-    all_synsets_valid(activity, syns_to_props)
-    synsets_properties_aligned(activity, syns_to_props)
-    no_unnecessary_specific_containers(activity, syns_to_props)
-    agent_present(activity)
+def verify_definition(activity, syns_to_props, csv=False):
+    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
+    with open(defn_fn, "r") as f:
+        defn = f.read() 
+    problem_name, objects, init, goal = _get_defn_elements_from_file(activity)
+    object_list_correctly_formatted(defn)
+    all_objects_appropriate(objects, init, goal)
+    all_objects_placed(init)
+    future_and_real_present(objects, init, goal)
+    no_repeat_object_lines(defn)
+    no_qmarks_in_init(defn)
+    no_contradictory_init_atoms(init)
+    no_uncontrolled_category(activity, defn)
+    all_synsets_valid(objects, init, goal, syns_to_props)
+    synsets_properties_aligned(init, goal, syns_to_props)
+    no_unnecessary_specific_containers(objects, init, goal, syns_to_props)
+    agent_present(init)
     problem_name_correct(activity)
     if csv:
         no_filled_in_tm_recipe_goal(activity)
@@ -545,15 +512,16 @@ def verify_definition(activity, csv=False):
 
 # Master planning sheet
 def batch_verify_all(csv=False): 
+    with open(SYNS_TO_PROPS_JSON, "r") as f:
+        syns_to_props = json.load(f) 
     for activity in sorted(os.listdir(PROBLEM_FILE_DIR)):
         if "-" in activity: continue        # TODO deal with these directories
         if not os.path.isdir(os.path.join(PROBLEM_FILE_DIR, activity)): continue
         print()
         print(activity)
-        count += 1
         if os.path.exists(os.path.join(CSVS_DIR, activity + ".csv")):
             try:
-                verify_definition(activity, csv=csv)
+                verify_definition(activity, syns_to_props, csv=csv)
             except FileNotFoundError:
                 print()
                 print("file not found for", activity)
@@ -567,7 +535,7 @@ def batch_verify_all(csv=False):
                     to_continue = input("continue? y/n: ")
                 continue
         else:
-            verify_definition(activity, csv=False)
+            verify_definition(activity, syns_to_props, csv=False)
 
 
 def unpack_nested_lines(sec):
