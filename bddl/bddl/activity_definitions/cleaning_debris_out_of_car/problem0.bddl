@@ -4,7 +4,7 @@
     (:objects
         car.n.01_1 - car.n.01
         driveway.n.01_1 - driveway.n.01
-        yogurt__cup.n.01_1 - yogurt__cup.n.01
+        cup__of__yogurt.n.01_1 - cup__of__yogurt.n.01
         bagged_chip.n.01_1 - bagged_chip.n.01
         vacuum.n.04_1 - vacuum.n.04
         floor.n.01_1 - floor.n.01
@@ -13,7 +13,7 @@
     
     (:init 
         (ontop car.n.01_1 driveway.n.01_1) 
-        (inside yogurt__cup.n.01_1 car.n.01_1) 
+        (inside cup__of__yogurt.n.01_1 car.n.01_1) 
         (inside bagged_chip.n.01_1 car.n.01_1) 
         (ontop vacuum.n.04_1 driveway.n.01_1)
         (inroom driveway.n.01_1 garden) 
@@ -24,7 +24,7 @@
     (:goal 
         (and 
             (not 
-                (inside ?yogurt__cup.n.01_1 ?car.n.01_1)
+                (inside ?cup__of__yogurt.n.01_1 ?car.n.01_1)
             )
             (not 
                 (inside ?bagged_chip.n.01_1 ?car.n.01_1)

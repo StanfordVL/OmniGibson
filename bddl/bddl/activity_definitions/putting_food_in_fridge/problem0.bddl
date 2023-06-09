@@ -3,12 +3,12 @@
 
     (:objects
         chicken.n.01_1 - chicken.n.01
-        milk__carton.n.01_1 - milk__carton.n.01
+        carton__of__milk.n.01_1 - carton__of__milk.n.01
         plate.n.04_1 - plate.n.04
         tupperware.n.01_1 - tupperware.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
-        orange_juice__carton.n.01_1 - orange_juice__carton.n.01
+        carton__of__orange_juice.n.01_1 - carton__of__orange_juice.n.01
         beefsteak_tomato.n.01_1 beefsteak_tomato.n.01_2 - beefsteak_tomato.n.01
         egg.n.02_1 egg.n.02_2 - egg.n.02
         water.n.06_1 - water.n.06
@@ -20,11 +20,11 @@
     )
     
     (:init 
-        (ontop milk__carton.n.01_1 breakfast_table.n.01_1) 
+        (ontop carton__of__milk.n.01_1 breakfast_table.n.01_1) 
         (ontop chicken.n.01_1 plate.n.04_1) 
         (cooked chicken.n.01_1)
         (ontop plate.n.04_1 breakfast_table.n.01_1)
-        (ontop orange_juice__carton.n.01_1 breakfast_table.n.01_1) 
+        (ontop carton__of__orange_juice.n.01_1 breakfast_table.n.01_1) 
         (ontop beefsteak_tomato.n.01_1 breakfast_table.n.01_1) 
         (ontop beefsteak_tomato.n.01_2 breakfast_table.n.01_1) 
         (ontop egg.n.02_1 breakfast_table.n.01_1) 
@@ -44,8 +44,8 @@
     
     (:goal 
         (and 
-            (inside ?milk__carton.n.01_1 ?electric_refrigerator.n.01_1) 
-            (inside ?orange_juice__carton.n.01_1 ?electric_refrigerator.n.01_1) 
+            (inside ?carton__of__milk.n.01_1 ?electric_refrigerator.n.01_1) 
+            (inside ?carton__of__orange_juice.n.01_1 ?electric_refrigerator.n.01_1) 
             (inside ?chicken.n.01_1 ?tupperware.n.01_1)
             (inside ?tupperware.n.01_1 ?electric_refrigerator.n.01_1)
             (forall 

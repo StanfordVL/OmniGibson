@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        sunscreen__bottle.n.01_1 - sunscreen__bottle.n.01
+        bottle__of__sunscreen.n.01_1 - bottle__of__sunscreen.n.01
         floor.n.01_1 - floor.n.01
         carryall.n.01_1 - carryall.n.01
         bath_towel.n.01_1 - bath_towel.n.01
@@ -16,7 +16,7 @@
         (ontop carryall.n.01_1 floor.n.01_1) 
         (ontop bath_towel.n.01_1 floor.n.01_1) 
         (ontop club_sandwich.n.01_1 carryall.n.01_1) 
-        (ontop sunscreen__bottle.n.01_1 floor.n.01_1) 
+        (ontop bottle__of__sunscreen.n.01_1 floor.n.01_1) 
         (ontop watermelon.n.02_1 club_sandwich.n.01_1) 
         (inroom floor.n.01_1 empty_room) 
         (inroom door.n.01_1 empty_room) 
@@ -28,7 +28,7 @@
             (folded ?bath_towel.n.01_1)
             (inside ?bath_towel.n.01_1 ?carryall.n.01_1)
             (inside ?club_sandwich.n.01_1 ?carryall.n.01_1)
-            (inside ?sunscreen__bottle.n.01_1 ?carryall.n.01_1)
+            (inside ?bottle__of__sunscreen.n.01_1 ?carryall.n.01_1)
             (inside ?watermelon.n.02_1 ?carryall.n.01_1)
             (nextto ?carryall.n.01_1 ?door.n.01_1)
         )

@@ -6,8 +6,8 @@
         coffee_table.n.01_1 - coffee_table.n.01
         frankfurter_bun.n.01_1 frankfurter_bun.n.01_2 - frankfurter_bun.n.01
         hotdog.n.02_1 hotdog.n.02_2 - hotdog.n.02
-        catsup__bottle.n.01_1 - catsup__bottle.n.01
-        mustard__bottle.n.01_1 - mustard__bottle.n.01
+        bottle__of__catsup.n.01_1 - bottle__of__catsup.n.01
+        bottle__of__mustard.n.01_1 - bottle__of__mustard.n.01
         bowl.n.01_1 - bowl.n.01
         vidalia_onion.n.01_1 vidalia_onion.n.01_2 - vidalia_onion.n.01
         diced__vidalia_onion.n.01_1 - diced__vidalia_onion.n.01
@@ -30,8 +30,8 @@
         (ontop sack.n.01_1 countertop.n.01_1)
         (inside hotdog.n.02_1 electric_refrigerator.n.01_1) 
         (inside hotdog.n.02_2 electric_refrigerator.n.01_1) 
-        (inside catsup__bottle.n.01_1 electric_refrigerator.n.01_1) 
-        (inside mustard__bottle.n.01_1 electric_refrigerator.n.01_1) 
+        (inside bottle__of__catsup.n.01_1 electric_refrigerator.n.01_1) 
+        (inside bottle__of__mustard.n.01_1 electric_refrigerator.n.01_1) 
         (inside vidalia_onion.n.01_1 bowl.n.01_1)
         (inside vidalia_onion.n.01_2 bowl.n.01_1)
         (ontop bowl.n.01_1 countertop.n.01_1)
@@ -85,8 +85,8 @@
                 (ontop ?tongs.n.01 ?plate.n.04)
             )
             (overlaid ?tablecloth.n.01_1 ?coffee_table.n.01_1) 
-            (ontop ?catsup__bottle.n.01_1 ?tablecloth.n.01_1)
-            (ontop ?mustard__bottle.n.01_1 ?tablecloth.n.01_1)
+            (ontop ?bottle__of__catsup.n.01_1 ?tablecloth.n.01_1)
+            (ontop ?bottle__of__mustard.n.01_1 ?tablecloth.n.01_1)
             (filled ?bowl.n.01_1 ?diced__vidalia_onion.n.01_1)
             (ontop ?bowl.n.01_1 ?tablecloth.n.01_1)
         )

@@ -12,9 +12,9 @@
         teacup.n.02_1 - teacup.n.02
         teapot.n.01_1 - teapot.n.01
         scone.n.01_1 - scone.n.01
-        jam__jar.n.01_1 - jam__jar.n.01
+        jar__of__jam.n.01_1 - jar__of__jam.n.01
         sugar_cookie.n.01_1 - sugar_cookie.n.01
-        honey__jar.n.01_1 - honey__jar.n.01
+        jar__of__honey.n.01_1 - jar__of__honey.n.01
         plate.n.04_1 - plate.n.04
         table_knife.n.01_1 table_knife.n.01_2 - table_knife.n.01
         tablefork.n.01_1 - tablefork.n.01
@@ -36,8 +36,8 @@
         (ontop tray.n.01_1 console_table.n.01_1) 
         (ontop teacup.n.02_1 console_table.n.01_1) 
         (ontop teapot.n.01_1 console_table.n.01_1) 
-        (ontop jam__jar.n.01_1 console_table.n.01_1) 
-        (ontop honey__jar.n.01_1 console_table.n.01_1) 
+        (ontop jar__of__jam.n.01_1 console_table.n.01_1) 
+        (ontop jar__of__honey.n.01_1 console_table.n.01_1) 
         (ontop table_knife.n.01_1 plate.n.04_1)
         (ontop table_knife.n.01_2 plate.n.04_1)
         (ontop tablefork.n.01_1 plate.n.04_1) 
@@ -62,15 +62,15 @@
             )
             (ontop ?scone.n.01_1 ?tray.n.01_1) 
             (ontop ?sugar_cookie.n.01_1 ?tray.n.01_1) 
-            (ontop ?honey__jar.n.01_1 ?tray.n.01_1) 
+            (ontop ?jar__of__honey.n.01_1 ?tray.n.01_1) 
             (exists 
                 (?table_knife.n.01 - table_knife.n.01)
-                (touching ?table_knife.n.01 ?honey__jar.n.01_1)
+                (touching ?table_knife.n.01 ?jar__of__honey.n.01_1)
             )
-            (ontop ?jam__jar.n.01_1 ?tray.n.01_1) 
+            (ontop ?jar__of__jam.n.01_1 ?tray.n.01_1) 
             (exists 
                 (?table_knife.n.01 - table_knife.n.01)
-                (touching ?table_knife.n.01 ?jam__jar.n.01_1)
+                (touching ?table_knife.n.01 ?jar__of__jam.n.01_1)
             )
             (ontop ?tray.n.01_1 ?breakfast_table.n.01_1) 
             (contains ?tray.n.01_2 ?diced__cheddar.n.01_1) 

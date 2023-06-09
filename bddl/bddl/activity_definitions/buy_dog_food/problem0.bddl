@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        dog_food__can.n.01_1 - dog_food__can.n.01
+        can__of__dog_food.n.01_1 - can__of__dog_food.n.01
         shelf.n.01_1 - shelf.n.01
         shopping_cart.n.01_1 - shopping_cart.n.01
         money.n.01_1 - money.n.01
@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (inside dog_food__can.n.01_1 shelf.n.01_1) 
+        (inside can__of__dog_food.n.01_1 shelf.n.01_1) 
         (inside money.n.01_1 shopping_cart.n.01_1) 
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shelf.n.01_1 grocery_store) 
@@ -23,7 +23,7 @@
     
     (:goal 
         (and 
-            (ontop ?dog_food__can.n.01_1 ?checkout.n.03_1) 
+            (ontop ?can__of__dog_food.n.01_1 ?checkout.n.03_1) 
             (ontop ?money.n.01_1 ?checkout.n.03_1)
         )
     )

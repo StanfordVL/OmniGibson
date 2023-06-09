@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        chocolate_box.n.01_1 chocolate_box.n.01_2 - chocolate_box.n.01
+        box__of__chocolates.n.01_1 box__of__chocolates.n.01_2 - box__of__chocolates.n.01
         carton.n.02_1 carton.n.02_2 - carton.n.02
         pop_bottle.n.01_1 pop_bottle.n.01_2 - pop_bottle.n.01
         chocolate_chip_cookie.n.01_1 chocolate_chip_cookie.n.01_2 - chocolate_chip_cookie.n.01
@@ -15,8 +15,8 @@
     )
     
     (:init 
-        (inside chocolate_box.n.01_1 carton.n.02_1) 
-        (inside chocolate_box.n.01_2 carton.n.02_1) 
+        (inside box__of__chocolates.n.01_1 carton.n.02_1) 
+        (inside box__of__chocolates.n.01_2 carton.n.02_1) 
         (inside pop_bottle.n.01_1 carton.n.02_1) 
         (inside pop_bottle.n.01_2 carton.n.02_1) 
         (inside chocolate_chip_cookie.n.01_1 carton.n.02_1) 
@@ -39,16 +39,16 @@
         (and
             (ontop ?cash_register.n.01_1 ?booth.n.01_1)
             (forall 
-                (?chocolate_box.n.01 - chocolate_box.n.01) 
-                (ontop ?chocolate_box.n.01 ?booth.n.01_1)
+                (?box__of__chocolates.n.01 - box__of__chocolates.n.01) 
+                (ontop ?box__of__chocolates.n.01 ?booth.n.01_1)
             ) 
-            (nextto ?chocolate_box.n.01_1 ?chocolate_box.n.01_2)
+            (nextto ?box__of__chocolates.n.01_1 ?box__of__chocolates.n.01_2)
             (exists 
                 (?price_tag.n.01 - price_tag.n.01)
                 (and
                     (exists
-                        (?chocolate_box.n.01 - chocolate_box.n.01)
-                        (touching ?price_tag.n.01 ?chocolate_box.n.01)
+                        (?box__of__chocolates.n.01 - box__of__chocolates.n.01)
+                        (touching ?price_tag.n.01 ?box__of__chocolates.n.01)
                     )
                 )
             )
