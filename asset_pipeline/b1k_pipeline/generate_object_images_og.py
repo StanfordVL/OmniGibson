@@ -25,7 +25,7 @@ def main():
     gm.DATASET_PATH = dataset_path
 
     # Create the scene config to load -- empty scene
-    cfg = {"scene": {"type": "Scene"}}
+    cfg = {"scene": {"type": "Scene", "floor_plane_visible": False}}
 
     # Create the environment
     env = og.Environment(configs=cfg)

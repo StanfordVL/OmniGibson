@@ -10,7 +10,7 @@ import tqdm
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
 BATCH_SIZE = 100
-
+WORKER_COUNT = 8
 
 def run_on_batch(dataset_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
@@ -45,9 +45,9 @@ def main():
             print("Launching cluster...")
             dask_client = Client(n_workers=0, host="", scheduler_port=8786)
             # subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh capri32.stanford.edu:8786"', shell=True, check=True)
-            subprocess.run('cd /scr/ig_pipeline/b1k_pipeline/docker; ./run_worker_local.sh cgokmen-lambda.stanford.edu:8786', shell=True, check=True)
+            subprocess.run(f'cd /scr/ig_pipeline/b1k_pipeline/docker; ./run_worker_local.sh {WORKER_COUNT} cgokmen-lambda.stanford.edu:8786', shell=True, check=True)
             print("Waiting for workers")
-            dask_client.wait_for_workers(8)
+            dask_client.wait_for_workers(WORKER_COUNT)
 
             # Start the batched run
             object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
@@ -69,8 +69,11 @@ def main():
             for future in tqdm.tqdm(as_completed(futures), total=len(futures)):
                 try:
                     future.result()
-                except Exception as e:
-                    print(e)
+                except subprocess.CalledProcessError as e:
+                    print("Error in worker")
+                    print("\n\nSTDOUT:\n" + e.stdout.decode("utf-8"))
+                    print("\n\nSTDERR:\n" + e.stderr.decode("utf-8"))
+                    raise e
 
             # Move the USDs to the output FS
             print("Copying USDs to output FS...")

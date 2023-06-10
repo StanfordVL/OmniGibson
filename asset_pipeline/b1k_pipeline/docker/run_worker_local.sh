@@ -142,20 +142,29 @@ MOUNT_KWARGS="${MOUNT_KWARGS:1}"
 
 
 # Create the image if it doesn't already exist
-for i in {1..8}
+WORKER_CNT=$1; shift
+for ((i = 1 ; i <= $WORKER_CNT ; i++));
 do
     CONTAINER_NAME=ig_pipeline_${i}
     echo "Creating container ${CONTAINER_NAME}..."
-    enroot create --force --name ${CONTAINER_NAME} ${SQSH_SOURCE}
+    # enroot create --force --name ${CONTAINER_NAME} ${SQSH_SOURCE}
+
+    if [ `expr $i % 2` == 0 ]
+    then
+        GPU=0
+    else
+        GPU=1
+    fi
 
     echo "Launching job"
-    echo ${MOUNT_KWARGS}
+    export ENROOT_RESTRICT_DEV=y
     enroot start \
         --root \
         --rw \
         ${ENV_KWARGS} \
+        --env OMNIGIBSON_GPU=${GPU} \
         ${MOUNT_KWARGS} \
-        ${CONTAINER_NAME} $@ &
+        ${CONTAINER_NAME} $@ &> /dev/null &
 done
 
 # Uncomment this to remove the image after
