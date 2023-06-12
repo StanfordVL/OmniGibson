@@ -44,7 +44,7 @@
                         (?steak.n.01 - steak.n.01)
                         (and
                             (inside ?steak.n.01 ?tupperware.n.01)
-                            (overlaid ?wax_paper.n.01 ?steak.n.01_1)
+                            (ontop ?wax_paper.n.01 ?steak.n.01_1)
                         )
                     )
                 )
@@ -57,7 +57,7 @@
                         (?chicken.n.01 - chicken.n.01)
                         (and
                             (inside ?chicken.n.01 ?tupperware.n.01)
-                            (overlaid ?wax_paper.n.01 ?chicken.n.01)
+                            (ontop ?wax_paper.n.01 ?chicken.n.01)
                         )
                     )
                 )

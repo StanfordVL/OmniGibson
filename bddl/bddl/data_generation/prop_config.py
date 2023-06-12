@@ -34,4 +34,5 @@ INTERNAL_PROP_NAMES = [
     "needsOrientation",
     "waterCook",
     "mixingTool"
+    "sceneObject"
 ]

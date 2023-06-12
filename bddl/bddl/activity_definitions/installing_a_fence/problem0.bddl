@@ -3,15 +3,15 @@
 
     (:objects
         floor.n.01_1 - floor.n.01
-        house_paint.n.01_1 - house_paint.n.01
-        house_paint__can.n.01_1 - house_paint__can.n.01
+        spray_paint.n.01_1 - spray_paint.n.01
+        spray_paint__can.n.01_1 - spray_paint__can.n.01
         rail_fence.n.01_1 - rail_fence.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (filled house_paint__can.n.01_1 house_paint.n.01_1) 
-        (ontop house_paint__can.n.01_1 floor.n.01_1)
+        (insource spray_paint__can.n.01_1 spray_paint.n.01_1) 
+        (ontop spray_paint__can.n.01_1 floor.n.01_1)
         (ontop rail_fence.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -19,10 +19,10 @@
     
     (:goal 
         (and 
-            (covered ?rail_fence.n.01_1 ?house_paint.n.01_1) 
+            (covered ?rail_fence.n.01_1 ?spray_paint.n.01_1) 
             (ontop ?rail_fence.n.01_1 ?floor.n.01_1) 
             (not 
-                (covered ?floor.n.01_1 ?house_paint.n.01_1)
+                (covered ?floor.n.01_1 ?spray_paint.n.01_1)
             ) 
         )
     )

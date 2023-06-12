@@ -12,7 +12,6 @@
     
     (:init 
         (covered air_conditioner.n.01_1 dust.n.01_1) 
-        (toggled_on rag.n.01_1) 
         (not 
             (toggled_on air_conditioner.n.01_1)
         ) 

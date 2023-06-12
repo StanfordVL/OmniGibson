@@ -18,7 +18,7 @@
     
     (:init 
         (ontop toaster_oven.n.01_1 countertop.n.01_1) 
-        (filled detergent__atomizer.n.01_1 detergent.n.02_1) 
+        (insource detergent__atomizer.n.01_1 detergent.n.02_1) 
         (covered toaster_oven.n.01_1 crumb.n.03_1)
         (covered toaster_oven.n.01_1 stain.n.01_1)
         (inside toast.n.01_1 toaster_oven.n.01_1)
