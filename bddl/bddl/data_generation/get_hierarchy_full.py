@@ -19,7 +19,7 @@ def add_igibson_objects(node, synset_to_cat):
   '''
   # categories = 
   if node["name"] in synset_to_cat:
-    node["igibson_categories"] = sorted(synset_to_cat[node["name"]])
+    node["categories"] = sorted(synset_to_cat[node["name"]])
 
   if "children" in node:
     for child_node in node["children"]:
