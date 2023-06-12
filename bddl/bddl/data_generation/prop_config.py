@@ -33,5 +33,6 @@ INTERNAL_PROP_NAMES = [
     "particleSource",
     "needsOrientation",
     "waterCook",
+    "mixingTool",
     "sceneObject"
 ]
