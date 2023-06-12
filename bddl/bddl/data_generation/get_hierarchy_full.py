@@ -29,7 +29,6 @@ def add_igibson_objects(node, synset_to_cat):
 def add_path(path, hierarchy):
   if not path: 
     return 
-  # print("Path is nontrivial")
   synset = path[-1]
   if "children" not in hierarchy:
     hierarchy["children"] = []
