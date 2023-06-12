@@ -7,7 +7,7 @@ from IPython import embed
 import bddl
 
 DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
-    bddl.__package__, "generated_data/output_hierarchy.json")
+    bddl.__package__, "generated_data/output_hierarchy_properties.json")
 
 
 class ObjectTaxonomy(object):
@@ -37,7 +37,7 @@ class ObjectTaxonomy(object):
                         next_nodes.append((child, node))
                         children_names.add(child['name'])
                 taxonomy.add_node(node['name'],
-                                  categories=node['categories'],
+                                  categories=node.get('categories', set()),
                                   abilities=node['abilities'])
                 for child_name in children_names:
                     taxonomy.add_edge(node['name'], child_name)
