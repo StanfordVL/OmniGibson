@@ -5,24 +5,24 @@
         box__of__chocolates.n.01_1 box__of__chocolates.n.01_2 - box__of__chocolates.n.01
         carton.n.02_1 carton.n.02_2 - carton.n.02
         pop_bottle.n.01_1 pop_bottle.n.01_2 - pop_bottle.n.01
-        cookie.n.01_1 cookie.n.01_2 - cookie.n.01
+        chocolate_chip_cookie.n.01_1 chocolate_chip_cookie.n.01_2 - chocolate_chip_cookie.n.01
         cash_register.n.01_1 - cash_register.n.01
         booth.n.01_1 - booth.n.01
-        candy.n.01_1 candy.n.01_2 - candy.n.01
+        box__of__candy.n.01_1 box__of__candy.n.01_2 - box__of__candy.n.01
         floor.n.01_1 - floor.n.01
         price_tag.n.01_1 price_tag.n.01_2 price_tag.n.01_3 price_tag.n.01_4 - price_tag.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (inside box__of__chocolates.n.01_1 carton.n.02_1)
-        (inside box__of__chocolates.n.01_2 carton.n.02_1)
+        (inside box__of__chocolates.n.01_1 carton.n.02_1) 
+        (inside box__of__chocolates.n.01_2 carton.n.02_1) 
         (inside pop_bottle.n.01_1 carton.n.02_1) 
         (inside pop_bottle.n.01_2 carton.n.02_1) 
-        (inside cookie.n.01_1 carton.n.02_1) 
-        (inside cookie.n.01_2 carton.n.02_1) 
-        (inside candy.n.01_1 carton.n.02_1) 
-        (inside candy.n.01_2 carton.n.02_1) 
+        (inside chocolate_chip_cookie.n.01_1 carton.n.02_1) 
+        (inside chocolate_chip_cookie.n.01_2 carton.n.02_1) 
+        (inside box__of__candy.n.01_1 carton.n.02_1) 
+        (inside box__of__candy.n.01_2 carton.n.02_1) 
         (inside cash_register.n.01_1 carton.n.02_2)
         (ontop carton.n.02_1 floor.n.01_1) 
         (ontop carton.n.02_2 floor.n.01_1) 
@@ -39,7 +39,7 @@
         (and
             (ontop ?cash_register.n.01_1 ?booth.n.01_1)
             (forall 
-                (?box__of__chocolates.n.01 - box__of__chocolates.n.01)
+                (?box__of__chocolates.n.01 - box__of__chocolates.n.01) 
                 (ontop ?box__of__chocolates.n.01 ?booth.n.01_1)
             ) 
             (nextto ?box__of__chocolates.n.01_1 ?box__of__chocolates.n.01_2)
@@ -67,30 +67,30 @@
                 )
             )
             (forall 
-                (?cookie.n.01 - cookie.n.01) 
-                (ontop ?cookie.n.01 ?booth.n.01_1)
+                (?chocolate_chip_cookie.n.01 - chocolate_chip_cookie.n.01) 
+                (ontop ?chocolate_chip_cookie.n.01 ?booth.n.01_1)
             ) 
-            (nextto ?cookie.n.01_1 ?cookie.n.01_2)
+            (nextto ?chocolate_chip_cookie.n.01_1 ?chocolate_chip_cookie.n.01_2)
             (exists 
                 (?price_tag.n.01 - price_tag.n.01)
                 (and
                     (exists
-                        (?cookie.n.01 - cookie.n.01)
-                        (touching ?price_tag.n.01 ?cookie.n.01)
+                        (?chocolate_chip_cookie.n.01 - chocolate_chip_cookie.n.01)
+                        (touching ?price_tag.n.01 ?chocolate_chip_cookie.n.01)
                     )
                 )
             )
             (forall 
-                (?candy.n.01 - candy.n.01) 
-                (ontop ?candy.n.01 ?booth.n.01_1)
+                (?box__of__candy.n.01 - box__of__candy.n.01) 
+                (ontop ?box__of__candy.n.01 ?booth.n.01_1)
             ) 
-            (nextto ?candy.n.01_1 ?candy.n.01_2)
+            (nextto ?box__of__candy.n.01_1 ?box__of__candy.n.01_2)
             (exists 
                 (?price_tag.n.01 - price_tag.n.01)
                 (and
                     (exists
-                        (?candy.n.01 - candy.n.01)
-                        (touching ?price_tag.n.01 ?candy.n.01)
+                        (?box__of__candy.n.01 - box__of__candy.n.01)
+                        (touching ?price_tag.n.01 ?box__of__candy.n.01)
                     )
                 )
             )

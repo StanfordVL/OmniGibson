@@ -4,7 +4,7 @@
     (:objects
      	chip.n.04_1 chip.n.04_2 - chip.n.04
     	bed.n.01_1 - bed.n.01
-    	candy.n.01_1 candy.n.01_2 - candy.n.01
+    	packaged__chocolate_bar.n.01_1 packaged__chocolate_bar.n.01_2 - packaged__chocolate_bar.n.01
     	jerky.n.01_1 jerky.n.01_2 - jerky.n.01
     	chocolate_bar.n.01_1 - chocolate_bar.n.01
     	granola_bar.n.01_1 granola_bar.n.01_2 - granola_bar.n.01
@@ -20,8 +20,8 @@
     (:init 
         (ontop chip.n.04_1 bed.n.01_1) 
         (ontop chip.n.04_2 bed.n.01_1) 
-        (ontop candy.n.01_1 bed.n.01_1) 
-        (ontop candy.n.01_2 bed.n.01_1) 
+        (ontop packaged__chocolate_bar.n.01_1 bed.n.01_1) 
+        (ontop packaged__chocolate_bar.n.01_2 bed.n.01_1) 
         (ontop jerky.n.01_1 bed.n.01_1) 
         (ontop jerky.n.01_2 bed.n.01_1) 
         (ontop chocolate_bar.n.01_1 bed.n.01_1) 
@@ -45,8 +45,8 @@
                 (nextto ?chip.n.04 ?bed.n.01_1)
             ) 
             (forall 
-                (?candy.n.01 - candy.n.01) 
-                (inside ?candy.n.01 ?cabinet.n.01_1)
+                (?packaged__chocolate_bar.n.01 - packaged__chocolate_bar.n.01) 
+                (inside ?packaged__chocolate_bar.n.01 ?cabinet.n.01_1)
             ) 
             (forall 
                 (?jerky.n.01 - jerky.n.01) 

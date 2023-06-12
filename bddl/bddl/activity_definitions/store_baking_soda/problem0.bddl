@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        sodium_carbonate__jar.n.01_1 sodium_carbonate__jar.n.01_2 - sodium_carbonate__jar.n.01
+        jar__of__sodium_carbonate.n.01_1 jar__of__sodium_carbonate.n.01_2 - jar__of__sodium_carbonate.n.01
         countertop.n.01_1 - countertop.n.01
         cabinet.n.01_1 - cabinet.n.01
         floor.n.01_1 - floor.n.01
@@ -10,8 +10,8 @@
     )
     
     (:init 
-        (ontop sodium_carbonate__jar.n.01_1 countertop.n.01_1) 
-        (ontop sodium_carbonate__jar.n.01_2 countertop.n.01_1) 
+        (ontop jar__of__sodium_carbonate.n.01_1 countertop.n.01_1) 
+        (ontop jar__of__sodium_carbonate.n.01_2 countertop.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -21,10 +21,10 @@
     (:goal 
         (and 
             (forall 
-                (?sodium_carbonate__jar.n.01 - sodium_carbonate__jar.n.01)
-                (inside ?sodium_carbonate__jar.n.01 ?cabinet.n.01_1)
+                (?jar__of__sodium_carbonate.n.01 - jar__of__sodium_carbonate.n.01)
+                (inside ?jar__of__sodium_carbonate.n.01 ?cabinet.n.01_1)
             )
-            (nextto ?sodium_carbonate__jar.n.01_2 ?sodium_carbonate__jar.n.01_1)
+            (nextto ?jar__of__sodium_carbonate.n.01_2 ?jar__of__sodium_carbonate.n.01_1)
         )
     )
 )

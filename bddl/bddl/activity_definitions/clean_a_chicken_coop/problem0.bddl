@@ -20,9 +20,6 @@
         (ontop chicken_coop.n.01_1 floor.n.01_1) 
         (insource watering_can.n.01_1 water.n.06_1) 
         (ontop watering_can.n.01_1 floor.n.01_1) 
-        (not
-            (toggled_on watering_can.n.01_1) 
-        )
         (ontop rag.n.01_1 chicken_coop.n.01_1) 
         (not
             (covered chicken_coop.n.01_1 detergent.n.02_1) 

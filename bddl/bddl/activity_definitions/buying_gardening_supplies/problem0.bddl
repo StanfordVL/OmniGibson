@@ -11,7 +11,7 @@
         money.n.01_1 money.n.01_2 money.n.01_3 - money.n.01
         shears.n.01_1 - shears.n.01
         shovel.n.01_1 - shovel.n.01
-        mulch__bag.n.01_1 - mulch__bag.n.01
+        bag__of__mulch.n.01_1 - bag__of__mulch.n.01
         fertilizer__atomizer.n.01_1 - fertilizer__atomizer.n.01
         pot_plant.n.01_1 pot_plant.n.01_2 pot_plant.n.01_3 - pot_plant.n.01
         floor.n.01_1 - floor.n.01
@@ -27,7 +27,7 @@
         (ontop pruner.n.02_1 shelf.n.01_1) 
         (ontop shears.n.01_1 shelf.n.01_1) 
         (ontop shovel.n.01_1 floor.n.01_1) 
-        (ontop mulch__bag.n.01_1 shelf.n.01_2) 
+        (ontop bag__of__mulch.n.01_1 shelf.n.01_2) 
         (ontop fertilizer__atomizer.n.01_1 shelf.n.01_2) 
         (ontop pot_plant.n.01_1 shelf.n.01_3) 
         (ontop pot_plant.n.01_2 shelf.n.01_3) 
@@ -48,7 +48,7 @@
             (ontop ?pruner.n.02_1 ?checkout.n.03_1) 
             (ontop ?shears.n.01_1 ?checkout.n.03_1) 
             (nextto ?shovel.n.01_1 ?checkout.n.03_1) 
-            (nextto ?mulch__bag.n.01_1 ?checkout.n.03_1) 
+            (nextto ?bag__of__mulch.n.01_1 ?checkout.n.03_1) 
             (ontop ?fertilizer__atomizer.n.01_1 ?checkout.n.03_1) 
             (ontop ?pot_plant.n.01_1 ?checkout.n.03_1) 
             (ontop ?pot_plant.n.01_2 ?checkout.n.03_1) 

@@ -108,7 +108,7 @@
                     )
                     (contains ?casserole.n.02 ?cooked__diced__broccoli.n.01_1)
                     (not 
-                        (contains ?casserole.n.02 ?chicken_leg.n.01_1)
+                        (inside ?chicken_leg.n.01_1 ?casserole.n.02)
                     )
                     (not 
                         (contains ?casserole.n.02 ?cooked__quinoa.n.01_1)

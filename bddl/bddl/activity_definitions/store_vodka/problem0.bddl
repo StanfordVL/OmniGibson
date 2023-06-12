@@ -2,15 +2,15 @@
     (:domain omnigibson)
 
     (:objects
-     	vodka__bottle.n.01_1 vodka__bottle.n.01_2 - vodka__bottle.n.01
+     	bottle__of__vodka.n.01_1 bottle__of__vodka.n.01_2 - bottle__of__vodka.n.01
     	floor.n.01_1 - floor.n.01
     	cabinet.n.01_1 - cabinet.n.01
     	agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop vodka__bottle.n.01_1 floor.n.01_1) 
-        (ontop vodka__bottle.n.01_2 floor.n.01_1) 
+        (ontop bottle__of__vodka.n.01_1 floor.n.01_1) 
+        (ontop bottle__of__vodka.n.01_2 floor.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -19,10 +19,10 @@
     (:goal 
         (and 
             (forall 
-                (?vodka__bottle.n.01 - vodka__bottle.n.01) 
-                (inside ?vodka__bottle.n.01 ?cabinet.n.01_1)
+                (?bottle__of__vodka.n.01 - bottle__of__vodka.n.01) 
+                (inside ?bottle__of__vodka.n.01 ?cabinet.n.01_1)
             ) 
-            (nextto ?vodka__bottle.n.01_1 ?vodka__bottle.n.01_2)
+            (nextto ?bottle__of__vodka.n.01_1 ?bottle__of__vodka.n.01_2)
         )
     )
 )
