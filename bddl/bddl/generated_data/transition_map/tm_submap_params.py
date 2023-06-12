@@ -48,19 +48,6 @@ TM_SUBMAPS_TO_PARAMS = {
         "output_objects": {
             "required"
         }
-    },
-    # "water_cook": {
-    #     "timesteps": {
-    #         "optional"
-    #     }
-    # },
-    # "water_cook_ricecooker": {
-    #     "machine": {
-    #         "optional"
-    #     },
-    #     "timesteps": {
-    #         "optional"
-    #     }
-    # }
+    }
 }
 
