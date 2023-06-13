@@ -1,0 +1,265 @@
+# ingredients --> cappuccino - make_a_cappuccino,,
+input,,
+real,espresso.n.01_(i),
+real,cane_sugar.n.01_(j),
+real,whole_milk.n.01_(k),
+real,foam.n.01_(l),
+transition requirement,,
+real,[fillable]_(m),
+real,[mixing_stick]_(n),
+contains,[fillable]_(m),espresso.n.01_(i)
+contains,[fillable]_(m),cane_sugar.n.01_(j)
+contains,[fillable]_(m),whole_milk.n.01_(k)
+contains,[fillable]_(m),foam.n.01_(l)
+part_inside,[mixing_stick]_(n),[fillable]_(m)
+output,,
+real,cappuccino.n.01_(n),
+contains,[fillable]_(m),cappuccino.n.01_(n)
+,,
+# ingredients --> vinegar cleaning solution - make_a_vinegar_cleaning_solution,,
+input,,
+real,vinegar.n.01_(i),
+real,water.n.06_(j),
+real,lemon_juice.n.01_(k),
+transition requirement,,
+real,[fillable]_(l),
+real,[mixing_stick]_(m),
+contains,[fillable]_(l),vinegar.n.01_(i)
+contains,[fillable]_(l),water.n.06_(j)
+contains,[fillable]_(l),lemon_juice.n.01_(k)
+part_inside,[mixing_stick]_(m),[fillable]_(l)
+output,,
+real,vinegar_cleaning_solution.n.01_(n),
+contains,[fillable]_(m),vinegar_cleaning_solution.n.01_(n)
+,,
+# ingredients --> cafe au lait - make_an_iced_espresso,,
+input,,
+real,espresso.n.01_(i),
+real,low-fat_milk.n.01_(j),
+real,sugar_syrup.n.01_(k),
+transition requirement,,
+real,[fillable]_(l),
+real,[mixing_stick]_(m),
+contains,[fillable]_(l),espresso.n.01_(i)
+contains,[fillable]_(l),low-fat_milk.n.01_(j)
+contains,[fillable]_(l),sugar_syrup.n.01_(k)
+part_inside,[mixing_stick]_(m),[fillable]_(l)
+output,,
+real,cafe_au_lait.n.01_(n),
+contains,[fillable]_(l),cafe_au_lait.n.01_(n)
+,,
+"# ingredients --> cake mix, make_cake_mix",,
+input,,
+real,flour.n.01_(i),
+real,baking_powder.n.01_(j),
+real,salt.n.02_(k),
+real,granulated_sugar.n.01_(l),
+real,sodium_carbonate.n.01_(m),
+transition requirement,,
+real,[fillable]_(n),
+real,[mixing_stick]_(o),
+contains,[fillable]_(n),flour.n.01_(i)
+contains,[fillable]_(n),baking_powder.n.01_(j)
+contains,[fillable]_(n),salt.n.02_(k)
+contains,[fillable]_(n),granulated_sugar.n.01_(l)
+contains,[fillable]_(n),sodium_carbonate.n.01_(m)
+part_inside,[mixing_stick]_(o),[fillable]_(n)
+output,,
+real,cake_mix.n.01_(p),
+contains,[fillable]_(n),cake_mix.n.01_(p)
+,,
+"# ingredients --> cinnamon sugar, make_cinnamon_sugar",,
+input,,
+real,cinnamon.n.03_(i),
+real,granulated_sugar.n.01_(j),
+transition requirement,,
+real,[fillable]_(k),
+real,[mixing_stick]_(l),
+contains,[fillable]_(n),cinnamon.n.03_(i)
+contains,[fillable]_(n),granulated_sugar.n.01_(j)
+part_inside,[mixing_stick]_(l),[fillable]_(k)
+output,,
+real,cinnamon_sugar.n.01_(m),
+contains,[fillable]_(n),cinnamon_sugar.n.01_(m)
+,,
+"# ingredients --> fruit punch, make_citrus_punch",,
+input,,
+real,orange_juice.n.01_(i),
+real,ginger_beer.n.01_(j),
+real,lemonade.n.01_(k),
+real,pineapple_juice.n.01_(l),
+transition requirement,,
+real,[fillable]_(m),
+real,[mixing_stick]_(n),
+contains,[fillable]_(m),orange_juice.n.01_(i)
+contains,[fillable]_(m),ginger_beer.n.01_(j)
+contains,[fillable]_(m),lemonade.n.01_(k)
+contains,[fillable]_(m),pineapple_juice.n.01_(l)
+part_inside,[mixing_stick]_(n),[fillable]_(m)
+output,,
+real,fruit_punch.n.01_(o),
+contains,[fillable]_(m),fruit_punch.n.01_(o)
+,,
+"# ingredients --> cream soda, make_cream_soda",,
+input,,
+real,soda_water.n.01_(i),
+real,heavy_cream.n.01_(j),
+real,sugar_syrup.n.01_(k),
+transition requirement,,
+real,[fillable]_(l),
+real,[mixing_stick]_(m),
+contains,[fillable]_(l),soda_water.n.01_(i)
+contains,[fillable]_(l),heavy_cream.n.01_(j)
+contains,[fillable]_(l),sugar_syrup.n.01_(k)
+part_inside,[mixing_stick]_(m),[fillable]_(l)
+output,,
+real,cream_soda.n.01_(n),
+contains,[fillable]_(l),cream_soda.n.01_(n)
+,,
+"# ingredients --> green tea, make_green_tea_latte",,
+input,,
+real,water.n.06_(i),
+real,green_tea.n.01_(i),
+transition requirement,,
+real,[fillable]_(k),
+real,[mixing_stick]_(l),
+contains,[fillable]_(k),water.n.06_(i)
+contains,[fillable]_(k),green_tea.n.01_(i)
+part_inside,[mixing_stick]_(l),[fillable]_(k)
+output,,
+real,tea.n.01_(m),
+contains,[fillable]_(k),tea.n.01_(m)
+,,
+"# ingredients --> green tea latte, make_green_tea_latte",,
+input,,
+real,low-fat_milk.n.01_(i),
+real,tea.n.01_(j),
+transition requirement,,
+real,[fillable]_(k),
+real,[mixing_stick]_(l),
+contains,[fillable]_(k),low-fat_milk.n.01_(i)
+contains,[fillable]_(k),tea.n.01_(j)
+part_inside,[mixing_stick]_(l),[fillable]_(k)
+output,,
+real,green_tea_latte.n.01_(m),
+contains,[fillable]_(k),green_tea_latte.n.01_(m)
+,,
+"# ingredients --> drip coffee, make_instant_coffee",,
+input,,
+real,instant_coffee.n.01_(i),
+real,water.n.06_(j),
+transition requirement,,
+real,[fillable]_(k),
+real,[mixing_stick]_(l),
+contains,[fillable]_(k),instant_coffee.n.01_(i)
+contains,[fillable]_(k),water.n.06_(j)
+part_inside,[mixing_stick]_(l),[fillable]_(k)
+output,,
+real,drip_coffee.n.01_(m),
+contains,[fillable]_(k),drip_coffee.n.01_(m)
+,,
+# ingredients --> lemon stain remover,,
+input,,
+real,lemon_juice.n.01_(i),
+real,vinegar.n.01_(j),
+real,sodium_carbonate.n.01_(k),
+transition requirement,,
+real,[fillable]_(l),
+real,[mixing_stick]_(m),
+contains,[fillable]_(l),lemon_juice.n.01_(i)
+contains,[fillable]_(l),vinegar.n.01_(j)
+contains,[fillable]_(l),sodium_carbonate.n.01_(k)
+part_inside,[mixing_stick]_(m),[fillable]_(l)
+output,,
+real,lemon_stain_remover.n.01_(n),
+contains,[fillable]_(l),lemon_stain_remover.n.01_(n)
+,,
+"# ingredients --> lemonade, make_lemonade",,
+input,,
+real,water.n.06_(i),
+real,granulated_sugar.n.01_(j),
+real,lemon_juice.n.01_(k),
+transition requirement,,
+real,[fillable]_(l),
+real,[mixing_stick]_(m),
+contains,[fillable]_(l),water.n.06_(i)
+contains,[fillable]_(l),granulated_sugar.n.01_(j)
+contains,[fillable]_(l),lemon_juice.n.01_(k)
+part_inside,[mixing_stick]_(m),[fillable]_(l)
+output,,
+real,lemonade.n.01_(n),
+contains,[fillable]_(l),lemonade.n.01_(n)
+,,
+"# ingredients --> limeade, make_limeade",,
+input,,
+real,water.n.06_(i),
+real,granulated_sugar.n.01_(j),
+real,lime_juice.n.01_(k),
+transition requirement,,
+real,[fillable]_(l),
+real,[mixing_stick]_(m),
+contains,[fillable]_(l),water.n.06_(i)
+contains,[fillable]_(l),granulated_sugar.n.01_(j)
+contains,[fillable]_(l),lime_juice.n.01_(k)
+part_inside,[mixing_stick]_(m),[fillable]_(l)
+output,,
+real,limeade.n.01_(n),
+contains,[fillable]_(l),limeade.n.01_(n)
+,,
+"# ingredients --> poultry seasoning, make_poultry_seasoning",,
+input,,
+real,rosemary.n.02_(i),
+real,sage.n.02_(j),
+real,thyme.n.01_(k),
+real,black_pepper.n.02_(l),
+real,nutmeg.n.02_(m),
+transition requirement,,
+real,[fillable]_(n),
+real,[mixing_stick]_(o),
+contains,[fillable]_(n),rosemary.n.02_(i)
+contains,[fillable]_(n),sage.n.02_(j)
+contains,[fillable]_(n),thyme.n.01_(k)
+contains,[fillable]_(n),black_pepper.n.02_(l)
+contains,[fillable]_(n),nutmeg.n.02_(m)
+part_inside,[mixing_stick]_(o),[fillable]_(n)
+output,,
+real,poultry_seasoning.n.01_(p),
+contains,[fillable]_(n),poultry_seasoning.n.01_(p)
+,,
+"# ingredients --> pumpkin pie spice, make_pumpkin_pie_spice",,
+input,,
+real,cinnamon.n.03_(i),
+real,ginger.n.02_(j),
+real,nutmeg.n.02_(k),
+real,allspice.n.03_(l),
+real,clove.n.04_(m),
+transition requirement,,
+real,[fillable]_(n),
+real,[mixing_stick]_(o),
+contains,[fillable]_(n),cinnamon.n.03_(i)
+contains,[fillable]_(n),ginger.n.02_(j)
+contains,[fillable]_(n),nutmeg.n.02_(k)
+contains,[fillable]_(n),allspice.n.03_(l)
+contains,[fillable]_(n),clove.n.04_(m)
+part_inside,[mixing_stick]_(o),[fillable]_(n)
+output,,
+real,pumpkin_pie_spice.n.01_(p),
+contains,[fillable]_(n),pumpkin_pie_spice.n.01_(p)
+,,
+"# ingredients --> hot toddy, make_warm_drinks_for_the_holidays",,
+input,,
+real,bourbon.n.02_(i),
+real,honey.n.01_(j),
+real,lemon_juice.n.01_(k),
+real,water.n.06_(l),
+transition requirement,,
+real,[fillable]_(m),
+real,[mixing_stick]_(n),
+contains,[fillable]_(m),bourbon.n.02_(i)
+contains,[fillable]_(m),honey.n.01_(j)
+contains,[fillable]_(m),lemon_juice.n.01_(k)
+contains,[fillable]_(m),water.n.06_(l)
+part_inside,[mixing_stick]_(n),[fillable]_(m)
+output,,
+real,hot_toddy.n.01_(o),
+contains,[fillable]_(m),hot_toddy.n.01_(o)

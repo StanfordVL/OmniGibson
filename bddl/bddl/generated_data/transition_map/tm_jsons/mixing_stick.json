@@ -1,0 +1,186 @@
+[
+    {
+        "rule_name": "# ingredients --> cappuccino - make_a_cappuccino",
+        "input_objects": [
+            "real espresso.n.01_(i)",
+            "real cane_sugar.n.01_(j)",
+            "real whole_milk.n.01_(k)",
+            "real foam.n.01_(l)"
+        ],
+        "output_objects": [
+            "real cappuccino.n.01_(n)",
+            "contains [fillable]_(m) cappuccino.n.01_(n)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> vinegar cleaning solution - make_a_vinegar_cleaning_solution",
+        "input_objects": [
+            "real vinegar.n.01_(i)",
+            "real water.n.06_(j)",
+            "real lemon_juice.n.01_(k)"
+        ],
+        "output_objects": [
+            "real vinegar_cleaning_solution.n.01_(n)",
+            "contains [fillable]_(m) vinegar_cleaning_solution.n.01_(n)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> cafe au lait - make_an_iced_espresso",
+        "input_objects": [
+            "real espresso.n.01_(i)",
+            "real low-fat_milk.n.01_(j)",
+            "real sugar_syrup.n.01_(k)"
+        ],
+        "output_objects": [
+            "real cafe_au_lait.n.01_(n)",
+            "contains [fillable]_(l) cafe_au_lait.n.01_(n)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> cake mix, make_cake_mix",
+        "input_objects": [
+            "real flour.n.01_(i)",
+            "real baking_powder.n.01_(j)",
+            "real salt.n.02_(k)",
+            "real granulated_sugar.n.01_(l)",
+            "real sodium_carbonate.n.01_(m)"
+        ],
+        "output_objects": [
+            "real cake_mix.n.01_(p)",
+            "contains [fillable]_(n) cake_mix.n.01_(p)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> cinnamon sugar, make_cinnamon_sugar",
+        "input_objects": [
+            "real cinnamon.n.03_(i)",
+            "real granulated_sugar.n.01_(j)"
+        ],
+        "output_objects": [
+            "real cinnamon_sugar.n.01_(m)",
+            "contains [fillable]_(n) cinnamon_sugar.n.01_(m)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> fruit punch, make_citrus_punch",
+        "input_objects": [
+            "real orange_juice.n.01_(i)",
+            "real ginger_beer.n.01_(j)",
+            "real lemonade.n.01_(k)",
+            "real pineapple_juice.n.01_(l)"
+        ],
+        "output_objects": [
+            "real fruit_punch.n.01_(o)",
+            "contains [fillable]_(m) fruit_punch.n.01_(o)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> cream soda, make_cream_soda",
+        "input_objects": [
+            "real soda_water.n.01_(i)",
+            "real heavy_cream.n.01_(j)",
+            "real sugar_syrup.n.01_(k)"
+        ],
+        "output_objects": [
+            "real cream_soda.n.01_(n)",
+            "contains [fillable]_(l) cream_soda.n.01_(n)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> green tea, make_green_tea_latte",
+        "input_objects": [
+            "real water.n.06_(i)",
+            "real green_tea.n.01_(i)"
+        ],
+        "output_objects": [
+            "real tea.n.01_(m)",
+            "contains [fillable]_(k) tea.n.01_(m)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> green tea latte, make_green_tea_latte",
+        "input_objects": [
+            "real low-fat_milk.n.01_(i)",
+            "real tea.n.01_(j)"
+        ],
+        "output_objects": [
+            "real green_tea_latte.n.01_(m)",
+            "contains [fillable]_(k) green_tea_latte.n.01_(m)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> drip coffee, make_instant_coffee",
+        "input_objects": [
+            "real instant_coffee.n.01_(i)",
+            "real water.n.06_(j)"
+        ],
+        "output_objects": [
+            "real drip_coffee.n.01_(m)",
+            "contains [fillable]_(k) drip_coffee.n.01_(m)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> lemon stain remover",
+        "input_objects": [
+            "real lemon_juice.n.01_(i)",
+            "real vinegar.n.01_(j)",
+            "real sodium_carbonate.n.01_(k)"
+        ],
+        "output_objects": [
+            "real lemon_stain_remover.n.01_(n)",
+            "contains [fillable]_(l) lemon_stain_remover.n.01_(n)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> lemonade, make_lemonade",
+        "input_objects": [
+            "real water.n.06_(i)",
+            "real granulated_sugar.n.01_(j)",
+            "real lemon_juice.n.01_(k)"
+        ],
+        "output_objects": [
+            "real lemonade.n.01_(n)",
+            "contains [fillable]_(l) lemonade.n.01_(n)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> limeade, make_limeade",
+        "input_objects": [
+            "real water.n.06_(i)",
+            "real granulated_sugar.n.01_(j)",
+            "real lime_juice.n.01_(k)"
+        ],
+        "output_objects": [
+            "real limeade.n.01_(n)",
+            "contains [fillable]_(l) limeade.n.01_(n)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> poultry seasoning, make_poultry_seasoning",
+        "input_objects": [
+            "real rosemary.n.02_(i)",
+            "real sage.n.02_(j)",
+            "real thyme.n.01_(k)",
+            "real black_pepper.n.02_(l)",
+            "real nutmeg.n.02_(m)"
+        ],
+        "output_objects": [
+            "real poultry_seasoning.n.01_(p)",
+            "contains [fillable]_(n) poultry_seasoning.n.01_(p)"
+        ]
+    },
+    {
+        "rule_name": "# ingredients --> pumpkin pie spice, make_pumpkin_pie_spice",
+        "input_objects": [
+            "real cinnamon.n.03_(i)",
+            "real ginger.n.02_(j)",
+            "real nutmeg.n.02_(k)",
+            "real allspice.n.03_(l)",
+            "real clove.n.04_(m)"
+        ],
+        "output_objects": [
+            "real pumpkin_pie_spice.n.01_(p)",
+            "contains [fillable]_(n) pumpkin_pie_spice.n.01_(p)"
+        ]
+    }
+]
