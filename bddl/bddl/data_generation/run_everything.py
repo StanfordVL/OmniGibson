@@ -20,6 +20,8 @@ SYN_PROP_DATA_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "synse
 # owned_models.to_csv("owned_models.csv", index=False)
 
 def main():
+    nltk.download("wordnet")
+
     # Get full hierarchy (it's created and saved on import)
     with open(SYN_PROP_DATA_FN, "r") as f:
         syn_prop_dict = {}
