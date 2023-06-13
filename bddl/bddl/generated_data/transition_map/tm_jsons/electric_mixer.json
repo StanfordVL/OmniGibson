@@ -1,267 +1,362 @@
 [
     {
-        "rule_name": "# ingredients --> sugar cookie dough - baking_cookies_for_the_PTA_bake_sale",
         "input_objects": [
-            "real flour.n.01_(i)",
-            "real granulated_sugar.n.01_(j)",
-            "real raw_egg.n.01_(k)",
-            "real raw_egg.n.01_(l)",
+            "flour.n.01_(i)",
+            "granulated_sugar.n.01_(j)",
+            "raw_egg.n.01_(k)",
+            "raw_egg.n.01_(l)",
+            "vanilla.n.02_(m)",
+            "melted__butter.n.01_(n)",
+            "baking_powder.n.01_(o)",
+            "salt.n.02_(p)"
+        ],
+        "input_states": [
             "not cooked raw_egg.n.01_(k)",
-            "not cooked raw_egg.n.01_(l)",
-            "real vanilla.n.02_(m)",
-            "real melted__butter.n.01_(n)",
-            "real baking_powder.n.01_(o)",
-            "real salt.n.02_(p)"
+            "not cooked raw_egg.n.01_(l)"
         ],
         "output_objects": [
-            "real sugar_cookie_dough.n.01_(s)",
+            "sugar_cookie_dough.n.01_(s)"
+        ],
+        "output_states": [
             "not cooked sugar_cookie_dough.n.01_(s)"
         ]
     },
     {
-        "rule_name": "# ingredients --> sugar cookie dough - baking_sugar_cookies",
         "input_objects": [
-            "real flour.n.01_(i)",
-            "real granulated_sugar.n.01_(j)",
-            "real raw_egg.n.01_(k)",
-            "not cooked raw_egg.n.01_(k)",
-            "real vanilla.n.02_(l)",
-            "real melted__butter.n.01_(m)",
-            "real sodium_carbonate.n.01_(n)",
-            "real baking_powder.n.01_(o)"
+            "flour.n.01_(i)",
+            "granulated_sugar.n.01_(j)",
+            "raw_egg.n.01_(k)",
+            "vanilla.n.02_(l)",
+            "melted__butter.n.01_(m)",
+            "sodium_carbonate.n.01_(n)",
+            "baking_powder.n.01_(o)"
+        ],
+        "input_states": [
+            "not cooked raw_egg.n.01_(k)"
         ],
         "output_objects": [
-            "real sugar_cookie_dough.n.01_(r)",
+            "sugar_cookie_dough.n.01_(r)"
+        ],
+        "output_states": [
             "not cooked sugar_cookie_dough.n.01_(r)"
         ]
     },
     {
-        "rule_name": "# ingredients --> cheese pastry filling - make_a_cheese_pastry",
         "input_objects": [
-            "real raw_egg.n.01_(i)",
-            "not cooked raw_egg.n.01_(i)",
-            "real cane_sugar.n.01_(j)",
-            "real lemon_juice.n.01_(k)",
-            "real vanilla.n.02_(l)",
-            "real cream_cheese.n.01_(m)",
-            "real salt.n.02_(n)"
+            "raw_egg.n.01_(i)",
+            "cane_sugar.n.01_(j)",
+            "lemon_juice.n.01_(k)",
+            "vanilla.n.02_(l)",
+            "cream_cheese.n.01_(m)",
+            "salt.n.02_(n)"
         ],
-        "output_objects": "real cheese_pastry_filling.n.01_(q)"
-    },
-    {
-        "rule_name": "# ingredients --> sugar coffee scrub - make_a_sugar_and_coffee_scrub",
-        "input_objects": [
-            "real ground_coffee.n.01_(i)",
-            "real brown_sugar.n.01_(j)",
-            "real coconut_oil.n.01_(k)"
-        ],
-        "output_objects": "real sugar_coffee_scrub.n.01_(n)"
-    },
-    {
-        "rule_name": "# ingredients --> bagel dough - make_bagels",
-        "input_objects": [
-            "real flour.n.01_(i)",
-            "real salt.n.02_(j)",
-            "real honey.n.01_(k)",
-            "real yeast.n.01_(l)",
-            "real water.n.06_(m)"
+        "input_states": [
+            "not cooked raw_egg.n.01_(i)"
         ],
         "output_objects": [
-            "real bagel_dough.n.01_(p)",
+            "cheese_pastry_filling.n.01_(q)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "ground_coffee.n.01_(i)",
+            "brown_sugar.n.01_(j)",
+            "coconut_oil.n.01_(k)"
+        ],
+        "input_states": [
+            null
+        ],
+        "output_objects": [
+            "sugar_coffee_scrub.n.01_(n)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "flour.n.01_(i)",
+            "salt.n.02_(j)",
+            "honey.n.01_(k)",
+            "yeast.n.01_(l)",
+            "water.n.06_(m)"
+        ],
+        "input_states": [
+            null
+        ],
+        "output_objects": [
+            "bagel_dough.n.01_(p)"
+        ],
+        "output_states": [
             "not cooked bagel_dough.n.01_(p)"
         ]
     },
     {
-        "rule_name": "# ingredients --> pancake batter, make_batter",
         "input_objects": [
-            "real flour.n.01_(i)",
-            "real baking_powder.n.01_(j)",
-            "real salt.n.02_(k)",
-            "real whole_milk.n.01_(l)",
-            "real water.n.06_(m)"
+            "flour.n.01_(i)",
+            "baking_powder.n.01_(j)",
+            "salt.n.02_(k)",
+            "whole_milk.n.01_(l)",
+            "water.n.06_(m)"
         ],
-        "output_objects": "real pancake_batter.n.01_(p)"
-    },
-    {
-        "rule_name": "# ingredients --> biscuit dough, make_biscuits",
-        "input_objects": [
-            "real flour.n.01_(i)",
-            "real baking_powder.n.01_(j)",
-            "real salt.n.02_(k)",
-            "real shortening.n.01_(l)",
-            "real whole_milk.n.01_(m)"
+        "input_states": [
+            null
         ],
         "output_objects": [
-            "real biscuit_dough.n.01_(p)",
+            "pancake_batter.n.01_(p)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "flour.n.01_(i)",
+            "baking_powder.n.01_(j)",
+            "salt.n.02_(k)",
+            "shortening.n.01_(l)",
+            "whole_milk.n.01_(m)"
+        ],
+        "input_states": [
+            null
+        ],
+        "output_objects": [
+            "biscuit_dough.n.01_(p)"
+        ],
+        "output_states": [
             "not cooked biscuit_dough.n.01_(p)"
         ]
     },
     {
-        "rule_name": "# ingredients --> blueberry mousse, make_blueberry_mousse",
         "input_objects": [
-            "real blueberry_compote.n.01_(i)",
-            "real gelatin.n.02_(j)",
-            "real raw_egg.n.01_(k)",
-            "not cooked raw_egg.n.01_(k)",
-            "real cream_of_tartar.n.01_(l)",
-            "real granulated_sugar.n.01_(m)",
-            "real whipped_cream.n.01_(n)"
+            "blueberry_compote.n.01_(i)",
+            "gelatin.n.02_(j)",
+            "raw_egg.n.01_(k)",
+            "cream_of_tartar.n.01_(l)",
+            "granulated_sugar.n.01_(m)",
+            "whipped_cream.n.01_(n)"
         ],
-        "output_objects": "real blueberry_mousse.n.01_(q)"
-    },
-    {
-        "rule_name": "# ingredients --> brownie batter, make_brownies",
-        "input_objects": [
-            "real butter.n.01_(i)",
-            "real granulated_sugar.n.01_(j)",
-            "real cocoa_powder.n.01_(k)",
-            "real vanilla.n.02_(l)",
-            "real raw_egg.n.01_(m)",
-            "not cooked raw_egg.n.01_(m)",
-            "real flour.n.01_(n)",
-            "real salt.n.02_(o)",
-            "real walnut.n.01_(p)",
-            "real walnut.n.01_(q)",
-            "real walnut.n.01_(r)",
-            "real walnut.n.01_(s)",
-            "real walnut.n.01_(t)",
-            "real walnut.n.01_(u)",
-            "real walnut.n.01_(v)"
-        ],
-        "output_objects": "real brownie_batter.n.01_(y)"
-    },
-    {
-        "rule_name": "# ingredients --> cherry filling, make_cake_filling",
-        "input_objects": [
-            "real cherry.n.03_(i)",
-            "real cherry.n.03_(j)",
-            "real cherry.n.03_(k)",
-            "real cherry.n.03_(l)",
-            "real cherry.n.03_(m)",
-            "real cherry.n.03_(n)",
-            "real cherry.n.03_(o)",
-            "real cherry.n.03_(p)",
-            "real cherry.n.03_(q)",
-            "real cherry.n.03_(r)",
-            "real cherry.n.03_(s)",
-            "real cherry.n.03_(t)",
-            "real cherry.n.03_(u)",
-            "real cherry.n.03_(v)",
-            "real cherry.n.03_(w)",
-            "real cherry.n.03_(x)",
-            "real granulated_sugar.n.01_(y)",
-            "real cornstarch.n.01_(z)",
-            "real lemon_juice.n.01_(a)",
-            "real water.n.06_(b)"
-        ],
-        "output_objects": "real cherry_filling.n.01_(e)"
-    },
-    {
-        "rule_name": "# ingredients --> chocolate cookie dough, make_chocolate_biscuits",
-        "input_objects": [
-            "real flour.n.01_(i)",
-            "real melted__butter.n.01_(j)",
-            "real granulated_sugar.n.01_(k)",
-            "real raw_egg.n.01_(l)",
-            "real raw_egg.n.01_(m)",
-            "real cocoa_powder.n.01_(n)",
-            "real chocolate_bar.n.01_(o)"
+        "input_states": [
+            "not cooked raw_egg.n.01_(k)"
         ],
         "output_objects": [
-            "real chocolate_cookie_dough.n.01_(r)",
+            "blueberry_mousse.n.01_(q)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "butter.n.01_(i)",
+            "granulated_sugar.n.01_(j)",
+            "cocoa_powder.n.01_(k)",
+            "vanilla.n.02_(l)",
+            "raw_egg.n.01_(m)",
+            "flour.n.01_(n)",
+            "salt.n.02_(o)",
+            "walnut.n.01_(p)",
+            "walnut.n.01_(q)",
+            "walnut.n.01_(r)",
+            "walnut.n.01_(s)",
+            "walnut.n.01_(t)",
+            "walnut.n.01_(u)",
+            "walnut.n.01_(v)"
+        ],
+        "input_states": [
+            "not cooked raw_egg.n.01_(m)"
+        ],
+        "output_objects": [
+            "brownie_batter.n.01_(y)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "cherry.n.03_(i)",
+            "cherry.n.03_(j)",
+            "cherry.n.03_(k)",
+            "cherry.n.03_(l)",
+            "cherry.n.03_(m)",
+            "cherry.n.03_(n)",
+            "cherry.n.03_(o)",
+            "cherry.n.03_(p)",
+            "cherry.n.03_(q)",
+            "cherry.n.03_(r)",
+            "cherry.n.03_(s)",
+            "cherry.n.03_(t)",
+            "cherry.n.03_(u)",
+            "cherry.n.03_(v)",
+            "cherry.n.03_(w)",
+            "cherry.n.03_(x)",
+            "granulated_sugar.n.01_(y)",
+            "cornstarch.n.01_(z)",
+            "lemon_juice.n.01_(a)",
+            "water.n.06_(b)"
+        ],
+        "input_states": [
+            null
+        ],
+        "output_objects": [
+            "cherry_filling.n.01_(e)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "flour.n.01_(i)",
+            "melted__butter.n.01_(j)",
+            "granulated_sugar.n.01_(k)",
+            "raw_egg.n.01_(l)",
+            "raw_egg.n.01_(m)",
+            "cocoa_powder.n.01_(n)",
+            "chocolate_bar.n.01_(o)"
+        ],
+        "input_states": [
+            null
+        ],
+        "output_objects": [
+            "chocolate_cookie_dough.n.01_(r)"
+        ],
+        "output_states": [
             "not cooked chocolate_cookie_dough.n.01_(r)",
             "inside chocolate_cookie_dough.n.01_(r) mixing_bowl.n.01_(q)"
         ]
     },
     {
-        "rule_name": "# ingredients --> spice cookie dough, make_cookies",
         "input_objects": [
-            "real flour.n.01_(i)",
-            "real granulated_sugar.n.01_(j)",
-            "real raw_egg.n.01_(k)",
-            "real raw_egg.n.01_(l)",
-            "real vanilla.n.02_(m)",
-            "real butter.n.01_(n)",
-            "real baking_powder.n.01_(o)",
-            "real cinnamon.n.03_(p)",
-            "real nutmeg.n.02_(q)",
-            "real salt.n.02_(r)"
+            "flour.n.01_(i)",
+            "granulated_sugar.n.01_(j)",
+            "raw_egg.n.01_(k)",
+            "raw_egg.n.01_(l)",
+            "vanilla.n.02_(m)",
+            "butter.n.01_(n)",
+            "baking_powder.n.01_(o)",
+            "cinnamon.n.03_(p)",
+            "nutmeg.n.02_(q)",
+            "salt.n.02_(r)"
+        ],
+        "input_states": [
+            null
         ],
         "output_objects": [
-            "real spice_cookie_dough.n.01_(u)",
+            "spice_cookie_dough.n.01_(u)"
+        ],
+        "output_states": [
             "not cooked spice_cookie_dough.n.01_(u)"
         ]
     },
     {
-        "rule_name": "# ingredients --> heavy cream, make_cream_from_milk",
         "input_objects": [
-            "real whole_milk.n.01_(i)",
-            "real melted__butter.n.01_(j)"
+            "whole_milk.n.01_(i)",
+            "melted__butter.n.01_(j)"
         ],
-        "output_objects": "real heavy_cream.n.01_(m)"
-    },
-    {
-        "rule_name": "# ingredients --> heavy cream, make_cream_from_milk",
-        "input_objects": [
-            "real whole_milk.n.01_(i)",
-            "real melted__butter.n.01_(j)"
-        ],
-        "output_objects": "real heavy_cream.n.01_(m)"
-    },
-    {
-        "rule_name": "# ingredients --> edible cookie dough, make_edible_chocolate_chip_cookie_dough",
-        "input_objects": [
-            "real cooked__flour.n.01_(i)",
-            "real melted__butter.n.01_(j)",
-            "real granulated_sugar.n.01_(k)",
-            "real brown_sugar.n.01_(l)",
-            "real salt.n.02_(m)",
-            "real vanilla.n.02_(n)",
-            "real jimmies.n.01_(o)"
+        "input_states": [
+            null
         ],
         "output_objects": [
-            "real edible_cookie_dough.n.01_(r)",
+            "heavy_cream.n.01_(m)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "whole_milk.n.01_(i)",
+            "melted__butter.n.01_(j)"
+        ],
+        "input_states": [
+            null
+        ],
+        "output_objects": [
+            "heavy_cream.n.01_(m)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "cooked__flour.n.01_(i)",
+            "melted__butter.n.01_(j)",
+            "granulated_sugar.n.01_(k)",
+            "brown_sugar.n.01_(l)",
+            "salt.n.02_(m)",
+            "vanilla.n.02_(n)",
+            "jimmies.n.01_(o)"
+        ],
+        "input_states": [
+            null
+        ],
+        "output_objects": [
+            "edible_cookie_dough.n.01_(r)"
+        ],
+        "output_states": [
             "not cooked edible_cookie_dough.n.01_(r)"
         ]
     },
     {
-        "rule_name": "# ingredients --> muffin batter, make_muffins",
         "input_objects": [
-            "real flour.n.01_(i)",
-            "real baking_powder.n.01_(j)",
-            "real salt.n.02_(k)",
-            "real raw_egg.n.01_(l)",
-            "not cooked raw_egg.n.01_(l)",
-            "real granulated_sugar.n.01_(m)",
-            "real whole_milk.n.01_(n)",
-            "real cooking_oil.n.01_(o)"
+            "flour.n.01_(i)",
+            "baking_powder.n.01_(j)",
+            "salt.n.02_(k)",
+            "raw_egg.n.01_(l)",
+            "granulated_sugar.n.01_(m)",
+            "whole_milk.n.01_(n)",
+            "cooking_oil.n.01_(o)"
         ],
-        "output_objects": "real muffin_batter.n.01_(r)"
-    },
-    {
-        "rule_name": "# ingredients --> onion ring batter, make_onion_ring_batter",
-        "input_objects": [
-            "real flour.n.01_(i)",
-            "real whole_milk.n.01_(j)",
-            "real raw_egg.n.01_(k)",
-            "not cooked raw_egg.n.01_(k)",
-            "real cooking_oil.n.01_(l)",
-            "real salt.n.02_(m)"
-        ],
-        "output_objects": "real onion_ring_batter.n.01_(p)"
-    },
-    {
-        "rule_name": "# ingredients --> pizza dough, make_pizza_dough",
-        "input_objects": [
-            "real water.n.06_(i)",
-            "real yeast.n.01_(j)",
-            "real granulated_sugar.n.01_(k)",
-            "real flour.n.01_(l)",
-            "real olive_oil.n.01_(m)",
-            "real salt.n.02_(n)"
+        "input_states": [
+            "not cooked raw_egg.n.01_(l)"
         ],
         "output_objects": [
-            "real pizza_dough.n.01_(q)",
+            "muffin_batter.n.01_(r)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "flour.n.01_(i)",
+            "whole_milk.n.01_(j)",
+            "raw_egg.n.01_(k)",
+            "cooking_oil.n.01_(l)",
+            "salt.n.02_(m)"
+        ],
+        "input_states": [
+            "not cooked raw_egg.n.01_(k)"
+        ],
+        "output_objects": [
+            "onion_ring_batter.n.01_(p)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "water.n.06_(i)",
+            "yeast.n.01_(j)",
+            "granulated_sugar.n.01_(k)",
+            "flour.n.01_(l)",
+            "olive_oil.n.01_(m)",
+            "salt.n.02_(n)"
+        ],
+        "input_states": [
+            null
+        ],
+        "output_objects": [
+            "pizza_dough.n.01_(q)"
+        ],
+        "output_states": [
             "not cooked pizza_dough.n.01_(q)"
         ]
     }

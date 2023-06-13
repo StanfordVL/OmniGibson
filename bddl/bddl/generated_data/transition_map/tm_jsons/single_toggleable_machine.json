@@ -1,268 +1,444 @@
 [
     {
-        "rule_name": "# ingredients --> drip coffee - brewing_coffee",
         "input_objects": [
-            "real coffee_bean.n.01_(i)",
-            "real water.n.06_(j)"
+            "coffee_bean.n.01_(i)",
+            "water.n.06_(j)"
         ],
-        "machine": "real coffee_maker.n.01_(k)",
-        "output_objects": "real drip_coffee.n.01_(l)"
-    },
-    {
-        "rule_name": "# ingredients --> iced cappuccino - make_a_blended_iced_cappuccino",
-        "input_objects": [
-            "real water.n.06_(i)",
-            "real instant_coffee.n.01_(j)",
-            "real cane_sugar.n.01_(k)",
-            "real chocolate_milk.n.01_(l)",
-            "real ice_cube.n.01_(m)",
-            "real ice_cube.n.01_(n)",
-            "real ice_cube.n.01_(o)"
+        "input_states": [
+            null
         ],
-        "machine": "real blender.n.01_(p)",
-        "output_objects": "real iced_cappuccino.n.01_(q)"
-    },
-    {
-        "rule_name": "# ingredients --> espresso - make_a_cappuccino",
-        "input_objects": [
-            "real water.n.06_(i)",
-            "real instant_coffee.n.01_(j)"
+        "machine": [
+            "coffee_maker.n.01_(k)"
         ],
-        "machine": "real coffee_maker.n.01_(k)",
-        "output_objects": "real espresso.n.01_(m)"
-    },
-    {
-        "rule_name": "# ingredients --> pastry dough - make_a_cheese_pastry",
-        "input_objects": [
-            "real water.n.06_(i)",
-            "real butter.n.01_(j)",
-            "real flour.n.01_(k)",
-            "real salt.n.02_(l)"
-        ],
-        "machine": "real food_processor.n.01_(m)",
         "output_objects": [
-            "real pastry.n.01_(n)",
+            "drip_coffee.n.01_(l)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "water.n.06_(i)",
+            "instant_coffee.n.01_(j)",
+            "cane_sugar.n.01_(k)",
+            "chocolate_milk.n.01_(l)",
+            "ice_cube.n.01_(m)",
+            "ice_cube.n.01_(n)",
+            "ice_cube.n.01_(o)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(p)"
+        ],
+        "output_objects": [
+            "iced_cappuccino.n.01_(q)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "water.n.06_(i)",
+            "instant_coffee.n.01_(j)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "coffee_maker.n.01_(k)"
+        ],
+        "output_objects": [
+            "espresso.n.01_(m)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "water.n.06_(i)",
+            "butter.n.01_(j)",
+            "flour.n.01_(k)",
+            "salt.n.02_(l)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "food_processor.n.01_(m)"
+        ],
+        "output_objects": [
+            "pastry.n.01_(n)"
+        ],
+        "output_states": [
             "not cooked pastry.n.01_(n)"
         ]
     },
     {
-        "rule_name": "# ingredients --> milkshake, make_a_frappe",
         "input_objects": [
-            "real water.n.06_(i)",
-            "real instant_coffee.n.01_(j)",
-            "real cane_sugar.n.01_(k)",
-            "real ice_cube.n.01_(l)",
-            "real ice_cube.n.01_(m)",
-            "real ice_cube.n.01_(n)",
-            "real ice_cube.n.01_(o)",
-            "real ice_cream.n.01_(p)"
+            "water.n.06_(i)",
+            "instant_coffee.n.01_(j)",
+            "cane_sugar.n.01_(k)",
+            "ice_cube.n.01_(l)",
+            "ice_cube.n.01_(m)",
+            "ice_cube.n.01_(n)",
+            "ice_cube.n.01_(o)",
+            "ice_cream.n.01_(p)"
         ],
-        "machine": "real blender.n.01_(q)",
-        "output_objects": "real milkshake.n.01_(r)"
-    },
-    {
-        "rule_name": "# ingredients --> milkshake, make_a_milkshake",
-        "input_objects": [
-            "real whole_milk.n.01_(i)",
-            "real chocolate_sauce.n.01_(j)",
-            "real ice_cream.n.01_(k)"
+        "input_states": [
+            null
         ],
-        "machine": "real blender.n.01_(l)",
-        "output_objects": "real milkshake.n.01_(m)"
-    },
-    {
-        "rule_name": "# ingredients --> smoothie - make_a_strawberry_slushie",
-        "input_objects": [
-            "real strawberry.n.01_(i)",
-            "real strawberry.n.01_(j)",
-            "real strawberry.n.01_(k)",
-            "real ice_cube.n.01_(l)",
-            "real ice_cube.n.01_(m)",
-            "real ice_cube.n.01_(n)",
-            "real ice_cube.n.01_(o)",
-            "real lemon_juice.n.01_(p)"
+        "machine": [
+            "blender.n.01_(q)"
         ],
-        "machine": "real blender.n.01_(q)",
-        "output_objects": "real smoothie.n.02_(r)"
-    },
-    {
-        "rule_name": "# ingredients --> chocolate milk, make_chocolate_milk",
-        "input_objects": [
-            "real granulated_sugar.n.01_(i)",
-            "real cocoa_powder.n.01_(j)",
-            "real low-fat_milk.n.01_(k)"
-        ],
-        "machine": "real blender.n.01_(l)",
-        "output_objects": "real chocolate_milk.n.01_(m)"
-    },
-    {
-        "rule_name": "# ingredients --> chocolate spread, make_chocolate_spread",
-        "input_objects": [
-            "real butter.n.01_(i)",
-            "real honey.n.01_(j)",
-            "real cocoa_powder.n.01_(k)"
-        ],
-        "machine": "real food_processor.n.01_(l)",
-        "output_objects": "real chocolate_sauce.n.01_(m)"
-    },
-    {
-        "rule_name": "# ingredients --> coffee, make_coffee",
-        "input_objects": [
-            "real coffee_bean.n.01_(i)",
-            "real water.n.06_(j)"
-        ],
-        "machine": "real coffee_maker.n.01_(k)",
         "output_objects": [
-            "real drip_coffee.n.01_(l)",
+            "milkshake.n.01_(r)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "whole_milk.n.01_(i)",
+            "chocolate_sauce.n.01_(j)",
+            "ice_cream.n.01_(k)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(l)"
+        ],
+        "output_objects": [
+            "milkshake.n.01_(m)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "strawberry.n.01_(i)",
+            "strawberry.n.01_(j)",
+            "strawberry.n.01_(k)",
+            "ice_cube.n.01_(l)",
+            "ice_cube.n.01_(m)",
+            "ice_cube.n.01_(n)",
+            "ice_cube.n.01_(o)",
+            "lemon_juice.n.01_(p)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(q)"
+        ],
+        "output_objects": [
+            "smoothie.n.02_(r)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "granulated_sugar.n.01_(i)",
+            "cocoa_powder.n.01_(j)",
+            "low-fat_milk.n.01_(k)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(l)"
+        ],
+        "output_objects": [
+            "chocolate_milk.n.01_(m)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "butter.n.01_(i)",
+            "honey.n.01_(j)",
+            "cocoa_powder.n.01_(k)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "food_processor.n.01_(l)"
+        ],
+        "output_objects": [
+            "chocolate_sauce.n.01_(m)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "coffee_bean.n.01_(i)",
+            "water.n.06_(j)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "coffee_maker.n.01_(k)"
+        ],
+        "output_objects": [
+            "drip_coffee.n.01_(l)"
+        ],
+        "output_states": [
             "contains coffee_maker.n.01_(k) drip_coffee.n.01_(l)"
         ]
     },
     {
-        "rule_name": "# ingredients --> eggnog, make_eggnog",
         "input_objects": [
-            "real granulated_sugar.n.01_(i)",
-            "real nutmeg.n.02_(j)",
-            "real cinnamon.n.03_(k)",
-            "real vanilla.n.02_(l)",
-            "real rum.n.01_(m)",
-            "real whole_milk.n.01_(n)",
-            "real raw_egg.n.01_(o)"
+            "granulated_sugar.n.01_(i)",
+            "nutmeg.n.02_(j)",
+            "cinnamon.n.03_(k)",
+            "vanilla.n.02_(l)",
+            "rum.n.01_(m)",
+            "whole_milk.n.01_(n)",
+            "raw_egg.n.01_(o)"
         ],
-        "machine": "real blender.n.01_(p)",
-        "output_objects": "real eggnog.n.01_(q)"
-    },
-    {
-        "rule_name": "# ingredients --> fruit punch, make_fruit_punch",
-        "input_objects": [
-            "real diced__lemon.n.01_(i)",
-            "real diced__strawberry.n.01_(j)",
-            "real diced__orange.n.01_(k)",
-            "real diced__apple.n.01_(l)"
+        "input_states": [
+            null
         ],
-        "machine": "real blender.n.01_(m)",
-        "output_objects": "real fruit_punch.n.01_(n)"
-    },
-    {
-        "rule_name": "# ingredients --> gazpacho, make_gazpacho",
-        "input_objects": [
-            "real basil.n.03_(i)",
-            "real salt.n.02_(j)",
-            "real black_pepper.n.02_(k)",
-            "real tomato_juice.n.01_(l)",
-            "real cucumber.n.02_(m)",
-            "real water.n.06_(n)",
-            "real lemon_juice.n.01_(o)"
+        "machine": [
+            "blender.n.01_(p)"
         ],
-        "machine": "real blender.n.01_(p)",
         "output_objects": [
-            "real gazpacho.n.01_(q)",
-            "contains blender.n.01_(p) gazpacho.n.01_(q)",
-            "not real basil.n.03_(i)"
+            "eggnog.n.01_(q)"
+        ],
+        "output_states": [
+            null
         ]
     },
     {
-        "rule_name": "# ingredients --> iced chocolate, make_iced_chocolate",
         "input_objects": [
-            "real ice_cube.n.01_(i)",
-            "real ice_cube.n.01_(j)",
-            "real cocoa_powder.n.01_(k)",
-            "real whole_milk.n.01_(l)",
-            "real granulated_sugar.n.01_(m)",
-            "real vanilla.n.02_(n)"
+            "diced__lemon.n.01_(i)",
+            "diced__strawberry.n.01_(j)",
+            "diced__orange.n.01_(k)",
+            "diced__apple.n.01_(l)"
         ],
-        "machine": "real blender.n.01_(o)",
-        "output_objects": "real iced_chocolate.n.01_(p)"
-    },
-    {
-        "rule_name": "# ingredients --> jerk seasoning, make_jamaican_jerk_seasoning",
-        "input_objects": [
-            "real brown_sugar.n.01_(i)",
-            "real chili.n.02_(j)",
-            "real cayenne.n.02_(k)",
-            "real clove.n.03_(l)",
-            "real clove.n.03_(m)"
+        "input_states": [
+            null
         ],
-        "machine": "real blender.n.01_(n)",
-        "output_objects": "real jerk_seasoning.n.01_(o)"
-    },
-    {
-        "rule_name": "# ingredients --> lemon pepper seasoning, make_lemon_pepper_seasoning",
-        "input_objects": [
-            "real black_pepper.n.02_(i)",
-            "real lemon_peel.n.01_(j)",
-            "real salt.n.02_(k)",
-            "real lemon_juice.n.01_(l)"
+        "machine": [
+            "blender.n.01_(m)"
         ],
-        "machine": "real blender.n.01_(m)",
-        "output_objects": "real lemon-pepper_seasoning.n.01_(n)"
-    },
-    {
-        "rule_name": "# ingredients --> mustard seasoning, make_mustard_herb_and_spice_seasoning",
-        "input_objects": [
-            "real mustard_seed.n.01_(i)",
-            "real sage.n.02_(j)",
-            "real cumin.n.02_(k)",
-            "real clove.n.03_(l)",
-            "real clove.n.03_(m)",
-            "real rosemary.n.02_(n)",
-            "real salt.n.02_(o)"
-        ],
-        "machine": "real blender.n.01_(p)",
-        "output_objects": "real mustard_seasoning.n.01_(q)"
-    },
-    {
-        "rule_name": "# ingredients --> smoothie, make_popsicles",
-        "input_objects": [
-            "real raspberry.n.02_(i)",
-            "real raspberry.n.02_(j)",
-            "real raspberry.n.02_(k)",
-            "real raspberry.n.02_(l)",
-            "real raspberry.n.02_(m)",
-            "real raspberry.n.02_(n)",
-            "real strawberry.n.01_(o)",
-            "real strawberry.n.01_(p)",
-            "real strawberry.n.01_(q)",
-            "real strawberry.n.01_(r)",
-            "real lemon_juice.n.01_(s)",
-            "real yogurt.n.01_(t)",
-            "real honey.n.01_(u)"
-        ],
-        "machine": "real blender.n.01_(v)",
-        "output_objects": "real smoothie.n.01_(w)"
-    },
-    {
-        "rule_name": "# ingredients --> tomato rice, make_tomato_rice",
-        "input_objects": [
-            "real white_rice.n.01_(i)",
-            "real diced__beefsteak_tomato.n.01_(j)",
-            "real diced__vidalia_onion.n.01_(k)",
-            "real olive_oil.n.01_(l)",
-            "real chicken_broth.n.01_(m)"
-        ],
-        "machine": "real crock_pot.n.01_(n)",
-        "output_objects": "real tomato_rice.n.01_(o)"
-    },
-    {
-        "rule_name": "# waffle batter --> one waffle, make_waffles",
-        "input_objects": "real waffle_batter.n.01_(i)",
-        "machine": "real waffle_iron.n.01_(j)",
         "output_objects": [
-            "real waffle.n.01_(k)",
+            "fruit_punch.n.01_(n)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "basil.n.03_(i)",
+            "salt.n.02_(j)",
+            "black_pepper.n.02_(k)",
+            "tomato_juice.n.01_(l)",
+            "cucumber.n.02_(m)",
+            "water.n.06_(n)",
+            "lemon_juice.n.01_(o)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(p)"
+        ],
+        "output_objects": [
+            "gazpacho.n.01_(q)",
+            "basil.n.03_(i)"
+        ],
+        "output_states": [
+            "contains blender.n.01_(p) gazpacho.n.01_(q)"
+        ]
+    },
+    {
+        "input_objects": [
+            "ice_cube.n.01_(i)",
+            "ice_cube.n.01_(j)",
+            "cocoa_powder.n.01_(k)",
+            "whole_milk.n.01_(l)",
+            "granulated_sugar.n.01_(m)",
+            "vanilla.n.02_(n)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(o)"
+        ],
+        "output_objects": [
+            "iced_chocolate.n.01_(p)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "brown_sugar.n.01_(i)",
+            "chili.n.02_(j)",
+            "cayenne.n.02_(k)",
+            "clove.n.03_(l)",
+            "clove.n.03_(m)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(n)"
+        ],
+        "output_objects": [
+            "jerk_seasoning.n.01_(o)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "black_pepper.n.02_(i)",
+            "lemon_peel.n.01_(j)",
+            "salt.n.02_(k)",
+            "lemon_juice.n.01_(l)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(m)"
+        ],
+        "output_objects": [
+            "lemon-pepper_seasoning.n.01_(n)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "mustard_seed.n.01_(i)",
+            "sage.n.02_(j)",
+            "cumin.n.02_(k)",
+            "clove.n.03_(l)",
+            "clove.n.03_(m)",
+            "rosemary.n.02_(n)",
+            "salt.n.02_(o)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(p)"
+        ],
+        "output_objects": [
+            "mustard_seasoning.n.01_(q)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "raspberry.n.02_(i)",
+            "raspberry.n.02_(j)",
+            "raspberry.n.02_(k)",
+            "raspberry.n.02_(l)",
+            "raspberry.n.02_(m)",
+            "raspberry.n.02_(n)",
+            "strawberry.n.01_(o)",
+            "strawberry.n.01_(p)",
+            "strawberry.n.01_(q)",
+            "strawberry.n.01_(r)",
+            "lemon_juice.n.01_(s)",
+            "yogurt.n.01_(t)",
+            "honey.n.01_(u)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(v)"
+        ],
+        "output_objects": [
+            "smoothie.n.01_(w)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "white_rice.n.01_(i)",
+            "diced__beefsteak_tomato.n.01_(j)",
+            "diced__vidalia_onion.n.01_(k)",
+            "olive_oil.n.01_(l)",
+            "chicken_broth.n.01_(m)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "crock_pot.n.01_(n)"
+        ],
+        "output_objects": [
+            "tomato_rice.n.01_(o)"
+        ],
+        "output_states": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "waffle_batter.n.01_(i)"
+        ],
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "waffle_iron.n.01_(j)"
+        ],
+        "output_objects": [
+            "waffle.n.01_(k)"
+        ],
+        "output_states": [
             "cooked waffle.n.01_(k)",
             "hot waffle.n.01_(k)"
         ]
     },
     {
-        "rule_name": "# ingredients --> fruit punch, make_watermelon_punch",
         "input_objects": [
-            "real diced__watermelon.n.01_(i)",
-            "real lemonade.n.01_(j)",
-            "real lemon_juice.n.01_(k)",
-            "real tonic.n.01_(l)"
+            "diced__watermelon.n.01_(i)",
+            "lemonade.n.01_(j)",
+            "lemon_juice.n.01_(k)",
+            "tonic.n.01_(l)"
         ],
-        "machine": "real blender.n.01_(m)",
+        "input_states": [
+            null
+        ],
+        "machine": [
+            "blender.n.01_(m)"
+        ],
         "output_objects": [
-            "real fruit_punch.n.01_(n)",
+            "fruit_punch.n.01_(n)"
+        ],
+        "output_states": [
             "contains blender.n.01_(m) fruit_punch.n.01_(n)"
         ]
     }

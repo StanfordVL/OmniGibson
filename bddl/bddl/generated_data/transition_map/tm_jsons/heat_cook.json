@@ -1,20 +1,29 @@
 [
     {
-        "rule_name": "# sugar cookie dough --> 6 sugar cookies - baking_cookies_for_the_PTA_bake_sale",
         "input_objects": [
-            "real sugar_cookie_dough.n.01_(i)",
+            "sugar_cookie_dough.n.01_(i)"
+        ],
+        "input_states": [
             "not cooked sugar_cookie_dough.n.01_(i)"
         ],
-        "container": "cookie_sheet.n.01_(j)",
-        "container_input_relation": "ontop sugar_cookie_dough.n.01_(i) cookie_sheet.n.01_(j)",
-        "heat_source": "oven.n.01_(k)",
+        "container": [
+            "cookie_sheet.n.01_(j)"
+        ],
+        "container_input_relation": [
+            "ontop sugar_cookie_dough.n.01_(i) cookie_sheet.n.01_(j)"
+        ],
+        "heat_source": [
+            "oven.n.01_(k)"
+        ],
         "output_objects": [
-            "real sugar_cookie.n.01_(l)",
-            "real sugar_cookie.n.01_(m)",
-            "real sugar_cookie.n.01_(n)",
-            "real sugar_cookie.n.01_(o)",
-            "real sugar_cookie.n.01_(p)",
-            "real sugar_cookie.n.01_(q)",
+            "sugar_cookie.n.01_(l)",
+            "sugar_cookie.n.01_(m)",
+            "sugar_cookie.n.01_(n)",
+            "sugar_cookie.n.01_(o)",
+            "sugar_cookie.n.01_(p)",
+            "sugar_cookie.n.01_(q)"
+        ],
+        "output_states": [
             "cooked sugar_cookie.n.01_(l)",
             "cooked sugar_cookie.n.01_(m)",
             "cooked sugar_cookie.n.01_(n)",
@@ -30,44 +39,68 @@
             "ontop sugar_cookie.n.01_(p) cookie_sheet.n.01_(j)",
             "ontop sugar_cookie.n.01_(q) cookie_sheet.n.01_(j)"
         ],
-        "timesteps": null
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> salt water - make_a_basic_brine",
         "input_objects": [
-            "real water.n.06_(i)",
-            "real salt.n.02_(j)"
+            "water.n.06_(i)",
+            "salt.n.02_(j)"
         ],
-        "container": "stockpot.n.01_(k)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "stockpot.n.01_(k)"
+        ],
         "container_input_relation": [
             "filled stockpot.n.01_(k) salt.n.02_(j)",
             "filled stockpot.n.01_(k) water.n.06_(i)"
         ],
-        "heat_source": "stove.n.01_(l)",
-        "output_objects": "real seawater.n.01_(m)",
-        "container_output_relation": "contains stockpot.n.01_(k) seawater.n.01_(m)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(l)"
+        ],
+        "output_objects": [
+            "seawater.n.01_(m)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains stockpot.n.01_(k) seawater.n.01_(m)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# pastry dough, cheese filling --> cheese pastries - make_a_cheese_pastry",
         "input_objects": [
-            "real pastry.n.01_(i)",
-            "not cooked pastry.n.01_(i)",
-            "real cheese_pastry_filling.n.01_(j)"
+            "pastry.n.01_(i)",
+            "cheese_pastry_filling.n.01_(j)"
         ],
-        "container": "cookie_sheet.n.01_(k)",
+        "input_states": [
+            "not cooked pastry.n.01_(i)"
+        ],
+        "container": [
+            "cookie_sheet.n.01_(k)"
+        ],
         "container_input_relation": [
             "ontop pastry.n.01_(i) cookie_sheet.n.01_(k)",
             "covered pastry.n.01_(i) cheese_pastry_filling.n.01_(j)"
         ],
-        "heat_source": "oven.n.01_(l)",
+        "heat_source": [
+            "oven.n.01_(l)"
+        ],
         "output_objects": [
-            "real cheese_pastry.n.01_(l)",
-            "real cheese_pastry.n.01_(m)",
-            "real cheese_pastry.n.01_(n)",
-            "real cheese_pastry.n.01_(o)",
-            "real cheese_pastry.n.01_(p)",
-            "real cheese_pastry.n.01_(q)",
+            "cheese_pastry.n.01_(l)",
+            "cheese_pastry.n.01_(m)",
+            "cheese_pastry.n.01_(n)",
+            "cheese_pastry.n.01_(o)",
+            "cheese_pastry.n.01_(p)",
+            "cheese_pastry.n.01_(q)"
+        ],
+        "output_states": [
             "cooked cheese_pastry.n.01_(l)",
             "cooked cheese_pastry.n.01_(m)",
             "cooked cheese_pastry.n.01_(n)",
@@ -83,24 +116,30 @@
             "ontop cheese_pastry.n.01_(p) cookie_sheet.n.01_(k)",
             "ontop cheese_pastry.n.01_(q) cookie_sheet.n.01_(k)"
         ],
-        "timesteps": null
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> red meat sauce, make_a_red_meat_sauce",
         "input_objects": [
-            "real tomato_sauce.n.01_(i)",
-            "real olive_oil.n.01_(j)",
-            "real clove.n.03_(k)",
-            "real clove.n.03_(l)",
-            "real clove.n.03_(m)",
-            "real basil.n.03_(n)",
-            "real basil.n.03_(o)",
-            "real basil.n.03_(p)",
-            "real basil.n.03_(q)",
-            "real ground_beef.n.01_(r)",
-            "real rosemary.n.02_(s)"
+            "tomato_sauce.n.01_(i)",
+            "olive_oil.n.01_(j)",
+            "clove.n.03_(k)",
+            "clove.n.03_(l)",
+            "clove.n.03_(m)",
+            "basil.n.03_(n)",
+            "basil.n.03_(o)",
+            "basil.n.03_(p)",
+            "basil.n.03_(q)",
+            "ground_beef.n.01_(r)",
+            "rosemary.n.02_(s)"
         ],
-        "container": "saucepan.n.01_(t)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "saucepan.n.01_(t)"
+        ],
         "container_input_relation": [
             "contains saucepan.n.01_(t) tomato_sauce.n.01_(i)",
             "contains saucepan.n.01_(t) olive_oil.n.01_(j)",
@@ -114,24 +153,38 @@
             "contains saucepan.n.01_(t) ground_beef.n.01_(r)",
             "contains saucepan.n.01_(t) rosemary.n.02_(s)"
         ],
-        "heat_source": "stove.n.01_(v)",
-        "output_objects": "real cooked__red_meat_sauce.n.01_(u)",
-        "container_output_relation": "contains saucepan.n.01_(t) cooked__red_meat_sauce.n.01_(u)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(v)"
+        ],
+        "output_objects": [
+            "cooked__red_meat_sauce.n.01_(u)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains saucepan.n.01_(t) cooked__red_meat_sauce.n.01_(u)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> schnitzel - make_a_wiener_schnitzle",
         "input_objects": [
-            "real cooking_oil.n.01_(i)",
-            "real flour.n.01_(j)",
-            "real raw_egg.n.01_(k)",
-            "not cooked raw_egg.n.01_(k)",
-            "real salt.n.02_(l)",
-            "real veal.n.01_(m)",
-            "not cooked veal.n.01_(m)",
-            "real breadcrumb.n.01_(n)"
+            "cooking_oil.n.01_(i)",
+            "flour.n.01_(j)",
+            "raw_egg.n.01_(k)",
+            "salt.n.02_(l)",
+            "veal.n.01_(m)",
+            "breadcrumb.n.01_(n)"
         ],
-        "container": "frying_pan.n.01_(o)",
+        "input_states": [
+            "not cooked raw_egg.n.01_(k)",
+            "not cooked veal.n.01_(m)"
+        ],
+        "container": [
+            "frying_pan.n.01_(o)"
+        ],
         "container_input_relation": [
             "contains frying_pan.n.01_(o) cooking_oil.n.01_(i)",
             "contains frying_pan.n.01_(o) flour.n.01_(j)",
@@ -140,29 +193,40 @@
             "inside veal.n.01_(m) frying_pan.n.01_(o)",
             "contains frying_pan.n.01_(o) breadcrumb.n.01_(n)"
         ],
-        "heat_source": "stove.n.01_(p)",
+        "heat_source": [
+            "stove.n.01_(p)"
+        ],
         "output_objects": [
-            "real schnitzel.n.01_(q)",
+            "schnitzel.n.01_(q)"
+        ],
+        "output_states": [
             "not cooked schnitzel.n.01_(q)"
         ],
-        "container_output_relation": "inside schnitzel.n.01_(q) frying_pan.n.01_(o)",
-        "timesteps": null
+        "container_output_relation": [
+            "inside schnitzel.n.01_(q) frying_pan.n.01_(o)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> applesauce - make_applesauce",
         "input_objects": [
-            "real apple.n.01_(i)",
-            "real apple.n.01_(j)",
-            "real apple.n.01_(k)",
+            "apple.n.01_(i)",
+            "apple.n.01_(j)",
+            "apple.n.01_(k)",
+            "water.n.06_(l)",
+            "lemon_juice.n.01_(m)",
+            "cinnamon.n.03_(n)",
+            "granulated_sugar.n.01_(o)"
+        ],
+        "input_states": [
             "not cooked apple.n.01_(i)",
             "not cooked apple.n.01_(j)",
-            "not cooked apple.n.01_(k)",
-            "real water.n.06_(l)",
-            "real lemon_juice.n.01_(m)",
-            "real cinnamon.n.03_(n)",
-            "real granulated_sugar.n.01_(o)"
+            "not cooked apple.n.01_(k)"
         ],
-        "container": "saucepan.n.01_(p)",
+        "container": [
+            "saucepan.n.01_(p)"
+        ],
         "container_input_relation": [
             "inside apple.n.01_(i) saucepan.n.01_(p)",
             "inside apple.n.01_(j) saucepan.n.01_(p)",
@@ -172,33 +236,51 @@
             "contains saucepan.n.01_(p) cinnamon.n.03_(n)",
             "contains saucepan.n.01_(p) granulated_sugar.n.01_(o)"
         ],
-        "heat_source": "stove.n.01_(q)",
-        "output_objects": "real applesauce.n.01_(r)",
-        "container_output_relation": "contains saucepan.n.01_(p) applesauce.n.01_(r)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(q)"
+        ],
+        "output_objects": [
+            "applesauce.n.01_(r)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains saucepan.n.01_(p) applesauce.n.01_(r)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# bagel dough --> four bagels - make_bagels",
         "input_objects": [
-            "real raw_egg.n.01_(i)",
-            "real bagel_dough.n.01_(j)",
-            "not cooked raw_egg.n.01_(i)",
-            "not cooked bagel_dough.n.01_(j)",
-            "real sesame_seed.n.01_(k)"
+            "raw_egg.n.01_(i)",
+            "bagel_dough.n.01_(j)",
+            "sesame_seed.n.01_(k)"
         ],
-        "container": "cookie_sheet.n.01_(m)",
+        "input_states": [
+            "not cooked raw_egg.n.01_(i)",
+            "not cooked bagel_dough.n.01_(j)"
+        ],
+        "container": [
+            "cookie_sheet.n.01_(m)"
+        ],
         "container_input_relation": [
             "ontop bagel_dough.n.01_(j) cookie_sheet.n.01_(m)",
             "ontop raw_egg.n.01_(i) bagel_dough.n.01_(j)",
             "covered raw_egg.n.01_(i) sesame_seed.n.01_(k)",
             "covered bagel_dough.n.01_(j) sesame_seed.n.01_(k)"
         ],
-        "heat_source": "oven.n.01_(l)",
+        "heat_source": [
+            "oven.n.01_(l)"
+        ],
         "output_objects": [
-            "real bagel.n.01_(n)",
-            "real bagel.n.01_(o)",
-            "real bagel.n.01_(p)",
-            "real bagel.n.01_(q)",
+            "bagel.n.01_(n)",
+            "bagel.n.01_(o)",
+            "bagel.n.01_(p)",
+            "bagel.n.01_(q)"
+        ],
+        "output_states": [
             "cooked bagel.n.01_(n)",
             "cooked bagel.n.01_(o)",
             "cooked bagel.n.01_(p)",
@@ -210,22 +292,33 @@
             "ontop bagel.n.01_(p) cookie_sheet.n.01_(m)",
             "ontop bagel.n.01_(q) cookie_sheet.n.01_(m)"
         ],
-        "timesteps": null
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# biscuit dough --> six biscuits, make_biscuits",
         "input_objects": [
-            "real biscuit_dough.n.01_(i)",
+            "biscuit_dough.n.01_(i)"
+        ],
+        "input_states": [
             "not cooked biscuit_dough.n.01_(i)"
         ],
-        "container": "cookie_sheet.n.01_(k)",
-        "container_input_relation": "ontop biscuit_dough.n.01_(i) cookie_sheet.n.01_(k)",
-        "heat_source": "oven.n.01_(j)",
+        "container": [
+            "cookie_sheet.n.01_(k)"
+        ],
+        "container_input_relation": [
+            "ontop biscuit_dough.n.01_(i) cookie_sheet.n.01_(k)"
+        ],
+        "heat_source": [
+            "oven.n.01_(j)"
+        ],
         "output_objects": [
-            "real biscuit.n.01_(l)",
-            "real biscuit.n.01_(m)",
-            "real biscuit.n.01_(n)",
-            "real biscuit.n.01_(o)",
+            "biscuit.n.01_(l)",
+            "biscuit.n.01_(m)",
+            "biscuit.n.01_(n)",
+            "biscuit.n.01_(o)"
+        ],
+        "output_states": [
             "cooked biscuit.n.01_(l)",
             "cooked biscuit.n.01_(m)",
             "cooked biscuit.n.01_(n)",
@@ -237,58 +330,94 @@
             "ontop biscuit.n.01_(n) cookie_sheet.n.01_(k)",
             "ontop biscuit.n.01_(o) cookie_sheet.n.01_(k)"
         ],
-        "timesteps": null
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> blueberry compote, make_blueberry_mousse",
         "input_objects": [
-            "real lemon_juice.n.01_(i)",
-            "real granulated_sugar.n.01_(j)",
-            "real blueberry.n.01_(k)"
+            "lemon_juice.n.01_(i)",
+            "granulated_sugar.n.01_(j)",
+            "blueberry.n.01_(k)"
         ],
-        "container": "saucepan.n.01_(v)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "saucepan.n.01_(v)"
+        ],
         "container_input_relation": [
             "contains saucepan.n.01_(v) lemon_juice.n.01_(i)",
             "contains saucepan.n.01_(v) granulated_sugar.n.01_(j)",
             "contains saucepan.n.01_(v) blueberry.n.01_(k)"
         ],
-        "heat_source": "stove.n.01_(u)",
-        "output_objects": "real blueberry_compote.n.01_(w)",
-        "container_output_relation": "contains saucepan.n.01_(v) blueberry_compote.n.01_(w)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(u)"
+        ],
+        "output_objects": [
+            "blueberry_compote.n.01_(w)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains saucepan.n.01_(v) blueberry_compote.n.01_(w)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> chicken curry, make_chicken_curry",
         "input_objects": [
-            "real diced__chicken_breast.n.01_(i)",
-            "real diced__beefsteak_tomato.n.01_(j)",
-            "real diced__vidalia_onion.n.01_(k)",
-            "real cooking_oil.n.01_(l)",
-            "real curry_powder.n.01_(m)"
+            "diced__chicken_breast.n.01_(i)",
+            "diced__beefsteak_tomato.n.01_(j)",
+            "diced__vidalia_onion.n.01_(k)",
+            "cooking_oil.n.01_(l)",
+            "curry_powder.n.01_(m)"
         ],
-        "container": "stockpot.n.01_(n)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "stockpot.n.01_(n)"
+        ],
         "container_input_relation": [
-            "contains diced__chicken_breast.n.01_(i)",
-            "contains diced__beefsteak_tomato.n.01_(j)",
-            "contains diced__vidalia_onion.n.01_(k)",
-            "contains cooking_oil.n.01_(l)",
-            "contains curry_powder.n.01_(m)"
+            "contains stockpot.n.01_(n) diced__chicken_breast.n.01_(i)",
+            "contains stockpot.n.01_(n) diced__beefsteak_tomato.n.01_(j)",
+            "contains stockpot.n.01_(n) diced__vidalia_onion.n.01_(k)",
+            "contains stockpot.n.01_(n) cooking_oil.n.01_(l)",
+            "contains stockpot.n.01_(n) curry_powder.n.01_(m)"
         ],
-        "heat_source": "stove.n.01_(o)",
-        "output_objects": "real chicken_curry.n.01_(p)",
-        "container_output_relation": "contains stockpot.n.01_(n) chicken_curry.n.01_(p)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(o)"
+        ],
+        "output_objects": [
+            "chicken_curry.n.01_(p)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains stockpot.n.01_(n) chicken_curry.n.01_(p)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> chocolate syrup - make_chocolate_syrup",
         "input_objects": [
-            "real granulated_sugar.n.01_(i)",
-            "real water.n.06_(j)",
-            "real salt.n.02_(k)",
-            "real vanilla.n.02_(l)",
-            "real ccoa_powder.n.01_(m)"
+            "granulated_sugar.n.01_(i)",
+            "water.n.06_(j)",
+            "salt.n.02_(k)",
+            "vanilla.n.02_(l)",
+            "ccoa_powder.n.01_(m)"
         ],
-        "container": "saucepan.n.01_(o)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "saucepan.n.01_(o)"
+        ],
         "container_input_relation": [
             "contains saucepan.n.01_(o) granulated_sugar.n.01_(i)",
             "contains saucepan.n.01_(o) water.n.06_(j)",
@@ -296,27 +425,47 @@
             "contains saucepan.n.01_(o) vanilla.n.02_(l)",
             "contains saucepan.n.01_(o) ccoa_powder.n.01_(m)"
         ],
-        "heat_source": "stove.n.01_(n)",
-        "output_objects": "real chocolate_sauce.n.01_(p)",
-        "container_output_relation": "contains saucepan.n.01_(o) chocolate_sauce.n.01_(p)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(n)"
+        ],
+        "output_objects": [
+            "chocolate_sauce.n.01_(p)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains saucepan.n.01_(o) chocolate_sauce.n.01_(p)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# spice cookie dough --> 6 spice cookies - make_cookies",
         "input_objects": [
-            "real spice_cookie_dough.n.01_(i)",
+            "spice_cookie_dough.n.01_(i)"
+        ],
+        "input_states": [
             "not cooked spice_cookie_dough.n.01_(i)"
         ],
-        "container": "cookie_sheet.n.01_(j)",
-        "container_input_relation": "ontop spice_cookie_dough.n.01_(i) cookie_sheet.n.01_(j)",
-        "heat_source": "oven.n.01_(k)",
+        "container": [
+            "cookie_sheet.n.01_(j)"
+        ],
+        "container_input_relation": [
+            "ontop spice_cookie_dough.n.01_(i) cookie_sheet.n.01_(j)"
+        ],
+        "heat_source": [
+            "oven.n.01_(k)"
+        ],
         "output_objects": [
-            "real spice_cookie.n.01_(l)",
-            "real spice_cookie.n.01_(m)",
-            "real spice_cookie.n.01_(n)",
-            "real spice_cookie.n.01_(o)",
-            "real spice_cookie.n.01_(p)",
-            "real spice_cookie.n.01_(q)",
+            "spice_cookie.n.01_(l)",
+            "spice_cookie.n.01_(m)",
+            "spice_cookie.n.01_(n)",
+            "spice_cookie.n.01_(o)",
+            "spice_cookie.n.01_(p)",
+            "spice_cookie.n.01_(q)"
+        ],
+        "output_states": [
             "cooked spice_cookie.n.01_(l)",
             "cooked spice_cookie.n.01_(m)",
             "cooked spice_cookie.n.01_(n)",
@@ -332,22 +481,33 @@
             "ontop spice_cookie.n.01_(p) cookie_sheet.n.01_(j)",
             "ontop spice_cookie.n.01_(q) cookie_sheet.n.01_(j)"
         ],
-        "timesteps": null
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# roll dough --> six baps, make_dinner_rolls",
         "input_objects": [
-            "real roll_dough.n.01_(i)",
+            "roll_dough.n.01_(i)"
+        ],
+        "input_states": [
             "not cooked roll_dough.n.01_(i)"
         ],
-        "container": "cookie_sheet.n.01_(j)",
-        "container_input_relation": "ontop roll_dough.n.01_(i) cookie_sheet.n.01_(j)",
-        "heat_source": "oven.n.01_(k)",
+        "container": [
+            "cookie_sheet.n.01_(j)"
+        ],
+        "container_input_relation": [
+            "ontop roll_dough.n.01_(i) cookie_sheet.n.01_(j)"
+        ],
+        "heat_source": [
+            "oven.n.01_(k)"
+        ],
         "output_objects": [
-            "real bap.n.01_(l)",
-            "real bap.n.01_(m)",
-            "real bap.n.01_(n)",
-            "real bap.n.01_(o)",
+            "bap.n.01_(l)",
+            "bap.n.01_(m)",
+            "bap.n.01_(n)",
+            "bap.n.01_(o)"
+        ],
+        "output_states": [
             "cooked bap.n.01_(l)",
             "cooked bap.n.01_(m)",
             "cooked bap.n.01_(n)",
@@ -359,18 +519,24 @@
             "ontop bap.n.01_(n) cookie_sheet.n.01_(j)",
             "ontop bap.n.01_(o) cookie_sheet.n.01_(j)"
         ],
-        "timesteps": null
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> granola, make_granola",
         "input_objects": [
-            "real oat.n.01_(i)",
-            "real honey.n.01_(j)",
-            "real cinnamon.n.03_(k)",
-            "real pecan.n.03_(l)",
-            "real raisin.n.01_(m)"
+            "oat.n.01_(i)",
+            "honey.n.01_(j)",
+            "cinnamon.n.03_(k)",
+            "pecan.n.03_(l)",
+            "raisin.n.01_(m)"
         ],
-        "container": "cookie_sheet.n.01_(o)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "cookie_sheet.n.01_(o)"
+        ],
         "container_input_relation": [
             "contains cookie_sheet.n.01_(o) oat.n.01_(i)",
             "contains cookie_sheet.n.01_(o) honey.n.01_(j)",
@@ -378,44 +544,83 @@
             "contains cookie_sheet.n.01_(o) pecan.n.03_(l)",
             "contains cookie_sheet.n.01_(o) raisin.n.01_(m)"
         ],
-        "heat_source": "oven.n.01_(n)",
-        "output_objects": "real granola.n.01_(p)",
-        "container_output_relation": "contains cookie_sheet.n.01_(o) granola.n.01_(p)",
-        "timesteps": null
-    },
-    {
-        "rule_name": "# ingredients --> cocoa, make_hot_cocoa",
-        "input_objects": [
-            "real cocoa_powder.n.01_(i)",
-            "real whole_milk.n.01_(j)",
-            "real granulated_sugar.n.01_(k)",
-            "real vanilla.n.02_(l)"
+        "heat_source": [
+            "oven.n.01_(n)"
         ],
-        "container": "saucepan.n.01_(m)",
-        "container_input_relation": [
-            "contains cocoa_powder.n.01_(i)",
-            "contains whole_milk.n.01_(j)",
-            "contains granulated_sugar.n.01_(k)",
-            "contains vanilla.n.02_(l)"
-        ],
-        "heat_source": "stove.n.01_(n)",
-        "output_objects": "real cocoa.n.01_(o)",
-        "container_output_relation": "contains saucepan.n.01_(m) cocoa.n.01_(o)",
-        "timesteps": null
-    },
-    {
-        "rule_name": "# water --> six ice cubes, make_ice",
-        "input_objects": "real water.n.06_(i)",
-        "container": "icetray.n.02_(j)",
-        "container_input_relation": "filled icetray.n.02_(j) water.n.06_(i)",
-        "heat_source": "deep-freeze.n.02_(k)",
         "output_objects": [
-            "real ice_cube.n.01_(l)",
-            "real ice_cube.n.01_(m)",
-            "real ice_cube.n.01_(n)",
-            "real ice_cube.n.01_(o)",
-            "real ice_cube.n.01_(p)",
-            "real ice_cube.n.01_(q)"
+            "granola.n.01_(p)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains cookie_sheet.n.01_(o) granola.n.01_(p)"
+        ],
+        "timesteps": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "cocoa_powder.n.01_(i)",
+            "whole_milk.n.01_(j)",
+            "granulated_sugar.n.01_(k)",
+            "vanilla.n.02_(l)"
+        ],
+        "input_states": [
+            null
+        ],
+        "container": [
+            "saucepan.n.01_(m)"
+        ],
+        "container_input_relation": [
+            "contains saucepan.n.01_(m) cocoa_powder.n.01_(i)",
+            "contains saucepan.n.01_(m) whole_milk.n.01_(j)",
+            "contains saucepan.n.01_(m) granulated_sugar.n.01_(k)",
+            "contains saucepan.n.01_(m) vanilla.n.02_(l)"
+        ],
+        "heat_source": [
+            "stove.n.01_(n)"
+        ],
+        "output_objects": [
+            "cocoa.n.01_(o)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains saucepan.n.01_(m) cocoa.n.01_(o)"
+        ],
+        "timesteps": [
+            null
+        ]
+    },
+    {
+        "input_objects": [
+            "water.n.06_(i)"
+        ],
+        "input_states": [
+            null
+        ],
+        "container": [
+            "icetray.n.02_(j)"
+        ],
+        "container_input_relation": [
+            "filled icetray.n.02_(j) water.n.06_(i)"
+        ],
+        "heat_source": [
+            "deep-freeze.n.02_(k)"
+        ],
+        "output_objects": [
+            "ice_cube.n.01_(l)",
+            "ice_cube.n.01_(m)",
+            "ice_cube.n.01_(n)",
+            "ice_cube.n.01_(o)",
+            "ice_cube.n.01_(p)",
+            "ice_cube.n.01_(q)"
+        ],
+        "output_states": [
+            null
         ],
         "container_output_relation": [
             "inside ice_cube.n.01_(l) icetray.n.02_(j)",
@@ -425,19 +630,25 @@
             "inside ice_cube.n.01_(p) icetray.n.02_(j)",
             "inside ice_cube.n.01_(q) icetray.n.02_(j)"
         ],
-        "timesteps": null
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> cheese sauce, make_macaroni_and_cheese",
         "input_objects": [
-            "real cream_cheese.n.01_(i)",
-            "real butter.n.01_(j)",
-            "real whole_milk.n.01_(k)",
-            "real grated_cheese.n.01_(l)",
-            "real parmesan.n.01_(m)",
-            "real salt.n.02_(n)"
+            "cream_cheese.n.01_(i)",
+            "butter.n.01_(j)",
+            "whole_milk.n.01_(k)",
+            "grated_cheese.n.01_(l)",
+            "parmesan.n.01_(m)",
+            "salt.n.02_(n)"
         ],
-        "container": "saucepan.n.01_(p)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "saucepan.n.01_(p)"
+        ],
         "container_input_relation": [
             "contains saucepan.n.01_(p) cream_cheese.n.01_(i)",
             "inside butter.n.01_(j) saucepan.n.01_(p)",
@@ -446,45 +657,69 @@
             "contains saucepan.n.01_(p) parmesan.n.01_(m)",
             "contains saucepan.n.01_(p) salt.n.02_(n)"
         ],
-        "heat_source": "stove.n.01_(o)",
-        "output_objects": "real cheese_sauce.n.01_(q)",
-        "container_output_relation": "contains saucepan.n.01_(p) cheese_sauce.n.01_(q)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(o)"
+        ],
+        "output_objects": [
+            "cheese_sauce.n.01_(q)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains saucepan.n.01_(p) cheese_sauce.n.01_(q)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": [
-            "# ingredients --> macaroni",
-            "cheese, make_macaroni_and_cheese"
-        ],
         "input_objects": [
-            "real cooked__noodle.n.01_(i)",
-            "real breadcrumb.n.01_(j)",
-            "real cheese_sauce.n.01_(k)"
+            "cooked__noodle.n.01_(i)",
+            "breadcrumb.n.01_(j)",
+            "cheese_sauce.n.01_(k)"
         ],
-        "container": "casserole.n.02_(m)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "casserole.n.02_(m)"
+        ],
         "container_input_relation": [
             "contains casserole.n.02_(m) cooked__noodle.n.01_(i)",
             "contains casserole.n.02_(m) breadcrumb.n.01_(j)",
             "contains casserole.n.02_(m) cheese_sauce.n.01_(k)"
         ],
-        "heat_source": "oven.n.01_(l)",
+        "heat_source": [
+            "oven.n.01_(l)"
+        ],
         "output_objects": [
-            "real macaroni_and_cheese.n.01_(n)",
+            "macaroni_and_cheese.n.01_(n)"
+        ],
+        "output_states": [
             "cooked macaroni_and_cheese.n.01_(n)"
         ],
-        "container_output_relation": "inside macaroni_and_cheese.n.01_(n) casserole.n.02_(m)",
-        "timesteps": null
+        "container_output_relation": [
+            "inside macaroni_and_cheese.n.01_(n) casserole.n.02_(m)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> meatloaf, make_meatloaf",
         "input_objects": [
-            "real ground_beef.n.01_(i)",
-            "real whole_milk.n.01_(j)",
-            "real diced__vidalia_onion.n.01_(k)",
-            "real breadcrumb.n.01_(l)",
-            "real brown_sugar.n.01_(m)"
+            "ground_beef.n.01_(i)",
+            "whole_milk.n.01_(j)",
+            "diced__vidalia_onion.n.01_(k)",
+            "breadcrumb.n.01_(l)",
+            "brown_sugar.n.01_(m)"
         ],
-        "container": "casserole.n.02_(n)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "casserole.n.02_(n)"
+        ],
         "container_input_relation": [
             "contains casserole.n.02_(n) ground_beef.n.01_(i)",
             "contains casserole.n.02_(n) whole_milk.n.01_(j)",
@@ -492,27 +727,47 @@
             "contains casserole.n.02_(n) breadcrumb.n.01_(l)",
             "contains casserole.n.02_(n) brown_sugar.n.01_(m)"
         ],
-        "heat_source": "oven.n.01_(o)",
+        "heat_source": [
+            "oven.n.01_(o)"
+        ],
         "output_objects": [
-            "real meat_loaf.n.01_(p)",
+            "meat_loaf.n.01_(p)"
+        ],
+        "output_states": [
             "cooked meat_loaf.n.01_(p)"
         ],
-        "container_output_relation": "inside meat_loaf.n.01_(p) casserole.n.02_(n)",
-        "timesteps": null
+        "container_output_relation": [
+            "inside meat_loaf.n.01_(p) casserole.n.02_(n)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# muffin batter --> six muffins, make_muffins",
-        "input_objects": "real muffin_batter.n.01_(i)",
-        "container": "cookie_sheet.n.01_(k)",
-        "container_input_relation": "filled cookie_sheet.n.01_(k) muffin_batter.n.01_(i)",
-        "heat_source": "oven.n.01_(j)",
+        "input_objects": [
+            "muffin_batter.n.01_(i)"
+        ],
+        "input_states": [
+            null
+        ],
+        "container": [
+            "cookie_sheet.n.01_(k)"
+        ],
+        "container_input_relation": [
+            "filled cookie_sheet.n.01_(k) muffin_batter.n.01_(i)"
+        ],
+        "heat_source": [
+            "oven.n.01_(j)"
+        ],
         "output_objects": [
-            "real muffin.n.01_(l)",
-            "real muffin.n.01_(m)",
-            "real muffin.n.01_(n)",
-            "real muffin.n.01_(o)",
-            "real muffin.n.01_(p)",
-            "real muffin.n.01_(q)",
+            "muffin.n.01_(l)",
+            "muffin.n.01_(m)",
+            "muffin.n.01_(n)",
+            "muffin.n.01_(o)",
+            "muffin.n.01_(p)",
+            "muffin.n.01_(q)"
+        ],
+        "output_states": [
             "cooked muffin.n.01_(l)",
             "cooked muffin.n.01_(m)",
             "cooked muffin.n.01_(n)",
@@ -528,19 +783,25 @@
             "ontop muffin.n.01_(p) cookie_sheet.n.01_(k)",
             "ontop muffin.n.01_(q) cookie_sheet.n.01_(k)"
         ],
-        "timesteps": null
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> oatmeal, make_oatmeal",
         "input_objects": [
-            "real salt.n.02_(i)",
-            "real cinnamon.n.03_(j)",
-            "real honey.n.01_(k)",
-            "real oat.n.01_(l)",
-            "real low-fat_milk.n.01_(m)",
-            "real water.n.06_(n)"
+            "salt.n.02_(i)",
+            "cinnamon.n.03_(j)",
+            "honey.n.01_(k)",
+            "oat.n.01_(l)",
+            "low-fat_milk.n.01_(m)",
+            "water.n.06_(n)"
         ],
-        "container": "saucepot.n.01_(o)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "saucepot.n.01_(o)"
+        ],
         "container_input_relation": [
             "contains saucepot.n.01_(o) salt.n.02_(i)",
             "contains saucepot.n.01_(o) cinnamon.n.03_(j)",
@@ -549,35 +810,50 @@
             "contains saucepot.n.01_(o) low-fat_milk.n.01_(m)",
             "contains saucepot.n.01_(o) water.n.06_(n)"
         ],
-        "heat_source": "stove.n.01_(p)",
-        "output_objects": "real oatmeal.n.01_(q)",
-        "container_output_relation": "contains saucepot.n.01_(o) oatmeal.n.01_(q)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(p)"
+        ],
+        "output_objects": [
+            "oatmeal.n.01_(q)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains saucepot.n.01_(o) oatmeal.n.01_(q)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> cooked marinara, make_pasta_sauce",
         "input_objects": [
-            "real half__beefsteak_tomato.n.01_(i)",
-            "real half__beefsteak_tomato.n.01_(j)",
-            "real half__beefsteak_tomato.n.01_(k)",
-            "real half__beefsteak_tomato.n.01_(l)",
-            "real half__beefsteak_tomato.n.01_(m)",
-            "real half__beefsteak_tomato.n.01_(n)",
-            "real clove.n.03_(o)",
-            "real clove.n.03_(p)",
-            "real clove.n.03_(q)",
-            "real clove.n.03_(r)",
-            "real clove.n.03_(s)",
-            "real diced__vidalia_onion.n.01_(t)",
-            "real basil.n.03_(u)",
-            "real basil.n.03_(v)",
-            "real basil.n.03_(w)",
-            "real basil.n.03_(x)",
-            "real oregano.n.01_(y)",
-            "real granulated_sugar.n.01_(z)",
-            "real salt.n.02_(a)"
+            "half__beefsteak_tomato.n.01_(i)",
+            "half__beefsteak_tomato.n.01_(j)",
+            "half__beefsteak_tomato.n.01_(k)",
+            "half__beefsteak_tomato.n.01_(l)",
+            "half__beefsteak_tomato.n.01_(m)",
+            "half__beefsteak_tomato.n.01_(n)",
+            "clove.n.03_(o)",
+            "clove.n.03_(p)",
+            "clove.n.03_(q)",
+            "clove.n.03_(r)",
+            "clove.n.03_(s)",
+            "diced__vidalia_onion.n.01_(t)",
+            "basil.n.03_(u)",
+            "basil.n.03_(v)",
+            "basil.n.03_(w)",
+            "basil.n.03_(x)",
+            "oregano.n.01_(y)",
+            "granulated_sugar.n.01_(z)",
+            "salt.n.02_(a)"
         ],
-        "container": "stockpot.n.01_(b)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "stockpot.n.01_(b)"
+        ],
         "container_input_relation": [
             "inside half__beefsteak_tomato.n.01_(i) stockpot.n.01_(b)",
             "inside half__beefsteak_tomato.n.01_(j) stockpot.n.01_(b)",
@@ -599,22 +875,37 @@
             "contains stockpot.n.01_(b) granulated_sugar.n.01_(z)",
             "contains stockpot.n.01_(b) salt.n.02_(a)"
         ],
-        "heat_source": "oven.n.01_(c)",
-        "output_objects": "real cooked__marinara.n.01_(d)",
-        "container_output_relation": "contains stockpot.n.01_(b) cooked__marinara.n.01_(d)",
-        "timesteps": null
+        "heat_source": [
+            "oven.n.01_(c)"
+        ],
+        "output_objects": [
+            "cooked__marinara.n.01_(d)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains stockpot.n.01_(b) cooked__marinara.n.01_(d)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> tomato sauce, make_pizza_sauce",
         "input_objects": [
-            "real beefsteak_tomato.n.01_(i)",
-            "real tomato_paste.n.01_(j)",
-            "real oregano.n.01_(k)",
-            "real clove.n.03_(l)",
-            "real clove.n.03_(m)",
-            "real basil.n.03_(n)"
+            "beefsteak_tomato.n.01_(i)",
+            "tomato_paste.n.01_(j)",
+            "oregano.n.01_(k)",
+            "clove.n.03_(l)",
+            "clove.n.03_(m)",
+            "basil.n.03_(n)"
         ],
-        "container": "stockpot.n.01_(o)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "stockpot.n.01_(o)"
+        ],
         "container_input_relation": [
             "inside beefsteak_tomato.n.01_(i) stockpot.n.01_(o)",
             "contains stockpot.n.01_(o) tomato_paste.n.01_(j)",
@@ -623,56 +914,70 @@
             "inside clove.n.03_(m) stockpot.n.01_(o)",
             "inside basil.n.03_(n) stockpot.n.01_(o)"
         ],
-        "heat_source": "stove.n.01_(p)",
-        "output_objects": "real tomato_sauce.n.01_(q)",
-        "container_output_relation": "contains stockpot.n.01_(o) tomato_sauce.n.01_(q)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(p)"
+        ],
+        "output_objects": [
+            "tomato_sauce.n.01_(q)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains stockpot.n.01_(o) tomato_sauce.n.01_(q)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> pizza, make_pizza",
         "input_objects": [
-            "real pizza_dough.n.01_(i)",
-            "not cooked pizza_dough.n.01_(i)",
-            "real tomato_sauce.n.01_(j)",
-            "real grated_cheese.n.01_(k)",
-            "real pepperoni.n.01_(l)",
-            "cooked pepperoni.n.01_(l)",
-            "real pepperoni.n.01_(m)",
-            "cooked pepperoni.n.01_(m)",
-            "real pepperoni.n.01_(n)",
-            "cooked pepperoni.n.01_(n)",
-            "real pepperoni.n.01_(o)",
-            "cooked pepperoni.n.01_(o)",
-            "real pepperoni.n.01_(p)",
-            "cooked pepperoni.n.01_(p)",
-            "real pepperoni.n.01_(q)",
-            "cooked pepperoni.n.01_(q)",
-            "real pepperoni.n.01_(r)",
-            "cooked pepperoni.n.01_(r)",
-            "real oregano.n.01_(s)",
-            "real half_mushroom.n.01_(t)",
-            "not cooked half_mushroom.n.01_(t)",
-            "real half_mushroom.n.01_(u)",
-            "not cooked half_mushroom.n.01_(u)",
-            "real half_mushroom.n.01_(v)",
-            "not cooked half_mushroom.n.01_(v)",
-            "real half_mushroom.n.01_(w)",
-            "not cooked half_mushroom.n.01_(w)",
-            "real half_mushroom.n.01_(x)",
-            "not cooked half_mushroom.n.01_(x)",
-            "real half_mushroom.n.01_(y)",
-            "not cooked half_mushroom.n.01_(y)",
-            "real half_mushroom.n.01_(z)",
-            "not cooked half_mushroom.n.01_(z)",
-            "real half_mushroom.n.01_(a)",
-            "not cooked half_mushroom.n.01_(a)",
-            "real half_mushroom.n.01_(b)",
-            "not cooked half_mushroom.n.01_(b)",
-            "real half_mushroom.n.01_(c)",
-            "not cooked half_mushroom.n.01_(c)",
-            "real diced__vidalia_onion.n.01_(d)"
+            "pizza_dough.n.01_(i)",
+            "tomato_sauce.n.01_(j)",
+            "grated_cheese.n.01_(k)",
+            "pepperoni.n.01_(l)",
+            "pepperoni.n.01_(m)",
+            "pepperoni.n.01_(n)",
+            "pepperoni.n.01_(o)",
+            "pepperoni.n.01_(p)",
+            "pepperoni.n.01_(q)",
+            "pepperoni.n.01_(r)",
+            "oregano.n.01_(s)",
+            "half_mushroom.n.01_(t)",
+            "half_mushroom.n.01_(u)",
+            "half_mushroom.n.01_(v)",
+            "half_mushroom.n.01_(w)",
+            "half_mushroom.n.01_(x)",
+            "half_mushroom.n.01_(y)",
+            "half_mushroom.n.01_(z)",
+            "half_mushroom.n.01_(a)",
+            "half_mushroom.n.01_(b)",
+            "half_mushroom.n.01_(c)",
+            "diced__vidalia_onion.n.01_(d)"
         ],
-        "container": "cookie_sheet.n.01_(e)",
+        "input_states": [
+            "not cooked pizza_dough.n.01_(i)",
+            "cooked pepperoni.n.01_(l)",
+            "cooked pepperoni.n.01_(m)",
+            "cooked pepperoni.n.01_(n)",
+            "cooked pepperoni.n.01_(o)",
+            "cooked pepperoni.n.01_(p)",
+            "cooked pepperoni.n.01_(q)",
+            "cooked pepperoni.n.01_(r)",
+            "not cooked half_mushroom.n.01_(t)",
+            "not cooked half_mushroom.n.01_(u)",
+            "not cooked half_mushroom.n.01_(v)",
+            "not cooked half_mushroom.n.01_(w)",
+            "not cooked half_mushroom.n.01_(x)",
+            "not cooked half_mushroom.n.01_(y)",
+            "not cooked half_mushroom.n.01_(z)",
+            "not cooked half_mushroom.n.01_(a)",
+            "not cooked half_mushroom.n.01_(b)",
+            "not cooked half_mushroom.n.01_(c)"
+        ],
+        "container": [
+            "cookie_sheet.n.01_(e)"
+        ],
         "container_input_relation": [
             "ontop pizza_dough.n.01_(i) cookie_sheet.n.01_(e)",
             "covered pizza_dough.n.01_(i) tomato_sauce.n.01_(j)",
@@ -697,26 +1002,46 @@
             "ontop half_mushroom.n.01_(b) pizza_dough.n.01_(i)",
             "ontop half_mushroom.n.01_(c) pizza_dough.n.01_(i)"
         ],
-        "heat_source": "oven.n.01_(f)",
+        "heat_source": [
+            "oven.n.01_(f)"
+        ],
         "output_objects": [
-            "real pizza.n.01_(g)",
+            "pizza.n.01_(g)"
+        ],
+        "output_states": [
             "cooked pizza.n.01_(g)",
             "hot pizza.n.01_(g)"
         ],
-        "container_output_relation": "ontop pizza.n.01_(g) cookie_sheet.n.01_(e)",
-        "timesteps": null
+        "container_output_relation": [
+            "ontop pizza.n.01_(g) cookie_sheet.n.01_(e)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> popsicles, make_popsicles",
-        "input_objects": "real smoothie.n.01_(i)",
-        "container": "mold.n.02_(j)",
-        "container_input_relation": "filled mold.n.02_(j) smoothie.n.01_(i)",
-        "heat_source": "deep-freeze.n.02_(k)",
+        "input_objects": [
+            "smoothie.n.01_(i)"
+        ],
+        "input_states": [
+            null
+        ],
+        "container": [
+            "mold.n.02_(j)"
+        ],
+        "container_input_relation": [
+            "filled mold.n.02_(j) smoothie.n.01_(i)"
+        ],
+        "heat_source": [
+            "deep-freeze.n.02_(k)"
+        ],
         "output_objects": [
-            "real ice_lolly.n.01_(l)",
-            "real ice_lolly.n.01_(m)",
-            "real ice_lolly.n.01_(n)",
-            "real ice_lolly.n.01_(o)",
+            "ice_lolly.n.01_(l)",
+            "ice_lolly.n.01_(m)",
+            "ice_lolly.n.01_(n)",
+            "ice_lolly.n.01_(o)"
+        ],
+        "output_states": [
             "frozen ice_lolly.n.01_(l)",
             "frozen ice_lolly.n.01_(m)",
             "frozen ice_lolly.n.01_(n)",
@@ -728,32 +1053,37 @@
             "inside ice_lolly.n.01_(n) mold.n.02_(j)",
             "inside ice_lolly.n.01_(o) mold.n.02_(j)"
         ],
-        "timesteps": null
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> fish stew, make_seafood_stew",
         "input_objects": [
-            "real diced__bell_pepper.n.02_(i)",
-            "real diced__clove.n.03_(j)",
-            "real olive_oil.n.01_(k)",
-            "real diced__beefsteak_tomato.n.01_(l)",
-            "real tomato_sauce.n.01_(m)",
-            "real chicken_broth.n.01_(n)",
-            "real clam.n.01_(o)",
-            "real clam.n.01_(p)",
-            "real clam.n.01_(q)",
-            "real clam.n.01_(r)",
-            "real clam.n.01_(s)",
-            "real clam.n.01_(t)",
-            "real prawn.n.01_(u)",
-            "real prawn.n.01_(v)",
-            "real prawn.n.01_(w)",
-            "real prawn.n.01_(x)",
-            "real prawn.n.01_(y)",
-            "real scallop.n.02_(z)",
-            "real scallop.n.02_(a)",
-            "real scallop.n.02_(b)",
-            "real scallop.n.02_(c)",
+            "diced__bell_pepper.n.02_(i)",
+            "diced__clove.n.03_(j)",
+            "olive_oil.n.01_(k)",
+            "diced__beefsteak_tomato.n.01_(l)",
+            "tomato_sauce.n.01_(m)",
+            "chicken_broth.n.01_(n)",
+            "clam.n.01_(o)",
+            "clam.n.01_(p)",
+            "clam.n.01_(q)",
+            "clam.n.01_(r)",
+            "clam.n.01_(s)",
+            "clam.n.01_(t)",
+            "prawn.n.01_(u)",
+            "prawn.n.01_(v)",
+            "prawn.n.01_(w)",
+            "prawn.n.01_(x)",
+            "prawn.n.01_(y)",
+            "scallop.n.02_(z)",
+            "scallop.n.02_(a)",
+            "scallop.n.02_(b)",
+            "scallop.n.02_(c)",
+            "oregano.n.01_(d)",
+            "parsley.n.02_(e)"
+        ],
+        "input_states": [
             "not cooked clam.n.01_(o)",
             "not cooked clam.n.01_(p)",
             "not cooked clam.n.01_(q)",
@@ -768,11 +1098,11 @@
             "not cooked scallop.n.02_(z)",
             "not cooked scallop.n.02_(a)",
             "not cooked scallop.n.02_(b)",
-            "not cooked scallop.n.02_(c)",
-            "real oregano.n.01_(d)",
-            "real parsley.n.02_(e)"
+            "not cooked scallop.n.02_(c)"
         ],
-        "container": "stockpot.n.01_(f)",
+        "container": [
+            "stockpot.n.01_(f)"
+        ],
         "container_input_relation": [
             "contains stockpot.n.01_(f) diced__bell_pepper.n.02_(i)",
             "contains stockpot.n.01_(f) diced__clove.n.03_(j)",
@@ -798,23 +1128,37 @@
             "inside scallop.n.02_(b) stockpot.n.01_(f)",
             "inside scallop.n.02_(c) stockpot.n.01_(f)"
         ],
-        "heat_source": "stove.n.01_(g)",
-        "output_objects": "real fish_stew.n.01_(h)",
-        "container_output_relation": "contains stockpot.n.01_(f) fish_stew.n.01_(h)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(g)"
+        ],
+        "output_objects": [
+            "fish_stew.n.01_(h)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains stockpot.n.01_(f) fish_stew.n.01_(h)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> chicken soup, make_soup",
         "input_objects": [
-            "real chicken_broth.n.01_(i)",
-            "real diced__carrot.n.03_(j)",
-            "real diced__celery.n.02_(k)",
-            "real chicken.n.01_(l)",
-            "not cooked chicken.n.01_(l)",
-            "real salt.n.02_(m)",
-            "real rosemary.n.02_(n)"
+            "chicken_broth.n.01_(i)",
+            "diced__carrot.n.03_(j)",
+            "diced__celery.n.02_(k)",
+            "chicken.n.01_(l)",
+            "salt.n.02_(m)",
+            "rosemary.n.02_(n)"
         ],
-        "container": "stockpot.n.01_(o)",
+        "input_states": [
+            "not cooked chicken.n.01_(l)"
+        ],
+        "container": [
+            "stockpot.n.01_(o)"
+        ],
         "container_input_relation": [
             "contains stockpot.n.01_(o) chicken_broth.n.01_(i)",
             "contains stockpot.n.01_(o) diced__carrot.n.03_(j)",
@@ -823,21 +1167,36 @@
             "contains stockpot.n.01_(o) rosemary.n.02_(n)",
             "inside chicken.n.01_(l) stockpot.n.01_(o)"
         ],
-        "heat_source": "stove.n.01_(p)",
-        "output_objects": "real cooked__chicken_soup.n.01_(p)",
-        "container_output_relation": "contains stockpot.n.01_(o) cooked__chicken_soup.n.01_(p)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(p)"
+        ],
+        "output_objects": [
+            "cooked__chicken_soup.n.01_(p)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains stockpot.n.01_(o) cooked__chicken_soup.n.01_(p)"
+        ],
+        "timesteps": [
+            null
+        ]
     },
     {
-        "rule_name": "# ingredients --> beef stew, make_stew",
         "input_objects": [
-            "real diced__carrot.n.01_(i)",
-            "real pea.n.01_(j)",
-            "real diced__vidalia_onion.n.01_(k)",
-            "real ground_beef.n.01_(l)",
-            "real beef_broth.n.01_(m)"
+            "diced__carrot.n.01_(i)",
+            "pea.n.01_(j)",
+            "diced__vidalia_onion.n.01_(k)",
+            "ground_beef.n.01_(l)",
+            "beef_broth.n.01_(m)"
         ],
-        "container": "stockpot.n.01_(o)",
+        "input_states": [
+            null
+        ],
+        "container": [
+            "stockpot.n.01_(o)"
+        ],
         "container_input_relation": [
             "contains stockpot.n.01_(o) diced__carrot.n.01_(i)",
             "contains stockpot.n.01_(o) pea.n.01_(j)",
@@ -845,9 +1204,20 @@
             "contains stockpot.n.01_(o) ground_beef.n.01_(l)",
             "contains stockpot.n.01_(o) beef_broth.n.01_(m)"
         ],
-        "heat_source": "stove.n.01_(n)",
-        "output_objects": "real beef_stew.n.01_(p)",
-        "container_output_relation": "contains stockpot.n.01_(o) beef_stew.n.01_(p)",
-        "timesteps": null
+        "heat_source": [
+            "stove.n.01_(n)"
+        ],
+        "output_objects": [
+            "beef_stew.n.01_(p)"
+        ],
+        "output_states": [
+            null
+        ],
+        "container_output_relation": [
+            "contains stockpot.n.01_(o) beef_stew.n.01_(p)"
+        ],
+        "timesteps": [
+            null
+        ]
     }
 ]

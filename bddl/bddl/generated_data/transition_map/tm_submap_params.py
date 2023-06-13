@@ -3,12 +3,21 @@ TM_SUBMAPS_TO_PARAMS = {
         "input_objects": {
             "required"
         },
+        "input_states": {
+            "required"
+        },
         "output_objects": {
+            "required"
+        },
+        "output_states": {
             "required"
         }
     },
     "heat_cook": {
         "input_objects": {
+            "required"
+        },
+        "input_states": {
             "required"
         },
         "container": {
@@ -23,6 +32,9 @@ TM_SUBMAPS_TO_PARAMS = {
         "output_objects": {
             "required"
         },
+        "output_states": {
+            "required"
+        },
         "container_output_relation": {
             "required"
         },
@@ -34,7 +46,13 @@ TM_SUBMAPS_TO_PARAMS = {
         "input_objects": {
             "required"
         },
+        "input_states": {
+            "required"
+        },
         "output_objects": {
+            "required"
+        },
+        "output_states": {
             "required"
         }
     },
@@ -42,10 +60,16 @@ TM_SUBMAPS_TO_PARAMS = {
         "input_objects": {
             "required"
         },
+        "input_states": {
+            "required"
+        },
         "machine": {
             "required"
         },
         "output_objects": {
+            "required"
+        },
+        "output_states": {
             "required"
         }
     }
