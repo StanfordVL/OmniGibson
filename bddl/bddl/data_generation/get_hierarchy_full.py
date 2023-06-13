@@ -5,16 +5,31 @@ We consider each unique path to a synset "different", with the obvious
 problem that each synset can have multiple hypernyms
 '''
 import json
+import pandas as pd
 import pathlib
 from nltk.corpus import wordnet as wn
 
 HIERARCHY_OUTPUT_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "output_hierarchy.json"
+HIERARCHY_PROPERTIES_OUTPUT_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "output_hierarchy_properties.json"
+CATEGORY_MAPPING_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "category_mapping.csv"
+SYN_PROP_PARAM_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_params.json"
+
+
+def add_igibson_objects(node, synset_to_cat):
+  '''
+  Go through the hierarchy and add the words associated with the synsets as attributes.
+  '''
+  if node["name"] in synset_to_cat:
+    node["categories"] = sorted(synset_to_cat[node["name"]])
+
+  if "children" in node:
+    for child_node in node["children"]:
+      add_igibson_objects(child_node, synset_to_cat)
 
 
 def add_path(path, hierarchy):
   if not path: 
     return 
-  # print("Path is nontrivial")
   synset = path[-1]
   if "children" not in hierarchy:
     hierarchy["children"] = []
@@ -41,6 +56,13 @@ def generate_paths(paths, path, synset, syn_prop_dict):
       generate_paths(paths, path + [hypernym], hypernym, syn_prop_dict)
 
 
+def add_properties(node, syn_prop_param_dict):
+  node["abilities"] = syn_prop_param_dict[node["name"]]
+  if "children" in node: 
+    for child_node in node["children"]:
+      add_properties(child_node, syn_prop_param_dict)
+
+
 # API
 
 def get_hierarchy(syn_prop_dict): 
@@ -56,7 +78,26 @@ def get_hierarchy(syn_prop_dict):
     for path in paths: 
       add_path(path[:-1], hierarchy)
 
+  synset_to_cat_raw = pd.read_csv(CATEGORY_MAPPING_FN)[["category", "synset"]].to_dict(orient="records")
+  synset_to_cat = {}
+  for rec in synset_to_cat_raw: 
+    syn, cat = rec["synset"], rec["category"]
+    if syn in synset_to_cat: 
+      synset_to_cat[syn].append(cat)
+    else:
+      synset_to_cat[syn] = [cat]
+  add_igibson_objects(hierarchy, synset_to_cat)
+
   with open(HIERARCHY_OUTPUT_FN, "w") as f:
+    json.dump(hierarchy, f, indent=2)
+  return hierarchy
+
+
+def create_get_save_hierarchy_with_properties(hierarchy):
+  with open(SYN_PROP_PARAM_FN) as f:
+    syn_prop_param_dict = json.load(f)
+  add_properties(hierarchy, syn_prop_param_dict)
+  with open(HIERARCHY_PROPERTIES_OUTPUT_FN, "w") as f:
     json.dump(hierarchy, f, indent=2)
   return hierarchy
 
