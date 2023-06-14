@@ -1,246 +1,246 @@
 [
     {
-        "input_objects": [
-            "espresso.n.01_(i)",
-            "cane_sugar.n.01_(j)",
-            "whole_milk.n.01_(k)",
-            "foam.n.01_(l)"
-        ],
+        "input_objects": {
+            "espresso.n.01": 1,
+            "cane_sugar.n.01": 1,
+            "whole_milk.n.01": 1,
+            "foam.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "cappuccino.n.01_(n)"
-        ],
+        "output_objects": {
+            "cappuccino.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(m) cappuccino.n.01_(n)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "vinegar.n.01_(i)",
-            "water.n.06_(j)",
-            "lemon_juice.n.01_(k)"
-        ],
+        "input_objects": {
+            "vinegar.n.01": 1,
+            "water.n.06": 1,
+            "lemon_juice.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "vinegar_cleaning_solution.n.01_(n)"
-        ],
+        "output_objects": {
+            "vinegar_cleaning_solution.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(m) vinegar_cleaning_solution.n.01_(n)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "espresso.n.01_(i)",
-            "low-fat_milk.n.01_(j)",
-            "sugar_syrup.n.01_(k)"
-        ],
+        "input_objects": {
+            "espresso.n.01": 1,
+            "low-fat_milk.n.01": 1,
+            "sugar_syrup.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "cafe_au_lait.n.01_(n)"
-        ],
+        "output_objects": {
+            "cafe_au_lait.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(l) cafe_au_lait.n.01_(n)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "flour.n.01_(i)",
-            "baking_powder.n.01_(j)",
-            "salt.n.02_(k)",
-            "granulated_sugar.n.01_(l)",
-            "sodium_carbonate.n.01_(m)"
-        ],
+        "input_objects": {
+            "flour.n.01": 1,
+            "baking_powder.n.01": 1,
+            "salt.n.02": 1,
+            "granulated_sugar.n.01": 1,
+            "sodium_carbonate.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "cake_mix.n.01_(p)"
-        ],
+        "output_objects": {
+            "cake_mix.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(n) cake_mix.n.01_(p)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "cinnamon.n.03_(i)",
-            "granulated_sugar.n.01_(j)"
-        ],
+        "input_objects": {
+            "cinnamon.n.03": 1,
+            "granulated_sugar.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "cinnamon_sugar.n.01_(m)"
-        ],
+        "output_objects": {
+            "cinnamon_sugar.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(n) cinnamon_sugar.n.01_(m)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "orange_juice.n.01_(i)",
-            "ginger_beer.n.01_(j)",
-            "lemonade.n.01_(k)",
-            "pineapple_juice.n.01_(l)"
-        ],
+        "input_objects": {
+            "orange_juice.n.01": 1,
+            "ginger_beer.n.01": 1,
+            "lemonade.n.01": 1,
+            "pineapple_juice.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "fruit_punch.n.01_(o)"
-        ],
+        "output_objects": {
+            "fruit_punch.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(m) fruit_punch.n.01_(o)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "soda_water.n.01_(i)",
-            "heavy_cream.n.01_(j)",
-            "sugar_syrup.n.01_(k)"
-        ],
+        "input_objects": {
+            "soda_water.n.01": 1,
+            "heavy_cream.n.01": 1,
+            "sugar_syrup.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "cream_soda.n.01_(n)"
-        ],
+        "output_objects": {
+            "cream_soda.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(l) cream_soda.n.01_(n)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "water.n.06_(i)",
-            "green_tea.n.01_(i)"
-        ],
+        "input_objects": {
+            "water.n.06": 1,
+            "green_tea.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "tea.n.01_(m)"
-        ],
+        "output_objects": {
+            "tea.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(k) tea.n.01_(m)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "low-fat_milk.n.01_(i)",
-            "tea.n.01_(j)"
-        ],
+        "input_objects": {
+            "low-fat_milk.n.01": 1,
+            "tea.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "green_tea_latte.n.01_(m)"
-        ],
+        "output_objects": {
+            "green_tea_latte.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(k) green_tea_latte.n.01_(m)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "instant_coffee.n.01_(i)",
-            "water.n.06_(j)"
-        ],
+        "input_objects": {
+            "instant_coffee.n.01": 1,
+            "water.n.06": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "drip_coffee.n.01_(m)"
-        ],
+        "output_objects": {
+            "drip_coffee.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(k) drip_coffee.n.01_(m)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "lemon_juice.n.01_(i)",
-            "vinegar.n.01_(j)",
-            "sodium_carbonate.n.01_(k)"
-        ],
+        "input_objects": {
+            "lemon_juice.n.01": 1,
+            "vinegar.n.01": 1,
+            "sodium_carbonate.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "lemon_stain_remover.n.01_(n)"
-        ],
+        "output_objects": {
+            "lemon_stain_remover.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(l) lemon_stain_remover.n.01_(n)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "water.n.06_(i)",
-            "granulated_sugar.n.01_(j)",
-            "lemon_juice.n.01_(k)"
-        ],
+        "input_objects": {
+            "water.n.06": 1,
+            "granulated_sugar.n.01": 1,
+            "lemon_juice.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "lemonade.n.01_(n)"
-        ],
+        "output_objects": {
+            "lemonade.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(l) lemonade.n.01_(n)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "water.n.06_(i)",
-            "granulated_sugar.n.01_(j)",
-            "lime_juice.n.01_(k)"
-        ],
+        "input_objects": {
+            "water.n.06": 1,
+            "granulated_sugar.n.01": 1,
+            "lime_juice.n.01": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "limeade.n.01_(n)"
-        ],
+        "output_objects": {
+            "limeade.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(l) limeade.n.01_(n)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "rosemary.n.02_(i)",
-            "sage.n.02_(j)",
-            "thyme.n.01_(k)",
-            "black_pepper.n.02_(l)",
-            "nutmeg.n.02_(m)"
-        ],
+        "input_objects": {
+            "rosemary.n.02": 1,
+            "sage.n.02": 1,
+            "thyme.n.01": 1,
+            "black_pepper.n.02": 1,
+            "nutmeg.n.02": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "poultry_seasoning.n.01_(p)"
-        ],
+        "output_objects": {
+            "poultry_seasoning.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(n) poultry_seasoning.n.01_(p)"
+            null
         ]
     },
     {
-        "input_objects": [
-            "cinnamon.n.03_(i)",
-            "ginger.n.02_(j)",
-            "nutmeg.n.02_(k)",
-            "allspice.n.03_(l)",
-            "clove.n.04_(m)"
-        ],
+        "input_objects": {
+            "cinnamon.n.03": 1,
+            "ginger.n.02": 1,
+            "nutmeg.n.02": 1,
+            "allspice.n.03": 1,
+            "clove.n.04": 1
+        },
         "input_states": [
             null
         ],
-        "output_objects": [
-            "pumpkin_pie_spice.n.01_(p)"
-        ],
+        "output_objects": {
+            "pumpkin_pie_spice.n.01": 1
+        },
         "output_states": [
-            "contains [fillable]_(n) pumpkin_pie_spice.n.01_(p)"
+            null
         ]
     }
 ]

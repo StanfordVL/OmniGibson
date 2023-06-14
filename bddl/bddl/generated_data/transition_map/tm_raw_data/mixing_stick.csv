@@ -1,16 +1,16 @@
 rule_name,input_objects,input_states,output_objects,output_states
-# ingredients --> cappuccino - make_a_cappuccino,espresso.n.01_(i) and cane_sugar.n.01_(j) and whole_milk.n.01_(k) and foam.n.01_(l),,cappuccino.n.01_(n),contains [fillable]_(m) cappuccino.n.01_(n)
-# ingredients --> vinegar cleaning solution - make_a_vinegar_cleaning_solution,vinegar.n.01_(i) and water.n.06_(j) and lemon_juice.n.01_(k),,vinegar_cleaning_solution.n.01_(n),contains [fillable]_(m) vinegar_cleaning_solution.n.01_(n)
-# ingredients --> cafe au lait - make_an_iced_espresso,espresso.n.01_(i) and low-fat_milk.n.01_(j) and sugar_syrup.n.01_(k),,cafe_au_lait.n.01_(n),contains [fillable]_(l) cafe_au_lait.n.01_(n)
-"# ingredients --> cake mix, make_cake_mix",flour.n.01_(i) and baking_powder.n.01_(j) and salt.n.02_(k) and granulated_sugar.n.01_(l) and sodium_carbonate.n.01_(m),,cake_mix.n.01_(p),contains [fillable]_(n) cake_mix.n.01_(p)
-"# ingredients --> cinnamon sugar, make_cinnamon_sugar",cinnamon.n.03_(i) and granulated_sugar.n.01_(j),,cinnamon_sugar.n.01_(m),contains [fillable]_(n) cinnamon_sugar.n.01_(m)
-"# ingredients --> fruit punch, make_citrus_punch",orange_juice.n.01_(i) and ginger_beer.n.01_(j) and lemonade.n.01_(k) and pineapple_juice.n.01_(l),,fruit_punch.n.01_(o),contains [fillable]_(m) fruit_punch.n.01_(o)
-"# ingredients --> cream soda, make_cream_soda",soda_water.n.01_(i) and heavy_cream.n.01_(j) and sugar_syrup.n.01_(k),,cream_soda.n.01_(n),contains [fillable]_(l) cream_soda.n.01_(n)
-"# ingredients --> green tea, make_green_tea_latte",water.n.06_(i) and green_tea.n.01_(i),,tea.n.01_(m),contains [fillable]_(k) tea.n.01_(m)
-"# ingredients --> green tea latte, make_green_tea_latte",low-fat_milk.n.01_(i) and tea.n.01_(j),,green_tea_latte.n.01_(m),contains [fillable]_(k) green_tea_latte.n.01_(m)
-"# ingredients --> drip coffee, make_instant_coffee",instant_coffee.n.01_(i) and water.n.06_(j),,drip_coffee.n.01_(m),contains [fillable]_(k) drip_coffee.n.01_(m)
-# ingredients --> lemon stain remover,lemon_juice.n.01_(i) and vinegar.n.01_(j) and sodium_carbonate.n.01_(k),,lemon_stain_remover.n.01_(n),contains [fillable]_(l) lemon_stain_remover.n.01_(n)
-"# ingredients --> lemonade, make_lemonade",water.n.06_(i) and granulated_sugar.n.01_(j) and lemon_juice.n.01_(k),,lemonade.n.01_(n),contains [fillable]_(l) lemonade.n.01_(n)
-"# ingredients --> limeade, make_limeade",water.n.06_(i) and granulated_sugar.n.01_(j) and lime_juice.n.01_(k),,limeade.n.01_(n),contains [fillable]_(l) limeade.n.01_(n)
-"# ingredients --> poultry seasoning, make_poultry_seasoning",rosemary.n.02_(i) and sage.n.02_(j) and thyme.n.01_(k) and black_pepper.n.02_(l) and nutmeg.n.02_(m),,poultry_seasoning.n.01_(p),contains [fillable]_(n) poultry_seasoning.n.01_(p)
-"# ingredients --> pumpkin pie spice, make_pumpkin_pie_spice",cinnamon.n.03_(i) and ginger.n.02_(j) and nutmeg.n.02_(k) and allspice.n.03_(l) and clove.n.04_(m),,pumpkin_pie_spice.n.01_(p),contains [fillable]_(n) pumpkin_pie_spice.n.01_(p)
+# ingredients --> cappuccino - make_a_cappuccino,espresso.n.01_(i) and cane_sugar.n.01_(j) and whole_milk.n.01_(k) and foam.n.01_(l),,cappuccino.n.01_(n),
+# ingredients --> vinegar cleaning solution - make_a_vinegar_cleaning_solution,vinegar.n.01_(i) and water.n.06_(j) and lemon_juice.n.01_(k),,vinegar_cleaning_solution.n.01_(n),
+# ingredients --> cafe au lait - make_an_iced_espresso,espresso.n.01_(i) and low-fat_milk.n.01_(j) and sugar_syrup.n.01_(k),,cafe_au_lait.n.01_(n),
+"# ingredients --> cake mix, make_cake_mix",flour.n.01_(i) and baking_powder.n.01_(j) and salt.n.02_(k) and granulated_sugar.n.01_(l) and sodium_carbonate.n.01_(m),,cake_mix.n.01_(p),
+"# ingredients --> cinnamon sugar, make_cinnamon_sugar",cinnamon.n.03_(i) and granulated_sugar.n.01_(j),,cinnamon_sugar.n.01_(m),
+"# ingredients --> fruit punch, make_citrus_punch",orange_juice.n.01_(i) and ginger_beer.n.01_(j) and lemonade.n.01_(k) and pineapple_juice.n.01_(l),,fruit_punch.n.01_(o),
+"# ingredients --> cream soda, make_cream_soda",soda_water.n.01_(i) and heavy_cream.n.01_(j) and sugar_syrup.n.01_(k),,cream_soda.n.01_(n),
+"# ingredients --> green tea, make_green_tea_latte",water.n.06_(i) and green_tea.n.01_(i),,tea.n.01_(m),
+"# ingredients --> green tea latte, make_green_tea_latte",low-fat_milk.n.01_(i) and tea.n.01_(j),,green_tea_latte.n.01_(m),
+"# ingredients --> drip coffee, make_instant_coffee",instant_coffee.n.01_(i) and water.n.06_(j),,drip_coffee.n.01_(m),
+# ingredients --> lemon stain remover,lemon_juice.n.01_(i) and vinegar.n.01_(j) and sodium_carbonate.n.01_(k),,lemon_stain_remover.n.01_(n),
+"# ingredients --> lemonade, make_lemonade",water.n.06_(i) and granulated_sugar.n.01_(j) and lemon_juice.n.01_(k),,lemonade.n.01_(n),
+"# ingredients --> limeade, make_limeade",water.n.06_(i) and granulated_sugar.n.01_(j) and lime_juice.n.01_(k),,limeade.n.01_(n),
+"# ingredients --> poultry seasoning, make_poultry_seasoning",rosemary.n.02_(i) and sage.n.02_(j) and thyme.n.01_(k) and black_pepper.n.02_(l) and nutmeg.n.02_(m),,poultry_seasoning.n.01_(p),
+"# ingredients --> pumpkin pie spice, make_pumpkin_pie_spice",cinnamon.n.03_(i) and ginger.n.02_(j) and nutmeg.n.02_(k) and allspice.n.03_(l) and clove.n.04_(m),,pumpkin_pie_spice.n.01_(p),
