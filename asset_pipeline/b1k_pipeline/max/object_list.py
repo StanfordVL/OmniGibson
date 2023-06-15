@@ -4,7 +4,7 @@ sys.path.append(r"D:\ig_pipeline")
 
 import json
 import pathlib
-from collections import Counter
+from collections import Counter, defaultdict
 
 import pymxs
 
@@ -25,27 +25,44 @@ def main():
         {
             x.group("category") + "-" + x.group("model_id")
             for x in matches
-            if x is not None
+            if x is not None and not x.group("meta_type")
         }
     )
     provided = sorted(
         {
             x.group("category") + "-" + x.group("model_id")
             for x in matches
-            if x is not None and not x.group("bad")
+            if x is not None and not x.group("bad") and not x.group("meta_type")
         }
     )
     counts = Counter(
         [
             x.group("category") + "-" + x.group("model_id")
             for x in matches
-            if x is not None
+            if x is not None and not x.group("meta_type")
         ]
     )
+    max_tree = [(x.name, str(rt.classOf(x)), x.parent.name if x.parent else None) for x in rt.objects]
 
     meshes = sorted(
-        name for match, name in zip(matches, object_names) if match is not None
+        name for match, name in zip(matches, object_names) if match is not None and not match.group("meta_type")
     )
+
+    meta_links = defaultdict(set)
+    for obj, _, parent in max_tree:
+        if not parent:
+            continue
+        parent_match = b1k_pipeline.utils.parse_name(parent)
+        obj_match = b1k_pipeline.utils.parse_name(obj)
+        if not parent_match or not obj_match:
+            continue
+        if not obj_match.group("meta_type") or parent_match.group("bad"):
+            continue
+        parent_id = parent_match.group("category") + "-" + parent_match.group("model_id")
+        meta_type = obj_match.group("meta_type")
+        meta_links[parent_id].add(meta_type)
+
+    meta_links = {k: sorted(v) for k, v in sorted(meta_links.items())}
 
     output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -56,6 +73,8 @@ def main():
         "needed_objects": needed,
         "provided_objects": provided,
         "meshes": meshes,
+        "meta_links": meta_links,
+        "max_tree": max_tree, 
         "object_counts": counts,
         "error_invalid_name": sorted(nomatch),
     }

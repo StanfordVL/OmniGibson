@@ -37,17 +37,19 @@ ALLOWED_PART_TAGS = {
 }
 
 
-ALLOWED_META_IS_DIMENSIONLESS = {
-    'fluidsource': True,
-    'togglebutton': False,
-    'attachment': True,
-    'heatsource': True,
-    'particleapplier': False,
-    'particleremover': False,
-    'fluidsink': False,
-    'slicer': False,
-    'fillable': False,
+ALLOWED_META_TYPES = {
+    'fluidsource': "dimensionless",
+    'togglebutton': "primitive",
+    'attachment': "dimensionless",
+    'heatsource': "dimensionless",
+    'particleapplier': "primitive",
+    'particleremover': "primitive",
+    'fluidsink': "primitive",
+    'slicer': "primitive",
+    'fillable': "primitive",
+    'collision': "convexmesh",
 }
+assert not (set(ALLOWED_META_TYPES.values()) - {"dimensionless", "primitive", "convexmesh"}), "Found invalid meta type mapping"
 
 
 def get_required_meta_links(category):
@@ -337,22 +339,23 @@ class SanityCheck:
         found_ml_types = set()
         found_ml_subids_for_id = collections.defaultdict(lambda: collections.defaultdict(list))
         for child in children:
-            # If it's an EditablePoly, then it will be processed as a root object too. Safe to skip.
-            if classOf(child) == rt.Editable_Poly:
-                continue
-
             # Otherwise, we can validate the individual meta link
             match = b1k_pipeline.utils.parse_name(child.name)
             if match is None:
                 self.expect(False, f"{child.name} is an invalid meta link under {row.object_name}.")
                 continue
+
+            # If it's an EditablePoly with no meta tag, then it will be processed as a root object too. Safe to skip.
+            if classOf(child) == rt.Editable_Poly and not match.group("meta_type"):
+                continue
+
             self.expect(match.group("mesh_basename") == row.name_mesh_basename, f"Meta link {child.name} base name doesnt match parent {row.object_name}")
 
             # Keep track of the meta links we have
             self.expect(match.group("meta_type"), f"Meta object {child.name} should have a meta link type in its name.")
             meta_link_type = match.group("meta_type")
-            if meta_link_type not in ALLOWED_META_IS_DIMENSIONLESS:
-                self.expect(False, f"Meta link type {meta_link_type} not in list of allowed meta link types: {ALLOWED_META_IS_DIMENSIONLESS.keys()}")
+            if meta_link_type not in ALLOWED_META_TYPES:
+                self.expect(False, f"Meta link type {meta_link_type} not in list of allowed meta link types: {ALLOWED_META_TYPES.keys()}")
                 continue
             
             found_ml_types.add(meta_link_type)
@@ -366,9 +369,9 @@ class SanityCheck:
                 meta_subid = match.group("meta_subid")
             found_ml_subids_for_id[meta_link_type][meta_id].append(meta_subid)
 
-            if ALLOWED_META_IS_DIMENSIONLESS[meta_link_type]:
+            if ALLOWED_META_TYPES[meta_link_type] == "dimensionless":
                 self.expect(classOf(child) == rt.Point, f"Dimensionless {meta_link_type} meta link {child.name} should be of Point instead of {classOf(child)}")
-            else:
+            elif ALLOWED_META_TYPES[meta_link_type] == "primitive":
                 volumetric_allowed_types = {
                     rt.Box,
                     rt.Cylinder,
@@ -381,6 +384,11 @@ class SanityCheck:
                     # Cones should have radius1 as 0 and radius2 nonzero
                     self.expect(np.isclose(child.radius1, 0), f"Cone {child.name} radius1 should be zero.")
                     self.expect(not np.isclose(child.radius2, 0), f"Cone {child.name} radius2 should be nonzero.")
+            elif ALLOWED_META_TYPES[meta_link_type] == "convexmesh":
+                # TODO: Assert that each element is a convex mesh
+                self.expect(classOf(child) == rt.Editable_Poly, f"Convex mesh {meta_link_type} meta link {child.name} should be of Editable Poly instead of {classOf(child)}")
+            else:
+                raise ValueError("Don't know how to process meta type " + ALLOWED_META_TYPES[meta_link_type])
 
         # Check that the meta links match what's needed
         required_meta_types = get_required_meta_links(row.name_category)
@@ -450,7 +458,7 @@ class SanityCheck:
         columns = set(df.columns)
 
         # Run the single-object validation checks.
-        objs = df[(df["type"] == rt.Editable_Poly) & df["name_bad"].isnull()]
+        objs = df[(df["type"] == rt.Editable_Poly) & df["name_bad"].isnull() & df["name_meta_type"].isnull()]
         objs.apply(self.validate_object, axis="columns")
 
         # Check that instance name-based grouping is equal to instance-based grouping.
