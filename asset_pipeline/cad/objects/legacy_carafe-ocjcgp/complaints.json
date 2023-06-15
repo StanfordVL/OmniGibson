@@ -3,24 +3,24 @@
         "object": "carafe-ocjcgp",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "looks like missing bottom",
-        "processed": false
+        "processed": true
     },
     {
         "object": "carafe-ocjcgp",
         "message": "Confirm reasonable bounding box size:\n6.72cm, 6.72cm, 20.45cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "maybe too small",
-        "processed": false
+        "processed": true
     },
     {
         "object": "carafe-ocjcgp",
         "message": "Confirm object properties:\n- dustyable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "fluid source toggleable ",
-        "processed": false
+        "processed": true
     },
     {
         "object": "carafe-ocjcgp",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "or if not fluid source then it should be fillable",
-        "processed": false
+        "processed": true
     }
 ]

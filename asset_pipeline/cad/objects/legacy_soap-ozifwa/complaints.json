@@ -3,78 +3,78 @@
         "object": "bar_soap-ozifwa",
         "message": "Confirm object synset assignment.\nObject assigned to synset: bar_soap.n.01\nDefinition: soap in the form of a bar\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "i don't see anything",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "i don't see anything",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm reasonable bounding box size:\n95.35m, 95.35m, 37.43m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "way way too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm object synset assignment.\nObject assigned to synset: bar_soap.n.01\nDefinition: soap in the form of a bar\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "can't see anything",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "can",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm reasonable bounding box size:\n95.35m, 95.35m, 37.43m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "way way too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm object synset assignment.\nObject assigned to synset: bar_soap.n.01\nDefinition: soap in the form of a bar\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "can't see anything",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "can't seen anything",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm reasonable bounding box size:\n95.35m, 95.35m, 37.43m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "giant",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm object synset assignment.\nObject assigned to synset: bar_soap.n.01\nDefinition: soap in the form of a bar\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "can't see anything",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "can't see anything",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm reasonable bounding box size:\n95.35m, 95.35m, 37.43m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "giant",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bar_soap-ozifwa",
         "message": "Confirm object properties:\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "cleaningtool maybe? ",
-        "processed": false
+        "processed": true
     }
 ]

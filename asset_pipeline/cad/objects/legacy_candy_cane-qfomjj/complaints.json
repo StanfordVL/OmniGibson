@@ -3,12 +3,12 @@
         "object": "candy_cane-qfomjj",
         "message": "Confirm reasonable bounding box size:\n3.60cm, 23.52cm, 57.50cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "maybe too big?",
-        "processed": false
+        "processed": true
     },
     {
         "object": "candy_cane-qfomjj",
         "message": "Confirm object properties:\n- burnable\n- cookable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "freezable sliceable ",
-        "processed": false
+        "processed": true
     }
 ]

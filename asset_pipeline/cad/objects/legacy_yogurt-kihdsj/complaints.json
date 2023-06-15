@@ -3,12 +3,12 @@
         "object": "yogurt-kihdsj",
         "message": "Confirm object synset assignment.\nObject assigned to synset: yogurt__cup.n.01 (custom synset)\nDefinition: cup.n.01(hypernyms): a small open container usually used for drinking; usually has a handle\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "cup of yoghurt maybe connect it to whats inside",
-        "processed": false
+        "processed": true
     },
     {
         "object": "yogurt-kihdsj",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "brand? can't see",
-        "processed": false
+        "processed": true
     }
 ]

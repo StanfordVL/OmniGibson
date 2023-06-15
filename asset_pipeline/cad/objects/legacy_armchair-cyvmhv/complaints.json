@@ -3,12 +3,12 @@
         "object": "armchair-cyvmhv",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "I'm not sure it would stand upright, it's designed weirdly with no back support",
-        "processed": false
+        "processed": true
     },
     {
         "object": "armchair-cyvmhv",
         "message": "Confirm reasonable bounding box size:\n46.88cm, 56.60cm, 67.85cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average height of an armchair is 76-102cm",
-        "processed": false
+        "processed": true
     }
 ]

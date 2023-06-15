@@ -3,24 +3,24 @@
         "object": "cereal-tiykku",
         "message": "Confirm object synset assignment.\nObject assigned to synset: cereal.n.01\nDefinition: grass whose starchy grains are used as food: wheat; rice; rye; oats; maize; buckwheat; millet\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "cereal box",
-        "processed": false
+        "processed": true
     },
     {
         "object": "cereal-tiykku",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "not sure about the brand",
-        "processed": false
+        "processed": true
     },
     {
         "object": "cereal-tiykku",
         "message": "Confirm reasonable bounding box size:\n3.64m, 13.34m, 18.58m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "giant",
-        "processed": false
+        "processed": true
     },
     {
         "object": "cereal-tiykku",
         "message": "Confirm object properties:\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "not sure",
-        "processed": false
+        "processed": true
     }
 ]

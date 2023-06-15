@@ -24,6 +24,7 @@ ENTRYPOINTS = {
     "new_sanity_check.py": "Run a number of sanity checks.",
     "next_failed.py": "Open the next object file that has failed sanity check.",
     "qa_next_failed.py": "Open the next object file that has unprocessed QA comments.",
+    "qa_next_failed_task_required.py": "Open the next task-required object file that has unprocessed QA comments.",
     "object_qa.py": "Walk through scene objects for quality assurance.",
     "randomize_obj_names.py": "Randomize objects named in the legacy format.",
     "resolve_complaints.py": "Resolve QA complaints for this file.",

@@ -3,12 +3,12 @@
         "object": "bowl-zwhewa",
         "message": "Confirm object synset assignment.\nObject assigned to synset: burrito_bowl.n.01 (custom synset)\nDefinition: salad.n.01(hypernyms): food mixtures either arranged on a plate or tossed and served with a moist dressing; usually consisting of or including greens\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "maybe a bowl",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bowl-zwhewa",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "idk depends on the category",
-        "processed": false
+        "processed": true
     }
 ]

@@ -3,18 +3,18 @@
         "object": "catsup-hvxkso",
         "message": "Confirm object synset assignment.\nObject assigned to synset: catsup.n.01\nDefinition: thick spicy sauce made from tomatoes\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "it should be the bottle synset and not what's in it",
-        "processed": false
+        "processed": true
     },
     {
         "object": "catsup-hvxkso",
         "message": "Confirm reasonable bounding box size:\n94.16cm, 2.03m, 4.50m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "catsup-hvxkso",
         "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "the bottle is not burnable cookable freezable or liquid ... it is a liquid source though or maybe fillable depending on the design decision and it is also dustyable and stainable and the cap can be an attached part",
-        "processed": false
+        "processed": true
     }
 ]

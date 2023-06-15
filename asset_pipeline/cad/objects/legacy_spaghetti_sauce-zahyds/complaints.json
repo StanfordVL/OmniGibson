@@ -3,12 +3,12 @@
         "object": "spaghetti_sauce-zahyds",
         "message": "Confirm object synset assignment.\nObject assigned to synset: spaghetti_sauce.n.01\nDefinition: any of numerous sauces for spaghetti or other kinds of pasta\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "jar of",
-        "processed": false
+        "processed": true
     },
     {
         "object": "spaghetti_sauce-zahyds",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "might be brand can't see",
-        "processed": false
+        "processed": true
     }
 ]

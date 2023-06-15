@@ -3,18 +3,18 @@
         "object": "colander-ambnzk",
         "message": "Confirm reasonable bounding box size:\n62.26cm, 53.76cm, 27.75cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "colander-ambnzk",
         "message": "Confirm object properties:\n- dustyable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "fluid drain? idk",
-        "processed": false
+        "processed": true
     },
     {
         "object": "colander-ambnzk",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "fluid drain? idk",
-        "processed": false
+        "processed": true
     }
 ]

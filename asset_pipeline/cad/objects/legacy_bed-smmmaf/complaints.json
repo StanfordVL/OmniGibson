@@ -9,19 +9,19 @@
         "object": "bed-smmmaf",
         "message": "Confirm reasonable bounding box size:\n47.64cm, 54.64cm, 37.22cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bed-smmmaf",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "i think it's connected to a light source?",
-        "processed": false
+        "processed": true
     },
     {
         "object": "nightstand-hessxe",
         "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "maybe connect nightstand to console table",
-        "processed": false
+        "processed": true
     },
     {
         "object": "nightstand-hessxe",

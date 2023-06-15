@@ -3,18 +3,18 @@
         "object": "crab-tjkiva",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "multiple",
-        "processed": false
+        "processed": true
     },
     {
         "object": "crab-tjkiva",
         "message": "Confirm reasonable bounding box size:\n1.18m, 1.24m, 24.46cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "crab-tjkiva",
         "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "sliceable ",
-        "processed": false
+        "processed": true
     }
 ]

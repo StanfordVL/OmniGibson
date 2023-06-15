@@ -3,18 +3,18 @@
         "object": "beet-wantjv",
         "message": "Confirm object synset assignment.\nObject assigned to synset: beet.n.01\nDefinition: biennial Eurasian plant usually having a swollen edible root; widely cultivated as a food crop\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "should be beetroot or beet.n.02",
-        "processed": false
+        "processed": true
     },
     {
         "object": "beet-wantjv",
         "message": "Confirm reasonable bounding box size:\n23.20cm, 18.85cm, 40.13cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "beet-wantjv",
         "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "probably sliceable",
-        "processed": false
+        "processed": true
     }
 ]

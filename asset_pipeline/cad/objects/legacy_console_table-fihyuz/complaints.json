@@ -3,12 +3,12 @@
         "object": "console_table-fihyuz",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "looks openable",
-        "processed": false
+        "processed": true
     },
     {
         "object": "console_table-fihyuz",
         "message": "Confirm object properties:\n- dustyable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "looks openable ",
-        "processed": false
+        "processed": true
     }
 ]

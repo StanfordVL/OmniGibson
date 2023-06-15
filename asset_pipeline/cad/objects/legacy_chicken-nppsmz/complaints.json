@@ -3,12 +3,12 @@
         "object": "chicken-nppsmz",
         "message": "Confirm reasonable bounding box size:\n1.67m, 1.35m, 78.89cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "chicken-nppsmz",
         "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "sliceable ",
-        "processed": false
+        "processed": true
     }
 ]

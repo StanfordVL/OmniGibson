@@ -3,18 +3,18 @@
         "object": "bottom_cabinet-yohygj",
         "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "no synset",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bottom_cabinet-yohygj",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "looks like missing top door or it might've been rendered with just lower door",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bottom_cabinet-yohygj",
         "message": "Confirm reasonable bounding box size:\n1.54m, 58.66cm, 1.28m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "depends on the synset",
-        "processed": false
+        "processed": true
     }
 ]

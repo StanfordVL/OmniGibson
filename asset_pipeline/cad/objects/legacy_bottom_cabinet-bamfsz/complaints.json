@@ -3,18 +3,18 @@
         "object": "bottom_cabinet-bamfsz",
         "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "no synsets",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bottom_cabinet-bamfsz",
         "message": "Confirm reasonable bounding box size:\n1.08m, 1.13m, 1.35m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big for just a cabinet",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bottom_cabinet-bamfsz",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "must have doors",
-        "processed": false
+        "processed": true
     }
 ]

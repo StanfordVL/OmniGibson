@@ -3,12 +3,12 @@
         "object": "carpet-ctclvd",
         "message": "Confirm reasonable bounding box size:\n89.70cm, 56.82cm, 1.16cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "might be too small",
-        "processed": false
+        "processed": true
     },
     {
         "object": "carpet-ctclvd",
         "message": "Confirm object properties:\n- dustyable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "maybe soft body ",
-        "processed": false
+        "processed": true
     }
 ]

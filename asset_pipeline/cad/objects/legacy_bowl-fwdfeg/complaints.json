@@ -3,24 +3,24 @@
         "object": "bowl-fwdfeg",
         "message": "Confirm object synset assignment.\nObject assigned to synset: burrito_bowl.n.01 (custom synset)\nDefinition: salad.n.01(hypernyms): food mixtures either arranged on a plate or tossed and served with a moist dressing; usually consisting of or including greens\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "looks like a bottomless ring",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bowl-fwdfeg",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "looks like missing bottom",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bowl-fwdfeg",
         "message": "Confirm reasonable bounding box size:\n68.18cm, 68.18cm, 27.12cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bowl-fwdfeg",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "fillable maybe",
-        "processed": false
+        "processed": true
     }
 ]

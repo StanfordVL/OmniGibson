@@ -3,24 +3,24 @@
         "object": "bottom_cabinet-wesxdp",
         "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "no synset",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bottom_cabinet-wesxdp",
         "message": "Confirm reasonable bounding box size:\n81.52cm, 85.77cm, 1.54m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "depends on the synset",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bottom_cabinet-wesxdp",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "Automated complaint: None was marked in original pass - please review.",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bottom_cabinet-wesxdp",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "Handle half not grabbable",
-        "processed": false
+        "processed": true
     }
 ]

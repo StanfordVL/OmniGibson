@@ -3,18 +3,18 @@
         "object": "bed-wfxgbb",
         "message": "Confirm object synset assignment.\nObject assigned to synset: pet_bed.n.01 (custom synset)\nDefinition: bedroom_furniture.n.01(hypernyms): furniture intended for use in a bedroom\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "missing parts",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bed-wfxgbb",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "missing parts",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bed-wfxgbb",
         "message": "Confirm reasonable bounding box size:\n71.95cm, 41.30cm, 47.48cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": false
+        "processed": true
     }
 ]

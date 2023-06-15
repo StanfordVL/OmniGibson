@@ -3,12 +3,12 @@
         "object": "chaise_longue-xmjcle",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "not sure about the physics",
-        "processed": false
+        "processed": true
     },
     {
         "object": "chaise_longue-xmjcle",
         "message": "Confirm reasonable bounding box size:\n34.34cm, 71.00cm, 61.47cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": false
+        "processed": true
     }
 ]

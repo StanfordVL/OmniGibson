@@ -3,18 +3,18 @@
         "object": "calculator-kwmmty",
         "message": "Confirm object synset assignment.\nObject assigned to synset: calculator.n.01\nDefinition: an expert at calculation (or at operating calculating machines)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "wrong calculator ",
-        "processed": false
+        "processed": true
     },
     {
         "object": "calculator-kwmmty",
         "message": "Confirm reasonable bounding box size:\n71.51cm, 56.08cm, 11.61cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "calculator-kwmmty",
         "message": "Confirm object properties:\n- dustyable\n- toggleable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "stainable ",
-        "processed": false
+        "processed": true
     }
 ]

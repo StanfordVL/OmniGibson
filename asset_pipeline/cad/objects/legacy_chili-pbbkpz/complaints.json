@@ -3,18 +3,18 @@
         "object": "chili-pbbkpz",
         "message": "Confirm object synset assignment.\nObject assigned to synset: chili.n.01\nDefinition: ground beef and chili peppers or chili powder often with tomatoes and kidney beans\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "pepper and not the stew",
-        "processed": false
+        "processed": true
     },
     {
         "object": "chili-pbbkpz",
         "message": "Confirm reasonable bounding box size:\n11.78cm, 2.58cm, 5.77cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "smaller is better",
-        "processed": false
+        "processed": true
     },
     {
         "object": "chili-pbbkpz",
         "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "sliceable",
-        "processed": false
+        "processed": true
     }
 ]

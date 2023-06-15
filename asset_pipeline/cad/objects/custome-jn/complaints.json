@@ -3,18 +3,18 @@
         "object": "ceremonial_robe-stcrad",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "no texture",
-        "processed": false
+        "processed": true
     },
     {
         "object": "ceremonial_robe-stcrad",
         "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
         "complaint": "cloth",
-        "processed": false
+        "processed": true
     },
     {
         "object": "shoes-jbuius",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "two objects;no texture",
-        "processed": false
+        "processed": true
     }
 ]
