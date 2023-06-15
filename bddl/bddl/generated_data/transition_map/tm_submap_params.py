@@ -5,7 +5,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "type": "synset"
         },
         "input_states": {
-            "required": True,
+            "required": False,
             "type": "atom"
         },
         "output_objects": {
@@ -13,7 +13,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "type": "synset"
         },
         "output_states": {
-            "required": True,
+            "required": False,
             "type": "atom"
         }
     },
@@ -23,7 +23,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "type": "synset"
         },
         "input_states": {
-            "required": True,
+            "required": False,
             "type": "atom"
         },
         "container": {
@@ -42,7 +42,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "type": "synset"
         },
         "output_states": {
-            "required": True,
+            "required": False,
             "type": "atom"
         },
         # "container_output_relation": {
@@ -59,7 +59,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "type": "synset"
         },
         "input_states": {
-            "required": True,
+            "required": False,
             "type": "atom"
         },
         "output_objects": {
@@ -67,7 +67,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "type": "synset"
         },
         "output_states": {
-            "required": True,
+            "required": False,
             "type": "atom"
 
         }
@@ -78,7 +78,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "type": "synset"
         },
         "input_states": {
-            "required": True,
+            "required": False,
             "type": "atom"
         },
         "machine": {
@@ -91,7 +91,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "type": "synset"
         },
         "output_states": {
-            "required": True,
+            "required": False,
             "type": "atom"
         }
     }
