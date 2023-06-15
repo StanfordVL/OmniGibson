@@ -14,6 +14,7 @@ ALL_SHEETS = [
   (ASSETS_SHEET_KEY, "Object Renames", "object_renames.csv"),
   (ASSETS_SHEET_KEY, "Deletion Queue", "deletion_queue.csv"),
   (ASSETS_SHEET_KEY, "Non-Sampleable Categories", "non_sampleable_categories.csv"),
+  (SYNSETS_SHEET_KEY, "Synsets", "synset_property.csv"),
 ]
 
 def main():
