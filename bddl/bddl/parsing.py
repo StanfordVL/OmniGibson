@@ -64,11 +64,8 @@ def parse_domain(domain):
                         raise Exception('Requirement %s not supported' % req)
                 requirements = group
             elif t == ':predicates':
-                predicate_name, arguments = parse_predicates(group)
-                if predicate_name in predicates:
-                    raise Exception(
-                        'Predicate %s defined multiple times' % predicate_name)
-                predicates[predicate_name] = arguments
+                # predicate_name, arguments = parse_predicates(group)
+                predicates = parse_predicates(group)
             elif t == ':types':
                 types = group
             elif t == ':action':
@@ -87,6 +84,7 @@ def parse_domain(domain):
 
 
 def parse_predicates(group):
+    predicates = {}
     for pred in group:
         predicate_name = pred.pop(0)
         arguments = {}
@@ -103,7 +101,9 @@ def parse_predicates(group):
                 untyped_variables.append(t)
         while untyped_variables:
             arguments[untyped_variables.pop(0)] = 'object'
-        return predicate_name, arguments
+        # print(predicates)
+        predicates[predicate_name] = arguments
+    return predicates
 
 
 def parse_action(group):
