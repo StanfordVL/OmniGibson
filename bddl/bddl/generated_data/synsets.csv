@@ -1596,7 +1596,7 @@ post.n.09,visual_signal.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBo
 postage.n.02,token.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 postcard.n.01,card.n.03,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 poster.n.01,sign.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-pot_plant.n.01,plant.n.02,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,rigidBody
+pot_plant.n.01,plant.n.02,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 pot.n.04,container.n.01,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 potato_pancake.n.01,pancake.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 potato.n.01,"root_vegetable.n.01,solanaceous_vegetable.n.01,starches.n.01",0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1798,7 +1798,7 @@ shutter.n.02,blind.n.03,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 sieve.n.01,strainer.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 silk.n.01,fabric.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 silver.n.02,precious_metal.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-sink.n.01,plumbing_fixture.n.01,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,rigidBody
+sink.n.01,plumbing_fixture.n.01,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,rigidBody
 sirloin.n.01,cut.n.06,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 skateboard.n.01,"board.n.03,wheeled_vehicle.n.01",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 skateboard_wheel.n.01,wheel.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
@@ -2172,3 +2172,8 @@ jar__of__tomato_sauce.n.01,grocery.n.02,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 dog_food__can.n.01,container.n.01,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 can__of__cat_food.n.01,grocery.n.02,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 jar__of__sodium_carbonate.n.01,grocery.n.02,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+brownie_batter.n.01,batter.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
+muffin_batter.n.01,batter.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
+diced__strawberry.n.01,berry.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__orange.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+waffle_batter.n.01,batter.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid

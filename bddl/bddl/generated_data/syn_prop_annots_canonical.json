@@ -2100,6 +2100,7 @@
     },
     "bathtub.n.01": {
         "particleSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2224,6 +2225,7 @@
         "freezable": {}
     },
     "bed.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2564,6 +2566,7 @@
         "freezable": {}
     },
     "bench.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7797,6 +7800,7 @@
     "cabinet.n.01": {
         "openable": {},
         "assembleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8860,6 +8864,7 @@
     },
     "carving_knife.n.01": {
         "slicer": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10718,6 +10723,7 @@
     },
     "cleaver.n.01": {
         "slicer": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12652,6 +12658,7 @@
         "freezable": {}
     },
     "countertop.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12895,6 +12902,7 @@
         "freezable": {}
     },
     "crib.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -13570,6 +13578,7 @@
     },
     "desk.n.01": {
         "assembleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -13607,6 +13616,7 @@
         "freezable": {}
     },
     "dessert_spoon.n.01": {
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14186,6 +14196,7 @@
     "dishwasher.n.01": {
         "openable": {},
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14414,6 +14425,7 @@
     },
     "door.n.01": {
         "openable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15163,6 +15175,7 @@
     "electric_refrigerator.n.01": {
         "openable": {},
         "coldSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15932,6 +15945,7 @@
         "breakable": {},
         "toggleable": {},
         "heatSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15950,6 +15964,7 @@
         "freezable": {}
     },
     "floor.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -17111,6 +17126,7 @@
     },
     "grandfather_clock.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21099,6 +21115,7 @@
         "freezable": {}
     },
     "lawn.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -22081,6 +22098,7 @@
     },
     "loudspeaker.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -22646,6 +22664,7 @@
         "freezable": {}
     },
     "masher.n.02": {
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23064,6 +23083,7 @@
         "openable": {},
         "toggleable": {},
         "heatSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23138,6 +23158,7 @@
     },
     "mirror.n.01": {
         "breakable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24298,6 +24319,7 @@
         "openable": {},
         "toggleable": {},
         "heatSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24920,6 +24942,7 @@
     },
     "parer.n.02": {
         "slicer": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -25947,6 +25970,7 @@
     },
     "photograph.n.01": {
         "flammable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -25966,6 +25990,7 @@
     },
     "piano.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26699,6 +26724,7 @@
     },
     "pocketknife.n.01": {
         "slicer": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27189,7 +27215,6 @@
     },
     "pot_plant.n.01": {
         "flammable": {},
-        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27737,6 +27762,7 @@
     },
     "putty_knife.n.01": {
         "slicer": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27962,6 +27988,7 @@
         "freezable": {}
     },
     "rail_fence.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28108,6 +28135,7 @@
     },
     "range_hood.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28195,6 +28223,7 @@
         "freezable": {}
     },
     "reamer.n.01": {
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28512,6 +28541,7 @@
         "freezable": {}
     },
     "rolling_pin.n.01": {
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28831,6 +28861,7 @@
     "rug.n.01": {
         "flammable": {},
         "particleRemover": {},
+        "sceneObject": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -29077,6 +29108,7 @@
         "freezable": {}
     },
     "salad_fork.n.01": {
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30251,6 +30283,7 @@
     },
     "shelf.n.01": {
         "assembleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30569,6 +30602,7 @@
     },
     "shower.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30702,7 +30736,9 @@
     },
     "sink.n.01": {
         "fillable": {},
+        "toggleable": {},
         "particleSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30870,6 +30906,7 @@
         "freezable": {}
     },
     "skimmer.n.02": {
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -31478,6 +31515,7 @@
     },
     "sofa.n.01": {
         "particleRemover": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -31621,6 +31659,7 @@
         "freezable": {}
     },
     "soupspoon.n.01": {
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32521,6 +32560,7 @@
     "stove.n.01": {
         "toggleable": {},
         "heatSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32999,6 +33039,7 @@
     },
     "swimming_pool.n.01": {
         "fillable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33114,6 +33155,7 @@
     },
     "table_knife.n.01": {
         "slicer": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33174,6 +33216,7 @@
         "freezable": {}
     },
     "tablefork.n.01": {
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33193,6 +33236,7 @@
     },
     "tablespoon.n.02": {
         "fillable": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33491,6 +33535,7 @@
     },
     "teaspoon.n.02": {
         "fillable": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33530,6 +33575,7 @@
     },
     "television_receiver.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34056,6 +34102,7 @@
         "freezable": {}
     },
     "toasting_fork.n.01": {
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34183,6 +34230,7 @@
         "freezable": {}
     },
     "toilet.n.02": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34428,6 +34476,7 @@
         "freezable": {}
     },
     "towel_rack.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34579,6 +34628,7 @@
     },
     "treadmill.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35027,6 +35077,7 @@
     },
     "utility_knife.n.01": {
         "slicer": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35619,6 +35670,7 @@
     },
     "wading_pool.n.01": {
         "fillable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35756,6 +35808,7 @@
     },
     "wall_clock.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35907,6 +35960,7 @@
         "openable": {},
         "toggleable": {},
         "particleSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36290,6 +36344,7 @@
     },
     "whisk.n.01": {
         "slicer": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36591,6 +36646,7 @@
     },
     "window.n.01": {
         "openable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36766,6 +36822,7 @@
     },
     "wooden_spoon.n.02": {
         "fillable": {},
+        "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -37327,6 +37384,51 @@
         "rustable": {},
         "wrinkleable": {},
         "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "brownie_batter.n.01": {
+        "cookable": {},
+        "liquid": {},
+        "boilable": {},
+        "substance": {},
+        "physicalSubstance": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "muffin_batter.n.01": {
+        "cookable": {},
+        "liquid": {},
+        "boilable": {},
+        "substance": {},
+        "physicalSubstance": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "diced__strawberry.n.01": {
+        "cookable": {},
+        "sliceable": {},
+        "macroPhysicalSubstance": {},
+        "substance": {},
+        "physicalSubstance": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "diced__orange.n.01": {
+        "cookable": {},
+        "sliceable": {},
+        "macroPhysicalSubstance": {},
+        "substance": {},
+        "physicalSubstance": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "waffle_batter.n.01": {
+        "cookable": {},
+        "liquid": {},
+        "boilable": {},
+        "substance": {},
+        "physicalSubstance": {},
         "heatable": {},
         "freezable": {}
     }

@@ -58,9 +58,10 @@ def sheet_to_json(submap):
                         reformatted_atoms[f"{synset1},{synset2}"] = [(atom[-3], atom[0] != "not")]
                 print(reformatted_atoms)
                 value = reformatted_atoms
-            else:
-                value = [value]
-            print(value)
+            elif value is None:
+                value = None
+            else: 
+                raise ValueError(f"Unhandled parameter type {TM_SUBMAPS_TO_PARAMS[submap][param]['type']}")
             reformatted_rule[param] = value
         reformatted_data.append(reformatted_rule)
 
