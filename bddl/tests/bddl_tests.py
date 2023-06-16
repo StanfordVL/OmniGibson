@@ -387,10 +387,10 @@ def verify_definition(activity, syns_to_props, domain_predicates, csv=False):
     no_contradictory_init_atoms(init)
     no_uncontrolled_category(activity, defn)
     no_invalid_synsets(objects, init, goal, syns_to_props)
-    # no_invalid_predicates(init, goal, domain_predicates)
+    no_invalid_predicates(init, goal, domain_predicates)
     no_misaligned_synsets_predicates(init, goal, syns_to_props)
     no_unnecessary_specific_containers(objects, init, goal, syns_to_props)
-    # no_substances_with_multiple_instances(objects, syns_to_props)
+    no_substances_with_multiple_instances(objects, syns_to_props)
     agent_present(init)
     problem_name_correct(activity)
     if csv:
@@ -402,7 +402,7 @@ def verify_definition(activity, syns_to_props, domain_predicates, csv=False):
 def batch_verify_all(csv=False): 
     with open(SYNS_TO_PROPS_JSON, "r") as f:
         syns_to_props = json.load(f) 
-    domain_predicates = parse_domain("omnigibson")
+    *__, domain_predicates = parse_domain("omnigibson")
     for activity in sorted(os.listdir(PROBLEM_FILE_DIR)):
         if "-" in activity: continue        # TODO deal with these directories
         if not os.path.isdir(os.path.join(PROBLEM_FILE_DIR, activity)): continue
