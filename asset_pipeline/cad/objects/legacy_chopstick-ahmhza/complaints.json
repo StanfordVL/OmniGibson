@@ -3,18 +3,18 @@
         "object": "chopstick-ahmhza",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "two probably should be separated? not sure",
-        "processed": false
+        "processed": true
     },
     {
         "object": "chopstick-ahmhza",
         "message": "Confirm reasonable bounding box size:\n7.35cm, 98.84cm, 6.27cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "chopstick-dgfsas",
         "message": "Confirm reasonable bounding box size:\n4.01cm, 98.81cm, 6.27cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x5",
-        "processed": false
+        "processed": true
     }
 ]

@@ -3,30 +3,30 @@
         "object": "coat-kiiium",
         "message": "Confirm object synset assignment.\nObject assigned to synset: wool_coat.n.01 (custom synset)\nDefinition: coat.n.01(hypernyms): an outer garment that has sleeves and covers the body from shoulder down; worn outdoors\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "can't see what it is ",
-        "processed": false
+        "processed": true
     },
     {
         "object": "coat-kiiium",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "cant see",
-        "processed": false
+        "processed": true
     },
     {
         "object": "coat-kiiium",
         "message": "Confirm reasonable bounding box size:\n18.46m, 57.80m, 80.59m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "giant",
-        "processed": false
+        "processed": true
     },
     {
         "object": "coat-kiiium",
         "message": "Confirm object properties:\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "cant see",
-        "processed": false
+        "processed": true
     },
     {
         "object": "coat-kiiium",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "cant see",
-        "processed": false
+        "processed": true
     }
 ]

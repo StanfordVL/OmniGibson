@@ -3,15 +3,11 @@ import sys
 
 sys.path.append(r"D:\ig_pipeline")
 import csv
-import glob
 import json
 import pathlib
-import re
 from collections import defaultdict
 
-import numpy as np
 import pymxs
-from scipy.spatial.transform import Rotation as R
 
 import b1k_pipeline.utils
 
@@ -55,7 +51,15 @@ def next_failed():
                 eligible_max.append(objdir / "processed.max")
 
     eligible_max.sort()
-    eligible_max = eligible_max
+    symlinks = [x for x in eligible_max if x.is_symlink()]
+    # If there are any symlinks, print dvc unprotect command and stop
+    if symlinks:
+        print("There are symlinks! Run the following commands:")
+        for start in range(0, len(symlinks), 50):
+            batch = symlinks[start : start + 50]
+            print("dvc unprotect", " ".join(str(x.relative_to(b1k_pipeline.utils.PIPELINE_ROOT)) for x in batch))
+        return
+
     print(len(eligible_max), "files remaining.")
     print("\n".join(str(x) for x in eligible_max))
     if eligible_max:
@@ -64,8 +68,8 @@ def next_failed():
         next_idx = 0
         try:
             next_idx = bisect.bisect(eligible_max, current_max) % len(eligible_max)
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
         scene_file = eligible_max[next_idx]
         assert (
