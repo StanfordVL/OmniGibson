@@ -24192,7 +24192,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 200.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {},
         "mixable": {},
         "moldyable": {},
@@ -28363,7 +28369,13 @@
         "fillable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 100.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {},
         "mixable": {},
         "moldyable": {},
@@ -29679,7 +29691,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 65.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {},
         "mixable": {},
         "moldyable": {},
