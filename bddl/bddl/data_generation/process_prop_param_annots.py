@@ -44,10 +44,13 @@ def add_cookable_params(propagated_canonical, props_to_syns, synset_nonexistent,
 def add_coldsource_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
     # coldSource
     coldSource_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "coldSource.csv")
-    coldSource_params = coldSource_params[coldSource_params["require_coldsource_temperature"] == True][["synset", "value(C)"]]
-    for i, [synset, temp] in coldSource_params.iterrows():
+    coldSource_params = coldSource_params[coldSource_params["require_coldsource_temperature"] == True][["synset", "value(C)", "requires_toggled_on", "requires_closed", "requires_inside"]]
+    for i, [synset, temp, requires_toggled_on, requires_closed, requires_inside] in coldSource_params.iterrows():
         try:
             float(temp)
+            int(requires_toggled_on)
+            int(requires_closed)
+            int(requires_inside)
         except ValueError:
             prop_but_no_param["coldSource"].append(synset)
             continue
@@ -62,6 +65,9 @@ def add_coldsource_params(propagated_canonical, props_to_syns, synset_nonexisten
             continue
         propagated_canonical[synset]["coldSource"]["temperature"] = float(temp)
         propagated_canonical[synset]["coldSource"]["heating_rate"] = 0.01
+        propagated_canonical[synset]["coldSource"]["requires_toggled_on"] = int(requires_toggled_on)
+        propagated_canonical[synset]["coldSource"]["requires_closed"] = int(requires_closed)
+        propagated_canonical[synset]["coldSource"]["requires_inside"] = int(requires_inside)
 
     for coldSource_synset in props_to_syns["coldSource"]:
         try: 
@@ -77,10 +83,13 @@ def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexisten
     # heatSource
     heatSource_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "heatSource.csv")
 
-    heatSource_params = heatSource_params[heatSource_params["require_heatsource_temperature"] == True][["synset", "value(C)"]]
-    for i, [synset, temp] in heatSource_params.iterrows():
+    heatSource_params = heatSource_params[heatSource_params["require_heatsource_temperature"] == True][["synset", "value(C)", "requires_toggled_on", "requires_closed", "requires_inside"]]
+    for i, [synset, temp, requires_toggled_on, requires_closed, requires_inside] in heatSource_params.iterrows():
         try:
             float(temp)
+            int(requires_toggled_on)
+            int(requires_closed)
+            int(requires_inside)
         except ValueError:
             prop_but_no_param["heatSource"].append(synset)
             continue
@@ -95,6 +104,9 @@ def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexisten
             continue
         propagated_canonical[synset]["heatSource"]["temperature"] = float(temp)
         propagated_canonical[synset]["heatSource"]["heating_rate"] = 0.01
+        propagated_canonical[synset]["heatSource"]["requires_toggled_on"] = int(requires_toggled_on)
+        propagated_canonical[synset]["heatSource"]["requires_closed"] = int(requires_closed)
+        propagated_canonical[synset]["heatSource"]["requires_inside"] = int(requires_inside)
 
     for heatSource_synset in props_to_syns["heatSource"]:
         try: 

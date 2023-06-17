@@ -386,7 +386,10 @@
     "air_conditioner.n.01": {
         "coldSource": {
             "temperature": 16.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "disinfectable": {},
         "dustyable": {},
@@ -9689,7 +9692,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 500.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "mixable": {},
@@ -14140,7 +14146,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 93.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
         },
         "heatable": {},
         "mixable": {},
@@ -15826,7 +15835,10 @@
     "cooler.n.01": {
         "coldSource": {
             "temperature": 4.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 1
         },
         "disinfectable": {},
         "dustyable": {},
@@ -20161,7 +20173,10 @@
     "electric_refrigerator.n.01": {
         "coldSource": {
             "temperature": 1.7,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 1,
+            "requires_inside": 1
         },
         "disinfectable": {},
         "dustyable": {},
@@ -20300,7 +20315,10 @@
         "freezable": {},
         "heatSource": {
             "temperature": 1093.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "substance": {},
@@ -20419,7 +20437,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 90.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "mixable": {},
@@ -21347,7 +21368,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 900.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "mixable": {},
@@ -21369,7 +21393,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 430.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "mixable": {},
@@ -21393,7 +21420,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 300.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "mixable": {},
@@ -25227,7 +25257,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 45.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "mixable": {},
@@ -25754,7 +25787,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 22.2222,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "mixable": {},
@@ -26700,7 +26736,10 @@
         "breakable": {},
         "coldSource": {
             "temperature": 0.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "disinfectable": {},
         "dustyable": {},
@@ -26762,7 +26801,10 @@
         "breakable": {},
         "coldSource": {
             "temperature": 0.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "disinfectable": {},
         "dustyable": {},
@@ -26804,7 +26846,10 @@
     "ice_maker.n.01": {
         "coldSource": {
             "temperature": -8.9,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
         },
         "disinfectable": {},
         "dustyable": {},
@@ -26828,7 +26873,10 @@
     "ice_pack.n.01": {
         "coldSource": {
             "temperature": 0.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "disinfectable": {},
         "dustyable": {},
@@ -27252,7 +27300,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 180.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "mixable": {},
@@ -32077,7 +32128,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 100.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 1,
+            "requires_inside": 1
         },
         "heatable": {},
         "mixable": {},
@@ -34175,7 +34229,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 250.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
         },
         "heatable": {},
         "mixable": {},
@@ -38567,7 +38624,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 121.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 1,
+            "requires_inside": 1
         },
         "heatable": {},
         "mixable": {},
@@ -45843,7 +45903,10 @@
     "steamer.n.02": {
         "coldSource": {
             "temperature": 150.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 1
         },
         "disinfectable": {},
         "dustyable": {},
@@ -45852,7 +45915,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 212.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 1
         },
         "heatable": {},
         "mixable": {},
@@ -48635,7 +48701,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 148.889,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
         },
         "heatable": {},
         "mixable": {},
@@ -48658,7 +48727,10 @@
         "grassyable": {},
         "heatSource": {
             "temperature": 204.0,
-            "heating_rate": 0.01
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 1,
+            "requires_inside": 1
         },
         "heatable": {},
         "mixable": {},
