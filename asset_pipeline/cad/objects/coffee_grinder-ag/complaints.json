@@ -3,18 +3,18 @@
         "object": "coffee_grinder-bubzvn",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "no texture",
-        "processed": false
+        "processed": true
     },
     {
         "object": "coffee_grinder-bubzvn",
         "message": "Confirm reasonable bounding box size:\n1.38m, 1.63m, 2.38m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x10",
-        "processed": false
+        "processed": true
     },
     {
         "object": "coffee_grinder-bubzvn",
         "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton",
-        "processed": false
+        "processed": true
     }
 ]
