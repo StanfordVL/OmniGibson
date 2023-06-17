@@ -6,7 +6,9 @@ import copy
 
 PARAMS_OUTFILE_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_params.json"
 UNRESOLVED_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "unresolved"
-PROP_PARAM_ANNOTS_DIR = pathlib.Path(__file__).parents[1] / "prop_param_annots"
+PROP_PARAM_ANNOTS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "prop_param_annots"
+SYNS_TO_PROPS = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_canonical.json"
+PROPS_TO_SYNS = pathlib.Path(__file__).parents[1] / "generated_data" / "properties_to_synsets.json"
 
 def add_cookable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
     # Cooking
@@ -122,3 +124,11 @@ def create_get_save_propagated_annots_params(propagated_canonical, props_to_syns
         json.dump(param_but_no_prop, f, indent=4)
     with open(UNRESOLVED_DIR / "prop_but_no_param_or_malformed_param.json", "w") as f:
         json.dump(prop_but_no_param, f, indent=4)
+
+
+if __name__ == "__main__":
+    with open(SYNS_TO_PROPS, "r") as f:
+        syns_to_props = json.load(f)
+    with open(PROPS_TO_SYNS, "r") as f:
+        props_to_syns = json.load(f)
+    create_get_save_propagated_annots_params(syns_to_props, props_to_syns)
