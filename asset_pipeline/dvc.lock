@@ -33232,6 +33232,9 @@ stages:
     - path: cad/objects/trash-ok/artifacts/object_list.json
       md5: ec564c25ae8ca2ceb98f209c19669d6e
       size: 1281
+    - path: cad/objects/trees-hv/artifacts/object_list.json
+      md5: edd5f3655b9831e4a961cf0795dceb6e
+      size: 6476
     - path: cad/objects/tripod-ti/artifacts/object_list.json
       md5: bfb7811445a22a9be7231d612d100ca7
       size: 650
@@ -33518,8 +33521,8 @@ stages:
       md5: 29819aefd035d0ae35567093710923e8
       size: 833329
     - path: params.yaml
-      md5: 9aa156fa17ca670c7675b06325dd8cb6
-      size: 240191
+      md5: d76a17b042e058446519dd2cd980dedf
+      size: 240271
     outs:
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -39170,6 +39173,9 @@ stages:
     - path: cad/objects/trash-ok/artifacts/object_list.json
       md5: ec564c25ae8ca2ceb98f209c19669d6e
       size: 1281
+    - path: cad/objects/trees-hv/artifacts/object_list.json
+      md5: edd5f3655b9831e4a961cf0795dceb6e
+      size: 6476
     - path: cad/objects/tripod-ti/artifacts/object_list.json
       md5: bfb7811445a22a9be7231d612d100ca7
       size: 650
@@ -39456,12 +39462,12 @@ stages:
       md5: 29819aefd035d0ae35567093710923e8
       size: 833329
     - path: params.yaml
-      md5: 9aa156fa17ca670c7675b06325dd8cb6
-      size: 240191
+      md5: d76a17b042e058446519dd2cd980dedf
+      size: 240271
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: edb852d867803b93bacbc508118928e2
-      size: 930812
+      md5: f8bf957c2e2cb4811eac91fbad3adb2e
+      size: 933370
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -45108,6 +45114,9 @@ stages:
     - path: cad/objects/trash-ok/artifacts/object_list.json
       md5: ec564c25ae8ca2ceb98f209c19669d6e
       size: 1281
+    - path: cad/objects/trees-hv/artifacts/object_list.json
+      md5: edd5f3655b9831e4a961cf0795dceb6e
+      size: 6476
     - path: cad/objects/tripod-ti/artifacts/object_list.json
       md5: bfb7811445a22a9be7231d612d100ca7
       size: 650
@@ -45433,12 +45442,12 @@ stages:
       md5: 29819aefd035d0ae35567093710923e8
       size: 833329
     - path: params.yaml
-      md5: 9aa156fa17ca670c7675b06325dd8cb6
-      size: 240191
+      md5: d76a17b042e058446519dd2cd980dedf
+      size: 240271
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: 0a6eb8ee268d9d4e883ca935e0ca44f9
-      size: 1147723
+      md5: f1fb2217a8aafc029466e6c81de71dbf
+      size: 1149757
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -46528,8 +46537,8 @@ stages:
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     - path: params.yaml
-      md5: 9aa156fa17ca670c7675b06325dd8cb6
-      size: 240191
+      md5: d76a17b042e058446519dd2cd980dedf
+      size: 240271
     outs:
     - path: artifacts/pipeline/combined_room_object_list.json
       md5: adca91f4a6da49701e1dce0c05be7e07
@@ -47078,9 +47087,22 @@ stages:
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     - path: params.yaml
-      md5: 9aa156fa17ca670c7675b06325dd8cb6
-      size: 240191
+      md5: d76a17b042e058446519dd2cd980dedf
+      size: 240271
     outs:
     - path: artifacts/pipeline/combined_room_object_list_future.json
       md5: 992d3f508564ec5a86a5fd8f9d7a4ab8
       size: 278009
+  object_list@objects/trees-hv:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/trees-hv/processed.max b1k_pipeline/max/object_list.py
+    deps:
+    - path: b1k_pipeline/max/object_list.py
+      md5: 815171f2098eb66473d3f483be0a12dc
+      size: 2748
+    - path: cad/objects/trees-hv/processed.max
+      md5: edc2e056382877a1b0c07e67036fa1de
+      size: 9859072
+    outs:
+    - path: cad/objects/trees-hv/artifacts/object_list.json
+      md5: edd5f3655b9831e4a961cf0795dceb6e
+      size: 6476
