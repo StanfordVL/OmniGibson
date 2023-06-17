@@ -9,12 +9,15 @@ UNRESOLVED_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "unresol
 PROP_PARAM_ANNOTS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "prop_param_annots"
 SYNS_TO_PROPS = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_canonical.json"
 PROPS_TO_SYNS = pathlib.Path(__file__).parents[1] / "generated_data" / "properties_to_synsets.json"
+SYNSET_LIST = pathlib.Path(__file__).parents[1] / "generated_data" / "synsets.csv"
+leaf_synsets = set(pd.read_csv(SYNSET_LIST)["synset"])
 
 def add_cookable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
     # Cooking
     cooking_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "cooking.csv")
     cooking_params = cooking_params[cooking_params["require_cookable/overcookable_temperature"] == True][["synset", "value_cook(C)", "value_overcook(C)"]]
     for i, [synset, cook_temp, overcook_temp] in cooking_params.iterrows():
+        if synset not in leaf_synsets: continue
         try:
             float(cook_temp)
         except ValueError:
@@ -32,6 +35,7 @@ def add_cookable_params(propagated_canonical, props_to_syns, synset_nonexistent,
         propagated_canonical[synset]["cookable"]["cook_temperature"] = float(cook_temp)
 
     for cookable_synset in props_to_syns["cookable"]:
+        if synset not in leaf_synsets: continue
         try: 
             wn_syn = wn.synset(cookable_synset)
         except:
@@ -46,6 +50,7 @@ def add_coldsource_params(propagated_canonical, props_to_syns, synset_nonexisten
     coldSource_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "coldSource.csv")
     coldSource_params = coldSource_params[coldSource_params["require_coldsource_temperature"] == True][["synset", "value(C)", "requires_toggled_on", "requires_closed", "requires_inside"]]
     for i, [synset, temp, requires_toggled_on, requires_closed, requires_inside] in coldSource_params.iterrows():
+        if synset not in leaf_synsets: continue
         try:
             float(temp)
             int(requires_toggled_on)
@@ -70,6 +75,7 @@ def add_coldsource_params(propagated_canonical, props_to_syns, synset_nonexisten
         propagated_canonical[synset]["coldSource"]["requires_inside"] = int(requires_inside)
 
     for coldSource_synset in props_to_syns["coldSource"]:
+        if synset not in leaf_synsets: continue
         try: 
             wn_syn = wn.synset(coldSource_synset)
         except:
@@ -85,6 +91,7 @@ def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexisten
 
     heatSource_params = heatSource_params[heatSource_params["require_heatsource_temperature"] == True][["synset", "value(C)", "requires_toggled_on", "requires_closed", "requires_inside"]]
     for i, [synset, temp, requires_toggled_on, requires_closed, requires_inside] in heatSource_params.iterrows():
+        if synset not in leaf_synsets: continue
         try:
             float(temp)
             int(requires_toggled_on)
@@ -109,6 +116,7 @@ def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexisten
         propagated_canonical[synset]["heatSource"]["requires_inside"] = int(requires_inside)
 
     for heatSource_synset in props_to_syns["heatSource"]:
+        if synset not in leaf_synsets: continue
         try: 
             wn_syn = wn.synset(heatSource_synset)
         except:
