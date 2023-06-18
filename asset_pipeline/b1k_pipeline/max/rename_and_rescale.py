@@ -30,6 +30,10 @@ def compute_bounding_box(objs):
 
     all_pts = []
     for obj in objs:
+        # Skip non-lower ends
+        if b1k_pipeline.utils.parse_name(obj.name).group("joint_side") == "upper":
+            continue
+
         # Get all the vertices
         X = np.array(rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1))))
 
@@ -49,7 +53,7 @@ def compute_bounding_box(objs):
 def processFile(pipeline_fs, target, renames, deletions, avg_dims):
     # Load file, fixing the units
     max_path = pipeline_fs.target(target).getsyspath("processed.max")
-    assert rt.loadMaxFile(max_path, useFileUnits=False)
+    assert rt.loadMaxFile(max_path, useFileUnits=False, quiet=True)
     assert rt.units.systemScale == 1, "System scale not set to 1mm."
     assert rt.units.systemType == rt.Name("millimeters"), "System scale not set to 1mm."
 
@@ -69,18 +73,18 @@ def processFile(pipeline_fs, target, renames, deletions, avg_dims):
         # For now - this is untested!
         for (cat, model_id), objs in objs_by_model.items():
             if cat not in avg_dims:
-                raise ValueError("Unknown category: {cat}")
+                raise ValueError(f"Unknown category: {cat}")
             avg_cat_dims = avg_dims[cat]
             bb_ext = compute_bounding_box(objs)
             scale_factors = avg_cat_dims / bb_ext
-            # Make sure that the max scale is not more than 3 times the min scale
-            if scale_factors.min() * 3 > scale_factors.max():
+            # Make sure that the max scale is not more than x times the min scale
+            if scale_factors.max() / scale_factors.min() > 10:
                 raise ValueError(f"Object {cat}-{model_id} has scales that vary by too much: {scale_factors}")
             scale_factor = float(scale_factors.min())
             for obj in objs:
                 # Multiply everything
                 obj.position *= scale_factor
-                obj.objectoffsetposition *= scale_factor
+                obj.objectoffsetpos *= scale_factor
                 obj.objectoffsetscale *= scale_factor
 
     # Now take care of renames and deletions
@@ -118,7 +122,7 @@ def processFile(pipeline_fs, target, renames, deletions, avg_dims):
 
 def rename_and_rescale_all_files():
     pipeline_fs = b1k_pipeline.utils.PipelineFS()
-    targets = b1k_pipeline.utils.get_targets("combined_unfiltered")
+    targets = b1k_pipeline.utils.get_targets("objects_unfiltered")
 
     # Load data for renames
     with pipeline_fs.open("metadata/object_renames.csv", "r") as f:
@@ -145,7 +149,7 @@ def rename_and_rescale_all_files():
     # Load the scale needed for each category
     with open(r"C:\Users\Cem\research\iGibson-dev\igibson\data\ig_dataset\metadata\avg_category_specs.json", "r") as f:
         avg_specs = json.load(f)
-    avg_dims = {cat: np.array(spec["size"]) for cat, spec in avg_specs.items()}
+    avg_dims = {cat: np.array(spec["size"]) * 1000 for cat, spec in avg_specs.items()}
 
     # Find the targets that contain these objects
     selected_targets = []
@@ -179,7 +183,10 @@ def rename_and_rescale_all_files():
 
     for i, f in enumerate(sorted(selected_targets)):
         print(f"Processing file {i+1}/{len(selected_targets)}: {f}")
-        processFile(pipeline_fs, target, renames, deletions, avg_dims)
+        try:
+            processFile(pipeline_fs, f, renames, deletions, avg_dims)
+        except Exception as e:
+            print(f, e)
 
 
 if __name__ == "__main__":
