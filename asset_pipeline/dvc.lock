@@ -39174,8 +39174,8 @@ stages:
       md5: ec564c25ae8ca2ceb98f209c19669d6e
       size: 1281
     - path: cad/objects/trees-hv/artifacts/object_list.json
-      md5: edd5f3655b9831e4a961cf0795dceb6e
-      size: 6476
+      md5: ce01a5918494927cbe5bfc08cd0d6409
+      size: 6779
     - path: cad/objects/tripod-ti/artifacts/object_list.json
       md5: bfb7811445a22a9be7231d612d100ca7
       size: 650
@@ -39360,8 +39360,8 @@ stages:
       md5: 69b72cba9d4d88bd6a0a9c6560b49082
       size: 32430
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
-      md5: 1bc449cf74381faf7f59154e02fc725a
-      size: 81982
+      md5: 11797ef4f1185b63890cff128f6f06bf
+      size: 81857
     - path: cad/scenes/Wainscott_1_int/artifacts/object_list.json
       md5: aebc38a246f0413e72ce076567fe7299
       size: 77671
@@ -39466,8 +39466,8 @@ stages:
       size: 240271
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: f8bf957c2e2cb4811eac91fbad3adb2e
-      size: 933370
+      md5: 46d7c93702bf9b13e234892da04a772a
+      size: 933642
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -45115,8 +45115,8 @@ stages:
       md5: ec564c25ae8ca2ceb98f209c19669d6e
       size: 1281
     - path: cad/objects/trees-hv/artifacts/object_list.json
-      md5: edd5f3655b9831e4a961cf0795dceb6e
-      size: 6476
+      md5: ce01a5918494927cbe5bfc08cd0d6409
+      size: 6779
     - path: cad/objects/tripod-ti/artifacts/object_list.json
       md5: bfb7811445a22a9be7231d612d100ca7
       size: 650
@@ -45322,8 +45322,8 @@ stages:
       md5: 9df3f2636deb1d6d0e2f1e074688a0ad
       size: 130500
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
-      md5: 1bc449cf74381faf7f59154e02fc725a
-      size: 81982
+      md5: 11797ef4f1185b63890cff128f6f06bf
+      size: 81857
     - path: cad/scenes/Wainscott_1_int/artifacts/object_list.json
       md5: aebc38a246f0413e72ce076567fe7299
       size: 77671
@@ -45446,8 +45446,8 @@ stages:
       size: 240271
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: f1fb2217a8aafc029466e6c81de71dbf
-      size: 1149757
+      md5: 97a619b08c438bd648ce04b322ffc1ff
+      size: 1149913
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -45676,8 +45676,8 @@ stages:
       md5: 5a4de58df21209dc43ac2b17de7cdf08
       size: 2038
     - path: cad/scenes/Wainscott_0_int/processed.max
-      md5: 4a67f39276c80b8cd1689283bd093f69
-      size: 93373066
+      md5: c1d56d04d0861214aae10fb9402aa426
+      size: 93394432
     outs:
     - path: cad/scenes/Wainscott_0_int/artifacts/room_object_list.json
       md5: fe1bc5eb84ded7308606633caacbecfb
