@@ -172,8 +172,9 @@ def rename_and_rescale_all_files():
     paths = [pathlib.Path(pipeline_fs.target(target).getsyspath("processed.max")) for target in selected_targets]
     symlinks = [p for p in paths if p.is_symlink()]
     if symlinks:
-        print("Found symlinks. Run below command to unprotect them in DVC.")
-        print("dvc unprotect", " ".join(str(p.relative_to(b1k_pipeline.utils.PIPELINE_ROOT)) for p in symlinks))
+        print("Found symlinks. Run below commands to unprotect them in DVC.")
+        for batch_start in range(0, len(symlinks), 50):
+            print("dvc unprotect", " ".join(str(p.relative_to(b1k_pipeline.utils.PIPELINE_ROOT)) for p in symlinks[batch_start:batch_start+50]))
         return
 
     for i, f in enumerate(sorted(selected_targets)):
