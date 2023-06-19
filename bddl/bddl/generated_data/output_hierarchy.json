@@ -176,11 +176,17 @@
                                     },
                                     {
                                       "name": "water_bottle.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "water_bottle"
+                                      ]
                                     },
                                     {
                                       "name": "wine_bottle.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "wine_bottle"
+                                      ]
                                     }
                                   ],
                                   "categories": [
@@ -342,8 +348,29 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "cooking_oil__bottle.n.01",
-                                  "hasModel": true
+                                  "name": "oil__bottle.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "cooking_oil__bottle.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "essential_oil__bottle.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "olive_oil__bottle.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "sesame_oil__bottle.n.01",
+                                      "hasModel": true
+                                    }
+                                  ],
+                                  "categories": [
+                                    "oil_bottle"
+                                  ]
                                 },
                                 {
                                   "name": "cornstarch__jar.n.01",
@@ -382,10 +409,6 @@
                                 },
                                 {
                                   "name": "disinfectant__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "essential_oil__bottle.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -559,10 +582,6 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "olive_oil__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "parmesan__bottle.n.01",
                                   "hasModel": true
                                 },
@@ -624,10 +643,6 @@
                                 },
                                 {
                                   "name": "sealant__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "sesame_oil__bottle.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -732,6 +747,13 @@
                                 {
                                   "name": "yeast__jar.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "squeeze_bottle.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "squeeze_bottle"
+                                  ]
                                 }
                               ]
                             },
