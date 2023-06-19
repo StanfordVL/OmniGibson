@@ -878,7 +878,10 @@
                                 },
                                 {
                                   "name": "recycling_bin.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "recycling_bin"
+                                  ]
                                 }
                               ]
                             },
@@ -1902,10 +1905,6 @@
                             },
                             {
                               "name": "chicken_soup__can.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "yogurt__cup.n.01",
                               "hasModel": true
                             },
                             {
@@ -22604,6 +22603,28 @@
                                   ]
                                 }
                               ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "transferred_property.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "acquisition.n.02",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "gift.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "present.n.02",
+                              "hasModel": true
                             }
                           ]
                         }
