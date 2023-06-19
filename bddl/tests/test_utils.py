@@ -1,5 +1,7 @@
+import json
+import os
 import re 
-
+from bddl.generated_data.transition_map.tm_submap_params import TM_SUBMAPS_TO_PARAMS
 
 # Constants
 
@@ -176,3 +178,25 @@ def check_synset_predicate_alignment(atom, syns_to_props):
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "insource": 
         assert (("particleSource" in syns_to_props[objects[0]]) or ("particleApplier" in syns_to_props[objects[0]])) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable insource: {atom}"
+
+
+def check_clashing_transition_rules():
+    # Check within each submap
+    for submap_name in TM_SUBMAPS_TO_PARAMS:
+        with open(os.path.join("..", "bddl", "generated_data", "transition_map", "tm_jsons", submap_name + ".json"), "r") as f:
+            submap = json.load(f)
+        seen = set() 
+        for rule in submap: 
+            input_objects = rule.get("input_objects", {})
+            input_states = rule.get("input_states", {})
+            # NOTE doing input_objects.keys, not input_objects.items, because simulator is not actually sensitive to amount. It only checks for category, 
+            #   so different amounts but same categories still need to result in the same output.
+            # Alphabetize everything.
+            input_objects = sorted(input_objects.keys(), key=lambda x: x[0])
+            input_states_str = [syns + ";" + ";".join([f"{pred}:{val}" for pred, val in sorted(states, key=lambda x: x[0])]) for syns, states in sorted(input_states.items(), key=lambda x: x[0])]
+            if "bagel_dough.n.01" in input_objects:
+                print(input_states_str)
+
+
+if __name__ == "__main__":
+    check_clashing_transition_rules()
