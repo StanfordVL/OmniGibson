@@ -348,29 +348,8 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "oil__bottle.n.01",
-                                  "hasModel": true,
-                                  "children": [
-                                    {
-                                      "name": "cooking_oil__bottle.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "essential_oil__bottle.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "olive_oil__bottle.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "sesame_oil__bottle.n.01",
-                                      "hasModel": true
-                                    }
-                                  ],
-                                  "categories": [
-                                    "oil_bottle"
-                                  ]
+                                  "name": "cooking_oil__bottle.n.01",
+                                  "hasModel": true
                                 },
                                 {
                                   "name": "cornstarch__jar.n.01",
@@ -409,6 +388,10 @@
                                 },
                                 {
                                   "name": "disinfectant__bottle.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "essential_oil__bottle.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -582,6 +565,10 @@
                                   "hasModel": true
                                 },
                                 {
+                                  "name": "olive_oil__bottle.n.01",
+                                  "hasModel": true
+                                },
+                                {
                                   "name": "parmesan__bottle.n.01",
                                   "hasModel": true
                                 },
@@ -643,6 +630,10 @@
                                 },
                                 {
                                   "name": "sealant__bottle.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "sesame_oil__bottle.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -747,6 +738,13 @@
                                 {
                                   "name": "yeast__jar.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "oil__bottle.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "oil_bottle"
+                                  ]
                                 },
                                 {
                                   "name": "squeeze_bottle.n.01",
@@ -1209,7 +1207,8 @@
                                   "name": "carton.n.02",
                                   "hasModel": true,
                                   "categories": [
-                                    "carton"
+                                    "carton",
+                                    "storage_box"
                                   ]
                                 },
                                 {
@@ -1346,8 +1345,7 @@
                                 }
                               ],
                               "categories": [
-                                "box",
-                                "storage_box"
+                                "box"
                               ]
                             },
                             {
@@ -11185,6 +11183,13 @@
                           "categories": [
                             "wind_chime"
                           ]
+                        },
+                        {
+                          "name": "hanging.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "hanging"
+                          ]
                         }
                       ],
                       "categories": [
@@ -16277,6 +16282,13 @@
                                       "categories": [
                                         "hamburger_bun"
                                       ]
+                                    },
+                                    {
+                                      "name": "soft_roll.n.01",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "soft_roll"
+                                      ]
                                     }
                                   ],
                                   "categories": [
@@ -18206,6 +18218,13 @@
                                   "hasModel": true,
                                   "categories": [
                                     "hamburger_bun"
+                                  ]
+                                },
+                                {
+                                  "name": "soft_roll.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "soft_roll"
                                   ]
                                 }
                               ],
