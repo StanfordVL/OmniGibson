@@ -363,7 +363,6 @@ stages:
       artifacts/pipeline/export_meshes.success
     deps:
     - cad/objects/acetone-jc/artifacts/export_meshes.json
-    - cad/objects/acid-ub/artifacts/export_meshes.json
     - cad/objects/adhesive-io/artifacts/export_meshes.json
     - cad/objects/adhesive_strip-vv/artifacts/export_meshes.json
     - cad/objects/air_conditioner-ep/artifacts/export_meshes.json
@@ -382,7 +381,6 @@ stages:
     - cad/objects/antlers-mq/artifacts/export_meshes.json
     - cad/objects/apple_cider-jf/artifacts/export_meshes.json
     - cad/objects/apple_pie-bk/artifacts/export_meshes.json
-    - cad/objects/applesauce-dt/artifacts/export_meshes.json
     - cad/objects/apron-iu/artifacts/export_meshes.json
     - cad/objects/arepa-od/artifacts/export_meshes.json
     - cad/objects/arugula-lx/artifacts/export_meshes.json
@@ -414,7 +412,6 @@ stages:
     - cad/objects/bath_salt-mo/artifacts/export_meshes.json
     - cad/objects/battery-lb/artifacts/export_meshes.json
     - cad/objects/batting_gloves-nd/artifacts/export_meshes.json
-    - cad/objects/bay_leaves-xu/artifacts/export_meshes.json
     - cad/objects/bedsheet-pj/artifacts/export_meshes.json
     - cad/objects/beer_keg-rn/artifacts/export_meshes.json
     - cad/objects/beeswax-ad/artifacts/export_meshes.json
@@ -423,9 +420,7 @@ stages:
     - cad/objects/birdcage-xo/artifacts/export_meshes.json
     - cad/objects/birdseed-bd/artifacts/export_meshes.json
     - cad/objects/biscuit-vh/artifacts/export_meshes.json
-    - cad/objects/black_beans-jm/artifacts/export_meshes.json
     - cad/objects/blackberries-xx/artifacts/export_meshes.json
-    - cad/objects/blankets-bx/artifacts/export_meshes.json
     - cad/objects/blazer-fa/artifacts/export_meshes.json
     - cad/objects/bleach-wc/artifacts/export_meshes.json
     - cad/objects/blender-temp/artifacts/export_meshes.json
@@ -433,7 +428,6 @@ stages:
     - cad/objects/blouse-rc/artifacts/export_meshes.json
     - cad/objects/blow_dryer-hf/artifacts/export_meshes.json
     - cad/objects/blueberries-dg/artifacts/export_meshes.json
-    - cad/objects/blueberry_mousse-ax/artifacts/export_meshes.json
     - cad/objects/boat-qb/artifacts/export_meshes.json
     - cad/objects/bobby_pins-pi/artifacts/export_meshes.json
     - cad/objects/body_srub-vm/artifacts/export_meshes.json
@@ -461,7 +455,6 @@ stages:
     - cad/objects/bun-ae/artifacts/export_meshes.json
     - cad/objects/burlap-sm/artifacts/export_meshes.json
     - cad/objects/burrito-of/artifacts/export_meshes.json
-    - cad/objects/buttermilk-ca/artifacts/export_meshes.json
     - cad/objects/butternut_squash-ev/artifacts/export_meshes.json
     - cad/objects/cactus-gb/artifacts/export_meshes.json
     - cad/objects/cake-fg/artifacts/export_meshes.json
@@ -474,19 +467,15 @@ stages:
     - cad/objects/canner-fk/artifacts/export_meshes.json
     - cad/objects/canvas-ts/artifacts/export_meshes.json
     - cad/objects/cappuccino-hi/artifacts/export_meshes.json
-    - cad/objects/caraway_seeds-sh/artifacts/export_meshes.json
     - cad/objects/cardigan-xm/artifacts/export_meshes.json
     - cad/objects/cardstock-wi/artifacts/export_meshes.json
     - cad/objects/care_products-gt/artifacts/export_meshes.json
     - cad/objects/cash_box-wk/artifacts/export_meshes.json
-    - cad/objects/casserole-zd/artifacts/export_meshes.json
-    - cad/objects/cat_food-eg/artifacts/export_meshes.json
     - cad/objects/catalog-xj/artifacts/export_meshes.json
     - cad/objects/cauliflower-oy/artifacts/export_meshes.json
     - cad/objects/caulk-hi/artifacts/export_meshes.json
     - cad/objects/cd-ui/artifacts/export_meshes.json
     - cad/objects/cell_phone-nb/artifacts/export_meshes.json
-    - cad/objects/cellophane-ul/artifacts/export_meshes.json
     - cad/objects/centerpiece-nc/artifacts/export_meshes.json
     - cad/objects/ceramic_tile-yb/artifacts/export_meshes.json
     - cad/objects/ceramic_tile-yr/artifacts/export_meshes.json
@@ -518,25 +507,20 @@ stages:
     - cad/objects/chocolate_biscuit-gv/artifacts/export_meshes.json
     - cad/objects/chocolate_cake-yw/artifacts/export_meshes.json
     - cad/objects/chocolate_chip-qm/artifacts/export_meshes.json
-    - cad/objects/chocolate_spread-aj/artifacts/export_meshes.json
     - cad/objects/chocolate_syrup-eh/artifacts/export_meshes.json
     - cad/objects/chopping_block-zd/artifacts/export_meshes.json
     - cad/objects/chorizo-su/artifacts/export_meshes.json
-    - cad/objects/chowder-pu/artifacts/export_meshes.json
     - cad/objects/cigarette-te/artifacts/export_meshes.json
     - cad/objects/cilantro-lx/artifacts/export_meshes.json
     - cad/objects/cinnamon_stick-jl/artifacts/export_meshes.json
-    - cad/objects/cioppino-md/artifacts/export_meshes.json
     - cad/objects/citrus-ln/artifacts/export_meshes.json
     - cad/objects/clam-yf/artifacts/export_meshes.json
     - cad/objects/clamp-ok/artifacts/export_meshes.json
     - cad/objects/cleaner-ed/artifacts/export_meshes.json
-    - cad/objects/clip-vb/artifacts/export_meshes.json
     - cad/objects/clock-wy/artifacts/export_meshes.json
     - cad/objects/clothesline-jc/artifacts/export_meshes.json
     - cad/objects/clothesline-pq/artifacts/export_meshes.json
     - cad/objects/cloves-kp/artifacts/export_meshes.json
-    - cad/objects/cocktail-uw/artifacts/export_meshes.json
     - cad/objects/cocoa_powder-vg/artifacts/export_meshes.json
     - cad/objects/coconut_milk-oq/artifacts/export_meshes.json
     - cad/objects/coconut_oil-xw/artifacts/export_meshes.json
@@ -546,7 +530,6 @@ stages:
     - cad/objects/coffee_grinder-ag/artifacts/export_meshes.json
     - cad/objects/coke_bottle-al/artifacts/export_meshes.json
     - cad/objects/comic_book-lr/artifacts/export_meshes.json
-    - cad/objects/compost-pf/artifacts/export_meshes.json
     - cad/objects/compost_bin-fh/artifacts/export_meshes.json
     - cad/objects/conch_shell-un/artifacts/export_meshes.json
     - cad/objects/console_game-cm/artifacts/export_meshes.json
@@ -569,7 +552,6 @@ stages:
     - cad/objects/curtain_rod-la/artifacts/export_meshes.json
     - cad/objects/cushion-kh/artifacts/export_meshes.json
     - cad/objects/custome-jn/artifacts/export_meshes.json
-    - cad/objects/cymbal-kq/artifacts/export_meshes.json
     - cad/objects/dahlias-po/artifacts/export_meshes.json
     - cad/objects/daiper-re/artifacts/export_meshes.json
     - cad/objects/decanter-ij/artifacts/export_meshes.json
@@ -579,7 +561,6 @@ stages:
     - cad/objects/denture-hi/artifacts/export_meshes.json
     - cad/objects/deodorant-ls/artifacts/export_meshes.json
     - cad/objects/diamond-jh/artifacts/export_meshes.json
-    - cad/objects/diamond_ring-pq/artifacts/export_meshes.json
     - cad/objects/dice-wq/artifacts/export_meshes.json
     - cad/objects/dish_soap-vr/artifacts/export_meshes.json
     - cad/objects/dish_towel-bv/artifacts/export_meshes.json
@@ -596,7 +577,6 @@ stages:
     - cad/objects/duck-dg/artifacts/export_meshes.json
     - cad/objects/duct_tape-ls/artifacts/export_meshes.json
     - cad/objects/dumpling-uy/artifacts/export_meshes.json
-    - cad/objects/duster-rm/artifacts/export_meshes.json
     - cad/objects/dutch_oven-wa/artifacts/export_meshes.json
     - cad/objects/duvet_set-pa/artifacts/export_meshes.json
     - cad/objects/dvd-yq/artifacts/export_meshes.json
@@ -623,7 +603,6 @@ stages:
     - cad/objects/food_processor-ht/artifacts/export_meshes.json
     - cad/objects/fountain-az/artifacts/export_meshes.json
     - cad/objects/frame-ow/artifacts/export_meshes.json
-    - cad/objects/frappuccino-if/artifacts/export_meshes.json
     - cad/objects/french_fries-jh/artifacts/export_meshes.json
     - cad/objects/french_press-hq/artifacts/export_meshes.json
     - cad/objects/french_toast-uh/artifacts/export_meshes.json
@@ -634,7 +613,6 @@ stages:
     - cad/objects/funnel-oh/artifacts/export_meshes.json
     - cad/objects/garden_glove-ld/artifacts/export_meshes.json
     - cad/objects/garlic-lh/artifacts/export_meshes.json
-    - cad/objects/gazpacho-er/artifacts/export_meshes.json
     - cad/objects/geode-qw/artifacts/export_meshes.json
     - cad/objects/gift-sd/artifacts/export_meshes.json
     - cad/objects/gift_bag-ue/artifacts/export_meshes.json
@@ -676,7 +654,6 @@ stages:
     - cad/objects/hoodie-ev/artifacts/export_meshes.json
     - cad/objects/hot_chocolate-ni/artifacts/export_meshes.json
     - cad/objects/hotdog_sandwitch-as/artifacts/export_meshes.json
-    - cad/objects/hummus-ht/artifacts/export_meshes.json
     - cad/objects/hutch-cr/artifacts/export_meshes.json
     - cad/objects/ice_bucket-kz/artifacts/export_meshes.json
     - cad/objects/ice_cream-re/artifacts/export_meshes.json
@@ -693,7 +670,6 @@ stages:
     - cad/objects/jelly_beans-in/artifacts/export_meshes.json
     - cad/objects/jelly_jars-jo/artifacts/export_meshes.json
     - cad/objects/jersey-of/artifacts/export_meshes.json
-    - cad/objects/jewelry-wd/artifacts/export_meshes.json
     - cad/objects/jewelry_cleaner-bh/artifacts/export_meshes.json
     - cad/objects/jigger-kf/artifacts/export_meshes.json
     - cad/objects/juicer-gs/artifacts/export_meshes.json
@@ -734,7 +710,6 @@ stages:
     - cad/objects/legacy_armchair-qplklw/artifacts/export_meshes.json
     - cad/objects/legacy_armchair-rabzuf/artifacts/export_meshes.json
     - cad/objects/legacy_armchair-tcxiue/artifacts/export_meshes.json
-    - cad/objects/legacy_armchair-tnryza/artifacts/export_meshes.json
     - cad/objects/legacy_armchair-umbrpd/artifacts/export_meshes.json
     - cad/objects/legacy_armchair-viphen/artifacts/export_meshes.json
     - cad/objects/legacy_armchair-vtsoat/artifacts/export_meshes.json
@@ -760,9 +735,6 @@ stages:
     - cad/objects/legacy_basket-wqxrbf/artifacts/export_meshes.json
     - cad/objects/legacy_basket-xhdtjn/artifacts/export_meshes.json
     - cad/objects/legacy_basket-xjftlf/artifacts/export_meshes.json
-    - cad/objects/legacy_bath_towel-feojdm/artifacts/export_meshes.json
-    - cad/objects/legacy_bath_towel-iviyls/artifacts/export_meshes.json
-    - cad/objects/legacy_bath_towel-lyqgnf/artifacts/export_meshes.json
     - cad/objects/legacy_bathtub-azdgtl/artifacts/export_meshes.json
     - cad/objects/legacy_bathtub-enpxbn/artifacts/export_meshes.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/export_meshes.json
@@ -770,7 +742,6 @@ stages:
     - cad/objects/legacy_bathtub-jfhrwj/artifacts/export_meshes.json
     - cad/objects/legacy_bathtub-oobbwn/artifacts/export_meshes.json
     - cad/objects/legacy_bathtub-wxrafq/artifacts/export_meshes.json
-    - cad/objects/legacy_bean-cdinsu/artifacts/export_meshes.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/export_meshes.json
     - cad/objects/legacy_bean-lvbjws/artifacts/export_meshes.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/export_meshes.json
@@ -1042,12 +1013,9 @@ stages:
     - cad/objects/legacy_console_table-fihyuz/artifacts/export_meshes.json
     - cad/objects/legacy_console_table-tvhett/artifacts/export_meshes.json
     - cad/objects/legacy_console_table-xqlxni/artifacts/export_meshes.json
-    - cad/objects/legacy_container_cranberry-fbcpsl/artifacts/export_meshes.json
     - cad/objects/legacy_container_date-qqddba/artifacts/export_meshes.json
     - cad/objects/legacy_cookie-ggpang/artifacts/export_meshes.json
-    - cad/objects/legacy_cord-aqikou/artifacts/export_meshes.json
     - cad/objects/legacy_cord-tzurlz/artifacts/export_meshes.json
-    - cad/objects/legacy_cord-ydrhwh/artifacts/export_meshes.json
     - cad/objects/legacy_countertop-tpuwys/artifacts/export_meshes.json
     - cad/objects/legacy_cpu_board-xlqvil/artifacts/export_meshes.json
     - cad/objects/legacy_crab-tjkiva/artifacts/export_meshes.json
@@ -1093,8 +1061,6 @@ stages:
     - cad/objects/legacy_dish_rack-kxuutl/artifacts/export_meshes.json
     - cad/objects/legacy_dishtowel-dtfspn/artifacts/export_meshes.json
     - cad/objects/legacy_dishtowel-ltydgg/artifacts/export_meshes.json
-    - cad/objects/legacy_dishtowel-qvzbjx/artifacts/export_meshes.json
-    - cad/objects/legacy_dishtowel-yobhae/artifacts/export_meshes.json
     - cad/objects/legacy_dishwasher-cgugie/artifacts/export_meshes.json
     - cad/objects/legacy_dishwasher-dngvvi/artifacts/export_meshes.json
     - cad/objects/legacy_dishwasher-dugpby/artifacts/export_meshes.json
@@ -1120,7 +1086,6 @@ stages:
     - cad/objects/legacy_drumstick-lkvzmj/artifacts/export_meshes.json
     - cad/objects/legacy_dryer-fhtvuq/artifacts/export_meshes.json
     - cad/objects/legacy_dryer-smcyys/artifacts/export_meshes.json
-    - cad/objects/legacy_dryer-tpqzai/artifacts/export_meshes.json
     - cad/objects/legacy_dryer-wivnic/artifacts/export_meshes.json
     - cad/objects/legacy_dryer-xsuyua/artifacts/export_meshes.json
     - cad/objects/legacy_dryer-zlmnfg/artifacts/export_meshes.json
@@ -1179,7 +1144,6 @@ stages:
     - cad/objects/legacy_green_onion_chopped-akrkjr/artifacts/export_meshes.json
     - cad/objects/legacy_griddle-ryvqep/artifacts/export_meshes.json
     - cad/objects/legacy_grill-ddlqye/artifacts/export_meshes.json
-    - cad/objects/legacy_guacamole-ajnjvv/artifacts/export_meshes.json
     - cad/objects/legacy_guitar-cybisc/artifacts/export_meshes.json
     - cad/objects/legacy_guitar-gysapt/artifacts/export_meshes.json
     - cad/objects/legacy_guitar-hpqjrq/artifacts/export_meshes.json
@@ -1197,7 +1161,6 @@ stages:
     - cad/objects/legacy_hairbrush-bdylnb/artifacts/export_meshes.json
     - cad/objects/legacy_hamburger-fyswch/artifacts/export_meshes.json
     - cad/objects/legacy_hammer-bbzlel/artifacts/export_meshes.json
-    - cad/objects/legacy_hand_towel-jaubic/artifacts/export_meshes.json
     - cad/objects/legacy_hanger-ffecvd/artifacts/export_meshes.json
     - cad/objects/legacy_hard_drive-ijibkm/artifacts/export_meshes.json
     - cad/objects/legacy_hard_drive-ubjbsm/artifacts/export_meshes.json
@@ -1234,7 +1197,6 @@ stages:
     - cad/objects/legacy_jar-pluujx/artifacts/export_meshes.json
     - cad/objects/legacy_jar-qzwijs/artifacts/export_meshes.json
     - cad/objects/legacy_jar-rdngsc/artifacts/export_meshes.json
-    - cad/objects/legacy_jar-sktwfj/artifacts/export_meshes.json
     - cad/objects/legacy_jar-uydvnv/artifacts/export_meshes.json
     - cad/objects/legacy_jar-vuolos/artifacts/export_meshes.json
     - cad/objects/legacy_jar-vzwhbg/artifacts/export_meshes.json
@@ -1362,11 +1324,9 @@ stages:
     - cad/objects/legacy_pajamas-rcgdde/artifacts/export_meshes.json
     - cad/objects/legacy_paper_bag-bzsxgw/artifacts/export_meshes.json
     - cad/objects/legacy_paper_clip-xjfirk/artifacts/export_meshes.json
-    - cad/objects/legacy_paper_towel-aclaus/artifacts/export_meshes.json
     - cad/objects/legacy_paper_towel_holder-rntefx/artifacts/export_meshes.json
     - cad/objects/legacy_parsley-kkgkkd/artifacts/export_meshes.json
     - cad/objects/legacy_pasta-gwqhko/artifacts/export_meshes.json
-    - cad/objects/legacy_pea-iblyep/artifacts/export_meshes.json
     - cad/objects/legacy_peach-orowgl/artifacts/export_meshes.json
     - cad/objects/legacy_peach-wrutgk/artifacts/export_meshes.json
     - cad/objects/legacy_pear-mqvgcg/artifacts/export_meshes.json
@@ -1497,14 +1457,12 @@ stages:
     - cad/objects/legacy_pot_plant-kxmvco/artifacts/export_meshes.json
     - cad/objects/legacy_pot_plant-nscddw/artifacts/export_meshes.json
     - cad/objects/legacy_pot_plant-qbnaph/artifacts/export_meshes.json
-    - cad/objects/legacy_pot_plant-qcpges/artifacts/export_meshes.json
     - cad/objects/legacy_pot_plant-qenqqv/artifacts/export_meshes.json
     - cad/objects/legacy_pot_plant-quaxmw/artifacts/export_meshes.json
     - cad/objects/legacy_pot_plant-udqjui/artifacts/export_meshes.json
     - cad/objects/legacy_pot_plant-uvbpsf/artifacts/export_meshes.json
     - cad/objects/legacy_pot_plant-vcwwrd/artifacts/export_meshes.json
     - cad/objects/legacy_pot_plant-vyswzs/artifacts/export_meshes.json
-    - cad/objects/legacy_pot_plant-xlylfy/artifacts/export_meshes.json
     - cad/objects/legacy_pot_plant-yvuagy/artifacts/export_meshes.json
     - cad/objects/legacy_potato-bpwohr/artifacts/export_meshes.json
     - cad/objects/legacy_potato-ljfitc/artifacts/export_meshes.json
@@ -1523,7 +1481,6 @@ stages:
     - cad/objects/legacy_puree-raagvm/artifacts/export_meshes.json
     - cad/objects/legacy_radish-bpmjki/artifacts/export_meshes.json
     - cad/objects/legacy_radish-vztgpr/artifacts/export_meshes.json
-    - cad/objects/legacy_rag-dgzewy/artifacts/export_meshes.json
     - cad/objects/legacy_rag-zmmbpz/artifacts/export_meshes.json
     - cad/objects/legacy_rail_fence-iduxiv/artifacts/export_meshes.json
     - cad/objects/legacy_rail_fence-qmsnld/artifacts/export_meshes.json
@@ -1571,7 +1528,6 @@ stages:
     - cad/objects/legacy_shampoo-kkbhzw/artifacts/export_meshes.json
     - cad/objects/legacy_shampoo-nijidu/artifacts/export_meshes.json
     - cad/objects/legacy_shampoo-tzghev/artifacts/export_meshes.json
-    - cad/objects/legacy_sheet-czdhwu/artifacts/export_meshes.json
     - cad/objects/legacy_shelf-cqcoox/artifacts/export_meshes.json
     - cad/objects/legacy_shelf-eyidvz/artifacts/export_meshes.json
     - cad/objects/legacy_shelf-lbbims/artifacts/export_meshes.json
@@ -1957,7 +1913,6 @@ stages:
     - cad/objects/magnifying_glass-ra/artifacts/export_meshes.json
     - cad/objects/mail-rt/artifacts/export_meshes.json
     - cad/objects/mallet-i1/artifacts/export_meshes.json
-    - cad/objects/manure-bf/artifacts/export_meshes.json
     - cad/objects/maple_syrup-is/artifacts/export_meshes.json
     - cad/objects/margarine-vs/artifacts/export_meshes.json
     - cad/objects/marigold-i7/artifacts/export_meshes.json
@@ -1971,14 +1926,12 @@ stages:
     - cad/objects/measuring_cup-7l/artifacts/export_meshes.json
     - cad/objects/measuring_tape-4b/artifacts/export_meshes.json
     - cad/objects/meat_thermometer-nt/artifacts/export_meshes.json
-    - cad/objects/meatloaf-55/artifacts/export_meshes.json
     - cad/objects/melon-5a/artifacts/export_meshes.json
     - cad/objects/meringue-sm/artifacts/export_meshes.json
     - cad/objects/mesh_bag-hz/artifacts/export_meshes.json
     - cad/objects/microfiber_cloth-ji/artifacts/export_meshes.json
     - cad/objects/microphone-st/artifacts/export_meshes.json
     - cad/objects/milkshake-zb/artifacts/export_meshes.json
-    - cad/objects/miso-un/artifacts/export_meshes.json
     - cad/objects/mistletoe_holly-vr/artifacts/export_meshes.json
     - cad/objects/mixing_bowl-fp/artifacts/export_meshes.json
     - cad/objects/mojito-0l/artifacts/export_meshes.json
@@ -1988,13 +1941,11 @@ stages:
     - cad/objects/mortar-v2/artifacts/export_meshes.json
     - cad/objects/moth_ball-pg/artifacts/export_meshes.json
     - cad/objects/mousepad-dz/artifacts/export_meshes.json
-    - cad/objects/mulch-4v/artifacts/export_meshes.json
     - cad/objects/mustard_greens-zy/artifacts/export_meshes.json
     - cad/objects/nachos-pj/artifacts/export_meshes.json
     - cad/objects/nails-vj/artifacts/export_meshes.json
     - cad/objects/name_tag-so/artifacts/export_meshes.json
     - cad/objects/nativity-tl/artifacts/export_meshes.json
-    - cad/objects/necktie-is/artifacts/export_meshes.json
     - cad/objects/nectarine-id/artifacts/export_meshes.json
     - cad/objects/nickel-qu/artifacts/export_meshes.json
     - cad/objects/noodle-21/artifacts/export_meshes.json
@@ -2017,13 +1968,11 @@ stages:
     - cad/objects/paper-fp/artifacts/export_meshes.json
     - cad/objects/paper_liners-mr/artifacts/export_meshes.json
     - cad/objects/paraffin_wax-3l/artifacts/export_meshes.json
-    - cad/objects/parchment_paper-ox/artifacts/export_meshes.json
     - cad/objects/parmesan_cheese-iz/artifacts/export_meshes.json
     - cad/objects/parsnip-7h/artifacts/export_meshes.json
     - cad/objects/pastry-hz/artifacts/export_meshes.json
     - cad/objects/pastry_brush-h1/artifacts/export_meshes.json
     - cad/objects/pastry_cutter-bx/artifacts/export_meshes.json
-    - cad/objects/patina-77/artifacts/export_meshes.json
     - cad/objects/paver-bp/artifacts/export_meshes.json
     - cad/objects/pea_pods-hg/artifacts/export_meshes.json
     - cad/objects/peanut_butter-pa/artifacts/export_meshes.json
@@ -2038,7 +1987,6 @@ stages:
     - cad/objects/pepperoni-ca/artifacts/export_meshes.json
     - cad/objects/pesticide-ik/artifacts/export_meshes.json
     - cad/objects/pet_bed-yw/artifacts/export_meshes.json
-    - cad/objects/pet_food-nf/artifacts/export_meshes.json
     - cad/objects/pet_poop-qg/artifacts/export_meshes.json
     - cad/objects/pickle-kk/artifacts/export_meshes.json
     - cad/objects/pickup_truck-c5/artifacts/export_meshes.json
@@ -2050,12 +1998,10 @@ stages:
     - cad/objects/pipe_cleaner-ph/artifacts/export_meshes.json
     - cad/objects/pitcher-xk/artifacts/export_meshes.json
     - cad/objects/pizza_box-vm/artifacts/export_meshes.json
-    - cad/objects/pizza_dough-ti/artifacts/export_meshes.json
     - cad/objects/pizza_sauce-nq/artifacts/export_meshes.json
     - cad/objects/plant_pot-7o/artifacts/export_meshes.json
     - cad/objects/plastic_bag-3p/artifacts/export_meshes.json
     - cad/objects/plastic_cup-dh/artifacts/export_meshes.json
-    - cad/objects/plastic_wrap-de/artifacts/export_meshes.json
     - cad/objects/plier-8w/artifacts/export_meshes.json
     - cad/objects/plug-jv/artifacts/export_meshes.json
     - cad/objects/plush_toy-de/artifacts/export_meshes.json
@@ -2063,7 +2009,6 @@ stages:
     - cad/objects/poker-gh/artifacts/export_meshes.json
     - cad/objects/pole-lx/artifacts/export_meshes.json
     - cad/objects/polo_shirt-te/artifacts/export_meshes.json
-    - cad/objects/popcorn-xz/artifacts/export_meshes.json
     - cad/objects/pork_chop-re/artifacts/export_meshes.json
     - cad/objects/pork_rib-l3/artifacts/export_meshes.json
     - cad/objects/portobello-xw/artifacts/export_meshes.json
@@ -2159,11 +2104,9 @@ stages:
     - cad/objects/smoothie-ee/artifacts/export_meshes.json
     - cad/objects/sneakers-cr/artifacts/export_meshes.json
     - cad/objects/snow_globe-aw/artifacts/export_meshes.json
-    - cad/objects/snow_pants-ic/artifacts/export_meshes.json
     - cad/objects/soccer_ball-uj/artifacts/export_meshes.json
     - cad/objects/socks-bz/artifacts/export_meshes.json
     - cad/objects/sod-cj/artifacts/export_meshes.json
-    - cad/objects/soda-oe/artifacts/export_meshes.json
     - cad/objects/softball-jr/artifacts/export_meshes.json
     - cad/objects/sour_cream-kx/artifacts/export_meshes.json
     - cad/objects/soy_sauce-jh/artifacts/export_meshes.json
@@ -2232,22 +2175,18 @@ stages:
     - cad/objects/tissues-qu/artifacts/export_meshes.json
     - cad/objects/toast-tt/artifacts/export_meshes.json
     - cad/objects/toaster_oven-kf/artifacts/export_meshes.json
-    - cad/objects/toolbox-ng/artifacts/export_meshes.json
     - cad/objects/tortilla-bq/artifacts/export_meshes.json
     - cad/objects/tortilla_chips-ub/artifacts/export_meshes.json
     - cad/objects/tote-se/artifacts/export_meshes.json
-    - cad/objects/towels-ib/artifacts/export_meshes.json
     - cad/objects/toy_train-vj/artifacts/export_meshes.json
     - cad/objects/trail_mix-hr/artifacts/export_meshes.json
     - cad/objects/trailer-mc/artifacts/export_meshes.json
-    - cad/objects/trash-ok/artifacts/export_meshes.json
     - cad/objects/trees-hv/artifacts/export_meshes.json
     - cad/objects/tripod-ti/artifacts/export_meshes.json
     - cad/objects/trombone-sg/artifacts/export_meshes.json
     - cad/objects/trophy-af/artifacts/export_meshes.json
     - cad/objects/truck-sf/artifacts/export_meshes.json
     - cad/objects/trumpet-gh/artifacts/export_meshes.json
-    - cad/objects/tube-kg/artifacts/export_meshes.json
     - cad/objects/tulip-ce/artifacts/export_meshes.json
     - cad/objects/tuna-wh/artifacts/export_meshes.json
     - cad/objects/tupperware-un/artifacts/export_meshes.json
@@ -2267,7 +2206,6 @@ stages:
     - cad/objects/waffle-yd/artifacts/export_meshes.json
     - cad/objects/waffle_maker-dr/artifacts/export_meshes.json
     - cad/objects/wallet-ql/artifacts/export_meshes.json
-    - cad/objects/wallpaper-ll/artifacts/export_meshes.json
     - cad/objects/water_dispenser-ht/artifacts/export_meshes.json
     - cad/objects/water_filter-kl/artifacts/export_meshes.json
     - cad/objects/watering_can-ek/artifacts/export_meshes.json
@@ -2344,7 +2282,6 @@ stages:
     cmd: python -m b1k_pipeline.export_objs_global
     deps:
     - cad/objects/acetone-jc/artifacts/meshes.zip
-    - cad/objects/acid-ub/artifacts/meshes.zip
     - cad/objects/adhesive-io/artifacts/meshes.zip
     - cad/objects/adhesive_strip-vv/artifacts/meshes.zip
     - cad/objects/air_conditioner-ep/artifacts/meshes.zip
@@ -2363,7 +2300,6 @@ stages:
     - cad/objects/antlers-mq/artifacts/meshes.zip
     - cad/objects/apple_cider-jf/artifacts/meshes.zip
     - cad/objects/apple_pie-bk/artifacts/meshes.zip
-    - cad/objects/applesauce-dt/artifacts/meshes.zip
     - cad/objects/apron-iu/artifacts/meshes.zip
     - cad/objects/arepa-od/artifacts/meshes.zip
     - cad/objects/arugula-lx/artifacts/meshes.zip
@@ -2395,7 +2331,6 @@ stages:
     - cad/objects/bath_salt-mo/artifacts/meshes.zip
     - cad/objects/battery-lb/artifacts/meshes.zip
     - cad/objects/batting_gloves-nd/artifacts/meshes.zip
-    - cad/objects/bay_leaves-xu/artifacts/meshes.zip
     - cad/objects/bedsheet-pj/artifacts/meshes.zip
     - cad/objects/beer_keg-rn/artifacts/meshes.zip
     - cad/objects/beeswax-ad/artifacts/meshes.zip
@@ -2404,9 +2339,7 @@ stages:
     - cad/objects/birdcage-xo/artifacts/meshes.zip
     - cad/objects/birdseed-bd/artifacts/meshes.zip
     - cad/objects/biscuit-vh/artifacts/meshes.zip
-    - cad/objects/black_beans-jm/artifacts/meshes.zip
     - cad/objects/blackberries-xx/artifacts/meshes.zip
-    - cad/objects/blankets-bx/artifacts/meshes.zip
     - cad/objects/blazer-fa/artifacts/meshes.zip
     - cad/objects/bleach-wc/artifacts/meshes.zip
     - cad/objects/blender-temp/artifacts/meshes.zip
@@ -2414,7 +2347,6 @@ stages:
     - cad/objects/blouse-rc/artifacts/meshes.zip
     - cad/objects/blow_dryer-hf/artifacts/meshes.zip
     - cad/objects/blueberries-dg/artifacts/meshes.zip
-    - cad/objects/blueberry_mousse-ax/artifacts/meshes.zip
     - cad/objects/boat-qb/artifacts/meshes.zip
     - cad/objects/bobby_pins-pi/artifacts/meshes.zip
     - cad/objects/body_srub-vm/artifacts/meshes.zip
@@ -2442,7 +2374,6 @@ stages:
     - cad/objects/bun-ae/artifacts/meshes.zip
     - cad/objects/burlap-sm/artifacts/meshes.zip
     - cad/objects/burrito-of/artifacts/meshes.zip
-    - cad/objects/buttermilk-ca/artifacts/meshes.zip
     - cad/objects/butternut_squash-ev/artifacts/meshes.zip
     - cad/objects/cactus-gb/artifacts/meshes.zip
     - cad/objects/cake-fg/artifacts/meshes.zip
@@ -2455,19 +2386,15 @@ stages:
     - cad/objects/canner-fk/artifacts/meshes.zip
     - cad/objects/canvas-ts/artifacts/meshes.zip
     - cad/objects/cappuccino-hi/artifacts/meshes.zip
-    - cad/objects/caraway_seeds-sh/artifacts/meshes.zip
     - cad/objects/cardigan-xm/artifacts/meshes.zip
     - cad/objects/cardstock-wi/artifacts/meshes.zip
     - cad/objects/care_products-gt/artifacts/meshes.zip
     - cad/objects/cash_box-wk/artifacts/meshes.zip
-    - cad/objects/casserole-zd/artifacts/meshes.zip
-    - cad/objects/cat_food-eg/artifacts/meshes.zip
     - cad/objects/catalog-xj/artifacts/meshes.zip
     - cad/objects/cauliflower-oy/artifacts/meshes.zip
     - cad/objects/caulk-hi/artifacts/meshes.zip
     - cad/objects/cd-ui/artifacts/meshes.zip
     - cad/objects/cell_phone-nb/artifacts/meshes.zip
-    - cad/objects/cellophane-ul/artifacts/meshes.zip
     - cad/objects/centerpiece-nc/artifacts/meshes.zip
     - cad/objects/ceramic_tile-yb/artifacts/meshes.zip
     - cad/objects/ceramic_tile-yr/artifacts/meshes.zip
@@ -2499,25 +2426,20 @@ stages:
     - cad/objects/chocolate_biscuit-gv/artifacts/meshes.zip
     - cad/objects/chocolate_cake-yw/artifacts/meshes.zip
     - cad/objects/chocolate_chip-qm/artifacts/meshes.zip
-    - cad/objects/chocolate_spread-aj/artifacts/meshes.zip
     - cad/objects/chocolate_syrup-eh/artifacts/meshes.zip
     - cad/objects/chopping_block-zd/artifacts/meshes.zip
     - cad/objects/chorizo-su/artifacts/meshes.zip
-    - cad/objects/chowder-pu/artifacts/meshes.zip
     - cad/objects/cigarette-te/artifacts/meshes.zip
     - cad/objects/cilantro-lx/artifacts/meshes.zip
     - cad/objects/cinnamon_stick-jl/artifacts/meshes.zip
-    - cad/objects/cioppino-md/artifacts/meshes.zip
     - cad/objects/citrus-ln/artifacts/meshes.zip
     - cad/objects/clam-yf/artifacts/meshes.zip
     - cad/objects/clamp-ok/artifacts/meshes.zip
     - cad/objects/cleaner-ed/artifacts/meshes.zip
-    - cad/objects/clip-vb/artifacts/meshes.zip
     - cad/objects/clock-wy/artifacts/meshes.zip
     - cad/objects/clothesline-jc/artifacts/meshes.zip
     - cad/objects/clothesline-pq/artifacts/meshes.zip
     - cad/objects/cloves-kp/artifacts/meshes.zip
-    - cad/objects/cocktail-uw/artifacts/meshes.zip
     - cad/objects/cocoa_powder-vg/artifacts/meshes.zip
     - cad/objects/coconut_milk-oq/artifacts/meshes.zip
     - cad/objects/coconut_oil-xw/artifacts/meshes.zip
@@ -2527,7 +2449,6 @@ stages:
     - cad/objects/coffee_grinder-ag/artifacts/meshes.zip
     - cad/objects/coke_bottle-al/artifacts/meshes.zip
     - cad/objects/comic_book-lr/artifacts/meshes.zip
-    - cad/objects/compost-pf/artifacts/meshes.zip
     - cad/objects/compost_bin-fh/artifacts/meshes.zip
     - cad/objects/conch_shell-un/artifacts/meshes.zip
     - cad/objects/console_game-cm/artifacts/meshes.zip
@@ -2550,7 +2471,6 @@ stages:
     - cad/objects/curtain_rod-la/artifacts/meshes.zip
     - cad/objects/cushion-kh/artifacts/meshes.zip
     - cad/objects/custome-jn/artifacts/meshes.zip
-    - cad/objects/cymbal-kq/artifacts/meshes.zip
     - cad/objects/dahlias-po/artifacts/meshes.zip
     - cad/objects/daiper-re/artifacts/meshes.zip
     - cad/objects/decanter-ij/artifacts/meshes.zip
@@ -2560,7 +2480,6 @@ stages:
     - cad/objects/denture-hi/artifacts/meshes.zip
     - cad/objects/deodorant-ls/artifacts/meshes.zip
     - cad/objects/diamond-jh/artifacts/meshes.zip
-    - cad/objects/diamond_ring-pq/artifacts/meshes.zip
     - cad/objects/dice-wq/artifacts/meshes.zip
     - cad/objects/dish_soap-vr/artifacts/meshes.zip
     - cad/objects/dish_towel-bv/artifacts/meshes.zip
@@ -2577,7 +2496,6 @@ stages:
     - cad/objects/duck-dg/artifacts/meshes.zip
     - cad/objects/duct_tape-ls/artifacts/meshes.zip
     - cad/objects/dumpling-uy/artifacts/meshes.zip
-    - cad/objects/duster-rm/artifacts/meshes.zip
     - cad/objects/dutch_oven-wa/artifacts/meshes.zip
     - cad/objects/duvet_set-pa/artifacts/meshes.zip
     - cad/objects/dvd-yq/artifacts/meshes.zip
@@ -2604,7 +2522,6 @@ stages:
     - cad/objects/food_processor-ht/artifacts/meshes.zip
     - cad/objects/fountain-az/artifacts/meshes.zip
     - cad/objects/frame-ow/artifacts/meshes.zip
-    - cad/objects/frappuccino-if/artifacts/meshes.zip
     - cad/objects/french_fries-jh/artifacts/meshes.zip
     - cad/objects/french_press-hq/artifacts/meshes.zip
     - cad/objects/french_toast-uh/artifacts/meshes.zip
@@ -2615,7 +2532,6 @@ stages:
     - cad/objects/funnel-oh/artifacts/meshes.zip
     - cad/objects/garden_glove-ld/artifacts/meshes.zip
     - cad/objects/garlic-lh/artifacts/meshes.zip
-    - cad/objects/gazpacho-er/artifacts/meshes.zip
     - cad/objects/geode-qw/artifacts/meshes.zip
     - cad/objects/gift-sd/artifacts/meshes.zip
     - cad/objects/gift_bag-ue/artifacts/meshes.zip
@@ -2657,7 +2573,6 @@ stages:
     - cad/objects/hoodie-ev/artifacts/meshes.zip
     - cad/objects/hot_chocolate-ni/artifacts/meshes.zip
     - cad/objects/hotdog_sandwitch-as/artifacts/meshes.zip
-    - cad/objects/hummus-ht/artifacts/meshes.zip
     - cad/objects/hutch-cr/artifacts/meshes.zip
     - cad/objects/ice_bucket-kz/artifacts/meshes.zip
     - cad/objects/ice_cream-re/artifacts/meshes.zip
@@ -2674,7 +2589,6 @@ stages:
     - cad/objects/jelly_beans-in/artifacts/meshes.zip
     - cad/objects/jelly_jars-jo/artifacts/meshes.zip
     - cad/objects/jersey-of/artifacts/meshes.zip
-    - cad/objects/jewelry-wd/artifacts/meshes.zip
     - cad/objects/jewelry_cleaner-bh/artifacts/meshes.zip
     - cad/objects/jigger-kf/artifacts/meshes.zip
     - cad/objects/juicer-gs/artifacts/meshes.zip
@@ -2715,7 +2629,6 @@ stages:
     - cad/objects/legacy_armchair-qplklw/artifacts/meshes.zip
     - cad/objects/legacy_armchair-rabzuf/artifacts/meshes.zip
     - cad/objects/legacy_armchair-tcxiue/artifacts/meshes.zip
-    - cad/objects/legacy_armchair-tnryza/artifacts/meshes.zip
     - cad/objects/legacy_armchair-umbrpd/artifacts/meshes.zip
     - cad/objects/legacy_armchair-viphen/artifacts/meshes.zip
     - cad/objects/legacy_armchair-vtsoat/artifacts/meshes.zip
@@ -2741,9 +2654,6 @@ stages:
     - cad/objects/legacy_basket-wqxrbf/artifacts/meshes.zip
     - cad/objects/legacy_basket-xhdtjn/artifacts/meshes.zip
     - cad/objects/legacy_basket-xjftlf/artifacts/meshes.zip
-    - cad/objects/legacy_bath_towel-feojdm/artifacts/meshes.zip
-    - cad/objects/legacy_bath_towel-iviyls/artifacts/meshes.zip
-    - cad/objects/legacy_bath_towel-lyqgnf/artifacts/meshes.zip
     - cad/objects/legacy_bathtub-azdgtl/artifacts/meshes.zip
     - cad/objects/legacy_bathtub-enpxbn/artifacts/meshes.zip
     - cad/objects/legacy_bathtub-fdjykf/artifacts/meshes.zip
@@ -2751,7 +2661,6 @@ stages:
     - cad/objects/legacy_bathtub-jfhrwj/artifacts/meshes.zip
     - cad/objects/legacy_bathtub-oobbwn/artifacts/meshes.zip
     - cad/objects/legacy_bathtub-wxrafq/artifacts/meshes.zip
-    - cad/objects/legacy_bean-cdinsu/artifacts/meshes.zip
     - cad/objects/legacy_bean-dyjvwv/artifacts/meshes.zip
     - cad/objects/legacy_bean-lvbjws/artifacts/meshes.zip
     - cad/objects/legacy_bean-mfkwzi/artifacts/meshes.zip
@@ -3023,12 +2932,9 @@ stages:
     - cad/objects/legacy_console_table-fihyuz/artifacts/meshes.zip
     - cad/objects/legacy_console_table-tvhett/artifacts/meshes.zip
     - cad/objects/legacy_console_table-xqlxni/artifacts/meshes.zip
-    - cad/objects/legacy_container_cranberry-fbcpsl/artifacts/meshes.zip
     - cad/objects/legacy_container_date-qqddba/artifacts/meshes.zip
     - cad/objects/legacy_cookie-ggpang/artifacts/meshes.zip
-    - cad/objects/legacy_cord-aqikou/artifacts/meshes.zip
     - cad/objects/legacy_cord-tzurlz/artifacts/meshes.zip
-    - cad/objects/legacy_cord-ydrhwh/artifacts/meshes.zip
     - cad/objects/legacy_countertop-tpuwys/artifacts/meshes.zip
     - cad/objects/legacy_cpu_board-xlqvil/artifacts/meshes.zip
     - cad/objects/legacy_crab-tjkiva/artifacts/meshes.zip
@@ -3074,8 +2980,6 @@ stages:
     - cad/objects/legacy_dish_rack-kxuutl/artifacts/meshes.zip
     - cad/objects/legacy_dishtowel-dtfspn/artifacts/meshes.zip
     - cad/objects/legacy_dishtowel-ltydgg/artifacts/meshes.zip
-    - cad/objects/legacy_dishtowel-qvzbjx/artifacts/meshes.zip
-    - cad/objects/legacy_dishtowel-yobhae/artifacts/meshes.zip
     - cad/objects/legacy_dishwasher-cgugie/artifacts/meshes.zip
     - cad/objects/legacy_dishwasher-dngvvi/artifacts/meshes.zip
     - cad/objects/legacy_dishwasher-dugpby/artifacts/meshes.zip
@@ -3101,7 +3005,6 @@ stages:
     - cad/objects/legacy_drumstick-lkvzmj/artifacts/meshes.zip
     - cad/objects/legacy_dryer-fhtvuq/artifacts/meshes.zip
     - cad/objects/legacy_dryer-smcyys/artifacts/meshes.zip
-    - cad/objects/legacy_dryer-tpqzai/artifacts/meshes.zip
     - cad/objects/legacy_dryer-wivnic/artifacts/meshes.zip
     - cad/objects/legacy_dryer-xsuyua/artifacts/meshes.zip
     - cad/objects/legacy_dryer-zlmnfg/artifacts/meshes.zip
@@ -3160,7 +3063,6 @@ stages:
     - cad/objects/legacy_green_onion_chopped-akrkjr/artifacts/meshes.zip
     - cad/objects/legacy_griddle-ryvqep/artifacts/meshes.zip
     - cad/objects/legacy_grill-ddlqye/artifacts/meshes.zip
-    - cad/objects/legacy_guacamole-ajnjvv/artifacts/meshes.zip
     - cad/objects/legacy_guitar-cybisc/artifacts/meshes.zip
     - cad/objects/legacy_guitar-gysapt/artifacts/meshes.zip
     - cad/objects/legacy_guitar-hpqjrq/artifacts/meshes.zip
@@ -3178,7 +3080,6 @@ stages:
     - cad/objects/legacy_hairbrush-bdylnb/artifacts/meshes.zip
     - cad/objects/legacy_hamburger-fyswch/artifacts/meshes.zip
     - cad/objects/legacy_hammer-bbzlel/artifacts/meshes.zip
-    - cad/objects/legacy_hand_towel-jaubic/artifacts/meshes.zip
     - cad/objects/legacy_hanger-ffecvd/artifacts/meshes.zip
     - cad/objects/legacy_hard_drive-ijibkm/artifacts/meshes.zip
     - cad/objects/legacy_hard_drive-ubjbsm/artifacts/meshes.zip
@@ -3215,7 +3116,6 @@ stages:
     - cad/objects/legacy_jar-pluujx/artifacts/meshes.zip
     - cad/objects/legacy_jar-qzwijs/artifacts/meshes.zip
     - cad/objects/legacy_jar-rdngsc/artifacts/meshes.zip
-    - cad/objects/legacy_jar-sktwfj/artifacts/meshes.zip
     - cad/objects/legacy_jar-uydvnv/artifacts/meshes.zip
     - cad/objects/legacy_jar-vuolos/artifacts/meshes.zip
     - cad/objects/legacy_jar-vzwhbg/artifacts/meshes.zip
@@ -3343,11 +3243,9 @@ stages:
     - cad/objects/legacy_pajamas-rcgdde/artifacts/meshes.zip
     - cad/objects/legacy_paper_bag-bzsxgw/artifacts/meshes.zip
     - cad/objects/legacy_paper_clip-xjfirk/artifacts/meshes.zip
-    - cad/objects/legacy_paper_towel-aclaus/artifacts/meshes.zip
     - cad/objects/legacy_paper_towel_holder-rntefx/artifacts/meshes.zip
     - cad/objects/legacy_parsley-kkgkkd/artifacts/meshes.zip
     - cad/objects/legacy_pasta-gwqhko/artifacts/meshes.zip
-    - cad/objects/legacy_pea-iblyep/artifacts/meshes.zip
     - cad/objects/legacy_peach-orowgl/artifacts/meshes.zip
     - cad/objects/legacy_peach-wrutgk/artifacts/meshes.zip
     - cad/objects/legacy_pear-mqvgcg/artifacts/meshes.zip
@@ -3478,14 +3376,12 @@ stages:
     - cad/objects/legacy_pot_plant-kxmvco/artifacts/meshes.zip
     - cad/objects/legacy_pot_plant-nscddw/artifacts/meshes.zip
     - cad/objects/legacy_pot_plant-qbnaph/artifacts/meshes.zip
-    - cad/objects/legacy_pot_plant-qcpges/artifacts/meshes.zip
     - cad/objects/legacy_pot_plant-qenqqv/artifacts/meshes.zip
     - cad/objects/legacy_pot_plant-quaxmw/artifacts/meshes.zip
     - cad/objects/legacy_pot_plant-udqjui/artifacts/meshes.zip
     - cad/objects/legacy_pot_plant-uvbpsf/artifacts/meshes.zip
     - cad/objects/legacy_pot_plant-vcwwrd/artifacts/meshes.zip
     - cad/objects/legacy_pot_plant-vyswzs/artifacts/meshes.zip
-    - cad/objects/legacy_pot_plant-xlylfy/artifacts/meshes.zip
     - cad/objects/legacy_pot_plant-yvuagy/artifacts/meshes.zip
     - cad/objects/legacy_potato-bpwohr/artifacts/meshes.zip
     - cad/objects/legacy_potato-ljfitc/artifacts/meshes.zip
@@ -3504,7 +3400,6 @@ stages:
     - cad/objects/legacy_puree-raagvm/artifacts/meshes.zip
     - cad/objects/legacy_radish-bpmjki/artifacts/meshes.zip
     - cad/objects/legacy_radish-vztgpr/artifacts/meshes.zip
-    - cad/objects/legacy_rag-dgzewy/artifacts/meshes.zip
     - cad/objects/legacy_rag-zmmbpz/artifacts/meshes.zip
     - cad/objects/legacy_rail_fence-iduxiv/artifacts/meshes.zip
     - cad/objects/legacy_rail_fence-qmsnld/artifacts/meshes.zip
@@ -3552,7 +3447,6 @@ stages:
     - cad/objects/legacy_shampoo-kkbhzw/artifacts/meshes.zip
     - cad/objects/legacy_shampoo-nijidu/artifacts/meshes.zip
     - cad/objects/legacy_shampoo-tzghev/artifacts/meshes.zip
-    - cad/objects/legacy_sheet-czdhwu/artifacts/meshes.zip
     - cad/objects/legacy_shelf-cqcoox/artifacts/meshes.zip
     - cad/objects/legacy_shelf-eyidvz/artifacts/meshes.zip
     - cad/objects/legacy_shelf-lbbims/artifacts/meshes.zip
@@ -3938,7 +3832,6 @@ stages:
     - cad/objects/magnifying_glass-ra/artifacts/meshes.zip
     - cad/objects/mail-rt/artifacts/meshes.zip
     - cad/objects/mallet-i1/artifacts/meshes.zip
-    - cad/objects/manure-bf/artifacts/meshes.zip
     - cad/objects/maple_syrup-is/artifacts/meshes.zip
     - cad/objects/margarine-vs/artifacts/meshes.zip
     - cad/objects/marigold-i7/artifacts/meshes.zip
@@ -3952,14 +3845,12 @@ stages:
     - cad/objects/measuring_cup-7l/artifacts/meshes.zip
     - cad/objects/measuring_tape-4b/artifacts/meshes.zip
     - cad/objects/meat_thermometer-nt/artifacts/meshes.zip
-    - cad/objects/meatloaf-55/artifacts/meshes.zip
     - cad/objects/melon-5a/artifacts/meshes.zip
     - cad/objects/meringue-sm/artifacts/meshes.zip
     - cad/objects/mesh_bag-hz/artifacts/meshes.zip
     - cad/objects/microfiber_cloth-ji/artifacts/meshes.zip
     - cad/objects/microphone-st/artifacts/meshes.zip
     - cad/objects/milkshake-zb/artifacts/meshes.zip
-    - cad/objects/miso-un/artifacts/meshes.zip
     - cad/objects/mistletoe_holly-vr/artifacts/meshes.zip
     - cad/objects/mixing_bowl-fp/artifacts/meshes.zip
     - cad/objects/mojito-0l/artifacts/meshes.zip
@@ -3969,13 +3860,11 @@ stages:
     - cad/objects/mortar-v2/artifacts/meshes.zip
     - cad/objects/moth_ball-pg/artifacts/meshes.zip
     - cad/objects/mousepad-dz/artifacts/meshes.zip
-    - cad/objects/mulch-4v/artifacts/meshes.zip
     - cad/objects/mustard_greens-zy/artifacts/meshes.zip
     - cad/objects/nachos-pj/artifacts/meshes.zip
     - cad/objects/nails-vj/artifacts/meshes.zip
     - cad/objects/name_tag-so/artifacts/meshes.zip
     - cad/objects/nativity-tl/artifacts/meshes.zip
-    - cad/objects/necktie-is/artifacts/meshes.zip
     - cad/objects/nectarine-id/artifacts/meshes.zip
     - cad/objects/nickel-qu/artifacts/meshes.zip
     - cad/objects/noodle-21/artifacts/meshes.zip
@@ -3998,13 +3887,11 @@ stages:
     - cad/objects/paper-fp/artifacts/meshes.zip
     - cad/objects/paper_liners-mr/artifacts/meshes.zip
     - cad/objects/paraffin_wax-3l/artifacts/meshes.zip
-    - cad/objects/parchment_paper-ox/artifacts/meshes.zip
     - cad/objects/parmesan_cheese-iz/artifacts/meshes.zip
     - cad/objects/parsnip-7h/artifacts/meshes.zip
     - cad/objects/pastry-hz/artifacts/meshes.zip
     - cad/objects/pastry_brush-h1/artifacts/meshes.zip
     - cad/objects/pastry_cutter-bx/artifacts/meshes.zip
-    - cad/objects/patina-77/artifacts/meshes.zip
     - cad/objects/paver-bp/artifacts/meshes.zip
     - cad/objects/pea_pods-hg/artifacts/meshes.zip
     - cad/objects/peanut_butter-pa/artifacts/meshes.zip
@@ -4019,7 +3906,6 @@ stages:
     - cad/objects/pepperoni-ca/artifacts/meshes.zip
     - cad/objects/pesticide-ik/artifacts/meshes.zip
     - cad/objects/pet_bed-yw/artifacts/meshes.zip
-    - cad/objects/pet_food-nf/artifacts/meshes.zip
     - cad/objects/pet_poop-qg/artifacts/meshes.zip
     - cad/objects/pickle-kk/artifacts/meshes.zip
     - cad/objects/pickup_truck-c5/artifacts/meshes.zip
@@ -4031,12 +3917,10 @@ stages:
     - cad/objects/pipe_cleaner-ph/artifacts/meshes.zip
     - cad/objects/pitcher-xk/artifacts/meshes.zip
     - cad/objects/pizza_box-vm/artifacts/meshes.zip
-    - cad/objects/pizza_dough-ti/artifacts/meshes.zip
     - cad/objects/pizza_sauce-nq/artifacts/meshes.zip
     - cad/objects/plant_pot-7o/artifacts/meshes.zip
     - cad/objects/plastic_bag-3p/artifacts/meshes.zip
     - cad/objects/plastic_cup-dh/artifacts/meshes.zip
-    - cad/objects/plastic_wrap-de/artifacts/meshes.zip
     - cad/objects/plier-8w/artifacts/meshes.zip
     - cad/objects/plug-jv/artifacts/meshes.zip
     - cad/objects/plush_toy-de/artifacts/meshes.zip
@@ -4044,7 +3928,6 @@ stages:
     - cad/objects/poker-gh/artifacts/meshes.zip
     - cad/objects/pole-lx/artifacts/meshes.zip
     - cad/objects/polo_shirt-te/artifacts/meshes.zip
-    - cad/objects/popcorn-xz/artifacts/meshes.zip
     - cad/objects/pork_chop-re/artifacts/meshes.zip
     - cad/objects/pork_rib-l3/artifacts/meshes.zip
     - cad/objects/portobello-xw/artifacts/meshes.zip
@@ -4140,11 +4023,9 @@ stages:
     - cad/objects/smoothie-ee/artifacts/meshes.zip
     - cad/objects/sneakers-cr/artifacts/meshes.zip
     - cad/objects/snow_globe-aw/artifacts/meshes.zip
-    - cad/objects/snow_pants-ic/artifacts/meshes.zip
     - cad/objects/soccer_ball-uj/artifacts/meshes.zip
     - cad/objects/socks-bz/artifacts/meshes.zip
     - cad/objects/sod-cj/artifacts/meshes.zip
-    - cad/objects/soda-oe/artifacts/meshes.zip
     - cad/objects/softball-jr/artifacts/meshes.zip
     - cad/objects/sour_cream-kx/artifacts/meshes.zip
     - cad/objects/soy_sauce-jh/artifacts/meshes.zip
@@ -4213,22 +4094,18 @@ stages:
     - cad/objects/tissues-qu/artifacts/meshes.zip
     - cad/objects/toast-tt/artifacts/meshes.zip
     - cad/objects/toaster_oven-kf/artifacts/meshes.zip
-    - cad/objects/toolbox-ng/artifacts/meshes.zip
     - cad/objects/tortilla-bq/artifacts/meshes.zip
     - cad/objects/tortilla_chips-ub/artifacts/meshes.zip
     - cad/objects/tote-se/artifacts/meshes.zip
-    - cad/objects/towels-ib/artifacts/meshes.zip
     - cad/objects/toy_train-vj/artifacts/meshes.zip
     - cad/objects/trail_mix-hr/artifacts/meshes.zip
     - cad/objects/trailer-mc/artifacts/meshes.zip
-    - cad/objects/trash-ok/artifacts/meshes.zip
     - cad/objects/trees-hv/artifacts/meshes.zip
     - cad/objects/tripod-ti/artifacts/meshes.zip
     - cad/objects/trombone-sg/artifacts/meshes.zip
     - cad/objects/trophy-af/artifacts/meshes.zip
     - cad/objects/truck-sf/artifacts/meshes.zip
     - cad/objects/trumpet-gh/artifacts/meshes.zip
-    - cad/objects/tube-kg/artifacts/meshes.zip
     - cad/objects/tulip-ce/artifacts/meshes.zip
     - cad/objects/tuna-wh/artifacts/meshes.zip
     - cad/objects/tupperware-un/artifacts/meshes.zip
@@ -4248,7 +4125,6 @@ stages:
     - cad/objects/waffle-yd/artifacts/meshes.zip
     - cad/objects/waffle_maker-dr/artifacts/meshes.zip
     - cad/objects/wallet-ql/artifacts/meshes.zip
-    - cad/objects/wallpaper-ll/artifacts/meshes.zip
     - cad/objects/water_dispenser-ht/artifacts/meshes.zip
     - cad/objects/water_filter-kl/artifacts/meshes.zip
     - cad/objects/watering_can-ek/artifacts/meshes.zip
@@ -4319,7 +4195,6 @@ stages:
     - cad/scenes/restaurant_urban/artifacts/meshes.zip
     - cad/scenes/school_gym/artifacts/meshes.zip
     - cad/objects/acetone-jc/artifacts/object_list.json
-    - cad/objects/acid-ub/artifacts/object_list.json
     - cad/objects/adhesive-io/artifacts/object_list.json
     - cad/objects/adhesive_strip-vv/artifacts/object_list.json
     - cad/objects/air_conditioner-ep/artifacts/object_list.json
@@ -4338,7 +4213,6 @@ stages:
     - cad/objects/antlers-mq/artifacts/object_list.json
     - cad/objects/apple_cider-jf/artifacts/object_list.json
     - cad/objects/apple_pie-bk/artifacts/object_list.json
-    - cad/objects/applesauce-dt/artifacts/object_list.json
     - cad/objects/apron-iu/artifacts/object_list.json
     - cad/objects/arepa-od/artifacts/object_list.json
     - cad/objects/arugula-lx/artifacts/object_list.json
@@ -4370,7 +4244,6 @@ stages:
     - cad/objects/bath_salt-mo/artifacts/object_list.json
     - cad/objects/battery-lb/artifacts/object_list.json
     - cad/objects/batting_gloves-nd/artifacts/object_list.json
-    - cad/objects/bay_leaves-xu/artifacts/object_list.json
     - cad/objects/bedsheet-pj/artifacts/object_list.json
     - cad/objects/beer_keg-rn/artifacts/object_list.json
     - cad/objects/beeswax-ad/artifacts/object_list.json
@@ -4379,9 +4252,7 @@ stages:
     - cad/objects/birdcage-xo/artifacts/object_list.json
     - cad/objects/birdseed-bd/artifacts/object_list.json
     - cad/objects/biscuit-vh/artifacts/object_list.json
-    - cad/objects/black_beans-jm/artifacts/object_list.json
     - cad/objects/blackberries-xx/artifacts/object_list.json
-    - cad/objects/blankets-bx/artifacts/object_list.json
     - cad/objects/blazer-fa/artifacts/object_list.json
     - cad/objects/bleach-wc/artifacts/object_list.json
     - cad/objects/blender-temp/artifacts/object_list.json
@@ -4389,7 +4260,6 @@ stages:
     - cad/objects/blouse-rc/artifacts/object_list.json
     - cad/objects/blow_dryer-hf/artifacts/object_list.json
     - cad/objects/blueberries-dg/artifacts/object_list.json
-    - cad/objects/blueberry_mousse-ax/artifacts/object_list.json
     - cad/objects/boat-qb/artifacts/object_list.json
     - cad/objects/bobby_pins-pi/artifacts/object_list.json
     - cad/objects/body_srub-vm/artifacts/object_list.json
@@ -4417,7 +4287,6 @@ stages:
     - cad/objects/bun-ae/artifacts/object_list.json
     - cad/objects/burlap-sm/artifacts/object_list.json
     - cad/objects/burrito-of/artifacts/object_list.json
-    - cad/objects/buttermilk-ca/artifacts/object_list.json
     - cad/objects/butternut_squash-ev/artifacts/object_list.json
     - cad/objects/cactus-gb/artifacts/object_list.json
     - cad/objects/cake-fg/artifacts/object_list.json
@@ -4430,19 +4299,15 @@ stages:
     - cad/objects/canner-fk/artifacts/object_list.json
     - cad/objects/canvas-ts/artifacts/object_list.json
     - cad/objects/cappuccino-hi/artifacts/object_list.json
-    - cad/objects/caraway_seeds-sh/artifacts/object_list.json
     - cad/objects/cardigan-xm/artifacts/object_list.json
     - cad/objects/cardstock-wi/artifacts/object_list.json
     - cad/objects/care_products-gt/artifacts/object_list.json
     - cad/objects/cash_box-wk/artifacts/object_list.json
-    - cad/objects/casserole-zd/artifacts/object_list.json
-    - cad/objects/cat_food-eg/artifacts/object_list.json
     - cad/objects/catalog-xj/artifacts/object_list.json
     - cad/objects/cauliflower-oy/artifacts/object_list.json
     - cad/objects/caulk-hi/artifacts/object_list.json
     - cad/objects/cd-ui/artifacts/object_list.json
     - cad/objects/cell_phone-nb/artifacts/object_list.json
-    - cad/objects/cellophane-ul/artifacts/object_list.json
     - cad/objects/centerpiece-nc/artifacts/object_list.json
     - cad/objects/ceramic_tile-yb/artifacts/object_list.json
     - cad/objects/ceramic_tile-yr/artifacts/object_list.json
@@ -4474,25 +4339,20 @@ stages:
     - cad/objects/chocolate_biscuit-gv/artifacts/object_list.json
     - cad/objects/chocolate_cake-yw/artifacts/object_list.json
     - cad/objects/chocolate_chip-qm/artifacts/object_list.json
-    - cad/objects/chocolate_spread-aj/artifacts/object_list.json
     - cad/objects/chocolate_syrup-eh/artifacts/object_list.json
     - cad/objects/chopping_block-zd/artifacts/object_list.json
     - cad/objects/chorizo-su/artifacts/object_list.json
-    - cad/objects/chowder-pu/artifacts/object_list.json
     - cad/objects/cigarette-te/artifacts/object_list.json
     - cad/objects/cilantro-lx/artifacts/object_list.json
     - cad/objects/cinnamon_stick-jl/artifacts/object_list.json
-    - cad/objects/cioppino-md/artifacts/object_list.json
     - cad/objects/citrus-ln/artifacts/object_list.json
     - cad/objects/clam-yf/artifacts/object_list.json
     - cad/objects/clamp-ok/artifacts/object_list.json
     - cad/objects/cleaner-ed/artifacts/object_list.json
-    - cad/objects/clip-vb/artifacts/object_list.json
     - cad/objects/clock-wy/artifacts/object_list.json
     - cad/objects/clothesline-jc/artifacts/object_list.json
     - cad/objects/clothesline-pq/artifacts/object_list.json
     - cad/objects/cloves-kp/artifacts/object_list.json
-    - cad/objects/cocktail-uw/artifacts/object_list.json
     - cad/objects/cocoa_powder-vg/artifacts/object_list.json
     - cad/objects/coconut_milk-oq/artifacts/object_list.json
     - cad/objects/coconut_oil-xw/artifacts/object_list.json
@@ -4502,7 +4362,6 @@ stages:
     - cad/objects/coffee_grinder-ag/artifacts/object_list.json
     - cad/objects/coke_bottle-al/artifacts/object_list.json
     - cad/objects/comic_book-lr/artifacts/object_list.json
-    - cad/objects/compost-pf/artifacts/object_list.json
     - cad/objects/compost_bin-fh/artifacts/object_list.json
     - cad/objects/conch_shell-un/artifacts/object_list.json
     - cad/objects/console_game-cm/artifacts/object_list.json
@@ -4525,7 +4384,6 @@ stages:
     - cad/objects/curtain_rod-la/artifacts/object_list.json
     - cad/objects/cushion-kh/artifacts/object_list.json
     - cad/objects/custome-jn/artifacts/object_list.json
-    - cad/objects/cymbal-kq/artifacts/object_list.json
     - cad/objects/dahlias-po/artifacts/object_list.json
     - cad/objects/daiper-re/artifacts/object_list.json
     - cad/objects/decanter-ij/artifacts/object_list.json
@@ -4535,7 +4393,6 @@ stages:
     - cad/objects/denture-hi/artifacts/object_list.json
     - cad/objects/deodorant-ls/artifacts/object_list.json
     - cad/objects/diamond-jh/artifacts/object_list.json
-    - cad/objects/diamond_ring-pq/artifacts/object_list.json
     - cad/objects/dice-wq/artifacts/object_list.json
     - cad/objects/dish_soap-vr/artifacts/object_list.json
     - cad/objects/dish_towel-bv/artifacts/object_list.json
@@ -4552,7 +4409,6 @@ stages:
     - cad/objects/duck-dg/artifacts/object_list.json
     - cad/objects/duct_tape-ls/artifacts/object_list.json
     - cad/objects/dumpling-uy/artifacts/object_list.json
-    - cad/objects/duster-rm/artifacts/object_list.json
     - cad/objects/dutch_oven-wa/artifacts/object_list.json
     - cad/objects/duvet_set-pa/artifacts/object_list.json
     - cad/objects/dvd-yq/artifacts/object_list.json
@@ -4579,7 +4435,6 @@ stages:
     - cad/objects/food_processor-ht/artifacts/object_list.json
     - cad/objects/fountain-az/artifacts/object_list.json
     - cad/objects/frame-ow/artifacts/object_list.json
-    - cad/objects/frappuccino-if/artifacts/object_list.json
     - cad/objects/french_fries-jh/artifacts/object_list.json
     - cad/objects/french_press-hq/artifacts/object_list.json
     - cad/objects/french_toast-uh/artifacts/object_list.json
@@ -4590,7 +4445,6 @@ stages:
     - cad/objects/funnel-oh/artifacts/object_list.json
     - cad/objects/garden_glove-ld/artifacts/object_list.json
     - cad/objects/garlic-lh/artifacts/object_list.json
-    - cad/objects/gazpacho-er/artifacts/object_list.json
     - cad/objects/geode-qw/artifacts/object_list.json
     - cad/objects/gift-sd/artifacts/object_list.json
     - cad/objects/gift_bag-ue/artifacts/object_list.json
@@ -4632,7 +4486,6 @@ stages:
     - cad/objects/hoodie-ev/artifacts/object_list.json
     - cad/objects/hot_chocolate-ni/artifacts/object_list.json
     - cad/objects/hotdog_sandwitch-as/artifacts/object_list.json
-    - cad/objects/hummus-ht/artifacts/object_list.json
     - cad/objects/hutch-cr/artifacts/object_list.json
     - cad/objects/ice_bucket-kz/artifacts/object_list.json
     - cad/objects/ice_cream-re/artifacts/object_list.json
@@ -4649,7 +4502,6 @@ stages:
     - cad/objects/jelly_beans-in/artifacts/object_list.json
     - cad/objects/jelly_jars-jo/artifacts/object_list.json
     - cad/objects/jersey-of/artifacts/object_list.json
-    - cad/objects/jewelry-wd/artifacts/object_list.json
     - cad/objects/jewelry_cleaner-bh/artifacts/object_list.json
     - cad/objects/jigger-kf/artifacts/object_list.json
     - cad/objects/juicer-gs/artifacts/object_list.json
@@ -4690,7 +4542,6 @@ stages:
     - cad/objects/legacy_armchair-qplklw/artifacts/object_list.json
     - cad/objects/legacy_armchair-rabzuf/artifacts/object_list.json
     - cad/objects/legacy_armchair-tcxiue/artifacts/object_list.json
-    - cad/objects/legacy_armchair-tnryza/artifacts/object_list.json
     - cad/objects/legacy_armchair-umbrpd/artifacts/object_list.json
     - cad/objects/legacy_armchair-viphen/artifacts/object_list.json
     - cad/objects/legacy_armchair-vtsoat/artifacts/object_list.json
@@ -4716,9 +4567,6 @@ stages:
     - cad/objects/legacy_basket-wqxrbf/artifacts/object_list.json
     - cad/objects/legacy_basket-xhdtjn/artifacts/object_list.json
     - cad/objects/legacy_basket-xjftlf/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-feojdm/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-iviyls/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-lyqgnf/artifacts/object_list.json
     - cad/objects/legacy_bathtub-azdgtl/artifacts/object_list.json
     - cad/objects/legacy_bathtub-enpxbn/artifacts/object_list.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/object_list.json
@@ -4726,7 +4574,6 @@ stages:
     - cad/objects/legacy_bathtub-jfhrwj/artifacts/object_list.json
     - cad/objects/legacy_bathtub-oobbwn/artifacts/object_list.json
     - cad/objects/legacy_bathtub-wxrafq/artifacts/object_list.json
-    - cad/objects/legacy_bean-cdinsu/artifacts/object_list.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/object_list.json
     - cad/objects/legacy_bean-lvbjws/artifacts/object_list.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/object_list.json
@@ -4998,12 +4845,9 @@ stages:
     - cad/objects/legacy_console_table-fihyuz/artifacts/object_list.json
     - cad/objects/legacy_console_table-tvhett/artifacts/object_list.json
     - cad/objects/legacy_console_table-xqlxni/artifacts/object_list.json
-    - cad/objects/legacy_container_cranberry-fbcpsl/artifacts/object_list.json
     - cad/objects/legacy_container_date-qqddba/artifacts/object_list.json
     - cad/objects/legacy_cookie-ggpang/artifacts/object_list.json
-    - cad/objects/legacy_cord-aqikou/artifacts/object_list.json
     - cad/objects/legacy_cord-tzurlz/artifacts/object_list.json
-    - cad/objects/legacy_cord-ydrhwh/artifacts/object_list.json
     - cad/objects/legacy_countertop-tpuwys/artifacts/object_list.json
     - cad/objects/legacy_cpu_board-xlqvil/artifacts/object_list.json
     - cad/objects/legacy_crab-tjkiva/artifacts/object_list.json
@@ -5049,8 +4893,6 @@ stages:
     - cad/objects/legacy_dish_rack-kxuutl/artifacts/object_list.json
     - cad/objects/legacy_dishtowel-dtfspn/artifacts/object_list.json
     - cad/objects/legacy_dishtowel-ltydgg/artifacts/object_list.json
-    - cad/objects/legacy_dishtowel-qvzbjx/artifacts/object_list.json
-    - cad/objects/legacy_dishtowel-yobhae/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-cgugie/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-dngvvi/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-dugpby/artifacts/object_list.json
@@ -5076,7 +4918,6 @@ stages:
     - cad/objects/legacy_drumstick-lkvzmj/artifacts/object_list.json
     - cad/objects/legacy_dryer-fhtvuq/artifacts/object_list.json
     - cad/objects/legacy_dryer-smcyys/artifacts/object_list.json
-    - cad/objects/legacy_dryer-tpqzai/artifacts/object_list.json
     - cad/objects/legacy_dryer-wivnic/artifacts/object_list.json
     - cad/objects/legacy_dryer-xsuyua/artifacts/object_list.json
     - cad/objects/legacy_dryer-zlmnfg/artifacts/object_list.json
@@ -5135,7 +4976,6 @@ stages:
     - cad/objects/legacy_green_onion_chopped-akrkjr/artifacts/object_list.json
     - cad/objects/legacy_griddle-ryvqep/artifacts/object_list.json
     - cad/objects/legacy_grill-ddlqye/artifacts/object_list.json
-    - cad/objects/legacy_guacamole-ajnjvv/artifacts/object_list.json
     - cad/objects/legacy_guitar-cybisc/artifacts/object_list.json
     - cad/objects/legacy_guitar-gysapt/artifacts/object_list.json
     - cad/objects/legacy_guitar-hpqjrq/artifacts/object_list.json
@@ -5153,7 +4993,6 @@ stages:
     - cad/objects/legacy_hairbrush-bdylnb/artifacts/object_list.json
     - cad/objects/legacy_hamburger-fyswch/artifacts/object_list.json
     - cad/objects/legacy_hammer-bbzlel/artifacts/object_list.json
-    - cad/objects/legacy_hand_towel-jaubic/artifacts/object_list.json
     - cad/objects/legacy_hanger-ffecvd/artifacts/object_list.json
     - cad/objects/legacy_hard_drive-ijibkm/artifacts/object_list.json
     - cad/objects/legacy_hard_drive-ubjbsm/artifacts/object_list.json
@@ -5190,7 +5029,6 @@ stages:
     - cad/objects/legacy_jar-pluujx/artifacts/object_list.json
     - cad/objects/legacy_jar-qzwijs/artifacts/object_list.json
     - cad/objects/legacy_jar-rdngsc/artifacts/object_list.json
-    - cad/objects/legacy_jar-sktwfj/artifacts/object_list.json
     - cad/objects/legacy_jar-uydvnv/artifacts/object_list.json
     - cad/objects/legacy_jar-vuolos/artifacts/object_list.json
     - cad/objects/legacy_jar-vzwhbg/artifacts/object_list.json
@@ -5318,11 +5156,9 @@ stages:
     - cad/objects/legacy_pajamas-rcgdde/artifacts/object_list.json
     - cad/objects/legacy_paper_bag-bzsxgw/artifacts/object_list.json
     - cad/objects/legacy_paper_clip-xjfirk/artifacts/object_list.json
-    - cad/objects/legacy_paper_towel-aclaus/artifacts/object_list.json
     - cad/objects/legacy_paper_towel_holder-rntefx/artifacts/object_list.json
     - cad/objects/legacy_parsley-kkgkkd/artifacts/object_list.json
     - cad/objects/legacy_pasta-gwqhko/artifacts/object_list.json
-    - cad/objects/legacy_pea-iblyep/artifacts/object_list.json
     - cad/objects/legacy_peach-orowgl/artifacts/object_list.json
     - cad/objects/legacy_peach-wrutgk/artifacts/object_list.json
     - cad/objects/legacy_pear-mqvgcg/artifacts/object_list.json
@@ -5453,14 +5289,12 @@ stages:
     - cad/objects/legacy_pot_plant-kxmvco/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-nscddw/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-qbnaph/artifacts/object_list.json
-    - cad/objects/legacy_pot_plant-qcpges/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-qenqqv/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-quaxmw/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-udqjui/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-uvbpsf/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-vcwwrd/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-vyswzs/artifacts/object_list.json
-    - cad/objects/legacy_pot_plant-xlylfy/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-yvuagy/artifacts/object_list.json
     - cad/objects/legacy_potato-bpwohr/artifacts/object_list.json
     - cad/objects/legacy_potato-ljfitc/artifacts/object_list.json
@@ -5479,7 +5313,6 @@ stages:
     - cad/objects/legacy_puree-raagvm/artifacts/object_list.json
     - cad/objects/legacy_radish-bpmjki/artifacts/object_list.json
     - cad/objects/legacy_radish-vztgpr/artifacts/object_list.json
-    - cad/objects/legacy_rag-dgzewy/artifacts/object_list.json
     - cad/objects/legacy_rag-zmmbpz/artifacts/object_list.json
     - cad/objects/legacy_rail_fence-iduxiv/artifacts/object_list.json
     - cad/objects/legacy_rail_fence-qmsnld/artifacts/object_list.json
@@ -5527,7 +5360,6 @@ stages:
     - cad/objects/legacy_shampoo-kkbhzw/artifacts/object_list.json
     - cad/objects/legacy_shampoo-nijidu/artifacts/object_list.json
     - cad/objects/legacy_shampoo-tzghev/artifacts/object_list.json
-    - cad/objects/legacy_sheet-czdhwu/artifacts/object_list.json
     - cad/objects/legacy_shelf-cqcoox/artifacts/object_list.json
     - cad/objects/legacy_shelf-eyidvz/artifacts/object_list.json
     - cad/objects/legacy_shelf-lbbims/artifacts/object_list.json
@@ -5913,7 +5745,6 @@ stages:
     - cad/objects/magnifying_glass-ra/artifacts/object_list.json
     - cad/objects/mail-rt/artifacts/object_list.json
     - cad/objects/mallet-i1/artifacts/object_list.json
-    - cad/objects/manure-bf/artifacts/object_list.json
     - cad/objects/maple_syrup-is/artifacts/object_list.json
     - cad/objects/margarine-vs/artifacts/object_list.json
     - cad/objects/marigold-i7/artifacts/object_list.json
@@ -5927,14 +5758,12 @@ stages:
     - cad/objects/measuring_cup-7l/artifacts/object_list.json
     - cad/objects/measuring_tape-4b/artifacts/object_list.json
     - cad/objects/meat_thermometer-nt/artifacts/object_list.json
-    - cad/objects/meatloaf-55/artifacts/object_list.json
     - cad/objects/melon-5a/artifacts/object_list.json
     - cad/objects/meringue-sm/artifacts/object_list.json
     - cad/objects/mesh_bag-hz/artifacts/object_list.json
     - cad/objects/microfiber_cloth-ji/artifacts/object_list.json
     - cad/objects/microphone-st/artifacts/object_list.json
     - cad/objects/milkshake-zb/artifacts/object_list.json
-    - cad/objects/miso-un/artifacts/object_list.json
     - cad/objects/mistletoe_holly-vr/artifacts/object_list.json
     - cad/objects/mixing_bowl-fp/artifacts/object_list.json
     - cad/objects/mojito-0l/artifacts/object_list.json
@@ -5944,13 +5773,11 @@ stages:
     - cad/objects/mortar-v2/artifacts/object_list.json
     - cad/objects/moth_ball-pg/artifacts/object_list.json
     - cad/objects/mousepad-dz/artifacts/object_list.json
-    - cad/objects/mulch-4v/artifacts/object_list.json
     - cad/objects/mustard_greens-zy/artifacts/object_list.json
     - cad/objects/nachos-pj/artifacts/object_list.json
     - cad/objects/nails-vj/artifacts/object_list.json
     - cad/objects/name_tag-so/artifacts/object_list.json
     - cad/objects/nativity-tl/artifacts/object_list.json
-    - cad/objects/necktie-is/artifacts/object_list.json
     - cad/objects/nectarine-id/artifacts/object_list.json
     - cad/objects/nickel-qu/artifacts/object_list.json
     - cad/objects/noodle-21/artifacts/object_list.json
@@ -5973,13 +5800,11 @@ stages:
     - cad/objects/paper-fp/artifacts/object_list.json
     - cad/objects/paper_liners-mr/artifacts/object_list.json
     - cad/objects/paraffin_wax-3l/artifacts/object_list.json
-    - cad/objects/parchment_paper-ox/artifacts/object_list.json
     - cad/objects/parmesan_cheese-iz/artifacts/object_list.json
     - cad/objects/parsnip-7h/artifacts/object_list.json
     - cad/objects/pastry-hz/artifacts/object_list.json
     - cad/objects/pastry_brush-h1/artifacts/object_list.json
     - cad/objects/pastry_cutter-bx/artifacts/object_list.json
-    - cad/objects/patina-77/artifacts/object_list.json
     - cad/objects/paver-bp/artifacts/object_list.json
     - cad/objects/pea_pods-hg/artifacts/object_list.json
     - cad/objects/peanut_butter-pa/artifacts/object_list.json
@@ -5994,7 +5819,6 @@ stages:
     - cad/objects/pepperoni-ca/artifacts/object_list.json
     - cad/objects/pesticide-ik/artifacts/object_list.json
     - cad/objects/pet_bed-yw/artifacts/object_list.json
-    - cad/objects/pet_food-nf/artifacts/object_list.json
     - cad/objects/pet_poop-qg/artifacts/object_list.json
     - cad/objects/pickle-kk/artifacts/object_list.json
     - cad/objects/pickup_truck-c5/artifacts/object_list.json
@@ -6006,12 +5830,10 @@ stages:
     - cad/objects/pipe_cleaner-ph/artifacts/object_list.json
     - cad/objects/pitcher-xk/artifacts/object_list.json
     - cad/objects/pizza_box-vm/artifacts/object_list.json
-    - cad/objects/pizza_dough-ti/artifacts/object_list.json
     - cad/objects/pizza_sauce-nq/artifacts/object_list.json
     - cad/objects/plant_pot-7o/artifacts/object_list.json
     - cad/objects/plastic_bag-3p/artifacts/object_list.json
     - cad/objects/plastic_cup-dh/artifacts/object_list.json
-    - cad/objects/plastic_wrap-de/artifacts/object_list.json
     - cad/objects/plier-8w/artifacts/object_list.json
     - cad/objects/plug-jv/artifacts/object_list.json
     - cad/objects/plush_toy-de/artifacts/object_list.json
@@ -6019,7 +5841,6 @@ stages:
     - cad/objects/poker-gh/artifacts/object_list.json
     - cad/objects/pole-lx/artifacts/object_list.json
     - cad/objects/polo_shirt-te/artifacts/object_list.json
-    - cad/objects/popcorn-xz/artifacts/object_list.json
     - cad/objects/pork_chop-re/artifacts/object_list.json
     - cad/objects/pork_rib-l3/artifacts/object_list.json
     - cad/objects/portobello-xw/artifacts/object_list.json
@@ -6115,11 +5936,9 @@ stages:
     - cad/objects/smoothie-ee/artifacts/object_list.json
     - cad/objects/sneakers-cr/artifacts/object_list.json
     - cad/objects/snow_globe-aw/artifacts/object_list.json
-    - cad/objects/snow_pants-ic/artifacts/object_list.json
     - cad/objects/soccer_ball-uj/artifacts/object_list.json
     - cad/objects/socks-bz/artifacts/object_list.json
     - cad/objects/sod-cj/artifacts/object_list.json
-    - cad/objects/soda-oe/artifacts/object_list.json
     - cad/objects/softball-jr/artifacts/object_list.json
     - cad/objects/sour_cream-kx/artifacts/object_list.json
     - cad/objects/soy_sauce-jh/artifacts/object_list.json
@@ -6188,22 +6007,18 @@ stages:
     - cad/objects/tissues-qu/artifacts/object_list.json
     - cad/objects/toast-tt/artifacts/object_list.json
     - cad/objects/toaster_oven-kf/artifacts/object_list.json
-    - cad/objects/toolbox-ng/artifacts/object_list.json
     - cad/objects/tortilla-bq/artifacts/object_list.json
     - cad/objects/tortilla_chips-ub/artifacts/object_list.json
     - cad/objects/tote-se/artifacts/object_list.json
-    - cad/objects/towels-ib/artifacts/object_list.json
     - cad/objects/toy_train-vj/artifacts/object_list.json
     - cad/objects/trail_mix-hr/artifacts/object_list.json
     - cad/objects/trailer-mc/artifacts/object_list.json
-    - cad/objects/trash-ok/artifacts/object_list.json
     - cad/objects/trees-hv/artifacts/object_list.json
     - cad/objects/tripod-ti/artifacts/object_list.json
     - cad/objects/trombone-sg/artifacts/object_list.json
     - cad/objects/trophy-af/artifacts/object_list.json
     - cad/objects/truck-sf/artifacts/object_list.json
     - cad/objects/trumpet-gh/artifacts/object_list.json
-    - cad/objects/tube-kg/artifacts/object_list.json
     - cad/objects/tulip-ce/artifacts/object_list.json
     - cad/objects/tuna-wh/artifacts/object_list.json
     - cad/objects/tupperware-un/artifacts/object_list.json
@@ -6223,7 +6038,6 @@ stages:
     - cad/objects/waffle-yd/artifacts/object_list.json
     - cad/objects/waffle_maker-dr/artifacts/object_list.json
     - cad/objects/wallet-ql/artifacts/object_list.json
-    - cad/objects/wallpaper-ll/artifacts/object_list.json
     - cad/objects/water_dispenser-ht/artifacts/object_list.json
     - cad/objects/water_filter-kl/artifacts/object_list.json
     - cad/objects/watering_can-ek/artifacts/object_list.json
@@ -6347,7 +6161,6 @@ stages:
     cmd: python -m b1k_pipeline.object_inventory
     deps:
     - cad/objects/acetone-jc/artifacts/object_list.json
-    - cad/objects/acid-ub/artifacts/object_list.json
     - cad/objects/adhesive-io/artifacts/object_list.json
     - cad/objects/adhesive_strip-vv/artifacts/object_list.json
     - cad/objects/air_conditioner-ep/artifacts/object_list.json
@@ -6366,7 +6179,6 @@ stages:
     - cad/objects/antlers-mq/artifacts/object_list.json
     - cad/objects/apple_cider-jf/artifacts/object_list.json
     - cad/objects/apple_pie-bk/artifacts/object_list.json
-    - cad/objects/applesauce-dt/artifacts/object_list.json
     - cad/objects/apron-iu/artifacts/object_list.json
     - cad/objects/arepa-od/artifacts/object_list.json
     - cad/objects/arugula-lx/artifacts/object_list.json
@@ -6398,7 +6210,6 @@ stages:
     - cad/objects/bath_salt-mo/artifacts/object_list.json
     - cad/objects/battery-lb/artifacts/object_list.json
     - cad/objects/batting_gloves-nd/artifacts/object_list.json
-    - cad/objects/bay_leaves-xu/artifacts/object_list.json
     - cad/objects/bedsheet-pj/artifacts/object_list.json
     - cad/objects/beer_keg-rn/artifacts/object_list.json
     - cad/objects/beeswax-ad/artifacts/object_list.json
@@ -6407,9 +6218,7 @@ stages:
     - cad/objects/birdcage-xo/artifacts/object_list.json
     - cad/objects/birdseed-bd/artifacts/object_list.json
     - cad/objects/biscuit-vh/artifacts/object_list.json
-    - cad/objects/black_beans-jm/artifacts/object_list.json
     - cad/objects/blackberries-xx/artifacts/object_list.json
-    - cad/objects/blankets-bx/artifacts/object_list.json
     - cad/objects/blazer-fa/artifacts/object_list.json
     - cad/objects/bleach-wc/artifacts/object_list.json
     - cad/objects/blender-temp/artifacts/object_list.json
@@ -6417,7 +6226,6 @@ stages:
     - cad/objects/blouse-rc/artifacts/object_list.json
     - cad/objects/blow_dryer-hf/artifacts/object_list.json
     - cad/objects/blueberries-dg/artifacts/object_list.json
-    - cad/objects/blueberry_mousse-ax/artifacts/object_list.json
     - cad/objects/boat-qb/artifacts/object_list.json
     - cad/objects/bobby_pins-pi/artifacts/object_list.json
     - cad/objects/body_srub-vm/artifacts/object_list.json
@@ -6445,7 +6253,6 @@ stages:
     - cad/objects/bun-ae/artifacts/object_list.json
     - cad/objects/burlap-sm/artifacts/object_list.json
     - cad/objects/burrito-of/artifacts/object_list.json
-    - cad/objects/buttermilk-ca/artifacts/object_list.json
     - cad/objects/butternut_squash-ev/artifacts/object_list.json
     - cad/objects/cactus-gb/artifacts/object_list.json
     - cad/objects/cake-fg/artifacts/object_list.json
@@ -6458,19 +6265,15 @@ stages:
     - cad/objects/canner-fk/artifacts/object_list.json
     - cad/objects/canvas-ts/artifacts/object_list.json
     - cad/objects/cappuccino-hi/artifacts/object_list.json
-    - cad/objects/caraway_seeds-sh/artifacts/object_list.json
     - cad/objects/cardigan-xm/artifacts/object_list.json
     - cad/objects/cardstock-wi/artifacts/object_list.json
     - cad/objects/care_products-gt/artifacts/object_list.json
     - cad/objects/cash_box-wk/artifacts/object_list.json
-    - cad/objects/casserole-zd/artifacts/object_list.json
-    - cad/objects/cat_food-eg/artifacts/object_list.json
     - cad/objects/catalog-xj/artifacts/object_list.json
     - cad/objects/cauliflower-oy/artifacts/object_list.json
     - cad/objects/caulk-hi/artifacts/object_list.json
     - cad/objects/cd-ui/artifacts/object_list.json
     - cad/objects/cell_phone-nb/artifacts/object_list.json
-    - cad/objects/cellophane-ul/artifacts/object_list.json
     - cad/objects/centerpiece-nc/artifacts/object_list.json
     - cad/objects/ceramic_tile-yb/artifacts/object_list.json
     - cad/objects/ceramic_tile-yr/artifacts/object_list.json
@@ -6502,25 +6305,20 @@ stages:
     - cad/objects/chocolate_biscuit-gv/artifacts/object_list.json
     - cad/objects/chocolate_cake-yw/artifacts/object_list.json
     - cad/objects/chocolate_chip-qm/artifacts/object_list.json
-    - cad/objects/chocolate_spread-aj/artifacts/object_list.json
     - cad/objects/chocolate_syrup-eh/artifacts/object_list.json
     - cad/objects/chopping_block-zd/artifacts/object_list.json
     - cad/objects/chorizo-su/artifacts/object_list.json
-    - cad/objects/chowder-pu/artifacts/object_list.json
     - cad/objects/cigarette-te/artifacts/object_list.json
     - cad/objects/cilantro-lx/artifacts/object_list.json
     - cad/objects/cinnamon_stick-jl/artifacts/object_list.json
-    - cad/objects/cioppino-md/artifacts/object_list.json
     - cad/objects/citrus-ln/artifacts/object_list.json
     - cad/objects/clam-yf/artifacts/object_list.json
     - cad/objects/clamp-ok/artifacts/object_list.json
     - cad/objects/cleaner-ed/artifacts/object_list.json
-    - cad/objects/clip-vb/artifacts/object_list.json
     - cad/objects/clock-wy/artifacts/object_list.json
     - cad/objects/clothesline-jc/artifacts/object_list.json
     - cad/objects/clothesline-pq/artifacts/object_list.json
     - cad/objects/cloves-kp/artifacts/object_list.json
-    - cad/objects/cocktail-uw/artifacts/object_list.json
     - cad/objects/cocoa_powder-vg/artifacts/object_list.json
     - cad/objects/coconut_milk-oq/artifacts/object_list.json
     - cad/objects/coconut_oil-xw/artifacts/object_list.json
@@ -6530,7 +6328,6 @@ stages:
     - cad/objects/coffee_grinder-ag/artifacts/object_list.json
     - cad/objects/coke_bottle-al/artifacts/object_list.json
     - cad/objects/comic_book-lr/artifacts/object_list.json
-    - cad/objects/compost-pf/artifacts/object_list.json
     - cad/objects/compost_bin-fh/artifacts/object_list.json
     - cad/objects/conch_shell-un/artifacts/object_list.json
     - cad/objects/console_game-cm/artifacts/object_list.json
@@ -6553,7 +6350,6 @@ stages:
     - cad/objects/curtain_rod-la/artifacts/object_list.json
     - cad/objects/cushion-kh/artifacts/object_list.json
     - cad/objects/custome-jn/artifacts/object_list.json
-    - cad/objects/cymbal-kq/artifacts/object_list.json
     - cad/objects/dahlias-po/artifacts/object_list.json
     - cad/objects/daiper-re/artifacts/object_list.json
     - cad/objects/decanter-ij/artifacts/object_list.json
@@ -6563,7 +6359,6 @@ stages:
     - cad/objects/denture-hi/artifacts/object_list.json
     - cad/objects/deodorant-ls/artifacts/object_list.json
     - cad/objects/diamond-jh/artifacts/object_list.json
-    - cad/objects/diamond_ring-pq/artifacts/object_list.json
     - cad/objects/dice-wq/artifacts/object_list.json
     - cad/objects/dish_soap-vr/artifacts/object_list.json
     - cad/objects/dish_towel-bv/artifacts/object_list.json
@@ -6580,7 +6375,6 @@ stages:
     - cad/objects/duck-dg/artifacts/object_list.json
     - cad/objects/duct_tape-ls/artifacts/object_list.json
     - cad/objects/dumpling-uy/artifacts/object_list.json
-    - cad/objects/duster-rm/artifacts/object_list.json
     - cad/objects/dutch_oven-wa/artifacts/object_list.json
     - cad/objects/duvet_set-pa/artifacts/object_list.json
     - cad/objects/dvd-yq/artifacts/object_list.json
@@ -6607,7 +6401,6 @@ stages:
     - cad/objects/food_processor-ht/artifacts/object_list.json
     - cad/objects/fountain-az/artifacts/object_list.json
     - cad/objects/frame-ow/artifacts/object_list.json
-    - cad/objects/frappuccino-if/artifacts/object_list.json
     - cad/objects/french_fries-jh/artifacts/object_list.json
     - cad/objects/french_press-hq/artifacts/object_list.json
     - cad/objects/french_toast-uh/artifacts/object_list.json
@@ -6618,7 +6411,6 @@ stages:
     - cad/objects/funnel-oh/artifacts/object_list.json
     - cad/objects/garden_glove-ld/artifacts/object_list.json
     - cad/objects/garlic-lh/artifacts/object_list.json
-    - cad/objects/gazpacho-er/artifacts/object_list.json
     - cad/objects/geode-qw/artifacts/object_list.json
     - cad/objects/gift-sd/artifacts/object_list.json
     - cad/objects/gift_bag-ue/artifacts/object_list.json
@@ -6660,7 +6452,6 @@ stages:
     - cad/objects/hoodie-ev/artifacts/object_list.json
     - cad/objects/hot_chocolate-ni/artifacts/object_list.json
     - cad/objects/hotdog_sandwitch-as/artifacts/object_list.json
-    - cad/objects/hummus-ht/artifacts/object_list.json
     - cad/objects/hutch-cr/artifacts/object_list.json
     - cad/objects/ice_bucket-kz/artifacts/object_list.json
     - cad/objects/ice_cream-re/artifacts/object_list.json
@@ -6677,7 +6468,6 @@ stages:
     - cad/objects/jelly_beans-in/artifacts/object_list.json
     - cad/objects/jelly_jars-jo/artifacts/object_list.json
     - cad/objects/jersey-of/artifacts/object_list.json
-    - cad/objects/jewelry-wd/artifacts/object_list.json
     - cad/objects/jewelry_cleaner-bh/artifacts/object_list.json
     - cad/objects/jigger-kf/artifacts/object_list.json
     - cad/objects/juicer-gs/artifacts/object_list.json
@@ -6718,7 +6508,6 @@ stages:
     - cad/objects/legacy_armchair-qplklw/artifacts/object_list.json
     - cad/objects/legacy_armchair-rabzuf/artifacts/object_list.json
     - cad/objects/legacy_armchair-tcxiue/artifacts/object_list.json
-    - cad/objects/legacy_armchair-tnryza/artifacts/object_list.json
     - cad/objects/legacy_armchair-umbrpd/artifacts/object_list.json
     - cad/objects/legacy_armchair-viphen/artifacts/object_list.json
     - cad/objects/legacy_armchair-vtsoat/artifacts/object_list.json
@@ -6744,9 +6533,6 @@ stages:
     - cad/objects/legacy_basket-wqxrbf/artifacts/object_list.json
     - cad/objects/legacy_basket-xhdtjn/artifacts/object_list.json
     - cad/objects/legacy_basket-xjftlf/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-feojdm/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-iviyls/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-lyqgnf/artifacts/object_list.json
     - cad/objects/legacy_bathtub-azdgtl/artifacts/object_list.json
     - cad/objects/legacy_bathtub-enpxbn/artifacts/object_list.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/object_list.json
@@ -6754,7 +6540,6 @@ stages:
     - cad/objects/legacy_bathtub-jfhrwj/artifacts/object_list.json
     - cad/objects/legacy_bathtub-oobbwn/artifacts/object_list.json
     - cad/objects/legacy_bathtub-wxrafq/artifacts/object_list.json
-    - cad/objects/legacy_bean-cdinsu/artifacts/object_list.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/object_list.json
     - cad/objects/legacy_bean-lvbjws/artifacts/object_list.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/object_list.json
@@ -7026,12 +6811,9 @@ stages:
     - cad/objects/legacy_console_table-fihyuz/artifacts/object_list.json
     - cad/objects/legacy_console_table-tvhett/artifacts/object_list.json
     - cad/objects/legacy_console_table-xqlxni/artifacts/object_list.json
-    - cad/objects/legacy_container_cranberry-fbcpsl/artifacts/object_list.json
     - cad/objects/legacy_container_date-qqddba/artifacts/object_list.json
     - cad/objects/legacy_cookie-ggpang/artifacts/object_list.json
-    - cad/objects/legacy_cord-aqikou/artifacts/object_list.json
     - cad/objects/legacy_cord-tzurlz/artifacts/object_list.json
-    - cad/objects/legacy_cord-ydrhwh/artifacts/object_list.json
     - cad/objects/legacy_countertop-tpuwys/artifacts/object_list.json
     - cad/objects/legacy_cpu_board-xlqvil/artifacts/object_list.json
     - cad/objects/legacy_crab-tjkiva/artifacts/object_list.json
@@ -7077,8 +6859,6 @@ stages:
     - cad/objects/legacy_dish_rack-kxuutl/artifacts/object_list.json
     - cad/objects/legacy_dishtowel-dtfspn/artifacts/object_list.json
     - cad/objects/legacy_dishtowel-ltydgg/artifacts/object_list.json
-    - cad/objects/legacy_dishtowel-qvzbjx/artifacts/object_list.json
-    - cad/objects/legacy_dishtowel-yobhae/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-cgugie/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-dngvvi/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-dugpby/artifacts/object_list.json
@@ -7104,7 +6884,6 @@ stages:
     - cad/objects/legacy_drumstick-lkvzmj/artifacts/object_list.json
     - cad/objects/legacy_dryer-fhtvuq/artifacts/object_list.json
     - cad/objects/legacy_dryer-smcyys/artifacts/object_list.json
-    - cad/objects/legacy_dryer-tpqzai/artifacts/object_list.json
     - cad/objects/legacy_dryer-wivnic/artifacts/object_list.json
     - cad/objects/legacy_dryer-xsuyua/artifacts/object_list.json
     - cad/objects/legacy_dryer-zlmnfg/artifacts/object_list.json
@@ -7163,7 +6942,6 @@ stages:
     - cad/objects/legacy_green_onion_chopped-akrkjr/artifacts/object_list.json
     - cad/objects/legacy_griddle-ryvqep/artifacts/object_list.json
     - cad/objects/legacy_grill-ddlqye/artifacts/object_list.json
-    - cad/objects/legacy_guacamole-ajnjvv/artifacts/object_list.json
     - cad/objects/legacy_guitar-cybisc/artifacts/object_list.json
     - cad/objects/legacy_guitar-gysapt/artifacts/object_list.json
     - cad/objects/legacy_guitar-hpqjrq/artifacts/object_list.json
@@ -7181,7 +6959,6 @@ stages:
     - cad/objects/legacy_hairbrush-bdylnb/artifacts/object_list.json
     - cad/objects/legacy_hamburger-fyswch/artifacts/object_list.json
     - cad/objects/legacy_hammer-bbzlel/artifacts/object_list.json
-    - cad/objects/legacy_hand_towel-jaubic/artifacts/object_list.json
     - cad/objects/legacy_hanger-ffecvd/artifacts/object_list.json
     - cad/objects/legacy_hard_drive-ijibkm/artifacts/object_list.json
     - cad/objects/legacy_hard_drive-ubjbsm/artifacts/object_list.json
@@ -7218,7 +6995,6 @@ stages:
     - cad/objects/legacy_jar-pluujx/artifacts/object_list.json
     - cad/objects/legacy_jar-qzwijs/artifacts/object_list.json
     - cad/objects/legacy_jar-rdngsc/artifacts/object_list.json
-    - cad/objects/legacy_jar-sktwfj/artifacts/object_list.json
     - cad/objects/legacy_jar-uydvnv/artifacts/object_list.json
     - cad/objects/legacy_jar-vuolos/artifacts/object_list.json
     - cad/objects/legacy_jar-vzwhbg/artifacts/object_list.json
@@ -7346,11 +7122,9 @@ stages:
     - cad/objects/legacy_pajamas-rcgdde/artifacts/object_list.json
     - cad/objects/legacy_paper_bag-bzsxgw/artifacts/object_list.json
     - cad/objects/legacy_paper_clip-xjfirk/artifacts/object_list.json
-    - cad/objects/legacy_paper_towel-aclaus/artifacts/object_list.json
     - cad/objects/legacy_paper_towel_holder-rntefx/artifacts/object_list.json
     - cad/objects/legacy_parsley-kkgkkd/artifacts/object_list.json
     - cad/objects/legacy_pasta-gwqhko/artifacts/object_list.json
-    - cad/objects/legacy_pea-iblyep/artifacts/object_list.json
     - cad/objects/legacy_peach-orowgl/artifacts/object_list.json
     - cad/objects/legacy_peach-wrutgk/artifacts/object_list.json
     - cad/objects/legacy_pear-mqvgcg/artifacts/object_list.json
@@ -7481,14 +7255,12 @@ stages:
     - cad/objects/legacy_pot_plant-kxmvco/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-nscddw/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-qbnaph/artifacts/object_list.json
-    - cad/objects/legacy_pot_plant-qcpges/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-qenqqv/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-quaxmw/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-udqjui/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-uvbpsf/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-vcwwrd/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-vyswzs/artifacts/object_list.json
-    - cad/objects/legacy_pot_plant-xlylfy/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-yvuagy/artifacts/object_list.json
     - cad/objects/legacy_potato-bpwohr/artifacts/object_list.json
     - cad/objects/legacy_potato-ljfitc/artifacts/object_list.json
@@ -7507,7 +7279,6 @@ stages:
     - cad/objects/legacy_puree-raagvm/artifacts/object_list.json
     - cad/objects/legacy_radish-bpmjki/artifacts/object_list.json
     - cad/objects/legacy_radish-vztgpr/artifacts/object_list.json
-    - cad/objects/legacy_rag-dgzewy/artifacts/object_list.json
     - cad/objects/legacy_rag-zmmbpz/artifacts/object_list.json
     - cad/objects/legacy_rail_fence-iduxiv/artifacts/object_list.json
     - cad/objects/legacy_rail_fence-qmsnld/artifacts/object_list.json
@@ -7555,7 +7326,6 @@ stages:
     - cad/objects/legacy_shampoo-kkbhzw/artifacts/object_list.json
     - cad/objects/legacy_shampoo-nijidu/artifacts/object_list.json
     - cad/objects/legacy_shampoo-tzghev/artifacts/object_list.json
-    - cad/objects/legacy_sheet-czdhwu/artifacts/object_list.json
     - cad/objects/legacy_shelf-cqcoox/artifacts/object_list.json
     - cad/objects/legacy_shelf-eyidvz/artifacts/object_list.json
     - cad/objects/legacy_shelf-lbbims/artifacts/object_list.json
@@ -7941,7 +7711,6 @@ stages:
     - cad/objects/magnifying_glass-ra/artifacts/object_list.json
     - cad/objects/mail-rt/artifacts/object_list.json
     - cad/objects/mallet-i1/artifacts/object_list.json
-    - cad/objects/manure-bf/artifacts/object_list.json
     - cad/objects/maple_syrup-is/artifacts/object_list.json
     - cad/objects/margarine-vs/artifacts/object_list.json
     - cad/objects/marigold-i7/artifacts/object_list.json
@@ -7955,14 +7724,12 @@ stages:
     - cad/objects/measuring_cup-7l/artifacts/object_list.json
     - cad/objects/measuring_tape-4b/artifacts/object_list.json
     - cad/objects/meat_thermometer-nt/artifacts/object_list.json
-    - cad/objects/meatloaf-55/artifacts/object_list.json
     - cad/objects/melon-5a/artifacts/object_list.json
     - cad/objects/meringue-sm/artifacts/object_list.json
     - cad/objects/mesh_bag-hz/artifacts/object_list.json
     - cad/objects/microfiber_cloth-ji/artifacts/object_list.json
     - cad/objects/microphone-st/artifacts/object_list.json
     - cad/objects/milkshake-zb/artifacts/object_list.json
-    - cad/objects/miso-un/artifacts/object_list.json
     - cad/objects/mistletoe_holly-vr/artifacts/object_list.json
     - cad/objects/mixing_bowl-fp/artifacts/object_list.json
     - cad/objects/mojito-0l/artifacts/object_list.json
@@ -7972,13 +7739,11 @@ stages:
     - cad/objects/mortar-v2/artifacts/object_list.json
     - cad/objects/moth_ball-pg/artifacts/object_list.json
     - cad/objects/mousepad-dz/artifacts/object_list.json
-    - cad/objects/mulch-4v/artifacts/object_list.json
     - cad/objects/mustard_greens-zy/artifacts/object_list.json
     - cad/objects/nachos-pj/artifacts/object_list.json
     - cad/objects/nails-vj/artifacts/object_list.json
     - cad/objects/name_tag-so/artifacts/object_list.json
     - cad/objects/nativity-tl/artifacts/object_list.json
-    - cad/objects/necktie-is/artifacts/object_list.json
     - cad/objects/nectarine-id/artifacts/object_list.json
     - cad/objects/nickel-qu/artifacts/object_list.json
     - cad/objects/noodle-21/artifacts/object_list.json
@@ -8001,13 +7766,11 @@ stages:
     - cad/objects/paper-fp/artifacts/object_list.json
     - cad/objects/paper_liners-mr/artifacts/object_list.json
     - cad/objects/paraffin_wax-3l/artifacts/object_list.json
-    - cad/objects/parchment_paper-ox/artifacts/object_list.json
     - cad/objects/parmesan_cheese-iz/artifacts/object_list.json
     - cad/objects/parsnip-7h/artifacts/object_list.json
     - cad/objects/pastry-hz/artifacts/object_list.json
     - cad/objects/pastry_brush-h1/artifacts/object_list.json
     - cad/objects/pastry_cutter-bx/artifacts/object_list.json
-    - cad/objects/patina-77/artifacts/object_list.json
     - cad/objects/paver-bp/artifacts/object_list.json
     - cad/objects/pea_pods-hg/artifacts/object_list.json
     - cad/objects/peanut_butter-pa/artifacts/object_list.json
@@ -8022,7 +7785,6 @@ stages:
     - cad/objects/pepperoni-ca/artifacts/object_list.json
     - cad/objects/pesticide-ik/artifacts/object_list.json
     - cad/objects/pet_bed-yw/artifacts/object_list.json
-    - cad/objects/pet_food-nf/artifacts/object_list.json
     - cad/objects/pet_poop-qg/artifacts/object_list.json
     - cad/objects/pickle-kk/artifacts/object_list.json
     - cad/objects/pickup_truck-c5/artifacts/object_list.json
@@ -8034,12 +7796,10 @@ stages:
     - cad/objects/pipe_cleaner-ph/artifacts/object_list.json
     - cad/objects/pitcher-xk/artifacts/object_list.json
     - cad/objects/pizza_box-vm/artifacts/object_list.json
-    - cad/objects/pizza_dough-ti/artifacts/object_list.json
     - cad/objects/pizza_sauce-nq/artifacts/object_list.json
     - cad/objects/plant_pot-7o/artifacts/object_list.json
     - cad/objects/plastic_bag-3p/artifacts/object_list.json
     - cad/objects/plastic_cup-dh/artifacts/object_list.json
-    - cad/objects/plastic_wrap-de/artifacts/object_list.json
     - cad/objects/plier-8w/artifacts/object_list.json
     - cad/objects/plug-jv/artifacts/object_list.json
     - cad/objects/plush_toy-de/artifacts/object_list.json
@@ -8047,7 +7807,6 @@ stages:
     - cad/objects/poker-gh/artifacts/object_list.json
     - cad/objects/pole-lx/artifacts/object_list.json
     - cad/objects/polo_shirt-te/artifacts/object_list.json
-    - cad/objects/popcorn-xz/artifacts/object_list.json
     - cad/objects/pork_chop-re/artifacts/object_list.json
     - cad/objects/pork_rib-l3/artifacts/object_list.json
     - cad/objects/portobello-xw/artifacts/object_list.json
@@ -8143,11 +7902,9 @@ stages:
     - cad/objects/smoothie-ee/artifacts/object_list.json
     - cad/objects/sneakers-cr/artifacts/object_list.json
     - cad/objects/snow_globe-aw/artifacts/object_list.json
-    - cad/objects/snow_pants-ic/artifacts/object_list.json
     - cad/objects/soccer_ball-uj/artifacts/object_list.json
     - cad/objects/socks-bz/artifacts/object_list.json
     - cad/objects/sod-cj/artifacts/object_list.json
-    - cad/objects/soda-oe/artifacts/object_list.json
     - cad/objects/softball-jr/artifacts/object_list.json
     - cad/objects/sour_cream-kx/artifacts/object_list.json
     - cad/objects/soy_sauce-jh/artifacts/object_list.json
@@ -8216,22 +7973,18 @@ stages:
     - cad/objects/tissues-qu/artifacts/object_list.json
     - cad/objects/toast-tt/artifacts/object_list.json
     - cad/objects/toaster_oven-kf/artifacts/object_list.json
-    - cad/objects/toolbox-ng/artifacts/object_list.json
     - cad/objects/tortilla-bq/artifacts/object_list.json
     - cad/objects/tortilla_chips-ub/artifacts/object_list.json
     - cad/objects/tote-se/artifacts/object_list.json
-    - cad/objects/towels-ib/artifacts/object_list.json
     - cad/objects/toy_train-vj/artifacts/object_list.json
     - cad/objects/trail_mix-hr/artifacts/object_list.json
     - cad/objects/trailer-mc/artifacts/object_list.json
-    - cad/objects/trash-ok/artifacts/object_list.json
     - cad/objects/trees-hv/artifacts/object_list.json
     - cad/objects/tripod-ti/artifacts/object_list.json
     - cad/objects/trombone-sg/artifacts/object_list.json
     - cad/objects/trophy-af/artifacts/object_list.json
     - cad/objects/truck-sf/artifacts/object_list.json
     - cad/objects/trumpet-gh/artifacts/object_list.json
-    - cad/objects/tube-kg/artifacts/object_list.json
     - cad/objects/tulip-ce/artifacts/object_list.json
     - cad/objects/tuna-wh/artifacts/object_list.json
     - cad/objects/tupperware-un/artifacts/object_list.json
@@ -8251,7 +8004,6 @@ stages:
     - cad/objects/waffle-yd/artifacts/object_list.json
     - cad/objects/waffle_maker-dr/artifacts/object_list.json
     - cad/objects/wallet-ql/artifacts/object_list.json
-    - cad/objects/wallpaper-ll/artifacts/object_list.json
     - cad/objects/water_dispenser-ht/artifacts/object_list.json
     - cad/objects/water_filter-kl/artifacts/object_list.json
     - cad/objects/watering_can-ek/artifacts/object_list.json
@@ -8330,7 +8082,6 @@ stages:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
     - cad/objects/acetone-jc/artifacts/object_list.json
-    - cad/objects/acid-ub/artifacts/object_list.json
     - cad/objects/adhesive-io/artifacts/object_list.json
     - cad/objects/adhesive_strip-vv/artifacts/object_list.json
     - cad/objects/air_conditioner-ep/artifacts/object_list.json
@@ -8349,7 +8100,6 @@ stages:
     - cad/objects/antlers-mq/artifacts/object_list.json
     - cad/objects/apple_cider-jf/artifacts/object_list.json
     - cad/objects/apple_pie-bk/artifacts/object_list.json
-    - cad/objects/applesauce-dt/artifacts/object_list.json
     - cad/objects/apron-iu/artifacts/object_list.json
     - cad/objects/arepa-od/artifacts/object_list.json
     - cad/objects/arugula-lx/artifacts/object_list.json
@@ -8381,7 +8131,6 @@ stages:
     - cad/objects/bath_salt-mo/artifacts/object_list.json
     - cad/objects/battery-lb/artifacts/object_list.json
     - cad/objects/batting_gloves-nd/artifacts/object_list.json
-    - cad/objects/bay_leaves-xu/artifacts/object_list.json
     - cad/objects/bedsheet-pj/artifacts/object_list.json
     - cad/objects/beer_keg-rn/artifacts/object_list.json
     - cad/objects/beeswax-ad/artifacts/object_list.json
@@ -8390,9 +8139,7 @@ stages:
     - cad/objects/birdcage-xo/artifacts/object_list.json
     - cad/objects/birdseed-bd/artifacts/object_list.json
     - cad/objects/biscuit-vh/artifacts/object_list.json
-    - cad/objects/black_beans-jm/artifacts/object_list.json
     - cad/objects/blackberries-xx/artifacts/object_list.json
-    - cad/objects/blankets-bx/artifacts/object_list.json
     - cad/objects/blazer-fa/artifacts/object_list.json
     - cad/objects/bleach-wc/artifacts/object_list.json
     - cad/objects/blender-temp/artifacts/object_list.json
@@ -8400,7 +8147,6 @@ stages:
     - cad/objects/blouse-rc/artifacts/object_list.json
     - cad/objects/blow_dryer-hf/artifacts/object_list.json
     - cad/objects/blueberries-dg/artifacts/object_list.json
-    - cad/objects/blueberry_mousse-ax/artifacts/object_list.json
     - cad/objects/boat-qb/artifacts/object_list.json
     - cad/objects/bobby_pins-pi/artifacts/object_list.json
     - cad/objects/body_srub-vm/artifacts/object_list.json
@@ -8428,7 +8174,6 @@ stages:
     - cad/objects/bun-ae/artifacts/object_list.json
     - cad/objects/burlap-sm/artifacts/object_list.json
     - cad/objects/burrito-of/artifacts/object_list.json
-    - cad/objects/buttermilk-ca/artifacts/object_list.json
     - cad/objects/butternut_squash-ev/artifacts/object_list.json
     - cad/objects/cactus-gb/artifacts/object_list.json
     - cad/objects/cake-fg/artifacts/object_list.json
@@ -8441,19 +8186,15 @@ stages:
     - cad/objects/canner-fk/artifacts/object_list.json
     - cad/objects/canvas-ts/artifacts/object_list.json
     - cad/objects/cappuccino-hi/artifacts/object_list.json
-    - cad/objects/caraway_seeds-sh/artifacts/object_list.json
     - cad/objects/cardigan-xm/artifacts/object_list.json
     - cad/objects/cardstock-wi/artifacts/object_list.json
     - cad/objects/care_products-gt/artifacts/object_list.json
     - cad/objects/cash_box-wk/artifacts/object_list.json
-    - cad/objects/casserole-zd/artifacts/object_list.json
-    - cad/objects/cat_food-eg/artifacts/object_list.json
     - cad/objects/catalog-xj/artifacts/object_list.json
     - cad/objects/cauliflower-oy/artifacts/object_list.json
     - cad/objects/caulk-hi/artifacts/object_list.json
     - cad/objects/cd-ui/artifacts/object_list.json
     - cad/objects/cell_phone-nb/artifacts/object_list.json
-    - cad/objects/cellophane-ul/artifacts/object_list.json
     - cad/objects/centerpiece-nc/artifacts/object_list.json
     - cad/objects/ceramic_tile-yb/artifacts/object_list.json
     - cad/objects/ceramic_tile-yr/artifacts/object_list.json
@@ -8485,25 +8226,20 @@ stages:
     - cad/objects/chocolate_biscuit-gv/artifacts/object_list.json
     - cad/objects/chocolate_cake-yw/artifacts/object_list.json
     - cad/objects/chocolate_chip-qm/artifacts/object_list.json
-    - cad/objects/chocolate_spread-aj/artifacts/object_list.json
     - cad/objects/chocolate_syrup-eh/artifacts/object_list.json
     - cad/objects/chopping_block-zd/artifacts/object_list.json
     - cad/objects/chorizo-su/artifacts/object_list.json
-    - cad/objects/chowder-pu/artifacts/object_list.json
     - cad/objects/cigarette-te/artifacts/object_list.json
     - cad/objects/cilantro-lx/artifacts/object_list.json
     - cad/objects/cinnamon_stick-jl/artifacts/object_list.json
-    - cad/objects/cioppino-md/artifacts/object_list.json
     - cad/objects/citrus-ln/artifacts/object_list.json
     - cad/objects/clam-yf/artifacts/object_list.json
     - cad/objects/clamp-ok/artifacts/object_list.json
     - cad/objects/cleaner-ed/artifacts/object_list.json
-    - cad/objects/clip-vb/artifacts/object_list.json
     - cad/objects/clock-wy/artifacts/object_list.json
     - cad/objects/clothesline-jc/artifacts/object_list.json
     - cad/objects/clothesline-pq/artifacts/object_list.json
     - cad/objects/cloves-kp/artifacts/object_list.json
-    - cad/objects/cocktail-uw/artifacts/object_list.json
     - cad/objects/cocoa_powder-vg/artifacts/object_list.json
     - cad/objects/coconut_milk-oq/artifacts/object_list.json
     - cad/objects/coconut_oil-xw/artifacts/object_list.json
@@ -8513,7 +8249,6 @@ stages:
     - cad/objects/coffee_grinder-ag/artifacts/object_list.json
     - cad/objects/coke_bottle-al/artifacts/object_list.json
     - cad/objects/comic_book-lr/artifacts/object_list.json
-    - cad/objects/compost-pf/artifacts/object_list.json
     - cad/objects/compost_bin-fh/artifacts/object_list.json
     - cad/objects/conch_shell-un/artifacts/object_list.json
     - cad/objects/console_game-cm/artifacts/object_list.json
@@ -8536,7 +8271,6 @@ stages:
     - cad/objects/curtain_rod-la/artifacts/object_list.json
     - cad/objects/cushion-kh/artifacts/object_list.json
     - cad/objects/custome-jn/artifacts/object_list.json
-    - cad/objects/cymbal-kq/artifacts/object_list.json
     - cad/objects/dahlias-po/artifacts/object_list.json
     - cad/objects/daiper-re/artifacts/object_list.json
     - cad/objects/decanter-ij/artifacts/object_list.json
@@ -8546,7 +8280,6 @@ stages:
     - cad/objects/denture-hi/artifacts/object_list.json
     - cad/objects/deodorant-ls/artifacts/object_list.json
     - cad/objects/diamond-jh/artifacts/object_list.json
-    - cad/objects/diamond_ring-pq/artifacts/object_list.json
     - cad/objects/dice-wq/artifacts/object_list.json
     - cad/objects/dish_soap-vr/artifacts/object_list.json
     - cad/objects/dish_towel-bv/artifacts/object_list.json
@@ -8563,7 +8296,6 @@ stages:
     - cad/objects/duck-dg/artifacts/object_list.json
     - cad/objects/duct_tape-ls/artifacts/object_list.json
     - cad/objects/dumpling-uy/artifacts/object_list.json
-    - cad/objects/duster-rm/artifacts/object_list.json
     - cad/objects/dutch_oven-wa/artifacts/object_list.json
     - cad/objects/duvet_set-pa/artifacts/object_list.json
     - cad/objects/dvd-yq/artifacts/object_list.json
@@ -8590,7 +8322,6 @@ stages:
     - cad/objects/food_processor-ht/artifacts/object_list.json
     - cad/objects/fountain-az/artifacts/object_list.json
     - cad/objects/frame-ow/artifacts/object_list.json
-    - cad/objects/frappuccino-if/artifacts/object_list.json
     - cad/objects/french_fries-jh/artifacts/object_list.json
     - cad/objects/french_press-hq/artifacts/object_list.json
     - cad/objects/french_toast-uh/artifacts/object_list.json
@@ -8601,7 +8332,6 @@ stages:
     - cad/objects/funnel-oh/artifacts/object_list.json
     - cad/objects/garden_glove-ld/artifacts/object_list.json
     - cad/objects/garlic-lh/artifacts/object_list.json
-    - cad/objects/gazpacho-er/artifacts/object_list.json
     - cad/objects/geode-qw/artifacts/object_list.json
     - cad/objects/gift-sd/artifacts/object_list.json
     - cad/objects/gift_bag-ue/artifacts/object_list.json
@@ -8643,7 +8373,6 @@ stages:
     - cad/objects/hoodie-ev/artifacts/object_list.json
     - cad/objects/hot_chocolate-ni/artifacts/object_list.json
     - cad/objects/hotdog_sandwitch-as/artifacts/object_list.json
-    - cad/objects/hummus-ht/artifacts/object_list.json
     - cad/objects/hutch-cr/artifacts/object_list.json
     - cad/objects/ice_bucket-kz/artifacts/object_list.json
     - cad/objects/ice_cream-re/artifacts/object_list.json
@@ -8660,7 +8389,6 @@ stages:
     - cad/objects/jelly_beans-in/artifacts/object_list.json
     - cad/objects/jelly_jars-jo/artifacts/object_list.json
     - cad/objects/jersey-of/artifacts/object_list.json
-    - cad/objects/jewelry-wd/artifacts/object_list.json
     - cad/objects/jewelry_cleaner-bh/artifacts/object_list.json
     - cad/objects/jigger-kf/artifacts/object_list.json
     - cad/objects/juicer-gs/artifacts/object_list.json
@@ -8701,7 +8429,6 @@ stages:
     - cad/objects/legacy_armchair-qplklw/artifacts/object_list.json
     - cad/objects/legacy_armchair-rabzuf/artifacts/object_list.json
     - cad/objects/legacy_armchair-tcxiue/artifacts/object_list.json
-    - cad/objects/legacy_armchair-tnryza/artifacts/object_list.json
     - cad/objects/legacy_armchair-umbrpd/artifacts/object_list.json
     - cad/objects/legacy_armchair-viphen/artifacts/object_list.json
     - cad/objects/legacy_armchair-vtsoat/artifacts/object_list.json
@@ -8727,9 +8454,6 @@ stages:
     - cad/objects/legacy_basket-wqxrbf/artifacts/object_list.json
     - cad/objects/legacy_basket-xhdtjn/artifacts/object_list.json
     - cad/objects/legacy_basket-xjftlf/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-feojdm/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-iviyls/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-lyqgnf/artifacts/object_list.json
     - cad/objects/legacy_bathtub-azdgtl/artifacts/object_list.json
     - cad/objects/legacy_bathtub-enpxbn/artifacts/object_list.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/object_list.json
@@ -8737,7 +8461,6 @@ stages:
     - cad/objects/legacy_bathtub-jfhrwj/artifacts/object_list.json
     - cad/objects/legacy_bathtub-oobbwn/artifacts/object_list.json
     - cad/objects/legacy_bathtub-wxrafq/artifacts/object_list.json
-    - cad/objects/legacy_bean-cdinsu/artifacts/object_list.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/object_list.json
     - cad/objects/legacy_bean-lvbjws/artifacts/object_list.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/object_list.json
@@ -9009,12 +8732,9 @@ stages:
     - cad/objects/legacy_console_table-fihyuz/artifacts/object_list.json
     - cad/objects/legacy_console_table-tvhett/artifacts/object_list.json
     - cad/objects/legacy_console_table-xqlxni/artifacts/object_list.json
-    - cad/objects/legacy_container_cranberry-fbcpsl/artifacts/object_list.json
     - cad/objects/legacy_container_date-qqddba/artifacts/object_list.json
     - cad/objects/legacy_cookie-ggpang/artifacts/object_list.json
-    - cad/objects/legacy_cord-aqikou/artifacts/object_list.json
     - cad/objects/legacy_cord-tzurlz/artifacts/object_list.json
-    - cad/objects/legacy_cord-ydrhwh/artifacts/object_list.json
     - cad/objects/legacy_countertop-tpuwys/artifacts/object_list.json
     - cad/objects/legacy_cpu_board-xlqvil/artifacts/object_list.json
     - cad/objects/legacy_crab-tjkiva/artifacts/object_list.json
@@ -9060,8 +8780,6 @@ stages:
     - cad/objects/legacy_dish_rack-kxuutl/artifacts/object_list.json
     - cad/objects/legacy_dishtowel-dtfspn/artifacts/object_list.json
     - cad/objects/legacy_dishtowel-ltydgg/artifacts/object_list.json
-    - cad/objects/legacy_dishtowel-qvzbjx/artifacts/object_list.json
-    - cad/objects/legacy_dishtowel-yobhae/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-cgugie/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-dngvvi/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-dugpby/artifacts/object_list.json
@@ -9087,7 +8805,6 @@ stages:
     - cad/objects/legacy_drumstick-lkvzmj/artifacts/object_list.json
     - cad/objects/legacy_dryer-fhtvuq/artifacts/object_list.json
     - cad/objects/legacy_dryer-smcyys/artifacts/object_list.json
-    - cad/objects/legacy_dryer-tpqzai/artifacts/object_list.json
     - cad/objects/legacy_dryer-wivnic/artifacts/object_list.json
     - cad/objects/legacy_dryer-xsuyua/artifacts/object_list.json
     - cad/objects/legacy_dryer-zlmnfg/artifacts/object_list.json
@@ -9146,7 +8863,6 @@ stages:
     - cad/objects/legacy_green_onion_chopped-akrkjr/artifacts/object_list.json
     - cad/objects/legacy_griddle-ryvqep/artifacts/object_list.json
     - cad/objects/legacy_grill-ddlqye/artifacts/object_list.json
-    - cad/objects/legacy_guacamole-ajnjvv/artifacts/object_list.json
     - cad/objects/legacy_guitar-cybisc/artifacts/object_list.json
     - cad/objects/legacy_guitar-gysapt/artifacts/object_list.json
     - cad/objects/legacy_guitar-hpqjrq/artifacts/object_list.json
@@ -9164,7 +8880,6 @@ stages:
     - cad/objects/legacy_hairbrush-bdylnb/artifacts/object_list.json
     - cad/objects/legacy_hamburger-fyswch/artifacts/object_list.json
     - cad/objects/legacy_hammer-bbzlel/artifacts/object_list.json
-    - cad/objects/legacy_hand_towel-jaubic/artifacts/object_list.json
     - cad/objects/legacy_hanger-ffecvd/artifacts/object_list.json
     - cad/objects/legacy_hard_drive-ijibkm/artifacts/object_list.json
     - cad/objects/legacy_hard_drive-ubjbsm/artifacts/object_list.json
@@ -9201,7 +8916,6 @@ stages:
     - cad/objects/legacy_jar-pluujx/artifacts/object_list.json
     - cad/objects/legacy_jar-qzwijs/artifacts/object_list.json
     - cad/objects/legacy_jar-rdngsc/artifacts/object_list.json
-    - cad/objects/legacy_jar-sktwfj/artifacts/object_list.json
     - cad/objects/legacy_jar-uydvnv/artifacts/object_list.json
     - cad/objects/legacy_jar-vuolos/artifacts/object_list.json
     - cad/objects/legacy_jar-vzwhbg/artifacts/object_list.json
@@ -9329,11 +9043,9 @@ stages:
     - cad/objects/legacy_pajamas-rcgdde/artifacts/object_list.json
     - cad/objects/legacy_paper_bag-bzsxgw/artifacts/object_list.json
     - cad/objects/legacy_paper_clip-xjfirk/artifacts/object_list.json
-    - cad/objects/legacy_paper_towel-aclaus/artifacts/object_list.json
     - cad/objects/legacy_paper_towel_holder-rntefx/artifacts/object_list.json
     - cad/objects/legacy_parsley-kkgkkd/artifacts/object_list.json
     - cad/objects/legacy_pasta-gwqhko/artifacts/object_list.json
-    - cad/objects/legacy_pea-iblyep/artifacts/object_list.json
     - cad/objects/legacy_peach-orowgl/artifacts/object_list.json
     - cad/objects/legacy_peach-wrutgk/artifacts/object_list.json
     - cad/objects/legacy_pear-mqvgcg/artifacts/object_list.json
@@ -9464,14 +9176,12 @@ stages:
     - cad/objects/legacy_pot_plant-kxmvco/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-nscddw/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-qbnaph/artifacts/object_list.json
-    - cad/objects/legacy_pot_plant-qcpges/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-qenqqv/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-quaxmw/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-udqjui/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-uvbpsf/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-vcwwrd/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-vyswzs/artifacts/object_list.json
-    - cad/objects/legacy_pot_plant-xlylfy/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-yvuagy/artifacts/object_list.json
     - cad/objects/legacy_potato-bpwohr/artifacts/object_list.json
     - cad/objects/legacy_potato-ljfitc/artifacts/object_list.json
@@ -9490,7 +9200,6 @@ stages:
     - cad/objects/legacy_puree-raagvm/artifacts/object_list.json
     - cad/objects/legacy_radish-bpmjki/artifacts/object_list.json
     - cad/objects/legacy_radish-vztgpr/artifacts/object_list.json
-    - cad/objects/legacy_rag-dgzewy/artifacts/object_list.json
     - cad/objects/legacy_rag-zmmbpz/artifacts/object_list.json
     - cad/objects/legacy_rail_fence-iduxiv/artifacts/object_list.json
     - cad/objects/legacy_rail_fence-qmsnld/artifacts/object_list.json
@@ -9538,7 +9247,6 @@ stages:
     - cad/objects/legacy_shampoo-kkbhzw/artifacts/object_list.json
     - cad/objects/legacy_shampoo-nijidu/artifacts/object_list.json
     - cad/objects/legacy_shampoo-tzghev/artifacts/object_list.json
-    - cad/objects/legacy_sheet-czdhwu/artifacts/object_list.json
     - cad/objects/legacy_shelf-cqcoox/artifacts/object_list.json
     - cad/objects/legacy_shelf-eyidvz/artifacts/object_list.json
     - cad/objects/legacy_shelf-lbbims/artifacts/object_list.json
@@ -9924,7 +9632,6 @@ stages:
     - cad/objects/magnifying_glass-ra/artifacts/object_list.json
     - cad/objects/mail-rt/artifacts/object_list.json
     - cad/objects/mallet-i1/artifacts/object_list.json
-    - cad/objects/manure-bf/artifacts/object_list.json
     - cad/objects/maple_syrup-is/artifacts/object_list.json
     - cad/objects/margarine-vs/artifacts/object_list.json
     - cad/objects/marigold-i7/artifacts/object_list.json
@@ -9938,14 +9645,12 @@ stages:
     - cad/objects/measuring_cup-7l/artifacts/object_list.json
     - cad/objects/measuring_tape-4b/artifacts/object_list.json
     - cad/objects/meat_thermometer-nt/artifacts/object_list.json
-    - cad/objects/meatloaf-55/artifacts/object_list.json
     - cad/objects/melon-5a/artifacts/object_list.json
     - cad/objects/meringue-sm/artifacts/object_list.json
     - cad/objects/mesh_bag-hz/artifacts/object_list.json
     - cad/objects/microfiber_cloth-ji/artifacts/object_list.json
     - cad/objects/microphone-st/artifacts/object_list.json
     - cad/objects/milkshake-zb/artifacts/object_list.json
-    - cad/objects/miso-un/artifacts/object_list.json
     - cad/objects/mistletoe_holly-vr/artifacts/object_list.json
     - cad/objects/mixing_bowl-fp/artifacts/object_list.json
     - cad/objects/mojito-0l/artifacts/object_list.json
@@ -9955,13 +9660,11 @@ stages:
     - cad/objects/mortar-v2/artifacts/object_list.json
     - cad/objects/moth_ball-pg/artifacts/object_list.json
     - cad/objects/mousepad-dz/artifacts/object_list.json
-    - cad/objects/mulch-4v/artifacts/object_list.json
     - cad/objects/mustard_greens-zy/artifacts/object_list.json
     - cad/objects/nachos-pj/artifacts/object_list.json
     - cad/objects/nails-vj/artifacts/object_list.json
     - cad/objects/name_tag-so/artifacts/object_list.json
     - cad/objects/nativity-tl/artifacts/object_list.json
-    - cad/objects/necktie-is/artifacts/object_list.json
     - cad/objects/nectarine-id/artifacts/object_list.json
     - cad/objects/nickel-qu/artifacts/object_list.json
     - cad/objects/noodle-21/artifacts/object_list.json
@@ -9984,13 +9687,11 @@ stages:
     - cad/objects/paper-fp/artifacts/object_list.json
     - cad/objects/paper_liners-mr/artifacts/object_list.json
     - cad/objects/paraffin_wax-3l/artifacts/object_list.json
-    - cad/objects/parchment_paper-ox/artifacts/object_list.json
     - cad/objects/parmesan_cheese-iz/artifacts/object_list.json
     - cad/objects/parsnip-7h/artifacts/object_list.json
     - cad/objects/pastry-hz/artifacts/object_list.json
     - cad/objects/pastry_brush-h1/artifacts/object_list.json
     - cad/objects/pastry_cutter-bx/artifacts/object_list.json
-    - cad/objects/patina-77/artifacts/object_list.json
     - cad/objects/paver-bp/artifacts/object_list.json
     - cad/objects/pea_pods-hg/artifacts/object_list.json
     - cad/objects/peanut_butter-pa/artifacts/object_list.json
@@ -10005,7 +9706,6 @@ stages:
     - cad/objects/pepperoni-ca/artifacts/object_list.json
     - cad/objects/pesticide-ik/artifacts/object_list.json
     - cad/objects/pet_bed-yw/artifacts/object_list.json
-    - cad/objects/pet_food-nf/artifacts/object_list.json
     - cad/objects/pet_poop-qg/artifacts/object_list.json
     - cad/objects/pickle-kk/artifacts/object_list.json
     - cad/objects/pickup_truck-c5/artifacts/object_list.json
@@ -10017,12 +9717,10 @@ stages:
     - cad/objects/pipe_cleaner-ph/artifacts/object_list.json
     - cad/objects/pitcher-xk/artifacts/object_list.json
     - cad/objects/pizza_box-vm/artifacts/object_list.json
-    - cad/objects/pizza_dough-ti/artifacts/object_list.json
     - cad/objects/pizza_sauce-nq/artifacts/object_list.json
     - cad/objects/plant_pot-7o/artifacts/object_list.json
     - cad/objects/plastic_bag-3p/artifacts/object_list.json
     - cad/objects/plastic_cup-dh/artifacts/object_list.json
-    - cad/objects/plastic_wrap-de/artifacts/object_list.json
     - cad/objects/plier-8w/artifacts/object_list.json
     - cad/objects/plug-jv/artifacts/object_list.json
     - cad/objects/plush_toy-de/artifacts/object_list.json
@@ -10030,7 +9728,6 @@ stages:
     - cad/objects/poker-gh/artifacts/object_list.json
     - cad/objects/pole-lx/artifacts/object_list.json
     - cad/objects/polo_shirt-te/artifacts/object_list.json
-    - cad/objects/popcorn-xz/artifacts/object_list.json
     - cad/objects/pork_chop-re/artifacts/object_list.json
     - cad/objects/pork_rib-l3/artifacts/object_list.json
     - cad/objects/portobello-xw/artifacts/object_list.json
@@ -10126,11 +9823,9 @@ stages:
     - cad/objects/smoothie-ee/artifacts/object_list.json
     - cad/objects/sneakers-cr/artifacts/object_list.json
     - cad/objects/snow_globe-aw/artifacts/object_list.json
-    - cad/objects/snow_pants-ic/artifacts/object_list.json
     - cad/objects/soccer_ball-uj/artifacts/object_list.json
     - cad/objects/socks-bz/artifacts/object_list.json
     - cad/objects/sod-cj/artifacts/object_list.json
-    - cad/objects/soda-oe/artifacts/object_list.json
     - cad/objects/softball-jr/artifacts/object_list.json
     - cad/objects/sour_cream-kx/artifacts/object_list.json
     - cad/objects/soy_sauce-jh/artifacts/object_list.json
@@ -10199,22 +9894,18 @@ stages:
     - cad/objects/tissues-qu/artifacts/object_list.json
     - cad/objects/toast-tt/artifacts/object_list.json
     - cad/objects/toaster_oven-kf/artifacts/object_list.json
-    - cad/objects/toolbox-ng/artifacts/object_list.json
     - cad/objects/tortilla-bq/artifacts/object_list.json
     - cad/objects/tortilla_chips-ub/artifacts/object_list.json
     - cad/objects/tote-se/artifacts/object_list.json
-    - cad/objects/towels-ib/artifacts/object_list.json
     - cad/objects/toy_train-vj/artifacts/object_list.json
     - cad/objects/trail_mix-hr/artifacts/object_list.json
     - cad/objects/trailer-mc/artifacts/object_list.json
-    - cad/objects/trash-ok/artifacts/object_list.json
     - cad/objects/trees-hv/artifacts/object_list.json
     - cad/objects/tripod-ti/artifacts/object_list.json
     - cad/objects/trombone-sg/artifacts/object_list.json
     - cad/objects/trophy-af/artifacts/object_list.json
     - cad/objects/truck-sf/artifacts/object_list.json
     - cad/objects/trumpet-gh/artifacts/object_list.json
-    - cad/objects/tube-kg/artifacts/object_list.json
     - cad/objects/tulip-ce/artifacts/object_list.json
     - cad/objects/tuna-wh/artifacts/object_list.json
     - cad/objects/tupperware-un/artifacts/object_list.json
@@ -10235,7 +9926,6 @@ stages:
     - cad/objects/waffle-yd/artifacts/object_list.json
     - cad/objects/waffle_maker-dr/artifacts/object_list.json
     - cad/objects/wallet-ql/artifacts/object_list.json
-    - cad/objects/wallpaper-ll/artifacts/object_list.json
     - cad/objects/water_dispenser-ht/artifacts/object_list.json
     - cad/objects/water_filter-kl/artifacts/object_list.json
     - cad/objects/watering_can-ek/artifacts/object_list.json
@@ -10344,7 +10034,6 @@ stages:
       artifacts/pipeline/object_list.success
     deps:
     - cad/objects/acetone-jc/artifacts/object_list.json
-    - cad/objects/acid-ub/artifacts/object_list.json
     - cad/objects/adhesive-io/artifacts/object_list.json
     - cad/objects/adhesive_strip-vv/artifacts/object_list.json
     - cad/objects/air_conditioner-ep/artifacts/object_list.json
@@ -10363,7 +10052,6 @@ stages:
     - cad/objects/antlers-mq/artifacts/object_list.json
     - cad/objects/apple_cider-jf/artifacts/object_list.json
     - cad/objects/apple_pie-bk/artifacts/object_list.json
-    - cad/objects/applesauce-dt/artifacts/object_list.json
     - cad/objects/apron-iu/artifacts/object_list.json
     - cad/objects/arepa-od/artifacts/object_list.json
     - cad/objects/arugula-lx/artifacts/object_list.json
@@ -10395,7 +10083,6 @@ stages:
     - cad/objects/bath_salt-mo/artifacts/object_list.json
     - cad/objects/battery-lb/artifacts/object_list.json
     - cad/objects/batting_gloves-nd/artifacts/object_list.json
-    - cad/objects/bay_leaves-xu/artifacts/object_list.json
     - cad/objects/bedsheet-pj/artifacts/object_list.json
     - cad/objects/beer_keg-rn/artifacts/object_list.json
     - cad/objects/beeswax-ad/artifacts/object_list.json
@@ -10404,9 +10091,7 @@ stages:
     - cad/objects/birdcage-xo/artifacts/object_list.json
     - cad/objects/birdseed-bd/artifacts/object_list.json
     - cad/objects/biscuit-vh/artifacts/object_list.json
-    - cad/objects/black_beans-jm/artifacts/object_list.json
     - cad/objects/blackberries-xx/artifacts/object_list.json
-    - cad/objects/blankets-bx/artifacts/object_list.json
     - cad/objects/blazer-fa/artifacts/object_list.json
     - cad/objects/bleach-wc/artifacts/object_list.json
     - cad/objects/blender-temp/artifacts/object_list.json
@@ -10414,7 +10099,6 @@ stages:
     - cad/objects/blouse-rc/artifacts/object_list.json
     - cad/objects/blow_dryer-hf/artifacts/object_list.json
     - cad/objects/blueberries-dg/artifacts/object_list.json
-    - cad/objects/blueberry_mousse-ax/artifacts/object_list.json
     - cad/objects/boat-qb/artifacts/object_list.json
     - cad/objects/bobby_pins-pi/artifacts/object_list.json
     - cad/objects/body_srub-vm/artifacts/object_list.json
@@ -10442,7 +10126,6 @@ stages:
     - cad/objects/bun-ae/artifacts/object_list.json
     - cad/objects/burlap-sm/artifacts/object_list.json
     - cad/objects/burrito-of/artifacts/object_list.json
-    - cad/objects/buttermilk-ca/artifacts/object_list.json
     - cad/objects/butternut_squash-ev/artifacts/object_list.json
     - cad/objects/cactus-gb/artifacts/object_list.json
     - cad/objects/cake-fg/artifacts/object_list.json
@@ -10455,19 +10138,15 @@ stages:
     - cad/objects/canner-fk/artifacts/object_list.json
     - cad/objects/canvas-ts/artifacts/object_list.json
     - cad/objects/cappuccino-hi/artifacts/object_list.json
-    - cad/objects/caraway_seeds-sh/artifacts/object_list.json
     - cad/objects/cardigan-xm/artifacts/object_list.json
     - cad/objects/cardstock-wi/artifacts/object_list.json
     - cad/objects/care_products-gt/artifacts/object_list.json
     - cad/objects/cash_box-wk/artifacts/object_list.json
-    - cad/objects/casserole-zd/artifacts/object_list.json
-    - cad/objects/cat_food-eg/artifacts/object_list.json
     - cad/objects/catalog-xj/artifacts/object_list.json
     - cad/objects/cauliflower-oy/artifacts/object_list.json
     - cad/objects/caulk-hi/artifacts/object_list.json
     - cad/objects/cd-ui/artifacts/object_list.json
     - cad/objects/cell_phone-nb/artifacts/object_list.json
-    - cad/objects/cellophane-ul/artifacts/object_list.json
     - cad/objects/centerpiece-nc/artifacts/object_list.json
     - cad/objects/ceramic_tile-yb/artifacts/object_list.json
     - cad/objects/ceramic_tile-yr/artifacts/object_list.json
@@ -10499,25 +10178,20 @@ stages:
     - cad/objects/chocolate_biscuit-gv/artifacts/object_list.json
     - cad/objects/chocolate_cake-yw/artifacts/object_list.json
     - cad/objects/chocolate_chip-qm/artifacts/object_list.json
-    - cad/objects/chocolate_spread-aj/artifacts/object_list.json
     - cad/objects/chocolate_syrup-eh/artifacts/object_list.json
     - cad/objects/chopping_block-zd/artifacts/object_list.json
     - cad/objects/chorizo-su/artifacts/object_list.json
-    - cad/objects/chowder-pu/artifacts/object_list.json
     - cad/objects/cigarette-te/artifacts/object_list.json
     - cad/objects/cilantro-lx/artifacts/object_list.json
     - cad/objects/cinnamon_stick-jl/artifacts/object_list.json
-    - cad/objects/cioppino-md/artifacts/object_list.json
     - cad/objects/citrus-ln/artifacts/object_list.json
     - cad/objects/clam-yf/artifacts/object_list.json
     - cad/objects/clamp-ok/artifacts/object_list.json
     - cad/objects/cleaner-ed/artifacts/object_list.json
-    - cad/objects/clip-vb/artifacts/object_list.json
     - cad/objects/clock-wy/artifacts/object_list.json
     - cad/objects/clothesline-jc/artifacts/object_list.json
     - cad/objects/clothesline-pq/artifacts/object_list.json
     - cad/objects/cloves-kp/artifacts/object_list.json
-    - cad/objects/cocktail-uw/artifacts/object_list.json
     - cad/objects/cocoa_powder-vg/artifacts/object_list.json
     - cad/objects/coconut_milk-oq/artifacts/object_list.json
     - cad/objects/coconut_oil-xw/artifacts/object_list.json
@@ -10527,7 +10201,6 @@ stages:
     - cad/objects/coffee_grinder-ag/artifacts/object_list.json
     - cad/objects/coke_bottle-al/artifacts/object_list.json
     - cad/objects/comic_book-lr/artifacts/object_list.json
-    - cad/objects/compost-pf/artifacts/object_list.json
     - cad/objects/compost_bin-fh/artifacts/object_list.json
     - cad/objects/conch_shell-un/artifacts/object_list.json
     - cad/objects/console_game-cm/artifacts/object_list.json
@@ -10550,7 +10223,6 @@ stages:
     - cad/objects/curtain_rod-la/artifacts/object_list.json
     - cad/objects/cushion-kh/artifacts/object_list.json
     - cad/objects/custome-jn/artifacts/object_list.json
-    - cad/objects/cymbal-kq/artifacts/object_list.json
     - cad/objects/dahlias-po/artifacts/object_list.json
     - cad/objects/daiper-re/artifacts/object_list.json
     - cad/objects/decanter-ij/artifacts/object_list.json
@@ -10560,7 +10232,6 @@ stages:
     - cad/objects/denture-hi/artifacts/object_list.json
     - cad/objects/deodorant-ls/artifacts/object_list.json
     - cad/objects/diamond-jh/artifacts/object_list.json
-    - cad/objects/diamond_ring-pq/artifacts/object_list.json
     - cad/objects/dice-wq/artifacts/object_list.json
     - cad/objects/dish_soap-vr/artifacts/object_list.json
     - cad/objects/dish_towel-bv/artifacts/object_list.json
@@ -10577,7 +10248,6 @@ stages:
     - cad/objects/duck-dg/artifacts/object_list.json
     - cad/objects/duct_tape-ls/artifacts/object_list.json
     - cad/objects/dumpling-uy/artifacts/object_list.json
-    - cad/objects/duster-rm/artifacts/object_list.json
     - cad/objects/dutch_oven-wa/artifacts/object_list.json
     - cad/objects/duvet_set-pa/artifacts/object_list.json
     - cad/objects/dvd-yq/artifacts/object_list.json
@@ -10604,7 +10274,6 @@ stages:
     - cad/objects/food_processor-ht/artifacts/object_list.json
     - cad/objects/fountain-az/artifacts/object_list.json
     - cad/objects/frame-ow/artifacts/object_list.json
-    - cad/objects/frappuccino-if/artifacts/object_list.json
     - cad/objects/french_fries-jh/artifacts/object_list.json
     - cad/objects/french_press-hq/artifacts/object_list.json
     - cad/objects/french_toast-uh/artifacts/object_list.json
@@ -10615,7 +10284,6 @@ stages:
     - cad/objects/funnel-oh/artifacts/object_list.json
     - cad/objects/garden_glove-ld/artifacts/object_list.json
     - cad/objects/garlic-lh/artifacts/object_list.json
-    - cad/objects/gazpacho-er/artifacts/object_list.json
     - cad/objects/geode-qw/artifacts/object_list.json
     - cad/objects/gift-sd/artifacts/object_list.json
     - cad/objects/gift_bag-ue/artifacts/object_list.json
@@ -10657,7 +10325,6 @@ stages:
     - cad/objects/hoodie-ev/artifacts/object_list.json
     - cad/objects/hot_chocolate-ni/artifacts/object_list.json
     - cad/objects/hotdog_sandwitch-as/artifacts/object_list.json
-    - cad/objects/hummus-ht/artifacts/object_list.json
     - cad/objects/hutch-cr/artifacts/object_list.json
     - cad/objects/ice_bucket-kz/artifacts/object_list.json
     - cad/objects/ice_cream-re/artifacts/object_list.json
@@ -10674,7 +10341,6 @@ stages:
     - cad/objects/jelly_beans-in/artifacts/object_list.json
     - cad/objects/jelly_jars-jo/artifacts/object_list.json
     - cad/objects/jersey-of/artifacts/object_list.json
-    - cad/objects/jewelry-wd/artifacts/object_list.json
     - cad/objects/jewelry_cleaner-bh/artifacts/object_list.json
     - cad/objects/jigger-kf/artifacts/object_list.json
     - cad/objects/juicer-gs/artifacts/object_list.json
@@ -10715,7 +10381,6 @@ stages:
     - cad/objects/legacy_armchair-qplklw/artifacts/object_list.json
     - cad/objects/legacy_armchair-rabzuf/artifacts/object_list.json
     - cad/objects/legacy_armchair-tcxiue/artifacts/object_list.json
-    - cad/objects/legacy_armchair-tnryza/artifacts/object_list.json
     - cad/objects/legacy_armchair-umbrpd/artifacts/object_list.json
     - cad/objects/legacy_armchair-viphen/artifacts/object_list.json
     - cad/objects/legacy_armchair-vtsoat/artifacts/object_list.json
@@ -10741,9 +10406,6 @@ stages:
     - cad/objects/legacy_basket-wqxrbf/artifacts/object_list.json
     - cad/objects/legacy_basket-xhdtjn/artifacts/object_list.json
     - cad/objects/legacy_basket-xjftlf/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-feojdm/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-iviyls/artifacts/object_list.json
-    - cad/objects/legacy_bath_towel-lyqgnf/artifacts/object_list.json
     - cad/objects/legacy_bathtub-azdgtl/artifacts/object_list.json
     - cad/objects/legacy_bathtub-enpxbn/artifacts/object_list.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/object_list.json
@@ -10751,7 +10413,6 @@ stages:
     - cad/objects/legacy_bathtub-jfhrwj/artifacts/object_list.json
     - cad/objects/legacy_bathtub-oobbwn/artifacts/object_list.json
     - cad/objects/legacy_bathtub-wxrafq/artifacts/object_list.json
-    - cad/objects/legacy_bean-cdinsu/artifacts/object_list.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/object_list.json
     - cad/objects/legacy_bean-lvbjws/artifacts/object_list.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/object_list.json
@@ -11023,12 +10684,9 @@ stages:
     - cad/objects/legacy_console_table-fihyuz/artifacts/object_list.json
     - cad/objects/legacy_console_table-tvhett/artifacts/object_list.json
     - cad/objects/legacy_console_table-xqlxni/artifacts/object_list.json
-    - cad/objects/legacy_container_cranberry-fbcpsl/artifacts/object_list.json
     - cad/objects/legacy_container_date-qqddba/artifacts/object_list.json
     - cad/objects/legacy_cookie-ggpang/artifacts/object_list.json
-    - cad/objects/legacy_cord-aqikou/artifacts/object_list.json
     - cad/objects/legacy_cord-tzurlz/artifacts/object_list.json
-    - cad/objects/legacy_cord-ydrhwh/artifacts/object_list.json
     - cad/objects/legacy_countertop-tpuwys/artifacts/object_list.json
     - cad/objects/legacy_cpu_board-xlqvil/artifacts/object_list.json
     - cad/objects/legacy_crab-tjkiva/artifacts/object_list.json
@@ -11074,8 +10732,6 @@ stages:
     - cad/objects/legacy_dish_rack-kxuutl/artifacts/object_list.json
     - cad/objects/legacy_dishtowel-dtfspn/artifacts/object_list.json
     - cad/objects/legacy_dishtowel-ltydgg/artifacts/object_list.json
-    - cad/objects/legacy_dishtowel-qvzbjx/artifacts/object_list.json
-    - cad/objects/legacy_dishtowel-yobhae/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-cgugie/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-dngvvi/artifacts/object_list.json
     - cad/objects/legacy_dishwasher-dugpby/artifacts/object_list.json
@@ -11101,7 +10757,6 @@ stages:
     - cad/objects/legacy_drumstick-lkvzmj/artifacts/object_list.json
     - cad/objects/legacy_dryer-fhtvuq/artifacts/object_list.json
     - cad/objects/legacy_dryer-smcyys/artifacts/object_list.json
-    - cad/objects/legacy_dryer-tpqzai/artifacts/object_list.json
     - cad/objects/legacy_dryer-wivnic/artifacts/object_list.json
     - cad/objects/legacy_dryer-xsuyua/artifacts/object_list.json
     - cad/objects/legacy_dryer-zlmnfg/artifacts/object_list.json
@@ -11160,7 +10815,6 @@ stages:
     - cad/objects/legacy_green_onion_chopped-akrkjr/artifacts/object_list.json
     - cad/objects/legacy_griddle-ryvqep/artifacts/object_list.json
     - cad/objects/legacy_grill-ddlqye/artifacts/object_list.json
-    - cad/objects/legacy_guacamole-ajnjvv/artifacts/object_list.json
     - cad/objects/legacy_guitar-cybisc/artifacts/object_list.json
     - cad/objects/legacy_guitar-gysapt/artifacts/object_list.json
     - cad/objects/legacy_guitar-hpqjrq/artifacts/object_list.json
@@ -11178,7 +10832,6 @@ stages:
     - cad/objects/legacy_hairbrush-bdylnb/artifacts/object_list.json
     - cad/objects/legacy_hamburger-fyswch/artifacts/object_list.json
     - cad/objects/legacy_hammer-bbzlel/artifacts/object_list.json
-    - cad/objects/legacy_hand_towel-jaubic/artifacts/object_list.json
     - cad/objects/legacy_hanger-ffecvd/artifacts/object_list.json
     - cad/objects/legacy_hard_drive-ijibkm/artifacts/object_list.json
     - cad/objects/legacy_hard_drive-ubjbsm/artifacts/object_list.json
@@ -11215,7 +10868,6 @@ stages:
     - cad/objects/legacy_jar-pluujx/artifacts/object_list.json
     - cad/objects/legacy_jar-qzwijs/artifacts/object_list.json
     - cad/objects/legacy_jar-rdngsc/artifacts/object_list.json
-    - cad/objects/legacy_jar-sktwfj/artifacts/object_list.json
     - cad/objects/legacy_jar-uydvnv/artifacts/object_list.json
     - cad/objects/legacy_jar-vuolos/artifacts/object_list.json
     - cad/objects/legacy_jar-vzwhbg/artifacts/object_list.json
@@ -11343,11 +10995,9 @@ stages:
     - cad/objects/legacy_pajamas-rcgdde/artifacts/object_list.json
     - cad/objects/legacy_paper_bag-bzsxgw/artifacts/object_list.json
     - cad/objects/legacy_paper_clip-xjfirk/artifacts/object_list.json
-    - cad/objects/legacy_paper_towel-aclaus/artifacts/object_list.json
     - cad/objects/legacy_paper_towel_holder-rntefx/artifacts/object_list.json
     - cad/objects/legacy_parsley-kkgkkd/artifacts/object_list.json
     - cad/objects/legacy_pasta-gwqhko/artifacts/object_list.json
-    - cad/objects/legacy_pea-iblyep/artifacts/object_list.json
     - cad/objects/legacy_peach-orowgl/artifacts/object_list.json
     - cad/objects/legacy_peach-wrutgk/artifacts/object_list.json
     - cad/objects/legacy_pear-mqvgcg/artifacts/object_list.json
@@ -11478,14 +11128,12 @@ stages:
     - cad/objects/legacy_pot_plant-kxmvco/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-nscddw/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-qbnaph/artifacts/object_list.json
-    - cad/objects/legacy_pot_plant-qcpges/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-qenqqv/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-quaxmw/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-udqjui/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-uvbpsf/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-vcwwrd/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-vyswzs/artifacts/object_list.json
-    - cad/objects/legacy_pot_plant-xlylfy/artifacts/object_list.json
     - cad/objects/legacy_pot_plant-yvuagy/artifacts/object_list.json
     - cad/objects/legacy_potato-bpwohr/artifacts/object_list.json
     - cad/objects/legacy_potato-ljfitc/artifacts/object_list.json
@@ -11504,7 +11152,6 @@ stages:
     - cad/objects/legacy_puree-raagvm/artifacts/object_list.json
     - cad/objects/legacy_radish-bpmjki/artifacts/object_list.json
     - cad/objects/legacy_radish-vztgpr/artifacts/object_list.json
-    - cad/objects/legacy_rag-dgzewy/artifacts/object_list.json
     - cad/objects/legacy_rag-zmmbpz/artifacts/object_list.json
     - cad/objects/legacy_rail_fence-iduxiv/artifacts/object_list.json
     - cad/objects/legacy_rail_fence-qmsnld/artifacts/object_list.json
@@ -11552,7 +11199,6 @@ stages:
     - cad/objects/legacy_shampoo-kkbhzw/artifacts/object_list.json
     - cad/objects/legacy_shampoo-nijidu/artifacts/object_list.json
     - cad/objects/legacy_shampoo-tzghev/artifacts/object_list.json
-    - cad/objects/legacy_sheet-czdhwu/artifacts/object_list.json
     - cad/objects/legacy_shelf-cqcoox/artifacts/object_list.json
     - cad/objects/legacy_shelf-eyidvz/artifacts/object_list.json
     - cad/objects/legacy_shelf-lbbims/artifacts/object_list.json
@@ -11938,7 +11584,6 @@ stages:
     - cad/objects/magnifying_glass-ra/artifacts/object_list.json
     - cad/objects/mail-rt/artifacts/object_list.json
     - cad/objects/mallet-i1/artifacts/object_list.json
-    - cad/objects/manure-bf/artifacts/object_list.json
     - cad/objects/maple_syrup-is/artifacts/object_list.json
     - cad/objects/margarine-vs/artifacts/object_list.json
     - cad/objects/marigold-i7/artifacts/object_list.json
@@ -11952,14 +11597,12 @@ stages:
     - cad/objects/measuring_cup-7l/artifacts/object_list.json
     - cad/objects/measuring_tape-4b/artifacts/object_list.json
     - cad/objects/meat_thermometer-nt/artifacts/object_list.json
-    - cad/objects/meatloaf-55/artifacts/object_list.json
     - cad/objects/melon-5a/artifacts/object_list.json
     - cad/objects/meringue-sm/artifacts/object_list.json
     - cad/objects/mesh_bag-hz/artifacts/object_list.json
     - cad/objects/microfiber_cloth-ji/artifacts/object_list.json
     - cad/objects/microphone-st/artifacts/object_list.json
     - cad/objects/milkshake-zb/artifacts/object_list.json
-    - cad/objects/miso-un/artifacts/object_list.json
     - cad/objects/mistletoe_holly-vr/artifacts/object_list.json
     - cad/objects/mixing_bowl-fp/artifacts/object_list.json
     - cad/objects/mojito-0l/artifacts/object_list.json
@@ -11969,13 +11612,11 @@ stages:
     - cad/objects/mortar-v2/artifacts/object_list.json
     - cad/objects/moth_ball-pg/artifacts/object_list.json
     - cad/objects/mousepad-dz/artifacts/object_list.json
-    - cad/objects/mulch-4v/artifacts/object_list.json
     - cad/objects/mustard_greens-zy/artifacts/object_list.json
     - cad/objects/nachos-pj/artifacts/object_list.json
     - cad/objects/nails-vj/artifacts/object_list.json
     - cad/objects/name_tag-so/artifacts/object_list.json
     - cad/objects/nativity-tl/artifacts/object_list.json
-    - cad/objects/necktie-is/artifacts/object_list.json
     - cad/objects/nectarine-id/artifacts/object_list.json
     - cad/objects/nickel-qu/artifacts/object_list.json
     - cad/objects/noodle-21/artifacts/object_list.json
@@ -11998,13 +11639,11 @@ stages:
     - cad/objects/paper-fp/artifacts/object_list.json
     - cad/objects/paper_liners-mr/artifacts/object_list.json
     - cad/objects/paraffin_wax-3l/artifacts/object_list.json
-    - cad/objects/parchment_paper-ox/artifacts/object_list.json
     - cad/objects/parmesan_cheese-iz/artifacts/object_list.json
     - cad/objects/parsnip-7h/artifacts/object_list.json
     - cad/objects/pastry-hz/artifacts/object_list.json
     - cad/objects/pastry_brush-h1/artifacts/object_list.json
     - cad/objects/pastry_cutter-bx/artifacts/object_list.json
-    - cad/objects/patina-77/artifacts/object_list.json
     - cad/objects/paver-bp/artifacts/object_list.json
     - cad/objects/pea_pods-hg/artifacts/object_list.json
     - cad/objects/peanut_butter-pa/artifacts/object_list.json
@@ -12019,7 +11658,6 @@ stages:
     - cad/objects/pepperoni-ca/artifacts/object_list.json
     - cad/objects/pesticide-ik/artifacts/object_list.json
     - cad/objects/pet_bed-yw/artifacts/object_list.json
-    - cad/objects/pet_food-nf/artifacts/object_list.json
     - cad/objects/pet_poop-qg/artifacts/object_list.json
     - cad/objects/pickle-kk/artifacts/object_list.json
     - cad/objects/pickup_truck-c5/artifacts/object_list.json
@@ -12031,12 +11669,10 @@ stages:
     - cad/objects/pipe_cleaner-ph/artifacts/object_list.json
     - cad/objects/pitcher-xk/artifacts/object_list.json
     - cad/objects/pizza_box-vm/artifacts/object_list.json
-    - cad/objects/pizza_dough-ti/artifacts/object_list.json
     - cad/objects/pizza_sauce-nq/artifacts/object_list.json
     - cad/objects/plant_pot-7o/artifacts/object_list.json
     - cad/objects/plastic_bag-3p/artifacts/object_list.json
     - cad/objects/plastic_cup-dh/artifacts/object_list.json
-    - cad/objects/plastic_wrap-de/artifacts/object_list.json
     - cad/objects/plier-8w/artifacts/object_list.json
     - cad/objects/plug-jv/artifacts/object_list.json
     - cad/objects/plush_toy-de/artifacts/object_list.json
@@ -12044,7 +11680,6 @@ stages:
     - cad/objects/poker-gh/artifacts/object_list.json
     - cad/objects/pole-lx/artifacts/object_list.json
     - cad/objects/polo_shirt-te/artifacts/object_list.json
-    - cad/objects/popcorn-xz/artifacts/object_list.json
     - cad/objects/pork_chop-re/artifacts/object_list.json
     - cad/objects/pork_rib-l3/artifacts/object_list.json
     - cad/objects/portobello-xw/artifacts/object_list.json
@@ -12140,11 +11775,9 @@ stages:
     - cad/objects/smoothie-ee/artifacts/object_list.json
     - cad/objects/sneakers-cr/artifacts/object_list.json
     - cad/objects/snow_globe-aw/artifacts/object_list.json
-    - cad/objects/snow_pants-ic/artifacts/object_list.json
     - cad/objects/soccer_ball-uj/artifacts/object_list.json
     - cad/objects/socks-bz/artifacts/object_list.json
     - cad/objects/sod-cj/artifacts/object_list.json
-    - cad/objects/soda-oe/artifacts/object_list.json
     - cad/objects/softball-jr/artifacts/object_list.json
     - cad/objects/sour_cream-kx/artifacts/object_list.json
     - cad/objects/soy_sauce-jh/artifacts/object_list.json
@@ -12213,22 +11846,18 @@ stages:
     - cad/objects/tissues-qu/artifacts/object_list.json
     - cad/objects/toast-tt/artifacts/object_list.json
     - cad/objects/toaster_oven-kf/artifacts/object_list.json
-    - cad/objects/toolbox-ng/artifacts/object_list.json
     - cad/objects/tortilla-bq/artifacts/object_list.json
     - cad/objects/tortilla_chips-ub/artifacts/object_list.json
     - cad/objects/tote-se/artifacts/object_list.json
-    - cad/objects/towels-ib/artifacts/object_list.json
     - cad/objects/toy_train-vj/artifacts/object_list.json
     - cad/objects/trail_mix-hr/artifacts/object_list.json
     - cad/objects/trailer-mc/artifacts/object_list.json
-    - cad/objects/trash-ok/artifacts/object_list.json
     - cad/objects/trees-hv/artifacts/object_list.json
     - cad/objects/tripod-ti/artifacts/object_list.json
     - cad/objects/trombone-sg/artifacts/object_list.json
     - cad/objects/trophy-af/artifacts/object_list.json
     - cad/objects/truck-sf/artifacts/object_list.json
     - cad/objects/trumpet-gh/artifacts/object_list.json
-    - cad/objects/tube-kg/artifacts/object_list.json
     - cad/objects/tulip-ce/artifacts/object_list.json
     - cad/objects/tuna-wh/artifacts/object_list.json
     - cad/objects/tupperware-un/artifacts/object_list.json
@@ -12248,7 +11877,6 @@ stages:
     - cad/objects/waffle-yd/artifacts/object_list.json
     - cad/objects/waffle_maker-dr/artifacts/object_list.json
     - cad/objects/wallet-ql/artifacts/object_list.json
-    - cad/objects/wallpaper-ll/artifacts/object_list.json
     - cad/objects/water_dispenser-ht/artifacts/object_list.json
     - cad/objects/water_filter-kl/artifacts/object_list.json
     - cad/objects/watering_can-ek/artifacts/object_list.json
@@ -12361,7 +11989,6 @@ stages:
       artifacts/pipeline/sanitycheck.success
     deps:
     - cad/objects/acetone-jc/artifacts/sanitycheck.json
-    - cad/objects/acid-ub/artifacts/sanitycheck.json
     - cad/objects/adhesive-io/artifacts/sanitycheck.json
     - cad/objects/adhesive_strip-vv/artifacts/sanitycheck.json
     - cad/objects/air_conditioner-ep/artifacts/sanitycheck.json
@@ -12380,7 +12007,6 @@ stages:
     - cad/objects/antlers-mq/artifacts/sanitycheck.json
     - cad/objects/apple_cider-jf/artifacts/sanitycheck.json
     - cad/objects/apple_pie-bk/artifacts/sanitycheck.json
-    - cad/objects/applesauce-dt/artifacts/sanitycheck.json
     - cad/objects/apron-iu/artifacts/sanitycheck.json
     - cad/objects/arepa-od/artifacts/sanitycheck.json
     - cad/objects/arugula-lx/artifacts/sanitycheck.json
@@ -12412,7 +12038,6 @@ stages:
     - cad/objects/bath_salt-mo/artifacts/sanitycheck.json
     - cad/objects/battery-lb/artifacts/sanitycheck.json
     - cad/objects/batting_gloves-nd/artifacts/sanitycheck.json
-    - cad/objects/bay_leaves-xu/artifacts/sanitycheck.json
     - cad/objects/bedsheet-pj/artifacts/sanitycheck.json
     - cad/objects/beer_keg-rn/artifacts/sanitycheck.json
     - cad/objects/beeswax-ad/artifacts/sanitycheck.json
@@ -12421,9 +12046,7 @@ stages:
     - cad/objects/birdcage-xo/artifacts/sanitycheck.json
     - cad/objects/birdseed-bd/artifacts/sanitycheck.json
     - cad/objects/biscuit-vh/artifacts/sanitycheck.json
-    - cad/objects/black_beans-jm/artifacts/sanitycheck.json
     - cad/objects/blackberries-xx/artifacts/sanitycheck.json
-    - cad/objects/blankets-bx/artifacts/sanitycheck.json
     - cad/objects/blazer-fa/artifacts/sanitycheck.json
     - cad/objects/bleach-wc/artifacts/sanitycheck.json
     - cad/objects/blender-temp/artifacts/sanitycheck.json
@@ -12431,7 +12054,6 @@ stages:
     - cad/objects/blouse-rc/artifacts/sanitycheck.json
     - cad/objects/blow_dryer-hf/artifacts/sanitycheck.json
     - cad/objects/blueberries-dg/artifacts/sanitycheck.json
-    - cad/objects/blueberry_mousse-ax/artifacts/sanitycheck.json
     - cad/objects/boat-qb/artifacts/sanitycheck.json
     - cad/objects/bobby_pins-pi/artifacts/sanitycheck.json
     - cad/objects/body_srub-vm/artifacts/sanitycheck.json
@@ -12459,7 +12081,6 @@ stages:
     - cad/objects/bun-ae/artifacts/sanitycheck.json
     - cad/objects/burlap-sm/artifacts/sanitycheck.json
     - cad/objects/burrito-of/artifacts/sanitycheck.json
-    - cad/objects/buttermilk-ca/artifacts/sanitycheck.json
     - cad/objects/butternut_squash-ev/artifacts/sanitycheck.json
     - cad/objects/cactus-gb/artifacts/sanitycheck.json
     - cad/objects/cake-fg/artifacts/sanitycheck.json
@@ -12472,19 +12093,15 @@ stages:
     - cad/objects/canner-fk/artifacts/sanitycheck.json
     - cad/objects/canvas-ts/artifacts/sanitycheck.json
     - cad/objects/cappuccino-hi/artifacts/sanitycheck.json
-    - cad/objects/caraway_seeds-sh/artifacts/sanitycheck.json
     - cad/objects/cardigan-xm/artifacts/sanitycheck.json
     - cad/objects/cardstock-wi/artifacts/sanitycheck.json
     - cad/objects/care_products-gt/artifacts/sanitycheck.json
     - cad/objects/cash_box-wk/artifacts/sanitycheck.json
-    - cad/objects/casserole-zd/artifacts/sanitycheck.json
-    - cad/objects/cat_food-eg/artifacts/sanitycheck.json
     - cad/objects/catalog-xj/artifacts/sanitycheck.json
     - cad/objects/cauliflower-oy/artifacts/sanitycheck.json
     - cad/objects/caulk-hi/artifacts/sanitycheck.json
     - cad/objects/cd-ui/artifacts/sanitycheck.json
     - cad/objects/cell_phone-nb/artifacts/sanitycheck.json
-    - cad/objects/cellophane-ul/artifacts/sanitycheck.json
     - cad/objects/centerpiece-nc/artifacts/sanitycheck.json
     - cad/objects/ceramic_tile-yb/artifacts/sanitycheck.json
     - cad/objects/ceramic_tile-yr/artifacts/sanitycheck.json
@@ -12516,25 +12133,20 @@ stages:
     - cad/objects/chocolate_biscuit-gv/artifacts/sanitycheck.json
     - cad/objects/chocolate_cake-yw/artifacts/sanitycheck.json
     - cad/objects/chocolate_chip-qm/artifacts/sanitycheck.json
-    - cad/objects/chocolate_spread-aj/artifacts/sanitycheck.json
     - cad/objects/chocolate_syrup-eh/artifacts/sanitycheck.json
     - cad/objects/chopping_block-zd/artifacts/sanitycheck.json
     - cad/objects/chorizo-su/artifacts/sanitycheck.json
-    - cad/objects/chowder-pu/artifacts/sanitycheck.json
     - cad/objects/cigarette-te/artifacts/sanitycheck.json
     - cad/objects/cilantro-lx/artifacts/sanitycheck.json
     - cad/objects/cinnamon_stick-jl/artifacts/sanitycheck.json
-    - cad/objects/cioppino-md/artifacts/sanitycheck.json
     - cad/objects/citrus-ln/artifacts/sanitycheck.json
     - cad/objects/clam-yf/artifacts/sanitycheck.json
     - cad/objects/clamp-ok/artifacts/sanitycheck.json
     - cad/objects/cleaner-ed/artifacts/sanitycheck.json
-    - cad/objects/clip-vb/artifacts/sanitycheck.json
     - cad/objects/clock-wy/artifacts/sanitycheck.json
     - cad/objects/clothesline-jc/artifacts/sanitycheck.json
     - cad/objects/clothesline-pq/artifacts/sanitycheck.json
     - cad/objects/cloves-kp/artifacts/sanitycheck.json
-    - cad/objects/cocktail-uw/artifacts/sanitycheck.json
     - cad/objects/cocoa_powder-vg/artifacts/sanitycheck.json
     - cad/objects/coconut_milk-oq/artifacts/sanitycheck.json
     - cad/objects/coconut_oil-xw/artifacts/sanitycheck.json
@@ -12544,7 +12156,6 @@ stages:
     - cad/objects/coffee_grinder-ag/artifacts/sanitycheck.json
     - cad/objects/coke_bottle-al/artifacts/sanitycheck.json
     - cad/objects/comic_book-lr/artifacts/sanitycheck.json
-    - cad/objects/compost-pf/artifacts/sanitycheck.json
     - cad/objects/compost_bin-fh/artifacts/sanitycheck.json
     - cad/objects/conch_shell-un/artifacts/sanitycheck.json
     - cad/objects/console_game-cm/artifacts/sanitycheck.json
@@ -12567,7 +12178,6 @@ stages:
     - cad/objects/curtain_rod-la/artifacts/sanitycheck.json
     - cad/objects/cushion-kh/artifacts/sanitycheck.json
     - cad/objects/custome-jn/artifacts/sanitycheck.json
-    - cad/objects/cymbal-kq/artifacts/sanitycheck.json
     - cad/objects/dahlias-po/artifacts/sanitycheck.json
     - cad/objects/daiper-re/artifacts/sanitycheck.json
     - cad/objects/decanter-ij/artifacts/sanitycheck.json
@@ -12577,7 +12187,6 @@ stages:
     - cad/objects/denture-hi/artifacts/sanitycheck.json
     - cad/objects/deodorant-ls/artifacts/sanitycheck.json
     - cad/objects/diamond-jh/artifacts/sanitycheck.json
-    - cad/objects/diamond_ring-pq/artifacts/sanitycheck.json
     - cad/objects/dice-wq/artifacts/sanitycheck.json
     - cad/objects/dish_soap-vr/artifacts/sanitycheck.json
     - cad/objects/dish_towel-bv/artifacts/sanitycheck.json
@@ -12594,7 +12203,6 @@ stages:
     - cad/objects/duck-dg/artifacts/sanitycheck.json
     - cad/objects/duct_tape-ls/artifacts/sanitycheck.json
     - cad/objects/dumpling-uy/artifacts/sanitycheck.json
-    - cad/objects/duster-rm/artifacts/sanitycheck.json
     - cad/objects/dutch_oven-wa/artifacts/sanitycheck.json
     - cad/objects/duvet_set-pa/artifacts/sanitycheck.json
     - cad/objects/dvd-yq/artifacts/sanitycheck.json
@@ -12621,7 +12229,6 @@ stages:
     - cad/objects/food_processor-ht/artifacts/sanitycheck.json
     - cad/objects/fountain-az/artifacts/sanitycheck.json
     - cad/objects/frame-ow/artifacts/sanitycheck.json
-    - cad/objects/frappuccino-if/artifacts/sanitycheck.json
     - cad/objects/french_fries-jh/artifacts/sanitycheck.json
     - cad/objects/french_press-hq/artifacts/sanitycheck.json
     - cad/objects/french_toast-uh/artifacts/sanitycheck.json
@@ -12632,7 +12239,6 @@ stages:
     - cad/objects/funnel-oh/artifacts/sanitycheck.json
     - cad/objects/garden_glove-ld/artifacts/sanitycheck.json
     - cad/objects/garlic-lh/artifacts/sanitycheck.json
-    - cad/objects/gazpacho-er/artifacts/sanitycheck.json
     - cad/objects/geode-qw/artifacts/sanitycheck.json
     - cad/objects/gift-sd/artifacts/sanitycheck.json
     - cad/objects/gift_bag-ue/artifacts/sanitycheck.json
@@ -12674,7 +12280,6 @@ stages:
     - cad/objects/hoodie-ev/artifacts/sanitycheck.json
     - cad/objects/hot_chocolate-ni/artifacts/sanitycheck.json
     - cad/objects/hotdog_sandwitch-as/artifacts/sanitycheck.json
-    - cad/objects/hummus-ht/artifacts/sanitycheck.json
     - cad/objects/hutch-cr/artifacts/sanitycheck.json
     - cad/objects/ice_bucket-kz/artifacts/sanitycheck.json
     - cad/objects/ice_cream-re/artifacts/sanitycheck.json
@@ -12691,7 +12296,6 @@ stages:
     - cad/objects/jelly_beans-in/artifacts/sanitycheck.json
     - cad/objects/jelly_jars-jo/artifacts/sanitycheck.json
     - cad/objects/jersey-of/artifacts/sanitycheck.json
-    - cad/objects/jewelry-wd/artifacts/sanitycheck.json
     - cad/objects/jewelry_cleaner-bh/artifacts/sanitycheck.json
     - cad/objects/jigger-kf/artifacts/sanitycheck.json
     - cad/objects/juicer-gs/artifacts/sanitycheck.json
@@ -12732,7 +12336,6 @@ stages:
     - cad/objects/legacy_armchair-qplklw/artifacts/sanitycheck.json
     - cad/objects/legacy_armchair-rabzuf/artifacts/sanitycheck.json
     - cad/objects/legacy_armchair-tcxiue/artifacts/sanitycheck.json
-    - cad/objects/legacy_armchair-tnryza/artifacts/sanitycheck.json
     - cad/objects/legacy_armchair-umbrpd/artifacts/sanitycheck.json
     - cad/objects/legacy_armchair-viphen/artifacts/sanitycheck.json
     - cad/objects/legacy_armchair-vtsoat/artifacts/sanitycheck.json
@@ -12758,9 +12361,6 @@ stages:
     - cad/objects/legacy_basket-wqxrbf/artifacts/sanitycheck.json
     - cad/objects/legacy_basket-xhdtjn/artifacts/sanitycheck.json
     - cad/objects/legacy_basket-xjftlf/artifacts/sanitycheck.json
-    - cad/objects/legacy_bath_towel-feojdm/artifacts/sanitycheck.json
-    - cad/objects/legacy_bath_towel-iviyls/artifacts/sanitycheck.json
-    - cad/objects/legacy_bath_towel-lyqgnf/artifacts/sanitycheck.json
     - cad/objects/legacy_bathtub-azdgtl/artifacts/sanitycheck.json
     - cad/objects/legacy_bathtub-enpxbn/artifacts/sanitycheck.json
     - cad/objects/legacy_bathtub-fdjykf/artifacts/sanitycheck.json
@@ -12768,7 +12368,6 @@ stages:
     - cad/objects/legacy_bathtub-jfhrwj/artifacts/sanitycheck.json
     - cad/objects/legacy_bathtub-oobbwn/artifacts/sanitycheck.json
     - cad/objects/legacy_bathtub-wxrafq/artifacts/sanitycheck.json
-    - cad/objects/legacy_bean-cdinsu/artifacts/sanitycheck.json
     - cad/objects/legacy_bean-dyjvwv/artifacts/sanitycheck.json
     - cad/objects/legacy_bean-lvbjws/artifacts/sanitycheck.json
     - cad/objects/legacy_bean-mfkwzi/artifacts/sanitycheck.json
@@ -13040,12 +12639,9 @@ stages:
     - cad/objects/legacy_console_table-fihyuz/artifacts/sanitycheck.json
     - cad/objects/legacy_console_table-tvhett/artifacts/sanitycheck.json
     - cad/objects/legacy_console_table-xqlxni/artifacts/sanitycheck.json
-    - cad/objects/legacy_container_cranberry-fbcpsl/artifacts/sanitycheck.json
     - cad/objects/legacy_container_date-qqddba/artifacts/sanitycheck.json
     - cad/objects/legacy_cookie-ggpang/artifacts/sanitycheck.json
-    - cad/objects/legacy_cord-aqikou/artifacts/sanitycheck.json
     - cad/objects/legacy_cord-tzurlz/artifacts/sanitycheck.json
-    - cad/objects/legacy_cord-ydrhwh/artifacts/sanitycheck.json
     - cad/objects/legacy_countertop-tpuwys/artifacts/sanitycheck.json
     - cad/objects/legacy_cpu_board-xlqvil/artifacts/sanitycheck.json
     - cad/objects/legacy_crab-tjkiva/artifacts/sanitycheck.json
@@ -13091,8 +12687,6 @@ stages:
     - cad/objects/legacy_dish_rack-kxuutl/artifacts/sanitycheck.json
     - cad/objects/legacy_dishtowel-dtfspn/artifacts/sanitycheck.json
     - cad/objects/legacy_dishtowel-ltydgg/artifacts/sanitycheck.json
-    - cad/objects/legacy_dishtowel-qvzbjx/artifacts/sanitycheck.json
-    - cad/objects/legacy_dishtowel-yobhae/artifacts/sanitycheck.json
     - cad/objects/legacy_dishwasher-cgugie/artifacts/sanitycheck.json
     - cad/objects/legacy_dishwasher-dngvvi/artifacts/sanitycheck.json
     - cad/objects/legacy_dishwasher-dugpby/artifacts/sanitycheck.json
@@ -13118,7 +12712,6 @@ stages:
     - cad/objects/legacy_drumstick-lkvzmj/artifacts/sanitycheck.json
     - cad/objects/legacy_dryer-fhtvuq/artifacts/sanitycheck.json
     - cad/objects/legacy_dryer-smcyys/artifacts/sanitycheck.json
-    - cad/objects/legacy_dryer-tpqzai/artifacts/sanitycheck.json
     - cad/objects/legacy_dryer-wivnic/artifacts/sanitycheck.json
     - cad/objects/legacy_dryer-xsuyua/artifacts/sanitycheck.json
     - cad/objects/legacy_dryer-zlmnfg/artifacts/sanitycheck.json
@@ -13177,7 +12770,6 @@ stages:
     - cad/objects/legacy_green_onion_chopped-akrkjr/artifacts/sanitycheck.json
     - cad/objects/legacy_griddle-ryvqep/artifacts/sanitycheck.json
     - cad/objects/legacy_grill-ddlqye/artifacts/sanitycheck.json
-    - cad/objects/legacy_guacamole-ajnjvv/artifacts/sanitycheck.json
     - cad/objects/legacy_guitar-cybisc/artifacts/sanitycheck.json
     - cad/objects/legacy_guitar-gysapt/artifacts/sanitycheck.json
     - cad/objects/legacy_guitar-hpqjrq/artifacts/sanitycheck.json
@@ -13195,7 +12787,6 @@ stages:
     - cad/objects/legacy_hairbrush-bdylnb/artifacts/sanitycheck.json
     - cad/objects/legacy_hamburger-fyswch/artifacts/sanitycheck.json
     - cad/objects/legacy_hammer-bbzlel/artifacts/sanitycheck.json
-    - cad/objects/legacy_hand_towel-jaubic/artifacts/sanitycheck.json
     - cad/objects/legacy_hanger-ffecvd/artifacts/sanitycheck.json
     - cad/objects/legacy_hard_drive-ijibkm/artifacts/sanitycheck.json
     - cad/objects/legacy_hard_drive-ubjbsm/artifacts/sanitycheck.json
@@ -13232,7 +12823,6 @@ stages:
     - cad/objects/legacy_jar-pluujx/artifacts/sanitycheck.json
     - cad/objects/legacy_jar-qzwijs/artifacts/sanitycheck.json
     - cad/objects/legacy_jar-rdngsc/artifacts/sanitycheck.json
-    - cad/objects/legacy_jar-sktwfj/artifacts/sanitycheck.json
     - cad/objects/legacy_jar-uydvnv/artifacts/sanitycheck.json
     - cad/objects/legacy_jar-vuolos/artifacts/sanitycheck.json
     - cad/objects/legacy_jar-vzwhbg/artifacts/sanitycheck.json
@@ -13360,11 +12950,9 @@ stages:
     - cad/objects/legacy_pajamas-rcgdde/artifacts/sanitycheck.json
     - cad/objects/legacy_paper_bag-bzsxgw/artifacts/sanitycheck.json
     - cad/objects/legacy_paper_clip-xjfirk/artifacts/sanitycheck.json
-    - cad/objects/legacy_paper_towel-aclaus/artifacts/sanitycheck.json
     - cad/objects/legacy_paper_towel_holder-rntefx/artifacts/sanitycheck.json
     - cad/objects/legacy_parsley-kkgkkd/artifacts/sanitycheck.json
     - cad/objects/legacy_pasta-gwqhko/artifacts/sanitycheck.json
-    - cad/objects/legacy_pea-iblyep/artifacts/sanitycheck.json
     - cad/objects/legacy_peach-orowgl/artifacts/sanitycheck.json
     - cad/objects/legacy_peach-wrutgk/artifacts/sanitycheck.json
     - cad/objects/legacy_pear-mqvgcg/artifacts/sanitycheck.json
@@ -13495,14 +13083,12 @@ stages:
     - cad/objects/legacy_pot_plant-kxmvco/artifacts/sanitycheck.json
     - cad/objects/legacy_pot_plant-nscddw/artifacts/sanitycheck.json
     - cad/objects/legacy_pot_plant-qbnaph/artifacts/sanitycheck.json
-    - cad/objects/legacy_pot_plant-qcpges/artifacts/sanitycheck.json
     - cad/objects/legacy_pot_plant-qenqqv/artifacts/sanitycheck.json
     - cad/objects/legacy_pot_plant-quaxmw/artifacts/sanitycheck.json
     - cad/objects/legacy_pot_plant-udqjui/artifacts/sanitycheck.json
     - cad/objects/legacy_pot_plant-uvbpsf/artifacts/sanitycheck.json
     - cad/objects/legacy_pot_plant-vcwwrd/artifacts/sanitycheck.json
     - cad/objects/legacy_pot_plant-vyswzs/artifacts/sanitycheck.json
-    - cad/objects/legacy_pot_plant-xlylfy/artifacts/sanitycheck.json
     - cad/objects/legacy_pot_plant-yvuagy/artifacts/sanitycheck.json
     - cad/objects/legacy_potato-bpwohr/artifacts/sanitycheck.json
     - cad/objects/legacy_potato-ljfitc/artifacts/sanitycheck.json
@@ -13521,7 +13107,6 @@ stages:
     - cad/objects/legacy_puree-raagvm/artifacts/sanitycheck.json
     - cad/objects/legacy_radish-bpmjki/artifacts/sanitycheck.json
     - cad/objects/legacy_radish-vztgpr/artifacts/sanitycheck.json
-    - cad/objects/legacy_rag-dgzewy/artifacts/sanitycheck.json
     - cad/objects/legacy_rag-zmmbpz/artifacts/sanitycheck.json
     - cad/objects/legacy_rail_fence-iduxiv/artifacts/sanitycheck.json
     - cad/objects/legacy_rail_fence-qmsnld/artifacts/sanitycheck.json
@@ -13569,7 +13154,6 @@ stages:
     - cad/objects/legacy_shampoo-kkbhzw/artifacts/sanitycheck.json
     - cad/objects/legacy_shampoo-nijidu/artifacts/sanitycheck.json
     - cad/objects/legacy_shampoo-tzghev/artifacts/sanitycheck.json
-    - cad/objects/legacy_sheet-czdhwu/artifacts/sanitycheck.json
     - cad/objects/legacy_shelf-cqcoox/artifacts/sanitycheck.json
     - cad/objects/legacy_shelf-eyidvz/artifacts/sanitycheck.json
     - cad/objects/legacy_shelf-lbbims/artifacts/sanitycheck.json
@@ -13955,7 +13539,6 @@ stages:
     - cad/objects/magnifying_glass-ra/artifacts/sanitycheck.json
     - cad/objects/mail-rt/artifacts/sanitycheck.json
     - cad/objects/mallet-i1/artifacts/sanitycheck.json
-    - cad/objects/manure-bf/artifacts/sanitycheck.json
     - cad/objects/maple_syrup-is/artifacts/sanitycheck.json
     - cad/objects/margarine-vs/artifacts/sanitycheck.json
     - cad/objects/marigold-i7/artifacts/sanitycheck.json
@@ -13969,14 +13552,12 @@ stages:
     - cad/objects/measuring_cup-7l/artifacts/sanitycheck.json
     - cad/objects/measuring_tape-4b/artifacts/sanitycheck.json
     - cad/objects/meat_thermometer-nt/artifacts/sanitycheck.json
-    - cad/objects/meatloaf-55/artifacts/sanitycheck.json
     - cad/objects/melon-5a/artifacts/sanitycheck.json
     - cad/objects/meringue-sm/artifacts/sanitycheck.json
     - cad/objects/mesh_bag-hz/artifacts/sanitycheck.json
     - cad/objects/microfiber_cloth-ji/artifacts/sanitycheck.json
     - cad/objects/microphone-st/artifacts/sanitycheck.json
     - cad/objects/milkshake-zb/artifacts/sanitycheck.json
-    - cad/objects/miso-un/artifacts/sanitycheck.json
     - cad/objects/mistletoe_holly-vr/artifacts/sanitycheck.json
     - cad/objects/mixing_bowl-fp/artifacts/sanitycheck.json
     - cad/objects/mojito-0l/artifacts/sanitycheck.json
@@ -13986,13 +13567,11 @@ stages:
     - cad/objects/mortar-v2/artifacts/sanitycheck.json
     - cad/objects/moth_ball-pg/artifacts/sanitycheck.json
     - cad/objects/mousepad-dz/artifacts/sanitycheck.json
-    - cad/objects/mulch-4v/artifacts/sanitycheck.json
     - cad/objects/mustard_greens-zy/artifacts/sanitycheck.json
     - cad/objects/nachos-pj/artifacts/sanitycheck.json
     - cad/objects/nails-vj/artifacts/sanitycheck.json
     - cad/objects/name_tag-so/artifacts/sanitycheck.json
     - cad/objects/nativity-tl/artifacts/sanitycheck.json
-    - cad/objects/necktie-is/artifacts/sanitycheck.json
     - cad/objects/nectarine-id/artifacts/sanitycheck.json
     - cad/objects/nickel-qu/artifacts/sanitycheck.json
     - cad/objects/noodle-21/artifacts/sanitycheck.json
@@ -14015,13 +13594,11 @@ stages:
     - cad/objects/paper-fp/artifacts/sanitycheck.json
     - cad/objects/paper_liners-mr/artifacts/sanitycheck.json
     - cad/objects/paraffin_wax-3l/artifacts/sanitycheck.json
-    - cad/objects/parchment_paper-ox/artifacts/sanitycheck.json
     - cad/objects/parmesan_cheese-iz/artifacts/sanitycheck.json
     - cad/objects/parsnip-7h/artifacts/sanitycheck.json
     - cad/objects/pastry-hz/artifacts/sanitycheck.json
     - cad/objects/pastry_brush-h1/artifacts/sanitycheck.json
     - cad/objects/pastry_cutter-bx/artifacts/sanitycheck.json
-    - cad/objects/patina-77/artifacts/sanitycheck.json
     - cad/objects/paver-bp/artifacts/sanitycheck.json
     - cad/objects/pea_pods-hg/artifacts/sanitycheck.json
     - cad/objects/peanut_butter-pa/artifacts/sanitycheck.json
@@ -14036,7 +13613,6 @@ stages:
     - cad/objects/pepperoni-ca/artifacts/sanitycheck.json
     - cad/objects/pesticide-ik/artifacts/sanitycheck.json
     - cad/objects/pet_bed-yw/artifacts/sanitycheck.json
-    - cad/objects/pet_food-nf/artifacts/sanitycheck.json
     - cad/objects/pet_poop-qg/artifacts/sanitycheck.json
     - cad/objects/pickle-kk/artifacts/sanitycheck.json
     - cad/objects/pickup_truck-c5/artifacts/sanitycheck.json
@@ -14048,12 +13624,10 @@ stages:
     - cad/objects/pipe_cleaner-ph/artifacts/sanitycheck.json
     - cad/objects/pitcher-xk/artifacts/sanitycheck.json
     - cad/objects/pizza_box-vm/artifacts/sanitycheck.json
-    - cad/objects/pizza_dough-ti/artifacts/sanitycheck.json
     - cad/objects/pizza_sauce-nq/artifacts/sanitycheck.json
     - cad/objects/plant_pot-7o/artifacts/sanitycheck.json
     - cad/objects/plastic_bag-3p/artifacts/sanitycheck.json
     - cad/objects/plastic_cup-dh/artifacts/sanitycheck.json
-    - cad/objects/plastic_wrap-de/artifacts/sanitycheck.json
     - cad/objects/plier-8w/artifacts/sanitycheck.json
     - cad/objects/plug-jv/artifacts/sanitycheck.json
     - cad/objects/plush_toy-de/artifacts/sanitycheck.json
@@ -14061,7 +13635,6 @@ stages:
     - cad/objects/poker-gh/artifacts/sanitycheck.json
     - cad/objects/pole-lx/artifacts/sanitycheck.json
     - cad/objects/polo_shirt-te/artifacts/sanitycheck.json
-    - cad/objects/popcorn-xz/artifacts/sanitycheck.json
     - cad/objects/pork_chop-re/artifacts/sanitycheck.json
     - cad/objects/pork_rib-l3/artifacts/sanitycheck.json
     - cad/objects/portobello-xw/artifacts/sanitycheck.json
@@ -14157,11 +13730,9 @@ stages:
     - cad/objects/smoothie-ee/artifacts/sanitycheck.json
     - cad/objects/sneakers-cr/artifacts/sanitycheck.json
     - cad/objects/snow_globe-aw/artifacts/sanitycheck.json
-    - cad/objects/snow_pants-ic/artifacts/sanitycheck.json
     - cad/objects/soccer_ball-uj/artifacts/sanitycheck.json
     - cad/objects/socks-bz/artifacts/sanitycheck.json
     - cad/objects/sod-cj/artifacts/sanitycheck.json
-    - cad/objects/soda-oe/artifacts/sanitycheck.json
     - cad/objects/softball-jr/artifacts/sanitycheck.json
     - cad/objects/sour_cream-kx/artifacts/sanitycheck.json
     - cad/objects/soy_sauce-jh/artifacts/sanitycheck.json
@@ -14230,22 +13801,18 @@ stages:
     - cad/objects/tissues-qu/artifacts/sanitycheck.json
     - cad/objects/toast-tt/artifacts/sanitycheck.json
     - cad/objects/toaster_oven-kf/artifacts/sanitycheck.json
-    - cad/objects/toolbox-ng/artifacts/sanitycheck.json
     - cad/objects/tortilla-bq/artifacts/sanitycheck.json
     - cad/objects/tortilla_chips-ub/artifacts/sanitycheck.json
     - cad/objects/tote-se/artifacts/sanitycheck.json
-    - cad/objects/towels-ib/artifacts/sanitycheck.json
     - cad/objects/toy_train-vj/artifacts/sanitycheck.json
     - cad/objects/trail_mix-hr/artifacts/sanitycheck.json
     - cad/objects/trailer-mc/artifacts/sanitycheck.json
-    - cad/objects/trash-ok/artifacts/sanitycheck.json
     - cad/objects/trees-hv/artifacts/sanitycheck.json
     - cad/objects/tripod-ti/artifacts/sanitycheck.json
     - cad/objects/trombone-sg/artifacts/sanitycheck.json
     - cad/objects/trophy-af/artifacts/sanitycheck.json
     - cad/objects/truck-sf/artifacts/sanitycheck.json
     - cad/objects/trumpet-gh/artifacts/sanitycheck.json
-    - cad/objects/tube-kg/artifacts/sanitycheck.json
     - cad/objects/tulip-ce/artifacts/sanitycheck.json
     - cad/objects/tuna-wh/artifacts/sanitycheck.json
     - cad/objects/tupperware-un/artifacts/sanitycheck.json
@@ -14265,7 +13832,6 @@ stages:
     - cad/objects/waffle-yd/artifacts/sanitycheck.json
     - cad/objects/waffle_maker-dr/artifacts/sanitycheck.json
     - cad/objects/wallet-ql/artifacts/sanitycheck.json
-    - cad/objects/wallpaper-ll/artifacts/sanitycheck.json
     - cad/objects/water_dispenser-ht/artifacts/sanitycheck.json
     - cad/objects/water_filter-kl/artifacts/sanitycheck.json
     - cad/objects/watering_can-ek/artifacts/sanitycheck.json

@@ -80877,3 +80877,26 @@ stages:
     - path: artifacts/pipeline/sanitycheck.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
+  export_meshes@objects/aluminium_foil-xr:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/aluminium_foil-xr/processed.max
+      b1k_pipeline/max/export_meshes.py
+    deps:
+    - path: artifacts/pipeline/sanitycheck.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: b1k_pipeline/max/export_meshes.py
+      md5: 725e8ef36a41319db3327173849e05ec
+      size: 22019
+    - path: cad/objects/aluminium_foil-xr/artifacts/object_list.json
+      md5: 76e6c7d97a379deddfeda6111e767935
+      size: 755
+    - path: cad/objects/aluminium_foil-xr/processed.max
+      md5: 1f09949223b8c69801b7463a794ea572
+      size: 3452928
+    outs:
+    - path: cad/objects/aluminium_foil-xr/artifacts/export_meshes.json
+      md5: e21b132535bb653df81bb2b41f112ca0
+      size: 250
+    - path: cad/objects/aluminium_foil-xr/artifacts/meshes.zip
+      md5: daaab75ca0cec8e39f7de82bb0a1964c
+      size: 3760911
