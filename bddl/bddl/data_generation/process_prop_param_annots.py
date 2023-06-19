@@ -33,6 +33,7 @@ def add_cookable_params(propagated_canonical, props_to_syns, synset_nonexistent,
             param_but_no_prop["cookable"].append(synset)
             continue
         propagated_canonical[synset]["cookable"]["cook_temperature"] = float(cook_temp)
+        propagated_canonical[synset]["cookable"]["burn_temperature"] = 200.
 
     for cookable_synset in props_to_syns["cookable"]:
         if synset not in leaf_synsets: continue
@@ -125,6 +126,21 @@ def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexisten
                         all(syn.name in propagated_canonical for syn in wn.synset(heatSource_synset).hyponyms()):        
             prop_but_no_param["heatSource"].append(heatSource_synset)
 
+
+def add_heatable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
+    # TODO will need to change when there are heating params
+    for heatable_syn in props_to_syns["heatable"]:
+        propagated_canonical[heatable_syn]["heatable"]["temperature"] = 40.
+
+
+def add_flammable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
+    for flammable_syn in props_to_syns["flammable"]:
+        propagated_canonical[flammable_syn]["flammable"]["ignition_temperature"] = 250.
+        propagated_canonical[flammable_syn]["flammable"]["fire_temperature"] = 1000.
+        propagated_canonical[flammable_syn]["flammable"]["heating_rate"] = 0.04
+        propagated_canonical[flammable_syn]["flammable"]["distance_threshold"] = 0.2
+
+
 # TODO check if that everything that SHOULD have a certain parameter annotation DOES have it 
 
 def create_get_save_propagated_annots_params(propagated_canonical, props_to_syns):
@@ -134,6 +150,8 @@ def create_get_save_propagated_annots_params(propagated_canonical, props_to_syns
     add_cookable_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
     add_coldsource_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
     add_heatsource_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
+    add_heatable_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
+    add_flammable_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
 
     with open(PARAMS_OUTFILE_FN, "w") as f:
         json.dump(propagated_params_canonical, f, indent=4)
