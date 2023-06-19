@@ -113,8 +113,11 @@ class ObjectExporter:
                 continue
             if black_list and any(re.fullmatch(p, obj.name) is not None for p in black_list):
                 continue
-            if b1k_pipeline.utils.parse_name(obj.name) is None:
+            parsed_name = b1k_pipeline.utils.parse_name(obj.name)
+            if parsed_name is None:
                 wrong_objs.append((obj.name, rt.ClassOf(obj)))
+                continue
+            if parsed_name.group("meta_type"):
                 continue
 
             obj_dir = os.path.join(self.obj_out_dir, obj.name)
@@ -313,15 +316,24 @@ class ObjectExporter:
                 }
 
         for child in obj.children:
+            child_name_result = b1k_pipeline.utils.parse_name(child.name)
+
             # Take care of exporting object parts.
             if rt.classOf(child) in (rt.Editable_Poly, rt.PolyMeshObject):
-                metadata["parts"].append(child.name)
+                if child_name_result.group("meta_type"):
+                    # Save collision mesh.
+                    assert child_name_result.group("meta_type") == "collision", f"Only Mcollision can be a mesh."
+                    rt.select(child)
+                    obj_path = os.path.join(obj_dir, child.name + ".obj")
+                    rt.exportFile(obj_path, rt.Name("noPrompt"), selectedOnly=True, using=rt.ObjExp)
+                else:
+                    # Save part metadata.
+                    metadata["parts"].append(child.name)
                 continue
 
             is_valid_meta = rt.classOf(child) in {rt.Point, rt.Box, rt.Cylinder, rt.Sphere, rt.Cone}
             assert is_valid_meta, f"Meta link {child.name} has unexpected type {rt.classOf(child)}"
 
-            child_name_result = b1k_pipeline.utils.parse_name(child.name)
             if not child_name_result.group("meta_type"):
                 continue
 
