@@ -324,8 +324,11 @@ class ObjectExporter:
                     # Save collision mesh.
                     assert child_name_result.group("meta_type") == "collision", f"Only Mcollision can be a mesh."
                     rt.select(child)
-                    obj_path = os.path.join(obj_dir, child.name + ".obj")
-                    rt.exportFile(obj_path, rt.Name("noPrompt"), selectedOnly=True, using=rt.ObjExp)
+                    col_path = os.path.join(obj_dir, child.name + ".obj")
+                    print("Saving collision mesh to ", col_path)
+                    rt.exportFile(col_path, rt.Name("noPrompt"), selectedOnly=True, using=rt.ObjExp)
+                    assert os.path.exists(col_path), f"Could not export collision object {child.name}"
+
                 else:
                     # Save part metadata.
                     metadata["parts"].append(child.name)
@@ -448,6 +451,8 @@ class ObjectExporter:
                 rt.polyop.setVertSelection(obj, rt.name('none'))
 
                 obj.isHidden = False
+                for child in obj.children:
+                    child.isHidden = False
                 self.uv_unwrapping(obj)
                 self.texture_baking(obj)
                 self.export_obj(obj)
@@ -478,18 +483,16 @@ def main():
     try:
         with TempFS(temp_dir=r"D:\tmp") as bakery_fs, \
              TempFS(temp_dir=r"D:\tmp") as obj_out_fs, \
-             ZipFS(os.path.join(out_dir, "meshes.zip"), write=True) as zip_fs:
+             ZipFS(os.path.join(out_dir, "meshes.zip"), write=True, temp_fs=obj_out_fs) as zip_fs:
             exp = ObjectExporter(bakery_fs.getsyspath("/"), obj_out_fs.getsyspath("/"), export_textures=export_textures)
             exp.run()
 
-            # Copy the temp_fs to the zip_fs
             print("Move files to archive.")
-            fs.copy.copy_fs(obj_out_fs, zip_fs)
-            print("Finished copying.")
 
-            unwrap_times = exp.unwrap_times
-            export_times = exp.export_times
-            baking_times = exp.baking_times
+        print("Finished copying.")
+        unwrap_times = exp.unwrap_times
+        export_times = exp.export_times
+        baking_times = exp.baking_times
     except:
         success = False
         error_msg = traceback.format_exc()
