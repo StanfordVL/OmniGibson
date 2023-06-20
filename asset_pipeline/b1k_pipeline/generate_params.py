@@ -83,7 +83,7 @@ REJECTED_OBJS = {
 }
 
 APPROVED_SCENES = {
-    ".*"
+    "None"
 }
 
 REJECTED_SCENES = {
