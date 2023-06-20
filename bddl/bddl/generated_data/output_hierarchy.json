@@ -176,11 +176,17 @@
                                     },
                                     {
                                       "name": "water_bottle.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "water_bottle"
+                                      ]
                                     },
                                     {
                                       "name": "wine_bottle.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "wine_bottle"
+                                      ]
                                     }
                                   ],
                                   "categories": [
@@ -732,6 +738,20 @@
                                 {
                                   "name": "yeast__jar.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "oil__bottle.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "oil_bottle"
+                                  ]
+                                },
+                                {
+                                  "name": "squeeze_bottle.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "squeeze_bottle"
+                                  ]
                                 }
                               ]
                             },
@@ -878,7 +898,10 @@
                                 },
                                 {
                                   "name": "recycling_bin.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "recycling_bin"
+                                  ]
                                 }
                               ]
                             },
@@ -1184,7 +1207,8 @@
                                   "name": "carton.n.02",
                                   "hasModel": true,
                                   "categories": [
-                                    "carton"
+                                    "carton",
+                                    "storage_box"
                                   ]
                                 },
                                 {
@@ -1321,8 +1345,7 @@
                                 }
                               ],
                               "categories": [
-                                "box",
-                                "storage_box"
+                                "box"
                               ]
                             },
                             {
@@ -1902,10 +1925,6 @@
                             },
                             {
                               "name": "chicken_soup__can.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "yogurt__cup.n.01",
                               "hasModel": true
                             },
                             {
@@ -6451,7 +6470,10 @@
                                         },
                                         {
                                           "name": "kid_glove.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "kid_glove"
+                                          ]
                                         },
                                         {
                                           "name": "rubber_glove.n.01",
@@ -9050,7 +9072,10 @@
                                     },
                                     {
                                       "name": "kid_glove.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "kid_glove"
+                                      ]
                                     },
                                     {
                                       "name": "rubber_glove.n.01",
@@ -10613,7 +10638,10 @@
                                   "children": [
                                     {
                                       "name": "portrait.n.02",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "portrait"
+                                      ]
                                     }
                                   ]
                                 }
@@ -11154,6 +11182,13 @@
                           "hasModel": true,
                           "categories": [
                             "wind_chime"
+                          ]
+                        },
+                        {
+                          "name": "hanging.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "hanging"
                           ]
                         }
                       ],
@@ -16247,6 +16282,13 @@
                                       "categories": [
                                         "hamburger_bun"
                                       ]
+                                    },
+                                    {
+                                      "name": "soft_roll.n.01",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "soft_roll"
+                                      ]
                                     }
                                   ],
                                   "categories": [
@@ -18176,6 +18218,13 @@
                                   "hasModel": true,
                                   "categories": [
                                     "hamburger_bun"
+                                  ]
+                                },
+                                {
+                                  "name": "soft_roll.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "soft_roll"
                                   ]
                                 }
                               ],
@@ -22595,6 +22644,28 @@
                                   ]
                                 }
                               ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "transferred_property.n.01",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "acquisition.n.02",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "gift.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "present.n.02",
+                              "hasModel": true
                             }
                           ]
                         }
