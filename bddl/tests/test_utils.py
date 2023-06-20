@@ -189,11 +189,15 @@ def check_clashing_transition_rules():
         for rule in submap: 
             input_objects = rule.get("input_objects", {})
             input_states = rule.get("input_states", {})
+            input_states = input_states if input_states is not None else {}
             # NOTE doing input_objects.keys, not input_objects.items, because simulator is not actually sensitive to amount. It only checks for category, 
             #   so different amounts but same categories still need to result in the same output.
             # Alphabetize everything.
             input_objects = sorted(input_objects.keys(), key=lambda x: x[0])
-            input_states_str = [syns + ";" + ";".join([f"{pred}:{val}" for pred, val in sorted(states, key=lambda x: x[0])]) for syns, states in sorted(input_states.items(), key=lambda x: x[0])]
+            if "bagel_dough.n.01" in input_objects:
+                print(input_objects)
+            input_states_str = [syns + "@" + ";".join([f"{pred}:{val}" for pred, val in sorted(states, key=lambda x: x[0])]) for syns, states in sorted(input_states.items(), key=lambda x: x[0])]
+            input_states_str = "-".join(input_states_str)
             if "bagel_dough.n.01" in input_objects:
                 print(input_states_str)
 
