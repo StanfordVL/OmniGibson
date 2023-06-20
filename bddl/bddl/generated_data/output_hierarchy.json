@@ -90,7 +90,10 @@
                                   "children": [
                                     {
                                       "name": "beer_bottle.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "beer_bottle"
+                                      ]
                                     },
                                     {
                                       "name": "flask.n.01",
@@ -447,7 +450,10 @@
                                 },
                                 {
                                   "name": "ink__bottle.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "ink_bottle"
+                                  ]
                                 },
                                 {
                                   "name": "instant_coffee__jar.n.01",
@@ -751,6 +757,13 @@
                                   "hasModel": true,
                                   "categories": [
                                     "squeeze_bottle"
+                                  ]
+                                },
+                                {
+                                  "name": "cleansing__bottle.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "cleansing_bottle"
                                   ]
                                 }
                               ]
