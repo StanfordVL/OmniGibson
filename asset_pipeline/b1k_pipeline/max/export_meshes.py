@@ -21,7 +21,7 @@ import fs.copy
 
 btt = rt.BakeToTexture
 
-USE_UNWRELLA = True
+USE_UNWRELLA = False
 IMG_SIZE = 1024
 HQ_IMG_SIZE = 4096
 HQ_IMG_CATEGORIES = {"floors"}
