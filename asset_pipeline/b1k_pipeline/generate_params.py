@@ -100,7 +100,7 @@ def main():
     salt, your_id, total_ids = sys.argv[1:]
     your_id = int(your_id)
     total_ids = int(total_ids)
-    assert 0 < your_id < total_ids, f"Invalid ID {your_id}"
+    assert 0 <= your_id < total_ids, f"Invalid ID {your_id}"
 
     root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ROOT_PATH))
 
