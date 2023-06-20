@@ -445,7 +445,8 @@ REJECTED_SCENES = {
     "house_double_floor_lower",
 }
 
-TOTAL_IDS = 4
+SALT = ""
+TOTAL_IDS = 3
 YOUR_ID = 0
 
 def main():
@@ -457,7 +458,7 @@ def main():
         if os.path.exists(os.path.join(objects_path, x, "processed.max"))
     ]
     approved_objects = sorted(x for x in all_object_list if any(re.fullmatch(exp, x) for exp in APPROVED_OBJS) and not any(re.fullmatch(exp, x) for exp in REJECTED_OBJS))
-    objects = sorted(["objects/" + x for x in approved_objects if int(hashlib.md5(x.encode()).hexdigest(), 16) % TOTAL_IDS != YOUR_ID])
+    objects = sorted(["objects/" + x for x in approved_objects if int(hashlib.md5((x + SALT).encode()).hexdigest(), 16) % TOTAL_IDS == YOUR_ID])
     objects_unfiltered = sorted(["objects/" + x for x in all_object_list])
 
     scenes_path = os.path.join(os.path.dirname(__file__), SCENES_DIR)
