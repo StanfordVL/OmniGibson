@@ -34,10 +34,6 @@
                                   "hasModel": true
                                 },
                                 {
-                                  "name": "ammonia_water__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "apple_juice__bottle.n.01",
                                   "hasModel": true
                                 },
@@ -1276,10 +1272,6 @@
                                   "categories": [
                                     "chest"
                                   ]
-                                },
-                                {
-                                  "name": "cereal_box.n.01",
-                                  "hasModel": true
                                 },
                                 {
                                   "name": "chicken_broth__carton.n.01",
@@ -7129,10 +7121,6 @@
                                   ]
                                 },
                                 {
-                                  "name": "bottle__of__analgesics.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "bottle__of__antihistamines.n.01",
                                   "hasModel": true,
                                   "categories": [
@@ -7204,13 +7192,6 @@
                                   "hasModel": true,
                                   "categories": [
                                     "bottle_of_bleach_agent"
-                                  ]
-                                },
-                                {
-                                  "name": "bottle__of__brandy.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "bottle_of_brandy"
                                   ]
                                 },
                                 {
@@ -8150,10 +8131,6 @@
                                   "categories": [
                                     "box_of_granola_bars"
                                   ]
-                                },
-                                {
-                                  "name": "box__of__gum.n.01",
-                                  "hasModel": true
                                 },
                                 {
                                   "name": "box__of__ice_cream.n.01",
@@ -10911,14 +10888,14 @@
                             },
                             {
                               "name": "liner.n.03",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "rag.n.01",
                               "hasModel": true,
                               "categories": [
                                 "microfiber_cloth"
                               ]
+                            },
+                            {
+                              "name": "rag.n.01",
+                              "hasModel": true
                             }
                           ]
                         },
@@ -13827,14 +13804,14 @@
                         },
                         {
                           "name": "liner.n.03",
-                          "hasModel": true
-                        },
-                        {
-                          "name": "rag.n.01",
                           "hasModel": true,
                           "categories": [
                             "microfiber_cloth"
                           ]
+                        },
+                        {
+                          "name": "rag.n.01",
+                          "hasModel": true
                         }
                       ]
                     }
@@ -14110,31 +14087,6 @@
                                           ]
                                         },
                                         {
-                                          "name": "wax.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "beeswax.n.01",
-                                              "hasModel": true
-                                            },
-                                            {
-                                              "name": "floor_wax.n.01",
-                                              "hasModel": true
-                                            },
-                                            {
-                                              "name": "paraffin.n.01",
-                                              "hasModel": true,
-                                              "categories": [
-                                                "paraffin_wax"
-                                              ]
-                                            },
-                                            {
-                                              "name": "wax_remnant.n.01",
-                                              "hasModel": true
-                                            }
-                                          ]
-                                        },
-                                        {
                                           "name": "fat.n.01",
                                           "hasModel": true,
                                           "children": [
@@ -14188,6 +14140,27 @@
                                                   ]
                                                 }
                                               ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "wax.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "floor_wax.n.01",
+                                              "hasModel": true
+                                            },
+                                            {
+                                              "name": "paraffin.n.01",
+                                              "hasModel": true,
+                                              "categories": [
+                                                "paraffin_wax"
+                                              ]
+                                            },
+                                            {
+                                              "name": "wax_remnant.n.01",
+                                              "hasModel": true
                                             }
                                           ]
                                         }
@@ -14670,33 +14643,6 @@
                       ]
                     },
                     {
-                      "name": "animal_material.n.01",
-                      "hasModel": true,
-                      "children": [
-                        {
-                          "name": "animal_product.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "beeswax.n.01",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
-                          "name": "feather.n.01",
-                          "hasModel": true,
-                          "categories": [
-                            "feather"
-                          ]
-                        },
-                        {
-                          "name": "shell.n.02",
-                          "hasModel": true
-                        }
-                      ]
-                    },
-                    {
                       "name": "mineral.n.01",
                       "hasModel": true,
                       "children": [
@@ -14950,6 +14896,23 @@
                           "categories": [
                             "steel_wool"
                           ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "animal_material.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "feather.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "feather"
+                          ]
+                        },
+                        {
+                          "name": "shell.n.02",
+                          "hasModel": true
                         }
                       ]
                     },
@@ -16396,19 +16359,11 @@
                                   ]
                                 },
                                 {
-                                  "name": "bap.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "bread_slice.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "bread_slice"
                                   ]
-                                },
-                                {
-                                  "name": "brown_bread.n.02",
-                                  "hasModel": true
                                 },
                                 {
                                   "name": "crouton.n.01",
@@ -18333,19 +18288,11 @@
                               ]
                             },
                             {
-                              "name": "bap.n.01",
-                              "hasModel": true
-                            },
-                            {
                               "name": "bread_slice.n.01",
                               "hasModel": true,
                               "categories": [
                                 "bread_slice"
                               ]
-                            },
-                            {
-                              "name": "brown_bread.n.02",
-                              "hasModel": true
                             },
                             {
                               "name": "crouton.n.01",
@@ -19679,27 +19626,6 @@
                               ]
                             },
                             {
-                              "name": "roast.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "beef_roast.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "diced__beef_roast.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "sliced__roast_beef.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "sliced_roast_beef"
-                                  ]
-                                }
-                              ]
-                            },
-                            {
                               "name": "brisket.n.01",
                               "hasModel": true,
                               "categories": [
@@ -19755,6 +19681,19 @@
                             {
                               "name": "sirloin.n.01",
                               "hasModel": true
+                            },
+                            {
+                              "name": "roast.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "sliced__roast_beef.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "sliced_roast_beef"
+                                  ]
+                                }
+                              ]
                             },
                             {
                               "name": "steak.n.01",
@@ -20800,31 +20739,6 @@
                               ]
                             },
                             {
-                              "name": "wax.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "beeswax.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "floor_wax.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "paraffin.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "paraffin_wax"
-                                  ]
-                                },
-                                {
-                                  "name": "wax_remnant.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
                               "name": "fat.n.01",
                               "hasModel": true,
                               "children": [
@@ -20878,6 +20792,27 @@
                                       ]
                                     }
                                   ]
+                                }
+                              ]
+                            },
+                            {
+                              "name": "wax.n.01",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "floor_wax.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "paraffin.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "paraffin_wax"
+                                  ]
+                                },
+                                {
+                                  "name": "wax_remnant.n.01",
+                                  "hasModel": true
                                 }
                               ]
                             }
@@ -21146,31 +21081,6 @@
                                               ]
                                             },
                                             {
-                                              "name": "wax.n.01",
-                                              "hasModel": true,
-                                              "children": [
-                                                {
-                                                  "name": "beeswax.n.01",
-                                                  "hasModel": true
-                                                },
-                                                {
-                                                  "name": "floor_wax.n.01",
-                                                  "hasModel": true
-                                                },
-                                                {
-                                                  "name": "paraffin.n.01",
-                                                  "hasModel": true,
-                                                  "categories": [
-                                                    "paraffin_wax"
-                                                  ]
-                                                },
-                                                {
-                                                  "name": "wax_remnant.n.01",
-                                                  "hasModel": true
-                                                }
-                                              ]
-                                            },
-                                            {
                                               "name": "fat.n.01",
                                               "hasModel": true,
                                               "children": [
@@ -21224,6 +21134,27 @@
                                                       ]
                                                     }
                                                   ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "name": "wax.n.01",
+                                              "hasModel": true,
+                                              "children": [
+                                                {
+                                                  "name": "floor_wax.n.01",
+                                                  "hasModel": true
+                                                },
+                                                {
+                                                  "name": "paraffin.n.01",
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "paraffin_wax"
+                                                  ]
+                                                },
+                                                {
+                                                  "name": "wax_remnant.n.01",
+                                                  "hasModel": true
                                                 }
                                               ]
                                             }
@@ -21706,33 +21637,6 @@
                           ]
                         },
                         {
-                          "name": "animal_material.n.01",
-                          "hasModel": true,
-                          "children": [
-                            {
-                              "name": "animal_product.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "beeswax.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "feather.n.01",
-                              "hasModel": true,
-                              "categories": [
-                                "feather"
-                              ]
-                            },
-                            {
-                              "name": "shell.n.02",
-                              "hasModel": true
-                            }
-                          ]
-                        },
-                        {
                           "name": "mineral.n.01",
                           "hasModel": true,
                           "children": [
@@ -21986,6 +21890,23 @@
                               "categories": [
                                 "steel_wool"
                               ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "animal_material.n.01",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "feather.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "feather"
+                              ]
+                            },
+                            {
+                              "name": "shell.n.02",
+                              "hasModel": true
                             }
                           ]
                         },

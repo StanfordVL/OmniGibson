@@ -23,7 +23,6 @@ almond.n.02,"drupe.n.01,edible_nut.n.01",0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 aluminum_foil.n.01,foil.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,cloth
 aluminum.n.01,metallic_element.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 ammonia_water__atomizer.n.01,dispenser.n.01,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,rigidBody
-ammonia_water__bottle.n.01,vessel.n.03,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 ammonia_water.n.01,liquid.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 analgesic.n.01,medicine.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 anchor.n.01,hook.n.04,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -99,7 +98,6 @@ banana.n.02,edible_fruit.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidB
 bandage.n.01,dressing.n.04,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 bandanna.n.01,handkerchief.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 banner.n.01,flag.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,cloth
-bap.n.01,bread.n.01,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,softBody
 bar_soap.n.01,soap.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
 bar.n.02,counter.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bar.n.13,support.n.10,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -129,7 +127,6 @@ beaten_egg.n.01,foodstuff.n.02,1,,0,,0,,1,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,liquid
 bed.n.01,bedroom_furniture.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 beef_broth__carton.n.01,box.n.01,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 beef_broth.n.01,broth.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
-beef_roast.n.01,roast.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 beef_stew.n.01,stew.n.02,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 beefsteak_tomato.n.01,tomato.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 beer_barrel.n.01,barrel.n.02,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -137,8 +134,7 @@ beer_bottle.n.01,bottle.n.01,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBo
 beer_glass.n.01,glass.n.02,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 beer_tap.n.01,faucet.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 beer.n.01,brew.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
-beeswax.n.01,"animal_product.n.01,wax.n.01",0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-beeswax_candle.n.01,candle.n.01,1,,0,,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,,0,0,rigidBody
+beeswax_candle.n.01,candle.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
 beet.n.02,root_vegetable.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bell_pepper.n.02,sweet_pepper.n.02,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bell.n.01,"acoustic_device.n.01,signaling_device.n.01",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -190,7 +186,6 @@ bottle__of__alfredo_sauce.n.01,grocery.n.02,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
 bottle__of__allspice.n.01,grocery.n.02,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__almond_oil.n.01,grocery.n.02,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__ammonia.n.01,grocery.n.02,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-bottle__of__analgesics.n.01,grocery.n.02,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,rigidBody
 bottle__of__antihistamines.n.01,grocery.n.02,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__apple_cider.n.01,grocery.n.02,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__apple_juice.n.01,grocery.n.02,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -202,7 +197,6 @@ bottle__of__barbecue_sauce.n.01,grocery.n.02,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 bottle__of__beer.n.01,grocery.n.02,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__black_pepper.n.01,grocery.n.02,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__bleach_agent.n.01,grocery.n.02,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-bottle__of__brandy.n.01,grocery.n.02,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__bug_repellent.n.01,grocery.n.02,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__buttermilk.n.01,grocery.n.02,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__carrot_juice.n.01,grocery.n.02,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -348,7 +342,6 @@ box__of__cream.n.01,grocery.n.02,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rig
 box__of__flour.n.01,grocery.n.02,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 box__of__fruit.n.01,grocery.n.02,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 box__of__granola_bars.n.01,grocery.n.02,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-box__of__gum.n.01,grocery.n.02,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 box__of__ice_cream.n.01,grocery.n.02,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 box__of__lasagna.n.01,grocery.n.02,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 box__of__lemons.n.01,grocery.n.02,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -396,7 +389,6 @@ broccolini.n.01,cruciferous_vegetable.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0
 broken__glass.n.01,container.n.01,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 broken__light_bulb.n.01,electric_lamp.n.01,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 broom.n.01,cleaning_implement.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-brown_bread.n.02,bread.n.01,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,softBody
 brown_rice__sack.n.01,bag.n.01,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 brown_rice.n.01,rice.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,microPhysicalSubstance
 brown_sugar__sack.n.01,bag.n.01,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -511,7 +503,6 @@ cellular_telephone.n.01,radiotelephone.n.02,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
 cellulose_tape.n.01,adhesive_tape.n.01,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 cement.n.01,concrete.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 centerpiece.n.02,decoration.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-cereal_box.n.01,box.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 chaff.n.01,plant_material.n.01,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,microPhysicalSubstance
 chain_saw.n.01,power_saw.n.01,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,rigidBody
 chain.n.05,restraint.n.06,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -799,7 +790,6 @@ diamond.n.01,jewel.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 diaper.n.01,garment.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 diced__apple.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__avocado.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-diced__beef_roast.n.01,roast.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__beefsteak_tomato.n.01,tomato.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__beet.n.01,root_vegetable.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__bell_pepper.n.01,sweet_pepper.n.02,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
@@ -881,7 +871,7 @@ dutch_oven.n.02,pot.n.01,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 dye.n.01,coloring_material.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 eames_chair.n.01,chair.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 easel.n.01,tripod.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-easter_egg.n.01,candy.n.01,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+easter_egg.n.01,candy.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 echeveria_elegans.n.01,succulent.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 edible_cookie_dough.n.01,dough.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,softBody
 egg_white.n.01,ingredient.n.03,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
@@ -1136,12 +1126,12 @@ hydrogen_peroxide__bottle.n.01,vessel.n.03,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 hydrogen_peroxide.n.01,oxidant.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 ice_cream__carton.n.01,box.n.01,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 ice_cream.n.01,frozen_dessert.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-ice_cube.n.01,cube.n.05,0,1,0,0,0,0,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,rigidBody
+ice_cube.n.01,cube.n.05,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,rigidBody
 ice_lolly.n.01,frozen_dessert.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-ice_maker.n.01,kitchen_appliance.n.01,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-ice_pack.n.01,bag.n.01,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+ice_maker.n.01,kitchen_appliance.n.01,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+ice_pack.n.01,bag.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 ice_skate.n.01,skate.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-ice.n.01,crystal.n.01,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+ice.n.01,crystal.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 iced_cappuccino.n.01,beverage.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 iced_chocolate.n.01,beverage.n.01,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 icepick.n.01,pick.n.06,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1219,7 +1209,7 @@ kiwi.n.03,edible_fruit.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBod
 knife_block.n.01,rack.n.05,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 knit.n.01,fabric.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 lab_exhaust_hood.n.01,hood.n.06,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-lace.n.01,cord.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,rope
+lace.n.01,cord.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,rigidBody
 lacquer.n.01,gum.n.03,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,visualSubstance
 ladder.n.01,stairs.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 lamb.n.05,meat.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1825,7 +1815,7 @@ sliced__tomato.n.01,tomato.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigi
 slicer.n.02,machine.n.01,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,rigidBody
 slide_fastener.n.01,fastener.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 slingback.n.01,shoe.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-smoothie.n.02,beverage.n.01,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
+smoothie.n.02,beverage.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 snack_rack.n.01,rack.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 snapper.n.02,saltwater_fish.n.01,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 snow_globe.n.01,plaything.n.01,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1887,7 +1877,7 @@ staple.n.05,paper_fastener.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigi
 stapler.n.01,machine.n.01,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,rigidBody
 statue.n.01,sculpture.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 steak.n.01,cut.n.06,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-steamer.n.02,cooking_utensil.n.01,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+steamer.n.02,cooking_utensil.n.01,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 steel_wool.n.01,abrasive.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,softBody
 steel.n.03,sharpener.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 steering_wheel.n.01,handwheel.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2112,7 +2102,7 @@ whipped_cream__can.n.01,dispenser.n.01,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0
 whipped_cream.n.01,topping.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 whisk.n.01,mixer.n.04,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,rigidBody
 whiskey__bottle.n.01,vessel.n.03,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-whiskey_stone.n.01,rock.n.01,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+whiskey_stone.n.01,rock.n.01,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 whistle.n.04,"acoustic_device.n.01,signaling_device.n.01",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 white_chocolate.n.01,chocolate.n.02,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 white_rice__sack.n.01,bag.n.01,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
