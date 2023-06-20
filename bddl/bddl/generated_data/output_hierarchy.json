@@ -613,7 +613,10 @@
                                 },
                                 {
                                   "name": "rum__bottle.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "rum_bottle"
+                                  ]
                                 },
                                 {
                                   "name": "saddle_soap__bottle.n.01",
@@ -8850,7 +8853,10 @@
                                             },
                                             {
                                               "name": "toaster_oven.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "toaster_oven"
+                                              ]
                                             },
                                             {
                                               "name": "toaster.n.02",
@@ -9994,7 +10000,10 @@
                           "children": [
                             {
                               "name": "mat.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "floor_mat"
+                              ]
                             },
                             {
                               "name": "rug.n.01",
