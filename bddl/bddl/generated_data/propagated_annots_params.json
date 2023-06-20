@@ -215,7 +215,9 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
@@ -27511,7 +27513,9 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
@@ -30202,7 +30206,9 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
@@ -33602,12 +33608,6 @@
     "kid_glove.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -33616,6 +33616,7 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
+        "particleRemover": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -38775,6 +38776,27 @@
         "physicalSubstance": {},
         "substance": {}
     },
+    "music_stool.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "musical_instrument.n.01": {
         "disinfectable": {},
         "dustyable": {},
@@ -39837,7 +39859,9 @@
         "fillable": {},
         "freezable": {},
         "grassyable": {},
-        "heatable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
@@ -45390,7 +45414,9 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
@@ -45913,6 +45939,26 @@
         "stickyable": {},
         "tarnishable": {},
         "toggleable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "pump.n.03": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -46806,6 +46852,26 @@
         "wrinkleable": {}
     },
     "receptacle.n.03": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "reception_desk.n.01": {
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -52298,10 +52364,17 @@
         "cookable": {},
         "disinfectable": {},
         "dustyable": {},
-        "flammable": {},
+        "flammable": {
+            "ignition_temperature": 250.0,
+            "fire_temperature": 1000.0,
+            "heating_rate": 0.04,
+            "distance_threshold": 0.2
+        },
         "freezable": {},
         "grassyable": {},
-        "heatable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
@@ -53451,7 +53524,9 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
@@ -57905,7 +57980,9 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
@@ -60288,7 +60365,6 @@
         "moldyable": {},
         "needsOrientation": {},
         "nonSubstance": {},
-        "particleApplier": {},
         "particleSource": {},
         "rigidBody": {},
         "rustable": {},
@@ -62125,27 +62201,6 @@
         "moldyable": {},
         "nonSubstance": {},
         "openable": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "yogurt__cup.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "fillable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
