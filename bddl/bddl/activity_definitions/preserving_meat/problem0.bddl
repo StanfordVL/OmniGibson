@@ -30,7 +30,9 @@
         (and 
             (contains ?mason_jar.n.01_1 ?diced__chicken.n.01_1) 
             (contains ?mason_jar.n.01_1 ?salt.n.02_1)
-            (closed ?mason_jar.n.01_1)
+            (not
+                (open ?mason_jar.n.01_1)
+            )
         )
     )
 )

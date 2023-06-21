@@ -18,8 +18,7 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (closed cash_register.n.01_1) 
+        (ontop cash_register.n.01_1 checkout.n.03_1)
         (ontop backpack.n.01_1 shelf.n.01_1) 
         (inside laptop.n.01_1 shelf.n.01_1) 
         (inside calculator.n.02_1 shelf.n.01_2) 

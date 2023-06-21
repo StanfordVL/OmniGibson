@@ -27,8 +27,10 @@
                 (?leftovers.n.01 - leftovers.n.01)
                 (inside ?leftovers.n.01 ?tupperware.n.01_1)
             )
-            (inside ?tupperware.n.01_1 ?electric_refrigerator.n.01_1) 
-            (closed ?electric_refrigerator.n.01_1)
+            (inside ?tupperware.n.01_1 ?electric_refrigerator.n.01_1)
+            (not
+                (open ?electric_refrigerator.n.01_1)
+            )
         )
     )
 )

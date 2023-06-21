@@ -32,7 +32,9 @@
                         (inside ?package.n.02 ?mailbox.n.01_1)
                         (nextto ?package.n.02 ?mailbox.n.01_1)
                     )
-                    (closed ?package.n.02)
+                    (not
+                        (open ?package.n.02)
+                    )
                 )
             ) 
         )
