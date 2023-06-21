@@ -4,7 +4,7 @@
     (:objects
         scrub_brush.n.01_1 - scrub_brush.n.01
         sink.n.01_1 - sink.n.01
-        dustcloth.n.01_1 - dustcloth.n.01
+        rag.n.01_1 - rag.n.01
         stain.n.01_1 - stain.n.01
         dust.n.01_1 - dust.n.01
         mold.n.05_1 - mold.n.05
@@ -20,8 +20,8 @@
     (:init 
         (covered scrub_brush.n.01_1 dust.n.01_1) 
         (covered scrub_brush.n.01_1 mold.n.05_1)
-        (covered dustcloth.n.01_1 stain.n.01_1) 
-        (ontop dustcloth.n.01_1 countertop.n.01_1)
+        (covered rag.n.01_1 stain.n.01_1) 
+        (ontop rag.n.01_1 countertop.n.01_1)
         (ontop scrub_brush.n.01_1 countertop.n.01_1)
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
@@ -42,7 +42,7 @@
                 (covered ?scrub_brush.n.01_1 ?mold.n.05_1)
             ) 
             (not 
-                (covered ?dustcloth.n.01_1 ?stain.n.01_1)
+                (covered ?rag.n.01_1 ?stain.n.01_1)
             )
         )
     )

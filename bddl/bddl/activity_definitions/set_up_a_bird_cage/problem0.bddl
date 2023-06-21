@@ -5,7 +5,7 @@
         birdcage.n.01_1 - birdcage.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
         bowl.n.01_1 bowl.n.01_2 - bowl.n.01
-        pinwheel.n.03_1 pinwheel.n.03_2 - pinwheel.n.03
+        toy_figure.n.01_1 toy_figure.n.01_2 - toy_figure.n.01
         water.n.06_1 - water.n.06
         sink.n.01_1 - sink.n.01
         apple.n.01_1 - apple.n.01
@@ -17,8 +17,8 @@
         (ontop birdcage.n.01_1 breakfast_table.n.01_1) 
         (ontop bowl.n.01_1 breakfast_table.n.01_1) 
         (ontop bowl.n.01_2 breakfast_table.n.01_1) 
-        (ontop pinwheel.n.03_1 breakfast_table.n.01_1)
-        (ontop pinwheel.n.03_2 breakfast_table.n.01_1)
+        (ontop toy_figure.n.01_1 breakfast_table.n.01_1)
+        (ontop toy_figure.n.01_2 breakfast_table.n.01_1)
         (ontop apple.n.01_1 breakfast_table.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
@@ -48,8 +48,8 @@
                 )
             )
             (forall 
-                (?pinwheel.n.03 - pinwheel.n.03)
-                (inside ?pinwheel.n.03 ?birdcage.n.01_1)
+                (?toy_figure.n.01 - toy_figure.n.01)
+                (inside ?toy_figure.n.01 ?birdcage.n.01_1)
             )
             (forall 
                 (?bowl.n.01 - bowl.n.01)

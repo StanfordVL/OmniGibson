@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        writing_paper.n.01_1 writing_paper.n.01_2 - writing_paper.n.01
+        sheet.n.02_1 sheet.n.02_2 - sheet.n.02
         carton.n.02_1 - carton.n.02
         bottle__of__glue.n.01_1 - bottle__of__glue.n.01
         paintbrush.n.01_1 paintbrush.n.01_2 - paintbrush.n.01
@@ -15,8 +15,8 @@
     )
     
     (:init 
-        (inside writing_paper.n.01_1 carton.n.02_1) 
-        (inside writing_paper.n.01_2 carton.n.02_1) 
+        (inside sheet.n.02_1 carton.n.02_1) 
+        (inside sheet.n.02_2 carton.n.02_1) 
         (inside bottle__of__glue.n.01_1 carton.n.02_1) 
         (inside paintbrush.n.01_1 carton.n.02_1) 
         (inside paintbrush.n.01_2 carton.n.02_1) 
@@ -34,8 +34,8 @@
     (:goal 
         (and 
             (forall 
-                (?writing_paper.n.01 - writing_paper.n.01)
-                (inside ?writing_paper.n.01 ?cabinet.n.01_1)
+                (?sheet.n.02 - sheet.n.02)
+                (inside ?sheet.n.02 ?cabinet.n.01_1)
             )
             (exists 
                 (?pencil_box.n.01 - pencil_box.n.01)

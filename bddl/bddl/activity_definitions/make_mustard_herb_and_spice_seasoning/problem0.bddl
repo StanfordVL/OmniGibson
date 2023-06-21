@@ -11,7 +11,7 @@
         mustard_seasoning.n.01_1 - mustard_seasoning.n.01
         blender.n.01_1 - blender.n.01
         bowl.n.01_1 - bowl.n.01
-        mustard_seed__bottle.n.01_1 - mustard_seed__bottle.n.01
+        mustard_seed__shaker.n.01_1 - mustard_seed__shaker.n.01
         sage__shaker.n.01_1 - sage__shaker.n.01
         cumin__shaker.n.01_1 - cumin__shaker.n.01
         rosemary__shaker.n.01_1 - rosemary__shaker.n.01
@@ -24,8 +24,8 @@
     )
     
     (:init 
-        (filled mustard_seed__bottle.n.01_1 mustard_seed.n.01_1) 
-        (inside mustard_seed__bottle.n.01_1 cabinet.n.01_1) 
+        (insource mustard_seed__shaker.n.01_1 mustard_seed.n.01_1) 
+        (inside mustard_seed__shaker.n.01_1 cabinet.n.01_1) 
         (insource sage__shaker.n.01_1 sage.n.02_1) 
         (inside sage__shaker.n.01_1 cabinet.n.01_1) 
         (insource cumin__shaker.n.01_1 cumin.n.02_1) 

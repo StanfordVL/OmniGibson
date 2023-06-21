@@ -11,7 +11,7 @@
         toasting_fork.n.01_1 - toasting_fork.n.01
         tongs.n.01_1 - tongs.n.01
         cigar_lighter.n.01_1 - cigar_lighter.n.01
-        bap.n.01_1 bap.n.01_2 bap.n.01_3 bap.n.01_4 - bap.n.01
+        hamburger_bun.n.01_1 hamburger_bun.n.01_2 hamburger_bun.n.01_3 hamburger_bun.n.01_4 - hamburger_bun.n.01
         driveway.n.01_1 - driveway.n.01
         lawn.n.01_1 - lawn.n.01
         floor.n.01_1 - floor.n.01
@@ -39,10 +39,10 @@
             (cooked patty.n.01_4)
         ) 
         (ontop sack.n.01_1 stool.n.01_1)
-        (inside bap.n.01_1 sack.n.01_1)
-        (inside bap.n.01_2 sack.n.01_1)
-        (inside bap.n.01_3 sack.n.01_1)
-        (inside bap.n.01_4 sack.n.01_1)
+        (inside hamburger_bun.n.01_1 sack.n.01_1)
+        (inside hamburger_bun.n.01_2 sack.n.01_1)
+        (inside hamburger_bun.n.01_3 sack.n.01_1)
+        (inside hamburger_bun.n.01_4 sack.n.01_1)
         (ontop spatula.n.01_1 stool.n.01_2) 
         (ontop toasting_fork.n.01_1 stool.n.01_2) 
         (ontop tongs.n.01_1 stool.n.01_2) 
@@ -62,8 +62,8 @@
             ) 
             (forpairs 
                 (?patty.n.01 - patty.n.01) 
-                (?bap.n.01 - bap.n.01) 
-                (ontop ?patty.n.01 ?bap.n.01)
+                (?hamburger_bun.n.01 - hamburger_bun.n.01) 
+                (ontop ?patty.n.01 ?hamburger_bun.n.01)
             ) 
         )
     )

@@ -10,7 +10,7 @@
         desk.n.01_1 - desk.n.01
         printer.n.03_1 - printer.n.03
         desktop_computer.n.01_1 - desktop_computer.n.01
-        writing_paper.n.01_1 - writing_paper.n.01
+        sheet.n.02_1 - sheet.n.02
         agent.n.01_1 - agent.n.01
     )
 
@@ -22,7 +22,7 @@
         (ontop plastic_bag.n.01_1 desk.n.01_1)
         (ontop printer.n.03_1 desk.n.01_1)
         (ontop desktop_computer.n.01_1 desk.n.01_1)
-        (ontop writing_paper.n.01_1 printer.n.03_1)
+        (ontop sheet.n.02_1 printer.n.03_1)
         (inroom floor.n.01_1 grocery_store)
         (inroom shelf.n.01_1 grocery_store)
         (inroom shelf.n.01_2 grocery_store)

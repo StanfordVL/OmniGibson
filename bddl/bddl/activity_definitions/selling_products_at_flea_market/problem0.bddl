@@ -4,7 +4,7 @@
     (:objects
         box__of__chocolates.n.01_1 box__of__chocolates.n.01_2 - box__of__chocolates.n.01
         carton.n.02_1 carton.n.02_2 - carton.n.02
-        pop_bottle.n.01_1 pop_bottle.n.01_2 - pop_bottle.n.01
+        bottle__of__soda.n.01_1 bottle__of__soda.n.01_2 - bottle__of__soda.n.01
         chocolate_chip_cookie.n.01_1 chocolate_chip_cookie.n.01_2 - chocolate_chip_cookie.n.01
         cash_register.n.01_1 - cash_register.n.01
         booth.n.01_1 - booth.n.01
@@ -17,8 +17,8 @@
     (:init 
         (inside box__of__chocolates.n.01_1 carton.n.02_1) 
         (inside box__of__chocolates.n.01_2 carton.n.02_1) 
-        (inside pop_bottle.n.01_1 carton.n.02_1) 
-        (inside pop_bottle.n.01_2 carton.n.02_1) 
+        (inside bottle__of__soda.n.01_1 carton.n.02_1) 
+        (inside bottle__of__soda.n.01_2 carton.n.02_1) 
         (inside chocolate_chip_cookie.n.01_1 carton.n.02_1) 
         (inside chocolate_chip_cookie.n.01_2 carton.n.02_1) 
         (inside box__of__candy.n.01_1 carton.n.02_1) 
@@ -53,16 +53,16 @@
                 )
             )
             (forall 
-                (?pop_bottle.n.01 - pop_bottle.n.01) 
-                (ontop ?pop_bottle.n.01 ?booth.n.01_1)
+                (?bottle__of__soda.n.01 - bottle__of__soda.n.01) 
+                (ontop ?bottle__of__soda.n.01 ?booth.n.01_1)
             ) 
-            (nextto ?pop_bottle.n.01_1 ?pop_bottle.n.01_2)
+            (nextto ?bottle__of__soda.n.01_1 ?bottle__of__soda.n.01_2)
             (exists 
                 (?price_tag.n.01 - price_tag.n.01)
                 (and
                     (exists
-                        (?pop_bottle.n.01 - pop_bottle.n.01)
-                        (touching ?price_tag.n.01 ?pop_bottle.n.01)
+                        (?bottle__of__soda.n.01 - bottle__of__soda.n.01)
+                        (touching ?price_tag.n.01 ?bottle__of__soda.n.01)
                     )
                 )
             )

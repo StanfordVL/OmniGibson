@@ -5,11 +5,11 @@
      	chip.n.04_1 chip.n.04_2 chip.n.04_3 - chip.n.04
     	bowl.n.01_1 - bowl.n.01
     	shelf.n.01_1 - shelf.n.01
-    	novel.n.02_1 novel.n.02_2 novel.n.02_3 - novel.n.02
+    	hardback.n.01_1 hardback.n.01_2 hardback.n.01_3 - hardback.n.01
     	table.n.02_1 - table.n.02
     	floor.n.01_1 - floor.n.01
         dust.n.01_1 - dust.n.01
-    	dustcloth.n.01_1 - dustcloth.n.01
+    	rag.n.01_1 - rag.n.01
     	teddy.n.01_1 - teddy.n.01
     	agent.n.01_1 - agent.n.01
     )
@@ -19,10 +19,10 @@
         (inside chip.n.04_2 bowl.n.01_1) 
         (inside chip.n.04_3 bowl.n.01_1) 
         (inside bowl.n.01_1 shelf.n.01_1) 
-        (ontop novel.n.02_1 table.n.02_1) 
-        (ontop novel.n.02_2 table.n.02_1) 
-        (ontop novel.n.02_3 floor.n.01_1) 
-        (inside dustcloth.n.01_1 shelf.n.01_1) 
+        (ontop hardback.n.01_1 table.n.02_1) 
+        (ontop hardback.n.01_2 table.n.02_1) 
+        (ontop hardback.n.01_3 floor.n.01_1) 
+        (inside rag.n.01_1 shelf.n.01_1) 
         (ontop teddy.n.01_1 floor.n.01_1) 
         (covered table.n.02_1 dust.n.01_1) 
         (inroom floor.n.01_1 living_room) 
@@ -39,11 +39,11 @@
             ) 
             (ontop ?bowl.n.01_1 ?table.n.02_1) 
             (forall 
-                (?novel.n.02 - novel.n.02) 
-                (inside ?novel.n.02 ?shelf.n.01_1)
+                (?hardback.n.01 - hardback.n.01) 
+                (inside ?hardback.n.01 ?shelf.n.01_1)
             ) 
-            (inside ?dustcloth.n.01_1 ?shelf.n.01_1) 
-            (folded ?dustcloth.n.01_1)
+            (inside ?rag.n.01_1 ?shelf.n.01_1) 
+            (folded ?rag.n.01_1)
             (inside ?teddy.n.01_1 ?shelf.n.01_1) 
             (not 
                 (covered ?table.n.02_1 ?dust.n.01_1)

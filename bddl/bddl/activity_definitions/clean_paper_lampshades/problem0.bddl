@@ -3,7 +3,7 @@
 
     (:objects
         rag.n.01_1 - rag.n.01
-        dustcloth.n.01_1 - dustcloth.n.01
+        rag.n.01_1 - rag.n.01
         lampshade.n.01_1 lampshade.n.01_2 - lampshade.n.01
         coffee_table.n.01_1 - coffee_table.n.01
         dust.n.01_1 - dust.n.01
@@ -13,7 +13,7 @@
     
     (:init 
         (ontop rag.n.01_1 coffee_table.n.01_1) 
-        (ontop dustcloth.n.01_1 coffee_table.n.01_1) 
+        (ontop rag.n.01_1 coffee_table.n.01_1) 
         (ontop lampshade.n.01_1 coffee_table.n.01_1) 
         (ontop lampshade.n.01_2 coffee_table.n.01_1) 
         (covered lampshade.n.01_1 dust.n.01_1)

@@ -5,7 +5,7 @@
      	chicken_soup.n.01_1 - chicken_soup.n.01
         cooked__chicken_soup.n.01_1 - cooked__chicken_soup.n.01
         bowl.n.01_1 - bowl.n.01
-    	chicken_soup__can.n.01_1 - chicken_soup__can.n.01
+    	chicken_soup__carton.n.01_1 - chicken_soup__carton.n.01
     	microwave.n.02_1 - microwave.n.02
     	countertop.n.01_1 - countertop.n.01
     	floor.n.01_1 - floor.n.01
@@ -13,8 +13,8 @@
     )
     
     (:init 
-        (filled chicken_soup__can.n.01_1 chicken_soup.n.01_1) 
-        (ontop chicken_soup__can.n.01_1 countertop.n.01_1)
+        (filled chicken_soup__carton.n.01_1 chicken_soup.n.01_1) 
+        (ontop chicken_soup__carton.n.01_1 countertop.n.01_1)
         (not
             (toggled_on microwave.n.02_1) 
         )

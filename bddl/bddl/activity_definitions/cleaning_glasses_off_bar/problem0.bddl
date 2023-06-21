@@ -3,7 +3,7 @@
 
     (:objects
         stain.n.01_1 - stain.n.01
-        chalice.n.01_1 chalice.n.01_2 chalice.n.01_3 - chalice.n.01
+        wineglass.n.01_1 wineglass.n.01_2 wineglass.n.01_3 - wineglass.n.01
         gin.n.01_1 - gin.n.01
         orange_juice.n.01_1 - orange_juice.n.01
         wineglass.n.01_1 wineglass.n.01_2 - wineglass.n.01
@@ -17,15 +17,15 @@
     )
     
     (:init
-        (covered chalice.n.01_1 stain.n.01_1) 
-        (covered chalice.n.01_1 gin.n.01_1)
-        (covered chalice.n.01_1 orange_juice.n.01_1)
-        (covered chalice.n.01_2 stain.n.01_1) 
-        (covered chalice.n.01_2 gin.n.01_1)
-        (covered chalice.n.01_2 orange_juice.n.01_1)
-        (covered chalice.n.01_3 stain.n.01_1) 
-        (covered chalice.n.01_3 gin.n.01_1)
-        (covered chalice.n.01_3 orange_juice.n.01_1)
+        (covered wineglass.n.01_1 stain.n.01_1) 
+        (covered wineglass.n.01_1 gin.n.01_1)
+        (covered wineglass.n.01_1 orange_juice.n.01_1)
+        (covered wineglass.n.01_2 stain.n.01_1) 
+        (covered wineglass.n.01_2 gin.n.01_1)
+        (covered wineglass.n.01_2 orange_juice.n.01_1)
+        (covered wineglass.n.01_3 stain.n.01_1) 
+        (covered wineglass.n.01_3 gin.n.01_1)
+        (covered wineglass.n.01_3 orange_juice.n.01_1)
         (covered wineglass.n.01_1 stain.n.01_1) 
         (covered wineglass.n.01_2 stain.n.01_1) 
         (covered wineglass.n.01_1 red_wine.n.01_1)
@@ -34,9 +34,9 @@
         (covered beer_glass.n.01_2 stain.n.01_1)
         (covered beer_glass.n.01_1 beer.n.01_1)
         (covered beer_glass.n.01_2 beer.n.01_1)
-        (ontop chalice.n.01_1 bar.n.02_1)
-        (ontop chalice.n.01_2 bar.n.02_1) 
-        (ontop chalice.n.01_3 bar.n.02_1) 
+        (ontop wineglass.n.01_1 bar.n.02_1)
+        (ontop wineglass.n.01_2 bar.n.02_1) 
+        (ontop wineglass.n.01_3 bar.n.02_1) 
         (ontop wineglass.n.01_1 bar.n.02_1) 
         (ontop wineglass.n.01_2 bar.n.02_1) 
         (ontop beer_glass.n.01_1 bar.n.02_1)
@@ -51,10 +51,10 @@
     (:goal 
         (and 
             (forall 
-                (?chalice.n.01 - chalice.n.01) 
+                (?wineglass.n.01 - wineglass.n.01) 
                 (or
-                    (inside ?chalice.n.01 ?sink.n.01_1)
-                    (nextto ?chalice.n.01 ?sink.n.01_1)
+                    (inside ?wineglass.n.01 ?sink.n.01_1)
+                    (nextto ?wineglass.n.01 ?sink.n.01_1)
                 )
             )
             (forall 
