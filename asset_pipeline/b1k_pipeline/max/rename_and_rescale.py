@@ -2,6 +2,7 @@ from collections import defaultdict
 import csv
 import json
 import sys
+import tqdm
 
 import numpy as np
 
@@ -58,7 +59,7 @@ def processFile(pipeline_fs, target, renames, deletions, avg_dims):
     assert rt.units.systemType == rt.Name("millimeters"), "System scale not set to 1mm."
 
     # Take care of resizing.
-    if "objects/legacy_" in target:
+    if False: # "objects/legacy_" in target:
         # First, group things by object ID
         objs_by_model = defaultdict(list)
         for obj in rt.objects:
@@ -157,19 +158,22 @@ def rename_and_rescale_all_files():
     # Find the targets that contain these objects
     selected_targets = []
     print("Preprocessing targets...")
-    for target in targets:
+    for target in tqdm.tqdm(targets):
         # See if the target was already processed
-        if pipeline_fs.target_output(target).exists(RECORD_RELPATH):
-            continue
+        # if pipeline_fs.target_output(target).exists(RECORD_RELPATH):
+        #     continue
 
         # Open the target's object list
-        with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
-            object_list = set(json.load(f)["needed_objects"])
+        # with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
+        #     object_list = set(json.load(f)["needed_objects"])
+        mesh_list = rt.getMAXFileObjectNames(pipeline_fs.target(target).getsyspath("processed.max"), quiet=True)
+        match_list = [b1k_pipeline.utils.parse_name(mesh) for mesh in mesh_list]
+        object_list = {match.group("category") + "-" + match.group("model_id") for match in match_list if match}
 
         # See if the target needs any of the operations
         has_rename = object_list & set(renames.keys())
         has_deletion = {x.split("-")[1] for x in object_list} & deletions
-        has_scale = "objects/legacy_" in target
+        has_scale = False # "objects/legacy_" in target
         if has_rename or has_deletion or has_scale:
             selected_targets.append(target)
 
