@@ -11115,7 +11115,10 @@
                           "children": [
                             {
                               "name": "board.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "board"
+                              ]
                             },
                             {
                               "name": "strip.n.05",
@@ -22800,7 +22803,10 @@
                       "children": [
                         {
                           "name": "legal_document.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "legal_document"
+                          ]
                         },
                         {
                           "name": "commercial_document.n.01",
