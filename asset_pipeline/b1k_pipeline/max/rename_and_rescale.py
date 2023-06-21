@@ -70,29 +70,25 @@ def processFile(pipeline_fs, target, renames, deletions, avg_dims):
             instance_id = match.group("instance_id")
             objs_by_model[(cat, model_id, instance_id)].append(obj)
 
-        # Now for each group, apply the appropriate scaling
-        # For now - this is untested!
-        for (cat, model_id, instance_id), objs in objs_by_model.items():
-            if cat not in avg_dims:
-                raise ValueError(f"Unknown category: {cat}")
-            avg_cat_dims = avg_dims[cat]
-            bb_ext = compute_bounding_box(objs)
+        # Identify the base object.
+        # This is the object that has the same ID as the file name.
+        base_key = next(k for k in objs_by_model.keys() if k[1] == target.split("-")[-1])
+        base_objs = objs_by_model[base_key]
+        bb_ext = np.sort(compute_bounding_box(base_objs))
+        avg_cat_dims = np.sort(avg_dims[base_key[0]])
+        scale_factors = avg_cat_dims / bb_ext
 
-            # The object might not be aligned properly in its axes!
-            # So we try to reorder the axes. This might be quite buggy.
-            avg_cat_dims = np.sort(avg_cat_dims)
-            bb_ext = np.sort(bb_ext)
+        # Make sure that the max scale is not more than x times the min scale
+        if scale_factors.max() / scale_factors.min() > 10:
+            raise ValueError(f"Object {base_key} has scales that vary by too much: {scale_factors}")
+        scale_factor = float(scale_factors.min())
 
-            scale_factors = avg_cat_dims / bb_ext
-            # Make sure that the max scale is not more than x times the min scale
-            if scale_factors.max() / scale_factors.min() > 10:
-                raise ValueError(f"Object {cat}-{model_id}-{instance_id} has scales that vary by too much: {scale_factors}")
-            scale_factor = float(scale_factors.min())
-            for obj in objs:
-                # Multiply everything
-                obj.position *= scale_factor
-                obj.objectoffsetpos *= scale_factor
-                obj.objectoffsetscale *= scale_factor
+        # Apply the scale
+        for obj in rt.objects:
+            # Multiply everything
+            obj.position *= scale_factor
+            obj.objectoffsetpos *= scale_factor
+            obj.objectoffsetscale *= scale_factor
 
     # Now take care of renames and deletions
     objects = list(rt.objects)
@@ -178,7 +174,6 @@ def rename_and_rescale_all_files():
             selected_targets.append(target)
 
     print("Remaining files:", len(selected_targets))
-    return
 
     # Before processing, check if any of the remaining targets are symlinks, and unprotect them
     paths = [pathlib.Path(pipeline_fs.target(target).getsyspath("processed.max")) for target in selected_targets]
