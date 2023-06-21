@@ -21,8 +21,10 @@
     
     (:goal 
         (and 
-            (inside ?water_glass.n.02_1 ?recycling_bin.n.01_1) 
-            (closed ?recycling_bin.n.01_1)
+            (inside ?water_glass.n.02_1 ?recycling_bin.n.01_1)
+            (not
+                (open ?recycling_bin.n.01_1)
+            )
         )
     )
 )

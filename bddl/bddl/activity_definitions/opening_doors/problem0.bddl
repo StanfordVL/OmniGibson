@@ -7,8 +7,13 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init 
-        (closed door.n.01_1)
+    (:init
+        (not
+            (open door.n.01_1)
+        )
+        (not
+            (open door.n.01_2)
+        )
         (inroom door.n.01_1 bathroom) 
         (inroom door.n.01_2 living_room)
         (inroom floor.n.01_1 bathroom) 

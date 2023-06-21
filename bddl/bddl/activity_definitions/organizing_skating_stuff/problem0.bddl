@@ -39,7 +39,9 @@
             )
             (inside ?helmet.n.01_1 ?duffel_bag.n.01_1)
             (inside ?puck.n.02_1 ?duffel_bag.n.01_1)
-            (closed ?duffel_bag.n.01_1)
+            (not
+                (open ?duffel_bag.n.01_1)
+            )
             (nextto ?hockey_stick.n.01_1 ?duffel_bag.n.01_1)
         )
     )

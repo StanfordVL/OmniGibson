@@ -18,8 +18,7 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (closed cash_register.n.01_1) 
+        (ontop cash_register.n.01_1 checkout.n.03_1)
         (ontop bottle__of__liquid_soap.n.01_1 shelf.n.01_1) 
         (inside vacuum.n.04_1 floor.n.01_1) 
         (inside dustcloth.n.01_1 shelf.n.01_2) 
