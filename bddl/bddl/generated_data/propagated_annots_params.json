@@ -30798,10 +30798,12 @@
         "wrinkleable": {}
     },
     "hot_pepper.n.02": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
-        }
+        },
+        "sliceable": {}
     },
     "hot_sauce.n.01": {
         "boilable": {},
@@ -41629,10 +41631,12 @@
         "substance": {}
     },
     "pepper.n.04": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
-        }
+        },
+        "sliceable": {}
     },
     "pepper__shaker.n.01": {
         "breakable": {},
@@ -44502,47 +44506,7 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "pottable__beefsteak_tomato.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "pottable__cactus.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "pottable__chili.n.01": {
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -51716,10 +51680,12 @@
         "wrinkleable": {}
     },
     "solanaceous_vegetable.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
-        }
+        },
+        "sliceable": {}
     },
     "solid.n.01": {
         "freezable": {},
@@ -56584,10 +56550,12 @@
         "wrinkleable": {}
     },
     "tomato.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
-        }
+        },
+        "sliceable": {}
     },
     "tomato_juice.n.01": {
         "boilable": {},
@@ -58273,6 +58241,7 @@
         "wrinkleable": {}
     },
     "vegetable.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
