@@ -4,7 +4,6 @@
     (:objects
         oven.n.01_1 - oven.n.01
         chicken.n.01_1 - chicken.n.01
-        casserole.n.02_1 - casserole.n.02
         gravy.n.01_1 - gravy.n.01
         soy_sauce.n.01_1 - soy_sauce.n.01
         rosemary.n.02_1 - rosemary.n.02
@@ -16,13 +15,12 @@
     )
     
     (:init 
-        (inside chicken.n.01_1 casserole.n.02_1) 
         (covered chicken.n.01_1 gravy.n.01_1) 
         (covered chicken.n.01_1 soy_sauce.n.01_1) 
         (covered chicken.n.01_1 rosemary.n.02_1) 
         (covered chicken.n.01_1 salt.n.02_1) 
         (covered chicken.n.01_1 olive_oil.n.01_1) 
-        (ontop casserole.n.02_1 countertop.n.01_1) 
+        (ontop chicken.n.01_1 countertop.n.01_1) 
         (inroom oven.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -31,8 +29,7 @@
     
     (:goal 
         (and 
-            (inside ?chicken.n.01_1 ?casserole.n.02_1)
-            (inside ?casserole.n.02_1 ?oven.n.01_1)
+            (inside ?chicken.n.01_1 ?oven.n.01_1)
             (toggled_on ?oven.n.01_1)
             (covered ?chicken.n.01_1 ?gravy.n.01_1) 
             (covered ?chicken.n.01_1 ?soy_sauce.n.01_1) 
