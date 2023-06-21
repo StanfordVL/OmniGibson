@@ -8,7 +8,7 @@
         stain.n.01_1 - stain.n.01
         sodium_carbonate.n.01_1 - sodium_carbonate.n.01
         rubbing_alcohol.n.01_1 - rubbing_alcohol.n.01
-        rubbing_alcohol__bottle.n.01_1 - rubbing_alcohol__bottle.n.01
+        rubbing_alcohol__atomizer.n.01_1 - rubbing_alcohol__atomizer.n.01
         sink.n.01_1 - sink.n.01
         pipe_cleaner.n.01_1 - pipe_cleaner.n.01
         rag.n.01_1 - rag.n.01
@@ -22,8 +22,8 @@
         (covered pipe.n.01_1 adhesive_material.n.01_1)
         (covered pipe.n.01_1 stain.n.01_1)
         (covered pipe.n.01_1 sodium_carbonate.n.01_1)
-        (filled rubbing_alcohol__bottle.n.01_1 rubbing_alcohol.n.01_1) 
-        (ontop rubbing_alcohol__bottle.n.01_1 floor.n.01_1)
+        (insource rubbing_alcohol__atomizer.n.01_1 rubbing_alcohol.n.01_1) 
+        (ontop rubbing_alcohol__atomizer.n.01_1 floor.n.01_1)
         (ontop sack.n.01_1 floor.n.01_1) 
         (inside pipe_cleaner.n.01_1 sack.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 

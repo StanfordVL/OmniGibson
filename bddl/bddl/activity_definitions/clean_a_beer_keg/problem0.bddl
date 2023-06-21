@@ -5,7 +5,7 @@
         hand_towel.n.01_1 - hand_towel.n.01
         sink.n.01_1 - sink.n.01
         disinfectant__bottle.n.01_1 - disinfectant__bottle.n.01
-        keg.n.02_1 - keg.n.02
+        beer_barrel.n.01_1 - beer_barrel.n.01
         floor.n.01_1 - floor.n.01
         beer.n.01_1 - beer.n.01
         disinfectant.n.01_1 - disinfectant.n.01
@@ -17,10 +17,10 @@
     (:init 
         (ontop hand_towel.n.01_1 countertop.n.01_1) 
         (ontop disinfectant__bottle.n.01_1 countertop.n.01_1) 
-        (ontop keg.n.02_1 floor.n.01_1) 
-        (covered keg.n.02_1 beer.n.01_1) 
+        (ontop beer_barrel.n.01_1 floor.n.01_1) 
+        (covered beer_barrel.n.01_1 beer.n.01_1) 
         (not 
-            (covered keg.n.02_1 disinfectant.n.01_1)
+            (covered beer_barrel.n.01_1 disinfectant.n.01_1)
         ) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
@@ -33,9 +33,9 @@
     
     (:goal 
         (and 
-            (covered ?keg.n.02_1 ?disinfectant.n.01_1)
+            (covered ?beer_barrel.n.01_1 ?disinfectant.n.01_1)
             (not 
-                (covered ?keg.n.02_1 ?beer.n.01_1)
+                (covered ?beer_barrel.n.01_1 ?beer.n.01_1)
             )
         )
     )

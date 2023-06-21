@@ -3,8 +3,8 @@
 
     (:objects
      	rubbing_alcohol.n.01_1 - rubbing_alcohol.n.01
-        rubbing_alcohol__bottle.n.01_1 - rubbing_alcohol__bottle.n.01
-    	cotton.n.02_1 - cotton.n.02
+        rubbing_alcohol__atomizer.n.01_1 - rubbing_alcohol__atomizer.n.01
+    	sponge.n.01_1 - sponge.n.01
     	rag.n.01_1 - rag.n.01
     	sink.n.01_1 - sink.n.01
     	doll.n.01_1 - doll.n.01
@@ -19,9 +19,9 @@
     
     (:init 
         (ontop stool.n.01_1 floor.n.01_1)
-        (filled rubbing_alcohol__bottle.n.01_1 rubbing_alcohol.n.01_1)
-        (ontop rubbing_alcohol__bottle.n.01_1 stool.n.01_1)
-        (ontop cotton.n.02_1 stool.n.01_1) 
+        (insource rubbing_alcohol__atomizer.n.01_1 rubbing_alcohol.n.01_1)
+        (ontop rubbing_alcohol__atomizer.n.01_1 stool.n.01_1)
+        (ontop sponge.n.01_1 stool.n.01_1) 
         (ontop rag.n.01_1 sink.n.01_1) 
         (ontop doll.n.01_1 stool.n.01_1) 
         (filled acetone__bottle.n.01_1 acetone.n.01_1)

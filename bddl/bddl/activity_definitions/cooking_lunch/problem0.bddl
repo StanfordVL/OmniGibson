@@ -4,7 +4,7 @@
     (:objects
         bread_slice.n.01_1 bread_slice.n.01_2 - bread_slice.n.01
         parmesan.n.01_1 - parmesan.n.01
-        parmesan__bottle.n.01_1 - parmesan__bottle.n.01
+        parmesan__shaker.n.01_1 - parmesan__shaker.n.01
         beefsteak_tomato.n.01_1 - beefsteak_tomato.n.01
         diced__beefsteak_tomato.n.01_1 - diced__beefsteak_tomato.n.01
         mustard.n.02_1 - mustard.n.02
@@ -26,8 +26,8 @@
         (ontop carving_knife.n.01_1 countertop.n.01_1) 
         (ontop plate.n.04_1 countertop.n.01_1) 
         (ontop plate.n.04_2 plate.n.04_1) 
-        (filled parmesan__bottle.n.01_1 parmesan.n.01_1)
-        (inside parmesan__bottle.n.01_1 electric_refrigerator.n.01_1)
+        (insource parmesan__shaker.n.01_1 parmesan.n.01_1)
+        (inside parmesan__shaker.n.01_1 electric_refrigerator.n.01_1)
         (filled mustard__bottle.n.01_1 mustard.n.02_1)
         (inside mustard__bottle.n.01_1 electric_refrigerator.n.01_1)
         (inside steak.n.01_1 electric_refrigerator.n.01_1)
