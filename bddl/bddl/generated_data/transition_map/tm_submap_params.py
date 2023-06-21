@@ -1,5 +1,9 @@
 TM_SUBMAPS_TO_PARAMS = {
     "electric_mixer": {
+        "rule_name": {
+            "required": False,
+            "type": "string"
+        },
         "input_objects": {
             "required": True,
             "type": "synset"
@@ -18,6 +22,10 @@ TM_SUBMAPS_TO_PARAMS = {
         }
     },
     "heat_cook": {
+        "rule_name": {
+            "required": False,
+            "type": "string"
+        },
         "input_objects": {
             "required": True,
             "type": "synset"
@@ -54,6 +62,10 @@ TM_SUBMAPS_TO_PARAMS = {
         }
     },
     "mixing_stick": {
+        "rule_name": {
+            "required": False,
+            "type": "string"
+        },
         "input_objects": {
             "required": True,
             "type": "synset"
@@ -73,6 +85,10 @@ TM_SUBMAPS_TO_PARAMS = {
         }
     },
     "single_toggleable_machine": {
+        "rule_name": {
+            "required": False,
+            "type": "string"
+        },
         "input_objects": {
             "required": True,
             "type": "synset"

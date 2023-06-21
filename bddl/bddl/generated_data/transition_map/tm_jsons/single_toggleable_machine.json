@@ -1,5 +1,6 @@
 [
     {
+        "rule_name": "drip coffee",
         "input_objects": {
             "coffee_bean.n.01": 1,
             "water.n.06": 1
@@ -11,12 +12,19 @@
         "output_objects": {
             "drip_coffee.n.01": 1
         },
-        "output_states": null
+        "output_states": {
+            "coffee_maker.n.01,drip_coffee.n.01": [
+                [
+                    "contains",
+                    true
+                ]
+            ]
+        }
     },
     {
+        "rule_name": "iced cappuccino",
         "input_objects": {
-            "water.n.06": 1,
-            "instant_coffee.n.01": 1,
+            "espresso.n.01": 1,
             "cane_sugar.n.02": 1,
             "chocolate_milk.n.01": 1,
             "ice_cube.n.01": 3
@@ -31,6 +39,7 @@
         "output_states": null
     },
     {
+        "rule_name": "espresso",
         "input_objects": {
             "water.n.06": 1,
             "instant_coffee.n.01": 1
@@ -45,6 +54,7 @@
         "output_states": null
     },
     {
+        "rule_name": "pastry dough",
         "input_objects": {
             "water.n.06": 1,
             "butter.n.01": 1,
@@ -68,12 +78,12 @@
         }
     },
     {
+        "rule_name": "milkshake",
         "input_objects": {
-            "water.n.06": 1,
-            "instant_coffee.n.01": 1,
+            "drip_coffee.n.01": 1,
             "cane_sugar.n.02": 1,
             "ice_cube.n.01": 4,
-            "ice_cream.n.01": 1
+            "scoop_of_ice_cream.n.01": 1
         },
         "input_states": null,
         "machine": {
@@ -85,10 +95,11 @@
         "output_states": null
     },
     {
+        "rule_name": "milkshake",
         "input_objects": {
             "whole_milk.n.01": 1,
             "chocolate_sauce.n.01": 1,
-            "ice_cream.n.01": 1
+            "scoop_of_ice_cream.n.01": 1
         },
         "input_states": null,
         "machine": {
@@ -100,6 +111,7 @@
         "output_states": null
     },
     {
+        "rule_name": "smoothie",
         "input_objects": {
             "strawberry.n.01": 3,
             "ice_cube.n.01": 4,
@@ -115,6 +127,7 @@
         "output_states": null
     },
     {
+        "rule_name": "chocolate milk",
         "input_objects": {
             "granulated_sugar.n.01": 1,
             "cocoa_powder.n.01": 1,
@@ -130,6 +143,7 @@
         "output_states": null
     },
     {
+        "rule_name": "chocolate spread",
         "input_objects": {
             "butter.n.01": 1,
             "honey.n.01": 1,
@@ -145,6 +159,7 @@
         "output_states": null
     },
     {
+        "rule_name": "coffee",
         "input_objects": {
             "coffee_bean.n.01": 1,
             "water.n.06": 1
@@ -166,6 +181,7 @@
         }
     },
     {
+        "rule_name": "eggnog",
         "input_objects": {
             "granulated_sugar.n.01": 1,
             "nutmeg.n.02": 1,
@@ -185,6 +201,7 @@
         "output_states": null
     },
     {
+        "rule_name": "fruit punch",
         "input_objects": {
             "diced__lemon.n.01": 1,
             "diced__strawberry.n.01": 1,
@@ -201,6 +218,7 @@
         "output_states": null
     },
     {
+        "rule_name": "gazpacho",
         "input_objects": {
             "basil.n.03": 1,
             "salt.n.02": 1,
@@ -228,6 +246,7 @@
         }
     },
     {
+        "rule_name": "iced chocolate",
         "input_objects": {
             "ice_cube.n.01": 2,
             "cocoa_powder.n.01": 1,
@@ -245,6 +264,7 @@
         "output_states": null
     },
     {
+        "rule_name": "jerk seasoning",
         "input_objects": {
             "brown_sugar.n.01": 1,
             "chili.n.02": 1,
@@ -261,6 +281,7 @@
         "output_states": null
     },
     {
+        "rule_name": "lemon pepper seasoning",
         "input_objects": {
             "black_pepper.n.02": 1,
             "lemon_peel.n.01": 1,
@@ -277,6 +298,7 @@
         "output_states": null
     },
     {
+        "rule_name": "mustard seasoning",
         "input_objects": {
             "mustard_seed.n.01": 1,
             "sage.n.02": 1,
@@ -295,6 +317,7 @@
         "output_states": null
     },
     {
+        "rule_name": "smoothie",
         "input_objects": {
             "raspberry.n.02": 6,
             "strawberry.n.01": 4,
@@ -312,6 +335,7 @@
         "output_states": null
     },
     {
+        "rule_name": "tomato rice",
         "input_objects": {
             "white_rice.n.01": 1,
             "diced__beefsteak_tomato.n.01": 1,
@@ -329,6 +353,7 @@
         "output_states": null
     },
     {
+        "rule_name": "waffle batter",
         "input_objects": {
             "waffle_batter.n.01": 1
         },
@@ -349,6 +374,7 @@
         }
     },
     {
+        "rule_name": "fruit punch",
         "input_objects": {
             "diced__watermelon.n.01": 1,
             "lemonade.n.01": 1,

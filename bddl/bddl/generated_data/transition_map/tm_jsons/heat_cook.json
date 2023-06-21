@@ -1,5 +1,6 @@
 [
     {
+        "rule_name": "sugar cookies",
         "input_objects": {
             "sugar_cookie_dough.n.01": 1
         },
@@ -31,6 +32,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "salt water",
         "input_objects": {
             "water.n.06": 1,
             "salt.n.02": 1
@@ -49,6 +51,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "cheese tarts",
         "input_objects": {
             "pastry.n.01": 1,
             "cheese_pastry_filling.n.01": 1
@@ -74,7 +77,7 @@
             "oven.n.01": 1
         },
         "output_objects": {
-            "cheese_pastry.n.01": 6
+            "cheese_tart.n.01": 6
         },
         "output_states": {
             "cheese_pastry.n.01": [
@@ -87,6 +90,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "red meat sauce",
         "input_objects": {
             "tomato_sauce.n.01": 1,
             "olive_oil.n.01": 1,
@@ -109,6 +113,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "schnitzel",
         "input_objects": {
             "cooking_oil.n.01": 1,
             "flour.n.01": 1,
@@ -151,6 +156,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "applesauce",
         "input_objects": {
             "apple.n.01": 3,
             "water.n.06": 1,
@@ -179,6 +185,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "bagels",
         "input_objects": {
             "raw_egg.n.01": 1,
             "bagel_dough.n.01": 1,
@@ -236,6 +243,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "biscuits",
         "input_objects": {
             "biscuit_dough.n.01": 1
         },
@@ -267,6 +275,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "blueberry compote",
         "input_objects": {
             "lemon_juice.n.01": 1,
             "granulated_sugar.n.01": 1,
@@ -286,6 +295,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "chicken curry",
         "input_objects": {
             "diced__chicken_breast.n.01": 1,
             "diced__beefsteak_tomato.n.01": 1,
@@ -307,10 +317,10 @@
         "timesteps": null
     },
     {
+        "rule_name": "chocolate syrup",
         "input_objects": {
             "granulated_sugar.n.01": 1,
-            "water.n.06": 1,
-            "salt.n.02": 1,
+            "seawater.n.01": 1,
             "vanilla.n.02": 1,
             "cocoa_powder.n.01": 1
         },
@@ -328,6 +338,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "spice cookies",
         "input_objects": {
             "spice_cookie_dough.n.01": 1
         },
@@ -359,6 +370,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "baps",
         "input_objects": {
             "roll_dough.n.01": 1
         },
@@ -390,8 +402,9 @@
         "timesteps": null
     },
     {
+        "rule_name": "granola",
         "input_objects": {
-            "oat.n.02": 1,
+            "oat.n.01": 1,
             "honey.n.01": 1,
             "cinnamon.n.03": 1,
             "pecan.n.03": 1,
@@ -411,6 +424,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "cocoa",
         "input_objects": {
             "cocoa_powder.n.01": 1,
             "whole_milk.n.01": 1,
@@ -431,6 +445,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "ice cubes",
         "input_objects": {
             "water.n.06": 1
         },
@@ -448,6 +463,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "cheese sauce",
         "input_objects": {
             "cream_cheese.n.01": 1,
             "butter.n.01": 1,
@@ -470,6 +486,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "macaroni and cheese",
         "input_objects": {
             "cooked__noodle.n.01": 1,
             "breadcrumb.n.01": 1,
@@ -496,6 +513,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "meatloaf",
         "input_objects": {
             "ground_beef.n.01": 1,
             "whole_milk.n.01": 1,
@@ -524,6 +542,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "muffins",
         "input_objects": {
             "muffin_batter.n.01": 1
         },
@@ -548,13 +567,13 @@
         "timesteps": null
     },
     {
+        "rule_name": "oatmeal",
         "input_objects": {
-            "salt.n.02": 1,
+            "seawater.n.01": 1,
             "cinnamon.n.03": 1,
             "honey.n.01": 1,
             "oat.n.02": 1,
-            "low-fat_milk.n.01": 1,
-            "water.n.06": 1
+            "low-fat_milk.n.01": 1
         },
         "input_states": null,
         "container": {
@@ -570,6 +589,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "marinara",
         "input_objects": {
             "half__beefsteak_tomato.n.01": 6,
             "clove.n.03": 5,
@@ -593,6 +613,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "tomato sauce",
         "input_objects": {
             "beefsteak_tomato.n.01": 1,
             "tomato_paste.n.01": 1,
@@ -614,6 +635,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "pizza",
         "input_objects": {
             "pizza_dough.n.01": 1,
             "tomato_sauce.n.01": 1,
@@ -699,6 +721,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "popsicles",
         "input_objects": {
             "smoothie.n.02": 1
         },
@@ -723,6 +746,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "fish stew",
         "input_objects": {
             "diced__bell_pepper.n.01": 1,
             "diced__clove.n.01": 1,
@@ -769,6 +793,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "chicken soup",
         "input_objects": {
             "chicken_broth.n.01": 1,
             "diced__carrot.n.01": 1,
@@ -798,6 +823,7 @@
         "timesteps": null
     },
     {
+        "rule_name": "beef stew",
         "input_objects": {
             "diced__carrot.n.01": 1,
             "pea.n.01": 1,
