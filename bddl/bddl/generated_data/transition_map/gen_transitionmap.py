@@ -58,6 +58,8 @@ def sheet_to_json(submap):
                         reformatted_atoms[f"{synset1},{synset2}"] = [(atom[-3], atom[0] != "not")]
                 print(reformatted_atoms)
                 value = reformatted_atoms
+            elif TM_SUBMAPS_TO_PARAMS[submap][param]["type"] == "string":
+                value = value
             elif value is None:
                 value = None
             else: 
