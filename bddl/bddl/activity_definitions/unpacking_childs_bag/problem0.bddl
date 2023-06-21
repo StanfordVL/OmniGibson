@@ -14,8 +14,7 @@
         bed.n.01_1 - bed.n.01
     )
     
-    (:init 
-        (closed backpack.n.01_1) 
+    (:init
         (ontop backpack.n.01_1 bed.n.01_1) 
         (inside pen.n.01_1 backpack.n.01_1) 
         (inside pen.n.01_2 backpack.n.01_1) 
@@ -51,8 +50,10 @@
                 (ontop ?crayon.n.01 ?desk.n.01_1)
             ) 
             (ontop ?notebook.n.01_1 ?desk.n.01_1)
-            (nextto ?backpack.n.01_1 ?desk.n.01_1) 
-            (closed ?backpack.n.01_1)
+            (nextto ?backpack.n.01_1 ?desk.n.01_1)
+            (not
+                (open ?backpack.n.01_1)
+            )
         )
     )
 )

@@ -1,26 +1,28 @@
 {
     "cookable": [
-        "tomato.n.01",
         "oatmeal.n.01",
-        "soup.n.01",
-        "tart.n.02",
-        "milk.n.01",
-        "pasta.n.02",
-        "stew.n.02",
-        "seafood.n.01",
-        "pie.n.01",
-        "herb.n.02",
-        "rice.n.01",
-        "bread.n.01",
-        "fruit.n.01",
-        "vegetable.n.01",
-        "relish.n.02",
-        "citrus.n.01",
         "fish_stew.n.01"
     ],
-    "coldSource": [],
+    "coldSource": [
+        "ice_cube.n.01",
+        "steamer.n.02",
+        "ice_maker.n.01",
+        "ice.n.01",
+        "ice_pack.n.01"
+    ],
     "heatSource": [
-        "candle.n.01",
-        "cooker.n.01"
+        "coffee_maker.n.01",
+        "kettle.n.01",
+        "light_bulb.n.01",
+        "toaster.n.02",
+        "iron.n.04",
+        "fireplace.n.01",
+        "steamer.n.02",
+        "ember.n.01",
+        "fire_pit.n.01",
+        "hand_blower.n.01",
+        "engine.n.01",
+        "pressure_cooker.n.01",
+        "firewood.n.01"
     ]
 }

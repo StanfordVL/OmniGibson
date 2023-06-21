@@ -25,7 +25,9 @@
                 (?bobby_pin.n.01 - bobby_pin.n.01)
                 (inside ?bobby_pin.n.01 ?pencil_box.n.01_1)
             )
-            (closed ?pencil_box.n.01_1)
+            (not
+                (open ?pencil_box.n.01_1)
+            )
             (inside ?pencil_box.n.01_1 ?shelf.n.01_1)
         )
     )

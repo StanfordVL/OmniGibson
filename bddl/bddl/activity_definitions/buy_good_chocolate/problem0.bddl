@@ -15,8 +15,7 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (closed cash_register.n.01_1) 
+        (ontop cash_register.n.01_1 checkout.n.03_1)
         (inside box__of__chocolates.n.01_1 shelf.n.01_1) 
         (inside bag__of__cocoa.n.01_1 shelf.n.01_2) 
         (inside money.n.01_1 shopping_cart.n.01_1) 

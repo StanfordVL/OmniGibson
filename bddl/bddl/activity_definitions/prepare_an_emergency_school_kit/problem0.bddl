@@ -29,8 +29,10 @@
     )
     
     (:goal 
-        (and 
-            (closed ?backpack.n.01_1) 
+        (and
+            (not
+                (open ?backpack.n.01_1)
+            )
             (inside ?pen.n.01_1 ?backpack.n.01_1) 
             (inside ?notebook.n.01_1 ?backpack.n.01_1) 
             (inside ?bottle__of__perfume.n.01_1 ?backpack.n.01_1) 

@@ -30,8 +30,10 @@
             (inside ?pen.n.01_1 ?pencil_box.n.01_1) 
             (inside ?pencil.n.01_1 ?pencil_box.n.01_1)
             (inside ?eraser.n.01_1 ?pencil_box.n.01_1) 
-            (inside ?shears.n.01_1 ?pencil_box.n.01_1) 
-            (closed ?pencil_box.n.01_1)
+            (inside ?shears.n.01_1 ?pencil_box.n.01_1)
+            (not
+                (open ?pencil_box.n.01_1)
+            )
         )
     )
 )
