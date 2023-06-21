@@ -6,7 +6,6 @@
         wineglass.n.01_1 wineglass.n.01_2 wineglass.n.01_3 - wineglass.n.01
         gin.n.01_1 - gin.n.01
         orange_juice.n.01_1 - orange_juice.n.01
-        wineglass.n.01_1 wineglass.n.01_2 - wineglass.n.01
         red_wine.n.01_1 - red_wine.n.01
         beer_glass.n.01_1 beer_glass.n.01_2 - beer_glass.n.01
         beer.n.01_1 - beer.n.01
@@ -23,22 +22,15 @@
         (covered wineglass.n.01_2 stain.n.01_1) 
         (covered wineglass.n.01_2 gin.n.01_1)
         (covered wineglass.n.01_2 orange_juice.n.01_1)
-        (covered wineglass.n.01_3 stain.n.01_1) 
-        (covered wineglass.n.01_3 gin.n.01_1)
-        (covered wineglass.n.01_3 orange_juice.n.01_1)
-        (covered wineglass.n.01_1 stain.n.01_1) 
-        (covered wineglass.n.01_2 stain.n.01_1) 
-        (covered wineglass.n.01_1 red_wine.n.01_1)
-        (covered wineglass.n.01_2 red_wine.n.01_1)
+        (covered wineglass.n.01_3 stain.n.01_1)
+        (covered wineglass.n.01_3 red_wine.n.01_1)
         (covered beer_glass.n.01_1 stain.n.01_1)
         (covered beer_glass.n.01_2 stain.n.01_1)
         (covered beer_glass.n.01_1 beer.n.01_1)
         (covered beer_glass.n.01_2 beer.n.01_1)
         (ontop wineglass.n.01_1 bar.n.02_1)
         (ontop wineglass.n.01_2 bar.n.02_1) 
-        (ontop wineglass.n.01_3 bar.n.02_1) 
-        (ontop wineglass.n.01_1 bar.n.02_1) 
-        (ontop wineglass.n.01_2 bar.n.02_1) 
+        (ontop wineglass.n.01_3 bar.n.02_1)
         (ontop beer_glass.n.01_1 bar.n.02_1)
         (ontop beer_glass.n.01_1 bar.n.02_1)
         (ontop beer_glass.n.01_2 bar.n.02_1)
@@ -52,13 +44,6 @@
         (and 
             (forall 
                 (?wineglass.n.01 - wineglass.n.01) 
-                (or
-                    (inside ?wineglass.n.01 ?sink.n.01_1)
-                    (nextto ?wineglass.n.01 ?sink.n.01_1)
-                )
-            )
-            (forall 
-                (?wineglass.n.01 - wineglass.n.01)
                 (or
                     (inside ?wineglass.n.01 ?sink.n.01_1)
                     (nextto ?wineglass.n.01 ?sink.n.01_1)

@@ -9,7 +9,6 @@
         dust.n.01_1 - dust.n.01
         mold.n.05_1 - mold.n.05
         detergent.n.02_1 - detergent.n.02
-        rag.n.01_1 - rag.n.01
         detergent__bottle.n.01_1 - detergent__bottle.n.01
         water.n.06_1 - water.n.06
         floor.n.01_1 - floor.n.01
@@ -24,8 +23,7 @@
         (ontop rag.n.01_1 countertop.n.01_1)
         (ontop scrub_brush.n.01_1 countertop.n.01_1)
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
-        (ontop rag.n.01_1 countertop.n.01_1) 
-        (ontop detergent__bottle.n.01_1 countertop.n.01_1) 
+        (ontop detergent__bottle.n.01_1 countertop.n.01_1)
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
