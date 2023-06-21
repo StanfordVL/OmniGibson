@@ -26292,24 +26292,10 @@
         "wrinkleable": {}
     },
     "frozen_dessert.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
         "freezable": {},
-        "grassyable": {},
         "heatable": {
             "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
+        }
     },
     "fruit.n.01": {
         "freezable": {},
@@ -31183,24 +31169,14 @@
         "wrinkleable": {}
     },
     "ice_cream.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
+        "boilable": {},
         "freezable": {},
-        "grassyable": {},
         "heatable": {
             "temperature": 40.0
         },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
+        "liquid": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "ice_cream__carton.n.01": {
         "breakable": {},
@@ -31493,6 +31469,26 @@
         "wrinkleable": {}
     },
     "indicator.n.03": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "infant_car_seat.n.01": {
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -40027,15 +40023,9 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "package.n.02": {
+    "package.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -40044,7 +40034,6 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "openable": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -47490,29 +47479,6 @@
         "stickyable": {},
         "tarnishable": {},
         "toggleable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "rubbing_alcohol__bottle.n.01": {
-        "breakable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "fillable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "openable": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -61317,7 +61283,7 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "yeast__bottle.n.01": {
+    "yeast__jar.n.01": {
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
@@ -61340,11 +61306,9 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "yeast__jar.n.01": {
-        "breakable": {},
+    "yeast__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -61352,8 +61316,9 @@
         },
         "mixable": {},
         "moldyable": {},
+        "needsOrientation": {},
         "nonSubstance": {},
-        "openable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},

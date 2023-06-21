@@ -8262,7 +8262,7 @@
         "heatable": {},
         "freezable": {}
     },
-    "car_seat.n.01": {
+    "infant_car_seat.n.01": {
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19057,20 +19057,10 @@
         "freezable": {}
     },
     "ice_cream.n.01": {
-        "rigidBody": {},
-        "nonSubstance": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
+        "liquid": {},
+        "boilable": {},
+        "substance": {},
+        "physicalSubstance": {},
         "heatable": {},
         "freezable": {}
     },
@@ -24097,26 +24087,6 @@
         "heatable": {},
         "freezable": {}
     },
-    "package.n.02": {
-        "flammable": {},
-        "openable": {},
-        "rigidBody": {},
-        "nonSubstance": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
     "packing_box.n.02": {
         "fillable": {},
         "flammable": {},
@@ -28353,27 +28323,6 @@
     "rubbing_alcohol__atomizer.n.01": {
         "toggleable": {},
         "particleApplier": {},
-        "rigidBody": {},
-        "nonSubstance": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
-    "rubbing_alcohol__bottle.n.01": {
-        "breakable": {},
-        "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36471,10 +36420,9 @@
         "heatable": {},
         "freezable": {}
     },
-    "yeast__bottle.n.01": {
-        "breakable": {},
-        "fillable": {},
-        "openable": {},
+    "yeast__shaker.n.01": {
+        "particleApplier": {},
+        "needsOrientation": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36990,6 +36938,24 @@
     "cleansing__bottle.n.01": {
         "fillable": {},
         "openable": {},
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "package.n.01": {
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},

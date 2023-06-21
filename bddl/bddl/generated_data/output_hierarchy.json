@@ -592,10 +592,6 @@
                                   ]
                                 },
                                 {
-                                  "name": "rubbing_alcohol__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "rum__bottle.n.01",
                                   "hasModel": true,
                                   "categories": [
@@ -718,10 +714,6 @@
                                 },
                                 {
                                   "name": "wine_sauce__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "yeast__bottle.n.01",
                                   "hasModel": true
                                 },
                                 {
@@ -1741,10 +1733,6 @@
                               "hasModel": true
                             },
                             {
-                              "name": "package.n.02",
-                              "hasModel": true
-                            },
-                            {
                               "name": "paprika__shaker.n.01",
                               "hasModel": true
                             },
@@ -1918,6 +1906,10 @@
                               "categories": [
                                 "watering_can"
                               ]
+                            },
+                            {
+                              "name": "yeast__shaker.n.01",
+                              "hasModel": true
                             },
                             {
                               "name": "yogurt__carton.n.01",
@@ -2677,7 +2669,13 @@
                                   "children": [
                                     {
                                       "name": "car_seat.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "infant_car_seat.n.01",
+                                          "hasModel": true
+                                        }
+                                      ]
                                     }
                                   ]
                                 },
@@ -23098,6 +23096,10 @@
                       ]
                     }
                   ]
+                },
+                {
+                  "name": "package.n.01",
+                  "hasModel": true
                 }
               ]
             },
