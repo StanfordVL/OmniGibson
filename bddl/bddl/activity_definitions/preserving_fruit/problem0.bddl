@@ -57,7 +57,9 @@
                 )
             )
             (contains ?mason_jar.n.01_1 ?sugar_syrup.n.01_1)
-            (closed ?mason_jar.n.01_1) 
+            (not
+                (open ?mason_jar.n.01_1)
+            )
         )
     )
 )

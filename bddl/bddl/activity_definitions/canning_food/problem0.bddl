@@ -58,7 +58,9 @@
                 (?mason_jar.n.01 - mason_jar.n.01) 
                 (and
                     (inside ?mason_jar.n.01 ?cabinet.n.01_1)
-                    (closed ?mason_jar.n.01)
+                    (not
+                        (open ?mason_jar.n.01)
+                    )
                 )
             ) 
         )

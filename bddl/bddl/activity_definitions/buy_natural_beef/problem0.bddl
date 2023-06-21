@@ -13,8 +13,7 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (closed cash_register.n.01_1) 
+        (ontop cash_register.n.01_1 checkout.n.03_1)
         (ontop pack__of__ground_beef.n.01_1 cooler.n.01_1)
         (ontop pack__of__ground_beef.n.01_2 cooler.n.01_1)
         (ontop pack__of__ground_beef.n.01_3 cooler.n.01_1)

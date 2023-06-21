@@ -30812,10 +30812,12 @@
         "wrinkleable": {}
     },
     "hot_pepper.n.02": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
-        }
+        },
+        "sliceable": {}
     },
     "hot_sauce.n.01": {
         "boilable": {},
@@ -31182,26 +31184,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "ice_cream.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "ice_cream__carton.n.01": {
         "breakable": {},
         "disinfectable": {},
@@ -31216,6 +31198,26 @@
         "moldyable": {},
         "nonSubstance": {},
         "openable": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "ice_cream_cone.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -31493,6 +31495,26 @@
         "wrinkleable": {}
     },
     "indicator.n.03": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "infant_car_seat.n.01": {
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -40027,15 +40049,9 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "package.n.02": {
+    "package.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -40044,7 +40060,6 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "openable": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -40798,6 +40813,28 @@
         "rustable": {},
         "scratchable": {},
         "sliceable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "parsley__shaker.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "needsOrientation": {},
+        "nonSubstance": {},
+        "particleApplier": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -41640,10 +41677,12 @@
         "substance": {}
     },
     "pepper.n.04": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
-        }
+        },
+        "sliceable": {}
     },
     "pepper__shaker.n.01": {
         "breakable": {},
@@ -44513,47 +44552,7 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "pottable__beefsteak_tomato.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "pottable__cactus.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "pottable__chili.n.01": {
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -47493,29 +47492,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "rubbing_alcohol__bottle.n.01": {
-        "breakable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "fillable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "openable": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "rubbish.n.01": {
         "freezable": {},
         "heatable": {
@@ -48339,6 +48315,28 @@
         },
         "sliceable": {}
     },
+    "savory_spice__shaker.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "needsOrientation": {},
+        "nonSubstance": {},
+        "particleApplier": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "saw.n.02": {
         "disinfectable": {},
         "dustyable": {},
@@ -48614,6 +48612,26 @@
         "wrinkleable": {}
     },
     "scoop.n.06": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "scoop_of_ice_cream.n.01": {
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -51750,10 +51768,12 @@
         "wrinkleable": {}
     },
     "solanaceous_vegetable.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
-        }
+        },
+        "sliceable": {}
     },
     "solid.n.01": {
         "freezable": {},
@@ -56618,10 +56638,12 @@
         "wrinkleable": {}
     },
     "tomato.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
-        }
+        },
+        "sliceable": {}
     },
     "tomato_juice.n.01": {
         "boilable": {},
@@ -58307,6 +58329,7 @@
         "wrinkleable": {}
     },
     "vegetable.n.01": {
+        "cookable": {},
         "freezable": {},
         "heatable": {
             "temperature": 40.0
@@ -61317,7 +61340,7 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "yeast__bottle.n.01": {
+    "yeast__jar.n.01": {
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
@@ -61340,11 +61363,9 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "yeast__jar.n.01": {
-        "breakable": {},
+    "yeast__shaker.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -61352,8 +61373,9 @@
         },
         "mixable": {},
         "moldyable": {},
+        "needsOrientation": {},
         "nonSubstance": {},
-        "openable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},

@@ -7,9 +7,13 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init 
-        (closed window.n.01_1) 
-        (closed window.n.01_2) 
+    (:init
+        (not
+            (open window.n.01_1)
+        )
+        (not
+            (open window.n.01_2)
+        )
         (inroom floor.n.01_1 living_room) 
         (inroom window.n.01_1 living_room) 
         (inroom window.n.01_2 living_room) 
