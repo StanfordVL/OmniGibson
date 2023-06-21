@@ -1927,6 +1927,10 @@
                               "categories": [
                                 "savory_spice_shaker"
                               ]
+                            },
+                            {
+                              "name": "package.n.02",
+                              "hasModel": true
                             }
                           ]
                         },
@@ -6078,7 +6082,10 @@
                                       "children": [
                                         {
                                           "name": "bicycle_chain.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "bicycle_chain"
+                                          ]
                                         }
                                       ]
                                     },
@@ -6269,7 +6276,10 @@
                               "children": [
                                 {
                                   "name": "aluminum_foil.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "aluminum_foil"
+                                  ]
                                 }
                               ]
                             }
@@ -6494,7 +6504,10 @@
                                   "children": [
                                     {
                                       "name": "belt.n.02",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "belt"
+                                      ]
                                     }
                                   ]
                                 },
@@ -8558,7 +8571,10 @@
                                 },
                                 {
                                   "name": "bag__of__mulch.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bag_of_mulch"
+                                  ]
                                 },
                                 {
                                   "name": "box__of__aluminium_foil.n.01",
@@ -8569,6 +8585,10 @@
                                 },
                                 {
                                   "name": "can__of__cat_food.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "sack__of__brown_rice.n.01",
                                   "hasModel": true
                                 }
                               ]
@@ -9017,7 +9037,10 @@
                               "children": [
                                 {
                                   "name": "belt.n.02",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "belt"
+                                  ]
                                 }
                               ]
                             },
@@ -9436,7 +9459,10 @@
                               "children": [
                                 {
                                   "name": "baby_shoe.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "baby_shoe"
+                                  ]
                                 },
                                 {
                                   "name": "gym_shoe.n.01",
@@ -9919,7 +9945,10 @@
                                   "children": [
                                     {
                                       "name": "bicycle_rack.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "bicycle_rack"
+                                      ]
                                     },
                                     {
                                       "name": "ceiling_rack.n.01",
@@ -13218,6 +13247,16 @@
                                           "hasModel": true
                                         }
                                       ]
+                                    },
+                                    {
+                                      "name": "tomato.n.02",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "pottable__beefsteak_tomato.n.01",
+                                          "hasModel": true
+                                        }
+                                      ]
                                     }
                                   ]
                                 },
@@ -14371,7 +14410,10 @@
                       "children": [
                         {
                           "name": "bag__of__rubbish.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "bag_of_rubbish"
+                          ]
                         },
                         {
                           "name": "rubbish.n.01",
@@ -16269,6 +16311,10 @@
                                   "categories": [
                                     "toast"
                                   ]
+                                },
+                                {
+                                  "name": "bap.n.01 ",
+                                  "hasModel": true
                                 }
                               ]
                             },
@@ -18182,6 +18228,10 @@
                               "categories": [
                                 "toast"
                               ]
+                            },
+                            {
+                              "name": "bap.n.01 ",
+                              "hasModel": true
                             }
                           ]
                         },
@@ -18911,6 +18961,10 @@
                                         },
                                         {
                                           "name": "diced__chili.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "pottable__chili.n.01",
                                           "hasModel": true
                                         }
                                       ]
@@ -21312,7 +21366,10 @@
                           "children": [
                             {
                               "name": "bag__of__rubbish.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "bag_of_rubbish"
+                              ]
                             },
                             {
                               "name": "rubbish.n.01",
