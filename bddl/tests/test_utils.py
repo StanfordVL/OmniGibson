@@ -185,21 +185,46 @@ def check_clashing_transition_rules():
     for submap_name in TM_SUBMAPS_TO_PARAMS:
         with open(os.path.join("..", "bddl", "generated_data", "transition_map", "tm_jsons", submap_name + ".json"), "r") as f:
             submap = json.load(f)
-        seen = set() 
+        seen_object_sets = []
         for rule in submap: 
+            # Get relevant parameters
+            rule_name = rule.get("rule_name", "No name")
             input_objects = rule.get("input_objects", {})
             input_states = rule.get("input_states", {})
             input_states = input_states if input_states is not None else {}
+            if submap_name == "heat_cook": 
+                equipment = set([list(rule["heat_source"].keys())[0], list(rule["container"].keys())[0]])
+            elif submap_name == "single_toggleable_machine":
+                equipment = set([list(rule["machine"].keys())[0]])
+            else:
+                equipment = set()       # Equivalence will pass trivially when checked, because this rule already clashes
+            output_objects = rule.get("output_objects", {})
+            output_states = rule.get("output_states", {})
+            output_states = output_states if output_states is not None else {}
+
             # NOTE doing input_objects.keys, not input_objects.items, because simulator is not actually sensitive to amount. It only checks for category, 
             #   so different amounts but same categories still need to result in the same output.
-            # Alphabetize everything.
-            input_objects = sorted(input_objects.keys(), key=lambda x: x[0])
-            if "bagel_dough.n.01" in input_objects:
-                print(input_objects)
-            input_states_str = [syns + "@" + ";".join([f"{pred}:{val}" for pred, val in sorted(states, key=lambda x: x[0])]) for syns, states in sorted(input_states.items(), key=lambda x: x[0])]
-            input_states_str = "-".join(input_states_str)
-            if "bagel_dough.n.01" in input_objects:
-                print(input_states_str)
+            
+            # Collect all sets of input objects to check subsetting
+            input_objects = set(sorted(input_objects.keys(), key=lambda x: x[0]))
+            output_objects = set(sorted(output_objects.keys(), key=lambda x: x[0]))
+            input_states_strs = set([syns + "@" + ";".join([f"{pred}:{val}" for pred, val in sorted(states, key=lambda x: x[0])]) for syns, states in sorted(input_states.items(), key=lambda x: x[0])])
+            output_states_strs = set([syns + "@" + ";".join([f"{pred}:{val}" for pred, val in sorted(states, key=lambda x: x[0])]) for syns, states in sorted(output_states.items(), key=lambda x: x[0])])
+            for seen_rule_name, seen_object_set, seen_states_set, seen_equipment, seen_output_objects, seen_output_states in seen_object_sets:
+                # If we see that our next input objects set is a subset or superset...
+                if input_objects.issuperset(seen_object_set) or input_objects.issubset(seen_object_set):
+                    # Construct a set of atomic formulae in string format
+                    if input_states_strs.issuperset(seen_states_set) or input_states_strs.issubset(seen_states_set):
+                        if equipment == seen_equipment:
+                            # At this point, the output needs to be identical
+                            if not output_objects == seen_output_objects or not output_states_strs == seen_output_states:
+                                raise AssertionError(f"Clashing rules with input objects {rule_name} and {seen_rule_name} in submap {submap_name}.")
+                
+            seen_object_sets.append((rule_name, input_objects, input_states_strs, equipment, output_objects, output_states_strs))
+            # input_states_str = [syns + "@" + ";".join([f"{pred}:{val}" for pred, val in sorted(states, key=lambda x: x[0])]) for syns, states in sorted(input_states.items(), key=lambda x: x[0])]
+            # input_states_str = "-".join(input_states_str)
+            # if "bagel_dough.n.01" in input_objects:
+            #     print(input_states_str)
 
 
 if __name__ == "__main__":

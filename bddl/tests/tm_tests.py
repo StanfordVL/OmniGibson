@@ -44,6 +44,7 @@ def no_incorrectly_formatted_params(rule, submap):
                     assert type(predicate) == str, f"Malformed predicate {predicate} for param {param} in rule TODO in submap {submap}"
                     assert type(val) == bool, f"Malformed predicate value {val} for param {param} in rule TODO in submap {submap}"
         elif param_metadata[param]["type"] == "integer": continue
+        elif param_metadata[param]["type"] == "string": continue
         elif value is None: 
             continue
         else:
@@ -61,6 +62,7 @@ def no_invalid_synsets(rule, submap, syns_to_props):
                 for proposed_synset in proposed_synsets.split(","):
                     assert proposed_synset in syns_to_props, f"Invalid synset {proposed_synset} in rule TODO in submap {submap}"
         elif param_metadata[param]["type"] == "integer": continue
+        elif param_metadata[param]["type"] == "string": continue
         elif value is None:
             continue
         else:
@@ -72,6 +74,7 @@ def no_invalid_predicates(rule, submap, domain_predicates):
     for param, value in rule.items(): 
         if param_metadata[param]["type"] == "synset": continue 
         elif param_metadata[param]["type"] == "integer": continue
+        elif param_metadata[param]["type"] == "string": continue
         elif value is None: continue
         elif param_metadata[param]["type"] == "atom": 
             for __, proposed_predicate_values in value.items(): 
@@ -86,6 +89,7 @@ def no_misaligned_synsets_predicates(rule, submap, syns_to_props):
     for param, value in rule.items(): 
         if param_metadata[param]["type"] == "synset": continue 
         elif param_metadata[param]["type"] == "integer": continue
+        elif param_metadata[param]["type"] == "string": continue
         elif value is None: continue
         elif param_metadata[param]["type"] == "atom": 
             for synsets, predicate_vals in value.items(): 
@@ -105,6 +109,7 @@ def no_substances_with_multiple_instances(rule, submap, syns_to_props):
                     assert num_instances == 1, f"Substance {synset} with {num_instances} instances instead of 1 in rule TODO in submap {submap}"
         elif param_metadata[param]["type"] == "atom": continue
         elif param_metadata[param]["type"] == "integer": continue
+        elif param_metadata[param]["type"] == "string": continue
         else:
             raise ValueError(f"Unhandled parameter type {param_metadata[param]['type']}")
 
