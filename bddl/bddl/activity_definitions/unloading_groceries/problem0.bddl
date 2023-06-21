@@ -30,9 +30,13 @@
             (inside ?white_bread.n.01_1 ?cabinet.n.01_1) 
             (inside ?box__of__corn_flakes.n.01_1 ?cabinet.n.01_1) 
             (inside ?cup__of__yogurt.n.01_1 ?electric_refrigerator.n.01_1)
-            (inside ?egg.n.02_1 ?electric_refrigerator.n.01_1) 
-            (closed ?electric_refrigerator.n.01_1) 
-            (closed ?cabinet.n.01_1)
+            (inside ?egg.n.02_1 ?electric_refrigerator.n.01_1)
+            (not
+                (open ?electric_refrigerator.n.01_1)
+            )
+            (not
+                (open ?cabinet.n.01_1)
+            )
         )
     )
 )

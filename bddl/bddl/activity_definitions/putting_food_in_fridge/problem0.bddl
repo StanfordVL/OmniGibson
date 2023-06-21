@@ -55,8 +55,10 @@
             (forall 
                 (?egg.n.02 - egg.n.02) 
                 (inside ?egg.n.02 ?electric_refrigerator.n.01_1)
-            ) 
-            (closed ?electric_refrigerator.n.01_1) 
+            )
+            (not
+                (open ?electric_refrigerator.n.01_1)
+            )
         )
     )
 )

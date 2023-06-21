@@ -43,9 +43,13 @@
             (ontop ?porkchop.n.01_2 ?plate.n.04_2) 
             (hot ?porkchop.n.01_2) 
             (frozen ?porkchop.n.01_1) 
-            (or 
-                (closed ?oven.n.01_1) 
-                (closed ?oven.n.01_1)
+            (or
+                (not
+                    (open ?oven.n.01_1)
+                )
+                (not
+                    (open ?oven.n.01_1)
+                )
             )
         )
     )

@@ -15,8 +15,7 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (closed cash_register.n.01_1) 
+        (ontop cash_register.n.01_1 checkout.n.03_1)
         (ontop money.n.01_1 checkout.n.03_1) 
         (ontop money.n.01_2 checkout.n.03_1) 
         (ontop glove.n.02_1 shelf.n.01_1) 
