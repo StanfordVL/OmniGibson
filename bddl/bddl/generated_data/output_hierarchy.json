@@ -281,7 +281,10 @@
                                     },
                                     {
                                       "name": "pewter_teapot.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "pewter_teapot"
+                                      ]
                                     },
                                     {
                                       "name": "saucepot.n.01",
@@ -1654,6 +1657,13 @@
                                   "categories": [
                                     "wicker_basket"
                                   ]
+                                },
+                                {
+                                  "name": "frail.n.02",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "frail"
+                                  ]
                                 }
                               ]
                             },
@@ -1939,7 +1949,10 @@
                             },
                             {
                               "name": "package.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "package"
+                              ]
                             }
                           ]
                         },
@@ -4528,7 +4541,10 @@
                                             },
                                             {
                                               "name": "pewter_teapot.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "pewter_teapot"
+                                              ]
                                             },
                                             {
                                               "name": "saucepot.n.01",
@@ -8607,7 +8623,10 @@
                                 },
                                 {
                                   "name": "pack__of__ground_beef.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "pack_of_ground_beef"
+                                  ]
                                 },
                                 {
                                   "name": "bag__of__mulch.n.01",
@@ -9964,7 +9983,10 @@
                           "children": [
                             {
                               "name": "plastic_wrap.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "plastic_wrap"
+                              ]
                             }
                           ]
                         },
@@ -16359,7 +16381,10 @@
                                   "children": [
                                     {
                                       "name": "meat_loaf.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "meat_loaf"
+                                      ]
                                     }
                                   ]
                                 },
@@ -17091,11 +17116,17 @@
                             },
                             {
                               "name": "meat_loaf.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "meat_loaf"
+                              ]
                             },
                             {
                               "name": "meatball.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "meatball"
+                              ]
                             },
                             {
                               "name": "porridge.n.01",
@@ -17120,7 +17151,10 @@
                             },
                             {
                               "name": "patty.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "patty"
+                              ]
                             },
                             {
                               "name": "pizza.n.01",
@@ -18279,7 +18313,10 @@
                               "children": [
                                 {
                                   "name": "meat_loaf.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "meat_loaf"
+                                  ]
                                 }
                               ]
                             },
@@ -19346,7 +19383,10 @@
                                 },
                                 {
                                   "name": "mustard.n.03",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "mustard_leaf"
+                                  ]
                                 },
                                 {
                                   "name": "radish.n.01",
