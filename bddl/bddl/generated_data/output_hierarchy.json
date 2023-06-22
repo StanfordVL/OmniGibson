@@ -1457,7 +1457,10 @@
                             },
                             {
                               "name": "cat_food__tin.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "cat_food_tin"
+                              ]
                             },
                             {
                               "name": "cayenne__shaker.n.01",
@@ -1912,7 +1915,10 @@
                             },
                             {
                               "name": "dog_food__can.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "dog_food_can"
+                              ]
                             },
                             {
                               "name": "parsley__shaker.n.01",
@@ -1988,7 +1994,10 @@
                                           "children": [
                                             {
                                               "name": "car_wheel.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "car_wheel"
+                                              ]
                                             },
                                             {
                                               "name": "skateboard_wheel.n.01",
@@ -4224,7 +4233,10 @@
                                               "children": [
                                                 {
                                                   "name": "clipper.n.04",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "clipper"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "shears.n.01",
@@ -4818,7 +4830,10 @@
                                           "children": [
                                             {
                                               "name": "clipper.n.04",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "clipper"
+                                              ]
                                             },
                                             {
                                               "name": "shears.n.01",
@@ -8566,7 +8581,10 @@
                                 },
                                 {
                                   "name": "can__of__dog_food.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "can_of_dog_food"
+                                  ]
                                 },
                                 {
                                   "name": "pack__of__ground_beef.n.01",
@@ -8588,7 +8606,10 @@
                                 },
                                 {
                                   "name": "can__of__cat_food.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "can_of_cat_food"
+                                  ]
                                 },
                                 {
                                   "name": "sack__of__brown_rice.n.01",
@@ -10444,7 +10465,10 @@
                           "children": [
                             {
                               "name": "cement.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "cement"
+                              ]
                             }
                           ]
                         }
@@ -11153,7 +11177,10 @@
                           "children": [
                             {
                               "name": "cement.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "cement"
+                              ]
                             }
                           ]
                         },
@@ -16316,7 +16343,7 @@
                                   ]
                                 },
                                 {
-                                  "name": "bap.n.01 ",
+                                  "name": "bap.n.01",
                                   "hasModel": true
                                 }
                               ]
@@ -18233,7 +18260,7 @@
                               ]
                             },
                             {
-                              "name": "bap.n.01 ",
+                              "name": "bap.n.01",
                               "hasModel": true
                             }
                           ]
