@@ -1,7 +1,16 @@
 import json
 import os
 import re 
+
 from bddl.generated_data.transition_map.tm_submap_params import TM_SUBMAPS_TO_PARAMS
+from bddl.parsing import parse_problem
+
+# Files
+
+PROBLEM_FILE_DIR = "../bddl/activity_definitions"
+PROPS_TO_SYNS_JSON = "../bddl/generated_data/properties_to_synsets.json"
+SYNS_TO_PROPS_JSON = "../bddl/generated_data/propagated_annots_canonical.json"
+CSVS_DIR = "tm_csvs"
 
 # Constants
 
@@ -108,7 +117,124 @@ PLACEMENTS = set([
     "contains"
 ])
 SUBSTANCE_PLACEMENTS = set(["saturated", "filled", "covered", "insource", "contains"])
-FUTURE_SYNSET = "future"
+FUTURE_PREDICATE = "future"
+
+
+# Helpers
+
+def _traverse_goal_for_objects(expr, objects=None):
+    objects = objects if objects is not None else set()
+    # Check that category declarations in quantifiers are really categories, and equal
+    if expr[0] in ["forall", "exists", "forpairs"]:
+        term, __, cat = expr[1]
+        assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
+        assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
+        if expr[0] in ["forpairs"]: 
+            term, __, cat = expr[2]
+            assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
+            assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
+        _traverse_goal_for_objects(expr[-1], objects=objects)
+    if expr[0] in ["forn", "fornpairs"]:
+        term, __, cat = expr[2]
+        assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
+        assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
+        if expr[0] == "fornpairs": 
+            term, __, cat = expr[3]
+            assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
+            assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
+        _traverse_goal_for_objects(expr[-1], objects=objects)
+    
+    # Check the subexpr for atomic formulae in base case, else recurse 
+    if type(expr[-1]) is not list: 
+        for obj in expr[1:]:
+            assert re.match(OBJECT_CAT_AND_INST_RE, obj.strip("?")) is not None, f"malformed object term in goal: {obj}"
+            objects.add(obj.strip("?"))
+    else: 
+        if expr[0] in ["and", "or"]:
+            for subexpr in expr[1:]:
+                _traverse_goal_for_objects(subexpr, objects=objects)
+        else:
+            _traverse_goal_for_objects(expr[-1], objects=objects)
+
+
+def _get_defn_elements_from_file(activity):
+    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
+    with open(defn_fn, "r") as f:
+        __, objects, init, goal = parse_problem(activity, 0, "omnigibson", predefined_problem=f.read())
+    return activity, objects, init, goal
+
+
+def _get_objects_from_object_list(objects):
+    instances, categories = set(), set()
+    for cat, insts in objects.items():
+        categories.add(cat)
+        for inst in insts: 
+            instances.add(inst)
+    return instances, categories
+
+
+def _get_instances_in_init(init):
+    '''
+    Take a parsed :init condition and return a set of all instances in it.
+    '''
+    init_insts = set()
+    for literal in init: 
+        formula = literal[1] if literal[0] == "not" else literal
+        for inst in formula[1:]: 
+            assert (re.match(OBJECT_INSTANCE_RE, inst) is not None) or (inst in ROOMS), f":init has category: {inst}" 
+            if inst not in ROOMS:
+                init_insts.add(inst)
+    return init_insts
+
+
+def _get_objects_in_goal(goal):
+    goal_objects = set()
+    goal = ["and"] + goal
+    _traverse_goal_for_objects(goal, goal_objects)
+    return goal_objects
+
+
+def _traverse_goal_for_atoms(expr, goal_atoms):
+    if all(type(subexpr) == str for subexpr in expr):
+        goal_atoms.append(expr)
+    elif expr[0] in ["and", "or"]:
+        for subexpr in expr[1:]:
+            _traverse_goal_for_atoms(subexpr, goal_atoms)
+    elif expr[0] in ["forall", "exists", "forn", "forpairs", "fornpairs"]:
+        _traverse_goal_for_atoms(expr[-1], goal_atoms)
+    elif expr[0] == "imply":
+        _traverse_goal_for_atoms(expr[1], goal_atoms)
+        _traverse_goal_for_atoms(expr[2], goal_atoms)
+    elif expr[0] == "not":
+        _traverse_goal_for_atoms(expr[1], goal_atoms)
+    else:
+        raise ValueError(f"Unhandled logic operator {expr[0]}")
+
+
+def _get_atoms_in_goal(goal):
+    goal_atoms = []
+    for goal_expr in goal:
+        _traverse_goal_for_atoms(goal_expr, goal_atoms)
+    return goal_atoms
+
+
+def _get_unique_items_from_transition_map():
+    obj_set = set()
+    for fname in glob.glob(CSVS_DIR):
+        with open(fname) as f:
+            for row in f:
+                first = row.split(',')[0]
+                if '.n.' in first:
+                    obj_set.add(first.rpartition('_')[0])
+
+    obj_set.remove('')
+    
+    for obj in obj_set:
+        print(obj)
+
+
+def is_specific_container_synset(synset): 
+    return "__" in synset and "__of__" not in synset and "diced__" not in synset and "cooked__" not in synset and "half__" not in synset
 
 
 def check_synset_predicate_alignment(atom, syns_to_props):
@@ -221,10 +347,17 @@ def check_clashing_transition_rules():
                                 raise AssertionError(f"Clashing rules with input objects {rule_name} and {seen_rule_name} in submap {submap_name}.")
                 
             seen_object_sets.append((rule_name, input_objects, input_states_strs, equipment, output_objects, output_states_strs))
-            # input_states_str = [syns + "@" + ";".join([f"{pred}:{val}" for pred, val in sorted(states, key=lambda x: x[0])]) for syns, states in sorted(input_states.items(), key=lambda x: x[0])]
-            # input_states_str = "-".join(input_states_str)
-            # if "bagel_dough.n.01" in input_objects:
-            #     print(input_states_str)
+
+    # Check heat_cook rules vs cooking individual items, since those are a potential clash that we know of
+    # for activity in os.listdir(PROBLEM_FILE_DIR):
+    #     if not os.path.isdir(os.path.join(PROBLEM_FILE_DIR, activity)): continue
+    #     __, objects, init, goal = _get_defn_elements_from_file(activity)
+        
+    #     # Check for a rigid body ending cooked and starting not cooked/cook state unspecified, or a future clause for a cooked substance
+    #     for cooking_rigids: 
+
+
+    # NOTE other heuristics as we discover them
 
 
 if __name__ == "__main__":

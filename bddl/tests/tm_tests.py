@@ -4,7 +4,7 @@ import re
 
 from bddl.generated_data.transition_map.tm_submap_params import TM_SUBMAPS_TO_PARAMS
 from bddl.parsing import parse_domain
-from test_utils import check_synset_predicate_alignment
+from test_utils import check_synset_predicate_alignment, check_clashing_transition_rules
 
 
 TRANSITION_MAP_DIR = "../bddl/generated_data/transition_map/tm_jsons"
