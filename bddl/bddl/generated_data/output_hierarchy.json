@@ -1009,7 +1009,10 @@
                                             },
                                             {
                                               "name": "trailer_truck.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "trailer_truck"
+                                              ]
                                             },
                                             {
                                               "name": "van.n.05",
@@ -1133,7 +1136,10 @@
                                 },
                                 {
                                   "name": "sleeping_bag.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "sleeping_bag"
+                                  ]
                                 },
                                 {
                                   "name": "sugar__sack.n.01",
@@ -2020,7 +2026,10 @@
                                             },
                                             {
                                               "name": "skateboard_wheel.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "skateboard_wheel"
+                                              ]
                                             }
                                           ]
                                         },
@@ -3902,7 +3911,10 @@
                                 },
                                 {
                                   "name": "space_heater.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "space_heater"
+                                  ]
                                 }
                               ]
                             },
@@ -5650,7 +5662,10 @@
                                     },
                                     {
                                       "name": "trampoline.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "trampoline"
+                                      ]
                                     }
                                   ]
                                 },
@@ -6000,7 +6015,10 @@
                                                 },
                                                 {
                                                   "name": "trailer_truck.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "trailer_truck"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "van.n.05",
@@ -8664,6 +8682,13 @@
                                 {
                                   "name": "sack__of__brown_rice.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "cup__of__ranch.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "cup_of_ranch"
+                                  ]
                                 }
                               ]
                             },
@@ -16621,7 +16646,10 @@
                             },
                             {
                               "name": "tofu.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "tofu"
+                              ]
                             }
                           ]
                         },
@@ -17234,7 +17262,10 @@
                             },
                             {
                               "name": "schnitzel.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "schnitzel"
+                              ]
                             },
                             {
                               "name": "scrambled_eggs.n.01",
