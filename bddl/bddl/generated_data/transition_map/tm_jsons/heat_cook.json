@@ -80,7 +80,7 @@
             "cheese_tart.n.01": 6
         },
         "output_states": {
-            "cheese_pastry.n.01": [
+            "cheese_tart.n.01": [
                 [
                     "cooked",
                     true
@@ -404,7 +404,7 @@
     {
         "rule_name": "granola",
         "input_objects": {
-            "oat.n.01": 1,
+            "oat.n.02": 1,
             "honey.n.01": 1,
             "cinnamon.n.03": 1,
             "pecan.n.03": 1,
