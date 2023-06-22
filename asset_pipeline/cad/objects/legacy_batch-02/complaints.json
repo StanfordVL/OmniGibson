@@ -1,0 +1,380 @@
+[
+    {
+        "object": "alarm-dkwmmf",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: alarm.n.01\nDefinition: fear resulting from the awareness of danger\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bad synset - needs other alarm",
+        "processed": false
+    },
+    {
+        "object": "alarm-dkwmmf",
+        "message": "Confirm reasonable bounding box size:\n55.12cm, 55.11cm, 20.85cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": false
+    },
+    {
+        "object": "armchair-axudcx",
+        "message": "Confirm reasonable bounding box size:\n50.62cm, 59.26cm, 62.65cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "armchair-bslhmj",
+        "message": "Confirm reasonable bounding box size:\n57.88cm, 55.00cm, 61.18cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "seems too small average height is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-cyvmhv",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "I'm not sure it would stand upright, it's designed weirdly with no back support",
+        "processed": true
+    },
+    {
+        "object": "armchair-cyvmhv",
+        "message": "Confirm reasonable bounding box size:\n46.88cm, 56.60cm, 67.85cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average height of an armchair is 76-102cm",
+        "processed": true
+    },
+    {
+        "object": "armchair-fsrprw",
+        "message": "Confirm reasonable bounding box size:\n51.47cm, 58.63cm, 62.55cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average height of an armchair is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-jmunen",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "i am not sure the physics would work with this armchair",
+        "processed": true
+    },
+    {
+        "object": "armchair-jmunen",
+        "message": "Confirm reasonable bounding box size:\n66.95cm, 51.01cm, 53.99cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small armchair height is on average 76 to 102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-nckeqb",
+        "message": "Confirm reasonable bounding box size:\n53.62cm, 60.54cm, 58.82cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too smalle average armchair height is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-pmrcex",
+        "message": "Confirm reasonable bounding box size:\n48.38cm, 51.58cm, 70.60cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average armchair height is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-qgcjtr",
+        "message": "Confirm reasonable bounding box size:\n57.56cm, 59.22cm, 55.80cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average armchair height is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-qjwuus",
+        "message": "Confirm reasonable bounding box size:\n53.35cm, 50.59cm, 67.79cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average armchair height is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-rabzuf",
+        "message": "Confirm reasonable bounding box size:\n52.83cm, 56.75cm, 63.16cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average armchair height is 76-102 cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-tcxiue",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "not sure if the physics would allow it to stand",
+        "processed": true
+    },
+    {
+        "object": "armchair-tcxiue",
+        "message": "Confirm reasonable bounding box size:\n57.44cm, 59.64cm, 56.02cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average armchair height is 76-102cm",
+        "processed": true
+    },
+    {
+        "object": "armchair-umbrpd",
+        "message": "Confirm reasonable bounding box size:\n62.58cm, 61.71cm, 44.18cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average height of an armchair is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-viphen",
+        "message": "Confirm reasonable bounding box size:\n41.76cm, 52.59cm, 74.10cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average height of an armchair is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-vtsoat",
+        "message": "Confirm reasonable bounding box size:\n64.81cm, 60.45cm, 43.03cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "shorter than average chair but it looks it too so i'm not sure",
+        "processed": false
+    },
+    {
+        "object": "armchair-vzhxuf",
+        "message": "Confirm reasonable bounding box size:\n46.52cm, 52.18cm, 71.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average height of an armchair is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-xkacfd",
+        "message": "Confirm reasonable bounding box size:\n63.38cm, 57.38cm, 51.87cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average height of an armchair is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-xpcheg",
+        "message": "Confirm reasonable bounding box size:\n62.96cm, 58.47cm, 51.16cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small average height of an armchair is 76-102cm",
+        "processed": false
+    },
+    {
+        "object": "armchair-xqovyv",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "missing its back",
+        "processed": true
+    },
+    {
+        "object": "board_game-eoywpy",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "it's the name of a real board game so maybe change the brand name",
+        "processed": true
+    },
+    {
+        "object": "board_game-frgdqh",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "not sure if the game name is real",
+        "processed": true
+    },
+    {
+        "object": "board_game-fzyuip",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "tetris is the name of real game so we should change",
+        "processed": true
+    },
+    {
+        "object": "board_game-gcfkqa",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real game so brand issues",
+        "processed": true
+    },
+    {
+        "object": "board_game-gumkqh",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real game we should change ",
+        "processed": true
+    },
+    {
+        "object": "board_game-ibzhzu",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real game so we should change appearance",
+        "processed": true
+    },
+    {
+        "object": "board_game-iqfvfl",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real game brand",
+        "processed": true
+    },
+    {
+        "object": "board_game-lzslbu",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real game brand",
+        "processed": true
+    },
+    {
+        "object": "board_game-nfewft",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real game brand",
+        "processed": true
+    },
+    {
+        "object": "board_game-ovttum",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real game brand",
+        "processed": true
+    },
+    {
+        "object": "board_game-qdkyzl",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real brand game",
+        "processed": true
+    },
+    {
+        "object": "board_game-qgvsnb",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real brand game ",
+        "processed": true
+    },
+    {
+        "object": "board_game-rgvkmy",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real brand game",
+        "processed": true
+    },
+    {
+        "object": "board_game-twkglv",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real brand game",
+        "processed": true
+    },
+    {
+        "object": "board_game-vbamua",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "real brand game ",
+        "processed": true
+    },
+    {
+        "object": "breakfast_table-cjjayg",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "more like coffee table",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-dnsjnv",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "more like coffee table",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-hggsao",
+        "message": "Confirm reasonable bounding box size:\n81.62cm, 46.70cm, 34.01cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-idnnmz",
+        "message": "Confirm reasonable bounding box size:\n87.94cm, 35.98cm, 31.18cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small ",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-ixvmic",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "more like coffee table",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-kpwegp",
+        "message": "Confirm reasonable bounding box size:\n78.08cm, 38.97cm, 35.39cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-kwmfdg",
+        "message": "Confirm reasonable bounding box size:\n85.05cm, 43.62cm, 29.37cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-lcsizg",
+        "message": "Confirm reasonable bounding box size:\n74.99cm, 49.92cm, 42.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-lnwggc",
+        "message": "Confirm reasonable bounding box size:\n65.10cm, 65.24cm, 38.81cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "maybe too small",
+        "processed": true
+    },
+    {
+        "object": "breakfast_table-lnwggc",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "\\",
+        "processed": true
+    },
+    {
+        "object": "breakfast_table-metubv",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "more like coffee table",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-mwsyqb",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "too short to be breakfast table?? Maybe coffee table?",
+        "processed": true
+    },
+    {
+        "object": "breakfast_table-mwsyqb",
+        "message": "Confirm reasonable bounding box size:\n1.69m, 98.53cm, 91.34cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "breakfast_table-mwsyqb",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Some gaps in table legs are blocked",
+        "processed": true
+    },
+    {
+        "object": "breakfast_table-pllvrt",
+        "message": "Confirm reasonable bounding box size:\n84.46cm, 41.33cm, 34.05cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-skczfi",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "there seems to be a gap between boards",
+        "processed": true
+    },
+    {
+        "object": "breakfast_table-skczfi",
+        "message": "Confirm reasonable bounding box size:\n86.15cm, 35.89cm, 35.90cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": true
+    },
+    {
+        "object": "breakfast_table-skseyx",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "coffee table",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-uhrsex",
+        "message": "Confirm reasonable bounding box size:\n83.52cm, 41.76cm, 29.95cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-wwsikw",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "looks like coffee table",
+        "processed": false
+    },
+    {
+        "object": "breakfast_table-zypvuv",
+        "message": "Confirm reasonable bounding box size:\n81.24cm, 51.54cm, 27.30cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "table_lamp-awfehr",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "the pivot looks off\\",
+        "processed": true
+    },
+    {
+        "object": "table_lamp-tnbwvj",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "rip physics",
+        "processed": true
+    },
+    {
+        "object": "table_lamp-wvysoe",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: table_lamp.n.01\nDefinition: a lamp that sits on a table\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "missing parts",
+        "processed": true
+    },
+    {
+        "object": "table_lamp-wvysoe",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "missing parts",
+        "processed": true
+    }
+]

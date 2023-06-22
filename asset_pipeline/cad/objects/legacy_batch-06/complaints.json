@@ -1,0 +1,584 @@
+[
+    {
+        "object": "canned_food-acgdtc",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: canned_food.n.01\nDefinition: food preserved by canning\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "maybe tomato sauce jar?",
+        "processed": true
+    },
+    {
+        "object": "canned_food-acgdtc",
+        "message": "Confirm reasonable bounding box size:\n1.05m, 1.07m, 1.22m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "giant",
+        "processed": true
+    },
+    {
+        "object": "canned_food-acgdtc",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none of these when it comes to the jarjust stainable dustyable and openable (maybe an extra part for the cap)",
+        "processed": true
+    },
+    {
+        "object": "canned_food-cbmndg",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: canned_food.n.01\nDefinition: food preserved by canning\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "it's jam jar",
+        "processed": true
+    },
+    {
+        "object": "canned_food-cbmndg",
+        "message": "Confirm reasonable bounding box size:\n48.88cm, 49.23cm, 67.41cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "canned_food-cbmndg",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none of these are true about the jar only stainable dustyable and maybe attached to extra part as the cap",
+        "processed": true
+    },
+    {
+        "object": "canned_food-foetdd",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: canned_food.n.01\nDefinition: food preserved by canning\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "don't know what it is but canned food is too braod",
+        "processed": true
+    },
+    {
+        "object": "canned_food-foetdd",
+        "message": "Confirm reasonable bounding box size:\n50.80cm, 50.79cm, 1.39m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "canned_food-foetdd",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none are true about the jar maybe stainable dustyable and attach a cap",
+        "processed": true
+    },
+    {
+        "object": "canned_food-mzoaia",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: canned_food.n.01\nDefinition: food preserved by canning\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "jar of olives",
+        "processed": true
+    },
+    {
+        "object": "canned_food-mzoaia",
+        "message": "Confirm reasonable bounding box size:\n64.18cm, 64.15cm, 93.58cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "canned_food-mzoaia",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none are true about the jar, maybe dustyable stainable and attach the cap",
+        "processed": true
+    },
+    {
+        "object": "canned_food-mzoaia",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "\\",
+        "processed": true
+    },
+    {
+        "object": "canned_food-pkopdw",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: canned_food.n.01\nDefinition: food preserved by canning\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "looks like a jar of olives",
+        "processed": true
+    },
+    {
+        "object": "canned_food-pkopdw",
+        "message": "Confirm reasonable bounding box size:\n96.47cm, 87.56cm, 1.12m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "canned_food-pkopdw",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none are true about the jar, maybe stainable dustyable and add an extra part as the cap",
+        "processed": true
+    },
+    {
+        "object": "canned_food-zfmfje",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: canned_food.n.01\nDefinition: food preserved by canning\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "looks like a ajar of pickles ",
+        "processed": true
+    },
+    {
+        "object": "canned_food-zfmfje",
+        "message": "Confirm reasonable bounding box size:\n66.24cm, 66.24cm, 1.04m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "canned_food-zfmfje",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none aretrue about the jar maybe dustyable stainable and a separate cap",
+        "processed": true
+    },
+    {
+        "object": "floor_lamp-fanocp",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "dont know how the physics would work",
+        "processed": true
+    },
+    {
+        "object": "floor_lamp-imgsrd",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "don't know how the physics would work",
+        "processed": true
+    },
+    {
+        "object": "floor_lamp-lqdmym",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "can't see parts of it",
+        "processed": true
+    },
+    {
+        "object": "fridge-xyejdx",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": true
+    },
+    {
+        "object": "fridge-xyejdx",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Handle not grabbable",
+        "processed": true
+    },
+    {
+        "object": "medicine-egondf",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: medicine.n.01\nDefinition: the branches of medical science that deal with nonsurgical techniques\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bottle of",
+        "processed": true
+    },
+    {
+        "object": "medicine-egondf",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "medicine-fmfwng",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: medicine.n.01\nDefinition: the branches of medical science that deal with nonsurgical techniques\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bottle of",
+        "processed": true
+    },
+    {
+        "object": "medicine-fmfwng",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "medicine-hvocpc",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: medicine.n.01\nDefinition: the branches of medical science that deal with nonsurgical techniques\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "box of",
+        "processed": true
+    },
+    {
+        "object": "medicine-hvocpc",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "medicine-kasbsy",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: medicine.n.01\nDefinition: the branches of medical science that deal with nonsurgical techniques\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bottle of",
+        "processed": true
+    },
+    {
+        "object": "medicine-kasbsy",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "medicine-kqkwoq",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: medicine.n.01\nDefinition: the branches of medical science that deal with nonsurgical techniques\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bottle of",
+        "processed": true
+    },
+    {
+        "object": "medicine-kqkwoq",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "medicine-qqsukh",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: medicine.n.01\nDefinition: the branches of medical science that deal with nonsurgical techniques\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bottle of ",
+        "processed": true
+    },
+    {
+        "object": "medicine-qqsukh",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "medicine-syfpak",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: medicine.n.01\nDefinition: the branches of medical science that deal with nonsurgical techniques\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bottle of",
+        "processed": true
+    },
+    {
+        "object": "medicine-syfpak",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "medicine-zfbnjh",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: medicine.n.01\nDefinition: the branches of medical science that deal with nonsurgical techniques\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bottle of ",
+        "processed": true
+    },
+    {
+        "object": "medicine-zfbnjh",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "microwave-abzvij",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: microwave.n.01\nDefinition: a short electromagnetic wave (longer than infrared but shorter than radio waves); used for radar and microwave ovens and for transmitting telephone, facsimile, video and data\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "wrong microwave",
+        "processed": false
+    },
+    {
+        "object": "microwave-bfbeeb",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: microwave.n.01\nDefinition: a short electromagnetic wave (longer than infrared but shorter than radio waves); used for radar and microwave ovens and for transmitting telephone, facsimile, video and data\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "wrong microwave",
+        "processed": true
+    },
+    {
+        "object": "microwave-bfbeeb",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": true
+    },
+    {
+        "object": "microwave-bfbeeb",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Handle not represented",
+        "processed": true
+    },
+    {
+        "object": "microwave-hjjxmi",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: microwave.n.01\nDefinition: a short electromagnetic wave (longer than infrared but shorter than radio waves); used for radar and microwave ovens and for transmitting telephone, facsimile, video and data\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": " wro",
+        "processed": true
+    },
+    {
+        "object": "microwave-hjjxmi",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "missing front",
+        "processed": true
+    },
+    {
+        "object": "microwave-rtfebu",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: microwave.n.01\nDefinition: a short electromagnetic wave (longer than infrared but shorter than radio waves); used for radar and microwave ovens and for transmitting telephone, facsimile, video and data\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "wrong microwave",
+        "processed": false
+    },
+    {
+        "object": "microwave-snsqrt",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: microwave.n.01\nDefinition: a short electromagnetic wave (longer than infrared but shorter than radio waves); used for radar and microwave ovens and for transmitting telephone, facsimile, video and data\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "wrong microwave",
+        "processed": false
+    },
+    {
+        "object": "microwave-vuezel",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: microwave.n.01\nDefinition: a short electromagnetic wave (longer than infrared but shorter than radio waves); used for radar and microwave ovens and for transmitting telephone, facsimile, video and data\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "wrong microwvae",
+        "processed": true
+    },
+    {
+        "object": "microwave-vuezel",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "missing rfont",
+        "processed": true
+    },
+    {
+        "object": "shampoo-bclpiq",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: shampoo.n.01\nDefinition: cleansing agent consisting of soaps or detergents used for washing the hair\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shampoo box",
+        "processed": true
+    },
+    {
+        "object": "shampoo-bclpiq",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "shampoo-dvrzmy",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: shampoo.n.01\nDefinition: cleansing agent consisting of soaps or detergents used for washing the hair\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "conditioner but idk if it really matters...it is a tube of ...",
+        "processed": true
+    },
+    {
+        "object": "shampoo-dvrzmy",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "shampoo-hlkpwd",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: shampoo.n.01\nDefinition: cleansing agent consisting of soaps or detergents used for washing the hair\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "tube of",
+        "processed": true
+    },
+    {
+        "object": "shampoo-hlkpwd",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "shampoo-jccyom",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: shampoo.n.01\nDefinition: cleansing agent consisting of soaps or detergents used for washing the hair\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "box of",
+        "processed": true
+    },
+    {
+        "object": "shampoo-jccyom",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "shampoo-kkbhzw",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: shampoo.n.01\nDefinition: cleansing agent consisting of soaps or detergents used for washing the hair\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bottle of",
+        "processed": false
+    },
+    {
+        "object": "shampoo-nijidu",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: shampoo.n.01\nDefinition: cleansing agent consisting of soaps or detergents used for washing the hair\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "box of ",
+        "processed": true
+    },
+    {
+        "object": "shampoo-nijidu",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "shampoo-tzghev",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: shampoo.n.01\nDefinition: cleansing agent consisting of soaps or detergents used for washing the hair\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "box of brand",
+        "processed": true
+    },
+    {
+        "object": "shampoo-tzghev",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "sink-ejooms",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "looks like connected to a table",
+        "processed": false
+    },
+    {
+        "object": "sink-ejooms",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": false
+    },
+    {
+        "object": "sink-wzpabm",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: sink.n.01\nDefinition: plumbing fixture consisting of a water basin fixed to a wall or floor and having a drainpipe\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "some have a base some don't",
+        "processed": true
+    },
+    {
+        "object": "sink-wzpabm",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "some have abase some dont",
+        "processed": true
+    },
+    {
+        "object": "sink-xiybkb",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: sink.n.01\nDefinition: plumbing fixture consisting of a water basin fixed to a wall or floor and having a drainpipe\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "some have a bas some dont",
+        "processed": true
+    },
+    {
+        "object": "sink-xiybkb",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "connected to a base",
+        "processed": true
+    },
+    {
+        "object": "sink-yfaufu",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: sink.n.01\nDefinition: plumbing fixture consisting of a water basin fixed to a wall or floor and having a drainpipe\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "connected toa cabinet",
+        "processed": true
+    },
+    {
+        "object": "sink-yfaufu",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "connected to  acabinet multiple",
+        "processed": true
+    },
+    {
+        "object": "sink-zexzrc",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: sink.n.01\nDefinition: plumbing fixture consisting of a water basin fixed to a wall or floor and having a drainpipe\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "connected to a base",
+        "processed": true
+    },
+    {
+        "object": "sink-zexzrc",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "connected to a base",
+        "processed": true
+    },
+    {
+        "object": "spoon-kwyoqh",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: spoon.n.01\nDefinition: a piece of cutlery with a shallow bowl-shaped container and a handle; used to stir or serve or take up food\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "more like a spatula?",
+        "processed": false
+    },
+    {
+        "object": "spoon-pxwpuw",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: spoon.n.01\nDefinition: a piece of cutlery with a shallow bowl-shaped container and a handle; used to stir or serve or take up food\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "spatula",
+        "processed": false
+    },
+    {
+        "object": "standing_tv-bkyguk",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no def",
+        "processed": false
+    },
+    {
+        "object": "standing_tv-blyapt",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no def",
+        "processed": false
+    },
+    {
+        "object": "standing_tv-ghxsoy",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no def",
+        "processed": false
+    },
+    {
+        "object": "standing_tv-gjlztf",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no def",
+        "processed": false
+    },
+    {
+        "object": "standing_tv-lkpsai",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no def",
+        "processed": false
+    },
+    {
+        "object": "standing_tv-sbxgwj",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no def",
+        "processed": false
+    },
+    {
+        "object": "standing_tv-udotid",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no def",
+        "processed": false
+    },
+    {
+        "object": "standing_tv-wbkvxr",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no def",
+        "processed": false
+    },
+    {
+        "object": "stove-qbjiva",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": false
+    },
+    {
+        "object": "stove-qbjiva",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": false
+    },
+    {
+        "object": "walker-cmfdmv",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: walker.n.01\nDefinition: New Zealand runner who in 1975 became the first person to run a mile in less that 3 minutes and 50 seconds (born in 1952)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shoe n.01",
+        "processed": false
+    },
+    {
+        "object": "walker-dgewyj",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: walker.n.01\nDefinition: New Zealand runner who in 1975 became the first person to run a mile in less that 3 minutes and 50 seconds (born in 1952)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shoe ",
+        "processed": true
+    },
+    {
+        "object": "walker-dgewyj",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "two",
+        "processed": true
+    },
+    {
+        "object": "walker-dlwoej",
+        "message": "Confirm reasonable bounding box size:\n27.10m, 10.34m, 11.17m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x100",
+        "processed": false
+    },
+    {
+        "object": "walker-glrsok",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: walker.n.01\nDefinition: New Zealand runner who in 1975 became the first person to run a mile in less that 3 minutes and 50 seconds (born in 1952)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shoe",
+        "processed": false
+    },
+    {
+        "object": "walker-ndexvs",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: walker.n.01\nDefinition: New Zealand runner who in 1975 became the first person to run a mile in less that 3 minutes and 50 seconds (born in 1952)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shoe",
+        "processed": false
+    },
+    {
+        "object": "walker-scbatq",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: walker.n.01\nDefinition: New Zealand runner who in 1975 became the first person to run a mile in less that 3 minutes and 50 seconds (born in 1952)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shoe",
+        "processed": false
+    },
+    {
+        "object": "walker-txpihh",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: walker.n.01\nDefinition: New Zealand runner who in 1975 became the first person to run a mile in less that 3 minutes and 50 seconds (born in 1952)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shoe",
+        "processed": false
+    },
+    {
+        "object": "walker-xnpimz",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: walker.n.01\nDefinition: New Zealand runner who in 1975 became the first person to run a mile in less that 3 minutes and 50 seconds (born in 1952)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shoe",
+        "processed": true
+    },
+    {
+        "object": "walker-xnpimz",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "two",
+        "processed": true
+    },
+    {
+        "object": "walker-fdklhj",
+        "message": "Confirm reasonable bounding box size:\n24.74m, 7.95m, 11.97m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x100",
+        "processed": true
+    },
+    {
+        "object": "walker-ykjauh",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: walker.n.01\nDefinition: New Zealand runner who in 1975 became the first person to run a mile in less that 3 minutes and 50 seconds (born in 1952)\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "shoe",
+        "processed": false
+    }
+]

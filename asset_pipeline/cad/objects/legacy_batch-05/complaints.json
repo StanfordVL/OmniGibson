@@ -1,0 +1,278 @@
+[
+    {
+        "object": "almond-acooui",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: almond.n.01\nDefinition: small bushy deciduous tree native to Asia and North Africa having pretty pink blossoms and highly prized edible nuts enclosed in a hard green hull; cultivated in southern Australia and California\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "potentially the tree and not the nut?",
+        "processed": false
+    },
+    {
+        "object": "almond-acooui",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "multiple almonds show up as single object",
+        "processed": true
+    },
+    {
+        "object": "almond-acooui",
+        "message": "Confirm reasonable bounding box size:\n1.30m, 1.04m, 30.03cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "potentially wrong",
+        "processed": false
+    },
+    {
+        "object": "basket-clziqw",
+        "message": "Confirm reasonable bounding box size:\n57.86cm, 57.86cm, 57.50cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "depends but it seems too big",
+        "processed": false
+    },
+    {
+        "object": "basket-haewxp",
+        "message": "Confirm reasonable bounding box size:\n64.76cm, 74.54cm, 15.84cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "probably too big",
+        "processed": false
+    },
+    {
+        "object": "basket-pcyjbu",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: basket.n.01\nDefinition: a container that is usually woven and has handles\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "not sure I think it is a box so maybe ",
+        "processed": false
+    },
+    {
+        "object": "basket-pcyjbu",
+        "message": "Confirm reasonable bounding box size:\n69.20cm, 56.29cm, 45.21cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": false
+    },
+    {
+        "object": "basket-pgwdlg",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: basket.n.01\nDefinition: a container that is usually woven and has handles\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "more like a box",
+        "processed": false
+    },
+    {
+        "object": "basket-pqzyxx",
+        "message": "Confirm reasonable bounding box size:\n41.22cm, 58.66cm, 59.33cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "might be too big",
+        "processed": false
+    },
+    {
+        "object": "basket-wdsnjy",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: basket.n.01\nDefinition: a container that is usually woven and has handles\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "more like box not sure",
+        "processed": false
+    },
+    {
+        "object": "basket-wdsnjy",
+        "message": "Confirm reasonable bounding box size:\n70.10cm, 37.38cm, 60.74cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": false
+    },
+    {
+        "object": "basket-wqxrbf",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: basket.n.01\nDefinition: a container that is usually woven and has handles\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "more like box not sure",
+        "processed": false
+    },
+    {
+        "object": "basket-xhdtjn",
+        "message": "Confirm reasonable bounding box size:\n61.68cm, 61.68cm, 48.89cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "might be too big",
+        "processed": false
+    },
+    {
+        "object": "basket-xjftlf",
+        "message": "Confirm reasonable bounding box size:\n67.38cm, 50.80cm, 53.94cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "might be little too big not sure",
+        "processed": false
+    },
+    {
+        "object": "bench-hezgut",
+        "message": "Confirm reasonable bounding box size:\n72.61cm, 40.62cm, 41.54cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "bench-jaklov",
+        "message": "Confirm reasonable bounding box size:\n85.75cm, 35.43cm, 37.31cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "bench-jvygiq",
+        "message": "Confirm reasonable bounding box size:\n85.54cm, 29.50cm, 42.57cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "bench-nokayw",
+        "message": "Confirm reasonable bounding box size:\n82.12cm, 36.36cm, 43.99cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "bench-nzsfrw",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "not sure the physics of the bench would work, but looks normal",
+        "processed": true
+    },
+    {
+        "object": "bench-nzsfrw",
+        "message": "Confirm reasonable bounding box size:\n87.52cm, 31.96cm, 36.33cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "bench-pcymmc",
+        "message": "Confirm reasonable bounding box size:\n89.69cm, 33.01cm, 29.42cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "bench-svnyht",
+        "message": "Confirm reasonable bounding box size:\n81.66cm, 27.67cm, 34.34cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "bench-wtkahs",
+        "message": "Confirm reasonable bounding box size:\n79.12cm, 34.06cm, 50.80cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "bench-zfpjkj",
+        "message": "Confirm reasonable bounding box size:\n81.40cm, 40.84cm, 41.31cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too small",
+        "processed": false
+    },
+    {
+        "object": "door-ohagsq",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": true
+    },
+    {
+        "object": "shelf-ptxdid",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: shelf.n.01\nDefinition: a support that consists of a horizontal surface for holding objects\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "looks too thin might be wallmounted shelf",
+        "processed": false
+    },
+    {
+        "object": "shelf-wnvxme",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Shelf cubbies are blocked",
+        "processed": false
+    },
+    {
+        "object": "sofa-jhfkdc",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: sofa.n.01\nDefinition: an upholstered seat for more than one person\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bench",
+        "processed": false
+    },
+    {
+        "object": "video_game-apjpos",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-ceaxsd",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-ckugyi",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-coiafo",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-lfdpse",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-muwcnf",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: computer_game.n.01\nDefinition: a game played against a computer\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "looks like an ipad",
+        "processed": false
+    },
+    {
+        "object": "video_game-ppnzqm",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-pujfzk",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-qsyyql",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-quzjuo",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-rzaxlj",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-veodkq",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "video_game-yyvkel",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand",
+        "processed": true
+    },
+    {
+        "object": "window-ithrgo",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": false
+    },
+    {
+        "object": "window-iwcqsz",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "window-mjssrd",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "window-tuztdv",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "window-ulnafj",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    }
+]

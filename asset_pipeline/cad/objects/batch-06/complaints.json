@@ -1,0 +1,272 @@
+[
+    {
+        "object": "aluminium_foil-lhwgty",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "extended parts should be cut",
+        "processed": true
+    },
+    {
+        "object": "aluminium_foil-lhwgty",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": true
+    },
+    {
+        "object": "aluminium_foil-lhwgty",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "missing texture; extended part needs to be cut",
+        "processed": true
+    },
+    {
+        "object": "catalog-zmidof",
+        "message": "Confirm reasonable bounding box size:\n29.70m, 21.00m, 2.00cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x100",
+        "processed": false
+    },
+    {
+        "object": "cauliflower-genkom",
+        "message": "Confirm reasonable bounding box size:\n34.21cm, 32.86cm, 25.03cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "chocolate_chip-gltrdw",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "clothesline-jjoofq",
+        "message": "Confirm reasonable bounding box size:\n237.54m, 237.54m, 139.50m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x100",
+        "processed": false
+    },
+    {
+        "object": "tray-hjxczh",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": true
+    },
+    {
+        "object": "coffee_filter-kizndy",
+        "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
+        "complaint": "cloth? not sure",
+        "processed": true
+    },
+    {
+        "object": "dough-pewqae",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "fishing_rod-zhmrtc",
+        "message": "Confirm reasonable bounding box size:\n6.66cm, 4.92mm, 8.08mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "1/20",
+        "processed": false
+    },
+    {
+        "object": "flashlight-jtrbkc",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "geode-shxbue",
+        "message": "Confirm reasonable bounding box size:\n96.99cm, 97.00cm, 1.01m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2",
+        "processed": false
+    },
+    {
+        "object": "glue-evtytd",
+        "message": "Confirm reasonable bounding box size:\n28.12cm, 64.54cm, 1.45m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x3",
+        "processed": true
+    },
+    {
+        "object": "glue-evtytd",
+        "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
+        "complaint": "particleapplier",
+        "processed": true
+    },
+    {
+        "object": "raisins_pile-gihwbe",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "multiple objects",
+        "processed": false
+    },
+    {
+        "object": "portafilter-obdthu",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "electric_hand_mixer-prewfi",
+        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "togglebutton",
+        "processed": true
+    },
+    {
+        "object": "electric_hand_mixer-prewfi",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": true
+    },
+    {
+        "object": "hockey_stick-jvgphb",
+        "message": "Confirm reasonable bounding box size:\n29.31cm, 3.35cm, 1.91m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2",
+        "processed": false
+    },
+    {
+        "object": "jelly_bean-fwupto",
+        "message": "Confirm reasonable bounding box size:\n12.57cm, 8.78cm, 9.08cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "jelly_bean-fyvbms",
+        "message": "Confirm reasonable bounding box size:\n10.19cm, 13.11cm, 9.30cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "jelly_bean-wocjtj",
+        "message": "Confirm reasonable bounding box size:\n9.18cm, 8.60cm, 8.68cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "jelly_bean-wufirc",
+        "message": "Confirm reasonable bounding box size:\n13.50cm, 9.22cm, 8.83cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "leaf_blower-omfuej",
+        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "togglebutton",
+        "processed": true
+    },
+    {
+        "object": "whisk-xymjmp",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": true
+    },
+    {
+        "object": "whisk-xymjmp",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "polo_shirt-vqbvph",
+        "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
+        "complaint": "cloth",
+        "processed": true
+    },
+    {
+        "object": "pump-wqbseg",
+        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "togglebutton;particleremover",
+        "processed": true
+    },
+    {
+        "object": "puzzle-antykn",
+        "message": "Confirm reasonable bounding box size:\n1.30m, 97.23cm, 8.75mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x4",
+        "processed": false
+    },
+    {
+        "object": "puzzle_piece-jcafwy",
+        "message": "Confirm reasonable bounding box size:\n22.87cm, 22.65cm, 7.69mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "puzzle_piece-moneds",
+        "message": "Confirm reasonable bounding box size:\n27.93cm, 17.27cm, 7.68mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "puzzle_piece-ppikln",
+        "message": "Confirm reasonable bounding box size:\n21.85cm, 16.63cm, 7.69mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "ketchup-bcqfxb",
+        "message": "Confirm reasonable bounding box size:\n13.75cm, 22.96cm, 53.49cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2",
+        "processed": false
+    },
+    {
+        "object": "mayonnaise-cirpak",
+        "message": "Confirm reasonable bounding box size:\n13.75cm, 22.96cm, 53.49cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2",
+        "processed": false
+    },
+    {
+        "object": "mustard-sjasxe",
+        "message": "Confirm reasonable bounding box size:\n13.75cm, 22.96cm, 53.49cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2",
+        "processed": false
+    },
+    {
+        "object": "shrub-hqlggp",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "Automated complaint: None was marked in original pass - please review.",
+        "processed": true
+    },
+    {
+        "object": "shrub-hqlggp",
+        "message": "Confirm reasonable bounding box size:\n98.67cm, 1.03m, 85.26cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2",
+        "processed": true
+    },
+    {
+        "object": "baseball_bat-spcxrt",
+        "message": "Confirm reasonable bounding box size:\n19.65cm, 19.65cm, 2.74m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2.74",
+        "processed": false
+    },
+    {
+        "object": "softball-erhbze",
+        "message": "Confirm reasonable bounding box size:\n20.75cm, 20.75cm, 20.84cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2",
+        "processed": false
+    },
+    {
+        "object": "tweezers-jghpwr",
+        "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
+        "complaint": "needs to be articulated?",
+        "processed": false
+    },
+    {
+        "object": "tweezers-ngwoat",
+        "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
+        "complaint": "needs to be articulated?",
+        "processed": false
+    },
+    {
+        "object": "work_helmet-goovzq",
+        "message": "Confirm reasonable bounding box size:\n2.55m, 1.93m, 1.20m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "zipper-bdfnlk",
+        "message": "Confirm reasonable bounding box size:\n5.47cm, 23.78cm, 4.22cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": false
+    },
+    {
+        "object": "zipper-qwsvid",
+        "message": "Confirm reasonable bounding box size:\n5.23cm, 13.35cm, 3.85cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x5",
+        "processed": false
+    }
+]

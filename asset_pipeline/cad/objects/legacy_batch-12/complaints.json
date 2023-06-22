@@ -1,0 +1,86 @@
+[
+    {
+        "object": "trowel-ematag",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: trowel.n.01\nDefinition: a small hand tool with a handle and flat metal blade; used for scooping or spreading plaster or similar materials\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cant navigate to see what it is",
+        "processed": false
+    },
+    {
+        "object": "turnip-nnvlrd",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: turnip.n.01\nDefinition: widely cultivated plant having a large fleshy edible white or yellow root\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "it's not the plant",
+        "processed": false
+    },
+    {
+        "object": "t_shirt-kvidcx",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no dfe",
+        "processed": false
+    },
+    {
+        "object": "vinegar-snzyfk",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: vinegar.n.01\nDefinition: sour-tasting liquid produced usually by oxidation of the alcohol in wine or cider and used as a condiment or food preservative\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "bottle of",
+        "processed": false
+    },
+    {
+        "object": "vinegar-snzyfk",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "texture is weird",
+        "processed": false
+    },
+    {
+        "object": "cap-gmdwwe",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: cap.n.01\nDefinition: a tight-fitting headdress\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "on its own i'm not sure why we have it",
+        "processed": true
+    },
+    {
+        "object": "cap-gmdwwe",
+        "message": "Confirm reasonable bounding box size:\n83.51cm, 83.50cm, 55.96cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "cap-gmdwwe",
+        "message": "Confirm object properties:\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "dustyable stainable ",
+        "processed": true
+    },
+    {
+        "object": "water_bottle-emquat",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "missing cap",
+        "processed": true
+    },
+    {
+        "object": "wrapped_gift-wpmksn",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "present.n.02",
+        "processed": true
+    },
+    {
+        "object": "wrapped_gift-wpmksn",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "open top",
+        "processed": true
+    },
+    {
+        "object": "wreath-rkrxno",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "lokks barren",
+        "processed": true
+    },
+    {
+        "object": "yogurt-kihdsj",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: yogurt__cup.n.01 (custom synset)\nDefinition: cup.n.01(hypernyms): a small open container usually used for drinking; usually has a handle\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cup of yoghurt maybe connect it to whats inside",
+        "processed": true
+    },
+    {
+        "object": "yogurt-kihdsj",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand? can't see",
+        "processed": true
+    }
+]
