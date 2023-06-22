@@ -438,6 +438,7 @@ def bin_files():
                 rt.Name("autoRenameDups"),
                 rt.Name("renameMtlDups"),
                 quiet=True,
+                mergedNodes=pymxs.byref(None),
             )
             assert success, f"Could not merge {f}"
             assert len(meshes) > 0, f"No objects found in file {f}"
