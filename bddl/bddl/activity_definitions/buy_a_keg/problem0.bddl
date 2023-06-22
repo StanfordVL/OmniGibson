@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        keg.n.02_1 - keg.n.02
+        beer_barrel.n.01_1 - beer_barrel.n.01
         shopping_cart.n.01_1 - shopping_cart.n.01
         credit_card.n.01_1 - credit_card.n.01
         checkout.n.03_1 - checkout.n.03
@@ -11,7 +11,7 @@
     )
     
     (:init 
-        (inside keg.n.02_1 shopping_cart.n.01_1) 
+        (inside beer_barrel.n.01_1 shopping_cart.n.01_1) 
         (inside credit_card.n.01_1 shopping_cart.n.01_1) 
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shopping_cart.n.01_1 grocery_store) 
@@ -21,7 +21,7 @@
     
     (:goal 
         (and 
-            (ontop ?keg.n.02_1 ?checkout.n.03_1) 
+            (ontop ?beer_barrel.n.01_1 ?checkout.n.03_1) 
             (ontop ?credit_card.n.01_1 ?checkout.n.03_1)
         )
     )

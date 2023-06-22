@@ -8,7 +8,7 @@
         mouse.n.04_1 mouse.n.04_2 - mouse.n.04
         legal_document.n.01_1 - legal_document.n.01
         carton.n.02_1 - carton.n.02
-        writing_paper.n.01_1 - writing_paper.n.01
+        sheet.n.02_1 - sheet.n.02
         pen.n.01_1 - pen.n.01
         book.n.02_1 - book.n.02
         recycling_bin.n.01_1 - recycling_bin.n.01
@@ -28,7 +28,7 @@
         (ontop mouse.n.04_2 desk.n.01_2) 
         (ontop legal_document.n.01_1 desk.n.01_1) 
         (ontop carton.n.02_1 desk.n.01_1) 
-        (ontop writing_paper.n.01_1 desk.n.01_2) 
+        (ontop sheet.n.02_1 desk.n.01_2) 
         (ontop pen.n.01_1 desk.n.01_1) 
         (ontop book.n.02_1 desk.n.01_2) 
         (ontop recycling_bin.n.01_1 desk.n.01_1) 
@@ -74,7 +74,7 @@
                     (covered ?keyboard.n.01 ?dust.n.01_1)
                 )
             )
-            (inside ?writing_paper.n.01_1 ?carton.n.02_1)
+            (inside ?sheet.n.02_1 ?carton.n.02_1)
             (inside ?pen.n.01_1 ?carton.n.02_1)
             (inside ?legal_document.n.01_1 ?carton.n.02_1)
             (inside ?book.n.02_1 ?carton.n.02_1)

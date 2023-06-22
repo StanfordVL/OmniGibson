@@ -7,7 +7,7 @@
     	beer_glass.n.01_1 beer_glass.n.01_2 - beer_glass.n.01
     	cabinet.n.01_1 - cabinet.n.01
     	bottle__of__wine.n.01_1 - bottle__of__wine.n.01
-    	bottle__of__brandy.n.01_1 - bottle__of__brandy.n.01
+    	bottle__of__whiskey.n.01_1 - bottle__of__whiskey.n.01
     	dishtowel.n.01_1 - dishtowel.n.01
     	bottle__of__tonic.n.01_1 - bottle__of__tonic.n.01
     	bottle__of__lemonade.n.01_1 - bottle__of__lemonade.n.01
@@ -23,7 +23,7 @@
         (ontop beer_glass.n.01_1 cabinet.n.01_1)
         (ontop bottle__of__wine.n.01_1 shelf.n.01_1)
         (ontop beer_glass.n.01_2 cabinet.n.01_1)
-        (ontop bottle__of__brandy.n.01_1 shelf.n.01_1)
+        (ontop bottle__of__whiskey.n.01_1 shelf.n.01_1)
         (ontop dishtowel.n.01_1 shelf.n.01_1)
         (ontop bottle__of__tonic.n.01_1 shelf.n.01_1)
         (ontop bottle__of__lemonade.n.01_1 shelf.n.01_1)
@@ -41,7 +41,7 @@
         (and 
             (nextto ?bottle__of__wine.n.01_1 ?bottle__of__beer.n.01_1) 
             (ontop ?shot_glass.n.01_1 ?serving_cart.n.01_1)
-            (ontop ?bottle__of__brandy.n.01_1 ?serving_cart.n.01_1)
+            (ontop ?bottle__of__whiskey.n.01_1 ?serving_cart.n.01_1)
             (ontop ?bottle__of__beer.n.01_1 ?serving_cart.n.01_1)
             (ontop ?bottle__of__tonic.n.01_1 ?serving_cart.n.01_1)
             (ontop ?bottle__of__lemonade.n.01_1 ?serving_cart.n.01_1)

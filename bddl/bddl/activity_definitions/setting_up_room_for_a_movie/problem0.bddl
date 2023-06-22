@@ -7,7 +7,7 @@
         bowl.n.01_1 - bowl.n.01
         can__of__soda.n.01_1 can__of__soda.n.01_2 can__of__soda.n.01_3 - can__of__soda.n.01
         shelf.n.01_1 - shelf.n.01
-        throw.n.04_1 - throw.n.04
+        sheet.n.03_1 - sheet.n.03
         table.n.02_1 - table.n.02
         floor.n.01_1 - floor.n.01
         television_receiver.n.01_1 - television_receiver.n.01
@@ -21,7 +21,7 @@
         (ontop can__of__soda.n.01_1 shelf.n.01_1)
         (ontop can__of__soda.n.01_2 shelf.n.01_1)
         (ontop can__of__soda.n.01_3 shelf.n.01_1)
-        (ontop throw.n.04_1 table.n.02_1)
+        (ontop sheet.n.03_1 table.n.02_1)
         (ontop bowl.n.01_1 table.n.02_1)
         (inroom floor.n.01_1 living_room)
         (inroom table.n.02_1 living_room)
@@ -37,7 +37,7 @@
                 (?can__of__soda.n.01 - can__of__soda.n.01)
                 (ontop ?can__of__soda.n.01 ?table.n.02_1)
             ) 
-            (ontop ?throw.n.04_1 ?sofa.n.01_1) 
+            (ontop ?sheet.n.03_1 ?sofa.n.01_1) 
             (filled ?bowl.n.01_1 ?popcorn.n.02_1) 
             (ontop ?bowl.n.01_1 ?table.n.02_1)
         )

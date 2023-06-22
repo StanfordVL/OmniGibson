@@ -29,11 +29,11 @@
         (and 
             (forall 
                 (?pot_plant.n.01 - pot_plant.n.01)
-                (saturated ?pot_plant.n.01 ?water.n.06_1)
+                (covered ?pot_plant.n.01 ?water.n.06_1)
             )
             (forall 
                 (?tree.n.01 - tree.n.01)
-                (saturated ?tree.n.01 ?water.n.06_1)
+                (covered ?tree.n.01 ?water.n.06_1)
             )
         )
     )

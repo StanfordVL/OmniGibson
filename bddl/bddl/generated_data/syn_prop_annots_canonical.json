@@ -1731,6 +1731,7 @@
         "freezable": {}
     },
     "bar.n.02": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3118,6 +3119,7 @@
         "freezable": {}
     },
     "booth.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6974,6 +6976,7 @@
         "freezable": {}
     },
     "breakfast_table.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -9404,6 +9407,7 @@
         "freezable": {}
     },
     "checkout.n.03": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -11377,6 +11381,7 @@
         "freezable": {}
     },
     "conference_table.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -11395,6 +11400,7 @@
         "freezable": {}
     },
     "console_table.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16210,6 +16216,7 @@
     },
     "gaming_table.n.01": {
         "breakable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20434,6 +20441,7 @@
         "freezable": {}
     },
     "kitchen_table.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21705,7 +21713,6 @@
     },
     "loudspeaker.n.01": {
         "toggleable": {},
-        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24921,6 +24928,7 @@
         "freezable": {}
     },
     "pedestal_table.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26487,6 +26495,7 @@
         "freezable": {}
     },
     "pool_table.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26759,7 +26768,6 @@
     },
     "pot_plant.n.01": {
         "flammable": {},
-        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28344,7 +28352,6 @@
     "rug.n.01": {
         "flammable": {},
         "particleRemover": {},
-        "sceneObject": {},
         "cloth": {},
         "nonSubstance": {},
         "deformable": {},
@@ -31610,6 +31617,7 @@
         "freezable": {}
     },
     "stand.n.04": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36293,6 +36301,7 @@
         "freezable": {}
     },
     "worktable.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36892,6 +36901,7 @@
         "freezable": {}
     },
     "reception_desk.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36990,6 +37000,99 @@
         "needsOrientation": {},
         "rigidBody": {},
         "nonSubstance": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "sack__of__brown_rice.n.01": {
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "package.n.02": {
+        "openable": {},
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "pottable__beefsteak_tomato.n.01": {
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "pottable__chili.n.01": {
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "bap.n.01 ": {
+        "cookable": {},
+        "softBody": {},
+        "nonSubstance": {},
+        "deformable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},

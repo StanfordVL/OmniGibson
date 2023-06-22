@@ -14,7 +14,7 @@
         oven.n.01_1 - oven.n.01
         cookie_sheet.n.01_1 - cookie_sheet.n.01
         flour__sack.n.01_1 - flour__sack.n.01
-        yeast__bottle.n.01_1 - yeast__bottle.n.01
+        yeast__shaker.n.01_1 - yeast__shaker.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
         sugar__sack.n.01_1 - sugar__sack.n.01
         butter__package.n.01_1 - butter__package.n.01
@@ -29,8 +29,8 @@
     (:init 
         (filled flour__sack.n.01_1 flour.n.01_1) 
         (inside flour__sack.n.01_1 cabinet.n.01_1) 
-        (filled yeast__bottle.n.01_1 yeast.n.01_1) 
-        (inside yeast__bottle.n.01_1 cabinet.n.01_1) 
+        (insource yeast__shaker.n.01_1 yeast.n.01_1) 
+        (inside yeast__shaker.n.01_1 cabinet.n.01_1) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
         (filled sugar__sack.n.01_1 granulated_sugar.n.01_1) 
