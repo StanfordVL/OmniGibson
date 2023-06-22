@@ -432,17 +432,23 @@ def bin_files():
         current_x_coordinate = 0
         for f in tqdm.tqdm(files):
             # Load everything in
-            assert rt.mergeMaxFile(
+            success, meshes = rt.mergeMaxFile(
                 f,
                 rt.Name("select"),
                 rt.Name("autoRenameDups"),
                 rt.Name("renameMtlDups"),
                 quiet=True,
-            ), f"Could not merge {f}"
+            )
+            assert success, f"Could not merge {f}"
+            assert len(meshes) > 0, f"No objects found in file {f}"
+
+            # Unhide everything
+            for x in meshes:
+                x.isHidden = False
 
             # Take everything in the selection and place them appropriately
-            bb_min = np.min([x.min for x in rt.selection], axis=0)
-            bb_max = np.max([x.max for x in rt.selection], axis=0)
+            bb_min = np.min([x.min for x in meshes], axis=0)
+            bb_max = np.max([x.max for x in meshes], axis=0)
             bb_size = bb_max - bb_min
 
             # Calculate the offset that everything needs to move by for the minimum to be at current_x_coordinate, 0, 0
@@ -450,7 +456,7 @@ def bin_files():
             offset = offset.tolist()
 
             # Move everything by the offset amount
-            for x in rt.selection:
+            for x in meshes:
                 if x.parent:
                     continue
                 x.position += rt.Point3(*offset)
