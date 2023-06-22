@@ -151,7 +151,7 @@ def rename_and_rescale_all_files():
             deletions.add(obj_id)
 
     # Load the scale needed for each category
-    with open(r"C:\Users\cgokmen\research\ig_dataset\metadata\avg_category_specs.json", "r") as f:
+    with open(r"C:\Users\Cem\research\iGibson-dev\igibson\data\ig_dataset\metadata\avg_category_specs.json", "r") as f:
         avg_specs = json.load(f)
     avg_dims = {cat: np.array(spec["size"]) * 1000 for cat, spec in avg_specs.items()}
 
