@@ -2583,6 +2583,26 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "bag__of__jerky.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "bag__of__mulch.n.01": {
         "disinfectable": {},
         "dustyable": {},
@@ -32557,28 +32577,6 @@
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
         "substance": {}
-    },
-    "jerky.n.01": {
-        "cookable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "sliceable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
     },
     "jersey.n.03": {
         "cloth": {},

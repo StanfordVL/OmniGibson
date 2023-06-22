@@ -8515,6 +8515,13 @@
                                   ]
                                 },
                                 {
+                                  "name": "bag__of__jerky.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bag_of_jerky"
+                                  ]
+                                },
+                                {
                                   "name": "jug__of__milk.n.01",
                                   "hasModel": true,
                                   "categories": [
@@ -9661,7 +9668,10 @@
                                   "children": [
                                     {
                                       "name": "jacket.n.05",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "pellet"
+                                      ]
                                     }
                                   ]
                                 }
@@ -9778,7 +9788,10 @@
                               "children": [
                                 {
                                   "name": "lampshade.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "lampshade"
+                                  ]
                                 }
                               ]
                             },
@@ -10029,7 +10042,10 @@
                                     },
                                     {
                                       "name": "kayak_rack.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "kayak_rack"
+                                      ]
                                     },
                                     {
                                       "name": "shoe_rack.n.01",
@@ -11857,7 +11873,10 @@
                             },
                             {
                               "name": "lace.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "lace"
+                              ]
                             },
                             {
                               "name": "string.n.01",
@@ -19701,7 +19720,10 @@
                             },
                             {
                               "name": "kielbasa.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "kielbasa"
+                              ]
                             },
                             {
                               "name": "pepperoni.n.01",
@@ -19788,12 +19810,11 @@
                           ]
                         },
                         {
-                          "name": "jerky.n.01",
-                          "hasModel": true
-                        },
-                        {
                           "name": "lamb.n.05",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "lamb"
+                          ]
                         },
                         {
                           "name": "pork.n.01",
