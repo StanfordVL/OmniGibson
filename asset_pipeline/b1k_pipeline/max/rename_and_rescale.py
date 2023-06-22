@@ -126,7 +126,7 @@ def processFile(pipeline_fs, target, renames, deletions, avg_dims):
 
 def rename_and_rescale_all_files():
     pipeline_fs = b1k_pipeline.utils.PipelineFS()
-    targets = b1k_pipeline.utils.get_targets("objects_unfiltered")
+    targets = b1k_pipeline.utils.get_targets("combined_unfiltered")
 
     # Load data for renames
     with pipeline_fs.open("metadata/object_renames.csv", "r") as f:
