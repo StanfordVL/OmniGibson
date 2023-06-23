@@ -64,7 +64,7 @@ SCENES_TO_ADD = {
     "school_computer_lab_and_infirmary": ["public_restroom_blue"],
     "Beechwood_0_garden": ["Beechwood_0_int"],
     # "Rs_garden": ["Rs_int"],
-    "Pomaria_0_garden": ["Pomaria_0_int"],
+    # "Pomaria_0_garden": ["Pomaria_0_int"],
     "Merom_0_garden": ["Merom_0_int"],
     "Wainscott_0_garden": ["Wainscott_0_int"],
 }

@@ -75,9 +75,7 @@ APPROVED_OBJS = {
 }
 
 REJECTED_OBJS = {
-    "valentine_wreath-ik",
-    "wood-we",
-    "curtain-fh",
+    "batch-05",
 }
 
 APPROVED_SCENES = {

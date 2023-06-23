@@ -4,7 +4,6 @@ combined:
 - objects/batch-02
 - objects/batch-03
 - objects/batch-04
-- objects/batch-05
 - objects/batch-06
 - objects/batch-07
 - objects/batch-08
@@ -26,6 +25,7 @@ combined:
 - objects/legacy_batch-10
 - objects/legacy_batch-11
 - objects/legacy_batch-12
+- objects/task_relevant-xy
 - scenes/Beechwood_0_int
 - scenes/Beechwood_1_int
 - scenes/Benevolence_0_int
@@ -96,6 +96,7 @@ combined_unfiltered:
 - objects/legacy_batch-10
 - objects/legacy_batch-11
 - objects/legacy_batch-12
+- objects/task_relevant-xy
 - scenes/Beechwood_0_garden
 - scenes/Beechwood_0_int
 - scenes/Beechwood_1_int
@@ -176,7 +177,6 @@ objects:
 - objects/batch-02
 - objects/batch-03
 - objects/batch-04
-- objects/batch-05
 - objects/batch-06
 - objects/batch-07
 - objects/batch-08
@@ -198,6 +198,7 @@ objects:
 - objects/legacy_batch-10
 - objects/legacy_batch-11
 - objects/legacy_batch-12
+- objects/task_relevant-xy
 objects_unfiltered:
 - objects/batch-00
 - objects/batch-01
@@ -226,6 +227,7 @@ objects_unfiltered:
 - objects/legacy_batch-10
 - objects/legacy_batch-11
 - objects/legacy_batch-12
+- objects/task_relevant-xy
 root_path: D:\ig_pipeline
 scenes:
 - scenes/Beechwood_0_int
