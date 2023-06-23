@@ -13,7 +13,7 @@ ALL_SHEETS = [
   (ASSETS_SHEET_KEY, "Object Category Mapping", "category_mapping.csv"),
   (ASSETS_SHEET_KEY, "Allowed Room Types", "allowed_room_types.csv"),
   (SYNSETS_SHEET_KEY, "Synsets", "synsets.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "heatSource", "prop_param_annots/heatSource.csv"),
+  (SYMSET_PARAMS_SHEET_KEY, "heatsource", "prop_param_annots/heatSource.csv"),
   (SYMSET_PARAMS_SHEET_KEY, "coldsource", "prop_param_annots/coldSource.csv"),
   (SYMSET_PARAMS_SHEET_KEY, "cooking", "prop_param_annots/cooking.csv"),
 ]
