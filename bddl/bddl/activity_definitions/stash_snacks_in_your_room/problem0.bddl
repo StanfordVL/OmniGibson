@@ -5,7 +5,7 @@
      	chip.n.04_1 chip.n.04_2 - chip.n.04
     	bed.n.01_1 - bed.n.01
     	pack__of__chocolate_bar.n.01_1 pack__of__chocolate_bar.n.01_2 - pack__of__chocolate_bar.n.01
-    	jerky.n.01_1 jerky.n.01_2 - jerky.n.01
+    	bag__of__jerky.n.01_1 bag__of__jerky.n.01_2 - bag__of__jerky.n.01
     	chocolate_bar.n.01_1 - chocolate_bar.n.01
     	granola_bar.n.01_1 granola_bar.n.01_2 - granola_bar.n.01
         sack.n.01_1 - sack.n.01
@@ -22,8 +22,8 @@
         (ontop chip.n.04_2 bed.n.01_1) 
         (ontop pack__of__chocolate_bar.n.01_1 bed.n.01_1)
         (ontop pack__of__chocolate_bar.n.01_2 bed.n.01_1)
-        (ontop jerky.n.01_1 bed.n.01_1) 
-        (ontop jerky.n.01_2 bed.n.01_1) 
+        (ontop bag__of__jerky.n.01_1 bed.n.01_1)
+        (ontop bag__of__jerky.n.01_2 bed.n.01_1)
         (ontop chocolate_bar.n.01_1 bed.n.01_1) 
         (ontop granola_bar.n.01_1 bed.n.01_1) 
         (ontop granola_bar.n.01_2 sack.n.01_1)
@@ -49,8 +49,8 @@
                 (inside ?pack__of__chocolate_bar.n.01 ?cabinet.n.01_1)
             ) 
             (forall 
-                (?jerky.n.01 - jerky.n.01) 
-                (inside ?jerky.n.01 ?cabinet.n.01_1)
+                (?bag__of__jerky.n.01 - bag__of__jerky.n.01)
+                (inside ?bag__of__jerky.n.01 ?cabinet.n.01_1)
             ) 
             (forall 
                 (?chocolate_bar.n.01 - chocolate_bar.n.01) 
