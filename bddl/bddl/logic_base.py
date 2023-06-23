@@ -29,7 +29,7 @@ class BinaryAtomicFormula(AtomicFormula):
 
     def __init__(self, scope, backend, body, object_map, generate_ground_options=True):
         super().__init__(scope, backend, body, object_map)
-        assert len(body) == 2, 'Param list should have 2 args'
+        assert len(body) == 2, f'Param list for predicate {self.STATE_NAME} should have 2 args'
         self.input1, self.input2 = [inp.strip('?') for inp in body]
         self.scope = scope
         try:
@@ -78,7 +78,7 @@ class UnaryAtomicFormula(AtomicFormula):
 
     def __init__(self, scope, backend, body, object_map, generate_ground_options=True):
         super().__init__(scope, backend, body, object_map)
-        assert len(body) == 1, 'Param list should have 1 arg'
+        assert len(body) == 1, f'Param list for predicate {self.STATE_NAME} should have 1 arg'
         self.input = body[0].strip('?')
         self.scope = scope
         try:

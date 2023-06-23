@@ -1,8 +1,11 @@
 from bddl.logic_base import UnaryAtomicFormula, BinaryAtomicFormula
 from bddl.backend_abc import BDDLBackend
+from bddl.parsing import parse_domain
 
-UNARIES = ["cooked", "real", "future", "frozen", "closed", "open", "folded", "unfolded", "toggled_on", "hot", "on_fire", "assembled", "broken"]
-BINARIES = ["saturated", "covered", "filled", "contains", "ontop", "nextto", "empty", "under", "touching", "inside", "overlaid", "attached", "draped", "insource", "inroom"]
+
+*__, domain_predicates = parse_domain("omnigibson")
+UNARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 1]
+BINARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 2]
 
 class DebugUnaryFormula(UnaryAtomicFormula):
     def _evaluate():

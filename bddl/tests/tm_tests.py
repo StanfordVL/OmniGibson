@@ -22,14 +22,14 @@ def no_missing_required_params(rule, submap):
         assert (not param_metadata[param]["required"]) or (rule[param] is not None), f"Required param {param} of rule {rule['rule_name']} is required but not present."
     for param, value in rule.items(): 
         if param_metadata[param]["required"]:
-            assert value is not None, f"Required param {param} of rule TODO is required has no value"
+            assert value is not None, f"Required param {param} of rule {rule['rule_name']} is required has no value"
 
 
 def no_incorrectly_formatted_params(rule, submap):
     param_metadata = TM_SUBMAPS_TO_PARAMS[submap]
     for param, value in rule.items(): 
         if param_metadata[param]["type"] == "synset" and value is not None:
-            assert type(value) == dict, f"Malformed synset-type value for param {param} in rule TODO"
+            assert type(value) == dict, f"Malformed synset-type value for param {param} in rule {rule['rule_name']}"
             for proposed_synset, proposed_integer in value.items():
                 assert re.match(OBJECT_CAT_RE, proposed_synset) is not None, f"Malformed synset {proposed_synset} in param {param} of rule {rule['rule_name']} in submap {submap}"
                 assert type(proposed_integer) == int, f"Malformed integer {proposed_integer} in param {param} of rule {rule['rule_name']}"

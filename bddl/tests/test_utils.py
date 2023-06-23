@@ -3,7 +3,7 @@ import os
 import re 
 
 from bddl.generated_data.transition_map.tm_submap_params import TM_SUBMAPS_TO_PARAMS
-from bddl.parsing import parse_problem
+from bddl.parsing import parse_problem, parse_domain
 
 # Files
 
@@ -14,8 +14,9 @@ CSVS_DIR = "tm_csvs"
 
 # Constants
 
-UNARIES = ["cooked", "real", "future", "frozen", "closed", "open", "folded", "unfolded", "toggled_on", "hot", "on_fire", "assembled", "broken"]
-BINARIES = ["saturated", "covered", "filled", "contains", "ontop", "nextto", "empty", "under", "touching", "inside", "overlaid", "attached", "draped", "insource", "inroom"]
+*__, domain_predicates = parse_domain("omnigibson")
+UNARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 1]
+BINARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 2]
 
 VALID_ATTACHMENTS = set([
     ("mixing_bowl.n.01", "electric_mixer.n.01"),
