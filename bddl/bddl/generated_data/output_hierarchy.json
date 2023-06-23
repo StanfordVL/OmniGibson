@@ -18176,7 +18176,10 @@
                       "children": [
                         {
                           "name": "coal.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "coal"
+                          ]
                         }
                       ]
                     },
@@ -20527,7 +20530,10 @@
               "children": [
                 {
                   "name": "coal.n.01",
-                  "hasModel": true
+                  "hasModel": true,
+                  "categories": [
+                    "coal"
+                  ]
                 },
                 {
                   "name": "peat.n.01",
@@ -23855,7 +23861,10 @@
                   "children": [
                     {
                       "name": "stain.n.01",
-                      "hasModel": true
+                      "hasModel": true,
+                      "categories": [
+                        "stain"
+                      ]
                     },
                     {
                       "name": "tarnish.n.02",
