@@ -74,9 +74,7 @@ APPROVED_OBJS = {
     ".*"
 }
 
-REJECTED_OBJS = {
-    "batch-05",
-}
+REJECTED_OBJS = set()
 
 APPROVED_SCENES = {
     ".*",
@@ -101,9 +99,15 @@ REJECTED_SCENES = {
 }
 
 def main():
-    salt, your_id, total_ids = sys.argv[1:]
-    your_id = int(your_id)
-    total_ids = int(total_ids)
+    if len(sys.argv) > 1:
+        # Work-division system for multiple clients
+        salt, your_id, total_ids = sys.argv[1:]
+        your_id = int(your_id)
+        total_ids = int(total_ids)
+    else:
+        salt = ""
+        your_id = 0
+        total_ids = 1
     assert 0 <= your_id < total_ids, f"Invalid ID {your_id}"
 
     root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ROOT_PATH))
