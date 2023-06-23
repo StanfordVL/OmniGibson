@@ -32,6 +32,7 @@ ENTRYPOINTS = {
     "rpc_server.py": "Run RPC Server for DVC stages.",
     "select_mismatched_pivot.py": "Select groups of object instances whose pivots dont match.",
     "spherify.py": "Convert point helpers into spheres.",
+    "switch_loose.py": "Switch visible object between different looseness options.",
     "translate_ig_dataset.py": "Update names of iG2 objects to new format.",
     "view_complaints.py": "View QA complaints for this file.",
 }
