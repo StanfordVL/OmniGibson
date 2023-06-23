@@ -51181,6 +51181,33 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "sliced__eggplant.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "flammable": {
+            "ignition_temperature": 250.0,
+            "fire_temperature": 1000.0,
+            "heating_rate": 0.04,
+            "distance_threshold": 0.2
+        },
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "sliced__lemon.n.01": {
         "cookable": {},
         "disinfectable": {},
