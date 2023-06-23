@@ -3,7 +3,7 @@
 
     (:objects
         mat.n.01_1 - mat.n.01
-        bathtub.n.01_1 - bathtub.n.01
+        sink.n.01_1 - sink.n.01
         water.n.06_1 - water.n.06
         scrub_brush.n.01_1 - scrub_brush.n.01
         detergent.n.02_1 - detergent.n.02
@@ -16,7 +16,7 @@
     )
     
     (:init 
-        (inside mat.n.01_1 bathtub.n.01_1) 
+        (inside mat.n.01_1 sink.n.01_1)
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop detergent__bottle.n.01_1 floor.n.01_1) 
@@ -24,12 +24,12 @@
             (covered mat.n.01_1 disinfectant.n.01_1)
         ) 
         (covered mat.n.01_1 mildew.n.02_1)
-        (insource bathtub.n.01_1 water.n.06_1) 
+        (insource sink.n.01_1 water.n.06_1)
         (ontop agent.n.01_1 floor.n.01_1) 
         (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1) 
         (ontop disinfectant__bottle.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
-        (inroom bathtub.n.01_1 bathroom)
+        (inroom sink.n.01_1 bathroom)
     )
     
     (:goal 
