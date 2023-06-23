@@ -20,7 +20,7 @@
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 playroom) 
         (inroom shelf.n.01_1 playroom) 
-        (inroom rug.n.01_1 playroom)
+        (ontop rug.n.01_1 floor.n.01_1)
     )
     
     (:goal 
