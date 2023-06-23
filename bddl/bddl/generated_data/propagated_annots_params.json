@@ -23656,7 +23656,7 @@
         "coldSource": {
             "temperature": 1.7,
             "heating_rate": 0.01,
-            "requires_toggled_on": 1,
+            "requires_toggled_on": 0,
             "requires_closed": 1,
             "requires_inside": 1
         },
@@ -39831,7 +39831,7 @@
             "heating_rate": 0.01,
             "requires_toggled_on": 1,
             "requires_closed": 0,
-            "requires_inside": 0
+            "requires_inside": 1
         },
         "heatable": {
             "temperature": 40.0
