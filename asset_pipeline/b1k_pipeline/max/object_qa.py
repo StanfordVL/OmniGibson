@@ -17,7 +17,7 @@ from b1k_pipeline.utils import parse_name, PIPELINE_ROOT
 
 IGNORE_CATEGORIES = {"walls", "floors", "ceilings"}
 
-PASS_NAME = "ruohan-1"
+PASS_NAME = "benjamin-scene-looseness"
 RECORD_PATH = PIPELINE_ROOT / "qa-logs" / f"{PASS_NAME}.json"
 
 CATEGORY_TO_SYNSET = {}
@@ -57,25 +57,37 @@ def main():
     available_groups = {
         x.group("category") + "-" + x.group("model_id")
         for x in parsed_names
-        if x is not None and not x.group("bad") and int(x.group("instance_id")) == 0 and x.group("category") not in IGNORE_CATEGORIES}
+        if x is not None and int(x.group("instance_id")) == 0 and x.group("category") not in IGNORE_CATEGORIES}
     remaining_groups = sorted(available_groups - completed_groups)
     if not remaining_groups:
-        rt.messageBox("Scene complete. Move to next scene.")
+        rt.messageBox("Scene complete.")
         return
 
     # Find objects corresponding to the next remaining group's instance zero
     next_group = remaining_groups[0]
     next_group_objects = []
+    has_loose = False
+    has_fixed = False
+    has_clutter = False
+    has_nonclutter = False
     for obj in rt.objects:
         n = parse_name(obj.name)
         if n is None:
             continue
-        if n.group("bad") or int(n.group("instance_id")) != 0:
+        if int(n.group("instance_id")) != 0:
             continue
         if n.group("category") + "-" + n.group("model_id") != next_group:
             continue
         next_group_objects.append(obj)
         obj.isHidden = False
+        if n.group("loose"):
+            has_loose = True
+        else:
+            has_fixed = True
+        if n.group("clutter"):
+            has_clutter = True
+        else:
+            has_nonclutter = True
 
     # Select that object and print
     rt.select(next_group_objects)
@@ -83,10 +95,12 @@ def main():
     rt.execute("max tool zoomextents")
     print(f"{len(available_groups) - len(remaining_groups) + 1} / {len(available_groups)}: {next_group}")
 
+    print(textwrap.fill(f"Used as loose: {has_loose}. Used as fixed: {has_fixed}. Used as clutter: {has_clutter}. Used as non-clutter: {has_nonclutter}"))
+
     # Show a popup with the synset info
-    category_name = next_group.split("-")[0]
-    synset_name, synset_desc = get_synset(category_name)
-    print(textwrap.fill(f"Category {category_name} is currently mapped to synset {synset_name} ({synset_desc})"))
+    # category_name = next_group.split("-")[0]
+    # synset_name, synset_desc = get_synset(category_name)
+    # print(textwrap.fill(f"Category {category_name} is currently mapped to synset {synset_name} ({synset_desc})"))
 
     # Record that object as completed
     with open(RECORD_PATH, "w") as f:
