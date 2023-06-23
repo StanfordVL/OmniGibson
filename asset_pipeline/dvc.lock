@@ -10767,6 +10767,9 @@ stages:
     - path: cad/scenes/hotel_suite_small/artifacts/object_list.json
       md5: dc7c214955194a0dc83cd1be173169eb
       size: 11502
+    - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
+      md5: 4b2c0c59e3fbee8bce554fad95bc8850
+      size: 77119
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       md5: 2ba5e47e698774d2bebf99d4afce8f4f
       size: 77844
@@ -10822,8 +10825,8 @@ stages:
       md5: 29819aefd035d0ae35567093710923e8
       size: 833329
     - path: params.yaml
-      md5: ba2e8894c05ba4cd928aec27c0e25403
-      size: 9096
+      md5: 17b1ea1f602263b011003824b5ad3d8d
+      size: 9201
     outs:
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -11005,6 +11008,9 @@ stages:
     - path: cad/scenes/hotel_suite_small/artifacts/object_list.json
       md5: dc7c214955194a0dc83cd1be173169eb
       size: 11502
+    - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
+      md5: 4b2c0c59e3fbee8bce554fad95bc8850
+      size: 77119
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       md5: 2ba5e47e698774d2bebf99d4afce8f4f
       size: 77844
@@ -11060,12 +11066,12 @@ stages:
       md5: 29819aefd035d0ae35567093710923e8
       size: 833329
     - path: params.yaml
-      md5: ba2e8894c05ba4cd928aec27c0e25403
-      size: 9096
+      md5: 17b1ea1f602263b011003824b5ad3d8d
+      size: 9201
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 32fb0247b7d4b0ae00f3284d538125dd
-      size: 897517
+      md5: 401741b22de9767cf41e1ab8be93e61d
+      size: 923963
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -11331,8 +11337,8 @@ stages:
       md5: 29819aefd035d0ae35567093710923e8
       size: 833329
     - path: params.yaml
-      md5: ba2e8894c05ba4cd928aec27c0e25403
-      size: 9096
+      md5: 17b1ea1f602263b011003824b5ad3d8d
+      size: 9201
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
       md5: 1d997c64f929cdb85e1e3ea3019c6aba
@@ -12314,6 +12320,12 @@ stages:
     - path: cad/scenes/hotel_suite_small/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
+    - path: cad/scenes/house_double_floor_lower/artifacts/room_object_list.json
+      md5: 8c0a3f61a4fafcfbaede90d7f8c1e6c1
+      size: 6411
+    - path: cad/scenes/house_double_floor_lower/artifacts/room_object_list.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
     - path: cad/scenes/house_double_floor_upper/artifacts/room_object_list.json
       md5: 8cf36f89a6c8d928af1fc8df7d8cfb9a
       size: 9037
@@ -12426,12 +12438,12 @@ stages:
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     - path: params.yaml
-      md5: ba2e8894c05ba4cd928aec27c0e25403
-      size: 9096
+      md5: 17b1ea1f602263b011003824b5ad3d8d
+      size: 9201
     outs:
     - path: artifacts/pipeline/combined_room_object_list.json
-      md5: adca91f4a6da49701e1dce0c05be7e07
-      size: 182836
+      md5: dbc384422594f50b31ccac688957553b
+      size: 189850
   room_object_list@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -12976,8 +12988,8 @@ stages:
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     - path: params.yaml
-      md5: ba2e8894c05ba4cd928aec27c0e25403
-      size: 9096
+      md5: 17b1ea1f602263b011003824b5ad3d8d
+      size: 9201
     outs:
     - path: artifacts/pipeline/combined_room_object_list_future.json
       md5: 992d3f508564ec5a86a5fd8f9d7a4ab8
