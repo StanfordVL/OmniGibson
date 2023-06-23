@@ -3,7 +3,6 @@ import json
 import pkgutil
 
 import networkx as nx
-from IPython import embed
 import bddl
 
 DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
@@ -218,4 +217,3 @@ class ObjectTaxonomy(object):
 
 if __name__ == "__main__":
     object_taxonomy = ObjectTaxonomy()
-    embed()
