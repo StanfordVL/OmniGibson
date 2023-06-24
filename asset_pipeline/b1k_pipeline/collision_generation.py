@@ -33,8 +33,8 @@ COACD_TIMEOUT = 10 * 60 # 10 min
 MAX_VERTEX_COUNT = 60
 REDUCTION_STEP = 5
 
-resolutions = ["1000000"]        ## [-r] <voxelresolution>: Total number of voxels to use. Default is 100,000
-depth = ["20"] # ["5", "10", "20"]    ## [-d] <maxRecursionDepth>: Maximum recursion depth. Default value is 10.
+resolutions = ["100000"]        ## [-r] <voxelresolution>: Total number of voxels to use. Default is 100,000
+depth = ["10"] # ["5", "10", "20"]    ## [-d] <maxRecursionDepth>: Maximum recursion depth. Default value is 10.
 maxHullVertCounts = ["60"]          ## [-v] <maxHullVertCount>: Maximum number of vertices in the output convex hull. Default value is 64
 maxHulls = ["4", "8", "32"]                          ## [-h] <n>: Maximum number of output convex hulls. Default is 32
 fillmode = ["flood"] # ["flood", "surface", "raycast"]                 ## [-f] <fillMode>: Fill mode. Default is 'flood', also 'surface' and 'raycast' are valid.
@@ -43,7 +43,7 @@ split = ["true"]                           ## [-p] <true/false>: If false, split
 edgelength = ["2"]                        ## [-l] <minEdgeLength>: Minimum size of a voxel edge. Default value is 2 voxels.
 
 thresholds = ["0.05"] #["0.05", "0.1", "0.5"]  ## [-t] <threshold>: concavity threshold for terminating the decomposition (0.01~1), default = 0.05.
-prep_resolutions = ["100"] #, "100", "75", "25"] ## [-pr] <preprocessed resolution>: resolution for manifold preprocess (20~100), default = 50.
+prep_resolutions = ["50"] #, "100", "75", "25"] ## [-pr] <preprocessed resolution>: resolution for manifold preprocess (20~100), default = 50.
 max_convex_hulls = ["8", "32"] #, "32", "64"]  ## [-c] <maxNumConvexHulls>:  max # convex hulls in the result, -1 for no maximum limitation, works only when merge is enabled, 
                                           # default = -1 (may introduce convex hull with a concavity larger than the threshold)
 
@@ -250,7 +250,7 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
                 
                 # Check if we have already selected a processing option for this mesh
                 processing_options = PROCESSING_OPTIONS
-                if target_fs.exists("collision_selection.json"):
+                if GENERATE_SELECTED_ONLY and target_fs.exists("collision_selection.json"):
                     with target_fs.open("collision_selection.json", "r") as f:
                         selection = json.load(f)
                     # Here we currently match the model ID and the link name
