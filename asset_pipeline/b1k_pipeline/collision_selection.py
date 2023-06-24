@@ -14,7 +14,7 @@ import b1k_pipeline.utils
 
 # These change the stepping logic
 YOUR_ID = 0
-TOTAL_IDS = 10
+TOTAL_IDS = 1
 
 
 @contextmanager
@@ -166,7 +166,8 @@ def main():
                     continue
 
                 with target_output_fs.open("collision_selection.json", "r") as f:
-                    selections |= set(json.load(f).keys())
+                    this_selections = [b1k_pipeline.utils.parse_name(x) for x in json.load(f).keys()]
+                    selections |= {(x.group('model_id'), x.group('link_name')) for x in this_selections}
 
         # Now get a list of all the objects that we can process.
         print("Getting list of objects to process...")
@@ -202,7 +203,8 @@ def main():
 
                         total_in_batch += 1
 
-                        if mesh_name in selections:
+                        matching_key = (parsed_name.group('model_id'), parsed_name.group('link_name'))
+                        if matching_key in selections:
                             continue
                         candidates[mesh_name] = target
     
