@@ -179,10 +179,14 @@ def main():
                     continue
 
                 with target_output_fs.open("object_list.json", "r") as f:
-                    mesh_list = json.load(f)["meshes"]
+                    object_list = json.load(f)
+
+                mesh_list = object_list["meshes"]
 
                 with target_output_fs.open("collision_meshes.zip", "rb") as zip_file, \
-                     ZipFS(zip_file) as zip_fs:
+                     ZipFS(zip_file) as zip_fs, \
+                     target_output_fs.open("meshes.zip", "rb") as meshes_zip_file, \
+                     ZipFS(meshes_zip_file) as meshes_zip_fs:
                     for mesh_name in mesh_list:
                         parsed_name = b1k_pipeline.utils.parse_name(mesh_name)
                         if not parsed_name:
@@ -197,6 +201,22 @@ def main():
                             continue
                         if not should_convert:
                             continue
+
+                        collision_found = False
+                        for item in meshes_zip_fs.listdir(mesh_name):
+                            parsed_item = b1k_pipeline.utils.parse_name(item)
+                            if not parsed_item:
+                                continue
+                            if parsed_item.group("model_id") == parsed_name.group("model_id") and \
+                                    parsed_item.group("link_name") == parsed_name.group("link_name") and \
+                                    parsed_item.group("meta_type") == "collision":
+                                collision_found = True
+                                break
+
+                        if collision_found:
+                            print("Found collision mesh for", mesh_name)
+                            continue
+
                         if not zip_fs.exists(mesh_name):
                             print("Missing mesh", mesh_name)
                             continue
