@@ -19,14 +19,11 @@ import random
 from fs.osfs import OSFS
 from fs.zipfs import ZipFS
 
-from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh, launch_cluster
+from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh
 
-WORKER_COUNT = 16
 GENERATE_SELECTED_ONLY = True
-
-# These are both on PATH on the worker
-VHACD_EXECUTABLE = "TestVHACD"
-COACD_EXECUTABLE = "coacd"
+VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
+COACD_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
 
 COACD_TIMEOUT = 10 * 60 # 10 min
 
@@ -62,7 +59,7 @@ def generate_option_coacd(threshold, prep_resolution, max_convex_hull):
         coacd_future = dask_client.submit(
             coacd_worker,
             input_stream.getvalue(),
-            threshold, prep_resolution, max_convex_hull,
+            threshold, prep_resolution if not m.is_volume else None, max_convex_hull,
             retries=1)
         result = coacd_future.result()
         if not result:
@@ -85,7 +82,11 @@ def coacd_worker(file_bytes, t, pr, max_hull):
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
 
-        vhacd_cmd = [str(COACD_EXECUTABLE), "-i", in_path, "-o", out_path, "-t", t, "-c", max_hull, "-pr", pr]
+        vhacd_cmd = ["python", str(COACD_SCRIPT_PATH), in_path, out_path, "--threshold", t, "--max-convex-hull", max_hull]
+        if pr:
+            vhacd_cmd.extend(["--preprocess", "true", "--preprocess-resolution", pr])
+        else:
+            vhacd_cmd.extend(["--preprocess", "false"])
         try:
             subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
             with open(out_path, 'rb') as f:
@@ -291,9 +292,9 @@ def main():
         errors = {}
         target_futures = {}
     
-        dask_client = launch_cluster(WORKER_COUNT)
+        dask_client = Client(sys.argv[1] + ":35423")
         
-        with futures.ThreadPoolExecutor(max_workers=10) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as mesh_executor:
+        with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as mesh_executor:
             targets = get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[target_executor.submit(process_target, target, pipeline_fs, mesh_executor, dask_client)] = target
