@@ -19,10 +19,14 @@ import random
 from fs.osfs import OSFS
 from fs.zipfs import ZipFS
 
-from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh
+from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh, launch_cluster
 
-VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
-COACD_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
+WORKER_COUNT = 16
+GENERATE_SELECTED_ONLY = True
+
+# These are both on PATH on the worker
+VHACD_EXECUTABLE = "TestVHACD"
+COACD_EXECUTABLE = "coacd"
 
 COACD_TIMEOUT = 10 * 60 # 10 min
 
@@ -58,7 +62,7 @@ def generate_option_coacd(threshold, prep_resolution, max_convex_hull):
         coacd_future = dask_client.submit(
             coacd_worker,
             input_stream.getvalue(),
-            threshold, prep_resolution if not m.is_volume else None, max_convex_hull,
+            threshold, prep_resolution, max_convex_hull,
             retries=1)
         result = coacd_future.result()
         if not result:
@@ -81,11 +85,7 @@ def coacd_worker(file_bytes, t, pr, max_hull):
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
 
-        vhacd_cmd = ["python", str(COACD_SCRIPT_PATH), in_path, out_path, "--threshold", t, "--max-convex-hull", max_hull]
-        if pr:
-            vhacd_cmd.extend(["--preprocess", "true", "--preprocess-resolution", pr])
-        else:
-            vhacd_cmd.extend(["--preprocess", "false"])
+        vhacd_cmd = [str(COACD_EXECUTABLE), "-i", in_path, "-o", out_path, "-t", t, "-c", max_hull, "-pr", pr]
         try:
             subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
             with open(out_path, 'rb') as f:
@@ -248,9 +248,25 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
                 # Load the mesh
                 m = load_mesh(mesh_archive_fs, f"{mesh_name}/{mesh_name}.obj", force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
                 
+                # Check if we have already selected a processing option for this mesh
+                processing_options = PROCESSING_OPTIONS
+                if target_fs.exists("collision_selection.json"):
+                    with target_fs.open("collision_selection.json", "r") as f:
+                        selection = json.load(f)
+                    # Here we currently match the model ID and the link name
+                    matching_key = (parsed_name.group('model_id'), parsed_name.group('link_name'))
+                    for k, v in selection.items():
+                        parsed_key = parse_name(k)
+                        if not parsed_key:
+                            continue
+                        if (parsed_key.group('model_id'), parsed_key.group('link_name')) == matching_key:
+                            # Get a list containing only the selected option
+                            processing_options = [(option_name, option_fn) for option_name, option_fn in processing_options if option_name == v]
+                            break
+
                 # Now queue a target for each of the processing options
                 mesh_dir = collision_mesh_archive_fs.makedir(mesh_name)
-                for option_name, option_fn in PROCESSING_OPTIONS:
+                for option_name, option_fn in processing_options:
                     future = link_executor.submit(process_object_with_option, m, mesh_dir, option_name, option_fn, dask_client)
                     object_futures[future] = mesh_name + "--" + option_name
         
@@ -275,9 +291,9 @@ def main():
         errors = {}
         target_futures = {}
     
-        dask_client = Client(sys.argv[1] + ":35423")
+        dask_client = launch_cluster(WORKER_COUNT)
         
-        with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as mesh_executor:
+        with futures.ThreadPoolExecutor(max_workers=10) as target_executor, futures.ThreadPoolExecutor(max_workers=50) as mesh_executor:
             targets = get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[target_executor.submit(process_target, target, pipeline_fs, mesh_executor, dask_client)] = target

@@ -1,11 +1,11 @@
 import subprocess
-from dask.distributed import Client, Scheduler, as_completed
+from dask.distributed import as_completed
 
 from fs.copy import copy_fs
 from fs.tempfs import TempFS
 from fs.zipfs import ZipFS
 
-from b1k_pipeline.utils import PipelineFS, ParallelZipFS, TMP_DIR
+from b1k_pipeline.utils import PipelineFS, ParallelZipFS, TMP_DIR, launch_cluster
 
 import tqdm
 
@@ -14,11 +14,6 @@ from IPython import embed
 BATCH_SIZE = 32
 assert(BATCH_SIZE % 2 == 0)
 WORKER_COUNT = 8
-
-def run_on_batch(dataset_path, output_path, batch):
-    python_cmd = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_path, output_path] + batch
-    cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
-    return subprocess.run(cmd, capture_output=True, check=True, cwd="/scr/ig_pipeline")
 
 
 def main():
@@ -35,11 +30,8 @@ def main():
                     continue
                 copy_fs(usd_fs.opendir(item.path), dataset_fs.makedirs(item.path))
 
-            dask_client = Client(n_workers=0, host="", scheduler_port=8786)
-            # subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh capri32.stanford.edu:8786"', shell=True, check=True)
-            subprocess.run(f'cd /scr/ig_pipeline/b1k_pipeline/docker; ./run_worker_local.sh {WORKER_COUNT} cgokmen-lambda.stanford.edu:8786', shell=True, check=True)
-            print("Waiting for workers")
-            dask_client.wait_for_workers(WORKER_COUNT)
+            # Launch the cluster
+            dask_client = launch_cluster(WORKER_COUNT)
 
             # Start the batched run
             object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
@@ -49,11 +41,11 @@ def main():
             for start in range(0, len(object_glob), BATCH_SIZE):
                 end = start + BATCH_SIZE
                 batch = object_glob[start:end]
+                command = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_fs.getsyspath("/"), out_temp_fs.getsyspath("/")] + batch
                 worker_future = dask_client.submit(
-                    run_on_batch,
-                    dataset_fs.getsyspath("/"),
-                    out_temp_fs.getsyspath("/"),
-                    batch,
+                    run_in_env,
+                    python_cmd=command,
+                    omnigibson_env=True,
                     pure=False)
                 futures[worker_future] = batch
 
