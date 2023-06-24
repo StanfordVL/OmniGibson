@@ -9898,7 +9898,10 @@
                             },
                             {
                               "name": "mulch.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "mulch"
+                              ]
                             },
                             {
                               "name": "roof.n.01",
@@ -9963,7 +9966,10 @@
                                 },
                                 {
                                   "name": "spray_paint.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spray_paint"
+                                  ]
                                 }
                               ]
                             },
@@ -11356,7 +11362,10 @@
                                 },
                                 {
                                   "name": "stucco.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "stucco"
+                                  ]
                                 }
                               ]
                             }
@@ -12568,7 +12577,10 @@
                                           "children": [
                                             {
                                               "name": "chia_seed.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "chia_seed"
+                                              ]
                                             },
                                             {
                                               "name": "cooked__cumin.n.01",
@@ -14178,7 +14190,10 @@
                                             },
                                             {
                                               "name": "grease.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "grease"
+                                              ]
                                             },
                                             {
                                               "name": "linseed_oil.n.01",
@@ -14257,7 +14272,10 @@
                                             },
                                             {
                                               "name": "wax_remnant.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "wax_remnant"
+                                              ]
                                             }
                                           ]
                                         }
@@ -14487,7 +14505,10 @@
                               "children": [
                                 {
                                   "name": "insectifuge.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "insectifuge"
+                                  ]
                                 }
                               ]
                             },
@@ -14600,7 +14621,10 @@
                     },
                     {
                       "name": "adhesive_material.n.01",
-                      "hasModel": true
+                      "hasModel": true,
+                      "categories": [
+                        "adhesive_material"
+                      ]
                     },
                     {
                       "name": "waste.n.01",
@@ -14619,7 +14643,10 @@
                           "children": [
                             {
                               "name": "debris.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "debris"
+                              ]
                             }
                           ]
                         },
@@ -14631,6 +14658,7 @@
                               "name": "fecal_matter.n.01",
                               "hasModel": true,
                               "categories": [
+                                "fecal_matter",
                                 "poop"
                               ]
                             }
@@ -14982,7 +15010,10 @@
                             },
                             {
                               "name": "spray_paint.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "spray_paint"
+                              ]
                             }
                           ]
                         }
@@ -15119,7 +15150,10 @@
                       "children": [
                         {
                           "name": "mud.n.03",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "mud"
+                          ]
                         },
                         {
                           "name": "soil.n.02",
@@ -15596,7 +15630,10 @@
                         },
                         {
                           "name": "stucco.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "stucco"
+                          ]
                         }
                       ]
                     },
@@ -16252,7 +16289,10 @@
                                 },
                                 {
                                   "name": "brown_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "brown_rice"
+                                  ]
                                 },
                                 {
                                   "name": "cooked__brown_rice.n.01",
@@ -16264,11 +16304,17 @@
                                 },
                                 {
                                   "name": "tomato_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "tomato_rice"
+                                  ]
                                 },
                                 {
                                   "name": "white_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "white_rice"
+                                  ]
                                 }
                               ]
                             },
@@ -16325,7 +16371,10 @@
                                 },
                                 {
                                   "name": "brown_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "brown_rice"
+                                  ]
                                 },
                                 {
                                   "name": "cooked__brown_rice.n.01",
@@ -16337,11 +16386,17 @@
                                 },
                                 {
                                   "name": "tomato_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "tomato_rice"
+                                  ]
                                 },
                                 {
                                   "name": "white_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "white_rice"
+                                  ]
                                 }
                               ]
                             },
@@ -17795,7 +17850,10 @@
                             },
                             {
                               "name": "pellet_food.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "pellet_food"
+                              ]
                             }
                           ]
                         },
@@ -17807,6 +17865,7 @@
                               "name": "hay.n.01",
                               "hasModel": true,
                               "categories": [
+                                "hay",
                                 "haystack"
                               ]
                             }
@@ -20170,7 +20229,10 @@
                             },
                             {
                               "name": "jimmies.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "jimmies"
+                              ]
                             }
                           ]
                         },
@@ -20913,7 +20975,10 @@
                                 },
                                 {
                                   "name": "grease.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "grease"
+                                  ]
                                 },
                                 {
                                   "name": "linseed_oil.n.01",
@@ -20992,7 +21057,10 @@
                                 },
                                 {
                                   "name": "wax_remnant.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "wax_remnant"
+                                  ]
                                 }
                               ]
                             }
@@ -21095,7 +21163,10 @@
                           "children": [
                             {
                               "name": "hair.n.04",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "hair"
+                              ]
                             }
                           ]
                         },
@@ -21170,7 +21241,10 @@
                                   "children": [
                                     {
                                       "name": "snow.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "snow"
+                                      ]
                                     }
                                   ]
                                 }
@@ -21252,7 +21326,10 @@
                                                 },
                                                 {
                                                   "name": "grease.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "grease"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "linseed_oil.n.01",
@@ -21331,7 +21408,10 @@
                                                 },
                                                 {
                                                   "name": "wax_remnant.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "wax_remnant"
+                                                  ]
                                                 }
                                               ]
                                             }
@@ -21561,7 +21641,10 @@
                                   "children": [
                                     {
                                       "name": "insectifuge.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "insectifuge"
+                                      ]
                                     }
                                   ]
                                 },
@@ -21674,7 +21757,10 @@
                         },
                         {
                           "name": "adhesive_material.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "adhesive_material"
+                          ]
                         },
                         {
                           "name": "waste.n.01",
@@ -21693,7 +21779,10 @@
                               "children": [
                                 {
                                   "name": "debris.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "debris"
+                                  ]
                                 }
                               ]
                             },
@@ -21705,6 +21794,7 @@
                                   "name": "fecal_matter.n.01",
                                   "hasModel": true,
                                   "categories": [
+                                    "fecal_matter",
                                     "poop"
                                   ]
                                 }
@@ -22056,7 +22146,10 @@
                                 },
                                 {
                                   "name": "spray_paint.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spray_paint"
+                                  ]
                                 }
                               ]
                             }
@@ -22193,7 +22286,10 @@
                           "children": [
                             {
                               "name": "mud.n.03",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "mud"
+                              ]
                             },
                             {
                               "name": "soil.n.02",
@@ -22670,7 +22766,10 @@
                             },
                             {
                               "name": "stucco.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "stucco"
+                              ]
                             }
                           ]
                         },
@@ -23751,11 +23850,17 @@
                           "children": [
                             {
                               "name": "incision.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "incision"
+                              ]
                             },
                             {
                               "name": "wrinkle.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "wrinkle"
+                              ]
                             }
                           ]
                         }
@@ -23871,7 +23976,10 @@
                     },
                     {
                       "name": "tarnish.n.02",
-                      "hasModel": true
+                      "hasModel": true,
+                      "categories": [
+                        "tarnish"
+                      ]
                     }
                   ]
                 }
