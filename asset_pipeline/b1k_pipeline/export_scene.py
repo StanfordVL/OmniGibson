@@ -11,11 +11,6 @@ from b1k_pipeline.mesh_tree import build_mesh_tree
 from b1k_pipeline.export_objs_global import compute_object_bounding_box
 import b1k_pipeline.utils
 
-OFFSETS = {
-    "restaurant_hotel": np.array([-13697.9,-14270.8,-3387.5]) / 1000.0,
-    "office_vendor_machine": np.array([-427.945,5878.52,0]) / 1000.0,
-}
-
 SKIP_CATEGORIES = {}
 
 def main():
@@ -53,9 +48,6 @@ def main():
 
         # Get the relevant bbox info.
         bbox_size, _, bbox_world_center, bbox_world_rot = compute_object_bounding_box(G.nodes[root_node])
-
-        if scene_name in OFFSETS:
-            bbox_world_center = bbox_world_center - OFFSETS[scene_name]
 
         # Save pose to scene URDF
         scene_link = ET.SubElement(scene_tree_root, "link")

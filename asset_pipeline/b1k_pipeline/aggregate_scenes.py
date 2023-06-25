@@ -24,7 +24,7 @@ def main():
                 source_file = "scene.urdf"
                 destination_dir = archive_fs.makedirs(fs.path.join("scenes", scene_name, "urdf"), recreate=True)
                 destination_file = f"{scene_name}_best.urdf"
-                fs.copy.copy_file(source_dir, source_file, archive_fs, destination_dir, destination_file)
+                fs.copy.copy_file(source_dir, source_file, destination_dir, destination_file)
 
         except Exception as e:
             success = False

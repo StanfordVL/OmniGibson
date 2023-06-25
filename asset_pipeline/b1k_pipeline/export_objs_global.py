@@ -264,6 +264,11 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         obj_relative_path = f"{obj_name}-{link_name}.obj"
         save_mesh(canonical_mesh, tfs, obj_relative_path)
 
+        # Check that a material got exported.
+        material_files = [x for x in tfs.listdir("/") if x.endswith(".mtl")]
+        assert len(material_files) == 1, f"Something's wrong: there's more than 1 material file in {tfs.listdir('/')}"
+        original_material_filename = material_files[0]
+
         # Move the mesh to the correct path
         obj_link_mesh_folder_fs = output_fs.makedir("shape", recreate=True)
         obj_link_visual_mesh_folder_fs = obj_link_mesh_folder_fs.makedir("visual", recreate=True)
@@ -272,6 +277,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
 
         # Fix texture file paths if necessary.
         original_material_fs = G.nodes[link_node]["material_dir"]
+        texture_translations = {}
         if original_material_fs:
             for src_texture_file in original_material_fs.listdir("/"):
                 fname = src_texture_file
@@ -302,7 +308,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "r") as f:
             new_lines = []
             for line in f.readlines():
-                if "mtllib material_0.mtl" in line:
+                if f"mtllib {original_material_filename}" in line:
                     line = f"mtllib {mtl_name}\n"
                 new_lines.append(line)
 
@@ -311,19 +317,18 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                 f.write(line)
 
         # Modify texture reference in MTL file
-        if tfs.exists("material_0.mtl"):
-            with tfs.open("material_0.mtl", "r") as f:
-                new_lines = []
-                for line in f.readlines():
-                    if "map_Kd material_0.png" in line:
-                        line = ""
-                        for key in MTL_MAPPING:
-                            line += f"{key} ../../material/{obj_name}-{link_name}-{MTL_MAPPING[key]}.png\n"
-                    new_lines.append(line)
+        with tfs.open(original_material_filename, "r") as f:
+            new_lines = []
+            for line in f.readlines():
+                if "map_Kd material_0.png" in line:
+                    line = ""
+                    for key in MTL_MAPPING:
+                        line += f"{key} ../../material/{obj_name}-{link_name}-{MTL_MAPPING[key]}.png\n"
+                new_lines.append(line)
 
-            with obj_link_visual_mesh_folder_fs.open(mtl_name, "w") as f:
-                for line in new_lines:
-                    f.write(line)
+        with obj_link_visual_mesh_folder_fs.open(mtl_name, "w") as f:
+            for line in new_lines:
+                f.write(line)
 
     # Create the link in URDF
     link_xml = ET.SubElement(tree_root, "link")
@@ -462,13 +467,11 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
 
 def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
     try:
+        obj_cat, obj_model, obj_inst_id, _ = root_node
+
         G = mesh_tree.build_mesh_tree(mesh_list, b1k_pipeline.utils.PipelineFS().target_output(target), filter_nodes=relevant_nodes)
 
         with OSFS(output_dir) as output_fs:
-            obj_cat, obj_model, obj_inst_id, _ = root_node
-
-            # Process the object
-            obj_cat, obj_model, obj_inst_id, _ = root_node
             obj_name = "-".join([obj_cat, obj_model])
 
             # Prepare the URDF tree

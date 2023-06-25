@@ -2,15 +2,15 @@ import os
 
 import concurrent.futures
 import fs
-import fs.zipfs
+from fs.multifs import MultiFS
+from fs.tempfs import TempFS
 import numpy as np
 import pybullet as p
 from PIL import Image
-from b1k_pipeline.utils import PIPELINE_ROOT
+from b1k_pipeline.utils import TMP_DIR, PipelineFS, ParallelZipFS
 import tqdm
 
 
-ZIP_FILE = PIPELINE_ROOT / "artifacts/parallels/maps.zip"
 MAX_RAYS = p.MAX_RAY_INTERSECTION_BATCH_SIZE - 1
 
 RESOLUTION = 0.01
@@ -35,12 +35,12 @@ def world_to_map(xy, trav_map_resolution, trav_map_size):
     return np.flip((np.array(xy) / trav_map_resolution + trav_map_size / 2.0)).round().astype(np.int)
 
 
-def process_scene(scene_id):
+def process_scene(scene_id, dataset_path):
     # Don't import this outside the processes so that they don't share any state.
     import igibson
     import igibson.external.pybullet_tools.utils
 
-    igibson.ig_dataset_path = PIPELINE_ROOT / "artifacts/aggregate"
+    igibson.ig_dataset_path = dataset_path
     room_categories_path = os.path.join(igibson.ig_dataset_path, "metadata", "room_categories.txt")
 
     sem_to_id = dict()
@@ -178,27 +178,36 @@ def process_scene(scene_id):
 
 
 def main():
-    with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
-        scene_folder = PIPELINE_ROOT / "artifacts/aggregate/scenes"
-        all_futures = {}
-        for scene_id in os.listdir(scene_folder):
-            all_futures[executor.submit(process_scene, scene_id)] = scene_id
+    with TempFS(temp_dir=TMP_DIR) as temp_fs:
+        # Extract objects/scenes to a common directory
+        multi_fs = fs.multifs.MultiFS()
+        multi_fs.add_fs("metadata", ParallelZipFS("metadata.zip"), priority=1)
+        multi_fs.add_fs("objects", ParallelZipFS("objects.zip"), priority=1)
+        multi_fs.add_fs("scenes", ParallelZipFS("scenes.zip"), priority=1)
 
-        with fs.zipfs.ZipFS(ZIP_FILE, write=True) as zip_fs:
-            with tqdm.tqdm(total=len(all_futures)) as scene_pbar:
-                for future in concurrent.futures.as_completed(all_futures.keys()):
-                    images = future.result()
-                    for path, arr in images.items():
-                        zip_fs.makedirs(fs.path.dirname(path), recreate=True)
-                        with zip_fs.open(path, "wb") as map_file:
-                            Image.fromarray(arr).save(map_file, format="png")
+        # Copy all the files to the output zip filesystem.
+        total_files = sum(1 for f in multi_fs.walk.files())
+        with tqdm.tqdm(total=total_files) as pbar:
+            fs.copy.copy_fs(multi_fs, temp_fs, on_copy=lambda *args: pbar.update(1))
 
-                scene_pbar.update(1)
+        with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
+            all_futures = {}
+            for scene_id in temp_fs.listdir("scenes"):
+                all_futures[executor.submit(process_scene, scene_id)] = scene_id
 
-    # If we got here, we were successful. Let's create the success file.
-    success_file = PIPELINE_ROOT / "artifacts/pipeline/make_maps.success"
-    with open(success_file, "w"):
-        pass
+            with ParallelZipFS("maps.zip", write=True) as zip_fs:
+                with tqdm.tqdm(total=len(all_futures)) as scene_pbar:
+                    for future in concurrent.futures.as_completed(all_futures.keys()):
+                        images = future.result()
+                        for path, arr in images.items():
+                            zip_fs.makedirs(fs.path.dirname(path), recreate=True)
+                            with zip_fs.open(path, "wb") as map_file:
+                                Image.fromarray(arr).save(map_file, format="png")
+
+                        scene_pbar.update(1)
+
+        # If we got here, we were successful. Let's create the success file.
+        PipelineFS().pipeline_output().touch("make_maps.success")
 
 if __name__ == "__main__":
     main()

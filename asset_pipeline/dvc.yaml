@@ -21,48 +21,48 @@ stages:
   aggregate_scenes:
     cmd: python -m b1k_pipeline.aggregate_scenes
     deps:
-    - cad/scenes/Beechwood_0_int/scene.urdf
-    - cad/scenes/Beechwood_1_int/scene.urdf
-    - cad/scenes/Benevolence_0_int/scene.urdf
-    - cad/scenes/Benevolence_1_int/scene.urdf
-    - cad/scenes/Benevolence_2_int/scene.urdf
-    - cad/scenes/Ihlen_0_int/scene.urdf
-    - cad/scenes/Ihlen_1_int/scene.urdf
-    - cad/scenes/Merom_0_int/scene.urdf
-    - cad/scenes/Merom_1_int/scene.urdf
-    - cad/scenes/Pomaria_0_int/scene.urdf
-    - cad/scenes/Pomaria_1_int/scene.urdf
-    - cad/scenes/Pomaria_2_int/scene.urdf
-    - cad/scenes/Rs_int/scene.urdf
-    - cad/scenes/Wainscott_0_int/scene.urdf
-    - cad/scenes/Wainscott_1_int/scene.urdf
-    - cad/scenes/commercial_kitchen_fire_extinguisher/scene.urdf
-    - cad/scenes/commercial_kitchen_pans/scene.urdf
-    - cad/scenes/gates_bedroom/scene.urdf
-    - cad/scenes/grocery_store_asian/scene.urdf
-    - cad/scenes/grocery_store_convenience/scene.urdf
-    - cad/scenes/grocery_store_half_stocked/scene.urdf
-    - cad/scenes/hall_arch_wood/scene.urdf
-    - cad/scenes/hall_conference_large/scene.urdf
-    - cad/scenes/hall_glass_ceiling/scene.urdf
-    - cad/scenes/hall_train_station/scene.urdf
-    - cad/scenes/hotel_gym_spa/scene.urdf
-    - cad/scenes/hotel_suite_large/scene.urdf
-    - cad/scenes/hotel_suite_small/scene.urdf
-    - cad/scenes/office_bike/scene.urdf
-    - cad/scenes/office_cubicles_left/scene.urdf
-    - cad/scenes/office_vendor_machine/scene.urdf
-    - cad/scenes/public_restroom_blue/scene.urdf
-    - cad/scenes/public_restroom_brown/scene.urdf
-    - cad/scenes/public_restroom_futuristic/scene.urdf
-    - cad/scenes/public_restroom_marble/scene.urdf
-    - cad/scenes/public_restroom_white/scene.urdf
-    - cad/scenes/restaurant_asian/scene.urdf
-    - cad/scenes/restaurant_cafeteria/scene.urdf
-    - cad/scenes/restaurant_diner/scene.urdf
-    - cad/scenes/restaurant_hotel/scene.urdf
-    - cad/scenes/restaurant_urban/scene.urdf
-    - cad/scenes/school_gym/scene.urdf
+    - cad/scenes/Beechwood_0_int/artifacts/scene.urdf
+    - cad/scenes/Beechwood_1_int/artifacts/scene.urdf
+    - cad/scenes/Benevolence_0_int/artifacts/scene.urdf
+    - cad/scenes/Benevolence_1_int/artifacts/scene.urdf
+    - cad/scenes/Benevolence_2_int/artifacts/scene.urdf
+    - cad/scenes/Ihlen_0_int/artifacts/scene.urdf
+    - cad/scenes/Ihlen_1_int/artifacts/scene.urdf
+    - cad/scenes/Merom_0_int/artifacts/scene.urdf
+    - cad/scenes/Merom_1_int/artifacts/scene.urdf
+    - cad/scenes/Pomaria_0_int/artifacts/scene.urdf
+    - cad/scenes/Pomaria_1_int/artifacts/scene.urdf
+    - cad/scenes/Pomaria_2_int/artifacts/scene.urdf
+    - cad/scenes/Rs_int/artifacts/scene.urdf
+    - cad/scenes/Wainscott_0_int/artifacts/scene.urdf
+    - cad/scenes/Wainscott_1_int/artifacts/scene.urdf
+    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/scene.urdf
+    - cad/scenes/commercial_kitchen_pans/artifacts/scene.urdf
+    - cad/scenes/gates_bedroom/artifacts/scene.urdf
+    - cad/scenes/grocery_store_asian/artifacts/scene.urdf
+    - cad/scenes/grocery_store_convenience/artifacts/scene.urdf
+    - cad/scenes/grocery_store_half_stocked/artifacts/scene.urdf
+    - cad/scenes/hall_arch_wood/artifacts/scene.urdf
+    - cad/scenes/hall_conference_large/artifacts/scene.urdf
+    - cad/scenes/hall_glass_ceiling/artifacts/scene.urdf
+    - cad/scenes/hall_train_station/artifacts/scene.urdf
+    - cad/scenes/hotel_gym_spa/artifacts/scene.urdf
+    - cad/scenes/hotel_suite_large/artifacts/scene.urdf
+    - cad/scenes/hotel_suite_small/artifacts/scene.urdf
+    - cad/scenes/office_bike/artifacts/scene.urdf
+    - cad/scenes/office_cubicles_left/artifacts/scene.urdf
+    - cad/scenes/office_vendor_machine/artifacts/scene.urdf
+    - cad/scenes/public_restroom_blue/artifacts/scene.urdf
+    - cad/scenes/public_restroom_brown/artifacts/scene.urdf
+    - cad/scenes/public_restroom_futuristic/artifacts/scene.urdf
+    - cad/scenes/public_restroom_marble/artifacts/scene.urdf
+    - cad/scenes/public_restroom_white/artifacts/scene.urdf
+    - cad/scenes/restaurant_asian/artifacts/scene.urdf
+    - cad/scenes/restaurant_cafeteria/artifacts/scene.urdf
+    - cad/scenes/restaurant_diner/artifacts/scene.urdf
+    - cad/scenes/restaurant_hotel/artifacts/scene.urdf
+    - cad/scenes/restaurant_urban/artifacts/scene.urdf
+    - cad/scenes/school_gym/artifacts/scene.urdf
     - cad/scenes/Beechwood_0_int/artifacts/export_scene.success
     - cad/scenes/Beechwood_1_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_0_int/artifacts/export_scene.success
@@ -1128,21 +1128,6 @@ stages:
     - params.yaml
     outs:
     - artifacts/pipeline/sanitycheck.success
-  usdify_dataset:
-    cmd: b1k_pipeline/usd_conversion/run_container.sh
-    deps:
-    - artifacts/og_dataset.zip
-    - b1k_pipeline/usd_conversion/run_container.sh
-    - b1k_pipeline/usd_conversion/run_in_container.sh
-    - b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
-    - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
-    - b1k_pipeline/usd_conversion/import_metadata.py
-    - b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
-    - b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
-    - b1k_pipeline/usd_conversion/usdify_objects_process.py
-    - b1k_pipeline/usd_conversion/usdify_scenes.py
-    outs:
-    - artifacts/og_dataset_encrypted.tar.gz
   usdify_objects:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_objects
     deps:
@@ -1159,6 +1144,7 @@ stages:
     outs:
     - artifacts/parallels/objects_usd.zip
     - artifacts/pipeline/usdify_objects.success
+    - artifacts/pipeline/usdify_objects.json
   validate_scene:
     do:
       cmd: python -m b1k_pipeline.validate_scene ${item}
