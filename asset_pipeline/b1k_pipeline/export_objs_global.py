@@ -5,19 +5,14 @@ import io
 import json
 import logging
 import os
-import pathlib
-import shutil
-import subprocess
-import tempfile
 import traceback
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
-from dask.distributed import Client
-
+from dask.distributed import Client, wait, as_completed
 import fs.copy
 from fs.tempfs import TempFS
-from fs.zipfs import ZipFS
+from fs.osfs import OSFS
 import networkx as nx
 import numpy as np
 import tqdm
@@ -27,7 +22,7 @@ from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline import mesh_tree
 import b1k_pipeline.utils
-from b1k_pipeline.utils import parse_name, PIPELINE_ROOT, get_targets, SUBDIVIDE_CLOTH_CATEGORIES, load_mesh, save_mesh
+from b1k_pipeline.utils import parse_name, get_targets, SUBDIVIDE_CLOTH_CATEGORIES, save_mesh
 
 logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
@@ -58,23 +53,7 @@ ALLOWED_PART_TAGS = {
     "connectedpart",
 }
 
-COACD_TIMEOUT = 10 * 60  # 10 minutes
-MAX_MESHES = 64
-VHACD_MESHES = 32
-VHACD_EXECUTABLE = "/svl/u/gabrael/v-hacd/app/build/TestVHACD"
 CLOTH_SUBDIVISION_THRESHOLD = 0.05
-COACD_EXCLUDE_CATEGORIES = {"floors", "walls", "ceilings"}
-
-# TODO: Make this use a local version if necessary.
-# from dask_kubernetes.operator import KubeCluster
-# cluster = KubeCluster(name="b1k-pipeline-vhacd", image="docker.io/igibson/vhacd-worker")
-# cluster = KubeCluster.from_yaml('worker-template.yaml')
-# cluster.scale(1)  # add 20 workers
-
-# client = Client(cluster)
-# client = Client('capri32.stanford.edu:8786')
-# VHACD_EXECUTABLE = "TestVHACD"
-# COACD_RUN_SCRIPT_PATH = "/cvgl2/u/cgokmen/vhacd-pipeline/run_coacd.py"
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -82,71 +61,6 @@ class NumpyEncoder(json.JSONEncoder):
         if isinstance(obj, np.ndarray):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
-
-
-def run_remote_convex_decomposition(in_file, out_file, dask_client, use_coacd=True):
-    # Temporarily save visual mesh as collision mesh too
-    out_file.write(in_file.read())
-    return
-
-    # This is the function that sends VHACD requests to a worker. It needs to read the contents
-    # of the source file into memory, transmit that to the worker, receive the contents of the
-    # result file and save those at the destination path.
-    file_bytes = in_file.read()
-    # data_future = client.scatter(file_bytes)
-    data_future = file_bytes
-    vhacd_future = dask_client.submit(
-        get_coacd_mesh if use_coacd else get_vhacd_mesh,
-        data_future,
-        retries=1)
-    result = vhacd_future.result()
-    if not result:
-        raise ValueError("vhacd failed")
-    out_file.write(result)
-
-def get_coacd_mesh(file_bytes):
-    with tempfile.TemporaryDirectory() as td:
-        in_path = os.path.join(td, "in.obj")
-        out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
-        with open(in_path, 'wb') as f:
-            f.write(file_bytes)
-        # Decide params
-        m = trimesh.load(in_path, force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
-        vhacd_cmd = ["coacd", "-t", "0.05"]
-        if m.is_volume:
-            vhacd_cmd += ["--no-preprocess"]
-        else:
-            vhacd_cmd += ["--preprocess-resolution", "100"]
-        vhacd_cmd += [in_path, out_path]
-        try:
-            subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True, timeout=COACD_TIMEOUT)
-            with open(out_path, 'rb') as f:
-                bytes = f.read()
-                stream = io.BytesIO(bytes)
-                m = trimesh.load(stream, file_type="obj", force="mesh", skip_material=True,
-                     merge_tex=True, merge_norm=True)
-                if len(m.split(only_watertight=False)) <= MAX_MESHES:
-                    return bytes
-        except Exception as e:
-            print("CoACD failed. Switching to V-HACD.", e)
-    return get_vhacd_mesh(file_bytes)
-
-def get_vhacd_mesh(file_bytes):
-    with tempfile.TemporaryDirectory() as td:
-        in_path = os.path.join(td, "in.obj")
-        out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
-        with open(in_path, 'wb') as f:
-            f.write(file_bytes)
-
-        # vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-v", "60", "-h", str(VHACD_MESHES)]
-        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-v", "60", "-h", str(VHACD_MESHES)]
-
-        try:
-            subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
-            with open(out_path, 'rb') as f:
-                return f.read()
-        except subprocess.CalledProcessError as e:
-            raise ValueError(f"V-HACD failed with exit code {e.returncode}. Output:\n{e.output}")
 
 
 def timeout(timelimit):
@@ -250,7 +164,7 @@ def compute_stable_poses(G, root_node):
     # First assemble a complete collision mesh
     all_link_meshes = []
     for link_node in nx.dfs_preorder_nodes(G, root_node):
-        collision_mesh = G.nodes[link_node]["collision_mesh"].copy()
+        collision_mesh = G.nodes[link_node]["canonical_collision_mesh"].copy()
         mesh_pose_in_base_frame = G.nodes[link_node]["link_frame_in_base"] +  G.nodes[link_node]["mesh_in_link_frame"]
         transform = trimesh.transformations.translation_matrix(mesh_pose_in_base_frame)
         collision_mesh.apply_transform(transform)
@@ -314,7 +228,7 @@ def compute_object_bounding_box(root_node_data):
     return bbox_size, base_link_offset, bbox_world_centroid, bbox_world_rotation
 
 
-def process_link(G, link_node, base_link_center, canonical_orientation, obj_name, output_fs, tree_root, out_metadata, dask_client):
+def process_link(G, link_node, base_link_center, canonical_orientation, obj_name, output_fs, tree_root, out_metadata):
     category_name, _, _, link_name = link_node
     raw_meta_links = G.nodes[link_node]["meta_links"]
 
@@ -327,7 +241,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     canonical_mesh._cache.cache["vertex_normals"] = canonical_mesh.vertex_normals
 
     # Subdivide the mesh if needed
-    if category_name in SUBDIVIDE_CLOTH_CATEGORIES:
+    if False: # category_name in SUBDIVIDE_CLOTH_CATEGORIES:
         assert link_name == "base_link", f"Cloth object {str(link_node)} should only have a base link."
         while True:
             edge_indices = np.where(canonical_mesh.edges_unique_length > CLOTH_SUBDIVISION_THRESHOLD)[0]
@@ -374,19 +288,14 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         # Copy the OBJ into the right spot
         fs.copy.copy_file(tfs, obj_relative_path, obj_link_visual_mesh_folder_fs, obj_relative_path)
         
-        # Run convex decomposition. Don't use COACD for wall meshes.
-        use_coacd = False
-        with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "rb") as visual_file, \
-             obj_link_collision_mesh_folder_fs.open(obj_relative_path, "wb") as collision_file:
-            run_remote_convex_decomposition(
-                visual_file,
-                collision_file,
-                dask_client,
-                use_coacd=use_coacd)
+        # Find precomputed collision mesh
+        canonical_collision_mesh = transform_mesh(G.nodes[link_node]["collision_mesh"], mesh_center, canonical_orientation)
+        canonical_collision_mesh._cache.cache["vertex_normals"] = canonical_collision_mesh.vertex_normals
+        save_mesh(canonical_collision_mesh, obj_link_collision_mesh_folder_fs, obj_relative_path)
 
         # Store the final meshes
         G.nodes[link_node]["visual_mesh"] = canonical_mesh.copy()
-        G.nodes[link_node]["collision_mesh"] = load_mesh(tfs, obj_relative_path, process=False, force="mesh", skip_materials=True, maintain_order=True)
+        G.nodes[link_node]["canonical_collision_mesh"] = canonical_collision_mesh.copy()
 
         # Modify MTL reference in OBJ file
         mtl_name = f"{obj_name}-{link_name}.mtl"
@@ -406,7 +315,6 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
             with tfs.open("material_0.mtl", "r") as f:
                 new_lines = []
                 for line in f.readlines():
-                    # TODO: bake multi-channel PBR texture
                     if "map_Kd material_0.png" in line:
                         line = ""
                         for key in MTL_MAPPING:
@@ -514,8 +422,6 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
 
                 meta_links = normalize_meta_links(meta_links, mesh_offset)
             elif joint_type == "P":
-                # TODO: Assert that the two are facing the same direction.
-
                 # Prismatic joint
                 diff = get_mesh_center(upper_canonical_mesh) - get_mesh_center(lower_canonical_mesh)
 
@@ -554,99 +460,104 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]
 
 
-def process_object(G, root_node, output_fs, dask_client):
-    obj_cat, obj_model, obj_inst_id, _ = root_node
+def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
+    try:
+        G = mesh_tree.build_mesh_tree(mesh_list, b1k_pipeline.utils.PipelineFS().target_output(target), filter_nodes=relevant_nodes)
 
-    # Process the object
-    obj_cat, obj_model, obj_inst_id, _ = root_node
-    obj_name = "-".join([obj_cat, obj_model])
+        with OSFS(output_dir) as output_fs:
+            obj_cat, obj_model, obj_inst_id, _ = root_node
 
-    # Prepare the URDF tree
-    tree_root = ET.Element("robot")
-    tree_root.attrib = {"name": obj_model}
+            # Process the object
+            obj_cat, obj_model, obj_inst_id, _ = root_node
+            obj_name = "-".join([obj_cat, obj_model])
 
-    # Extract base link orientation and position
-    base_link_metadata = G.nodes[root_node]["metadata"]
-    canonical_orientation = np.array(base_link_metadata["orientation"])
-    base_link_mesh = G.nodes[root_node]["lower_mesh"]
-    base_link_center = get_mesh_center(base_link_mesh)
+            # Prepare the URDF tree
+            tree_root = ET.Element("robot")
+            tree_root.attrib = {"name": obj_model}
 
-    out_metadata = {
-        "meta_links": {},
-        "link_tags": {},
-        "object_parts": [],
-    }
+            # Extract base link orientation and position
+            base_link_metadata = G.nodes[root_node]["metadata"]
+            canonical_orientation = np.array(base_link_metadata["orientation"])
+            base_link_mesh = G.nodes[root_node]["lower_mesh"]
+            base_link_center = get_mesh_center(base_link_mesh)
 
-    # Iterate over each link.
-    for link_node in nx.dfs_preorder_nodes(G, root_node):
-        process_link(G, link_node, base_link_center, canonical_orientation, obj_name, output_fs, tree_root, out_metadata, dask_client)
+            out_metadata = {
+                "meta_links": {},
+                "link_tags": {},
+                "object_parts": [],
+            }
 
-    # Save the URDF file.
-    xmlstr = minidom.parseString(ET.tostring(tree_root)).toprettyxml(indent="   ")
-    xmlio = io.StringIO(xmlstr)
-    tree = ET.parse(xmlio)
-    
-    with output_fs.makedir("urdf").open(f"{obj_model}.urdf", "wb") as f:
-        tree.write(f, xml_declaration=True)
+            # Iterate over each link.
+            for link_node in nx.dfs_preorder_nodes(G, root_node):
+                process_link(G, link_node, base_link_center, canonical_orientation, obj_name, output_fs, tree_root, out_metadata)
 
-    bbox_size, base_link_offset, _, _ = compute_object_bounding_box(G.nodes[root_node])
+            # Save the URDF file.
+            xmlstr = minidom.parseString(ET.tostring(tree_root)).toprettyxml(indent="   ")
+            xmlio = io.StringIO(xmlstr)
+            tree = ET.parse(xmlio)
+            
+            with output_fs.makedir("urdf").open(f"{obj_model}.urdf", "wb") as f:
+                tree.write(f, xml_declaration=True)
 
-    # Compute part information
-    for part_node_key in get_part_nodes(G, root_node):
-        # Get the part node bounding box
-        part_bb_size, _, part_bb_in_world_pos, part_bb_in_world_rot = compute_object_bounding_box(G.nodes[part_node_key])
+            bbox_size, base_link_offset, _, _ = compute_object_bounding_box(G.nodes[root_node])
 
-        # Convert into our base link frame
-        our_transform = np.eye(4)
-        our_transform[:3, 3] = base_link_center
-        our_transform[:3, :3] = R.from_quat(canonical_orientation).as_matrix()
-        bb_transform = np.eye(4)
-        bb_transform[:3, 3] = part_bb_in_world_pos
-        bb_transform[:3, :3] = part_bb_in_world_rot.as_matrix()
-        bb_transform_in_our = np.linalg.inv(our_transform) @ bb_transform
-        bb_pos_in_our = bb_transform_in_our[:3, 3]
-        bb_quat_in_our = R.from_matrix(bb_transform_in_our[:3, :3]).as_quat()
+            # Compute part information
+            for part_node_key in get_part_nodes(G, root_node):
+                # Get the part node bounding box
+                part_bb_size, _, part_bb_in_world_pos, part_bb_in_world_rot = compute_object_bounding_box(G.nodes[part_node_key])
 
-        # Get the part type
-        part_tags = set(G.nodes[part_node_key]["tags"]) & ALLOWED_PART_TAGS
-        assert(len(part_tags) == 1), f"Part node {part_node_key} has multiple part tags: {part_tags}"
-        part_type, = part_tags
+                # Convert into our base link frame
+                our_transform = np.eye(4)
+                our_transform[:3, 3] = base_link_center
+                our_transform[:3, :3] = R.from_quat(canonical_orientation).as_matrix()
+                bb_transform = np.eye(4)
+                bb_transform[:3, 3] = part_bb_in_world_pos
+                bb_transform[:3, :3] = part_bb_in_world_rot.as_matrix()
+                bb_transform_in_our = np.linalg.inv(our_transform) @ bb_transform
+                bb_pos_in_our = bb_transform_in_our[:3, 3]
+                bb_quat_in_our = R.from_matrix(bb_transform_in_our[:3, :3]).as_quat()
 
-        # Add the metadata
-        out_metadata["object_parts"].append({
-            "category": part_node_key[0],
-            "model": part_node_key[1],
-            "type": part_type,
-            "bb_pos": bb_pos_in_our,
-            "bb_orn": bb_quat_in_our,
-            "bb_size": part_bb_size,
-        })
+                # Get the part type
+                part_tags = set(G.nodes[part_node_key]["tags"]) & ALLOWED_PART_TAGS
+                assert(len(part_tags) == 1), f"Part node {part_node_key} has multiple part tags: {part_tags}"
+                part_type, = part_tags
 
-    # Save metadata json
-    out_metadata.update({
-        "base_link_offset": base_link_offset.tolist(),
-        "bbox_size": bbox_size.tolist(),
-        "orientations": compute_stable_poses(G, root_node),
-        "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
-    })
-    with output_fs.makedir("misc").open("metadata.json", "w") as f:
-        json.dump(out_metadata, f, cls=NumpyEncoder)
+                # Add the metadata
+                out_metadata["object_parts"].append({
+                    "category": part_node_key[0],
+                    "model": part_node_key[1],
+                    "type": part_type,
+                    "bb_pos": bb_pos_in_our,
+                    "bb_orn": bb_quat_in_our,
+                    "bb_size": part_bb_size,
+                })
 
-def process_target(target, objects_fs, link_executor, dask_client):
-    pipeline_fs = b1k_pipeline.utils.PipelineFS()
+            # Save metadata json
+            out_metadata.update({
+                "base_link_offset": base_link_offset.tolist(),
+                "bbox_size": bbox_size.tolist(),
+                "orientations": compute_stable_poses(G, root_node),
+                "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
+            })
+            with output_fs.makedir("misc").open("metadata.json", "w") as f:
+                json.dump(out_metadata, f, cls=NumpyEncoder)
+    except Exception as exc:
+        return exc
 
-    with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
-        mesh_list = json.load(f)["meshes"]
+def process_target(target, objects_path, dask_client):
+    with b1k_pipeline.utils.PipelineFS() as pipeline_fs, OSFS(objects_path) as objects_fs:
+        with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
+            mesh_list = json.load(f)["meshes"]
 
-    # Build the mesh tree using our mesh tree library. The scene code also uses this system.
-    with pipeline_fs.target_output(target).open("meshes.zip", "rb") as f:
-        with ZipFS(f) as mesh_archive_fs:
-            G = mesh_tree.build_mesh_tree(mesh_list, mesh_archive_fs, scale_factor=1.0 if "legacy_" in target else 0.001)
+        # Build the mesh tree using our mesh tree library. The scene code also uses this system.
+        G = mesh_tree.build_mesh_tree(mesh_list, pipeline_fs.target_output(target), load_meshes=False)
 
-            # Go through each object.
-            roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
+        # Go through each object.
+        roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
-            # Only save the 0th instance.
+        # Only save the 0th instance.
+        # with futures.ThreadPoolExecutor(max_workers=10) as link_executor:
+        if True:
             saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
             object_futures = {}
             for root_node in saveable_roots:
@@ -657,39 +568,37 @@ def process_target(target, objects_fs, link_executor, dask_client):
                     node
                     for part_root_node in get_part_nodes(G, root_node)  # Get every part root node
                     for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
-                Gprime = G.subgraph(relevant_nodes).copy()
 
                 obj_cat, obj_model, obj_inst_id, _ = root_node
                 output_dirname = f"{obj_cat}/{obj_model}"
-                object_futures[link_executor.submit(process_object, Gprime, root_node, objects_fs.makedirs(output_dirname), dask_client)] = str(root_node)
+                object_futures[dask_client.submit(process_object, root_node, target, mesh_list, relevant_nodes, objects_fs.makedirs(output_dirname).getsyspath("/"), pure=False)] = str(root_node)
 
             # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
-            futures.wait(object_futures.keys())
+            wait(object_futures.keys())
 
-    # Accumulate the errors
-    error_msg = ""
-    for future, root_node in object_futures.items():
-        exc = future.exception()
-        if exc:
-            error_msg += f"{root_node}: {exc}\n\n"
-    if error_msg:
-        raise ValueError(error_msg)
+        # Accumulate the errors
+        error_msg = ""
+        for future in as_completed(object_futures.keys()):
+            root_node = object_futures[future]
+            exc = future.result()
+            if exc:
+                error_msg += f"{root_node}: {exc}\n\n"
+        if error_msg:
+            raise ValueError(error_msg)
 
 def main():
     with b1k_pipeline.utils.ParallelZipFS("objects.zip", write=True) as archive_fs:
-        objects_dir = archive_fs.makedir("objects")
+        objects_dir = archive_fs.makedir("objects").getsyspath("/")
         # Load the mesh list from the object list json.
         errors = {}
         target_futures = {}
-
-        dask_client = None #  Client('svl3.stanford.edu:35423')
-        
-        with futures.ThreadPoolExecutor(max_workers=1) as target_executor, futures.ThreadPoolExecutor(max_workers=5) as link_executor:
+     
+        dask_client = Client() # silence_logs=True) # , n_workers=30, threads_per_worker=1)
+        with futures.ThreadPoolExecutor(max_workers=3) as target_executor:
             targets = get_targets("combined")
             for target in tqdm.tqdm(targets):
-                target_futures[target_executor.submit(process_target, target, objects_dir, link_executor, dask_client)] = target
-                # all_futures.update(process_target(target, output_dir, executor, dask_client))
-                    
+                target_futures[target_executor.submit(process_target, target, objects_dir, dask_client)] = target
+            
             with tqdm.tqdm(total=len(target_futures)) as object_pbar:
                 for future in futures.as_completed(target_futures.keys()):
                     try:
