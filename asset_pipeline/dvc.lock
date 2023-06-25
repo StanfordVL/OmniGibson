@@ -7685,21 +7685,21 @@ stages:
       md5: dc2d3836565bbe18b0336b28da119f43
       size: 717450
     - path: b1k_pipeline/aggregate_metadata.py
-      md5: d1290c1d2381d6bf2e923292a200cc52
-      size: 6054
+      md5: d886121f38a08382848705f88f581686
+      size: 5483
     - path: metadata/allowed_room_types.csv
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     - path: metadata/category_mapping.csv
-      md5: d91f793b3fa33e32379de07253bbe431
-      size: 143757
+      md5: 31b557a03d3c950d266c9208360d33fc
+      size: 136063
     - path: metadata/non_sampleable_categories.csv
       md5: 1fdd0762be41ba03ee7a15db19b16c6b
       size: 562
     outs:
     - path: artifacts/parallels/metadata.zip
-      md5: 023783f8dfe8acaa11dda96a10e6201e
+      md5: 4ead4a9453b9f3bb97df8c59e5a94b1c
       size: 116
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: 2a2ffdaa7a6b9c3501ed1e7c2d0de5c9
-      size: 316
+      md5: 5e69adf73188d044949816e519a3ea2c
+      size: 378
