@@ -108,7 +108,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
 
                 # Attempt to load the collision mesh
                 # First check if a collision mesh exist in the same directory
-                collision_filenames = [x for x in mesh_dir.listdir("/") if "Mcollision" in x]
+                collision_filenames = [x for x in mesh_dir.listdir("/") if "Mcollision" in x and x.endswith(".obj")]
                 assert len(collision_filenames) <= 1, f"Found multiple collision meshes for {node_key}"
                 if collision_filenames:
                     collision_filename, = collision_filenames

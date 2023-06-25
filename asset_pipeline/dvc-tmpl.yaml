@@ -159,6 +159,8 @@ stages:
     cmd: 'python -m b1k_pipeline.export_objs_global'
     deps:
     - cad/#{combined}/artifacts/meshes.zip
+    - cad/#{combined}/artifacts/collision_meshes.zip
+    - cad/#{combined}/artifacts/collision_selection.json
     - cad/#{combined}/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     # - artifacts/pipeline/object_inventory.success  # TODO: Reactivate
