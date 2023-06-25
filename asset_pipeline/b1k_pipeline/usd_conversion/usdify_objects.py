@@ -1,3 +1,4 @@
+import json
 import os
 import subprocess
 from dask.distributed import Client, as_completed
@@ -66,9 +67,11 @@ def main():
 
             # Wait for all the workers to finish
             print("Queued all batches. Waiting for them to finish...")
+            logs = []
             for future in tqdm.tqdm(as_completed(futures), total=len(futures)):
                 try:
-                    future.result()
+                    out = future.result()
+                    logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
                 except subprocess.CalledProcessError as e:
                     print("Error in worker")
                     print("\n\nSTDOUT:\n" + e.stdout.decode("utf-8"))
@@ -82,6 +85,10 @@ def main():
                 fs.copy.copy_fs(dataset_fs.opendir(item), out_fs.makedirs(item))
 
             print("Done processing. Archiving things now.")
+
+        # Save the logs
+        with pipeline_fs.pipeline_output().open("usdify_objects.json", "w") as f:
+            json.dump(logs, f)
 
         # At this point, out_temp_fs's contents will be zipped. Save the success file.
         pipeline_fs.pipeline_output().touch("usdify_objects.success")
