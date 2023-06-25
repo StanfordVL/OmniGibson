@@ -37,27 +37,12 @@ def main():
                     category = row["category"].strip()
                     categories_by_id[cat_id] = category
 
-                    enable_ag = int(row["enable_ag"]) if row["enable_ag"] else None
-                    mass = float(row["mass"]) if row["mass"] else None
-                    size = (
-                        [
-                            float(row["size_x"]),
-                            float(row["size_y"]),
-                            float(row["size_z"]),
-                        ]
-                        if row["size_x"]
-                        else None
-                    )
-                    density = (
-                        mass / np.product(size)
-                        if mass is not None and size is not None
-                        else None
-                    )
+                    mass = float(row["mass (auto)"]) if row["mass (auto)"] and row["mass (auto)"] != "#DIV/0!" else None
                     avg_category_specs[category] = {
-                        "enable_ag": enable_ag,
+                        "enable_ag": None,
                         "mass": mass,
-                        "size": size,
-                        "density": density,
+                        "size": None,
+                        "density": None,
                     }
 
             # Validate: have we found all categories on the list?

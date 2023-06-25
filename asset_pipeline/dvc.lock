@@ -7703,3 +7703,17 @@ stages:
     - path: artifacts/pipeline/aggregate_metadata.json
       md5: a324664fd08f41157b7c59c15adb2689
       size: 100889
+  aggregate_metadata_success:
+    cmd: python -m b1k_pipeline.check_success artifacts/pipeline/aggregate_metadata.json
+      artifacts/pipeline/aggregate_metadata.success
+    deps:
+    - path: artifacts/pipeline/aggregate_metadata.json
+      md5: a324664fd08f41157b7c59c15adb2689
+      size: 100889
+    - path: b1k_pipeline/check_success.py
+      md5: bc3fa689bd7cc8819016ea480a7d9ef3
+      size: 707
+    outs:
+    - path: artifacts/pipeline/aggregate_metadata.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
