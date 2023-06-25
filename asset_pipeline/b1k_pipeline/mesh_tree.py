@@ -1,19 +1,42 @@
+import csv
 import json
-import os
-import re
 
 import networkx as nx
-import numpy as np
 import tqdm
 import trimesh
+from fs.zipfs import ZipFS
 
-from b1k_pipeline.utils import parse_name, save_mesh, load_mesh
+from b1k_pipeline.utils import parse_name, load_mesh, PipelineFS
 
 
-def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, scale_factor=1):
+def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=True, filter_nodes=None, show_progress=False):
     G = nx.DiGraph()
 
-    scale_matrix = trimesh.transformations.scale_matrix(scale_factor)
+    # Load the rename file
+    renames = {}
+    with PipelineFS().open("metadata/object_renames.csv") as f:
+        for row in csv.DictReader(f):
+            key = (row["Original category (auto)"], row["ID (auto)"])
+            renames[key] = row["New Category"]
+
+    def maybe_rename_category(cat, model):
+        if (cat, model) in renames:
+            return renames[(cat, model)]
+        return cat
+
+    # Load the collision selections
+    collision_selections = {}
+    if target_output_fs.exists("collision_selection.json"):
+        with target_output_fs.open("collision_selection.json", "r") as f:
+            mesh_to_collision = json.load(f)
+            match_to_collision = {parse_name(k): v for k, v in mesh_to_collision.items()}
+            collision_selections = {(k.group("model_id"), k.group("link_name") if k.group("link_name") else "base_link"): v for k, v in match_to_collision.items() if k is not None}
+    else:
+        print("Warning: No collision selection file found. Collision meshes will not be loaded.")
+
+    # Open the mesh filesystems
+    mesh_fs = ZipFS(target_output_fs.open("meshes.zip", "rb"))
+    collision_mesh_fs = ZipFS(target_output_fs.open("collision_meshes.zip", "rb"))
 
     pbar = tqdm.tqdm(mesh_list) if show_progress else mesh_list
     for mesh_name in pbar:
@@ -23,8 +46,8 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
         is_broken = match.group("bad")
         is_randomization_fixed = match.group("randomization_disabled")
         is_loose = match.group("loose")
-        obj_cat = match.group("category")
         obj_model = match.group("model_id")
+        obj_cat = maybe_rename_category(match.group("category"), obj_model)
         obj_inst_id = match.group("instance_id")
         link_name = match.group("link_name")
         parent_link_name = match.group("parent_link_name")
@@ -42,6 +65,10 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
             tags = sorted([x[1:] for x in tags_str.split("-") if x])
 
         node_key = (obj_cat, obj_model, obj_inst_id, link_name)
+
+        if filter_nodes is not None and node_key not in filter_nodes:
+            continue
+
         if node_key not in G.nodes:
             G.add_node(node_key)
         G.nodes[node_key]["is_broken"] = is_broken
@@ -60,37 +87,44 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
         # Delete meta links from metadata to avoid confusion
         del metadata["meta_links"]
 
-        # Apply the scaling factor.
-        for meta_link_id_to_subid in meta_links.values():
-            for meta_link_subid_to_link in meta_link_id_to_subid.values():
-                for meta_link in meta_link_subid_to_link:
-                    meta_link["position"] = np.array(meta_link["position"]) * scale_factor
-                    if "length" in meta_link:
-                        meta_link["length"] *= scale_factor
-                    if "width" in meta_link:
-                        meta_link["width"] *= scale_factor
-                    if "size" in meta_link:
-                        meta_link["size"] = (np.asarray(meta_link["size"]) * scale_factor).tolist()
-
         # Add the data for the position onto the node.
         if joint_side == "upper":
             assert "upper_mesh" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
-            upper_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
-            upper_mesh.apply_transform(scale_matrix)
-            G.nodes[node_key]["upper_mesh"] = upper_mesh
+            if load_meshes:
+                upper_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
+                G.nodes[node_key]["upper_mesh"] = upper_mesh
         else:
-            assert "lower_mesh" not in G.nodes[node_key], f"Found two lower meshes for {node_key}"
-            lower_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh")
-            lower_mesh.apply_transform(scale_matrix)
-            G.nodes[node_key]["lower_mesh"] = lower_mesh
-
-            lower_mesh_ordered = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
-            lower_mesh_ordered.apply_transform(scale_matrix)
-            G.nodes[node_key]["lower_mesh_ordered"] = lower_mesh_ordered
-
             G.nodes[node_key]["metadata"] = metadata
             G.nodes[node_key]["meta_links"] = meta_links
             G.nodes[node_key]["material_dir"] = mesh_dir.opendir("material") if mesh_dir.exists("material") else None
+
+            if load_meshes:
+                assert "lower_mesh" not in G.nodes[node_key], f"Found two lower meshes for {node_key}"
+                lower_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh")
+                G.nodes[node_key]["lower_mesh"] = lower_mesh
+
+                lower_mesh_ordered = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
+                G.nodes[node_key]["lower_mesh_ordered"] = lower_mesh_ordered
+
+                # Attempt to load the collision mesh
+                # First check if a collision mesh exist in the same directory
+                collision_filenames = [x for x in mesh_dir.listdir("/") if "Mcollision" in x]
+                assert len(collision_filenames) <= 1, f"Found multiple collision meshes for {node_key}"
+                if collision_filenames:
+                    collision_filename, = collision_filenames
+                    collision_mesh = load_mesh(mesh_dir, collision_filename, process=False, force="mesh", skip_materials=True)
+                    G.nodes[node_key]["collision_mesh"] = collision_mesh
+                elif mesh_name:
+                    # Try to load a collision mesh selection
+                    collision_key = (obj_model, link_name)
+                    if collision_key in collision_selections:
+                        collision_selection = collision_selections[collision_key]
+                        try:
+                            collision_mesh = load_mesh(collision_mesh_fs.opendir(mesh_name), collision_selection + ".obj", process=False, force="mesh", skip_materials=True)
+                            G.nodes[node_key]["collision_mesh"] = collision_mesh
+                        except:
+                            pass
+                            # raise
 
         # Add the edge in from the parent
         if link_name != "base_link":
@@ -105,9 +139,9 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
             (_, _, d), = G.in_edges(node, data=True)
             joint_type = d["joint_type"]
             needs_upper = load_upper and not data["is_broken"] and joint_type != "F"
-        assert not needs_upper or "upper_mesh" in data, f"{node} does not have upper mesh."
-        assert "lower_mesh" in data, f"{node} does not have lower mesh."
-        assert "lower_mesh_ordered" in data, f"{node} does not have lower mesh."
+        assert not load_meshes or not needs_upper or "upper_mesh" in data, f"{node} does not have upper mesh."
+        assert not load_meshes or "lower_mesh" in data, f"{node} does not have lower mesh."
+        assert not load_meshes or "lower_mesh_ordered" in data, f"{node} does not have lower mesh."
         assert "metadata" in data, f"{node} does not have metadata."
 
         if "upper_mesh" in data:
@@ -121,11 +155,17 @@ def build_mesh_tree(mesh_list, mesh_fs, load_upper=True, show_progress=False, sc
             assert G.in_degree(node) != 0, f"Non-base_link node {node} should not have in degree 0."
 
     # Create combined mesh for each root node and add some data.
-    roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
-    for root in roots:
-        nodes = nx.dfs_preorder_nodes(G, root)
-        meshes = [G.nodes[node]["lower_mesh"] for node in nodes]
-        combined_mesh = trimesh.util.concatenate(meshes)
-        G.nodes[root]["combined_mesh"] = combined_mesh
+    if load_meshes:
+        roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
+        for root in roots:
+            nodes = nx.dfs_preorder_nodes(G, root)
+            meshes = [G.nodes[node]["lower_mesh"] for node in nodes]
+            combined_mesh = trimesh.util.concatenate(meshes)
+            G.nodes[root]["combined_mesh"] = combined_mesh
+
+            if all("collision_mesh" in G.nodes[node] for node in nodes):
+                collision_meshes = [G.nodes[node]["collision_mesh"] for node in nodes]
+                combined_collision_mesh = trimesh.util.concatenate(collision_meshes)
+                G.nodes[root]["combined_collision_mesh"] = combined_collision_mesh
 
     return G
