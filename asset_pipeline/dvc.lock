@@ -7691,15 +7691,15 @@ stages:
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     - path: metadata/category_mapping.csv
-      md5: 31b557a03d3c950d266c9208360d33fc
-      size: 136063
+      md5: 4fff36c706881635d8f813e923522e67
+      size: 134889
     - path: metadata/non_sampleable_categories.csv
       md5: 1fdd0762be41ba03ee7a15db19b16c6b
       size: 562
     outs:
     - path: artifacts/parallels/metadata.zip
-      md5: 4ead4a9453b9f3bb97df8c59e5a94b1c
-      size: 116
+      md5: 1e582b16fa1ef58464ddd587cec82a70
+      size: 19199
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: 5e69adf73188d044949816e519a3ea2c
-      size: 378
+      md5: a324664fd08f41157b7c59c15adb2689
+      size: 100889
