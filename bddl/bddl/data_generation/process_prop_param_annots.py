@@ -130,7 +130,7 @@ def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexisten
 def add_heatable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
     # TODO will need to change when there are heating params
     for heatable_syn in props_to_syns["heatable"]:
-        propagated_canonical[heatable_syn]["heatable"]["temperature"] = 40.
+        propagated_canonical[heatable_syn]["heatable"]["heat_temperature"] = 40.
 
 
 def add_flammable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
