@@ -247,7 +247,7 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
                 # print(f"Start {mesh_name} from {target}")
 
                 # Load the mesh
-                m = load_mesh(mesh_archive_fs, f"{mesh_name}/{mesh_name}.obj", force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
+                m = load_mesh(mesh_archive_fs.opendir(mesh_name), f"{mesh_name}.obj", force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
                 
                 # Check if we have already selected a processing option for this mesh
                 processing_options = PROCESSING_OPTIONS

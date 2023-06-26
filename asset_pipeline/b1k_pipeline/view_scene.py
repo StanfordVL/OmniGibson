@@ -15,7 +15,7 @@ from b1k_pipeline.utils import PIPELINE_ROOT
 
 import igibson
 igibson.ignore_visual_shape = False
-igibson.ig_dataset_path = PIPELINE_ROOT / "artifacts/aggregate"
+igibson.ig_dataset_path = r"D:\dataset-6-25"
 
 from igibson.objects.articulated_object import URDFObject
 from igibson.simulator import Simulator
@@ -56,14 +56,14 @@ def get_cube(limits=None):
 
 def main():
     scene_name = sys.argv[1]
-    target = "scenes/" + scene_name
-    input_dir = PIPELINE_ROOT / "artifacts" / "aggregate" / target
-    scene_filename = input_dir / f"urdf/{scene_name}_best.urdf"
+    # target = "scenes/" + scene_name
+    # input_dir = PIPELINE_ROOT / "artifacts" / "aggregate" / target
+    # scene_filename = input_dir / f"urdf/{scene_name}_best.urdf"
 
     # Load the scene into iGibson 2
     s = Simulator(mode="headless", use_pb_gui=True)
     try:
-        scene = InteractiveIndoorScene(scene_name, urdf_path=str(scene_filename))
+        scene = InteractiveIndoorScene(scene_name)
         s.import_scene(scene)
 
         # Get the points this object thinks are its bounding box
