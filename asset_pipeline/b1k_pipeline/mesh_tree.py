@@ -8,6 +8,8 @@ from fs.zipfs import ZipFS
 
 from b1k_pipeline.utils import parse_name, load_mesh, PipelineFS
 
+SCALE_FACTOR = 0.001
+SCALE_MATRIX = trimesh.transformations.scale_matrix(0.001)
 
 def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=True, filter_nodes=None, show_progress=False):
     G = nx.DiGraph()
@@ -87,11 +89,24 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
         # Delete meta links from metadata to avoid confusion
         del metadata["meta_links"]
 
+        # Apply the scaling factor.
+        for meta_link_id_to_subid in meta_links.values():
+            for meta_link_subid_to_link in meta_link_id_to_subid.values():
+                for meta_link in meta_link_subid_to_link:
+                    meta_link["position"] = np.array(meta_link["position"]) * SCALE_FACTOR
+                    if "length" in meta_link:
+                        meta_link["length"] *= SCALE_FACTOR
+                    if "width" in meta_link:
+                        meta_link["width"] *= SCALE_FACTOR
+                    if "size" in meta_link:
+                        meta_link["size"] = (np.asarray(meta_link["size"]) * SCALE_FACTOR).tolist()
+
         # Add the data for the position onto the node.
         if joint_side == "upper":
             assert "upper_mesh" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
             if load_meshes:
                 upper_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
+                upper_mesh.apply_transform(SCALE_MATRIX)
                 G.nodes[node_key]["upper_mesh"] = upper_mesh
         else:
             G.nodes[node_key]["metadata"] = metadata
@@ -101,9 +116,11 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
             if load_meshes:
                 assert "lower_mesh" not in G.nodes[node_key], f"Found two lower meshes for {node_key}"
                 lower_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh")
+                lower_mesh.apply_transform(SCALE_MATRIX)
                 G.nodes[node_key]["lower_mesh"] = lower_mesh
 
                 lower_mesh_ordered = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
+                lower_mesh_ordered.apply_transform(SCALE_MATRIX)
                 G.nodes[node_key]["lower_mesh_ordered"] = lower_mesh_ordered
 
                 # Attempt to load the collision mesh
@@ -113,6 +130,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
                 if collision_filenames:
                     collision_filename, = collision_filenames
                     collision_mesh = load_mesh(mesh_dir, collision_filename, process=False, force="mesh", skip_materials=True)
+                    collision_mesh.apply_transform(SCALE_MATRIX)
                     G.nodes[node_key]["collision_mesh"] = collision_mesh
                 elif mesh_name:
                     # Try to load a collision mesh selection
@@ -121,6 +139,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
                         collision_selection = collision_selections[collision_key]
                         try:
                             collision_mesh = load_mesh(collision_mesh_fs.opendir(mesh_name), collision_selection + ".obj", process=False, force="mesh", skip_materials=True)
+                            collision_mesh.apply_transform(SCALE_MATRIX)
                             G.nodes[node_key]["collision_mesh"] = collision_mesh
                         except:
                             pass
