@@ -14,7 +14,7 @@
         (covered rug.n.01_1 dust.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
-        (inroom rug.n.01_1 utility_room)
+        (ontop rug.n.01_1 floor.n.01_1)
     )
     
     (:goal 

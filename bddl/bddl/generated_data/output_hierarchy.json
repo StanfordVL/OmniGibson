@@ -248,7 +248,10 @@
                                     },
                                     {
                                       "name": "copper_pot.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "copper_pot"
+                                      ]
                                     },
                                     {
                                       "name": "coffeepot.n.01",
@@ -281,7 +284,10 @@
                                     },
                                     {
                                       "name": "pewter_teapot.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "pewter_teapot"
+                                      ]
                                     },
                                     {
                                       "name": "saucepot.n.01",
@@ -336,7 +342,10 @@
                                 },
                                 {
                                   "name": "cola__bottle.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "cola_bottle"
+                                  ]
                                 },
                                 {
                                   "name": "conditioner__bottle.n.01",
@@ -729,7 +738,10 @@
                                 },
                                 {
                                   "name": "squeeze_bottle.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "squeeze_bottle"
+                                  ]
                                 },
                                 {
                                   "name": "cleansing__bottle.n.01",
@@ -1003,7 +1015,10 @@
                                             },
                                             {
                                               "name": "trailer_truck.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "trailer_truck"
+                                              ]
                                             },
                                             {
                                               "name": "van.n.05",
@@ -1025,7 +1040,10 @@
                                     },
                                     {
                                       "name": "recreational_vehicle.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "recreational_vehicle"
+                                      ]
                                     }
                                   ]
                                 },
@@ -1124,7 +1142,10 @@
                                 },
                                 {
                                   "name": "sleeping_bag.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "sleeping_bag"
+                                  ]
                                 },
                                 {
                                   "name": "sugar__sack.n.01",
@@ -1457,7 +1478,10 @@
                             },
                             {
                               "name": "cat_food__tin.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "cat_food_tin"
+                              ]
                             },
                             {
                               "name": "cayenne__shaker.n.01",
@@ -1648,6 +1672,13 @@
                                   "categories": [
                                     "wicker_basket"
                                   ]
+                                },
+                                {
+                                  "name": "frail.n.02",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "frail"
+                                  ]
                                 }
                               ]
                             },
@@ -1718,7 +1749,10 @@
                             },
                             {
                               "name": "mold.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "mold"
+                              ]
                             },
                             {
                               "name": "mulch__bag.n.01",
@@ -1912,7 +1946,10 @@
                             },
                             {
                               "name": "dog_food__can.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "dog_food_can"
+                              ]
                             },
                             {
                               "name": "parsley__shaker.n.01",
@@ -1930,7 +1967,10 @@
                             },
                             {
                               "name": "package.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "package"
+                              ]
                             }
                           ]
                         },
@@ -1988,11 +2028,17 @@
                                           "children": [
                                             {
                                               "name": "car_wheel.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "car_wheel"
+                                              ]
                                             },
                                             {
                                               "name": "skateboard_wheel.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "skateboard_wheel"
+                                              ]
                                             }
                                           ]
                                         },
@@ -2682,7 +2728,10 @@
                                       "children": [
                                         {
                                           "name": "infant_car_seat.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "infant_car_seat"
+                                          ]
                                         }
                                       ]
                                     }
@@ -3318,7 +3367,10 @@
                                     },
                                     {
                                       "name": "cup_holder.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "cup_holder"
+                                      ]
                                     },
                                     {
                                       "name": "french_fry_holder.n.01",
@@ -3871,7 +3923,10 @@
                                 },
                                 {
                                   "name": "space_heater.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "space_heater"
+                                  ]
                                 }
                               ]
                             },
@@ -3881,7 +3936,10 @@
                             },
                             {
                               "name": "router.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "router"
+                              ]
                             },
                             {
                               "name": "elastic_device.n.01",
@@ -4224,7 +4282,10 @@
                                               "children": [
                                                 {
                                                   "name": "clipper.n.04",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "clipper"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "shears.n.01",
@@ -4395,7 +4456,10 @@
                                   "children": [
                                     {
                                       "name": "flagpole.n.02",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "flagpole"
+                                      ]
                                     }
                                   ]
                                 }
@@ -4474,7 +4538,10 @@
                                             },
                                             {
                                               "name": "copper_pot.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "copper_pot"
+                                              ]
                                             },
                                             {
                                               "name": "coffeepot.n.01",
@@ -4507,7 +4574,10 @@
                                             },
                                             {
                                               "name": "pewter_teapot.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "pewter_teapot"
+                                              ]
                                             },
                                             {
                                               "name": "saucepot.n.01",
@@ -4818,7 +4888,10 @@
                                           "children": [
                                             {
                                               "name": "clipper.n.04",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "clipper"
+                                              ]
                                             },
                                             {
                                               "name": "shears.n.01",
@@ -5604,7 +5677,10 @@
                                     },
                                     {
                                       "name": "trampoline.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "trampoline"
+                                      ]
                                     }
                                   ]
                                 },
@@ -5954,7 +6030,10 @@
                                                 },
                                                 {
                                                   "name": "trailer_truck.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "trailer_truck"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "van.n.05",
@@ -5976,7 +6055,10 @@
                                         },
                                         {
                                           "name": "recreational_vehicle.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "recreational_vehicle"
+                                          ]
                                         }
                                       ]
                                     },
@@ -6663,7 +6745,10 @@
                                           "children": [
                                             {
                                               "name": "fur_coat.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "fur_coat"
+                                              ]
                                             },
                                             {
                                               "name": "jacket.n.01",
@@ -6758,13 +6843,19 @@
                                       "children": [
                                         {
                                           "name": "necktie.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "necktie"
+                                          ]
                                         }
                                       ]
                                     },
                                     {
                                       "name": "scarf.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "scarf"
+                                      ]
                                     },
                                     {
                                       "name": "suit.n.01",
@@ -8376,10 +8467,7 @@
                                 },
                                 {
                                   "name": "gift_box.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "gift_box"
-                                  ]
+                                  "hasModel": true
                                 },
                                 {
                                   "name": "jar__of__bath_salt.n.01",
@@ -8488,6 +8576,13 @@
                                   ]
                                 },
                                 {
+                                  "name": "bag__of__jerky.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bag_of_jerky"
+                                  ]
+                                },
+                                {
                                   "name": "jug__of__milk.n.01",
                                   "hasModel": true,
                                   "categories": [
@@ -8566,11 +8661,17 @@
                                 },
                                 {
                                   "name": "can__of__dog_food.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "can_of_dog_food"
+                                  ]
                                 },
                                 {
                                   "name": "pack__of__ground_beef.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "pack_of_ground_beef"
+                                  ]
                                 },
                                 {
                                   "name": "bag__of__mulch.n.01",
@@ -8588,11 +8689,21 @@
                                 },
                                 {
                                   "name": "can__of__cat_food.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "can_of_cat_food"
+                                  ]
                                 },
                                 {
                                   "name": "sack__of__brown_rice.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "cup__of__ranch.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "cup_of_ranch"
+                                  ]
                                 }
                               ]
                             },
@@ -8937,7 +9048,10 @@
                                     },
                                     {
                                       "name": "doily.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "doily"
+                                      ]
                                     }
                                   ]
                                 }
@@ -9196,7 +9310,10 @@
                                       "children": [
                                         {
                                           "name": "fur_coat.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "fur_coat"
+                                          ]
                                         },
                                         {
                                           "name": "jacket.n.01",
@@ -9291,13 +9408,19 @@
                                   "children": [
                                     {
                                       "name": "necktie.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "necktie"
+                                      ]
                                     }
                                   ]
                                 },
                                 {
                                   "name": "scarf.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "scarf"
+                                  ]
                                 },
                                 {
                                   "name": "suit.n.01",
@@ -9622,7 +9745,10 @@
                                   "children": [
                                     {
                                       "name": "jacket.n.05",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "pellet"
+                                      ]
                                     }
                                   ]
                                 }
@@ -9739,7 +9865,10 @@
                               "children": [
                                 {
                                   "name": "lampshade.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "lampshade"
+                                  ]
                                 }
                               ]
                             },
@@ -9760,13 +9889,19 @@
                                 },
                                 {
                                   "name": "windshield.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "windshield"
+                                  ]
                                 }
                               ]
                             },
                             {
                               "name": "mulch.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "mulch"
+                              ]
                             },
                             {
                               "name": "roof.n.01",
@@ -9831,7 +9966,10 @@
                                 },
                                 {
                                   "name": "spray_paint.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spray_paint"
+                                  ]
                                 }
                               ]
                             },
@@ -9912,8 +10050,14 @@
                           "children": [
                             {
                               "name": "plastic_wrap.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "plastic_wrap"
+                              ]
                             }
+                          ],
+                          "categories": [
+                            "gift_box"
                           ]
                         },
                         {
@@ -9990,7 +10134,10 @@
                                     },
                                     {
                                       "name": "kayak_rack.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "kayak_rack"
+                                      ]
                                     },
                                     {
                                       "name": "shoe_rack.n.01",
@@ -10110,7 +10257,10 @@
                                     },
                                     {
                                       "name": "hutch.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "hutch"
+                                      ]
                                     }
                                   ]
                                 },
@@ -10444,7 +10594,10 @@
                           "children": [
                             {
                               "name": "cement.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "cement"
+                              ]
                             }
                           ]
                         }
@@ -11153,7 +11306,10 @@
                           "children": [
                             {
                               "name": "cement.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "cement"
+                              ]
                             }
                           ]
                         },
@@ -11206,7 +11362,10 @@
                                 },
                                 {
                                   "name": "stucco.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "stucco"
+                                  ]
                                 }
                               ]
                             }
@@ -11262,7 +11421,10 @@
                               "children": [
                                 {
                                   "name": "dog_collar.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "dog_collar"
+                                  ]
                                 }
                               ]
                             },
@@ -11724,7 +11886,10 @@
                       "children": [
                         {
                           "name": "chopping_block.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "chopping_block"
+                          ]
                         },
                         {
                           "name": "cube.n.05",
@@ -11806,7 +11971,10 @@
                             },
                             {
                               "name": "lace.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "lace"
+                              ]
                             },
                             {
                               "name": "string.n.01",
@@ -11940,7 +12108,10 @@
                                   "children": [
                                     {
                                       "name": "hose.n.03",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "hose"
+                                      ]
                                     },
                                     {
                                       "name": "pipe.n.01",
@@ -12077,7 +12248,10 @@
                             },
                             {
                               "name": "sanitary_napkin.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "sanitary_napkin"
+                              ]
                             }
                           ]
                         },
@@ -12297,6 +12471,13 @@
                                           "categories": [
                                             "plum"
                                           ]
+                                        },
+                                        {
+                                          "name": "half__peach.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_peach"
+                                          ]
                                         }
                                       ]
                                     },
@@ -12406,7 +12587,10 @@
                                           "children": [
                                             {
                                               "name": "chia_seed.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "chia_seed"
+                                              ]
                                             },
                                             {
                                               "name": "cooked__cumin.n.01",
@@ -12540,6 +12724,13 @@
                                             {
                                               "name": "diced__strawberry.n.01",
                                               "hasModel": true
+                                            },
+                                            {
+                                              "name": "half__strawberry.n.01",
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_strawberry"
+                                              ]
                                             }
                                           ]
                                         },
@@ -12637,7 +12828,10 @@
                                             },
                                             {
                                               "name": "half__lime.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_lime"
+                                              ]
                                             },
                                             {
                                               "name": "half__orange.n.01",
@@ -12752,7 +12946,10 @@
                                         },
                                         {
                                           "name": "half__mango.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_mango"
+                                          ]
                                         },
                                         {
                                           "name": "half__pineapple.n.01",
@@ -12837,6 +13034,34 @@
                                           "categories": [
                                             "sliced_papaya"
                                           ]
+                                        },
+                                        {
+                                          "name": "half__apricot.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_apricot"
+                                          ]
+                                        },
+                                        {
+                                          "name": "half__kiwi.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_kiwi"
+                                          ]
+                                        },
+                                        {
+                                          "name": "half__peach.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_peach"
+                                          ]
+                                        },
+                                        {
+                                          "name": "half__pear.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_pear"
+                                          ]
                                         }
                                       ]
                                     },
@@ -12857,6 +13082,13 @@
                                           "categories": [
                                             "pear"
                                           ]
+                                        },
+                                        {
+                                          "name": "half__pear.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_pear"
+                                          ]
                                         }
                                       ]
                                     },
@@ -12876,7 +13108,10 @@
                                     },
                                     {
                                       "name": "gourd.n.02",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "gourd"
+                                      ]
                                     },
                                     {
                                       "name": "hip.n.05",
@@ -12962,7 +13197,10 @@
                                   "children": [
                                     {
                                       "name": "daffodil_bulb.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "daffodil_bulb"
+                                      ]
                                     }
                                   ]
                                 },
@@ -13257,7 +13495,10 @@
                                       "children": [
                                         {
                                           "name": "pottable__beefsteak_tomato.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "pottable_beefsteak_tomato"
+                                          ]
                                         }
                                       ]
                                     }
@@ -13353,7 +13594,10 @@
                                     },
                                     {
                                       "name": "pottable__cactus.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "pottable_cactus"
+                                      ]
                                     }
                                   ]
                                 },
@@ -13400,7 +13644,10 @@
                                       "children": [
                                         {
                                           "name": "pottable__daffodil.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "pottable_daffodil"
+                                          ]
                                         }
                                       ]
                                     }
@@ -13434,11 +13681,17 @@
                                             },
                                             {
                                               "name": "pottable__dahlia.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "pottable_dahlia"
+                                              ]
                                             },
                                             {
                                               "name": "pottable__marigold.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "pottable_marigold"
+                                              ]
                                             },
                                             {
                                               "name": "sunflower.n.01",
@@ -13612,7 +13865,10 @@
                                       "children": [
                                         {
                                           "name": "conch.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "conch"
+                                          ]
                                         }
                                       ]
                                     }
@@ -13900,7 +14156,10 @@
             },
             {
               "name": "ribbon.n.01",
-              "hasModel": true
+              "hasModel": true,
+              "categories": [
+                "ribbon"
+              ]
             },
             {
               "name": "film.n.04",
@@ -13983,7 +14242,10 @@
                                             },
                                             {
                                               "name": "grease.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "grease"
+                                              ]
                                             },
                                             {
                                               "name": "linseed_oil.n.01",
@@ -14062,7 +14324,10 @@
                                             },
                                             {
                                               "name": "wax_remnant.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "wax_remnant"
+                                              ]
                                             }
                                           ]
                                         }
@@ -14292,7 +14557,10 @@
                               "children": [
                                 {
                                   "name": "insectifuge.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "insectifuge"
+                                  ]
                                 }
                               ]
                             },
@@ -14405,7 +14673,10 @@
                     },
                     {
                       "name": "adhesive_material.n.01",
-                      "hasModel": true
+                      "hasModel": true,
+                      "categories": [
+                        "adhesive_material"
+                      ]
                     },
                     {
                       "name": "waste.n.01",
@@ -14424,7 +14695,10 @@
                           "children": [
                             {
                               "name": "debris.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "debris"
+                              ]
                             }
                           ]
                         },
@@ -14436,6 +14710,7 @@
                               "name": "fecal_matter.n.01",
                               "hasModel": true,
                               "categories": [
+                                "fecal_matter",
                                 "poop"
                               ]
                             }
@@ -14638,7 +14913,10 @@
                               "children": [
                                 {
                                   "name": "post-it.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "post_it"
+                                  ]
                                 }
                               ]
                             }
@@ -14666,11 +14944,17 @@
                         },
                         {
                           "name": "wallpaper.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "wallpaper"
+                          ]
                         },
                         {
                           "name": "wax_paper.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "wax_paper"
+                          ]
                         },
                         {
                           "name": "wrapping_paper.n.01",
@@ -14778,7 +15062,10 @@
                             },
                             {
                               "name": "spray_paint.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "spray_paint"
+                              ]
                             }
                           ]
                         }
@@ -14790,7 +15077,10 @@
                       "children": [
                         {
                           "name": "emery_paper.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "emery_paper"
+                          ]
                         },
                         {
                           "name": "steel_wool.n.01",
@@ -14912,7 +15202,10 @@
                       "children": [
                         {
                           "name": "mud.n.03",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "mud"
+                          ]
                         },
                         {
                           "name": "soil.n.02",
@@ -15389,7 +15682,10 @@
                         },
                         {
                           "name": "stucco.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "stucco"
+                          ]
                         }
                       ]
                     },
@@ -16002,7 +16298,10 @@
                                 },
                                 {
                                   "name": "sesame_seed.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "sesame_seed"
+                                  ]
                                 },
                                 {
                                   "name": "turmeric.n.02",
@@ -16042,7 +16341,10 @@
                                 },
                                 {
                                   "name": "brown_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "brown_rice"
+                                  ]
                                 },
                                 {
                                   "name": "cooked__brown_rice.n.01",
@@ -16054,11 +16356,17 @@
                                 },
                                 {
                                   "name": "tomato_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "tomato_rice"
+                                  ]
                                 },
                                 {
                                   "name": "white_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "white_rice"
+                                  ]
                                 }
                               ]
                             },
@@ -16072,7 +16380,10 @@
                                 },
                                 {
                                   "name": "popcorn.n.02",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "popcorn"
+                                  ]
                                 },
                                 {
                                   "name": "sweet_corn.n.02",
@@ -16115,7 +16426,10 @@
                                 },
                                 {
                                   "name": "brown_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "brown_rice"
+                                  ]
                                 },
                                 {
                                   "name": "cooked__brown_rice.n.01",
@@ -16127,11 +16441,17 @@
                                 },
                                 {
                                   "name": "tomato_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "tomato_rice"
+                                  ]
                                 },
                                 {
                                   "name": "white_rice.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "white_rice"
+                                  ]
                                 }
                               ]
                             },
@@ -16274,7 +16594,10 @@
                                   "children": [
                                     {
                                       "name": "meat_loaf.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "meat_loaf"
+                                      ]
                                     }
                                   ]
                                 },
@@ -16475,7 +16798,10 @@
                             },
                             {
                               "name": "tofu.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "tofu"
+                              ]
                             }
                           ]
                         },
@@ -16702,7 +17028,10 @@
                         },
                         {
                           "name": "raw_egg.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "raw_egg"
+                          ]
                         }
                       ]
                     },
@@ -16762,11 +17091,17 @@
                                   "children": [
                                     {
                                       "name": "scoop_of_ice_cream.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "scoop_of_ice_cream"
+                                      ]
                                     },
                                     {
                                       "name": "ice_lolly.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "ice_lolly"
+                                      ]
                                     }
                                   ]
                                 },
@@ -16964,11 +17299,17 @@
                               "children": [
                                 {
                                   "name": "half__hard-boiled_egg.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_hard_boiled_egg"
+                                  ]
                                 },
                                 {
                                   "name": "hard-boiled_egg.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "hard_boiled_egg"
+                                  ]
                                 }
                               ]
                             },
@@ -17006,11 +17347,17 @@
                             },
                             {
                               "name": "meat_loaf.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "meat_loaf"
+                              ]
                             },
                             {
                               "name": "meatball.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "meatball"
+                              ]
                             },
                             {
                               "name": "porridge.n.01",
@@ -17035,7 +17382,10 @@
                             },
                             {
                               "name": "patty.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "patty"
+                              ]
                             },
                             {
                               "name": "pizza.n.01",
@@ -17069,11 +17419,17 @@
                             },
                             {
                               "name": "salad.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "salad"
+                              ]
                             },
                             {
                               "name": "schnitzel.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "schnitzel"
+                              ]
                             },
                             {
                               "name": "scrambled_eggs.n.01",
@@ -17204,7 +17560,10 @@
                             },
                             {
                               "name": "gelatin.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "gelatin"
+                              ]
                             }
                           ]
                         },
@@ -17546,7 +17905,10 @@
                             },
                             {
                               "name": "pellet_food.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "pellet_food"
+                              ]
                             }
                           ]
                         },
@@ -17558,6 +17920,7 @@
                               "name": "hay.n.01",
                               "hasModel": true,
                               "categories": [
+                                "hay",
                                 "haystack"
                               ]
                             }
@@ -17930,7 +18293,10 @@
                       "children": [
                         {
                           "name": "coal.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "coal"
+                          ]
                         }
                       ]
                     },
@@ -18191,7 +18557,10 @@
                               "children": [
                                 {
                                   "name": "meat_loaf.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "meat_loaf"
+                                  ]
                                 }
                               ]
                             },
@@ -18290,17 +18659,30 @@
                                 },
                                 {
                                   "name": "spice_cookie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spice_cookie"
+                                  ]
                                 },
                                 {
                                   "name": "sugar_cookie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "sugar_cookie"
+                                  ]
                                 },
                                 {
                                   "name": "wafer.n.02",
                                   "hasModel": true,
                                   "categories": [
                                     "wafer"
+                                  ]
+                                },
+                                {
+                                  "name": "cookie_stick.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "cookie_stick"
                                   ]
                                 }
                               ]
@@ -18490,6 +18872,13 @@
                                 {
                                   "name": "diced__strawberry.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "half__strawberry.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_strawberry"
+                                  ]
                                 }
                               ]
                             },
@@ -18587,7 +18976,10 @@
                                 },
                                 {
                                   "name": "half__lime.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_lime"
+                                  ]
                                 },
                                 {
                                   "name": "half__orange.n.01",
@@ -18702,7 +19094,10 @@
                             },
                             {
                               "name": "half__mango.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_mango"
+                              ]
                             },
                             {
                               "name": "half__pineapple.n.01",
@@ -18786,6 +19181,34 @@
                               "hasModel": true,
                               "categories": [
                                 "sliced_papaya"
+                              ]
+                            },
+                            {
+                              "name": "half__apricot.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "half_apricot"
+                              ]
+                            },
+                            {
+                              "name": "half__kiwi.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "half_kiwi"
+                              ]
+                            },
+                            {
+                              "name": "half__peach.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "half_peach"
+                              ]
+                            },
+                            {
+                              "name": "half__pear.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "half_pear"
                               ]
                             }
                           ]
@@ -18942,7 +19365,10 @@
                                         },
                                         {
                                           "name": "half__bell_pepper.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_bell_pepper"
+                                          ]
                                         }
                                       ]
                                     },
@@ -18968,7 +19394,10 @@
                                         },
                                         {
                                           "name": "pottable__chili.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "pottable_chili"
+                                          ]
                                         }
                                       ]
                                     }
@@ -18983,13 +19412,23 @@
                                 },
                                 {
                                   "name": "half__eggplant.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_eggplant"
+                                  ]
                                 },
                                 {
                                   "name": "potato.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "potato"
+                                  ]
+                                },
+                                {
+                                  "name": "sliced__eggplant.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "sliced_eggplant"
                                   ]
                                 }
                               ]
@@ -19034,7 +19473,10 @@
                                 },
                                 {
                                   "name": "half__potato.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_potato"
+                                  ]
                                 },
                                 {
                                   "name": "parsnip.n.03",
@@ -19258,7 +19700,10 @@
                                 },
                                 {
                                   "name": "mustard.n.03",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "mustard_leaf"
+                                  ]
                                 },
                                 {
                                   "name": "radish.n.01",
@@ -19328,7 +19773,10 @@
                                 },
                                 {
                                   "name": "half__vidalia_onion.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_vidalia_onion"
+                                  ]
                                 },
                                 {
                                   "name": "sliced__onion.n.01",
@@ -19522,7 +19970,10 @@
                               "children": [
                                 {
                                   "name": "ham_hock.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "ham_hock"
+                                  ]
                                 }
                               ]
                             },
@@ -19581,6 +20032,13 @@
                             {
                               "name": "tenderloin.n.02",
                               "hasModel": true
+                            },
+                            {
+                              "name": "sliced__brisket.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "sliced__brisket"
+                              ]
                             }
                           ]
                         },
@@ -19629,7 +20087,10 @@
                             },
                             {
                               "name": "kielbasa.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "kielbasa"
+                              ]
                             },
                             {
                               "name": "pepperoni.n.01",
@@ -19716,12 +20177,11 @@
                           ]
                         },
                         {
-                          "name": "jerky.n.01",
-                          "hasModel": true
-                        },
-                        {
                           "name": "lamb.n.05",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "lamb"
+                          ]
                         },
                         {
                           "name": "pork.n.01",
@@ -19732,7 +20192,10 @@
                         },
                         {
                           "name": "veal.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "veal"
+                          ]
                         },
                         {
                           "name": "game.n.07",
@@ -19869,7 +20332,10 @@
                             },
                             {
                               "name": "jimmies.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "jimmies"
+                              ]
                             }
                           ]
                         },
@@ -19939,7 +20405,10 @@
                             },
                             {
                               "name": "scallop.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "scallop"
+                              ]
                             }
                           ]
                         },
@@ -20132,7 +20601,10 @@
                   "children": [
                     {
                       "name": "ice.n.01",
-                      "hasModel": true
+                      "hasModel": true,
+                      "categories": [
+                        "ice"
+                      ]
                     },
                     {
                       "name": "gem.n.02",
@@ -20226,7 +20698,10 @@
               "children": [
                 {
                   "name": "coal.n.01",
-                  "hasModel": true
+                  "hasModel": true,
+                  "categories": [
+                    "coal"
+                  ]
                 },
                 {
                   "name": "peat.n.01",
@@ -20603,7 +21078,10 @@
                                 },
                                 {
                                   "name": "grease.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "grease"
+                                  ]
                                 },
                                 {
                                   "name": "linseed_oil.n.01",
@@ -20682,7 +21160,10 @@
                                 },
                                 {
                                   "name": "wax_remnant.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "wax_remnant"
+                                  ]
                                 }
                               ]
                             }
@@ -20785,7 +21266,10 @@
                           "children": [
                             {
                               "name": "hair.n.04",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "hair"
+                              ]
                             }
                           ]
                         },
@@ -20860,7 +21344,10 @@
                                   "children": [
                                     {
                                       "name": "snow.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "snow"
+                                      ]
                                     }
                                   ]
                                 }
@@ -20942,7 +21429,10 @@
                                                 },
                                                 {
                                                   "name": "grease.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "grease"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "linseed_oil.n.01",
@@ -21021,7 +21511,10 @@
                                                 },
                                                 {
                                                   "name": "wax_remnant.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "wax_remnant"
+                                                  ]
                                                 }
                                               ]
                                             }
@@ -21251,7 +21744,10 @@
                                   "children": [
                                     {
                                       "name": "insectifuge.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "insectifuge"
+                                      ]
                                     }
                                   ]
                                 },
@@ -21364,7 +21860,10 @@
                         },
                         {
                           "name": "adhesive_material.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "adhesive_material"
+                          ]
                         },
                         {
                           "name": "waste.n.01",
@@ -21383,7 +21882,10 @@
                               "children": [
                                 {
                                   "name": "debris.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "debris"
+                                  ]
                                 }
                               ]
                             },
@@ -21395,6 +21897,7 @@
                                   "name": "fecal_matter.n.01",
                                   "hasModel": true,
                                   "categories": [
+                                    "fecal_matter",
                                     "poop"
                                   ]
                                 }
@@ -21597,7 +22100,10 @@
                                   "children": [
                                     {
                                       "name": "post-it.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "post_it"
+                                      ]
                                     }
                                   ]
                                 }
@@ -21625,11 +22131,17 @@
                             },
                             {
                               "name": "wallpaper.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "wallpaper"
+                              ]
                             },
                             {
                               "name": "wax_paper.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "wax_paper"
+                              ]
                             },
                             {
                               "name": "wrapping_paper.n.01",
@@ -21737,7 +22249,10 @@
                                 },
                                 {
                                   "name": "spray_paint.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spray_paint"
+                                  ]
                                 }
                               ]
                             }
@@ -21749,7 +22264,10 @@
                           "children": [
                             {
                               "name": "emery_paper.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "emery_paper"
+                              ]
                             },
                             {
                               "name": "steel_wool.n.01",
@@ -21871,7 +22389,10 @@
                           "children": [
                             {
                               "name": "mud.n.03",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "mud"
+                              ]
                             },
                             {
                               "name": "soil.n.02",
@@ -22348,7 +22869,10 @@
                             },
                             {
                               "name": "stucco.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "stucco"
+                              ]
                             }
                           ]
                         },
@@ -22566,6 +23090,13 @@
                   "categories": [
                     "poster"
                   ]
+                },
+                {
+                  "name": "signpost.n.01",
+                  "hasModel": true,
+                  "categories": [
+                    "signpost"
+                  ]
                 }
               ],
               "categories": [
@@ -22649,7 +23180,10 @@
                                 },
                                 {
                                   "name": "price_tag.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "price_tag"
+                                  ]
                                 }
                               ]
                             },
@@ -23419,11 +23953,17 @@
                           "children": [
                             {
                               "name": "incision.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "incision"
+                              ]
                             },
                             {
                               "name": "wrinkle.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "wrinkle"
+                              ]
                             }
                           ]
                         }
@@ -23532,11 +24072,17 @@
                   "children": [
                     {
                       "name": "stain.n.01",
-                      "hasModel": true
+                      "hasModel": true,
+                      "categories": [
+                        "stain"
+                      ]
                     },
                     {
                       "name": "tarnish.n.02",
-                      "hasModel": true
+                      "hasModel": true,
+                      "categories": [
+                        "tarnish"
+                      ]
                     }
                   ]
                 }
@@ -23627,7 +24173,10 @@
                             },
                             {
                               "name": "turkey_leg.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "turkey_leg"
+                              ]
                             }
                           ]
                         },
