@@ -26,6 +26,8 @@ combined:
 - objects/legacy_batch-10
 - objects/legacy_batch-11
 - objects/legacy_batch-12
+- objects/substances-01
+- objects/task_relavant-ab
 - objects/task_relevant-xy
 - scenes/Beechwood_0_int
 - scenes/Beechwood_1_int
@@ -46,6 +48,7 @@ combined:
 - scenes/commercial_kitchen_pans
 - scenes/gates_bedroom
 - scenes/grocery_store_asian
+- scenes/grocery_store_cafe
 - scenes/grocery_store_convenience
 - scenes/grocery_store_half_stocked
 - scenes/hall_arch_wood
@@ -55,8 +58,10 @@ combined:
 - scenes/hotel_gym_spa
 - scenes/hotel_suite_large
 - scenes/hotel_suite_small
+- scenes/house_double_floor_lower
 - scenes/office_bike
 - scenes/office_cubicles_left
+- scenes/office_large
 - scenes/office_vendor_machine
 - scenes/public_restroom_blue
 - scenes/public_restroom_brown
@@ -64,6 +69,7 @@ combined:
 - scenes/public_restroom_marble
 - scenes/public_restroom_white
 - scenes/restaurant_asian
+- scenes/restaurant_brunch
 - scenes/restaurant_cafeteria
 - scenes/restaurant_diner
 - scenes/restaurant_hotel
@@ -98,6 +104,8 @@ combined_unfiltered:
 - objects/legacy_batch-11
 - objects/legacy_batch-12
 - objects/procedural-aa
+- objects/substances-01
+- objects/task_relavant-ab
 - objects/task_relevant-xy
 - scenes/Beechwood_0_garden
 - scenes/Beechwood_0_int
@@ -173,6 +181,10 @@ final_scenes:
 - scenes/Rs_int
 - scenes/Wainscott_0_int
 - scenes/Wainscott_1_int
+- scenes/grocery_store_cafe
+- scenes/house_double_floor_lower
+- scenes/office_large
+- scenes/restaurant_brunch
 objects:
 - objects/batch-00
 - objects/batch-01
@@ -201,6 +213,8 @@ objects:
 - objects/legacy_batch-10
 - objects/legacy_batch-11
 - objects/legacy_batch-12
+- objects/substances-01
+- objects/task_relavant-ab
 - objects/task_relevant-xy
 objects_unfiltered:
 - objects/batch-00
@@ -231,6 +245,8 @@ objects_unfiltered:
 - objects/legacy_batch-11
 - objects/legacy_batch-12
 - objects/procedural-aa
+- objects/substances-01
+- objects/task_relavant-ab
 - objects/task_relevant-xy
 root_path: /scr/ig_pipeline
 scenes:
@@ -253,6 +269,7 @@ scenes:
 - scenes/commercial_kitchen_pans
 - scenes/gates_bedroom
 - scenes/grocery_store_asian
+- scenes/grocery_store_cafe
 - scenes/grocery_store_convenience
 - scenes/grocery_store_half_stocked
 - scenes/hall_arch_wood
@@ -262,8 +279,10 @@ scenes:
 - scenes/hotel_gym_spa
 - scenes/hotel_suite_large
 - scenes/hotel_suite_small
+- scenes/house_double_floor_lower
 - scenes/office_bike
 - scenes/office_cubicles_left
+- scenes/office_large
 - scenes/office_vendor_machine
 - scenes/public_restroom_blue
 - scenes/public_restroom_brown
@@ -271,6 +290,7 @@ scenes:
 - scenes/public_restroom_marble
 - scenes/public_restroom_white
 - scenes/restaurant_asian
+- scenes/restaurant_brunch
 - scenes/restaurant_cafeteria
 - scenes/restaurant_diner
 - scenes/restaurant_hotel

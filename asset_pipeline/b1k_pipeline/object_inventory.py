@@ -11,6 +11,7 @@ import b1k_pipeline.utils
 def main(use_future=False):
     needed = set()
     providers = defaultdict(list)
+    meta_links = defaultdict(set)
     needed_by = defaultdict(list)
     skipped_files = []
     
@@ -35,6 +36,8 @@ def main(use_future=False):
                     needed_by[obj].append(target)
                 for provided in object_list["provided_objects"]:
                     providers[provided].append(target)
+                for obj, links in object_list["meta_links"].items():
+                    meta_links[obj] |= set(links)
 
         # Check the multiple-provided copies.
         multiple_provided = {k: v for k, v in providers.items() if len(v) > 1}
@@ -53,6 +56,7 @@ def main(use_future=False):
             "success": success,
             "providers": single_provider,
             "needed_by": needed_by,
+            "meta_links": {x: sorted(y) for x, y in meta_links.items()},
             "error_skipped_files": sorted(skipped_files),
             "error_multiple_provided": multiple_provided,
             "error_missing_objects": sorted(missing_objects),
