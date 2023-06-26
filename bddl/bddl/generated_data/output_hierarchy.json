@@ -18659,11 +18659,17 @@
                                 },
                                 {
                                   "name": "spice_cookie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spice_cookie"
+                                  ]
                                 },
                                 {
                                   "name": "sugar_cookie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "sugar_cookie"
+                                  ]
                                 },
                                 {
                                   "name": "wafer.n.02",
@@ -20026,6 +20032,13 @@
                             {
                               "name": "tenderloin.n.02",
                               "hasModel": true
+                            },
+                            {
+                              "name": "sliced__brisket.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "sliced__brisket"
+                              ]
                             }
                           ]
                         },
