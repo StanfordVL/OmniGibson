@@ -8863,7 +8863,10 @@
                                 },
                                 {
                                   "name": "gift_box.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "gift_box"
+                                  ]
                                 },
                                 {
                                   "name": "jar__of__bath_salt.n.01",
@@ -10454,9 +10457,6 @@
                                 "plastic_wrap"
                               ]
                             }
-                          ],
-                          "categories": [
-                            "gift_box"
                           ]
                         },
                         {
