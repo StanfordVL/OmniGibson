@@ -2,11 +2,16 @@ FROM stanfordvl/omnigibson:latest
 
 ADD environment.yml /tmp/environment.yml
 
+# TODO: Remove this
+# Temporarily install updated BDDL
+RUN micromamba run -n omnigibson pip uninstall -y bddl
+RUN micromamba run -n omnigibson pip install https://github.com/StanfordVL/bddl/archive/develop.zip
+
 # Create the ig_pipeline environment
 RUN micromamba env create --file /tmp/environment.yml
 
-# Install CoACD
-RUN micromamba run -n pipeline pip install coacd
+# Install CoACD, open3d
+RUN micromamba run -n pipeline pip install coacd open3d
 
 # Install V-HACD
 RUN apt-get update && \

@@ -42,10 +42,10 @@ if __name__ == "__main__":
             import_render_channels=IMPORT_RENDER_CHANNELS,
         )
 
-        # Apply cloth conversions if necessary.
-        if obj_category in CLOTH_CATEGORIES:
-            rigid_usd_path = os.path.join(dataset_root, "objects", obj_category, obj_model, "usd", f"{obj_model}.usd")
-            postprocess_cloth(rigid_usd_path)
+        # # Apply cloth conversions if necessary.
+        # if obj_category in CLOTH_CATEGORIES:
+        #     rigid_usd_path = os.path.join(dataset_root, "objects", obj_category, obj_model, "usd", f"{obj_model}.usd")
+        #     postprocess_cloth(rigid_usd_path)
 
         # Encrypt the output files.
         for usd_path in glob.glob(os.path.join(dataset_root, "objects", obj_category, obj_model, "usd", "*.usd")):

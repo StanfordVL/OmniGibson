@@ -40,6 +40,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/scene.urdf
     - cad/scenes/gates_bedroom/scene.urdf
     - cad/scenes/grocery_store_asian/scene.urdf
+    - cad/scenes/grocery_store_cafe/scene.urdf
     - cad/scenes/grocery_store_convenience/scene.urdf
     - cad/scenes/grocery_store_half_stocked/scene.urdf
     - cad/scenes/hall_arch_wood/scene.urdf
@@ -49,8 +50,10 @@ stages:
     - cad/scenes/hotel_gym_spa/scene.urdf
     - cad/scenes/hotel_suite_large/scene.urdf
     - cad/scenes/hotel_suite_small/scene.urdf
+    - cad/scenes/house_double_floor_lower/scene.urdf
     - cad/scenes/office_bike/scene.urdf
     - cad/scenes/office_cubicles_left/scene.urdf
+    - cad/scenes/office_large/scene.urdf
     - cad/scenes/office_vendor_machine/scene.urdf
     - cad/scenes/public_restroom_blue/scene.urdf
     - cad/scenes/public_restroom_brown/scene.urdf
@@ -58,6 +61,7 @@ stages:
     - cad/scenes/public_restroom_marble/scene.urdf
     - cad/scenes/public_restroom_white/scene.urdf
     - cad/scenes/restaurant_asian/scene.urdf
+    - cad/scenes/restaurant_brunch/scene.urdf
     - cad/scenes/restaurant_cafeteria/scene.urdf
     - cad/scenes/restaurant_diner/scene.urdf
     - cad/scenes/restaurant_hotel/scene.urdf
@@ -82,6 +86,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/artifacts/export_scene.success
     - cad/scenes/gates_bedroom/artifacts/export_scene.success
     - cad/scenes/grocery_store_asian/artifacts/export_scene.success
+    - cad/scenes/grocery_store_cafe/artifacts/export_scene.success
     - cad/scenes/grocery_store_convenience/artifacts/export_scene.success
     - cad/scenes/grocery_store_half_stocked/artifacts/export_scene.success
     - cad/scenes/hall_arch_wood/artifacts/export_scene.success
@@ -91,8 +96,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/export_scene.success
     - cad/scenes/hotel_suite_large/artifacts/export_scene.success
     - cad/scenes/hotel_suite_small/artifacts/export_scene.success
+    - cad/scenes/house_double_floor_lower/artifacts/export_scene.success
     - cad/scenes/office_bike/artifacts/export_scene.success
     - cad/scenes/office_cubicles_left/artifacts/export_scene.success
+    - cad/scenes/office_large/artifacts/export_scene.success
     - cad/scenes/office_vendor_machine/artifacts/export_scene.success
     - cad/scenes/public_restroom_blue/artifacts/export_scene.success
     - cad/scenes/public_restroom_brown/artifacts/export_scene.success
@@ -100,6 +107,7 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/export_scene.success
     - cad/scenes/public_restroom_white/artifacts/export_scene.success
     - cad/scenes/restaurant_asian/artifacts/export_scene.success
+    - cad/scenes/restaurant_brunch/artifacts/export_scene.success
     - cad/scenes/restaurant_cafeteria/artifacts/export_scene.success
     - cad/scenes/restaurant_diner/artifacts/export_scene.success
     - cad/scenes/restaurant_hotel/artifacts/export_scene.success
@@ -132,6 +140,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.json
     - cad/scenes/gates_bedroom/artifacts/room_object_list.json
     - cad/scenes/grocery_store_asian/artifacts/room_object_list.json
+    - cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/room_object_list.json
     - cad/scenes/grocery_store_half_stocked/artifacts/room_object_list.json
     - cad/scenes/hall_arch_wood/artifacts/room_object_list.json
@@ -141,8 +150,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/room_object_list.json
     - cad/scenes/hotel_suite_large/artifacts/room_object_list.json
     - cad/scenes/hotel_suite_small/artifacts/room_object_list.json
+    - cad/scenes/house_double_floor_lower/artifacts/room_object_list.json
     - cad/scenes/office_bike/artifacts/room_object_list.json
     - cad/scenes/office_cubicles_left/artifacts/room_object_list.json
+    - cad/scenes/office_large/artifacts/room_object_list.json
     - cad/scenes/office_vendor_machine/artifacts/room_object_list.json
     - cad/scenes/public_restroom_blue/artifacts/room_object_list.json
     - cad/scenes/public_restroom_brown/artifacts/room_object_list.json
@@ -150,6 +161,7 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/room_object_list.json
     - cad/scenes/public_restroom_white/artifacts/room_object_list.json
     - cad/scenes/restaurant_asian/artifacts/room_object_list.json
+    - cad/scenes/restaurant_brunch/artifacts/room_object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/room_object_list.json
     - cad/scenes/restaurant_diner/artifacts/room_object_list.json
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.json
@@ -174,6 +186,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.success
     - cad/scenes/gates_bedroom/artifacts/room_object_list.success
     - cad/scenes/grocery_store_asian/artifacts/room_object_list.success
+    - cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
     - cad/scenes/grocery_store_convenience/artifacts/room_object_list.success
     - cad/scenes/grocery_store_half_stocked/artifacts/room_object_list.success
     - cad/scenes/hall_arch_wood/artifacts/room_object_list.success
@@ -183,8 +196,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/room_object_list.success
     - cad/scenes/hotel_suite_large/artifacts/room_object_list.success
     - cad/scenes/hotel_suite_small/artifacts/room_object_list.success
+    - cad/scenes/house_double_floor_lower/artifacts/room_object_list.success
     - cad/scenes/office_bike/artifacts/room_object_list.success
     - cad/scenes/office_cubicles_left/artifacts/room_object_list.success
+    - cad/scenes/office_large/artifacts/room_object_list.success
     - cad/scenes/office_vendor_machine/artifacts/room_object_list.success
     - cad/scenes/public_restroom_blue/artifacts/room_object_list.success
     - cad/scenes/public_restroom_brown/artifacts/room_object_list.success
@@ -192,6 +207,7 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/room_object_list.success
     - cad/scenes/public_restroom_white/artifacts/room_object_list.success
     - cad/scenes/restaurant_asian/artifacts/room_object_list.success
+    - cad/scenes/restaurant_brunch/artifacts/room_object_list.success
     - cad/scenes/restaurant_cafeteria/artifacts/room_object_list.success
     - cad/scenes/restaurant_diner/artifacts/room_object_list.success
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.success
@@ -391,6 +407,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/artifacts/export_meshes.json
     - cad/scenes/gates_bedroom/artifacts/export_meshes.json
     - cad/scenes/grocery_store_asian/artifacts/export_meshes.json
+    - cad/scenes/grocery_store_cafe/artifacts/export_meshes.json
     - cad/scenes/grocery_store_convenience/artifacts/export_meshes.json
     - cad/scenes/grocery_store_half_stocked/artifacts/export_meshes.json
     - cad/scenes/hall_arch_wood/artifacts/export_meshes.json
@@ -400,8 +417,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/export_meshes.json
     - cad/scenes/hotel_suite_large/artifacts/export_meshes.json
     - cad/scenes/hotel_suite_small/artifacts/export_meshes.json
+    - cad/scenes/house_double_floor_lower/artifacts/export_meshes.json
     - cad/scenes/office_bike/artifacts/export_meshes.json
     - cad/scenes/office_cubicles_left/artifacts/export_meshes.json
+    - cad/scenes/office_large/artifacts/export_meshes.json
     - cad/scenes/office_vendor_machine/artifacts/export_meshes.json
     - cad/scenes/public_restroom_blue/artifacts/export_meshes.json
     - cad/scenes/public_restroom_brown/artifacts/export_meshes.json
@@ -409,6 +428,7 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/export_meshes.json
     - cad/scenes/public_restroom_white/artifacts/export_meshes.json
     - cad/scenes/restaurant_asian/artifacts/export_meshes.json
+    - cad/scenes/restaurant_brunch/artifacts/export_meshes.json
     - cad/scenes/restaurant_cafeteria/artifacts/export_meshes.json
     - cad/scenes/restaurant_diner/artifacts/export_meshes.json
     - cad/scenes/restaurant_hotel/artifacts/export_meshes.json
@@ -469,6 +489,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
     - cad/scenes/gates_bedroom/artifacts/meshes.zip
     - cad/scenes/grocery_store_asian/artifacts/meshes.zip
+    - cad/scenes/grocery_store_cafe/artifacts/meshes.zip
     - cad/scenes/grocery_store_convenience/artifacts/meshes.zip
     - cad/scenes/grocery_store_half_stocked/artifacts/meshes.zip
     - cad/scenes/hall_arch_wood/artifacts/meshes.zip
@@ -478,8 +499,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/meshes.zip
     - cad/scenes/hotel_suite_large/artifacts/meshes.zip
     - cad/scenes/hotel_suite_small/artifacts/meshes.zip
+    - cad/scenes/house_double_floor_lower/artifacts/meshes.zip
     - cad/scenes/office_bike/artifacts/meshes.zip
     - cad/scenes/office_cubicles_left/artifacts/meshes.zip
+    - cad/scenes/office_large/artifacts/meshes.zip
     - cad/scenes/office_vendor_machine/artifacts/meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/meshes.zip
     - cad/scenes/public_restroom_brown/artifacts/meshes.zip
@@ -487,6 +510,7 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/meshes.zip
     - cad/scenes/public_restroom_white/artifacts/meshes.zip
     - cad/scenes/restaurant_asian/artifacts/meshes.zip
+    - cad/scenes/restaurant_brunch/artifacts/meshes.zip
     - cad/scenes/restaurant_cafeteria/artifacts/meshes.zip
     - cad/scenes/restaurant_diner/artifacts/meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/meshes.zip
@@ -541,6 +565,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
     - cad/scenes/gates_bedroom/artifacts/object_list.json
     - cad/scenes/grocery_store_asian/artifacts/object_list.json
+    - cad/scenes/grocery_store_cafe/artifacts/object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/object_list.json
     - cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
     - cad/scenes/hall_arch_wood/artifacts/object_list.json
@@ -550,8 +575,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
     - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
+    - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
+    - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
     - cad/scenes/public_restroom_brown/artifacts/object_list.json
@@ -559,6 +586,7 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/object_list.json
     - cad/scenes/public_restroom_white/artifacts/object_list.json
     - cad/scenes/restaurant_asian/artifacts/object_list.json
+    - cad/scenes/restaurant_brunch/artifacts/object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
@@ -666,6 +694,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
     - cad/scenes/gates_bedroom/artifacts/object_list.json
     - cad/scenes/grocery_store_asian/artifacts/object_list.json
+    - cad/scenes/grocery_store_cafe/artifacts/object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/object_list.json
     - cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
     - cad/scenes/hall_arch_wood/artifacts/object_list.json
@@ -675,8 +704,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
     - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
+    - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
+    - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
     - cad/scenes/public_restroom_brown/artifacts/object_list.json
@@ -684,6 +715,7 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/object_list.json
     - cad/scenes/public_restroom_white/artifacts/object_list.json
     - cad/scenes/restaurant_asian/artifacts/object_list.json
+    - cad/scenes/restaurant_brunch/artifacts/object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
@@ -861,6 +893,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
     - cad/scenes/gates_bedroom/artifacts/object_list.json
     - cad/scenes/grocery_store_asian/artifacts/object_list.json
+    - cad/scenes/grocery_store_cafe/artifacts/object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/object_list.json
     - cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
     - cad/scenes/hall_arch_wood/artifacts/object_list.json
@@ -870,8 +903,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
     - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
+    - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
+    - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
     - cad/scenes/public_restroom_brown/artifacts/object_list.json
@@ -879,6 +914,7 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/object_list.json
     - cad/scenes/public_restroom_white/artifacts/object_list.json
     - cad/scenes/restaurant_asian/artifacts/object_list.json
+    - cad/scenes/restaurant_brunch/artifacts/object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
@@ -975,6 +1011,7 @@ stages:
     - cad/scenes/commercial_kitchen_pans/artifacts/sanitycheck.json
     - cad/scenes/gates_bedroom/artifacts/sanitycheck.json
     - cad/scenes/grocery_store_asian/artifacts/sanitycheck.json
+    - cad/scenes/grocery_store_cafe/artifacts/sanitycheck.json
     - cad/scenes/grocery_store_convenience/artifacts/sanitycheck.json
     - cad/scenes/grocery_store_half_stocked/artifacts/sanitycheck.json
     - cad/scenes/hall_arch_wood/artifacts/sanitycheck.json
@@ -984,8 +1021,10 @@ stages:
     - cad/scenes/hotel_gym_spa/artifacts/sanitycheck.json
     - cad/scenes/hotel_suite_large/artifacts/sanitycheck.json
     - cad/scenes/hotel_suite_small/artifacts/sanitycheck.json
+    - cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
     - cad/scenes/office_bike/artifacts/sanitycheck.json
     - cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
+    - cad/scenes/office_large/artifacts/sanitycheck.json
     - cad/scenes/office_vendor_machine/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_blue/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_brown/artifacts/sanitycheck.json
@@ -993,6 +1032,7 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_white/artifacts/sanitycheck.json
     - cad/scenes/restaurant_asian/artifacts/sanitycheck.json
+    - cad/scenes/restaurant_brunch/artifacts/sanitycheck.json
     - cad/scenes/restaurant_cafeteria/artifacts/sanitycheck.json
     - cad/scenes/restaurant_diner/artifacts/sanitycheck.json
     - cad/scenes/restaurant_hotel/artifacts/sanitycheck.json

@@ -91,12 +91,8 @@ REJECTED_SCENES = {
     "office_cubicles_right",
 
     # Temporary
-    "house_double_floor_lower",
-    "house_double_floor_upper",
     "house_single_floor",
-    "restaurant_brunch",
-    "office_large",
-    "grocery_store_cafe",
+    "house_double_floor_upper",
     "Pomaria_0_garden",
 }
 

@@ -30,9 +30,7 @@ def main():
 
     # Build the mesh tree using our mesh tree library.
     # We don't need the upper side joints since we will only use these objects for bboxes.
-    with target_output_fs.open("meshes.zip", "rb") as f:
-        mesh_archive_fs = ZipFS(f)
-        G = build_mesh_tree(mesh_list, mesh_archive_fs, load_upper=False)
+    G = build_mesh_tree(mesh_list, target_output_fs, load_upper=False)
 
     # Go through each object.
     roots = [node for node, in_degree in G.in_degree() if in_degree == 0]

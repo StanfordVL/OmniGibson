@@ -48,6 +48,7 @@ combined:
 - scenes/commercial_kitchen_pans
 - scenes/gates_bedroom
 - scenes/grocery_store_asian
+- scenes/grocery_store_cafe
 - scenes/grocery_store_convenience
 - scenes/grocery_store_half_stocked
 - scenes/hall_arch_wood
@@ -57,8 +58,10 @@ combined:
 - scenes/hotel_gym_spa
 - scenes/hotel_suite_large
 - scenes/hotel_suite_small
+- scenes/house_double_floor_lower
 - scenes/office_bike
 - scenes/office_cubicles_left
+- scenes/office_large
 - scenes/office_vendor_machine
 - scenes/public_restroom_blue
 - scenes/public_restroom_brown
@@ -66,6 +69,7 @@ combined:
 - scenes/public_restroom_marble
 - scenes/public_restroom_white
 - scenes/restaurant_asian
+- scenes/restaurant_brunch
 - scenes/restaurant_cafeteria
 - scenes/restaurant_diner
 - scenes/restaurant_hotel
@@ -177,6 +181,10 @@ final_scenes:
 - scenes/Rs_int
 - scenes/Wainscott_0_int
 - scenes/Wainscott_1_int
+- scenes/grocery_store_cafe
+- scenes/house_double_floor_lower
+- scenes/office_large
+- scenes/restaurant_brunch
 objects:
 - objects/batch-00
 - objects/batch-01
@@ -261,6 +269,7 @@ scenes:
 - scenes/commercial_kitchen_pans
 - scenes/gates_bedroom
 - scenes/grocery_store_asian
+- scenes/grocery_store_cafe
 - scenes/grocery_store_convenience
 - scenes/grocery_store_half_stocked
 - scenes/hall_arch_wood
@@ -270,8 +279,10 @@ scenes:
 - scenes/hotel_gym_spa
 - scenes/hotel_suite_large
 - scenes/hotel_suite_small
+- scenes/house_double_floor_lower
 - scenes/office_bike
 - scenes/office_cubicles_left
+- scenes/office_large
 - scenes/office_vendor_machine
 - scenes/public_restroom_blue
 - scenes/public_restroom_brown
@@ -279,6 +290,7 @@ scenes:
 - scenes/public_restroom_marble
 - scenes/public_restroom_white
 - scenes/restaurant_asian
+- scenes/restaurant_brunch
 - scenes/restaurant_cafeteria
 - scenes/restaurant_diner
 - scenes/restaurant_hotel

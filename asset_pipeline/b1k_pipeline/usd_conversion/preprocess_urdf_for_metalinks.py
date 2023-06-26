@@ -7,6 +7,25 @@ from pathlib import Path
 import numpy as np
 import omnigibson.utils.transform_utils as T
 
+META_LINK_RENAME_MAPPING = {
+    "fillable": "container",
+    "fluidsink": "particlesink",
+    "fluidsource": "particlesource",
+}
+
+ALLOWED_META_TYPES = {
+    'particlesource': "dimensionless",
+    'togglebutton': "primitive",
+    'attachment': "dimensionless",
+    'heatsource': "dimensionless",
+    'particleapplier': "primitive",
+    'particleremover': "primitive",
+    'particlesink': "primitive",
+    'slicer': "primitive",
+    'container': "primitive",
+    'collision': "convexmesh",
+    'lights': "light",
+}
 
 def pretty_print_xml(current, parent=None, index=-1, depth=0, use_tabs=False):
     space = "\t" if use_tabs else " " * 4
@@ -229,27 +248,55 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model, dataset_root):
         "links" in metadata and "meta_links" in metadata
     ), "Only expected one of links and meta_links to be found in metadata, but found both!"
 
-    # Add meta links to URDF
     if "meta_links" in metadata:
+        # Rename meta links, e.g. from "fillable" to "container"
+        for link, meta_link in metadata["meta_links"].items():
+            for meta_link_name, meta_link_attrs in meta_link.items():
+                if meta_link_name in META_LINK_RENAME_MAPPING:
+                    metadata["meta_links"][link][META_LINK_RENAME_MAPPING[meta_link_name]] = meta_link_attrs
+                    del metadata["meta_links"][link][meta_link_name]
+
+        with open(metadata_fpath, "w") as f:
+            json.dump(metadata, f)
+
         meta_links = metadata.pop("meta_links")
         print("meta_links:", meta_links)
         for parent_link_name, child_link_attrs in meta_links.items():
             for meta_link_name, ml_attrs in child_link_attrs.items():
-                for ml_id, attrs_list in ml_attrs.items():
-                    for i, attrs in enumerate(attrs_list):
-                        pos = attrs.get("position", None)
-                        quat = attrs.get("orientation", None)
-                        pos = [0, 0, 0] if pos is None else pos
-                        quat = [0, 0, 0, 1.0] if quat is None else quat
+                assert meta_link_name in ALLOWED_META_TYPES, f"meta_link_name {meta_link_name} not in {ALLOWED_META_TYPES}"
 
-                        # Create metalink
-                        create_metalink(
-                            root_element=root,
-                            metalink_name=f"{meta_link_name}_{ml_id}_{i}",
-                            parent_link_name=parent_link_name,
-                            pos=pos,
-                            rpy=T.quat2euler(quat),
-                        )
+                for ml_id, attrs_list in ml_attrs.items():
+                    if len(attrs_list) > 0:
+                        if ALLOWED_META_TYPES[meta_link_name] != "dimensionless":
+                            # If not dimensionless, we create one meta link for a list of meshes below it
+                            attrs_list = [attrs_list[0]]
+                        else:
+                            # Otherwise, we create one meta link for each frame
+                            # For non-attachment meta links, we expect only one instance per type
+                            # E.g. heatsource_leftstove_0, heatsource_rightstove_0, but not heatsource_leftstove_1
+                            if meta_link_name != "attachment":
+                                assert len(attrs_list) == 1, f"Expected only one instance for meta_link {meta_link_name}_{ml_id}, but found {len(attrs_list)}"
+
+                        for i, attrs in enumerate(attrs_list):
+                            pos = attrs["position"]
+                            quat = attrs["orientation"]
+
+                            # For particle applier only, the orientation of the meta link matters (particle should shoot towards the negative z-axis)
+                            # If the meta link is created based on the orientation of the first mesh that is a cone, we need to rotate it by 180 degrees
+                            # because the cone is pointing in the wrong direction.
+                            if meta_link_name == "particleapplier" and attrs["type"] == "cone":
+                                assert len(attrs_list) == 1, f"Expected only one instance for meta_link {meta_link_name}_{ml_id}, but found {len(attrs_list)}"
+                                quat = T.quat_multiply(quat, T.axisangle2quat([np.pi, 0.0, 0.0]))
+
+                            # Create metalink
+                            create_metalink(
+                                root_element=root,
+                                metalink_name=f"{meta_link_name}_{ml_id}_{i}",
+                                parent_link_name=parent_link_name,
+                                pos=pos,
+                                rpy=T.quat2euler(quat),
+                            )
+
 
     # Export this URDF
     return generate_urdf_from_xmltree(

@@ -21,6 +21,8 @@ from pxr import Gf, PhysxSchema, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade
 from pxr.Sdf import ValueTypeNames as VT
 from pxr.UsdGeom import Tokens
 
+from b1k_pipeline.usd_conversion.preprocess_urdf_for_metalinks import ALLOWED_META_TYPES
+
 LIGHT_MAPPING = {
     0: "Rect",
     2: "Sphere",
@@ -34,7 +36,6 @@ OBJECT_STATE_TEXTURES = {
     "soaked",
     "toggledon",
 }
-
 
 def set_mtl_albedo(mtl_prim, texture):
     mtl = "diffuse_texture"
@@ -515,6 +516,111 @@ def add_xform_properties(prim):
         xform_op_rot = UsdGeom.XformOp(prim.GetAttribute("xformOp:orient"))
     xformable.SetXformOpOrder([xform_op_translate, xform_op_rot, xform_op_scale])
 
+def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
+    """
+    Process a meta link by creating visual meshes or lights below it
+    """
+    assert meta_link_type in ALLOWED_META_TYPES
+    if ALLOWED_META_TYPES[meta_link_type] not in ["primitive", "light"]:
+        return
+
+    is_light = ALLOWED_META_TYPES[meta_link_type] == "light"
+
+    for link_id, mesh_info_list in meta_link_infos.items():
+        if len(mesh_info_list) == 0:
+            continue
+
+        if meta_link_type in ["togglebutton", "particleapplier", "particleremover", "particlesink"]:
+            assert len(mesh_info_list) == 1, f"Invalid number of meshes for {meta_link_type}"
+
+        meta_link_in_parent_link_pos, meta_link_in_parent_link_orn = mesh_info_list[0]["position"], mesh_info_list[0]["orientation"]
+
+        # For particle applier only, the orientation of the meta link matters (particle should shoot towards the negative z-axis)
+        # If the meta link is created based on the orientation of the first mesh that is a cone, we need to rotate it by 180 degrees
+        # because the cone is pointing in the wrong direction. This is already done in update_obj_urdf_with_metalinks;
+        # we just need to make sure meta_link_in_parent_link_orn is updated correctly.
+        if meta_link_type == "particleapplier" and mesh_info_list[0]["type"] == "cone":
+            meta_link_in_parent_link_orn = T.quat_multiply(meta_link_in_parent_link_orn, T.axisangle2quat([np.pi, 0.0, 0.0]))
+
+        for i, mesh_info in enumerate(mesh_info_list):
+            if is_light:
+                # Create a light
+                light_type = LIGHT_MAPPING[mesh_info["type"]]
+                prim_path = f"/{obj_model}/lights_{link_id}_0_link/light_{i}"
+                prim = (
+                    UsdLux.__dict__[f"{light_type}Light"]
+                    .Define(stage, prim_path)
+                    .GetPrim()
+                )
+                UsdLux.ShapingAPI.Apply(prim).GetShapingConeAngleAttr().Set(180.0)
+            else:
+                # Create a primitive shape
+                mesh_type = mesh_info["type"].capitalize() if mesh_info["type"] != "box" else "Cube"
+                prim_path = f"/{obj_model}/{meta_link_type}_{link_id}_0_link/mesh_{i}"
+                assert mesh_type in UsdGeom.__dict__
+                # togglebutton has to be a sphere
+                if meta_link_type in ["togglebutton"]:
+                    assert mesh_type in ["Sphere"], f"Invalid mesh type for togglebutton: {mesh_type}"
+                # particle applier has to be a cone or cylinder because of the visualization of the particle flow
+                elif meta_link_type in ["particleapplier"]:
+                    assert mesh_type in ["Cone", "Cylinder"], f"Invalid mesh type for particleapplier: {mesh_type}"
+                prim = UsdGeom.__dict__[mesh_type].Define(stage, prim_path).GetPrim()
+
+            add_xform_properties(prim=prim)
+            # Make sure mesh_prim has XForm properties
+            xform_prim = XFormPrim(prim_path=prim_path)
+
+            # Get the mesh/light pose in the parent link frame
+            mesh_in_parent_link_pos, mesh_in_parent_link_orn = np.array(mesh_info["position"]), np.array(
+                mesh_info["orientation"])
+
+            # Get the mesh/light pose in the meta link frame
+            mesh_in_meta_link_pos, mesh_in_meta_link_orn = \
+                T.relative_pose_transform(mesh_in_parent_link_pos, mesh_in_parent_link_orn,
+                                          meta_link_in_parent_link_pos, meta_link_in_parent_link_orn)
+
+            if is_light:
+                xform_prim.prim.GetAttribute("color").Set(
+                    Gf.Vec3f(*np.array(mesh_info["color"]) / 255.0)
+                )
+                xform_prim.prim.GetAttribute("intensity").Set(mesh_info["intensity"])
+                if light_type == "Rect":
+                    xform_prim.prim.GetAttribute("height").Set(mesh_info["length"])
+                    xform_prim.prim.GetAttribute("width").Set(mesh_info["width"])
+                elif light_type == "Disk":
+                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["length"])
+                elif light_type == "Sphere":
+                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["length"])
+                else:
+                    raise ValueError(f"Invalid light type: {light_type}")
+            else:
+                if mesh_type == "Cylinder":
+                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["size"][0])
+                    xform_prim.prim.GetAttribute("height").Set(mesh_info["size"][2])
+                    # Offset the position by half the height because in 3dsmax the origin of the cylinder is at the center of the base
+                    mesh_in_meta_link_pos += T.quat2mat(mesh_in_meta_link_orn) @ np.array(
+                        [0.0, 0.0, mesh_info["size"][2] / 2])
+                elif mesh_type == "Cone":
+                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["size"][0])
+                    xform_prim.prim.GetAttribute("height").Set(mesh_info["size"][2])
+                    # Flip the orientation of the z-axis because in 3dsmax the cone is pointing in the opposite direction
+                    mesh_in_meta_link_orn = T.quat_multiply(mesh_in_meta_link_orn, T.axisangle2quat([np.pi, 0.0, 0.0]))
+                    # Offset the position by half the height because in 3dsmax the origin of the cone is at the center of the base
+                    mesh_in_meta_link_pos += T.quat2mat(mesh_in_meta_link_orn) @ np.array(
+                        [0.0, 0.0, -mesh_info["size"][2] / 2])
+                elif mesh_type == "Cube":
+                    # Need to use scale instead of size because in 3dsmax, the shape is a cuboid, not a cube
+                    xform_prim.prim.GetAttribute("size").Set(1.0)
+                    xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(*mesh_info["size"]))
+                elif mesh_type == "Sphere":
+                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["size"][0])
+                else:
+                    raise ValueError(f"Invalid mesh type: {mesh_type}")
+
+            xform_prim.set_local_pose(
+                translation=mesh_in_meta_link_pos,
+                orientation=T.convert_quat(mesh_in_meta_link_orn, to="wxyz")
+            )
 
 # TODO: Handle metalinks
 # TODO: Import heights per link folder into USD folder
@@ -562,73 +668,43 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
 
     # Grab light info if any
     meta_links = data["metadata"].get("meta_links", dict())
+
     # TODO: Use parent link name
     for link_name, link_metadata in meta_links.items():
-        light_infos = link_metadata.get("lights", dict())
-        for light_id, light_info_list in light_infos.items():
-            for i, light_info in enumerate(light_info_list):
-                # Create the light in the scene
-                light_type = LIGHT_MAPPING[light_info["type"]]
-                light_prim_path = f"/{obj_model}/lights_{light_id}_{i}_link/light"
-                light_prim = (
-                    UsdLux.__dict__[f"{light_type}Light"]
-                    .Define(stage, light_prim_path)
-                    .GetPrim()
-                )
-                UsdLux.ShapingAPI.Apply(light_prim).GetShapingConeAngleAttr().Set(180.0)
-                add_xform_properties(prim=light_prim)
-                # Make sure light_prim has XForm properties
-                light = XFormPrim(prim_path=light_prim_path)
-                # # Set the values accordingly
-                # light.set_local_pose(
-                #     translation=np.array(light_info["position"]),
-                #     orientation=T.convert_quat(np.array(light_info["orientation"]), to="wxyz")
-                # )
-                light.prim.GetAttribute("color").Set(
-                    Gf.Vec3f(*np.array(light_info["color"]) / 255.0)
-                )
-                light.prim.GetAttribute("intensity").Set(light_info["intensity"])
-                if light_type == "Rect":
-                    light.prim.GetAttribute("height").Set(light_info["length"])
-                    light.prim.GetAttribute("width").Set(light_info["width"])
-                elif light_type == "Disk":
-                    light.prim.GetAttribute("radius").Set(light_info["length"])
-                elif light_type == "Sphere":
-                    light.prim.GetAttribute("radius").Set(light_info["length"])
-                else:
-                    raise ValueError(f"Invalid light type: {light_type}")
+        for meta_link_type, meta_link_infos in link_metadata.items():
+            process_meta_link(stage, obj_model, meta_link_type, meta_link_infos)
 
-    # Update metalink info
-    if "meta_links" in data["metadata"]:
-        meta_links = data["metadata"].pop("meta_links")
-        print("meta_links:", meta_links)
-        # TODO: Use parent link name
-        for parent_link_name, child_link_attrs in meta_links.items():
-            for meta_link_name, ml_attrs in child_link_attrs.items():
-                for ml_id, attrs_list in ml_attrs.items():
-                    for i, attrs in enumerate(attrs_list):
-                        # # Create new Xform prim that will contain info
-                        ml_prim_path = (
-                            f"{prim.GetPath()}/{meta_link_name}_{ml_id}_{i}_link"
-                        )
-                        link_prim = get_prim_at_path(ml_prim_path)
-                        assert (
-                            link_prim
-                        ), f"Should have found valid metalink prim at prim path: {ml_prim_path}"
-
-                        link_prim.CreateAttribute("ig:is_metalink", VT.Bool)
-                        link_prim.GetAttribute("ig:is_metalink").Set(True)
-
-                        # # TODO! Validate that this works
-                        # # test on water sink 02: water sink location is 0.1, 0.048, 0.32
-                        # # water source location is -0.03724, 0.008, 0.43223
-                        # add_xform_properties(prim=link_prim)
-                        # link_prim.GetAttribute("xformOp:translate").Set(Gf.Vec3f(*atrr["xyz"]))
-                        # if atrr["rpy"] is not None:
-                        #     link_prim.GetAttribute("xformOp:orient").Set(Gf.Quatf(*(T.euler2quat(atrr["rpy"])[[3, 0, 1, 2]])))
-
-                        # link_prim.CreateAttribute("ig:orientation", VT.Quatf)
-                        # link_prim.GetAttribute("ig:orientation").Set(Gf.Quatf(*atrr["rpy"]))
+    # # Update metalink info
+    # if "meta_links" in data["metadata"]:
+    #     meta_links = data["metadata"].pop("meta_links")
+    #     print("meta_links:", meta_links)
+    #     # TODO: Use parent link name
+    #     for parent_link_name, child_link_attrs in meta_links.items():
+    #         for meta_link_name, ml_attrs in child_link_attrs.items():
+    #             for ml_id, attrs_list in ml_attrs.items():
+    #                 for i, attrs in enumerate(attrs_list):
+    #                     # # Create new Xform prim that will contain info
+    #                     ml_prim_path = (
+    #                         f"{prim.GetPath()}/{meta_link_name}_{ml_id}_{i}_link"
+    #                     )
+    #                     link_prim = get_prim_at_path(ml_prim_path)
+    #                     assert (
+    #                         link_prim
+    #                     ), f"Should have found valid metalink prim at prim path: {ml_prim_path}"
+    #
+    #                     link_prim.CreateAttribute("ig:is_metalink", VT.Bool)
+    #                     link_prim.GetAttribute("ig:is_metalink").Set(True)
+    #
+    #                     # TODO! Validate that this works
+    #                     # test on water sink 02: water sink location is 0.1, 0.048, 0.32
+    #                     # water source location is -0.03724, 0.008, 0.43223
+    #                     add_xform_properties(prim=link_prim)
+    #                     link_prim.GetAttribute("xformOp:translate").Set(Gf.Vec3f(*atrr["xyz"]))
+    #                     if atrr["rpy"] is not None:
+    #                         link_prim.GetAttribute("xformOp:orient").Set(Gf.Quatf(*(T.euler2quat(atrr["rpy"])[[3, 0, 1, 2]])))
+    #
+    #                     link_prim.CreateAttribute("ig:orientation", VT.Quatf)
+    #                     link_prim.GetAttribute("ig:orientation").Set(Gf.Quatf(*atrr["rpy"]))
 
     # Iterate over dict and replace any lists of dicts as dicts of dicts (with each dict being indexed by an integer)
     data = recursively_replace_list_of_dict(data)
