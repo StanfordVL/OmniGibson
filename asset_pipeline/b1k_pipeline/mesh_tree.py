@@ -2,6 +2,7 @@ import csv
 import json
 
 import networkx as nx
+import numpy as np
 import tqdm
 import trimesh
 from fs.zipfs import ZipFS
