@@ -8,17 +8,13 @@ import glob
 import csv
 from collections import Counter
 
-from bddl.parsing import parse_problem, construct_bddl_from_parsed
+from bddl.parsing import parse_problem, parse_domain
 import bddl.activity
-from bddl_debug_backend import DebugBackend, DebugGenericObject, UNARIES, BINARIES, VALID_ATTACHMENTS, VALID_ROOMS
-
-PROBLEM_FILE_DIR = "../bddl/activity_definitions"
-PROPS_TO_SYNS_JSON = "../bddl/generated_data/properties_to_synsets.json"
-SYNS_TO_PROPS_JSON = "../bddl/generated_data/propagated_annots_canonical.json"
-CSVS_DIR = "tm_csvs"
+from bddl_debug_backend import DebugBackend, DebugGenericObject
+import test_utils
 
 
-# PREDICATES
+# Predicates
 
 def is_water_sourced(objects, init, goal):
     obj_list = []
@@ -60,181 +56,6 @@ def is_water_sourced(objects, init, goal):
     return True
 
 
-# OBJECTS
-
-# Constants
-
-OBJECT_INSTANCE_RE = r"[A-Za-z-_]+\.n\.[0-9]+_[0-9]+"
-OBJECT_CAT_RE = r"[A-Za-z-_]+\.n\.[0-9]+$"
-OBJECT_CAT_AND_INST_RE = r"[A-Za-z-_]+\.n\.[0-9]+"
-SINGLE_CAT_QUANTS = ["forall", "exists", "forn"]
-DOUBLE_CAT_QUANTS = ["forpairs", "fornpairs"]
-ROOMS = set([
-    "kitchen", 
-    "dining_room",
-    "living_room", 
-    "utility_room", 
-    "empty_room", 
-    "bedroom", 
-    "bathroom", 
-    "garden", 
-    "shared_office", 
-    "corridor", 
-    "classroom", 
-    "grocery_store",
-    "computer_lab",
-    "playroom",
-    "sauna",
-    "childs_room",
-    "garage",
-    "closet",
-    "storage_room",
-    "entryway",
-    "private_office",
-    "meeting_room",
-    "bar",
-    "staircase",
-    "spa",
-    "television_room",
-    "lobby"
-])
-PLACEMENTS = set([
-    # "connected",
-    "ontop", 
-    "inside", 
-    "under", 
-    "filled", 
-    "covered", 
-    "overlaid", 
-    "saturated", 
-    "inroom", 
-    "insource", 
-    # "hung", 
-    "future",
-    "attached",
-    "draped",
-    "contains"
-])
-SUBSTANCE_PLACEMENTS = set(["saturated", "filled", "covered", "insource", "contains"])
-FUTURE_SYNSET = "future"
-
-# Helpers
-
-def _traverse_goal_for_objects(expr, objects=None):
-    objects = objects if objects is not None else set()
-    # Check that category declarations in quantifiers are really categories, and equal
-    if expr[0] in ["forall", "exists", "forpairs"]:
-        term, __, cat = expr[1]
-        assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
-        assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
-        if expr[0] in ["forpairs"]: 
-            term, __, cat = expr[2]
-            assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
-            assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
-        _traverse_goal_for_objects(expr[-1], objects=objects)
-    if expr[0] in ["forn", "fornpairs"]:
-        term, __, cat = expr[2]
-        assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
-        assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
-        if expr[0] == "fornpairs": 
-            term, __, cat = expr[3]
-            assert term.strip("?") == cat, f"mismatched term and cat declaration: {term}, {cat}"
-            assert re.match(OBJECT_CAT_RE, term.strip("?")) is not None, f"non-category term in quantifier declaration: {term}"
-        _traverse_goal_for_objects(expr[-1], objects=objects)
-    
-    # Check the subexpr for atomic formulae in base case, else recurse 
-    if type(expr[-1]) is not list: 
-        for obj in expr[1:]:
-            assert re.match(OBJECT_CAT_AND_INST_RE, obj.strip("?")) is not None, f"malformed object term in goal: {obj}"
-            objects.add(obj.strip("?"))
-    else: 
-        if expr[0] in ["and", "or"]:
-            for subexpr in expr[1:]:
-                _traverse_goal_for_objects(subexpr, objects=objects)
-        else:
-            _traverse_goal_for_objects(expr[-1], objects=objects)
-
-
-def _get_defn_elements_from_file(activity):
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, 'problem0.bddl')
-    with open(defn_fn, "r") as f:
-        __, objects, init, goal = parse_problem(activity, 0, "omnigibson", predefined_problem=f.read())
-    return activity, objects, init, goal
-
-
-def _get_objects_from_object_list(objects):
-    instances, categories = set(), set()
-    for cat, insts in objects.items():
-        categories.add(cat)
-        for inst in insts: 
-            instances.add(inst)
-    return instances, categories
-
-
-def _get_instances_in_init(init):
-    '''
-    Take a parsed :init condition and return a set of all instances in it.
-    '''
-    init_insts = set()
-    for literal in init: 
-        formula = literal[1] if literal[0] == "not" else literal
-        for inst in formula[1:]: 
-            assert (re.match(OBJECT_INSTANCE_RE, inst) is not None) or (inst in ROOMS), f":init has category: {inst}" 
-            if inst not in ROOMS:
-                init_insts.add(inst)
-    return init_insts
-
-
-def _get_objects_in_goal(goal):
-    goal_objects = set()
-    goal = ["and"] + goal
-    _traverse_goal_for_objects(goal, goal_objects)
-    return goal_objects
-
-
-def _traverse_goal_for_atoms(expr, goal_atoms):
-    if all(type(subexpr) == str for subexpr in expr):
-        goal_atoms.append(expr)
-    elif expr[0] in ["and", "or"]:
-        for subexpr in expr[1:]:
-            _traverse_goal_for_atoms(subexpr, goal_atoms)
-    elif expr[0] in ["forall", "exists", "forn", "forpairs", "fornpairs"]:
-        _traverse_goal_for_atoms(expr[-1], goal_atoms)
-    elif expr[0] == "imply":
-        _traverse_goal_for_atoms(expr[1], goal_atoms)
-        _traverse_goal_for_atoms(expr[2], goal_atoms)
-    elif expr[0] == "not":
-        _traverse_goal_for_atoms(expr[1], goal_atoms)
-    else:
-        raise ValueError(f"Unhandled logic operator {expr[0]}")
-
-
-def _get_atoms_in_goal(goal):
-    goal_atoms = []
-    for goal_expr in goal:
-        _traverse_goal_for_atoms(goal_expr, goal_atoms)
-    return goal_atoms
-
-
-def _get_unique_items_from_transition_map():
-    obj_set = set()
-    for fname in glob.glob(CSVS_DIR):
-        with open(fname) as f:
-            for row in f:
-                first = row.split(',')[0]
-                if '.n.' in first:
-                    obj_set.add(first.rpartition('_')[0])
-
-    obj_set.remove('')
-    
-    for obj in obj_set:
-        print(obj)
-
-
-def is_specific_container_synset(synset): 
-    return "__" in synset and "__of__" not in synset and "diced__" not in synset and "cooked__" not in synset and "half__" not in synset
-
-
 # Checkers
 
 def object_list_correctly_formatted(defn):
@@ -249,11 +70,11 @@ def object_list_correctly_formatted(defn):
     for line in objects_section:
         elements = line.strip().split(" ")
         category = elements[-1]
-        assert re.match(OBJECT_CAT_RE, category) is not None, f"Malformed category at end of object section line: {category}"
+        assert re.match(test_utils.OBJECT_CAT_RE, category) is not None, f"Malformed category at end of object section line: {category}"
         assert elements[-2] == "-", f"There should be a hyphen but instead there is {elements[-2]}"
         for inst in elements[:-2]:
-            assert re.match(OBJECT_INSTANCE_RE, inst) is not None, f"Malformed instance {inst}"
-            assert category == re.match(OBJECT_CAT_AND_INST_RE, inst).group(), f"Mismatched category and object: {category} and {inst}"
+            assert re.match(test_utils.OBJECT_INSTANCE_RE, inst) is not None, f"Malformed instance {inst}"
+            assert category == re.match(test_utils.OBJECT_CAT_AND_INST_RE, inst).group(), f"Mismatched category and object: {category} and {inst}"
 
 
 def all_objects_appropriate(objects, init, goal):
@@ -266,13 +87,13 @@ def all_objects_appropriate(objects, init, goal):
         instances and categories in :objects
     4. There are no categories in :init
     '''
-    instances, categories = _get_objects_from_object_list(objects)
-    init_insts = _get_instances_in_init(init)
+    instances, categories = test_utils._get_objects_from_object_list(objects)
+    init_insts = test_utils._get_instances_in_init(init)
     
     assert init_insts.issubset(instances), f":init has object instances not in :objects: {init_insts.difference(instances)}"
     assert instances.issubset(init_insts), f":objects has object instances not in :init: {instances.difference(init_insts)}"
     
-    goal_objects = _get_objects_in_goal(goal)
+    goal_objects = test_utils._get_objects_in_goal(goal)
     assert goal_objects.issubset(categories.union(instances)), f":goal has objects not in :objects: {goal_objects.difference(categories.union(instances))}"
 
 
@@ -286,7 +107,7 @@ def all_objects_placed(init):
 
     NOTE should only be executed AFTER all_objects_appropraite
     '''
-    insts = _get_instances_in_init(init)
+    insts = test_utils._get_instances_in_init(init)
     insts = set([inst for inst in insts if ["future", inst] not in init])
 
     # Make sure everything not set to `future` is placed relative to a ROOM
@@ -300,7 +121,7 @@ def all_objects_placed(init):
             for literal in init: 
                 formula = literal[1] if literal[0] == "not" else literal 
                 # NOTE only uncomment below line suffix when dealing with situations where substance and object have been flipped
-                if (formula[0] == FUTURE_SYNSET and formula[1] == inst) or ((formula[0] in PLACEMENTS) and (formula[1] == inst) and ((formula[2] in ROOMS) or (formula[2] in placed_insts))) or ((formula[0] in SUBSTANCE_PLACEMENTS) and (formula[1] in placed_insts) and (formula[2] == inst)):
+                if (formula[0] == test_utils.FUTURE_PREDICATE and formula[1] == inst) or ((formula[0] in test_utils.PLACEMENTS) and (formula[1] == inst) and ((formula[2] in test_utils.ROOMS) or (formula[2] in placed_insts))) or ((formula[0] in test_utils.SUBSTANCE_PLACEMENTS) and (formula[1] in placed_insts) and (formula[2] == inst)):
                     placed_insts.add(inst)
         saturated = old_placed_insts == placed_insts 
         old_placed_insts = copy.deepcopy(placed_insts)
@@ -308,20 +129,29 @@ def all_objects_placed(init):
     assert placed_insts == insts, f"Unplaced object instances: {insts.difference(placed_insts)}"
 
 
-def all_synsets_valid(objects, init, goal, syns_to_props):
-    instances, categories = _get_objects_from_object_list(objects)
-    init_insts = _get_instances_in_init(init)
-    goal_objects = _get_objects_in_goal(goal)
-    object_insts = set([re.match(OBJECT_CAT_AND_INST_RE, inst).group() for inst in instances.union(init_insts).union(goal_objects)])
+def no_invalid_synsets(objects, init, goal, syns_to_props):
+    instances, categories = test_utils._get_objects_from_object_list(objects)
+    init_insts = test_utils._get_instances_in_init(init)
+    goal_objects = test_utils._get_objects_in_goal(goal)
+    object_insts = set([re.match(test_utils.OBJECT_CAT_AND_INST_RE, inst).group() for inst in instances.union(init_insts).union(goal_objects)])
     object_terms = object_insts.union(categories)
     for proposed_syn in object_terms: 
         assert (proposed_syn in syns_to_props) or (proposed_syn == "agent.n.01"), f"Invalid synset: {proposed_syn}"
+
+
+def no_invalid_predicates(init, goal, domain_predicates):
+    atoms = []
+    for literal in init: 
+        atoms.append(literal[1] if literal[0] == "not" else literal)
+    atoms.extend(test_utils._get_atoms_in_goal(goal))
+    for atom in atoms: 
+        assert atom[0] in domain_predicates, f"Invalid predicate: {atom[0]}" 
         
 
 # Check uncontrolled categories
 
 def future_and_real_present(objects, init, goal): 
-    init_objects = _get_instances_in_init(init)
+    init_objects = test_utils._get_instances_in_init(init)
     future_objects = set([literal[1] for literal in init if literal[0] == "future"])
     real_objects = set([expression[1].strip("?") for expression in goal if expression[0] == "real"])
     for expression in goal:
@@ -375,123 +205,55 @@ def agent_present(init):
 
 
 def problem_name_correct(activity, definition_id=0):
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, f'problem{definition_id}.bddl')
+    defn_fn = os.path.join(test_utils.PROBLEM_FILE_DIR, activity, f'problem{definition_id}.bddl')
     with open(defn_fn, "r") as f:
         problem_name, *__ = parse_problem(activity, 0, "omnigibson", predefined_problem=f.read())
     assert (problem_name == f"{activity}-{definition_id}") or (problem_name == f"{activity.lower()}-{definition_id}"), f"Wrong problem name '{problem_name}' for activity '{activity}'"
 
 
-def check_property_alignment(atom, syns_to_props):
-    if atom[0] == "ontop" and atom[1] == "agent.n.01_1":
-        return 
-
-    pred, *object_insts = atom 
-    objects = []
-    for object_inst in object_insts: 
-        syn_match = re.match(OBJECT_CAT_AND_INST_RE, object_inst.strip("?"))
-        if syn_match is not None:
-            objects.append(syn_match.group())
-        elif True: # object_inst in VALID_ROOMS:    # TODO uncomment when VALID_ROOMS is populated
-            if pred == "inroom":
-                objects.append(object_inst)
-            else:
-                raise AssertionError(f"Nonsynset {object_inst} outside inroom")
-        else:
-            raise AssertionError(f"Invalid room {object_inst}")
-    assert (pred in UNARIES) or (pred in BINARIES), f"Invalid predicate: {pred}"
-    assert ((pred in UNARIES) and (len(objects) == 1)) or ((pred in BINARIES) and (len(objects) == 2)), f"Atom has wrong arity: {atom}"
-
-    # Unaries
-    if pred == "cooked": 
-        assert "cookable" in syns_to_props[objects[0]], f"Inapplicable cooked: {atom}"
-    if pred == "frozen": 
-        assert "freezable" in syns_to_props[objects[0]], f"Inapplicable frozen: {atom}"
-    if pred == "closed" or pred == "open":
-        assert "openable" in syns_to_props[objects[0]], f"Inapplicable closed/open: {atom}"
-    if pred == "folded" or pred == "unfolded":
-        assert "drapeable" in syns_to_props[objects[0]], f"Inapplicable folded/unfolded: {atom}"
-    if pred == "toggled_on":
-        assert "toggleable" in syns_to_props[objects[0]], f"Inapplicable toggled_on: {atom}"
-    if pred == "hot": 
-        assert "heatable" in syns_to_props[objects[0]], f"Inapplicable hot: {atom}"
-    if pred == "on_fire": 
-        assert "flammable" in syns_to_props[objects[0]], f"Inapplicable on_fire: {atom}"
-    if pred == "assembled": 
-        assert "assembleable" in syns_to_props[objects[0]], f"Inapplicable assembled: {atom}"
-    if pred == "broken": 
-        assert "breakable" in syns_to_props[objects[0]], f"Inapplicable broken: {atom}"
-    
-    # Binaries
-    if pred == "saturated":
-        assert ("particleRemover" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable saturated: {atom}"
-    if pred == "covered":
-        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable covered: {atom}"
-    if pred == "filled":
-        assert ("fillable" in syns_to_props[objects[0]]) and ("physicalSubstance" in syns_to_props[objects[1]]), f"Inapplicable filled/empty: {atom}"
-    if pred == "contains" or pred == "empty":
-        assert ("fillable" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable contains: {atom}"
-    if pred == "ontop":
-        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable ontop: {atom}"
-    if pred == "nextto":
-        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable nextto: {atom}"
-    if pred == "under":
-        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable under: {atom}"
-    if pred == "touching": 
-        assert ("rigidBody" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable touching: {atom}"
-    if pred == "inside": 
-        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
-    if pred == "overlaid": 
-        assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
-    if pred == "attached":
-        assert tuple(objects) in VALID_ATTACHMENTS, f"Inapplicable attached: {atom}"
-    if pred == "draped": 
-        assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
-    if pred == "insource": 
-        assert (("particleSource" in syns_to_props[objects[0]]) or ("particleApplier" in syns_to_props[objects[0]])) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable insource: {atom}"
-    # if pred == "inroom": 
-    #     assert ("sceneObject" in syns_to_props[objects[0]]), f"Inapplicable inroom: {atom}"     # NOTE we already know the room is valid
-
-
-    # TODO scene objects not being the moving input (first for rigid, second for substance) unless inroom 
-
-
-def synsets_properties_aligned(init, goal, syns_to_props):
+def no_misaligned_synsets_predicates(init, goal, syns_to_props):
     for literal in init: 
         init_atom = literal[1] if literal[0] == "not" else literal
-        check_property_alignment(init_atom, syns_to_props)
-    goal_atoms = _get_atoms_in_goal(goal)
+        test_utils.check_synset_predicate_alignment(init_atom, syns_to_props)
+    goal_atoms = test_utils._get_atoms_in_goal(goal)
     for goal_atom in goal_atoms:
-        check_property_alignment(goal_atom, syns_to_props)
+        test_utils.check_synset_predicate_alignment(goal_atom, syns_to_props)
 
 
 def no_unnecessary_specific_containers(objects, init, goal, syns_to_props):
-    specific_fillable_containers = [obj_cat for obj_cat in objects.keys() if obj_cat != "agent.n.01" and "fillable" in syns_to_props[obj_cat] and is_specific_container_synset(obj_cat)]
+    specific_fillable_containers = [obj_cat for obj_cat in objects.keys() if obj_cat != "agent.n.01" and "fillable" in syns_to_props[obj_cat] and test_utils.is_specific_container_synset(obj_cat)]
     
     atoms = []
     for literal in init: 
         atoms.append(literal[1] if literal[0] == "not" else literal)
-    goal_atoms = [[term.strip("?") for term in goal_atom] for goal_atom in _get_atoms_in_goal(goal)]
+    goal_atoms = [[term.strip("?") for term in goal_atom] for goal_atom in test_utils._get_atoms_in_goal(goal)]
     atoms.extend(goal_atoms)
     fill_atoms = [atom for atom in atoms if (atom[0] in ["filled", "contains", "insource", "inside"])]
 
     for specific_fillable_container in specific_fillable_containers:
         for atom in fill_atoms: 
             # print(atom)
-            if (atom[0] in ["filled", "contains", "insource"]) and (re.match(OBJECT_CAT_AND_INST_RE, atom[1]).group() == specific_fillable_container):
+            if (atom[0] in ["filled", "contains", "insource"]) and (re.match(test_utils.OBJECT_CAT_AND_INST_RE, atom[1]).group() == specific_fillable_container):
                 break 
-            if (atom[0] == "inside") and (re.match(OBJECT_CAT_AND_INST_RE, atom[2]).group() == specific_fillable_container):
+            if (atom[0] == "inside") and (re.match(test_utils.OBJECT_CAT_AND_INST_RE, atom[2]).group() == specific_fillable_container):
                 break
         else:
             raise AssertionError(f"Substance-specific fillable container {specific_fillable_container} that does not fill/contain anything/have anything inside. Switch to container__of version.")
 
 
+def no_substances_with_multiple_instances(objects, syns_to_props):
+    for cat, insts in objects.items(): 
+        if "substance" in syns_to_props[cat]:
+            assert len(insts) == 1, f"Substance {cat} with {len(insts)} instances instead of 1"
+
+
 # MAIN 
 
-def verify_definition(activity, syns_to_props, csv=False):
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
+def verify_definition(activity, syns_to_props, domain_predicates, csv=False):
+    defn_fn = os.path.join(test_utils.PROBLEM_FILE_DIR, activity, "problem0.bddl")
     with open(defn_fn, "r") as f:
         defn = f.read() 
-    problem_name, objects, init, goal = _get_defn_elements_from_file(activity)
+    __, objects, init, goal = test_utils._get_defn_elements_from_file(activity)
     object_list_correctly_formatted(defn)
     all_objects_appropriate(objects, init, goal)
     all_objects_placed(init)
@@ -499,10 +261,12 @@ def verify_definition(activity, syns_to_props, csv=False):
     no_repeat_object_lines(defn)
     no_qmarks_in_init(defn)
     no_contradictory_init_atoms(init)
+    no_invalid_synsets(objects, init, goal, syns_to_props)
+    no_invalid_predicates(init, goal, domain_predicates)
     no_uncontrolled_category(activity, defn)
-    all_synsets_valid(objects, init, goal, syns_to_props)
-    synsets_properties_aligned(init, goal, syns_to_props)
+    no_misaligned_synsets_predicates(init, goal, syns_to_props)
     no_unnecessary_specific_containers(objects, init, goal, syns_to_props)
+    no_substances_with_multiple_instances(objects, syns_to_props)
     agent_present(init)
     problem_name_correct(activity)
     if csv:
@@ -512,16 +276,17 @@ def verify_definition(activity, syns_to_props, csv=False):
 
 # Master planning sheet
 def batch_verify_all(csv=False): 
-    with open(SYNS_TO_PROPS_JSON, "r") as f:
+    with open(test_utils.SYNS_TO_PROPS_JSON, "r") as f:
         syns_to_props = json.load(f) 
-    for activity in sorted(os.listdir(PROBLEM_FILE_DIR)):
-        if "-" in activity: continue        # TODO deal with these directories
-        if not os.path.isdir(os.path.join(PROBLEM_FILE_DIR, activity)): continue
+    *__, domain_predicates = parse_domain("omnigibson")
+    for activity in sorted(os.listdir(test_utils.PROBLEM_FILE_DIR)):
+        if "-" in activity: continue
+        if not os.path.isdir(os.path.join(test_utils.PROBLEM_FILE_DIR, activity)): continue
         print()
         print(activity)
-        if os.path.exists(os.path.join(CSVS_DIR, activity + ".csv")):
+        if os.path.exists(os.path.join(test_utils.CSVS_DIR, activity + ".csv")):
             try:
-                verify_definition(activity, syns_to_props, csv=csv)
+                verify_definition(activity, syns_to_props, domain_predicates, csv=csv)
             except FileNotFoundError:
                 print()
                 print("file not found for", activity)
@@ -535,7 +300,7 @@ def batch_verify_all(csv=False):
                     to_continue = input("continue? y/n: ")
                 continue
         else:
-            verify_definition(activity, syns_to_props, csv=False)
+            verify_definition(activity, syns_to_props, domain_predicates, csv=False)
 
 
 def unpack_nested_lines(sec):
@@ -562,13 +327,13 @@ def unpack_nested_lines(sec):
 # Transition maps
 
 def no_filled_in_tm_recipe_goal(activity):
-    defn_fn = os.path.join(PROBLEM_FILE_DIR, activity, "problem0.bddl")
+    defn_fn = os.path.join(test_utils.PROBLEM_FILE_DIR, activity, "problem0.bddl")
     with open(defn_fn, "r") as f:
         defn = f.read()
     goal_section = defn.split(":goal")[-1]
     assert "filled" not in goal_section, "filled in TM BDDL :goal"
 
-    csv = os.path.join(CSVS_DIR, activity + ".csv")
+    csv = os.path.join(test_utils.CSVS_DIR, activity + ".csv")
     with open(csv, "r") as f:
         lines = list(f.readlines())
     container_lines = [lines[i + 1] for i in range(len(lines) - 1) if "container," in lines[i]]
@@ -577,7 +342,7 @@ def no_filled_in_tm_recipe_goal(activity):
 
 
 def sync_csv(activity):
-    csv = os.path.join(CSVS_DIR, activity + ".csv")
+    csv = os.path.join(test_utils.CSVS_DIR, activity + ".csv")
 
     csv_objs = set()
     bddl_objs = set()
@@ -604,8 +369,8 @@ def sync_csv(activity):
 
     csv_objs.discard('')
 
-    __, objects, init, _ = _get_defn_elements_from_file(activity)
-    bddl_objs, _ = _get_objects_from_object_list(objects)
+    __, objects, init, _ = test_utils._get_defn_elements_from_file(activity)
+    bddl_objs, _ = test_utils._get_objects_from_object_list(objects)
     for literal in init: 
         formula = literal[1] if literal[0] == "not" else literal
         #things to ignore
@@ -633,7 +398,7 @@ def sync_csv(activity):
 
 
 def batch_sync_csv():
-    for fname in os.listdir(CSVS_DIR):
+    for fname in os.listdir(test_utils.CSVS_DIR):
         activity = fname[:-len(".csv")]
         print()
         print(activity)
