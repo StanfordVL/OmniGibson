@@ -74,7 +74,7 @@ APPROVED_OBJS = {
     ".*"
 }
 
-REJECTED_OBJS = {"substances-01"}
+REJECTED_OBJS = set()
 
 APPROVED_SCENES = {
     ".*",
