@@ -4233,7 +4233,10 @@
                               "children": [
                                 {
                                   "name": "lens.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "lens"
+                                  ]
                                 }
                               ]
                             },
@@ -11131,7 +11134,10 @@
                                   "children": [
                                     {
                                       "name": "portrait.n.02",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "portrait"
+                                      ]
                                     }
                                   ]
                                 }
@@ -11347,7 +11353,10 @@
                             },
                             {
                               "name": "rag.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "rag"
+                              ]
                             }
                           ]
                         },
@@ -11740,7 +11749,8 @@
                               "name": "paving_stone.n.01",
                               "hasModel": true,
                               "categories": [
-                                "paver"
+                                "paver",
+                                "paving_stone"
                               ]
                             },
                             {
@@ -12433,10 +12443,6 @@
                               ]
                             }
                           ]
-                        },
-                        {
-                          "name": "pinwheel.n.03",
-                          "hasModel": true
                         },
                         {
                           "name": "sandbox.n.02",
@@ -14431,7 +14437,10 @@
                         },
                         {
                           "name": "rag.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "rag"
+                          ]
                         }
                       ]
                     }
@@ -17543,7 +17552,10 @@
                                 },
                                 {
                                   "name": "bap.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bap"
+                                  ]
                                 }
                               ]
                             },
@@ -18422,7 +18434,10 @@
                             },
                             {
                               "name": "ramen.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "ramen"
+                              ]
                             },
                             {
                               "name": "refried_beans.n.01",
@@ -19812,7 +19827,10 @@
                             },
                             {
                               "name": "bap.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "bap"
+                              ]
                             }
                           ]
                         },
