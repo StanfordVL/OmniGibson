@@ -74,7 +74,7 @@ APPROVED_OBJS = {
     ".*"
 }
 
-REJECTED_OBJS = {"batch-10"}
+REJECTED_OBJS = set()
 
 APPROVED_SCENES = {
     ".*",
@@ -90,8 +90,6 @@ REJECTED_SCENES = {
 
     # Temporary
     "house_single_floor",
-    "house_double_floor_upper",
-    "Pomaria_0_garden",
 }
 
 def main():

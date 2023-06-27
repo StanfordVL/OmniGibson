@@ -44,7 +44,8 @@ def main(use_future=False):
         single_provider = {k: v[0] for k, v in providers.items()}
 
         provided_objects = set(single_provider.keys())
-        missing_objects = needed - provided_objects
+        missing_objects = {x.split("-")[1] for x in needed} - {x.split("-")[1] for x in provided_objects}
+        missing_objects &= {obj.split("-")[1] for obj, needers in needed_by.items() if any(t in params["final_scenes"] for t in needers)} # Limit this to stuff that shows up in final scenes
 
         id_occurrences = defaultdict(list)
         for obj_name, provider in single_provider.items():
