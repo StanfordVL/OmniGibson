@@ -32,7 +32,7 @@ def main():
     if current_prefix == "L-":  # Loose nonclutter -> Loose clutter
       prefix = "C-"
       message = "Switched to clutter"
-    elif has_nonclutter:  # Loose clutter -> Fixed
+    elif current_prefix == "C-":  # Loose clutter -> Fixed
       prefix = ""
       message = "Switched to fixed"
     else:  # Fixed -> Loose nonluuter
@@ -50,7 +50,7 @@ def main():
         assert parse_name(obj.name), f"Almost generated invalid name {new_name}"
         obj.name = new_name
 
-    rt.MessageBox(message)
+    print(message)
       
 
 if __name__ == "__main__":
