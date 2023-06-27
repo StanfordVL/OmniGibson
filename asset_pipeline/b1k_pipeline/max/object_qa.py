@@ -69,7 +69,6 @@ def main():
     has_loose = False
     has_fixed = False
     has_clutter = False
-    has_nonclutter = False
     for obj in rt.objects:
         n = parse_name(obj.name)
         if n is None:
@@ -80,14 +79,12 @@ def main():
             continue
         next_group_objects.append(obj)
         obj.isHidden = False
-        if n.group("loose"):
+        if n.group("loose") == "L-":
             has_loose = True
-        else:
-            has_fixed = True
-        if n.group("clutter"):
+        elif n.group("loose") == "C-":
             has_clutter = True
         else:
-            has_nonclutter = True
+            has_fixed = True
 
     # Select that object and print
     rt.select(next_group_objects)
@@ -95,7 +92,7 @@ def main():
     rt.execute("max tool zoomextents")
     print(f"{len(available_groups) - len(remaining_groups) + 1} / {len(available_groups)}: {next_group}")
 
-    print(textwrap.fill(f"Used as loose: {has_loose}. Used as fixed: {has_fixed}. Used as clutter: {has_clutter}. Used as non-clutter: {has_nonclutter}"))
+    print(textwrap.fill(f"Used as loose: {has_loose}. Used as fixed: {has_fixed}. Used as clutter: {has_clutter}"))
 
     # Show a popup with the synset info
     # category_name = next_group.split("-")[0]
