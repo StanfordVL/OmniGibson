@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        pinwheel.n.03_1 pinwheel.n.03_2 - pinwheel.n.03
         floor.n.01_1 - floor.n.01
         petfood.n.01_1 - petfood.n.01
         petfood__bag.n.01_1 - petfood__bag.n.01
@@ -16,8 +15,6 @@
     )
     
     (:init 
-        (ontop pinwheel.n.03_1 floor.n.01_1)
-        (ontop pinwheel.n.03_2 floor.n.01_1)
         (filled petfood__bag.n.01_1 petfood.n.01_1)
         (ontop petfood__bag.n.01_1 floor.n.01_1) 
         (ontop tissue.n.02_1 floor.n.01_1) 
@@ -32,10 +29,6 @@
     
     (:goal 
         (and 
-            (forall 
-                (?pinwheel.n.03 - pinwheel.n.03)
-                (inside ?pinwheel.n.03 ?hutch.n.01_1)
-            ) 
             (filled ?bowl.n.01_1 ?petfood.n.01_1) 
             (overlaid ?tissue.n.02_1 ?hutch.n.01_1) 
             (inside ?hamster_wheel.n.01_1 ?hutch.n.01_1) 
