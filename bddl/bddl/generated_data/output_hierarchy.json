@@ -26,13 +26,185 @@
                           "hasModel": true,
                           "children": [
                             {
-                              "name": "vessel.n.03",
+                              "name": "dispenser.n.01",
                               "hasModel": true,
                               "children": [
                                 {
-                                  "name": "acetone__bottle.n.01",
+                                  "name": "acetone__atomizer.n.01",
                                   "hasModel": true
                                 },
+                                {
+                                  "name": "aerosol.n.02",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spray_can"
+                                  ]
+                                },
+                                {
+                                  "name": "air_freshener__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "air_freshener_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "ammonia_water__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "ammonia_water_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spray_bottle"
+                                  ]
+                                },
+                                {
+                                  "name": "bleaching_agent__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bleaching_agent_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "candy_dispenser_shelf.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "candy_dispenser_shelf"
+                                  ]
+                                },
+                                {
+                                  "name": "conditioner__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "conditioner_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "deodorant__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "deodorant_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "detergent__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "detergent_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "dry_food_dispenser_shelf.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "dry_food_dispenser_shelf"
+                                  ]
+                                },
+                                {
+                                  "name": "fertilizer__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "fertilizer_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "inhaler.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "inhaler"
+                                  ]
+                                },
+                                {
+                                  "name": "insectifuge__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "insectifuge_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "pesticide__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "pesticide_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "rubbing_alcohol__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "rubbing_alcohol_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "sealant__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "sealant_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "soap_dispenser.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "soap_dispenser",
+                                    "wall_mounted_soap_dispenser"
+                                  ]
+                                },
+                                {
+                                  "name": "spray_paint__can.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spray_paint_can"
+                                  ]
+                                },
+                                {
+                                  "name": "tissue_dispenser.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "tissue_dispenser"
+                                  ]
+                                },
+                                {
+                                  "name": "vinegar__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "vinegar_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "water__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "water_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "whipped_cream__atomizer.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "whipped_cream_atomizer"
+                                  ]
+                                },
+                                {
+                                  "name": "whipped_cream__can.n.01",
+                                  "hasModel": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "allspice__shaker.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "allspice_shaker"
+                              ]
+                            },
+                            {
+                              "name": "vessel.n.03",
+                              "hasModel": true,
+                              "children": [
                                 {
                                   "name": "apple_juice__bottle.n.01",
                                   "hasModel": true
@@ -211,10 +383,6 @@
                                   ]
                                 },
                                 {
-                                  "name": "bleaching_agent__bottle.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "bottle.n.03",
                                   "hasModel": true,
                                   "categories": [
@@ -373,10 +541,6 @@
                                   "categories": [
                                     "cola_bottle"
                                   ]
-                                },
-                                {
-                                  "name": "conditioner__bottle.n.01",
-                                  "hasModel": true
                                 },
                                 {
                                   "name": "cooking_oil__bottle.n.01",
@@ -924,164 +1088,6 @@
                                     "cleansing_bottle"
                                   ]
                                 }
-                              ]
-                            },
-                            {
-                              "name": "dispenser.n.01",
-                              "hasModel": true,
-                              "children": [
-                                {
-                                  "name": "aerosol.n.02",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "spray_can"
-                                  ]
-                                },
-                                {
-                                  "name": "air_freshener__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "air_freshener_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "ammonia_water__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "ammonia_water_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "spray_bottle"
-                                  ]
-                                },
-                                {
-                                  "name": "candy_dispenser_shelf.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "candy_dispenser_shelf"
-                                  ]
-                                },
-                                {
-                                  "name": "deodorant__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "deodorant_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "detergent__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "detergent_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "dry_food_dispenser_shelf.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "dry_food_dispenser_shelf"
-                                  ]
-                                },
-                                {
-                                  "name": "fertilizer__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "fertilizer_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "inhaler.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "inhaler"
-                                  ]
-                                },
-                                {
-                                  "name": "insectifuge__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "insectifuge_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "pesticide__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "pesticide_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "rubbing_alcohol__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "rubbing_alcohol_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "sealant__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "sealant_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "soap_dispenser.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "soap_dispenser",
-                                    "wall_mounted_soap_dispenser"
-                                  ]
-                                },
-                                {
-                                  "name": "spray_paint__can.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "spray_paint_can"
-                                  ]
-                                },
-                                {
-                                  "name": "tissue_dispenser.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "tissue_dispenser"
-                                  ]
-                                },
-                                {
-                                  "name": "vinegar__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "vinegar_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "water__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "water_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "whipped_cream__atomizer.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "whipped_cream_atomizer"
-                                  ]
-                                },
-                                {
-                                  "name": "whipped_cream__can.n.01",
-                                  "hasModel": true
-                                }
-                              ]
-                            },
-                            {
-                              "name": "allspice__shaker.n.01",
-                              "hasModel": true,
-                              "categories": [
-                                "allspice_shaker"
                               ]
                             },
                             {
@@ -1679,7 +1685,10 @@
                             },
                             {
                               "name": "can.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "can"
+                              ]
                             },
                             {
                               "name": "canister.n.02",
@@ -2076,7 +2085,10 @@
                             },
                             {
                               "name": "mold.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "mold"
+                              ]
                             },
                             {
                               "name": "mulch__bag.n.01",
@@ -13734,7 +13746,10 @@
                         },
                         {
                           "name": "pebble.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "pebble"
+                          ]
                         },
                         {
                           "name": "whiskey_stone.n.01",
@@ -14203,7 +14218,10 @@
                                           "children": [
                                             {
                                               "name": "poinsettia.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "poinsettia"
+                                              ]
                                             }
                                           ]
                                         },
@@ -15297,7 +15315,10 @@
                             },
                             {
                               "name": "half__log.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_log"
+                              ]
                             },
                             {
                               "name": "log.n.01",
@@ -17618,15 +17639,24 @@
                                 },
                                 {
                                   "name": "edible_cookie_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "edible_cookie_dough"
+                                  ]
                                 },
                                 {
                                   "name": "pastry.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "pastry"
+                                  ]
                                 },
                                 {
                                   "name": "pizza_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "pizza_dough"
+                                  ]
                                 },
                                 {
                                   "name": "spice_cookie_dough.n.01",
@@ -17634,7 +17664,10 @@
                                 },
                                 {
                                   "name": "sugar_cookie_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "sugar_cookie_dough"
+                                  ]
                                 },
                                 {
                                   "name": "roll_dough.n.01",
@@ -17763,7 +17796,10 @@
                                 },
                                 {
                                   "name": "cheddar.n.02",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "cheddar"
+                                  ]
                                 },
                                 {
                                   "name": "cottage_cheese.n.01",
@@ -17806,7 +17842,10 @@
                                 },
                                 {
                                   "name": "half__feta.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_feta"
+                                  ]
                                 },
                                 {
                                   "name": "melted__cheddar.n.01",
@@ -18158,7 +18197,10 @@
                                     },
                                     {
                                       "name": "hotdog.n.02",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "hotdog"
+                                      ]
                                     }
                                   ]
                                 },
@@ -19631,7 +19673,10 @@
                                 },
                                 {
                                   "name": "half__apple_pie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_apple_pie"
+                                  ]
                                 }
                               ]
                             },
@@ -21439,7 +21484,10 @@
                             },
                             {
                               "name": "pepperoni.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "pepperoni"
+                              ]
                             }
                           ]
                         },
@@ -21579,7 +21627,10 @@
                         },
                         {
                           "name": "cheddar.n.02",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "cheddar"
+                          ]
                         },
                         {
                           "name": "cottage_cheese.n.01",
@@ -21622,7 +21673,10 @@
                         },
                         {
                           "name": "half__feta.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_feta"
+                          ]
                         },
                         {
                           "name": "melted__cheddar.n.01",
@@ -21754,7 +21808,10 @@
                           "children": [
                             {
                               "name": "clam.n.03",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "clam"
+                              ]
                             },
                             {
                               "name": "crab.n.05",
@@ -21973,10 +22030,6 @@
                           ]
                         }
                       ]
-                    },
-                    {
-                      "name": "leftovers.n.01",
-                      "hasModel": true
                     },
                     {
                       "name": "fish.n.02",
@@ -23515,7 +23568,10 @@
                                 },
                                 {
                                   "name": "half__log.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_log"
+                                  ]
                                 },
                                 {
                                   "name": "log.n.01",

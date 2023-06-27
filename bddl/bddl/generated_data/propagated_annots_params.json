@@ -105,11 +105,9 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "acetone__bottle.n.01": {
-        "breakable": {},
+    "acetone__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -118,13 +116,14 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "openable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -376,6 +375,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -5134,11 +5134,9 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "bleaching_agent__bottle.n.01": {
-        "breakable": {},
+    "bleaching_agent__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -5147,13 +5145,14 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "openable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -17138,10 +17137,9 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "conditioner__bottle.n.01": {
+    "conditioner__atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -17150,13 +17148,14 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "openable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -34017,27 +34016,6 @@
         "rustable": {},
         "scratchable": {},
         "sliceable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "leftovers.n.01": {
-        "cookable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "mixable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},

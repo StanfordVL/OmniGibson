@@ -1,8 +1,7 @@
 {
-    "acetone__bottle.n.01": {
-        "breakable": {},
-        "fillable": {},
-        "openable": {},
+    "acetone__atomizer.n.01": {
+        "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -99,6 +98,7 @@
         "freezable": {}
     },
     "aerosol.n.02": {
+        "toggleable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -2855,10 +2855,9 @@
         "heatable": {},
         "freezable": {}
     },
-    "bleaching_agent__bottle.n.01": {
-        "breakable": {},
-        "fillable": {},
-        "openable": {},
+    "bleaching_agent__atomizer.n.01": {
+        "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -11332,9 +11331,9 @@
         "heatable": {},
         "freezable": {}
     },
-    "conditioner__bottle.n.01": {
-        "fillable": {},
-        "openable": {},
+    "conditioner__atomizer.n.01": {
+        "toggleable": {},
+        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20771,25 +20770,6 @@
     "leek.n.02": {
         "cookable": {},
         "sliceable": {},
-        "rigidBody": {},
-        "nonSubstance": {},
-        "wetable": {},
-        "mixable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {},
-        "heatable": {},
-        "freezable": {}
-    },
-    "leftovers.n.01": {
-        "cookable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
