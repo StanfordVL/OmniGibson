@@ -11,7 +11,7 @@
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
         bleaching_agent.n.01_1 - bleaching_agent.n.01
-        bleaching_agent__bottle.n.01_1 - bleaching_agent__bottle.n.01
+        bleaching_agent__atomizer.n.01_1 - bleaching_agent__atomizer.n.01
         ashcan.n.01_1 - ashcan.n.01
         water.n.06_1 - water.n.06
         scrub_brush.n.01_1 - scrub_brush.n.01
@@ -28,8 +28,8 @@
         (ontop watering_can.n.01_1 floor.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
-        (filled bleaching_agent__bottle.n.01_1 bleaching_agent.n.01_1) 
-        (ontop bleaching_agent__bottle.n.01_1 floor.n.01_1)
+        (insource bleaching_agent__atomizer.n.01_1 bleaching_agent.n.01_1) 
+        (ontop bleaching_agent__atomizer.n.01_1 floor.n.01_1)
         (covered board.n.02_1 mud.n.03_1)
         (insource watering_can.n.01_1 water.n.06_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 

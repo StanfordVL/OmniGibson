@@ -8,7 +8,7 @@
         bucket.n.01_1 - bucket.n.01
         driveway.n.01_1 - driveway.n.01
         bleaching_agent.n.01_1 - bleaching_agent.n.01
-        bleaching_agent__bottle.n.01_1 - bleaching_agent__bottle.n.01
+        bleaching_agent__atomizer.n.01_1 - bleaching_agent__atomizer.n.01
         water.n.06_1 - water.n.06
         scrub_brush.n.01_1 - scrub_brush.n.01
         floor.n.01_1 - floor.n.01
@@ -19,10 +19,10 @@
         (covered wall.n.01_1 mold.n.05_1) 
         (covered wall.n.01_1 stucco.n.01_1) 
         (ontop bucket.n.01_1 driveway.n.01_1) 
-        (filled bleaching_agent__bottle.n.01_1 bleaching_agent.n.01_1) 
+        (insource bleaching_agent__atomizer.n.01_1 bleaching_agent.n.01_1) 
         (filled bucket.n.01_1 water.n.06_1) 
         (ontop scrub_brush.n.01_1 driveway.n.01_1) 
-        (ontop bleaching_agent__bottle.n.01_1 driveway.n.01_1) 
+        (ontop bleaching_agent__atomizer.n.01_1 driveway.n.01_1) 
         (inroom driveway.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 

@@ -4,16 +4,19 @@
     (:objects
         breakfast_table.n.01_1 - breakfast_table.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-        leftovers.n.01_1 leftovers.n.01_2 leftovers.n.01_3 - leftovers.n.01
+        kabob.n.01_1 kabob.n.01_2 kabob.n.01_3 - kabob.n.01
         tupperware.n.01_1 - tupperware.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop leftovers.n.01_1 breakfast_table.n.01_1) 
-        (ontop leftovers.n.01_2 breakfast_table.n.01_1) 
-        (ontop leftovers.n.01_3 breakfast_table.n.01_1) 
+        (cooked kabob.n.01_1)
+        (cooked kabob.n.01_2)
+        (cooked kabob.n.01_3)
+        (ontop kabob.n.01_1 breakfast_table.n.01_1) 
+        (ontop kabob.n.01_2 breakfast_table.n.01_1) 
+        (ontop kabob.n.01_3 breakfast_table.n.01_1) 
         (ontop tupperware.n.01_1 breakfast_table.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom breakfast_table.n.01_1 dining_room) 
@@ -24,8 +27,8 @@
     (:goal 
         (and 
             (forall 
-                (?leftovers.n.01 - leftovers.n.01)
-                (inside ?leftovers.n.01 ?tupperware.n.01_1)
+                (?kabob.n.01 - kabob.n.01)
+                (inside ?kabob.n.01 ?tupperware.n.01_1)
             )
             (inside ?tupperware.n.01_1 ?electric_refrigerator.n.01_1)
             (not

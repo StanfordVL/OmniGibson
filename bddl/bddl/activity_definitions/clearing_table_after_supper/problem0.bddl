@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        leftovers.n.01_1 leftovers.n.01_2 leftovers.n.01_3 - leftovers.n.01
+        meatball.n.01_1 meatball.n.01_2 meatball.n.01_3 - meatball.n.01
         plate.n.04_1 plate.n.04_2 plate.n.04_3 - plate.n.04
         tupperware.n.01_1 tupperware.n.01_2 - tupperware.n.01
         crumb.n.03_1 - crumb.n.03
@@ -16,9 +16,12 @@
     )
     
     (:init 
-        (ontop leftovers.n.01_1 plate.n.04_1) 
-        (ontop leftovers.n.01_2 plate.n.04_2) 
-        (ontop leftovers.n.01_3 plate.n.04_3) 
+        (cooked meatball.n.01_1)
+        (cooked meatball.n.01_2)
+        (cooked meatball.n.01_3)
+        (ontop meatball.n.01_1 plate.n.04_1) 
+        (ontop meatball.n.01_2 plate.n.04_2) 
+        (ontop meatball.n.01_3 plate.n.04_3) 
         (ontop plate.n.04_1 breakfast_table.n.01_1) 
         (ontop plate.n.04_2 breakfast_table.n.01_1) 
         (ontop plate.n.04_3 breakfast_table.n.01_1)
@@ -41,10 +44,10 @@
     (:goal 
         (and 
             (forall
-                (?leftovers.n.01 - leftovers.n.01)
+                (?meatball.n.01 - meatball.n.01)
                 (exists 
                     (?tupperware.n.01 - tupperware.n.01)
-                    (inside ?leftovers.n.01 ?tupperware.n.01)
+                    (contains ?tupperware.n.01 ?meatball.n.01)
                 )
             )
             (forall 
