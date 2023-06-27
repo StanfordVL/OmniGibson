@@ -47,7 +47,7 @@
                 (?meatball.n.01 - meatball.n.01)
                 (exists 
                     (?tupperware.n.01 - tupperware.n.01)
-                    (contains ?tupperware.n.01 ?meatball.n.01)
+                    (inside ?meatball.n.01 ?tupperware.n.01)
                 )
             )
             (forall 
