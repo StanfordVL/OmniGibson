@@ -81,15 +81,15 @@ APPROVED_SCENES = {
 }
 
 REJECTED_SCENES = {
-    ".*_garden",
+    "Beechwood_0_garden",
+    "Rs_garden",
+    "Merom_0_garden",
+    "Wainscott_0_garden",
     "school_biology",
     "school_chemistry",
     "school_computer_lab_and_infirmary",
     "school_geography",
     "office_cubicles_right",
-
-    # Temporary
-    "house_single_floor",
 }
 
 def main():

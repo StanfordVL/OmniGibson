@@ -30,6 +30,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/scene.urdf
     - cad/scenes/Merom_0_int/artifacts/scene.urdf
     - cad/scenes/Merom_1_int/artifacts/scene.urdf
+    - cad/scenes/Pomaria_0_garden/artifacts/scene.urdf
     - cad/scenes/Pomaria_0_int/artifacts/scene.urdf
     - cad/scenes/Pomaria_1_int/artifacts/scene.urdf
     - cad/scenes/Pomaria_2_int/artifacts/scene.urdf
@@ -52,6 +53,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/scene.urdf
     - cad/scenes/house_double_floor_lower/artifacts/scene.urdf
     - cad/scenes/house_double_floor_upper/artifacts/scene.urdf
+    - cad/scenes/house_single_floor/artifacts/scene.urdf
     - cad/scenes/office_bike/artifacts/scene.urdf
     - cad/scenes/office_cubicles_left/artifacts/scene.urdf
     - cad/scenes/office_large/artifacts/scene.urdf
@@ -77,6 +79,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/export_scene.success
     - cad/scenes/Merom_0_int/artifacts/export_scene.success
     - cad/scenes/Merom_1_int/artifacts/export_scene.success
+    - cad/scenes/Pomaria_0_garden/artifacts/export_scene.success
     - cad/scenes/Pomaria_0_int/artifacts/export_scene.success
     - cad/scenes/Pomaria_1_int/artifacts/export_scene.success
     - cad/scenes/Pomaria_2_int/artifacts/export_scene.success
@@ -99,6 +102,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/export_scene.success
     - cad/scenes/house_double_floor_lower/artifacts/export_scene.success
     - cad/scenes/house_double_floor_upper/artifacts/export_scene.success
+    - cad/scenes/house_single_floor/artifacts/export_scene.success
     - cad/scenes/office_bike/artifacts/export_scene.success
     - cad/scenes/office_cubicles_left/artifacts/export_scene.success
     - cad/scenes/office_large/artifacts/export_scene.success
@@ -132,6 +136,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/room_object_list.json
     - cad/scenes/Merom_0_int/artifacts/room_object_list.json
     - cad/scenes/Merom_1_int/artifacts/room_object_list.json
+    - cad/scenes/Pomaria_0_garden/artifacts/room_object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/room_object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/room_object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/room_object_list.json
@@ -154,6 +159,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/room_object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/room_object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/room_object_list.json
+    - cad/scenes/house_single_floor/artifacts/room_object_list.json
     - cad/scenes/office_bike/artifacts/room_object_list.json
     - cad/scenes/office_cubicles_left/artifacts/room_object_list.json
     - cad/scenes/office_large/artifacts/room_object_list.json
@@ -179,6 +185,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/room_object_list.success
     - cad/scenes/Merom_0_int/artifacts/room_object_list.success
     - cad/scenes/Merom_1_int/artifacts/room_object_list.success
+    - cad/scenes/Pomaria_0_garden/artifacts/room_object_list.success
     - cad/scenes/Pomaria_0_int/artifacts/room_object_list.success
     - cad/scenes/Pomaria_1_int/artifacts/room_object_list.success
     - cad/scenes/Pomaria_2_int/artifacts/room_object_list.success
@@ -201,6 +208,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/room_object_list.success
     - cad/scenes/house_double_floor_lower/artifacts/room_object_list.success
     - cad/scenes/house_double_floor_upper/artifacts/room_object_list.success
+    - cad/scenes/house_single_floor/artifacts/room_object_list.success
     - cad/scenes/office_bike/artifacts/room_object_list.success
     - cad/scenes/office_cubicles_left/artifacts/room_object_list.success
     - cad/scenes/office_large/artifacts/room_object_list.success
@@ -403,6 +411,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/export_meshes.json
     - cad/scenes/Merom_0_int/artifacts/export_meshes.json
     - cad/scenes/Merom_1_int/artifacts/export_meshes.json
+    - cad/scenes/Pomaria_0_garden/artifacts/export_meshes.json
     - cad/scenes/Pomaria_0_int/artifacts/export_meshes.json
     - cad/scenes/Pomaria_1_int/artifacts/export_meshes.json
     - cad/scenes/Pomaria_2_int/artifacts/export_meshes.json
@@ -425,6 +434,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/export_meshes.json
     - cad/scenes/house_double_floor_lower/artifacts/export_meshes.json
     - cad/scenes/house_double_floor_upper/artifacts/export_meshes.json
+    - cad/scenes/house_single_floor/artifacts/export_meshes.json
     - cad/scenes/office_bike/artifacts/export_meshes.json
     - cad/scenes/office_cubicles_left/artifacts/export_meshes.json
     - cad/scenes/office_large/artifacts/export_meshes.json
@@ -488,6 +498,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/meshes.zip
     - cad/scenes/Merom_0_int/artifacts/meshes.zip
     - cad/scenes/Merom_1_int/artifacts/meshes.zip
+    - cad/scenes/Pomaria_0_garden/artifacts/meshes.zip
     - cad/scenes/Pomaria_0_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_1_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_2_int/artifacts/meshes.zip
@@ -510,6 +521,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/meshes.zip
     - cad/scenes/house_double_floor_lower/artifacts/meshes.zip
     - cad/scenes/house_double_floor_upper/artifacts/meshes.zip
+    - cad/scenes/house_single_floor/artifacts/meshes.zip
     - cad/scenes/office_bike/artifacts/meshes.zip
     - cad/scenes/office_cubicles_left/artifacts/meshes.zip
     - cad/scenes/office_large/artifacts/meshes.zip
@@ -567,6 +579,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Merom_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Merom_1_int/artifacts/collision_meshes.zip
+    - cad/scenes/Pomaria_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_2_int/artifacts/collision_meshes.zip
@@ -589,6 +602,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/collision_meshes.zip
     - cad/scenes/house_double_floor_lower/artifacts/collision_meshes.zip
     - cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
+    - cad/scenes/house_single_floor/artifacts/collision_meshes.zip
     - cad/scenes/office_bike/artifacts/collision_meshes.zip
     - cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
     - cad/scenes/office_large/artifacts/collision_meshes.zip
@@ -646,6 +660,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/collision_selection.json
     - cad/scenes/Merom_0_int/artifacts/collision_selection.json
     - cad/scenes/Merom_1_int/artifacts/collision_selection.json
+    - cad/scenes/Pomaria_0_garden/artifacts/collision_selection.json
     - cad/scenes/Pomaria_0_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_1_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_2_int/artifacts/collision_selection.json
@@ -668,6 +683,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/collision_selection.json
     - cad/scenes/house_double_floor_lower/artifacts/collision_selection.json
     - cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
+    - cad/scenes/house_single_floor/artifacts/collision_selection.json
     - cad/scenes/office_bike/artifacts/collision_selection.json
     - cad/scenes/office_cubicles_left/artifacts/collision_selection.json
     - cad/scenes/office_large/artifacts/collision_selection.json
@@ -725,6 +741,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
     - cad/scenes/Merom_1_int/artifacts/object_list.json
+    - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/object_list.json
@@ -747,6 +764,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
+    - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
@@ -857,6 +875,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
     - cad/scenes/Merom_1_int/artifacts/object_list.json
+    - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/object_list.json
@@ -879,6 +898,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
+    - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
@@ -1060,6 +1080,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
     - cad/scenes/Merom_1_int/artifacts/object_list.json
+    - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/object_list.json
@@ -1082,6 +1103,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
+    - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
@@ -1181,6 +1203,7 @@ stages:
     - cad/scenes/Ihlen_1_int/artifacts/sanitycheck.json
     - cad/scenes/Merom_0_int/artifacts/sanitycheck.json
     - cad/scenes/Merom_1_int/artifacts/sanitycheck.json
+    - cad/scenes/Pomaria_0_garden/artifacts/sanitycheck.json
     - cad/scenes/Pomaria_0_int/artifacts/sanitycheck.json
     - cad/scenes/Pomaria_1_int/artifacts/sanitycheck.json
     - cad/scenes/Pomaria_2_int/artifacts/sanitycheck.json
@@ -1203,6 +1226,7 @@ stages:
     - cad/scenes/hotel_suite_small/artifacts/sanitycheck.json
     - cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
     - cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
+    - cad/scenes/house_single_floor/artifacts/sanitycheck.json
     - cad/scenes/office_bike/artifacts/sanitycheck.json
     - cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
     - cad/scenes/office_large/artifacts/sanitycheck.json
