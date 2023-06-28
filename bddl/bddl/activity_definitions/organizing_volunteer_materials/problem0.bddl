@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        wall.n.01_1 - wall.n.01
         dress.n.01_1 dress.n.01_2 - dress.n.01
         packing_box.n.02_1 packing_box.n.02_2 - packing_box.n.02
         floor.n.01_1 - floor.n.01
@@ -20,7 +19,6 @@
         (ontop packing_box.n.02_1 floor.n.01_1)
         (ontop packing_box.n.02_2 floor.n.01_1)
         (inroom floor.n.01_1 empty_room) 
-        (inroom wall.n.01_1 empty_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

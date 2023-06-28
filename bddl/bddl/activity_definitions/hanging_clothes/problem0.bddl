@@ -8,22 +8,21 @@
         chest_of_drawers.n.01_1 - chest_of_drawers.n.01
         hanger.n.02_1 hanger.n.02_2 hanger.n.02_3 - hanger.n.02
         wardrobe.n.01_1 - wardrobe.n.01
-        wall.n.01_1 - wall.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
+        bed.n.01_1 - bed.n.01
     )
     
     (:init 
-        (ontop sweater.n.01_1 chest_of_drawers.n.01_1) 
-        (ontop dress.n.01_1 chest_of_drawers.n.01_1) 
-        (ontop skirt.n.01_1 chest_of_drawers.n.01_1) 
+        (ontop sweater.n.01_1 bed.n.01_1) 
+        (ontop dress.n.01_1 bed.n.01_1) 
+        (ontop skirt.n.01_1 bed.n.01_1) 
         (attached hanger.n.02_1 wardrobe.n.01_1) 
         (attached hanger.n.02_3 wardrobe.n.01_1) 
         (attached hanger.n.02_2 wardrobe.n.01_1) 
-        (inroom wall.n.01_1 closet) 
         (inroom floor.n.01_1 closet) 
         (inroom wardrobe.n.01_1 closet) 
-        (inroom chest_of_drawers.n.01_1 closet) 
+        (inroom bed.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

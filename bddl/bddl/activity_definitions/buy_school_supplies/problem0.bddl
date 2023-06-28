@@ -11,7 +11,6 @@
         pencil.n.01_1 - pencil.n.01
         pencil_box.n.01_1 - pencil_box.n.01
         backpack.n.01_1 - backpack.n.01
-        wall.n.01_1 - wall.n.01
         eraser.n.01_1 - eraser.n.01
         money.n.01_1 money.n.01_2 money.n.01_3 money.n.01_4 - money.n.01
         floor.n.01_1 - floor.n.01
@@ -27,7 +26,7 @@
         (ontop crayon.n.01_1 shelf.n.01_2) 
         (ontop pencil.n.01_1 shelf.n.01_2) 
         (ontop pencil_box.n.01_1 shelf.n.01_3) 
-        (ontop backpack.n.01_1 wall.n.01_1) 
+        (ontop backpack.n.01_1 shelf.n.01_1) 
         (ontop eraser.n.01_1 shelf.n.01_2) 
         (ontop money.n.01_1 checkout.n.03_1) 
         (ontop money.n.01_2 checkout.n.03_1) 
@@ -38,7 +37,6 @@
         (inroom shelf.n.01_2 grocery_store) 
         (inroom shelf.n.01_3 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
-        (inroom wall.n.01_1 grocery_store) 
         (ontop agent.n.01_1 floor.n.01_1)
     
     )

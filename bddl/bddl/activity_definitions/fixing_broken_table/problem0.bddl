@@ -10,7 +10,7 @@
     (:init 
         (broken coffee_table.n.01_1) 
         (inroom floor.n.01_1 garage) 
-        (inroom coffee_table.n.01_1 garage) 
+        (ontop coffee_table.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
