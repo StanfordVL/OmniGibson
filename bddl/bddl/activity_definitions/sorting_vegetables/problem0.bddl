@@ -3,7 +3,7 @@
 
     (:objects
         mixing_bowl.n.01_1 mixing_bowl.n.01_2 mixing_bowl.n.01_3 - mixing_bowl.n.01
-        kitchen_table.n.01_1 - kitchen_table.n.01
+        counter_top.n.01_1 - counter_top.n.01
         sack.n.01_1 sack.n.01_2 - sack.n.01
         bok_choy.n.02_1 bok_choy.n.02_2 bok_choy.n.02_3 - bok_choy.n.02
         chard.n.02_1 chard.n.02_2 chard.n.02_3 - chard.n.02
@@ -15,11 +15,11 @@
     )
     
     (:init 
-        (ontop mixing_bowl.n.01_1 kitchen_table.n.01_1) 
-        (ontop mixing_bowl.n.01_2 kitchen_table.n.01_1) 
-        (ontop mixing_bowl.n.01_3 kitchen_table.n.01_1) 
-        (ontop sack.n.01_1 kitchen_table.n.01_1)
-        (ontop sack.n.01_2 kitchen_table.n.01_1)
+        (ontop mixing_bowl.n.01_1 counter_top.n.01_1) 
+        (ontop mixing_bowl.n.01_2 counter_top.n.01_1) 
+        (ontop mixing_bowl.n.01_3 counter_top.n.01_1) 
+        (ontop sack.n.01_1 counter_top.n.01_1)
+        (ontop sack.n.01_2 counter_top.n.01_1)
         (inside bok_choy.n.02_1 sack.n.01_1)
         (inside bok_choy.n.02_2 sack.n.01_1)
         (inside bok_choy.n.02_3 sack.n.01_1)
@@ -33,7 +33,7 @@
         (inside artichoke.n.02_2 sack.n.01_2)
         (inside leek.n.02_1 sack.n.01_1)
         (inside leek.n.02_2 sack.n.01_1)
-        (inroom kitchen_table.n.01_1 kitchen) 
+        (inroom counter_top.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
