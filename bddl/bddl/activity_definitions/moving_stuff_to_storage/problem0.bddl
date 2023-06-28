@@ -6,6 +6,7 @@
         ice_skate.n.01_1 ice_skate.n.01_2 - ice_skate.n.01
         shelf.n.01_1 - shelf.n.01
         bowling_ball.n.01_1 - bowling_ball.n.01
+        painting.n.01_1 - painting.n.01
         textbook.n.01_1 textbook.n.01_2 - textbook.n.01
         carton.n.02_1 carton.n.02_2 - carton.n.02
         agent.n.01_1 - agent.n.01
@@ -17,6 +18,7 @@
         (ontop bowling_ball.n.01_1 floor.n.01_1) 
         (inside textbook.n.01_1 shelf.n.01_1) 
         (inside textbook.n.01_2 shelf.n.01_1) 
+        (ontop painting.n.01_1 floor.n.01_1)
         (ontop carton.n.02_1 floor.n.01_1)
         (ontop carton.n.02_2 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1) 

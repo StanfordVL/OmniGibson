@@ -11,9 +11,8 @@
     )
     
     (:init 
-        (ontop money.n.01_1 carton.n.02_1) 
+        (inside money.n.01_1 shopping_cart.n.01_1) 
         (ontop air_conditioner.n.01_1 floor.n.01_1) 
-        (ontop carton.n.02_1 shopping_cart.n.01_1) 
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shopping_cart.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
