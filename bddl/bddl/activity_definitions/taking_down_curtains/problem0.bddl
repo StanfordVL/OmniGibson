@@ -3,7 +3,6 @@
 
     (:objects
         floor.n.01_1 - floor.n.01
-        wall.n.01_1 - wall.n.01
         curtain.n.01_1 curtain.n.01_2 - curtain.n.01
         curtain_rod.n.01_1 - curtain_rod.n.01
         stool.n.01_1 - stool.n.01
@@ -15,8 +14,7 @@
         (draped curtain.n.01_1 curtain_rod.n.01_1)
         (draped curtain.n.01_2 curtain_rod.n.01_1)
         (inroom floor.n.01_1 bedroom) 
-        (inroom wall.n.01_1 bedroom) 
-        (inroom stool.n.01_1 bedroom) 
+        (ontop stool.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
