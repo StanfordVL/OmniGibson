@@ -10,9 +10,9 @@ def main():
     # Find groups of visible objects
     parsed_names = [parse_name(x.name) for x in rt.objects if not x.isHidden]
     groups = {
-        x.group("category") + "-" + x.group("model_id")
+        x.group("category")
         for x in parsed_names
-        if x is not None and int(x.group("instance_id")) == 0 and x.group("category") not in IGNORE_CATEGORIES}
+        if x is not None and int(x.group("instance_id")) == 0}
     assert len(groups) == 1, "Multiple object groups are visible"
 
     # Find objects corresponding to the next remaining group's instance zero
@@ -23,7 +23,7 @@ def main():
         n = parse_name(obj.name)
         if n is None:
             continue
-        if n.group("category") + "-" + n.group("model_id") != this_group:
+        if n.group("category") != this_group:
             continue
         this_group_objects.append(obj)
         current_prefix = n.group("loose")

@@ -26,6 +26,7 @@ ENTRYPOINTS = {
     "qa_next_failed.py": "Open the next object file that has unprocessed QA comments.",
     "qa_next_failed_task_required.py": "Open the next task-required object file that has unprocessed QA comments.",
     "object_qa.py": "Walk through scene objects for quality assurance.",
+    "category_qa.py": "Walk through scene categories for quality assurance.",
     "prereduce.py": "Apply vertex reduction without collapsing.",
     "randomize_obj_names.py": "Randomize objects named in the legacy format.",
     "resolve_complaints.py": "Resolve QA complaints for this file.",
