@@ -6877,6 +6877,9 @@ stages:
     - path: cad/scenes/Merom_1_int/artifacts/export_meshes.json
       md5: cd5111f10e97887b1ab2fbaf387aee47
       size: 17720
+    - path: cad/scenes/Pomaria_0_garden/artifacts/export_meshes.json
+      md5: 6fa403d51eb3839ef4e2981ef6b626da
+      size: 29116
     - path: cad/scenes/Pomaria_0_int/artifacts/export_meshes.json
       md5: a7c1725d35a28d26b04e2f4a77c7bf35
       size: 10925
@@ -6943,6 +6946,9 @@ stages:
     - path: cad/scenes/house_double_floor_upper/artifacts/export_meshes.json
       md5: 3bcf29af4b732937bb53f54200f39ccd
       size: 41676
+    - path: cad/scenes/house_single_floor/artifacts/export_meshes.json
+      md5: f3daaddbb2f9312b92b58e107121d2d6
+      size: 121579
     - path: cad/scenes/office_bike/artifacts/export_meshes.json
       md5: 669f6a5c1701b4fa9536ebdb48c3eab9
       size: 23734
@@ -9533,3 +9539,49 @@ stages:
     - path: cad/objects/procedural-aa/artifacts/meshes.zip
       md5: bee6c9761c0b79bfc37b4708f3a9e921
       size: 269144546
+  export_meshes@scenes/house_single_floor:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
+      b1k_pipeline/max/export_meshes.py
+    deps:
+    - path: artifacts/pipeline/sanitycheck.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: b1k_pipeline/max/export_meshes.py
+      md5: 8a9a89e217089b57d358763d9db5b28b
+      size: 22188
+    - path: cad/scenes/house_single_floor/artifacts/object_list.json
+      md5: 6ab7f02a380a562117e494470191a0c1
+      size: 288953
+    - path: cad/scenes/house_single_floor/processed.max
+      md5: 5bfd36e90e846179f79ad812377af2a5
+      size: 506783458
+    outs:
+    - path: cad/scenes/house_single_floor/artifacts/export_meshes.json
+      md5: f3daaddbb2f9312b92b58e107121d2d6
+      size: 121579
+    - path: cad/scenes/house_single_floor/artifacts/meshes.zip
+      md5: 9d6cb4044d2bf7150944d2049c9e5ccd
+      size: 1481850601
+  export_meshes@scenes/Pomaria_0_garden:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_garden/processed.max
+      b1k_pipeline/max/export_meshes.py
+    deps:
+    - path: artifacts/pipeline/sanitycheck.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: b1k_pipeline/max/export_meshes.py
+      md5: 8a9a89e217089b57d358763d9db5b28b
+      size: 22188
+    - path: cad/scenes/Pomaria_0_garden/artifacts/object_list.json
+      md5: d6eee88867960df854f4b27495e61528
+      size: 81215
+    - path: cad/scenes/Pomaria_0_garden/processed.max
+      md5: 66b02c34a8f3f84a27db5061859c6098
+      size: 142211436
+    outs:
+    - path: cad/scenes/Pomaria_0_garden/artifacts/export_meshes.json
+      md5: 6fa403d51eb3839ef4e2981ef6b626da
+      size: 29116
+    - path: cad/scenes/Pomaria_0_garden/artifacts/meshes.zip
+      md5: d9ba8a87c61b9c02732d952d1dd9bef5
+      size: 637932968
