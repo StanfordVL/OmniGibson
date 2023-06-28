@@ -9,7 +9,7 @@
         liquid_soap.n.01_1 - liquid_soap.n.01
         liquid_soap__bottle.n.01_1 - liquid_soap__bottle.n.01
         bleaching_agent.n.01_1 - bleaching_agent.n.01
-        bleaching_agent__bottle.n.01_1 - bleaching_agent__bottle.n.01
+        bleaching_agent__atomizer.n.01_1 - bleaching_agent__atomizer.n.01
         stain.n.01_1 - stain.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -23,8 +23,8 @@
         (ontop swab.n.02_1 floor.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
-        (filled bleaching_agent__bottle.n.01_1 bleaching_agent.n.01_1) 
-        (ontop bleaching_agent__bottle.n.01_1 floor.n.01_1)
+        (insource bleaching_agent__atomizer.n.01_1 bleaching_agent.n.01_1) 
+        (ontop bleaching_agent__atomizer.n.01_1 floor.n.01_1)
         (covered tile.n.01_1 stain.n.01_1) 
         (covered tile.n.01_2 stain.n.01_1) 
         (covered tile.n.01_3 stain.n.01_1) 
