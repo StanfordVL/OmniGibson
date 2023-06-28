@@ -268,5 +268,35 @@
         "message": "Confirm reasonable bounding box size:\n5.23cm, 13.35cm, 3.85cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x5",
         "processed": true
+    },
+    {
+        "object": "biscuit_dough-vbhtbo",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: bad object, no bottom",
+        "processed": false
+    },
+    {
+        "object": "spice_cookie_dough-iuiioe",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: bad object, no bottom",
+        "processed": false
+    },
+    {
+        "object": "bagel_dough-iuembm",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: bad object, missing bottom",
+        "processed": false
+    },
+    {
+        "object": "edible_cookie_dough-epwkoi",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: bad object, no bottom",
+        "processed": false
+    },
+    {
+        "object": "pastry-bqjjie",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: bad object, missing bottom",
+        "processed": false
     }
 ]
