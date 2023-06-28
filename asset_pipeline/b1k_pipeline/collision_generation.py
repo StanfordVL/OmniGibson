@@ -82,7 +82,7 @@ def coacd_worker(file_bytes, t, pr, max_hull):
         with open(in_path, 'wb') as f:
             f.write(file_bytes)
 
-        vhacd_cmd = [str(COACD_SCRIPT_PATH), "-i", in_path, "-o", out_path, "-t", t, "-c", max_hull, "--pr", 100000]  # For now, we are forcing the default resolution
+        vhacd_cmd = [str(COACD_SCRIPT_PATH), "-i", in_path, "-o", out_path, "-t", t, "-c", max_hull, "-pr", "50"]  # For now, we are forcing the default resolution
         try:
             subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
             with open(out_path, 'rb') as f:
