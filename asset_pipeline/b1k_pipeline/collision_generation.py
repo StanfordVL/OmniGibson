@@ -19,7 +19,7 @@ import random
 from fs.osfs import OSFS
 from fs.zipfs import ZipFS
 
-from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh
+from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh, launch_cluster
 
 GENERATE_SELECTED_ONLY = True
 VHACD_EXECUTABLE = "TestVHACD"
@@ -288,7 +288,8 @@ def main():
         errors = {}
         target_futures = {}
     
-        dask_client = Client(sys.argv[1]) # + ":35423")
+        # dask_client = Client(sys.argv[1]) # + ":35423")
+        dask_client = launch_cluster(16)
         
         with futures.ThreadPoolExecutor(max_workers=5) as target_executor, futures.ThreadPoolExecutor(max_workers=100) as mesh_executor:
             targets = get_targets("combined")
