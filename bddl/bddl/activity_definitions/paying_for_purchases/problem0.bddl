@@ -4,6 +4,7 @@
     (:objects
         cash_register.n.01_1 - cash_register.n.01
         shopping_basket.n.01_1 - shopping_basket.n.01
+        checkout_counter.n.01_1 - checkout_counter.n.01
         money.n.01_1 - money.n.01
         apple.n.01_1 apple.n.01_2 - apple.n.01
         floor.n.01_1 - floor.n.01
@@ -15,8 +16,8 @@
         (inside apple.n.01_1 shopping_basket.n.01_1) 
         (inside apple.n.01_2 shopping_basket.n.01_1) 
         (inroom floor.n.01_1 grocery_store) 
-        (inroom shopping_basket.n.01_1 grocery_store) 
-        (inroom cash_register.n.01_1 grocery_store) 
+        (ontop shopping_basket.n.01_1 floor.n.01_1) 
+        (ontop cash_register.n.01_1 checkout_counter) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
