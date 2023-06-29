@@ -256,5 +256,17 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: uneven top",
         "processed": false
+    },
+    {
+        "object": "walls-ttopqj",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "visual mesh may have stray vertex (bbox was off)",
+        "processed": false
+    },
+    {
+        "object": "walls-ynporc",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wall is not connected on both sides",
+        "processed": false
     }
 ]
