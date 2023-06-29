@@ -21,9 +21,9 @@ IN_FILENAME_AGGREGATE = os.path.join(os.path.dirname(os.path.dirname(__file__)),
 PARALLELS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "parallels")
 OUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "og_dataset.zip")
 PARALLELS = [
-    "objects.zip",
+    "objects_usd.zip",
     "metadata.zip",
-    "scenes.zip",
+    "scenes_json.zip",
     # "maps.zip",
 ]
 
