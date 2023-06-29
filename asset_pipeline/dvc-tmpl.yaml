@@ -373,7 +373,7 @@ stages:
     # Zip the dataset.
     cmd: 'python -m b1k_pipeline.pack_dataset'
     deps:
-    - artifacts/pipeline/make_maps.success
+    # - artifacts/pipeline/make_maps.success
     # - artifacts/pipeline/validate_scene.success
     - artifacts/pipeline/aggregate_metadata.success
     - artifacts/pipeline/aggregate_scenes.success
