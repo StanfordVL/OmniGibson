@@ -61,6 +61,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
         if joint_side == "upper" and not load_upper:
             continue
 
+
         link_name = "base_link" if link_name is None else link_name
 
         tags = []
@@ -151,11 +152,22 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
             assert parent_link_name, f"Non-base_link {node_key} should have a parent link name."
             parent_key = (obj_cat, obj_model, obj_inst_id, parent_link_name)
             G.add_edge(parent_key, node_key, joint_type=joint_type)
+            if "is_loose" not in G.nodes[parent_key]:
+                G.nodes[parent_key]["is_loose"] = None
+
+    # Pop any invalid base links
+    bad_base = [x for x in G.nodes if G.in_degree(x) == 0 and "lower_mesh" not in G.nodes[x]]
+    for b in bad_base:
+       if b not in G.nodes:
+           continue
+       bad_nodes = list(nx.dfs_preorder_nodes(G, b))
+       G.remove_nodes_from(bad_nodes)
 
     # Quick validation.
     for node, data in G.nodes(data=True):
         needs_upper = False
         if node[-1] != "base_link":
+            assert len(G.in_edges(node)) == 1, node
             (_, _, d), = G.in_edges(node, data=True)
             joint_type = d["joint_type"]
             needs_upper = load_upper and not data["is_broken"] and joint_type != "F"
@@ -179,7 +191,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
         roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
         for root in roots:
             nodes = nx.dfs_preorder_nodes(G, root)
-            meshes = [G.nodes[node]["lower_mesh"] for node in nodes]
+            meshes = [G.nodes[node]["lower_mesh"] for node in nodes if "lower_mesh" in G.nodes[node]]
             combined_mesh = trimesh.util.concatenate(meshes)
             G.nodes[root]["combined_mesh"] = combined_mesh
 

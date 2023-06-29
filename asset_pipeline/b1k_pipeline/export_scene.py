@@ -40,6 +40,10 @@ def main():
         if obj_cat in SKIP_CATEGORIES:
             continue
 
+        # For now, skip loose objects
+        if G.nodes[root_node]["is_loose"] == "C-":
+            continue
+
         obj_name_in_scene = "-".join([obj_cat, obj_model, obj_inst_id])
         obj_rooms = G.nodes[root_node]["metadata"]["layer_name"]
         # TODO: Verify rooms.

@@ -805,7 +805,6 @@ stages:
       - cad/${item}/artifacts/meshes.zip
       - b1k_pipeline/export_scene.py
       - b1k_pipeline/export_objs_global.py
-      - b1k_pipeline/mesh_tree.py
       outs:
       - cad/${item}/artifacts/scene.urdf
       - cad/${item}/artifacts/export_scene.success
