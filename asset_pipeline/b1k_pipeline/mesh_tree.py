@@ -156,7 +156,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
                 G.nodes[parent_key]["is_loose"] = None
 
     # Pop any invalid base links
-    bad_base = [x for x in G.nodes if G.in_degree(x) == 0 and "lower_mesh" not in G.nodes[x]]
+    bad_base = [node for node, in_degree in G.in_degree() if in_degree == 0 and "lower_mesh" not in G.nodes[node]]
     for b in bad_base:
        if b not in G.nodes:
            continue
