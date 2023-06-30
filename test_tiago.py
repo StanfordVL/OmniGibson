@@ -29,7 +29,7 @@ def execute_controller(ctrl_gen, env, filename=None):
 
 def main():
     # Load the config
-    config_filename = "test_tiago.yaml"
+    config_filename = "test.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
     config["scene"]["load_object_categories"] = ["floors", "ceilings", "walls", "coffee_table"]
@@ -102,6 +102,7 @@ def main():
 
     # from IPython import embed; embed()
     # test_navigate_to_obj()
+    set_start_pose()
     test_grasp_no_navigation()
     pause(10)
 
