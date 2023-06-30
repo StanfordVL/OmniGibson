@@ -1,0 +1,43 @@
+(define (problem putting_in_a_pool-0)
+    (:domain omnigibson)
+
+    (:objects
+        water.n.06_1 - water.n.06
+        pool.n.01_1 - pool.n.01
+        person.n.01_1 person.n.01_2 - person.n.01
+        floor.n.01_1 - floor.n.01
+        lawn.n.01_1 - lawn.n.01
+        tree.n.01_1 tree.n.01_2 - tree.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (filled pool.n.01_1 water.n.06_1) 
+        (ontop person.n.01_1 floor.n.01_1) 
+        (ontop person.n.01_2 floor.n.01_1) 
+        (not 
+            (frozen water.n.06_1)
+        ) 
+        (inroom floor.n.01_1 garden) 
+        (inroom lawn.n.01_1 garden) 
+        (inroom tree.n.01_1 garden) 
+        (inroom tree.n.01_2 garden) 
+        (inroom pool.n.01_1 garden) 
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?person.n.01 - person.n.01) 
+                (ontop ?person.n.01 ?pool.n.01_1)
+            ) 
+            (exists 
+                (?person.n.01 - person.n.01) 
+                (not 
+                    (ontop ?person.n.01 ?floor.n.01_1)
+                )
+            )
+        )
+    )
+)
