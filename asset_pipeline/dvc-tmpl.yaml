@@ -243,7 +243,7 @@ stages:
 
   export_scene:
     # Generate scene URDF file from meshes.
-    foreach: ${scenes}
+    foreach: ${final_scenes}
     do:
       cmd: 'python -m b1k_pipeline.export_scene ${item}'
       deps:
@@ -268,8 +268,8 @@ stages:
     # Aggregate scenes from different entries into a single location.
     cmd: 'python -m b1k_pipeline.aggregate_scenes'
     deps:
-    - cad/#{scenes}/artifacts/scene.urdf
-    - cad/#{scenes}/artifacts/export_scene.success
+    - cad/#{final_scenes}/artifacts/scene.urdf
+    - cad/#{final_scenes}/artifacts/export_scene.success
     - b1k_pipeline/aggregate_scenes.py
     - params.yaml
     outs:
@@ -278,7 +278,7 @@ stages:
 
   validate_scene:
     # Validate exported scene, e.g. physics stability.
-    foreach: ${scenes}
+    foreach: ${final_scenes}
     do:
       cmd: 'python -m b1k_pipeline.validate_scene ${item}'
       deps:
@@ -303,7 +303,7 @@ stages:
     - artifacts/parallels/metadata.zip
     # - artifacts/pipeline/export_objs.success
     - artifacts/pipeline/aggregate_metadata.success
-    - b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
+    # - b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
     - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
     - b1k_pipeline/usd_conversion/import_metadata.py
     - b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
@@ -377,7 +377,7 @@ stages:
     # - artifacts/pipeline/validate_scene.success
     - artifacts/pipeline/aggregate_metadata.success
     - artifacts/pipeline/aggregate_scenes.success
-    - artifacts/pipeline/export_objs.success
+    # - artifacts/pipeline/export_objs.success
     - artifacts/parallels/metadata.zip
     - artifacts/parallels/objects_usd.zip
     - artifacts/parallels/scenes_json.zip

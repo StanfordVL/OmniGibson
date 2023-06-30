@@ -64,7 +64,6 @@ def main():
                     print("Error in worker")
                     print("\n\nSTDOUT:\n" + e.stdout.decode("utf-8"))
                     print("\n\nSTDERR:\n" + e.stderr.decode("utf-8"))
-                    raise e
 
             # Move the USDs to the output FS
             print("Copying scene JSONs to output FS...")

@@ -563,6 +563,7 @@ def process_target(target, objects_path, dask_client):
         if True:
             saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
             object_futures = {}
+            print(target, len(saveable_roots))
             for root_node in saveable_roots:
                 # Start processing the object. We start by creating an object-specific
                 # copy of the mesh tree (also including info about any parts)
