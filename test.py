@@ -116,8 +116,8 @@ def main():
 
     # Work more reliably
     # test_navigate_to_obj()
-    # test_grasp_replay_and_place()
-    test_grasp_no_navigation()
+    test_grasp_replay_and_place()
+    # test_grasp_no_navigation()
     pause(10)
 
     # Don't work as reliably because robot wobbles on its wheels

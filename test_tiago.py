@@ -14,8 +14,9 @@ def pause(time):
 
 def replay_controller(env, filename):
     actions = yaml.load(open(filename, "r"), Loader=yaml.FullLoader)
+    empty = np.zeros(22)
     for action in actions:
-        env.step(action)
+        env.step(empty)
 
 def execute_controller(ctrl_gen, env, filename=None):
     actions = []
@@ -29,7 +30,7 @@ def execute_controller(ctrl_gen, env, filename=None):
 
 def main():
     # Load the config
-    config_filename = "test.yaml"
+    config_filename = "test_tiago.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
     config["scene"]["load_object_categories"] = ["floors", "ceilings", "walls", "coffee_table"]
@@ -102,9 +103,14 @@ def main():
 
     # from IPython import embed; embed()
     # test_navigate_to_obj()
-    set_start_pose()
-    test_grasp_no_navigation()
-    pause(10)
+    # set_start_pose()
+    # test_grasp_no_navigation()
+    # replay_controller(env, "grasp_tiago.yaml")
+    # pause(10)
+
+    empty = np.zeros(22)
+    for action in range(10000):
+        env.step(empty)
 
 
 
