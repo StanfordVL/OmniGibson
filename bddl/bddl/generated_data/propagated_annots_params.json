@@ -22647,13 +22647,20 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "dried_fruit.n.01": {
-        "cookable": {},
+    "dried_cranberry.n.01": {
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
         },
-        "sliceable": {}
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
+    "dried_fruit.n.01": {
+        "freezable": {},
+        "heatable": {
+            "heat_temperature": 40.0
+        }
     },
     "drill.n.01": {
         "disinfectable": {},
