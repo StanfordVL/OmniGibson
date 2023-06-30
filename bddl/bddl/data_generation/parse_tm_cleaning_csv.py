@@ -138,6 +138,10 @@ def parse_tm_cleaning_csv():
             # Leaf node
             if "name" in ohp_root.keys() and "children" not in ohp_root.keys():
                 name = ohp_root["name"]
+                # Make sure category mapping exists
+                if "substance" in ohp_root["abilities"] and "categories" not in ohp_root:
+                    ohp_root["categories"] = [name.split(".")[0]]
+                
                 # Make sure particleRemover annotation aligns
                 if "particleRemover" in ohp_root["abilities"]:
                     if name not in pruned_synset_cleaning_mapping:
