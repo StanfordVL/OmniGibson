@@ -31,7 +31,10 @@
                               "children": [
                                 {
                                   "name": "acetone__atomizer.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "acetone_atomizer"
+                                  ]
                                 },
                                 {
                                   "name": "aerosol.n.02",
@@ -3812,7 +3815,6 @@
                                   "hasModel": true,
                                   "categories": [
                                     "buret_clamp",
-                                    "clamp",
                                     "flask_clamp",
                                     "test_tube_clamp"
                                   ]
