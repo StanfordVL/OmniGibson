@@ -141,11 +141,11 @@ def parse_tm_cleaning_csv():
                 # Make sure category mapping exists
                 if "substance" in ohp_root["abilities"]:
                     correct_category = name.split(".")[0].replace("-", "_")
-                        if "categories" in ohp_root:
-                            assert len(ohp_root["categories"]) = 1
-                            assert ohp_root["categories"][0] == correct_category
-                        else:
-                            ohp_root["categories"] = [correct_category]
+                    if "categories" in ohp_root:
+                        assert len(ohp_root["categories"]) = 1
+                        assert ohp_root["categories"][0] == correct_category
+                    else:
+                        ohp_root["categories"] = [correct_category]
                 
                 # Make sure particleRemover annotation aligns
                 if "particleRemover" in ohp_root["abilities"]:
