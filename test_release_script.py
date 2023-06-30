@@ -44,7 +44,7 @@ def _execute_release(robot):
     action = _empty_action(robot)
     controller_name = "gripper_{}".format("0")
     action[robot.controller_action_idx[controller_name]] = 1.0
-    robot.release_grasp_immediately()
+    # robot.release_grasp_immediately()
     # og.sim.step()
     for _ in range(MAX_STEPS_FOR_GRASP_OR_RELEASE):
         # Otherwise, keep applying the action!
@@ -140,35 +140,36 @@ def main():
     table.set_position([1.0, 1.0, 0.58])
 
     grasp_obj = DatasetObject(
-        name="potato",
-        category="potato",
-        model="lqjear"
+        name="cologne",
+        category="cologne",
+        model="lyipur",
+        scale=0.01
     )
     og.sim.import_object(grasp_obj)
-    grasp_obj.set_position([-0.3, -0.8, 0.5])
+    grasp_obj.set_position([-0.295, -0.8, 0.5])
     og.sim.step()
 
-    start_joint_pos = np.array(
-        [
-            0.0,
-            0.0,  # wheels
-            0.2,  # trunk
-            0.0,
-            1.1707963267948966,
-            0.0,  # head
-            1.4707963267948965,
-            -0.4,
-            1.6707963267948966,
-            0.0,
-            1.5707963267948966,
-            0.0,  # arm
-            0.05,
-            0.05,  # gripper
-        ]
-    )
+    default_pose = np.array(
+            [
+                0.0,
+                0.0,  # wheels
+                0.0,  # trunk
+                0.0,
+                0.0,
+                0.0,  # head
+                -0.22184,
+                1.53448,
+                1.46076,
+                -0.84995,
+                1.36904,
+                1.90996,  # arm
+                0.05,
+                0.05,  # gripper
+            ]
+        )
     robot.set_position([0.0, -0.5, 0.05])
     robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
-    robot.set_joint_positions(start_joint_pos)
+    robot.set_joint_positions(default_pose)
     og.sim.step()
 
     replay_controller(env, "grasp.yaml")
