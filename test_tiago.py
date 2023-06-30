@@ -19,15 +19,10 @@ def replay_controller(env, filename):
 
 def execute_controller(ctrl_gen, env, filename=None):
     actions = []
-    counter = 0
     for action in ctrl_gen:
-        # action = np.zeros(22)
         env.step(action)
-        # print(action)
         actions.append(action.tolist())
-        counter += 1
-        if counter > 500:
-            break
+        print(og.sim._physics_context.get_gravity())
     if filename is not None:
         with open(filename, "w") as f:
             yaml.dump(actions, f)
@@ -102,7 +97,7 @@ def main():
         robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
         # pause(100)
         og.sim.step()
-        execute_controller(controller.grasp(grasp_obj), env, "grasp_tiago.yaml")
+        execute_controller(controller.grasp(grasp_obj), env)
         # replay_controller(env, "grasp_tiago.yaml")
 
     # from IPython import embed; embed()
