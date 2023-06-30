@@ -19,16 +19,22 @@ def replay_controller(env, filename):
 
 def execute_controller(ctrl_gen, env, filename=None):
     actions = []
+    counter = 0
     for action in ctrl_gen:
+        # action = np.zeros(22)
         env.step(action)
+        # print(action)
         actions.append(action.tolist())
+        counter += 1
+        if counter > 500:
+            break
     if filename is not None:
         with open(filename, "w") as f:
             yaml.dump(actions, f)
 
 def main():
     # Load the config
-    config_filename = "test.yaml"
+    config_filename = "test_tiago.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
     config["scene"]["load_object_categories"] = ["floors", "ceilings", "walls", "coffee_table"]
@@ -86,43 +92,24 @@ def main():
         og.sim.step()
     
     def test_navigate_to_obj():
-        set_start_pose()
-        execute_controller(controller._navigate_to_obj(table), env)
+        # execute_controller(controller._navigate_to_obj(table), env)
+        pose_2d = np.array([0.5, 0.5, 0.0])
+        execute_controller(controller._navigate_to_pose(pose_2d), env)
 
     def test_grasp_no_navigation():
-        set_start_pose()
-        robot.set_position([0.0, -0.5, 0.05])
+        # set_start_pose()
+        robot.set_position([-0.1, -0.35, 0.05])
         robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
+        # pause(100)
         og.sim.step()
-        execute_controller(controller.grasp(grasp_obj), env)
+        execute_controller(controller.grasp(grasp_obj), env, "grasp_tiago.yaml")
+        # replay_controller(env, "grasp_tiago.yaml")
 
-    def test_grasp():
-        set_start_pose()
-        execute_controller(controller.grasp(grasp_obj), env)
-
-    def test_place():
-        test_grasp()
-        pause(1)
-        execute_controller(controller.place_on_top(table), env)
-
-    # Replays grasping from previous primitive then executes normal place on top
-    def test_grasp_replay_and_place():
-        set_start_pose()
-        robot.set_position([0.0, -0.5, 0.05])
-        robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
-        og.sim.step()
-        replay_controller(env, "grasp.yaml")
-        execute_controller(controller.place_on_top(table), env)
-
-    # Work more reliably
+    # from IPython import embed; embed()
     # test_navigate_to_obj()
-    # test_grasp_replay_and_place()
     test_grasp_no_navigation()
     pause(10)
 
-    # Don't work as reliably because robot wobbles on its wheels
-    # test_grasp()
-    # test_place()
 
 
 if __name__ == "__main__":

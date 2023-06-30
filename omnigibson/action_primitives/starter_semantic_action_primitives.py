@@ -338,7 +338,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
             # If the grasp pose is too far, navigate.
             # yield from self._navigate_if_needed(obj, pos_on_obj=approach_pos)
-            yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0])
+            # yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0])
 
             yield from self._move_hand(grasp_pose)
 
