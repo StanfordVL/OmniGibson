@@ -5,7 +5,6 @@
         fairy_light.n.01_1 - fairy_light.n.01
         floor.n.01_1 - floor.n.01
         wall.n.01_1 - wall.n.01
-        ladder.n.01_1 - ladder.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -16,7 +15,6 @@
         )
         (inroom floor.n.01_1 living_room) 
         (inroom wall.n.01_1 living_room) 
-        (ontop ladder.n.01_1 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

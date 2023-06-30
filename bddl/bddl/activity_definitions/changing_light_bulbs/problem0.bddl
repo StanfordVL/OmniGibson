@@ -7,7 +7,6 @@
         light_bulb.n.01_1 light_bulb.n.01_2 - light_bulb.n.01
         broken__light_bulb.n.01_1 broken__light_bulb.n.01_2 - broken__light_bulb.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
-        wall.n.01_1 wall.n.01_2 - wall.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -31,8 +30,6 @@
         )
         (inroom floor.n.01_1 bedroom) 
         (inroom floor.n.01_2 dining_room) 
-        (inroom wall.n.01_1 bedroom) 
-        (inroom wall.n.01_2 dining_room) 
         (inroom table_lamp.n.01_1 bedroom) 
         (inroom breakfast_table.n.01_1 dining_room) 
         (ontop agent.n.01_1 floor.n.01_2)

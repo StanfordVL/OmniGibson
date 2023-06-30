@@ -5,7 +5,7 @@
      	chip.n.04_1 - chip.n.04
     	bowl.n.01_1 bowl.n.01_2 - bowl.n.01
     	tortilla.n.01_1 - tortilla.n.01
-    	countertop.n.01_1 - countertop.n.01
+    	cabinet.n.01_1 - cabinet.n.01
     	conference_table.n.01_1 - conference_table.n.01
     	floor.n.01_1 - floor.n.01
     	agent.n.01_1 - agent.n.01
@@ -14,10 +14,10 @@
     (:init 
         (ontop chip.n.04_1 bowl.n.01_1) 
         (ontop tortilla.n.01_1 bowl.n.01_2) 
-        (ontop bowl.n.01_1 countertop.n.01_1) 
-        (ontop bowl.n.01_2 countertop.n.01_1) 
+        (inside bowl.n.01_1 cabinet.n.01_1) 
+        (inside bowl.n.01_2 cabinet.n.01_1) 
         (inroom conference_table.n.01_1 meeting_room) 
-        (inroom countertop.n.01_1 meeting_room) 
+        (inroom cabinet.n.01_1 meeting_room) 
         (inroom floor.n.01_1 meeting_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

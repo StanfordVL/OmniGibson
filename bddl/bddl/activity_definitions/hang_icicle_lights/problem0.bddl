@@ -3,7 +3,7 @@
 
     (:objects
         fairy_light.n.01_1 - fairy_light.n.01
-        pedestal_table.n.01_1 - pedestal_table.n.01
+        coffee_table.n.01_1 - coffee_table.n.01
         floor.n.01_1 - floor.n.01
         wall.n.01_1 - wall.n.01
         tree.n.01_1 - tree.n.01
@@ -11,14 +11,14 @@
     )
     
     (:init 
-        (ontop fairy_light.n.01_1 pedestal_table.n.01_1) 
+        (ontop fairy_light.n.01_1 coffee_table.n.01_1) 
         (not 
             (attached fairy_light.n.01_1 wall.n.01_1)
         )
         (inroom floor.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
         (inroom tree.n.01_1 garden) 
-        (inroom pedestal_table.n.01_1 garden) 
+        (inroom coffee_table.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
