@@ -521,7 +521,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
     Process a meta link by creating visual meshes or lights below it
     """
     assert meta_link_type in ALLOWED_META_TYPES
-    if ALLOWED_META_TYPES[meta_link_type] not in ["primitive", "light"]:
+    if ALLOWED_META_TYPES[meta_link_type] not in ["primitive", "light"] and meta_link_type != "particlesource":
         return
 
     is_light = ALLOWED_META_TYPES[meta_link_type] == "light"
@@ -530,7 +530,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
         if len(mesh_info_list) == 0:
             continue
 
-        if meta_link_type in ["togglebutton", "particleapplier", "particleremover", "particlesink"]:
+        if meta_link_type in ["togglebutton", "particleapplier", "particleremover", "particlesink", "particlesource"]:
             assert len(mesh_info_list) == 1, f"Invalid number of meshes for {meta_link_type}"
 
         meta_link_in_parent_link_pos, meta_link_in_parent_link_orn = mesh_info_list[0]["position"], mesh_info_list[0]["orientation"]
@@ -554,8 +554,11 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                 )
                 UsdLux.ShapingAPI.Apply(prim).GetShapingConeAngleAttr().Set(180.0)
             else:
-                # Create a primitive shape
-                mesh_type = mesh_info["type"].capitalize() if mesh_info["type"] != "box" else "Cube"
+                if meta_link_type == "particlesource":
+                    mesh_type = "Cylinder"
+                else:
+                    # Create a primitive shape
+                    mesh_type = mesh_info["type"].capitalize() if mesh_info["type"] != "box" else "Cube"
                 prim_path = f"/{obj_model}/{meta_link_type}_{link_id}_0_link/mesh_{i}"
                 assert mesh_type in UsdGeom.__dict__
                 # togglebutton has to be a sphere
@@ -595,25 +598,39 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                     raise ValueError(f"Invalid light type: {light_type}")
             else:
                 if mesh_type == "Cylinder":
-                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["size"][0])
-                    xform_prim.prim.GetAttribute("height").Set(mesh_info["size"][2])
+                    xform_prim.prim.GetAttribute("radius").Set(0.5)
+                    xform_prim.prim.GetAttribute("height").Set(1.0)
+                    if meta_link_type == "particlesource":
+                        desired_radius = 0.0125
+                        desired_height = 0.05
+                        height_offset = -desired_height / 2.0
+                    else:
+                        desired_radius = mesh_info["size"][0]
+                        desired_height = mesh_info["size"][2]
+                        height_offset = desired_height / 2.0
+                    xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_height))
                     # Offset the position by half the height because in 3dsmax the origin of the cylinder is at the center of the base
                     mesh_in_meta_link_pos += T.quat2mat(mesh_in_meta_link_orn) @ np.array(
-                        [0.0, 0.0, mesh_info["size"][2] / 2])
+                        [0.0, 0.0, height_offset])
                 elif mesh_type == "Cone":
-                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["size"][0])
-                    xform_prim.prim.GetAttribute("height").Set(mesh_info["size"][2])
+                    xform_prim.prim.GetAttribute("radius").Set(0.5)
+                    xform_prim.prim.GetAttribute("height").Set(1.0)
+                    desired_radius = mesh_info["size"][0]
+                    desired_height = mesh_info["size"][2]
+                    height_offset = -desired_height / 2.0
+                    xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_height))
                     # Flip the orientation of the z-axis because in 3dsmax the cone is pointing in the opposite direction
                     mesh_in_meta_link_orn = T.quat_multiply(mesh_in_meta_link_orn, T.axisangle2quat([np.pi, 0.0, 0.0]))
                     # Offset the position by half the height because in 3dsmax the origin of the cone is at the center of the base
                     mesh_in_meta_link_pos += T.quat2mat(mesh_in_meta_link_orn) @ np.array(
-                        [0.0, 0.0, -mesh_info["size"][2] / 2])
+                        [0.0, 0.0, height_offset])
                 elif mesh_type == "Cube":
-                    # Need to use scale instead of size because in 3dsmax, the shape is a cuboid, not a cube
                     xform_prim.prim.GetAttribute("size").Set(1.0)
                     xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(*mesh_info["size"]))
                 elif mesh_type == "Sphere":
-                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["size"][0])
+                    xform_prim.prim.GetAttribute("radius").Set(0.5)
+                    desired_radius = mesh_info["size"][0]
+                    xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_radius * 2))
                 else:
                     raise ValueError(f"Invalid mesh type: {mesh_type}")
 
