@@ -139,8 +139,13 @@ def parse_tm_cleaning_csv():
             if "name" in ohp_root.keys() and "children" not in ohp_root.keys():
                 name = ohp_root["name"]
                 # Make sure category mapping exists
-                if "substance" in ohp_root["abilities"] and "categories" not in ohp_root:
-                    ohp_root["categories"] = [name.split(".")[0]]
+                if "substance" in ohp_root["abilities"]:
+                    correct_category = name.split(".")[0].replace("-", "_")
+                        if "categories" in ohp_root:
+                            assert len(ohp_root["categories"]) = 1
+                            assert ohp_root["categories"][0] == correct_category
+                        else:
+                            ohp_root["categories"] = [correct_category]
                 
                 # Make sure particleRemover annotation aligns
                 if "particleRemover" in ohp_root["abilities"]:
