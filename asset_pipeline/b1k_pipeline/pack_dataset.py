@@ -24,7 +24,7 @@ PARALLELS = [
     "objects_usd.zip",
     "metadata.zip",
     "scenes_json.zip",
-    # "maps.zip",
+    "maps.zip",
 ]
 
 def main():
