@@ -39,7 +39,8 @@ def load_scene_from_urdf(urdf):
     og.sim.import_scene(scene)
 
     for obj_name, obj_info in objs_info.items():
-        if not os.path.exists(DatasetObject.get_usd_path(obj_info['cfg']['category'], obj_info['cfg']['model'])):
+        if not os.path.exists(DatasetObject.get_usd_path(obj_info['cfg']['category'], obj_info['cfg']['model']).replace(".usd", ".encrypted.usd")):
+            print("Missing object", obj_name)
             continue
         obj = DatasetObject(
             prim_path=f"/World/{obj_name}",

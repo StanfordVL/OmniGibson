@@ -147,7 +147,7 @@ for ((i = 1 ; i <= $WORKER_CNT ; i++));
 do
     CONTAINER_NAME=ig_pipeline_${i}
     echo "Creating container ${CONTAINER_NAME}..."
-    enroot create --name ${CONTAINER_NAME} ${SQSH_SOURCE}
+    enroot create --force --name ${CONTAINER_NAME} ${SQSH_SOURCE}
 
     if [ `expr $i % 2` == 0 ]
     then

@@ -32,7 +32,7 @@ def world_to_map(xy, trav_map_resolution, trav_map_size):
     :param xy: 2D location in world reference frame (metric)
     :return: 2D location in map reference frame (image)
     """
-    return np.flip((np.array(xy) / trav_map_resolution + trav_map_size / 2.0)).round().astype(np.int)
+    return np.flip((np.array(xy) / trav_map_resolution + trav_map_size / 2.0)).round().astype(int)
 
 
 def process_scene(scene_id, dataset_path):
@@ -137,8 +137,8 @@ def process_scene(scene_id, dataset_path):
         if fname == "floor_trav_no_obj_0.png":
             all_insts = set()
             for c in scene.objects_by_category["ceilings"]:
-                assert len(c.in_rooms) == 1
-                all_insts.add(c.in_rooms[0])
+                if c.in_rooms:
+                    all_insts.extend(c.in_rooms)
             sorted_all_insts = sorted(all_insts)
 
             inst_to_id = dict()
@@ -167,9 +167,10 @@ def process_scene(scene_id, dataset_path):
                 # plt.savefig("scatter.png")
 
                 xy_map = world_to_map(xy_world, RESOLUTION, trav_map_size)
-                room_type = "_".join(ceiling.in_rooms[0].split('_')[:-1])
+                room = ceiling.in_rooms[0] if ceiling.in_rooms else None
+                room_type = "_".join(room.split('_')[:-1]) if room else None
                 semseg_map[xy_map[:, 0], xy_map[:, 1]] = sem_to_id[room_type] if room_type in sem_to_id else 0
-                insseg_map[xy_map[:, 0], xy_map[:, 1]] = inst_to_id[ceiling.in_rooms[0]]
+                insseg_map[xy_map[:, 0], xy_map[:, 1]] = inst_to_id[room] if room in inst_to_id else 0
 
             images[fs.path.join(save_path, semseg_map_fname)] = semseg_map
             images[fs.path.join(save_path, insseg_map_fname)] = insseg_map
@@ -190,10 +191,19 @@ def main():
         with tqdm.tqdm(total=total_files) as pbar:
             fs.copy.copy_fs(multi_fs, temp_fs, on_copy=lambda *args: pbar.update(1))
 
+        # Temporarily move URDF into root of objects
+        print("Moving URDF files...")
+        urdf_glob = list(temp_fs.glob("objects/*/*/urdf/*.urdf"))
+        for item in tqdm.tqdm(urdf_glob):
+            orig_path = item.path
+            obj_root_dir = fs.path.dirname(fs.path.dirname(orig_path))
+            new_path = fs.path.join(obj_root_dir, fs.path.basename(orig_path))
+            temp_fs.move(orig_path, new_path)
+
         with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
             all_futures = {}
             for scene_id in temp_fs.listdir("scenes"):
-                all_futures[executor.submit(process_scene, scene_id)] = scene_id
+                all_futures[executor.submit(process_scene, scene_id, temp_fs.getsyspath("/"))] = scene_id
 
             with ParallelZipFS("maps.zip", write=True) as zip_fs:
                 with tqdm.tqdm(total=len(all_futures)) as scene_pbar:

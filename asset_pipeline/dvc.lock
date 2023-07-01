@@ -8238,15 +8238,12 @@ stages:
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
-    - path: b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
-      md5: 03819734cc6fd1e70193bbe70b2b2d63
-      size: 4602
     - path: b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
       md5: 8b784bd33873e9719f56d199a362d0a5
       size: 4053
     - path: b1k_pipeline/usd_conversion/import_metadata.py
-      md5: 7c97b628541a622b6d2d7a2fe1f6055c
-      size: 37116
+      md5: 0a8b3e1bc27bffcd9beae6dc4d2e07f0
+      size: 38154
     - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
       md5: 2b0532b0a2be7d2446a4459406922c1c
       size: 2566
@@ -8261,11 +8258,11 @@ stages:
       size: 1988
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: 7497e9d988f29be3bfe7b5c3e3509845
-      size: 18086633603
+      md5: 25029b709d171efb8c7d344faf721fe8
+      size: 18086647700
     - path: artifacts/pipeline/usdify_objects.json
-      md5: 90b5814f4d0ac8667f69c3a3cd1b30f4
-      size: 31829908
+      md5: e02a6158618cb55d2dbd673b15a93958
+      size: 31890514
     - path: artifacts/pipeline/usdify_objects.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9875,11 +9872,11 @@ stages:
       md5: 141caa4039931f04322b1841ddd506fc
       size: 23554
     - path: artifacts/parallels/objects_usd.zip
-      md5: 7497e9d988f29be3bfe7b5c3e3509845
-      size: 18086633603
+      md5: 25029b709d171efb8c7d344faf721fe8
+      size: 18086647700
     - path: artifacts/parallels/scenes_json.zip
-      md5: 76cdb2bad9582d23c1f6f4d868218d6c
-      size: 22
+      md5: f446a998db11b85e159fd0e4f8f91810
+      size: 11544
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9891,8 +9888,8 @@ stages:
       size: 2062
     outs:
     - path: artifacts/og_dataset.zip
-      md5: 6ece1156bb0d4ca1b971156e797a2c1d
-      size: 18086657258
+      md5: bf5d65dd2ca829979721f84855962ad4
+      size: 18086682877
     - path: artifacts/pipeline/pack_dataset.json
       md5: 2ad066aadc9c024dff5e8d3c6587590d
       size: 44
@@ -9906,8 +9903,8 @@ stages:
       md5: 141caa4039931f04322b1841ddd506fc
       size: 23554
     - path: artifacts/parallels/objects_usd.zip
-      md5: 7497e9d988f29be3bfe7b5c3e3509845
-      size: 18086633603
+      md5: 25029b709d171efb8c7d344faf721fe8
+      size: 18086647700
     - path: artifacts/parallels/scenes.zip
       md5: c1bebfed7303b6e6e96d98f218b252c6
       size: 248684
@@ -9915,14 +9912,14 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
-      md5: 5fdb70c1e19e09848ecd28e299c5b3f8
-      size: 4603
+      md5: 3d09ee3980fe9404da108aaae0b475c7
+      size: 4683
     - path: b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
       md5: 8b784bd33873e9719f56d199a362d0a5
       size: 4053
     - path: b1k_pipeline/usd_conversion/import_metadata.py
-      md5: 7c97b628541a622b6d2d7a2fe1f6055c
-      size: 37116
+      md5: 0a8b3e1bc27bffcd9beae6dc4d2e07f0
+      size: 38154
     - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
       md5: 2b0532b0a2be7d2446a4459406922c1c
       size: 2566
@@ -9933,15 +9930,15 @@ stages:
       md5: bce12dad23e62f946f83fef9d8ddddeb
       size: 3533
     - path: b1k_pipeline/usd_conversion/usdify_scenes_process.py
-      md5: 1e9253166ae2640a417b89de7a65fb9c
-      size: 887
+      md5: e4a2d5dc237f37403f731f8bc7f558c5
+      size: 1644
     outs:
     - path: artifacts/parallels/scenes_json.zip
-      md5: 76cdb2bad9582d23c1f6f4d868218d6c
-      size: 22
+      md5: 24025935abf9ef3f38f4a7f2e0829289
+      size: 34949
     - path: artifacts/pipeline/usdify_scenes.json
-      md5: 39c451de7f750218351c2a266fee31ae
-      size: 1099377
+      md5: 9028216ca41d8b854a8824136e29cf15
+      size: 1816915
     - path: artifacts/pipeline/usdify_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
