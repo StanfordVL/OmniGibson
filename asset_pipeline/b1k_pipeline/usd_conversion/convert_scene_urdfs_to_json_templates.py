@@ -39,18 +39,21 @@ def load_scene_from_urdf(urdf):
     og.sim.import_scene(scene)
 
     for obj_name, obj_info in objs_info.items():
-        if not os.path.exists(DatasetObject.get_usd_path(obj_info['cfg']['category'], obj_info['cfg']['model']).replace(".usd", ".encrypted.usd")):
-            print("Missing object", obj_name)
-            continue
-        obj = DatasetObject(
-            prim_path=f"/World/{obj_name}",
-            name=obj_name,
-            **obj_info["cfg"],
-        )
-        og.sim.import_object(obj)
-        obj.set_bbox_center_position_orientation(
-            position=obj_info["bbox_pos"], orientation=obj_info["bbox_quat"]
-        )
+        try:
+            if not os.path.exists(DatasetObject.get_usd_path(obj_info['cfg']['category'], obj_info['cfg']['model']).replace(".usd", ".encrypted.usd")):
+                print("Missing object", obj_name)
+                continue
+            obj = DatasetObject(
+                prim_path=f"/World/{obj_name}",
+                name=obj_name,
+                **obj_info["cfg"],
+            )
+            og.sim.import_object(obj)
+            obj.set_bbox_center_position_orientation(
+                position=obj_info["bbox_pos"], orientation=obj_info["bbox_quat"]
+            )
+        except Exception as e:
+            raise ValueError(f"Failed to load object {obj_name}") from e
 
     # Take a sim step
     og.sim.step()

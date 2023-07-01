@@ -9912,8 +9912,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
-      md5: 3d09ee3980fe9404da108aaae0b475c7
-      size: 4683
+      md5: dc5e96f3549df882935fefaa5784539b
+      size: 4848
     - path: b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
       md5: 8b784bd33873e9719f56d199a362d0a5
       size: 4053
@@ -9927,18 +9927,18 @@ stages:
       md5: 34bda2403ce5837ea9d00b3c4142aa9e
       size: 11887
     - path: b1k_pipeline/usd_conversion/usdify_scenes.py
-      md5: bce12dad23e62f946f83fef9d8ddddeb
-      size: 3533
+      md5: 49b06ae3faacb7ebb6b022e1765d41bd
+      size: 3474
     - path: b1k_pipeline/usd_conversion/usdify_scenes_process.py
-      md5: e4a2d5dc237f37403f731f8bc7f558c5
-      size: 1644
+      md5: 83620f607cc6e9ad75cd49437573fad7
+      size: 1640
     outs:
     - path: artifacts/parallels/scenes_json.zip
-      md5: 24025935abf9ef3f38f4a7f2e0829289
-      size: 34949
+      md5: 32816d0ffb7fdb6e3e64500c241f6cae
+      size: 557338
     - path: artifacts/pipeline/usdify_scenes.json
-      md5: 9028216ca41d8b854a8824136e29cf15
-      size: 1816915
+      md5: 50cf9a728f381b93862d24c83e92200e
+      size: 1444352
     - path: artifacts/pipeline/usdify_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
