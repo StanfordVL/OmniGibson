@@ -205,10 +205,11 @@ def detect_robot_collision(robot, filter_objs=[]):
 def detect_self_collision(robot):
     contacts = robot.contact_list()
     robot_links = [link.prim_path for link in robot.links.values()]
+    disabled_pairs = [set(p) for p in robot.disabled_collision_pairs]
     for c in contacts:
         link0 = c.body0.split("/")[-1]
         link1 = c.body1.split("/")[-1]
-        if [link0, link1] not in robot.disabled_collision_pairs and c.body0 in robot_links and c.body1 in robot_links:
+        if {link0, link1} not in disabled_pairs and c.body0 in robot_links and c.body1 in robot_links:
             return True
     return False
 

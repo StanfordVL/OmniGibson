@@ -6,6 +6,7 @@ from omnigibson.macros import gm
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
 import omnigibson.utils.transform_utils as T
 from omnigibson.objects.dataset_object import DatasetObject
+from omnigibson.object_states import ContactBodies
     
 
 def pause(time):
@@ -14,16 +15,14 @@ def pause(time):
 
 def replay_controller(env, filename):
     actions = yaml.load(open(filename, "r"), Loader=yaml.FullLoader)
-    empty = np.zeros(22)
     for action in actions:
-        env.step(empty)
+        env.step(action)
 
 def execute_controller(ctrl_gen, env, filename=None):
     actions = []
     for action in ctrl_gen:
         env.step(action)
         actions.append(action.tolist())
-        print(og.sim._physics_context.get_gravity())
     if filename is not None:
         with open(filename, "w") as f:
             yaml.dump(actions, f)
@@ -101,16 +100,58 @@ def main():
         execute_controller(controller.grasp(grasp_obj), env)
         # replay_controller(env, "grasp_tiago.yaml")
 
-    # from IPython import embed; embed()
-    # test_navigate_to_obj()
-    # set_start_pose()
+    def detect_robot_collision(robot, filter_objs=[]):
+        filter_categories = ["floors"]
+        
+        obj_in_hand = robot._ag_obj_in_hand[robot.default_arm]
+        if obj_in_hand is not None:
+            filter_objs.append(obj_in_hand)
+
+        collision_prims = list(robot.states[ContactBodies].get_value(ignore_objs=tuple(filter_objs)))
+
+        for col_prim in collision_prims:
+            tokens = col_prim.prim_path.split("/")
+            obj_prim_path = "/".join(tokens[:-1])
+            col_obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
+            if col_obj.category in filter_categories:
+                collision_prims.remove(col_prim)
+
+        return len(collision_prims) > 0 or detect_self_collision(robot)
+
+    def detect_self_collision(robot):
+        contacts = robot.contact_list()
+        robot_links = [link.prim_path for link in robot.links.values()]
+        disabled_pairs = [set(p) for p in robot.disabled_collision_pairs]
+        for c in contacts:
+            link0 = c.body0.split("/")[-1]
+            link1 = c.body1.split("/")[-1]
+            if {link0, link1} not in disabled_pairs and c.body0 in robot_links and c.body1 in robot_links:
+                return True
+        return False
+
+
+    robot.untuck()
+    og.sim.step()
+    while True:
+        coll = []
+        robot_links = [link.prim_path for link in robot.links.values()]
+        for c in robot.contact_list():
+            if c.body0 in robot_links and c.body1 in robot_links:
+                link0 = c.body0.split("/")[-1]
+                link1 = c.body1.split("/")[-1]
+                pair = {link0, link1}
+                if pair not in coll:
+                    coll.append(pair)
+        
+        print(detect_robot_collision(robot))
+        print(detect_self_collision(robot))
+        print("---------------")
+        pause(2)
+
     # test_grasp_no_navigation()
     # replay_controller(env, "grasp_tiago.yaml")
     # pause(10)
 
-    empty = np.zeros(22)
-    for action in range(10000):
-        env.step(empty)
 
 
 

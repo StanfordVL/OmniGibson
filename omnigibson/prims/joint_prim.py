@@ -884,7 +884,8 @@ class JointPrim(BasePrim):
         if self.articulated:
             self.set_pos(state["pos"], drive=False)
             self.set_vel(state["vel"], drive=False)
-            self.set_effort(state["effort"])
+            if self.driven:
+                self.set_effort(state["effort"])
             if self._control_type == ControlType.POSITION:
                 self.set_pos(state["target_pos"], drive=True)
             elif self._control_type == ControlType.VELOCITY:
