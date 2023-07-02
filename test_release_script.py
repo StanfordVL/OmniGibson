@@ -51,8 +51,8 @@ def _execute_release(robot):
         yield action
 
     # Do nothing for a bit so that AG can trigger.
-    # for _ in range(MAX_WAIT_FOR_GRASP_OR_RELEASE):
-    #     yield _empty_action(robot)
+    for _ in range(MAX_WAIT_FOR_GRASP_OR_RELEASE):
+        yield _empty_action(robot)
 
 def _empty_action(robot):
     action = np.zeros(robot.action_dim)
@@ -99,7 +99,7 @@ class UndoableContext(object):
 
 def _sample_pose_with_object_and_predicate(robot, predicate, held_obj, target_obj):
     with UndoableContext(robot):
-        robot._release_grasp()
+        robot.release_grasp_immediately()
         pred_map = {object_states.OnTop: "onTop", object_states.Inside: "inside"}
         result = sample_kinematics(
             pred_map[predicate],
