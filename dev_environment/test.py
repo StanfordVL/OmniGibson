@@ -1,11 +1,17 @@
 import yaml
 import numpy as np
+import argparse
 
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
 import omnigibson.utils.transform_utils as T
 from omnigibson.objects.dataset_object import DatasetObject
+
+import cProfile, pstats, io
+import time
+import os
+import argparse
     
 
 def pause(time):
@@ -105,34 +111,44 @@ def main():
         pause(1)
         execute_controller(controller.place_on_top(table), env)
 
-    # Replays grasping from previous primitive then executes normal place on top
-    # collision = [0.155803, 0.983069, 0.146438]
-    # navigate = [1.29988, 0.195853, 1.78008]
-    # set_start_pose()
-    # robot.set_position([0.0, -0.5, 0.05])
-    # robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
-    # og.sim.step()
-    # execute_controller(controller._navigate_to_pose_direct(navigate), env)
-    # pause(10)
-
     def test_grasp_replay_and_place():
         set_start_pose()
         robot.set_position([0.0, -0.5, 0.05])
         robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
         og.sim.step()
-        replay_controller(env, "grasp.yaml")
+        replay_controller(env, "./replays/grasp.yaml")
         execute_controller(controller.place_on_top(table), env)
 
     # Work more reliably
     # test_navigate_to_obj()
-    # test_grasp_replay_and_place()
     # test_grasp_no_navigation()
-    pause(10)
+    test_grasp_replay_and_place()
 
     # Don't work as reliably because robot wobbles on its wheels
     # test_grasp()
     # test_place()
 
+    pause(5)
+
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Run test script")
+    parser.add_argument(
+        "--profile",
+        action="store_true",
+        help="If set, profile code and generate prof file",
+    )
+    args = parser.parse_args()
+    if args.profile:
+        pr = cProfile.Profile()
+        pr.enable()
+        main()
+        pr.disable()
+        s = io.StringIO()
+        results = pstats.Stats(pr)
+        filename = f'profile-{os.path.basename(__file__)}-{time.strftime("%Y%m%d-%H%M%S")}'
+        results.dump_stats(f"./profiles/{filename}.prof")
+        os.system(f"flameprof ./profiles/{filename}.prof > ./profiles/{filename}.svg")
+        # Run `snakeviz ./profiles/<filename>.prof` to visualize stack trace or open <filename>.svg in a browser
+    else:
+        main()

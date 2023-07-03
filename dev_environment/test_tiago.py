@@ -1,12 +1,17 @@
 import yaml
 import numpy as np
+import argparse
 
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
 import omnigibson.utils.transform_utils as T
 from omnigibson.objects.dataset_object import DatasetObject
-from omnigibson.object_states import ContactBodies
+
+import cProfile, pstats, io
+import time
+import os
+import argparse
     
 
 def pause(time):
@@ -63,75 +68,72 @@ def main():
 
     controller = StarterSemanticActionPrimitives(None, scene, robot)
 
-    # Need to set start pose because default tuck pose for Fetch collides with itself
-    def set_start_pose():
-        default_pose = np.array(
-            [
-                0.0,
-                0.0,  # wheels
-                0.0,  # trunk
-                0.0,
-                0.0,
-                0.0,  # head
-                -0.22184,
-                1.53448,
-                1.46076,
-                -0.84995,
-                1.36904,
-                1.90996,  # arm
-                0.05,
-                0.05,  # gripper
-            ]
-        )
-        robot.set_joint_positions(default_pose)
-        og.sim.step()
-    
+
     def test_navigate_to_obj():
-        # execute_controller(controller._navigate_to_obj(table), env)
+        # Need to set start pose to reset_hand because default tuck pose for Tiago collides with itself
         execute_controller(controller._reset_hand(), env)
-        # pose_2d = np.array([0.5, 0.5, 0.0])
         execute_controller(controller._navigate_to_obj(table), env)
-        # execute_controller(controller._navigate_to_pose(pose_2d), env)
 
     def test_grasp_no_navigation():
+        # Need to set start pose to reset_hand because default tuck pose for Tiago collides with itself
+        execute_controller(controller._reset_hand(), env)
         robot.set_position([-0.1, -0.35, 0.05])
         robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
         og.sim.step()
-        execute_controller(controller._reset_hand(), env)
-        # while True:
-        #     print(detect_self_collision(robot))
-        #     pause(1)
         execute_controller(controller.grasp(grasp_obj), env)
-        # replay_controller(env, "grasp_tiago.yaml")
 
-    def detect_robot_collision(robot, filter_objs=[]):
-        filter_categories = ["floors"]
+    def test_grasp():
+        # Need to set start pose to reset_hand because default tuck pose for Tiago collides with itself
+        execute_controller(controller._reset_hand(), env)
+        execute_controller(controller.grasp(grasp_obj), env)
+
+    def test_place():
+        test_grasp()
+        pause(1)
+        execute_controller(controller.place_on_top(table), env)
+
+
+    # Work more reliably
+    test_navigate_to_obj()
+    
+    # Don't work as reliably
+    # test_grasp_no_navigation()
+    # test_grasp()
+    # test_place()
+
+    pause(5)
+
+    ###################################################################################
+    # Random test code below
+    ###################################################################################
+    # def detect_robot_collision(robot, filter_objs=[]):
+    #     filter_categories = ["floors"]
         
-        obj_in_hand = robot._ag_obj_in_hand[robot.default_arm]
-        if obj_in_hand is not None:
-            filter_objs.append(obj_in_hand)
+    #     obj_in_hand = robot._ag_obj_in_hand[robot.default_arm]
+    #     if obj_in_hand is not None:
+    #         filter_objs.append(obj_in_hand)
 
-        collision_prims = list(robot.states[ContactBodies].get_value(ignore_objs=tuple(filter_objs)))
+    #     collision_prims = list(robot.states[ContactBodies].get_value(ignore_objs=tuple(filter_objs)))
 
-        for col_prim in collision_prims:
-            tokens = col_prim.prim_path.split("/")
-            obj_prim_path = "/".join(tokens[:-1])
-            col_obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
-            if col_obj.category in filter_categories:
-                collision_prims.remove(col_prim)
+    #     for col_prim in collision_prims:
+    #         tokens = col_prim.prim_path.split("/")
+    #         obj_prim_path = "/".join(tokens[:-1])
+    #         col_obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
+    #         if col_obj.category in filter_categories:
+    #             collision_prims.remove(col_prim)
 
-        return len(collision_prims) > 0 or detect_self_collision(robot)
+    #     return len(collision_prims) > 0 or detect_self_collision(robot)
 
-    def detect_self_collision(robot):
-        contacts = robot.contact_list()
-        robot_links = [link.prim_path for link in robot.links.values()]
-        disabled_pairs = [set(p) for p in robot.disabled_collision_pairs]
-        for c in contacts:
-            link0 = c.body0.split("/")[-1]
-            link1 = c.body1.split("/")[-1]
-            if {link0, link1} not in disabled_pairs and c.body0 in robot_links and c.body1 in robot_links:
-                return True
-        return False
+    # def detect_self_collision(robot):
+    #     contacts = robot.contact_list()
+    #     robot_links = [link.prim_path for link in robot.links.values()]
+    #     disabled_pairs = [set(p) for p in robot.disabled_collision_pairs]
+    #     for c in contacts:
+    #         link0 = c.body0.split("/")[-1]
+    #         link1 = c.body1.split("/")[-1]
+    #         if {link0, link1} not in disabled_pairs and c.body0 in robot_links and c.body1 in robot_links:
+    #             return True
+    #     return False
 
     # robot.set_position([-0.1, -0.35, 0.05])
     # robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
@@ -157,15 +159,28 @@ def main():
     #     print("---------------")
     #     pause(2)
 
-    test_grasp_no_navigation()
-    # test_navigate_to_obj()
-    # execute_controller(controller._reset_hand(), env)
-    # execute_controller(controller._navigate_to_pose_direct([0.5, 0.5, 0.7]), env)
-    # execute_controller(controller._navigate_to_pose_direct([0.5, 0.5, 0.0]), env)
-    # replay_controller(env, "grasp_tiago.yaml")
-    pause(10)
-
-
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Run test script")
+    parser.add_argument(
+        "--profile",
+        action="store_true",
+        help="If set, profile code and generate prof file",
+    )
+    args = parser.parse_args()
+    if args.profile:
+        pr = cProfile.Profile()
+        pr.enable()
+        main()
+        pr.disable()
+        s = io.StringIO()
+        results = pstats.Stats(pr)
+        filename = f'profile-{os.path.basename(__file__)}-{time.strftime("%Y%m%d-%H%M%S")}'
+        results.dump_stats(f"./profiles/{filename}.prof")
+        os.system(f"flameprof ./profiles/{filename}.prof > ./profiles/{filename}.svg")
+        # Run `snakeviz ./profiles/<filename>.prof` to visualize stack trace or open <filename>.svg in a browser
+    else:
+        main()
+
+
+

@@ -164,6 +164,26 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         }
         self.arm = self.robot.default_arm
         self.robot_model = self.robot.model_name
+        self._set_joint_velocities()
+
+    # Set joint velocities for the robots so they move at appropriate speeds.
+    # Not speeding up joints because joint controller is position controller. Asking Josiah about this 
+    def _set_joint_velocities(self):
+        control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
+        if self.robot_model == "Tiago":
+            joint_gains = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+            joints = np.array([joint for joint in self.robot.joints.values()])
+            arm_joints = joints[control_idx]
+            for i, joint in enumerate(arm_joints):
+                pass
+                # damps = []
+                # joint.set_control_type(ControlType.POSITION, kp=10000000.0)
+                # print(joint.name)
+                # for dof_handle, dof_property in zip(joint._dof_handles, joint._dof_properties):
+                #     damps.append(dof_property.stiffness)
+                # print(damps)
+                # print("-------")
+
 
     def get_action_space(self):
         if ACTIVITY_RELEVANT_OBJECTS_ONLY:
@@ -323,8 +343,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             approach_pose = (approach_pos, grasp_pose[1])
 
             # If the grasp pose is too far, navigate.
-            # yield from self._navigate_if_needed(obj, pos_on_obj=approach_pos)
-            # yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0])
+            yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0])
 
             yield from self._move_hand(grasp_pose)
 
@@ -655,7 +674,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 base_action = [direction_vec[0], direction_vec[1], 0.0]
                 action[self.robot.controller_action_idx["base"]] = base_action
                 yield action
-                
             else:
                 diff_angle_to_waypoint = T.vecs2axisangle([1, 0, 0], [body_target_pose[0][0], body_target_pose[0][1], 0.0])[2]
                 if abs(diff_angle_to_waypoint) > DEFAULT_ANGLE_THRESHOLD:
@@ -666,6 +684,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     base_action = [KP_LIN_VEL, 0.0]
                     action[self.robot.controller_action_idx["base"]] = base_action
                     yield action
+                
             body_target_pose = self._get_pose_in_robot_frame(pose)
 
         # Rotate in place to final orientation once at location
