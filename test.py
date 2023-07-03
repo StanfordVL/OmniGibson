@@ -106,6 +106,15 @@ def main():
         execute_controller(controller.place_on_top(table), env)
 
     # Replays grasping from previous primitive then executes normal place on top
+    # collision = [0.155803, 0.983069, 0.146438]
+    # navigate = [1.29988, 0.195853, 1.78008]
+    # set_start_pose()
+    # robot.set_position([0.0, -0.5, 0.05])
+    # robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
+    # og.sim.step()
+    # execute_controller(controller._navigate_to_pose_direct(navigate), env)
+    # pause(10)
+
     def test_grasp_replay_and_place():
         set_start_pose()
         robot.set_position([0.0, -0.5, 0.05])
@@ -116,7 +125,7 @@ def main():
 
     # Work more reliably
     # test_navigate_to_obj()
-    test_grasp_replay_and_place()
+    # test_grasp_replay_and_place()
     # test_grasp_no_navigation()
     pause(10)
 

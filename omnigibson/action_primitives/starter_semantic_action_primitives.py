@@ -5,6 +5,7 @@ It currently only works with BehaviorRobot with its JointControllers set to abso
 See provided behavior_robot_mp_behavior_task.yaml config file for an example. See examples/action_primitives for
 runnable examples.
 """
+import copy
 import inspect
 import logging
 import random
@@ -100,21 +101,6 @@ def indented_print(msg, *args, **kwargs):
     logger.debug("  " * len(inspect.stack()) + str(msg), *args, **kwargs)
 
 
-def is_close(start_pose, end_pose, angle_threshold, dist_threshold):
-    start_pos, start_orn = start_pose
-    start_rot = Rotation.from_quat(start_orn)
-
-    end_pos, end_orn = end_pose
-    end_rot = Rotation.from_quat(end_orn)
-
-    diff_rot = end_rot * start_rot.inv()
-    diff_pos = np.array(end_pos) - np.array(start_pos)
-    indented_print(
-        "Position difference to target: %s, Rotation difference: %s", np.linalg.norm(diff_pos), diff_rot.magnitude()
-    )
-    return diff_rot.magnitude() < angle_threshold, np.linalg.norm(diff_pos) < dist_threshold, diff_rot.as_euler('xyz')[2], np.linalg.norm(diff_pos)
-
-
 class UndoableContext(object):
     def __init__(self, robot):
         self.robot = robot
@@ -137,15 +123,14 @@ class UndoableContext(object):
             obj.keep_still()
 
     def __exit__(self, *args):
-        og.sim.load_state(self.state, serialized=False)
-        og.sim.step()
-        # from IPython import embed; embed()
-        if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
-            self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
         og.sim._physics_context.set_gravity(value=-9.81)
         for obj in og.sim.scene.objects:
             for link in obj.links.values():
                 PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(True)
+        og.sim.load_state(self.state, serialized=False)
+        og.sim.step()
+        if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
+            self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
         og.sim.step()
         
 
@@ -178,6 +163,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             StarterSemanticActionPrimitive.NAVIGATE_TO: self._navigate_to_obj,
         }
         self.arm = self.robot.default_arm
+        self.robot_model = self.robot.model_name
 
     def get_action_space(self):
         if ACTIVITY_RELEVANT_OBJECTS_ONLY:
@@ -518,7 +504,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         action = self._empty_action()
         controller_name = "gripper_{}".format(self.arm)
         action[self.robot.controller_action_idx[controller_name]] = 1.0
-        self.robot.release_grasp_immediately()
         for _ in range(MAX_STEPS_FOR_GRASP_OR_RELEASE):
             # Otherwise, keep applying the action!
             yield action
@@ -546,7 +531,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
     def _reset_hand(self):
         control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
-        default_pose = np.array(
+        reset_pose_fetch = np.array(
             [
                 0.0,
                 0.0,  # wheels
@@ -564,8 +549,39 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 0.05,  # gripper
             ]
         )
-        default_pose = default_pose[control_idx]
-        yield from self._move_hand_direct_joint(default_pose, control_idx)
+        reset_pose_tiago = np.array(
+            [
+                0.0,  
+                0.0, 
+                0.0, 
+                0.0,
+                0.0, 
+                0.0,
+                0.1, # trunk
+                -1.1,
+                -1.1,  
+                0.0,  
+                1.47,  
+                1.47,
+                0.0,  
+                2.71,  
+                2.71,  
+                1.71,
+                1.71, 
+                -1.57, 
+                -1.57,  
+                1.39,
+                1.39,  
+                0.0,  
+                0.0,  
+                0.045,
+                0.045,  
+                0.045,  
+                0.045,
+            ]
+        )
+        reset_pose = reset_pose_tiago[control_idx] if self.robot_model == "Tiago" else reset_pose_fetch[control_idx]
+        yield from self._move_hand_direct_joint(reset_pose, control_idx)
 
     def _navigate_to_pose(self, pose_2d):
         with UndoableContext(self.robot):
@@ -625,51 +641,60 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         yield from self._navigate_to_pose(pose)
 
     def _navigate_to_pose_direct(self, pose_2d, low_precision=False):
-        pose = self._get_robot_pose_from_2d_pose(pose_2d)
 
         dist_threshold = LOW_PRECISION_DIST_THRESHOLD if low_precision else DEFAULT_DIST_THRESHOLD
         angle_threshold = LOW_PRECISION_ANGLE_THRESHOLD if low_precision else DEFAULT_ANGLE_THRESHOLD
-        arrived_at_pos = False
-        while True:
+            
+        pose = self._get_robot_pose_from_2d_pose(pose_2d)
+        body_target_pose = self._get_pose_in_robot_frame(pose)
+
+        while np.linalg.norm(body_target_pose[0][:2]) > dist_threshold:
+            if self.robot_model == "Tiago":
+                action = self._empty_action()
+                direction_vec = body_target_pose[0][:2] / (np.linalg.norm(body_target_pose[0][:2]) * 5)
+                base_action = [direction_vec[0], direction_vec[1], 0.0]
+                action[self.robot.controller_action_idx["base"]] = base_action
+                yield action
+                
+            else:
+                diff_angle_to_waypoint = T.vecs2axisangle([1, 0, 0], [body_target_pose[0][0], body_target_pose[0][1], 0.0])[2]
+                if abs(diff_angle_to_waypoint) > DEFAULT_ANGLE_THRESHOLD:
+                    end_pose = (pose[0], T.euler2quat([0, 0, np.arctan2(pose[0][1], pose[0][0])]))
+                    yield from self._rotate_in_place(end_pose, angle_threshold=DEFAULT_ANGLE_THRESHOLD)
+                else:
+                    action = self._empty_action()
+                    base_action = [KP_LIN_VEL, 0.0]
+                    action[self.robot.controller_action_idx["base"]] = base_action
+                    yield action
             body_target_pose = self._get_pose_in_robot_frame(pose)
 
-            action = self._empty_action()
-
-            is_angle_close, is_dist_close, angle, dist = is_close(([0, 0, 0], [0, 0, 0, 1]), body_target_pose, angle_threshold, dist_threshold)
-            if is_dist_close: arrived_at_pos = True
-
-            angle_to_waypoint = T.vecs2axisangle([1, 0, 0], [body_target_pose[0][0], body_target_pose[0][1], 0.0])[2]
-
-            lin_vel = 0.0
-            ang_vel = 0.0
-
-            if arrived_at_pos:
-                direction = -1.0 if angle < 0.0 else 1.0
-                ang_vel = KP_ANGLE_VEL * abs(angle) * direction
-                ang_vel = 0.2 * direction
-            else:
-                if abs(angle_to_waypoint) > DEFAULT_ANGLE_THRESHOLD:
-                    direction = -1.0 if angle_to_waypoint < 0 else 1.0
-                    ang_vel = KP_ANGLE_VEL * direction
-                else:
-                    lin_vel = KP_LIN_VEL
-
-            base_action = [lin_vel, ang_vel]
-            action[self.robot.controller_action_idx["base"]] = base_action
-
-            # Return None if no action is needed.
-            if is_angle_close and arrived_at_pos:
-                indented_print("Move is complete.")
-                return
-
-            yield action
-
+        # Rotate in place to final orientation once at location
+        yield from self._rotate_in_place(pose, angle_threshold=angle_threshold)
         # raise ActionPrimitiveError(
         #     ActionPrimitiveError.Reason.EXECUTION_ERROR,
         #     "Could not move robot to desired waypoint.",
         #     {"target_pose": pose, "current_pose": self.robot.get_position_orientation()},
         # )
 
+    def _rotate_in_place(self, end_pose, angle_threshold = DEFAULT_ANGLE_THRESHOLD):
+        body_target_pose = self._get_pose_in_robot_frame(end_pose)
+        diff_angle = T.vecs2axisangle([1, 0, 0], [body_target_pose[0][0], body_target_pose[0][1], 0.0])[2]
+        while abs(diff_angle) > angle_threshold:
+            action = self._empty_action()
+
+            direction = -1.0 if T.wrap_angle(diff_angle) < 0.0 else 1.0
+            ang_vel = 0.2 * direction
+
+            base_action = [0.0, 0.0, ang_vel] if self.robot_model == "Tiago" else [0.0, ang_vel]
+            action[self.robot.controller_action_idx["base"]] = base_action
+            
+            yield action
+
+            body_target_pose = self._get_pose_in_robot_frame(end_pose)
+            diff_angle = T.vecs2axisangle([1, 0, 0], [body_target_pose[0][0], body_target_pose[0][1], 0.0])[2]
+            
+        yield self._empty_action()
+            
     def _sample_pose_near_object(self, obj, pos_on_obj=None, **kwargs):
         if pos_on_obj is None:
             pos_on_obj = self._sample_position_on_aabb_face(obj)
@@ -726,7 +751,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
     def _sample_pose_with_object_and_predicate(self, predicate, held_obj, target_obj):
         with UndoableContext(self.robot):
-            self.robot._release_grasp()
+            self.robot.release_grasp_immediately()
             pred_map = {object_states.OnTop: "onTop", object_states.Inside: "inside"}
             result = sample_kinematics(
                 pred_map[predicate],

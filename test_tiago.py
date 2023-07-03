@@ -88,15 +88,23 @@ def main():
     
     def test_navigate_to_obj():
         # execute_controller(controller._navigate_to_obj(table), env)
-        pose_2d = np.array([0.5, 0.5, 0.0])
-        execute_controller(controller._navigate_to_pose(pose_2d), env)
+        execute_controller(controller._reset_hand(), env)
+        # pose_2d Search Stanford Vision & Learning
+￼
+￼
+￼
+= np.array([0.5, 0.5, 0.0])
+        execute_controller(controller._navigate_to_obj(table), env)
+        # execute_controller(controller._navigate_to_pose(pose_2d), env)
 
     def test_grasp_no_navigation():
-        # set_start_pose()
         robot.set_position([-0.1, -0.35, 0.05])
         robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
-        # pause(100)
         og.sim.step()
+        execute_controller(controller._reset_hand(), env)
+        # while True:
+        #     print(detect_self_collision(robot))
+        #     pause(1)
         execute_controller(controller.grasp(grasp_obj), env)
         # replay_controller(env, "grasp_tiago.yaml")
 
@@ -129,29 +137,37 @@ def main():
                 return True
         return False
 
-
-    robot.untuck()
-    og.sim.step()
-    while True:
-        coll = []
-        robot_links = [link.prim_path for link in robot.links.values()]
-        for c in robot.contact_list():
-            if c.body0 in robot_links and c.body1 in robot_links:
-                link0 = c.body0.split("/")[-1]
-                link1 = c.body1.split("/")[-1]
-                pair = {link0, link1}
-                if pair not in coll:
-                    coll.append(pair)
+    # robot.set_position([-0.1, -0.35, 0.05])
+    # robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
+    # og.sim.step()
+    # control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["left"]])
+    # joint_pos = [0.284846, 1.22316, 0.323617, 1.72149, 1.4959, -0.31599, -1.4043, 0.152401]
+    # robot.set_joint_positions(joint_pos, control_idx)
+    # og.sim.step()
+    # while True:
+    #     coll = []
+    #     robot_links = [link.prim_path for link in robot.links.values()]
+    #     for c in robot.contact_list():
+    #         if c.body0 in robot_links and c.body1 in robot_links:
+    #             link0 = c.body0.split("/")[-1]
+    #             link1 = c.body1.split("/")[-1]
+    #             pair = {link0, link1}
+    #             if pair not in coll:
+    #                 coll.append(pair)
         
-        print(detect_robot_collision(robot))
-        print(detect_self_collision(robot))
-        print("---------------")
-        pause(2)
+    #     print(coll)
+    #     print(detect_robot_collision(robot))
+    #     print(detect_self_collision(robot))
+    #     print("---------------")
+    #     pause(2)
 
-    # test_grasp_no_navigation()
+    test_grasp_no_navigation()
+    # test_navigate_to_obj()
+    # execute_controller(controller._reset_hand(), env)
+    # execute_controller(controller._navigate_to_pose_direct([0.5, 0.5, 0.7]), env)
+    # execute_controller(controller._navigate_to_pose_direct([0.5, 0.5, 0.0]), env)
     # replay_controller(env, "grasp_tiago.yaml")
-    # pause(10)
-
+    pause(10)
 
 
 
