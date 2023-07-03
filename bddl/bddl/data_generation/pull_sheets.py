@@ -13,6 +13,7 @@ TM_SHEET_KEY = "11PsOlRYjsJ_WZZzMc6-iOi0oT_pIgKgvzXLg3kR00KM"
 ALL_SHEETS = [
   (ASSETS_SHEET_KEY, "Object Category Mapping", "category_mapping.csv"),
   (ASSETS_SHEET_KEY, "Allowed Room Types", "allowed_room_types.csv"),
+  (ASSETS_SHEET_KEY, "Substance Hyperparams", "substance_hyperparams.csv"),
   (SYNSETS_SHEET_KEY, "Synsets", "synsets.csv"),
   (SYMSET_PARAMS_SHEET_KEY, "heatsource", "prop_param_annots/heatSource.csv"),
   (SYMSET_PARAMS_SHEET_KEY, "coldsource", "prop_param_annots/coldSource.csv"),
