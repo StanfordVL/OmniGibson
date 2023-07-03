@@ -1611,6 +1611,13 @@
                                   "categories": [
                                     "chicken_soup_carton"
                                   ]
+                                },
+                                {
+                                  "name": "liquid_carton.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "liquid_carton"
+                                  ]
                                 }
                               ]
                             },
@@ -13561,6 +13568,13 @@
                                           "categories": [
                                             "half_pear"
                                           ]
+                                        },
+                                        {
+                                          "name": "half__papaya.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_papaya"
+                                          ]
                                         }
                                       ]
                                     },
@@ -17657,11 +17671,17 @@
                               "children": [
                                 {
                                   "name": "bagel_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bagel_dough"
+                                  ]
                                 },
                                 {
                                   "name": "biscuit_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "biscuit_dough"
+                                  ]
                                 },
                                 {
                                   "name": "chocolate_cookie_dough.n.01",
@@ -17697,7 +17717,10 @@
                                 },
                                 {
                                   "name": "spice_cookie_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "spice_cookie_dough"
+                                  ]
                                 },
                                 {
                                   "name": "sugar_cookie_dough.n.01",
@@ -17708,7 +17731,10 @@
                                 },
                                 {
                                   "name": "roll_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "roll_dough"
+                                  ]
                                 }
                               ]
                             },
@@ -20556,6 +20582,13 @@
                               "categories": [
                                 "half_pear"
                               ]
+                            },
+                            {
+                              "name": "half__papaya.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "half_papaya"
+                              ]
                             }
                           ]
                         },
@@ -21470,7 +21503,8 @@
                               "name": "sliced__brisket.n.01",
                               "hasModel": true,
                               "categories": [
-                                "sliced__brisket"
+                                "sliced__brisket",
+                                "sliced_brisket"
                               ]
                             }
                           ]
