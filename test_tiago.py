@@ -89,11 +89,7 @@ def main():
     def test_navigate_to_obj():
         # execute_controller(controller._navigate_to_obj(table), env)
         execute_controller(controller._reset_hand(), env)
-        # pose_2d Search Stanford Vision & Learning
-￼
-￼
-￼
-= np.array([0.5, 0.5, 0.0])
+        # pose_2d = np.array([0.5, 0.5, 0.0])
         execute_controller(controller._navigate_to_obj(table), env)
         # execute_controller(controller._navigate_to_pose(pose_2d), env)
 
