@@ -37,6 +37,7 @@ PROP_TO_DESC = { #added by hand from B1K Object States Google Doc found here htt
     "stainable": "stained",
     "sliceable": "sliced",
     "slicer": None,
+    "diceable": "diced",
     "soakable": "soaked",
     "timeSetable": "time_set",
     "toggleable": "toggled_on",
