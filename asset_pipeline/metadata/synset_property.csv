@@ -663,7 +663,7 @@ cooked__diced__chili.n.01,hot_pepper.n.02,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,
 cooked__diced__chorizo.n.01,sausage.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 cooked__diced__clove.n.01,garlic.n.02,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 cooked__diced__green_onion.n.01,onion.n.03,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-cooked__diced__potato.n.01,root_vegetable.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+cooked__diced__potato.n.01,"root_vegetable.n.01,solanaceous_vegetable.n.01,starches.n.01",1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 cooked__diced__steak.n.01,cut.n.06,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 cooked__diced__turkey.n.01,poultry.n.02,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 cooked__diced__vidalia_onion.n.01,onion.n.03,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
@@ -695,7 +695,7 @@ cooked__saffron.n.01,flavorer.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 cooked__salsa.n.01,condiment.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 cooked__salt.n.01,flavorer.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,microPhysicalSubstance
 cooked__sunflower_seed.n.01,edible_seed.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,microPhysicalSubstance
-cooked__water.n.01,food.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
+cooked__water.n.01,"food.n.01,liquid.n.01,nutrient.n.02",1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 cooked__white_rice.n.01,rice.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,microPhysicalSubstance
 cooked__white_wine.n.01,wine.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 cooked__wine_sauce.n.01,sauce.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
@@ -785,7 +785,7 @@ detergent.n.02,cleansing_agent.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 dial.n.03,indicator.n.03,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 diamond.n.01,jewel.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 diaper.n.01,garment.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
-diced__apple.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__apple.n.01,"edible_fruit.n.01,pome.n.01",1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__avocado.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__beefsteak_tomato.n.01,tomato.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__beet.n.01,root_vegetable.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
@@ -809,7 +809,7 @@ diced__lemon.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macr
 diced__lettuce.n.01,salad_green.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__mango.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__pineapple.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-diced__potato.n.01,root_vegetable.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__potato.n.01,"root_vegetable.n.01,solanaceous_vegetable.n.01,starches.n.01",1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__spinach.n.01,greens.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__steak.n.01,cut.n.06,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__vidalia_onion.n.01,onion.n.03,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
@@ -1035,7 +1035,7 @@ hair_spray.n.01,toiletry.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liqu
 hair.n.04,filament.n.03,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 hairbrush.n.01,brush.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__apple_pie.n.01,pie.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__apple.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+half__apple.n.01,"edible_fruit.n.01,pome.n.01",1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__beefsteak_tomato.n.01,tomato.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__bell_pepper.n.01,sweet_pepper.n.02,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__chestnut.n.01,edible_nut.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1050,10 +1050,10 @@ half__mango.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
 half__mushroom.n.01,vegetable.n.01,1,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__orange.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__pineapple.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__plum.n.01,drupe.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+half__plum.n.01,"drupe.n.01,edible_fruit.n.01",1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__pomegranate.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__pomelo.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__potato.n.01,root_vegetable.n.01,1,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+half__potato.n.01,"root_vegetable.n.01,solanaceous_vegetable.n.01,starches.n.01",1,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__vidalia_onion.n.01,onion.n.03,1,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__watermelon.n.01,melon.n.01,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__zucchini.n.01,summer_squash.n.02,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
