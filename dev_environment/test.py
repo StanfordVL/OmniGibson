@@ -126,17 +126,30 @@ def main():
 
     # Don't work as reliably because robot wobbles on its wheels
     # test_grasp()
-    # test_place()
+    test_place()
 
     ############################
     # Random testing
     ############################
-    set_start_pose()
-    grasp_pose = ([-0.29866518, -0.79903033,  0.59277585], [0., 0.70710678, 0., 0.70710678])
-    nav_location = [-0.78219, -0.105526, -0.96194]
-    execute_controller(controller._navigate_if_needed(grasp_obj, pos_on_obj=grasp_pose[0]), env)
-    execute_controller(controller._move_hand(grasp_pose), env)
-    pause(2)
+    # set_start_pose()
+    # pose = controller._get_robot_pose_from_2d_pose([-0.0683838, -0.0908793, -1.8852])
+    # robot.set_position_orientation(pose[0], pose[1])
+    # pause(1)
+    # pose_2d = [1.32554, 0.100119, 1.81331]
+    # pose = controller._get_robot_pose_from_2d_pose(pose_2d)
+    # robot.set_position_orientation(pose[0], pose[1])
+    # pause(10)
+    # execute_controller(controller._navigate_to_pose(pose_2d), env)
+
+    # grasp_pose = ([-0.29866518, -0.79903033,  0.59277585], [0., 0.70710678, 0., 0.70710678])
+    # pose_2d = [-0.78219, -0.105526, -0.96194]
+    # # execute_controller(controller._navigate_if_needed(grasp_obj, pos_on_obj=grasp_pose[0]), env)
+    # print(controller._test_pose(pose_2d, pos_on_obj=grasp_pose[0]))
+    # execute_controller(controller._navigate_to_pose(pose_2d), env)
+    # yaw = T.quat2euler(robot.get_position_orientation()[1])[2]
+    # print(yaw)
+    # execute_controller(controller._move_hand(grasp_pose), env)
+    # pause(2)
 
 
 if __name__ == "__main__":
