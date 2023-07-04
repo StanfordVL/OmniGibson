@@ -164,7 +164,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         }
         self.arm = self.robot.default_arm
         self.robot_model = self.robot.model_name
-        self._set_joint_velocities()
+        self.robot_base_mass = self.robot._links["base_link"].mass
+        # self._set_joint_velocities()
 
     # Set joint velocities for the robots so they move at appropriate speeds.
     # Not speeding up joints because joint controller is position controller. Asking Josiah about this 
@@ -341,10 +342,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # Prepare data for the approach later.
             approach_pos = grasp_pose[0] + object_direction * GRASP_APPROACH_DISTANCE
             approach_pose = (approach_pos, grasp_pose[1])
-
+            print("approach_pose", approach_pose)
+            print("grasp_pose", grasp_pose)
             # If the grasp pose is too far, navigate.
             yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0])
-
             yield from self._move_hand(grasp_pose)
 
             # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
@@ -462,12 +463,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         return joint_pos, control_idx
 
     def _move_hand(self, target_pose):
+        self._fix_robot_base()
+        self._settle_robot()
         joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
 
         with UndoableContext(self.robot):
             plan = plan_arm_motion(
                 robot=self.robot,
-                obj_in_hand=self._get_obj_in_hand(),
                 end_conf=joint_pos
             )
 
@@ -477,12 +479,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 "Could not make a hand motion plan.",
                 {"target_pose": target_pose},
             )
-
+        
         # Follow the plan to navigate.
         indented_print("Plan has %d steps.", len(plan))
         for i, joint_pos in enumerate(plan):
             indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
             yield from self._move_hand_direct_joint(joint_pos, control_idx)
+        self._unfix_robot_base()
 
     def _move_hand_direct_joint(self, joint_pos, control_idx, stop_on_contact=False):
         action = self._empty_action()
@@ -843,7 +846,18 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         hand_in_obj = T.relative_pose_transform(*hand_in_world, *obj_in_world)
 
         # Now apply desired obj pose.
-        # desired_hand_pose = T.pose_transform(*hand_in_obj, *desired_pose)
         desired_hand_pose = T.pose_transform(*desired_pose, *hand_in_obj)
 
         return desired_hand_pose
+    
+    # Function that is particularly useful for Fetch, where it gives time for the base of robot to settle due to its uneven base.
+    def _settle_robot(self):
+        for _ in range(100):
+            og.sim.step()
+    
+    def _fix_robot_base(self):
+        self.robot_base_mass = self.robot._links['base_link'].mass
+        self.robot._links['base_link'].mass = 10000
+
+    def _unfix_robot_base(self):
+        self.robot._links['base_link'].mass = self.robot_base_mass

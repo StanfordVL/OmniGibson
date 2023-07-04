@@ -54,7 +54,7 @@ def main():
         scale = 0.3
     )
     og.sim.import_object(table)
-    table.set_position([1.0, 1.0, 0.58])
+    table.set_position([1.0, 1.0, 0.2])
 
     grasp_obj = DatasetObject(
         name="potato",
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--profile",
         action="store_true",
-        help="If set, profile code and generate prof file",
+        help="If set, profile code and generate .prof file",
     )
     args = parser.parse_args()
     if args.profile:

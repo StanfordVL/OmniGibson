@@ -122,13 +122,21 @@ def main():
     # Work more reliably
     # test_navigate_to_obj()
     # test_grasp_no_navigation()
-    test_grasp_replay_and_place()
+    # test_grasp_replay_and_place()
 
     # Don't work as reliably because robot wobbles on its wheels
     # test_grasp()
     # test_place()
 
-    pause(5)
+    ############################
+    # Random testing
+    ############################
+    set_start_pose()
+    grasp_pose = ([-0.29866518, -0.79903033,  0.59277585], [0., 0.70710678, 0., 0.70710678])
+    nav_location = [-0.78219, -0.105526, -0.96194]
+    execute_controller(controller._navigate_if_needed(grasp_obj, pos_on_obj=grasp_pose[0]), env)
+    execute_controller(controller._move_hand(grasp_pose), env)
+    pause(2)
 
 
 if __name__ == "__main__":
@@ -136,7 +144,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--profile",
         action="store_true",
-        help="If set, profile code and generate prof file",
+        help="If set, profile code and generate .prof file",
     )
     args = parser.parse_args()
     if args.profile:

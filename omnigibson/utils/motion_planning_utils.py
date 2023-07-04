@@ -79,7 +79,6 @@ def plan_base_motion(
 
 def plan_arm_motion(
     robot,
-    obj_in_hand,
     end_conf,
     planning_time = 100.0,
     **kwargs,
