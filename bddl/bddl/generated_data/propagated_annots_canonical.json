@@ -3562,7 +3562,9 @@
     "cookable": {},
     "freezable": {},
     "heatable": {},
+    "microPhysicalSubstance": {},
     "physicalSubstance": {},
+    "sliceable": {},
     "substance": {}
   },
   "beef_broth.n.01": {
@@ -17775,15 +17777,6 @@
   },
   "diced__avocado.n.01": {
     "cookable": {},
-    "freezable": {},
-    "heatable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
-  "diced__beef_roast.n.01": {
-    "cookable": {},
-    "flammable": {},
     "freezable": {},
     "heatable": {},
     "macroPhysicalSubstance": {},
@@ -33200,7 +33193,6 @@
   },
   "nutrient.n.02": {
     "boilable": {},
-    "cookable": {},
     "freezable": {},
     "heatable": {},
     "liquid": {},
@@ -37204,22 +37196,8 @@
   },
   "pome.n.01": {
     "cookable": {},
-    "disinfectable": {},
-    "dustyable": {},
     "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "mixable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
+    "heatable": {}
   },
   "pomegranate.n.02": {
     "disinfectable": {},

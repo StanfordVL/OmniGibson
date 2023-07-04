@@ -367,9 +367,6 @@
                                         "wine_bottle"
                                       ]
                                     }
-                                  ],
-                                  "categories": [
-                                    "bottle"
                                   ]
                                 },
                                 {
@@ -1813,9 +1810,6 @@
                                     "beaker"
                                   ]
                                 }
-                              ],
-                              "categories": [
-                                "cup"
                               ]
                             },
                             {
@@ -1928,9 +1922,6 @@
                                     "wooden_spoon"
                                   ]
                                 }
-                              ],
-                              "categories": [
-                                "spoon"
                               ]
                             },
                             {
@@ -3260,9 +3251,6 @@
                                             "pillar_candle"
                                           ]
                                         }
-                                      ],
-                                      "categories": [
-                                        "candle"
                                       ]
                                     },
                                     {
@@ -5603,9 +5591,6 @@
                                             "music_stool"
                                           ]
                                         }
-                                      ],
-                                      "categories": [
-                                        "stool"
                                       ]
                                     },
                                     {
@@ -6182,9 +6167,6 @@
                                         "volleyball"
                                       ]
                                     }
-                                  ],
-                                  "categories": [
-                                    "ball"
                                   ]
                                 },
                                 {
@@ -10070,9 +10052,6 @@
                                     "high_heel"
                                   ]
                                 }
-                              ],
-                              "categories": [
-                                "shoe"
                               ]
                             },
                             {
@@ -10144,9 +10123,6 @@
                                     "quilt"
                                   ]
                                 }
-                              ],
-                              "categories": [
-                                "bedding"
                               ]
                             },
                             {
@@ -10917,9 +10893,6 @@
                                         "stone_wall"
                                       ]
                                     }
-                                  ],
-                                  "categories": [
-                                    "fence"
                                   ]
                                 },
                                 {
@@ -11218,9 +11191,6 @@
                                         "statue"
                                       ]
                                     }
-                                  ],
-                                  "categories": [
-                                    "sculpture"
                                   ]
                                 }
                               ]
@@ -12034,9 +12004,6 @@
                                             "beaker"
                                           ]
                                         }
-                                      ],
-                                      "categories": [
-                                        "cup"
                                       ]
                                     }
                                   ]
@@ -12085,9 +12052,6 @@
                                             "wooden_spoon"
                                           ]
                                         }
-                                      ],
-                                      "categories": [
-                                        "spoon"
                                       ]
                                     },
                                     {
@@ -12704,9 +12668,6 @@
                                     "place_mat"
                                   ]
                                 }
-                              ],
-                              "categories": [
-                                "mat"
                               ]
                             },
                             {
@@ -13465,6 +13426,13 @@
                                           ]
                                         },
                                         {
+                                          "name": "half__plum.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_plum"
+                                          ]
+                                        },
+                                        {
                                           "name": "half__pomegranate.n.01",
                                           "hasModel": true,
                                           "categories": [
@@ -13587,6 +13555,20 @@
                                           "hasModel": true,
                                           "categories": [
                                             "apple"
+                                          ]
+                                        },
+                                        {
+                                          "name": "diced__apple.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "diced__apple"
+                                          ]
+                                        },
+                                        {
+                                          "name": "half__apple.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_apple"
                                           ]
                                         },
                                         {
@@ -13808,9 +13790,6 @@
                             "whiskey_stone"
                           ]
                         }
-                      ],
-                      "categories": [
-                        "rock"
                       ]
                     },
                     {
@@ -15030,9 +15009,6 @@
                                             "toilet_soap"
                                           ]
                                         }
-                                      ],
-                                      "categories": [
-                                        "soap"
                                       ]
                                     },
                                     {
@@ -16225,9 +16201,6 @@
                                     "whole_milk"
                                   ]
                                 }
-                              ],
-                              "categories": [
-                                "milk"
                               ]
                             },
                             {
@@ -16393,6 +16366,13 @@
                                 "tea"
                               ]
                             }
+                          ]
+                        },
+                        {
+                          "name": "cooked__water.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "cooked__water"
                           ]
                         },
                         {
@@ -17639,10 +17619,31 @@
                               ]
                             },
                             {
+                              "name": "cooked__diced__potato.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "cooked__diced__potato"
+                              ]
+                            },
+                            {
+                              "name": "diced__potato.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "diced__potato"
+                              ]
+                            },
+                            {
                               "name": "french_fries.n.02",
                               "hasModel": true,
                               "categories": [
                                 "french_fries"
+                              ]
+                            },
+                            {
+                              "name": "half__potato.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "half_potato"
                               ]
                             },
                             {
@@ -17985,9 +17986,6 @@
                                     "whole_milk"
                                   ]
                                 }
-                              ],
-                              "categories": [
-                                "milk"
                               ]
                             },
                             {
@@ -18674,9 +18672,6 @@
                                         "hard_candy"
                                       ]
                                     }
-                                  ],
-                                  "categories": [
-                                    "candy"
                                   ]
                                 },
                                 {
@@ -18962,9 +18957,6 @@
                                 "whole_milk"
                               ]
                             }
-                          ],
-                          "categories": [
-                            "milk"
                           ]
                         },
                         {
@@ -19640,6 +19632,26 @@
                   ]
                 },
                 {
+                  "name": "nutrient.n.02",
+                  "hasModel": true,
+                  "children": [
+                    {
+                      "name": "cooked__water.n.01",
+                      "hasModel": true,
+                      "categories": [
+                        "cooked__water"
+                      ]
+                    },
+                    {
+                      "name": "water.n.06",
+                      "hasModel": true,
+                      "categories": [
+                        "water"
+                      ]
+                    }
+                  ]
+                },
+                {
                   "name": "lubricant.n.01",
                   "hasModel": true,
                   "categories": [
@@ -19658,19 +19670,6 @@
                           "name": "vaseline.n.01",
                           "hasModel": true
                         }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "nutrient.n.02",
-                  "hasModel": true,
-                  "children": [
-                    {
-                      "name": "water.n.06",
-                      "hasModel": true,
-                      "categories": [
-                        "water"
                       ]
                     }
                   ]
@@ -20472,6 +20471,13 @@
                               ]
                             },
                             {
+                              "name": "half__plum.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "half_plum"
+                              ]
+                            },
+                            {
                               "name": "half__pomegranate.n.01",
                               "hasModel": true,
                               "categories": [
@@ -20803,6 +20809,20 @@
                                   ]
                                 },
                                 {
+                                  "name": "cooked__diced__potato.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "cooked__diced__potato"
+                                  ]
+                                },
+                                {
+                                  "name": "diced__potato.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "diced__potato"
+                                  ]
+                                },
+                                {
                                   "name": "eggplant.n.01",
                                   "hasModel": true,
                                   "categories": [
@@ -20814,6 +20834,13 @@
                                   "hasModel": true,
                                   "categories": [
                                     "half_eggplant"
+                                  ]
+                                },
+                                {
+                                  "name": "half__potato.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_potato"
                                   ]
                                 },
                                 {
@@ -21653,13 +21680,6 @@
                               "hasModel": true,
                               "categories": [
                                 "ground_beef"
-                              ]
-                            },
-                            {
-                              "name": "diced__beef_roast.n.01",
-                              "hasModel": true,
-                              "categories": [
-                                "diced__beef_roast"
                               ]
                             }
                           ]
@@ -23309,9 +23329,6 @@
                                                 "toilet_soap"
                                               ]
                                             }
-                                          ],
-                                          "categories": [
-                                            "soap"
                                           ]
                                         },
                                         {
@@ -24504,9 +24521,6 @@
                                         "whole_milk"
                                       ]
                                     }
-                                  ],
-                                  "categories": [
-                                    "milk"
                                   ]
                                 },
                                 {
@@ -24672,6 +24686,13 @@
                                     "tea"
                                   ]
                                 }
+                              ]
+                            },
+                            {
+                              "name": "cooked__water.n.01",
+                              "hasModel": true,
+                              "categories": [
+                                "cooked__water"
                               ]
                             },
                             {
@@ -24959,9 +24980,6 @@
                     "signpost"
                   ]
                 }
-              ],
-              "categories": [
-                "sign"
               ]
             },
             {
@@ -25797,9 +25815,6 @@
                                 "statue"
                               ]
                             }
-                          ],
-                          "categories": [
-                            "sculpture"
                           ]
                         }
                       ]
