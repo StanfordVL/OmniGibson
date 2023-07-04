@@ -39,14 +39,10 @@ def sanity_check_category_synset():
     modifiers = [f"{state}__" for state in ["cooked", "half", "diced"]]
     known_exceptions = {"coconut.n.01"}
 
-    incorrect_count = 0
     for category, synset in CATEGORY_TO_SYNSET.items():
         assert category != ""
         assert synset != ""
-        if not synset in SYNSET_TO_PROPERTY:
-            print(f"synset {synset} not in synset_property.csv")
-            incorrect_count += 1
-    # assert incorrect_count == 31, "Exactly 31 non-leaf synsets should appear in category mapping."
+        assert synset in SYNSET_TO_PROPERTY, f"synset {synset} not in synset_property.csv"
 
     for synset, properties in SYNSET_TO_PROPERTY.items():
         assert synset != ""
@@ -77,8 +73,7 @@ def sanity_check_category_synset():
 
         for modifier in modifiers:
             if modifier in synset:
-                # assert len(properties["hypernyms"].split(",")) == 1
-                synset_parent = properties["hypernyms"].split(",")[0]
+                synset_parents = set(properties["hypernyms"].split(","))
 
                 # cooked__batter.n.01 -> batter.n.01
                 base_synset = synset
@@ -94,11 +89,11 @@ def sanity_check_category_synset():
                     break
 
                 base_synset = synset_candidates[index]
-                base_synset_parent = SYNSET_TO_PROPERTY[base_synset]["hypernyms"].split(",")[0]
+                base_synset_parents = set(SYNSET_TO_PROPERTY[base_synset]["hypernyms"].split(","))
 
                 # The cooked/diced/half version should share the same parent as the base version.
-                assert base_synset_parent == synset_parent or base_synset in known_exceptions, \
-                    f"base synset {base_synset} of synset {synset} has parent {base_synset_parent} but synset parent is {synset_parent}"
+                assert base_synset_parents == synset_parents or base_synset in known_exceptions, \
+                    f"base synset {base_synset} of synset {synset} has parent {base_synset_parents} but synset parent is {synset_parents}"
 
                 break
 
