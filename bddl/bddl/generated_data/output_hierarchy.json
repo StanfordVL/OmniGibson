@@ -4846,8 +4846,14 @@
                                     {
                                       "name": "bat.n.05",
                                       "hasModel": true,
-                                      "categories": [
-                                        "baseball_bat"
+                                      "children": [
+                                        {
+                                          "name": "baseball_bat.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "baseball_bat"
+                                          ]
+                                        }
                                       ]
                                     }
                                   ]
@@ -5971,6 +5977,13 @@
                                       "hasModel": true,
                                       "categories": [
                                         "baseball"
+                                      ]
+                                    },
+                                    {
+                                      "name": "baseball_bat.n.01",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "baseball_bat"
                                       ]
                                     },
                                     {
@@ -12490,10 +12503,31 @@
                           ]
                         },
                         {
+                          "name": "toy_car.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "toy_car"
+                          ]
+                        },
+                        {
+                          "name": "toy_dice.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "toy_dice"
+                          ]
+                        },
+                        {
                           "name": "toy_figure.n.01",
                           "hasModel": true,
                           "categories": [
                             "toy_figure"
+                          ]
+                        },
+                        {
+                          "name": "beach_toy.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "beach_toy"
                           ]
                         },
                         {
@@ -12502,10 +12536,14 @@
                           "categories": [
                             "toy_train"
                           ]
+                        },
+                        {
+                          "name": "alphabet_abacus.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "alphabet_abacus"
+                          ]
                         }
-                      ],
-                      "categories": [
-                        "toy"
                       ]
                     },
                     {

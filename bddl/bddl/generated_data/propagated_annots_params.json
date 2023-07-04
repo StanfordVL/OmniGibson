@@ -769,6 +769,26 @@
         "physicalSubstance": {},
         "substance": {}
     },
+    "alphabet_abacus.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "heat_temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "aluminum.n.01": {
         "disinfectable": {},
         "dustyable": {},
@@ -3577,6 +3597,26 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "baseball_bat.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "heat_temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "baseball_cap.n.01": {
         "disinfectable": {},
         "dustyable": {},
@@ -4030,6 +4070,26 @@
         "rustable": {},
         "scratchable": {},
         "sliceable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "beach_toy.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "heat_temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -57417,8 +57477,47 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "toy_car.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "heat_temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "toy_dice.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "heat_temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "toy_figure.n.01": {
-        "breakable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
