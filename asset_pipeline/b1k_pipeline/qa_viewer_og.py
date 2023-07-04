@@ -1,14 +1,13 @@
 import logging
+import multiprocessing
 import os
 import json
 import sys
 import nltk
 import numpy as np
 import csv
-import shutil
-from IPython import embed
 import networkx as nx
-import webbrowser
+import sys
 
 nltk.download('wordnet')
 nltk.download('omw-1.4')
@@ -17,14 +16,6 @@ from nltk.corpus import wordnet as wn
 from bddl.object_taxonomy import ObjectTaxonomy
 from b1k_pipeline.utils import PIPELINE_ROOT
 
-import omnigibson as og
-from omnigibson.macros import gm
-from omnigibson.utils.asset_utils import (
-    get_all_object_categories,
-    get_all_object_category_models,
-)
-from omnigibson.objects.dataset_object import DatasetObject
-import omnigibson.utils.transform_utils as T
 
 # Mapping from object model name (e.g. apple-xyzabc) to the source 3dsmax file.
 INVENTORY_PATH = PIPELINE_ROOT / "artifacts/pipeline/object_inventory.json"
@@ -180,25 +171,16 @@ def sanity_check_category_synset():
                     assert properties["particleSource"] == "0", f"Custom synset {synset} with __xyz should not be particleSource"
 
 
-def step_sim(obj):
-    target_pos = np.array([0.0, 0.0, 1.0])
-
-    obj.set_orientation([0, 0, 0, 1])
-    center_offset = obj.get_position() - obj.aabb_center
-
-    steps = 600
-    steps_per_joint = steps // 6
-    for i in range(steps):
-        quat = T.euler2quat([0, 0, 2 * np.pi * i / steps])
-        pos = T.quat2mat(quat) @ center_offset + target_pos
-        obj.set_position_orientation(pos, quat)
-        if obj.n_dof > 0:
-            frac = (i % steps_per_joint) / steps_per_joint
-            j_frac = -1.0 + 2.0 * frac if (i // steps_per_joint) % 2 == 0 else 1.0 - 2.0 * frac
-            obj.set_joint_positions(positions=j_frac * np.ones(obj.n_dof), normalized=True, drive=False)
-        og.sim.step()
-
 def main(dataset_path, record_path):
+    import omnigibson as og
+    from omnigibson.macros import gm
+    from omnigibson.utils.asset_utils import (
+        get_all_object_categories,
+        get_all_object_category_models,
+    )
+    from omnigibson.objects.dataset_object import DatasetObject
+    import omnigibson.utils.transform_utils as T
+
     gm.DATASET_PATH = dataset_path
 
     sanity_check_category_synset()
@@ -238,8 +220,8 @@ def main(dataset_path, record_path):
             name=obj_model,
             category=obj_category,
             model=obj_model,
-            visual_only=True,
             position=[0, 0, 10.0],
+            fixed_base=True,
         )
 
         og.sim.import_object(obj)
@@ -253,54 +235,99 @@ def main(dataset_path, record_path):
         )
         og.sim.enable_viewer_camera_teleoperation()
 
-        step_sim(obj)
+        # Get all the questions
+        messages = get_questions(obj)
 
-        user_complained_synset(obj)
-        user_complained_bbox(obj)
-        user_complained_appearance(obj)
-        user_complained_collision(obj)
-        user_complained_articulation(obj)
+        # Launch the complaint thread
+        complaint_process = multiprocessing.Process(
+            target=process_object_complaints,
+            args=[obj.category, obj.name, messages, record_path, sys.stdin.fileno()],
+            daemon=True)
+        complaint_process.start()
 
-        synset, properties = get_synset_and_properties(obj.category)
-        if properties["objectType"] in ["rope", "cloth"]:
-            user_complained_cloth(obj)
+        # Keep simulating until the thread is done
+        while complaint_process.is_alive():
+            target_pos = np.array([0.0, 0.0, 1.0])
 
-        # user_complained_metas(obj)
+            obj.set_orientation([0, 0, 0, 1])
+            center_offset = obj.get_position() - obj.aabb_center
 
-        with open(record_path, "w") as f:
-            processed_objs.add((obj_category, obj_model))
-            json.dump(sorted(processed_objs), f)
+            steps = 600
+            steps_per_joint = steps // 6
+            for i in range(steps):
+                quat = T.euler2quat([0, 0, 2 * np.pi * i / steps])
+                pos = T.quat2mat(quat) @ center_offset + target_pos
+                obj.set_position_orientation(pos, quat)
+                if obj.n_dof > 0:
+                    frac = (i % steps_per_joint) / steps_per_joint
+                    j_frac = -1.0 + 2.0 * frac if (i // steps_per_joint) % 2 == 0 else 1.0 - 2.0 * frac
+                    obj.set_joint_positions(positions=j_frac * np.ones(obj.n_dof), normalized=True, drive=False)
+                og.sim.step()
+                og.sim.render()
 
+        # Join the finished thread
+        complaint_process.join()
+        assert complaint_process.exitcode == 0, "Complaint process exited."
+
+        # Remove the object and move on
         og.sim.remove_object(obj)
 
     og.shutdown()
 
-def process_complaint(message, obj):
+def get_questions(obj):
+    messages = [
+        user_complained_synset(obj),
+        user_complained_bbox(obj),
+        user_complained_appearance(obj),
+        user_complained_collision(obj),
+        user_complained_articulation(obj),
+    ]
+
+    _, properties = get_synset_and_properties(obj.category)
+    if properties["objectType"] in ["rope", "cloth"]:
+        messages.append(user_complained_cloth(obj))
+
+    # messages.append(user_complained_metas(_obj))
+    return messages
+
+def process_object_complaints(category, model, messages, record_path, stdin_fileno):
+    # Open stdin so that we can read from it
+    sys.stdin = os.fdopen(stdin_fileno)
+
+    for m in messages:
+        process_complaint(m, category, model)
+
+    processed_objs = set()
+    if os.path.exists(record_path):
+        with open(record_path, "r") as f:
+            processed_objs = set(json.load(f))
+    processed_objs.add((category, model))
+    with open(record_path, "w") as f:
+        json.dump(sorted(processed_objs), f)
+
+def process_complaint(message, category, model):
     print(message)
     while True:
-        response = input("Do you think anything is wrong? Enter a complaint (hit enter if all's good, enter s if you want to take a few more sim steps): ")
-        if response == "s":
-            step_sim(obj)
-        else:
-            if response:
-                obj_key = f"{obj.category}-{obj.name}"
-                complaint = {
-                    "object": obj_key,
-                    "message": message,
-                    "complaint": response,
-                    "processed": False
-                }
-                target_name = INVENTORY_DICT[obj_key]
+        response = input("Do you think anything is wrong? Enter a complaint (hit enter if all's good): ")
+        if response:
+            obj_key = f"{category}-{model}"
+            complaint = {
+                "object": obj_key,
+                "message": message,
+                "complaint": response,
+                "processed": False
+            }
+            target_name = INVENTORY_DICT[obj_key]
 
-                complaints_file = PIPELINE_ROOT / "cad" / target_name / "complaints.json"
-                complaints = []
-                if os.path.exists(complaints_file):
-                    with open(complaints_file, "r") as f:
-                        complaints = json.load(f)
-                complaints.append(complaint)
-                with open(complaints_file, "w") as f:
-                    json.dump(complaints, f, indent=4)
-            break
+            complaints_file = PIPELINE_ROOT / "cad" / target_name / "complaints.json"
+            complaints = []
+            if os.path.exists(complaints_file):
+                with open(complaints_file, "r") as f:
+                    complaints = json.load(f)
+            complaints.append(complaint)
+            with open(complaints_file, "w") as f:
+                json.dump(complaints, f, indent=4)
+        break
 
 
 def get_synset_and_properties(category):
@@ -334,7 +361,7 @@ def user_complained_synset(obj):
         "If the object category is wrong, please add this object to the Object Rename tab.\n"
         "If the object synset is empty or wrong, please modify the Object Category Mapping tab."
     )
-    process_complaint(message, obj)
+    return message
 
 def user_complained_bbox(obj):
     original_bounding_box = obj.aabb_extent / obj.scale
@@ -345,7 +372,7 @@ def user_complained_bbox(obj):
         "Press Enter if the size is good. Otherwise, enter the scaling factor you want to apply to the object.\n"
         "2 means the object should be scaled 2x larger and 0.5 means the object should be shrinked to half."
     )
-    process_complaint(message, obj)
+    return message
 
 def user_complained_appearance(obj):
     message = (
@@ -355,7 +382,7 @@ def user_complained_appearance(obj):
         "- make sure the object has a valid texture or appearance (e.g. texture not black, transparency rendered correctly, etc).\n"
         "- make sure the object has all parts necessary."
     )
-    process_complaint(message, obj)
+    return message
 
 def user_complained_collision(obj):
     message = (
@@ -364,19 +391,7 @@ def user_complained_collision(obj):
         "- make sure the collision meshes well approximate the original visual meshes\n"
         "- make sure the collision meshes don't lose any affordance (e.g. holes and handles are preserved)."
     )
-    for link in obj.links.values():
-        for visual_mesh in link.visual_meshes.values():
-            visual_mesh.purpose = "guide"
-        for collision_mesh in link.collision_meshes.values():
-            collision_mesh.purpose = "default"
-    process_complaint(message, obj)
-    for link in obj.links.values():
-        for visual_mesh in link.visual_meshes.values():
-            visual_mesh.purpose = "default"
-        for collision_mesh in link.collision_meshes.values():
-            collision_mesh.purpose = "guide"
-    for _ in range(3):
-        og.sim.render()
+    return message
 
 
 def user_complained_articulation(obj):
@@ -386,14 +401,14 @@ def user_complained_articulation(obj):
         message += f"- {j_name}, {j.joint_type}\n"
     message += "Verify that these are all the moving parts you expect from this object\n"
     message += "and that the joint limits look reasonable."
-    process_complaint(message, obj)
+    return message
 
 
 def user_complained_cloth(obj):
     message = (
         "Confirm the default state of the rope/cloth object is unfolded."
     )
-    process_complaint(message, obj)
+    return message
 
 # TODO: after metalinks are added to the USD with the final format, add a check for them here.
 def user_complained_metas(obj):
@@ -405,7 +420,7 @@ def user_complained_metas(obj):
     for meta_link in meta_links:
         message += f"- {meta_link}\n"
     message += "\nMake sure these match mechanisms you expect from this object."
-    process_complaint(message, obj)
+    return message
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
