@@ -5,6 +5,7 @@ import omnigibson as og
 import numpy as np
 import omnigibson.utils.transform_utils as T
 from scipy.spatial.transform import Rotation as R
+from omnigibson.utils.geometry_utils import get_particle_positions_from_frame
 
 
 def sample_stable_orientations(obj, n_samples=10, drop_aabb_offset=0.1):
@@ -75,7 +76,27 @@ def compute_native_bbox_extent(obj):
 
 
 def compute_base_aligned_bboxes(obj):
-    pass
+    link_bounding_boxes = {}
+    for link_name, link in obj.links.items():
+        link_bounding_boxes[link_name] = {}
+        for mesh_type, mesh_list in zip(("collision", "visual"), (link.collision_meshes, link.visual_meshes)):
+            pts_in_link_frame = []
+            for mesh_name, mesh in mesh_list.items():
+                pts = mesh.get_attribute("points")
+                local_pos, local_orn = mesh.get_local_pose()
+                pts_in_link_frame.append(get_particle_positions_from_frame(local_pos, local_orn, mesh.scale, pts))
+            pts_in_link_frame = np.concatenate(pts_in_link_frame, axis=0)
+            max_pt = np.max(pts_in_link_frame, axis=0)
+            min_pt = np.min(pts_in_link_frame, axis=0)
+            extent = max_pt - min_pt
+            center = (max_pt + min_pt) / 2.0
+            transform = T.pose2mat((center, np.array([0, 0, 0, 1.0])))
+            print(pts_in_link_frame.shape)
+            link_bounding_boxes[link_name][mesh_type] = {
+                "extent": extent,
+                "transform": transform,
+            }
+    return link_bounding_boxes
 
 
 def compute_obj_kinematic_metadata(obj):
