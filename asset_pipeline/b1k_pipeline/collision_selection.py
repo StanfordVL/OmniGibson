@@ -53,7 +53,7 @@ def load_mesh(mesh_fs, mesh_fn, index, offset=None, scale=None):
 
     hulls = [m]
     if index != 0:
-        hulls = m.split(only_watertight=True)
+        hulls = m.split(only_watertight=False)
 
     # Apply a different color to each part
     cmap = plt.get_cmap('hsv')

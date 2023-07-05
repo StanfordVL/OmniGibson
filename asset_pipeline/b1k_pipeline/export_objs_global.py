@@ -159,6 +159,8 @@ def compute_mesh_stable_poses(mesh):
     return trimesh.poses.compute_stable_poses(mesh, n_samples=5, threshold=0.03)
 
 def compute_stable_poses(G, root_node):
+    return []
+
     # First assemble a complete collision mesh
     all_link_meshes = []
     for link_node in nx.dfs_preorder_nodes(G, root_node):

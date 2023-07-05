@@ -197,6 +197,12 @@ def process_object_with_option(m, out_fs, option_name, option_fn, dask_client):
     reduced_submeshes = [convexify_and_reduce(submesh, dask_client) for submesh in submeshes]
     final_mesh = trimesh.util.concatenate(reduced_submeshes)
 
+    resplit_submeshes = final_mesh.split()
+    assert len(resplit_submeshes) > 0, f"{option_name} c&r returned no submeshes"
+    assert len(resplit_submeshes) <= 32, f"{option_name} c&r returned too many submeshes"
+    resplit_non_wt_submeshes = final_mesh.split(only_watertight=False)
+    assert len(resplit_non_wt_submeshes) == len(resplit_submeshes), f"{option_name} c&r returned non-watertight submeshes"
+
     # Save the result
     save_mesh(final_mesh, out_fs, f"{option_name}.obj")
 
