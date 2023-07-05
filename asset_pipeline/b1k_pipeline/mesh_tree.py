@@ -39,6 +39,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
 
     # Open the mesh filesystems
     mesh_fs = ZipFS(target_output_fs.open("meshes.zip", "rb"))
+    print("Trying to open zip file in ", target_output_fs.getsyspath("collision_meshes.zip"))
     collision_mesh_fs = ZipFS(target_output_fs.open("collision_meshes.zip", "rb"))
 
     pbar = tqdm.tqdm(mesh_list) if show_progress else mesh_list
@@ -134,13 +135,18 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
                     collision_mesh = load_mesh(mesh_dir, collision_filename, process=False, force="mesh", skip_materials=True)
                     collision_mesh.apply_transform(SCALE_MATRIX)
                     G.nodes[node_key]["collision_mesh"] = collision_mesh
+                    G.nodes[node_key]["manual_collision_filename"] = collision_filename
                 elif mesh_name:
                     # Try to load a collision mesh selection
                     collision_key = (obj_model, link_name)
                     if collision_key in collision_selections:
                         collision_selection = collision_selections[collision_key]
+                        G.nodes[node_key]["collision_selection"] = collision_selection
+                        
                         try:
-                            collision_mesh = load_mesh(collision_mesh_fs.opendir(mesh_name), collision_selection + ".obj", process=False, force="mesh", skip_materials=True)
+                            collision_dir = collision_mesh_fs.opendir(mesh_name)
+                            G.nodes[node_key]["collision_options"] = collision_dir.listdir("/")
+                            collision_mesh = load_mesh(collision_dir, collision_selection + ".obj", process=False, force="mesh", skip_materials=True)
                             collision_mesh.apply_transform(SCALE_MATRIX)
                             G.nodes[node_key]["collision_mesh"] = collision_mesh
                         except:

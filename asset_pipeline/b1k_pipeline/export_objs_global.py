@@ -159,8 +159,6 @@ def compute_mesh_stable_poses(mesh):
     return trimesh.poses.compute_stable_poses(mesh, n_samples=5, threshold=0.03)
 
 def compute_stable_poses(G, root_node):
-    return []
-
     # First assemble a complete collision mesh
     all_link_meshes = []
     for link_node in nx.dfs_preorder_nodes(G, root_node):
@@ -206,8 +204,9 @@ def compute_link_aligned_bounding_boxes(G, root_node):
         # Get the pose and transform it
         for key in ["collision", "visual"]:
             try:
+                mesh = G.nodes[link_node]["visual_mesh"] if key == "visual" else G.nodes[link_node]["canonical_collision_mesh"]
                 link_bounding_boxes[link_name][key] = get_bbox_data_for_mesh(
-                    transform_mesh(G.nodes[link_node][key + "_mesh"], -G.nodes[link_node]["mesh_in_link_frame"], [0, 0, 0, 1]))
+                    transform_mesh(mesh, -G.nodes[link_node]["mesh_in_link_frame"], [0, 0, 0, 1]))
             except Exception as e:
                 print(f"Problem with {obj_cat}-{obj_model} link {link_name}: {str(e)}")
 

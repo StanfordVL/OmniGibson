@@ -21,7 +21,7 @@ from fs.zipfs import ZipFS
 
 from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh, launch_cluster
 
-GENERATE_SELECTED_ONLY = True
+GENERATE_SELECTED_ONLY = False
 VHACD_EXECUTABLE = "TestVHACD"
 COACD_SCRIPT_PATH = "coacd"
 
@@ -190,6 +190,8 @@ def convexify_and_reduce(m, dask_client):
 def process_object_with_option(m, out_fs, option_name, option_fn, dask_client):
     # Run the option
     submeshes = option_fn(m, dask_client)
+    assert len(submeshes) > 0, f"{option_name} returned no submeshes"
+    assert len(submeshes) <= 32, f"{option_name} returned too many submeshes"
 
     # Convexify and reduce each submesh
     reduced_submeshes = [convexify_and_reduce(submesh, dask_client) for submesh in submeshes]
@@ -210,20 +212,23 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
     in_hash = target_fs.hash("meshes.zip", "md5")
 
     # Compare it to the saved hash if one exists.
-    if target_fs.exists("collision_meshes.zip"):
-        with target_fs.open("collision_meshes.zip", "rb") as out_zip, \
-            ZipFS(out_zip) as collision_mesh_archive_fs:
-            if collision_mesh_archive_fs.exists("hash.txt"):
-                with collision_mesh_archive_fs.open("hash.txt", "r") as f:
-                    out_hash = f.read()
+    try:
+        if target_fs.exists("collision_meshes.zip"):
+            with target_fs.open("collision_meshes.zip", "rb") as out_zip, \
+                ZipFS(out_zip) as collision_mesh_archive_fs:
+                if collision_mesh_archive_fs.exists("hash.txt"):
+                    with collision_mesh_archive_fs.open("hash.txt", "r") as f:
+                        out_hash = f.read()
+                    
+                    # Return if the hash has not changed.
+                    # if in_hash + script_hash == out_hash:
+                    if out_hash.startswith(in_hash):
+                        print(target, "already processed, skipping.")
+                        return
+    except:
+        pass
                 
-                # Return if the hash has not changed.
-                # if in_hash + script_hash == out_hash:
-                if out_hash.startswith(in_hash):
-                    print(target, "already processed, skipping.")
-                    return
-                
-                print(f"Reprocessing {target} due to hash mismatch.")
+    print(f"Reprocessing {target} due to hash mismatch or missing file.")
 
     with target_fs.open("meshes.zip", "rb") as in_zip, \
          target_fs.open("collision_meshes.zip", "wb") as out_zip:
@@ -291,7 +296,7 @@ def main():
         # dask_client = Client(sys.argv[1]) # + ":35423")
         dask_client = launch_cluster(16)
         
-        with futures.ThreadPoolExecutor(max_workers=5) as target_executor, futures.ThreadPoolExecutor(max_workers=100) as mesh_executor:
+        with futures.ThreadPoolExecutor(max_workers=8) as target_executor, futures.ThreadPoolExecutor(max_workers=200) as mesh_executor:
             targets = get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[target_executor.submit(process_target, target, pipeline_fs, mesh_executor, dask_client)] = target
