@@ -12,6 +12,11 @@ from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.utils.python_utils import assert_valid_key, merge_nested_dicts, create_class_from_registry_and_config,\
     Recreatable
 
+from omnigibson.utils.python_utils import assert_valid_key, merge_nested_dicts, create_class_from_registry_and_config,\
+    Recreatable
+
+import time
+
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -57,6 +62,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._task = None
         self._loaded = None
         self._current_episode = 0
+
+        self._prev_sim_end_ts = 0
+        self._cur_sim_start_ts = 0
 
         # Variables reset at the beginning of each episode
         self._current_step = 0
@@ -364,7 +372,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """
         info["episode_length"] = self._current_step
 
-    def step(self, action):
+    def step(self, action, time_step=False):
         """
         Apply robot's action and return the next state, reward, done and info,
         following OpenAI Gym's convention
@@ -403,8 +411,15 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # Grab observations
         obs = self.get_obs()
 
+        if time_step:
+            self._cur_sim_start_ts = time.clock()
+
         # Grab reward, done, and info, and populate with internal info
         reward, done, info = self.task.step(self, action)
+
+        if time_step:
+            self._prev_sim_end_ts = time.clock()
+
         self._populate_info(info)
 
         if done and self._automatic_reset:
@@ -423,6 +438,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """
         self._current_episode += 1
         self._current_step = 0
+        self._prev_sim_end_ts = 0
+        self._cur_sim_start_ts = 0
+
 
     # TODO: Match super class signature?
     def reset(self):
@@ -452,6 +470,16 @@ class Environment(gym.Env, GymObservable, Recreatable):
             raise ValueError("Observation space does not match returned observations!")
 
         return obs
+
+    @property
+    def wall_time_step(self):
+        """
+        Returns:
+            int: wall clock step duration 
+        """
+        if self._prev_sim_end_ts == 0 or self._cur_sim_start_ts == 0:
+            return 0 
+        return self._cur_sim_start_ts - self._prev_sim_end_ts
 
     @property
     def episode_steps(self):

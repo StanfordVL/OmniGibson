@@ -43,3 +43,13 @@ class PredicateGoal(SuccessCondition):
                 of the predicates matching either of those conditions
         """
         return self._goal_status
+
+
+    @property
+    def partial_success(self):
+        """
+        Returns:
+            float: partial success if supposed, -1.0 otherwise 
+        """
+        assert self._done is not None, "At least one step() must occur before partial_success can be calculated!"
+        return len(satisfied) / (len(satisfied) + len(unsatisfied))
