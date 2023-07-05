@@ -68,20 +68,6 @@ def main():
     grasp_obj.set_position([-0.3, -0.8, 0.5])
     og.sim.step()
 
-    marker = PrimitiveObject(
-        prim_path=f"/World/marker",
-        name="marker",
-        primitive_type="Sphere",
-        radius=0.03,
-        visual_only=True,
-        rgba=[1.0, 0, 0, 1.0],
-    )
-    og.sim.import_object(marker)
-    marker.set_position([1.40287, 0.113639, 0.5])
-    og.sim.step()
-    scene = env.scene
-    robot = env.robots[0]
-
     controller = StarterSemanticActionPrimitives(None, scene, robot)
 
     # Need to set start pose because default tuck pose for Fetch collides with itself
