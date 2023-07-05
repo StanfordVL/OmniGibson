@@ -13,6 +13,7 @@ import time
 import os
 import argparse
     
+from omnigibson.objects import PrimitiveObject
 
 def pause(time):
     for _ in range(int(time*100)):
@@ -62,9 +63,24 @@ def main():
         model="lyipur",
         scale=0.01
     )
+
     og.sim.import_object(grasp_obj)
     grasp_obj.set_position([-0.3, -0.8, 0.5])
     og.sim.step()
+
+    marker = PrimitiveObject(
+        prim_path=f"/World/marker",
+        name="marker",
+        primitive_type="Sphere",
+        radius=0.03,
+        visual_only=True,
+        rgba=[1.0, 0, 0, 1.0],
+    )
+    og.sim.import_object(marker)
+    marker.set_position([1.40287, 0.113639, 0.5])
+    og.sim.step()
+    scene = env.scene
+    robot = env.robots[0]
 
     controller = StarterSemanticActionPrimitives(None, scene, robot)
 
@@ -103,7 +119,8 @@ def main():
         execute_controller(controller.grasp(grasp_obj), env)
 
     def test_grasp():
-        set_start_pose()
+        # set_start_pose()
+        execute_controller(controller._reset_hand(), env)
         execute_controller(controller.grasp(grasp_obj), env)
 
     def test_place():
@@ -124,32 +141,56 @@ def main():
     # test_grasp_no_navigation()
     # test_grasp_replay_and_place()
 
+
+    def set_joint_positions(i, val):
+        control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["0"]])
+        reset_pose_fetch = np.array(
+            [
+                0.0,
+                0.0,  # wheels
+                0.0,  # trunk
+                0.0,
+                0.0,
+                0.0,  # head
+                -1.0,
+                1.53448,
+                1.46076,
+                0.0,
+                1.36904,
+                1.90996,  # arm
+                0.05,
+                0.05,  # gripper
+            ]
+        )
+        actual_i = control_idx[i]
+        # print(actual_i)
+        reset_pose_fetch[actual_i] = val
+        robot.set_joint_positions(reset_pose_fetch)
+        og.sim.step()
+        pause(2)
+    
+    # from IPython import embed; embed()
     # Don't work as reliably because robot wobbles on its wheels
+    # execute_controller(controller._reset_hand(), env)
+    # pause(10)
     # test_grasp()
-    test_place()
+    # 1.40287 0.113639 2.06657
+    # test_place()
 
     ############################
     # Random testing
     ############################
-    # set_start_pose()
-    # pose = controller._get_robot_pose_from_2d_pose([-0.0683838, -0.0908793, -1.8852])
-    # robot.set_position_orientation(pose[0], pose[1])
-    # pause(1)
-    # pose_2d = [1.32554, 0.100119, 1.81331]
+    # execute_controller(controller._reset_hand(), env)
+    # pose_2d = [1.40287, 0.113639, 2.06657]
+    # robot.tuck()
+    # og.sim.step()
+    pose_2d = [1.00287, 1.013639, 0.0]
+    pose_2d = [0.6345406548990742, -0.5249127119737239, -2.8566302473196963]
+    og.sim.step()
     # pose = controller._get_robot_pose_from_2d_pose(pose_2d)
+    execute_controller(controller._navigate_to_pose_direct(pose_2d), env)
     # robot.set_position_orientation(pose[0], pose[1])
-    # pause(10)
-    # execute_controller(controller._navigate_to_pose(pose_2d), env)
-
-    # grasp_pose = ([-0.29866518, -0.79903033,  0.59277585], [0., 0.70710678, 0., 0.70710678])
-    # pose_2d = [-0.78219, -0.105526, -0.96194]
-    # # execute_controller(controller._navigate_if_needed(grasp_obj, pos_on_obj=grasp_pose[0]), env)
-    # print(controller._test_pose(pose_2d, pos_on_obj=grasp_pose[0]))
-    # execute_controller(controller._navigate_to_pose(pose_2d), env)
-    # yaw = T.quat2euler(robot.get_position_orientation()[1])[2]
-    # print(yaw)
-    # execute_controller(controller._move_hand(grasp_pose), env)
-    # pause(2)
+    pause(10)
 
 
 if __name__ == "__main__":

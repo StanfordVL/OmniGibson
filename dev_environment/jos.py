@@ -3,6 +3,7 @@ import numpy as np
 
 import omnigibson as og
 from omnigibson.macros import gm
+from omnigibson.utils.motion_planning_utils import detect_self_collision
     
 
 def pause(time):
@@ -24,9 +25,14 @@ def main():
     # Allow user to move camera more easily
     og.sim.enable_viewer_camera_teleoperation()
 
+    robot.tuck()
+    og.sim.step()
+
+    while True:
+        print(detect_self_collision(robot))
+        pause(1)
+
     # from IPython import embed; embed()
-    robot._links['l_wheel_link'].scale = np.array([0.5, 0.5, 0.5])
-    robot._links['r_wheel_link'].scale = np.array([0.5, 0.5, 0.5])
     # og.sim.step()
     # og.sim.stop()
     # og.sim.play()
