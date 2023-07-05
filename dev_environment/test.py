@@ -92,12 +92,12 @@ def main():
                 0.0,  # wheels
                 0.0,  # trunk
                 0.0,
-                0.0,
+                -1.0,
                 0.0,  # head
-                -0.22184,
+                -1.0,
                 1.53448,
-                1.46076,
-                -0.84995,
+                2.2,
+                0.0,
                 1.36904,
                 1.90996,  # arm
                 0.05,
@@ -119,8 +119,7 @@ def main():
         execute_controller(controller.grasp(grasp_obj), env)
 
     def test_grasp():
-        # set_start_pose()
-        execute_controller(controller._reset_hand(), env)
+        set_start_pose()
         execute_controller(controller.grasp(grasp_obj), env)
 
     def test_place():
@@ -137,7 +136,7 @@ def main():
         execute_controller(controller.place_on_top(table), env)
 
     # Work more reliably
-    # test_navigate_to_obj()
+    test_navigate_to_obj()
     # test_grasp_no_navigation()
     # test_grasp_replay_and_place()
 
@@ -145,16 +144,7 @@ def main():
     # test_grasp()
     # test_place()
 
-    ############################
-    # Random testing
-    ############################
-    execute_controller(controller._reset_hand(), env)
-    pose_2d = [1.40287, 0.113639, 2.06657]
-    og.sim.step()
-    pose_2d = [0.6345406548990742, -0.5249127119737239, -2.8566302473196963]
-    execute_controller(controller._navigate_to_pose_direct(pose_2d), env)
-    pause(10)
-
+    pause(5)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run test script")
