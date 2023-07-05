@@ -141,55 +141,18 @@ def main():
     # test_grasp_no_navigation()
     # test_grasp_replay_and_place()
 
-
-    def set_joint_positions(i, val):
-        control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["0"]])
-        reset_pose_fetch = np.array(
-            [
-                0.0,
-                0.0,  # wheels
-                0.0,  # trunk
-                0.0,
-                0.0,
-                0.0,  # head
-                -1.0,
-                1.53448,
-                1.46076,
-                0.0,
-                1.36904,
-                1.90996,  # arm
-                0.05,
-                0.05,  # gripper
-            ]
-        )
-        actual_i = control_idx[i]
-        # print(actual_i)
-        reset_pose_fetch[actual_i] = val
-        robot.set_joint_positions(reset_pose_fetch)
-        og.sim.step()
-        pause(2)
-    
-    # from IPython import embed; embed()
-    # Don't work as reliably because robot wobbles on its wheels
-    # execute_controller(controller._reset_hand(), env)
-    # pause(10)
+    # Don't work as reliably
     # test_grasp()
-    # 1.40287 0.113639 2.06657
     # test_place()
 
     ############################
     # Random testing
     ############################
-    # execute_controller(controller._reset_hand(), env)
-    # pose_2d = [1.40287, 0.113639, 2.06657]
-    # robot.tuck()
-    # og.sim.step()
-    pose_2d = [1.00287, 1.013639, 0.0]
-    pose_2d = [0.6345406548990742, -0.5249127119737239, -2.8566302473196963]
+    execute_controller(controller._reset_hand(), env)
+    pose_2d = [1.40287, 0.113639, 2.06657]
     og.sim.step()
-    # pose = controller._get_robot_pose_from_2d_pose(pose_2d)
+    pose_2d = [0.6345406548990742, -0.5249127119737239, -2.8566302473196963]
     execute_controller(controller._navigate_to_pose_direct(pose_2d), env)
-    # robot.set_position_orientation(pose[0], pose[1])
     pause(10)
 
 
