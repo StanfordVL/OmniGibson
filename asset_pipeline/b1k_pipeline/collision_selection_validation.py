@@ -62,7 +62,7 @@ def main():
                 target = target_futures[future]
                 target_errors = future.result()
                 if target_errors:
-                    errors[target] = {str(k): v for k, v in target_errors.items()}
+                    errors[target] = {k: v for k, v in target_errors.items()}
 
                 pbar.update(1)
 
@@ -108,7 +108,8 @@ def main():
                     json.dump(new_selections, f, indent=4)
 
         with pipeline_fs.pipeline_output().open("validate_collision_selection.json", "w") as f:
-            json.dump({"success": not errors, "errors": errors}, f, indent=4)
+            printable_errors = {k: {str(k2): v2 for k2, v2 in v.items()} for k, v in errors.items()}
+            json.dump({"success": not errors, "errors": printable_errors}, f, indent=4)
 
 
 if __name__ == "__main__":

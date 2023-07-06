@@ -56,20 +56,6 @@
         "objects/batch-09": {
             "('rose', 'hrwson', '0', 'base_link')": "Collision selection was not in the available options."
         },
-        "objects/batch-12": {
-            "('lid', 'kbuqww', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('shoulder_bag', 'pxvcyu', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('electric_switch', 'hpowgy', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('electric_switch', 'hrwnhp', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('electric_switch', 'wseglt', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
-        },
-        "objects/batch-11": {
-            "('goblet', 'nawrfs', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('pipe', 'yeizsx', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('shovel', 'guynvr', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('storage_organizer', 'hmygav', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('storage_organizer', 'hmygav', '0', 'top_drawer')": "Collision mesh was found but contains non-watertight meshes."
-        },
         "objects/legacy_batch-00": {
             "('bottle_of_pop', 'bqretx', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('bottle_of_pop', 'drqbiy', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -111,6 +97,20 @@
             "('bottom_cabinet', 'ybntlp', '0', 'link_1')": "Collision mesh was found but contains non-watertight meshes.",
             "('bottom_cabinet', 'yohygj', '0', 'base_link')": "Collision selection was not in the available options."
         },
+        "objects/batch-12": {
+            "('lid', 'kbuqww', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('shoulder_bag', 'pxvcyu', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('electric_switch', 'hpowgy', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('electric_switch', 'hrwnhp', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('electric_switch', 'wseglt', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
+        },
+        "objects/batch-11": {
+            "('goblet', 'nawrfs', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('pipe', 'yeizsx', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('shovel', 'guynvr', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('storage_organizer', 'hmygav', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('storage_organizer', 'hmygav', '0', 'top_drawer')": "Collision mesh was found but contains non-watertight meshes."
+        },
         "objects/batch-08": {
             "('baking_sheet', 'yhurut', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('charger', 'bapkyh', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -132,20 +132,6 @@
             "('straight_chair', 'laxufh', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('straight_chair', 'mdnhjm', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('swivel_chair', 'xppcsn', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
-        },
-        "objects/legacy_batch-02": {
-            "('armchair', 'bslhmj', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('armchair', 'qplklw', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('armchair', 'umbrpd', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('breakfast_table', 'bmnubh', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('breakfast_table', 'dnsjnv', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('breakfast_table', 'lnwggc', '0', 'base_link')": "Collision selection was not in the available options.",
-            "('breakfast_table', 'lwtcfh', '0', 'link_0')": "Collision mesh was found but contains non-watertight meshes.",
-            "('table_lamp', 'htinka', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('table_lamp', 'lyjkje', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('table_lamp', 'midfvh', '0', 'body')": "Collision mesh was found but contains non-watertight meshes.",
-            "('table_lamp', 'pxdhzm', '0', 'body')": "Collision mesh was found but contains non-watertight meshes.",
-            "('table_lamp', 'wslomg', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
         "objects/legacy_batch-05": {
             "('bench', 'nokayw', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -174,6 +160,20 @@
             "('window', 'subxdn', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('window', 'tflzbx', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('window', 'tuztdv', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
+        },
+        "objects/legacy_batch-02": {
+            "('armchair', 'bslhmj', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('armchair', 'qplklw', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('armchair', 'umbrpd', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('breakfast_table', 'bmnubh', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('breakfast_table', 'dnsjnv', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('breakfast_table', 'lnwggc', '0', 'base_link')": "Collision selection was not in the available options.",
+            "('breakfast_table', 'lwtcfh', '0', 'link_0')": "Collision mesh was found but contains non-watertight meshes.",
+            "('table_lamp', 'htinka', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('table_lamp', 'lyjkje', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('table_lamp', 'midfvh', '0', 'body')": "Collision mesh was found but contains non-watertight meshes.",
+            "('table_lamp', 'pxdhzm', '0', 'body')": "Collision mesh was found but contains non-watertight meshes.",
+            "('table_lamp', 'wslomg', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
         "objects/legacy_batch-07": {
             "('briefcase', 'ohelib', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -223,17 +223,6 @@
             "('lid', 'dadswa', '0', 'base_link')": "Collision selection was not in the available options.",
             "('whiteboard', 'bqqmtc', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
-        "objects/legacy_batch-08": {
-            "('bottle_of_wine', 'fzuiwy', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('bucket', 'bdhvnt', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('folding_chair', 'dqhazh', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('piano', 'ojoiqt', '0', 'base_link')": "Collision selection was not in the available options.",
-            "('piano', 'ygmqqa', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('rail_fence', 'iduxiv', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('rocking_chair', 'tjaphm', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('towel_rack', 'pqhsry', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('wall_mounted_tv', 'ggfznh', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
-        },
         "objects/legacy_batch-06": {
             "('floor_lamp', 'jqsuky', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('fridge', 'hivvdf', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -262,6 +251,17 @@
             "('tablefork', 'pqrtkc', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('toasting_fork', 'osrfkc', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('wall_clock', 'przkmo', '0', 'link_1')": "Collision mesh was found but contains non-watertight meshes."
+        },
+        "objects/legacy_batch-08": {
+            "('bottle_of_wine', 'fzuiwy', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('bucket', 'bdhvnt', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('folding_chair', 'dqhazh', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('piano', 'ojoiqt', '0', 'base_link')": "Collision selection was not in the available options.",
+            "('piano', 'ygmqqa', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('rail_fence', 'iduxiv', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('rocking_chair', 'tjaphm', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('towel_rack', 'pqhsry', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('wall_mounted_tv', 'ggfznh', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
         "objects/legacy_batch-03": {
             "('bed', 'sunfhf', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -343,6 +343,9 @@
             "('wall_mounted_shelf', 'nuzsvi', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('wall_mounted_shelf', 'wiiyfk', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
+        "scenes/hall_conference_large": {
+            "('water_glass', 'szjfpb', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
+        },
         "scenes/commercial_kitchen_fire_extinguisher": {
             "('serving_cart', 'revrxw', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('commercial_kitchen_sink', 'nmxgbm', '0', 'door')": "Collision selection was not in the available options.",
@@ -351,16 +354,13 @@
             "('oven', 'cgtaer', '0', 'base_link')": "Collision selection was not in the available options.",
             "('wall_mounted_shelf', 'notszn', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
-        "scenes/hall_conference_large": {
-            "('water_glass', 'szjfpb', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
-        },
-        "scenes/hall_train_station": {
-            "('arched_window', 'asrqdf', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
-        },
         "scenes/Pomaria_0_garden": {
             "('door', 'mfocvp', '0', 'leaf0')": "Collision mesh was found but contains non-watertight meshes.",
             "('toy_box', 'qgfbdj', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('window', 'yorgot', '0', 'leaf1')": "Collision mesh was found but contains non-watertight meshes."
+        },
+        "scenes/hall_train_station": {
+            "('arched_window', 'asrqdf', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
         "scenes/hotel_suite_small": {
             "('desk', 'sjugsf', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -372,17 +372,6 @@
             "('stand', 'kwkcjq', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('wall_mounted_light', 'wcnxct', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('wall_mounted_soap_dispenser', 'byjkkn', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
-        },
-        "scenes/grocery_store_cafe": {
-            "('grocery_shelf', 'dylnro', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('grocery_shelf', 'sjmdri', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('grocery_shelf', 'wranvj', '0', 'base_link')": "Collision mesh was found but contains too many meshes: 33",
-            "('shelf', 'iwziew', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('door', 'abghjg', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('door', 'abghjg', '0', 'leaf2')": "Collision selection was not in the available options.",
-            "('walls', 'ezpvbf', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('walls', 'jkkqre', '0', 'base_link')": "Collision mesh was found but contains too many meshes: 49",
-            "('walls', 'rywdwu', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
         "scenes/grocery_store_asian": {
             "('fridge', 'lleghp', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -396,11 +385,31 @@
             "('shelf', 'eeamky', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('shelf', 'sylmbu', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
+        "scenes/grocery_store_cafe": {
+            "('grocery_shelf', 'dylnro', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('grocery_shelf', 'sjmdri', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('grocery_shelf', 'wranvj', '0', 'base_link')": "Collision mesh was found but contains too many meshes: 33",
+            "('shelf', 'iwziew', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('door', 'abghjg', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('door', 'abghjg', '0', 'leaf2')": "Collision selection was not in the available options.",
+            "('walls', 'ezpvbf', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('walls', 'jkkqre', '0', 'base_link')": "Collision mesh was found but contains too many meshes: 49",
+            "('walls', 'rywdwu', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
+        },
         "objects/procedural-aa": {
             "('cream_carton', 'lfjmos', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('lemonade_bottle', 'yprkek', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('soda_water_bottle', 'upfssc', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('tomato_paste_can', 'krarex', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
+        },
+        "scenes/hotel_suite_large": {
+            "('blanket', 'uksirc', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('cap', 'tpknvf', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('notebook', 'fckzgw', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('tablefork', 'yuihyg', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('vase', 'pqsamn', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('room_light', 'mjfjhn', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('towel_rack', 'ibrplo', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
         "scenes/hotel_gym_spa": {
             "('pillar_candle', 'bdahdx', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -413,15 +422,6 @@
             "('shower_stall', 'vcwkma', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('sofa', 'hxlckz', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('spotlight', 'gbvzvy', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
-        },
-        "scenes/hotel_suite_large": {
-            "('blanket', 'uksirc', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('cap', 'tpknvf', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('notebook', 'fckzgw', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('tablefork', 'yuihyg', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('vase', 'pqsamn', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('room_light', 'mjfjhn', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('towel_rack', 'ibrplo', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
         "scenes/office_cubicles_left": {
             "('conference_table', 'fpkmyw', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
@@ -523,10 +523,6 @@
             "('walls', 'xsfcrp', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('walls', 'yorsom', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
-        "scenes/restaurant_hotel": {
-            "('walls', 'mubrqe', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
-            "('walls', 'qpxjfj', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
-        },
         "scenes/restaurant_cafeteria": {
             "('breakfast_table', 'bhszwe', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('door', 'axhbtu', '0', 'leaf')": "Collision mesh was found but contains non-watertight meshes.",
@@ -538,6 +534,10 @@
             "('signpost', 'mexzmk', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
             "('stove', 'urgtyy', '0', 'oven_rack9')": "Collision mesh was found but contains non-watertight meshes.",
             "('window', 'ayvcgc', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
+        },
+        "scenes/restaurant_hotel": {
+            "('walls', 'mubrqe', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
+            "('walls', 'qpxjfj', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes."
         },
         "scenes/restaurant_brunch": {
             "('ladder', 'vpmrlk', '0', 'base_link')": "Collision mesh was found but contains non-watertight meshes.",
