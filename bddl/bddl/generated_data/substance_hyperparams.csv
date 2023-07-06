@@ -241,7 +241,7 @@ shortening,"{""type"": ""fluid"", ""particle_contact_offset"": 0.017, ""particle
 smoothie,"{""type"": ""fluid"", ""particle_contact_offset"": 0.017, ""particle_density"": 1162.0, ""is_viscous"": true, ""material_mtl_name"": ""WholeMilk"", ""customize_material_kwargs"": {""diffuse_reflection_color"": [0.96, 0.74, 0.93], ""enable_diffuse_transmission"": false}}"
 snow,"{""type"": ""macro_visual_particle"", ""relative_particle_scaling"": true}"
 soda_water,"{""type"": ""fluid"", ""particle_contact_offset"": 0.012, ""particle_density"": 1014.0, ""is_viscous"": false, ""material_mtl_name"": ""DeepWater"", ""customize_material_kwargs"": {""specular_transmission_color"": [1.0, 1.0, 1.0], ""specular_transmission_scattering_color"": [1.0, 1.0, 1.0]}}"
-sodium_carbonate,"{""type"": ""macro_physical_particle"", ""particle_contact_offset"": 0.005, ""particle_density"": 2540.0}"
+sodium_carbonate,"{""type"": ""micro_physical_particle"", ""particle_density"": 2540.0}"
 soil,"{""type"": ""micro_physical_particle"", ""particle_density"": 1500.0}"
 soy_sauce,"{""type"": ""fluid"", ""particle_contact_offset"": 0.012, ""particle_density"": 1078.0, ""is_viscous"": false, ""material_mtl_name"": ""DeepWater"", ""customize_material_kwargs"": {""specular_transmission_weight"": 0.2, ""specular_transmission_scattering_depth"": 0.0, ""specular_transmission_color"": [0.29, 0.17, 0.01], ""specular_transmission_scattering_color"": [0.18, 0.11, 0.02]}}"
 soya_milk,"{""type"": ""fluid"", ""particle_contact_offset"": 0.012, ""particle_density"": 1030.0, ""is_viscous"": false, ""material_mtl_name"": ""WholeMilk"", ""customize_material_kwargs"": {""enable_diffuse_transmission"": false}}"
