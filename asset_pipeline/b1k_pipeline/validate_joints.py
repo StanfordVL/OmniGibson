@@ -3,18 +3,20 @@ import glob
 import numpy as np
 import tqdm
 
+from b1k_pipeline.utils import ParallelZipFS
 
-def check_urdf(fn):
+def check_urdf(objects_fs, fn):
   # Get the joint axes in the object
-  tree = ET.parse(fn)
-  joints = list(tree.findall('.//axis'))
+  with objects_fs.open(fn) as f:
+    tree = ET.parse(f)
+  joints = list(tree.findall('.//joint[@type="prismatic"]'))
 
   # If there are none, return.
   if len(joints) == 0:
     return True
   
   # Otherwise load the axes into a numpy array
-  axes = np.array([[float(y) for y in x.attrib["xyz"].split()] for x in joints])
+  axes = np.array([[float(y) for y in x.find("axis").attrib["xyz"].split()] for x in joints])
   assert axes.shape[1] == 3, fn
 
   # Compare the axes with the canonical axes to see if any pair is close
@@ -25,9 +27,10 @@ def check_urdf(fn):
 
 
 def main():
-  files = glob.glob("artifacts/parallels/objects/*/*/urdf/*.urdf")
-  bad = sorted(fn for fn in tqdm.tqdm(files) if not check_urdf(fn))
-  print("\n".join(bad))
+  with ParallelZipFS("objects.zip") as objects_fs:
+    files = [x.path for x in objects_fs.glob("objects/*/*/urdf/*.urdf")]
+    bad = sorted(fn for fn in tqdm.tqdm(files) if not check_urdf(objects_fs, fn))
+    print("\n".join(bad))
 
 
 if __name__ == "__main__":

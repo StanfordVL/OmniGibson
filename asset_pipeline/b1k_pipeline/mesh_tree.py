@@ -12,7 +12,7 @@ from b1k_pipeline.utils import parse_name, load_mesh, PipelineFS
 SCALE_FACTOR = 0.001
 SCALE_MATRIX = trimesh.transformations.scale_matrix(0.001)
 
-def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=True, filter_nodes=None, show_progress=False):
+def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True, load_nonzero=True, load_meshes=True, filter_nodes=None, show_progress=False):
     G = nx.DiGraph()
 
     # Load the rename file
@@ -61,6 +61,11 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_meshes=Tr
         if joint_side == "upper" and not load_upper:
             continue
 
+        if is_broken and not load_bad:
+            continue
+
+        if int(obj_inst_id) != 0 and not load_nonzero:
+            continue
 
         link_name = "base_link" if link_name is None else link_name
 
