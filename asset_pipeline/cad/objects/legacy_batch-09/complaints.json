@@ -364,5 +364,11 @@
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "dont see anything",
         "processed": true
+    },
+    {
+        "object": "carton-msfzpz",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "has no thickness and somehow vhacd did not run so we do not have good thickness samples",
+        "processed": false
     }
 ]
