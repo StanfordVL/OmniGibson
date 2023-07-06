@@ -200,7 +200,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
     if load_meshes:
         roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
         for root in roots:
-            nodes = nx.dfs_preorder_nodes(G, root)
+            nodes = list(nx.dfs_preorder_nodes(G, root))
             meshes = [G.nodes[node]["lower_mesh"] for node in nodes if "lower_mesh" in G.nodes[node]]
             combined_mesh = trimesh.util.concatenate(meshes)
             G.nodes[root]["combined_mesh"] = combined_mesh
