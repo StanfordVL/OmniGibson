@@ -106,12 +106,13 @@ stages:
   collision_selection_validation:
     cmd: 'python -m b1k_pipeline.collision_selection_validation'
     deps: 
+    - b1k_pipeline/collision_selection_validation.py
     - cad/#{combined}/artifacts/meshes.zip
     - cad/#{combined}/artifacts/object_list.json
     - cad/#{combined}/artifacts/collision_meshes.zip
     - cad/#{combined}/artifacts/collision_selection.json
     outs:
-    - artifacts/pipeline/collision_validation_selection.json
+    - artifacts/pipeline/collision_selection_validation.json
 
   collision_selection_validation_success:
     cmd: 'python -m b1k_pipeline.check_success artifacts/pipeline/collision_selection_validation.json artifacts/pipeline/collision_selection_validation.success'
@@ -370,11 +371,12 @@ stages:
   collision_average_volumes:
     cmd: 'python -m b1k_pipeline.collision_average_volumes'
     deps:
+    - b1k_pipeline/collision_average_volumes.py
     - cad/#{combined}/artifacts/meshes.zip
     - cad/#{combined}/artifacts/object_list.json
     - cad/#{combined}/artifacts/collision_meshes.zip
     - cad/#{combined}/artifacts/collision_selection.json
-    - artifacts/pipeline/collision_validation_selection.json
+    - artifacts/pipeline/collision_selection_validation.success
     outs:
     - artifacts/pipeline/collision_average_volumes.json
 

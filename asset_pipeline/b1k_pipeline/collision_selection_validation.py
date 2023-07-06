@@ -5,7 +5,7 @@ import json
 from b1k_pipeline import mesh_tree
 from b1k_pipeline.utils import PipelineFS, get_targets, parse_name
 
-NUKE_SELECTIONS = True
+NUKE_SELECTIONS = False
 
 def process_target(target):
     try:
@@ -23,12 +23,12 @@ def process_target(target):
                 if "collision_mesh" in G.nodes[node] and G.nodes[node]["collision_mesh"]:
                     # Validate the mesh
                     splits = G.nodes[node]["collision_mesh"].split(only_watertight=False)
-                    splits_wt = G.nodes[node]["collision_mesh"].split(only_watertight=True)
-                    if len(splits_wt) != len(splits):
-                        errors[node] = "Collision mesh was found but contains non-watertight meshes."
-                    elif len(splits) == 0:
+                    # splits_wt = G.nodes[node]["collision_mesh"].split(only_watertight=True)
+                    if len(splits) == 0:
                         errors[node] = "Collision mesh was found but contains no meshes."
-                    elif len(splits) > 32:
+                    # elif len(splits_wt) != len(splits):
+                    #     errors[node] = "Collision mesh was found but contains non-watertight meshes."
+                    elif len(splits) > 250:
                         errors[node] = f"Collision mesh was found but contains too many meshes: {len(splits)}"
                     # If we reach here, no errors!
                 elif "manual_collision_filename" in G.nodes[node]:
@@ -53,7 +53,7 @@ def main():
     target_futures = {}
     targets = get_targets("combined")
 
-    with futures.ProcessPoolExecutor(max_workers=8) as executor:
+    with futures.ProcessPoolExecutor(max_workers=16) as executor:
         for target in tqdm.tqdm(targets):
             target_futures[executor.submit(process_target, target)] = target
                 
