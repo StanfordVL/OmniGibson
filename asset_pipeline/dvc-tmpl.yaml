@@ -103,6 +103,24 @@ stages:
     outs:
     - artifacts/pipeline/export_meshes.success
 
+  collision_selection_validation:
+    cmd: 'python -m b1k_pipeline.collision_selection_validation'
+    deps: 
+    - cad/#{combined}/artifacts/meshes.zip
+    - cad/#{combined}/artifacts/object_list.json
+    - cad/#{combined}/artifacts/collision_meshes.zip
+    - cad/#{combined}/artifacts/collision_selection.json
+    outs:
+    - artifacts/pipeline/collision_validation_selection.json
+
+  collision_selection_validation_success:
+    cmd: 'python -m b1k_pipeline.check_success artifacts/pipeline/collision_selection_validation.json artifacts/pipeline/collision_selection_validation.success'
+    deps:
+    - artifacts/pipeline/collision_selection_validation.json
+    - b1k_pipeline/check_success.py
+    outs:
+    - artifacts/pipeline/collision_selection_validation.success
+
   # export_objs:
   #   # Process exported meshes into iGibson objects.
   #   foreach: ${combined}
@@ -163,6 +181,7 @@ stages:
     - cad/#{combined}/artifacts/collision_selection.json
     - cad/#{combined}/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
+    - artifacts/pipeline/collision_selection_validation.success
     # - artifacts/pipeline/object_inventory.success  # TODO: Reactivate
     - artifacts/pipeline/sanitycheck.success
     - artifacts/pipeline/export_meshes.success
@@ -348,15 +367,37 @@ stages:
     - artifacts/parallels/maps.zip
     - artifacts/pipeline/make_maps.success
 
+  collision_average_volumes:
+    cmd: 'python -m b1k_pipeline.collision_average_volumes'
+    deps:
+    - cad/#{combined}/artifacts/meshes.zip
+    - cad/#{combined}/artifacts/object_list.json
+    - cad/#{combined}/artifacts/collision_meshes.zip
+    - cad/#{combined}/artifacts/collision_selection.json
+    - artifacts/pipeline/collision_validation_selection.json
+    outs:
+    - artifacts/pipeline/collision_average_volumes.json
+
+  collision_average_volumes_success:
+    cmd: 'python -m b1k_pipeline.check_success artifacts/pipeline/collision_average_volumes.json artifacts/pipeline/collision_average_volumes.success'
+    deps:
+    - artifacts/pipeline/collision_average_volumes.json
+    - b1k_pipeline/check_success.py
+    outs:
+    - artifacts/pipeline/collision_average_volumes.success
+
   aggregate_metadata:
     # Add metadata and compile everything in the right spot.
     cmd: 'python -m b1k_pipeline.aggregate_metadata'
     deps:
     - b1k_pipeline/aggregate_metadata.py
     - artifacts/pipeline/object_inventory.json
+    # - artifacts/pipeline/object_inventory.success
     - metadata/category_mapping.csv
     - metadata/non_sampleable_categories.csv
     - metadata/allowed_room_types.csv
+    - artifacts/pipeline/collision_average_volumes.json
+    - artifacts/pipeline/collision_average_volumes.success
     outs:
     - artifacts/parallels/metadata.zip
     - artifacts/pipeline/aggregate_metadata.json

@@ -21,6 +21,9 @@ def main():
             with pipeline_output_dir.open("object_inventory.json", "r") as f:
                 object_inventory = json.load(f)
 
+            with pipeline_output_dir.open("collision_average_volumes.json", "r") as f:
+                collision_average_volumes = json.load(f)["volumes"]
+
             # assert object_inventory["success"], "Object inventory was unsuccessful."
 
             categories = {
@@ -37,12 +40,16 @@ def main():
                     category = row["category"].strip()
                     categories_by_id[cat_id] = category
 
+                    volume = collision_average_volumes[category] if category in collision_average_volumes else None
                     mass = float(row["mass (auto)"]) if row["mass (auto)"] and row["mass (auto)"] != "#DIV/0!" else None
+                    density = mass / volume if mass and volume else None
+
                     avg_category_specs[category] = {
                         "enable_ag": None,
                         "mass": mass,
                         "size": None,
-                        "density": None,
+                        "volume": volume,
+                        "density": density,
                     }
 
             # Validate: have we found all categories on the list?
