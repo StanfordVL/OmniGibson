@@ -107,7 +107,7 @@ def main():
                 with pipeline_fs.target_output(target).open("collision_selection.json", "w") as f:
                     json.dump(new_selections, f, indent=4)
 
-        with pipeline_fs.pipeline_output().open("validate_collision_selection.json", "w") as f:
+        with pipeline_fs.pipeline_output().open("collision_selection_validation.json", "w") as f:
             printable_errors = {k: {str(k2): v2 for k2, v2 in v.items()} for k, v in errors.items()}
             json.dump({"success": not errors, "errors": printable_errors}, f, indent=4)
 
