@@ -171,7 +171,7 @@ def main():
 
         # Now get a list of all the objects that we can process.
         print("Getting list of objects to process...")
-        candidates = {}
+        candidates = []
         total_in_batch = 0
         for target in tqdm.tqdm(all_targets):
             with pipeline_fs.target_output(target) as target_output_fs:
@@ -226,12 +226,12 @@ def main():
                         matching_key = (parsed_name.group('model_id'), parsed_name.group('link_name'))
                         if matching_key in selections:
                             continue
-                        candidates[mesh_name] = target
+                        candidates.append((mesh_name, target))
     
         print("Total objects (including completed) in your batch:", total_in_batch)
 
         # Start iterating.
-        for i, (mesh_name, target) in enumerate(candidates.items()):
+        for i, (mesh_name, target) in enumerate(candidates):
             print("\n--------------------------------------------------------------------------")
             print(f"{i + 1} / {len(candidates)}: {mesh_name} (from {target})\n")
             with pipeline_fs.target_output(target) as target_output_fs:
