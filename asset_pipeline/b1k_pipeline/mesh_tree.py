@@ -1,5 +1,6 @@
 import csv
 import json
+import re
 
 import networkx as nx
 import numpy as np
@@ -135,10 +136,12 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                 collision_filenames = [x for x in mesh_dir.listdir("/") if "Mcollision" in x and x.endswith(".obj")]
                 assert len(collision_filenames) <= 1, f"Found multiple collision meshes for {node_key}"
                 if collision_filenames:
+                    # This type of collision mesh contains multiple meshes in a single file, so we need to split.
                     collision_filename, = collision_filenames
                     collision_mesh = load_mesh(mesh_dir, collision_filename, force="mesh", skip_materials=True)
                     collision_mesh.apply_transform(SCALE_MATRIX)
-                    G.nodes[node_key]["collision_mesh"] = collision_mesh
+
+                    G.nodes[node_key]["collision_mesh"] = collision_mesh.split(only_watertight=False)
                     G.nodes[node_key]["manual_collision_filename"] = collision_filename
                 elif mesh_name:
                     # Try to load a collision mesh selection
@@ -149,13 +152,22 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                         
                         try:
                             collision_dir = collision_mesh_fs.opendir(mesh_name)
-                            G.nodes[node_key]["collision_options"] = collision_dir.listdir("/")
-                            collision_mesh = load_mesh(collision_dir, collision_selection + ".obj", force="mesh", skip_materials=True)
-                            collision_mesh.apply_transform(SCALE_MATRIX)
-                            G.nodes[node_key]["collision_mesh"] = collision_mesh
+                            G.nodes[node_key]["collision_options"] = {x.rsplit("-", 1)[0] for x in collision_dir.listdir("/")}
+
+                            selection_matching_pattern = re.compile(collision_selection + r"-(\d+).obj")
+                            selection_matches = [(selection_matching_pattern.fullmatch(x), x) for x in collision_dir.listdir("/")]
+                            indexed_matches = {int(match.group(1)): fn for match, fn in selection_matches if match}
+                            assert set(range(len(indexed_matches))) == set(indexed_matches.keys()), f"Missing collision meshes for {node_key}"
+                            ordered_collision_filenames = [indexed_matches[i] for i in range(len(indexed_matches))]
+
+                            collision_meshes = []
+                            for collision_filename in ordered_collision_filenames:
+                                collision_mesh = load_mesh(collision_dir, collision_filename, force="mesh", skip_materials=True)
+                                collision_mesh.apply_transform(SCALE_MATRIX)
+                                collision_meshes.append(collision_mesh)
+                            G.nodes[node_key]["collision_mesh"] = collision_meshes
                         except:
                             pass
-                            # raise
 
         # Add the edge in from the parent
         if link_name != "base_link":
@@ -206,7 +218,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
             G.nodes[root]["combined_mesh"] = combined_mesh
 
             if all("collision_mesh" in G.nodes[node] for node in nodes):
-                collision_meshes = [G.nodes[node]["collision_mesh"] for node in nodes]
+                collision_meshes = [cm for node in nodes for cm in G.nodes[node]["collision_mesh"]]
                 combined_collision_mesh = trimesh.util.concatenate(collision_meshes)
                 G.nodes[root]["combined_collision_mesh"] = combined_collision_mesh
 

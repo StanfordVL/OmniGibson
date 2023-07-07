@@ -25,8 +25,6 @@ GENERATE_SELECTED_ONLY = False
 VHACD_EXECUTABLE = "TestVHACD"
 COACD_SCRIPT_PATH = "coacd"
 
-COACD_TIMEOUT = 10 * 60 # 10 min
-
 MAX_VERTEX_COUNT = 60
 REDUCTION_STEP = 5
 
@@ -60,7 +58,7 @@ def generate_option_coacd(threshold, prep_resolution, max_convex_hull):
             coacd_worker,
             input_stream.getvalue(),
             threshold, prep_resolution, max_convex_hull,
-            retries=1)
+            retries=2)
         result = coacd_future.result()
         if not result:
             raise ValueError("coacd failed")
@@ -101,7 +99,7 @@ def generate_option_vhacd(resolution, depth, fillmode, errorp, split, edgelength
             vhacd_worker,
             input_stream.getvalue(),
             resolution, depth, fillmode, errorp, split, edgelength, maxHullVertCount, maxHull,
-            retries=1)
+            retries=3)
         result = vhacd_future.result()
         if not result:
             raise ValueError("vhacd failed")
@@ -195,16 +193,10 @@ def process_object_with_option(m, out_fs, option_name, option_fn, dask_client):
 
     # Convexify and reduce each submesh
     reduced_submeshes = [convexify_and_reduce(submesh, dask_client) for submesh in submeshes]
-    final_mesh = trimesh.util.concatenate(reduced_submeshes)
-
-    resplit_submeshes = final_mesh.split()
-    assert len(resplit_submeshes) > 0, f"{option_name} c&r returned no submeshes"
-    assert len(resplit_submeshes) <= 32, f"{option_name} c&r returned too many submeshes"
-    resplit_non_wt_submeshes = final_mesh.split(only_watertight=False)
-    assert len(resplit_non_wt_submeshes) == len(resplit_submeshes), f"{option_name} c&r returned non-watertight submeshes"
-
+    
     # Save the result
-    save_mesh(final_mesh, out_fs, f"{option_name}.obj")
+    for i, submesh in enumerate(reduced_submeshes):
+        save_mesh(submesh, out_fs, f"{option_name}-{i}.obj")
 
 
 def process_target(target, pipeline_fs, link_executor, dask_client):

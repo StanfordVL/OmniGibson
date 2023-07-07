@@ -295,14 +295,20 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         # Copy the OBJ into the right spot
         fs.copy.copy_file(tfs, obj_relative_path, obj_link_visual_mesh_folder_fs, obj_relative_path)
         
-        # Find precomputed collision mesh
-        canonical_collision_mesh = transform_mesh(G.nodes[link_node]["collision_mesh"], mesh_center, canonical_orientation)
-        canonical_collision_mesh._cache.cache["vertex_normals"] = canonical_collision_mesh.vertex_normals
-        save_mesh(canonical_collision_mesh, obj_link_collision_mesh_folder_fs, obj_relative_path)
+        # Save and merge precomputed collision mesh
+        canonical_collision_meshes = []
+        collision_filenames = []
+        for i, collision_mesh in enumerate(G.nodes[link_node]["collision_mesh"]):
+            canonical_collision_mesh = transform_mesh(collision_mesh, mesh_center, canonical_orientation)
+            canonical_collision_mesh._cache.cache["vertex_normals"] = canonical_collision_mesh.vertex_normals
+            collision_filename = obj_relative_path.replace(".obj", f"-{i}.obj")
+            save_mesh(canonical_collision_mesh, obj_link_collision_mesh_folder_fs, collision_filename)
+            collision_filenames.append(collision_filename)
+            canonical_collision_meshes.append(canonical_collision_mesh)
 
         # Store the final meshes
         G.nodes[link_node]["visual_mesh"] = canonical_mesh.copy()
-        G.nodes[link_node]["canonical_collision_mesh"] = canonical_collision_mesh.copy()
+        G.nodes[link_node]["canonical_collision_mesh"] = trimesh.util.concatenate(canonical_collision_meshes)
 
         # Modify MTL reference in OBJ file
         mtl_name = f"{obj_name}-{link_name}.mtl"
@@ -341,12 +347,14 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     visual_mesh_xml = ET.SubElement(visual_geometry_xml, "mesh")
     visual_mesh_xml.attrib = {"filename": os.path.join("shape", "visual", obj_relative_path).replace("\\", "/")}
 
-    collision_xml = ET.SubElement(link_xml, "collision")
-    collision_origin_xml = ET.SubElement(collision_xml, "origin")
-    collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
-    collision_geometry_xml = ET.SubElement(collision_xml, "geometry")
-    collision_mesh_xml = ET.SubElement(collision_geometry_xml, "mesh")
-    collision_mesh_xml.attrib = {"filename": os.path.join("shape", "collision", obj_relative_path).replace("\\", "/")}
+    for collision_filename in collision_filenames:
+        collision_xml = ET.SubElement(link_xml, "collision")
+        collision_xml.attrib = {"name": collision_filename.replace(".obj", "")}
+        collision_origin_xml = ET.SubElement(collision_xml, "origin")
+        collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
+        collision_geometry_xml = ET.SubElement(collision_xml, "geometry")
+        collision_mesh_xml = ET.SubElement(collision_geometry_xml, "mesh")
+        collision_mesh_xml.attrib = {"filename": os.path.join("shape", "collision", collision_filename).replace("\\", "/")}
 
     # This object might be a base link and thus without an in-edge. Nothing to do then.
     if len(in_edges) == 0:

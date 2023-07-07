@@ -1,4 +1,5 @@
 from concurrent import futures
+import traceback
 import tqdm
 import json
 
@@ -20,16 +21,21 @@ def process_target(target):
             errors = {}
             for node in G.nodes:
                 # If the object has a collision mesh we are probably good.
-                if "collision_mesh" in G.nodes[node] and G.nodes[node]["collision_mesh"]:
+                if "collision_mesh" in G.nodes[node]:
                     # Validate the mesh
-                    splits = G.nodes[node]["collision_mesh"].split(only_watertight=False)
-                    # splits_wt = G.nodes[node]["collision_mesh"].split(only_watertight=True)
+                    splits = G.nodes[node]["collision_mesh"]
                     if len(splits) == 0:
                         errors[node] = "Collision mesh was found but contains no meshes."
-                    # elif len(splits_wt) != len(splits):
-                    #     errors[node] = "Collision mesh was found but contains non-watertight meshes."
-                    elif len(splits) > 250:
-                        errors[node] = f"Collision mesh was found but contains too many meshes: {len(splits)}"
+                    elif len(splits) > 32:
+                        errors[node] = "Collision mesh was found but contains too many meshes."
+                    elif any(not split.is_watertight for split in splits):
+                        errors[node] = "Collision mesh was found but contains non-watertight meshes."
+                    elif any(not split.is_volume or split.volume <= 0 for split in splits):
+                        errors[node] = "Collision mesh was found but contains zero volume meshes."
+
+                    # Identify manual collision mesh in error
+                    if "manual_collision_filename" in G.nodes[node] and node in errors:
+                        errors[node] = "Manual " + errors[node]
                     # If we reach here, no errors!
                 elif "manual_collision_filename" in G.nodes[node]:
                     # The object has a manual collision mesh but it was not loaded
@@ -46,7 +52,7 @@ def process_target(target):
 
             return errors
     except Exception as e:
-        return {"Exception": str(e)}
+        return {"Exception": str(e) + "\n" + traceback.format_exc()}
 
 def main():
     errors = {}
@@ -84,9 +90,10 @@ def main():
                 error_keys = {
                     (model, link)
                     for (_, model, _, link), error in errors[target].items()
-                    if error in (
-                        "Collision selection was not in the available options.",
-                    )
+                    if "Manual" not in error
+                    # if error in (
+                    #     "Collision selection was not in the available options.",
+                    # )
                 }
 
                 # Build a new collision selection without the errors
