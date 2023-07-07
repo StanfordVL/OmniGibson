@@ -68,19 +68,19 @@ def load_mesh(mesh_fs, mesh_fns, basename, index, offset=None, scale=None):
     for smi, sm in enumerate(hulls):
         with TempFS() as temp_fs:
             # Save as an OBJ to a temp directory
-            b1k_pipeline.utils.save_mesh(sm, temp_fs, basename)
+            b1k_pipeline.utils.save_mesh(sm, temp_fs, "obj.obj")
 
             # Load the obj into pybullet
             vis_kwargs = {
                 "shapeType": p.GEOM_MESH,
-                "fileName": temp_fs.getsyspath(basename),
+                "fileName": temp_fs.getsyspath("obj.obj"),
             }
             if index > 0:
                 vis_kwargs["rgbaColor"] = colors[smi]
             vis = p.createVisualShape(**vis_kwargs)
             bid = p.createMultiBody(baseVisualShapeIndex=vis, basePosition=[index * 1.5, 0, 0])
             if bid == -1:
-                print("Could not load mesh", basename)
+                print("Could not load mesh")
                 return
         
     label = basename
