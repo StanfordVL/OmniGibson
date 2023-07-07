@@ -6,7 +6,7 @@ import json
 from b1k_pipeline import mesh_tree
 from b1k_pipeline.utils import PipelineFS, get_targets, parse_name
 
-NUKE_SELECTIONS = False
+NUKE_SELECTIONS = True
 
 def process_target(target):
     try:

@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 import hashlib
 import os
+import re
 import sys
 import numpy as np
 import tqdm
@@ -10,6 +11,7 @@ import pybullet as p
 import json
 from fs.zipfs import ZipFS
 from fs.tempfs import TempFS
+import trimesh
 import b1k_pipeline.utils
 
 # These change the stepping logic
@@ -37,23 +39,27 @@ def suppress_stdout():
             # CLOEXEC may be different
 
 
-def load_mesh(mesh_fs, mesh_fn, index, offset=None, scale=None):
+def load_mesh(mesh_fs, mesh_fns, basename, index, offset=None, scale=None):
     # First, load into trimesh
-    m = b1k_pipeline.utils.load_mesh(mesh_fs, mesh_fn, force="mesh", skip_materials=index > 0)
+    hulls = [
+        b1k_pipeline.utils.load_mesh(mesh_fs, mesh_fn, force="mesh", skip_materials=index > 0)
+        for mesh_fn in mesh_fns
+    ]
+    m = trimesh.util.concatenate(hulls)
 
     # Apply the desired offset if one is provided. Otherwise, center.
     if offset is None:
         offset = -m.centroid
     m.apply_translation(offset)
+    for mesh in hulls:
+        mesh.apply_translation(offset)
 
     # Scale the object to fit in the [1, 1, 1] bounding box
     if scale is None:
         scale = 1 / m.bounding_box.extents.max()
     m.apply_scale(scale)
-
-    hulls = [m]
-    if index != 0:
-        hulls = m.split(only_watertight=False)
+    for mesh in hulls:
+        mesh.apply_scale(scale)
 
     # Apply a different color to each part
     cmap = plt.get_cmap('hsv')
@@ -62,22 +68,22 @@ def load_mesh(mesh_fs, mesh_fn, index, offset=None, scale=None):
     for smi, sm in enumerate(hulls):
         with TempFS() as temp_fs:
             # Save as an OBJ to a temp directory
-            b1k_pipeline.utils.save_mesh(sm, temp_fs, mesh_fn)
+            b1k_pipeline.utils.save_mesh(sm, temp_fs, basename)
 
             # Load the obj into pybullet
             vis_kwargs = {
                 "shapeType": p.GEOM_MESH,
-                "fileName": temp_fs.getsyspath(mesh_fn),
+                "fileName": temp_fs.getsyspath(basename),
             }
             if index > 0:
                 vis_kwargs["rgbaColor"] = colors[smi]
             vis = p.createVisualShape(**vis_kwargs)
             bid = p.createMultiBody(baseVisualShapeIndex=vis, basePosition=[index * 1.5, 0, 0])
             if bid == -1:
-                print("Could not load mesh", mesh_fn)
+                print("Could not load mesh", basename)
                 return
         
-    label = mesh_fn
+    label = basename
     if index == 0:
         label = "visual"
     volume = sum(x.volume for x in hulls)
@@ -108,17 +114,19 @@ def select_mesh(target_output_fs, mesh_name):
         with suppress_stdout():
             with target_output_fs.open("meshes.zip", "rb") as zip_file, \
                     ZipFS(zip_file) as zip_fs, zip_fs.opendir(mesh_name) as mesh_fs:
-                visual_offset, visual_scale = load_mesh(mesh_fs, f"{mesh_name}.obj", 0)
+                visual_offset, visual_scale = load_mesh(mesh_fs, [f"{mesh_name}.obj"], 0)
 
             # Load in each of the meshes
             with target_output_fs.open("collision_meshes.zip", "rb") as zip_file, \
                 ZipFS(zip_file) as zip_fs, zip_fs.opendir(mesh_name) as mesh_fs:
                 candidates = []
                 filenames = [x.name for x in mesh_fs.filterdir('/', files=['*.obj'])]
-                for i, fn in enumerate(sorted(filenames)):
+                filename_bases = {x.rsplit("-", 1)[0] for x in filenames}
+                for i, fn in enumerate(sorted(filename_bases)):
                     # Load the candidate
-                    if load_mesh(mesh_fs, fn, i+1, visual_offset, visual_scale):
-                        candidates.append(fn.replace(".obj", ""))
+                    selection_matching_pattern = re.compile(fn + r"-(\d+).obj")
+                    if load_mesh(mesh_fs, [x for x in filenames if selection_matching_pattern.fullmatch(x)], fn, i+1, visual_offset, visual_scale):
+                        candidates.append(fn)
                     else:
                         candidates.append(None)
 
