@@ -158,6 +158,7 @@ def plan_arm_motion(
 #             for link in obj.links.values():
 #                 if not link.kinematic_only:
 #                     for mesh in link.collision_meshes.values():
+#                         from IPython import embed; embed()
 #                         all_rigid_mesh_ids.append(mesh.prim_path)
 
 #     # robot_links = [link.prim_path for link in robot.links.values()]
@@ -170,8 +171,7 @@ def plan_arm_motion(
 
 #     def overlap_callback(hit):
 #         nonlocal valid_hit
-#         # from IPython import embed; embed()
-#         breakpoint()
+#         from IPython import embed; embed()
 #         # valid_hit = hit.rigid_body in <VALID LINK PRIM PATHS TO CHECK FOR COL>
 #         # Continue traversal only if we don't have a valid hit yet
 #         return not valid_hit
@@ -180,10 +180,14 @@ def plan_arm_motion(
 #         nonlocal valid_hit
 #         valid_hit = False
 
-#         for mesh_id_pair in mesh_id_pairs:
-#             if valid_hit:
-#                 break
-#             og.sim.psqi.overlap_mesh(*mesh_id_pair, reportFn=overlap_callback)
+#         mesh_id = "/World/coffee_table_fqluyq_0/base_link/collisions/mesh_6"
+#         og.sim.psqi.overlap_mesh(0, 1, reportFn=overlap_callback)
+
+#         # for mesh_id_pair in mesh_id_pairs:
+#         #     if valid_hit:
+#         #         break
+#         #     from IPython import embed; embed()
+#         #     og.sim.psqi.overlap_mesh(*mesh_id_pair, reportFn=overlap_callback)
             
 #         return valid_hit
     
