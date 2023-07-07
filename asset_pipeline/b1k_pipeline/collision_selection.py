@@ -114,7 +114,7 @@ def select_mesh(target_output_fs, mesh_name):
         with suppress_stdout():
             with target_output_fs.open("meshes.zip", "rb") as zip_file, \
                     ZipFS(zip_file) as zip_fs, zip_fs.opendir(mesh_name) as mesh_fs:
-                visual_offset, visual_scale = load_mesh(mesh_fs, [f"{mesh_name}.obj"], 0)
+                visual_offset, visual_scale = load_mesh(mesh_fs, [f"{mesh_name}.obj"], mesh_name, 0)
 
             # Load in each of the meshes
             with target_output_fs.open("collision_meshes.zip", "rb") as zip_file, \
