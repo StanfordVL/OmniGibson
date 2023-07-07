@@ -46,14 +46,14 @@ def main():
     # Allow user to move camera more easily
     og.sim.enable_viewer_camera_teleoperation()
 
-    table = DatasetObject(
-        name="table",
-        category="breakfast_table",
-        model="rjgmmy",
-        scale = 0.3
-    )
-    og.sim.import_object(table)
-    table.set_position([1.0, 1.0, 0.58])
+    # table = DatasetObject(
+    #     name="table",
+    #     category="breakfast_table",
+    #     model="rjgmmy",
+    #     scale = 0.3
+    # )
+    # og.sim.import_object(table)
+    # table.set_position([1.0, 1.0, 0.58])
 
     grasp_obj = DatasetObject(
         name="potato",
@@ -120,15 +120,14 @@ def main():
         execute_controller(controller.place_on_top(table), env)
 
     # Work more reliably
-    test_navigate_to_obj()
+    # test_navigate_to_obj()
     # test_grasp_no_navigation()
     # test_grasp_replay_and_place()
 
     # Don't work as reliably
     # test_grasp()
     # test_place()
-
-    pause(5)
+    execute_controller(controller._navigate_to_pose([1.0, 1.0, 0.0]), env)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run test script")
