@@ -7,6 +7,10 @@ from omnigibson.object_states import ContactBodies
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import RigidContactAPI
 
+from omnigibson.utils.constants import PrimType
+import itertools
+
+num_samples = [0]
 def plan_base_motion(
     robot,
     end_conf,
@@ -22,6 +26,7 @@ def plan_base_motion(
         )
         og.sim.step(render=False)
         state_valid = not detect_robot_collision(robot)
+        num_samples[0] += 1
         return state_valid
 
     pos = robot.get_position()
@@ -30,11 +35,13 @@ def plan_base_motion(
 
     # create an SE2 state space
     space = ob.SE2StateSpace()
+    print(space.getLongestValidSegmentFraction())
+    # space.setLongestValidSegmentFraction(.01)
 
     # set lower and upper bounds
     bounds = ob.RealVectorBounds(2)
-    bounds.setLow(-7.0)
-    bounds.setHigh(7.0)
+    bounds.setLow(-3.0)
+    bounds.setHigh(3.0)
     space.setBounds(bounds)
 
     # create a simple setup object
@@ -42,7 +49,7 @@ def plan_base_motion(
     ss.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
 
     si = ss.getSpaceInformation()
-    planner = ompl_geo.LBKPIECE1(si)
+    planner = ompl_geo.RRTConnect(si)
     ss.setPlanner(planner)
 
     start = ob.State(space)
@@ -69,6 +76,7 @@ def plan_base_motion(
         # print the simplified path
         sol_path = ss.getSolutionPath()
         return_path = []
+        print("num_samples: ", num_samples[0])
         for i in range(sol_path.getStateCount()):
             x = sol_path.getState(i).getX()
             y = sol_path.getState(i).getY()
@@ -138,6 +146,48 @@ def plan_arm_motion(
             return_path.append(joint_pos)
         return return_path
     return None
+
+# def detect_robot_collision(robot, filter_objs=[]):
+#     filter_categories = ["floors"]
+#     # Store the meshs' IDs
+#     mesh_robot_ids = [mesh.prim_path for link in robot.links.values() for mesh in link.collision_meshes.values()]
+#     # breakpoint()
+#     all_rigid_mesh_ids = []
+#     for obj in og.sim.scene.objects:
+#         if obj.prim_type == PrimType.RIGID and obj.category not in filter_categories:
+#             for link in obj.links.values():
+#                 if not link.kinematic_only:
+#                     for mesh in link.collision_meshes.values():
+#                         all_rigid_mesh_ids.append(mesh.prim_path)
+
+#     # robot_links = [link.prim_path for link in robot.links.values()]
+#     all_other_object_mesh_ids = list(set(all_rigid_mesh_ids) - set(mesh_robot_ids))
+    
+#     mesh_id_pairs = itertools.product(mesh_robot_ids, all_other_object_mesh_ids)
+
+#     # Define function for checking overlap
+#     valid_hit = False
+
+#     def overlap_callback(hit):
+#         nonlocal valid_hit
+#         # from IPython import embed; embed()
+#         breakpoint()
+#         # valid_hit = hit.rigid_body in <VALID LINK PRIM PATHS TO CHECK FOR COL>
+#         # Continue traversal only if we don't have a valid hit yet
+#         return not valid_hit
+
+#     def check_overlap():
+#         nonlocal valid_hit
+#         valid_hit = False
+
+#         for mesh_id_pair in mesh_id_pairs:
+#             if valid_hit:
+#                 break
+#             og.sim.psqi.overlap_mesh(*mesh_id_pair, reportFn=overlap_callback)
+            
+#         return valid_hit
+    
+#     check_overlap()
 
 def detect_robot_collision(robot, filter_objs=[]):
     filter_categories = ["floors"]

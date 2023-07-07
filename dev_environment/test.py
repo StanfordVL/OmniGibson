@@ -36,7 +36,7 @@ def main():
     config_filename = "test.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
-    config["scene"]["load_object_categories"] = ["floors", "ceilings", "walls", "coffee_table"]
+    config["scene"]["load_object_categories"] = ["floors", "walls"]
 
     # Load the environment
     env = og.Environment(configs=config)
@@ -46,87 +46,8 @@ def main():
     # Allow user to move camera more easily
     og.sim.enable_viewer_camera_teleoperation()
 
-    # table = DatasetObject(
-    #     name="table",
-    #     category="breakfast_table",
-    #     model="rjgmmy",
-    #     scale = 0.3
-    # )
-    # og.sim.import_object(table)
-    # table.set_position([1.0, 1.0, 0.58])
-
-    grasp_obj = DatasetObject(
-        name="potato",
-        category="cologne",
-        model="lyipur",
-        scale=0.01
-    )
-
-    og.sim.import_object(grasp_obj)
-    grasp_obj.set_position([-0.3, -0.8, 0.5])
-    og.sim.step()
-
     controller = StarterSemanticActionPrimitives(None, scene, robot)
 
-    # Need to set start pose because default tuck pose for Fetch collides with itself
-    def set_start_pose():
-        default_pose = np.array(
-            [
-                0.0,
-                0.0,  # wheels
-                0.0,  # trunk
-                0.0,
-                -1.0,
-                0.0,  # head
-                -1.0,
-                1.53448,
-                2.2,
-                0.0,
-                1.36904,
-                1.90996,  # arm
-                0.05,
-                0.05,  # gripper
-            ]
-        )
-        robot.set_joint_positions(default_pose)
-        og.sim.step()
-    
-    def test_navigate_to_obj():
-        set_start_pose()
-        execute_controller(controller._navigate_to_obj(table), env)
-
-    def test_grasp_no_navigation():
-        set_start_pose()
-        robot.set_position([0.0, -0.5, 0.05])
-        robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
-        og.sim.step()
-        execute_controller(controller.grasp(grasp_obj), env)
-
-    def test_grasp():
-        set_start_pose()
-        execute_controller(controller.grasp(grasp_obj), env)
-
-    def test_place():
-        test_grasp()
-        pause(1)
-        execute_controller(controller.place_on_top(table), env)
-
-    def test_grasp_replay_and_place():
-        set_start_pose()
-        robot.set_position([0.0, -0.5, 0.05])
-        robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
-        og.sim.step()
-        replay_controller(env, "./replays/grasp.yaml")
-        execute_controller(controller.place_on_top(table), env)
-
-    # Work more reliably
-    # test_navigate_to_obj()
-    # test_grasp_no_navigation()
-    # test_grasp_replay_and_place()
-
-    # Don't work as reliably
-    # test_grasp()
-    # test_place()
     execute_controller(controller._navigate_to_pose([1.0, 1.0, 0.0]), env)
 
 if __name__ == "__main__":
@@ -142,7 +63,6 @@ if __name__ == "__main__":
         pr.enable()
         main()
         pr.disable()
-        s = io.StringIO()
         results = pstats.Stats(pr)
         filename = f'profile-{os.path.basename(__file__)}-{time.strftime("%Y%m%d-%H%M%S")}'
         results.dump_stats(f"./profiles/{filename}.prof")
