@@ -8,7 +8,33 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import RigidContactAPI
 
 from omnigibson.utils.constants import PrimType
-import itertools
+
+class UndoableContext(object):
+    def __init__(self, robot):
+        self.robot = robot
+
+    def __enter__(self):
+        self.obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm]
+        # Store object in hand and the link of the object attached to the robot gripper to manually restore later
+        if self.obj_in_hand is not None:
+            obj_ag_link_path = self.robot._ag_obj_constraint_params[self.robot.default_arm]['ag_link_prim_path']
+            for link in self.obj_in_hand._links.values():
+                if link.prim_path == obj_ag_link_path:
+                    self.obj_in_hand_link = link
+                    break
+
+        self.state = og.sim.dump_state(serialized=False)
+        og.sim._physics_context.set_gravity(value=0.0)
+        for obj in og.sim.scene.objects:
+            obj.keep_still()
+
+    def __exit__(self, *args):
+        og.sim._physics_context.set_gravity(value=-9.81)
+        og.sim.load_state(self.state, serialized=False)
+        og.sim.step()
+        if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
+            self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
+        og.sim.step()
 
 num_samples = [0]
 def plan_base_motion(
@@ -18,16 +44,17 @@ def plan_base_motion(
     **kwargs,
 ):
     def state_valid_fn(q):
-        x = q.getX()
-        y = q.getY()
-        yaw = q.getYaw()
-        robot.set_position_orientation(
-            [x, y, 0.05], T.euler2quat((0, 0, yaw))
-        )
-        og.sim.step(render=False)
-        state_valid = not detect_robot_collision(robot)
-        num_samples[0] += 1
-        return state_valid
+        with UndoableContext(robot):
+            x = q.getX()
+            y = q.getY()
+            yaw = q.getYaw()
+            robot.set_position_orientation(
+                [x, y, 0.05], T.euler2quat((0, 0, yaw))
+            )
+            og.sim.step(render=False)
+            state_valid = not detect_robot_collision(robot)
+            num_samples[0] += 1
+            return state_valid
 
     pos = robot.get_position()
     yaw = T.quat2euler(robot.get_orientation())[2]
@@ -146,52 +173,6 @@ def plan_arm_motion(
             return_path.append(joint_pos)
         return return_path
     return None
-
-# def detect_robot_collision(robot, filter_objs=[]):
-#     filter_categories = ["floors"]
-#     # Store the meshs' IDs
-#     mesh_robot_ids = [mesh.prim_path for link in robot.links.values() for mesh in link.collision_meshes.values()]
-#     # breakpoint()
-#     all_rigid_mesh_ids = []
-#     for obj in og.sim.scene.objects:
-#         if obj.prim_type == PrimType.RIGID and obj.category not in filter_categories:
-#             for link in obj.links.values():
-#                 if not link.kinematic_only:
-#                     for mesh in link.collision_meshes.values():
-#                         from IPython import embed; embed()
-#                         all_rigid_mesh_ids.append(mesh.prim_path)
-
-#     # robot_links = [link.prim_path for link in robot.links.values()]
-#     all_other_object_mesh_ids = list(set(all_rigid_mesh_ids) - set(mesh_robot_ids))
-    
-#     mesh_id_pairs = itertools.product(mesh_robot_ids, all_other_object_mesh_ids)
-
-#     # Define function for checking overlap
-#     valid_hit = False
-
-#     def overlap_callback(hit):
-#         nonlocal valid_hit
-#         from IPython import embed; embed()
-#         # valid_hit = hit.rigid_body in <VALID LINK PRIM PATHS TO CHECK FOR COL>
-#         # Continue traversal only if we don't have a valid hit yet
-#         return not valid_hit
-
-#     def check_overlap():
-#         nonlocal valid_hit
-#         valid_hit = False
-
-#         mesh_id = "/World/coffee_table_fqluyq_0/base_link/collisions/mesh_6"
-#         og.sim.psqi.overlap_mesh(0, 1, reportFn=overlap_callback)
-
-#         # for mesh_id_pair in mesh_id_pairs:
-#         #     if valid_hit:
-#         #         break
-#         #     from IPython import embed; embed()
-#         #     og.sim.psqi.overlap_mesh(*mesh_id_pair, reportFn=overlap_callback)
-            
-#         return valid_hit
-    
-#     check_overlap()
 
 def detect_robot_collision(robot, filter_objs=[]):
     filter_categories = ["floors"]

@@ -118,15 +118,10 @@ class UndoableContext(object):
         self.state = og.sim.dump_state(serialized=False)
         og.sim._physics_context.set_gravity(value=0.0)
         for obj in og.sim.scene.objects:
-            for link in obj.links.values():
-                PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(False)
             obj.keep_still()
 
     def __exit__(self, *args):
         og.sim._physics_context.set_gravity(value=-9.81)
-        for obj in og.sim.scene.objects:
-            for link in obj.links.values():
-                PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(True)
         og.sim.load_state(self.state, serialized=False)
         og.sim.step()
         if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
@@ -606,12 +601,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         yield from self._move_hand_direct_joint(reset_pose, control_idx)
 
     def _navigate_to_pose(self, pose_2d):
-        with UndoableContext(self.robot):
-            plan = plan_base_motion(
-                robot=self.robot,
-                end_conf=pose_2d,
-            )
-
+        plan = plan_base_motion(
+            robot=self.robot,
+            end_conf=pose_2d,
+        )
+        
         if plan is None:
             # TODO: Would be great to produce a more informative error.
             raise ActionPrimitiveError(ActionPrimitiveError.Reason.PLANNING_ERROR, "Could not make a navigation plan.")
