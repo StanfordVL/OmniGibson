@@ -188,19 +188,16 @@ class ObjectTaxonomy(object):
         assert self.is_valid_synset(synset)
         return list(self.taxonomy.successors(synset))
 
-    def get_parent(self, synset):
+    def get_parents(self, synset):
         """
-        Get the immediate parent synset of a synset.
+        Get the immediate parent synsets of a synset.
 
         :param synset: synset to search.
-        :return: str corresponding to parent synset, None if no parent exists.
+        :return: list of str corresponding to parent synset
         """
         assert self.is_valid_synset(synset)
 
-        in_degree = self.taxonomy.in_degree(synset)
-        assert in_degree <= 1
-
-        return next(self.taxonomy.predecessors(synset)) if in_degree else None
+        return list(self.taxonomy.predecessors(synset))
 
     def is_leaf(self, synset):
         """
