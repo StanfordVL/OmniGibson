@@ -242,15 +242,26 @@ def detect_robot_collision(robot, filter_objs=[]):
 #     return len(collision_prims) > 0 or detect_self_collision(robot)
 
 def detect_self_collision(robot):
-    contacts = robot.contact_list()
-    robot_links = [link.prim_path for link in robot.links.values()]
-    disabled_pairs = [set(p) for p in robot.disabled_collision_pairs]
-    for c in contacts:
-        link0 = c.body0.split("/")[-1]
-        link1 = c.body1.split("/")[-1]
-        if {link0, link1} not in disabled_pairs and c.body0 in robot_links and c.body1 in robot_links:
-            return True
+    all_impulses = RigidContactAPI.get_all_impulses()
+    robot_links = robot.links
+    disabled_pairs_ids = [{RigidContactAPI.get_body_idx(robot_links[p[0]].prim_path), RigidContactAPI.get_body_idx(robot_links[p[1]].prim_path)} for p in robot.disabled_collision_pairs]
+    robot_link_ids = [RigidContactAPI.get_body_idx(link.prim_path) for link in robot_links.values()]
+    for id_1 in robot_link_ids:
+        for id_2 in robot_link_ids:
+            if id_1 != id_2 and {id_1, id_2} not in disabled_pairs_ids and np.max(all_impulses[id_1][id_2]) > 0.0:
+                return True    
     return False
+
+# def detect_self_collision(robot):
+#     contacts = robot.contact_list()
+#     robot_links = [link.prim_path for link in robot.links.values()]
+#     disabled_pairs = [set(p) for p in robot.disabled_collision_pairs]
+#     for c in contacts:
+#         link0 = c.body0.split("/")[-1]
+#         link1 = c.body1.split("/")[-1]
+#         if {link0, link1} not in disabled_pairs and c.body0 in robot_links and c.body1 in robot_links:
+#             return True
+#     return False
 
 def detect_hand_collision(robot, joint_pos, control_idx):
     robot.set_joint_positions(joint_pos, control_idx)
