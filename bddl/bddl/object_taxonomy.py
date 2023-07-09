@@ -61,6 +61,14 @@ class ObjectTaxonomy(object):
                              ", ".join(matched))
 
         return matched[0]
+    
+    def get_all_synsets(self):
+        """
+        Return all synsets in topology, in topological order (every synsets appears before its descendants)
+
+        :return: list of str corresponding to synsets
+        """
+        return list(nx.topological_sort(self.taxonomy))
 
     def get_synset_from_category(self, category):
         """
