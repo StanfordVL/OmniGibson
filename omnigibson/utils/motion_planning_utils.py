@@ -181,16 +181,36 @@ def detect_robot_collision(robot, filter_objs=[]):
     if obj_in_hand is not None:
         filter_objs.append(obj_in_hand)
 
-    collision_prims = list(robot.states[ContactBodies].get_value(ignore_objs=tuple(filter_objs)))
+    all_rigid_links = []
+    for obj in og.sim.scene.objects:
+        if obj.prim_type == PrimType.RIGID and obj.category not in filter_categories:
+            for link in obj.links.values():
+                if not link.kinematic_only:
+                    all_rigid_links.append(link.prim_path)
 
-    for col_prim in collision_prims:
-        tokens = col_prim.prim_path.split("/")
-        obj_prim_path = "/".join(tokens[:-1])
-        col_obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
-        if col_obj.category in filter_categories:
-            collision_prims.remove(col_prim)
+    robot_links = [link.prim_path for link in robot.links.values()]
+    all_other_object_links = list(set(all_rigid_links) - set(robot_links))
 
-    return len(collision_prims) > 0 or detect_self_collision(robot)
+    impulse_matrix = RigidContactAPI.get_impulses(robot_links, all_other_object_links)
+    return np.max(impulse_matrix) > 0.0 or detect_self_collision(robot)
+
+# def detect_robot_collision(robot, filter_objs=[]):
+#     filter_categories = ["floors"]
+    
+#     obj_in_hand = robot._ag_obj_in_hand[robot.default_arm]
+#     if obj_in_hand is not None:
+#         filter_objs.append(obj_in_hand)
+
+#     collision_prims = list(robot.states[ContactBodies].get_value(ignore_objs=tuple(filter_objs)))
+
+#     for col_prim in collision_prims:
+#         tokens = col_prim.prim_path.split("/")
+#         obj_prim_path = "/".join(tokens[:-1])
+#         col_obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
+#         if col_obj.category in filter_categories:
+#             collision_prims.remove(col_prim)
+
+#     return len(collision_prims) > 0 or detect_self_collision(robot)
 
 def detect_self_collision(robot):
     contacts = robot.contact_list()
