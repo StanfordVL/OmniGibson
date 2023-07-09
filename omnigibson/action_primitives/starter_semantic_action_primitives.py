@@ -118,15 +118,10 @@ class UndoableContext(object):
         self.state = og.sim.dump_state(serialized=False)
         og.sim._physics_context.set_gravity(value=0.0)
         for obj in og.sim.scene.objects:
-            for link in obj.links.values():
-                PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(False)
             obj.keep_still()
 
     def __exit__(self, *args):
         og.sim._physics_context.set_gravity(value=-9.81)
-        for obj in og.sim.scene.objects:
-            for link in obj.links.values():
-                PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(True)
         og.sim.load_state(self.state, serialized=False)
         og.sim.step()
         if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:

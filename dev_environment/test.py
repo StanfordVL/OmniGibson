@@ -36,7 +36,7 @@ def main():
     config_filename = "test.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
-    config["scene"]["load_object_categories"] = ["floors", "walls"]
+    config["scene"]["load_object_categories"] = ["floors", "walls", "coffee_table"]
 
     # Load the environment
     env = og.Environment(configs=config)
