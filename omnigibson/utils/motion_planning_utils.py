@@ -8,6 +8,7 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import RigidContactAPI
 
 from omnigibson.utils.constants import PrimType
+import itertools
 
 class UndoableContext(object):
     def __init__(self, robot):
@@ -211,6 +212,18 @@ def detect_robot_collision(robot, filter_objs=[]):
 #             collision_prims.remove(col_prim)
 
 #     return len(collision_prims) > 0 or detect_self_collision(robot)
+
+def detect_self_collision(robot):
+    all_impulses = RigidContactAPI.get_all_impulses()
+    disabled_pairs_ids = {{RigidContactAPI.get_body_idx(p[0]), RigidContactAPI.get_body_idx(p[1])} for p in robot.disabled_collision_pairs}
+    robot_link_ids = [RigidContactAPI.get_body_idx(link.prim_path) for link in robot.links.values()]
+    for id_1 in robot_link_ids:
+        for id_2 in robot_link_ids:
+            if id_1 != id_2 and {id_1, id_2} not in disabled_pairs_ids and np.max(all_impulses[id_1][id_2]) > 0.0:
+                return True
+            
+    return False
+
 
 def detect_self_collision(robot):
     contacts = robot.contact_list()

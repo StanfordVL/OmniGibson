@@ -33,19 +33,45 @@ def main():
     # Allow user to move camera more easily
     og.sim.enable_viewer_camera_teleoperation()
 
+    # Self collisions
+    sample_self_collision = [0.03053552120088664, 1.0269865478752571, 1.1344740372495958, 6.158997020615134, 1.133466907494042, -4.544473644642829, 0.6930819484783561, 4.676661155308317]
+    def set_joint_position(joint_pos):
+        joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+        robot.set_joint_positions(joint_pos, joint_control_idx)
+        og.sim.step()
 
-    positions = [
-        [0.0, 0.0, 0.0],
-        [0.0, -1.0, 0.0]
-    ]
+    with UndoableContext(robot):
+        print(detect_robot_collision(robot))
+        print("--------------------")
+        pause(2)
 
-    for position in positions:
-        with UndoableContext(robot):
-            robot.set_position(position)
-            og.sim.step()
-            print(detect_robot_collision(robot))
-            print("--------------------")
-            pause(2)
+    set_joint_position(sample_self_collision)
+    with UndoableContext(robot):
+        print(detect_robot_collision(robot))
+        print("--------------------")
+        pause(2)
+
+    robot.untuck()
+    og.sim.step()
+    with UndoableContext(robot):
+        print(detect_robot_collision(robot))
+        print("--------------------")
+        pause(2)
+
+
+    # Robot collisions
+    # positions = [
+    #     [0.0, 0.0, 0.0],
+    #     [0.0, -1.0, 0.0]
+    # ]
+
+    # for position in positions:
+    #     with UndoableContext(robot):
+    #         robot.set_position(position)
+    #         og.sim.step()
+    #         print(detect_robot_collision(robot))
+    #         print("--------------------")
+    #         pause(2)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run test script")
