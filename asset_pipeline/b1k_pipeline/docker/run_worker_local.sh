@@ -101,6 +101,7 @@ declare -A MOUNTS=(
     [${ISAAC_CACHE_PATH}/config]=/root/.nvidia-omniverse/config
     [${ISAAC_CACHE_PATH}/data]=/root/.local/share/ov/data
     [${ISAAC_CACHE_PATH}/documents]=/root/Documents
+    ["/scr/OmniGibson"]=/omnigibson-src
 )
 
 MOUNT_KWARGS=""
@@ -147,7 +148,7 @@ for ((i = 1 ; i <= $WORKER_CNT ; i++));
 do
     CONTAINER_NAME=ig_pipeline_${i}
     echo "Creating container ${CONTAINER_NAME}..."
-    enroot create --force --name ${CONTAINER_NAME} ${SQSH_SOURCE}
+    # enroot create --force --name ${CONTAINER_NAME} ${SQSH_SOURCE}
 
     if [ `expr $i % 2` == 0 ]
     then

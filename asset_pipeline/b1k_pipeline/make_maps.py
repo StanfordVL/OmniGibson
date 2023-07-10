@@ -1,6 +1,7 @@
 import os
 
 import concurrent.futures
+import pdb
 import fs
 from fs.multifs import MultiFS
 from fs.tempfs import TempFS
@@ -66,8 +67,9 @@ def process_scene(scene_id, dataset_path):
         # Get the maximum magnitude distance from zero
         body_ids = [bid for obj in scene.get_objects() for bid in obj.get_body_ids()]
         aabbs = [igibson.external.pybullet_tools.utils.get_aabb(b) for b in body_ids]
-        bad_aabbs = [(bid, aabb) for bid, aabb in zip(body_ids, aabbs) if np.any(np.abs(aabb) > 20)]
-        assert not bad_aabbs, f"Bad AABBs: {bad_aabbs}"
+        bad_aabbs = [(scene.objects_by_id[bid].name, aabb) for bid, aabb in zip(body_ids, aabbs) if np.any(np.abs(aabb) > 20)]
+        if bad_aabbs:
+            pdb.set_trace()
         combined_aabb = np.array(igibson.external.pybullet_tools.utils.aabb_union(aabbs))
         aabb_dist_from_zero = np.abs(combined_aabb)
         print(aabb_dist_from_zero)

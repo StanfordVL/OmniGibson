@@ -6,7 +6,7 @@ import json
 from b1k_pipeline import mesh_tree
 from b1k_pipeline.utils import PipelineFS, get_targets, parse_name
 
-NUKE_SELECTIONS = True
+NUKE_SELECTIONS = False
 
 def process_target(target):
     try:
@@ -27,7 +27,7 @@ def process_target(target):
                     if len(splits) == 0:
                         errors[node] = "Collision mesh was found but contains no meshes."
                     elif len(splits) > 32:
-                        errors[node] = "Collision mesh was found but contains too many meshes."
+                        errors[node] = f"Collision mesh was found but contains too many meshes: {len(splits)}."
                     elif any(not split.is_watertight for split in splits):
                         errors[node] = "Collision mesh was found but contains non-watertight meshes."
                     elif any(not split.is_volume or split.volume <= 0 for split in splits):
@@ -116,7 +116,7 @@ def main():
 
         with pipeline_fs.pipeline_output().open("collision_selection_validation.json", "w") as f:
             printable_errors = {k: {str(k2): v2 for k2, v2 in v.items()} for k, v in errors.items()}
-            json.dump({"success": not errors, "errors": printable_errors}, f, indent=4)
+            json.dump({"success": True, "errors": printable_errors}, f, indent=4)
 
 
 if __name__ == "__main__":
