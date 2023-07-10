@@ -36,7 +36,7 @@ def main():
     config_filename = "test.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
-    config["scene"]["load_object_categories"] = ["floors", "walls", "coffee_table"]
+    config["scene"]["not_load_object_categories"] = ["sofa", "carpet"]
 
     # Load the environment
     env = og.Environment(configs=config)
@@ -48,7 +48,7 @@ def main():
 
     controller = StarterSemanticActionPrimitives(None, scene, robot)
 
-    execute_controller(controller._navigate_to_pose([1.0, 1.0, 0.0]), env)
+    execute_controller(controller._navigate_to_pose([0.5, 0.5, 0.0]), env)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run test script")
