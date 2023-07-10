@@ -12,6 +12,7 @@ from b1k_pipeline.export_objs_global import compute_object_bounding_box
 import b1k_pipeline.utils
 
 SKIP_CATEGORIES = {}
+SKIP_MODELS = {"pluwfl"}
 
 def main():
     target = sys.argv[1]
@@ -38,6 +39,9 @@ def main():
     for root_node in roots:
         obj_cat, obj_model, obj_inst_id, _ = root_node
         if obj_cat in SKIP_CATEGORIES:
+            continue
+
+        if obj_model in SKIP_MODELS:
             continue
 
         # For now, skip loose objects
