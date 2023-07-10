@@ -20674,7 +20674,13 @@
         }
     },
     "deep-freeze.n.02": {
-        "coldSource": {},
+        "coldSource": {
+            "temperature": -18.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 1,
+            "requires_inside": 1
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
