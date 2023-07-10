@@ -36,7 +36,7 @@ def main():
         dask_client = launch_cluster(WORKER_COUNT)
 
         # Start the batched run
-        scenes = ["Rs_int"] # [x.split("/")[-1] for x in get_targets("scenes")]
+        scenes = [x.split("/")[-1] for x in get_targets("scenes")]
         print("Queueing scenes.")
         print("Total count: ", len(scenes))
         futures = {}
