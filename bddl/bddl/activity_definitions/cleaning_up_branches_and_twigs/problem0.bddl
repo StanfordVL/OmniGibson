@@ -13,7 +13,7 @@
     
     (:init 
         (ontop lawn.n.01_1 floor.n.01_1) 
-        (ontop grill.n.02_1 lawn.n.01_1) 
+        (inroom grill.n.02_1 garden)
         (ontop branch.n.02_1 grill.n.02_1) 
         (ontop branch.n.02_2 lawn.n.01_1) 
         (ontop branch.n.02_3 lawn.n.01_1)
