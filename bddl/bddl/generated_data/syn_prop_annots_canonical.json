@@ -668,6 +668,7 @@
     "armchair.n.01": {
         "breakable": {},
         "flammable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -9243,6 +9244,7 @@
         "freezable": {}
     },
     "chaise_longue.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10611,6 +10613,7 @@
     },
     "clothes_dryer.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10881,14 +10884,6 @@
         "cookable": {},
         "liquid": {},
         "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "heatable": {},
-        "freezable": {}
-    },
-    "cocoa.n.02": {
-        "cookable": {},
-        "microPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
         "heatable": {},
@@ -13154,7 +13149,6 @@
     },
     "deep-freeze.n.02": {
         "openable": {},
-        "toggleable": {},
         "coldSource": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -14369,6 +14363,7 @@
         "freezable": {}
     },
     "driveway.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14633,6 +14628,7 @@
     },
     "eames_chair.n.01": {
         "breakable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15448,6 +15444,7 @@
         "freezable": {}
     },
     "fireplace.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15725,6 +15722,7 @@
     "flower.n.02": {
         "cookable": {},
         "sliceable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15789,6 +15787,7 @@
     },
     "folding_chair.n.01": {
         "breakable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -17158,6 +17157,7 @@
         "freezable": {}
     },
     "griddle.n.01": {
+        "toggleable": {},
         "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -17180,6 +17180,7 @@
         "flammable": {},
         "openable": {},
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27951,6 +27952,7 @@
         "freezable": {}
     },
     "rocking_chair.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29168,6 +29170,7 @@
     },
     "scrub.n.01": {
         "particleRemover": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29854,6 +29857,7 @@
         "freezable": {}
     },
     "shopping_cart.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30024,6 +30028,7 @@
     },
     "showerhead.n.01": {
         "toggleable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -31928,6 +31933,7 @@
         "freezable": {}
     },
     "straight_chair.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32466,6 +32472,7 @@
     },
     "swivel_chair.n.01": {
         "breakable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34025,6 +34032,7 @@
     },
     "tree.n.01": {
         "flammable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35316,6 +35324,7 @@
     },
     "wardrobe.n.01": {
         "openable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35520,7 +35529,6 @@
         "freezable": {}
     },
     "watering_can.n.01": {
-        "fillable": {},
         "particleSource": {},
         "needsOrientation": {},
         "rigidBody": {},
