@@ -57,7 +57,7 @@ if __name__ == "__main__":
     env = og.Environment(configs=cfg)
 
     # Get all the RigidPrims from the scene
-    objs = env.scene.objects()
+    objs = env.scene.objects
     links = {obj.name + "-" + link_name: link for obj in objs for link_name, link in obj.links.items()}
 
     # Store their poses

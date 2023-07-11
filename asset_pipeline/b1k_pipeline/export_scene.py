@@ -13,6 +13,7 @@ import b1k_pipeline.utils
 
 SKIP_CATEGORIES = {}
 SKIP_MODELS = {"pluwfl"}
+NEVER_CLUTTER_CATEGORIES = {"shopping_cart"}
 
 def main():
     target = sys.argv[1]
@@ -45,7 +46,7 @@ def main():
             continue
 
         # For now, skip loose objects
-        if G.nodes[root_node]["is_loose"] == "C-":
+        if G.nodes[root_node]["is_loose"] == "C-" and obj_cat not in NEVER_CLUTTER_CATEGORIES:
             continue
 
         obj_name_in_scene = "-".join([obj_cat, obj_model, obj_inst_id])

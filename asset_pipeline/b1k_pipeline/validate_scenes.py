@@ -10,7 +10,7 @@ import tqdm
 
 from b1k_pipeline.utils import PipelineFS, TMP_DIR, launch_cluster, get_targets
 
-WORKER_COUNT = 2
+WORKER_COUNT = 1
 
 def run_on_scene(dataset_path, scene, output_dir):
     python_cmd = ["python", "-m", "b1k_pipeline.validate_scenes_process", dataset_path, scene, output_dir]
@@ -36,7 +36,7 @@ def main():
         dask_client = launch_cluster(WORKER_COUNT)
 
         # Start the batched run
-        scenes = [x.split("/")[-1] for x in get_targets("scenes")]
+        scenes = [x.split("/")[-1] for x in get_targets("final_scenes")]
         print("Queueing scenes.")
         print("Total count: ", len(scenes))
         futures = {}

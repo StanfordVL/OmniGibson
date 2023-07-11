@@ -1910,7 +1910,7 @@ stages:
   validate_scenes:
     cmd: python -m b1k_pipeline.validate_scenes
     deps:
-    - artifacts/parallels/pack_dataset.zip
+    - artifacts/og_dataset.zip
     - artifacts/pipeline/pack_dataset.success
     - b1k_pipeline/validate_scenes.py
     - b1k_pipeline/validate_scenes_process.py
