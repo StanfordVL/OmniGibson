@@ -11,16 +11,16 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init 
-        (ontop lawn.n.01_1 floor.n.01_1) 
-        (inroom grill.n.02_1 garden)
+    (:init
         (ontop branch.n.02_1 grill.n.02_1) 
         (ontop branch.n.02_2 lawn.n.01_1) 
         (ontop branch.n.02_3 lawn.n.01_1)
         (ontop ashcan.n.01_1 lawn.n.01_1) 
         (ontop pruner.n.02_1 lawn.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (inroom floor.n.01_1 garden) 
+        (inroom floor.n.01_1 garden)
+        (inroom lawn.n.01_1 garden)
+        (inroom grill.n.02_1 garden)
     )
     
     (:goal 
