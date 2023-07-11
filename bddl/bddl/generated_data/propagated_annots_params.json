@@ -1886,7 +1886,6 @@
     "atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -4827,6 +4826,7 @@
     "bin.n.01": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -4971,6 +4971,7 @@
     "bird_feeder.n.01": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -13760,7 +13761,6 @@
         "substance": {}
     },
     "chaff.n.01": {
-        "fireSource": {},
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -15299,7 +15299,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fireSource": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -17014,6 +17013,7 @@
     "compost_bin.n.01": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -20702,7 +20702,6 @@
     "deep_fryer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fireSource": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -23849,7 +23848,6 @@
         "wrinkleable": {}
     },
     "ember.n.01": {
-        "fireSource": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -25105,7 +25103,6 @@
     "firewood.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fireSource": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -26095,7 +26092,6 @@
         "wrinkleable": {}
     },
     "fragment.n.01": {
-        "fireSource": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -28433,13 +28429,6 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {
-            "temperature": 200.0,
-            "heating_rate": 0.01,
-            "requires_toggled_on": 1,
-            "requires_closed": 0,
-            "requires_inside": 0
-        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -35487,7 +35476,6 @@
     "log.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fireSource": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -46012,7 +46000,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 91.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -48664,7 +48658,6 @@
         "wrinkleable": {}
     },
     "sawdust.n.01": {
-        "fireSource": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -50500,7 +50493,6 @@
     "shortening.n.01": {
         "boilable": {},
         "cookable": {},
-        "fireSource": {},
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -53984,7 +53976,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 1980.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },

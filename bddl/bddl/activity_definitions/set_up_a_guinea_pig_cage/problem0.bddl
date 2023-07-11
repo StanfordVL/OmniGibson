@@ -33,7 +33,7 @@
             (filled ?bowl.n.01_1 ?pellet_food.n.01_1)
             (inside ?bowl.n.01_1 ?hutch.n.01_1)
             (inside ?water_bottle.n.01_1 ?hutch.n.01_1) 
-            (contains ?hutch.n.01_1 ?hay.n.01_1)
+            (covered ?hutch.n.01_1 ?hay.n.01_1)
         )
     )
 )
