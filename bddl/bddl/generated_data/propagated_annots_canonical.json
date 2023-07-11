@@ -4943,7 +4943,6 @@
     "breakable": {},
     "disinfectable": {},
     "dustyable": {},
-    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -10414,7 +10413,6 @@
     "breakable": {},
     "disinfectable": {},
     "dustyable": {},
-    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -16172,7 +16170,6 @@
   "crate.n.01": {
     "disinfectable": {},
     "dustyable": {},
-    "fillable": {},
     "flammable": {},
     "freezable": {},
     "grassyable": {},
@@ -26436,6 +26433,7 @@
   },
   "ice.n.01": {
     "breakable": {},
+    "coldSource": {},
     "disinfectable": {},
     "dustyable": {},
     "freezable": {},
@@ -26494,6 +26492,7 @@
   },
   "ice_cube.n.01": {
     "breakable": {},
+    "coldSource": {},
     "disinfectable": {},
     "dustyable": {},
     "freezable": {},
@@ -26532,6 +26531,7 @@
     "wrinkleable": {}
   },
   "ice_maker.n.01": {
+    "coldSource": {},
     "disinfectable": {},
     "dustyable": {},
     "freezable": {},
@@ -34048,7 +34048,6 @@
   "packing_box.n.02": {
     "disinfectable": {},
     "dustyable": {},
-    "fillable": {},
     "flammable": {},
     "freezable": {},
     "grassyable": {},
@@ -36551,7 +36550,6 @@
   "pizza_box.n.01": {
     "disinfectable": {},
     "dustyable": {},
-    "fillable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -45437,9 +45435,9 @@
   "steamer.n.02": {
     "disinfectable": {},
     "dustyable": {},
-    "fillable": {},
     "freezable": {},
     "grassyable": {},
+    "heatSource": {},
     "heatable": {},
     "mixable": {},
     "moldyable": {},
@@ -47914,7 +47912,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},

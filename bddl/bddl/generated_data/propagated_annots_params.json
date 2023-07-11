@@ -5875,7 +5875,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -12273,7 +12272,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -19335,7 +19333,6 @@
     "crate.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -31435,6 +31432,13 @@
     },
     "ice.n.01": {
         "breakable": {},
+        "coldSource": {
+            "temperature": 0.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -31499,6 +31503,13 @@
     },
     "ice_cube.n.01": {
         "breakable": {},
+        "coldSource": {
+            "temperature": 0.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -31541,6 +31552,13 @@
         "wrinkleable": {}
     },
     "ice_maker.n.01": {
+        "coldSource": {
+            "temperature": -8.9,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -40343,7 +40361,6 @@
     "packing_box.n.02": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -43274,7 +43291,6 @@
     "pizza_box.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -53598,9 +53614,15 @@
     "steamer.n.02": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 212.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -56450,7 +56472,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
