@@ -7,6 +7,7 @@ from omnigibson.macros import gm
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
 import omnigibson.utils.transform_utils as T
 from omnigibson.objects.dataset_object import DatasetObject
+from omni.physx.scripts import utils
 
 import cProfile, pstats, io
 import time
@@ -46,14 +47,14 @@ def main():
     # Allow user to move camera more easily
     og.sim.enable_viewer_camera_teleoperation()
 
-    table = DatasetObject(
-        name="table",
-        category="breakfast_table",
-        model="rjgmmy",
-        scale = 0.3
-    )
-    og.sim.import_object(table)
-    table.set_position([1.0, 1.0, 0.58])
+    # table = DatasetObject(
+    #     name="table",
+    #     category="breakfast_table",
+    #     model="rjgmmy",
+    #     scale = 0.3
+    # )
+    # og.sim.import_object(table)
+    # table.set_position([1.0, 1.0, 0.58])
 
     grasp_obj = DatasetObject(
         name="potato",
@@ -120,7 +121,7 @@ def main():
         execute_controller(controller.place_on_top(table), env)
 
     # Work more reliably
-    test_navigate_to_obj()
+    # test_navigate_to_obj()
     # test_grasp_no_navigation()
     # test_grasp_replay_and_place()
 
@@ -128,7 +129,8 @@ def main():
     # test_grasp()
     # test_place()
 
-    pause(5)
+    execute_controller(controller._navigate_to_pose([0.9, 0.9, 0]), env)
+    # pause(5)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run test script")

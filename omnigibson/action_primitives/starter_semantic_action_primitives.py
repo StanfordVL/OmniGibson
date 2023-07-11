@@ -101,41 +101,87 @@ def indented_print(msg, *args, **kwargs):
     logger.debug("  " * len(inspect.stack()) + str(msg), *args, **kwargs)
 
 
+# class UndoableContext(object):
+#     def __init__(self, robot):
+#         self.robot = robot
+
+#     def __enter__(self):
+#         self.obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm]
+#         # Store object in hand and the link of the object attached to the robot gripper to manually restore later
+#         if self.obj_in_hand is not None:
+#             obj_ag_link_path = self.robot._ag_obj_constraint_params[self.robot.default_arm]['ag_link_prim_path']
+#             for link in self.obj_in_hand._links.values():
+#                 if link.prim_path == obj_ag_link_path:
+#                     self.obj_in_hand_link = link
+#                     break
+
+#         self.state = og.sim.dump_state(serialized=False)
+#         og.sim._physics_context.set_gravity(value=0.0)
+#         for obj in og.sim.scene.objects:
+#             for link in obj.links.values():
+#                 PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(False)
+#             obj.keep_still()
+
+#     def __exit__(self, *args):
+#         og.sim._physics_context.set_gravity(value=-9.81)
+#         for obj in og.sim.scene.objects:
+#             for link in obj.links.values():
+#                 PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(True)
+#         og.sim.load_state(self.state, serialized=False)
+#         og.sim.step()
+#         if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
+#             self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
+#         og.sim.step()
+        
+from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand
+from omnigibson.prims import CollisionGeomPrim
+
 class UndoableContext(object):
     def __init__(self, robot):
         self.robot = robot
 
     def __enter__(self):
-        self.obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm]
-        # Store object in hand and the link of the object attached to the robot gripper to manually restore later
-        if self.obj_in_hand is not None:
-            obj_ag_link_path = self.robot._ag_obj_constraint_params[self.robot.default_arm]['ag_link_prim_path']
-            for link in self.obj_in_hand._links.values():
-                if link.prim_path == obj_ag_link_path:
-                    self.obj_in_hand_link = link
-                    break
+        # og.sim._physics_context.set_gravity(value=0)
+        self.robot_meshes = []
+        self.robot_meshes_copy = []
+        self.robot_meshes_relative_poses = []
+        robot_pose = self.robot.get_position_orientation()
+        for link in self.robot.links.values():
+            for mesh in link.collision_meshes.values():
+                new_path = "/World/" + mesh.prim_path.split("/")[-2] + "_copy"
+                mesh_command = CopyPrimCommand(mesh.prim_path, path_to=new_path)
+                mesh_command.do()
+                mesh_copy_path = mesh_command._path_to
+                mesh_copy = CollisionGeomPrim(mesh_copy_path, mesh_copy_path)
+                mesh_copy.collision_enabled = True
+                # mesh_pose = mesh.get_position_orientation()
+                # mesh_copy.set_position_orientation(*mesh_pose)
+                self.robot_meshes_copy.append(mesh_copy)
 
-        self.state = og.sim.dump_state(serialized=False)
-        og.sim._physics_context.set_gravity(value=0.0)
-        for obj in og.sim.scene.objects:
-            for link in obj.links.values():
-                PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(False)
-            obj.keep_still()
+                mesh_pose = mesh.get_position_orientation()
+                mesh_in_robot = T.relative_pose_transform(*mesh_pose, *robot_pose)
+                self.robot_meshes_relative_poses.append(mesh_in_robot)
+
+                mesh.collision_enabled = False
+                self.robot_meshes.append(mesh) 
+        # og.sim.step() 
+        return self  
 
     def __exit__(self, *args):
-        og.sim._physics_context.set_gravity(value=-9.81)
-        for obj in og.sim.scene.objects:
-            for link in obj.links.values():
-                PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(True)
-        og.sim.load_state(self.state, serialized=False)
-        og.sim.step()
-        if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
-            self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
-        og.sim.step()
+        for i, m in enumerate(self.robot_meshes):
+            m.collision_enabled = True
+            self.robot_meshes_copy[i].remove()
+        # pass
+        # og.sim._physics_context.set_gravity(value=-9.81)
+        # for obj in og.sim.scene.objects:
+        #     for link in obj.links.values():
+        #         PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(True)
+        # og.sim.load_state(self.state, serialized=False)
+        # og.sim.step()
+        # if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
+        #     self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
+        # og.sim.step()
         
-
-
-
 class StarterSemanticActionPrimitive(IntEnum):
     GRASP = 0
     PLACE_ON_TOP = 1
@@ -606,10 +652,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         yield from self._move_hand_direct_joint(reset_pose, control_idx)
 
     def _navigate_to_pose(self, pose_2d):
-        with UndoableContext(self.robot):
+        with UndoableContext(self.robot) as context:
             plan = plan_base_motion(
                 robot=self.robot,
                 end_conf=pose_2d,
+                context=context
             )
 
         if plan is None:

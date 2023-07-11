@@ -6,22 +6,27 @@ import omnigibson as og
 from omnigibson.object_states import ContactBodies
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import RigidContactAPI
+from pxr import PhysicsSchemaTools
 
+num_checks = [0]
 def plan_base_motion(
     robot,
     end_conf,
+    context,
     planning_time = 100.0,
-    **kwargs,
+    **kwargs
 ):
     def state_valid_fn(q):
         x = q.getX()
         y = q.getY()
         yaw = q.getYaw()
-        robot.set_position_orientation(
-            [x, y, 0.05], T.euler2quat((0, 0, yaw))
-        )
-        og.sim.step(render=False)
-        state_valid = not detect_robot_collision(robot)
+        # robot.set_position_orientation(
+        #     [x, y, 0.05], T.euler2quat((0, 0, yaw))
+        # )
+        pose = ([x, y, 0.0], T.euler2quat((0, 0, yaw)))
+        # og.sim.step(render=False)
+        state_valid = not detect_robot_collision(context, robot, pose)
+        num_checks[0] += 1
         return state_valid
 
     pos = robot.get_position()
@@ -33,8 +38,8 @@ def plan_base_motion(
 
     # set lower and upper bounds
     bounds = ob.RealVectorBounds(2)
-    bounds.setLow(-7.0)
-    bounds.setHigh(7.0)
+    bounds.setLow(-3.0)
+    bounds.setHigh(3.0)
     space.setBounds(bounds)
 
     # create a simple setup object
@@ -42,7 +47,7 @@ def plan_base_motion(
     ss.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
 
     si = ss.getSpaceInformation()
-    planner = ompl_geo.LBKPIECE1(si)
+    planner = ompl_geo.RRTConnect(si)
     ss.setPlanner(planner)
 
     start = ob.State(space)
@@ -68,6 +73,7 @@ def plan_base_motion(
         ss.simplifySolution()
         # print the simplified path
         sol_path = ss.getSolutionPath()
+        print("Num collision checks: ", num_checks[0])
         return_path = []
         for i in range(sol_path.getStateCount()):
             x = sol_path.getState(i).getX()
@@ -139,23 +145,89 @@ def plan_arm_motion(
         return return_path
     return None
 
-def detect_robot_collision(robot, filter_objs=[]):
-    filter_categories = ["floors"]
+# def detect_robot_collision(robot, filter_objs=[]):
+#     filter_categories = ["floors"]
     
-    obj_in_hand = robot._ag_obj_in_hand[robot.default_arm]
-    if obj_in_hand is not None:
-        filter_objs.append(obj_in_hand)
+#     obj_in_hand = robot._ag_obj_in_hand[robot.default_arm]
+#     if obj_in_hand is not None:
+#         filter_objs.append(obj_in_hand)
 
-    collision_prims = list(robot.states[ContactBodies].get_value(ignore_objs=tuple(filter_objs)))
+#     collision_prims = list(robot.states[ContactBodies].get_value(ignore_objs=tuple(filter_objs)))
 
-    for col_prim in collision_prims:
-        tokens = col_prim.prim_path.split("/")
-        obj_prim_path = "/".join(tokens[:-1])
-        col_obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
-        if col_obj.category in filter_categories:
-            collision_prims.remove(col_prim)
+#     for col_prim in collision_prims:
+#         tokens = col_prim.prim_path.split("/")
+#         obj_prim_path = "/".join(tokens[:-1])
+#         col_obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
+#         if col_obj.category in filter_categories:
+#             collision_prims.remove(col_prim)
 
-    return len(collision_prims) > 0 or detect_self_collision(robot)
+#     return len(collision_prims) > 0 or detect_self_collision(robot)
+
+from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, TransformPrimsCommand, TransformPrimCommand
+from omnigibson.prims import CollisionGeomPrim
+from pxr import Gf, Usd
+
+def detect_robot_collision(context, robot, pose=None, filter_objs=[]):
+    filter_categories = ["floors"]
+
+    # Store the meshs' IDs
+    # robot_root_mesh = robot.root_link.collision_meshes["collisions"]
+    # robot_pose = robot_root_mesh.get_position_orientation()
+    # relative_pose = T.relative_pose_transform(*pose, *robot_pose)
+    # print(relative_pose)
+    # print(T.pose2mat(relative_pose).astype(np.double))
+    # print(T.mat2pose(T.pose2mat(relative_pose).astype(np.double)))
+    # print(Gf.Matrix4d(T.pose2mat(relative_pose).astype(np.double)))
+    transforms = []
+    for i, mesh in enumerate(context.robot_meshes_copy):
+        # print(mesh.get_position())
+        # mesh.set_local_pose(*relative_pose)
+        # breakpoint()
+        relative_pose = context.robot_meshes_relative_poses[i]
+        mesh_pose = T.pose_transform(*pose, *relative_pose)
+        relative_pose_mat = Gf.Matrix4d(np.transpose(T.pose2mat(mesh_pose).astype(np.double)))
+        transforms.append((mesh.prim_path, relative_pose_mat, None, Usd.TimeCode.Default(), False, ''))
+        # TransformPrimCommand(mesh.prim_path, relative_pose_mat).do()
+        # print(mesh.get_position())
+        # print("----------")
+    # relative_pose_mat = Gf.Matrix4d(T.pose2mat(relative_pose).astype(np.double))
+    # transforms = [(mesh.prim_path, relative_pose_mat, None, Usd.TimeCode.Default(), False, '') for mesh in context.robot_meshes_copy]
+    TransformPrimsCommand(transforms).do()
+
+
+    filtered_links = []
+    for obj in og.sim.scene.objects:
+        if obj.category in filter_categories:
+            for link in obj.links.values():
+                filtered_links.append(link.prim_path)
+
+    # Define function for checking overlap
+    valid_hit = False
+
+    def overlap_callback(hit):
+        nonlocal valid_hit
+        valid_hit = hit.rigid_body not in filtered_links
+        # if valid_hit:
+        #     breakpoint()
+        return not valid_hit
+
+
+    def check_overlap():
+        nonlocal valid_hit
+        valid_hit = False
+
+        for mesh in context.robot_meshes_copy:
+            if valid_hit:
+                break
+            if "l_gripper_finger_link" in mesh.prim_path or "r_gripper_finger_link" in mesh.prim_path:
+                continue
+            mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh.prim_path)
+            og.sim.psqi.overlap_mesh(*mesh_id, reportFn=overlap_callback)
+            
+        return valid_hit
+    
+    return check_overlap()
+
 
 def detect_self_collision(robot):
     contacts = robot.contact_list()
