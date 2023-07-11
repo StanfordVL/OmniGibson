@@ -12,10 +12,8 @@
     )
     
     (:init 
-        (not 
-            (toggled_on coffee_maker.n.01_1) 
-        )
-        (ontop coffee_maker.n.01_1 countertop.n.01_1) 
+        (toggled_on coffee_maker.n.01_1)
+        (ontop coffee_maker.n.01_1 countertop.n.01_1)
         (ontop mug.n.04_1 countertop.n.01_1)
         (ontop mug.n.04_2 countertop.n.01_1)
         (filled mug.n.04_1 drip_coffee.n.01_1)
