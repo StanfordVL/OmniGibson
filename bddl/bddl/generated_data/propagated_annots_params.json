@@ -48590,7 +48590,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 77.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -52488,7 +52494,13 @@
         },
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 42.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
