@@ -1886,7 +1886,6 @@
     "atomizer.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -28433,13 +28432,6 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {
-            "temperature": 200.0,
-            "heating_rate": 0.01,
-            "requires_toggled_on": 1,
-            "requires_closed": 0,
-            "requires_inside": 0
-        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -46012,7 +46004,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 91.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -53984,7 +53982,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 1980.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
