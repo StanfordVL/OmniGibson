@@ -5652,7 +5652,6 @@
     },
     "bottle.n.03": {
         "breakable": {},
-        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -19024,6 +19023,7 @@
     },
     "ice_cube.n.01": {
         "breakable": {},
+        "coldSource": {},
         "slicer": {},
         "meltable": {},
         "rigidBody": {},
@@ -19063,6 +19063,7 @@
     },
     "ice_maker.n.01": {
         "toggleable": {},
+        "coldSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19118,6 +19119,7 @@
     },
     "ice.n.01": {
         "breakable": {},
+        "coldSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -31667,6 +31669,7 @@
     },
     "steamer.n.02": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},

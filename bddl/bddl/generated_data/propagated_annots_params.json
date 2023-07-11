@@ -5875,7 +5875,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -31433,6 +31432,13 @@
     },
     "ice.n.01": {
         "breakable": {},
+        "coldSource": {
+            "temperature": 0.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -31497,6 +31503,13 @@
     },
     "ice_cube.n.01": {
         "breakable": {},
+        "coldSource": {
+            "temperature": 0.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -31539,6 +31552,13 @@
         "wrinkleable": {}
     },
     "ice_maker.n.01": {
+        "coldSource": {
+            "temperature": -8.9,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -53596,6 +53616,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 212.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
