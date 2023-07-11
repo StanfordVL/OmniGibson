@@ -14,7 +14,7 @@
     )
     
     (:init 
-        (ontop chest_of_drawers.n.01_1 floor.n.01_1)
+        (inroom chest_of_drawers.n.01_1 closet)
         (inside sweater.n.01_1 chest_of_drawers.n.01_1) 
         (ontop boot.n.01_1 floor.n.01_1) 
         (ontop boot.n.01_2 floor.n.01_1) 
