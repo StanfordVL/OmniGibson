@@ -10,6 +10,7 @@ import traceback
 import numpy as np
 import pandas as pd
 import pymxs
+import trimesh
 import trimesh.transformations
 from scipy.spatial.transform import Rotation
 
@@ -327,6 +328,42 @@ class SanityCheck:
                 f"{row.object_name} has different material. Match materials on each instance.",
             )
 
+    def validate_collision(self, obj):
+        try:
+            # For this case, unwrap the object
+            obj = obj._obj
+
+            # Assert that collision meshes do not share instances in the scene
+            assert not [x for x in rt.objects if x.baseObject == obj.baseObject and x != obj], f"{obj.name} should not have instances."
+            
+            # Triangulate the faces
+            rt.polyop.setVertSelection(obj, rt.name('all'))
+            obj.connectVertices()
+            rt.polyop.setVertSelection(obj, rt.name('none'))
+            
+            # Get vertices and faces into numpy arrays for conversion
+            verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
+            faces = np.array([rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]) - 1
+            assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
+
+            # Split the faces into elements
+            elems = {tuple(rt.polyop.GetElementsUsingFace(obj, i + 1)) for i in range(rt.polyop.GetNumFaces(obj))}
+            assert len(elems) <= 32, f"{obj.name} should not have more than 32 elements."
+            elems = np.array(list(elems))
+            assert not np.any(np.sum(elems, axis=0) > 1), f"{obj.name} has same face appear in multiple elements"
+            
+            # Iterate through the elements
+            for i, elem in enumerate(elems):
+                # Load the mesh into trimesh and assert convexity
+                relevant_faces = faces[elem]
+                m = trimesh.Trimesh(vertices=verts, faces=relevant_faces)
+                m.remove_unreferenced_vertices()
+                assert m.is_volume, f"{obj.name} element {i} is not a volume"
+                assert m.is_convex, f"{obj.name} element {i} is not convex"
+                assert len(m.split()) == 1, f"{obj.name} element {i} has elements trimesh still finds splittable"
+        except Exception as e:
+            self.expect(False, str(e))
+
     def validate_meta_links(self, row):
         # Don't worry about bad objects or upper links.
         if row.name_joint_side == "upper":
@@ -389,6 +426,9 @@ class SanityCheck:
                 self.expect(classOf(child) == rt.Editable_Poly, f"Convex mesh {meta_link_type} meta link {child.name} should be of Editable Poly instead of {classOf(child)}")
             else:
                 raise ValueError("Don't know how to process meta type " + ALLOWED_META_TYPES[meta_link_type])
+            
+            if meta_link_type == "collision":
+                self.validate_collision(child)
 
         # Check that the meta links match what's needed
         required_meta_types = get_required_meta_links(row.name_category)

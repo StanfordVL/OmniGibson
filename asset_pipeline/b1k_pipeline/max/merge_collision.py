@@ -23,6 +23,11 @@ def merge_collision():
     for obj in collision_objs[1:]:
         rt.polyop.attach(baseObj, obj)
 
+    # Triangulate the faces
+    rt.polyop.setVertSelection(baseObj, rt.name('all'))
+    baseObj.connectVertices()
+    rt.polyop.setVertSelection(baseObj, rt.name('none'))
+
     # Parent the collision object to the target object
     baseObj.parent = target
 

@@ -14,6 +14,7 @@ import re
 from collections import defaultdict
 import b1k_pipeline.utils
 
+import trimesh
 from fs.zipfs import ZipFS
 from fs.osfs import OSFS
 from fs.tempfs import TempFS
@@ -68,6 +69,40 @@ def unlight_all_mats():
     materials = {x.material for x in rt.objects}
     for mat in materials:
         unlight_mats_recursively(mat)
+
+def save_collision_mesh(obj, output_fs):
+    # Assert that collision meshes do not share instances in the scene
+    assert not [x for x in rt.objects if x.baseObject == obj.baseObject and x != obj], f"{obj.name} should not have instances."
+    
+    # Triangulate the faces
+    rt.polyop.setVertSelection(obj, rt.name('all'))
+    obj.connectVertices()
+    rt.polyop.setVertSelection(obj, rt.name('none'))
+    
+    # Get vertices and faces into numpy arrays for conversion
+    verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
+    faces = np.array([rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]) - 1
+    assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
+
+    # Split the faces into elements
+    elems = {tuple(rt.polyop.GetElementsUsingFace(obj, i + 1)) for i in range(rt.polyop.GetNumFaces(obj))}
+    assert len(elems) <= 32, f"{obj.name} should not have more than 32 elements."
+    elems = np.array(list(elems))
+    assert not np.any(np.sum(elems, axis=0) > 1), f"{obj.name} has same face appear in multiple elements"
+    
+    # Iterate through the elements
+    for i, elem in enumerate(elems):
+        # Load the mesh into trimesh and assert convexity
+        relevant_faces = faces[elem]
+        m = trimesh.Trimesh(vertices=verts, faces=relevant_faces)
+        m.remove_unreferenced_vertices()
+        assert m.is_volume, f"{obj.name} element {i} is not a volume"
+        assert m.is_convex, f"{obj.name} element {i} is not convex"
+        assert len(m.split()) == 1, f"{obj.name} element {i} has elements trimesh still finds splittable"
+        
+        # Save the mesh into an obj file
+        assert b1k_pipeline.utils.save_mesh(m, output_fs, obj.name + f"-{i}.obj"), f"{obj.name} element {i} could not be saved"
+
 
 class ObjectExporter:
     def __init__(self, bakery, obj_out_dir, export_textures=True):
@@ -323,12 +358,7 @@ class ObjectExporter:
                 if child_name_result.group("meta_type"):
                     # Save collision mesh.
                     assert child_name_result.group("meta_type") == "collision", f"Only Mcollision can be a mesh."
-                    rt.select(child)
-                    col_path = os.path.join(obj_dir, child.name + ".obj")
-                    print("Saving collision mesh to ", col_path)
-                    rt.exportFile(col_path, rt.Name("noPrompt"), selectedOnly=True, using=rt.ObjExp)
-                    assert os.path.exists(col_path), f"Could not export collision object {child.name}"
-
+                    save_collision_mesh(child, OSFS(obj_dir))
                 else:
                     # Save part metadata.
                     metadata["parts"].append(child.name)
