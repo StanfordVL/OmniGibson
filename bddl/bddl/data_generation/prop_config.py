@@ -10,7 +10,7 @@ GPT_PROP_NAMES = [
     "cookable", 
     "heatSource",
     "coldSource",
-    "fireSource",
+    # "fireSource",       # deprecated
     "sliceable",
     "slicer",
     # "soakable",         # deprecated
