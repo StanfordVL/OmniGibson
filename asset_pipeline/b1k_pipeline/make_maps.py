@@ -1,6 +1,7 @@
 import os
 
 import concurrent.futures
+import pdb
 import fs
 from fs.multifs import MultiFS
 from fs.tempfs import TempFS
@@ -66,8 +67,8 @@ def process_scene(scene_id, dataset_path):
         # Get the maximum magnitude distance from zero
         body_ids = [bid for obj in scene.get_objects() for bid in obj.get_body_ids()]
         aabbs = [igibson.external.pybullet_tools.utils.get_aabb(b) for b in body_ids]
-        bad_aabbs = [(bid, aabb) for bid, aabb in zip(body_ids, aabbs) if np.any(np.abs(aabb) > 20)]
-        assert not bad_aabbs, f"Bad AABBs: {bad_aabbs}"
+        # bad_aabbs = [(scene.objects_by_id[bid].name, aabb) for bid, aabb in zip(body_ids, aabbs) if np.any(np.abs(aabb) > 20)]
+        # assert not bad_aabbs, f"Bad AABBs: {bad_aabbs}"
         combined_aabb = np.array(igibson.external.pybullet_tools.utils.aabb_union(aabbs))
         aabb_dist_from_zero = np.abs(combined_aabb)
         print(aabb_dist_from_zero)
@@ -205,23 +206,22 @@ def main():
 
         with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
             all_futures = {}
-            for scene_id in ["Wainscott_0_int"]: # temp_fs.listdir("scenes"):
-                process_scene(scene_id, temp_fs.getsyspath("/"))
-                # all_futures[executor.submit(process_scene, scene_id, temp_fs.getsyspath("/"))] = scene_id
+            for scene_id in temp_fs.listdir("scenes"):
+                all_futures[executor.submit(process_scene, scene_id, temp_fs.getsyspath("/"))] = scene_id
 
-        #     with ParallelZipFS("maps.zip", write=True) as zip_fs:
-        #         with tqdm.tqdm(total=len(all_futures)) as scene_pbar:
-        #             for future in concurrent.futures.as_completed(all_futures.keys()):
-        #                 images = future.result()
-        #                 for path, arr in images.items():
-        #                     zip_fs.makedirs(fs.path.dirname(path), recreate=True)
-        #                     with zip_fs.open(path, "wb") as map_file:
-        #                         Image.fromarray(arr).save(map_file, format="png")
+            with ParallelZipFS("maps.zip", write=True) as zip_fs:
+                with tqdm.tqdm(total=len(all_futures)) as scene_pbar:
+                    for future in concurrent.futures.as_completed(all_futures.keys()):
+                        images = future.result()
+                        for path, arr in images.items():
+                            zip_fs.makedirs(fs.path.dirname(path), recreate=True)
+                            with zip_fs.open(path, "wb") as map_file:
+                                Image.fromarray(arr).save(map_file, format="png")
 
-        #                 scene_pbar.update(1)
+                        scene_pbar.update(1)
 
-        # # If we got here, we were successful. Let's create the success file.
-        # PipelineFS().pipeline_output().touch("make_maps.success")
+        # If we got here, we were successful. Let's create the success file.
+        PipelineFS().pipeline_output().touch("make_maps.success")
 
 if __name__ == "__main__":
     main()

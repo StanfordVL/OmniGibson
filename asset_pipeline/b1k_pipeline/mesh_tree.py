@@ -138,7 +138,10 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                 if collision_filenames:
                     # This type of collision mesh contains multiple meshes in a single file, so we need to split.
                     collision_filename, = collision_filenames
-                    collision_mesh = load_mesh(mesh_dir, collision_filename, force="mesh", skip_materials=True)
+                    collision_mesh = load_mesh(mesh_dir, collision_filename, force="mesh", process=True, skip_materials=True)
+                    # Some objects behave better when loaded with process=False
+                    if not collision_mesh.is_volume:
+                        collision_mesh = load_mesh(mesh_dir, collision_filename, force="mesh", process=False, skip_materials=True)
                     collision_mesh.apply_transform(SCALE_MATRIX)
 
                     G.nodes[node_key]["collision_mesh"] = collision_mesh.split(only_watertight=False)
@@ -163,6 +166,8 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                             collision_meshes = []
                             for collision_filename in ordered_collision_filenames:
                                 collision_mesh = load_mesh(collision_dir, collision_filename, force="mesh", skip_materials=True)
+                                if not collision_mesh.is_volume:
+                                    collision_mesh = load_mesh(collision_dir, collision_filename, force="mesh", process=False, skip_materials=True)
                                 collision_mesh.apply_transform(SCALE_MATRIX)
                                 collision_meshes.append(collision_mesh)
                             G.nodes[node_key]["collision_mesh"] = collision_meshes
@@ -178,6 +183,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                 G.nodes[parent_key]["is_loose"] = None
 
     # Pop any invalid base links
+    # TODO: Remove this.
     bad_base = [node for node, in_degree in G.in_degree() if in_degree == 0 and "metadata" not in G.nodes[node]]
     for b in bad_base:
        if b not in G.nodes:

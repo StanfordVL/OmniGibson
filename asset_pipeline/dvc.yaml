@@ -1907,13 +1907,20 @@ stages:
     - artifacts/parallels/scenes_json.zip
     - artifacts/pipeline/usdify_scenes.success
     - artifacts/pipeline/usdify_scenes.json
-  validate_scene:
-    do:
-      cmd: python -m b1k_pipeline.validate_scene ${item}
-      deps:
-      - artifacts/parallels/scenes.zip
-      - artifacts/pipeline/aggregate_scenes.success
-      - b1k_pipeline/validate_scene.py
-      outs:
-      - cad/${item}/artifacts/validate_scene.json
-    foreach: ${final_scenes}
+  validate_scenes:
+    cmd: python -m b1k_pipeline.validate_scenes
+    deps:
+    - artifacts/og_dataset.zip
+    - artifacts/pipeline/pack_dataset.success
+    - b1k_pipeline/validate_scenes.py
+    - b1k_pipeline/validate_scenes_process.py
+    outs:
+    - artifacts/pipeline/validate_scenes.json
+  validate_scenes_success:
+    cmd: python -m b1k_pipeline.check_success artifacts/pipeline/validate_scenes.json
+      artifacts/pipeline/validate_scenes.success
+    deps:
+    - artifacts/pipeline/validate_scenes.json
+    - b1k_pipeline/check_success.py
+    outs:
+    - artifacts/pipeline/validate_scenes.success

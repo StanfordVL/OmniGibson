@@ -64,6 +64,7 @@ def generate_option_coacd(threshold, prep_resolution, max_convex_hull):
             raise ValueError("coacd failed")
         # Read the result back into a trimesh
         output_stream = io.BytesIO(result)
+        # TODO: Do NOT do this
         combined_mesh = trimesh.load(output_stream, file_type="obj", force="mesh", skip_material=True,
                                     merge_tex=True, merge_norm=True)
         return combined_mesh.split(only_watertight=False)
@@ -105,6 +106,7 @@ def generate_option_vhacd(resolution, depth, fillmode, errorp, split, edgelength
             raise ValueError("vhacd failed")
         # Read the result back into a trimesh
         output_stream = io.BytesIO(result)
+        # TODO: Do NOT do this.
         combined_mesh = trimesh.load(output_stream, file_type="obj", force="mesh", skip_material=True,
                                     merge_tex=True, merge_norm=True)
         return combined_mesh.split(only_watertight=False)

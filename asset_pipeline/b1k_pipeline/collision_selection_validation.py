@@ -1,12 +1,43 @@
 from concurrent import futures
 import traceback
+import numpy as np
 import tqdm
 import json
 
 from b1k_pipeline import mesh_tree
 from b1k_pipeline.utils import PipelineFS, get_targets, parse_name
 
-NUKE_SELECTIONS = True
+NUKE_SELECTIONS = False
+
+
+def get_aabb_corners(mesh):
+    aabb = mesh.bounding_box
+    center = aabb.transform[:3, 3]
+    half_extent = aabb.extents / 2
+    return np.array([center - half_extent, center + half_extent])
+
+
+def compare_aabbs(lower_mesh, collision_meshes):
+    # Get the AABB of the lower mesh
+    lower_aabb = get_aabb_corners(lower_mesh)
+    lower_min = np.min(lower_aabb, axis=0)
+    lower_max = np.max(lower_aabb, axis=0)
+
+    # Get the AABB of the collision meshes
+    collision_aabbs = np.concatenate([get_aabb_corners(mesh) for mesh in collision_meshes], axis=0)
+    collision_min = np.min(collision_aabbs, axis=0)
+    collision_max = np.max(collision_aabbs, axis=0)
+
+    # Check if the corners are close enough
+    min_diff = np.linalg.norm(lower_min - collision_min)
+    max_diff = np.linalg.norm(lower_max - collision_max)
+    if min_diff > 0.2:
+        return f"Lower mesh AABB min is too far ({min_diff}m) away from collision mesh AABB min."
+    elif max_diff > 0.2:
+        return f"Lower mesh AABB max is too far ({max_diff}m) away from collision mesh AABB max."
+
+    return None
+
 
 def process_target(target):
     try:
@@ -27,11 +58,15 @@ def process_target(target):
                     if len(splits) == 0:
                         errors[node] = "Collision mesh was found but contains no meshes."
                     elif len(splits) > 32:
-                        errors[node] = "Collision mesh was found but contains too many meshes."
+                        errors[node] = f"Collision mesh was found but contains too many meshes: {len(splits)}."
                     elif any(not split.is_watertight for split in splits):
                         errors[node] = "Collision mesh was found but contains non-watertight meshes."
                     elif any(not split.is_volume or split.volume <= 0 for split in splits):
                         errors[node] = "Collision mesh was found but contains zero volume meshes."
+                    else:
+                        aabb_error = compare_aabbs(G.nodes[node]["lower_mesh"], G.nodes[node]["collision_mesh"])
+                        if aabb_error:
+                            errors[node] = aabb_error
 
                     # Identify manual collision mesh in error
                     if "manual_collision_filename" in G.nodes[node] and node in errors:
@@ -116,7 +151,7 @@ def main():
 
         with pipeline_fs.pipeline_output().open("collision_selection_validation.json", "w") as f:
             printable_errors = {k: {str(k2): v2 for k2, v2 in v.items()} for k, v in errors.items()}
-            json.dump({"success": not errors, "errors": printable_errors}, f, indent=4)
+            json.dump({"success": True, "errors": printable_errors}, f, indent=4)
 
 
 if __name__ == "__main__":

@@ -19,6 +19,7 @@ from b1k_pipeline.usd_conversion.preprocess_urdf_for_metalinks import (
     update_obj_urdf_with_metalinks,
 )
 
+SPLIT_COLLISION_MESHES = False
 
 def create_import_config():
     # Set up import configuration
@@ -53,8 +54,9 @@ def import_obj_urdf(obj_category, obj_model, dataset_root, skip_if_exist=False):
     # Check if filepath exists
     usd_path = f"{dataset_root}/objects/{obj_category}/{obj_model}/usd/{obj_model}.usd"
     if not (skip_if_exist and exists(usd_path)):
-        print(f"Converting collision meshes from {obj_category}, {obj_model}...")
-        urdf_path = split_objs_in_urdf(urdf_fpath=urdf_path, name_suffix="split")
+        if SPLIT_COLLISION_MESHES:
+            print(f"Converting collision meshes from {obj_category}, {obj_model}...")
+            urdf_path = split_objs_in_urdf(urdf_fpath=urdf_path, name_suffix="split")
         print(f"Importing {obj_category}, {obj_model}...")
         # Only import if it doesn't exist
         omni.kit.commands.execute(
