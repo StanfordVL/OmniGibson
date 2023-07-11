@@ -79,19 +79,13 @@
             ) 
             (ontop ?sack.n.01_1 ?floor.n.01_1) 
             (not 
-                (covered ?floor.n.01_1 ?stain.n.01_1)
+                (covered ?table.n.02_1 ?stain.n.01_1)
             ) 
             (forall
                 (?chair.n.01 - chair.n.01)
-                (not 
+                (not
                     (covered ?chair.n.01 ?stain.n.01_1)
-                ) 
-                (not 
-                    (covered ?floor.n.01_1 ?stain.n.01_1)
-                ) 
-                (not 
-                    (covered ?table.n.02_1 ?stain.n.01_1)
-                )
+                 )
             )        
         )
     )

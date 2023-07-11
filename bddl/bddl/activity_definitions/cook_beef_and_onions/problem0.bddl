@@ -11,7 +11,6 @@
         cooked__diced__green_onion.n.01_1 - cooked__diced__green_onion.n.01
         soy_sauce.n.01_1 - soy_sauce.n.01
         soy_sauce__bottle.n.01_1 - soy_sauce__bottle.n.01
-        plastic_wrap.n.01_1 - plastic_wrap.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         oven.n.01_1 - oven.n.01
         floor.n.01_1 - floor.n.01
@@ -20,8 +19,7 @@
     
     (:init 
         (inside steak.n.01_1 electric_refrigerator.n.01_1) 
-        (ontop steak.n.01_1 plastic_wrap.n.01_1)
-        (inside vidalia_onion.n.01_1 electric_refrigerator.n.01_1) 
+        (inside vidalia_onion.n.01_1 electric_refrigerator.n.01_1)
         (inside green_onion.n.01_1 electric_refrigerator.n.01_1) 
         (filled soy_sauce__bottle.n.01_1 soy_sauce.n.01_1)
         (inside soy_sauce__bottle.n.01_1 electric_refrigerator.n.01_1)
