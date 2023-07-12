@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (ontop lawn.n.01_1 floor.n.01_1) 
+        (inroom lawn.n.01_1 garden)
         (ontop plastic_bag.n.01_1 floor.n.01_1) 
         (covered lawn.n.01_1 bunchgrass.n.01_1) 
         (ontop compost_bin.n.01_1 lawn.n.01_1) 

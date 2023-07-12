@@ -14,7 +14,7 @@
     (:init 
         (ontop toaster_oven.n.01_1 countertop.n.01_1) 
         (ontop wooden_spoon.n.02_1 countertop.n.01_1)
-        (ontop table.n.02_1 floor.n.01_1) 
+        (inroom table.n.02_1 living_room)
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 

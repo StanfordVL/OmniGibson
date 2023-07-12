@@ -12,7 +12,7 @@
     (:init 
         (covered piano.n.01_1 dust.n.01_1) 
         (ontop rag.n.01_1 piano.n.01_1) 
-        (ontop piano.n.01_1 floor.n.01_1)
+        (inroom piano.n.01_1 living_room)
         (inroom floor.n.01_1 living_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )
