@@ -178,22 +178,48 @@ def detect_robot_collision(context, robot, pose=None, filter_objs=[]):
     # print(T.pose2mat(relative_pose).astype(np.double))
     # print(T.mat2pose(T.pose2mat(relative_pose).astype(np.double)))
     # print(Gf.Matrix4d(T.pose2mat(relative_pose).astype(np.double)))
-    transforms = []
-    for i, mesh in enumerate(context.robot_meshes_copy):
-        # print(mesh.get_position())
-        # mesh.set_local_pose(*relative_pose)
-        # breakpoint()
-        relative_pose = context.robot_meshes_relative_poses[i]
-        mesh_pose = T.pose_transform(*pose, *relative_pose)
-        relative_pose_mat = Gf.Matrix4d(np.transpose(T.pose2mat(mesh_pose).astype(np.double)))
-        transforms.append((mesh.prim_path, relative_pose_mat, None, Usd.TimeCode.Default(), False, ''))
-        # TransformPrimCommand(mesh.prim_path, relative_pose_mat).do()
-        # print(mesh.get_position())
-        # print("----------")
-    # relative_pose_mat = Gf.Matrix4d(T.pose2mat(relative_pose).astype(np.double))
-    # transforms = [(mesh.prim_path, relative_pose_mat, None, Usd.TimeCode.Default(), False, '') for mesh in context.robot_meshes_copy]
-    TransformPrimsCommand(transforms).do()
+    # transforms = []
+    # for i, mesh in enumerate(context.robot_meshes_copy):
+    #     # breakpoint()
+    #     # print(mesh.get_position())
+    #     # mesh.set_local_pose(*relative_pose)
+    #     # breakpoint()
+    #     relative_pose = context.robot_meshes_relative_poses[i]
+    #     mesh_pose = T.pose_transform(*pose, *relative_pose)
+    #     # relative_pose_mat = Gf.Matrix4d(np.transpose(T.pose2mat(mesh_pose).astype(np.double)))
+    #     translation, orientation = mesh_pose
 
+    #     prim = context.prims[i]
+    #     translation = Gf.Vec3d(*np.array(translation, dtype=float))
+    #     prim.GetAttribute("xformOp:translate").Set(translation)
+
+    #     orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
+    #     prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
+    #     # transforms.append((mesh.prim_path, relative_pose_mat, None, Usd.TimeCode.Default(), False, ''))
+    #     # TransformPrimCommand(mesh.prim_path, relative_pose_mat).do()
+    #     # print(mesh.get_position())
+    #     # print("----------")
+    # # relative_pose_mat = Gf.Matrix4d(T.pose2mat(relative_pose).astype(np.double))
+    # # transforms = [(mesh.prim_path, relative_pose_mat, None, Usd.TimeCode.Default(), False, '') for mesh in context.robot_meshes_copy]
+    # # TransformPrimsCommand(transforms).do()
+
+    # for i, mesh in enumerate(context.robot_meshes_copy):
+    #     # breakpoint()
+    #     # print(mesh.get_position())
+    #     # mesh.set_local_pose(*relative_pose)
+    #     # breakpoint()
+    #     relative_pose = context.robot_meshes_relative_poses[i]
+    #     mesh_pose = T.pose_transform(*pose, *relative_pose)
+    #     # relative_pose_mat = Gf.Matrix4d(np.transpose(T.pose2mat(mesh_pose).astype(np.double)))
+    #     translation, orientation = mesh_pose
+
+    translation = pose[0]
+    orientation = pose[1]
+    translation = Gf.Vec3d(*np.array(translation, dtype=float))
+    context.robot_prim.GetAttribute("xformOp:translate").Set(translation)
+
+    orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
+    context.robot_prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
 
     filtered_links = []
     for obj in og.sim.scene.objects:

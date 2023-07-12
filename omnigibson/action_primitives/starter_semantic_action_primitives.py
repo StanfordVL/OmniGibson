@@ -133,8 +133,13 @@ def indented_print(msg, *args, **kwargs):
 #             self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
 #         og.sim.step()
         
-from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand
+from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, CreatePrimCommand
+from omnigibson.prims import CollisionGeomPrim, XFormPrim
+from omni.isaac.core.utils.prims import get_prim_at_path
+
+from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, TransformPrimsCommand, TransformPrimCommand
 from omnigibson.prims import CollisionGeomPrim
+from pxr import Gf, Usd
 
 class UndoableContext(object):
     def __init__(self, robot):
@@ -142,24 +147,40 @@ class UndoableContext(object):
 
     def __enter__(self):
         # og.sim._physics_context.set_gravity(value=0)
+        self.robot_copy = None
         self.robot_meshes = []
         self.robot_meshes_copy = []
         self.robot_meshes_relative_poses = []
+        self.prims = []
         robot_pose = self.robot.get_position_orientation()
+        # self.robot_prim = XFormPrim("/World/robot_copy", "test")
+        CreatePrimCommand("Xform", "/World/robot_copy").do()
+        self.robot_prim = get_prim_at_path("/World/robot_copy")
         for link in self.robot.links.values():
             for mesh in link.collision_meshes.values():
-                new_path = "/World/" + mesh.prim_path.split("/")[-2] + "_copy"
+                new_path = "/World/robot_copy/" + mesh.prim_path.split("/")[-2]
                 mesh_command = CopyPrimCommand(mesh.prim_path, path_to=new_path)
                 mesh_command.do()
                 mesh_copy_path = mesh_command._path_to
+                self.prims.append(get_prim_at_path(mesh_command._path_to))
                 mesh_copy = CollisionGeomPrim(mesh_copy_path, mesh_copy_path)
-                mesh_copy.collision_enabled = True
+                mesh_copy.collision_enabled = False
                 # mesh_pose = mesh.get_position_orientation()
                 # mesh_copy.set_position_orientation(*mesh_pose)
                 self.robot_meshes_copy.append(mesh_copy)
 
                 mesh_pose = mesh.get_position_orientation()
                 mesh_in_robot = T.relative_pose_transform(*mesh_pose, *robot_pose)
+
+                translation = mesh_in_robot[0]
+                orientation = mesh_in_robot[1]
+
+                translation = Gf.Vec3d(*np.array(translation, dtype=float))
+                mesh_copy.prim.GetAttribute("xformOp:translate").Set(translation)
+
+                orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
+                mesh_copy.prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation))
+
                 self.robot_meshes_relative_poses.append(mesh_in_robot)
 
                 mesh.collision_enabled = False
