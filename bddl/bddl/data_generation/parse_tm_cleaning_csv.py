@@ -4,6 +4,12 @@ from enum import IntEnum
 from bddl.object_taxonomy import ObjectTaxonomy
 import pathlib
 
+
+PROP_PARAM_ANNOTS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "prop_param_annots"
+PARTICLE_APPLIER_FILE = PROP_PARAM_ANNOTS_DIR / "particleApplier.csv"
+PARTICLE_SOURCE_FILE = PROP_PARAM_ANNOTS_DIR / "particleSource.csv"
+
+
 # Specific methods for applying / removing particles
 class ParticleModifyMethod(IntEnum):
     ADJACENCY = 0
@@ -23,16 +29,17 @@ PREDICATE_MAPPING = {
     "function": ParticleModifyCondition.FUNCTION,
 }
 
-PARTICLE_SOURCE_MAPPING = {
-    "bathtub.n.01": "water",
-    "bidet.n.01": "water",
-    "sink.n.01": "water",
-    "soap_dispenser.n.01": "liquid_soap",
-    "tub.n.02": "water",
-    "watering_can.n.01": "water",
-    "squeeze_bottle.n.01": "water",
-}
+PARTICLE_APPLIER_MAPPING = {}
+with open(PARTICLE_APPLIER_FILE) as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        PARTICLE_APPLIER_MAPPING[row["synset"]] = row["system"]
 
+PARTICLE_SOURCE_MAPPING = {}
+with open(PARTICLE_SOURCE_FILE) as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        PARTICLE_SOURCE_MAPPING[row["synset"]] = row["system"]
 
 def parse_predicate(predicate):
     pred_type = PREDICATE_MAPPING[predicate.split(" ")[0]]
@@ -138,14 +145,16 @@ def parse_tm_cleaning_csv():
             # Leaf node
             if "name" in ohp_root.keys() and "children" not in ohp_root.keys():
                 name = ohp_root["name"]
-                # Make sure category mapping exists
+                # Assign synset to category mapping for substance
                 if "substance" in ohp_root["abilities"]:
                     correct_category = name.split(".")[0].replace("-", "_")
+                    # If categories already exist, it's read from the object modeling spreadsheet category mapping
                     if "categories" in ohp_root:
                         assert len(ohp_root["categories"]) == 1
+                    # Otherwise, infer from the synset
                     else:
                         ohp_root["categories"] = [correct_category]
-                
+
                 # Make sure particleRemover annotation aligns
                 if "particleRemover" in ohp_root["abilities"]:
                     if name not in pruned_synset_cleaning_mapping:
@@ -160,10 +169,9 @@ def parse_tm_cleaning_csv():
                     }
                 if "particleApplier" in ohp_root["abilities"]:
                     print(f"Adding particleApplier kwargs for: {name}")
-                    # assert len(name.split("__")) > 1
-                    system_name = name.split("__")[0]
+                    assert name in PARTICLE_APPLIER_MAPPING
                     ohp_root["abilities"]["particleApplier"] = {
-                        "conditions": {system_name: [(ParticleModifyCondition.GRAVITY, True) if "needsOrientation" in ohp_root["abilities"] else (ParticleModifyCondition.TOGGLEDON, True)]},
+                        "conditions": {PARTICLE_APPLIER_MAPPING[name]: [(ParticleModifyCondition.GRAVITY, True) if "needsOrientation" in ohp_root["abilities"] else (ParticleModifyCondition.TOGGLEDON, True)]},
                         "method": ParticleModifyMethod.PROJECTION,
                     }
                 if "particleSource" in ohp_root["abilities"]:
