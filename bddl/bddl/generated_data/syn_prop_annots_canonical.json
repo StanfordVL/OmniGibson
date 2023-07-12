@@ -99,7 +99,6 @@
     },
     "aerosol.n.02": {
         "toggleable": {},
-        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -820,7 +819,6 @@
     },
     "atomizer.n.01": {
         "toggleable": {},
-        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -11027,6 +11025,7 @@
     },
     "coffee_maker.n.01": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -17149,6 +17148,7 @@
     },
     "griddle.n.01": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19082,6 +19082,7 @@
         "freezable": {}
     },
     "ice_pack.n.01": {
+        "coldSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19363,6 +19364,7 @@
     },
     "iron.n.04": {
         "toggleable": {},
+        "heatSource": {},
         "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -20258,6 +20260,7 @@
     },
     "kettle.n.01": {
         "fillable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21102,6 +21105,7 @@
     "light_bulb.n.01": {
         "breakable": {},
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29430,7 +29434,6 @@
         "freezable": {}
     },
     "shaker.n.03": {
-        "particleApplier": {},
         "needsOrientation": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -33396,6 +33399,7 @@
     },
     "toaster.n.02": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -37390,6 +37394,13 @@
         "rustable": {},
         "wrinkleable": {},
         "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "freshener.n.01": {
+        "macroPhysicalSubstance": {},
+        "substance": {},
+        "physicalSubstance": {},
         "heatable": {},
         "freezable": {}
     }

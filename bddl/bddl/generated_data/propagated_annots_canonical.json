@@ -313,7 +313,6 @@
     "mixable": {},
     "moldyable": {},
     "nonSubstance": {},
-    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -1614,7 +1613,6 @@
     "mixable": {},
     "moldyable": {},
     "nonSubstance": {},
-    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -13950,6 +13948,7 @@
     "dustyable": {},
     "freezable": {},
     "grassyable": {},
+    "heatSource": {},
     "heatable": {},
     "mixable": {},
     "moldyable": {},
@@ -22094,6 +22093,13 @@
     "freezable": {},
     "heatable": {}
   },
+  "freshener.n.01": {
+    "freezable": {},
+    "heatable": {},
+    "macroPhysicalSubstance": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "friedcake.n.01": {
     "cookable": {},
     "deformable": {},
@@ -23840,6 +23846,7 @@
     "dustyable": {},
     "freezable": {},
     "grassyable": {},
+    "heatSource": {},
     "heatable": {},
     "mixable": {},
     "moldyable": {},
@@ -26551,6 +26558,7 @@
     "wrinkleable": {}
   },
   "ice_pack.n.01": {
+    "coldSource": {},
     "disinfectable": {},
     "dustyable": {},
     "freezable": {},
@@ -26988,6 +26996,7 @@
     "dustyable": {},
     "freezable": {},
     "grassyable": {},
+    "heatSource": {},
     "heatable": {},
     "mixable": {},
     "moldyable": {},
@@ -28002,6 +28011,7 @@
     "fillable": {},
     "freezable": {},
     "grassyable": {},
+    "heatSource": {},
     "heatable": {},
     "mixable": {},
     "moldyable": {},
@@ -29261,6 +29271,7 @@
     "dustyable": {},
     "freezable": {},
     "grassyable": {},
+    "heatSource": {},
     "heatable": {},
     "mixable": {},
     "moldyable": {},
@@ -42090,7 +42101,6 @@
     "moldyable": {},
     "needsOrientation": {},
     "nonSubstance": {},
-    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -47851,6 +47861,13 @@
     "physicalSubstance": {},
     "substance": {}
   },
+  "thing.n.08": {
+    "freezable": {},
+    "heatable": {},
+    "macroPhysicalSubstance": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "thing.n.12": {
     "freezable": {},
     "heatable": {}
@@ -48196,6 +48213,7 @@
     "dustyable": {},
     "freezable": {},
     "grassyable": {},
+    "heatSource": {},
     "heatable": {},
     "mixable": {},
     "moldyable": {},

@@ -368,7 +368,6 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -1894,7 +1893,6 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -16450,6 +16448,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 93.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -26345,6 +26350,15 @@
             "heat_temperature": 40.0
         }
     },
+    "freshener.n.01": {
+        "freezable": {},
+        "heatable": {
+            "heat_temperature": 40.0
+        },
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
     "friedcake.n.01": {
         "cookable": {},
         "deformable": {},
@@ -28426,6 +28440,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 200.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -31580,6 +31601,13 @@
         "wrinkleable": {}
     },
     "ice_pack.n.01": {
+        "coldSource": {
+            "temperature": 0.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -32080,6 +32108,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 180.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -33249,6 +33284,13 @@
         "fillable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 100.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -34709,6 +34751,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 65.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -49738,7 +49787,6 @@
         "moldyable": {},
         "needsOrientation": {},
         "nonSubstance": {},
-        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -56398,6 +56446,15 @@
         "physicalSubstance": {},
         "substance": {}
     },
+    "thing.n.08": {
+        "freezable": {},
+        "heatable": {
+            "heat_temperature": 40.0
+        },
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
     "thing.n.12": {
         "freezable": {},
         "heatable": {
@@ -56792,6 +56849,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 148.889,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
