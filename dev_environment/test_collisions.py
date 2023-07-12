@@ -35,7 +35,7 @@ def main():
 
 
     positions = [
-        # [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0],
         [0.0, -1.0, 0.0],
         [0.5, 0.5, 0]
     ]
@@ -43,12 +43,14 @@ def main():
     # breakpoint()
     robot.tuck()
     og.sim.step()
+    # print(gm.ENABLE_FLATCACHE)
 
     # pause(5)
 
     for position in positions:
         with UndoableContext(robot) as context:
             # breakpoint()
+            # pause(100)
             print(detect_robot_collision(context, robot, (position, [0, 0, 0, 1])))
             print("--------------------")
         pause(1)
