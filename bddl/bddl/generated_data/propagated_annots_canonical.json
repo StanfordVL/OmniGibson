@@ -313,7 +313,6 @@
     "mixable": {},
     "moldyable": {},
     "nonSubstance": {},
-    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -1614,7 +1613,6 @@
     "mixable": {},
     "moldyable": {},
     "nonSubstance": {},
-    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -22095,6 +22093,13 @@
     "freezable": {},
     "heatable": {}
   },
+  "freshener.n.01": {
+    "freezable": {},
+    "heatable": {},
+    "macroPhysicalSubstance": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "friedcake.n.01": {
     "cookable": {},
     "deformable": {},
@@ -42096,7 +42101,6 @@
     "moldyable": {},
     "needsOrientation": {},
     "nonSubstance": {},
-    "particleApplier": {},
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
@@ -47851,6 +47855,13 @@
     "wrinkleable": {}
   },
   "thing.n.04": {
+    "freezable": {},
+    "heatable": {},
+    "macroPhysicalSubstance": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "thing.n.08": {
     "freezable": {},
     "heatable": {},
     "macroPhysicalSubstance": {},

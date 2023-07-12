@@ -99,7 +99,6 @@
     },
     "aerosol.n.02": {
         "toggleable": {},
-        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -820,7 +819,6 @@
     },
     "atomizer.n.01": {
         "toggleable": {},
-        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29436,7 +29434,6 @@
         "freezable": {}
     },
     "shaker.n.03": {
-        "particleApplier": {},
         "needsOrientation": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -37397,6 +37394,13 @@
         "rustable": {},
         "wrinkleable": {},
         "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "freshener.n.01": {
+        "macroPhysicalSubstance": {},
+        "substance": {},
+        "physicalSubstance": {},
         "heatable": {},
         "freezable": {}
     }
