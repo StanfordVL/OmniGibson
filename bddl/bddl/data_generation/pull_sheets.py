@@ -18,6 +18,8 @@ ALL_SHEETS = [
   (SYMSET_PARAMS_SHEET_KEY, "heatsource", "prop_param_annots/heatSource.csv"),
   (SYMSET_PARAMS_SHEET_KEY, "coldsource", "prop_param_annots/coldSource.csv"),
   (SYMSET_PARAMS_SHEET_KEY, "cooking", "prop_param_annots/cooking.csv"),
+  (SYMSET_PARAMS_SHEET_KEY, "particleApplier", "prop_param_annots/particleApplier.csv"),
+  (SYMSET_PARAMS_SHEET_KEY, "particleSource", "prop_param_annots/particleSource.csv"),
   (TM_SHEET_KEY, "cleaning substance-based dirtiness", "prop_param_annots/tm_cleaning.csv"),
 ]
 
