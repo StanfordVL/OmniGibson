@@ -35,13 +35,15 @@ def main():
 
 
     positions = [
-        [0.0, 0.0, 0.0],
+        [0.0, 2.0, 0.0],
         [0.0, -1.0, 0.0],
         [0.5, 0.5, 0]
     ]
 
     # breakpoint()
     robot.tuck()
+    robot.set_position([0, 2.2, 0])
+    pause(100)
     og.sim.step()
     # print(gm.ENABLE_FLATCACHE)
 
