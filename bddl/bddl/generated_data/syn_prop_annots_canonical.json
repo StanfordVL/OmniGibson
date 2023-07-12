@@ -8177,7 +8177,6 @@
     },
     "canned_food.n.01": {
         "openable": {},
-        "cookable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14940,6 +14939,7 @@
     },
     "engine.n.01": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16569,7 +16569,6 @@
         "freezable": {}
     },
     "glaze.n.01": {
-        "cookable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -18067,6 +18066,7 @@
     },
     "hand_blower.n.01": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26891,6 +26891,7 @@
     "pressure_cooker.n.01": {
         "fillable": {},
         "openable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27173,7 +27174,6 @@
         "freezable": {}
     },
     "puree.n.01": {
-        "cookable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
