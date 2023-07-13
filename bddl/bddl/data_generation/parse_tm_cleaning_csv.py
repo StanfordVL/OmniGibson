@@ -48,7 +48,7 @@ def parse_predicate(predicate):
 
 
 def parse_conditions_entry(unparsed_conditions):
-    print(f"Parsing: {unparsed_conditions}")
+    # print(f"Parsing: {unparsed_conditions}")
     if unparsed_conditions.isnumeric():
         always_true = bool(int(unparsed_conditions))
         conditions = [] if always_true else None
@@ -149,17 +149,17 @@ def parse_tm_cleaning_csv():
                 # Make sure particleRemover annotation aligns
                 if "particleRemover" in ohp_root["abilities"]:
                     if name not in pruned_synset_cleaning_mapping:
-                        print(f"no particleRemover annotated for {name}")
+                        # print(f"no particleRemover annotated for {name}")
                         not_annotated_removers.add(name)
                 if "particleSink" in ohp_root["abilities"]:
-                    print(f"Adding particleSink kwargs for: {name}")
+                    # print(f"Adding particleSink kwargs for: {name}")
                     ohp_root["abilities"]["particleSink"] = {
                         "conditions": {},
                         "default_physical_conditions": [],
                         "default_visual_conditions": None,
                     }
                 if "particleApplier" in ohp_root["abilities"]:
-                    print(f"Adding particleApplier kwargs for: {name}")
+                    # print(f"Adding particleApplier kwargs for: {name}")
                     # assert len(name.split("__")) > 1
                     system_name = name.split("__")[0]
                     ohp_root["abilities"]["particleApplier"] = {
@@ -167,7 +167,7 @@ def parse_tm_cleaning_csv():
                         "method": ParticleModifyMethod.PROJECTION,
                     }
                 if "particleSource" in ohp_root["abilities"]:
-                    print(f"Adding particleSource kwargs for: {name}")
+                    # print(f"Adding particleSource kwargs for: {name}")
                     assert name in PARTICLE_SOURCE_MAPPING
                     ohp_root["abilities"]["particleSource"] = {
                         "conditions": {PARTICLE_SOURCE_MAPPING[name]: [(ParticleModifyCondition.GRAVITY, True) if "needsOrientation" in ohp_root["abilities"] else (ParticleModifyCondition.TOGGLEDON, True)]},

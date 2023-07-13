@@ -21,10 +21,12 @@ def add_cookable_params(propagated_canonical, props_to_syns, synset_nonexistent,
         try:
             float(cook_temp)
         except ValueError:
-            prop_but_no_param["cookable"].append(synset)
+            if synset in props_to_syns["cookable"]:
+                prop_but_no_param["cookable"].append(synset)
             continue
         if pd.isna(float(cook_temp)):
-            prop_but_no_param["cookable"].append(synset)
+            if synset in props_to_syns["cookable"]:
+                prop_but_no_param["cookable"].append(synset)
             continue
         if synset not in propagated_canonical:
             synset_nonexistent["cookable"].append(synset)
@@ -58,10 +60,12 @@ def add_coldsource_params(propagated_canonical, props_to_syns, synset_nonexisten
             int(requires_closed)
             int(requires_inside)
         except ValueError:
-            prop_but_no_param["coldSource"].append(synset)
+            if synset in props_to_syns["coldSource"]:
+                prop_but_no_param["coldSource"].append(synset)
             continue
         if pd.isna(float(temp)):
-            prop_but_no_param["coldSource"].append(synset)
+            if synset in props_to_syns["coldSource"]:
+                prop_but_no_param["coldSource"].append(synset)
             continue
         if synset not in propagated_canonical:
             synset_nonexistent["coldSource"].append(synset)
@@ -99,10 +103,12 @@ def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexisten
             int(requires_closed)
             int(requires_inside)
         except ValueError:
-            prop_but_no_param["heatSource"].append(synset)
+            if synset in props_to_syns["heatSource"]:
+                prop_but_no_param["heatSource"].append(synset)
             continue
         if pd.isna(float(temp)):
-            prop_but_no_param["heatSource"].append(synset)
+            if synset in props_to_syns["heatSource"]:
+                prop_but_no_param["heatSource"].append(synset)
             continue
         if synset not in propagated_canonical:
             synset_nonexistent["heatSource"].append(synset)
@@ -129,11 +135,13 @@ def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexisten
 
 def add_heatable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
     # TODO will need to change when there are heating params
+    # NOTE no potential for prop annot-param annot inconsistency
     for heatable_syn in props_to_syns["heatable"]:
         propagated_canonical[heatable_syn]["heatable"]["heat_temperature"] = 40.
 
 
 def add_flammable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
+    # NOTE no potential for prop annot-param annot inconsistency
     for flammable_syn in props_to_syns["flammable"]:
         propagated_canonical[flammable_syn]["flammable"]["ignition_temperature"] = 250.
         propagated_canonical[flammable_syn]["flammable"]["fire_temperature"] = 1000.

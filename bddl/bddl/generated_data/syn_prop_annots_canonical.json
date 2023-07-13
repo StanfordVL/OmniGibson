@@ -99,7 +99,6 @@
     },
     "aerosol.n.02": {
         "toggleable": {},
-        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -820,7 +819,6 @@
     },
     "atomizer.n.01": {
         "toggleable": {},
-        "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2661,6 +2659,7 @@
         "freezable": {}
     },
     "bird_feeder.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5651,7 +5650,6 @@
     },
     "bottle.n.03": {
         "breakable": {},
-        "fillable": {},
         "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -8160,7 +8158,6 @@
     },
     "canister.n.02": {
         "breakable": {},
-        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8180,7 +8177,6 @@
     },
     "canned_food.n.01": {
         "openable": {},
-        "cookable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -11028,6 +11024,7 @@
     },
     "coffee_maker.n.01": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14942,6 +14939,7 @@
     },
     "engine.n.01": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16571,7 +16569,6 @@
         "freezable": {}
     },
     "glaze.n.01": {
-        "cookable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -17150,6 +17147,7 @@
     },
     "griddle.n.01": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18068,6 +18066,7 @@
     },
     "hand_blower.n.01": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19024,6 +19023,7 @@
     },
     "ice_cube.n.01": {
         "breakable": {},
+        "coldSource": {},
         "slicer": {},
         "meltable": {},
         "rigidBody": {},
@@ -19063,6 +19063,7 @@
     },
     "ice_maker.n.01": {
         "toggleable": {},
+        "coldSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19081,6 +19082,7 @@
         "freezable": {}
     },
     "ice_pack.n.01": {
+        "coldSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19118,6 +19120,7 @@
     },
     "ice.n.01": {
         "breakable": {},
+        "coldSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19361,6 +19364,7 @@
     },
     "iron.n.04": {
         "toggleable": {},
+        "heatSource": {},
         "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -20256,6 +20260,8 @@
     },
     "kettle.n.01": {
         "fillable": {},
+        "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21100,6 +21106,7 @@
     "light_bulb.n.01": {
         "breakable": {},
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24025,7 +24032,6 @@
         "freezable": {}
     },
     "packing_box.n.02": {
-        "fillable": {},
         "flammable": {},
         "openable": {},
         "rigidBody": {},
@@ -25883,7 +25889,6 @@
         "freezable": {}
     },
     "pizza_box.n.01": {
-        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26887,6 +26892,8 @@
     "pressure_cooker.n.01": {
         "fillable": {},
         "openable": {},
+        "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27169,7 +27176,6 @@
         "freezable": {}
     },
     "puree.n.01": {
-        "cookable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -29430,7 +29436,6 @@
         "freezable": {}
     },
     "shaker.n.03": {
-        "particleApplier": {},
         "needsOrientation": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -31668,8 +31673,8 @@
         "freezable": {}
     },
     "steamer.n.02": {
-        "fillable": {},
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33168,7 +33173,6 @@
         "freezable": {}
     },
     "thyme__shaker.n.01": {
-        "sliceable": {},
         "particleApplier": {},
         "needsOrientation": {},
         "rigidBody": {},
@@ -33397,6 +33401,7 @@
     },
     "toaster.n.02": {
         "toggleable": {},
+        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},

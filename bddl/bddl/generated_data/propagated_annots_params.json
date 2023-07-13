@@ -368,7 +368,6 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -1894,7 +1893,6 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -2008,6 +2006,7 @@
         "fillable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {},
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -2021,6 +2020,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -4971,6 +4971,7 @@
     "bird_feeder.n.01": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -5374,6 +5375,7 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {},
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -5874,7 +5876,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -12272,7 +12273,6 @@
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -12291,7 +12291,6 @@
         "wrinkleable": {}
     },
     "canned_food.n.01": {
-        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -16451,6 +16450,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 93.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -19334,7 +19340,6 @@
     "crate.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -23993,6 +23998,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 90.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -26944,7 +26956,6 @@
     },
     "garnish.n.01": {
         "boilable": {},
-        "cookable": {},
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -27535,7 +27546,6 @@
     },
     "glaze.n.01": {
         "boilable": {},
-        "cookable": {},
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -28428,6 +28438,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 200.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -29749,6 +29766,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 45.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -31434,6 +31458,13 @@
     },
     "ice.n.01": {
         "breakable": {},
+        "coldSource": {
+            "temperature": 0.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -31498,6 +31529,13 @@
     },
     "ice_cube.n.01": {
         "breakable": {},
+        "coldSource": {
+            "temperature": 0.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -31540,6 +31578,13 @@
         "wrinkleable": {}
     },
     "ice_maker.n.01": {
+        "coldSource": {
+            "temperature": -8.9,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -31561,6 +31606,13 @@
         "wrinkleable": {}
     },
     "ice_pack.n.01": {
+        "coldSource": {
+            "temperature": 0.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -32061,6 +32113,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 180.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -33230,6 +33289,13 @@
         "fillable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 100.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -33242,6 +33308,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -34690,6 +34757,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 65.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -38141,6 +38215,7 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {},
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -40342,7 +40417,6 @@
     "packing_box.n.02": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -43273,7 +43347,6 @@
     "pizza_box.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -45093,6 +45166,13 @@
         "fillable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 121.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 1,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -45106,6 +45186,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -45701,7 +45782,6 @@
     },
     "puree.n.01": {
         "boilable": {},
-        "cookable": {},
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -48589,7 +48669,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 77.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -49715,7 +49801,6 @@
         "moldyable": {},
         "needsOrientation": {},
         "nonSubstance": {},
-        "particleApplier": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -52487,7 +52572,13 @@
         },
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "temperature": 42.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 0
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -53585,9 +53676,15 @@
     "steamer.n.02": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 212.0,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 0,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -56437,7 +56534,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -56758,6 +56854,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "temperature": 148.889,
+            "heating_rate": 0.01,
+            "requires_toggled_on": 1,
+            "requires_closed": 0,
+            "requires_inside": 1
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -57352,7 +57455,6 @@
     },
     "topping.n.01": {
         "boilable": {},
-        "cookable": {},
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
