@@ -12,7 +12,7 @@
     (:init 
         (insource spray_paint__can.n.01_1 spray_paint.n.01_1) 
         (ontop spray_paint__can.n.01_1 floor.n.01_1)
-        (ontop rail_fence.n.01_1 floor.n.01_1) 
+        (inroom rail_fence.n.01_1 garden)
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -20,8 +20,7 @@
     (:goal 
         (and 
             (covered ?rail_fence.n.01_1 ?spray_paint.n.01_1) 
-            (ontop ?rail_fence.n.01_1 ?floor.n.01_1) 
-            (not 
+            (not
                 (covered ?floor.n.01_1 ?spray_paint.n.01_1)
             ) 
         )

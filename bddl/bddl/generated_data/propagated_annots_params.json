@@ -4384,7 +4384,10 @@
     },
     "beer.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 37.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -11419,7 +11422,10 @@
         "substance": {}
     },
     "butter.n.01": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 38.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -12259,7 +12265,10 @@
         "wrinkleable": {}
     },
     "cane_sugar.n.02": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 130.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -14356,7 +14365,10 @@
         "wrinkleable": {}
     },
     "chestnut.n.03": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -15336,7 +15348,10 @@
         "wrinkleable": {}
     },
     "cinnamon.n.03": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -15924,7 +15939,10 @@
         "wrinkleable": {}
     },
     "clove.n.03": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "flammable": {
@@ -19931,7 +19949,10 @@
         "wrinkleable": {}
     },
     "cumin.n.02": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -25695,7 +25716,10 @@
         "wrinkleable": {}
     },
     "flour.n.01": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 71.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -28287,7 +28311,10 @@
     },
     "gravy.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 37.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -28616,7 +28643,10 @@
     },
     "guacamole.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -29627,7 +29657,10 @@
         "wrinkleable": {}
     },
     "hamburger.n.01": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 71.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -36383,7 +36416,10 @@
     },
     "maple_syrup.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 37.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -36488,7 +36524,10 @@
     },
     "marinade.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 37.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -36989,7 +37028,10 @@
     },
     "mayonnaise.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -37994,7 +38036,10 @@
     },
     "molasses.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 130.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -38638,7 +38683,10 @@
     },
     "mustard.n.02": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -39416,7 +39464,10 @@
         "substance": {}
     },
     "nutmeg.n.02": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -39629,7 +39680,10 @@
         "substance": {}
     },
     "olive.n.04": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -39652,7 +39706,10 @@
     },
     "olive_oil.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 190.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -40986,7 +41043,10 @@
         "wrinkleable": {}
     },
     "paprika.n.02": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -41650,7 +41710,10 @@
     },
     "peanut_oil.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 190.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -42337,7 +42400,10 @@
     },
     "pesto.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 90.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -42799,7 +42865,10 @@
         "wrinkleable": {}
     },
     "pie_crust.n.01": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 200.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -43222,7 +43291,10 @@
         "wrinkleable": {}
     },
     "pistachio.n.02": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -45406,7 +45478,10 @@
         "visualSubstance": {}
     },
     "prosciutto.n.01": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 71.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -46145,7 +46220,10 @@
         "wrinkleable": {}
     },
     "radish.n.01": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -48221,7 +48299,10 @@
         "substance": {}
     },
     "salad.n.01": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -48356,7 +48437,10 @@
         "substance": {}
     },
     "salt.n.02": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 100.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -52518,7 +52602,10 @@
     },
     "soy_sauce.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 37.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -54853,7 +54940,10 @@
         "wrinkleable": {}
     },
     "sushi.n.01": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 71.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -58779,7 +58869,10 @@
     },
     "vanilla.n.02": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 37.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -59220,7 +59313,10 @@
     },
     "vinegar.n.01": {
         "boilable": {},
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 37.0,
+            "burn_temperature": 200.0
+        },
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -59854,7 +59950,10 @@
         "wrinkleable": {}
     },
     "walnut.n.01": {
-        "cookable": {},
+        "cookable": {
+            "cook_temperature": 58.0,
+            "burn_temperature": 200.0
+        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
