@@ -35,19 +35,27 @@ def main():
 
 
     positions = [
-        [0.0, 2.0, 0.0],
+        [0.0, 0.0, 0.0],
         [0.0, -1.0, 0.0],
         [0.5, 0.5, 0]
     ]
 
     # breakpoint()
     robot.tuck()
-    robot.set_position([0, 2.2, 0])
-    pause(100)
+    robot.set_position([0, 0, 0.1])
+    # pause(100)
     og.sim.step()
     # print(gm.ENABLE_FLATCACHE)
+    # meshes = []
+    # for link in robot.links.values():
+    #     for mesh in link.collision_meshes.values():
+    #         if mesh.prim_path == "/World/robot0/l_wheel_link/collisions" or mesh.prim_path == "/World/robot0/r_wheel_link/collisions":
+    #             mesh.collision_enabled = False
+            # meshes.append(mesh)
 
-    # pause(5)
+    # from IPython import embed; embed()
+
+    # pause(100)
 
     for position in positions:
         with UndoableContext(robot) as context:
@@ -55,6 +63,7 @@ def main():
             # pause(100)
             print(detect_robot_collision(context, robot, (position, [0, 0, 0, 1])))
             print("--------------------")
+            pause(100)
         pause(1)
 
 if __name__ == "__main__":

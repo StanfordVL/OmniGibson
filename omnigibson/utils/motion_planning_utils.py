@@ -215,6 +215,7 @@ def detect_robot_collision(context, robot, pose=None, filter_objs=[]):
 
     translation = pose[0]
     orientation = pose[1]
+    # context.robot_prim.set_local_poses(np.array([translation]), np.array([orientation]))
     translation = Gf.Vec3d(*np.array(translation, dtype=float))
     context.robot_prim.GetAttribute("xformOp:translate").Set(translation)
 

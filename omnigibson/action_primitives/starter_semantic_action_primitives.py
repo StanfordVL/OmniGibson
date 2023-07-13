@@ -140,6 +140,7 @@ from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, TransformPrimsCommand, TransformPrimCommand
 from omnigibson.prims import CollisionGeomPrim
 from pxr import Gf, Usd
+from omni.isaac.core.prims import XFormPrimView
 
 class UndoableContext(object):
     def __init__(self, robot):
@@ -156,6 +157,8 @@ class UndoableContext(object):
         # self.robot_prim = XFormPrim("/World/robot_copy", "test")
         CreatePrimCommand("Xform", "/World/robot_copy").do()
         self.robot_prim = get_prim_at_path("/World/robot_copy")
+        # self.robot_prim = XFormPrimView("/World/robot_copy")
+        # breakpoint()
         for link in self.robot.links.values():
             for mesh in link.collision_meshes.values():
                 new_path = "/World/robot_copy/" + mesh.prim_path.split("/")[-2]
@@ -164,7 +167,7 @@ class UndoableContext(object):
                 mesh_copy_path = mesh_command._path_to
                 self.prims.append(get_prim_at_path(mesh_command._path_to))
                 mesh_copy = CollisionGeomPrim(mesh_copy_path, mesh_copy_path)
-                mesh_copy.collision_enabled = False
+                mesh_copy.collision_enabled = True
                 # mesh_pose = mesh.get_position_orientation()
                 # mesh_copy.set_position_orientation(*mesh_pose)
                 self.robot_meshes_copy.append(mesh_copy)
@@ -183,7 +186,7 @@ class UndoableContext(object):
 
                 self.robot_meshes_relative_poses.append(mesh_in_robot)
 
-                mesh.collision_enabled = False
+                # mesh.collision_enabled = True
                 self.robot_meshes.append(mesh) 
         # og.sim.step() 
         return self  
