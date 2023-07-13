@@ -11,9 +11,11 @@ combined:
 - objects/batch-10
 - objects/batch-11
 - objects/batch-13
+- objects/legacy_batch-00
 - objects/legacy_batch-01
 - objects/legacy_batch-02
 - objects/legacy_batch-03
+- objects/legacy_batch-04
 - objects/legacy_batch-05
 - objects/legacy_batch-06
 - objects/legacy_batch-07
@@ -27,6 +29,7 @@ combined:
 - objects/task_relavant-ab
 - objects/task_relevant-xy
 - scenes/Beechwood_0_int
+- scenes/Beechwood_1_int
 - scenes/Benevolence_0_int
 - scenes/Benevolence_1_int
 - scenes/Benevolence_2_int
@@ -159,6 +162,7 @@ combined_unfiltered:
 - scenes/school_gym
 final_scenes:
 - scenes/Beechwood_0_int
+- scenes/Beechwood_1_int
 - scenes/Benevolence_0_int
 - scenes/Benevolence_1_int
 - scenes/Benevolence_2_int
@@ -186,9 +190,11 @@ objects:
 - objects/batch-10
 - objects/batch-11
 - objects/batch-13
+- objects/legacy_batch-00
 - objects/legacy_batch-01
 - objects/legacy_batch-02
 - objects/legacy_batch-03
+- objects/legacy_batch-04
 - objects/legacy_batch-05
 - objects/legacy_batch-06
 - objects/legacy_batch-07
@@ -237,6 +243,7 @@ objects_unfiltered:
 root_path: D:\ig_pipeline
 scenes:
 - scenes/Beechwood_0_int
+- scenes/Beechwood_1_int
 - scenes/Benevolence_0_int
 - scenes/Benevolence_1_int
 - scenes/Benevolence_2_int

@@ -24,6 +24,7 @@ stages:
     cmd: python -m b1k_pipeline.aggregate_scenes
     deps:
     - cad/scenes/Beechwood_0_int/artifacts/scene.urdf
+    - cad/scenes/Beechwood_1_int/artifacts/scene.urdf
     - cad/scenes/Benevolence_0_int/artifacts/scene.urdf
     - cad/scenes/Benevolence_1_int/artifacts/scene.urdf
     - cad/scenes/Benevolence_2_int/artifacts/scene.urdf
@@ -39,6 +40,7 @@ stages:
     - cad/scenes/Wainscott_1_int/artifacts/scene.urdf
     - cad/scenes/house_double_floor_upper/artifacts/scene.urdf
     - cad/scenes/Beechwood_0_int/artifacts/export_scene.success
+    - cad/scenes/Beechwood_1_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_0_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_1_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_2_int/artifacts/export_scene.success
@@ -74,9 +76,11 @@ stages:
     - cad/objects/batch-10/artifacts/meshes.zip
     - cad/objects/batch-11/artifacts/meshes.zip
     - cad/objects/batch-13/artifacts/meshes.zip
+    - cad/objects/legacy_batch-00/artifacts/meshes.zip
     - cad/objects/legacy_batch-01/artifacts/meshes.zip
     - cad/objects/legacy_batch-02/artifacts/meshes.zip
     - cad/objects/legacy_batch-03/artifacts/meshes.zip
+    - cad/objects/legacy_batch-04/artifacts/meshes.zip
     - cad/objects/legacy_batch-05/artifacts/meshes.zip
     - cad/objects/legacy_batch-06/artifacts/meshes.zip
     - cad/objects/legacy_batch-07/artifacts/meshes.zip
@@ -90,6 +94,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/meshes.zip
     - cad/objects/task_relevant-xy/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/meshes.zip
+    - cad/scenes/Beechwood_1_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_1_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_2_int/artifacts/meshes.zip
@@ -141,9 +146,11 @@ stages:
     - cad/objects/batch-10/artifacts/object_list.json
     - cad/objects/batch-11/artifacts/object_list.json
     - cad/objects/batch-13/artifacts/object_list.json
+    - cad/objects/legacy_batch-00/artifacts/object_list.json
     - cad/objects/legacy_batch-01/artifacts/object_list.json
     - cad/objects/legacy_batch-02/artifacts/object_list.json
     - cad/objects/legacy_batch-03/artifacts/object_list.json
+    - cad/objects/legacy_batch-04/artifacts/object_list.json
     - cad/objects/legacy_batch-05/artifacts/object_list.json
     - cad/objects/legacy_batch-06/artifacts/object_list.json
     - cad/objects/legacy_batch-07/artifacts/object_list.json
@@ -157,6 +164,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
+    - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
     - cad/scenes/Benevolence_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
@@ -208,9 +216,11 @@ stages:
     - cad/objects/batch-10/artifacts/collision_meshes.zip
     - cad/objects/batch-11/artifacts/collision_meshes.zip
     - cad/objects/batch-13/artifacts/collision_meshes.zip
+    - cad/objects/legacy_batch-00/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-01/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-02/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-03/artifacts/collision_meshes.zip
+    - cad/objects/legacy_batch-04/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-05/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-06/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-07/artifacts/collision_meshes.zip
@@ -224,6 +234,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
     - cad/objects/task_relevant-xy/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
+    - cad/scenes/Beechwood_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_2_int/artifacts/collision_meshes.zip
@@ -275,9 +286,11 @@ stages:
     - cad/objects/batch-10/artifacts/collision_selection.json
     - cad/objects/batch-11/artifacts/collision_selection.json
     - cad/objects/batch-13/artifacts/collision_selection.json
+    - cad/objects/legacy_batch-00/artifacts/collision_selection.json
     - cad/objects/legacy_batch-01/artifacts/collision_selection.json
     - cad/objects/legacy_batch-02/artifacts/collision_selection.json
     - cad/objects/legacy_batch-03/artifacts/collision_selection.json
+    - cad/objects/legacy_batch-04/artifacts/collision_selection.json
     - cad/objects/legacy_batch-05/artifacts/collision_selection.json
     - cad/objects/legacy_batch-06/artifacts/collision_selection.json
     - cad/objects/legacy_batch-07/artifacts/collision_selection.json
@@ -291,6 +304,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/collision_selection.json
     - cad/objects/task_relevant-xy/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
+    - cad/scenes/Beechwood_1_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_0_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_1_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_2_int/artifacts/collision_selection.json
@@ -357,9 +371,11 @@ stages:
     - cad/objects/batch-10/artifacts/meshes.zip
     - cad/objects/batch-11/artifacts/meshes.zip
     - cad/objects/batch-13/artifacts/meshes.zip
+    - cad/objects/legacy_batch-00/artifacts/meshes.zip
     - cad/objects/legacy_batch-01/artifacts/meshes.zip
     - cad/objects/legacy_batch-02/artifacts/meshes.zip
     - cad/objects/legacy_batch-03/artifacts/meshes.zip
+    - cad/objects/legacy_batch-04/artifacts/meshes.zip
     - cad/objects/legacy_batch-05/artifacts/meshes.zip
     - cad/objects/legacy_batch-06/artifacts/meshes.zip
     - cad/objects/legacy_batch-07/artifacts/meshes.zip
@@ -373,6 +389,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/meshes.zip
     - cad/objects/task_relevant-xy/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/meshes.zip
+    - cad/scenes/Beechwood_1_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_1_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_2_int/artifacts/meshes.zip
@@ -424,9 +441,11 @@ stages:
     - cad/objects/batch-10/artifacts/object_list.json
     - cad/objects/batch-11/artifacts/object_list.json
     - cad/objects/batch-13/artifacts/object_list.json
+    - cad/objects/legacy_batch-00/artifacts/object_list.json
     - cad/objects/legacy_batch-01/artifacts/object_list.json
     - cad/objects/legacy_batch-02/artifacts/object_list.json
     - cad/objects/legacy_batch-03/artifacts/object_list.json
+    - cad/objects/legacy_batch-04/artifacts/object_list.json
     - cad/objects/legacy_batch-05/artifacts/object_list.json
     - cad/objects/legacy_batch-06/artifacts/object_list.json
     - cad/objects/legacy_batch-07/artifacts/object_list.json
@@ -440,6 +459,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
+    - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
     - cad/scenes/Benevolence_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
@@ -491,9 +511,11 @@ stages:
     - cad/objects/batch-10/artifacts/collision_meshes.zip
     - cad/objects/batch-11/artifacts/collision_meshes.zip
     - cad/objects/batch-13/artifacts/collision_meshes.zip
+    - cad/objects/legacy_batch-00/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-01/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-02/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-03/artifacts/collision_meshes.zip
+    - cad/objects/legacy_batch-04/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-05/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-06/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-07/artifacts/collision_meshes.zip
@@ -507,6 +529,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
     - cad/objects/task_relevant-xy/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
+    - cad/scenes/Beechwood_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_2_int/artifacts/collision_meshes.zip
@@ -558,9 +581,11 @@ stages:
     - cad/objects/batch-10/artifacts/collision_selection.json
     - cad/objects/batch-11/artifacts/collision_selection.json
     - cad/objects/batch-13/artifacts/collision_selection.json
+    - cad/objects/legacy_batch-00/artifacts/collision_selection.json
     - cad/objects/legacy_batch-01/artifacts/collision_selection.json
     - cad/objects/legacy_batch-02/artifacts/collision_selection.json
     - cad/objects/legacy_batch-03/artifacts/collision_selection.json
+    - cad/objects/legacy_batch-04/artifacts/collision_selection.json
     - cad/objects/legacy_batch-05/artifacts/collision_selection.json
     - cad/objects/legacy_batch-06/artifacts/collision_selection.json
     - cad/objects/legacy_batch-07/artifacts/collision_selection.json
@@ -574,6 +599,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/collision_selection.json
     - cad/objects/task_relevant-xy/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
+    - cad/scenes/Beechwood_1_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_0_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_1_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_2_int/artifacts/collision_selection.json
@@ -627,6 +653,7 @@ stages:
     cmd: python -m b1k_pipeline.combined_room_object_list
     deps:
     - cad/scenes/Beechwood_0_int/artifacts/room_object_list.json
+    - cad/scenes/Beechwood_1_int/artifacts/room_object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/room_object_list.json
     - cad/scenes/Benevolence_1_int/artifacts/room_object_list.json
     - cad/scenes/Benevolence_2_int/artifacts/room_object_list.json
@@ -667,6 +694,7 @@ stages:
     - cad/scenes/restaurant_urban/artifacts/room_object_list.json
     - cad/scenes/school_gym/artifacts/room_object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/room_object_list.success
+    - cad/scenes/Beechwood_1_int/artifacts/room_object_list.success
     - cad/scenes/Benevolence_0_int/artifacts/room_object_list.success
     - cad/scenes/Benevolence_1_int/artifacts/room_object_list.success
     - cad/scenes/Benevolence_2_int/artifacts/room_object_list.success
@@ -863,9 +891,11 @@ stages:
     - cad/objects/batch-10/artifacts/export_meshes.json
     - cad/objects/batch-11/artifacts/export_meshes.json
     - cad/objects/batch-13/artifacts/export_meshes.json
+    - cad/objects/legacy_batch-00/artifacts/export_meshes.json
     - cad/objects/legacy_batch-01/artifacts/export_meshes.json
     - cad/objects/legacy_batch-02/artifacts/export_meshes.json
     - cad/objects/legacy_batch-03/artifacts/export_meshes.json
+    - cad/objects/legacy_batch-04/artifacts/export_meshes.json
     - cad/objects/legacy_batch-05/artifacts/export_meshes.json
     - cad/objects/legacy_batch-06/artifacts/export_meshes.json
     - cad/objects/legacy_batch-07/artifacts/export_meshes.json
@@ -879,6 +909,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/export_meshes.json
     - cad/objects/task_relevant-xy/artifacts/export_meshes.json
     - cad/scenes/Beechwood_0_int/artifacts/export_meshes.json
+    - cad/scenes/Beechwood_1_int/artifacts/export_meshes.json
     - cad/scenes/Benevolence_0_int/artifacts/export_meshes.json
     - cad/scenes/Benevolence_1_int/artifacts/export_meshes.json
     - cad/scenes/Benevolence_2_int/artifacts/export_meshes.json
@@ -936,9 +967,11 @@ stages:
     - cad/objects/batch-10/artifacts/meshes.zip
     - cad/objects/batch-11/artifacts/meshes.zip
     - cad/objects/batch-13/artifacts/meshes.zip
+    - cad/objects/legacy_batch-00/artifacts/meshes.zip
     - cad/objects/legacy_batch-01/artifacts/meshes.zip
     - cad/objects/legacy_batch-02/artifacts/meshes.zip
     - cad/objects/legacy_batch-03/artifacts/meshes.zip
+    - cad/objects/legacy_batch-04/artifacts/meshes.zip
     - cad/objects/legacy_batch-05/artifacts/meshes.zip
     - cad/objects/legacy_batch-06/artifacts/meshes.zip
     - cad/objects/legacy_batch-07/artifacts/meshes.zip
@@ -952,6 +985,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/meshes.zip
     - cad/objects/task_relevant-xy/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/meshes.zip
+    - cad/scenes/Beechwood_1_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_1_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_2_int/artifacts/meshes.zip
@@ -1003,9 +1037,11 @@ stages:
     - cad/objects/batch-10/artifacts/collision_meshes.zip
     - cad/objects/batch-11/artifacts/collision_meshes.zip
     - cad/objects/batch-13/artifacts/collision_meshes.zip
+    - cad/objects/legacy_batch-00/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-01/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-02/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-03/artifacts/collision_meshes.zip
+    - cad/objects/legacy_batch-04/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-05/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-06/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-07/artifacts/collision_meshes.zip
@@ -1019,6 +1055,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
     - cad/objects/task_relevant-xy/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
+    - cad/scenes/Beechwood_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_2_int/artifacts/collision_meshes.zip
@@ -1070,9 +1107,11 @@ stages:
     - cad/objects/batch-10/artifacts/collision_selection.json
     - cad/objects/batch-11/artifacts/collision_selection.json
     - cad/objects/batch-13/artifacts/collision_selection.json
+    - cad/objects/legacy_batch-00/artifacts/collision_selection.json
     - cad/objects/legacy_batch-01/artifacts/collision_selection.json
     - cad/objects/legacy_batch-02/artifacts/collision_selection.json
     - cad/objects/legacy_batch-03/artifacts/collision_selection.json
+    - cad/objects/legacy_batch-04/artifacts/collision_selection.json
     - cad/objects/legacy_batch-05/artifacts/collision_selection.json
     - cad/objects/legacy_batch-06/artifacts/collision_selection.json
     - cad/objects/legacy_batch-07/artifacts/collision_selection.json
@@ -1086,6 +1125,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/collision_selection.json
     - cad/objects/task_relevant-xy/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
+    - cad/scenes/Beechwood_1_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_0_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_1_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_2_int/artifacts/collision_selection.json
@@ -1137,9 +1177,11 @@ stages:
     - cad/objects/batch-10/artifacts/object_list.json
     - cad/objects/batch-11/artifacts/object_list.json
     - cad/objects/batch-13/artifacts/object_list.json
+    - cad/objects/legacy_batch-00/artifacts/object_list.json
     - cad/objects/legacy_batch-01/artifacts/object_list.json
     - cad/objects/legacy_batch-02/artifacts/object_list.json
     - cad/objects/legacy_batch-03/artifacts/object_list.json
+    - cad/objects/legacy_batch-04/artifacts/object_list.json
     - cad/objects/legacy_batch-05/artifacts/object_list.json
     - cad/objects/legacy_batch-06/artifacts/object_list.json
     - cad/objects/legacy_batch-07/artifacts/object_list.json
@@ -1153,6 +1195,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
+    - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
     - cad/scenes/Benevolence_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
@@ -1257,9 +1300,11 @@ stages:
     - cad/objects/batch-10/artifacts/object_list.json
     - cad/objects/batch-11/artifacts/object_list.json
     - cad/objects/batch-13/artifacts/object_list.json
+    - cad/objects/legacy_batch-00/artifacts/object_list.json
     - cad/objects/legacy_batch-01/artifacts/object_list.json
     - cad/objects/legacy_batch-02/artifacts/object_list.json
     - cad/objects/legacy_batch-03/artifacts/object_list.json
+    - cad/objects/legacy_batch-04/artifacts/object_list.json
     - cad/objects/legacy_batch-05/artifacts/object_list.json
     - cad/objects/legacy_batch-06/artifacts/object_list.json
     - cad/objects/legacy_batch-07/artifacts/object_list.json
@@ -1273,6 +1318,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
+    - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
     - cad/scenes/Benevolence_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
@@ -1448,9 +1494,11 @@ stages:
     - cad/objects/batch-10/artifacts/object_list.json
     - cad/objects/batch-11/artifacts/object_list.json
     - cad/objects/batch-13/artifacts/object_list.json
+    - cad/objects/legacy_batch-00/artifacts/object_list.json
     - cad/objects/legacy_batch-01/artifacts/object_list.json
     - cad/objects/legacy_batch-02/artifacts/object_list.json
     - cad/objects/legacy_batch-03/artifacts/object_list.json
+    - cad/objects/legacy_batch-04/artifacts/object_list.json
     - cad/objects/legacy_batch-05/artifacts/object_list.json
     - cad/objects/legacy_batch-06/artifacts/object_list.json
     - cad/objects/legacy_batch-07/artifacts/object_list.json
@@ -1464,6 +1512,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
+    - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
     - cad/scenes/Benevolence_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
@@ -1558,9 +1607,11 @@ stages:
     - cad/objects/batch-10/artifacts/sanitycheck.json
     - cad/objects/batch-11/artifacts/sanitycheck.json
     - cad/objects/batch-13/artifacts/sanitycheck.json
+    - cad/objects/legacy_batch-00/artifacts/sanitycheck.json
     - cad/objects/legacy_batch-01/artifacts/sanitycheck.json
     - cad/objects/legacy_batch-02/artifacts/sanitycheck.json
     - cad/objects/legacy_batch-03/artifacts/sanitycheck.json
+    - cad/objects/legacy_batch-04/artifacts/sanitycheck.json
     - cad/objects/legacy_batch-05/artifacts/sanitycheck.json
     - cad/objects/legacy_batch-06/artifacts/sanitycheck.json
     - cad/objects/legacy_batch-07/artifacts/sanitycheck.json
@@ -1574,6 +1625,7 @@ stages:
     - cad/objects/task_relavant-ab/artifacts/sanitycheck.json
     - cad/objects/task_relevant-xy/artifacts/sanitycheck.json
     - cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
+    - cad/scenes/Beechwood_1_int/artifacts/sanitycheck.json
     - cad/scenes/Benevolence_0_int/artifacts/sanitycheck.json
     - cad/scenes/Benevolence_1_int/artifacts/sanitycheck.json
     - cad/scenes/Benevolence_2_int/artifacts/sanitycheck.json

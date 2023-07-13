@@ -78,8 +78,6 @@ REJECTED_OBJS = {
     # Temporary
     "batch-06",
     "batch-12",
-    "legacy_batch-00",
-    "legacy_batch-04",
     "substances-02",
 }
 
@@ -99,7 +97,6 @@ REJECTED_SCENES = {
     "office_cubicles_right",
 
     # Temporary
-    "Beechwood_1_int",
     "Pomaria_0_garden",
     "commercial_kitchen_fire_extinguisher",
     "grocery_store_cafe",
