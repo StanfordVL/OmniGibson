@@ -31,7 +31,7 @@
     
     (:goal 
         (and 
-            (inside ?kettle.n.01_1 ?sink.n.01_1) 
+            (ontop ?kettle.n.01_1 ?sink.n.01_1)
             (not 
                 (covered ?kettle.n.01_1 ?stain.n.01_1)
             )

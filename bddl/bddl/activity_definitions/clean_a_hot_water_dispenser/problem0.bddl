@@ -12,7 +12,7 @@
     
     (:init 
         (covered sink.n.01_1 dust.n.01_1) 
-        (inside rag.n.01_1 sink.n.01_1) 
+        (ontop rag.n.01_1 sink.n.01_1)
         (insource sink.n.01_1 water.n.06_1)
         (inroom floor.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
