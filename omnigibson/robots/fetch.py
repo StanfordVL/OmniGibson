@@ -382,6 +382,25 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
             ["torso_lift_link", "shoulder_lift_link"],
             ["torso_lift_link", "torso_fixed_link"],
         ]
+    
+    @property
+    def manipulation_link_names(self):
+        return [
+            "torso_lift_link", 
+            "head_pan_link", 
+            "head_tilt_link", 
+            "head_camera_link", 
+            "shoulder_pan_link", 
+            "shoulder_lift_link", 
+            "upperarm_roll_link", 
+            "elbow_flex_link", 
+            "forearm_roll_link", 
+            "wrist_flex_link", 
+            "wrist_roll_link", 
+            "gripper_link", 
+            "l_gripper_finger_link", 
+            "r_gripper_finger_link",
+        ]
 
     @property
     def arm_link_names(self):
