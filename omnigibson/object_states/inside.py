@@ -20,19 +20,16 @@ class Inside(KinematicsMixin, RelativeObjectState, BooleanState):
 
         state = og.sim.dump_state(serialized=False)
 
-        for _ in range(10):
-            if sample_kinematics("inside", self.obj, other) and self.get_value(other):
-                return True
-            else:
-                og.sim.load_state(state, serialized=False)
+        if sample_kinematics("inside", self.obj, other) and self.get_value(other):
+            return True
+        else:
+            og.sim.load_state(state, serialized=False)
 
         return False
 
     def _get_value(self, other):
         # First check that the inner object's position is inside the outer's AABB.
-        # Since we usually check for a small set of outer objects, this is cheap.
-        # Also note that this produces garbage values for fixed objects - but we are
-        # assuming none of our inside-checking objects are fixed.
+        # Since we usually check for a small set of outer objects, this is cheap
         aabb_lower, aabb_upper = self.obj.states[AABB].get_value()
         inner_object_pos = (aabb_lower + aabb_upper) / 2.0
         outer_object_aabb = other.states[AABB].get_value()
