@@ -7,7 +7,7 @@ from omnigibson.macros import gm
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives, UndoableContext
 import omnigibson.utils.transform_utils as T
 from omnigibson.objects.dataset_object import DatasetObject
-from omnigibson.utils.motion_planning_utils import detect_robot_collision
+from omnigibson.utils.motion_planning_utils import detect_robot_collision, arm_planning_validity_fn
 from omnigibson.utils.control_utils import FKSolver
 
 import cProfile, pstats, io
@@ -26,7 +26,7 @@ def pause(time):
 
 def main():
     # Load the config
-    config_filename = "test.yaml"
+    config_filename = "test_tiago.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
     config["scene"]["load_object_categories"] = ["floors", "walls"]
@@ -38,65 +38,43 @@ def main():
 
     # Allow user to move camera more easily
     og.sim.enable_viewer_camera_teleoperation()
-
-    def set_joint_position(joint_pos):
-        joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
-        robot.set_joint_positions(joint_pos, joint_control_idx)
     
     robot.tuck()
-    sample_joint_pos = [0.15423851367072022, -1.0387570683144083, 0.9822923612052801, -3.616398201866898, 1.1935598104403646, -5.581136441178919, -1.538962073594338, -4.815883527519679]
-    # set_joint_position(sample_joint_pos)
-    # og.sim.step()
+    og.sim.step()
+
+    # import random
+    # def get_random_joint_position():
+    #     joint_positions = []
+    #     joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+    #     joints = np.array([joint for joint in robot.joints.values()])
+    #     arm_joints = joints[joint_control_idx]
+    #     for i, joint in enumerate(arm_joints):
+    #         val = random.uniform(joint.lower_limit, joint.upper_limit)
+    #         joint_positions.append(val)
+    #     return joint_positions
+    
+    # def set_joint_position(joint_pos):
+    #     joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+    #     robot.set_joint_positions(joint_pos, joint_control_idx)
+
+    # while True:
+    #     joint_pos = get_random_joint_position()
+    #     set_joint_position(joint_pos)
+    #     pause(2)
+    #     print(joint_pos)
+    #     print("------------------------")
+
+    # sample_table_collision = [0.05725323620041453, 0.5163557640853469, 1.510323032160434, -4.410407307232964, -1.1433260958390707, -5.606768602222553, 1.0313821643138894, -4.181284701460742]
+    # sample_self_collision = [0.03053552120088664, 1.0269865478752571, 1.1344740372495958, 6.158997020615134, 1.133466907494042, -4.544473644642829, 0.6930819484783561, 4.676661155308317]
+    # collision_free = [0.17814310139520295, -0.8082173382782226, 1.3469484097869393, 1.6222072455290446, 2.0591874971218145, -2.9063608379063557, -0.04634827601286595, 4.505122702016582]
+    
+    #Tiago
+    # collision = [0.2393288722514114, 0.6827304549383206, -0.7417095531313561, 1.5545856070355928, 1.1564023450452656, -1.9133402827904034, -1.0298560252209046, -0.9335642636338648]
+    no_collision = [0.22302278221924968, -1.0026208057533306, 0.25838140454017355, 1.3805559572150887, 2.2007603924033146, 1.9623866326341695, -0.6222869567629125, 0.9930485383035812]
+    
     # pause(100)
-
-    # Create the FK solver 
-    fk_solver = FKSolver(
-        robot_description_path=robot.robot_arm_descriptor_yamls[robot.default_arm],
-        robot_urdf_path=robot.urdf_path,
-    )
-
-
-    arm_links = [
-        "head_pan_link",
-        "torso_lift_link",
-        "shoulder_pan_link",
-        "shoulder_lift_link",
-        "upperarm_roll_link",
-        "elbow_flex_link",
-        "forearm_roll_link",
-        "wrist_flex_link",
-        "wrist_roll_link",
-        "gripper_link",
-        "l_gripper_finger_link",
-        "r_gripper_finger_link"
-    ]
-
-    # for link in arm_links:
-    #     link_pose_robot_frame = link_poses[link]
-    #     link_pose_world_frame = T.pose_transform(*robot.get_position_orientation(), *link_pose_robot_frame)
-
-    with UndoableContext(robot) as context:
-        # breakpoint()
-        # pause(100)
-        # print(detect_robot_collision(context, robot, ([0, -1, 0], [0, 0, 0, 1])))
-        # print("--------------------")
-        link_poses = fk_solver.get_link_poses(sample_joint_pos, arm_links)
-        # breakpoint()
-        
-        for mesh in context.robot_meshes_copy:
-            link_name = mesh.name.split("/")[-1]
-            if link_name in arm_links:
-                pose = link_poses[link_name]
-                translation = pose[0]
-                orientation = pose[1]
-                mesh_prim = get_prim_at_path(mesh.prim_path)
-                # context.robot_prim.set_local_poses(np.array([translation]), np.array([orientation]))
-                translation = Gf.Vec3d(*np.array(translation, dtype=float))
-                mesh_prim.GetAttribute("xformOp:translate").Set(translation)
-
-                orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
-                mesh_prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation))
-            
+    with UndoableContext(robot, "arm") as context:        
+        print(not arm_planning_validity_fn(context, no_collision))
         pause(100)
     
     # breakpoint()

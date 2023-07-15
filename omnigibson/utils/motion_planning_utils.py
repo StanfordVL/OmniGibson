@@ -8,6 +8,16 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import RigidContactAPI
 from pxr import PhysicsSchemaTools
 
+from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, CreatePrimCommand
+from omnigibson.prims import CollisionGeomPrim, XFormPrim
+from omni.isaac.core.utils.prims import get_prim_at_path
+
+from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, TransformPrimsCommand, TransformPrimCommand
+from omnigibson.prims import CollisionGeomPrim
+from pxr import Gf, Usd
+from omni.isaac.core.prims import XFormPrimView
+
+
 num_checks = [0]
 def plan_base_motion(
     robot,
@@ -20,12 +30,8 @@ def plan_base_motion(
         x = q.getX()
         y = q.getY()
         yaw = q.getYaw()
-        # robot.set_position_orientation(
-        #     [x, y, 0.05], T.euler2quat((0, 0, yaw))
-        # )
         pose = ([x, y, 0.0], T.euler2quat((0, 0, yaw)))
-        # og.sim.step(render=False)
-        state_valid = not detect_robot_collision(context, robot, pose)
+        state_valid = base_planning_validity_fn(context, pose)
         num_checks[0] += 1
         return state_valid
 
@@ -86,6 +92,7 @@ def plan_base_motion(
 def plan_arm_motion(
     robot,
     end_conf,
+    context,
     planning_time = 100.0,
     **kwargs,
 ):
@@ -94,10 +101,8 @@ def plan_arm_motion(
 
     def state_valid_fn(q):
         joint_pos = [q[i] for i in range(dim)]
-        robot.set_joint_positions(joint_pos, joint_control_idx)
-        og.sim.step(render=False)
-        state_valid = not detect_robot_collision(robot)
-        return state_valid
+        # state_valid = not detect_robot_collision(robot)
+        return arm_planning_validity_fn(context, joint_pos)
     
     # create an SE2 state space
     space = ob.RealVectorStateSpace(dim)
@@ -116,7 +121,7 @@ def plan_arm_motion(
     ss.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
 
     si = ss.getSpaceInformation()
-    planner = ompl_geo.LBKPIECE1(si)
+    planner = ompl_geo.RRTConnect(si)
     ss.setPlanner(planner)
 
     start_conf = robot.get_joint_positions()[joint_control_idx]
@@ -163,56 +168,15 @@ def plan_arm_motion(
 
 #     return len(collision_prims) > 0 or detect_self_collision(robot)
 
+def detect_robot_collision(robot, filter_objs=[]):
+    pass
+
 from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, TransformPrimsCommand, TransformPrimCommand
 from omnigibson.prims import CollisionGeomPrim
 from pxr import Gf, Usd
 
-def detect_robot_collision(context, robot, pose=None, filter_objs=[]):
-    filter_categories = ["floors"]
-
-    # Store the meshs' IDs
-    # robot_root_mesh = robot.root_link.collision_meshes["collisions"]
-    # robot_pose = robot_root_mesh.get_position_orientation()
-    # relative_pose = T.relative_pose_transform(*pose, *robot_pose)
-    # print(relative_pose)
-    # print(T.pose2mat(relative_pose).astype(np.double))
-    # print(T.mat2pose(T.pose2mat(relative_pose).astype(np.double)))
-    # print(Gf.Matrix4d(T.pose2mat(relative_pose).astype(np.double)))
-    # transforms = []
-    # for i, mesh in enumerate(context.robot_meshes_copy):
-    #     # breakpoint()
-    #     # print(mesh.get_position())
-    #     # mesh.set_local_pose(*relative_pose)
-    #     # breakpoint()
-    #     relative_pose = context.robot_meshes_relative_poses[i]
-    #     mesh_pose = T.pose_transform(*pose, *relative_pose)
-    #     # relative_pose_mat = Gf.Matrix4d(np.transpose(T.pose2mat(mesh_pose).astype(np.double)))
-    #     translation, orientation = mesh_pose
-
-    #     prim = context.prims[i]
-    #     translation = Gf.Vec3d(*np.array(translation, dtype=float))
-    #     prim.GetAttribute("xformOp:translate").Set(translation)
-
-    #     orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
-    #     prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
-    #     # transforms.append((mesh.prim_path, relative_pose_mat, None, Usd.TimeCode.Default(), False, ''))
-    #     # TransformPrimCommand(mesh.prim_path, relative_pose_mat).do()
-    #     # print(mesh.get_position())
-    #     # print("----------")
-    # # relative_pose_mat = Gf.Matrix4d(T.pose2mat(relative_pose).astype(np.double))
-    # # transforms = [(mesh.prim_path, relative_pose_mat, None, Usd.TimeCode.Default(), False, '') for mesh in context.robot_meshes_copy]
-    # # TransformPrimsCommand(transforms).do()
-
-    # for i, mesh in enumerate(context.robot_meshes_copy):
-    #     # breakpoint()
-    #     # print(mesh.get_position())
-    #     # mesh.set_local_pose(*relative_pose)
-    #     # breakpoint()
-    #     relative_pose = context.robot_meshes_relative_poses[i]
-    #     mesh_pose = T.pose_transform(*pose, *relative_pose)
-    #     # relative_pose_mat = Gf.Matrix4d(np.transpose(T.pose2mat(mesh_pose).astype(np.double)))
-    #     translation, orientation = mesh_pose
-
+# Moves robot and detects robot collisions with the environment, but not with itself
+def base_planning_validity_fn(context, pose):
     translation = pose[0]
     orientation = pose[1]
     # context.robot_prim.set_local_poses(np.array([translation]), np.array([orientation]))
@@ -222,38 +186,72 @@ def detect_robot_collision(context, robot, pose=None, filter_objs=[]):
     orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
     context.robot_prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
 
-    filtered_links = []
-    for obj in og.sim.scene.objects:
-        if obj.category in filter_categories:
-            for link in obj.links.values():
-                filtered_links.append(link.prim_path)
+    for link in context.robot_meshes_copy:
+        for mesh in context.robot_meshes_copy[link]:
+            mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh.prim_path)
+            if mesh._prim.GetTypeName() == "Mesh":
+                if og.sim.psqi.overlap_mesh_any(*mesh_id):
+                    return False
+            else:
+                if og.sim.psqi.overlap_shape_any(*mesh_id):
+                    return False
+    return True
+
+# Sets joint positions of robot and detects robot collisions with the environment and itself
+def arm_planning_validity_fn(context, joint_pos):
+    arm_links = context.robot.manipulation_link_names
+    link_poses = context.fk_solver.get_link_poses(joint_pos, arm_links)
+
+    for link in arm_links:
+        pose = link_poses[link]
+        if link in context.robot_meshes_copy.keys():
+            for mesh, relative_pose in zip(context.robot_meshes_copy[link], context.robot_meshes_relative_poses[link]):
+                mesh_pose = T.pose_transform(*pose, *relative_pose)
+                translation = Gf.Vec3d(*np.array(mesh_pose[0], dtype=float))
+                mesh._prim.GetAttribute("xformOp:translate").Set(translation)
+                orientation = np.array(mesh_pose[1], dtype=float)[[3, 0, 1, 2]]
+                mesh._prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation))
 
     # Define function for checking overlap
     valid_hit = False
+    mesh_hit = None
 
     def overlap_callback(hit):
         nonlocal valid_hit
-        valid_hit = hit.rigid_body not in filtered_links
-        # if valid_hit:
-        #     breakpoint()
+        nonlocal mesh_hit
+        # print(hit.rigid_body)filtered_links_paths
+        # from IPython import embed; embed()
+        # print(mesh_hit)
+        # print(hit.rigid_body)
+        # print(context.collision_pairs_dict)
+        valid_hit = hit.rigid_body not in context.collision_pairs_dict[mesh_hit]
+        # from IPython import embed; embed()
+        if valid_hit:
+            print("hit body")
+            print(mesh_hit)
+            print(hit.rigid_body)
         return not valid_hit
-
 
     def check_overlap():
         nonlocal valid_hit
+        nonlocal mesh_hit
         valid_hit = False
 
-        for mesh in context.robot_meshes_copy:
-            if valid_hit:
-                break
-            if "l_gripper_finger_link" in mesh.prim_path or "r_gripper_finger_link" in mesh.prim_path:
-                continue
-            mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh.prim_path)
-            og.sim.psqi.overlap_mesh(*mesh_id, reportFn=overlap_callback)
+        for link in context.robot_meshes_copy:
+            for mesh in context.robot_meshes_copy[link]:
+                # print(mesh.collision_enabled)
+                if valid_hit:
+                    return valid_hit
+                mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh.prim_path)
+                mesh_hit = mesh.prim_path
+                if mesh._prim.GetTypeName() == "Mesh":
+                    og.sim.psqi.overlap_mesh(*mesh_id, reportFn=overlap_callback)
+                else:
+                    og.sim.psqi.overlap_shape(*mesh_id, reportFn=overlap_callback)
             
         return valid_hit
     
-    return check_overlap()
+    return not check_overlap()
 
 
 def detect_self_collision(robot):

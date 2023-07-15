@@ -99,39 +99,6 @@ logger = logging.getLogger(__name__)
 
 def indented_print(msg, *args, **kwargs):
     logger.debug("  " * len(inspect.stack()) + str(msg), *args, **kwargs)
-
-
-# class UndoableContext(object):
-#     def __init__(self, robot):
-#         self.robot = robot
-
-#     def __enter__(self):
-#         self.obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm]
-#         # Store object in hand and the link of the object attached to the robot gripper to manually restore later
-#         if self.obj_in_hand is not None:
-#             obj_ag_link_path = self.robot._ag_obj_constraint_params[self.robot.default_arm]['ag_link_prim_path']
-#             for link in self.obj_in_hand._links.values():
-#                 if link.prim_path == obj_ag_link_path:
-#                     self.obj_in_hand_link = link
-#                     break
-
-#         self.state = og.sim.dump_state(serialized=False)
-#         og.sim._physics_context.set_gravity(value=0.0)
-#         for obj in og.sim.scene.objects:
-#             for link in obj.links.values():
-#                 PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(False)
-#             obj.keep_still()
-
-#     def __exit__(self, *args):
-#         og.sim._physics_context.set_gravity(value=-9.81)
-#         for obj in og.sim.scene.objects:
-#             for link in obj.links.values():
-#                 PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(True)
-#         og.sim.load_state(self.state, serialized=False)
-#         og.sim.step()
-#         if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
-#             self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
-#         og.sim.step()
         
 from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, CreatePrimCommand
 from omnigibson.prims import CollisionGeomPrim, XFormPrim
@@ -141,60 +108,37 @@ from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimComm
 from omnigibson.prims import CollisionGeomPrim
 from pxr import Gf, Usd
 from omni.isaac.core.prims import XFormPrimView
+from omnigibson.utils.control_utils import FKSolver
 
 class UndoableContext(object):
-    def __init__(self, robot):
+    def __init__(self, robot, mode=None):
         self.robot = robot
+        self.mode = mode
+        self.robot_copy_path = "/World/robot_copy"
+        self.robot_prim = None
+        self.robot_meshes_copy = {}
+        self.robot_meshes_relative_poses = {}
+        self.disabled_meshes = []
 
     def __enter__(self):
-        # og.sim._physics_context.set_gravity(value=0)
-        self.robot_copy = None
-        self.robot_meshes = []
-        self.robot_meshes_copy = []
-        self.robot_meshes_relative_poses = []
-        self.prims = []
-        robot_pose = self.robot.get_position_orientation()
-        # self.robot_prim = XFormPrim("/World/robot_copy", "test")
-        CreatePrimCommand("Xform", "/World/robot_copy").do()
-        self.robot_prim = get_prim_at_path("/World/robot_copy")
-        # self.robot_prim = XFormPrimView("/World/robot_copy")
-        # breakpoint()
-        for link in self.robot.links.values():
-            for mesh in link.collision_meshes.values():
-                new_path = "/World/robot_copy/" + mesh.prim_path.split("/")[-2]
-                mesh_command = CopyPrimCommand(mesh.prim_path, path_to=new_path)
-                mesh_command.do()
-                mesh_copy_path = mesh_command._path_to
-                self.prims.append(get_prim_at_path(mesh_command._path_to))
-                mesh_copy = CollisionGeomPrim(mesh_copy_path, mesh_copy_path)
-                mesh_copy.collision_enabled = True
-                # mesh_pose = mesh.get_position_orientation()
-                # mesh_copy.set_position_orientation(*mesh_pose)
-                self.robot_meshes_copy.append(mesh_copy)
-
-                mesh_pose = mesh.get_position_orientation()
-                mesh_in_robot = T.relative_pose_transform(*mesh_pose, *robot_pose)
-
-                translation = mesh_in_robot[0]
-                orientation = mesh_in_robot[1]
-
-                translation = Gf.Vec3d(*np.array(translation, dtype=float))
-                mesh_copy.prim.GetAttribute("xformOp:translate").Set(translation)
-
-                orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
-                mesh_copy.prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation))
-
-                self.robot_meshes_relative_poses.append(mesh_in_robot)
-
-                # mesh.collision_enabled = True
-                self.robot_meshes.append(mesh) 
-        # og.sim.step() 
+        og.sim._physics_context.set_gravity(value=0)
+        self._copy_robot()
+        self._disable_colliders()
+        if self.mode == "arm":
+            self._construct_collision_pair_dict()
+            self.fk_solver = FKSolver(
+                robot_description_path=self.robot.robot_arm_descriptor_yamls[self.robot.default_arm],
+                robot_urdf_path=self.robot.urdf_path,
+            )
         return self  
 
     def __exit__(self, *args):
-        for i, m in enumerate(self.robot_meshes):
-            m.collision_enabled = True
-            self.robot_meshes_copy[i].remove()
+        for link in self.robot_meshes_copy:
+            for mesh in self.robot_meshes_copy[link]:
+                mesh.remove()
+        for d_mesh in self.disabled_meshes:
+            d_mesh.collision_enabled = True
+
         # pass
         # og.sim._physics_context.set_gravity(value=-9.81)
         # for obj in og.sim.scene.objects:
@@ -205,6 +149,79 @@ class UndoableContext(object):
         # if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
         #     self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
         # og.sim.step()
+
+    def _copy_robot(self):
+        CreatePrimCommand("Xform", self.robot_copy_path).do()
+        # self.robot_prim = CollisionGeomPrim(self.robot_copy_path, self.robot_copy_path)
+        # print(self.robot_prim.collision_enabled)
+        # self.robot_prim.collision_enabled = True
+        # print(self.robot_prim.collision_enabled)
+        # self.robot_prim = self.robot_prim._prim
+        self.robot_prim = get_prim_at_path(self.robot_copy_path)
+
+        for link in self.robot.links.values():
+            for mesh in link.collision_meshes.values():
+                split_path = mesh.prim_path.split("/")
+                link_name = split_path[3]
+                mesh_copy_path = self.robot_copy_path + "/" + link_name
+                mesh_copy_path += f"_{split_path[-1]}" if split_path[-1] != "collisions" else ""
+
+                mesh_command = CopyPrimCommand(mesh.prim_path, path_to=mesh_copy_path)
+                mesh_command.do()
+                mesh_copy = CollisionGeomPrim(mesh_copy_path, mesh_copy_path)
+                relative_pose = T.relative_pose_transform(*mesh.get_position_orientation(), *link.get_position_orientation())
+                if link_name not in self.robot_meshes_copy.keys():
+                    self.robot_meshes_copy[link_name] = [mesh_copy]
+                    self.robot_meshes_relative_poses[link_name] = [relative_pose]
+                else:
+                    self.robot_meshes_copy[link_name].append(mesh_copy)
+                    self.robot_meshes_relative_poses[link_name].append(relative_pose)
+
+                # Set poses of meshes to contruct robot copy
+                mesh_in_robot = T.relative_pose_transform(*mesh.get_position_orientation(), *self.robot.get_position_orientation())
+                translation = Gf.Vec3d(*np.array(mesh_in_robot[0], dtype=float))
+                mesh_copy.prim.GetAttribute("xformOp:translate").Set(translation)
+                orientation = np.array(mesh_in_robot[1], dtype=float)[[3, 0, 1, 2]]
+                mesh_copy.prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation))
+
+                if self.mode == "base":
+                    mesh_copy.collision_enabled = False
+                elif self.mode == "arm":
+                    mesh_copy.collision_enabled = True
+                else:
+                    pass
+                mesh.collision_enabled = False
+                self.disabled_meshes.append(mesh)
+        og.sim.step()
+
+    def _disable_colliders(self):
+        filter_categories = ["floors"]
+        for obj in og.sim.scene.objects:
+            if obj.category in filter_categories:
+                for link in obj.links.values():
+                    for mesh in link.collision_meshes.values():
+                        mesh.collision_enabled = False
+                        self.disabled_meshes.append(mesh)
+
+    def _construct_collision_pair_dict(self):
+        # from IPython import embed; embed()
+        self.collision_pairs_dict = {}
+
+        # Filter out collision pairs of meshes part of the same link
+        for link in self.robot_meshes_copy:
+            for mesh in self.robot_meshes_copy[link]:
+                self.collision_pairs_dict[mesh.prim_path] = [m.prim_path for m in self.robot_meshes_copy[link]]
+
+        # Filter out collision pairs of meshes part of disabled collision pairs
+        for pair in self.robot.temp_disabled_collision_pairs:
+            link_1 = pair[0]
+            link_2 = pair[1]
+            if link_1 in self.robot_meshes_copy.keys() and link_2 in self.robot_meshes_copy.keys():
+                for mesh in self.robot_meshes_copy[link_1]:
+                    self.collision_pairs_dict[mesh.prim_path] += [m.prim_path for m in self.robot_meshes_copy[link_2]]
+
+                for mesh in self.robot_meshes_copy[link_2]:
+                    self.collision_pairs_dict[mesh.prim_path] += [m.prim_path for m in self.robot_meshes_copy[link_1]]
         
 class StarterSemanticActionPrimitive(IntEnum):
     GRASP = 0
@@ -414,7 +431,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             approach_pose = (approach_pos, grasp_pose[1])
 
             # If the grasp pose is too far, navigate.
-            yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0])
+            # yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0])
             yield from self._move_hand(grasp_pose)
 
             # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
@@ -536,10 +553,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self._settle_robot()
         joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
 
-        with UndoableContext(self.robot):
+        with UndoableContext(self.robot, "arm") as context:
             plan = plan_arm_motion(
                 robot=self.robot,
-                end_conf=joint_pos
+                end_conf=joint_pos,
+                context=context
             )
 
         if plan is None:
@@ -619,6 +637,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 action[action_idx] = self.robot.get_joint_positions()[joint_idx]
 
         return action
+    
 
     def _reset_hand(self):
         control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
@@ -676,7 +695,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         yield from self._move_hand_direct_joint(reset_pose, control_idx)
 
     def _navigate_to_pose(self, pose_2d):
-        with UndoableContext(self.robot) as context:
+        with UndoableContext(self.robot, "base") as context:
             plan = plan_base_motion(
                 robot=self.robot,
                 end_conf=pose_2d,

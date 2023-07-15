@@ -7,7 +7,7 @@ from omnigibson.macros import gm
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives, UndoableContext
 import omnigibson.utils.transform_utils as T
 from omnigibson.objects.dataset_object import DatasetObject
-from omnigibson.utils.motion_planning_utils import detect_robot_collision
+from omnigibson.utils.motion_planning_utils import base_planning_validity_fn
 
 import cProfile, pstats, io
 import time
@@ -20,7 +20,7 @@ def pause(time):
 
 def main():
     # Load the config
-    config_filename = "test.yaml"
+    config_filename = "test_tiago.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
     config["scene"]["load_object_categories"] = ["floors", "walls", "coffee_table"]
@@ -40,6 +40,7 @@ def main():
         [0.5, 0.5, 0]
     ]
 
+    # from IPython import embed; embed()
     # breakpoint()
     robot.tuck()
     robot.set_position([0, 0, 0.1])
@@ -58,13 +59,13 @@ def main():
     # pause(100)
 
     for position in positions:
-        with UndoableContext(robot) as context:
+        with UndoableContext(robot, "base") as context:
             # breakpoint()
             # pause(100)
-            print(detect_robot_collision(context, robot, (position, [0, 0, 0, 1])))
+            print(not base_planning_validity_fn(context,(position, [0, 0, 0, 1])))
             print("--------------------")
-            pause(100)
-        pause(1)
+            # pause(100)
+    pause(1)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run test script")

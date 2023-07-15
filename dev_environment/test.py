@@ -28,7 +28,7 @@ def execute_controller(ctrl_gen, env, filename=None):
     for action in ctrl_gen:
         env.step(action)
         actions.append(action.tolist())
-        break
+        # break
     if filename is not None:
         with open(filename, "w") as f:
             yaml.dump(actions, f)
@@ -38,9 +38,9 @@ def main():
     config_filename = "test.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
-    # config["scene"]["load_object_categories"] = ["floors", "ceilings", "walls", "coffee_table"]
+    config["scene"]["load_object_categories"] = ["floors", "ceilings", "walls", "coffee_table"]
 
-    config["scene"]["not_load_object_categories"] = ["sofa", "carpet"]
+    # config["scene"]["not_load_object_categories"] = ["sofa", "carpet"]
 
     # Load the environment
     env = og.Environment(configs=config)
@@ -132,7 +132,10 @@ def main():
     # test_grasp()
     # test_place()
 
-    execute_controller(controller._navigate_to_pose([0.0, 2.2, 0]), env)
+    test_grasp_no_navigation()
+    pause(10)
+
+    # execute_controller(controller._navigate_to_pose([0.0, 1.0, 0]), env)
     # pause(5)
 
 if __name__ == "__main__":

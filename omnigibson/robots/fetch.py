@@ -384,12 +384,34 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         ]
     
     @property
+    def temp_disabled_collision_pairs(self):
+        return [
+            ["torso_lift_link", "shoulder_lift_link"],
+            ["torso_lift_link", "torso_fixed_link"],
+            ["torso_lift_link", "estop_link"],
+            ["base_link", "laser_link"],
+            ["base_link", "torso_fixed_link"],
+            ["base_link", "l_wheel_link"],
+            ["base_link", "r_wheel_link"],
+            ["base_link", "estop_link"],
+            ["torso_lift_link", "shoulder_pan_link"],
+            ["torso_lift_link", "head_pan_link"],
+            ["head_pan_link", "head_tilt_link"],
+            ["shoulder_pan_link", "shoulder_lift_link"],
+            ["shoulder_lift_link", "upperarm_roll_link"],
+            ["upperarm_roll_link", "elbow_flex_link"],
+            ["elbow_flex_link", "forearm_roll_link"],
+            ["forearm_roll_link", "wrist_flex_link"],
+            ["wrist_flex_link", "wrist_roll_link"],
+            ["wrist_roll_link", "gripper_link"],
+        ]
+    
+    @property
     def manipulation_link_names(self):
         return [
             "torso_lift_link", 
             "head_pan_link", 
-            "head_tilt_link", 
-            "head_camera_link", 
+            "head_tilt_link",  
             "shoulder_pan_link", 
             "shoulder_lift_link", 
             "upperarm_roll_link", 

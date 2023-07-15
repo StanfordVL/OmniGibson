@@ -548,7 +548,16 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             ["base_link", "wheel_rear_right_link"],
             ["base_link", "wheel_front_left_link"],
             ["base_link", "wheel_front_right_link"],
+            ["base_link", "base_dock_link"],
+            ["base_link", "base_antenna_right_link"],
+            ["base_link", "torso_fixed_column_link"],
+            ["base_link", "suspension_front_left_link"],
+            ["base_link", "suspension_front_right_link"],
         ]
+    
+    @property
+    def temp_disabled_collision_pairs(self):
+        return self.disabled_collision_pairs
     
     @property
     def manipulation_link_names(self):
