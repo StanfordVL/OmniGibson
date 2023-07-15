@@ -160,20 +160,24 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                         collision_filenames = collision_dir.listdir("/")
                         selection_matching_pattern = re.compile(collision_selection + r"-(\d+).obj$")
 
-                # Match the files
-                selection_matches = [(selection_matching_pattern.fullmatch(x), x) for x in collision_filenames]
-                indexed_matches = {int(match.group(1)): fn for match, fn in selection_matches if match}
-                assert set(range(len(indexed_matches))) == set(indexed_matches.keys()), f"Missing collision meshes for {node_key}"
-                ordered_collision_filenames = [indexed_matches[i] for i in range(len(indexed_matches))]
+                if obj_model == "nkbvad":
+                    print(collision_filenames)
 
-                collision_meshes = []
-                for collision_filename in ordered_collision_filenames:
-                    collision_mesh = load_mesh(collision_fs, collision_filename, force="mesh", skip_materials=True)
-                    if not collision_mesh.is_volume:
-                        collision_mesh = load_mesh(collision_fs, collision_filename, force="mesh", process=False, skip_materials=True)
-                    collision_mesh.apply_transform(SCALE_MATRIX)
-                    collision_meshes.append(collision_mesh)
-                G.nodes[node_key]["collision_mesh"] = collision_meshes
+                # Match the files
+                if collision_filenames:
+                    selection_matches = [(selection_matching_pattern.fullmatch(x), x) for x in collision_filenames]
+                    indexed_matches = {int(match.group(1)): fn for match, fn in selection_matches if match}
+                    assert set(range(len(collision_filenames))) == set(indexed_matches.keys()), f"Missing collision meshes for {node_key}"
+                    ordered_collision_filenames = [indexed_matches[i] for i in range(len(collision_filenames))]
+
+                    collision_meshes = []
+                    for collision_filename in ordered_collision_filenames:
+                        collision_mesh = load_mesh(collision_fs, collision_filename, force="mesh", skip_materials=True)
+                        if not collision_mesh.is_volume:
+                            collision_mesh = load_mesh(collision_fs, collision_filename, force="mesh", process=False, skip_materials=True)
+                        collision_mesh.apply_transform(SCALE_MATRIX)
+                        collision_meshes.append(collision_mesh)
+                    G.nodes[node_key]["collision_mesh"] = collision_meshes
 
         # Add the edge in from the parent
         if link_name != "base_link":
