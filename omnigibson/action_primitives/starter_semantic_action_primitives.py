@@ -431,18 +431,19 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             approach_pose = (approach_pos, grasp_pose[1])
 
             # If the grasp pose is too far, navigate.
-            # yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0])
+            yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0])
             yield from self._move_hand(grasp_pose)
 
             # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
             # It's okay if we can't go all the way because we run into the object.
             indented_print("Performing grasp approach.")
             try:
-                yield from self._move_hand_direct_cartesian(approach_pose, stop_on_contact=True)
+                num_waypoints = 50
+                yield from self._move_hand_direct_cartesian_smoothly(approach_pose, num_waypoints, stop_on_contact=True)
             except ActionPrimitiveError:
                 # An error will be raised when contact fails. If this happens, let's retry.
                 # Retreat back to the grasp pose.
-                yield from self._move_hand_direct_cartesian(grasp_pose)
+                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose)
                 raise
 
             indented_print("Grasping.")
@@ -450,7 +451,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 yield from self._execute_grasp()
             except ActionPrimitiveError:
                 # Retreat back to the grasp pose.
-                yield from self._move_hand_direct_cartesian(grasp_pose)
+                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose)
                 raise
 
         indented_print("Moving hand back to neutral position.")
@@ -591,6 +592,17 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     def _move_hand_direct_cartesian(self, target_pose, **kwargs):
         joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
         yield from self._move_hand_direct_joint(joint_pos, control_idx, **kwargs)
+
+    def _move_hand_direct_cartesian_smoothly(self, target_pose, num_waypoints, stop_on_contact=False):
+        # current_pose = self.robot.get_position_orientation()
+        current_pose = self.robot.eef_links[self.arm].get_position_orientation()
+        waypoints = np.linspace(current_pose, target_pose, num=num_waypoints+1)[1:]
+        for waypoint in waypoints:
+            print("hi")
+            if stop_on_contact and detect_robot_collision(self.robot):
+                return
+            joint_pos, control_idx = self._convert_cartesian_to_joint_space(waypoint)
+            yield from self._move_hand_direct_joint(joint_pos, control_idx, stop_on_contact=stop_on_contact)
 
     def _execute_grasp(self):
         action = self._empty_action()
