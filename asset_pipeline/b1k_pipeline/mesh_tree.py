@@ -167,7 +167,9 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                 if collision_filenames:
                     selection_matches = [(selection_matching_pattern.fullmatch(x), x) for x in collision_filenames]
                     indexed_matches = {int(match.group(1)): fn for match, fn in selection_matches if match}
-                    assert set(range(len(collision_filenames))) == set(indexed_matches.keys()), f"Missing collision meshes for {node_key}"
+                    expected_keys = set(range(len(collision_filenames)))
+                    found_keys = set(indexed_matches.keys())
+                    assert expected_keys == found_keys, f"Missing collision meshes for {node_key}: {expected_keys - found_keys}"
                     ordered_collision_filenames = [indexed_matches[i] for i in range(len(collision_filenames))]
 
                     collision_meshes = []
