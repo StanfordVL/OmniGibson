@@ -74,12 +74,7 @@ APPROVED_OBJS = {
     ".*"
 }
 
-REJECTED_OBJS = {
-    # Temporary
-    "batch-06",
-    "batch-12",
-    "substances-02",
-}
+REJECTED_OBJS = set()
 
 APPROVED_SCENES = {
     ".*",
@@ -97,14 +92,7 @@ REJECTED_SCENES = {
     "office_cubicles_right",
 
     # Temporary
-    "Pomaria_0_garden",
-    "commercial_kitchen_fire_extinguisher",
-    "grocery_store_cafe",
-    "house_double_floor_lower",
     "house_single_floor",
-    "office_large",
-    "public_restroom_futuristic",
-    "restaurant_brunch",
 }
 
 def main():

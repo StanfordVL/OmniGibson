@@ -42,7 +42,7 @@ def file_eligible(objdir):
 
 def next_failed():
     eligible_max = []
-    for target in b1k_pipeline.utils.get_targets("objects_unfiltered"):
+    for target in b1k_pipeline.utils.get_targets("combined"):
         objdir = b1k_pipeline.utils.PIPELINE_ROOT / "cad" / target
         if objdir.exists() and file_eligible(objdir):
             eligible_max.append(objdir / "processed.max")
