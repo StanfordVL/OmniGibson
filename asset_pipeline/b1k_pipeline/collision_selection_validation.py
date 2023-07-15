@@ -1,3 +1,4 @@
+import collections
 from concurrent import futures
 import traceback
 import numpy as np
@@ -42,48 +43,63 @@ def compare_aabbs(lower_mesh, collision_meshes):
 def process_target(target):
     try:
         with PipelineFS() as pipeline_fs:
+            errors = collections.defaultdict(list)
+
             with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
                 mesh_list = json.load(f)["meshes"]
+
+            with pipeline_fs.target_output(target).open("collision_selection.json", "r") as f:
+                collision_selection = json.load(f)
+
+            selected = {}
+            for obj in collision_selection:
+                m = parse_name(obj)
+                model = m.group("model_id")
+                link = m.group("link_name")
+                if not link:
+                    link = "base_link"
+                if (model, link) in selected:
+                    errors[obj].append("Duplicate collision selection. Seen before as " + selected[(model, link)] + ".")
+                selected[(model, link)] = obj
 
             # Get the mesh tree
             G = mesh_tree.build_mesh_tree(mesh_list, pipeline_fs.target_output(target), load_upper=False, load_bad=False, load_nonzero=False)
 
             # Check that each object matches at least one of the options
-            errors = {}
             for node in G.nodes:
                 # If the object has a collision mesh we are probably good.
                 if "collision_mesh" in G.nodes[node]:
                     # Validate the mesh
                     splits = G.nodes[node]["collision_mesh"]
                     if len(splits) == 0:
-                        errors[node] = "Collision mesh was found but contains no meshes."
+                        errors[node].append("Collision mesh was found but contains no meshes.")
                     elif len(splits) > 32:
-                        errors[node] = f"Collision mesh was found but contains too many meshes: {len(splits)}."
+                        errors[node].append("Collision mesh was found but contains too many meshes: {len(splits)}.")
                     elif any(not split.is_watertight for split in splits):
-                        errors[node] = "Collision mesh was found but contains non-watertight meshes."
+                        errors[node].append("Collision mesh was found but contains non-watertight meshes.")
                     elif any(not split.is_volume or split.volume <= 0 for split in splits):
-                        errors[node] = "Collision mesh was found but contains zero volume meshes."
+                        errors[node].append("Collision mesh was found but contains zero volume meshes.")
                     else:
                         aabb_error = compare_aabbs(G.nodes[node]["lower_mesh"], G.nodes[node]["collision_mesh"])
                         if aabb_error:
-                            errors[node] = aabb_error
+                            errors[node].append(aabb_error)
 
                     # Identify manual collision mesh in error
                     if "manual_collision_filename" in G.nodes[node] and node in errors:
-                        errors[node] = "Manual " + errors[node]
+                        errors[node] = ["Manual " + x for x in errors[node]]
                     # If we reach here, no errors!
                 elif "manual_collision_filename" in G.nodes[node]:
                     # The object has a manual collision mesh but it was not loaded
-                    errors[node] = "Manual collision mesh was found but could not be loaded."
+                    errors[node].append("Manual collision mesh was found but could not be loaded.")
                 elif "collision_selection" not in G.nodes[node]:
                     # No collision selection was made
-                    errors[node] = "No collision selection was made."
+                    errors[node].append("No collision selection was made.")
                 elif "collision_options" not in G.nodes[node] or not G.nodes[node]["collision_options"]:
-                    errors[node] = "No collision options were available."
+                    errors[node].append("No collision options were available.")
                 elif G.nodes[node]["collision_selection"] not in G.nodes[node]["collision_options"]:
-                    errors[node] = "Collision selection was not in the available options."
+                    errors[node].append("Collision selection was not in the available options.")
                 else:
-                    errors[node] = "Something unexpected happened."
+                    errors[node].append("Something unexpected happened.")
 
             return errors
     except Exception as e:
