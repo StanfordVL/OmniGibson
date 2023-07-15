@@ -9119,8 +9119,8 @@ stages:
     cmd: python -m b1k_pipeline.collision_selection_validation
     deps:
     - path: b1k_pipeline/collision_selection_validation.py
-      md5: 8921b6c92f2b2b8fa31a82c45c6b7317
-      size: 7015
+      md5: 7c099b7046057173e36902378e140d56
+      size: 7019
     - path: cad/objects/batch-00/artifacts/collision_meshes.zip
       md5: e534ef4bd760d0dae71be1226e7afba8
       size: 1307436
@@ -10084,15 +10084,15 @@ stages:
       size: 835547
     outs:
     - path: artifacts/pipeline/collision_selection_validation.json
-      md5: 42d819de2473fb7a7dc5408521285b64
-      size: 30522
+      md5: 13c1f3c7e7dbea4ca06be6653b1510fe
+      size: 810
   collision_selection_validation_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_selection_validation.json
       artifacts/pipeline/collision_selection_validation.success
     deps:
     - path: artifacts/pipeline/collision_selection_validation.json
-      md5: 42d819de2473fb7a7dc5408521285b64
-      size: 30522
+      md5: 7d12d00c261321094d99e31a0ec1ab86
+      size: 318
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 707
