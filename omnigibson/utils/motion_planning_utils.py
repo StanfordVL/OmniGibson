@@ -21,7 +21,7 @@ def plan_base_motion(
         y = q.getY()
         yaw = q.getYaw()
         pose = ([x, y, 0.0], T.euler2quat((0, 0, yaw)))
-        state_valid = base_planning_validity_fn(context, pose)
+        state_valid = not detect_robot_collision(context, pose)
         num_checks[0] += 1
         return state_valid
 
@@ -158,11 +158,9 @@ def plan_arm_motion(
 
 #     return len(collision_prims) > 0 or detect_self_collision(robot)
 
-def detect_robot_collision(robot, filter_objs=[]):
-    pass
 
 # Moves robot and detects robot collisions with the environment, but not with itself
-def base_planning_validity_fn(context, pose):
+def detect_robot_collision(context, pose):
     translation = pose[0]
     orientation = pose[1]
     # context.robot_prim.set_local_poses(np.array([translation]), np.array([orientation]))
@@ -177,11 +175,31 @@ def base_planning_validity_fn(context, pose):
             mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh.prim_path)
             if mesh._prim.GetTypeName() == "Mesh":
                 if og.sim.psqi.overlap_mesh_any(*mesh_id):
-                    return False
+                    return True
             else:
                 if og.sim.psqi.overlap_shape_any(*mesh_id):
-                    return False
-    return True
+                    return True
+    return False
+
+# Detects robot collisions with the environment, but not with itself
+def detect_robot_collision_in_sim(robot, filter_objs=[]):
+    filter_categories = ["floors"]
+    
+    obj_in_hand = robot._ag_obj_in_hand[robot.default_arm]
+    if obj_in_hand is not None:
+        filter_objs.append(obj_in_hand)
+
+    collision_prims = list(robot.states[ContactBodies].get_value(ignore_objs=tuple(filter_objs)))
+
+    for col_prim in collision_prims:
+        tokens = col_prim.prim_path.split("/")
+        obj_prim_path = "/".join(tokens[:-1])
+        col_obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
+        if col_obj.category in filter_categories:
+            collision_prims.remove(col_prim)
+
+    return len(collision_prims) > 0
+    
 
 # Sets joint positions of robot and detects robot collisions with the environment and itself
 def arm_planning_validity_fn(context, joint_pos):

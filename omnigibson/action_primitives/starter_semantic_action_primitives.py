@@ -18,6 +18,8 @@ import numpy as np
 import omnigibson as og
 from omnigibson import object_states
 from omnigibson.action_primitives.action_primitive_set_base import ActionPrimitiveError, BaseActionPrimitiveSet
+from omnigibson.objects.stateful_object import StatefulObject
+from omnigibson.objects.usd_object import USDObject
 from omnigibson.utils.object_state_utils import sample_kinematics
 from omnigibson.object_states.utils import get_center_extent
 from omnigibson.objects.object_base import BaseObject
@@ -27,7 +29,7 @@ from omnigibson.utils.motion_planning_utils import (
     plan_base_motion,
     plan_arm_motion,
     detect_robot_collision,
-    detect_hand_collision
+    detect_robot_collision_in_sim,
 )
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.control_utils import IKSolver
@@ -42,22 +44,13 @@ from omni.usd.commands import CopyPrimCommand, CreatePrimCommand
 from omni.isaac.core.utils.prims import get_prim_at_path
 from pxr import Gf
 
-
 # Fake imports
-p = None
-set_joint_position = None
-RoomFloor = None
 URDFObject = None
-DEFAULT_BODY_OFFSET_FROM_FLOOR = 0.05
-behavior_robot = None
-BehaviorRobot = None
-get_grasp_poses_for_object = None
-plan_hand_motion_br = None
-get_pose3d_hand_collision_fn = None
-restoreState = None
+RoomFloor = None
 
 KP_LIN_VEL = 0.3
 KP_ANGLE_VEL = 0.2
+DEFAULT_BODY_OFFSET_FROM_FLOOR = 0.05
 
 MAX_STEPS_FOR_GRASP_OR_RELEASE = 30
 MAX_WAIT_FOR_GRASP_OR_RELEASE = 10
@@ -134,8 +127,6 @@ class UndoableContext(object):
         # print(self.robot_prim.collision_enabled)
         # self.robot_prim = self.robot_prim._prim
         self.robot_prim = get_prim_at_path(self.robot_copy_path)
-
-        # robot_copy 
 
         for link in self.robot.links.values():
             for mesh in link.collision_meshes.values():
@@ -326,7 +317,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             except ActionPrimitiveError:
                 # An error will be raised when contact fails. If this happens, let's retry.
                 # Retreat back to the grasp pose.
-                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose)
+                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints)
                 raise
 
             indented_print("Grasping.")
@@ -334,7 +325,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 yield from self._execute_grasp()
             except ActionPrimitiveError:
                 # Retreat back to the grasp pose.
-                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose)
+                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints)
                 raise
 
         indented_print("Moving hand back to neutral position.")
@@ -354,6 +345,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
         
         obj_pose = self._sample_pose_with_object_and_predicate(predicate, obj_in_hand, obj)
+        print(obj_pose)
         hand_pose = self._get_hand_pose_for_object_pose(obj_pose)
         yield from self._navigate_if_needed(obj, pos_on_obj=hand_pose[0])
         yield from self._move_hand(hand_pose)
@@ -364,7 +356,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             return
 
     def _convert_cartesian_to_joint_space(self, target_pose):
-        joint_pos, control_idx = self._ik_solver_cartesian_to_joint_space(target_pose)
+        relative_target_pose = self._get_pose_in_robot_frame(target_pose)
+        joint_pos, control_idx = self._ik_solver_cartesian_to_joint_space(relative_target_pose)
         if joint_pos is None:
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.PLANNING_ERROR,
@@ -373,12 +366,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
         return joint_pos, control_idx
     
-    def _target_in_reach_of_robot(self, target_pose):
+    def _target_in_reach_of_robot(self, target_pose, is_relative=False):
+        if not is_relative:
+            target_pose = self._get_pose_in_robot_frame(target_pose)
         joint_pos, _ = self._ik_solver_cartesian_to_joint_space(target_pose)
         return False if joint_pos is None else True
 
-    def _ik_solver_cartesian_to_joint_space(self, target_pose):
-        relative_target_pose = self._get_pose_in_robot_frame(target_pose)
+    def _ik_solver_cartesian_to_joint_space(self, relative_target_pose):
         control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
         ik_solver = IKSolver(
             robot_description_path=self.robot.robot_arm_descriptor_yamls[self.arm],
@@ -437,7 +431,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
             if max(diff_joint_pos) < 0.005:
                 return
-            if stop_on_contact and detect_robot_collision(self.robot):
+            if stop_on_contact and detect_robot_collision_in_sim(self.robot):
                 return
             yield action
 
@@ -450,7 +444,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         current_pose = self.robot.eef_links[self.arm].get_position_orientation()
         waypoints = np.linspace(current_pose, target_pose, num=num_waypoints+1)[1:]
         for waypoint in waypoints:
-            if stop_on_contact and detect_robot_collision(self.robot):
+            if stop_on_contact and detect_robot_collision_in_sim(self.robot):
                 return
             joint_pos, control_idx = self._convert_cartesian_to_joint_space(waypoint)
             yield from self._move_hand_direct_joint(joint_pos, control_idx, stop_on_contact=stop_on_contact)
@@ -709,54 +703,62 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         return np.random.uniform(face_min, face_max)
 
     def _sample_pose_with_object_and_predicate(self, predicate, held_obj, target_obj):
-        with UndoableContext(self.robot):
-            self.robot.release_grasp_immediately()
-            pred_map = {object_states.OnTop: "onTop", object_states.Inside: "inside"}
-            result = sample_kinematics(
-                pred_map[predicate],
-                held_obj,
-                target_obj,
-                use_ray_casting_method=True,
-                max_trials=MAX_ATTEMPTS_FOR_SAMPLING_POSE_WITH_OBJECT_AND_PREDICATE,
-                skip_falling=True,
-                z_offset=PREDICATE_SAMPLING_Z_OFFSET,
-            )
+        # with UndoableContext(self.robot):
+        # obj_in_hand_link = None
+        # obj_ag_link_path = self.robot._ag_obj_constraint_params[self.robot.default_arm]['ag_link_prim_path']
+        # for link in held_obj._links.values():
+        #     if link.prim_path == obj_ag_link_path:
+        #         obj_in_hand_link = link
+        #         break
+        # held_obj_og = held_obj.get_position_orientation()
+        # self.robot.release_grasp_immediately()
+        state = og.sim.dump_state()
+        # CreatePrimCommand()
+        # new_path = held_obj.prim_path + "_copy"
+        # mesh_command = CopyPrimCommand(held_obj.prim_path, path_to=new_path)
+        # mesh_command.do()
+        obj = USDObject("test", held_obj.usd_path)
+        og.sim.import_object(obj)
+        og.sim.step()
+        pred_map = {object_states.OnTop: "onTop", object_states.Inside: "inside"}
+        result = sample_kinematics(
+            pred_map[predicate],
+            obj,
+            target_obj,
+            use_ray_casting_method=True,
+            max_trials=MAX_ATTEMPTS_FOR_SAMPLING_POSE_WITH_OBJECT_AND_PREDICATE,
+            skip_falling=True,
+            z_offset=PREDICATE_SAMPLING_Z_OFFSET,
+        )
 
-            if not result:
-                raise ActionPrimitiveError(
-                    ActionPrimitiveError.Reason.SAMPLING_ERROR,
-                    "Could not sample position with object and predicate.",
-                    {"target_object": target_obj, "held_object": held_obj, "predicate": pred_map[predicate]},
-                )
-            pos, orn = held_obj.get_position_orientation()
-            return pos, orn
+        if not result:
+            raise ActionPrimitiveError(
+                ActionPrimitiveError.Reason.SAMPLING_ERROR,
+                "Could not sample position with object and predicate.",
+                {"target_object": target_obj, "held_object": held_obj, "predicate": pred_map[predicate]},
+            )
+        # print(obj_in_hand_link)
+        # pos, orn = held_obj.get_position_orientation()
+        # held_obj.set_position_orientation(*held_obj_og)
+        # breakpoint()
+        # self.robot._establish_grasp(ag_data=(held_obj, obj_in_hand_link))
+        pos, orn = obj.get_position_orientation()
+        og.sim.load_state(state)
+        breakpoint()
+        return pos, orn
 
     def _test_pose(self, pose_2d, pos_on_obj=None, check_joint=None):
-        with UndoableContext(self.robot):
-            self.robot.set_position_orientation(*self._get_robot_pose_from_2d_pose(pose_2d))
-            og.sim.step(render=False)
+        with UndoableContext(self.robot, "base") as context:
+            pose = self._get_robot_pose_from_2d_pose(pose_2d)
             if pos_on_obj is not None:
                 pose_on_obj = (pos_on_obj, [0.0, 0.0, 0.0, 1.0])
-                if not self._target_in_reach_of_robot(pose_on_obj):
+                relative_pose = T.relative_pose_transform(*pose_on_obj, *pose)
+                if not self._target_in_reach_of_robot(relative_pose, is_relative=True):
                     return False
             
-            if detect_robot_collision(self.robot):
+            if detect_robot_collision(context, pose):
                 indented_print("Candidate position failed collision test.")
                 return False
-
-            # if check_joint is not None:
-            #     body_id, joint_info = check_joint
-
-            #     # Check at different positions of the joint.
-            #     joint_range = joint_info.jointUpperLimit - joint_info.jointLowerLimit
-            #     turn_steps = int(ceil(abs(joint_range) / JOINT_CHECKING_RESOLUTION))
-            #     for i in range(turn_steps):
-            #         joint_pos = (i + 1) / turn_steps * joint_range + joint_info.jointLowerLimit
-            #         set_joint_position(body_id, joint_info.jointIndex, joint_pos)
-
-            #         if detect_robot_collision():
-            #             indented_print("Candidate position failed joint-move collision test.")
-            #             return False
 
             return True
 

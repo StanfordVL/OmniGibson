@@ -50,14 +50,14 @@ def main():
     # Allow user to move camera more easily
     og.sim.enable_viewer_camera_teleoperation()
 
-    # table = DatasetObject(
-    #     name="table",
-    #     category="breakfast_table",
-    #     model="rjgmmy",
-    #     scale = 0.3
-    # )
-    # og.sim.import_object(table)
-    # table.set_position([1.0, 1.0, 0.58])
+    table = DatasetObject(
+        name="table",
+        category="breakfast_table",
+        model="rjgmmy",
+        scale = 0.3
+    )
+    og.sim.import_object(table)
+    table.set_position([1.0, 1.0, 0.58])
 
     grasp_obj = DatasetObject(
         name="potato",
@@ -104,7 +104,7 @@ def main():
         robot.set_position([0.0, -0.5, 0.05])
         robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
         og.sim.step()
-        execute_controller(controller.grasp(grasp_obj), env)
+        execute_controller(controller.grasp(grasp_obj), env, "./replays/grasp.yaml")
 
     def test_grasp():
         set_start_pose()
@@ -120,7 +120,9 @@ def main():
         robot.set_position([0.0, -0.5, 0.05])
         robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
         og.sim.step()
+        controller._fix_robot_base()
         replay_controller(env, "./replays/grasp.yaml")
+        controller._unfix_robot_base()
         execute_controller(controller.place_on_top(table), env)
 
     # Work more reliably
@@ -132,7 +134,9 @@ def main():
     # test_grasp()
     # test_place()
 
-    test_grasp_no_navigation()
+    # test_grasp_no_navigation()
+    # test_grasp()
+    test_grasp_replay_and_place()
     pause(10)
 
     # execute_controller(controller._navigate_to_pose([0.0, 1.0, 0]), env)
