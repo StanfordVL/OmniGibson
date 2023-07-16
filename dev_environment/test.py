@@ -4,10 +4,17 @@ import argparse
 
 import omnigibson as og
 from omnigibson.macros import gm
-from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
+from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives, UndoableContext
 import omnigibson.utils.transform_utils as T
 from omnigibson.objects.dataset_object import DatasetObject
 from omni.physx.scripts import utils
+from omnigibson.utils.motion_planning_utils import (
+    plan_base_motion,
+    plan_arm_motion,
+    detect_robot_collision,
+    detect_robot_collision_in_sim,
+    arm_planning_validity_fn
+)
 
 import cProfile, pstats, io
 import time
@@ -28,6 +35,7 @@ def execute_controller(ctrl_gen, env, filename=None):
     for action in ctrl_gen:
         env.step(action)
         actions.append(action.tolist())
+        # print(env.robots[0].get_joint_positions())
         # break
     if filename is not None:
         with open(filename, "w") as f:
@@ -95,16 +103,19 @@ def main():
         robot.set_joint_positions(default_pose)
         og.sim.step()
     
+    robot.tuck()
+    og.sim.step()
+
     def test_navigate_to_obj():
         set_start_pose()
         execute_controller(controller._navigate_to_obj(table), env)
 
     def test_grasp_no_navigation():
-        set_start_pose()
+        # set_start_pose()
         robot.set_position([0.0, -0.5, 0.05])
         robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
         og.sim.step()
-        execute_controller(controller.grasp(grasp_obj), env, "./replays/grasp.yaml")
+        execute_controller(controller.grasp(grasp_obj), env)
 
     def test_grasp():
         set_start_pose()
@@ -131,16 +142,32 @@ def main():
     # test_grasp_replay_and_place()
 
     # Don't work as reliably
-    # test_grasp()
+    test_grasp()
     # test_place()
 
     # test_grasp_no_navigation()
     # test_grasp()
-    test_grasp_replay_and_place()
-    pause(10)
+    # test_grasp_replay_and_place()
+
+#     joint_pos = np.array([-2.7455899e-03,  2.6479384e-02,  9.1548145e-02,  1.2876080e-01,
+#   1.1599542e-01, -6.4017418e-05 , 1.2593279e+00 ,-1.6949688e+00,
+#   1.3330945e+00 , 2.5068374e+00 , 2.9042342e-01 , 2.3277307e+00,
+#   4.9997143e-02 , 5.0000001e-02]
+# )
+#     control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["0"]])
+
+#     robot.set_joint_positions(joint_pos)
+#     robot.set_position([0.0, -0.5, 0.05])
+#     robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
+#     og.sim.step()
+#     with UndoableContext(robot, "arm") as context:        
+#         print(not arm_planning_validity_fn(context, joint_pos[control_idx]))
+#         pause(100)
+    
+#     pause(10)
 
     # execute_controller(controller._navigate_to_pose([0.0, 1.0, 0]), env)
-    # pause(5)
+    pause(5)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run test script")
