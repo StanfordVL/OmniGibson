@@ -92,7 +92,7 @@ def plan_arm_motion(
     if "combined" in robot.robot_arm_descriptor_yamls:
         joint_combined_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
         initial_joint_pos = np.array(robot.get_joint_positions()[joint_combined_idx])
-        control_idx_in_joint_pos = np.where(np.in1d(joint_control_idx, joint_combined_idx))[0]
+        control_idx_in_joint_pos = np.where(np.in1d(joint_combined_idx, joint_control_idx))[0]
     else:
         initial_joint_pos = np.array(robot.get_joint_positions()[joint_control_idx])
         control_idx_in_joint_pos = np.arange(dim)
@@ -121,6 +121,7 @@ def plan_arm_motion(
 
     si = ss.getSpaceInformation()
     planner = ompl_geo.RRTConnect(si)
+    planner.setRange(0.01)
     ss.setPlanner(planner)
 
     start_conf = robot.get_joint_positions()[joint_control_idx]
@@ -139,7 +140,7 @@ def plan_arm_motion(
 
     if solved:
         # try to shorten the path
-        ss.simplifySolution()
+        # ss.simplifySolution()
 
         sol_path = ss.getSolutionPath()
         return_path = []
@@ -148,25 +149,6 @@ def plan_arm_motion(
             return_path.append(joint_pos)
         return return_path
     return None
-
-# def detect_robot_collision(robot, filter_objs=[]):
-#     filter_categories = ["floors"]
-    
-#     obj_in_hand = robot._ag_obj_in_hand[robot.default_arm]
-#     if obj_in_hand is not None:
-#         filter_objs.append(obj_in_hand)
-
-#     collision_prims = list(robot.states[ContactBodies].get_value(ignore_objs=tuple(filter_objs)))
-
-#     for col_prim in collision_prims:
-#         tokens = col_prim.prim_path.split("/")
-#         obj_prim_path = "/".join(tokens[:-1])
-#         col_obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
-#         if col_obj.category in filter_categories:
-#             collision_prims.remove(col_prim)
-
-#     return len(collision_prims) > 0 or detect_self_collision(robot)
-
 
 # Moves robot and detects robot collisions with the environment, but not with itself
 def detect_robot_collision(context, pose):
@@ -228,7 +210,7 @@ def arm_planning_validity_fn(context, joint_pos):
     # Define function for checking overlap
     valid_hit = False
     mesh_hit = None
-    links = []
+    # links = []
 
     def overlap_callback(hit):
         nonlocal valid_hit
@@ -269,22 +251,6 @@ def arm_planning_validity_fn(context, joint_pos):
         return valid_hit
     
     return not check_overlap()
-
-
-def detect_self_collision(robot):
-    contacts = robot.contact_list()
-    robot_links = [link.prim_path for link in robot.links.values()]
-    disabled_pairs = [set(p) for p in robot.disabled_collision_pairs]
-    for c in contacts:
-        link0 = c.body0.split("/")[-1]
-        link1 = c.body1.split("/")[-1]
-        if {link0, link1} not in disabled_pairs and c.body0 in robot_links and c.body1 in robot_links:
-            return True
-    return False
-
-def detect_hand_collision(robot, joint_pos, control_idx):
-    robot.set_joint_positions(joint_pos, control_idx)
-    return detect_robot_collision(robot)
 
 def remove_unnecessary_rotations(path):
     for start_idx in range(len(path) - 1):

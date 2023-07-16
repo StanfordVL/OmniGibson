@@ -18,8 +18,6 @@ import numpy as np
 import omnigibson as og
 from omnigibson import object_states
 from omnigibson.action_primitives.action_primitive_set_base import ActionPrimitiveError, BaseActionPrimitiveSet
-from omnigibson.objects.stateful_object import StatefulObject
-from omnigibson.objects.usd_object import USDObject
 from omnigibson.utils.object_state_utils import sample_kinematics
 from omnigibson.object_states.utils import get_center_extent
 from omnigibson.objects.object_base import BaseObject
@@ -114,25 +112,15 @@ class UndoableContext(object):
         for d_mesh in self.disabled_meshes:
             d_mesh.collision_enabled = True
 
-        # pass
-        # og.sim._physics_context.set_gravity(value=-9.81)
-        # for obj in og.sim.scene.objects:
-        #     for link in obj.links.values():
-        #         PhysxSchema.PhysxRigidBodyAPI(link.prim).GetSolveContactAttr().Set(True)
-        # og.sim.load_state(self.state, serialized=False)
-        # og.sim.step()
-        # if self.obj_in_hand is not None and not self.robot._ag_obj_constraint_params[self.robot.default_arm]:
-        #     self.robot._establish_grasp(ag_data=(self.obj_in_hand, self.obj_in_hand_link))
-        # og.sim.step()
-
     def _copy_robot(self):
         CreatePrimCommand("Xform", self.robot_copy_path).do()
-        # self.robot_prim = CollisionGeomPrim(self.robot_copy_path, self.robot_copy_path)
-        # print(self.robot_prim.collision_enabled)
-        # self.robot_prim.collision_enabled = True
-        # print(self.robot_prim.collision_enabled)
-        # self.robot_prim = self.robot_prim._prim
         self.robot_prim = get_prim_at_path(self.robot_copy_path)
+
+        robot_pose = self.robot.get_position_orientation()
+        translation = Gf.Vec3d(*np.array(robot_pose[0], dtype=float))
+        self.robot_prim.GetAttribute("xformOp:translate").Set(translation)
+        orientation = np.array(robot_pose[1], dtype=float)[[3, 0, 1, 2]]
+        self.robot_prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
 
         for link in self.robot.links.values():
             for mesh in link.collision_meshes.values():
@@ -174,6 +162,14 @@ class UndoableContext(object):
         for obj in og.sim.scene.objects:
             if obj.category in filter_categories:
                 for link in obj.links.values():
+                    for mesh in link.collision_meshes.values():
+                        mesh.collision_enabled = False
+                        self.disabled_meshes.append(mesh)
+
+        # Disable object in hand
+        obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm] 
+        if obj_in_hand is not None:
+            for link in obj_in_hand.links.values():
                     for mesh in link.collision_meshes.values():
                         mesh.collision_enabled = False
                         self.disabled_meshes.append(mesh)
@@ -221,25 +217,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self.arm = self.robot.default_arm
         self.robot_model = self.robot.model_name
         self.robot_base_mass = self.robot._links["base_link"].mass
-        # self._set_joint_velocities()
-
-    # Set joint velocities for the robots so they move at appropriate speeds.
-    # Not speeding up joints because joint controller is position controller. Asking Josiah about this 
-    def _set_joint_velocities(self):
-        control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
-        if self.robot_model == "Tiago":
-            joint_gains = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
-            joints = np.array([joint for joint in self.robot.joints.values()])
-            arm_joints = joints[control_idx]
-            for i, joint in enumerate(arm_joints):
-                pass
-                # damps = []
-                # joint.set_control_type(ControlType.POSITION, kp=10000000.0)
-                # print(joint.name)
-                # for dof_handle, dof_property in zip(joint._dof_handles, joint._dof_properties):
-                #     damps.append(dof_property.stiffness)
-                # print(damps)
-                # print("-------")
 
 
     def get_action_space(self):
@@ -351,7 +328,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
         
         obj_pose = self._sample_pose_with_object_and_predicate(predicate, obj_in_hand, obj)
-        print(obj_pose)
         hand_pose = self._get_hand_pose_for_object_pose(obj_pose)
         yield from self._navigate_if_needed(obj, pos_on_obj=hand_pose[0])
         yield from self._move_hand(hand_pose)
@@ -709,27 +685,27 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         return np.random.uniform(face_min, face_max)
 
     def _sample_pose_with_object_and_predicate(self, predicate, held_obj, target_obj):
-        # with UndoableContext(self.robot):
-        # obj_in_hand_link = None
-        # obj_ag_link_path = self.robot._ag_obj_constraint_params[self.robot.default_arm]['ag_link_prim_path']
-        # for link in held_obj._links.values():
-        #     if link.prim_path == obj_ag_link_path:
-        #         obj_in_hand_link = link
-        #         break
-        # held_obj_og = held_obj.get_position_orientation()
-        # self.robot.release_grasp_immediately()
+        obj_in_hand_link = None
+        obj_ag_link_path = self.robot._ag_obj_constraint_params[self.robot.default_arm]['ag_link_prim_path']
+        for link in held_obj._links.values():
+            if link.prim_path == obj_ag_link_path:
+                obj_in_hand_link = link
+                break
+        
         state = og.sim.dump_state()
-        # CreatePrimCommand()
+        self.robot.release_grasp_immediately()
         # new_path = held_obj.prim_path + "_copy"
         # mesh_command = CopyPrimCommand(held_obj.prim_path, path_to=new_path)
         # mesh_command.do()
-        obj = USDObject("test", held_obj.usd_path)
-        og.sim.import_object(obj)
-        og.sim.step()
+        # from IPython import embed; embed()
+        # obj = USDObject("test", held_obj.usd_path)
+        # obj_copy_path = held_obj.prim_path + "_copy"
+        # obj = held_obj.duplicate(obj_copy_path)
+        # og.sim.step()
         pred_map = {object_states.OnTop: "onTop", object_states.Inside: "inside"}
         result = sample_kinematics(
             pred_map[predicate],
-            obj,
+            held_obj,
             target_obj,
             use_ray_casting_method=True,
             max_trials=MAX_ATTEMPTS_FOR_SAMPLING_POSE_WITH_OBJECT_AND_PREDICATE,
@@ -744,13 +720,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 {"target_object": target_obj, "held_object": held_obj, "predicate": pred_map[predicate]},
             )
         # print(obj_in_hand_link)
-        # pos, orn = held_obj.get_position_orientation()
-        # held_obj.set_position_orientation(*held_obj_og)
-        # breakpoint()
-        # self.robot._establish_grasp(ag_data=(held_obj, obj_in_hand_link))
-        pos, orn = obj.get_position_orientation()
+        pos, orn = held_obj.get_position_orientation()
         og.sim.load_state(state)
-        breakpoint()
+        og.sim.step()
+        self.robot._establish_grasp(ag_data=(held_obj, obj_in_hand_link))
         return pos, orn
 
     def _test_pose(self, pose_2d, pos_on_obj=None, check_joint=None):
