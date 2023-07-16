@@ -35,12 +35,11 @@ def main():
     env = og.Environment(configs=config)
     scene = env.scene
     robot = env.robots[0]
-
     # Allow user to move camera more easily
     og.sim.enable_viewer_camera_teleoperation()
     
-    robot.tuck()
-    og.sim.step()
+    # robot.tuck()
+    # pause(2)
 
     # import random
     # def get_random_joint_position():
@@ -53,10 +52,11 @@ def main():
     #         joint_positions.append(val)
     #     return joint_positions
     
-    # def set_joint_position(joint_pos):
-    #     joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
-    #     robot.set_joint_positions(joint_pos, joint_control_idx)
-
+    def set_joint_position(joint_pos):
+        joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+        robot.set_joint_positions(joint_pos, joint_control_idx)
+    robot.tuck()
+    og.sim.step()
     # while True:
     #     joint_pos = get_random_joint_position()
     #     set_joint_position(joint_pos)
@@ -69,10 +69,43 @@ def main():
     # collision_free = [0.17814310139520295, -0.8082173382782226, 1.3469484097869393, 1.6222072455290446, 2.0591874971218145, -2.9063608379063557, -0.04634827601286595, 4.505122702016582]
     
     #Tiago
-    # collision = [0.2393288722514114, 0.6827304549383206, -0.7417095531313561, 1.5545856070355928, 1.1564023450452656, -1.9133402827904034, -1.0298560252209046, -0.9335642636338648]
+    collision = [0.2393288722514114, 0.6827304549383206, -0.7417095531313561, 1.5545856070355928, 1.1564023450452656, -1.9133402827904034, -1.0298560252209046, -0.9335642636338648]
     no_collision = [0.22302278221924968, -1.0026208057533306, 0.25838140454017355, 1.3805559572150887, 2.2007603924033146, 1.9623866326341695, -0.6222869567629125, 0.9930485383035812]
-    
+    # set_joint_position(no_collision)
     # pause(100)
+    # pause(100)
+    # pos = np.array([
+    #             0.0,  
+    #             0.0, 
+    #             0.0, 
+    #             0.0,
+    #             0.0, 
+    #             0.0,
+    #             0.1, # trunk
+    #             -1.1,
+    #             -1.1,  
+    #             0.0,  
+    #             1.47,  
+    #             1.47,
+    #             0.0,  
+    #             2.71,  
+    #             2.71,  
+    #             1.71,
+    #             1.71, 
+    #             -1.57, 
+    #             -1.57,  
+    #             1.39,
+    #             1.39,  
+    #             0.0,  
+    #             0.0,  
+    #             0.045,
+    #             0.045,  
+    #             0.045,  
+    #             0.045,
+    #         ])
+    # joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+    # pos = pos[joint_control_idx]
+    # print(pos)
     with UndoableContext(robot, "arm") as context:        
         print(not arm_planning_validity_fn(context, no_collision))
         pause(100)

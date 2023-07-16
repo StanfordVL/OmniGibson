@@ -94,7 +94,7 @@ def main():
 
 
     # Work more reliably
-    test_navigate_to_obj()
+    test_grasp_no_navigation()
     
     # Don't work as reliably
     # test_grasp_no_navigation()

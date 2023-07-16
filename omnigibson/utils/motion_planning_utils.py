@@ -6,17 +6,7 @@ import omnigibson as og
 from omnigibson.object_states import ContactBodies
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import RigidContactAPI
-from pxr import PhysicsSchemaTools
-
-from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, CreatePrimCommand
-from omnigibson.prims import CollisionGeomPrim, XFormPrim
-from omni.isaac.core.utils.prims import get_prim_at_path
-
-from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, TransformPrimsCommand, TransformPrimCommand
-from omnigibson.prims import CollisionGeomPrim
-from pxr import Gf, Usd
-from omni.isaac.core.prims import XFormPrimView
-
+from pxr import PhysicsSchemaTools, Gf
 
 num_checks = [0]
 def plan_base_motion(
@@ -171,10 +161,6 @@ def plan_arm_motion(
 def detect_robot_collision(robot, filter_objs=[]):
     pass
 
-from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, TransformPrimsCommand, TransformPrimCommand
-from omnigibson.prims import CollisionGeomPrim
-from pxr import Gf, Usd
-
 # Moves robot and detects robot collisions with the environment, but not with itself
 def base_planning_validity_fn(context, pose):
     translation = pose[0]
@@ -215,21 +201,25 @@ def arm_planning_validity_fn(context, joint_pos):
     # Define function for checking overlap
     valid_hit = False
     mesh_hit = None
+    links = []
 
     def overlap_callback(hit):
         nonlocal valid_hit
         nonlocal mesh_hit
-        # print(hit.rigid_body)filtered_links_paths
-        # from IPython import embed; embed()
-        # print(mesh_hit)
-        # print(hit.rigid_body)
-        # print(context.collision_pairs_dict)
+        
         valid_hit = hit.rigid_body not in context.collision_pairs_dict[mesh_hit]
-        # from IPython import embed; embed()
-        if valid_hit:
-            print("hit body")
-            print(mesh_hit)
-            print(hit.rigid_body)
+        # test = hit.rigid_body not in context.collision_pairs_dict[mesh_hit]
+        # if test:
+        #     print("hit body")
+        #     print(mesh_hit)
+        #     print(hit.rigid_body)
+        #     link_a = mesh_hit.split("/")[-1]
+        #     link_b = hit.rigid_body.split("/")[-1]
+        #     pair = {link_a, link_b}
+        #     if pair not in links:
+        #         links.append({link_a, link_b})
+        # return True
+
         return not valid_hit
 
     def check_overlap():
@@ -239,7 +229,6 @@ def arm_planning_validity_fn(context, joint_pos):
 
         for link in context.robot_meshes_copy:
             for mesh in context.robot_meshes_copy[link]:
-                # print(mesh.collision_enabled)
                 if valid_hit:
                     return valid_hit
                 mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh.prim_path)
@@ -249,6 +238,7 @@ def arm_planning_validity_fn(context, joint_pos):
                 else:
                     og.sim.psqi.overlap_shape(*mesh_id, reportFn=overlap_callback)
             
+        # print([list(link) for link in links])
         return valid_hit
     
     return not check_overlap()

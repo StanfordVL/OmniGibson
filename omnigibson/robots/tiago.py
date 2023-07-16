@@ -140,6 +140,8 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # Other args that will be created at runtime
         self._world_base_fixed_joint_prim = None
 
+        # Create simplified collision mesh object
+        
         # Parse reset joint pos if specifying special string
         if isinstance(reset_joint_pos, str):
             assert (
@@ -550,9 +552,26 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             ["base_link", "wheel_front_right_link"],
             ["base_link", "base_dock_link"],
             ["base_link", "base_antenna_right_link"],
+            ["base_link", "base_antenna_left_link"],
             ["base_link", "torso_fixed_column_link"],
             ["base_link", "suspension_front_left_link"],
             ["base_link", "suspension_front_right_link"],
+            ["base_link", "torso_fixed_link"],
+            ["suspension_front_left_link", "wheel_front_left_link"],
+            ["torso_lift_link", "arm_right_1_link"],
+            ["torso_lift_link", "arm_right_2_link"],
+            ["torso_lift_link", "arm_left_1_link"],
+            ["torso_lift_link", "arm_left_2_link"],
+            ["arm_left_tool_link", "wrist_left_ft_link"],
+            ["wrist_left_ft_link", "wrist_left_ft_tool_link"],
+            ["wrist_left_ft_tool_link", "gripper_left_link"],
+            ['gripper_left_grasping_frame', 'gripper_left_left_finger_link'], 
+            ['gripper_left_grasping_frame', 'gripper_left_right_finger_link'], 
+            ['wrist_right_ft_link', 'arm_right_tool_link'], 
+            ['wrist_right_ft_tool_link', 'wrist_right_ft_link'], 
+            ['gripper_right_link', 'wrist_right_ft_tool_link'], 
+            ['head_1_link', 'head_2_link'],
+            ['torso_fixed_column_link', 'arm_right_1_link']
         ]
     
     @property
@@ -598,6 +617,49 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             "head_2_link", 
             "xtion_link", 
         ]
+        # return { "left": [
+        #             "torso_fixed_link", 
+        #             "torso_lift_link", 
+        #             "arm_left_1_link", 
+        #             "arm_left_2_link", 
+        #             "arm_left_3_link", 
+        #             "arm_left_4_link", 
+        #             "arm_left_5_link", 
+        #             "arm_left_6_link", 
+        #             "arm_left_7_link", 
+        #             "arm_left_tool_link", 
+        #             "wrist_left_ft_link", 
+        #             "wrist_left_ft_tool_link", 
+        #             "gripper_left_link", 
+        #             "gripper_left_grasping_frame", 
+        #             "gripper_left_left_finger_link", 
+        #             "gripper_left_right_finger_link", 
+        #             "gripper_left_tool_link", 
+        #             "head_1_link", 
+        #             "head_2_link", 
+        #             "xtion_link", 
+        #         ],
+        #         "right": [
+        #             "torso_fixed_link",
+        #             "torso_lift_link", 
+        #             "arm_right_1_link", 
+        #             "arm_right_2_link", 
+        #             "arm_right_3_link", 
+        #             "arm_right_4_link", 
+        #             "arm_right_5_link", 
+        #             "arm_right_6_link", 
+        #             "arm_right_7_link", 
+        #             "arm_right_tool_link", 
+        #             "wrist_right_ft_link", 
+        #             "wrist_right_ft_tool_link", 
+        #             "gripper_right_link", 
+        #             "gripper_right_grasping_frame", 
+        #             "gripper_right_left_finger_link", 
+        #             "gripper_right_right_finger_link", 
+        #             "gripper_right_tool_link", 
+        #             "head_1_link", 
+        #             "xtion_link", 
+        #         ]}
 
     @property
     def arm_link_names(self):

@@ -5,32 +5,23 @@ It currently only works with BehaviorRobot with its JointControllers set to abso
 See provided behavior_robot_mp_behavior_task.yaml config file for an example. See examples/action_primitives for
 runnable examples.
 """
-import copy
 import inspect
 import logging
 import random
 from enum import IntEnum
-from math import ceil
 import cv2
 from matplotlib import pyplot as plt
 
 import gym
 import numpy as np
-from scipy.spatial.transform import Rotation
-from pxr import PhysxSchema
 
 import omnigibson as og
 from omnigibson import object_states
 from omnigibson.action_primitives.action_primitive_set_base import ActionPrimitiveError, BaseActionPrimitiveSet
-# from igibson.external.pybullet_tools.utils import set_joint_position
-# from omnigibson.object_states.on_floor import RoomFloor
 from omnigibson.utils.object_state_utils import sample_kinematics
 from omnigibson.object_states.utils import get_center_extent
-# from igibson.objects.articulated_object import URDFObject
 from omnigibson.objects.object_base import BaseObject
-# from igibson.robots import BaseRobot, behavior_robot
 from omnigibson.robots import BaseRobot
-# from igibson.robots.behavior_robot import DEFAULT_BODY_OFFSET_FROM_FLOOR, BehaviorRobot
 from omnigibson.tasks.behavior_task import BehaviorTask
 from omnigibson.utils.motion_planning_utils import (
     plan_base_motion,
@@ -38,17 +29,19 @@ from omnigibson.utils.motion_planning_utils import (
     detect_robot_collision,
     detect_hand_collision
 )
-# from igibson.utils.grasp_planning_utils import get_grasp_poses_for_object, get_grasp_position_for_open
-# from igibson.utils.utils import restoreState
-
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.control_utils import IKSolver
 from omnigibson.utils.grasping_planning_utils import (
-    get_grasp_poses_for_object_sticky,
-    get_grasp_position_for_open
+    get_grasp_poses_for_object_sticky
 )
-from omnigibson.objects import DatasetObject
 from omnigibson.controllers.controller_base import ControlType
+from omnigibson.prims import CollisionGeomPrim
+from omnigibson.utils.control_utils import FKSolver
+
+from omni.usd.commands import CopyPrimCommand, CreatePrimCommand
+from omni.isaac.core.utils.prims import get_prim_at_path
+from pxr import Gf
+
 
 # Fake imports
 p = None
@@ -66,25 +59,17 @@ restoreState = None
 KP_LIN_VEL = 0.3
 KP_ANGLE_VEL = 0.2
 
-MAX_STEPS_FOR_HAND_MOVE = 100
-MAX_STEPS_FOR_HAND_MOVE_WHEN_OPENING = 30
 MAX_STEPS_FOR_GRASP_OR_RELEASE = 30
 MAX_WAIT_FOR_GRASP_OR_RELEASE = 10
-MAX_STEPS_FOR_WAYPOINT_NAVIGATION = 200
 
 MAX_ATTEMPTS_FOR_SAMPLING_POSE_WITH_OBJECT_AND_PREDICATE = 20
 MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT = 60
-MAX_ATTEMPTS_FOR_SAMPLING_POSE_IN_ROOM = 60
 
 BIRRT_SAMPLING_CIRCLE_PROBABILITY = 0.5
-HAND_SAMPLING_DOMAIN_PADDING = 1  # Allow 1m of freedom around the sampling range.
 PREDICATE_SAMPLING_Z_OFFSET = 0.2
-JOINT_CHECKING_RESOLUTION = np.pi / 18
 
 GRASP_APPROACH_DISTANCE = 0.2
 OPEN_GRASP_APPROACH_DISTANCE = 0.2
-# HAND_DISTANCE_THRESHOLD = 0.9 * behavior_robot.HAND_DISTANCE_THRESHOLD
-HAND_DISTANCE_THRESHOLD = 0.9
 
 ACTIVITY_RELEVANT_OBJECTS_ONLY = False
 
@@ -99,16 +84,7 @@ logger = logging.getLogger(__name__)
 
 def indented_print(msg, *args, **kwargs):
     logger.debug("  " * len(inspect.stack()) + str(msg), *args, **kwargs)
-        
-from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, CreatePrimCommand
-from omnigibson.prims import CollisionGeomPrim, XFormPrim
-from omni.isaac.core.utils.prims import get_prim_at_path
 
-from omni.usd.commands import CopyPrimsCommand, DeletePrimsCommand, CopyPrimCommand, TransformPrimsCommand, TransformPrimCommand
-from omnigibson.prims import CollisionGeomPrim
-from pxr import Gf, Usd
-from omni.isaac.core.prims import XFormPrimView
-from omnigibson.utils.control_utils import FKSolver
 
 class UndoableContext(object):
     def __init__(self, robot, mode=None):
@@ -121,7 +97,7 @@ class UndoableContext(object):
         self.disabled_meshes = []
 
     def __enter__(self):
-        og.sim._physics_context.set_gravity(value=0)
+        # og.sim._physics_context.set_gravity(value=0)
         self._copy_robot()
         self._disable_colliders()
         if self.mode == "arm":
@@ -158,6 +134,8 @@ class UndoableContext(object):
         # print(self.robot_prim.collision_enabled)
         # self.robot_prim = self.robot_prim._prim
         self.robot_prim = get_prim_at_path(self.robot_copy_path)
+
+        # robot_copy 
 
         for link in self.robot.links.values():
             for mesh in link.collision_meshes.values():
@@ -226,9 +204,6 @@ class UndoableContext(object):
 class StarterSemanticActionPrimitive(IntEnum):
     GRASP = 0
     PLACE_ON_TOP = 1
-    PLACE_INSIDE = 2
-    OPEN = 3
-    CLOSE = 4
     NAVIGATE_TO = 5  # For mostly debugging purposes.
 
 
@@ -244,9 +219,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self.controller_functions = {
             StarterSemanticActionPrimitive.GRASP: self.grasp,
             StarterSemanticActionPrimitive.PLACE_ON_TOP: self.place_on_top,
-            StarterSemanticActionPrimitive.PLACE_INSIDE: self.place_inside,
-            StarterSemanticActionPrimitive.OPEN: self.open,
-            StarterSemanticActionPrimitive.CLOSE: self.close,
             StarterSemanticActionPrimitive.NAVIGATE_TO: self._navigate_to_obj,
         }
         self.arm = self.robot.default_arm
@@ -315,95 +287,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         action = StarterSemanticActionPrimitive(action_idx)
         return self.controller_functions[action](target_obj)
 
-    def open(self, obj):
-        yield from self._open_or_close(obj, True)
-
-    def close(self, obj):
-        yield from self._open_or_close(obj, False)
-
-    def _open_or_close(self, obj, should_open):
-        # hand_collision_fn = get_pose3d_hand_collision_fn(
-        #     self.robot, None, self._get_collision_body_ids(include_robot=True)
-        # )
-
-        # Open the hand first
-        yield from self._execute_release()
-
-        # Don't do anything if the object is already closed and we're trying to close.
-        if not should_open and not obj.states[object_states.Open].get_value():
-            return
-
-        grasp_data = get_grasp_position_for_open(self.robot, obj, should_open)
-        if grasp_data is None:
-            if should_open and obj.states[object_states.Open].get_value():
-                # It's already open so we're good
-                return
-            else:
-                # We were trying to do something but didn't have the data.
-                raise ActionPrimitiveError(
-                    ActionPrimitiveError.Reason.SAMPLING_ERROR,
-                    "Could not sample grasp position for object.",
-                    {"object": obj},
-                )
-
-        grasp_pose, target_poses, object_direction, joint_info, grasp_required = grasp_data
-        # with UndoableContext(self.robot):
-        #     if hand_collision_fn(grasp_pose):
-        #         raise ActionPrimitiveError(
-        #             ActionPrimitiveError.Reason.SAMPLING_ERROR,
-        #             "Rejecting grasp pose due to collision.",
-        #             {"object": obj, "grasp_pose": grasp_pose},
-        #         )
-
-        # Prepare data for the approach later.
-        approach_pos = grasp_pose[0] + object_direction * OPEN_GRASP_APPROACH_DISTANCE
-        approach_pose = (approach_pos, grasp_pose[1])
-
-        # If the grasp pose is too far, navigate
-        # [bid] = obj.get_body_ids()  # TODO: Fix this!
-        # check_joint = (bid, joint_info)
-        # yield from self._navigate_if_needed(obj, pos_on_obj=approach_pos, check_joint=check_joint)
-        # yield from self._navigate_if_needed(obj, pos_on_obj=grasp_pose[0], check_joint=check_joint)
-
-        yield from self._move_hand(grasp_pose)
-
-        # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
-        # It's okay if we can't go all the way because we run into the object.
-        indented_print("Performing grasp approach for open.")
-
-        try:
-            yield from self._move_hand_direct_cartesian(approach_pose, ignore_failure=True, stop_on_contact=True)
-        except ActionPrimitiveError:
-            # An error will be raised when contact fails. If this happens, let's retreat back to the grasp pose.
-            yield from self._move_hand_direct_cartesian(grasp_pose, ignore_failure=True)
-            raise
-
-        if grasp_required:
-            try:
-                yield from self._execute_grasp()
-            except ActionPrimitiveError:
-                # Retreat back to the grasp pose.
-                yield from self._execute_release()
-                yield from self._move_hand_direct(grasp_pose, ignore_failure=True)
-                raise
-
-        for target_pose in target_poses:
-            yield from self._move_hand_direct(
-                target_pose, ignore_failure=True, max_steps_for_hand_move=MAX_STEPS_FOR_HAND_MOVE_WHEN_OPENING
-            )
-
-        # Moving to target pose often fails. Let's get the hand to apply the correct actions for its current pos
-        # This prevents the hand from jerking into its desired position when we do a release.
-        yield from self._move_hand_direct(
-            self.robot.eef_links[self.arm].get_position_orientation(), ignore_failure=True
-        )
-
-        yield from self._execute_release()
-        yield from self._reset_hand()
-
-        if obj.states[object_states.Open].get_value() == should_open:
-            return
-
     def grasp(self, obj):
         # Don't do anything if the object is already grasped.
         obj_in_hand = self._get_obj_in_hand()
@@ -462,37 +345,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
     def place_on_top(self, obj):
         yield from self._place_with_predicate(obj, object_states.OnTop)
-
-    def place_inside(self, obj):
-        yield from self._place_with_predicate(obj, object_states.Inside)
-
-    def toggle_on(self, obj):
-        yield from self._toggle(obj, True)
-
-    def toggle_off(self, obj):
-        yield from self._toggle(obj, False)
-
-    def _toggle(self, obj, value):
-        if obj.states[object_states.ToggledOn].get_value() == value:
-            return
-
-        # Put the hand in the toggle marker.
-        toggle_state = obj.states[object_states.ToggledOn]
-        toggle_position = toggle_state.get_link_position()
-        yield from self._navigate_if_needed(obj, toggle_position)
-
-        hand_orientation = self.robot.eef_links[self.arm].get_orientation()  # Just keep the current hand orientation.
-        desired_hand_pose = (toggle_position, hand_orientation)
-
-        yield from self._move_hand_direct(desired_hand_pose, ignore_failure=True)
-
-        # Put hand back where it was.
-        yield from self._reset_hand()
-
-        if obj.states[object_states.ToggledOn].get_value() != value:
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.EXECUTION_ERROR, "Failed to toggle object.", {"object": object}
-            )
 
     def _place_with_predicate(self, obj, predicate):
         obj_in_hand = self._get_obj_in_hand()
@@ -598,7 +450,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         current_pose = self.robot.eef_links[self.arm].get_position_orientation()
         waypoints = np.linspace(current_pose, target_pose, num=num_waypoints+1)[1:]
         for waypoint in waypoints:
-            print("hi")
             if stop_on_contact and detect_robot_collision(self.robot):
                 return
             joint_pos, control_idx = self._convert_cartesian_to_joint_space(waypoint)
@@ -718,7 +569,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # TODO: Would be great to produce a more informative error.
             raise ActionPrimitiveError(ActionPrimitiveError.Reason.PLANNING_ERROR, "Could not make a navigation plan.")
 
-        self.draw_plan(plan)
+        # self._draw_plan(plan)
         # Follow the plan to navigate.
         indented_print("Plan has %d steps.", len(plan))
         for i, pose_2d in enumerate(plan):
@@ -726,7 +577,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             low_precision = True if i < len(plan) - 1 else False
             yield from self._navigate_to_pose_direct(pose_2d, low_precision=low_precision)
 
-    def draw_plan(self, plan):
+    def _draw_plan(self, plan):
         SEARCHED = []
         trav_map = og.sim.scene._trav_map
         for q in plan:
@@ -796,11 +647,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         # Rotate in place to final orientation once at location
         yield from self._rotate_in_place(end_pose, angle_threshold=angle_threshold)
-        # raise ActionPrimitiveError(
-        #     ActionPrimitiveError.Reason.EXECUTION_ERROR,
-        #     "Could not move robot to desired waypoint.",
-        #     {"target_pose": pose, "current_pose": self.robot.get_position_orientation()},
-        # )
 
     def _rotate_in_place(self, end_pose, angle_threshold = DEFAULT_ANGLE_THRESHOLD):
         body_target_pose = self._get_pose_in_robot_frame(end_pose)
@@ -809,7 +655,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             action = self._empty_action()
 
             direction = -1.0 if diff_yaw < 0.0 else 1.0
-            ang_vel = 0.2 * direction
+            ang_vel = KP_ANGLE_VEL * direction
 
             base_action = [0.0, 0.0, ang_vel] if self.robot_model == "Tiago" else [0.0, ang_vel]
             action[self.robot.controller_action_idx["base"]] = base_action
@@ -861,19 +707,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         face_min = face_center - face_vertical_half_extent - face_lateral_half_extent
         face_max = face_center + face_vertical_half_extent + face_lateral_half_extent
         return np.random.uniform(face_min, face_max)
-
-    def _sample_pose_in_room(self, room: str):
-        # TODO(MP): Bias the sampling near the agent.
-        for _ in range(MAX_ATTEMPTS_FOR_SAMPLING_POSE_IN_ROOM):
-            _, pos = self.scene.get_random_point_by_room_instance(room)
-            yaw = np.random.uniform(-np.pi, np.pi)
-            pose = (pos[0], pos[1], yaw)
-            if self._test_pose(pose):
-                return pose
-
-        raise ActionPrimitiveError(
-            ActionPrimitiveError.Reason.SAMPLING_ERROR, "Could not find valid position in room.", {"room": room}
-        )
 
     def _sample_pose_with_object_and_predicate(self, predicate, held_obj, target_obj):
         with UndoableContext(self.robot):
