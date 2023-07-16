@@ -42,19 +42,20 @@ def main():
     # pause(2)
 
     # import random
-    # def get_random_joint_position():
-    #     joint_positions = []
-    #     joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
-    #     joints = np.array([joint for joint in robot.joints.values()])
-    #     arm_joints = joints[joint_control_idx]
-    #     for i, joint in enumerate(arm_joints):
-    #         val = random.uniform(joint.lower_limit, joint.upper_limit)
-    #         joint_positions.append(val)
-    #     return joint_positions
+    def get_random_joint_position():
+        joint_positions = []
+        joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
+        joints = np.array([joint for joint in robot.joints.values()])
+        arm_joints = joints[joint_control_idx]
+        for i, joint in enumerate(arm_joints):
+            val = np.random.uniform(joint.lower_limit, joint.upper_limit)
+            joint_positions.append(val)
+        return joint_positions
     
     def set_joint_position(joint_pos):
-        joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+        joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
         robot.set_joint_positions(joint_pos, joint_control_idx)
+
     robot.tuck()
     og.sim.step()
     # while True:
@@ -69,8 +70,9 @@ def main():
     # collision_free = [0.17814310139520295, -0.8082173382782226, 1.3469484097869393, 1.6222072455290446, 2.0591874971218145, -2.9063608379063557, -0.04634827601286595, 4.505122702016582]
     
     #Tiago
-    collision = [0.2393288722514114, 0.6827304549383206, -0.7417095531313561, 1.5545856070355928, 1.1564023450452656, -1.9133402827904034, -1.0298560252209046, -0.9335642636338648]
-    no_collision = [0.22302278221924968, -1.0026208057533306, 0.25838140454017355, 1.3805559572150887, 2.2007603924033146, 1.9623866326341695, -0.6222869567629125, 0.9930485383035812]
+    collision = [0.14065403286781475, 0.7298650222286143, -0.4780975016232605, 1.0888713731557247, -0.03729107004351029, 3.274825625013916, 1.2937221767307419, 1.8178545818287346, 0.269868125704424, -1.1858447020249343, 1.079587475865726, 0.11286700467163624, -1.3232706255151934, 0.3340342084010399, 1.4264938203455721]
+    no_collision = [0.3184793294422698, 1.5142631693122297, 1.2405191873837995, 0.21394545305074741, -0.6831575211130013, -0.7389958913494964, 2.725925427761072, 1.1755425218590514, 0.6547571278019166, 0.7133282478444771, 0.5163046628994854, -1.0098026849625532, 0.09229435376315243, 1.9379299096653453, 2.0534229844998677]
+
     # set_joint_position(no_collision)
     # pause(100)
     # pause(100)
@@ -107,7 +109,7 @@ def main():
     # pos = pos[joint_control_idx]
     # print(pos)
     with UndoableContext(robot, "arm") as context:        
-        print(not arm_planning_validity_fn(context, no_collision))
+        print(not arm_planning_validity_fn(context, collision))
         pause(100)
     
     # breakpoint()

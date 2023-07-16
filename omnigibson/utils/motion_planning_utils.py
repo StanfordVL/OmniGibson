@@ -89,8 +89,17 @@ def plan_arm_motion(
     joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
     dim = len(joint_control_idx)
 
+    if "combined" in robot.robot_arm_descriptor_yamls:
+        joint_combined_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
+        initial_joint_pos = np.array(robot.get_joint_positions()[joint_combined_idx])
+        control_idx_in_joint_pos = np.where(np.in1d(joint_control_idx, joint_combined_idx))[0]
+    else:
+        initial_joint_pos = np.array(robot.get_joint_positions()[joint_control_idx])
+        control_idx_in_joint_pos = np.arange(dim)
+
     def state_valid_fn(q):
-        joint_pos = [q[i] for i in range(dim)]
+        joint_pos = initial_joint_pos.copy()
+        joint_pos[control_idx_in_joint_pos] = [q[i] for i in range(dim)]
         # state_valid = not detect_robot_collision(robot)
         return arm_planning_validity_fn(context, joint_pos)
     

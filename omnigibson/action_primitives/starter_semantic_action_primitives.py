@@ -95,11 +95,17 @@ class UndoableContext(object):
         self._disable_colliders()
         if self.mode == "arm":
             self._construct_collision_pair_dict()
-            self.fk_solver = FKSolver(
-                robot_description_path=self.robot.robot_arm_descriptor_yamls[self.robot.default_arm],
-                robot_urdf_path=self.robot.urdf_path,
-            )
-        return self  
+            if "combined" in self.robot.robot_arm_descriptor_yamls:
+                self.fk_solver = FKSolver(
+                    robot_description_path=self.robot.robot_arm_descriptor_yamls["combined"],
+                    robot_urdf_path=self.robot.urdf_path,
+                )
+            else:
+                self.fk_solver = FKSolver(
+                    robot_description_path=self.robot.robot_arm_descriptor_yamls[self.robot.default_arm],
+                    robot_urdf_path=self.robot.urdf_path,
+                )
+        return self 
 
     def __exit__(self, *args):
         for link in self.robot_meshes_copy:

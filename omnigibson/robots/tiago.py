@@ -501,11 +501,15 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def arm_control_idx(self):
-        return {"left": np.array([7, 10, 13, 15, 17, 19, 21]), "right": np.array([8, 11, 14, 16, 18, 20, 22])}
+        return {"left": np.array([7, 10, 13, 15, 17, 19, 21]),
+                "right": np.array([8, 11, 14, 16, 18, 20, 22]),
+                "combined": np.array([7, 8, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22])}
 
     @property
     def gripper_control_idx(self):
-        return {"left": np.array([23, 24]), "right": np.array([25, 26])}
+        return {"left": np.array([23, 24]),
+                "right": np.array([25, 26]),
+                "combined": np.array([23, 24, 25, 26])}
 
     @property
     def finger_lengths(self):
@@ -686,7 +690,8 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def robot_arm_descriptor_yamls(self):
         return {"left": os.path.join(gm.ASSET_PATH, "models/tiago/tiago_dual_omnidirectional_stanford_left_arm_descriptor.yaml"),
-                "right": os.path.join(gm.ASSET_PATH, "models/tiago/tiago_dual_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml")}
+                "right": os.path.join(gm.ASSET_PATH, "models/tiago/tiago_dual_omnidirectional_stanford_right_arm_fixed_trunk_descriptor.yaml"),
+                "combined": os.path.join(gm.ASSET_PATH, "models/tiago/tiago_dual_omnidirectional_stanford.yaml")}
 
     @property
     def urdf_path(self):
