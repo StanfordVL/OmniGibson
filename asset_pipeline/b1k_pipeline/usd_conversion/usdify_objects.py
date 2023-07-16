@@ -10,7 +10,7 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
-BATCH_SIZE = 100
+BATCH_SIZE = 50
 WORKER_COUNT = 8
 
 def run_on_batch(dataset_path, batch):
