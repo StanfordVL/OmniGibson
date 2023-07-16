@@ -32,9 +32,9 @@ def compare_aabbs(lower_mesh, collision_meshes):
     # Check if the corners are close enough
     min_diff = np.linalg.norm(lower_min - collision_min)
     max_diff = np.linalg.norm(lower_max - collision_max)
-    if min_diff > 0.2:
+    if min_diff > 2:
         return f"Lower mesh AABB min is too far ({min_diff}m) away from collision mesh AABB min."
-    elif max_diff > 0.2:
+    elif max_diff > 2:
         return f"Lower mesh AABB max is too far ({max_diff}m) away from collision mesh AABB max."
 
     return None

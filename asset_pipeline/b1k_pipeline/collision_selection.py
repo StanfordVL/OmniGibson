@@ -175,7 +175,7 @@ def main():
 
                 with target_output_fs.open("collision_selection.json", "r") as f:
                     this_selections = [b1k_pipeline.utils.parse_name(x) for x in json.load(f).keys()]
-                    selections |= {(x.group('model_id'), x.group('link_name')) for x in this_selections}
+                    selections |= {(x.group('model_id'), x.group('link_name') if x.group('link_name') else "base_link") for x in this_selections}
 
         # Now get a list of all the objects that we can process.
         print("Getting list of objects to process...")
@@ -200,6 +200,10 @@ def main():
                         if not parsed_name:
                             print("Bad name", parsed_name)
                             continue
+                        mesh_model = parsed_name.group("model_id")
+                        mesh_link = parsed_name.group("link_name")
+                        if not mesh_link:
+                            mesh_link = "base_link"
                         should_convert = (
                             int(parsed_name.group("instance_id")) == 0 and
                             not parsed_name.group("bad") and
@@ -215,8 +219,12 @@ def main():
                             parsed_item = b1k_pipeline.utils.parse_name(item)
                             if not parsed_item:
                                 continue
-                            if parsed_item.group("model_id") == parsed_name.group("model_id") and \
-                                    parsed_item.group("link_name") == parsed_name.group("link_name") and \
+                            item_model = parsed_item.group("model_id")
+                            item_link = parsed_item.group("link_name")
+                            if not item_link:
+                                item_link = "base_link"
+                            if item_model == mesh_model and \
+                                    item_link == mesh_link and \
                                     parsed_item.group("meta_type") == "collision":
                                 collision_found = True
                                 break
@@ -231,7 +239,7 @@ def main():
 
                         total_in_batch += 1
 
-                        matching_key = (parsed_name.group('model_id'), parsed_name.group('link_name'))
+                        matching_key = (mesh_model, mesh_link)
                         if matching_key in selections:
                             continue
                         candidates.append((mesh_name, target))
