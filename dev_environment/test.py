@@ -142,12 +142,12 @@ def main():
     # test_grasp_replay_and_place()
 
     # Don't work as reliably
-    test_grasp()
+    # test_grasp()
     # test_place()
 
     # test_grasp_no_navigation()
     # test_grasp()
-    # test_grasp_replay_and_place()
+    test_grasp_replay_and_place()
 
 #     joint_pos = np.array([-2.7455899e-03,  2.6479384e-02,  9.1548145e-02,  1.2876080e-01,
 #   1.1599542e-01, -6.4017418e-05 , 1.2593279e+00 ,-1.6949688e+00,
