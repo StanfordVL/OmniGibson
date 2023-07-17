@@ -42,6 +42,10 @@ from omni.usd.commands import CopyPrimCommand, CreatePrimCommand
 from omni.isaac.core.utils.prims import get_prim_at_path
 from pxr import Gf
 
+import os
+from omnigibson.macros import gm
+from omnigibson.objects.usd_object import USDObject
+
 # Fake imports
 URDFObject = None
 RoomFloor = None
@@ -113,22 +117,34 @@ class UndoableContext(object):
             d_mesh.collision_enabled = True
 
     def _copy_robot(self):
+        # Create prim under which robot meshes are nested
         CreatePrimCommand("Xform", self.robot_copy_path).do()
         self.robot_prim = get_prim_at_path(self.robot_copy_path)
-
         robot_pose = self.robot.get_position_orientation()
         translation = Gf.Vec3d(*np.array(robot_pose[0], dtype=float))
         self.robot_prim.GetAttribute("xformOp:translate").Set(translation)
         orientation = np.array(robot_pose[1], dtype=float)[[3, 0, 1, 2]]
         self.robot_prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
 
-        for link in self.robot.links.values():
+        # Set robot meshes to copy, either simplified version of Tiago or full version of other robots
+        robot_to_copy = None
+        if self.robot.model_name == "Tiago" and self.mode == "base":
+            tiago_usd = os.path.join(gm.ASSET_PATH, "models/tiago/tiago_dual_omnidirectional_stanford/tiago_dual_omnidirectional_stanford_33_simplified_collision_mesh.usd")
+            robot_to_copy =  USDObject("tiago_copy", tiago_usd)
+            og.sim.import_object(robot_to_copy)
+        else:
+            robot_to_copy = self.robot
+
+        # Copy robot meshes
+        for link in robot_to_copy.links.values():
             for mesh in link.collision_meshes.values():
                 split_path = mesh.prim_path.split("/")
                 link_name = split_path[3]
+                if "grasping_frame" in link_name:
+                    continue
+
                 mesh_copy_path = self.robot_copy_path + "/" + link_name
                 mesh_copy_path += f"_{split_path[-1]}" if split_path[-1] != "collisions" else ""
-
                 mesh_command = CopyPrimCommand(mesh.prim_path, path_to=mesh_copy_path)
                 mesh_command.do()
                 mesh_copy = CollisionGeomPrim(mesh_copy_path, mesh_copy_path)
@@ -140,7 +156,7 @@ class UndoableContext(object):
                     self.robot_meshes_copy[link_name].append(mesh_copy)
                     self.robot_meshes_relative_poses[link_name].append(relative_pose)
 
-                # Set poses of meshes to contruct robot copy
+                # Set poses of meshes relative to the robot to construct the robot
                 mesh_in_robot = T.relative_pose_transform(*mesh.get_position_orientation(), *self.robot.get_position_orientation())
                 translation = Gf.Vec3d(*np.array(mesh_in_robot[0], dtype=float))
                 mesh_copy.prim.GetAttribute("xformOp:translate").Set(translation)
@@ -151,11 +167,22 @@ class UndoableContext(object):
                     mesh_copy.collision_enabled = False
                 elif self.mode == "arm":
                     mesh_copy.collision_enabled = True
-                else:
-                    pass
-                mesh.collision_enabled = False
-                self.disabled_meshes.append(mesh)
+
+                # if "grasping_frame" in link_name:
+                #     mesh_copy.collision_enabled = False
+
+        if self.robot.model_name == "Tiago" and self.mode == "base":
+            og.sim.remove_object(robot_to_copy)
+        
+        self._disable_robot_colliders()
         og.sim.step()
+
+    def _disable_robot_colliders(self):
+        for link in self.robot.links.values():
+            for mesh in link.collision_meshes.values(): 
+                if "grasping_frame" not in link.prim_path:
+                    mesh.collision_enabled = False
+                    self.disabled_meshes.append(mesh) 
 
     def _disable_colliders(self):
         filter_categories = ["floors"]
@@ -217,7 +244,24 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self.arm = self.robot.default_arm
         self.robot_model = self.robot.model_name
         self.robot_base_mass = self.robot._links["base_link"].mass
+        if self.robot_model == "Tiago":
+            self._setup_tiago()
+            print("hello")
 
+        self._load_robot_copy()
+
+    def _load_robot_copy(self):
+        
+
+    def _setup_tiago(self):
+        for link in self.robot.links.values():
+            for mesh in link.collision_meshes.values():
+                if "grasping_frame" in link.prim_path:
+                    mesh.collision_enabled = False
+                    # print(mesh.prim_path)
+                    # print(mesh.collision_enabled)
+                    # print(mesh.prim_path)
+    
 
     def get_action_space(self):
         if ACTIVITY_RELEVANT_OBJECTS_ONLY:
@@ -378,8 +422,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         return joint_pos, control_idx
 
     def _move_hand(self, target_pose):
-        self._fix_robot_base()
-        self._settle_robot()
+        # self._fix_robot_base()
+        # self._settle_robot()
         joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
 
         with UndoableContext(self.robot, "arm") as context:
@@ -545,7 +589,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # TODO: Would be great to produce a more informative error.
             raise ActionPrimitiveError(ActionPrimitiveError.Reason.PLANNING_ERROR, "Could not make a navigation plan.")
 
-        # self._draw_plan(plan)
+        self._draw_plan(plan)
         # Follow the plan to navigate.
         indented_print("Plan has %d steps.", len(plan))
         for i, pose_2d in enumerate(plan):

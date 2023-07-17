@@ -98,7 +98,8 @@ def plan_arm_motion(
         control_idx_in_joint_pos = np.arange(dim)
 
     def state_valid_fn(q):
-        joint_pos = initial_joint_pos.copy()
+        # joint_pos = initial_joint_pos.copy()
+        joint_pos = initial_joint_pos
         joint_pos[control_idx_in_joint_pos] = [q[i] for i in range(dim)]
         # state_valid = not detect_robot_collision(robot)
         return arm_planning_validity_fn(context, joint_pos)
@@ -121,7 +122,7 @@ def plan_arm_motion(
 
     si = ss.getSpaceInformation()
     planner = ompl_geo.RRTConnect(si)
-    planner.setRange(0.01)
+    # planner.setRange(0.01)
     ss.setPlanner(planner)
 
     start_conf = robot.get_joint_positions()[joint_control_idx]
@@ -140,7 +141,7 @@ def plan_arm_motion(
 
     if solved:
         # try to shorten the path
-        # ss.simplifySolution()
+        ss.simplifySolution()
 
         sol_path = ss.getSolutionPath()
         return_path = []
@@ -217,6 +218,10 @@ def arm_planning_validity_fn(context, joint_pos):
         nonlocal mesh_hit
         
         valid_hit = hit.rigid_body not in context.collision_pairs_dict[mesh_hit]
+        # if valid_hit:
+        #     print("hit body")
+        #     print(mesh_hit)
+        #     print(hit.rigid_body)
         # test = hit.rigid_body not in context.collision_pairs_dict[mesh_hit]
         # if test:
         #     print("hit body")

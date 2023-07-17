@@ -66,6 +66,9 @@ def main():
     grasp_obj.set_position([-0.3, -0.8, 0.5])
     og.sim.step()
 
+
+    # robot.set_position([-2.0, 0.0, 0.0])
+    # pause(2)
     controller = StarterSemanticActionPrimitives(None, scene, robot)
 
 
@@ -80,6 +83,12 @@ def main():
         robot.set_position([-0.1, -0.35, 0.05])
         robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
         og.sim.step()
+        # for link in robot.links.values():
+        #     for mesh in link.collision_meshes.values():
+        #         if "grasping_frame" in link.prim_path:
+        #             mesh.collision_enabled = False
+        #             print(mesh.prim_path)
+        #             print(mesh.collision_enabled)
         execute_controller(controller.grasp(grasp_obj), env)
 
     def test_grasp():
@@ -93,6 +102,7 @@ def main():
         execute_controller(controller.place_on_top(table), env)
 
 
+    # pause(100)
     # Work more reliably
     test_grasp_no_navigation()
     
@@ -100,6 +110,9 @@ def main():
     # test_grasp_no_navigation()
     # test_grasp()
     # test_place()
+
+    # execute_controller(controller._navigate_to_pose([-0, -2.3, 0.0]), env)
+    # execute_controller(controller._navigate_to_pose([0, 0.3, 0.2]), env)
 
     pause(5)
 
