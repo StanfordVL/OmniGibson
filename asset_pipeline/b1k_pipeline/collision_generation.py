@@ -21,7 +21,7 @@ from fs.zipfs import ZipFS
 
 from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, save_mesh, launch_cluster
 
-GENERATE_SELECTED_ONLY = False
+GENERATE_SELECTED_ONLY = True
 VHACD_EXECUTABLE = "TestVHACD"
 COACD_SCRIPT_PATH = "coacd"
 

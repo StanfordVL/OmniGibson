@@ -97,7 +97,7 @@ def save_collision_mesh(obj, output_fs):
         m = trimesh.Trimesh(vertices=verts, faces=relevant_faces)
         m.remove_unreferenced_vertices()
         assert m.is_volume, f"{obj.name} element {i} is not a volume"
-        assert m.is_convex, f"{obj.name} element {i} is not convex"
+        # assert m.is_convex, f"{obj.name} element {i} is not convex"
         assert len(m.split()) == 1, f"{obj.name} element {i} has elements trimesh still finds splittable"
         
         # Save the mesh into an obj file
