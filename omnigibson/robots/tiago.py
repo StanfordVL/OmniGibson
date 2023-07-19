@@ -576,6 +576,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             ['gripper_right_link', 'wrist_right_ft_tool_link'], 
             ['head_1_link', 'head_2_link'],
             ['torso_fixed_column_link', 'arm_right_1_link'],
+            ['torso_fixed_column_link', 'arm_left_1_link'],
         ]
     
     @property
@@ -702,6 +703,10 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def eef_link_names(self):
         return {arm: "gripper_{}_grasping_frame".format(arm) for arm in self.arm_names}
+    
+    # @property
+    # def correct_eef_link_names(self):
+    #     return {arm: "gripper_{}_link".format(arm) for arm in self.arm_names}
 
     @property
     def finger_link_names(self):

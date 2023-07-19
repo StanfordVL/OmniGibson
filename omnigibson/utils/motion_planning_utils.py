@@ -112,9 +112,15 @@ def plan_arm_motion(
     joints = np.array([joint for joint in robot.joints.values()])
     arm_joints = joints[joint_control_idx]
     for i, joint in enumerate(arm_joints):
+        if end_conf[i] > joint.upper_limit:
+            end_conf[i] = joint.upper_limit
+        if end_conf[i] < joint.lower_limit:
+            end_conf[i] = joint.lower_limit
         bounds.setLow(i, float(joint.lower_limit))
         bounds.setHigh(i, float(joint.upper_limit))
     space.setBounds(bounds)
+
+    # 0.293879 1.55192 0.380693 1.40033 0.77242 -0.386359 -1.41372 -1.22937
 
     # create a simple setup object
     ss = ompl_geo.SimpleSetup(space)
@@ -141,7 +147,7 @@ def plan_arm_motion(
 
     if solved:
         # try to shorten the path
-        ss.simplifySolution()
+        # ss.simplifySolution()
 
         sol_path = ss.getSolutionPath()
         return_path = []
@@ -162,6 +168,15 @@ def detect_robot_collision(context, pose):
     orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
     context.robot_prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
 
+    # print(translation, orientation)
+    # for link in context.robot_meshes_copy:
+    #     for mesh in context.robot_meshes_copy[link]:
+    #         mesh.collision_enabled = True
+    # from IPython import embed; embed()
+    # for link in context.robot_meshes_copy:
+    #     for mesh in context.robot_meshes_copy[link]:
+    #         mesh.collision_enabled = False
+                
     for link in context.robot_meshes_copy:
         for mesh in context.robot_meshes_copy[link]:
             mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh.prim_path)
@@ -218,10 +233,10 @@ def arm_planning_validity_fn(context, joint_pos):
         nonlocal mesh_hit
         
         valid_hit = hit.rigid_body not in context.collision_pairs_dict[mesh_hit]
-        # if valid_hit:
-        #     print("hit body")
-        #     print(mesh_hit)
-        #     print(hit.rigid_body)
+        if valid_hit:
+            print("hit body")
+            print(mesh_hit)
+            print(hit.rigid_body)
         # test = hit.rigid_body not in context.collision_pairs_dict[mesh_hit]
         # if test:
         #     print("hit body")

@@ -29,7 +29,7 @@ def main():
     config_filename = "test_tiago.yaml"
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
-    config["scene"]["load_object_categories"] = ["floors", "walls"]
+    config["scene"]["load_object_categories"] = ["floors", "walls", "coffee_table"]
 
     # Load the environment
     env = og.Environment(configs=config)
@@ -105,7 +105,7 @@ def main():
     #             0.045,  
     #             0.045,
     #         ])
-    pos = np.array(
+    joint_pos = np.array(
             [
                 0.0,  
                 0.0, 
@@ -136,12 +136,64 @@ def main():
                 0.045,
             ]
         )
+    
+    
+    
+    pose_2d = [0.299906, -0.918024, 2.94397]
+
+    pos = np.array([pose_2d[0], pose_2d[1], 0.05])
+    orn = T.euler2quat([0, 0, pose_2d[2]])
+
+    # robot.set_position_orientation([-1.08215380e+00, -3.35281938e-01, -2.77837131e-07], [ 1.78991655e-07, -4.65450078e-08, -2.67762393e-01,  9.63485003e-01])
+    # robot.set_position_orientation(pos, orn)
+    # og.sim.step()
+    positions = [[0.09640930593013763, -1.0999783277511597, 1.470136046409607, 2.7100629806518555, 1.710019826889038, -1.5699725151062012, 1.3899997472763062, -2.2541275939147454e-06], [0.11789778377430027, 1.57079632679, -0.00844635003731165, 1.6066719362098862, 0.4473218694991109, 0.019161401102889112, -1.2949643256956296, -1.9651135606361847]]
     joint_combined_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
-    pos = pos[joint_combined_idx]
+    joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+    control_idx_in_joint_pos = np.where(np.in1d(joint_combined_idx, joint_control_idx))[0]
+    joint_pos = joint_pos[joint_combined_idx]
+    joint_pos[control_idx_in_joint_pos] = [0.263221, 1.51202 ,0.277794 ,1.5376, 0.852972, -0.23253 ,-1.41372 ,1.55155]
     # print(pos)
-    with UndoableContext(robot, "arm") as context:        
-        print(not arm_planning_validity_fn(context, no_collision))
-        pause(100)
+    # robot.set_joint_positions([0.263221, 1.51202 ,0.277794 ,1.5376, 0.852972, -0.23253 ,-1.41372 ,1.55155], joint_control_idx)
+    # pause(100)
+    # from omnigibson.controllers.controller_base import ControlType
+    # action = np.zeros(robot.action_dim)
+    # for name, controller in robot._controllers.items():
+    #     joint_idx = controller.dof_idx
+    #     action_idx = robot.controller_action_idx[name]
+    #     if controller.control_type == ControlType.POSITION and len(joint_idx) == len(action_idx):
+    #         action[action_idx] = robot.get_joint_positions()[joint_idx]
+    # action[robot.controller_action_idx["arm_left"]] = positions[1]
+    # for p in positions:
+    #     robot.set_joint_positions(p, joint_control_idx)
+    #     og.sim.step()
+    #     pause(2)
+    # with UndoableContext(robot, "arm") as context: 
+    #     while True:
+    #         jp = np.array(robot.get_joint_positions()[joint_combined_idx])
+    #         print(not arm_planning_validity_fn(context, jp))
+    #         env.step(action)
+
+#     joint_pos = [-1.0821538e+00, -3.3528194e-01, -2.7783713e-07,  3.8149398e-07,
+#  -2.0263911e-07, -5.4213971e-01 , 1.1684235e-01 , 1.5707957e+00,
+#  -1.0999898e+00 ,-2.8282230e-07 , 5.6211746e-01 , 1.4701120e+00,
+#   1.0374244e-08 , 1.6099000e+00 , 2.6821127e+00 , 4.4674629e-01,
+#   1.8163613e+00 ,-2.2369886e-02, -1.5652136e+00, -1.2442690e+00,
+#   1.3900158e+00, -2.0943952e+00, -5.9008621e-06,  4.4999883e-02,
+#   4.5000002e-02,  4.4999868e-02,  4.5000002e-02]
+#     joint_pos = np.array(joint_pos)[joint_combined_idx]
+    # with UndoableContext(robot, "arm") as context:        
+    #     print(not arm_planning_validity_fn(context, joint_pos))
+    #     for i in range(10000):
+    #         og.sim.render()
+
+    with UndoableContext(robot, "base") as context:        
+        print(detect_robot_collision(context, [pos, orn]))
+        for link in context.robot_meshes_copy:
+            for mesh in context.robot_meshes_copy[link]:
+                mesh.collision_enabled = True
+        for i in range(10000):
+            og.sim.render()
     
     # breakpoint()
 

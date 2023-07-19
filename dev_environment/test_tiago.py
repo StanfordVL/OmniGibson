@@ -4,9 +4,11 @@ import argparse
 
 import omnigibson as og
 from omnigibson.macros import gm
-from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
+from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives, UndoableContext
+from omnigibson.objects.primitive_object import PrimitiveObject
 import omnigibson.utils.transform_utils as T
 from omnigibson.objects.dataset_object import DatasetObject
+from omnigibson.utils.motion_planning_utils import detect_robot_collision, arm_planning_validity_fn
 
 import cProfile, pstats, io
 import time
@@ -26,6 +28,9 @@ def replay_controller(env, filename):
 def execute_controller(ctrl_gen, env, filename=None):
     actions = []
     for action in ctrl_gen:
+        # print(env.robots[0].get_position_orientation())
+        # print(env.robots[0].get_joint_positions())
+        # print("----------------")
         env.step(action)
         actions.append(action.tolist())
     if filename is not None:
@@ -66,6 +71,18 @@ def main():
     grasp_obj.set_position([-0.3, -0.8, 0.5])
     og.sim.step()
 
+    # marker = PrimitiveObject(
+    #     prim_path=f"/World/marker",
+    #     name="marker",
+    #     primitive_type="Cube",
+    #     size=0.07,
+    #     visual_only=True,
+    #     rgba=[1.0, 0, 0, 1.0],
+    # )
+    # og.sim.import_object(marker)
+    # marker.set_position_orientation([-0.29840604, -0.79821703,  0.59273211], [0.        , 0.70710678, 0.        , 0.70710678])
+    # og.sim.step()
+
 
     # robot.set_position([-2.0, 0.0, 0.0])
     # pause(2)
@@ -80,8 +97,9 @@ def main():
     def test_grasp_no_navigation():
         # Need to set start pose to reset_hand because default tuck pose for Tiago collides with itself
         execute_controller(controller._reset_hand(), env)
-        robot.set_position([-0.1, -0.35, 0.05])
-        robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
+        # robot.set_position([-0.1, -0.35, 0.05])
+        # robot.set_orientation(T.euler2quat([0, 0,-np.pi/1.5]))
+        robot.set_position_orientation([-1.08215380e+00, -3.35281938e-01, -2.77837131e-07], [ 1.78991655e-07, -4.65450078e-08, -2.67762393e-01,  9.63485003e-01])
         og.sim.step()
         # for link in robot.links.values():
         #     for mesh in link.collision_meshes.values():
@@ -100,21 +118,65 @@ def main():
         test_grasp()
         pause(1)
         execute_controller(controller.place_on_top(table), env)
-
-
+    
+    # positions = [[0.09988395869731903, -1.0999969244003296, 1.4699827432632446, 2.710009813308716, 1.710004448890686, -1.5700018405914307, 1.3899955749511719, 2.001982011279324e-07], [0.15954897383415584, -0.9759483151785584, 1.051426922254121, 1.3919954813427862, 1.9255247232751793, -0.46858315638703396, 1.135518807525537, 0.5174528326963662], [0.15062408833826937, -0.4437143998615267, 0.8304433521196042, 1.437534104367112, 1.6164805582338932, -0.37533100951328124, 0.6381778036539293, -0.0283867578914061], [0.13373369762078724, 0.5635409634642365, 0.41223083348993295, 1.5237161776241306, 1.0316129205581803, -0.1988508522420569, -0.30304254915485307, -1.0613909301407032], [0.11684330690330513, 1.57079632679, -0.005981685139738268, 1.6098982508811492, 0.4467452828824673, -0.022370694970832543, -1.244262901963635, -2.09439510239]]
+    control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["left"]])
+    # robot.set_position_orientation([-1.08215380e+00, -3.35281938e-01, -2.77837131e-07], [ 1.78991655e-07, -4.65450078e-08, -2.67762393e-01,  9.63485003e-01])
+    # og.sim.step()
+    # for p in positions:
+    #     robot.set_joint_positions(p, control_idx)
+    #     pause(0.2)
     # pause(100)
     # Work more reliably
-    test_grasp_no_navigation()
-    
-    # Don't work as reliably
+    # og.sim._physics_context.set_gravity(value=-0.1)
+    # execute_controller(controller._reset_hand(), env)
+    # robot.set_position_orientation([-1.08215380e+00, -3.35281938e-01, -2.77837131e-07], [ 1.78991655e-07, -4.65450078e-08, -2.67762393e-01,  9.63485003e-01])
+    # og.sim.step()
+    # execute_controller(controller._reset_hand(), env)
+    # grasp_pose = [-0.29840604, -0.79821703,  0.59273211], [0.        , 0.70710678, 0.        , 0.70710678]
+    # execute_controller(controller._reset_hand(), env)
+    # execute_controller(controller._move_hand(grasp_pose), env)
     # test_grasp_no_navigation()
+    
+    # end_joint = [0.11684331,  1.57079633, -0.00598169,  1.60989825,  0.44674528, -0.02237069, -1.2442629, -2.0943951]
+    # robot.set_joint_positions(end_joint, control_idx)
+    # pause(1)
+    # from IPython import embed; embed()
+    # og.sim.step()
+    # Don't work as reliably
+
+    
+
+    # pose_2d = [-0.543999, -0.233287,-1.16071]
+    # pos = np.array([pose_2d[0], pose_2d[1], 0.05])
+    # orn = T.euler2quat([0, 0, pose_2d[2]])
+    # robot.set_position_orientation(pos, orn)
+    # og.sim.step()
+    # pause(10)
+    # t_pose = ([-0.29840604, -0.79821703,  0.59273211], [0.        , 0.70710678, 0.        , 0.70710678])
+    # execute_controller(controller._reset_hand(), env)
+    # execute_controller(controller._move_hand(t_pose), env)
+
+    # test_grasp_no_navigation()
+
     # test_grasp()
-    # test_place()
+    
+
+    pose_2d = [-0.5, -2.2, 0.261041]
+    pos = np.array([pose_2d[0], pose_2d[1], 0.05])
+    orn = T.euler2quat([0, 0, pose_2d[2]])
+
+    # with UndoableContext(robot, "base") as context:        
+    #     print(not detect_robot_collision(context, (pos, orn)))
+    #     for i in range(10000):
+    #         og.sim.render()
+    # test_grasp()
+    test_place()
 
     # execute_controller(controller._navigate_to_pose([-0, -2.3, 0.0]), env)
-    # execute_controller(controller._navigate_to_pose([0, 0.3, 0.2]), env)
+    # execute_controller(controller._navigate_to_pose(pose_2d), env)
 
-    pause(5)
+    pause(100)
 
     ###################################################################################
     # Random test code below
