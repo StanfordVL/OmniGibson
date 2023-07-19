@@ -8,7 +8,6 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import RigidContactAPI
 from pxr import PhysicsSchemaTools, Gf
 
-num_checks = [0]
 def plan_base_motion(
     robot,
     end_conf,
@@ -22,7 +21,6 @@ def plan_base_motion(
         yaw = q.getYaw()
         pose = ([x, y, 0.0], T.euler2quat((0, 0, yaw)))
         state_valid = not detect_robot_collision(context, pose)
-        num_checks[0] += 1
         return state_valid
 
     pos = robot.get_position()
@@ -69,7 +67,6 @@ def plan_base_motion(
         ss.simplifySolution()
         # print the simplified path
         sol_path = ss.getSolutionPath()
-        print("Num collision checks: ", num_checks[0])
         return_path = []
         for i in range(sol_path.getStateCount()):
             x = sol_path.getState(i).getX()
@@ -98,10 +95,8 @@ def plan_arm_motion(
         control_idx_in_joint_pos = np.arange(dim)
 
     def state_valid_fn(q):
-        # joint_pos = initial_joint_pos.copy()
         joint_pos = initial_joint_pos
         joint_pos[control_idx_in_joint_pos] = [q[i] for i in range(dim)]
-        # state_valid = not detect_robot_collision(robot)
         return arm_planning_validity_fn(context, joint_pos)
     
     # create an SE2 state space
@@ -128,7 +123,7 @@ def plan_arm_motion(
 
     si = ss.getSpaceInformation()
     planner = ompl_geo.RRTConnect(si)
-    # planner.setRange(0.01)
+    planner.setRange(0.01)
     ss.setPlanner(planner)
 
     start_conf = robot.get_joint_positions()[joint_control_idx]
@@ -161,21 +156,12 @@ def plan_arm_motion(
 def detect_robot_collision(context, pose):
     translation = pose[0]
     orientation = pose[1]
-    # context.robot_prim.set_local_poses(np.array([translation]), np.array([orientation]))
+    # context.robot_copy.prim.set_local_poses(np.array([translation]), np.array([orientation]))
     translation = Gf.Vec3d(*np.array(translation, dtype=float))
-    context.robot_prim.GetAttribute("xformOp:translate").Set(translation)
+    context.robot_copy.prim.GetAttribute("xformOp:translate").Set(translation)
 
     orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
-    context.robot_prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
-
-    # print(translation, orientation)
-    # for link in context.robot_meshes_copy:
-    #     for mesh in context.robot_meshes_copy[link]:
-    #         mesh.collision_enabled = True
-    # from IPython import embed; embed()
-    # for link in context.robot_meshes_copy:
-    #     for mesh in context.robot_meshes_copy[link]:
-    #         mesh.collision_enabled = False
+    context.robot_copy.prim.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
                 
     for link in context.robot_meshes_copy:
         for mesh in context.robot_meshes_copy[link]:
@@ -226,28 +212,12 @@ def arm_planning_validity_fn(context, joint_pos):
     # Define function for checking overlap
     valid_hit = False
     mesh_hit = None
-    # links = []
 
     def overlap_callback(hit):
         nonlocal valid_hit
         nonlocal mesh_hit
         
-        valid_hit = hit.rigid_body not in context.collision_pairs_dict[mesh_hit]
-        if valid_hit:
-            print("hit body")
-            print(mesh_hit)
-            print(hit.rigid_body)
-        # test = hit.rigid_body not in context.collision_pairs_dict[mesh_hit]
-        # if test:
-        #     print("hit body")
-        #     print(mesh_hit)
-        #     print(hit.rigid_body)
-        #     link_a = mesh_hit.split("/")[-1]
-        #     link_b = hit.rigid_body.split("/")[-1]
-        #     pair = {link_a, link_b}
-        #     if pair not in links:
-        #         links.append({link_a, link_b})
-        # return True
+        valid_hit = hit.rigid_body not in context.disabled_collision_pairs_dict[mesh_hit]
 
         return not valid_hit
 
@@ -267,7 +237,6 @@ def arm_planning_validity_fn(context, joint_pos):
                 else:
                     og.sim.psqi.overlap_shape(*mesh_id, reportFn=overlap_callback)
             
-        # print([list(link) for link in links])
         return valid_hit
     
     return not check_overlap()

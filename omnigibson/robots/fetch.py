@@ -384,7 +384,7 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         ]
     
     @property
-    def temp_disabled_collision_pairs(self):
+    def primitive_disabled_collision_pairs(self):
         return [
             ["torso_lift_link", "shoulder_lift_link"],
             ["torso_lift_link", "torso_fixed_link"],
