@@ -139,8 +139,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
         # Other args that will be created at runtime
         self._world_base_fixed_joint_prim = None
-
-        # Create simplified collision mesh object
         
         # Parse reset joint pos if specifying special string
         if isinstance(reset_joint_pos, str):
@@ -636,10 +634,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def eef_link_names(self):
         return {arm: "gripper_{}_grasping_frame".format(arm) for arm in self.arm_names}
-    
-    # @property
-    # def correct_eef_link_names(self):
-    #     return {arm: "gripper_{}_link".format(arm) for arm in self.arm_names}
 
     @property
     def finger_link_names(self):
