@@ -41,18 +41,17 @@
     )
     
     (:goal 
-        (and 
-            (open ?cash_register.n.01_1) 
+        (and
             (forn 
                 (5) 
                 (?money.n.01 - money.n.01) 
-                (ontop ?money.n.01 ?cash_register.n.01_1)
+                (nextto ?money.n.01 ?cash_register.n.01_1)
     
             ) 
             (forn 
                 (1) 
                 (?money.n.01 - money.n.01) 
-                (ontop ?money.n.01 ?checkout.n.03_1)
+                (nextto ?money.n.01 ?checkout.n.03_1)
     
             ) 
             (forall 
