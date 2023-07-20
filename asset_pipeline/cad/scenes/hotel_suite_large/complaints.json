@@ -21,19 +21,19 @@
         "object": "table_lamp-uzrovn",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
-        "processed": false
+        "processed": true
     },
     {
         "object": "door-uptpdr",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "no handle",
-        "processed": false
+        "processed": true
     },
     {
         "object": "wall_mounted_shelf-xogqqm",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
-        "processed": false
+        "processed": true
     },
     {
         "object": "ceilings-hnnzid-0",
@@ -45,13 +45,13 @@
         "object": "walls-xftoqy",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: wall too big, need segmentation",
-        "processed": false
+        "processed": true
     },
     {
         "object": "floors-nwjrkc",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: corner not perpendicular",
-        "processed": false
+        "processed": true
     },
     {
         "object": "sink-jbborl",
@@ -63,6 +63,6 @@
         "object": "hardback-gyshpg",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "1",
-        "processed": false
+        "processed": true
     }
 ]
