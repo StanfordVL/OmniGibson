@@ -11,6 +11,7 @@ REMACRO = re.compile('^[0-9]+ +"[^"]*" +"([^"]*)" +"[^"]*" +"([^"]*)"', re.M)
 ENTRYPOINTS = {
     "align_pivots.py": "Find instances with unaligned pivots and align them.",
     "assign_light.py": "Assign lights to objects.",
+    "assign_toggle.py": "Assign toggle button metalink to object",
     "demirror.py": "Fix objects that are mirrored.",
     "find_duplicates.py": "Find duplicate objects in the scene.",
     # "fix_common_issues.py": "Fix common issues like scale.",
@@ -34,6 +35,7 @@ ENTRYPOINTS = {
     "select_mismatched_pivot.py": "Select groups of object instances whose pivots dont match.",
     "spherify.py": "Convert point helpers into spheres.",
     "switch_loose.py": "Switch visible object between different looseness options.",
+    "switch_metalink.py": "Switch type of selected metalinks",
     "translate_ig_dataset.py": "Update names of iG2 objects to new format.",
     "view_complaints.py": "View QA complaints for this file.",
 }
