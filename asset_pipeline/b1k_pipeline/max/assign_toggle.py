@@ -1,9 +1,7 @@
-import re
-from collections import defaultdict
+import sys
+sys.path.append(r"D:\ig_pipeline")
 
-import numpy as np
 import pymxs
-from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline.utils import parse_name
 
