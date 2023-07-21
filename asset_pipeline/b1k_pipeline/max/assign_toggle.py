@@ -5,6 +5,8 @@ import numpy as np
 import pymxs
 from scipy.spatial.transform import Rotation as R
 
+from b1k_pipeline.utils import parse_name
+
 rt = pymxs.runtime
 
 
@@ -22,6 +24,9 @@ def assign_toggle():
 
     # Rename the first object to match the selected object
     button.name = target.name + "-Mtogglebutton"
+
+    # Validate that the object name is valid
+    assert parse_name(button.name) is not None, f"Done, but please fix invalid name {button.name} for collision object"
 
 
 def assign_toggle_button():

@@ -11,7 +11,6 @@ rt = pymxs.runtime
 def switch_metalink():
     metalinks = list(rt.selection)
 
-    current_prefix = ""
     for obj in metalinks:
         n = parse_name(obj.name)
         if n is None:
@@ -43,7 +42,6 @@ def switch_metalink():
 def switch_metalink_button():
     try:
         switch_metalink()
-        #rt.messageBox("Success!")
     except AssertionError as e:
         # Print message
         rt.messageBox(str(e))
