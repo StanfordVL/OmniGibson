@@ -155,7 +155,6 @@
     },
     "aioli.n.01": {
         "breakable": {},
-        "openable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -500,7 +499,6 @@
     "apple_juice__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -751,7 +749,6 @@
     },
     "ashcan.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1038,7 +1035,6 @@
     },
     "bag__of__auricularia.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1058,7 +1054,6 @@
     },
     "bag__of__breadcrumbs.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1078,7 +1073,6 @@
     },
     "bag__of__brown_rice.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1098,7 +1092,6 @@
     },
     "bag__of__chips.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1118,7 +1111,6 @@
     },
     "bag__of__cocoa.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1138,7 +1130,6 @@
     },
     "bag__of__cookies.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1158,7 +1149,6 @@
     },
     "bag__of__cream_cheese.n.01": {
         "flammable": {},
-        "openable": {},
         "meltable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -1179,7 +1169,6 @@
     },
     "bag__of__fertilizer.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1199,7 +1188,6 @@
     },
     "bag__of__flour.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1219,7 +1207,6 @@
     },
     "bag__of__ice_cream.n.01": {
         "flammable": {},
-        "openable": {},
         "meltable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -1240,7 +1227,6 @@
     },
     "bag__of__oranges.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1260,7 +1246,6 @@
     },
     "bag__of__popcorn.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1280,7 +1265,6 @@
     },
     "bag__of__rice.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1319,7 +1303,6 @@
     },
     "bag__of__shiitake.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1339,7 +1322,6 @@
     },
     "bag__of__snacks.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1359,7 +1341,6 @@
     },
     "bag__of__starch.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1379,7 +1360,6 @@
     },
     "bag__of__tea.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1399,7 +1379,6 @@
     },
     "bag__of__yeast.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1419,7 +1398,6 @@
     },
     "bag.n.06": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1520,7 +1498,6 @@
     "baking_powder__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1646,10 +1623,8 @@
     },
     "bandage.n.01": {
         "particleRemover": {},
-        "cloth": {},
+        "rigidBody": {},
         "nonSubstance": {},
-        "deformable": {},
-        "drapeable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -1767,7 +1742,6 @@
     "barbecue_sauce__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -1936,7 +1910,6 @@
     "basil__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2199,7 +2172,6 @@
     "beef_broth__carton.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2278,7 +2250,6 @@
     "beer_bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -2613,7 +2584,6 @@
     },
     "binder.n.03": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3139,7 +3109,6 @@
         "freezable": {}
     },
     "bottle__of__acetone.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3158,7 +3127,6 @@
         "freezable": {}
     },
     "bottle__of__acid.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3177,7 +3145,6 @@
         "freezable": {}
     },
     "bottle__of__alcohol.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3197,7 +3164,6 @@
     },
     "bottle__of__alfredo_sauce.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3217,7 +3183,6 @@
     },
     "bottle__of__allspice.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3237,7 +3202,6 @@
     },
     "bottle__of__almond_oil.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3256,7 +3220,6 @@
         "freezable": {}
     },
     "bottle__of__ammonia.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3275,7 +3238,6 @@
         "freezable": {}
     },
     "bottle__of__antihistamines.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3295,7 +3257,6 @@
     },
     "bottle__of__apple_cider.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3315,7 +3276,6 @@
     },
     "bottle__of__apple_juice.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3335,7 +3295,6 @@
     },
     "bottle__of__applesauce.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3354,7 +3313,6 @@
         "freezable": {}
     },
     "bottle__of__aspirin.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3373,7 +3331,6 @@
         "freezable": {}
     },
     "bottle__of__baby_oil.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3393,7 +3350,6 @@
     },
     "bottle__of__balsamic_vinegar.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3412,7 +3368,6 @@
         "freezable": {}
     },
     "bottle__of__barbecue_sauce.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3432,7 +3387,6 @@
     },
     "bottle__of__beer.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3452,7 +3406,6 @@
     },
     "bottle__of__black_pepper.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3471,7 +3424,6 @@
         "freezable": {}
     },
     "bottle__of__bleach_agent.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3490,7 +3442,6 @@
         "freezable": {}
     },
     "bottle__of__bug_repellent.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3509,7 +3460,6 @@
         "freezable": {}
     },
     "bottle__of__buttermilk.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3528,7 +3478,6 @@
         "freezable": {}
     },
     "bottle__of__carrot_juice.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3547,7 +3496,6 @@
         "freezable": {}
     },
     "bottle__of__catsup.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3566,7 +3514,6 @@
         "freezable": {}
     },
     "bottle__of__caulk.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3586,7 +3533,6 @@
     },
     "bottle__of__champagne.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3605,7 +3551,6 @@
         "freezable": {}
     },
     "bottle__of__chili_pepper.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3624,7 +3569,6 @@
         "freezable": {}
     },
     "bottle__of__chocolate_sauce.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3643,7 +3587,6 @@
         "freezable": {}
     },
     "bottle__of__cleaner.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3662,7 +3605,6 @@
         "freezable": {}
     },
     "bottle__of__cocoa.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3681,7 +3623,6 @@
         "freezable": {}
     },
     "bottle__of__coconut_milk.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3700,7 +3641,6 @@
         "freezable": {}
     },
     "bottle__of__coconut_oil.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3719,7 +3659,6 @@
         "freezable": {}
     },
     "bottle__of__coconut_water.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3739,7 +3678,6 @@
     },
     "bottle__of__coffee.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3759,7 +3697,6 @@
     },
     "bottle__of__coke.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3778,7 +3715,6 @@
         "freezable": {}
     },
     "bottle__of__cold_cream.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3798,7 +3734,6 @@
     },
     "bottle__of__cologne.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3817,7 +3752,6 @@
         "freezable": {}
     },
     "bottle__of__conditioner.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3836,7 +3770,6 @@
         "freezable": {}
     },
     "bottle__of__cooking_oil.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3856,7 +3789,6 @@
     },
     "bottle__of__cranberry_juice.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3875,7 +3807,6 @@
         "freezable": {}
     },
     "bottle__of__degreaser.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3894,7 +3825,6 @@
         "freezable": {}
     },
     "bottle__of__deicer.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3913,7 +3843,6 @@
         "freezable": {}
     },
     "bottle__of__detergent.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3932,7 +3861,6 @@
         "freezable": {}
     },
     "bottle__of__dish_soap.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3951,7 +3879,6 @@
         "freezable": {}
     },
     "bottle__of__disinfectant.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3971,7 +3898,6 @@
     },
     "bottle__of__essential_oil.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -3990,7 +3916,6 @@
         "freezable": {}
     },
     "bottle__of__fabric_softener.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4009,7 +3934,6 @@
         "freezable": {}
     },
     "bottle__of__face_cream.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4028,7 +3952,6 @@
         "freezable": {}
     },
     "bottle__of__fennel.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4047,7 +3970,6 @@
         "freezable": {}
     },
     "bottle__of__food_coloring.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4066,7 +3988,6 @@
         "freezable": {}
     },
     "bottle__of__frosting.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4086,7 +4007,6 @@
     },
     "bottle__of__fruit_punch.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4106,7 +4026,6 @@
     },
     "bottle__of__garlic_sauce.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4126,7 +4045,6 @@
     },
     "bottle__of__gin.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4146,7 +4064,6 @@
     },
     "bottle__of__ginger_beer.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4165,7 +4082,6 @@
         "freezable": {}
     },
     "bottle__of__ginger.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4184,7 +4100,6 @@
         "freezable": {}
     },
     "bottle__of__glass_cleaner.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4203,7 +4118,6 @@
         "freezable": {}
     },
     "bottle__of__glue.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4222,7 +4136,6 @@
         "freezable": {}
     },
     "bottle__of__ground_cloves.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4241,7 +4154,6 @@
         "freezable": {}
     },
     "bottle__of__ground_mace.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4260,7 +4172,6 @@
         "freezable": {}
     },
     "bottle__of__ground_nutmeg.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4279,7 +4190,6 @@
         "freezable": {}
     },
     "bottle__of__hot_sauce.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4298,7 +4208,6 @@
         "freezable": {}
     },
     "bottle__of__lacquer.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4318,7 +4227,6 @@
     },
     "bottle__of__lavender_oil.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4337,7 +4245,6 @@
         "freezable": {}
     },
     "bottle__of__lemon_juice.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4357,7 +4264,6 @@
     },
     "bottle__of__lemon_sauce.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4377,7 +4283,6 @@
     },
     "bottle__of__lemonade.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4414,7 +4319,6 @@
         "freezable": {}
     },
     "bottle__of__lime_juice.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4433,7 +4337,6 @@
         "freezable": {}
     },
     "bottle__of__liquid_soap.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4452,7 +4355,6 @@
         "freezable": {}
     },
     "bottle__of__lotion.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4471,7 +4373,6 @@
         "freezable": {}
     },
     "bottle__of__lubricant.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4490,7 +4391,6 @@
         "freezable": {}
     },
     "bottle__of__maple_syrup.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4509,7 +4409,6 @@
         "freezable": {}
     },
     "bottle__of__mayonnaise.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4528,7 +4427,6 @@
         "freezable": {}
     },
     "bottle__of__medicine.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4547,7 +4445,6 @@
         "freezable": {}
     },
     "bottle__of__milk.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4566,7 +4463,6 @@
         "freezable": {}
     },
     "bottle__of__milkshake.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4585,7 +4481,6 @@
         "freezable": {}
     },
     "bottle__of__molasses.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4605,7 +4500,6 @@
     },
     "bottle__of__mushroom_sauce.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4624,7 +4518,6 @@
         "freezable": {}
     },
     "bottle__of__mustard_seeds.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4643,7 +4536,6 @@
         "freezable": {}
     },
     "bottle__of__mustard.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4662,7 +4554,6 @@
         "freezable": {}
     },
     "bottle__of__oil.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4681,7 +4572,6 @@
         "freezable": {}
     },
     "bottle__of__olive_oil.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4700,7 +4590,6 @@
         "freezable": {}
     },
     "bottle__of__onion_powder.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4720,7 +4609,6 @@
     },
     "bottle__of__orange_juice.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4739,7 +4627,6 @@
         "freezable": {}
     },
     "bottle__of__paint_remover.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4758,7 +4645,6 @@
         "freezable": {}
     },
     "bottle__of__paint.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4778,7 +4664,6 @@
     },
     "bottle__of__papaya_juice.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4797,7 +4682,6 @@
         "freezable": {}
     },
     "bottle__of__paprika.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4816,7 +4700,6 @@
         "freezable": {}
     },
     "bottle__of__parsley.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4835,7 +4718,6 @@
         "freezable": {}
     },
     "bottle__of__peanut_butter.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4855,7 +4737,6 @@
     },
     "bottle__of__perfume.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4874,7 +4755,6 @@
         "freezable": {}
     },
     "bottle__of__pesticide.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4894,7 +4774,6 @@
     },
     "bottle__of__pesto.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4914,7 +4793,6 @@
     },
     "bottle__of__pizza_sauce.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4934,7 +4812,6 @@
     },
     "bottle__of__pop.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4953,7 +4830,6 @@
         "freezable": {}
     },
     "bottle__of__poppy_seeds.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4972,7 +4848,6 @@
         "freezable": {}
     },
     "bottle__of__powder.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -4991,7 +4866,6 @@
         "freezable": {}
     },
     "bottle__of__protein_powder.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5010,7 +4884,6 @@
         "freezable": {}
     },
     "bottle__of__pumpkin_pie_spice.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5029,7 +4902,6 @@
         "freezable": {}
     },
     "bottle__of__rosemary.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5049,7 +4921,6 @@
     },
     "bottle__of__rum.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5068,7 +4939,6 @@
         "freezable": {}
     },
     "bottle__of__sage.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5088,7 +4958,6 @@
     },
     "bottle__of__sake.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5108,7 +4977,6 @@
     },
     "bottle__of__salsa.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5128,7 +4996,6 @@
     },
     "bottle__of__sangria.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5147,7 +5014,6 @@
         "freezable": {}
     },
     "bottle__of__sealant.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5166,7 +5032,6 @@
         "freezable": {}
     },
     "bottle__of__seasoning.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5185,7 +5050,6 @@
         "freezable": {}
     },
     "bottle__of__sesame_oil.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5204,7 +5068,6 @@
         "freezable": {}
     },
     "bottle__of__sesame_seeds.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5223,7 +5086,6 @@
         "freezable": {}
     },
     "bottle__of__shampoo.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5242,7 +5104,6 @@
         "freezable": {}
     },
     "bottle__of__skin_cream.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5262,7 +5123,6 @@
     },
     "bottle__of__soda.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5281,7 +5141,6 @@
         "freezable": {}
     },
     "bottle__of__solvent.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5300,7 +5159,6 @@
         "freezable": {}
     },
     "bottle__of__soup.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5319,7 +5177,6 @@
         "freezable": {}
     },
     "bottle__of__sour_cream.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5338,7 +5195,6 @@
         "freezable": {}
     },
     "bottle__of__soy_milk.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5358,7 +5214,6 @@
     },
     "bottle__of__soy_sauce.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5377,7 +5232,6 @@
         "freezable": {}
     },
     "bottle__of__spice.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5396,7 +5250,6 @@
         "freezable": {}
     },
     "bottle__of__sriracha.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5415,7 +5268,6 @@
         "freezable": {}
     },
     "bottle__of__sunscreen.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5434,7 +5286,6 @@
         "freezable": {}
     },
     "bottle__of__supplements.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5453,7 +5304,6 @@
         "freezable": {}
     },
     "bottle__of__tea_leaves.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5473,7 +5323,6 @@
     },
     "bottle__of__tea.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5493,7 +5342,6 @@
     },
     "bottle__of__tequila.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5512,7 +5360,6 @@
         "freezable": {}
     },
     "bottle__of__tomato_paste.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5532,7 +5379,6 @@
     },
     "bottle__of__tonic.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5551,7 +5397,6 @@
         "freezable": {}
     },
     "bottle__of__vinegar.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5571,7 +5416,6 @@
     },
     "bottle__of__vodka.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5590,7 +5434,6 @@
         "freezable": {}
     },
     "bottle__of__water.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5610,7 +5453,6 @@
     },
     "bottle__of__whiskey.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5630,7 +5472,6 @@
     },
     "bottle__of__wine.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5650,7 +5491,6 @@
     },
     "bottle.n.03": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5738,7 +5578,6 @@
     "bourbon__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5841,7 +5680,6 @@
     },
     "box__of__almond_milk.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5861,7 +5699,6 @@
     },
     "box__of__apple_juice.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5881,7 +5718,6 @@
     },
     "box__of__baking_mix.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5901,7 +5737,6 @@
     },
     "box__of__baking_powder.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5921,7 +5756,6 @@
     },
     "box__of__baking_soda.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5941,7 +5775,6 @@
     },
     "box__of__barley.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5961,7 +5794,6 @@
     },
     "box__of__beer.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -5981,7 +5813,6 @@
     },
     "box__of__brown_sugar.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6001,7 +5832,6 @@
     },
     "box__of__butter.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6021,7 +5851,6 @@
     },
     "box__of__candy.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6041,7 +5870,6 @@
     },
     "box__of__cane_sugar.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6061,7 +5889,6 @@
     },
     "box__of__cereal.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6081,7 +5908,6 @@
     },
     "box__of__champagne.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6101,7 +5927,6 @@
     },
     "box__of__chocolates.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6121,7 +5946,6 @@
     },
     "box__of__coconut_milk.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6141,7 +5965,6 @@
     },
     "box__of__coffee.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6161,7 +5984,6 @@
     },
     "box__of__cookies.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6181,7 +6003,6 @@
     },
     "box__of__corn_flakes.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6201,7 +6022,6 @@
     },
     "box__of__crackers.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6221,7 +6041,6 @@
     },
     "box__of__cream.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6241,7 +6060,6 @@
     },
     "box__of__flour.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6261,7 +6079,6 @@
     },
     "box__of__fruit.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6281,7 +6098,6 @@
     },
     "box__of__granola_bars.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6301,7 +6117,6 @@
     },
     "box__of__ice_cream.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6321,7 +6136,6 @@
     },
     "box__of__lasagna.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6341,7 +6155,6 @@
     },
     "box__of__lemons.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6361,7 +6174,6 @@
     },
     "box__of__milk.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6381,7 +6193,6 @@
     },
     "box__of__oatmeal.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6401,7 +6212,6 @@
     },
     "box__of__raspberries.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6421,7 +6231,6 @@
     },
     "box__of__rice.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6441,7 +6250,6 @@
     },
     "box__of__rum.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6461,7 +6269,6 @@
     },
     "box__of__sake.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6481,7 +6288,6 @@
     },
     "box__of__salt.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6501,7 +6307,6 @@
     },
     "box__of__sanitary_napkin.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6521,7 +6326,6 @@
     },
     "box__of__shampoo.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6541,7 +6345,6 @@
     },
     "box__of__takeout.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6561,7 +6364,6 @@
     },
     "box__of__tissue.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6581,7 +6383,6 @@
     },
     "box__of__tomato_juice.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6601,7 +6402,6 @@
     },
     "box__of__vegetable_juice.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6621,7 +6421,6 @@
     },
     "box__of__whiskey.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6641,7 +6440,6 @@
     },
     "box__of__wine.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6661,7 +6459,6 @@
     },
     "box__of__yogurt.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -6871,7 +6668,6 @@
     "brandy__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7041,7 +6837,6 @@
         "freezable": {}
     },
     "briefcase.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7294,7 +7089,6 @@
         "freezable": {}
     },
     "bucket__of__paint.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7865,7 +7659,6 @@
         "freezable": {}
     },
     "can__of__baking_mix.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7884,7 +7677,6 @@
         "freezable": {}
     },
     "can__of__bay_leaves.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7903,7 +7695,6 @@
         "freezable": {}
     },
     "can__of__beans.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7922,7 +7713,6 @@
         "freezable": {}
     },
     "can__of__coffee.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7941,7 +7731,6 @@
         "freezable": {}
     },
     "can__of__corn.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7960,7 +7749,6 @@
         "freezable": {}
     },
     "can__of__icetea.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7979,7 +7767,6 @@
         "freezable": {}
     },
     "can__of__oatmeal.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -7998,7 +7785,6 @@
         "freezable": {}
     },
     "can__of__sardines.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8017,7 +7803,6 @@
         "freezable": {}
     },
     "can__of__soda.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8036,7 +7821,6 @@
         "freezable": {}
     },
     "can__of__tomato_paste.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8055,7 +7839,6 @@
         "freezable": {}
     },
     "can__of__tomatoes.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8176,7 +7959,6 @@
         "freezable": {}
     },
     "canned_food.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8226,7 +8008,6 @@
     },
     "canteen.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8246,7 +8027,6 @@
     },
     "cap.n.02": {
         "flammable": {},
-        "openable": {},
         "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -8385,7 +8165,6 @@
     "carboy.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8574,7 +8353,6 @@
         "freezable": {}
     },
     "carton__of__chocolate_milk.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8594,7 +8372,6 @@
     },
     "carton__of__eggs.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8613,7 +8390,6 @@
         "freezable": {}
     },
     "carton__of__milk.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8632,7 +8408,6 @@
         "freezable": {}
     },
     "carton__of__orange_juice.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8651,7 +8426,6 @@
         "freezable": {}
     },
     "carton__of__pineapple_juice.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8670,7 +8444,6 @@
         "freezable": {}
     },
     "carton__of__soy_milk.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8690,7 +8463,6 @@
     },
     "carton.n.02": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8729,7 +8501,6 @@
         "freezable": {}
     },
     "case__of__eyeshadow.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8749,7 +8520,6 @@
     },
     "case__of__pop.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8828,7 +8598,6 @@
         "freezable": {}
     },
     "cash_register.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8896,7 +8665,6 @@
     },
     "cat_food__tin.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -8942,7 +8710,6 @@
     "catsup__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -9283,7 +9050,6 @@
     "champagne__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -9705,7 +9471,6 @@
     "chicken_broth__carton.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -9872,7 +9637,6 @@
     },
     "chickpea__can.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10025,7 +9789,6 @@
     "chlorine__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10176,7 +9939,6 @@
     "chocolate_sauce__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10507,7 +10269,6 @@
         "freezable": {}
     },
     "clamp.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10679,7 +10440,6 @@
     "clove__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10824,7 +10584,6 @@
     "cocoa__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10891,7 +10650,6 @@
     "coconut_oil__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10969,7 +10727,6 @@
     "coffee_bean__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -11084,7 +10841,6 @@
     "cola__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "sliceable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -11208,7 +10964,6 @@
         "freezable": {}
     },
     "comic_book.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12054,7 +11809,6 @@
     "cooking_oil__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12224,7 +11978,6 @@
     },
     "corn_flake.n.01": {
         "flammable": {},
-        "openable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
@@ -12290,7 +12043,6 @@
     "cornstarch__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12479,7 +12231,6 @@
     "cream__carton.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12500,7 +12251,6 @@
     "cream_cheese__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -13378,7 +13128,6 @@
     "detergent__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -13897,7 +13646,6 @@
     "disinfectant__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14591,7 +14339,6 @@
         "freezable": {}
     },
     "dutch_oven.n.02": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -14811,7 +14558,6 @@
     },
     "electric_mixer.n.01": {
         "fillable": {},
-        "openable": {},
         "toggleable": {},
         "slicer": {},
         "rigidBody": {},
@@ -14872,7 +14618,6 @@
         "freezable": {}
     },
     "elevator.n.01": {
-        "openable": {},
         "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -14979,7 +14724,6 @@
     },
     "envelope.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15029,7 +14773,6 @@
     "essential_oil__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15101,7 +14844,6 @@
     "fabric_softener__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15311,7 +15053,6 @@
     "feta__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15645,7 +15386,6 @@
     },
     "floor_wax__bottle.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16022,7 +15762,6 @@
     "frosting__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16215,7 +15954,6 @@
         "freezable": {}
     },
     "garden_umbrella.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16314,7 +16052,6 @@
     "gelatin__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16373,7 +16110,6 @@
     },
     "gift_box.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16394,7 +16130,6 @@
     "gin__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16550,7 +16285,6 @@
     "glaze__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16800,7 +16534,6 @@
     "granola__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -16857,7 +16590,6 @@
     "granulated_sugar__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18046,7 +17778,6 @@
     },
     "hamster_wheel.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18222,7 +17953,6 @@
     },
     "hardback.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18503,7 +18233,6 @@
     "herb__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "needsOrientation": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -18525,7 +18254,6 @@
     "herbicide__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18685,7 +18413,6 @@
     "honey__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18790,7 +18517,6 @@
     "hot_sauce__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18859,7 +18585,6 @@
     },
     "house_paint__can.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18907,7 +18632,6 @@
     "hummus__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18956,7 +18680,6 @@
     "hydrogen_peroxide__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -18985,7 +18708,6 @@
     "ice_cream__carton.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19261,7 +18983,6 @@
     "ink__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19336,7 +19057,6 @@
     "instant_coffee__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19528,7 +19248,6 @@
     "jam__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19575,7 +19294,6 @@
         "freezable": {}
     },
     "jar__of__bath_salt.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19594,7 +19312,6 @@
         "freezable": {}
     },
     "jar__of__beans.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19613,7 +19330,6 @@
         "freezable": {}
     },
     "jar__of__cumin.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19632,7 +19348,6 @@
         "freezable": {}
     },
     "jar__of__curry_powder.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19651,7 +19366,6 @@
         "freezable": {}
     },
     "jar__of__dill_seed.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19670,7 +19384,6 @@
         "freezable": {}
     },
     "jar__of__grains.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19690,7 +19403,6 @@
     },
     "jar__of__honey.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19710,7 +19422,6 @@
     },
     "jar__of__ink.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19730,7 +19441,6 @@
     },
     "jar__of__jam.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19750,7 +19460,6 @@
     },
     "jar__of__jelly.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19770,7 +19479,6 @@
     },
     "jar__of__mayonnaise.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19790,7 +19498,6 @@
     },
     "jar__of__orange_sauce.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19810,7 +19517,6 @@
     },
     "jar__of__pepper.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19830,7 +19536,6 @@
     },
     "jar__of__puree.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19850,7 +19555,6 @@
     },
     "jar__of__spaghetti_sauce.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19870,7 +19574,6 @@
     },
     "jar__of__sugar.n.01": {
         "breakable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19913,7 +19616,6 @@
     "jelly__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -19934,7 +19636,6 @@
     "jelly_bean__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20060,7 +19761,6 @@
     "jimmies__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20105,7 +19805,6 @@
         "freezable": {}
     },
     "jug__of__milk.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20779,7 +20478,6 @@
     "lemon_juice__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20894,7 +20592,6 @@
     "lemonade__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -20943,7 +20640,6 @@
     "lentil__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21066,8 +20762,6 @@
         "freezable": {}
     },
     "lid.n.02": {
-        "openable": {},
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21171,7 +20865,6 @@
     "lime_juice__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21378,7 +21071,6 @@
         "freezable": {}
     },
     "lipstick.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21407,7 +21099,6 @@
     "liquid_soap__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21473,7 +21164,6 @@
         "freezable": {}
     },
     "lock.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21612,7 +21302,6 @@
     "lotion__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21668,7 +21357,6 @@
     "lubricant__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21695,7 +21383,6 @@
         "freezable": {}
     },
     "luggage_compartment.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21736,7 +21423,6 @@
     "lunch_box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21995,7 +21681,6 @@
     "maple_syrup__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -22025,7 +21710,6 @@
     "margarine__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -22092,7 +21776,6 @@
     "marinara__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -22403,7 +22086,6 @@
     "mayonnaise__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -22650,7 +22332,6 @@
     "milk__carton.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23162,7 +22843,6 @@
     "mustard__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23476,7 +23156,6 @@
     "noodle__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23581,7 +23260,6 @@
     "oat__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23644,7 +23322,6 @@
     "olive_oil__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23769,7 +23446,6 @@
     "orange_juice__carton.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23918,7 +23594,6 @@
     },
     "pack__of__cigarettes.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23955,7 +23630,6 @@
         "freezable": {}
     },
     "pack__of__kielbasa.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23975,7 +23649,6 @@
     },
     "pack__of__pasta.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23994,7 +23667,6 @@
         "freezable": {}
     },
     "pack__of__protein_powder.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24013,7 +23685,6 @@
         "freezable": {}
     },
     "pack__of__ramen.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24335,7 +24006,6 @@
     },
     "paperback_book.n.01": {
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24528,7 +24198,6 @@
     "pasta__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24717,7 +24386,6 @@
     "peanut_butter__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -25603,7 +25271,6 @@
     "pill_bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -25700,7 +25367,6 @@
     "pineapple_juice__carton.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26257,7 +25923,6 @@
     "polish__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26422,7 +26087,6 @@
     "pop_bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27302,7 +26966,6 @@
     "quinoa__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27469,7 +27132,6 @@
     "raisin__box.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27742,7 +27404,6 @@
     },
     "refried_beans__can.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28301,7 +27962,6 @@
     "rum__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28376,7 +28036,6 @@
     "saddle_soap__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28566,7 +28225,6 @@
     "salsa__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28596,7 +28254,6 @@
     "salt__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29231,7 +28888,6 @@
     "sealant__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29379,7 +29035,6 @@
     "sesame_oil__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29455,7 +29110,6 @@
     "shampoo__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29807,7 +29461,6 @@
         "freezable": {}
     },
     "shoebox.n.02": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29886,7 +29539,6 @@
     "shortening__carton.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29935,7 +29587,6 @@
     },
     "shoulder_bag.n.01": {
         "flammable": {},
-        "openable": {},
         "particleRemover": {},
         "softBody": {},
         "nonSubstance": {},
@@ -30745,7 +30396,6 @@
     },
     "soap_dispenser.n.01": {
         "breakable": {},
-        "openable": {},
         "particleSource": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -30806,7 +30456,6 @@
     },
     "soda__can.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30827,7 +30476,6 @@
     "soda_water__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30856,7 +30504,6 @@
     "sodium_carbonate__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30949,7 +30596,6 @@
     "solvent__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30969,7 +30615,6 @@
     },
     "soup__can.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -31078,7 +30723,6 @@
     "soy_sauce__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -31216,7 +30860,6 @@
     "specimen_bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -31559,7 +31202,6 @@
         "freezable": {}
     },
     "staple_gun.n.01": {
-        "openable": {},
         "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -31786,7 +31428,6 @@
     "stew__carton.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32138,7 +31779,6 @@
     "sugar_syrup__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32252,7 +31892,6 @@
     },
     "sunscreen__bottle.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32723,10 +32362,8 @@
     },
     "tape.n.04": {
         "sliceable": {},
-        "cloth": {},
+        "rigidBody": {},
         "nonSubstance": {},
-        "deformable": {},
-        "drapeable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -32857,7 +32494,6 @@
     "teapot.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32991,7 +32627,6 @@
         "freezable": {}
     },
     "tent.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33012,7 +32647,6 @@
     "tequila__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33040,7 +32674,6 @@
         "freezable": {}
     },
     "terrarium.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33097,7 +32730,6 @@
         "freezable": {}
     },
     "textbook.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33498,7 +33130,6 @@
     "toilet_soap__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33527,10 +33158,8 @@
     "toilet_tissue.n.01": {
         "sliceable": {},
         "particleRemover": {},
-        "cloth": {},
+        "rigidBody": {},
         "nonSubstance": {},
-        "deformable": {},
-        "drapeable": {},
         "wetable": {},
         "mixable": {},
         "stickyable": {},
@@ -33569,7 +33198,6 @@
     "tomato_juice__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33597,7 +33225,6 @@
     },
     "tomato_paste__can.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -33635,7 +33262,6 @@
     "tomato_sauce__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34171,7 +33797,6 @@
         "freezable": {}
     },
     "tube__of__lotion.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34190,7 +33815,6 @@
         "freezable": {}
     },
     "tube__of__toothpaste.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34269,7 +33893,6 @@
     "tupperware.n.01": {
         "fillable": {},
         "flammable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34410,7 +34033,6 @@
         "freezable": {}
     },
     "umbrella.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34468,7 +34090,6 @@
         "freezable": {}
     },
     "vacuum.n.04": {
-        "openable": {},
         "toggleable": {},
         "particleRemover": {},
         "rigidBody": {},
@@ -34489,7 +34110,6 @@
         "freezable": {}
     },
     "valve.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34528,7 +34148,6 @@
     "vanilla__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34633,7 +34252,6 @@
     "vegetable_oil__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34732,7 +34350,6 @@
         "freezable": {}
     },
     "vent.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34851,7 +34468,6 @@
     "vinegar__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34887,7 +34503,6 @@
         "freezable": {}
     },
     "violin_case.n.01": {
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34947,7 +34562,6 @@
     "vitamin_pill__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -34975,7 +34589,6 @@
     "vodka__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35392,7 +35005,6 @@
     "water_bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35736,7 +35348,6 @@
     "whiskey__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35841,7 +35452,6 @@
     "white_sauce__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -35993,7 +35603,6 @@
         "freezable": {}
     },
     "window_blind.n.01": {
-        "openable": {},
         "particleRemover": {},
         "cloth": {},
         "nonSubstance": {},
@@ -36075,7 +35684,6 @@
     "wine_sauce__bottle.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36384,7 +35992,6 @@
     "yeast__jar.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36433,7 +36040,6 @@
     "yogurt__carton.n.01": {
         "breakable": {},
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36499,7 +36105,6 @@
     },
     "chicken_soup__carton.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36644,7 +36249,6 @@
     },
     "dog_food__can.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36879,7 +36483,6 @@
     },
     "cleansing__bottle.n.01": {
         "fillable": {},
-        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
