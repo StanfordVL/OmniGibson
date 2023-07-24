@@ -164,18 +164,15 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                             # TODO: Do something
                             pass
 
-                if obj_model == "nkbvad":
-                    print(collision_filenames)
-
                 # Match the files
                 if collision_filenames:
                     try:
                         selection_matches = [(selection_matching_pattern.fullmatch(x), x) for x in collision_filenames]
                         indexed_matches = {int(match.group(1)): fn for match, fn in selection_matches if match}
-                        expected_keys = set(range(len(collision_filenames)))
+                        expected_keys = set(range(len(indexed_matches)))
                         found_keys = set(indexed_matches.keys())
                         assert expected_keys == found_keys, f"Missing collision meshes for {node_key}: {expected_keys - found_keys}"
-                        ordered_collision_filenames = [indexed_matches[i] for i in range(len(collision_filenames))]
+                        ordered_collision_filenames = [indexed_matches[i] for i in range(len(indexed_matches))]
 
                         collision_meshes = []
                         for collision_filename in ordered_collision_filenames:
