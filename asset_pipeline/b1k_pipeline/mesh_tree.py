@@ -7,11 +7,14 @@ import numpy as np
 import tqdm
 import trimesh
 from fs.zipfs import ZipFS
+from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline.utils import parse_name, load_mesh, PipelineFS
 
 SCALE_FACTOR = 0.001
 SCALE_MATRIX = trimesh.transformations.scale_matrix(0.001)
+
+PARTICLE_APPLIER_CONE_LENGTH = 0.3
 
 def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True, load_nonzero=True, load_meshes=True, filter_nodes=None, show_progress=False):
     G = nx.DiGraph()
@@ -98,7 +101,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
         del metadata["meta_links"]
 
         # Apply the scaling factor.
-        for meta_link_id_to_subid in meta_links.values():
+        for meta_type, meta_link_id_to_subid in meta_links.items():
             for meta_link_subid_to_link in meta_link_id_to_subid.values():
                 for meta_link in meta_link_subid_to_link:
                     meta_link["position"] = np.array(meta_link["position"]) * SCALE_FACTOR
@@ -108,6 +111,18 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                         meta_link["width"] *= SCALE_FACTOR
                     if "size" in meta_link:
                         meta_link["size"] = (np.asarray(meta_link["size"]) * SCALE_FACTOR).tolist()
+
+                    # TODO: Remove this after it's fixed in export_meshes
+                    # Fix inverted meta link orientations
+                    meta_link["orientation"] = R.from_quat(meta_link["orientation"]).inv().as_quat().tolist()
+
+                    # TODO: Remove this once it is moved to a better place
+                    # Apply the meta link scaling rules here
+                    if meta_type == "particleapplier":
+                        coefficient = PARTICLE_APPLIER_CONE_LENGTH / meta_link["size"][2]
+
+                        if coefficient > 1:
+                            meta_link["size"] = (np.asarray(meta_link["size"]) * coefficient).tolist()
 
         # Add the data for the position onto the node.
         if joint_side == "upper":
@@ -153,33 +168,38 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                         collision_selection = collision_selections[collision_key]
                         G.nodes[node_key]["collision_selection"] = collision_selection
                         
-                        collision_dir = collision_mesh_fs.opendir(mesh_name)
-                        G.nodes[node_key]["collision_options"] = {x.rsplit("-", 1)[0] for x in collision_dir.listdir("/")}
+                        try:
+                            collision_dir = collision_mesh_fs.opendir(mesh_name)
+                            G.nodes[node_key]["collision_options"] = {x.rsplit("-", 1)[0] for x in collision_dir.listdir("/")}
 
-                        collision_fs = collision_dir
-                        collision_filenames = collision_dir.listdir("/")
-                        selection_matching_pattern = re.compile(collision_selection + r"-(\d+).obj$")
-
-                if obj_model == "nkbvad":
-                    print(collision_filenames)
+                            collision_fs = collision_dir
+                            collision_filenames = collision_dir.listdir("/")
+                            selection_matching_pattern = re.compile(collision_selection + r"-(\d+).obj$")
+                        except:
+                            # TODO: Do something
+                            pass
 
                 # Match the files
                 if collision_filenames:
-                    selection_matches = [(selection_matching_pattern.fullmatch(x), x) for x in collision_filenames]
-                    indexed_matches = {int(match.group(1)): fn for match, fn in selection_matches if match}
-                    expected_keys = set(range(len(collision_filenames)))
-                    found_keys = set(indexed_matches.keys())
-                    assert expected_keys == found_keys, f"Missing collision meshes for {node_key}: {expected_keys - found_keys}"
-                    ordered_collision_filenames = [indexed_matches[i] for i in range(len(collision_filenames))]
+                    try:
+                        selection_matches = [(selection_matching_pattern.fullmatch(x), x) for x in collision_filenames]
+                        indexed_matches = {int(match.group(1)): fn for match, fn in selection_matches if match}
+                        expected_keys = set(range(len(indexed_matches)))
+                        found_keys = set(indexed_matches.keys())
+                        assert expected_keys == found_keys, f"Missing collision meshes for {node_key}: {expected_keys - found_keys}"
+                        ordered_collision_filenames = [indexed_matches[i] for i in range(len(indexed_matches))]
 
-                    collision_meshes = []
-                    for collision_filename in ordered_collision_filenames:
-                        collision_mesh = load_mesh(collision_fs, collision_filename, force="mesh", skip_materials=True)
-                        if not collision_mesh.is_volume:
-                            collision_mesh = load_mesh(collision_fs, collision_filename, force="mesh", process=False, skip_materials=True)
-                        collision_mesh.apply_transform(SCALE_MATRIX)
-                        collision_meshes.append(collision_mesh)
-                    G.nodes[node_key]["collision_mesh"] = collision_meshes
+                        collision_meshes = []
+                        for collision_filename in ordered_collision_filenames:
+                            collision_mesh = load_mesh(collision_fs, collision_filename, force="mesh", skip_materials=True)
+                            if not collision_mesh.is_volume:
+                                collision_mesh = load_mesh(collision_fs, collision_filename, force="mesh", process=False, skip_materials=True)
+                            collision_mesh.apply_transform(SCALE_MATRIX)
+                            collision_meshes.append(collision_mesh)
+                        G.nodes[node_key]["collision_mesh"] = collision_meshes
+                    except:
+                        # TODO: Do something
+                        pass
 
         # Add the edge in from the parent
         if link_name != "base_link":

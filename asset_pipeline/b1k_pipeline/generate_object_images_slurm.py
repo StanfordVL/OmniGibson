@@ -5,7 +5,7 @@ from fs.copy import copy_fs
 from fs.tempfs import TempFS
 from fs.zipfs import ZipFS
 
-from b1k_pipeline.utils import PipelineFS, ParallelZipFS, TMP_DIR, launch_cluster
+from b1k_pipeline.utils import PipelineFS, ParallelZipFS, TMP_DIR, launch_cluster, run_in_env
 
 import tqdm
 
@@ -67,11 +67,11 @@ def main():
                             batch_size = len(batch) // 2
                             subbatches = [batch[:batch_size], batch[batch_size:]]
                             for subbatch in subbatches:
+                                subcommand = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_fs.getsyspath("/"), out_temp_fs.getsyspath("/")] + subbatch
                                 worker_future = dask_client.submit(
-                                    run_on_batch,
-                                    dataset_fs.getsyspath("/"),
-                                    out_temp_fs.getsyspath("/"),
-                                    subbatch,
+                                    run_in_env,
+                                    python_cmd=subcommand,
+                                    omnigibson_env=True,
                                     pure=False)
                                 futures[worker_future] = subbatch
                             del futures[future]

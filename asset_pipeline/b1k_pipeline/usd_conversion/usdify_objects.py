@@ -10,7 +10,7 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
-BATCH_SIZE = 100
+BATCH_SIZE = 50
 WORKER_COUNT = 8
 
 def run_on_batch(dataset_path, batch):
@@ -30,18 +30,9 @@ def main():
             fs.copy.copy_fs(metadata_fs, dataset_fs)
             objdir_glob = list(objects_fs.glob("objects/*/*/"))
             for item in tqdm.tqdm(objdir_glob):
-                if objects_fs.opendir(item.path).glob("urdf/*.urdf").count().files == 0:
+                if objects_fs.opendir(item.path).glob("*.urdf").count().files == 0:
                     continue
                 fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path))
-
-            # Temporarily move URDF into root of objects
-            print("Moving URDF files...")
-            urdf_glob = list(dataset_fs.glob("objects/*/*/urdf/*.urdf"))
-            for item in tqdm.tqdm(urdf_glob):
-                orig_path = item.path
-                obj_root_dir = fs.path.dirname(fs.path.dirname(orig_path))
-                new_path = fs.path.join(obj_root_dir, fs.path.basename(orig_path))
-                dataset_fs.move(orig_path, new_path)
 
             print("Launching cluster...")
             dask_client = Client(n_workers=0, host="", scheduler_port=8786)
