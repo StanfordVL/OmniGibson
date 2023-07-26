@@ -73,7 +73,7 @@ def main():
             sim.import_scene(EmptyScene(render_floor_plane=False))
 
             model_path = get_ig_model_path(obj_category, obj_model)
-            filename = os.path.join(model_path, f"urdf/{obj_model}.urdf")
+            filename = os.path.join(model_path, f"{obj_model}.urdf")
 
             try:
                 bbox = URDFObject(

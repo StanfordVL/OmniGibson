@@ -195,15 +195,6 @@ def main():
         with tqdm.tqdm(total=total_files) as pbar:
             fs.copy.copy_fs(multi_fs, temp_fs, on_copy=lambda *args: pbar.update(1))
 
-        # Temporarily move URDF into root of objects
-        print("Moving URDF files...")
-        urdf_glob = list(temp_fs.glob("objects/*/*/urdf/*.urdf"))
-        for item in tqdm.tqdm(urdf_glob):
-            orig_path = item.path
-            obj_root_dir = fs.path.dirname(fs.path.dirname(orig_path))
-            new_path = fs.path.join(obj_root_dir, fs.path.basename(orig_path))
-            temp_fs.move(orig_path, new_path)
-
         with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
             all_futures = {}
             for scene_id in temp_fs.listdir("scenes"):
