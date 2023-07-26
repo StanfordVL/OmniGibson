@@ -6,7 +6,6 @@ import re
 import pandas as pd
 import pathlib
 
-# from bddl.generated_data import particle_params
 
 OBJECT_INSTANCE_RE = r"[A-Za-z-_]+\.n\.[0-9]+_[0-9]+"
 OBJECT_CAT_RE = r"[A-Za-z-_]+\.n\.[0-9]+$"
@@ -17,7 +16,6 @@ PROP_PARAM_ANNOTS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "
 PARAMS_OUTFILE_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_params.json"
 REMOVER_SYNSET_MAPPING = pathlib.Path(__file__).parents[1] / "generated_data" / "remover_synset_mapping.json"
 LEAF_SYNSETS_FILE = pathlib.Path(__file__).parents[1] / "generated_data" / "synsets.csv"
-# OUTPUT_HIERARCHY_PROPERTIES = pathlib.Path(__file__).parents[1] / "generated_data" / "output_hierarchy_properties.json"
 
 # Helpers
 LEAF_SYNSETS_SET = set(pd.read_csv(LEAF_SYNSETS_FILE)["synset"])
@@ -113,8 +111,6 @@ def get_synsets_to_particle_remover_params():
 # Main parameter method
 
 def create_get_save_propagated_annots_params(syns_to_props):
-    # with open(SYNS_TO_PROPS, "r") as f:
-    #     syns_to_props = json.load(f)
     
     synsets_to_particleremover_params = get_synsets_to_particle_remover_params()
     for particleremover_syn, particleremover_params in synsets_to_particleremover_params.items():
