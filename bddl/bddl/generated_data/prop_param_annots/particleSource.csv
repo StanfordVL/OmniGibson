@@ -1,8 +1,8 @@
-synset,conditions
-basin.n.01,toggled_on:True
-bidet.n.01,toggled_on:True
-sink.n.01,toggled_on:True
-soap_dispenser.n.01,toggled_on:True
-squeeze_bottle.n.01,toggled_on:True
-tub.n.02,toggled_on:True
-watering_can.n.01,gravity:True
+synset,conditions,system
+basin.n.01,toggled_on:True,water
+bidet.n.01,toggled_on:True,water
+sink.n.01,toggled_on:True,water
+soap_dispenser.n.01,toggled_on:True,liquid_soap
+squeeze_bottle.n.01,toggled_on:True,water
+watering_can.n.01,gravity:True,water
+bathtub.n.01,toggled_on:True,water
