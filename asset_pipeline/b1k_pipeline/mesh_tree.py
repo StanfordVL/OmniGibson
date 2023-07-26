@@ -7,11 +7,14 @@ import numpy as np
 import tqdm
 import trimesh
 from fs.zipfs import ZipFS
+from scipy.spatial.transform import Rotation as R
 
 from b1k_pipeline.utils import parse_name, load_mesh, PipelineFS
 
 SCALE_FACTOR = 0.001
 SCALE_MATRIX = trimesh.transformations.scale_matrix(0.001)
+
+PARTICLE_APPLIER_CONE_LENGTH = 0.3
 
 def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True, load_nonzero=True, load_meshes=True, filter_nodes=None, show_progress=False):
     G = nx.DiGraph()
@@ -98,7 +101,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
         del metadata["meta_links"]
 
         # Apply the scaling factor.
-        for meta_link_id_to_subid in meta_links.values():
+        for meta_type, meta_link_id_to_subid in meta_links.items():
             for meta_link_subid_to_link in meta_link_id_to_subid.values():
                 for meta_link in meta_link_subid_to_link:
                     meta_link["position"] = np.array(meta_link["position"]) * SCALE_FACTOR
@@ -108,6 +111,18 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                         meta_link["width"] *= SCALE_FACTOR
                     if "size" in meta_link:
                         meta_link["size"] = (np.asarray(meta_link["size"]) * SCALE_FACTOR).tolist()
+
+                    # TODO: Remove this after it's fixed in export_meshes
+                    # Fix inverted meta link orientations
+                    meta_link["orientation"] = R.from_quat(meta_link["orientation"]).inv().as_quat().tolist()
+
+                    # TODO: Remove this once it is moved to a better place
+                    # Apply the meta link scaling rules here
+                    if meta_type == "particleapplier":
+                        coefficient = PARTICLE_APPLIER_CONE_LENGTH / meta_link["size"][2]
+
+                        if coefficient > 1:
+                            meta_link["size"] = (np.asarray(meta_link["size"]) * coefficient).tolist()
 
         # Add the data for the position onto the node.
         if joint_side == "upper":
