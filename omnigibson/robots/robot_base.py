@@ -171,7 +171,8 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                     self._sensors[sensor.name] = sensor
 
         # Since proprioception isn't an actual sensor, we need to possibly manually add it here as well
-        if self._obs_modalities == "all":
+        # if self._obs_modalities == "all":
+        if "proprio" in self._obs_modalities:
             obs_modalities.add("proprio")
 
         # Update our overall obs modalities
@@ -226,7 +227,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             n-array: numpy array of all robot-specific proprioceptive observations.
         """
         proprio_dict = self._get_proprioception_dict()
-        return np.concatenate([proprio_dict[obs] for obs in self._proprio_obs])
+        return np.concatenate([proprio_dict[obs] for obs in self._proprio_obs], dtype=np.float32)
 
     def _get_proprioception_dict(self):
         """

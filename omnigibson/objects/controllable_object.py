@@ -633,6 +633,7 @@ class ControllableObject(BaseObject):
                 velocity control mode to a position control mode)
         """
         return 1e7
+        # return 5e3
 
     @property
     def default_kd(self):
