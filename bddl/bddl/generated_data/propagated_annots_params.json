@@ -12708,7 +12708,6 @@
     "carton.n.02": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -12717,6 +12716,7 @@
         "mixable": {},
         "moldyable": {},
         "nonSubstance": {},
+        "openable": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -53717,6 +53717,26 @@
         "wrinkleable": {}
     },
     "stool.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {
+            "heat_temperature": 40.0
+        },
+        "mixable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "storage_container.n.01": {
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
