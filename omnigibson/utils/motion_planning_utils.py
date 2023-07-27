@@ -8,6 +8,19 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import RigidContactAPI
 from pxr import PhysicsSchemaTools, Gf
 
+import time
+
+PLANNER = "RRTstar"
+SIMPLIFICATIONS = []
+
+PLANNERS = {
+    "RRTConnect" : ompl_geo.RRTConnect, 
+    "RRTstar" : ompl_geo.RRTstar, # optim
+    "RRTsharp" : ompl_geo.RRTsharp, # optim: faster-convergence version of RRT*
+    "RRTXstatic" : ompl_geo.RRTXstatic, # optim: faster-convergence version of RRT*
+    "BITstar": ompl_geo.BITstar, # optim
+}
+
 def plan_base_motion(
     robot,
     end_conf,
@@ -80,7 +93,7 @@ def plan_arm_motion(
     robot,
     end_conf,
     context,
-    planning_time = 100.0,
+    planning_time = 20.0,
     **kwargs,
 ):
     joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
@@ -115,15 +128,14 @@ def plan_arm_motion(
         bounds.setHigh(i, float(joint.upper_limit))
     space.setBounds(bounds)
 
-    # 0.293879 1.55192 0.380693 1.40033 0.77242 -0.386359 -1.41372 -1.22937
-
     # create a simple setup object
     ss = ompl_geo.SimpleSetup(space)
     ss.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
 
     si = ss.getSpaceInformation()
-    planner = ompl_geo.RRTConnect(si)
-    planner.setRange(0.01)
+    planner = PLANNERS[PLANNER](si)
+
+    # planner.setRange(0.01)
     ss.setPlanner(planner)
 
     start_conf = robot.get_joint_positions()[joint_control_idx]
@@ -136,15 +148,32 @@ def plan_arm_motion(
         goal[i] = float(end_conf[i])
     ss.setStartAndGoalStates(start, goal)
 
-    # this will automatically choose a default planner with
-    # default parameters
+    # define path simplifier
+    ps = ompl_geo.PathSimplifier(si)
+    SIMPLIFIERS = {
+        "reduceVertices": ps.reduceVertices,
+        "shortcutPath": ps.shortcutPath,
+        "collapseCloseVertices": ps.collapseCloseVertices,
+        "smoothBSpline": ps.smoothBSpline,
+        "simplifyMax": ps.simplifyMax,
+        "findBetterGoal": ps.findBetterGoal,
+    }
+
     solved = ss.solve(planning_time)
 
     if solved:
         # try to shorten the path
         # ss.simplifySolution()
-
+        simp_start_time = time.time()
+        for simplifier in SIMPLIFICATIONS:
+            cur_time = time.time()
+            print("----------Running simplifier ", simplifier, "----------")
+            SIMPLIFIERS[simplifier](ss.getSolutionPath())
+            print("Simplifier ", simplifier, " took ", time.time() - cur_time, " seconds")
+        print("All simplifications combined took ", time.time() - simp_start_time, " seconds")
+        
         sol_path = ss.getSolutionPath()
+
         return_path = []
         for i in range(sol_path.getStateCount()):
             joint_pos = [sol_path.getState(i)[j] for j in range(dim)]

@@ -423,16 +423,18 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         else:
             return joint_pos, control_idx
         
-    def _move_hand(self, target_pose, obj_to_track=None):
+    def _move_hand(self, target_pose, obj_to_track=None, plan=None):
         # self._fix_robot_base()
         # self._settle_robot()
+        breakpoint()
         joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
-        with UndoableContext(self.robot, "arm") as context:
-            plan = plan_arm_motion(
-                robot=self.robot,
-                end_conf=joint_pos,
-                context=context
-            )
+        if plan is None:
+            with UndoableContext(self.robot, "arm") as context:
+                plan = plan_arm_motion(
+                    robot=self.robot,
+                    end_conf=joint_pos,
+                    context=context
+                )
 
         if plan is None:
             raise ActionPrimitiveError(
