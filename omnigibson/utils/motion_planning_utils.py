@@ -150,6 +150,8 @@ def plan_arm_motion(
 
     # get state information
     si = ob.SpaceInformation(space)
+    si.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
+    si.setup()
 
     # create problem definition 
     pdef = ob.ProblemDefinition(si)
@@ -172,6 +174,10 @@ def plan_arm_motion(
     # define optimizing planner
     planner = PLANNERS[algo](si)
     planner.setProblemDefinition(pdef)
+    try:
+        planner.setRange(setrange)
+    except:
+        print("this planner does not have setRange")
     planner.setup()
 
     # define path simplifier
@@ -189,12 +195,11 @@ def plan_arm_motion(
 
     if solved:
         # try to shorten the path
-        # ss.simplifySolution()
         simp_start_time = time.time()
         for simplifier in simplifiers:
             cur_time = time.time()
             print("----------Running simplifier ", simplifier, "----------")
-            SIMPLIFIERS[simplifier](ss.getSolutionPath())
+            SIMPLIFIERS[simplifier](pdef.getSolutionPath())
             print("Simplifier ", simplifier, " took ", time.time() - cur_time, " seconds")
         print("All simplifications combined took ", time.time() - simp_start_time, " seconds")
         sol_path = pdef.getSolutionPath()

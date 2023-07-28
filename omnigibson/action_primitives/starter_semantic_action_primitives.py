@@ -641,7 +641,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 -1.16488536e-07,
                 4.55182843e-08,  
                 2.36128806e-04,  
-                0.15,  
+                0.10,  
                 0.94,
                 -1.1,  
                 0.0, 
