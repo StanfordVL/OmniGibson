@@ -43,7 +43,7 @@
             )
             (or
                 (inside ?chopping_board.n.01_1 ?sink.n.01_1)
-                (nextto ?chopping_board.n.01_1 ?sink.n.01_1)
+                (ontop ?chopping_board.n.01_1 ?sink.n.01_1)
             )
         )
     )

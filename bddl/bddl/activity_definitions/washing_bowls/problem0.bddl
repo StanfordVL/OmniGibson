@@ -17,9 +17,9 @@
     )
     
     (:init 
-        (inside bowl.n.01_1 sink.n.01_1) 
-        (inside bowl.n.01_2 sink.n.01_1) 
-        (inside sponge.n.01_1 sink.n.01_1) 
+        (ontop bowl.n.01_1 sink.n.01_1)
+        (ontop bowl.n.01_2 sink.n.01_1)
+        (ontop sponge.n.01_1 sink.n.01_1)
         (covered bowl.n.01_1 stain.n.01_1) 
         (covered bowl.n.01_1 milk.n.01_1)
         (covered bowl.n.01_2 stain.n.01_1) 
