@@ -348,7 +348,7 @@ class SanityCheck:
 
             # Split the faces into elements
             elems = {tuple(rt.polyop.GetElementsUsingFace(obj, i + 1)) for i in range(rt.polyop.GetNumFaces(obj))}
-            assert len(elems) <= 32, f"{obj.name} should not have more than 32 elements. Has {len(elems)} elements."
+            assert len(elems) <= 32, f"{obj.name} should not have more than 32 elements."
             elems = np.array(list(elems))
             assert not np.any(np.sum(elems, axis=0) > 1), f"{obj.name} has same face appear in multiple elements"
             
@@ -477,7 +477,7 @@ class SanityCheck:
         # Check that the object names are unique.
         duplicate_named_objs = df[df.duplicated(subset=["object_name"], keep="first")]
         duplicate_named_objs.apply(
-            lambda row: self.expect(False, f"{row.object_name} is not unique."), axis=1
+            lambda row: self.expect(False, f"{row.object_name} is not unique.")
         )
 
         # Unwrap the name into its columns

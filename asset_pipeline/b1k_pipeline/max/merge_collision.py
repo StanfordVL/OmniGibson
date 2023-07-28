@@ -41,7 +41,7 @@ def merge_collision():
 def merge_collision_button():
     try:
         merge_collision()
-        #rt.messageBox("Success!")
+        rt.messageBox("Success!")
     except AssertionError as e:
         # Print message
         rt.messageBox(str(e))
