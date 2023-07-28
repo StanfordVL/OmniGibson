@@ -360,10 +360,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
             indented_print("Moving back to grasp pose.")
             num_waypoints = 50
+            above_pose = (grasp_pose[0], grasp_pose[1])
+            above_pose[0][2] += 0.1
             yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track)
 
         indented_print("Moving hand back to neutral position.")
-        yield from self._reset_hand()
+
+        yield from self._reset_hand(check_valid=True, obj_to_track=obj_to_track)
 
         if self._get_obj_in_hand() == obj:
             return
@@ -424,20 +427,16 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             return None, control_idx
         else:
             return joint_pos, control_idx
+    
+    def _move_arm_to_joint_pos(self, joint_pos, control_idx, obj_to_track=None, stop_on_contact=False):
         
-    def _move_hand(self, target_pose, obj_to_track=None, plan=None):
-        # self._fix_robot_base()
-        # self._settle_robot()
-        breakpoint()
-        joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
-        if plan is None:
-            with UndoableContext(self.robot, "arm") as context:
-                plan = plan_arm_motion(
-                    robot=self.robot,
-                    end_conf=joint_pos,
-                    context=context
-                )
-                
+        # variant of _move_hand that takes arm joints as input
+        with UndoableContext(self.robot, "arm") as context:
+            plan = plan_arm_motion(
+                robot=self.robot,
+                end_conf=joint_pos,
+                context=context
+            )
         if plan is None:
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.PLANNING_ERROR,
@@ -451,12 +450,41 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
             yield from self._move_hand_direct_joint(joint_pos, control_idx, obj_to_track=obj_to_track)
         
-        # # skip the first (initial) pose
-        # for i in range(1, len(plan)):
-        #     joint_pos = plan[i]
-        #     indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
-        #     yield from self._move_hand_direct_joint(joint_pos, control_idx, obj_to_track=obj_to_track)
+        self._unfix_robot_base()
 
+    def _move_hand_given_plan(self, plan, control_idx, obj_to_track=None): # for motion planner testing
+        
+        # Follow the plan to navigate.
+        indented_print("Plan has %d steps.", len(plan))
+        for i, joint_pos in enumerate(plan):
+            indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
+            yield from self._move_hand_direct_joint(joint_pos, control_idx, obj_to_track=obj_to_track)
+        
+        self._unfix_robot_base()
+
+    def _move_hand(self, target_pose, obj_to_track=None):
+        # self._fix_robot_base()
+        # self._settle_robot()
+        joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
+        with UndoableContext(self.robot, "arm") as context:
+            plan = plan_arm_motion(
+                robot=self.robot,
+                end_conf=joint_pos,
+                context=context
+            )
+        if plan is None:
+            raise ActionPrimitiveError(
+                ActionPrimitiveError.Reason.PLANNING_ERROR,
+                "Could not make a hand motion plan.",
+                {"target_pose": target_pose},
+            )
+        
+        # Follow the plan to navigate.
+        indented_print("Plan has %d steps.", len(plan))
+        for i, joint_pos in enumerate(plan):
+            indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
+            yield from self._move_hand_direct_joint(joint_pos, control_idx, obj_to_track=obj_to_track)
+        
         self._unfix_robot_base()
 
     def _move_hand_direct_joint(self, joint_pos, control_idx, obj_to_track=None, stop_on_contact=False):
@@ -584,59 +612,117 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         return action
 
-    def _reset_hand(self):
+    def _get_reset_joint_pos(self):
+        if self.robot_model == "Fetch":
+            return np.array(
+                [
+                    0.0,
+                    0.0,  # wheels
+                    0.0,  # trunk
+                    0.0,
+                    -1.0,
+                    0.0,  # head
+                    -1.0,
+                    1.53448,
+                    2.2,
+                    0.0,
+                    1.36904,
+                    1.90996,  # arm
+                    0.05,
+                    0.05,  # gripper
+                ]
+            )
+        
+        elif self.robot_model == "Tiago": 
+            return np.array([
+                -1.78029833e-04,  
+                3.20231302e-05, 
+                -1.85759447e-07, 
+                -1.16488536e-07,
+                4.55182843e-08,  
+                2.36128806e-04,  
+                0.15,  
+                0.94,
+                -1.1,  
+                0.0, 
+                -0.9,  
+                1.47,
+                0.0,  
+                2.1,  
+                2.71,  
+                1.5,
+                1.71,  
+                1.3, 
+                -1.57, 
+                -1.4,
+                1.39,  
+                0.0,  
+                0.0,  
+                0.045,
+                0.045,
+                0.045,
+                0.045,
+            ])
+
+    def _reset_hand(self, check_valid=False, obj_to_track=None):
+        # if check_valid = True, plans a path back to home position. if False, homes joints without planning (may cause collision)
         control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
-        reset_pose_fetch = np.array(
-            [
-                0.0,
-                0.0,  # wheels
-                0.0,  # trunk
-                0.0,
-                -1.0,
-                0.0,  # head
-                -1.0,
-                1.53448,
-                2.2,
-                0.0,
-                1.36904,
-                1.90996,  # arm
-                0.05,
-                0.05,  # gripper
-            ]
-        )
+        # reset_pose_fetch = np.array(
+        #     [
+        #         0.0,
+        #         0.0,  # wheels
+        #         0.0,  # trunk
+        #         0.0,
+        #         -1.0,
+        #         0.0,  # head
+        #         -1.0,
+        #         1.53448,
+        #         2.2,
+        #         0.0,
+        #         1.36904,
+        #         1.90996,  # arm
+        #         0.05,
+        #         0.05,  # gripper
+        #     ]
+        # )
 
-        reset_pose_tiago = np.array([
-            -1.78029833e-04,  
-            3.20231302e-05, 
-            -1.85759447e-07, 
-            -1.16488536e-07,
-            4.55182843e-08,  
-            2.36128806e-04,  
-            0.15,  
-            0.94,
-            -1.1,  
-            0.0, 
-            -0.9,  
-            1.47,
-            0.0,  
-            2.1,  
-            2.71,  
-            1.5,
-            1.71,  
-            1.3, 
-            -1.57, 
-            -1.4,
-            1.39,  
-            0.0,  
-            0.0,  
-            0.045,
-            0.045,
-            0.045,
-            0.045,
-        ])
+        # reset_pose_tiago = np.array([
+        #     -1.78029833e-04,  
+        #     3.20231302e-05, 
+        #     -1.85759447e-07, 
+        #     -1.16488536e-07,
+        #     4.55182843e-08,  
+        #     2.36128806e-04,  
+        #     0.15,  
+        #     0.94,
+        #     -1.1,  
+        #     0.0, 
+        #     -0.9,  
+        #     1.47,
+        #     0.0,  
+        #     2.1,  
+        #     2.71,  
+        #     1.5,
+        #     1.71,  
+        #     1.3, 
+        #     -1.57, 
+        #     -1.4,
+        #     1.39,  
+        #     0.0,  
+        #     0.0,  
+        #     0.045,
+        #     0.045,
+        #     0.045,
+        #     0.045,
+        # ])
 
-        reset_pose = reset_pose_tiago[control_idx] if self.robot_model == "Tiago" else reset_pose_fetch[control_idx]
-        yield from self._move_hand_direct_joint(reset_pose, control_idx)
+        # reset_pose = reset_pose_tiago[control_idx] if self.robot_model == "Tiago" else reset_pose_fetch[control_idx]
+        reset_joint_pos = self._get_reset_joint_pos()[control_idx]
+
+        if check_valid:
+            yield from self._move_arm_to_joint_pos(reset_joint_pos, control_idx, obj_to_track=obj_to_track)
+        else:
+            yield from self._move_hand_direct_joint(reset_joint_pos, control_idx, obj_to_track=obj_to_track)
 
     def _navigate_to_pose(self, pose_2d, obj_to_track=None):
         with UndoableContext(self.robot, "base") as context:
@@ -650,12 +736,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             raise ActionPrimitiveError(ActionPrimitiveError.Reason.PLANNING_ERROR, "Could not make a navigation plan.")
 
         self._draw_plan(plan)
-        # Follow the plan to navigate.
-        # indented_print("Plan has %d steps.", len(plan))
-        # for i, pose_2d in enumerate(plan):
-        #     indented_print("Executing navigation plan step %d/%d", i + 1, len(plan))
-        #     low_precision = True if i < len(plan) - 1 else False
-        #     yield from self._navigate_to_pose_direct(pose_2d, low_precision=low_precision, obj_to_track=obj_to_track)
 
         # skip the initial pose
         for i in range(1, len(plan)): # skip the first (initial) pose

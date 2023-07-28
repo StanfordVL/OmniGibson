@@ -10,9 +10,6 @@ from pxr import PhysicsSchemaTools, Gf
 
 import time
 
-PLANNER = "RRTstar"
-SIMPLIFICATIONS = []
-
 PLANNERS = {
     "RRTConnect" : ompl_geo.RRTConnect, 
     "RRTstar" : ompl_geo.RRTstar, # optim
@@ -20,6 +17,22 @@ PLANNERS = {
     "RRTXstatic" : ompl_geo.RRTXstatic, # optim: faster-convergence version of RRT*
     "BITstar": ompl_geo.BITstar, # optim
 }
+
+OPTIM_PLANNERS = [
+    "RRTstar", "RRTsharp", "RRTXstatic",
+    "BITstar",
+]
+
+# class WeightedJointMotionOptimizationObjective(ob.PathLengthOptimizationObjective):
+#     def __init__(self, weights):
+#         self.weights = weights
+
+#     def motionCost(self, s1, s2):
+#         cost = 0
+#         for i in len(s1 - 1):
+#             cost += abs(s2[i] - s1[i]) * self.weights[i]
+#         return ob.Cost(cost)
+
 
 def plan_base_motion(
     robot,
@@ -89,11 +102,15 @@ def plan_base_motion(
         return remove_unnecessary_rotations(return_path)
     return None
 
+
 def plan_arm_motion(
     robot,
     end_conf,
     context,
     planning_time = 20.0,
+    algo="BITstar",
+    simplifiers=[],
+    setrange=0.0,
     **kwargs,
 ):
     joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
@@ -107,11 +124,14 @@ def plan_arm_motion(
         initial_joint_pos = np.array(robot.get_joint_positions()[joint_control_idx])
         control_idx_in_joint_pos = np.arange(dim)
 
+    # state validity function (collision checker)
     def state_valid_fn(q):
         joint_pos = initial_joint_pos
         joint_pos[control_idx_in_joint_pos] = [q[i] for i in range(dim)]
         return arm_planning_validity_fn(context, joint_pos)
     
+    # breakpoint()
+
     # create an SE2 state space
     space = ob.RealVectorStateSpace(dim)
 
@@ -128,16 +148,13 @@ def plan_arm_motion(
         bounds.setHigh(i, float(joint.upper_limit))
     space.setBounds(bounds)
 
-    # create a simple setup object
-    ss = ompl_geo.SimpleSetup(space)
-    ss.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
+    # get state information
+    si = ob.SpaceInformation(space)
 
-    si = ss.getSpaceInformation()
-    planner = PLANNERS[PLANNER](si)
+    # create problem definition 
+    pdef = ob.ProblemDefinition(si)
 
-    # planner.setRange(0.01)
-    ss.setPlanner(planner)
-
+    # set start and goal states
     start_conf = robot.get_joint_positions()[joint_control_idx]
     start = ob.State(space)
     for i in range(dim):
@@ -146,7 +163,16 @@ def plan_arm_motion(
     goal = ob.State(space)
     for i in range(dim):
         goal[i] = float(end_conf[i])
-    ss.setStartAndGoalStates(start, goal)
+    pdef.setStartAndGoalStates(start, goal)
+
+    # setup optimization objective
+    optim_obj = ob.PathLengthOptimizationObjective(si)
+    pdef.setOptimizationObjective(optim_obj)
+
+    # define optimizing planner
+    planner = PLANNERS[algo](si)
+    planner.setProblemDefinition(pdef)
+    planner.setup()
 
     # define path simplifier
     ps = ompl_geo.PathSimplifier(si)
@@ -159,20 +185,19 @@ def plan_arm_motion(
         "findBetterGoal": ps.findBetterGoal,
     }
 
-    solved = ss.solve(planning_time)
+    solved = planner.solve(planning_time)
 
     if solved:
         # try to shorten the path
         # ss.simplifySolution()
         simp_start_time = time.time()
-        for simplifier in SIMPLIFICATIONS:
+        for simplifier in simplifiers:
             cur_time = time.time()
             print("----------Running simplifier ", simplifier, "----------")
             SIMPLIFIERS[simplifier](ss.getSolutionPath())
             print("Simplifier ", simplifier, " took ", time.time() - cur_time, " seconds")
         print("All simplifications combined took ", time.time() - simp_start_time, " seconds")
-        
-        sol_path = ss.getSolutionPath()
+        sol_path = pdef.getSolutionPath()
 
         return_path = []
         for i in range(sol_path.getStateCount()):
@@ -180,6 +205,114 @@ def plan_arm_motion(
             return_path.append(joint_pos)
         return return_path
     return None
+
+
+
+
+# def plan_arm_motion(
+#     robot,
+#     end_conf,
+#     context,
+#     planning_time = 20.0,
+#     algo="BITstar",
+#     simplifiers=[],
+#     setrange=0.0,
+#     **kwargs,
+# ):
+#     joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+#     dim = len(joint_control_idx)
+
+#     if "combined" in robot.robot_arm_descriptor_yamls:
+#         joint_combined_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
+#         initial_joint_pos = np.array(robot.get_joint_positions()[joint_combined_idx])
+#         control_idx_in_joint_pos = np.where(np.in1d(joint_combined_idx, joint_control_idx))[0]
+#     else:
+#         initial_joint_pos = np.array(robot.get_joint_positions()[joint_control_idx])
+#         control_idx_in_joint_pos = np.arange(dim)
+
+#     def state_valid_fn(q):
+#         joint_pos = initial_joint_pos
+#         joint_pos[control_idx_in_joint_pos] = [q[i] for i in range(dim)]
+#         return arm_planning_validity_fn(context, joint_pos)
+    
+#     # create an SE2 state space
+#     space = ob.RealVectorStateSpace(dim)
+
+#     # set lower and upper bounds
+#     bounds = ob.RealVectorBounds(dim)
+#     joints = np.array([joint for joint in robot.joints.values()])
+#     arm_joints = joints[joint_control_idx]
+#     for i, joint in enumerate(arm_joints):
+#         if end_conf[i] > joint.upper_limit:
+#             end_conf[i] = joint.upper_limit
+#         if end_conf[i] < joint.lower_limit:
+#             end_conf[i] = joint.lower_limit
+#         bounds.setLow(i, float(joint.lower_limit))
+#         bounds.setHigh(i, float(joint.upper_limit))
+#     space.setBounds(bounds)
+
+#     # create a simple setup object
+#     ss = ompl_geo.SimpleSetup(space)
+#     ss.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
+
+#     # get state information
+#     si = ss.getSpaceInformation()
+
+#     # define planner
+#     planner = PLANNERS[algo](si)
+
+#     # planner.setRange(0.01)
+#     ss.setPlanner(planner)
+    
+#     start_conf = robot.get_joint_positions()[joint_control_idx]
+#     start = ob.State(space)
+#     for i in range(dim):
+#         start[i] = float(start_conf[i])
+
+#     goal = ob.State(space)
+#     for i in range(dim):
+#         goal[i] = float(end_conf[i])
+#     ss.setStartAndGoalStates(start, goal)
+
+#     # # setup optimization objective
+#     # if algo in OPTIM_PLANNERS:
+#     #     optim_obj = ob.PathLengthOptimizationObjective(si)
+#     #     ss.setOptimizationObjective(optim_obj)
+#     #     planner.setProblemDefinition(si)
+#     #     planner.setup()
+
+#     # define path simplifier
+#     ps = ompl_geo.PathSimplifier(si)
+#     SIMPLIFIERS = {
+#         "reduceVertices": ps.reduceVertices,
+#         "shortcutPath": ps.shortcutPath,
+#         "collapseCloseVertices": ps.collapseCloseVertices,
+#         "smoothBSpline": ps.smoothBSpline,
+#         "simplifyMax": ps.simplifyMax,
+#         "findBetterGoal": ps.findBetterGoal,
+#     }
+
+#     solved = ss.solve(planning_time)
+
+#     if solved:
+#         # try to shorten the path
+#         # ss.simplifySolution()
+#         simp_start_time = time.time()
+#         for simplifier in simplifiers:
+#             cur_time = time.time()
+#             print("----------Running simplifier ", simplifier, "----------")
+#             SIMPLIFIERS[simplifier](ss.getSolutionPath())
+#             print("Simplifier ", simplifier, " took ", time.time() - cur_time, " seconds")
+#         print("All simplifications combined took ", time.time() - simp_start_time, " seconds")
+        
+#         sol_path = ss.getSolutionPath()
+
+#         return_path = []
+#         for i in range(sol_path.getStateCount()):
+#             joint_pos = [sol_path.getState(i)[j] for j in range(dim)]
+#             return_path.append(joint_pos)
+#         return return_path
+#     return None
 
 # Moves robot and detects robot collisions with the environment, but not with itself
 def detect_robot_collision(context, pose):
