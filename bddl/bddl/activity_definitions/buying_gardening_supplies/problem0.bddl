@@ -51,11 +51,9 @@
             (ontop ?pot_plant.n.01_1 ?checkout.n.03_1) 
             (ontop ?pot_plant.n.01_2 ?checkout.n.03_1) 
             (ontop ?pot_plant.n.01_3 ?shelf.n.01_3)
-    
-            (open ?cash_register.n.01_1) 
             (forall 
                 (?money.n.01 - money.n.01) 
-                (ontop ?money.n.01 ?cash_register.n.01_1)
+                (nextto ?money.n.01 ?cash_register.n.01_1)
     
             ) 
         )

@@ -5557,7 +5557,6 @@
     },
     "bouquet.n.01": {
         "flammable": {},
-        "cookable": {},
         "sliceable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -8464,6 +8463,7 @@
     },
     "carton.n.02": {
         "fillable": {},
+        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -13541,7 +13541,7 @@
         "freezable": {}
     },
     "dip.n.07": {
-        "cookable": {},
+        "flammable": {},
         "meltable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -27179,7 +27179,6 @@
         "freezable": {}
     },
     "ramekin.n.01": {
-        "cookable": {},
         "sliceable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -31523,6 +31522,24 @@
         "heatable": {},
         "freezable": {}
     },
+    "storage_container.n.01": {
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "mixable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
     "storage_organizer.n.01": {
         "rigidBody": {},
         "nonSubstance": {},
@@ -32256,7 +32273,6 @@
     },
     "taboret.n.01": {
         "flammable": {},
-        "cookable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -36444,7 +36460,6 @@
         "freezable": {}
     },
     "music_stool.n.01": {
-        "cookable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},

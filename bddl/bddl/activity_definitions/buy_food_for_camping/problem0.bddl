@@ -41,8 +41,7 @@
     )
     
     (:goal 
-        (and 
-            (open ?cash_register.n.01_1) 
+        (and
             (forall 
                 (?water_bottle.n.01 - water_bottle.n.01) 
                 (ontop ?water_bottle.n.01 ?checkout.n.03_1)
@@ -66,7 +65,7 @@
             (ontop ?canned_food.n.01_1 ?checkout.n.03_1) 
             (forall 
                 (?money.n.01 - money.n.01) 
-                (ontop ?money.n.01 ?cash_register.n.01_1)
+                (nextto ?money.n.01 ?cash_register.n.01_1)
     
             )
     

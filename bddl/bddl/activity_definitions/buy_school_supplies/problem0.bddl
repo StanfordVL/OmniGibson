@@ -42,8 +42,7 @@
     )
     
     (:goal 
-        (and 
-            (open ?cash_register.n.01_1) 
+        (and
             (ontop ?bottle__of__glue.n.01_1 ?checkout.n.03_1) 
             (ontop ?notebook.n.01_1 ?checkout.n.03_1) 
             (ontop ?notebook.n.01_2 ?checkout.n.03_1) 
@@ -54,7 +53,7 @@
             (nextto ?eraser.n.01_1 ?pencil_box.n.01_1) 
             (forall 
                 (?money.n.01 - money.n.01) 
-                (ontop ?money.n.01 ?cash_register.n.01_1)
+                (nextto ?money.n.01 ?cash_register.n.01_1)
     
             )
     
