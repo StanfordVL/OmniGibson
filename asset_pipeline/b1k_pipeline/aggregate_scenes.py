@@ -9,6 +9,9 @@ import yaml
 def main():
     with b1k_pipeline.utils.PipelineFS() as pipeline_fs, \
          b1k_pipeline.utils.ParallelZipFS("scenes.zip", write=True) as archive_fs:
+        # Create the scenes dir even if we don't have any scenes
+        archive_fs.makedir("scenes")
+
         success = True
         error_msg = ""
         try:

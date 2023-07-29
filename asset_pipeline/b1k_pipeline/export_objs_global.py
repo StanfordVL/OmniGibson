@@ -19,6 +19,7 @@ import tqdm
 import trimesh
 import trimesh.voxel.creation
 from scipy.spatial.transform import Rotation as R
+from PIL import Image
 
 from b1k_pipeline import mesh_tree
 import b1k_pipeline.utils
@@ -54,6 +55,9 @@ ALLOWED_PART_TAGS = {
 }
 
 CLOTH_SUBDIVISION_THRESHOLD = 0.05
+
+LOG_SURFACE_AREA_RANGE = (-6, 4)
+LOG_TEXTURE_RANGE = (4, 11)
 
 
 class NumpyEncoder(json.JSONEncoder):
@@ -241,24 +245,16 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     # Somehow we need to manually write the vertex normals to cache
     canonical_mesh._cache.cache["vertex_normals"] = canonical_mesh.vertex_normals
 
-    # Subdivide the mesh if needed
-    if False: # category_name in SUBDIVIDE_CLOTH_CATEGORIES:
-        assert link_name == "base_link", f"Cloth object {str(link_node)} should only have a base link."
-        while True:
-            edge_indices = np.where(canonical_mesh.edges_unique_length > CLOTH_SUBDIVISION_THRESHOLD)[0]
-
-            # Faces that have any edges longer than the threshold
-            face_indices_from_edge_length = np.where([len(np.intersect1d(face, edge_indices)) != 0 for face in canonical_mesh.faces_unique_edges])[0]
-            if len(face_indices_from_edge_length) == 0:
-                break
-
-            canonical_mesh = canonical_mesh.subdivide(face_indices_from_edge_length)
-
-        # Somehow we need to manually write the vertex normals to cache
-        canonical_mesh._cache.cache["vertex_normals"] = canonical_mesh.vertex_normals
-
     in_edges = list(G.in_edges(link_node))
     assert len(in_edges) <= 1, f"Something's wrong: there's more than 1 in-edge to node {link_node}"
+
+    # Compute the texture resolution needed
+    mesh_surface_area = canonical_mesh.area
+    log_area = np.clip(np.log(mesh_surface_area) / np.log(10), *LOG_SURFACE_AREA_RANGE)
+    log_area_range_fraction = (log_area - LOG_SURFACE_AREA_RANGE[0]) / (LOG_SURFACE_AREA_RANGE[1] - LOG_SURFACE_AREA_RANGE[0])
+    log2_area = LOG_TEXTURE_RANGE[0] + log_area_range_fraction * (LOG_TEXTURE_RANGE[1] - LOG_TEXTURE_RANGE[0])
+    log2_area = int(np.clip(np.round(log2_area), *LOG_TEXTURE_RANGE))
+    texture_res = int(2 ** log2_area)
 
     # Save the mesh
     with TempFS() as tfs:      
@@ -278,7 +274,6 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
 
         # Fix texture file paths if necessary.
         original_material_fs = G.nodes[link_node]["material_dir"]
-        texture_translations = {}
         if original_material_fs:
             for src_texture_file in original_material_fs.listdir("/"):
                 fname = src_texture_file
@@ -290,7 +285,13 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                     raise ValueError(f"Unknown texture map: {fname}")
 
                 dst_texture_file = f"{obj_name}-{link_name}-{dst_fname}.png"
-                fs.copy.copy_file(original_material_fs, src_texture_file, obj_link_material_folder_fs, dst_texture_file)
+
+                # Load the image
+                texture = Image.open(original_material_fs.open(src_texture_file, "rb"), formats=("png",))
+                existing_texture_res = texture.size[0]
+                if existing_texture_res > texture_res:
+                    texture = texture.resize((texture_res, texture_res), Image.BILINEAR)
+                texture.save(obj_link_material_folder_fs.open(dst_texture_file, "wb"), format="png")
 
         # Copy the OBJ into the right spot
         fs.copy.copy_file(tfs, obj_relative_path, obj_link_visual_mesh_folder_fs, obj_relative_path)
@@ -367,8 +368,10 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         joint_type = G.edges[edge]["joint_type"]
         parent_frame = G.nodes[parent_node]["link_frame_in_base"]
 
+        rotated_parent_frame = R.from_quat(canonical_orientation).apply(parent_frame)
+
         # Load the meshes.
-        lower_canonical_mesh = transform_mesh(G.nodes[child_node]["lower_mesh_ordered"], base_link_center + parent_frame, canonical_orientation)
+        lower_canonical_mesh = transform_mesh(G.nodes[child_node]["lower_mesh_ordered"], base_link_center + rotated_parent_frame, canonical_orientation)
 
         # Load the centers.
         child_center = get_mesh_center(lower_canonical_mesh)
@@ -387,7 +390,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
 
         mesh_offset = np.zeros(3)
         if joint_type in ("P", "R"):
-            upper_canonical_mesh = transform_mesh(G.nodes[child_node]["upper_mesh"], base_link_center + parent_frame, canonical_orientation)
+            upper_canonical_mesh = transform_mesh(G.nodes[child_node]["upper_mesh"], base_link_center + rotated_parent_frame, canonical_orientation)
             
             if joint_type == "R":
                 # Revolute joint
@@ -508,7 +511,7 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
             xmlio = io.StringIO(xmlstr)
             tree = ET.parse(xmlio)
             
-            with output_fs.makedir("urdf").open(f"{obj_model}.urdf", "wb") as f:
+            with output_fs.open(f"{obj_model}.urdf", "wb") as f:
                 tree.write(f, xml_declaration=True)
 
             bbox_size, base_link_offset, _, _ = compute_object_bounding_box(G.nodes[root_node])
@@ -544,12 +547,19 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
                     "bb_size": part_bb_size,
                 })
 
+            openable_joint_ids = [
+                (i, joint.attrib["name"])
+                for i, joint in enumerate(tree.findall("joint"))
+                if "openable" in out_metadata["link_tags"][joint.find("child").attrib["link"]]
+            ]
+
             # Save metadata json
             out_metadata.update({
                 "base_link_offset": base_link_offset.tolist(),
                 "bbox_size": bbox_size.tolist(),
                 "orientations": compute_stable_poses(G, root_node),
                 "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
+                "openable_joint_ids": openable_joint_ids,
             })
             with output_fs.makedir("misc").open("metadata.json", "w") as f:
                 json.dump(out_metadata, f, cls=NumpyEncoder)
@@ -568,23 +578,20 @@ def process_target(target, objects_path, dask_client):
         roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
         # Only save the 0th instance.
-        # with futures.ThreadPoolExecutor(max_workers=10) as link_executor:
-        if True:
-            saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
-            object_futures = {}
-            print(target, len(saveable_roots))
-            for root_node in saveable_roots:
-                # Start processing the object. We start by creating an object-specific
-                # copy of the mesh tree (also including info about any parts)
-                relevant_nodes = set(nx.dfs_tree(G, root_node).nodes())
-                relevant_nodes |= {
-                    node
-                    for part_root_node in get_part_nodes(G, root_node)  # Get every part root node
-                    for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
+        saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
+        object_futures = {}
+        for root_node in saveable_roots:
+            # Start processing the object. We start by creating an object-specific
+            # copy of the mesh tree (also including info about any parts)
+            relevant_nodes = set(nx.dfs_tree(G, root_node).nodes())
+            relevant_nodes |= {
+                node
+                for part_root_node in get_part_nodes(G, root_node)  # Get every part root node
+                for node in nx.dfs_tree(G, part_root_node).nodes()}  # Get the subtree of each part
 
-                obj_cat, obj_model, obj_inst_id, _ = root_node
-                output_dirname = f"{obj_cat}/{obj_model}"
-                object_futures[dask_client.submit(process_object, root_node, target, mesh_list, relevant_nodes, objects_fs.makedirs(output_dirname).getsyspath("/"), pure=False)] = str(root_node)
+            obj_cat, obj_model, obj_inst_id, _ = root_node
+            output_dirname = f"{obj_cat}/{obj_model}"
+            object_futures[dask_client.submit(process_object, root_node, target, mesh_list, relevant_nodes, objects_fs.makedirs(output_dirname).getsyspath("/"), pure=False)] = str(root_node)
 
             # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
             wait(object_futures.keys())

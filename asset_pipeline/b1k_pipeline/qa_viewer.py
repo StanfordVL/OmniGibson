@@ -77,7 +77,7 @@ def main(dataset_path, record_path):
 
         obj_name = "{}_{}".format(obj_category, obj_model)
         model_path = get_ig_model_path(obj_category, obj_model)
-        filename = os.path.join(model_path, f"urdf/{obj_model}.urdf")
+        filename = os.path.join(model_path, f"{obj_model}.urdf")
 
         print("\n\n-----------------------------------------------------------------------------")
         print(f"Object {i+1}/{len(remaining_objs)}: ")

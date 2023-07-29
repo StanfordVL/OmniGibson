@@ -28,7 +28,7 @@ def check_urdf(objects_fs, fn):
 
 def main():
   with ParallelZipFS("objects.zip") as objects_fs:
-    files = [x.path for x in objects_fs.glob("objects/*/*/urdf/*.urdf")]
+    files = [x.path for x in objects_fs.glob("objects/*/*/*.urdf")]
     bad = sorted(fn for fn in tqdm.tqdm(files) if not check_urdf(objects_fs, fn))
     print("\n".join(bad))
 

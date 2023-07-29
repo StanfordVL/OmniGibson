@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 import omni
 import omnigibson.utils.transform_utils as T
+from omnigibson.utils.render_utils import make_glass
 import pxr.Vt
 from omni.isaac.core.prims.xform_prim import XFormPrim
 from omni.isaac.core.utils.prims import get_prim_at_path
@@ -639,6 +640,44 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                 orientation=T.convert_quat(mesh_in_meta_link_orn, to="wxyz")
             )
 
+def process_glass_link(prim):
+    # Update any glass parts to use the glass material instead
+    glass_prim_paths = []
+    for gchild in prim.GetChildren():
+        if gchild.GetTypeName() == "Mesh":
+            # check if has col api, if not, this is visual
+            if not gchild.HasAPI(UsdPhysics.CollisionAPI):
+                glass_prim_paths.append(gchild.GetPath().pathString)
+        elif gchild.GetTypeName() == "Scope":
+            # contains multiple additional prims, check those
+            for ggchild in gchild.GetChildren():
+                if ggchild.GetTypeName() == "Mesh":
+                    # check if has col api, if not, this is visual
+                    if not ggchild.HasAPI(UsdPhysics.CollisionAPI):
+                        glass_prim_paths.append(ggchild.GetPath().pathString)
+
+    assert glass_prim_paths
+
+    stage = get_current_stage()
+    root_path = stage.GetDefaultPrim().GetPath().pathString
+    glass_mtl_prim_path = f"{root_path}/Looks/OmniGlass"
+    if not get_prim_at_path(glass_mtl_prim_path):
+        mtl_created = []
+        omni.kit.commands.execute(
+            "CreateAndBindMdlMaterialFromLibrary",
+            mdl_name="OmniGlass.mdl",
+            mtl_name="OmniGlass",
+            mtl_created_list=mtl_created,
+        )
+
+    for glass_prim_path in glass_prim_paths:
+        omni.kit.commands.execute(
+            "BindMaterialCommand",
+            prim_path=glass_prim_path,
+            material_path=glass_mtl_prim_path,
+            strength=None,
+        )
+
 # TODO: Handle metalinks
 # TODO: Import heights per link folder into USD folder
 def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_channels=False):
@@ -770,6 +809,10 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
             usd_path=usd_path,
             dataset_root=dataset_root,
         )
+
+    for link, link_tags in data["metadata"]["link_tags"].items():
+        if "glass" in link_tags:
+            process_glass_link(prim.GetChild(link))
 
     # Save stage
     stage.Save()
