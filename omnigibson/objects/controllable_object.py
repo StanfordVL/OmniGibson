@@ -324,6 +324,7 @@ class ControllableObject(BaseObject):
                 - n-array: raw control signals to send to the object's joints
                 - list: control types for each joint
         """
+        # print("input action\n", action)
         # First, loop over all controllers, and calculate the computed control
         control = dict()
         idx = 0
@@ -351,6 +352,8 @@ class ControllableObject(BaseObject):
             u_type_vec[idx] = ctrl["type"]
 
         # Return control
+        # print("output control\n", u_vec)
+        # print("output control type\n", u_type_vec)
         return u_vec, u_type_vec
 
     def deploy_control(self, control, control_type, indices=None, normalized=False):

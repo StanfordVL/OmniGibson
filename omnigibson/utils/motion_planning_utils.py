@@ -38,7 +38,10 @@ def plan_base_motion(
     robot,
     end_conf,
     context,
-    planning_time = 100.0,
+    planning_time = 20.0,
+    algo="RRTConnect",
+    simplifiers=[],
+    setrange=0.0,
     **kwargs
 ):
     def state_valid_fn(q):
@@ -67,7 +70,10 @@ def plan_base_motion(
     ss.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
 
     si = ss.getSpaceInformation()
-    planner = ompl_geo.RRTConnect(si)
+    # planner = ompl_geo.RRTConnect(si)
+    # planner = ompl_geo.BITstar(si)
+    planner = PLANNERS[algo](si)
+    planner.setRange(0.01)
     ss.setPlanner(planner)
 
     start = ob.State(space)
@@ -100,6 +106,7 @@ def plan_base_motion(
             yaw = sol_path.getState(i).getYaw()
             return_path.append([x, y, yaw])
         return remove_unnecessary_rotations(return_path)
+        # return return_path
     return None
 
 
