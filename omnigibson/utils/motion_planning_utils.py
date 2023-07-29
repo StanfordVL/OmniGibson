@@ -23,17 +23,6 @@ OPTIM_PLANNERS = [
     "BITstar",
 ]
 
-# class WeightedJointMotionOptimizationObjective(ob.PathLengthOptimizationObjective):
-#     def __init__(self, weights):
-#         self.weights = weights
-
-#     def motionCost(self, s1, s2):
-#         cost = 0
-#         for i in len(s1 - 1):
-#             cost += abs(s2[i] - s1[i]) * self.weights[i]
-#         return ob.Cost(cost)
-
-
 def plan_base_motion(
     robot,
     end_conf,
@@ -70,10 +59,14 @@ def plan_base_motion(
     ss.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
 
     si = ss.getSpaceInformation()
-    # planner = ompl_geo.RRTConnect(si)
-    # planner = ompl_geo.BITstar(si)
     planner = PLANNERS[algo](si)
-    planner.setRange(0.01)
+    
+    if not setrange == 0.0:
+        try:
+            planner.setRange(setrange)
+        except:
+            print("this planner does not have setRange")
+            
     ss.setPlanner(planner)
 
     start = ob.State(space)
@@ -181,10 +174,11 @@ def plan_arm_motion(
     # define optimizing planner
     planner = PLANNERS[algo](si)
     planner.setProblemDefinition(pdef)
-    try:
-        planner.setRange(setrange)
-    except:
-        print("this planner does not have setRange")
+    if not setrange == 0.0:
+        try:
+            planner.setRange(setrange)
+        except:
+            print("this planner does not have setRange")
     planner.setup()
 
     # define path simplifier
