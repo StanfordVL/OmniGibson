@@ -8579,7 +8579,6 @@
         "wrinkleable": {}
     },
     "bouquet.n.01": {
-        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {
@@ -21557,9 +21556,14 @@
         "substance": {}
     },
     "dip.n.07": {
-        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
+        "flammable": {
+            "ignition_temperature": 250.0,
+            "fire_temperature": 1000.0,
+            "heating_rate": 0.04,
+            "distance_threshold": 0.2
+        },
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -55306,7 +55310,6 @@
         "wrinkleable": {}
     },
     "taboret.n.01": {
-        "cookable": {},
         "disinfectable": {},
         "dustyable": {},
         "flammable": {
