@@ -126,10 +126,10 @@ def create_get_save_propagated_annots_params(syns_to_props):
             for param_record in param_annots: 
                 for param_name, param_value in param_record.items():
 
-                    # TODO remove this cookable hardcode once annotations are complete
-                    if prop == "cookable" and param_name == "cook_temperature" and pd.isna(param_value):
-                        syns_to_props[param_record["synset"]][prop][param_name] = 58.
-                        continue
+                    # # TODO remove this cookable hardcode once annotations are complete
+                    # if prop == "cookable" and param_name == "cook_temperature" and pd.isna(param_value):
+                    #     syns_to_props[param_record["synset"]][prop][param_name] = 58.
+                    #     continue
 
                     if param_name == "synset": continue
 
