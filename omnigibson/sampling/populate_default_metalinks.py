@@ -79,11 +79,13 @@ def point_inside_aabb(point, aabb_low, aabb_high):
 def sample_raytest_start_end_full_grid_topdown(
     obj,
     ray_spacing,
-    aabb_offset=macros.utils.sampling_utils.DEFAULT_AABB_OFFSET,
+    aabb_offset=None,
+    aabb_offset_fraction=macros.utils.sampling_utils.DEFAULT_AABB_OFFSET_FRACTION,
 ):
     bbox_center = obj.aabb_center
     bbox_orn = np.array([0, 0, 0, 1.0])
     bbox_bf_extent = obj.aabb_extent
+    aabb_offset = aabb_offset_fraction * bbox_bf_extent if aabb_offset is None else aabb_offset
     # bbox_center, bbox_orn, bbox_bf_extent, _ = obj.get_base_aligned_bbox(xy_aligned=True, fallback_to_aabb=True)
 
     half_extent_with_offset = (bbox_bf_extent / 2) + aabb_offset
@@ -411,6 +413,8 @@ SIDEWAYS_MODELS = {
     "aqdbdu",
     "pobfpe",
     "szzjzd",
+    "wgcgia",
+    "vghfkh",
 }
 
 UPSIDE_DOWN_MODELS = {
