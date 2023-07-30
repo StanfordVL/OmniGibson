@@ -397,7 +397,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.PLANNING_ERROR,
                 "Could not find joint positions for target pose",
-                {"target_pose": target_pose},
+                {"target_pose": joint_pos},
             )
         return joint_pos, control_idx
     
