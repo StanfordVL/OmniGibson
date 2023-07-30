@@ -32,7 +32,8 @@ import gspread
 
 SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
 CREDENTIALS = "key.json"
-WORKSHEET = "Sheet1"
+# WORKSHEET = "Sheet1"
+WORKSHEET = "07/28 - 304a7a"
 USER = "chengshu"
 
 client = gspread.service_account(filename=CREDENTIALS)
@@ -200,8 +201,8 @@ def main(random_selection=False, headless=False, short_exec=False):
             continue
 
         # Only sample stuff which is fixed
-        if "fixed" not in misc.lower():
-            continue
+        # if "fixed" not in misc.lower():
+        #     continue
 
         # If we've already sampled successfully (success is populated with a 1) and we don't want to overwrite the
         # existing sampling result, skip
