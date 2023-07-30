@@ -290,6 +290,11 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
             # Create a primitive shape if it doesn't already exist
             pre_existing_mesh = get_prim_at_path(mesh_prim_path)
             if not pre_existing_mesh:
+                if self._projection_mesh_params is None:
+                    self._projection_mesh_params = {
+                        "type": "Cylinder",
+                        "extents": np.array([0.1, 0.1, 0.1]),
+                    }
                 # Projection mesh params must be specified in order to determine scalings
                 assert self._projection_mesh_params is not None, \
                     f"Must specify projection_mesh_params for {self.obj.name}'s {self.__class__.__name__} " \
