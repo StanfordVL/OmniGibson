@@ -565,8 +565,9 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
                 "bbox_size": bbox_size.tolist(),
                 "orientations": compute_stable_poses(G, root_node),
                 "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
-                "openable_joint_ids": openable_joint_ids,
             })
+            if openable_joint_ids:
+                out_metadata["openable_joint_ids"] = openable_joint_ids
             with output_fs.makedir("misc").open("metadata.json", "w") as f:
                 json.dump(out_metadata, f, cls=NumpyEncoder)
     except Exception as exc:
