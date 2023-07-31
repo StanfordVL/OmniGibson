@@ -114,7 +114,10 @@ def get_objects_config_from_element(element, model_pose_info):
                     if "bounding_box" in ele.keys()
                     else None
                 )
-                model_pose_info[name]["cfg"]["in_rooms"] = ele.get("rooms", None)
+                in_rooms = ele.get("rooms", "")
+                if in_rooms:
+                    in_rooms = in_rooms.split(",")
+                model_pose_info[name]["cfg"]["in_rooms"] = in_rooms
                 model_pose_info[name]["cfg"]["scale"] = (
                     string_to_array(ele.get("scale")) if "scale" in ele.keys() else None
                 )
