@@ -94,19 +94,6 @@ class InteractiveTraversableScene(TraversableScene):
             use_floor_plane=False,
         )
 
-    def _initialize(self):
-        super()._initialize()
-        self._seg_map.room_sem_name_to_ins_name = defaultdict(list)
-        for object in self.objects:
-            if object.in_rooms is None:
-                continue
-            for in_room in object.in_rooms:
-                if in_room == "":
-                    continue
-                room_type = "_".join(in_room.split("_")[:-1])
-                if in_room not in self._seg_map.room_sem_name_to_ins_name[room_type]:
-                    self._seg_map.room_sem_name_to_ins_name[room_type].append(in_room)
-
     def get_scene_loading_info(self, scene_model, scene_instance=None):
         """
         Gets scene loading info to know what single USD file to load, specified indirectly via @scene_instance if it
@@ -170,9 +157,9 @@ class InteractiveTraversableScene(TraversableScene):
         super()._load()
 
         # Load the traversability map if we have the connectivity graph
-        # maps_path = os.path.join(self.scene_dir, "layout")
-        # if self.has_connectivity_graph:
-        #     self._trav_map.load_map(maps_path)
+        maps_path = os.path.join(self.scene_dir, "layout")
+        if self.has_connectivity_graph:
+            self._trav_map.load_map(maps_path)
 
     def _should_load_object(self, obj_info):
         category = obj_info["args"].get("category", "object")
