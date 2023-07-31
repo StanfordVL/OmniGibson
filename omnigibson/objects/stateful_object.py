@@ -21,6 +21,7 @@ from omnigibson.object_states.factory import (
 from omnigibson.object_states.object_state_base import REGISTERED_OBJECT_STATES
 from omnigibson.object_states.heat_source_or_sink import HeatSourceOrSink
 from omnigibson.object_states.on_fire import OnFire
+from omnigibson.object_states.cloth_particles import ClothParticles
 from omnigibson.object_states.particle_modifier import ParticleRemover
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.renderer_settings.renderer_settings import RendererSettings
@@ -193,6 +194,20 @@ class StatefulObject(BaseObject):
         """
         return self._abilities
 
+    @property
+    def aabb(self):
+        # If we're a cloth prim type and we're playing, override super method by efficiently computing using
+        # potentially cached value
+        if self._prim_type == PrimType.CLOTH and og.sim.is_playing():
+            particle_contact_offset = self.root_link.cloth_system.particle_contact_offset
+            particle_positions = self.states[ClothParticles].get_value().positions
+            aabb_lo, aabb_hi = np.min(particle_positions, axis=0) - particle_contact_offset, \
+                               np.max(particle_positions, axis=0) + particle_contact_offset
+        else:
+            aabb_lo, aabb_hi = super().aabb
+
+        return aabb_lo, aabb_hi
+
     def prepare_object_states(self):
         """
         Prepare the state dictionary for an object by generating the appropriate
@@ -201,7 +216,7 @@ class StatefulObject(BaseObject):
         This uses the abilities of the object and the state dependency graph to
         find & instantiate all relevant states.
         """
-        states_info = {state_type: {"ability": None, "params": dict()} for state_type in get_default_states()} if \
+        states_info = {state_type: {"ability": None, "params": dict()} for state_type in get_default_states(self)} if \
             self._include_default_states else dict()
 
         # Map the state type (class) to ability name and params

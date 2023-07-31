@@ -98,8 +98,11 @@ def get_visual_states():
     return _VISUAL_STATE_SET
 
 
-def get_default_states():
-    return _DEFAULT_STATE_SET
+def get_default_states(obj):
+    states = _DEFAULT_STATE_SET
+    if obj.prim_type == PrimType.CLOTH:
+        states = set.union({ClothParticles}, states)
+    return states
 
 
 def get_state_name(state):
