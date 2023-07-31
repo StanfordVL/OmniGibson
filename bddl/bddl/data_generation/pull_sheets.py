@@ -8,7 +8,6 @@ OUTPUT_ROOT = pathlib.Path(__file__).parents[1] / "generated_data"
 ASSETS_SHEET_KEY = "10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4"
 SYNSETS_SHEET_KEY = "1eIQn1HzUJV15nCP4MqsHvrdWAV9VrKoxOqSnQxF0_1A"
 SYMSET_PARAMS_SHEET_KEY = "1jQomcQS3DSMLctEOElafCPj_v498gwtb57NC9eNwu-4"
-# TM_SHEET_KEY = "11PsOlRYjsJ_WZZzMc6-iOi0oT_pIgKgvzXLg3kR00KM"
 
 ALL_SHEETS = [
   (ASSETS_SHEET_KEY, "Object Category Mapping", "category_mapping.csv"),
