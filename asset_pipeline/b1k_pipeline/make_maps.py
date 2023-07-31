@@ -63,7 +63,7 @@ def process_scene(scene_id, dataset_path, out_path):
     import igibson.external.pybullet_tools.utils
     from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
     from igibson.simulator import Simulator
-    
+
     igibson.ig_dataset_path = dataset_path
 
     # Create the output directory
@@ -110,14 +110,14 @@ def process_scene(scene_id, dataset_path, out_path):
         scannable_map = new_trav_map[x_min:x_max+1, y_min:y_max+1]
 
         # Get the points to cast rays from
-        grid_indices = np.array(list(np.ndindex(scannable_map.shape)), dtype=int)
-        corresponding_world_centers = map_to_world(grid_indices, RESOLUTION, map_size_in_pixels)
-        start_pts = np.concatenate([corresponding_world_centers, np.full((len(grid_indices), 1), Z_START)], axis=1)
-        end_pts = np.concatenate([corresponding_world_centers, np.full((len(grid_indices), 1), Z_END)], axis=1)
+        pixel_indices = np.array(list(np.ndindex(scannable_map.shape)), dtype=int)
+        corresponding_world_centers = map_to_world(pixel_indices + np.array([[x_min, y_min]]), RESOLUTION, map_size_in_pixels)
+        start_pts = np.concatenate([corresponding_world_centers, np.full((len(pixel_indices), 1), Z_START)], axis=1)
+        end_pts = np.concatenate([corresponding_world_centers, np.full((len(pixel_indices), 1), Z_END)], axis=1)
 
         # Get the ray cast results (in batches so that pybullet does not complain)
         ray_results = []
-        for batch_start in range(0, len(grid_indices), MAX_RAYS):
+        for batch_start in range(0, len(pixel_indices), MAX_RAYS):
             batch_end = batch_start + MAX_RAYS
             ray_results.extend(
                 p.rayTestBatch(
@@ -126,7 +126,7 @@ def process_scene(scene_id, dataset_path, out_path):
                     numThreads=0,
                 )
             )
-        assert len(ray_results) == len(grid_indices)
+        assert len(ray_results) == len(pixel_indices)
 
         # Check which rays hit floors
         hit_floor = np.array([item[0] in floor_bids for item in ray_results]).astype(np.uint8)
