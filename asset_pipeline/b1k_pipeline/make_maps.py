@@ -5,6 +5,7 @@ import pdb
 import fs
 from fs.multifs import MultiFS
 from fs.tempfs import TempFS
+from fs.osfs import OSFS
 import numpy as np
 import pybullet as p
 from PIL import Image
@@ -15,14 +16,20 @@ import tqdm
 MAX_RAYS = p.MAX_RAY_INTERSECTION_BATCH_SIZE - 1
 
 RESOLUTION = 0.01
-Z_SKY = 9.9
-Z_ABOVE_FLOOR = 1.5  # overcome carpets
-Z_BELOW_FLOOR = -0.1
+Z_START = 2.  # Just above the typical robot height
+Z_END = -0.1  # Just below the floor
 
-BLACKLIST_MAPPING = {
-    "floor_trav_no_obj_0.png": [],
-    "floor_trav_0.png": ["floors", "carpet"],
-    "floor_trav_no_door_0.png": ["floors", "door", "carpet"],
+WALL_CATEGORIES = ["walls", "fence"]
+FLOOR_CATEGORIES = ["floors", "driveway", "lawn"]
+DOOR_CATEGORIES = ["door", "garage_door", "gate"]
+IGNORE_CATEGORIES = ["carpet"]
+NEEDED_STRUCTURE_CATEGORIES = FLOOR_CATEGORIES + WALL_CATEGORIES
+
+LOAD_NOT_LOAD_MAPPING = {
+    # key: (load, not_load)
+    "floor_trav_no_obj_0.png": (NEEDED_STRUCTURE_CATEGORIES, None),
+    "floor_trav_0.png": (None, IGNORE_CATEGORIES),
+    "floor_trav_no_door_0.png": (None, DOOR_CATEGORIES + IGNORE_CATEGORIES),
 }
 
 
@@ -36,160 +43,141 @@ def world_to_map(xy, trav_map_resolution, trav_map_size):
     return np.flip((np.array(xy) / trav_map_resolution + trav_map_size / 2.0)).round().astype(int)
 
 
-def process_scene(scene_id, dataset_path):
+def map_to_world(xy, trav_map_resolution, trav_map_size):
+    """
+    Transforms a 2D point in map reference frame into world (simulator) reference frame
+
+    Args:
+        xy (2-array or (N, 2)-array): 2D location(s) in map reference frame (in image pixel space)
+
+    Returns:
+        2-array or (N, 2)-array: 2D location(s) in world reference frame (in metric space)
+    """
+    axis = 0 if len(xy.shape) == 1 else 1
+    return np.flip((xy - trav_map_size / 2.0) * trav_map_resolution, axis=axis)
+
+
+def process_scene(scene_id, dataset_path, out_path):
     # Don't import this outside the processes so that they don't share any state.
     import igibson
     import igibson.external.pybullet_tools.utils
-
-    igibson.ig_dataset_path = dataset_path
-    room_categories_path = os.path.join(igibson.ig_dataset_path, "metadata", "room_categories.txt")
-
-    sem_to_id = dict()
-    idx = 1
-    with open(room_categories_path) as f:
-        for line in f.readlines():
-            sem_to_id[line.strip()] = idx
-            idx += 1
-
-    from igibson.object_states import AABB
     from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
     from igibson.simulator import Simulator
 
+    igibson.ig_dataset_path = dataset_path
+
+    # Create the output directory
+    save_path = os.path.join(out_path, "scenes", scene_id, "layout")
+    os.makedirs(save_path, exist_ok=True)
+
+    # Get the room type to room id mapping
+    room_categories_path = os.path.join(igibson.ig_dataset_path, "metadata", "room_categories.txt")
+    with open(room_categories_path) as f:
+        sem_to_id = {line.strip(): i + 1 for i, line in enumerate(f.readlines())}
+
     s = Simulator(mode="headless", use_pb_gui=False)
-    images = {}
-    for fname in BLACKLIST_MAPPING:
-        if fname == "floor_trav_0.png" or fname == "floor_trav_no_door_0.png":
-            scene = InteractiveIndoorScene(scene_id, not_load_object_categories=BLACKLIST_MAPPING[fname])
-        else:
-            scene = InteractiveIndoorScene(scene_id, load_object_categories=["ceilings", "walls"])
+    for fname, (load_categories, not_load_categories) in LOAD_NOT_LOAD_MAPPING.items():
+        # Load the scene with the right categories
+        scene = InteractiveIndoorScene(scene_id, load_object_categories=load_categories, not_load_object_categories=not_load_categories)
         s.import_scene(scene)
 
-        # Get the maximum magnitude distance from zero
-        body_ids = [bid for obj in scene.get_objects() for bid in obj.get_body_ids()]
-        aabbs = [igibson.external.pybullet_tools.utils.get_aabb(b) for b in body_ids]
-        # bad_aabbs = [(scene.objects_by_id[bid].name, aabb) for bid, aabb in zip(body_ids, aabbs) if np.any(np.abs(aabb) > 20)]
-        # assert not bad_aabbs, f"Bad AABBs: {bad_aabbs}"
+        # Compute the map dimensions by finding the AABB of all objects and calculating max distance from origin.
+        floor_objs = [
+            floor
+            for floor_cat in FLOOR_CATEGORIES
+            for floor in scene.objects_by_category[floor_cat]
+        ]
+        floor_bids = [
+            bid
+            for floor in floor_objs
+            for bid in floor.get_body_ids()
+        ]
+        aabbs = [igibson.external.pybullet_tools.utils.get_aabb(b) for b in floor_bids]
         combined_aabb = np.array(igibson.external.pybullet_tools.utils.aabb_union(aabbs))
         aabb_dist_from_zero = np.abs(combined_aabb)
-        print(aabb_dist_from_zero)
         dist_from_center = np.max(aabb_dist_from_zero)
         map_size_in_meters = dist_from_center * 2
         map_size_in_pixels = map_size_in_meters / RESOLUTION
         map_size_in_pixels = int(np.ceil(map_size_in_pixels / 2) * 2)  # Round to nearest multiple of 2
 
+        # Initialize the map array
         new_trav_map = np.zeros((map_size_in_pixels, map_size_in_pixels), dtype=np.uint8)
         assert new_trav_map.shape[0] == new_trav_map.shape[1]
-        trav_map_size = new_trav_map.shape[0]
-        half_trav_map_size = trav_map_size // 2
 
-        # floor = scene.objects_by_category["floors"][0]
-        ceiling_bids = {bid for ceiling in scene.objects_by_category["ceilings"] for bid in ceiling.get_body_ids()}
-        wall_bids = {bid for wall in scene.objects_by_category["walls"] for bid in wall.get_body_ids()}
-        floor_bids = {bid for fl in scene.objects_by_category["floors"] for bid in fl.get_body_ids()}
+        # Get a view to the part of the map that we will actually cast rays for (e.g. the occupied section)
+        x_min, y_min = world_to_map(combined_aabb[0][:2], RESOLUTION, map_size_in_pixels)
+        x_max, y_max = world_to_map(combined_aabb[1][:2], RESOLUTION, map_size_in_pixels)
+        scannable_map = new_trav_map[x_min:x_max+1, y_min:y_max+1]
 
-        # floor_aabb = floor.states[AABB].get_value()
-        points = []
-        for ceiling in scene.objects_by_category["ceilings"]:
-            floor_aabb = ceiling.states[AABB].get_value()
-            points.extend(floor_aabb)
+        # Get the points to cast rays from
+        pixel_indices = np.array(list(np.ndindex(scannable_map.shape)), dtype=int)
+        corresponding_world_centers = map_to_world(pixel_indices + np.array([[x_min, y_min]]), RESOLUTION, map_size_in_pixels)
+        start_pts = np.concatenate([corresponding_world_centers, np.full((len(pixel_indices), 1), Z_START)], axis=1)
+        end_pts = np.concatenate([corresponding_world_centers, np.full((len(pixel_indices), 1), Z_END)], axis=1)
 
-        x_min, y_min, z_min = np.min(np.asarray(points), axis=0)
-        x_max, y_max, z_max = np.max(np.asarray(points), axis=0)
-
-        # Make sure the range is within the original trav map
-        x_min = max(-half_trav_map_size + 1, np.floor(x_min / RESOLUTION)) * RESOLUTION
-        y_min = max(-half_trav_map_size + 1, np.floor(y_min / RESOLUTION)) * RESOLUTION
-        x_max = min(half_trav_map_size - 1, np.ceil(x_max / RESOLUTION)) * RESOLUTION
-        y_max = min(half_trav_map_size - 1, np.ceil(y_max / RESOLUTION)) * RESOLUTION
-
-        # y_min = -0.2
-        # y_max = 0.5
-        x, y = np.mgrid[x_min : x_max + RESOLUTION : RESOLUTION, y_min : y_max + RESOLUTION : RESOLUTION]
-        x = x.flatten()
-        y = y.flatten()
-
-        z_up_start = np.ones_like(x) * Z_BELOW_FLOOR
-        z_up_end = np.ones_like(x) * Z_SKY
-        start_pts = np.vstack([x, y, z_up_start]).T
-        end_pts = np.vstack([x, y, z_up_end]).T
-
-        ray_results_up = []
-        for i in range(len(start_pts) // MAX_RAYS + 1):
-            ray_results_up.extend(
+        # Get the ray cast results (in batches so that pybullet does not complain)
+        ray_results = []
+        for batch_start in range(0, len(pixel_indices), MAX_RAYS):
+            batch_end = batch_start + MAX_RAYS
+            ray_results.extend(
                 p.rayTestBatch(
-                    start_pts[i * MAX_RAYS : (i + 1) * MAX_RAYS],
-                    end_pts[i * MAX_RAYS : (i + 1) * MAX_RAYS],
+                    start_pts[batch_start: batch_end],
+                    end_pts[batch_start: batch_end],
                     numThreads=0,
                 )
             )
-        assert len(ray_results_up) == len(start_pts)
+        assert len(ray_results) == len(pixel_indices)
 
-        # If the ray hits the ceiling or hits the wall that correspounds to doors (0.1 * (9.9 - (-0.1)) - 0.1 = 0.9m height)
-        hit_floor = np.array(
-            [
-                item[0] in ceiling_bids or (item[0] in wall_bids and item[2] > 0.1)
-                for item in ray_results_up
-            ]
-        )
-        xy_world = start_pts[hit_floor.nonzero()][:, :2]
+        # Check which rays hit floors
+        hit_floor = np.array([item[0] in floor_bids for item in ray_results]).astype(np.uint8)
+        scannable_map[:, :] = np.reshape(hit_floor * 255, scannable_map.shape)
+        Image.fromarray(new_trav_map).save(os.path.join(save_path, fname))
 
-        xy_map = world_to_map(xy_world, RESOLUTION, trav_map_size)
-        new_trav_map[xy_map[:, 0], xy_map[:, 1]] = 255
-        save_path = fs.path.join("scenes", scene_id, "layout")
-        images[fs.path.join(save_path, fname)] = new_trav_map
-
+        # At the same time as the no-obj trav map, we generate the segmentation maps.
         if fname == "floor_trav_no_obj_0.png":
-            all_insts = set()
-            for c in scene.objects_by_category["ceilings"]:
-                if c.in_rooms:
-                    all_insts.extend(c.in_rooms)
+            # Get a list of all of the room instances in the scene
+            all_insts = {
+                room
+                for floor in floor_objs
+                for room in (floor.in_rooms if floor.in_rooms else [])
+            }
             sorted_all_insts = sorted(all_insts)
 
-            inst_to_id = dict()
-            idx = 1
-            for inst in sorted_all_insts:
-                inst_to_id[inst] = idx
-                idx += 1
+            # Map those rooms into a contiguous range of integers starting from 1
+            inst_to_id = {inst: i + 1 for i, inst in enumerate(sorted_all_insts)}
 
-            semseg_map_fname = "floor_semseg_0.png"
-            semseg_map = new_trav_map.copy()
-            semseg_map[:, :] = 0
-
+            # Color the instance segmentation map using the hit objects' 
             insseg_map_fname = "floor_insseg_0.png"
-            insseg_map = new_trav_map.copy()
-            insseg_map[:, :] = 0
-            for ceiling in scene.objects_by_category["ceilings"]:
-                hit_floor = np.array(
-                    [
-                        item[0] in ceiling.get_body_ids()
-                        for item in ray_results_up
-                    ]
-                )
-                xy_world = start_pts[hit_floor.nonzero()][:, :2]
+            insseg_map = np.zeros_like(new_trav_map, dtype=np.uint8)
+            scannable_insseg_map = insseg_map[x_min:x_max+1, y_min:y_max+1]
+            hit_room_inst_name = [
+                scene.objects_by_id[item[0]].in_rooms[0] if item[0] in scene.objects_by_id and scene.objects_by_id[item[0]].in_rooms else None
+                for item in ray_results
+            ]
+            insseg_val = np.array([inst_to_id[inst] if inst else 0 for inst in hit_room_inst_name], dtype=np.uint8)
+            scannable_insseg_map[:, :] = np.reshape(insseg_val, scannable_insseg_map.shape)
+            Image.fromarray(insseg_map).save(os.path.join(save_path, insseg_map_fname))
 
-                # plt.scatter(xy_world[:, 0], xy_world[:, 1])
-                # plt.savefig("scatter.png")
+            # Now the same for the semseg map
+            semseg_map_fname = "floor_semseg_0.png"
+            semseg_map = np.zeros_like(new_trav_map, dtype=np.uint8)
+            scannable_semseg_map = semseg_map[x_min:x_max+1, y_min:y_max+1]
+            hit_room_type = [x.rsplit("_", 1)[0] if x else None for x in hit_room_inst_name]
+            semseg_val = np.array([sem_to_id[rm_type] if rm_type else 0 for rm_type in hit_room_type], dtype=np.uint8)
+            scannable_semseg_map[:, :] = np.reshape(semseg_val, scannable_semseg_map.shape)
+            Image.fromarray(semseg_map).save(os.path.join(save_path, semseg_map_fname))
 
-                xy_map = world_to_map(xy_world, RESOLUTION, trav_map_size)
-                room = ceiling.in_rooms[0] if ceiling.in_rooms else None
-                room_type = "_".join(room.split('_')[:-1]) if room else None
-                semseg_map[xy_map[:, 0], xy_map[:, 1]] = sem_to_id[room_type] if room_type in sem_to_id else 0
-                insseg_map[xy_map[:, 0], xy_map[:, 1]] = inst_to_id[room] if room in inst_to_id else 0
-
-            images[fs.path.join(save_path, semseg_map_fname)] = semseg_map
-            images[fs.path.join(save_path, insseg_map_fname)] = insseg_map
         s.reload()
-    return images
 
 
 def main():
     with TempFS(temp_dir=TMP_DIR) as temp_fs:
         # Extract objects/scenes to a common directory
-        multi_fs = fs.multifs.MultiFS()
+        multi_fs = MultiFS()
         multi_fs.add_fs("metadata", ParallelZipFS("metadata.zip"), priority=1)
         multi_fs.add_fs("objects", ParallelZipFS("objects.zip"), priority=1)
         multi_fs.add_fs("scenes", ParallelZipFS("scenes.zip"), priority=1)
-
+        
         # Copy all the files to the output zip filesystem.
         total_files = sum(1 for f in multi_fs.walk.files())
         with tqdm.tqdm(total=total_files) as pbar:
@@ -197,19 +185,13 @@ def main():
 
         with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
             all_futures = {}
-            for scene_id in temp_fs.listdir("scenes"):
-                all_futures[executor.submit(process_scene, scene_id, temp_fs.getsyspath("/"))] = scene_id
-
             with ParallelZipFS("maps.zip", write=True) as zip_fs:
-                with tqdm.tqdm(total=len(all_futures)) as scene_pbar:
-                    for future in concurrent.futures.as_completed(all_futures.keys()):
-                        images = future.result()
-                        for path, arr in images.items():
-                            zip_fs.makedirs(fs.path.dirname(path), recreate=True)
-                            with zip_fs.open(path, "wb") as map_file:
-                                Image.fromarray(arr).save(map_file, format="png")
+                for scene_id in temp_fs.listdir("scenes"):
+                    all_futures[executor.submit(process_scene, scene_id, temp_fs.getsyspath("/"), zip_fs.getsyspath("/"))] = scene_id
 
-                        scene_pbar.update(1)
+                for future in tqdm.tqdm(concurrent.futures.as_completed(all_futures.keys()), total=len(all_futures)):
+                    # Check for an exception
+                    future.result()
 
         # If we got here, we were successful. Let's create the success file.
         PipelineFS().pipeline_output().touch("make_maps.success")

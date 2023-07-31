@@ -287,11 +287,13 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                 dst_texture_file = f"{obj_name}-{link_name}-{dst_fname}.png"
 
                 # Load the image
-                texture = Image.open(original_material_fs.open(src_texture_file, "rb"), formats=("png",))
-                existing_texture_res = texture.size[0]
-                if existing_texture_res > texture_res:
-                    texture = texture.resize((texture_res, texture_res), Image.BILINEAR)
-                texture.save(obj_link_material_folder_fs.open(dst_texture_file, "wb"), format="png")
+                # TODO: Re-enable this after tuning it.
+                # texture = Image.open(original_material_fs.open(src_texture_file, "rb"), formats=("png",))
+                # existing_texture_res = texture.size[0]
+                # if existing_texture_res > texture_res:
+                #     texture = texture.resize((texture_res, texture_res), Image.BILINEAR)
+                # texture.save(obj_link_material_folder_fs.open(dst_texture_file, "wb"), format="png")
+                fs.copy.copy_file(original_material_fs, src_texture_file, obj_link_material_folder_fs, dst_texture_file)
 
         # Copy the OBJ into the right spot
         fs.copy.copy_file(tfs, obj_relative_path, obj_link_visual_mesh_folder_fs, obj_relative_path)
@@ -348,6 +350,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     visual_mesh_xml = ET.SubElement(visual_geometry_xml, "mesh")
     visual_mesh_xml.attrib = {"filename": os.path.join("shape", "visual", obj_relative_path).replace("\\", "/")}
 
+    collision_origin_xmls = []
     for collision_filename in collision_filenames:
         collision_xml = ET.SubElement(link_xml, "collision")
         collision_xml.attrib = {"name": collision_filename.replace(".obj", "")}
@@ -356,6 +359,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         collision_geometry_xml = ET.SubElement(collision_xml, "geometry")
         collision_mesh_xml = ET.SubElement(collision_geometry_xml, "mesh")
         collision_mesh_xml.attrib = {"filename": os.path.join("shape", "collision", collision_filename).replace("\\", "/")}
+        collision_origin_xmls.append(collision_origin_xml)
 
     # This object might be a base link and thus without an in-edge. Nothing to do then.
     if len(in_edges) == 0:
@@ -435,7 +439,9 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                 # Assign visual and collision mesh origin so that the offset from the joint origin is removed.
                 mesh_offset = child_center - joint_origin
                 visual_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
-                collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
+
+                for collision_origin_xml in collision_origin_xmls:
+                    collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
 
                 meta_links = normalize_meta_links(meta_links, mesh_offset)
             elif joint_type == "P":
@@ -559,8 +565,9 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
                 "bbox_size": bbox_size.tolist(),
                 "orientations": compute_stable_poses(G, root_node),
                 "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
-                "openable_joint_ids": openable_joint_ids,
             })
+            if openable_joint_ids:
+                out_metadata["openable_joint_ids"] = openable_joint_ids
             with output_fs.makedir("misc").open("metadata.json", "w") as f:
                 json.dump(out_metadata, f, cls=NumpyEncoder)
     except Exception as exc:
@@ -577,16 +584,8 @@ def process_target(target, objects_path, dask_client):
         # Go through each object.
         roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
-        whitelist = {
-            ("door", "fnvpyu"),
-            ("window", "ropopf"),
-            ("acetone_atomizer", "krtwsl"),
-            ("vacuum", "bdmsbr"),
-            ("microwave", "hjjxmi"),
-        }
-
         # Only save the 0th instance.
-        saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"] and root_node[:2] in whitelist]
+        saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
         object_futures = {}
         for root_node in saveable_roots:
             # Start processing the object. We start by creating an object-specific
