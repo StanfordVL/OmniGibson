@@ -2,6 +2,7 @@ import networkx as nx
 
 from omnigibson.object_states.kinematics_mixin import KinematicsMixin
 from omnigibson.object_states import *
+from omnigibson.utils.constants import PrimType
 
 _ABILITY_TO_STATE_MAPPING = {
     "attachable": [AttachedTo],

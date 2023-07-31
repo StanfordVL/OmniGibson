@@ -1,3 +1,5 @@
+from omnigibson.object_states.cloth_mixin import ClothStateMixin
+from omnigibson.object_states.cloth_particles import ClothParticles
 from omnigibson.object_states.kinematics_mixin import KinematicsMixin
 from omnigibson.object_states.object_state_base import BooleanStateMixin, RelativeObjectState
 from omnigibson.object_states.touching import Touching
@@ -24,12 +26,12 @@ m.OVERLAP_AREA_PERCENTAGE = 0.5
 m.SAMPLING_Z_OFFSET = 0.01
 
 
-class Overlaid(KinematicsMixin, RelativeObjectState, BooleanStateMixin):
+class Overlaid(RelativeObjectState, ClothStateMixin, KinematicsMixin, BooleanStateMixin):
 
     @classmethod
     def get_dependencies(cls):
         deps = super().get_dependencies()
-        deps.add(Touching)
+        deps.update({Touching, ClothParticles})
         return deps
 
     def _set_value(self, other, new_value):
@@ -58,7 +60,7 @@ class Overlaid(KinematicsMixin, RelativeObjectState, BooleanStateMixin):
             return False
 
         # Compute the convex hull of the particles of the cloth object.
-        points = self.obj.root_link.keypoint_particle_positions[:, :2]
+        points = self.obj.states[ClothParticles].get_value().keypoint_positions[:, :2]
         cloth_hull = ConvexHull(points)
 
         # Compute the base aligned bounding box of the rigid object.

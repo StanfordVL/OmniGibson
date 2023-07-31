@@ -5,6 +5,7 @@ from scipy.spatial import ConvexHull, distance_matrix
 from omnigibson.macros import create_module_macros
 from omnigibson.object_states.object_state_base import BooleanStateMixin, AbsoluteObjectState
 from omnigibson.object_states.cloth_mixin import ClothStateMixin
+from omnigibson.object_states.cloth_particles import ClothParticles
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -40,6 +41,12 @@ class FoldedLevel(AbsoluteObjectState, ClothStateMixin):
     State representing the object's folded level.
     Value is a FoldedLevelData object.
     """
+    @classmethod
+    def get_dependencies(cls):
+        deps = super().get_dependencies()
+        deps.add(ClothParticles)
+        return deps
+
     def _initialize(self):
         super()._initialize()
         # Assume the initial state is unfolded
@@ -55,7 +62,9 @@ class FoldedLevel(AbsoluteObjectState, ClothStateMixin):
         Calculate the percantage of surface normals that are sufficiently close to the z-axis.
         """
         cloth = self.obj.root_link
-        normals = cloth.compute_face_normals(face_ids=cloth.keyface_idx)
+        normals = cloth.compute_face_normals_from_particle_positions(
+            face_ids=self.obj.states[ClothParticles].get_value().keyface_positions,
+        )
 
         # projection onto the z-axis
         proj = np.abs(np.dot(normals, np.array([0.0, 0.0, 1.0])))
@@ -96,8 +105,7 @@ class FoldedLevel(AbsoluteObjectState, ClothStateMixin):
             area (float): area of the convex hull of the projected points
             diagonal (float): diagonal of the convex hull of the projected points
         """
-        cloth = self.obj.root_link
-        points = cloth.keypoint_particle_positions[:, dims]
+        points = self.obj.states[ClothParticles].get_value().keypoint_positions[:, dims]
         hull = ConvexHull(points)
 
         # When input points are 2-dimensional, this is the area of the convex hull.
