@@ -26,6 +26,8 @@ def switch_metalink():
         elif current_metatype == "fluidsource":
             new_metatype = "heatsource"
         elif current_metatype == "heatsource":
+           new_metatype = "particleapplier"
+        elif current_metatype == "particleapplier":
            new_metatype = "togglebutton"
         
 
