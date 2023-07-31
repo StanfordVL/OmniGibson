@@ -33,7 +33,6 @@ m.KEYPOINT_COVERAGE_THRESHOLD = 0.80
 m.N_CLOTH_KEYFACES = 500
 
 
-
 class ClothPrim(GeomPrim):
     """
     Provides high level functions to deal with a cloth prim and its attributes/ properties.

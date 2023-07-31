@@ -8,6 +8,7 @@ import trimesh
 import omnigibson as og
 from omnigibson.macros import gm, create_module_macros
 from omnigibson.prims.xform_prim import XFormPrim
+from omnigibson.object_states.cloth_particles import ClothParticles
 from omnigibson.systems.system_base import BaseSystem, VisualParticleSystem, PhysicalParticleSystem, REGISTERED_SYSTEMS
 from omnigibson.utils.constants import SemanticClass, PrimType
 from omnigibson.utils.python_utils import classproperty, subclass_factory, snake_case_to_camel_case
@@ -380,8 +381,8 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
                 # Update the transforms
                 cloth = obj.root_link
                 face_ids = cls._cloth_face_ids[group]
-                idxs = cloth.faces[face_ids].flatten()
-                positions = cloth.compute_particle_positions(idxs=idxs).reshape(-1, 3, 3)
+                idxs = cloth.faces[face_ids]
+                positions = obj.states[ClothParticles].get_value().positions[idxs]
                 normals = cloth.compute_face_normals_from_particle_positions(positions=positions)
 
                 # The actual positions we want are the face centroids, or the mean of all the positions
@@ -556,8 +557,9 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
             n_faces = len(cloth.faces)
             face_ids = np.random.choice(n_faces, min(max_samples, n_faces), replace=False)
             # Positions are the midpoints of each requested face
-            normals = cloth.compute_face_normals(face_ids=face_ids)
-            positions = cloth.compute_particle_positions(idxs=cloth.faces[face_ids].flatten()).reshape(-1, 3, 3).mean(axis=1)
+            face_vertex_positions = obj.states[ClothParticles].get_value().positions[face_ids]
+            positions = face_vertex_positions.mean(axis=1)
+            normals = cloth.compute_face_normals_from_particle_positions(positions=face_vertex_positions)
             # Orientations are the normals
             z_up = np.zeros_like(normals)
             z_up[:, 2] = 1.0

@@ -1,4 +1,5 @@
 from omnigibson.utils.constants import PrimType
+from omnigibson.object_states.cloth_particles import ClothParticles
 from omnigibson.object_states import Folded, Unfolded
 from omnigibson.macros import gm
 import numpy as np
@@ -95,7 +96,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         # Fold all three cloths along the x-axis
         for i in range(3):
             obj = objs[i]
-            pos = obj.root_link.compute_particle_positions()
+            pos = obj.states[ClothParticles].get_value().positions
             x_min, x_max = np.min(pos, axis=0)[0], np.max(pos, axis=0)[0]
             x_extent = x_max - x_min
             # Get indices for the bottom 10 percent vertices in the x-axis
@@ -119,7 +120,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         # Fold the t-shirt twice again along the y-axis
         for direction in [-1, 1]:
             obj = shirt
-            pos = obj.root_link.compute_particle_positions()
+            pos = obj.states[ClothParticles].get_value().positions
             y_min, y_max = np.min(pos, axis=0)[1], np.max(pos, axis=0)[1]
             y_extent = y_max - y_min
             if direction == 1:
