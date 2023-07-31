@@ -63,7 +63,7 @@ class FoldedLevel(AbsoluteObjectState, ClothStateMixin):
         """
         cloth = self.obj.root_link
         normals = cloth.compute_face_normals_from_particle_positions(
-            face_ids=self.obj.states[ClothParticles].get_value().keyface_positions,
+            positions=self.obj.states[ClothParticles].get_value().keyface_positions,
         )
 
         # projection onto the z-axis
