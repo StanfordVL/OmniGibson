@@ -33,7 +33,7 @@ import gspread
 SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
 CREDENTIALS = "key.json"
 # WORKSHEET = "Sheet1"
-WORKSHEET = "07/28 - 304a7a"
+WORKSHEET = "07/28 - 2afe3e"
 USER = "chengshu"
 
 client = gspread.service_account(filename=CREDENTIALS)
