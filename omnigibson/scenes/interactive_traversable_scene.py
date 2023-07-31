@@ -170,9 +170,9 @@ class InteractiveTraversableScene(TraversableScene):
         super()._load()
 
         # Load the traversability map if we have the connectivity graph
-        maps_path = os.path.join(self.scene_dir, "layout")
-        if self.has_connectivity_graph:
-            self._trav_map.load_map(maps_path)
+        # maps_path = os.path.join(self.scene_dir, "layout")
+        # if self.has_connectivity_graph:
+        #     self._trav_map.load_map(maps_path)
 
     def _should_load_object(self, obj_info):
         category = obj_info["args"].get("category", "object")

@@ -45,15 +45,15 @@ class TraversableScene(Scene):
         log.info("TraversableScene model: {}".format(scene_model))
         self.scene_model = scene_model
 
-        # Create traversable map
-        self._trav_map = TraversableMap(
-            map_resolution=trav_map_resolution,
-            trav_map_erosion=trav_map_erosion,
-            trav_map_with_objects=trav_map_with_objects,
-            build_graph=build_graph,
-            num_waypoints=num_waypoints,
-            waypoint_resolution=waypoint_resolution,
-        )
+        # # Create traversable map
+        # self._trav_map = TraversableMap(
+        #     map_resolution=trav_map_resolution,
+        #     trav_map_erosion=trav_map_erosion,
+        #     trav_map_with_objects=trav_map_with_objects,
+        #     build_graph=build_graph,
+        #     num_waypoints=num_waypoints,
+        #     waypoint_resolution=waypoint_resolution,
+        # )
         # Run super init
         super().__init__(
             scene_file=scene_file,
