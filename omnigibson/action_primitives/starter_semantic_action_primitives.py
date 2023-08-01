@@ -58,6 +58,8 @@ KP_LIN_VEL = 0.3
 KP_ANGLE_VEL = 0.5
 DEFAULT_BODY_OFFSET_FROM_FLOOR = 0.01
 
+MAX_STEPS_FOR_NAVIGATE_TO_POSE_DIRECT = 400
+MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT = 400
 MAX_STEPS_FOR_GRASP_OR_RELEASE = 30
 MAX_WAIT_FOR_GRASP_OR_RELEASE = 10
 
@@ -67,7 +69,7 @@ MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT = 200
 BIRRT_SAMPLING_CIRCLE_PROBABILITY = 0.5
 PREDICATE_SAMPLING_Z_OFFSET = 0.2
 
-GRASP_APPROACH_DISTANCE = 0.3
+GRASP_APPROACH_DISTANCE = 0.5
 OPEN_GRASP_APPROACH_DISTANCE = 0.2
 
 ACTIVITY_RELEVANT_OBJECTS_ONLY = False
@@ -334,37 +336,46 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             approach_pose = (approach_pos, grasp_pose[1])
 
             # If the grasp pose is too far, navigate.
+            print("1. navigate")
             yield from self._navigate_if_needed(obj, pose_on_obj=grasp_pose, obj_to_track=obj_to_track)
+            print("2. move hand to above pos")
             yield from self._move_hand(grasp_pose, obj_to_track=obj_to_track)
 
             # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
             # It's okay if we can't go all the way because we run into the object.
             indented_print("Performing grasp approach.")
-            try:
-                num_waypoints = 50
-                yield from self._move_hand_direct_cartesian_smoothly(approach_pose, num_waypoints, stop_on_contact=True, obj_to_track=obj_to_track)
-            except ActionPrimitiveError:
-                # An error will be raised when contact fails. If this happens, let's retry.
-                # Retreat back to the grasp pose.
-                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track)
-                raise
-
-            indented_print("Grasping.")
-            try:
-                yield from self._execute_grasp(obj_to_track=obj_to_track)
-            except ActionPrimitiveError:
-                # Retreat back to the grasp pose.
-                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track)
-                raise
+            print("3. move down")
+            yield from self._move_hand_direct_cartesian_smoothly(approach_pose, 50, stop_on_contact=True, obj_to_track=obj_to_track)
+            print("4. grip")
+            yield from self._execute_grasp(obj_to_track=obj_to_track)
+            # try:
+            #     num_waypoints = 50
+            #     yield from self._move_hand_direct_cartesian_smoothly(approach_pose, num_waypoints, stop_on_contact=True, obj_to_track=obj_to_track)
+            # except ActionPrimitiveError:
+            #     # An error will be raised when contact fails. If this happens, let's retry.
+            #     # Retreat back to the grasp pose.
+            #     print("contact failed. retrying")
+            #     yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track)
+            #     raise
+            # indented_print("Grasping.")
+            # try:
+            #     print("4. grip")
+            #     yield from self._execute_grasp(obj_to_track=obj_to_track)
+            # except ActionPrimitiveError:
+            #     # Retreat back to the grasp pose.
+            #     print("retreat")
+            #     yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track)
+            #     raise
 
             indented_print("Moving back to grasp pose.")
+            print("move back up")
             num_waypoints = 50
             above_pose = (grasp_pose[0], grasp_pose[1])
             above_pose[0][2] += 0.1
             yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track)
 
         indented_print("Moving hand back to neutral position.")
-
+        print("resetting arm")
         yield from self._reset_hand(check_valid=True, obj_to_track=obj_to_track)
 
         if self._get_obj_in_hand() == obj:
@@ -440,7 +451,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.PLANNING_ERROR,
                 "Could not make a hand motion plan.",
-                {"target_pose": target_pose},
+                {"target_pose": joint_pos},
             )
         
         # Follow the plan to navigate.
@@ -498,14 +509,29 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # head_idx = self.robot.controller_action_idx["camera"]
             # action[head_idx] = head_q
 
-        while True:
+        # while True:
+        #     current_joint_pos = self.robot.get_joint_positions()[control_idx]
+        #     diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
+        #     print("diff_joint_pos", max(abs(diff_joint_pos)))
+        #     if max(diff_joint_pos) < 0.005:
+        #         return
+        #     if stop_on_contact and detect_robot_collision_in_sim(self.robot):
+        #         print("contact. stopping")
+        #         return
+        #     yield action
+
+        for _ in range(MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT):
             current_joint_pos = self.robot.get_joint_positions()[control_idx]
             diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
+            print("diff_joint_pos", max(abs(diff_joint_pos)))
             if max(diff_joint_pos) < 0.005:
                 return
             if stop_on_contact and detect_robot_collision_in_sim(self.robot):
+                print("contact. stopping")
                 return
             yield action
+        print("exceeded max step")
+        return
 
     def _move_hand_direct_cartesian(self, target_pose, **kwargs):
         joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
@@ -671,6 +697,16 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 0.045,
                 0.045,
             ])
+            # return np.array([
+            #     -1.78029833e-04,  3.20231302e-05, -1.85759447e-07,
+            #     0.0, -0.2,
+            #     0.0,  0.1, -6.10000000e-01,
+            #     -1.10000000e+00,  0.00000000e+00, -1.10000000e+00,  1.47000000e+00,
+            #     0.00000000e+00,  8.70000000e-01,  2.71000000e+00,  1.50000000e+00,
+            #     1.71000000e+00, -1.50000000e+00, -1.57000000e+00,  4.50000000e-01,
+            #     1.39000000e+00,  0.00000000e+00,  0.00000000e+00,  4.50000000e-02,
+            #     4.50000000e-02,  4.50000000e-02,  4.50000000e-02
+            # ])
 
     def _reset_hand(self, check_valid=False, obj_to_track=None):
         # if check_valid = True, plans a path back to home position. if False, homes joints without planning (may cause collision)
@@ -751,14 +787,37 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             diff_yaw = T.wrap_angle(T.quat2euler(body_target_pose[1])[2])
             at_goal_orn = abs(diff_yaw) < angle_threshold
             
-            while not(at_goal_pos and at_goal_orn):
+            # while not (at_goal_pos and at_goal_orn):
+                # action = self._empty_action()
+                # direction_vec = body_target_pose[0][:2] / (np.linalg.norm(body_target_pose[0][:2]) * 5)
+                # ang_direction = -1.0 if diff_yaw < 0.0 else 1.0
+                # ang_vel = KP_ANGLE_VEL * ang_direction
+                # action_linear = [direction_vec[0], direction_vec[1]] if not at_goal_pos else [0.0, 0.0]
+                # action_angular = ang_vel if not at_goal_orn else 0.0
+                # # print("at_goal_pos", at_goal_pos)
+                # base_action = [action_linear[0], action_linear[1], action_angular]
+                # action[self.robot.controller_action_idx["base"]] = base_action
+
+                # # if an object to track is provided, compute head joint angles
+                # if obj_to_track is not None:
+                #     action = self.overwrite_head_action(action, obj=obj_to_track)
+                # yield action
+
+                # body_target_pose = self._get_pose_in_robot_frame(end_pose)
+                # at_goal_pos = np.linalg.norm(body_target_pose[0][:2]) < dist_threshold
+                # diff_yaw = T.wrap_angle(T.quat2euler(body_target_pose[1])[2])
+                # at_goal_orn = abs(diff_yaw) < angle_threshold
+
+            for _ in range(MAX_STEPS_FOR_NAVIGATE_TO_POSE_DIRECT):
+                if at_goal_pos and at_goal_orn:
+                    return
                 action = self._empty_action()
                 direction_vec = body_target_pose[0][:2] / (np.linalg.norm(body_target_pose[0][:2]) * 5)
                 ang_direction = -1.0 if diff_yaw < 0.0 else 1.0
                 ang_vel = KP_ANGLE_VEL * ang_direction
                 action_linear = [direction_vec[0], direction_vec[1]] if not at_goal_pos else [0.0, 0.0]
                 action_angular = ang_vel if not at_goal_orn else 0.0
-                print("at_goal_pos", at_goal_pos)
+                # print("at_goal_pos", at_goal_pos)
                 base_action = [action_linear[0], action_linear[1], action_angular]
                 action[self.robot.controller_action_idx["base"]] = base_action
 
@@ -773,7 +832,24 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 at_goal_orn = abs(diff_yaw) < angle_threshold
 
         else: # all other robots have differential drive base
-            while np.linalg.norm(body_target_pose[0][:2]) > dist_threshold:
+            # while np.linalg.norm(body_target_pose[0][:2]) > dist_threshold:
+            #     diff_pos = end_pose[0] - self.robot.get_position()
+            #     intermediate_pose = (end_pose[0], T.euler2quat([0, 0, np.arctan2(diff_pos[1], diff_pos[0])]))
+            #     body_intermediate_pose = self._get_pose_in_robot_frame(intermediate_pose)
+            #     diff_yaw = T.wrap_angle(T.quat2euler(body_intermediate_pose[1])[2])
+            #     if abs(diff_yaw) > DEFAULT_ANGLE_THRESHOLD:
+            #         yield from self._rotate_in_place(intermediate_pose, angle_threshold=DEFAULT_ANGLE_THRESHOLD, obj_to_track=obj_to_track)
+            #     else:
+            #         action = self._empty_action()
+            #         base_action = [KP_LIN_VEL, 0.0]
+            #         action[self.robot.controller_action_idx["base"]] = base_action
+            #         yield action
+
+            #     body_target_pose = self._get_pose_in_robot_frame(end_pose)
+            
+            for _ in range(MAX_STEPS_FOR_NAVIGATE_TO_POSE_DIRECT):
+                if np.linalg.norm(body_target_pose[0][:2]) < dist_threshold:
+                    return
                 diff_pos = end_pose[0] - self.robot.get_position()
                 intermediate_pose = (end_pose[0], T.euler2quat([0, 0, np.arctan2(diff_pos[1], diff_pos[0])]))
                 body_intermediate_pose = self._get_pose_in_robot_frame(intermediate_pose)
