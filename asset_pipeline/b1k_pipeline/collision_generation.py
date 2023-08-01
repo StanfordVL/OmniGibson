@@ -258,12 +258,15 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
                     # Here we currently match the model ID and the link name
                     matching_key = (parsed_name.group('model_id'), parsed_name.group('link_name'))
                     for k, v in selection.items():
+                        vs = {v}
+                        if v == "bbox":
+                            vs.add("chull")
                         parsed_key = parse_name(k)
                         if not parsed_key:
                             continue
                         if (parsed_key.group('model_id'), parsed_key.group('link_name')) == matching_key:
                             # Get a list containing only the selected option
-                            processing_options = [(option_name, option_fn) for option_name, option_fn in processing_options if option_name == v]
+                            processing_options = [(option_name, option_fn) for option_name, option_fn in processing_options if option_name in vs]
                             break
 
                 # Now queue a target for each of the processing options
