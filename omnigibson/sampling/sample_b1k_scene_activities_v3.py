@@ -158,7 +158,8 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     valid_tasks = get_valid_tasks()
     mapping = parse_task_mapping(fpath=SCENE_MAPPING_FPATH)
-    activities = get_scene_compatible_activities(scene_model=args.scene_model, mapping=mapping)
+    activities = get_scene_compatible_activities(scene_model=args.scene_model, mapping=mapping) \
+        if args.activities is None else args.activities.split(",")
 
     # Create the environment
     # Attempt to sample the activity
