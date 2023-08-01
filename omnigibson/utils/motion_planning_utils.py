@@ -9,7 +9,7 @@ def plan_base_motion(
     robot,
     end_conf,
     context,
-    planning_time = 100.0,
+    planning_time = 20.0,
     **kwargs
 ):
     """
@@ -95,7 +95,7 @@ def plan_arm_motion(
     robot,
     end_conf,
     context,
-    planning_time = 100.0,
+    planning_time = 20.0,
     **kwargs
 ):
     """

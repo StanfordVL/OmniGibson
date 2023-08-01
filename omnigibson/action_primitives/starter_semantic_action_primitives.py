@@ -66,7 +66,7 @@ MAX_WAIT_FOR_GRASP_OR_RELEASE = 10
 MAX_STEPS_FOR_WAYPOINT_NAVIGATION = 200
 
 MAX_ATTEMPTS_FOR_SAMPLING_POSE_WITH_OBJECT_AND_PREDICATE = 20
-MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT = 200
+MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT = 500
 MAX_ATTEMPTS_FOR_SAMPLING_POSE_IN_ROOM = 60
 
 BIRRT_SAMPLING_CIRCLE_PROBABILITY = 0.5
@@ -520,8 +520,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 )
             
         if self._get_obj_in_hand() != obj:
-            # Open the hand first
-            yield from self._execute_release()
+            # # Open the hand first
+            # yield from self._execute_release()
 
             # Allow grasping from suboptimal extents if we've tried enough times.
             grasp_poses = get_grasp_poses_for_object_sticky(obj)
@@ -532,6 +532,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             approach_pose = (approach_pos, grasp_pose[1])
             # If the grasp pose is too far, navigate.
             yield from self._navigate_if_needed(obj, pose_on_obj=grasp_pose, obj_to_track=obj_to_track)
+            
+            # Open the hand first
+            yield from self._execute_release()
             yield from self._move_hand(grasp_pose, obj_to_track=obj_to_track)
 
             # We can pre-grasp in sticky grasping mode.
@@ -543,7 +546,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             yield from self._move_hand_direct_cartesian(approach_pose, stop_on_contact=True, obj_to_track=obj_to_track)
 
             # Step once to update
-            yield self._empty_action()
+            yield (self._empty_action(), "update:get_obj_in_hand")
 
             if self._get_obj_in_hand() is None:
                 raise ActionPrimitiveError(
@@ -745,7 +748,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             np.array or None: Action array for one step for the robot to move hand or None if its at the target pose
         """
-        yield from self._settle_robot()
+        if self.robot_model == "Fetch":
+            yield from (self._settle_robot(), "update:settle_robot")
         joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
         yield from self._move_hand_joint(joint_pos, control_idx, obj_to_track=obj_to_track)
 
@@ -833,7 +837,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 return
             if stop_on_contact and detect_robot_collision_in_sim(self.robot, ignore_obj_in_hand=False):
                 return
-            yield action
+            yield (action, "manip:move_hand_direct_joint")
 
         if not ignore_failure:
             raise ActionPrimitiveError(
@@ -926,7 +930,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         controller_name = "gripper_{}".format(self.arm)
         action[self.robot.controller_action_idx[controller_name]] = -1.0
         for _ in range(MAX_STEPS_FOR_GRASP_OR_RELEASE):
-            yield action
+            yield (action, "manip:execute_grasp")
 
         # Do nothing for a bit so that AG can trigger.
         # for _ in range(MAX_WAIT_FOR_GRASP_OR_RELEASE):
@@ -948,7 +952,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         action[self.robot.controller_action_idx[controller_name]] = 1.0
         for _ in range(MAX_STEPS_FOR_GRASP_OR_RELEASE):
             # Otherwise, keep applying the action!
-            yield action
+            yield (action, "manip:execute_release")
 
         if self._get_obj_in_hand() is not None:
             raise ActionPrimitiveError(
@@ -1191,6 +1195,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Args:
             obj (StatefulObject): object to be in range of
             pose_on_obj (Iterable): (pos, quat) pose
+            obj_to_track (StatefulObject): Object to track with the camera
 
         Returns:
             np.array or None: Action array for one step for the robot to navigate in range or None if it is done navigating
@@ -1223,7 +1228,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 base_action = [direction_vec[0], direction_vec[1], 0.0]
                 action[self.robot.controller_action_idx["base"]] = base_action
                 action = self._overwrite_head_action(action, obj_to_track) if obj_to_track is not None else action
-                yield action
+                yield (action, "nav:navigate_to_pose_direct")
             else:
                 diff_pos = end_pose[0] - self.robot.get_position()
                 intermediate_pose = (end_pose[0], T.euler2quat([0, 0, np.arctan2(diff_pos[1], diff_pos[0])]))
@@ -1235,7 +1240,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     action = self._empty_action()
                     base_action = [KP_LIN_VEL, 0.0]
                     action[self.robot.controller_action_idx["base"]] = base_action
-                    yield action
+                    yield (action, "nav:navigate_to_pose_direct")
 
             body_target_pose = self._get_pose_in_robot_frame(end_pose)
 
@@ -1266,12 +1271,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             action[self.robot.controller_action_idx["base"]] = base_action
             
             action = self._overwrite_head_action(action, obj_to_track) if obj_to_track is not None else action
-            yield action
+            yield (action, "nav:rotate_in_place")
 
             body_target_pose = self._get_pose_in_robot_frame(end_pose)
             diff_yaw = T.wrap_angle(T.quat2euler(body_target_pose[1])[2])
             
-        yield self._empty_action()
+        yield (self._empty_action(), "nav:rotate_in_place")
             
     def _sample_pose_near_object(self, obj, pose_on_obj=None, **kwargs):
         """
