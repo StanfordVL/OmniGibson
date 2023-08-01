@@ -30,6 +30,7 @@ LOAD_NOT_LOAD_MAPPING = {
     "floor_trav_no_obj_0.png": (NEEDED_STRUCTURE_CATEGORIES, None),
     "floor_trav_0.png": (None, IGNORE_CATEGORIES),
     "floor_trav_no_door_0.png": (None, DOOR_CATEGORIES + IGNORE_CATEGORIES),
+    "floor_trav_open_door_0.png": (None, IGNORE_CATEGORIES),
 }
 
 
@@ -63,6 +64,7 @@ def process_scene(scene_id, dataset_path, out_path):
     import igibson.external.pybullet_tools.utils
     from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
     from igibson.simulator import Simulator
+    from igibson import object_states
 
     igibson.ig_dataset_path = dataset_path
 
@@ -80,6 +82,14 @@ def process_scene(scene_id, dataset_path, out_path):
         # Load the scene with the right categories
         scene = InteractiveIndoorScene(scene_id, load_object_categories=load_categories, not_load_object_categories=not_load_categories)
         s.import_scene(scene)
+
+        # Move the doors to the open position if necessary
+        if fname == "floor_trav_open_door_0.png":
+            for door_cat in DOOR_CATEGORIES:
+                for door in scene.objects_by_category[door_cat]:
+                    if object_states.Open not in door.states:
+                        continue
+                    door.states[object_states.Open].set_value(True, fully=True)
 
         # Compute the map dimensions by finding the AABB of all objects and calculating max distance from origin.
         floor_objs = [
