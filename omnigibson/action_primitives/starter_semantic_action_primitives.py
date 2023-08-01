@@ -529,7 +529,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             if stop_on_contact and detect_robot_collision_in_sim(self.robot):
                 print("contact. stopping")
                 return
-            yield action
+            yield action, "manip:move_hand_direct_joint"
         print("exceeded max step")
         return
 
@@ -553,14 +553,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if obj_to_track is not None:
             action = self.overwrite_head_action(action, obj=obj_to_track)
         for _ in range(MAX_STEPS_FOR_GRASP_OR_RELEASE):
-            yield action
+            yield action, "manip:execute_grasp"
 
         # Do nothing for a bit so that AG can trigger.
         for _ in range(MAX_WAIT_FOR_GRASP_OR_RELEASE):
             action = self._empty_action()
             if obj_to_track is not None:
                 action = self.overwrite_head_action(action, obj=obj_to_track)
-            yield action
+            yield action, "manip:execute_grasp"
 
         if self._get_obj_in_hand() is None:
             raise ActionPrimitiveError(
@@ -574,11 +574,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         action[self.robot.controller_action_idx[controller_name]] = 1.0
         for _ in range(MAX_STEPS_FOR_GRASP_OR_RELEASE):
             # Otherwise, keep applying the action!
-            yield action
+            yield action, "manip:execute_release"
 
         # Do nothing for a bit so that AG can trigger.
         for _ in range(MAX_WAIT_FOR_GRASP_OR_RELEASE):
-            yield self._empty_action()
+            yield self._empty_action(), "manip:execute_release"
 
         if self._get_obj_in_hand() is not None:
             raise ActionPrimitiveError(
@@ -824,7 +824,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 # if an object to track is provided, compute head joint angles
                 if obj_to_track is not None:
                     action = self.overwrite_head_action(action, obj=obj_to_track)
-                yield action
+                yield action, "nav:navigate_to_pose_direct"
 
                 body_target_pose = self._get_pose_in_robot_frame(end_pose)
                 at_goal_pos = np.linalg.norm(body_target_pose[0][:2]) < dist_threshold
@@ -832,21 +832,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 at_goal_orn = abs(diff_yaw) < angle_threshold
 
         else: # all other robots have differential drive base
-            # while np.linalg.norm(body_target_pose[0][:2]) > dist_threshold:
-            #     diff_pos = end_pose[0] - self.robot.get_position()
-            #     intermediate_pose = (end_pose[0], T.euler2quat([0, 0, np.arctan2(diff_pos[1], diff_pos[0])]))
-            #     body_intermediate_pose = self._get_pose_in_robot_frame(intermediate_pose)
-            #     diff_yaw = T.wrap_angle(T.quat2euler(body_intermediate_pose[1])[2])
-            #     if abs(diff_yaw) > DEFAULT_ANGLE_THRESHOLD:
-            #         yield from self._rotate_in_place(intermediate_pose, angle_threshold=DEFAULT_ANGLE_THRESHOLD, obj_to_track=obj_to_track)
-            #     else:
-            #         action = self._empty_action()
-            #         base_action = [KP_LIN_VEL, 0.0]
-            #         action[self.robot.controller_action_idx["base"]] = base_action
-            #         yield action
-
-            #     body_target_pose = self._get_pose_in_robot_frame(end_pose)
-            
             for _ in range(MAX_STEPS_FOR_NAVIGATE_TO_POSE_DIRECT):
                 if np.linalg.norm(body_target_pose[0][:2]) < dist_threshold:
                     return
@@ -860,7 +845,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     action = self._empty_action()
                     base_action = [KP_LIN_VEL, 0.0]
                     action[self.robot.controller_action_idx["base"]] = base_action
-                    yield action
+                    yield action, "nav:navigate_to_pose_direct"
 
                 body_target_pose = self._get_pose_in_robot_frame(end_pose)
 
@@ -923,7 +908,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             if obj_to_track is not None:
                 action = self.overwrite_head_action(action, obj=obj_to_track)
             
-            yield action
+            yield action, "nav:rotate_in_place"
 
             body_target_pose = self._get_pose_in_robot_frame(end_pose)
             diff_yaw = T.wrap_angle(T.quat2euler(body_target_pose[1])[2])
@@ -941,7 +926,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if obj_to_track is not None:
             action = self.overwrite_head_action(action, obj=obj_to_track)
         
-        yield action
+        yield action, "nav:rotate_in_place"
    
     def _sample_pose_near_object(self, obj, pose_on_obj=None, **kwargs):
         if pose_on_obj is None:
