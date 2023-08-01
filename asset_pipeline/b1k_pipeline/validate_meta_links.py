@@ -27,8 +27,11 @@ META_REQUIRING_ABILITIES = {
     "particleSource", "particleApplier", "particleRemover"
 }
 
-def check_meta_links(abilities, meta_links):
+def check_meta_links(category, abilities, meta_links):
     errors = []
+
+    if category in ["walls", "floors", "lawn", "driveway"] and "collision" not in meta_links:
+        errors.append("Wall/floor/lawn/driveway objects must have a manual collision mesh.")
 
     if "substance" in abilities:
         return []  # substances don't need any meta links
@@ -88,11 +91,11 @@ def main():
                 assert syn, f"Could not find synset for object {obj}"
                 abilities = OBJECT_TAXONOMY.get_abilities(syn)
 
-                if syn not in fully_complete_objects:
+                if cat not in fully_complete_objects:
                     fully_complete_objects[cat] = 0
 
                 meta_links = set(object_list["meta_links"][obj]) if obj in object_list["meta_links"] else set()
-                errors = check_meta_links(abilities, meta_links)
+                errors = check_meta_links(cat, abilities, meta_links)
                 if errors:
                     target_errors.append((obj, errors))
                 else:
@@ -113,14 +116,21 @@ def main():
 
         # Now check that each leaf-level synset has at least one fully complete object
         print("Task-required synsets that have no fully-complete objects:")
+        trs_missing = {}
         for trs in sorted(TASK_REQUIRED_SYNSETS):
             if "substance" in OBJECT_TAXONOMY.get_abilities(trs):
                 continue
             descendants = OBJECT_TAXONOMY.get_subtree_categories(trs)
             trs_fully_complete = sum(fully_complete_objects[cat] for cat in descendants if cat in fully_complete_objects)
             if trs_fully_complete == 0:
-                needed_abilities = ", ".join(sorted(set(OBJECT_TAXONOMY.get_abilities(trs).keys()) & META_REQUIRING_ABILITIES))
-                print(f" - {trs}: {needed_abilities}")
+                needed_abilities = sorted(set(OBJECT_TAXONOMY.get_abilities(trs).keys()) & META_REQUIRING_ABILITIES)
+                print(f" - {trs}: {', '.join(needed_abilities)}")
+                trs_missing[trs] = needed_abilities
+
+        with fs.pipeline_output().open("validate_meta_links.json", "w") as f:
+            json.dump({"target_errors": all_errors, "task_required_synsets_with_no_complete_obj": trs_missing}, f, indent=2)
+
+        
 
 
 if __name__ == "__main__":
