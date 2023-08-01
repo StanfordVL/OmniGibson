@@ -40,6 +40,16 @@ stages:
     outs:
     - artifacts/pipeline/object_list.success
 
+  validate_meta_links:
+    # Validate exported scene, e.g. physics stability.
+    cmd: 'python -m b1k_pipeline.validate_meta_links'
+    deps:
+    - cad/#{combined}/artifacts/object_list.json
+    - artifacts/pipeline/object_list.success
+    - b1k_pipeline/validate_meta_links.py
+    outs:
+    - artifacts/pipeline/validate_meta_links.json
+
   object_inventory:
     # List all objects found in all entries, with their sources. Cross-reference bad objects w/ providers. Check provider uniqueness.
     cmd: 'python -m b1k_pipeline.object_inventory'
