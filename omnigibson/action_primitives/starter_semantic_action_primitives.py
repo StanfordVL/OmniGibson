@@ -63,7 +63,7 @@ MAX_STEPS_FOR_HAND_MOVE = 500
 MAX_STEPS_FOR_HAND_MOVE_WHEN_OPENING = 30
 MAX_STEPS_FOR_GRASP_OR_RELEASE = 30
 MAX_WAIT_FOR_GRASP_OR_RELEASE = 10
-MAX_STEPS_FOR_WAYPOINT_NAVIGATION = 200
+MAX_STEPS_FOR_WAYPOINT_NAVIGATION = 500
 
 MAX_ATTEMPTS_FOR_SAMPLING_POSE_WITH_OBJECT_AND_PREDICATE = 20
 MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT = 500
@@ -838,6 +838,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             if stop_on_contact and detect_robot_collision_in_sim(self.robot, ignore_obj_in_hand=False):
                 return
             yield (action, "manip:move_hand_direct_joint")
+        
+        # exceeded max steps for hand move
+        return
 
         if not ignore_failure:
             raise ActionPrimitiveError(
@@ -1220,8 +1223,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             
         end_pose = self._get_robot_pose_from_2d_pose(pose_2d)
         body_target_pose = self._get_pose_in_robot_frame(end_pose)
-        
-        while np.linalg.norm(body_target_pose[0][:2]) > dist_threshold:
+
+        for _ in range(MAX_STEPS_FOR_WAYPOINT_NAVIGATION):
+            if np.linalg.norm(body_target_pose[0][:2]) dist_threshold:
+                return
             if self.robot_model == "Tiago":
                 action = self._empty_action()
                 direction_vec = body_target_pose[0][:2] / (np.linalg.norm(body_target_pose[0][:2]) * 5)
