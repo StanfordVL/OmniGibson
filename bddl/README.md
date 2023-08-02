@@ -1,6 +1,6 @@
 # Behavior Domain Definition Language 
 
-**Note: You are reading the docs for the 3.0.0b1 release, which is a backwards-incompatible version of BDDL containing a subset of BEHAVIOR-1K activities released as part of the BEHAVIOR-1K beta release. Please go to the tags menu to see BEHAVIOR-100 code and files.**
+**Note: You are reading the docs for the 3.1.0 release, which is a backwards-incompatible version of BDDL containing a subset of BEHAVIOR-1K activities released as part of the BEHAVIOR-1K beta release. Please go to the tags menu to see BEHAVIOR-100 code and files.**
 
 The Behavior Domain Definition Language (BDDL) is a domain-specific language designed for the Benchmark for Everyday Household Activities in Virtual, Interactive, and ecOlogical enviRonments (BEHAVIOR). 
 
