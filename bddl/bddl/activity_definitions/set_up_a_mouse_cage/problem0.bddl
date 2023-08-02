@@ -30,7 +30,7 @@
     (:goal 
         (and 
             (filled ?bowl.n.01_1 ?petfood.n.01_1) 
-            (overlaid ?tissue.n.02_1 ?hutch.n.01_1) 
+            (ontop ?tissue.n.02_1 ?hutch.n.01_1)
             (inside ?hamster_wheel.n.01_1 ?hutch.n.01_1) 
             (inside ?water_bottle.n.01_1 ?hutch.n.01_1) 
             (ontop ?hutch.n.01_1 ?coffee_table.n.01_1) 
