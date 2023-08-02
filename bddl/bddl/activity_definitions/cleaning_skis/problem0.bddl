@@ -5,7 +5,7 @@
      	ski.n.01_1 ski.n.01_2 - ski.n.01
         stain.n.01_1 - stain.n.01
         rubbing_alcohol.n.01_1 - rubbing_alcohol.n.01
-        rubbing_alcohol__bottle.n.01_1 - rubbing_alcohol__bottle.n.01
+        rubbing_alcohol__atomizer.n.01_1 - rubbing_alcohol__atomizer.n.01
     	bathtub.n.01_1 - bathtub.n.01
     	snow.n.01_1 - snow.n.01
     	scraper.n.01_1 - scraper.n.01
@@ -23,12 +23,12 @@
         (covered ski.n.01_2 snow.n.01_1) 
         (covered ski.n.01_1 stain.n.01_1) 
         (covered ski.n.01_2 stain.n.01_1) 
-        (filled rubbing_alcohol__bottle.n.01_1 rubbing_alcohol.n.01_1)
-        (ontop rubbing_alcohol__bottle.n.01_1 floor.n.01_1)
+        (insource rubbing_alcohol__atomizer.n.01_1 rubbing_alcohol.n.01_1)
+        (ontop rubbing_alcohol__atomizer.n.01_1 floor.n.01_1)
         (ontop rag.n.01_1 floor.n.01_1)
         (ontop scraper.n.01_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1)
-        (inroom bathtub.n.01_1 utility_room) 
+        (inroom bathtub.n.01_1 bathroom) 
         (inroom floor.n.01_1 utility_room) 
         (inroom sink.n.01_1 utility_room)
         (ontop agent.n.01_1 floor.n.01_1)

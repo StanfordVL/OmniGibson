@@ -10,8 +10,7 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init 
-        (closed electric_refrigerator.n.01_1) 
+    (:init
         (ontop club_sandwich.n.01_1 plate.n.04_1) 
         (ontop club_sandwich.n.01_2 plate.n.04_1) 
         (ontop plate.n.04_1 desk.n.01_1)

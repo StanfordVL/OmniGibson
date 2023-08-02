@@ -7,11 +7,11 @@
         sign.n.02_1 - sign.n.02
         floor.n.01_1 - floor.n.01
         centerpiece.n.02_1 - centerpiece.n.02
-        gift__box.n.01_1 - gift__box.n.01
+        gift_box.n.01_1 - gift_box.n.01
         bow.n.08_1 - bow.n.08
         tree.n.01_1 - tree.n.01
         wall.n.01_1 - wall.n.01
-        pedestal_table.n.01_1 - pedestal_table.n.01
+        coffee_table.n.01_1 - coffee_table.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -30,18 +30,18 @@
         )
         (ontop centerpiece.n.02_1 floor.n.01_1) 
         (ontop bow.n.08_1 floor.n.01_1)
-        (ontop gift__box.n.01_1 floor.n.01_1)
+        (ontop gift_box.n.01_1 floor.n.01_1)
         (inroom floor.n.01_1 garden) 
         (inroom tree.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
-        (inroom pedestal_table.n.01_1 garden) 
+        (inroom coffee_table.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (ontop ?gift__box.n.01_1 ?pedestal_table.n.01_1)
-            (ontop ?centerpiece.n.02_1 ?pedestal_table.n.01_1) 
+            (ontop ?gift_box.n.01_1 ?coffee_table.n.01_1)
+            (ontop ?centerpiece.n.02_1 ?coffee_table.n.01_1) 
             (forall 
                 (?balloon.n.01 - balloon.n.01)
                 (ontop ?balloon.n.01 ?floor.n.01_1)

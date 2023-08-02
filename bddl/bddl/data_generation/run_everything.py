@@ -1,8 +1,9 @@
 import pathlib
-from bddl.data_generation.get_hierarchy_full import get_hierarchy
+from bddl.data_generation.get_hierarchy_full import get_hierarchy, create_get_save_hierarchy_with_properties
 from bddl.data_generation.get_syn_prop_annots_canonical import create_get_save_annots_canonical, create_get_save_properties_to_synsets, create_get_save_synsets_to_descriptors
 from bddl.data_generation.propagate_by_intersection import create_get_save_propagated_canonical
 from bddl.data_generation.process_prop_param_annots import create_get_save_propagated_annots_params
+from bddl.data_generation.parse_tm_cleaning_csv import parse_tm_cleaning_csv
 import pandas as pd
 import csv
 import nltk
@@ -20,7 +21,7 @@ SYN_PROP_DATA_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "synse
 # owned_models.to_csv("owned_models.csv", index=False)
 
 def main():
-    nltk.download('wordnet')
+    nltk.download("wordnet")
 
     # Get full hierarchy (it's created and saved on import)
     with open(SYN_PROP_DATA_FN, "r") as f:
@@ -43,6 +44,12 @@ def main():
 
     # Add parameter info to syns-to-props
     create_get_save_propagated_annots_params(propagated_canonical, props_to_syns)
+
+    # Add prop-param info to hierarchy 
+    create_get_save_hierarchy_with_properties(hierarchy)
+
+    # Add TM cleaning info to hierarchy
+    parse_tm_cleaning_csv()
 
     # # Create and save activity-specific hierarchies (no getting because that will get complicated)
     # create_save_activity_specific_hierarchies()

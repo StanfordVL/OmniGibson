@@ -8,21 +8,20 @@
         shelf.n.01_1 shelf.n.01_2 - shelf.n.01
         brisket.n.01_1 - brisket.n.01
         bratwurst.n.01_1 bratwurst.n.01_2 - bratwurst.n.01
-        ground_beef__package.n.01_1 - ground_beef__package.n.01
+        pack__of__ground_beef.n.01_1 - pack__of__ground_beef.n.01
         money.n.01_1 money.n.01_2 money.n.01_3 money.n.01_4 money.n.01_5 money.n.01_6 - money.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (closed cash_register.n.01_1) 
+        (ontop cash_register.n.01_1 checkout.n.03_1)
         (ontop steak.n.01_1 shelf.n.01_1) 
         (ontop steak.n.01_2 shelf.n.01_1) 
         (ontop brisket.n.01_1 shelf.n.01_2) 
         (ontop bratwurst.n.01_1 shelf.n.01_2) 
         (ontop bratwurst.n.01_2 shelf.n.01_2) 
-        (ontop ground_beef__package.n.01_1 shelf.n.01_1) 
+        (ontop pack__of__ground_beef.n.01_1 shelf.n.01_1)
         (ontop money.n.01_1 checkout.n.03_1) 
         (ontop money.n.01_2 checkout.n.03_1) 
         (ontop money.n.01_3 checkout.n.03_1) 
@@ -39,18 +38,17 @@
     )
     
     (:goal 
-        (and 
-            (open ?cash_register.n.01_1) 
+        (and
             (forn 
                 (5) 
                 (?money.n.01 - money.n.01) 
-                (ontop ?money.n.01 ?cash_register.n.01_1)
+                (nextto ?money.n.01 ?cash_register.n.01_1)
     
             ) 
             (forn 
                 (1) 
                 (?money.n.01 - money.n.01) 
-                (ontop ?money.n.01 ?checkout.n.03_1)
+                (nextto ?money.n.01 ?checkout.n.03_1)
     
             ) 
             (forall 
@@ -64,7 +62,7 @@
     
             ) 
             (ontop ?brisket.n.01_1 ?checkout.n.03_1) 
-            (ontop ?ground_beef__package.n.01_1 ?checkout.n.03_1)
+            (ontop ?pack__of__ground_beef.n.01_1 ?checkout.n.03_1)
     
         )
     

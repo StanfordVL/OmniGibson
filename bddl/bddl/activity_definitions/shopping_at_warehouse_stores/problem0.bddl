@@ -2,10 +2,10 @@
     (:domain omnigibson)
 
     (:objects
-     	corn_flake__box.n.01_1 - corn_flake__box.n.01
+     	box__of__corn_flakes.n.01_1 - box__of__corn_flakes.n.01
     	shopping_cart.n.01_1 - shopping_cart.n.01
     	baguet.n.01_1 - baguet.n.01
-    	cream_cheese__box.n.01_1 - cream_cheese__box.n.01
+    	bag__of__cream_cheese.n.01_1 - bag__of__cream_cheese.n.01
     	pomegranate.n.02_1 - pomegranate.n.02
     	watermelon.n.02_1 - watermelon.n.02
     	chicken.n.01_1 - chicken.n.01
@@ -15,9 +15,9 @@
     )
     
     (:init 
-        (ontop corn_flake__box.n.01_1 shopping_cart.n.01_1) 
+        (ontop box__of__corn_flakes.n.01_1 shopping_cart.n.01_1) 
         (ontop baguet.n.01_1 shopping_cart.n.01_1) 
-        (ontop cream_cheese__box.n.01_1 shopping_cart.n.01_1) 
+        (ontop bag__of__cream_cheese.n.01_1 shopping_cart.n.01_1) 
         (ontop pomegranate.n.02_1 shopping_cart.n.01_1) 
         (ontop watermelon.n.02_1 shopping_cart.n.01_1) 
         (ontop chicken.n.01_1 shopping_cart.n.01_1) 
@@ -29,9 +29,9 @@
     
     (:goal 
         (and 
-            (ontop ?corn_flake__box.n.01_1 ?checkout.n.03_1) 
+            (ontop ?box__of__corn_flakes.n.01_1 ?checkout.n.03_1) 
             (ontop ?baguet.n.01_1 ?checkout.n.03_1) 
-            (ontop ?cream_cheese__box.n.01_1 ?checkout.n.03_1) 
+            (ontop ?bag__of__cream_cheese.n.01_1 ?checkout.n.03_1) 
             (ontop ?pomegranate.n.02_1 ?checkout.n.03_1) 
             (ontop ?watermelon.n.02_1 ?checkout.n.03_1)
         )

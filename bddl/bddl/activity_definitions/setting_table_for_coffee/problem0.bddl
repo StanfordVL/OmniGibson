@@ -5,7 +5,7 @@
         espresso.n.01_1 - espresso.n.01
         pitcher.n.02_1 - pitcher.n.02
         countertop.n.01_1 - countertop.n.01
-        cream__carton.n.01_1 - cream__carton.n.01
+        box__of__cream.n.01_1 - box__of__cream.n.01
         shelf.n.01_1 - shelf.n.01
         napkin.n.01_1 napkin.n.01_2 - napkin.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
@@ -20,7 +20,7 @@
     (:init 
         (filled pitcher.n.02_1 espresso.n.01_1) 
         (ontop pitcher.n.02_1 countertop.n.01_1) 
-        (inside cream__carton.n.01_1 electric_refrigerator.n.01_1) 
+        (inside box__of__cream.n.01_1 electric_refrigerator.n.01_1) 
         (ontop napkin.n.01_1 breakfast_table.n.01_1) 
         (ontop napkin.n.01_2 breakfast_table.n.01_1) 
         (filled bowl.n.01_1 granulated_sugar.n.01_1) 
@@ -30,7 +30,7 @@
         (inroom breakfast_table.n.01_1 dining_room) 
         (inroom shelf.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
-        (inroom electric_refrigerator.n.01_1 dining_room) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -39,7 +39,7 @@
         (and 
             (filled ?pitcher.n.02_1 ?espresso.n.01_1)
             (ontop ?pitcher.n.02_1 ?countertop.n.01_1)
-            (ontop ?cream__carton.n.01_1 ?breakfast_table.n.01_1) 
+            (ontop ?box__of__cream.n.01_1 ?breakfast_table.n.01_1) 
             (forall 
                 (?napkin.n.01 - napkin.n.01) 
                 (ontop ?napkin.n.01 ?breakfast_table.n.01_1)

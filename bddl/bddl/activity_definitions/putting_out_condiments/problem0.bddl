@@ -4,12 +4,12 @@
     (:objects
         wicker_basket.n.01_1 wicker_basket.n.01_2 - wicker_basket.n.01
         countertop.n.01_1 - countertop.n.01
-        vinegar__bottle.n.01_1 - vinegar__bottle.n.01
+        bottle__of__vinegar.n.01_1 - bottle__of__vinegar.n.01
         pickle.n.01_1 - pickle.n.01
-        mustard__bottle.n.01_1 - mustard__bottle.n.01
-        peanut_butter__jar.n.01_1 - peanut_butter__jar.n.01
-        tomato_sauce__jar.n.01_1 - tomato_sauce__jar.n.01
-        mayonnaise__jar.n.01_1 - mayonnaise__jar.n.01
+        bottle__of__mustard.n.01_1 - bottle__of__mustard.n.01
+        bottle__of__peanut_butter.n.01_1 - bottle__of__peanut_butter.n.01
+        jar__of__spaghetti_sauce.n.01_1 - jar__of__spaghetti_sauce.n.01
+        bottle__of__mayonnaise.n.01_1 - bottle__of__mayonnaise.n.01
         table_knife.n.01_1 table_knife.n.01_2 table_knife.n.01_3 table_knife.n.01_4 table_knife.n.01_5 table_knife.n.01_6 table_knife.n.01_7 - table_knife.n.01
         cabinet.n.01_1 - cabinet.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -21,12 +21,12 @@
     (:init 
         (ontop wicker_basket.n.01_1 countertop.n.01_1) 
         (ontop wicker_basket.n.01_2 countertop.n.01_1) 
-        (ontop vinegar__bottle.n.01_1 countertop.n.01_1) 
+        (ontop bottle__of__vinegar.n.01_1 countertop.n.01_1) 
         (inside pickle.n.01_1 electric_refrigerator.n.01_1) 
-        (inside mustard__bottle.n.01_1 electric_refrigerator.n.01_1) 
-        (inside peanut_butter__jar.n.01_1 cabinet.n.01_1) 
-        (inside tomato_sauce__jar.n.01_1 electric_refrigerator.n.01_1) 
-        (inside mayonnaise__jar.n.01_1 electric_refrigerator.n.01_1) 
+        (inside bottle__of__mustard.n.01_1 electric_refrigerator.n.01_1) 
+        (inside bottle__of__peanut_butter.n.01_1 cabinet.n.01_1) 
+        (inside jar__of__spaghetti_sauce.n.01_1 electric_refrigerator.n.01_1)
+        (inside bottle__of__mayonnaise.n.01_1 electric_refrigerator.n.01_1) 
         (inside table_knife.n.01_1 cabinet.n.01_1)
         (inside table_knife.n.01_2 cabinet.n.01_1)
         (inside table_knife.n.01_3 cabinet.n.01_1)
@@ -44,12 +44,12 @@
     
     (:goal 
         (and 
-            (ontop ?vinegar__bottle.n.01_1 ?breakfast_table.n.01_1) 
+            (ontop ?bottle__of__vinegar.n.01_1 ?breakfast_table.n.01_1) 
             (ontop ?pickle.n.01_1 ?breakfast_table.n.01_1) 
-            (ontop ?mustard__bottle.n.01_1 ?breakfast_table.n.01_1) 
-            (ontop ?tomato_sauce__jar.n.01_1 ?breakfast_table.n.01_1) 
-            (ontop ?peanut_butter__jar.n.01_1 ?breakfast_table.n.01_1) 
-            (ontop ?mayonnaise__jar.n.01_1 ?breakfast_table.n.01_1)
+            (ontop ?bottle__of__mustard.n.01_1 ?breakfast_table.n.01_1) 
+            (ontop ?jar__of__spaghetti_sauce.n.01_1 ?breakfast_table.n.01_1)
+            (ontop ?bottle__of__peanut_butter.n.01_1 ?breakfast_table.n.01_1) 
+            (ontop ?bottle__of__mayonnaise.n.01_1 ?breakfast_table.n.01_1)
             (forn
                 (4)
                 (?table_knife.n.01 - table_knife.n.01)

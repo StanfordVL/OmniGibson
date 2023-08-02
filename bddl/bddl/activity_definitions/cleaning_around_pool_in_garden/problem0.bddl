@@ -13,7 +13,7 @@
     (:init 
         (covered driveway.n.01_1 dust.n.01_1) 
         (ontop broom.n.01_1 floor.n.01_1)
-        (ontop pool.n.01_1 driveway.n.01_1) 
+        (inroom pool.n.01_1 garden)
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)

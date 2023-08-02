@@ -4,7 +4,7 @@
     (:objects
         cash_register.n.01_1 - cash_register.n.01
         checkout.n.03_1 - checkout.n.03
-        vitamin_pill__bottle.n.01_1 vitamin_pill__bottle.n.01_2 vitamin_pill__bottle.n.01_3 vitamin_pill__bottle.n.01_4 - vitamin_pill__bottle.n.01
+        bottle__of__supplements.n.01_1 bottle__of__supplements.n.01_2 bottle__of__supplements.n.01_3 bottle__of__supplements.n.01_4 - bottle__of__supplements.n.01
         shelf.n.01_1 shelf.n.01_2 - shelf.n.01
         money.n.01_1 money.n.01_2 money.n.01_3 - money.n.01
         sack.n.01_1 - sack.n.01
@@ -13,12 +13,11 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (closed cash_register.n.01_1) 
-        (ontop vitamin_pill__bottle.n.01_1 shelf.n.01_1) 
-        (ontop vitamin_pill__bottle.n.01_2 shelf.n.01_2) 
-        (ontop vitamin_pill__bottle.n.01_3 shelf.n.01_1) 
-        (ontop vitamin_pill__bottle.n.01_4 shelf.n.01_2) 
+        (ontop cash_register.n.01_1 checkout.n.03_1)
+        (ontop bottle__of__supplements.n.01_1 shelf.n.01_1) 
+        (ontop bottle__of__supplements.n.01_2 shelf.n.01_2) 
+        (ontop bottle__of__supplements.n.01_3 shelf.n.01_1) 
+        (ontop bottle__of__supplements.n.01_4 shelf.n.01_2) 
         (ontop money.n.01_1 checkout.n.03_1) 
         (ontop money.n.01_2 checkout.n.03_1) 
         (ontop money.n.01_3 checkout.n.03_1) 
@@ -32,17 +31,16 @@
     )
     
     (:goal 
-        (and 
-            (open ?cash_register.n.01_1) 
+        (and
             (ontop ?sack.n.01_1 ?checkout.n.03_1) 
             (forall 
-                (?vitamin_pill__bottle.n.01 - vitamin_pill__bottle.n.01) 
-                (ontop ?vitamin_pill__bottle.n.01 ?sack.n.01_1)
+                (?bottle__of__supplements.n.01 - bottle__of__supplements.n.01) 
+                (ontop ?bottle__of__supplements.n.01 ?sack.n.01_1)
     
             ) 
             (forall 
                 (?money.n.01 - money.n.01) 
-                (ontop ?money.n.01 ?cash_register.n.01_1)
+                (nextto ?money.n.01 ?cash_register.n.01_1)
     
             )
     

@@ -19,7 +19,7 @@
         salt__shaker.n.01_1 - salt__shaker.n.01
         honey__jar.n.01_1 - honey__jar.n.01
         yeast__jar.n.01_1 - yeast__jar.n.01
-        sesame_seed__bottle.n.01_1 - sesame_seed__bottle.n.01
+        sesame_seed__shaker.n.01_1 - sesame_seed__shaker.n.01
         countertop.n.01_1 countertop.n.01_2 countertop.n.01_3 - countertop.n.01
         bowl.n.01_1 - bowl.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -42,8 +42,8 @@
         (ontop electric_mixer.n.01_1 countertop.n.01_2) 
         (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (inside raw_egg.n.01_1 bowl.n.01_1) 
-        (filled sesame_seed__bottle.n.01_1 sesame_seed.n.01_1) 
-        (ontop sesame_seed__bottle.n.01_1 countertop.n.01_3) 
+        (insource sesame_seed__shaker.n.01_1 sesame_seed.n.01_1) 
+        (ontop sesame_seed__shaker.n.01_1 countertop.n.01_3) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 

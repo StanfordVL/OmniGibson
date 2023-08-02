@@ -7,7 +7,7 @@
         short_pants.n.01_1 - short_pants.n.01
         polo_shirt.n.01_1 polo_shirt.n.01_2 - polo_shirt.n.01
         jean.n.01_1 - jean.n.01
-        pajama.n.01_1 - pajama.n.01
+        pajama.n.02_1 - pajama.n.02
         tank_top.n.01_1 tank_top.n.01_2 - tank_top.n.01
         sweatshirt.n.01_1 - sweatshirt.n.01
         chest_of_drawers.n.01_1 - chest_of_drawers.n.01
@@ -20,7 +20,7 @@
         (ontop polo_shirt.n.01_1 desk.n.01_1) 
         (ontop polo_shirt.n.01_2 desk.n.01_1) 
         (ontop sweatshirt.n.01_1 desk.n.01_1) 
-        (ontop pajama.n.01_1 desk.n.01_1) 
+        (ontop pajama.n.02_1 desk.n.01_1) 
         (ontop tank_top.n.01_1 desk.n.01_1) 
         (ontop tank_top.n.01_2 desk.n.01_1) 
         (inroom desk.n.01_1 bedroom)
@@ -43,9 +43,9 @@
             (folded ?jean.n.01_1)
             (exists
                 (?chest_of_drawers.n.01 - chest_of_drawers.n.01)
-                (inside ?pajama.n.01_1 ?chest_of_drawers.n.01)
+                (inside ?pajama.n.02_1 ?chest_of_drawers.n.01)
             )
-            (folded ?pajama.n.01_1)
+            (folded ?pajama.n.02_1)
             (exists
                 (?chest_of_drawers.n.01 - chest_of_drawers.n.01)
                 (inside ?sweatshirt.n.01_1 ?chest_of_drawers.n.01)

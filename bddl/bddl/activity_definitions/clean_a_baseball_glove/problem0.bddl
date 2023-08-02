@@ -15,8 +15,8 @@
     )
     
     (:init 
-        (inside baseball_glove.n.01_1 sink.n.01_1) 
-        (inside rag.n.01_1 sink.n.01_1) 
+        (ontop baseball_glove.n.01_1 sink.n.01_1)
+        (ontop rag.n.01_1 sink.n.01_1)
         (filled disinfectant__bottle.n.01_2 saddle_soap.n.01_1) 
         (not 
             (covered baseball_glove.n.01_1 disinfectant.n.01_1)

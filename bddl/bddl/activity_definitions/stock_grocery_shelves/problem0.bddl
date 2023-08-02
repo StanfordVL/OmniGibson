@@ -2,14 +2,14 @@
     (:domain omnigibson)
 
     (:objects
-     	brown_bread.n.02_1 brown_bread.n.02_2 brown_bread.n.02_3 - brown_bread.n.02
+     	pack__of__bread.n.01_1 pack__of__bread.n.01_2 pack__of__bread.n.01_3 - pack__of__bread.n.01
     	toilet_tissue.n.01_1 toilet_tissue.n.01_2 - toilet_tissue.n.01
-    	cat_food__tin.n.01_1 cat_food__tin.n.01_2 cat_food__tin.n.01_3 cat_food__tin.n.01_4 cat_food__tin.n.01_5 - cat_food__tin.n.01
+    	can__of__cat_food.n.01_1 can__of__cat_food.n.01_2 can__of__cat_food.n.01_3 can__of__cat_food.n.01_4 can__of__cat_food.n.01_5 - can__of__cat_food.n.01
     	floor.n.01_1 - floor.n.01
-    	soda_water__bottle.n.01_1 soda_water__bottle.n.01_2 soda_water__bottle.n.01_3 soda_water__bottle.n.01_4 soda_water__bottle.n.01_5 - soda_water__bottle.n.01
-    	candy.n.01_1 candy.n.01_2 candy.n.01_3 candy.n.01_4 candy.n.01_5 - candy.n.01
-    	pop_bottle.n.01_1 pop_bottle.n.01_2 pop_bottle.n.01_3 pop_bottle.n.01_4 pop_bottle.n.01_5 - pop_bottle.n.01
-    	cooking_oil__bottle.n.01_1 cooking_oil__bottle.n.01_2 cooking_oil__bottle.n.01_3 - cooking_oil__bottle.n.01
+    	water_bottle.n.01_1 water_bottle.n.01_2 water_bottle.n.01_3 water_bottle.n.01_4 water_bottle.n.01_5 - water_bottle.n.01
+    	pack__of__chocolate_bar.n.01_1 pack__of__chocolate_bar.n.01_2 pack__of__chocolate_bar.n.01_3 pack__of__chocolate_bar.n.01_4 pack__of__chocolate_bar.n.01_5 - pack__of__chocolate_bar.n.01
+    	bottle__of__soda.n.01_1 bottle__of__soda.n.01_2 bottle__of__soda.n.01_3 bottle__of__soda.n.01_4 bottle__of__soda.n.01_5 - bottle__of__soda.n.01
+    	bottle__of__cooking_oil.n.01_1 bottle__of__cooking_oil.n.01_2 bottle__of__cooking_oil.n.01_3 - bottle__of__cooking_oil.n.01
     	cigarette.n.01_1 cigarette.n.01_2 cigarette.n.01_3 cigarette.n.01_4 - cigarette.n.01
         carton.n.02_1 carton.n.02_2 carton.n.02_3 carton.n.02_4 - carton.n.02
     	shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 - shelf.n.01
@@ -17,32 +17,32 @@
     )
     
     (:init 
-        (inside brown_bread.n.02_1 carton.n.02_1) 
-        (inside brown_bread.n.02_2 carton.n.02_1) 
-        (inside brown_bread.n.02_3 carton.n.02_1) 
-        (inside cooking_oil__bottle.n.01_1 carton.n.02_1) 
-        (inside cooking_oil__bottle.n.01_2 carton.n.02_1) 
-        (inside cooking_oil__bottle.n.01_3 carton.n.02_1) 
-        (inside cat_food__tin.n.01_1 carton.n.02_2) 
-        (inside cat_food__tin.n.01_2 carton.n.02_2) 
-        (inside cat_food__tin.n.01_3 carton.n.02_2) 
-        (inside cat_food__tin.n.01_4 carton.n.02_2) 
-        (inside cat_food__tin.n.01_5 carton.n.02_2) 
-        (inside soda_water__bottle.n.01_1 carton.n.02_3) 
-        (inside soda_water__bottle.n.01_2 carton.n.02_3) 
-        (inside soda_water__bottle.n.01_3 carton.n.02_3) 
-        (inside soda_water__bottle.n.01_4 carton.n.02_3) 
-        (inside soda_water__bottle.n.01_5 carton.n.02_3) 
-        (inside pop_bottle.n.01_1 carton.n.02_3)
-        (inside pop_bottle.n.01_2 carton.n.02_3)
-        (inside pop_bottle.n.01_3 carton.n.02_3)
-        (inside pop_bottle.n.01_4 carton.n.02_3)
-        (inside pop_bottle.n.01_5 carton.n.02_3)
-        (inside candy.n.01_1 carton.n.02_3) 
-        (inside candy.n.01_2 carton.n.02_3) 
-        (inside candy.n.01_3 carton.n.02_3) 
-        (inside candy.n.01_4 carton.n.02_3) 
-        (inside candy.n.01_5 carton.n.02_3) 
+        (inside pack__of__bread.n.01_1 carton.n.02_1)
+        (inside pack__of__bread.n.01_2 carton.n.02_1)
+        (inside pack__of__bread.n.01_3 carton.n.02_1)
+        (inside bottle__of__cooking_oil.n.01_1 carton.n.02_1) 
+        (inside bottle__of__cooking_oil.n.01_2 carton.n.02_1) 
+        (inside bottle__of__cooking_oil.n.01_3 carton.n.02_1) 
+        (inside can__of__cat_food.n.01_1 carton.n.02_2) 
+        (inside can__of__cat_food.n.01_2 carton.n.02_2) 
+        (inside can__of__cat_food.n.01_3 carton.n.02_2) 
+        (inside can__of__cat_food.n.01_4 carton.n.02_2) 
+        (inside can__of__cat_food.n.01_5 carton.n.02_2) 
+        (inside water_bottle.n.01_1 carton.n.02_3) 
+        (inside water_bottle.n.01_2 carton.n.02_3) 
+        (inside water_bottle.n.01_3 carton.n.02_3) 
+        (inside water_bottle.n.01_4 carton.n.02_3) 
+        (inside water_bottle.n.01_5 carton.n.02_3) 
+        (inside bottle__of__soda.n.01_1 carton.n.02_3)
+        (inside bottle__of__soda.n.01_2 carton.n.02_3)
+        (inside bottle__of__soda.n.01_3 carton.n.02_3)
+        (inside bottle__of__soda.n.01_4 carton.n.02_3)
+        (inside bottle__of__soda.n.01_5 carton.n.02_3)
+        (inside pack__of__chocolate_bar.n.01_1 carton.n.02_3)
+        (inside pack__of__chocolate_bar.n.01_2 carton.n.02_3)
+        (inside pack__of__chocolate_bar.n.01_3 carton.n.02_3)
+        (inside pack__of__chocolate_bar.n.01_4 carton.n.02_3)
+        (inside pack__of__chocolate_bar.n.01_5 carton.n.02_3)
         (inside cigarette.n.01_1 carton.n.02_4) 
         (inside cigarette.n.01_2 carton.n.02_4) 
         (inside cigarette.n.01_3 carton.n.02_4) 
@@ -65,15 +65,15 @@
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
-                    (?cat_food__tin.n.01 - cat_food__tin.n.01)
+                    (?can__of__cat_food.n.01 - can__of__cat_food.n.01)
                     (and 
-                        (inside ?cat_food__tin.n.01 ?shelf.n.01)
+                        (inside ?can__of__cat_food.n.01 ?shelf.n.01)
                         (or 
-                            (touching ?cat_food__tin.n.01 ?cat_food__tin.n.01_1)
-                            (touching ?cat_food__tin.n.01 ?cat_food__tin.n.01_2)
-                            (touching ?cat_food__tin.n.01 ?cat_food__tin.n.01_3)
-                            (touching ?cat_food__tin.n.01 ?cat_food__tin.n.01_4)
-                            (touching ?cat_food__tin.n.01 ?cat_food__tin.n.01_5)
+                            (touching ?can__of__cat_food.n.01 ?can__of__cat_food.n.01_1)
+                            (touching ?can__of__cat_food.n.01 ?can__of__cat_food.n.01_2)
+                            (touching ?can__of__cat_food.n.01 ?can__of__cat_food.n.01_3)
+                            (touching ?can__of__cat_food.n.01 ?can__of__cat_food.n.01_4)
+                            (touching ?can__of__cat_food.n.01 ?can__of__cat_food.n.01_5)
                         )
                     )
                 )
@@ -81,13 +81,13 @@
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
-                    (?brown_bread.n.02 - brown_bread.n.02)
+                    (?pack__of__bread.n.01 - pack__of__bread.n.01)
                     (and 
-                        (inside ?brown_bread.n.02 ?shelf.n.01)
+                        (inside ?pack__of__bread.n.01 ?shelf.n.01)
                         (or 
-                            (touching ?brown_bread.n.02 ?brown_bread.n.02_1)
-                            (touching ?brown_bread.n.02 ?brown_bread.n.02_2)
-                            (touching ?brown_bread.n.02 ?brown_bread.n.02_3)
+                            (touching ?pack__of__bread.n.01 ?pack__of__bread.n.01_1)
+                            (touching ?pack__of__bread.n.01 ?pack__of__bread.n.01_2)
+                            (touching ?pack__of__bread.n.01 ?pack__of__bread.n.01_3)
                         )
                     )
                 )
@@ -95,15 +95,15 @@
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
-                    (?pop_bottle.n.01 - pop_bottle.n.01)
+                    (?bottle__of__soda.n.01 - bottle__of__soda.n.01)
                     (and 
-                        (inside ?pop_bottle.n.01 ?shelf.n.01)
+                        (inside ?bottle__of__soda.n.01 ?shelf.n.01)
                         (or 
-                            (touching ?pop_bottle.n.01 ?pop_bottle.n.01_1)
-                            (touching ?pop_bottle.n.01 ?pop_bottle.n.01_2)
-                            (touching ?pop_bottle.n.01 ?pop_bottle.n.01_3)
-                            (touching ?pop_bottle.n.01 ?pop_bottle.n.01_4)
-                            (touching ?pop_bottle.n.01 ?pop_bottle.n.01_5)
+                            (touching ?bottle__of__soda.n.01 ?bottle__of__soda.n.01_1)
+                            (touching ?bottle__of__soda.n.01 ?bottle__of__soda.n.01_2)
+                            (touching ?bottle__of__soda.n.01 ?bottle__of__soda.n.01_3)
+                            (touching ?bottle__of__soda.n.01 ?bottle__of__soda.n.01_4)
+                            (touching ?bottle__of__soda.n.01 ?bottle__of__soda.n.01_5)
                         )
                     )
                 )
@@ -111,13 +111,13 @@
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
-                    (?cooking_oil__bottle.n.01 - cooking_oil__bottle.n.01)
+                    (?bottle__of__cooking_oil.n.01 - bottle__of__cooking_oil.n.01)
                     (and 
-                        (inside ?cooking_oil__bottle.n.01 ?shelf.n.01)
+                        (inside ?bottle__of__cooking_oil.n.01 ?shelf.n.01)
                         (or 
-                            (touching ?cooking_oil__bottle.n.01 ?cooking_oil__bottle.n.01_1)
-                            (touching ?cooking_oil__bottle.n.01 ?cooking_oil__bottle.n.01_2)
-                            (touching ?cooking_oil__bottle.n.01 ?cooking_oil__bottle.n.01_3)
+                            (touching ?bottle__of__cooking_oil.n.01 ?bottle__of__cooking_oil.n.01_1)
+                            (touching ?bottle__of__cooking_oil.n.01 ?bottle__of__cooking_oil.n.01_2)
+                            (touching ?bottle__of__cooking_oil.n.01 ?bottle__of__cooking_oil.n.01_3)
                         )
                     )
                 )
@@ -153,15 +153,15 @@
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
-                    (?soda_water__bottle.n.01 - soda_water__bottle.n.01)
+                    (?water_bottle.n.01 - water_bottle.n.01)
                     (and 
-                        (inside ?soda_water__bottle.n.01 ?shelf.n.01)
+                        (inside ?water_bottle.n.01 ?shelf.n.01)
                         (or 
-                            (touching ?soda_water__bottle.n.01 ?soda_water__bottle.n.01_1)
-                            (touching ?soda_water__bottle.n.01 ?soda_water__bottle.n.01_2)
-                            (touching ?soda_water__bottle.n.01 ?soda_water__bottle.n.01_3)
-                            (touching ?soda_water__bottle.n.01 ?soda_water__bottle.n.01_4)
-                            (touching ?soda_water__bottle.n.01 ?soda_water__bottle.n.01_5)
+                            (touching ?water_bottle.n.01 ?water_bottle.n.01_1)
+                            (touching ?water_bottle.n.01 ?water_bottle.n.01_2)
+                            (touching ?water_bottle.n.01 ?water_bottle.n.01_3)
+                            (touching ?water_bottle.n.01 ?water_bottle.n.01_4)
+                            (touching ?water_bottle.n.01 ?water_bottle.n.01_5)
                         )
                     )
                 )
@@ -169,15 +169,15 @@
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
-                    (?candy.n.01 - candy.n.01)
+                    (?pack__of__chocolate_bar.n.01 - pack__of__chocolate_bar.n.01)
                     (and 
-                        (inside ?candy.n.01 ?shelf.n.01)
+                        (inside ?pack__of__chocolate_bar.n.01 ?shelf.n.01)
                         (or 
-                            (touching ?candy.n.01 ?candy.n.01_1)
-                            (touching ?candy.n.01 ?candy.n.01_2)
-                            (touching ?candy.n.01 ?candy.n.01_3)
-                            (touching ?candy.n.01 ?candy.n.01_4)
-                            (touching ?candy.n.01 ?candy.n.01_5)
+                            (touching ?pack__of__chocolate_bar.n.01 ?pack__of__chocolate_bar.n.01_1)
+                            (touching ?pack__of__chocolate_bar.n.01 ?pack__of__chocolate_bar.n.01_2)
+                            (touching ?pack__of__chocolate_bar.n.01 ?pack__of__chocolate_bar.n.01_3)
+                            (touching ?pack__of__chocolate_bar.n.01 ?pack__of__chocolate_bar.n.01_4)
+                            (touching ?pack__of__chocolate_bar.n.01 ?pack__of__chocolate_bar.n.01_5)
                         )
                     )
                 )

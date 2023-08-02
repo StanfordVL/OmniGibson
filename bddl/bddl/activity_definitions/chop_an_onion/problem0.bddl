@@ -13,7 +13,7 @@
     )
     
     (:init 
-        (inside chopping_board.n.01_1 countertop.n.01_1) 
+        (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
         (ontop vidalia_onion.n.01_1 chopping_board.n.01_1) 
         (inroom countertop.n.01_1 kitchen)

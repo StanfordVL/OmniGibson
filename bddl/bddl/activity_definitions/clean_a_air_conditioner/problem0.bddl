@@ -12,12 +12,11 @@
     
     (:init 
         (covered air_conditioner.n.01_1 dust.n.01_1) 
-        (toggled_on rag.n.01_1) 
         (not 
             (toggled_on air_conditioner.n.01_1)
         ) 
         (ontop rag.n.01_1 breakfast_table.n.01_1) 
-        (inroom air_conditioner.n.01_1 dining_room) 
+        (ontop air_conditioner.n.01_1 floor.n.01_1) 
         (inroom breakfast_table.n.01_1 dining_room)
         (inroom floor.n.01_1 dining_room) 
         (ontop agent.n.01_1 floor.n.01_1)

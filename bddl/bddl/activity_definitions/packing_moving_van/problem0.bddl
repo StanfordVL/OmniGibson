@@ -32,7 +32,9 @@
                 (?carton.n.02 - carton.n.02) 
                 (and
                     (inside ?carton.n.02 ?van.n.05_1)
-                    (closed ?carton.n.02)
+                    (not
+                        (open ?carton.n.02)
+                    )
                 )
             )
             (forall 

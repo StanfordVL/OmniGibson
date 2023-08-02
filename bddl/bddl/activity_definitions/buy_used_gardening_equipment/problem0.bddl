@@ -15,8 +15,7 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (closed cash_register.n.01_1) 
+        (ontop cash_register.n.01_1 checkout.n.03_1)
         (ontop money.n.01_1 checkout.n.03_1) 
         (ontop money.n.01_2 checkout.n.03_1) 
         (ontop glove.n.02_1 shelf.n.01_1) 
@@ -37,10 +36,9 @@
         (and 
             (forall 
                 (?money.n.01 - money.n.01) 
-                (ontop ?money.n.01 ?cash_register.n.01_1)
+                (nextto ?money.n.01 ?cash_register.n.01_1)
     
-            ) 
-            (open ?cash_register.n.01_1) 
+            )
             (ontop ?trowel.n.01_1 ?checkout.n.03_1) 
             (ontop ?watering_can.n.01_1 ?checkout.n.03_1) 
             (ontop ?pruner.n.02_1 ?checkout.n.03_1) 

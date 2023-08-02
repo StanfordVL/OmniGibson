@@ -11,7 +11,7 @@
         salt.n.02_1 - salt.n.02
         cooked__salt.n.01_1 - cooked__salt.n.01
         marjoram.n.02_1 - marjoram.n.02
-        cooked__marjoram.n.02_1 - cooked__marjoram.n.02
+        cooked__marjoram.n.01_1 - cooked__marjoram.n.01
         black_pepper.n.02_1 - black_pepper.n.02
         cooked__black_pepper.n.01_1 - cooked__black_pepper.n.01
         pepper__shaker.n.01_1 - pepper__shaker.n.01
@@ -75,7 +75,7 @@
         (future cooked__diced__bell_pepper.n.01_1)
         (future cooked__diced__clove.n.01_1)
         (future cooked__salt.n.01_1)
-        (future cooked__marjoram.n.02_1)
+        (future cooked__marjoram.n.01_1)
         (future cooked__black_pepper.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -94,7 +94,7 @@
                 (real ?salt.n.02_1)
             )
             (or
-                (real ?cooked__marjoram.n.02_1)
+                (real ?cooked__marjoram.n.01_1)
                 (real ?marjoram.n.02_1)
             )
             (or 
@@ -114,7 +114,7 @@
             )
             (or
                 (contains ?stockpot.n.01_1 ?marjoram.n.02_1)
-                (contains ?stockpot.n.01_1 ?cooked__marjoram.n.02_1)
+                (contains ?stockpot.n.01_1 ?cooked__marjoram.n.01_1)
             )
             (or
                 (contains ?stockpot.n.01_1 ?black_pepper.n.02_1)

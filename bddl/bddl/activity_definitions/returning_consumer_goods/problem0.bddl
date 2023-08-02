@@ -4,7 +4,7 @@
     (:objects
         money.n.01_1 - money.n.01
         checkout.n.03_1 - checkout.n.03
-        pop_bottle.n.01_1 pop_bottle.n.01_2 - pop_bottle.n.01
+        bottle__of__soda.n.01_1 bottle__of__soda.n.01_2 - bottle__of__soda.n.01
         shoulder_bag.n.01_1 - shoulder_bag.n.01
         sack.n.01_1 - sack.n.01
         floor.n.01_1 - floor.n.01
@@ -14,8 +14,8 @@
     
     (:init 
         (ontop money.n.01_1 checkout.n.03_1) 
-        (inside pop_bottle.n.01_1 sack.n.01_1)
-        (inside pop_bottle.n.01_2 sack.n.01_1)
+        (inside bottle__of__soda.n.01_1 sack.n.01_1)
+        (inside bottle__of__soda.n.01_2 sack.n.01_1)
         (ontop sack.n.01_1 checkout.n.03_1)
         (ontop shoulder_bag.n.01_1 checkout.n.03_1)
         (inroom floor.n.01_1 grocery_store) 
@@ -28,8 +28,8 @@
         (and 
             (inside ?money.n.01_1 ?shoulder_bag.n.01_1) 
             (forall 
-                (?pop_bottle.n.01 - pop_bottle.n.01)
-                (ontop ?pop_bottle.n.01 ?checkout.n.03_1)
+                (?bottle__of__soda.n.01 - bottle__of__soda.n.01)
+                (ontop ?bottle__of__soda.n.01 ?checkout.n.03_1)
             )
         )
     )

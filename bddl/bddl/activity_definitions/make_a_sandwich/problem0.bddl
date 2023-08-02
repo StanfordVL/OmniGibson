@@ -38,13 +38,9 @@
         (and 
             (exists 
                 (?bread_slice.n.01 - bread_slice.n.01)
-                (and
-                    (or 
-                        (ontop ?bread_slice.n.01 ?bread_slice.n.01_1)
-                        (ontop ?bread_slice.n.01 ?bread_slice.n.01_2)
-                    )
-                    (under ?peanut_butter.n.01_1 ?bread_slice.n.01)
-                    (under ?jelly.n.02_1 ?bread_slice.n.01)
+                (or 
+                    (ontop ?bread_slice.n.01 ?bread_slice.n.01_1)
+                    (ontop ?bread_slice.n.01 ?bread_slice.n.01_2)
                 )
             )
             (exists 
@@ -54,8 +50,8 @@
             (forall 
                 (?bread_slice.n.01 - bread_slice.n.01)
                 (and
-                    (touching ?peanut_butter.n.01_1 ?bread_slice.n.01)
-                    (touching ?jelly.n.02_1 ?bread_slice.n.01)
+                    (covered ?bread_slice.n.01 ?peanut_butter.n.01_1)
+                    (covered ?bread_slice.n.01 ?jelly.n.02_1)
                 )
             )
         )

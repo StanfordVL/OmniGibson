@@ -4,7 +4,7 @@
     (:objects
         whole_milk.n.01_1 - whole_milk.n.01
         chocolate_sauce.n.01_1 - chocolate_sauce.n.01
-        ice_cream.n.01_1 - ice_cream.n.01
+        scoop_of_ice_cream.n.01_1 - scoop_of_ice_cream.n.01
         milkshake.n.01_1 - milkshake.n.01
         blender.n.01_1 - blender.n.01
         cup.n.01_1 - cup.n.01
@@ -17,12 +17,12 @@
         agent.n.01_1 - agent.n.01
         floor.n.01_1 - floor.n.01
     )
-    
-    (:init 
-        (filled milk__carton.n.01_1 whole_milk.n.01_1) 
-        (ontop tablespoon.n.02_1 countertop.n.01_1) 
-        (filled chocolate_sauce__bottle.n.01_1 chocolate_sauce.n.01_1) 
-        (inside ice_cream.n.01_1 ice_cream__carton.n.01_1) 
+
+    (:init
+        (filled milk__carton.n.01_1 whole_milk.n.01_1)
+        (ontop tablespoon.n.02_1 countertop.n.01_1)
+        (filled chocolate_sauce__bottle.n.01_1 chocolate_sauce.n.01_1)
+        (inside scoop_of_ice_cream.n.01_1 ice_cream__carton.n.01_1)
         (ontop blender.n.01_1 countertop.n.01_1) 
         (ontop cup.n.01_1 countertop.n.01_1) 
         (inside ice_cream__carton.n.01_1 electric_refrigerator.n.01_1) 

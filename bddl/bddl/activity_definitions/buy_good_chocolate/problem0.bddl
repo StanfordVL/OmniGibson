@@ -4,9 +4,9 @@
     (:objects
         cash_register.n.01_1 - cash_register.n.01
         checkout.n.03_1 - checkout.n.03
-        chocolate_box.n.01_1 - chocolate_box.n.01
+        box__of__chocolates.n.01_1 - box__of__chocolates.n.01
         shelf.n.01_1 shelf.n.01_2 - shelf.n.01
-        cocoa__box.n.01_1 - cocoa__box.n.01
+        bag__of__cocoa.n.01_1 - bag__of__cocoa.n.01
         money.n.01_1 money.n.01_2 money.n.01_3 - money.n.01
         sack.n.01_1 - sack.n.01
         shopping_cart.n.01_1 - shopping_cart.n.01
@@ -15,10 +15,9 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (closed cash_register.n.01_1) 
-        (inside chocolate_box.n.01_1 shelf.n.01_1) 
-        (inside cocoa__box.n.01_1 shelf.n.01_2) 
+        (ontop cash_register.n.01_1 checkout.n.03_1)
+        (inside box__of__chocolates.n.01_1 shelf.n.01_1) 
+        (inside bag__of__cocoa.n.01_1 shelf.n.01_2) 
         (inside money.n.01_1 shopping_cart.n.01_1) 
         (inside money.n.01_2 shopping_cart.n.01_1) 
         (inside money.n.01_3 shopping_cart.n.01_1) 
@@ -33,8 +32,8 @@
     
     (:goal 
         (and 
-            (inside ?chocolate_box.n.01_1 ?sack.n.01_1) 
-            (inside ?cocoa__box.n.01_1 ?sack.n.01_1) 
+            (inside ?box__of__chocolates.n.01_1 ?sack.n.01_1) 
+            (inside ?bag__of__cocoa.n.01_1 ?sack.n.01_1) 
             (forall 
                 (?money.n.01 - money.n.01) 
                 (inside ?money.n.01 ?cash_register.n.01_1)

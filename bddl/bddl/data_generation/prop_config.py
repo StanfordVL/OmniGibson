@@ -10,7 +10,7 @@ GPT_PROP_NAMES = [
     "cookable", 
     "heatSource",
     "coldSource",
-    "fireSource",
+    # "fireSource",       # deprecated
     "sliceable",
     "slicer",
     # "soakable",         # deprecated
@@ -31,6 +31,10 @@ INTERNAL_PROP_NAMES = [
     "particleRemover",
     "particleApplier",
     "particleSource",
+    "particleSink",
     "needsOrientation",
-    "waterCook"
+    "waterCook",
+    "mixingTool",
+    "sceneObject",
+    "diceable",
 ]

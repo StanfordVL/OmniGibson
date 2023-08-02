@@ -6,7 +6,7 @@
         floor.n.01_1 - floor.n.01
         notebook.n.01_1 notebook.n.01_2 - notebook.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
-        handbook.n.01_1 handbook.n.01_2 - handbook.n.01
+        catalog.n.01_1 catalog.n.01_2 - catalog.n.01
         bandanna.n.01_1 bandanna.n.01_2 - bandanna.n.01
         rubber_boot.n.01_1 rubber_boot.n.01_2 - rubber_boot.n.01
         apron.n.01_1 apron.n.01_2 - apron.n.01
@@ -22,15 +22,15 @@
         (ontop packing_box.n.02_3 floor.n.01_1) 
         (ontop notebook.n.01_1 breakfast_table.n.01_1) 
         (ontop notebook.n.01_2 notebook.n.01_1) 
-        (ontop handbook.n.01_1 breakfast_table.n.01_1) 
-        (ontop handbook.n.01_2 handbook.n.01_1) 
+        (ontop catalog.n.01_1 breakfast_table.n.01_1) 
+        (ontop catalog.n.01_2 catalog.n.01_1) 
         (ontop bandanna.n.01_1 breakfast_table.n.01_1) 
         (ontop bandanna.n.01_2 breakfast_table.n.01_1) 
         (ontop rubber_boot.n.01_1 floor.n.01_1) 
         (ontop rubber_boot.n.01_2 floor.n.01_1) 
         (ontop apron.n.01_2 breakfast_table.n.01_1) 
-        (ontop glove.n.02_1 handbook.n.01_2) 
-        (ontop glove.n.02_2 handbook.n.01_2) 
+        (ontop glove.n.02_1 catalog.n.01_2) 
+        (ontop glove.n.02_2 catalog.n.01_2) 
         (ontop backpack.n.01_1 floor.n.01_1) 
         (ontop backpack.n.01_2 floor.n.01_1) 
         (ontop water_bottle.n.01_1 breakfast_table.n.01_1) 
@@ -51,8 +51,8 @@
                         (inside ?notebook.n.01 ?packing_box.n.02)
                     )
                     (forall 
-                        (?handbook.n.01 - handbook.n.01) 
-                        (inside ?handbook.n.01 ?packing_box.n.02)
+                        (?catalog.n.01 - catalog.n.01) 
+                        (inside ?catalog.n.01 ?packing_box.n.02)
                     ) 
                 )
             )

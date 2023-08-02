@@ -6,11 +6,11 @@
     	pen.n.01_1 - pen.n.01
     	floor.n.01_1 - floor.n.01
     	notebook.n.01_1 - notebook.n.01
-    	perfume__bottle.n.01_1 - perfume__bottle.n.01
+    	bottle__of__perfume.n.01_1 - bottle__of__perfume.n.01
     	granola_bar.n.01_1 - granola_bar.n.01
     	wallet.n.01_1 - wallet.n.01
     	tissue.n.02_1 - tissue.n.02
-    	gum__box.n.01_1 - gum__box.n.01
+    	box__of__candy.n.01_1 - box__of__candy.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -18,26 +18,28 @@
         (open backpack.n.01_1) 
         (ontop pen.n.01_1 floor.n.01_1) 
         (ontop notebook.n.01_1 floor.n.01_1) 
-        (ontop perfume__bottle.n.01_1 floor.n.01_1) 
+        (ontop bottle__of__perfume.n.01_1 floor.n.01_1) 
         (ontop granola_bar.n.01_1 floor.n.01_1) 
         (ontop wallet.n.01_1 floor.n.01_1) 
         (ontop tissue.n.02_1 floor.n.01_1) 
-        (ontop gum__box.n.01_1 floor.n.01_1) 
+        (ontop box__of__candy.n.01_1 floor.n.01_1) 
         (ontop backpack.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 corridor) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
-        (and 
-            (closed ?backpack.n.01_1) 
+        (and
+            (not
+                (open ?backpack.n.01_1)
+            )
             (inside ?pen.n.01_1 ?backpack.n.01_1) 
             (inside ?notebook.n.01_1 ?backpack.n.01_1) 
-            (inside ?perfume__bottle.n.01_1 ?backpack.n.01_1) 
+            (inside ?bottle__of__perfume.n.01_1 ?backpack.n.01_1) 
             (inside ?granola_bar.n.01_1 ?backpack.n.01_1) 
             (inside ?wallet.n.01_1 ?backpack.n.01_1) 
             (inside ?tissue.n.02_1 ?backpack.n.01_1) 
-            (inside ?gum__box.n.01_1 ?backpack.n.01_1)
+            (inside ?box__of__candy.n.01_1 ?backpack.n.01_1)
         )
     )
 )

@@ -4,6 +4,7 @@
     (:objects
         water.n.06_1 - water.n.06
         instant_coffee.n.01_1 - instant_coffee.n.01
+        coffee_maker.n.01_1 - coffee_maker.n.01
         cane_sugar.n.02_1 - cane_sugar.n.02
         chocolate_milk.n.01_1 - chocolate_milk.n.01
         ice_cube.n.01_1 ice_cube.n.01_2 ice_cube.n.01_3 - ice_cube.n.01
@@ -37,6 +38,7 @@
         (inside ice_cube.n.01_3 bowl.n.01_1) 
         (ontop cup.n.01_1 countertop.n.01_1) 
         (ontop blender.n.01_1 countertop.n.01_1) 
+        (ontop coffee_maker.n.01_1 countertop.n.01_1)
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 

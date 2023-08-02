@@ -14,7 +14,7 @@
     (:init 
         (covered mousepad.n.01_1 dust.n.01_1) 
         (ontop rag.n.01_1 mousepad.n.01_1) 
-        (inside mousepad.n.01_1 sink.n.01_1) 
+        (ontop mousepad.n.01_1 sink.n.01_1)
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
