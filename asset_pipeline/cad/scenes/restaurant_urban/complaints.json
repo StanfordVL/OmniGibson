@@ -34,5 +34,17 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: does not model door handles",
         "processed": true
+    },
+    {
+        "object": "walls-sazvet",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "doorway inaccurate",
+        "processed": false
+    },
+    {
+        "object": "window-vapbnz",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "disconnected pieces in vmesh",
+        "processed": false
     }
 ]

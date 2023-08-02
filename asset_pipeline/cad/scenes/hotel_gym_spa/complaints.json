@@ -106,5 +106,23 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "handle not represented",
         "processed": true
+    },
+    {
+        "object": "floors-xawgsl",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "holes and stairs not accurate",
+        "processed": false
+    },
+    {
+        "object": "window-dpngol",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "unconnected hulls",
+        "processed": false
+    },
+    {
+        "object": "window-xljwun",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "unconnected hulls",
+        "processed": false
     }
 ]
