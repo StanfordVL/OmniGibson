@@ -2,7 +2,7 @@ import omnigibson as og
 
 from omnigibson.macros import gm
 from omnigibson.object_states import *
-from omnigibson.utils.constants import PrimType, ParticleModifyCondition, ParticleModifyMethod
+from omnigibson.utils.constants import PrimType
 import omnigibson.utils.transform_utils as T
 import numpy as np
 
@@ -20,7 +20,7 @@ def og_test(func):
 
 num_objs = 0
 
-def get_obj_cfg(name, category, model, prim_type=PrimType.RIGID, scale=None, abilities=None, visual_only=False):
+def get_obj_cfg(name, category, model, prim_type=PrimType.RIGID, scale=None, abilities=None):
     global num_objs
     num_objs += 1
     return {
@@ -33,7 +33,6 @@ def get_obj_cfg(name, category, model, prim_type=PrimType.RIGID, scale=None, abi
         "position": [150, 150, num_objs * 5],
         "scale": scale,
         "abilities": abilities,
-        "visual_only": visual_only,
     }
 
 def assert_test_scene():
@@ -57,14 +56,24 @@ def assert_test_scene():
                 get_obj_cfg("shelf_back_panel", "shelf_back_panel", "gjsnrt", abilities={"attachable": {}}),
                 get_obj_cfg("shelf_shelf", "shelf_shelf", "ymtnqa", abilities={"attachable": {}}),
                 get_obj_cfg("shelf_baseboard", "shelf_baseboard", "hlhneo", abilities={"attachable": {}}),
-                get_obj_cfg("bracelet", "bracelet", "thqqmo"),
-                get_obj_cfg("oyster", "oyster", "enzocs"),
-                get_obj_cfg("sink", "sink", "egwapq", scale=np.ones(3)),
-                get_obj_cfg("stockpot", "stockpot", "dcleem", abilities={"fillable": {}}),
-                get_obj_cfg("applier_dishtowel", "dishtowel", "dtfspn", abilities={"particleApplier": {"method": ParticleModifyMethod.ADJACENCY, "conditions": {"water": []}}}),
-                get_obj_cfg("remover_dishtowel", "dishtowel", "dtfspn", abilities={"particleRemover": {"method": ParticleModifyMethod.ADJACENCY, "conditions": {"water": []}}}),
-                get_obj_cfg("spray_bottle", "spray_bottle", "asztxi", visual_only=True, abilities={"toggleable": {}, "particleApplier": {"method": ParticleModifyMethod.PROJECTION, "conditions": {"water": [(ParticleModifyCondition.TOGGLEDON, True)]}}}),
-                get_obj_cfg("vacuum", "vacuum", "bdmsbr", visual_only=True, abilities={"toggleable": {}, "particleRemover": {"method": ParticleModifyMethod.PROJECTION, "conditions": {"water": [(ParticleModifyCondition.TOGGLEDON, True)]}}}),
+                get_obj_cfg("sink", "sink", "yfaufu", scale=np.ones(3), abilities={
+                    "toggleable": {},
+                    "particleSource": {
+                        "conditions": {
+                            "water": [lambda obj: obj.states[ToggledOn].get_value()],
+                        },
+                        "source_radius": 0.0125,
+                        "source_height": 0.05,
+                        "initial_speed": 0.0,  # Water merely falls out of the spout
+                    },
+                    "particleSink": {
+                        "conditions": {
+                            "water": None,  # No conditions, always sinking nearby particles
+                        },
+                        "sink_radius": 0.05,
+                        "sink_height": 0.05,
+                    }
+                }),
             ],
             "robots": [
                 {
@@ -89,37 +98,7 @@ def assert_test_scene():
         og.sim.step()
         og.sim.scene.update_initial_state()
 
-
 def get_random_pose(pos_low=10.0, pos_hi=20.0):
     pos = np.random.uniform(pos_low, pos_hi, 3)
     orn = T.euler2quat(np.random.uniform(-np.pi, np.pi, 3))
     return pos, orn
-
-
-def place_objA_on_objB_bbox(objA, objB, x_offset=0.0, y_offset=0.0, z_offset=0.01):
-    objA.keep_still()
-    objB.keep_still()
-    # Reset pose if cloth object
-    if objA.prim_type == PrimType.CLOTH:
-        objA.root_link.reset()
-
-    objA_aabb_center, objA_aabb_extent = objA.aabb_center, objA.aabb_extent
-    objB_aabb_center, objB_aabb_extent = objB.aabb_center, objB.aabb_extent
-    objA_aabb_offset = objA.get_position() - objA_aabb_center
-
-    target_objA_aabb_pos = objB_aabb_center + np.array([0, 0, (objB_aabb_extent[2] + objA_aabb_extent[2]) / 2.0]) + \
-                           np.array([x_offset, y_offset, z_offset])
-    objA.set_position(target_objA_aabb_pos + objA_aabb_offset)
-
-
-def place_obj_on_floor_plane(obj, x_offset=0.0, y_offset=0.0, z_offset=0.01):
-    obj.keep_still()
-    # Reset pose if cloth object
-    if obj.prim_type == PrimType.CLOTH:
-        obj.root_link.reset()
-
-    obj_aabb_center, obj_aabb_extent = obj.aabb_center, obj.aabb_extent
-    obj_aabb_offset = obj.get_position() - obj_aabb_center
-
-    target_obj_aabb_pos = np.array([0, 0, obj_aabb_extent[2] / 2.0]) + np.array([x_offset, y_offset, z_offset])
-    obj.set_position(target_obj_aabb_pos + obj_aabb_offset)

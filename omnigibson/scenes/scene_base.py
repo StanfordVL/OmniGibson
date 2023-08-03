@@ -86,14 +86,6 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         return self._skybox
 
     @property
-    def floor_plane(self):
-        """
-        Returns:
-            None or XFormPrim: Generated floor plane prim, if it is used
-        """
-        return self._floor_plane
-
-    @property
     def object_registry(self):
         """
         Returns:

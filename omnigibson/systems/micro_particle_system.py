@@ -1564,7 +1564,6 @@ GranularSystem.create(
         fixed_base=False,
         visual_only=True,
         include_default_states=False,
-        abilities={},
     )
 )
 

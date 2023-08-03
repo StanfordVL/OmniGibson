@@ -32,7 +32,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="shelf_back_panel",
         category="shelf_back_panel",
         model="gjsnrt",
-        bounding_box=[0.8, 2.02, 0.02],
         position=[0, 0, 0.01],
         abilities={"attachable": {}},
     ))
@@ -45,7 +44,6 @@ def main(random_selection=False, headless=False, short_exec=False):
             name=f"shelf_side_{i}",
             category="shelf_side",
             model="bxfkjj",
-            bounding_box=[0.03, 2.02, 0.26],
             position=[xs[i], 0, base_z + delta_z * idx],
             abilities={"attachable": {}},
         ))
@@ -58,7 +56,6 @@ def main(random_selection=False, headless=False, short_exec=False):
             name=f"shelf_shelf_{i}",
             category="shelf_shelf",
             model="ymtnqa",
-            bounding_box=[0.74, 0.023, 0.26],
             position=[0, ys[i], base_z + delta_z * idx],
             abilities={"attachable": {}},
         ))
@@ -69,7 +66,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="shelf_top_0",
         category="shelf_top",
         model="pfiole",
-        bounding_box=[0.74, 0.04, 0.26],
         position=[0, 1.0, base_z + delta_z * idx],
         abilities={"attachable": {}},
     ))
@@ -80,7 +76,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         name=f"shelf_baseboard",
         category="shelf_baseboard",
         model="hlhneo",
-        bounding_box=[0.742, 0.067, 0.02],
         position=[0, -0.97884506, base_z + delta_z * idx],
         abilities={"attachable": {}},
     ))
@@ -104,7 +99,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     shelf_baseboard.keep_still()
     shelf_baseboard.set_linear_velocity([-0.2, 0, 0])
 
-    input("\n\nShelf parts fall to their correct poses and get automatically attached to the back panel.\n"
+    input("Shelf parts fall to their correct poses and get automatically attached to the back panel.\n"
           "You can try to drag the shelf to hit the floor to break it apart. Press [ENTER] to continue.\n")
 
     for _ in range(1000):

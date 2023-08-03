@@ -36,7 +36,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="stove",
         category="stove",
         model="yhjzwg",
-        bounding_box=[1.185, 0.978, 1.387],
         position=[0, 0, 0.69],
     ))
 
@@ -46,7 +45,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="microwave",
         category="microwave",
         model="hjjxmi",
-        bounding_box=[0.384, 0.256, 0.196],
+        scale=0.25,
         position=[2.5, 0, 0.10],
     ))
 
@@ -56,7 +55,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="oven",
         category="oven",
         model="wuinhm",
-        bounding_box=[1.075, 0.926, 1.552],
         position=[-1.25, 0, 0.88],
     ))
 
@@ -66,7 +64,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="tray",
         category="tray",
         model="xzcnjq",
-        bounding_box=[0.319, 0.478, 0.046],
+        scale=0.15,
         position=[-0.25, -0.12, 1.26],
     ))
 
@@ -76,7 +74,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="fridge",
         category="fridge",
         model="hivvdf",
-        bounding_box=[1.065, 1.149, 1.528],
         abilities={
             "coldSource": {
                 "temperature": -100.0,
@@ -93,7 +90,6 @@ def main(random_selection=False, headless=False, short_exec=False):
             name=f"apple{i}",
             category="apple",
             model="agveuv",
-            bounding_box=[0.065, 0.065, 0.077],
             position=[0, i * 0.1, 5.0],
         ))
 
