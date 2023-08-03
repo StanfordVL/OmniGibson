@@ -83,7 +83,7 @@ class ParticleSource(ParticleApplier):
             projection_mesh_params = {
                 "type": "Cylinder",
                 "extents": [source_radius * 2, source_radius * 2, source_height],
-            }
+            },
         else:
             projection_mesh_params = None
 
@@ -105,10 +105,7 @@ class ParticleSource(ParticleApplier):
         # This is equivalent to the time it takes for a generated particle to travel @source_height distance
         # Note that object state steps are discretized by og.sim.render_step
         # Note: t derived from quadratic formula: height = 0.5 g t^2 + v0 t
-        # Note: height must be considered in the world frame, so we convert the distance from local into world frame
-        # Extents are in local frame, so we need to convert to world frame using link scale
-        distance = self.link.scale[2] * self._projection_mesh_params["extents"][2]
-        t = (-self._initial_speed + np.sqrt(self._initial_speed ** 2 + 2 * og.sim.gravity * distance)) / og.sim.gravity
+        t = (-self._initial_speed + np.sqrt(self._initial_speed ** 2 + 2 * og.sim.gravity * self._projection_mesh_params["extents"][2])) / og.sim.gravity
         self._n_steps_per_modification = np.ceil(1 + t / og.sim.get_rendering_dt()).astype(int)
 
     def _get_max_particles_limit_per_step(self, system):
@@ -122,8 +119,8 @@ class ParticleSource(ParticleApplier):
         # Always requires metalink since projection is used
         return True
 
-    @property
-    def visualize(self):
+    @classproperty
+    def visualize(cls):
         # Don't visualize this source
         return False
 
@@ -199,7 +196,7 @@ class ParticleSink(ParticleRemover):
             projection_mesh_params = {
                 "type": "Cylinder",
                 "extents": [sink_radius * 2, sink_radius * 2, sink_height],
-            }
+            },
         else:
             projection_mesh_params = None
 

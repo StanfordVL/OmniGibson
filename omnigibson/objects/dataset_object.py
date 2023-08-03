@@ -97,13 +97,15 @@ class DatasetObject(USDObject):
                 -- not both!
             fit_avg_dim_volume (bool): whether to fit the object to have the same volume as the average dimension
                 while keeping the aspect ratio. Note that if this is set, it will override both @scale and @bounding_box
-            in_rooms (None or str or list): If specified, sets the room(s) that this object should belong to. Either
-                a list of room type(s) or a single comma-delimited string of room type(s)
+            in_rooms (None or list): If specified, sets the rooms that this object should belong to
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
         # Store variables
-        self._in_rooms = in_rooms.split(",") if isinstance(in_rooms, str) else in_rooms
+        self._in_rooms = in_rooms
+
+        # Info that will be filled in at runtime
+        self.supporting_surfaces = None             # Dictionary mapping link names to surfaces represented by links
 
         # Make sure only one of bounding_box and scale are specified
         if bounding_box is not None and scale is not None:
@@ -158,6 +160,31 @@ class DatasetObject(USDObject):
         """
         return os.path.join(gm.DATASET_PATH, "objects", category, model, "usd", f"{model}.usd")
 
+    def load_supporting_surfaces(self):
+        # Initialize dict of supporting surface info
+        self.supporting_surfaces = {}
+
+        # See if we have any height info -- if not, we can immediately return
+        heights_info = self.heights_per_link
+        if heights_info is None:
+            return
+
+        # TODO: Integrate images directly into usd file?
+        # We loop over all the predicates and corresponding supported links in our heights info
+        usd_dir = os.path.dirname(self._usd_path)
+        for predicate, links in heights_info.items():
+            height_maps = {}
+            for link_name, heights in links.items():
+                height_maps[link_name] = []
+                for i, z_value in enumerate(heights):
+                    # Get boolean birds-eye view xy-mask image for this surface
+                    img_fname = os.path.join(usd_dir, "../misc", "height_maps_per_link", predicate, link_name, f"{i}.png")
+                    xy_map = cv2.imread(img_fname, 0)
+                    # Add this map to the supporting surfaces for this link and predicate combination
+                    height_maps[link_name].append((z_value, xy_map))
+            # Add this heights map to the overall supporting surfaces
+            self.supporting_surfaces[predicate] = height_maps
+
     def sample_orientation(self):
         """
         Samples an orientation in quaternion (x,y,z,w) form
@@ -204,10 +231,8 @@ class DatasetObject(USDObject):
 
         # Apply any forced roughness updates
         for material in self.materials:
-            if ("reflection_roughness_texture_influence" in material.shader_input_names and
-                "reflection_roughness_constant" in material.shader_input_names):
-                material.reflection_roughness_texture_influence = 0.0
-                material.reflection_roughness_constant = gm.FORCE_ROUGHNESS
+            material.reflection_roughness_texture_influence = 0.0
+            material.reflection_roughness_constant = gm.FORCE_ROUGHNESS
 
         # Set the joint frictions based on category
         friction = SPECIAL_JOINT_FRICTIONS.get(self.category, DEFAULT_JOINT_FRICTION)
@@ -245,16 +270,16 @@ class DatasetObject(USDObject):
         # Otherwise, if manual bounding box is specified, scale based on ratio between that and the native bbox
         elif self._load_config["bounding_box"] is not None:
             scale = np.ones(3)
-            valid_idxes = self.native_bbox > 1e-4
+            valid_idxes = ~np.isclose(self.native_bbox, 0.0)
             scale[valid_idxes] = np.array(self._load_config["bounding_box"])[valid_idxes] / self.native_bbox[valid_idxes]
         else:
             scale = np.ones(3) if self._load_config["scale"] is None else self._load_config["scale"]
 
-        # Assert that the scale does not have too small dimensions
-        assert np.all(scale > 1e-4), f"Scale of {self.name} is too small: {scale}"
-
         # Set this scale in the load config -- it will automatically scale the object during self.initialize()
         self._load_config["scale"] = scale
+
+        # Load any supporting surfaces belonging to this object
+        self.load_supporting_surfaces()
 
         # Run super last
         super()._post_load()
@@ -292,7 +317,7 @@ class DatasetObject(USDObject):
         it modifies the current albedo map by adding and scaling the values. See @self._update_albedo_value for details.
 
         Args:
-            object_state (BooleanStateMixin or None): the object state that the diffuse color should match to
+            object_state (BooleanState or None): the object state that the diffuse color should match to
         """
         # TODO: uncomment these once our dataset has the object state-conditioned texture maps
         # DEFAULT_ALBEDO_MAP_SUFFIX = frozenset({"DIFFUSE", "COMBINED", "albedo"})
@@ -401,6 +426,16 @@ class DatasetObject(USDObject):
         return self.get_custom_data().get("metadata", None)
 
     @property
+    def heights_per_link(self):
+        """
+        Gets this object's heights per link information, if it exists
+
+        Returns:
+            None or dict: Nested dictionary of object's height per link information if it exists, else None
+        """
+        return self.get_custom_data().get("heights_per_link", None)
+
+    @property
     def orientations(self):
         """
         Returns:
@@ -408,21 +443,6 @@ class DatasetObject(USDObject):
         """
         metadata = self.metadata
         return None if metadata is None else metadata.get("orientations", None)
-
-    @property
-    def scale(self):
-        # Just super call
-        return super().scale
-
-    @scale.setter
-    def scale(self, scale):
-        # call super first
-        # A bit esoteric -- see https://gist.github.com/Susensio/979259559e2bebcd0273f1a95d7c1e79
-        super(DatasetObject, type(self)).scale.fset(self, scale)
-
-        # Remove bounding_box from scale if it's in our args
-        if "bounding_box" in self._init_info["args"]:
-            self._init_info["args"].pop("bounding_box")
 
     @property
     def scaled_bbox_center_in_base_frame(self):
@@ -492,7 +512,7 @@ class DatasetObject(USDObject):
             4-tuple:
                 - 3-array: (x,y,z) bbox center position in world frame
                 - 3-array: (x,y,z,w) bbox quaternion orientation in world frame
-                - 3-array: (x,y,z) bbox extent in desired frame
+                - 3-array: (x,y,z) bbox extent in world frame
                 - 3-array: (x,y,z) bbox center in desired frame
         """
         assert self.prim_type == PrimType.RIGID, "get_base_aligned_bbox is only supported for rigid objects."
@@ -518,9 +538,26 @@ class DatasetObject(USDObject):
 
             # If the link has a bounding box annotation.
             if self.native_link_bboxes is not None and link_name in self.native_link_bboxes:
+                # If a visual bounding box does not exist in the dictionary, try switching to collision.
+                # We expect that every link has its collision bb annotated (or set to None if none exists).
+                if bbox_type == "visual" and "visual" not in self.native_link_bboxes[link_name]:
+                    log.debug(
+                        "Falling back to collision bbox for object %s link %s since no visual bbox exists.",
+                        self.name,
+                        link_name,
+                    )
+                    bbox_type = "collision"
+
                 # Check if the annotation is still missing.
                 if bbox_type not in self.native_link_bboxes[link_name]:
-                    raise ValueError(f"Could not find {bbox_type} bounding box for object {self.name} link {link_name}")
+                    raise ValueError(
+                        "Could not find %s bounding box for object %s link %s" % (bbox_type, self.name, link_name)
+                    )
+
+                # Check if a mesh exists for this link. If None, the link is meshless, so we continue to the next link.
+                # TODO: Because of encoding, may need to be UsdTokens.none, not None
+                if self.native_link_bboxes[link_name][bbox_type] is None:
+                    continue
 
                 # Get the extent and transform.
                 bb_data = self.native_link_bboxes[link_name][bbox_type][link_bbox_type]
@@ -547,9 +584,6 @@ class DatasetObject(USDObject):
                 # Add the points to our collection of points.
                 points.extend(trimesh.transformations.transform_points(vertices_in_base_frame, bbox_center_in_base_frame))
             elif fallback_to_aabb:
-                # If we're visual and the mesh is not visible, there is no fallback so continue
-                if bbox_type == "visual" and not np.all(tuple(mesh.visible for mesh in meshes.values())):
-                    continue
                 # If no BB annotation is available, get the AABB for this link.
                 aabb_center, aabb_extent = BoundingBoxAPI.compute_center_extent(prim=link)
                 aabb_vertices_in_world = aabb_center + np.array(list(itertools.product((1, -1), repeat=3))) * (

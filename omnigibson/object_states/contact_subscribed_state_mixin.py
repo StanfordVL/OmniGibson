@@ -1,8 +1,7 @@
-from abc import abstractmethod
-from omnigibson.object_states.object_state_base import BaseObjectState
+from abc import ABC, abstractmethod
 
 
-class ContactSubscribedStateMixin(BaseObjectState):
+class ContactSubscribedStateMixin(ABC):
     """
     Handles contact events (including CONTACT_FOUND, CONTACT_PERSIST, and CONTACT_LOST).
     The subclass should implement its own on_contact method

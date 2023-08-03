@@ -500,6 +500,14 @@ def axisangle2quat(vec):
     Returns:
         np.array: (x,y,z,w) vec4 float angles
     """
+    # Grab angle
+    angle = np.linalg.norm(vec)
+
+    # handle zero-rotation case
+    if math.isclose(angle, 0.0):
+        return np.array([0.0, 0.0, 0.0, 1.0])
+
+    # otherwise convert like normal
     return R.from_rotvec(vec).as_quat()
 
 
@@ -988,36 +996,15 @@ def vecs2axisangle(vec0, vec1):
     Converts the angle from unnormalized 3D vectors @vec0 to @vec1 into an axis-angle representation of the angle
 
     Args:
-        vec0 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
-        vec1 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
+        vec0 (3-array): (x,y,z) 3D vector, possibly unnormalized
+        vec1 (3-array): (x,y,z) 3D vector, possibly unnormalized
     """
     # Normalize vectors
-    vec0 = normalize(vec0, axis=-1)
-    vec1 = normalize(vec1, axis=-1)
+    vec0 = normalize(vec0)
+    vec1 = normalize(vec1)
 
     # Get cross product for direction of angle, and multiply by arcos of the dot product which is the angle
-    return np.cross(vec0, vec1) * np.arccos((vec0 * vec1).sum(-1, keepdims=True))
-
-
-def vecs2quat(vec0, vec1, normalized=False):
-    """
-    Converts the angle from unnormalized 3D vectors @vec0 to @vec1 into a quaternion representation of the angle
-
-    Args:
-        vec0 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
-        vec1 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
-        normalized (bool): If True, @vec0 and @vec1 are assumed to already be normalized and we will skip the
-            normalization step (more efficient)
-    """
-    # Normalize vectors if requested
-    if not normalized:
-        vec0 = normalize(vec0, axis=-1)
-        vec1 = normalize(vec1, axis=-1)
-
-    # Half-way Quaternion Solution -- see https://stackoverflow.com/a/11741520
-    cos_theta = np.sum(vec0 * vec1, axis=-1, keepdims=True)
-    quat_unnormalized = np.where(cos_theta == -1, np.array([1.0, 0, 0, 0]), np.concatenate([np.cross(vec0, vec1), 1 + cos_theta], axis=-1))
-    return quat_unnormalized / np.linalg.norm(quat_unnormalized, axis=-1, keepdims=True)
+    return np.cross(vec0, vec1) * np.arccos(np.dot(vec0, vec1))
 
 
 def l2_distance(v1, v2):
@@ -1077,8 +1064,7 @@ def anorm(x, axis=None, keepdims=False):
 
 def normalize(v, axis=None, eps=1e-10):
     """L2 Normalize along specified axes."""
-    norm = anorm(v, axis=axis, keepdims=True)
-    return v / np.where(norm < eps, eps, norm)
+    return v / max(anorm(v, axis=axis, keepdims=True), eps)
 
 
 def cartesian_to_polar(x, y):
@@ -1096,7 +1082,7 @@ def rad2deg(rad):
     return rad * 180. / np.pi
 
 
-def check_quat_right_angle(quat, atol=5e-2):
+def check_quat_right_angle(quat, atol=1e-2):
     """
     Check by making sure the quaternion is some permutation of +/- (1, 0, 0, 0),
     +/- (0.707, 0.707, 0, 0), or +/- (0.5, 0.5, 0.5, 0.5)

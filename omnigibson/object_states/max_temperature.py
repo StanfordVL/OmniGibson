@@ -9,11 +9,9 @@ class MaxTemperature(AbsoluteObjectState, UpdateStateMixin):
     This state remembers the highest temperature reached by an object.
     """
 
-    @classmethod
-    def get_dependencies(cls):
-        deps = super().get_dependencies()
-        deps.add(Temperature)
-        return deps
+    @staticmethod
+    def get_dependencies():
+        return AbsoluteObjectState.get_dependencies() + [Temperature]
 
     def __init__(self, obj):
         super(MaxTemperature, self).__init__(obj)

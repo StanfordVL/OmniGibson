@@ -33,7 +33,7 @@ def main(random_selection=False, headless=False, short_exec=False):
             name="microwave",
             category="microwave",
             model="hjjxmi",
-            bounding_box=[0.768, 0.512, 0.392],
+            scale=0.5,
     )
 
     cabinet_cfg = dict(
@@ -41,7 +41,6 @@ def main(random_selection=False, headless=False, short_exec=False):
             name="cabinet",
             category="bottom_cabinet",
             model="bamfsz",
-            bounding_box=[1.075, 1.131, 1.355],
     )
 
     plate_cfgs = [dict(
@@ -57,7 +56,6 @@ def main(random_selection=False, headless=False, short_exec=False):
             name=f"apple{i}",
             category="apple",
             model="agveuv",
-            bounding_box=[0.065, 0.065, 0.077],
     ) for i in range(4)]
 
     shelf_cfg = dict(
@@ -71,10 +69,11 @@ def main(random_selection=False, headless=False, short_exec=False):
     box_cfgs = [dict(
             type="DatasetObject",
             name=f"box{i}",
-            category="box_of_crackers",
+            category="cracker_box",
             model="cmdigf",
             bounding_box=np.array([0.2, 0.05, 0.3]),
     ) for i in range(5)]
+
 
     # Compose objects cfg
     objects_cfg = [
@@ -159,7 +158,7 @@ def sample_microwave_plates_apples(env):
 
 def sample_boxes_on_shelf(env):
     shelf = env.scene.object_registry("name", "shelf")
-    boxes = list(env.scene.object_registry("category", "box_of_crackers"))
+    boxes = list(env.scene.object_registry("category", "cracker_box"))
     # Place the shelf at a pre-determined location on the floor
     og.log.info("Placing shelf on the floor...")
     shelf.set_orientation([0, 0, 0, 1.0])

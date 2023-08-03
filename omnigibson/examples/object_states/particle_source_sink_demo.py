@@ -3,7 +3,6 @@ import numpy as np
 import omnigibson as og
 from omnigibson import object_states
 from omnigibson.macros import gm
-from omnigibson.utils.constants import ParticleModifyCondition
 
 # Make sure object states are enabled and GPU dynamics are used
 gm.ENABLE_OBJECT_STATES = True
@@ -36,28 +35,35 @@ def main(random_selection=False, headless=False, short_exec=False):
         }
     }
 
+    def check_toggledon(obj):
+        return obj.states[object_states.ToggledOn].get_value()
+
     # Define objects to load into the environment
     sink_cfg = dict(
         type="DatasetObject",
         name="sink",
         category="sink",
-        model="egwapq",
-        bounding_box=[2.427, 0.625, 1.2],
+        model="yfaufu",
+        scale=[0.8, 0.8, 0.8],
         abilities={
             "toggleable": {},
             "particleSource": {
                 "conditions": {
-                    "water": [(ParticleModifyCondition.TOGGLEDON, True)],   # Must be toggled on for water source to be active
+                    "water": [check_toggledon],   # Must be toggled on for water source to be active
                 },
+                "source_radius": 0.0125,
+                "source_height": 0.05,
                 "initial_speed": 0.0,               # Water merely falls out of the spout
             },
             "particleSink": {
                 "conditions": {
-                    "water": [],  # No conditions, always sinking nearby particles
+                    "water": None,  # No conditions, always sinking nearby particles
                 },
+                "sink_radius": 0.05,
+                "sink_height": 0.05,
             },
         },
-        position=[0.0, 0, 0.42],
+        position=[-0.7, 0, 0.56],
     )
 
     cfg["objects"] = [sink_cfg]
@@ -67,8 +73,8 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Set camera to ideal angle for viewing objects
     og.sim.viewer_camera.set_position_orientation(
-        position=np.array([ 0.37860532, -0.65396566,  1.4067066 ]),
-        orientation=np.array([0.49909498, 0.15201752, 0.24857062, 0.81609284]),
+        position=np.array([-0.71452157, -0.88294428,  1.85640559]),
+        orientation=np.array([ 0.44909348, -0.00142818, -0.00284131,  0.89347912]),
     )
 
     # Take a few steps to let the objects settle, and then turn on the sink

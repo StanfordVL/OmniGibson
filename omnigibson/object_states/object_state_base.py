@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 import inspect
 import omnigibson as og
 from omnigibson.utils.python_utils import classproperty, Serializable, Registerable, Recreatable
@@ -14,8 +14,8 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
     RelativeObjectState.
     """
 
-    @classmethod
-    def get_dependencies(cls):
+    @staticmethod
+    def get_dependencies():
         """
         Get the dependency states for this state, e.g. states that need to be explicitly enabled on the current object
         before the current state is usable. States listed here will be enabled for all objects that have this current
@@ -23,12 +23,12 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         *any* object.
 
         Returns:
-            set of str: Set of strings corresponding to state keys.
+            list of str: List of strings corresponding to state keys.
         """
-        return set()
+        return []
 
-    @classmethod
-    def get_optional_dependencies(cls):
+    @staticmethod
+    def get_optional_dependencies():
         """
         Get states that should be processed prior to this state if they are already enabled. These states will not be
         enabled because of this state's dependency on them, but if they are already enabled for another reason (e.g.
@@ -36,9 +36,9 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         state being processed on *any* object.
 
         Returns:
-            set of str: Set of strings corresponding to state keys.
+            list of str: List of strings corresponding to state keys.
         """
-        return set()
+        return []
 
     def __init__(self, obj):
         super().__init__()
@@ -58,36 +58,6 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
 
         Args:
             obj (StatefulObject): Object whose compatibility with this state should be checked
-
-        Returns:
-            2-tuple:
-                - bool: Whether the given object is compatible with this object state or not
-                - None or str: If not compatible, the reason why it is not compatible. Otherwise, None
-        """
-        # Make sure all required dependencies are included in this object's state dictionary
-        for dep in cls.get_dependencies():
-            if dep not in obj.states:
-                return False, f"Missing required dependency state {dep.__name__}"
-        # Make sure all required kwargs are specified
-        default_kwargs = inspect.signature(cls.__init__).parameters
-        for kwarg, val in default_kwargs.items():
-            if val.default == inspect._empty and kwarg not in kwargs and kwarg not in {"obj", "self", "args", "kwargs"}:
-                return False, f"Missing required kwarg '{kwarg}'"
-        # Default is True if all kwargs are met
-        return True, None
-
-    @classmethod
-    def is_compatible_asset(cls, prim, **kwargs):
-        """
-        Determines whether this object state is compatible with object with corresponding prim @prim or not
-        (i.e.: whether the state can be successfully instantiated with @self.obj given other constructor
-        arguments **kwargs. This is a useful check to evaluate an object's USD that hasn't been explicitly imported
-        into OmniGibson yet.
-
-        NOTE: Can be further extended by subclass
-
-        Args:
-            prim (Usd.Prim): Object prim whose compatibility with this state should be checked
 
         Returns:
             2-tuple:
@@ -304,7 +274,7 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         return val
 
     def _get_value(self, *args, **kwargs):
-        raise NotImplementedError(f"_get_value not implemented for {self.__class__.__name__} state.")
+        raise NotImplementedError
 
     def set_value(self, *args, **kwargs):
         """
@@ -321,7 +291,7 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         return val
 
     def _set_value(self, *args, **kwargs):
-        raise NotImplementedError(f"_set_value not implemented for {self.__class__.__name__} state.")
+        raise NotImplementedError
 
     def remove(self):
         """
@@ -354,11 +324,13 @@ class AbsoluteObjectState(BaseObjectState):
     the value.
     """
 
+    @abstractmethod
     def _get_value(self):
-        raise NotImplementedError(f"_get_value not implemented for {self.__class__.__name__} state.")
+        raise NotImplementedError()
 
+    @abstractmethod
     def _set_value(self, new_value):
-        raise NotImplementedError(f"_set_value not implemented for {self.__class__.__name__} state.")
+        raise NotImplementedError()
 
     @classproperty
     def _do_not_register_classes(cls):
@@ -374,11 +346,13 @@ class RelativeObjectState(BaseObjectState):
     Note that subclasses will typically compute values on-the-fly.
     """
 
+    @abstractmethod
     def _get_value(self, other):
-        raise NotImplementedError(f"_get_value not implemented for {self.__class__.__name__} state.")
+        raise NotImplementedError()
 
+    @abstractmethod
     def _set_value(self, other, new_value):
-        raise NotImplementedError(f"_set_value not implemented for {self.__class__.__name__} state.")
+        raise NotImplementedError()
 
     @classproperty
     def _do_not_register_classes(cls):
@@ -388,28 +362,9 @@ class RelativeObjectState(BaseObjectState):
         return classes
 
 
-class IntrinsicObjectState(BaseObjectState):
-    """
-    This class is used to track object states that should NOT have getters / setters implemented, since the associated
-    ability / state is intrinsic to the state
-    """
-
-    def _get_value(self):
-        raise NotImplementedError(f"_get_value not implemented for IntrinsicObjectState {self.__class__.__name__} state.")
-
-    def _set_value(self, new_value):
-        raise NotImplementedError(f"_set_value not implemented for IntrinsicObjectState {self.__class__.__name__} state.")
-
-    @classproperty
-    def _do_not_register_classes(cls):
-        # Don't register this class since it's an abstract template
-        classes = super()._do_not_register_classes
-        classes.add("IntrinsicObjectState")
-        return classes
-
-
-class BooleanStateMixin(BaseObjectState):
+class BooleanState:
     """
     This class is a mixin used to indicate that a state has a boolean value.
     """
+
     pass
