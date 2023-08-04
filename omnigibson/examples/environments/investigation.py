@@ -24,7 +24,7 @@ import os, yaml
 # cfg = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 cfg = {
         "scene": {
-            "type": "Scene",
+            "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
         }
     }
@@ -50,15 +50,8 @@ og.sim.enable_viewer_camera_teleoperation()
 # task_goal_conditions = env.task.activity_natural_language_goal_conditions
 
 
-# In[4]:
-
-
 # task_name = task.activity_name.replace("_", " ").capitalize()
 # assert all(x.isalpha() or x.isspace() for x in task_name)
-
-
-# In[5]:
-
 
 # def stringify_conds(conds):
 #     string_conds = []
@@ -91,18 +84,18 @@ rooms = "\n".join(sorted({
 
 # In[7]:
 
-#TODO: The baseRobot part Ddoesn't do any harm, but I think it is redundant; TODO: check
+#TODO: The baseRobot part doesn't do any harm, but I think it is redundant; TODO: check
 from omnigibson.robots import BaseRobot
-obj_room_pairs = {
-    (obj, (", ".join(obj.in_rooms) if hasattr(obj, "in_rooms") and obj.in_rooms else None))
-    for obj in env.scene.objects
-    if not isinstance(obj, BaseRobot)
-}
-objects = "\n".join(sorted(
-    f"- {obj.name} (in rooms {rm})" if rm else f"- {obj.name}"
-    for obj, rm in obj_room_pairs
-))
-
+# obj_room_pairs = {
+#     (obj, (", ".join(obj.in_rooms) if hasattr(obj, "in_rooms") and obj.in_rooms else None))
+#     for obj in env.scene.objects
+#     if not isinstance(obj, BaseRobot)
+# }
+# objects = "\n".join(sorted(
+#     f"- {obj.name} (in rooms {rm})" if rm else f"- {obj.name}"
+#     for obj, rm in obj_room_pairs
+# ))
+objects = sorted([obj.name for obj in og.sim.scene.objects])
 
 # In[8]:
 
@@ -136,10 +129,10 @@ Imagine you're a sort of interior designer, but rather than physical spaces, you
 
 # Observation: all of the below predicates are currently true:
 # {initial_observation}
+# The scene contains the below rooms:
+# {rooms}
 
 human_prompt = f"""
-The scene contains the below rooms:
-{rooms}
 The scene contains the below objects, which you can use as arguments to functions:
 {objects}
 """.strip()
