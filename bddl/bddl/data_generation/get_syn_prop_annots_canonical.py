@@ -129,7 +129,6 @@ def add_programmatic_properties(synset_content): # runs programmatic addition ov
         if "nonSubstance" in synset_content[synset]: # non-substances are both wetable and mixable
                 synset_content[synset].update({
                     "wetable": {},
-                    "mixable": {},
                     "stickyable": {},
                     "dustyable": {},
                     "grassyable": {},
