@@ -127,11 +127,6 @@ def create_get_save_propagated_annots_params(syns_to_props):
             for param_record in param_annots: 
                 for param_name, param_value in param_record.items():
 
-                    # # TODO remove this cookable hardcode once annotations are complete
-                    # if prop == "cookable" and param_name == "cook_temperature" and pd.isna(param_value):
-                    #     syns_to_props[param_record["synset"]][prop][param_name] = 58.
-                    #     continue
-
                     if param_name == "synset": continue
 
                     # NaN values
@@ -150,11 +145,11 @@ def create_get_save_propagated_annots_params(syns_to_props):
                             raise ValueError(f"synset {param_record['synset']} particleApplier annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
                         elif prop == "particleSink":
                             if param_name == "conditions": 
-                                param_value = {}
+                                formatted_param_value = {}
                             elif param_name == "default_physical_conditions": 
-                                param_value = []
+                                formatted_param_value = []
                             elif param_name == "default_visual_conditions":
-                                param_value = None
+                                formatted_param_value = None
                             else:
                                 raise ValueError(f"synset {param_record['synset']} particleSink annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
                         elif prop == "particleSource":
@@ -207,6 +202,8 @@ def create_get_save_propagated_annots_params(syns_to_props):
                             raise ValueError(f"Synset {param_record['synset']} property {prop} has param {param_name} that is not named `method`, `conditions`, or `system` and is not a NaN or a float. This is unhandled - please check.")
 
                     syns_to_props[param_record["synset"]][prop][param_name] = formatted_param_value
+    
+    print(syns_to_props["shower.n.01"]["particleSink"]["conditions"])
 
     with open(PARAMS_OUTFILE_FN, "w") as f:
         json.dump(syns_to_props, f, indent=4)
