@@ -3,7 +3,6 @@ from bddl.data_generation.get_hierarchy_full import get_hierarchy, create_get_sa
 from bddl.data_generation.get_syn_prop_annots_canonical import create_get_save_annots_canonical, create_get_save_properties_to_synsets, create_get_save_synsets_to_descriptors
 from bddl.data_generation.propagate_by_intersection import create_get_save_propagated_canonical
 from bddl.data_generation.process_prop_param_annots import create_get_save_propagated_annots_params
-# from bddl.data_generation.parse_tm_cleaning_csv import parse_tm_cleaning_csv
 import pandas as pd
 import csv
 import nltk

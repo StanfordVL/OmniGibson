@@ -111,6 +111,7 @@ def get_synsets_to_particle_remover_params():
 # Main parameter method
 
 def create_get_save_propagated_annots_params(syns_to_props):
+    print("Processing param annots...")
     
     synsets_to_particleremover_params = get_synsets_to_particle_remover_params()
     for particleremover_syn, particleremover_params in synsets_to_particleremover_params.items():
@@ -207,9 +208,10 @@ def create_get_save_propagated_annots_params(syns_to_props):
 
                     syns_to_props[param_record["synset"]][prop][param_name] = formatted_param_value
 
-
     with open(PARAMS_OUTFILE_FN, "w") as f:
         json.dump(syns_to_props, f, indent=4)
+    
+    print("Params parsed and added to flat and hierarchical files, saved.")
 
 
 if __name__ == "__main__":

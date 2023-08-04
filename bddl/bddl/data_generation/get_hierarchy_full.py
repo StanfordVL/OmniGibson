@@ -94,11 +94,13 @@ def get_hierarchy(syn_prop_dict):
 
 
 def create_get_save_hierarchy_with_properties(hierarchy):
+  print("Adding params to hierarchy file...")
   with open(SYN_PROP_PARAM_FN) as f:
     syn_prop_param_dict = json.load(f)
   add_properties(hierarchy, syn_prop_param_dict)
   with open(HIERARCHY_PROPERTIES_OUTPUT_FN, "w") as f:
     json.dump(hierarchy, f, indent=2)
+  print("Added params to hierarchy file, saved.")
   return hierarchy
 
 
