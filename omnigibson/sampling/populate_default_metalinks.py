@@ -8,13 +8,16 @@ from pxr import Vt, UsdGeom, Gf, UsdPhysics, PhysxSchema, Sdf, Usd
 from omnigibson.utils.sampling_utils import raytest_batch, raytest #, sample_raytest_start_end_full_grid_topdown
 from omnigibson.utils.asset_utils import decrypt_file, encrypt_file, get_all_object_category_models, get_all_object_categories
 import omnigibson.utils.transform_utils as T
+from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.utils.constants import ParticleModifyMethod
+from omni.isaac.core.utils.bounds import recompute_extents
 import trimesh
 from omni.kit.primitive.mesh.evaluators.cube import CubeEvaluator
-# from omni.isaac.core.utils.prims import get_prim_at_path, is_prim_path_valid
+from omni.isaac.core.utils.prims import get_prim_at_path, is_prim_path_valid
 import carb
 import omni
 import os
+import time
 import bddl
 from bddl.object_taxonomy import ObjectTaxonomy
 
@@ -33,6 +36,25 @@ Algorithm:
 7. Programmatically create meshes in USD, and also create fixed joint for metalink
 8. Save the USD
 """
+
+GEOM_SHAPE_DEFAULTS = {
+    "radius": 0.5,
+    "height": 1.0,
+    "size": 1.0,
+}
+
+METAMESH_NAME = "mesh_0"
+
+PARTICLE_APPLIER_METAMESH_TYPE = "Cone"
+PARTICLE_APPLIER_METAMESH_EXTENTS = np.array([0.15, 0.15, 0.30])
+PARTICLE_REMOVER_METAMESH_TYPE = "Cone"
+PARTICLE_REMOVER_METAMESH_EXTENTS = np.array([0.15, 0.15, 0.30])
+PARTICLE_SOURCE_METAMESH_TYPE = "Cylinder"
+PARTICLE_SOURCE_METAMESH_EXTENTS = np.array([0.05, 0.05, 0.1])
+PARTICLE_SINK_METAMESH_TYPE = "Sphere"
+PARTICLE_SINK_METAMESH_EXTENTS = np.ones(3) * 0.1
+
+
 def create_mesh(prim_path, stage):
     stage.DefinePrim(prim_path, "Mesh")
     mesh = UsdGeom.Mesh.Define(stage, prim_path)
@@ -289,7 +311,7 @@ def generate_fillable_volume(obj):
     obj_prim_path = prim.GetPath().pathString
     container_link_path = f"{obj_prim_path}/{container_link_prefix}_0_0_link"
     container_link = stage.DefinePrim(container_link_path, "Xform")
-    mesh_prim = create_mesh(prim_path=f"{container_link_path}/mesh_0", stage=stage).GetPrim()
+    mesh_prim = create_mesh(prim_path=f"{container_link_path}/{METAMESH_NAME}", stage=stage).GetPrim()
 
     # Write mesh data
     mesh_prim.GetAttribute("faceVertexCounts").Set(np.ones(len(ctm.faces), dtype=int) * 3)
@@ -360,24 +382,85 @@ def generate_metalink(obj, metalink_prefix):
         encrypt_file(usd_path, encrypted_usd_path)
         os.remove(usd_path)
 
+
+def generate_metamesh(obj, metalink_prefix, mesh_name, mesh_type, extents):
+    # Check if path is valid
+    for link_name, link in obj.links.items():
+        if metalink_prefix in link_name:
+            for vm_name in link.visual_meshes.keys():
+                if mesh_name in vm_name:
+                    print("ALREADY EXISTS")
+                    return
+
+    # Create link in USD
+    og.sim.stop()
+
+    # Open original USD
+    usd_path = obj.usd_path
+    encrypted = isinstance(obj, DatasetObject)
+    if encrypted:
+        # Decrypt first
+        encrypted_usd_path = usd_path.replace(".usd", ".encrypted.usd")
+        decrypt_file(encrypted_usd_path, usd_path)
+
+    stage = Usd.Stage.Open(usd_path)
+    prim = stage.GetDefaultPrim()
+
+    obj_prim_path = prim.GetPath().pathString
+    metamesh_path = f"{obj_prim_path}/{metalink_prefix}_0_0_link/{mesh_name}"
+    mesh = UsdGeom.__dict__[mesh_type].Define(stage, metamesh_path).GetPrim()
+    tstamp = "".join(f"{time.time()}".split("."))
+    xform = XFormPrim(prim_path=metamesh_path, name=tstamp)
+    xform._prim = mesh
+    xform._post_load()
+    property_names = set(mesh.GetPropertyNames())
+    for shape_attr, default_val in GEOM_SHAPE_DEFAULTS.items():
+        if shape_attr in property_names:
+            mesh.GetAttribute(shape_attr).Set(default_val)
+    recompute_extents(prim=xform.prim)
+
+    mesh.GetAttribute("xformOp:scale").Set(Gf.Vec3d(*extents))
+
+    # Save the USD
+    stage.Save()
+
+    if encrypted:
+        encrypted_usd_path = usd_path.replace(".usd", ".encrypted.usd")
+        encrypt_file(usd_path, encrypted_usd_path)
+        os.remove(usd_path)
+
 def generate_toggle_button_link(obj):
     return generate_metalink(obj=obj, metalink_prefix=macros.object_states.toggle.TOGGLE_LINK_PREFIX)
 
 
 def generate_particlesource_link(obj):
-    return generate_metalink(obj=obj, metalink_prefix=macros.object_states.particle_source_or_sink.SOURCE_LINK_PREFIX)
+    metalink_prefix = macros.object_states.particle_source_or_sink.SOURCE_LINK_PREFIX
+    generate_metalink(obj=obj, metalink_prefix=metalink_prefix)
+    generate_metamesh(obj=obj, metalink_prefix=metalink_prefix, mesh_name=METAMESH_NAME, mesh_type=PARTICLE_SOURCE_METAMESH_TYPE, extents=PARTICLE_SOURCE_METAMESH_EXTENTS)
 
 
 def generate_particlesink_link(obj):
-    return generate_metalink(obj=obj, metalink_prefix=macros.object_states.particle_source_or_sink.SINK_LINK_PREFIX)
+    metalink_prefix = macros.object_states.particle_source_or_sink.SINK_LINK_PREFIX
+    generate_metalink(obj=obj, metalink_prefix=metalink_prefix)
+    generate_metamesh(obj=obj, metalink_prefix=metalink_prefix, mesh_name=METAMESH_NAME, mesh_type=PARTICLE_SINK_METAMESH_TYPE, extents=PARTICLE_SINK_METAMESH_EXTENTS)
 
 
 def generate_particleapplier_link(obj):
-    return generate_metalink(obj=obj, metalink_prefix=macros.object_states.particle_modifier.APPLICATION_LINK_PREFIX)
+    metalink_prefix = macros.object_states.particle_modifier.APPLICATION_LINK_PREFIX
+    generate_metalink(obj=obj, metalink_prefix=metalink_prefix)
+    synset = ot.get_synset_from_category(obj.category)
+    abilities = ot.get_abilities(synset)
+    if abilities["particleApplier"]["method"] == ParticleModifyMethod.PROJECTION:
+        generate_metamesh(obj=obj, metalink_prefix=metalink_prefix, mesh_name=METAMESH_NAME, mesh_type=PARTICLE_APPLIER_METAMESH_TYPE, extents=PARTICLE_APPLIER_METAMESH_EXTENTS)
 
 
 def generate_particleremover_link(obj):
-    return generate_metalink(obj=obj, metalink_prefix=macros.object_states.particle_modifier.REMOVAL_LINK_PREFIX)
+    metalink_prefix = macros.object_states.particle_modifier.REMOVAL_LINK_PREFIX
+    generate_metalink(obj=obj, metalink_prefix=metalink_prefix)
+    synset = ot.get_synset_from_category(obj.category)
+    abilities = ot.get_abilities(synset)
+    if abilities["particleRemover"]["method"] == ParticleModifyMethod.PROJECTION:
+        generate_metamesh(obj=obj, metalink_prefix=metalink_prefix, mesh_name=METAMESH_NAME, mesh_type=PARTICLE_REMOVER_METAMESH_TYPE, extents=PARTICLE_REMOVER_METAMESH_EXTENTS)
 
 
 def generate_heat_source_or_sink_link(obj):
