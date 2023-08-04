@@ -203,7 +203,6 @@ def create_get_save_propagated_annots_params(syns_to_props):
 
                     syns_to_props[param_record["synset"]][prop][param_name] = formatted_param_value
     
-    print(syns_to_props["shower.n.01"]["particleSink"]["conditions"])
 
     with open(PARAMS_OUTFILE_FN, "w") as f:
         json.dump(syns_to_props, f, indent=4)
