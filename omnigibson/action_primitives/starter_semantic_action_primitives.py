@@ -306,7 +306,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         action = StarterSemanticActionPrimitive(action_idx)
         return self.controller_functions[action](target_obj)
 
-    def grasp(self, obj, track_obj=True): # TODO
+    def grasp(self, obj, track_obj=True, allow_nav=True): 
         print("GRASP CALLED")
         # track_obj: if true, tries to keep the object in view
         obj_to_track = obj if track_obj else None
@@ -337,7 +337,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
             # If the grasp pose is too far, navigate.
             print("1. navigate")
-            yield from self._navigate_if_needed(obj, pose_on_obj=grasp_pose, obj_to_track=obj_to_track)
+            if allow_nav:
+                yield from self._navigate_if_needed(obj, pose_on_obj=grasp_pose, obj_to_track=obj_to_track)
             print("2. move hand to above pos")
             yield from self._move_hand(grasp_pose, obj_to_track=obj_to_track)
 
@@ -520,7 +521,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         for _ in range(MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT):
             current_joint_pos = self.robot.get_joint_positions()[control_idx]
             diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
-            print("diff_joint_pos", max(abs(diff_joint_pos)))
+            # print("diff_joint_pos", max(abs(diff_joint_pos)))
             if max(diff_joint_pos) < 0.005:
                 return
             if stop_on_contact and detect_robot_collision_in_sim(self.robot):
