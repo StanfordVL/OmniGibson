@@ -108,8 +108,8 @@ def main():
         pose = controller._get_robot_pose_from_2d_pose([-0.433881, -0.210183, -2.96118])
         robot.set_position_orientation(*pose)
         og.sim.step()
-        replay_controller(env, "./replays/test_grasp_pose.yaml")
-        # execute_controller(controller._grasp(grasp_obj), env, "./replays/test_grasp_pose.yaml")
+        # replay_controller(env, "./replays/test_grasp_pose.yaml")
+        execute_controller(controller._grasp(grasp_obj), env)
 
     def test_grasp():
         # Need to set start pose to reset_hand because default tuck pose for Tiago collides with itself

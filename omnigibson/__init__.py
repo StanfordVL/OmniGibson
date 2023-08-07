@@ -80,7 +80,7 @@ def create_app():
 
     # Enable additional extensions we need
     from omni.isaac.core.utils.extensions import enable_extension
-    enable_extension("omni.flowusd")
+    # enable_extension("omni.flowusd")
     enable_extension("omni.particle.system.bundle")
 
     # Additional import for windows

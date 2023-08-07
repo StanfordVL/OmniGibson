@@ -1086,7 +1086,6 @@ class ManipulationRobot(BaseRobot):
             applying_grasp = np.any(controller.control < threshold)
             if arm == "left":
                 print(controller.control, threshold, applying_grasp)
-
             # Execute gradual release of object
             if self._ag_obj_in_hand[arm]:
                 if self._ag_release_counter[arm] is not None:
