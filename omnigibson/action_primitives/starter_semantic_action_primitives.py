@@ -540,7 +540,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     "Grasp completed, but no object detected in hand after executing grasp",
                     {"target object": obj.name},
                 )
-            
+            return
             yield from self._reset_hand()
 
         if self._get_obj_in_hand() != obj:
@@ -988,6 +988,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         for name, controller in self.robot._controllers.items():
             joint_idx = controller.dof_idx
             action_idx = self.robot.controller_action_idx[name]
+            from IPython import embed; embed()
             if controller.control_type == ControlType.POSITION and len(joint_idx) == len(action_idx):
                 action[action_idx] = self.robot.get_joint_positions()[joint_idx]
 

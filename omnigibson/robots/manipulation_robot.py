@@ -1084,6 +1084,8 @@ class ManipulationRobot(BaseRobot):
             controlled_joints = controller.dof_idx
             threshold = np.mean(np.array(self.control_limits["position"])[:, controlled_joints], axis=0)
             applying_grasp = np.any(controller.control < threshold)
+            if arm == "left":
+                print(controller.control, threshold, applying_grasp)
 
             # Execute gradual release of object
             if self._ag_obj_in_hand[arm]:
