@@ -229,7 +229,7 @@ import openai
 from omnigibson.utils.object_state_utils import  sample_kinematics
 from omnigibson.objects.dataset_object import DatasetObject
 
-openai.api_key = "API_KEY"
+openai.api_key = "API_key"
    
 messages = [
     {"role": "system", "content": system_prompt},
@@ -265,12 +265,15 @@ for _ in range(5):
     target_object1 = DatasetObject(name = f"{target_object1_category}_{target_object1_model}_{target_object1_instanceID}", category = target_object1_category, model = target_object1_model)
     og.sim.import_object(target_object1)
     target_object2 = [obj for obj in og.sim.scene.objects if obj.name == function_args["target_object2"]][0]
+    env.step([])
 
-    function_response = sample_kinematics(
-        function_name,
+    predicate = "onTop" if function_name.lower() == "ontop" else "inside"
+
+    function_response = str(sample_kinematics(
+        predicate,
         target_object1,
         target_object2
-    )
+    ))
     
     messages.append(response_message)
     messages.append(
@@ -291,11 +294,10 @@ for _ in range(5):
 
     """.strip()
 
-
-    messages.append([
+    messages = [
     {"role": "system", "content": system_prompt},
     {"role": "user", "content": human_prompt},
-])
+    ]
 
 
 # %%
