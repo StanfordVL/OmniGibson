@@ -643,7 +643,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             joint_idx = controller.dof_idx
             action_idx = self.robot.controller_action_idx[name]
             if controller.control_type == ControlType.POSITION and len(joint_idx) == len(action_idx):
-                action[action_idx] = self.robot.get_joint_positions()[joint_idx]
+                if name != "camera":
+                    action[action_idx] = self.robot.get_joint_positions()[joint_idx]
 
         return action
 
