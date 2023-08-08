@@ -72,20 +72,19 @@ og.sim.enable_viewer_camera_teleoperation()
 # goal_conditions = stringify_conds(task_goal_conditions)
 
 
-# In[6]:
 
-
-rooms = "\n".join(sorted({
-    f"- {rm}"
-    for obj in env.scene.objects
-    for rm in (obj.in_rooms if hasattr(obj, "in_rooms") and obj.in_rooms else [])
-    if rm}))
+# rooms = "\n".join(sorted({
+#     f"- {rm}"
+#     for obj in env.scene.objects
+#     for rm in (obj.in_rooms if hasattr(obj, "in_rooms") and obj.in_rooms else [])
+#     if rm}))
 
 
 # In[7]:
+from omnigibson.utils.asset_utils import get_all_object_category_models, get_all_object_categories
 
 #TODO: The baseRobot part doesn't do any harm, but I think it is redundant; TODO: check
-from omnigibson.robots import BaseRobot
+# from omnigibson.robots import BaseRobot
 # obj_room_pairs = {
 #     (obj, (", ".join(obj.in_rooms) if hasattr(obj, "in_rooms") and obj.in_rooms else None))
 #     for obj in env.scene.objects
@@ -95,10 +94,11 @@ from omnigibson.robots import BaseRobot
 #     f"- {obj.name} (in rooms {rm})" if rm else f"- {obj.name}"
 #     for obj, rm in obj_room_pairs
 # ))
-objects = sorted([obj.name for obj in og.sim.scene.objects])
+scene_objects = sorted([obj.name for obj in og.sim.scene.objects])
+all_object_categories = get_all_object_categories()
+
 
 # In[8]:
-
 
 # Use the scene graph API to get the current state of the scene
 # def get_observation(env):
@@ -107,6 +107,7 @@ objects = sorted([obj.name for obj in og.sim.scene.objects])
 
 
 # In[9]:
+import random
 
 
 system_prompt = """
@@ -133,8 +134,11 @@ Imagine you're a sort of interior designer, but rather than physical spaces, you
 # {rooms}
 
 human_prompt = f"""
-The scene contains the below objects, which you can use as arguments to functions:
-{objects}
+The following is the list of all available objects that can be chosen as target_object1 to functions and after they are chosen, they will be imported into the scene in a way that creates the desired effect by the function called:
+{random.choices(all_object_categories, k=300)}
+The scene contains the below objects, which you can use as potential target_object2 to functions:
+{scene_objects}
+
 """.strip()
 
 
@@ -153,11 +157,11 @@ functions = [
             "properties": {
                 "target_object1": {
                     "type": "string",
-                    "description": "The name of the object to place the on top of another object which will be defined as target_object2.",
+                    "description": "The name of the object to place the on top of another object which will be defined as target_object2. You can pick this from the list of all available objects.",
                 },
                 "target_object2": {
                     "type": "string",
-                    "description": "The name of the object to place the object defined as the property \"target_object1\" on top of. Before calling this function, you need to have picked target_object1 first.",
+                    "description": "The name of the object to place the object defined as the property \"target_object1\" on top of. Before calling this function, you need to have picked target_object1 first. You can pick \"target_object2\" from the list of all objects that the scene currently contains.",
                 },
             },
             "required": ["target_object1", "target_object2"],
@@ -171,11 +175,11 @@ functions = [
             "properties": {
                 "target_object1": {
                     "type": "string",
-                    "description": "The name of the object to place inside another object you will pick next.",
+                    "description": "The name of the object to place inside another object you will pick next. You can pick this from the list of all available objects.",
                 },
                 "target_object2": {
                     "type": "string",
-                    "description": "The name of the object to place the object denoted as target_object1 inside.",
+                    "description": "The name of the object to place the object denoted as target_object1 inside.  You can pick \"target_object2\" from the list of all objects that the scene currently contains.",
                 },
             },
             "required": ["target_object1", "target_object2"],
@@ -205,6 +209,8 @@ import json
 
 # In[ ]:
 import textwrap
+
+
 def wrap_text(t):
     paragraphs = t.split("\n")
     return "\n".join(textwrap.fill(x, 80) for x in paragraphs)
@@ -221,19 +227,21 @@ def print_message(message):
 
 import openai
 from omnigibson.utils.object_state_utils import  sample_kinematics
+from omnigibson.objects.dataset_object import DatasetObject
 
-openai.api_key = "ADD_KEY"
+openai.api_key = "API_KEY"
    
 messages = [
     {"role": "system", "content": system_prompt},
     {"role": "user", "content": human_prompt},
 ]
 
+
 for message in messages:
     print_message(message)
 
-
-for _ in range(30):
+import bisect
+for _ in range(5):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
@@ -246,13 +254,22 @@ for _ in range(30):
 
     if "function_call" not in response_message:
         break
-        
+
+
     function_name = response_message["function_call"]["name"].upper()
     function_args = json.loads(response_message["function_call"]["arguments"])
+    target_object1_category = function_args["target_object1"]
+    target_object1_model = random.choice(get_all_object_category_models(target_object1_category))
+    current_object1_instances = [int(obj.name.strip("_")[-1]) for obj in og.sim.scene.objects if  f"{target_object1_category}_{target_object1_model}" in obj.name]
+    target_object1_instanceID = max(current_object1_instances) + 1 if current_object1_instances else 0
+    target_object1 = DatasetObject(name = f"{target_object1_category}_{target_object1_model}_{target_object1_instanceID}", category = target_object1_category, model = target_object1_model)
+    og.sim.import_object(target_object1)
+    target_object2 = [obj for obj in og.sim.scene.objects if obj.name == function_args["target_object2"]][0]
+
     function_response = sample_kinematics(
         function_name,
-        function_args["target_object"][0],
-        function_args["target_object"][1]
+        target_object1,
+        target_object2
     )
     
     messages.append(response_message)
@@ -264,8 +281,21 @@ for _ in range(30):
         }
     )  # extend conversation with function response
     print_message(messages[-1])
+    scene_objects = sorted([obj.name for obj in og.sim.scene.objects])
+    
+    human_prompt = f"""
+    The following is the list of all available objects that can be chosen as target_object1 to functions and after they are chosen, they will be imported into the scene in a way that creates the desired effect by the function called:
+    {random.choices(all_object_categories, k=300)}
+    The scene contains the below objects, which you can use as potential target_object2 to functions:
+    {scene_objects}
+
+    """.strip()
 
 
+    messages.append([
+    {"role": "system", "content": system_prompt},
+    {"role": "user", "content": human_prompt},
+])
 
 
 # %%
