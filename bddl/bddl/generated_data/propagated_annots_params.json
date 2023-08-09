@@ -8989,7 +8989,6 @@
         "heatable": {},
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "beef_broth.n.01": {
@@ -9350,7 +9349,6 @@
         "heatable": {},
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "beverage.n.01": {
@@ -11151,7 +11149,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "blueberry_compote.n.01": {
@@ -11193,7 +11190,6 @@
         },
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "board.n.02": {
@@ -17390,7 +17386,6 @@
         "heatable": {},
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "bucket.n.01": {
@@ -20822,7 +20817,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cayenne__shaker.n.01": {
@@ -23775,7 +23769,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "clove__jar.n.01": {
@@ -25920,13 +25913,14 @@
         "substance": {}
     },
     "cooked__coconut.n.01": {
+        "cookable": {},
+        "flammable": {},
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cooked__cooking_oil.n.01": {
@@ -26204,6 +26198,7 @@
         "cookable": {
             "cook_temperature": 58.0
         },
+        "flammable": {},
         "freezable": {},
         "heatable": {
             "heat_temperature": 40.0
@@ -26385,7 +26380,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cooked__kidney_bean.n.01": {
@@ -26472,7 +26466,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cooked__melted__butter.n.01": {
@@ -26504,7 +26497,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cooked__olive_oil.n.01": {
@@ -26560,7 +26552,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cooked__paprika.n.01": {
@@ -26579,7 +26570,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cooked__pea.n.01": {
@@ -26610,7 +26600,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cooked__popcorn.n.01": {
@@ -26647,7 +26636,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cooked__quinoa.n.01": {
@@ -27302,7 +27290,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cornmeal__sack.n.01": {
@@ -27978,7 +27965,6 @@
         "meltable": {},
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cotton.n.01": {
@@ -29284,7 +29270,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cranberry_juice.n.01": {
@@ -29410,7 +29395,6 @@
         },
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cream_cheese__box.n.01": {
@@ -30283,7 +30267,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "cruciferous_vegetable.n.01": {
@@ -33125,7 +33108,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "diced__pineapple.n.01": {
@@ -33198,7 +33180,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "diced__vidalia_onion.n.01": {
@@ -40563,7 +40544,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "ferric_oxide.n.01": {
@@ -41533,7 +41513,6 @@
         },
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "fodder.n.02": {
@@ -43467,7 +43446,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "ginger.n.03": {
@@ -43716,7 +43694,6 @@
         "heatable": {},
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "glove.n.02": {
@@ -45697,7 +45674,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "ground_beef__package.n.01": {
@@ -49480,7 +49456,6 @@
         },
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "hummus__box.n.01": {
@@ -51976,7 +51951,6 @@
         },
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "jelly.n.03": {
@@ -52019,7 +51993,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "jelly_bean__jar.n.01": {
@@ -61063,7 +61036,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "macaroni_and_cheese.n.01": {
@@ -62064,7 +62036,6 @@
         },
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "margarine__box.n.01": {
@@ -64880,7 +64851,6 @@
         "heatable": {},
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "measure.n.02": {
@@ -65260,7 +65230,6 @@
         },
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "message.n.01": {
@@ -66059,7 +66028,6 @@
         "heatable": {},
         "liquid": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "mouthpiece.n.06": {
@@ -68157,7 +68125,6 @@
         "liquid": {},
         "meltable": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "nutmeg.n.02": {
@@ -68706,7 +68673,6 @@
         "heatable": {},
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "orange_zest.n.01": {
@@ -68719,7 +68685,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "orchid.n.01": {
@@ -72002,7 +71967,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "parmesan__shaker.n.01": {
@@ -72615,7 +72579,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "pedestal_table.n.01": {
@@ -72641,8 +72604,7 @@
     "peel.n.02": {
         "cookable": {},
         "freezable": {},
-        "heatable": {},
-        "sliceable": {}
+        "heatable": {}
     },
     "peeler.n.03": {
         "disinfectable": {},
@@ -73406,7 +73368,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "penny.n.02": {
@@ -75563,7 +75524,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "pineapple.n.02": {
@@ -81840,7 +81800,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "raisin__box.n.01": {
@@ -81991,7 +81950,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "raw_egg.n.01": {
@@ -83228,14 +83186,12 @@
         "meltable": {},
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "rind.n.01": {
         "cookable": {},
         "freezable": {},
-        "heatable": {},
-        "sliceable": {}
+        "heatable": {}
     },
     "ring.n.08": {
         "disinfectable": {},
@@ -84707,7 +84663,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "saffron__shaker.n.01": {
@@ -84779,7 +84734,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -86741,7 +86695,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "scraper.n.01": {
@@ -95679,7 +95632,6 @@
         },
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "spaghetti_sauce.n.01": {
@@ -108230,7 +108182,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "turner.n.08": {
@@ -111340,7 +111291,6 @@
         },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
-        "sliceable": {},
         "substance": {}
     },
     "wheel.n.01": {
