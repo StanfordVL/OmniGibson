@@ -17,7 +17,7 @@ from omni.isaac.core.utils.prims import get_prim_at_path
 from omni.isaac.core.utils.stage import close_stage, get_current_stage, open_stage
 from omni.usd import create_material_input, get_shader_from_material
 from omnigibson.macros import gm
-from omnigibson.utils.usd_utils import BoundingBoxAPI
+from omnigibson.utils.usd_utils import BoundingBoxAPI, create_primitive_mesh
 from pxr import Gf, PhysxSchema, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade
 from pxr.Sdf import ValueTypeNames as VT
 from pxr.UsdGeom import Tokens
@@ -544,6 +544,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
             meta_link_in_parent_link_orn = T.quat_multiply(meta_link_in_parent_link_orn, T.axisangle2quat([np.pi, 0.0, 0.0]))
 
         for i, mesh_info in enumerate(mesh_info_list):
+            is_mesh = False
             if is_light:
                 # Create a light
                 light_type = LIGHT_MAPPING[mesh_info["type"]]
@@ -565,10 +566,11 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                 # togglebutton has to be a sphere
                 if meta_link_type in ["togglebutton"]:
                     assert mesh_type in ["Sphere"], f"Invalid mesh type for togglebutton: {mesh_type}"
+                    is_mesh = True
                 # particle applier has to be a cone or cylinder because of the visualization of the particle flow
                 elif meta_link_type in ["particleapplier"]:
                     assert mesh_type in ["Cone", "Cylinder"], f"Invalid mesh type for particleapplier: {mesh_type}"
-                prim = UsdGeom.__dict__[mesh_type].Define(stage, prim_path).GetPrim()
+                prim = create_primitive_mesh(prim_path, mesh_type, stage=stage).GetPrim() if is_mesh else UsdGeom.__dict__[mesh_type].Define(stage, prim_path).GetPrim()
 
             add_xform_properties(prim=prim)
             # Make sure mesh_prim has XForm properties
@@ -599,8 +601,9 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                     raise ValueError(f"Invalid light type: {light_type}")
             else:
                 if mesh_type == "Cylinder":
-                    xform_prim.prim.GetAttribute("radius").Set(0.5)
-                    xform_prim.prim.GetAttribute("height").Set(1.0)
+                    if not is_mesh:
+                        xform_prim.prim.GetAttribute("radius").Set(0.5)
+                        xform_prim.prim.GetAttribute("height").Set(1.0)
                     if meta_link_type == "particlesource":
                         desired_radius = 0.0125
                         desired_height = 0.05
@@ -614,8 +617,9 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                     mesh_in_meta_link_pos += T.quat2mat(mesh_in_meta_link_orn) @ np.array(
                         [0.0, 0.0, height_offset])
                 elif mesh_type == "Cone":
-                    xform_prim.prim.GetAttribute("radius").Set(0.5)
-                    xform_prim.prim.GetAttribute("height").Set(1.0)
+                    if not is_mesh:
+                        xform_prim.prim.GetAttribute("radius").Set(0.5)
+                        xform_prim.prim.GetAttribute("height").Set(1.0)
                     desired_radius = mesh_info["size"][0]
                     desired_height = mesh_info["size"][2]
                     height_offset = -desired_height / 2.0
@@ -626,10 +630,12 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                     mesh_in_meta_link_pos += T.quat2mat(mesh_in_meta_link_orn) @ np.array(
                         [0.0, 0.0, height_offset])
                 elif mesh_type == "Cube":
-                    xform_prim.prim.GetAttribute("size").Set(1.0)
+                    if not is_mesh:
+                        xform_prim.prim.GetAttribute("size").Set(1.0)
                     xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(*mesh_info["size"]))
                 elif mesh_type == "Sphere":
-                    xform_prim.prim.GetAttribute("radius").Set(0.5)
+                    if not is_mesh:
+                        xform_prim.prim.GetAttribute("radius").Set(0.5)
                     desired_radius = mesh_info["size"][0]
                     xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_radius * 2))
                 else:
