@@ -158,27 +158,18 @@ def create_get_save_propagated_annots_params(syns_to_props):
                     # `conditions` values - format is keyword1:bool_value1;keyword2:bool_value2;...;keywordN:bool_valueN
                     elif param_name == "conditions": 
                         if (prop == "particleApplier") or (prop == "particleSource"):
-                            # NOTE assumes that there may be multiple conditions but only handles gravity and toggled_on
+                            # NOTE assumes that there may be multiple conditions
                             conditions = param_value.split(";")
-                            if len(conditions) > 1:
-                                print(f"WARNING: multiple conditions for prop {prop} for synset {param_record['synset']}")
-                            
-                            # Checks that at most one of gravity and toggled_on are required
-                            assert (not "gravity:True" in conditions) or (not "toggled_on:True" in conditions), f"synset {param_record['synset']} prop {prop} has contradictory conditions gravity:True and toggled_on:True"
-                            
-                            # Now that we know at most one of gravity and toggled_on are true, verify that it's one of them and determine which one
-                            gravity_or_toggled_on = ""
+                            formatted_conditions = []
                             for condition in conditions: 
-                                if condition == "gravity:True": 
-                                    gravity_or_toggled_on = "gravity"
+                                if condition == "gravity:True":
+                                    formatted_conditions.append((ParticleModifyCondition.GRAVITY, True))
                                 elif condition == "toggled_on:True":
-                                    gravity_or_toggled_on = "toggled_on"
-                            if gravity_or_toggled_on not in ["gravity", "toggled_on"]:
-                                raise ValueError(f"Synset {param_record['synset']} prop {prop} uses neither gravity nor toggled_on")
-
-                            # Make the `conditions` entry
+                                    formatted_conditions.append((ParticleModifyCondition.TOGGLEDON, True))
+                                else:
+                                    raise ValueError(f"Synset {param_record['synset']} prop {prop} has unhandled condition {condition}")
                             formatted_param_value = {
-                                param_record["system"]: [(ParticleModifyCondition.GRAVITY if gravity_or_toggled_on == "gravity" else (ParticleModifyCondition.TOGGLEDON), True)]
+                                param_record["system"]: formatted_conditions
                             }
 
                         else:
