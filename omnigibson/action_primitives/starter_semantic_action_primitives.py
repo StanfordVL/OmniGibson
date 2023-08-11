@@ -495,44 +495,99 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         
         self._unfix_robot_base()
 
-    def _move_hand_direct_joint(self, joint_pos, control_idx, obj_to_track=None, stop_on_contact=False):
-        action = self._empty_action()
-        controller_name = "arm_{}".format(self.arm)
-        action[self.robot.controller_action_idx[controller_name]] = joint_pos
+    # def _move_hand_direct_joint(self, joint_pos, control_idx, obj_to_track=None, stop_on_contact=False):
+    #     action = self._empty_action()
+    #     controller_name = "arm_{}".format(self.arm)
+    #     action[self.robot.controller_action_idx[controller_name]] = joint_pos
 
-        # if an object to track is provided, compute head joint angles
-        if obj_to_track is not None:
-            action = self.overwrite_head_action(action, obj=obj_to_track)
-            # head_q = self.get_head_goal_q(obj_to_track)
-            # head_idx = self.robot.controller_action_idx["camera"]
-            # action[head_idx] = head_q
+    #     # if an object to track is provided, compute head joint angles
+    #     if obj_to_track is not None:
+    #         action = self.overwrite_head_action(action, obj=obj_to_track)
 
-        # while True:
-        #     current_joint_pos = self.robot.get_joint_positions()[control_idx]
-        #     diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
-        #     print("diff_joint_pos", max(abs(diff_joint_pos)))
-        #     if max(diff_joint_pos) < 0.005:
-        #         return
-        #     if stop_on_contact and detect_robot_collision_in_sim(self.robot):
-        #         print("contact. stopping")
-        #         return
-        #     yield action
-
-        for _ in range(MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT):
-            current_joint_pos = self.robot.get_joint_positions()[control_idx]
-            diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
-            # print("diff_joint_pos", max(abs(diff_joint_pos)))
-            if max(diff_joint_pos) < 0.005:
-                return
-            if stop_on_contact and detect_robot_collision_in_sim(self.robot):
-                print("contact. stopping")
-                return
-            yield action, "manip:move_hand_direct_joint"
+    #     for _ in range(MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT):
+    #         current_joint_pos = self.robot.get_joint_positions()[control_idx]
+    #         diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
+    #         # print("diff_joint_pos", max(abs(diff_joint_pos)))
+    #         if max(diff_joint_pos) < 0.005:
+    #             return
+    #         if stop_on_contact and detect_robot_collision_in_sim(self.robot):
+    #             print("contact. stopping")
+    #             return
+    #         yield action, "manip:move_hand_direct_joint"
         
-        raise ActionPrimitiveError(
-            ActionPrimitiveError.Reason.EXECUTION_ERROR,
-            "MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT reached",
-        )
+    #     raise ActionPrimitiveError(
+    #         ActionPrimitiveError.Reason.EXECUTION_ERROR,
+    #         "MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT reached",
+    #     )
+
+    def _move_hand_direct_joint(self, joint_pos, control_idx, obj_to_track=None, stop_on_contact=False):
+
+        # TODO - make sure controller is JointController and in position control mode
+        ######## Delta Joiint Position Control Case ########
+        action = self._empty_action()
+        controller_name = f"arm_{self.arm}"
+
+        use_delta = self.robot._controllers[controller_name].use_delta_commands
+        thresh = 0.005
+
+        current_joint_pos = self.robot.get_joint_positions()[control_idx]
+        diff_joint_pos = joint_pos - current_joint_pos 
+        if use_delta:
+            print("using delta")
+            for _ in range(MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT):
+                current_joint_pos = self.robot.get_joint_positions()[control_idx]
+                diff_joint_pos = joint_pos - current_joint_pos 
+
+                # compute delta commands
+                # get minimum action and gain according to each joint's control limits
+                controller = self.robot._controllers[controller_name]
+                control_limits = controller._control_limits[controller.control_type]
+                lim = np.minimum(abs(control_limits[0][control_idx]), abs(control_limits[1][control_idx]))
+                gain = 4500.0
+                min_action = 0.5
+                # for joints not within thresh, set a minimum action value
+                # for joints within thres, set action to zero
+                _action = gain * diff_joint_pos
+                _action[abs(_action) < min_action] = np.sign(_action[abs(_action) < min_action]) * min_action
+                _action[abs(diff_joint_pos) < thresh] = 0.0
+                action[self.robot.controller_action_idx[controller_name]] = _action
+                
+                print("joint position error", abs(diff_joint_pos))
+                if max(abs(diff_joint_pos)) < thresh:
+                    return
+                print("action", action[control_idx])
+                yield action, "manip:move_hand_direct_joint"
+            
+            raise ActionPrimitiveError(
+                ActionPrimitiveError.Reason.EXECUTION_ERROR,
+                "MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT reached",
+            )
+
+        else:
+            ####### Absolute Joint Position Control Case #######
+            action = self._empty_action()
+            controller_name = "arm_{}".format(self.arm)
+            action[self.robot.controller_action_idx[controller_name]] = joint_pos
+
+            # if an object to track is provided, compute head joint angles
+            if obj_to_track is not None:
+                action = self.overwrite_head_action(action, obj=obj_to_track)
+
+            for _ in range(MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT):
+                current_joint_pos = self.robot.get_joint_positions()[control_idx]
+                diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
+                # print("diff_joint_pos", max(abs(diff_joint_pos)))
+                if max(diff_joint_pos) < 0.005:
+                    return
+                if stop_on_contact and detect_robot_collision_in_sim(self.robot):
+                    print("contact. stopping")
+                    return
+                yield action, "manip:move_hand_direct_joint"
+            
+            raise ActionPrimitiveError(
+                ActionPrimitiveError.Reason.EXECUTION_ERROR,
+                "MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT reached",
+            )
 
     def _move_hand_direct_cartesian(self, target_pose, **kwargs):
         joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
@@ -640,13 +695,57 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     def _empty_action(self):
         action = np.zeros(self.robot.action_dim)
         for name, controller in self.robot._controllers.items():
+
+            # Get controller name
+            controller_name = self.robot._controller_config[name]["name"]
+
+            # Make sure base, arms, camera are in joint control mode
+            if name in ["base", "arm_left", "arm_right", "camera"]:
+                assert (controller_name == "JointController",
+                    f"Current version of SemanticActionPrimitives only support JointController for base, arms, and camera but got {controller_name} for {name}")
+            
             joint_idx = controller.dof_idx
             action_idx = self.robot.controller_action_idx[name]
-            if controller.control_type == ControlType.POSITION and len(joint_idx) == len(action_idx):
-                if name != "camera":
-                    action[action_idx] = self.robot.get_joint_positions()[joint_idx]
 
+            # JointController case
+            if controller_name == "JointController":
+                # position control case
+                if controller.control_type == ControlType.POSITION and len(joint_idx) == len(action_idx):
+                    if controller.use_delta_commands:
+                        continue
+                    else:
+                        # for absolute position control case, null action is current joint position
+                        action[action_idx] = self.robot.get_joint_positions()[joint_idx]
+                # velocity control case
+                elif controller.control_type == ControlType.VELOCITY and len(joint_idx) == len(action_idx):
+                    # null action is zero velocity
+                    continue
+                # effort control case - currently not supported
+                else:
+                    raise Exception("Effort control is currently not supported")
+
+            # MultiFingerGripperController case
+            elif controller_name == "MultiFingerGripperController":
+                mode = self.robot._controller_config[name]["mode"]
+                if mode == "binary":
+                    continue
+                else:
+                    raise Exception(f"Gripper controller mode {mode} is currently not supported. Please use binary mode.")
+            
+            else:
+                raise Exception(f"Controller type {controller_name} is currently not supported.")
         return action
+
+    # def _empty_action(self):
+    #     action = np.zeros(self.robot.action_dim)
+    #     for name, controller in self.robot._controllers.items():
+    #         joint_idx = controller.dof_idx
+    #         action_idx = self.robot.controller_action_idx[name]
+    #         if controller.control_type == ControlType.POSITION and len(joint_idx) == len(action_idx):
+    #             if name != "camera":
+    #                 action[action_idx] = self.robot.get_joint_positions()[joint_idx]
+
+    #     return action
 
     def _get_reset_joint_pos(self):
         if self.robot_model == "Fetch":
@@ -700,7 +799,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             #     0.045,
             # ])
             return np.array([
-                -1.78029833e-04,  3.20231302e-05, -1.85759447e-07,
+                0.0,  0.0, 0.0,
                 0.0, -0.2,
                 0.0,  0.1, -6.10000000e-01,
                 -1.10000000e+00,  0.00000000e+00, -1.10000000e+00,  1.47000000e+00,
