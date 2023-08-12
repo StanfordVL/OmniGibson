@@ -704,7 +704,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 assert (controller_name == "JointController",
                     f"Current version of SemanticActionPrimitives only support JointController for base, arms, and camera but got {controller_name} for {name}")
             
-            joint_idx = controller.dof_idx
+            # joint_idx = controller.dof_idx
+            joint_idx = self.robot.controller_joint_idx[name]
             action_idx = self.robot.controller_action_idx[name]
 
             # JointController case
@@ -715,7 +716,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                         continue
                     else:
                         # for absolute position control case, null action is current joint position
-                        action[action_idx] = self.robot.get_joint_positions()[joint_idx]
+                        if name == "camera": 
+                            action[action_idx] = self._get_reset_joint_pos()[joint_idx]
+                        else:
+                            action[action_idx] = self.robot.get_joint_positions()[joint_idx]
                 # velocity control case
                 elif controller.control_type == ControlType.VELOCITY and len(joint_idx) == len(action_idx):
                     # null action is zero velocity
@@ -769,45 +773,36 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
         
         elif self.robot_model == "Tiago": 
+            """
+            {
+                'base': array([0, 1, 5]),
+                'camera': array([ 9, 12]),
+                'arm_left': array([ 6,  7, 10, 13, 15, 17, 19, 21]),
+                'gripper_left': array([23, 24]),
+                'arm_right': array([ 8, 11, 14, 16, 18, 20, 22]),
+                'gripper_right': array([25, 26])}
+
+            """
+            default_pos = {
+                "base" : np.array([0.0, 0.0, 0.0]),
+                "camera" : np.array([0.0, -0.2]),
+                "arm_left" : np.array([0.1 , -0.61, -1.1, 0.87, 1.5, -1.5 , 0.45, 0.0]),
+                "arm_right" : np.array([-1.1 , 1.47, 2.71, 1.71, -1.57, 1.39, 0.0]),
+                "gripper_left" : np.array([0.045, 0.045]),
+                "gripper_right" : np.array([0.045, 0.045]),
+            }
+            reset_q = np.zeros(self.robot.n_dof)
+            for name, idx in self.robot.controller_joint_idx.items():
+                reset_q[idx] = default_pos[name]
+            return reset_q
             # return np.array([
-            #     -1.78029833e-04,  
-            #     3.20231302e-05, 
-            #     -1.85759447e-07, 
-            #     0.0, # head 1
-            #     -0.2,  # head 2
-            #     2.36128806e-04,  
-            #     0.10,  
-            #     0.94,
-            #     -1.1,  
-            #     0.0, 
-            #     -0.9,  
-            #     1.47,
-            #     0.0,  
-            #     2.1,  
-            #     2.71,  
-            #     1.5,
-            #     1.71,  
-            #     1.3, 
-            #     -1.57, 
-            #     -1.4,
-            #     1.39,  
-            #     0.0,  
-            #     0.0,  
-            #     0.045,
-            #     0.045,
-            #     0.045,
-            #     0.045,
+            #     0.0,  0.0, 0.0, 0.0, 0.0,
+            #     0.0,  0.1, -0.61, -1.1,  0.0, -1.1,  1.47,
+            #     0.00000000e+00,  8.70000000e-01,  2.71000000e+00,  1.50000000e+00,
+            #     1.71000000e+00, -1.50000000e+00, -1.57000000e+00,  4.50000000e-01,
+            #     1.39000000e+00,  0.00000000e+00,  0.00000000e+00,  4.50000000e-02,
+            #     4.50000000e-02,  4.50000000e-02,  4.50000000e-02
             # ])
-            return np.array([
-                0.0,  0.0, 0.0,
-                0.0, -0.2,
-                0.0,  0.1, -6.10000000e-01,
-                -1.10000000e+00,  0.00000000e+00, -1.10000000e+00,  1.47000000e+00,
-                0.00000000e+00,  8.70000000e-01,  2.71000000e+00,  1.50000000e+00,
-                1.71000000e+00, -1.50000000e+00, -1.57000000e+00,  4.50000000e-01,
-                1.39000000e+00,  0.00000000e+00,  0.00000000e+00,  4.50000000e-02,
-                4.50000000e-02,  4.50000000e-02,  4.50000000e-02
-            ])
 
     def _reset_hand(self, check_valid=False, obj_to_track=None):
         # if check_valid = True, plans a path back to home position. if False, homes joints without planning (may cause collision)
