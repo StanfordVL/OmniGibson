@@ -4,7 +4,8 @@
 # In[1]:
 
 
-import pdb
+# import pdb
+import numpy as np
 import omnigibson as og
 from omnigibson.macros import gm
 
@@ -16,7 +17,6 @@ gm.USE_GPU_DYNAMICS = True
 # In[2]:
 
 
-import os
 cfg = {
         "scene": {
             "type": "InteractiveTraversableScene",
@@ -35,12 +35,11 @@ og.sim.enable_viewer_camera_teleoperation()
 
 
 # In[7]:
-from omnigibson.utils.asset_utils import get_all_object_category_models, get_all_object_categories
+from omnigibson.utils.asset_utils import get_all_object_category_models, get_all_object_categories, decrypted
 
 scene_objects = sorted([obj.name for obj in og.sim.scene.objects])
 all_object_categories = get_all_object_categories()
 
-# In[9]:
 import random
 
 system_prompt = """
@@ -74,7 +73,7 @@ functions = [
                 },
                 "target_object2": {
                     "type": "string",
-                    "description": "The name of the object to place the object defined as the property \"target_object1\" on top of. Before calling this function, you need to have picked target_object1 first. You can pick \"target_object2\" from the list of all objects that the scene currently contains.",
+                    "description": "The name of the object to place the object defined as the property \"target_object1\" on top of. Before calling this function, you need to have picked target_object1 first. You can pick \"target_object2\" from the list of all objects that the scene currently contains. These objects come in the form of categoryname_6randomcharacters_instancenumber",
                 },
             },
             "required": ["target_object1", "target_object2"],
@@ -101,10 +100,10 @@ functions = [
 
 ]
 
-import json
-
 # In[ ]:
+import json
 import textwrap
+from pxr import Usd
 
 def wrap_text(t):
     paragraphs = t.split("\n")
@@ -124,7 +123,16 @@ import openai
 from omnigibson.utils.object_state_utils import  sample_kinematics
 from omnigibson.objects.dataset_object import DatasetObject
 
-openai.api_key = "API_key"
+def get_bbox(category, model):
+    usd_path = DatasetObject.get_usd_path(category=category, model=model)
+    usd_path = usd_path.replace(".usd", ".encrypted.usd")
+    with decrypted(usd_path) as fpath:
+        stage = Usd.Stage.Open(fpath)
+        prim = stage.GetDefaultPrim()
+        bbox = prim.GetAttribute("ig:nativeBB").Get()
+    return bbox
+
+openai.api_key = "API_KEY"
    
 messages = [
     {"role": "system", "content": system_prompt},
@@ -138,7 +146,7 @@ for message in messages:
 function_calls = []
 # "gpt-3.5-turbo"
 # "gpt-4-32k"
-for _ in range(5):
+for _ in range(10):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
@@ -164,9 +172,15 @@ for _ in range(5):
     target_object1_instanceID = max(current_object1_instances) + 1 if current_object1_instances else 0
     target_object1_name = f"{target_object1_category}_{target_object1_model}_{target_object1_instanceID}"
     target_object1 = DatasetObject(name = target_object1_name, category = target_object1_category, model = target_object1_model)
+
+    bounding_box = get_bbox(target_object1_category, target_object1_model)
+    if not np.all(bounding_box < 0.5):
+        print(bounding_box)
+        continue
     og.sim.import_object(target_object1)
     target_object2 = [obj for obj in og.sim.scene.objects if obj.name == function_args["target_object2"]][0]
-    env.step([])
+    for _ in range(20):
+        env.step([])
 
     predicate = "onTop" if function_name.lower() == "ontop" else "inside"
     try:
@@ -211,6 +225,6 @@ for _ in range(20):
 
 print(function_calls)
 
-
+# In[]
 
 # %%
