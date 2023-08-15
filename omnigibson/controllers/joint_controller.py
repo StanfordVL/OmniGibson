@@ -127,6 +127,7 @@ class JointController(LocomotionController, ManipulationController, GripperContr
 
         # Return control
         return u
+    
 
     def is_grasping(self):
         # No good heuristic to determine grasping, so return UNKNOWN
