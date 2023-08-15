@@ -641,6 +641,9 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                 else:
                     raise ValueError(f"Invalid mesh type: {mesh_type}")
 
+                # Make invisible
+                UsdGeom.Imageable(xform_prim.prim).MakeInvisible()
+
             xform_prim.set_local_pose(
                 translation=mesh_in_meta_link_pos,
                 orientation=T.convert_quat(mesh_in_meta_link_orn, to="wxyz")
