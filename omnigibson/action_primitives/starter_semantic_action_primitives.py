@@ -552,10 +552,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 _action[abs(diff_joint_pos) < thresh] = 0.0
                 action[self.robot.controller_action_idx[controller_name]] = _action
                 
-                print("joint position error", abs(diff_joint_pos))
+                # print("joint position error", abs(diff_joint_pos))
                 if max(abs(diff_joint_pos)) < thresh:
                     return
-                print("action", action[control_idx])
+                # print("action", action[control_idx])
                 yield action, "manip:move_hand_direct_joint"
             
             raise ActionPrimitiveError(
