@@ -7,7 +7,7 @@
         hamburger.n.01_1 hamburger.n.01_2 - hamburger.n.01
         table.n.02_1 - table.n.02
         tortilla_chip.n.01_1 tortilla_chip.n.01_2 - tortilla_chip.n.01
-        pie.n.01_1 - pie.n.01 
+        apple_pie.n.01_1 - apple_pie.n.01 
         muffin.n.01_1 - muffin.n.01
         crescent_roll.n.01_1 crescent_roll.n.01_2 - crescent_roll.n.01
         water_bottle.n.01_1 - water_bottle.n.01
@@ -23,7 +23,7 @@
         (ontop hamburger.n.01_2 table.n.02_1) 
         (ontop tortilla_chip.n.01_1 table.n.02_1)
         (ontop tortilla_chip.n.01_2 table.n.02_1)
-        (ontop pie.n.01_1 table.n.02_1) 
+        (ontop apple_pie.n.01_1 table.n.02_1) 
         (ontop muffin.n.01_1 table.n.02_1) 
         (ontop crescent_roll.n.01_1 table.n.02_1) 
         (ontop crescent_roll.n.01_2 table.n.02_1) 
@@ -54,10 +54,10 @@
                 )
             ) 
             (forall 
-                (?pie.n.01 - pie.n.01) 
+                (?apple_pie.n.01 - apple_pie.n.01) 
                 (exists
                     (?bag.n.06 - bag.n.06)
-                    (inside ?pie.n.01 ?bag.n.06)
+                    (inside ?apple_pie.n.01 ?bag.n.06)
                 )
             ) 
             (forall 

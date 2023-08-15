@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-     	fish.n.02_1 - fish.n.02
+     	salmon.n.03_1 - salmon.n.03
     	shelf.n.01_1 - shelf.n.01
     	money.n.01_1 - money.n.01
     	disinfectant.n.01_1 - disinfectant.n.01
@@ -12,8 +12,8 @@
     )
     
     (:init 
-        (ontop fish.n.02_1 shelf.n.01_1) 
-        (ontop money.n.01_1 fish.n.02_1) 
+        (ontop salmon.n.03_1 shelf.n.01_1) 
+        (ontop money.n.01_1 salmon.n.03_1) 
         (covered money.n.01_1 disinfectant.n.01_1) 
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shelf.n.01_1 grocery_store) 
@@ -23,7 +23,7 @@
     
     (:goal 
         (and 
-            (ontop ?fish.n.02_1 ?checkout.n.03_1) 
+            (ontop ?salmon.n.03_1 ?checkout.n.03_1) 
             (ontop ?money.n.01_1 ?checkout.n.03_1)
         )
     )

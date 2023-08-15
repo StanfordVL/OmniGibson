@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        pie.n.01_1 - pie.n.01
+        apple_pie.n.01_1 - apple_pie.n.01
         oven.n.01_1 - oven.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         floor.n.01_1 - floor.n.01
@@ -10,8 +10,8 @@
     )
 
     (:init 
-        (inside pie.n.01_1 electric_refrigerator.n.01_1) 
-        (frozen pie.n.01_1)
+        (inside apple_pie.n.01_1 electric_refrigerator.n.01_1) 
+        (frozen apple_pie.n.01_1)
         (inroom oven.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen)
@@ -20,9 +20,9 @@
     
     (:goal 
         (and 
-            (hot ?pie.n.01_1)
+            (hot ?apple_pie.n.01_1)
             (not 
-                (frozen ?pie.n.01_1)
+                (frozen ?apple_pie.n.01_1)
             )
         )
     )
