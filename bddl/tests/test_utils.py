@@ -60,7 +60,7 @@ VALID_ATTACHMENTS = set([
     ("webcam.n.02", "desktop_computer.n.01"),
     ("kayak.n.01", "kayak_rack.n.01"),
     ("kayak_rack.n.01", "wall.n.01"),
-    ("fish.n.02", "fishing_rod.n.01"),
+    ("trout.n.01", "fishing_rod.n.01"),
     ("bicycle_rack.n.01", "recreational_vehicle.n.01"),
 ])
 
