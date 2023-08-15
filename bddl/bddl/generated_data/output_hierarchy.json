@@ -451,12 +451,10 @@
                                       ]
                                     },
                                     {
-                                      "name": "kettle.n.01",
+                                      "name": "electric_kettle.n.01",
                                       "hasModel": true,
                                       "categories": [
-                                        "boiler",
-                                        "electric_kettle",
-                                        "kettle"
+                                        "electric_kettle"
                                       ]
                                     },
                                     {
@@ -485,6 +483,21 @@
                                       "hasModel": true,
                                       "categories": [
                                         "teapot"
+                                      ]
+                                    },
+                                    {
+                                      "name": "kettle.n.01",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "boiler",
+                                        "kettle"
+                                      ]
+                                    },
+                                    {
+                                      "name": "electric_cauldron.n.01",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "electric_cauldron"
                                       ]
                                     }
                                   ]
@@ -1596,7 +1609,10 @@
                                 },
                                 {
                                   "name": "storage_container.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "storage_box"
+                                  ]
                                 },
                                 {
                                   "name": "yogurt__carton.n.01",
@@ -4930,7 +4946,6 @@
                                           "name": "electric_mixer.n.01",
                                           "hasModel": true,
                                           "categories": [
-                                            "electric_hand_mixer",
                                             "electric_mixer"
                                           ]
                                         },
@@ -4939,6 +4954,13 @@
                                           "hasModel": true,
                                           "categories": [
                                             "whisk"
+                                          ]
+                                        },
+                                        {
+                                          "name": "electric_hand_mixer.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "electric_hand_mixer"
                                           ]
                                         }
                                       ]
@@ -4986,12 +5008,10 @@
                                               ]
                                             },
                                             {
-                                              "name": "kettle.n.01",
+                                              "name": "electric_kettle.n.01",
                                               "hasModel": true,
                                               "categories": [
-                                                "boiler",
-                                                "electric_kettle",
-                                                "kettle"
+                                                "electric_kettle"
                                               ]
                                             },
                                             {
@@ -5020,6 +5040,21 @@
                                               "hasModel": true,
                                               "categories": [
                                                 "teapot"
+                                              ]
+                                            },
+                                            {
+                                              "name": "kettle.n.01",
+                                              "hasModel": true,
+                                              "categories": [
+                                                "boiler",
+                                                "kettle"
+                                              ]
+                                            },
+                                            {
+                                              "name": "electric_cauldron.n.01",
+                                              "hasModel": true,
+                                              "categories": [
+                                                "electric_cauldron"
                                               ]
                                             }
                                           ]
@@ -9268,8 +9303,7 @@
                                               "name": "coffee_maker.n.01",
                                               "hasModel": true,
                                               "categories": [
-                                                "coffee_maker",
-                                                "french_press"
+                                                "coffee_maker"
                                               ]
                                             },
                                             {
@@ -9334,6 +9368,13 @@
                                               "hasModel": true,
                                               "categories": [
                                                 "waffle_maker"
+                                              ]
+                                            },
+                                            {
+                                              "name": "french_press.n.01",
+                                              "hasModel": true,
+                                              "categories": [
+                                                "french_press"
                                               ]
                                             }
                                           ]

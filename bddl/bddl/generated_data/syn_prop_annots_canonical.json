@@ -211,7 +211,6 @@
         "freezable": {}
     },
     "alarm_clock.n.01": {
-        "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15681,7 +15680,6 @@
         "freezable": {}
     },
     "grandfather_clock.n.01": {
-        "toggleable": {},
         "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -18956,7 +18954,7 @@
         "heatable": {},
         "freezable": {}
     },
-    "kettle.n.01": {
+    "electric_kettle.n.01": {
         "fillable": {},
         "toggleable": {},
         "heatSource": {},
@@ -19759,8 +19757,6 @@
     },
     "light_bulb.n.01": {
         "breakable": {},
-        "toggleable": {},
-        "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -21503,7 +21499,6 @@
         "freezable": {}
     },
     "mouse.n.04": {
-        "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29778,7 +29773,6 @@
         "freezable": {}
     },
     "steamer.n.02": {
-        "toggleable": {},
         "heatSource": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -33371,7 +33365,6 @@
         "freezable": {}
     },
     "water_filter.n.01": {
-        "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -43331,6 +43324,82 @@
         "microPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "electric_hand_mixer.n.01": {
+        "toggleable": {},
+        "mixingTool": {},
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "french_press.n.01": {
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "kettle.n.01": {
+        "fillable": {},
+        "openable": {},
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
+    "electric_cauldron.n.01": {
+        "fillable": {},
+        "openable": {},
+        "toggleable": {},
+        "heatSource": {},
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
         "heatable": {},
         "freezable": {}
     }

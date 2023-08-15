@@ -534,7 +534,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -44652,6 +44651,33 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "electric_cauldron.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "fillable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatSource": {
+            "requires_toggled_on": 1.0,
+            "requires_closed": 0.0,
+            "requires_inside": 1.0,
+            "temperature": 200.0,
+            "heating_rate": 0.01
+        },
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "openable": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "toggleable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "electric_fan.n.01": {
         "disinfectable": {},
         "dustyable": {},
@@ -44660,6 +44686,51 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "toggleable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "electric_hand_mixer.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "mixingTool": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "toggleable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "electric_kettle.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "fillable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatSource": {
+            "requires_toggled_on": 1.0,
+            "requires_closed": 0.0,
+            "requires_inside": 1.0,
+            "temperature": 100.0,
+            "heating_rate": 0.01
+        },
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -44787,7 +44858,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -47547,6 +47617,23 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "french_press.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -50655,7 +50742,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -63376,25 +63462,18 @@
         "fillable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {
-            "requires_toggled_on": 1.0,
-            "requires_closed": 0.0,
-            "requires_inside": 1.0,
-            "temperature": 100.0,
-            "heating_rate": 0.01
-        },
         "heatable": {
             "heat_temperature": 40.0
         },
         "moldyable": {},
         "nonSubstance": {},
+        "openable": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -67505,13 +67584,6 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {
-            "requires_toggled_on": 1.0,
-            "requires_closed": 0.0,
-            "requires_inside": 0.0,
-            "temperature": 65.0,
-            "heating_rate": 0.01
-        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -67523,7 +67595,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -75906,7 +75977,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -76298,7 +76368,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -83039,7 +83108,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -107247,7 +107315,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -120967,7 +121034,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
