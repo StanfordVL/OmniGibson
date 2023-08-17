@@ -97,6 +97,8 @@ def process_scene(scene_id, dataset_path, out_path):
             for floor_cat in FLOOR_CATEGORIES
             for floor in scene.objects_by_category[floor_cat]
         ]
+        roomless_floor_objs = [(floor, len(floor.in_rooms)) for floor in floor_objs if len(floor.in_rooms) != 1]
+        assert not roomless_floor_objs, f"Found {len(roomless_floor_objs)} floor objects without exactly one room: {roomless_floor_objs}"
         floor_bids = [
             bid
             for floor in floor_objs
