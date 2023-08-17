@@ -5729,10 +5729,7 @@
                                     },
                                     {
                                       "name": "kitchen_table.n.01",
-                                      "hasModel": true,
-                                      "categories": [
-                                        "commercial_kitchen_table"
-                                      ]
+                                      "hasModel": true
                                     },
                                     {
                                       "name": "pedestal_table.n.01",
@@ -12261,6 +12258,7 @@
                                   "name": "countertop.n.01",
                                   "hasModel": true,
                                   "categories": [
+                                    "commercial_kitchen_table",
                                     "countertop"
                                   ]
                                 }
