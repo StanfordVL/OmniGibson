@@ -5851,8 +5851,8 @@ stages:
       md5: 601a9c526eeb66cbbae2a9a7f1f905b5
       size: 23669
     - path: cad/objects/batch-01/processed.max
-      md5: c7dda66d166483e7c205b5154d0f27ba
-      size: 106557798
+      md5: 69094227b8d10bcb26764f59c2f58783
+      size: 106664294
     outs:
     - path: cad/objects/batch-01/artifacts/sanitycheck.json
       md5: 4c2ccf50653f3ae2a3f019cb52e6795a
@@ -6045,12 +6045,12 @@ stages:
       md5: c42786b99c864e95b59fcda8be4d36d1
       size: 2659
     - path: cad/objects/batch-01/processed.max
-      md5: c7dda66d166483e7c205b5154d0f27ba
-      size: 106557798
+      md5: 69094227b8d10bcb26764f59c2f58783
+      size: 106664294
     outs:
     - path: cad/objects/batch-01/artifacts/object_list.json
-      md5: 79c178fa8bdb2deee920ff46472c7cc3
-      size: 31194
+      md5: 23252bbc10f1f63b3f0650cac9169dbe
+      size: 31214
   object_list@objects/batch-02:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-02/processed.max b1k_pipeline/max/object_list.py
     deps:
@@ -6375,18 +6375,18 @@ stages:
       md5: 8f67c8a3cae22b0303e1082e4d76f9c9
       size: 23730
     - path: cad/objects/batch-01/artifacts/object_list.json
-      md5: 79c178fa8bdb2deee920ff46472c7cc3
-      size: 31194
+      md5: 23252bbc10f1f63b3f0650cac9169dbe
+      size: 31214
     - path: cad/objects/batch-01/processed.max
-      md5: c7dda66d166483e7c205b5154d0f27ba
-      size: 106557798
+      md5: 69094227b8d10bcb26764f59c2f58783
+      size: 106664294
     outs:
     - path: cad/objects/batch-01/artifacts/export_meshes.json
-      md5: 1df6b8eb7f1c9e913f13a31da43d9f41
-      size: 15427
+      md5: f39af68ae637bc5267c6ca6402c14ea4
+      size: 15440
     - path: cad/objects/batch-01/artifacts/meshes.zip
-      md5: b65e4c86d6f0fca058a3497de228166f
-      size: 166880454
+      md5: 7ffdea28e119ff5e676a703879fa569c
+      size: 166996182
   export_meshes@objects/batch-00:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-00/processed.max b1k_pipeline/max/export_meshes.py
     deps:
