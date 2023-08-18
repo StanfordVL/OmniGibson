@@ -10,8 +10,6 @@ gm.HEADLESS = True
 gm.ENABLE_FLATCACHE = False
 gm.USE_GPU_DYNAMICS = False
 gm.USE_ENCRYPTED_ASSETS = True
-gm.ENABLE_OBJECT_STATES = False
-gm.ENABLE_TRANSITION_RULES = False
 
 import omnigibson as og
 from omnigibson import app

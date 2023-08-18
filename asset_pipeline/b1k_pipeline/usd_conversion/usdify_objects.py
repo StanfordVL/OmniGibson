@@ -1,5 +1,6 @@
 import json
 import os
+import random
 import subprocess
 from dask.distributed import Client, as_completed
 import fs.copy
@@ -10,7 +11,7 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
-BATCH_SIZE = 50
+BATCH_SIZE = 64
 WORKER_COUNT = 8
 
 def run_on_batch(dataset_path, batch):
@@ -45,7 +46,7 @@ def main():
             object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
             print("Queueing batches.")
             print("Total count: ", len(object_glob))
-            futures = []
+            futures = {}
             for start in range(0, len(object_glob), BATCH_SIZE):
                 end = start + BATCH_SIZE
                 batch = object_glob[start:end]
@@ -54,20 +55,59 @@ def main():
                     dataset_fs.getsyspath("/"),
                     batch,
                     pure=False)
-                futures.append(worker_future)
+                futures[worker_future] = batch
 
             # Wait for all the workers to finish
             print("Queued all batches. Waiting for them to finish...")
             logs = []
-            for future in tqdm.tqdm(as_completed(futures), total=len(futures)):
-                try:
-                    out = future.result()
-                    logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
-                except subprocess.CalledProcessError as e:
-                    print("Error in worker")
-                    print("\n\nSTDOUT:\n" + e.stdout.decode("utf-8"))
-                    print("\n\nSTDERR:\n" + e.stderr.decode("utf-8"))
-                    raise e
+            while True:
+                for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
+                    # Check the batch results.
+                    batch = futures[future]
+                    if future.exception():
+                        e = future.exception()
+                        logs.append({"stdout": e.stdout.decode("utf-8"), "stderr": e.stderr.decode("utf-8")})
+                        print(e)
+                    else:
+                        out = future.result()
+                        logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
+
+                    # Remove everything that failed and make a new batch from them.
+                    new_batch = []
+                    for item in batch:
+                        item_dir = dataset_fs.opendir(item)
+                        if item_dir.glob("usd/*.encrypted.usd").count().files != 1:
+                            print("Could not find", item)
+                            print("Available items:", list(item_dir.walk.files()))
+                            new_batch.append(item)
+                            if item_dir.exists("usd"):
+                                item_dir.removetree("usd")
+
+                    # If there's nothing to requeue, we are good!
+                    if not new_batch:
+                        continue
+
+                    # Otherwise, decide if we are going to requeue or just skip.
+                    if len(batch) == 1:
+                        print(f"Failed on a single item {batch[0]}. Skipping.")
+                    else:
+                        print(f"Subdividing batch of length {len(batch)}")
+                        batch_size = len(batch) // 2
+                        subbatches = [batch[:batch_size], batch[batch_size:]]
+                        for subbatch in subbatches:
+                            worker_future = dask_client.submit(
+                                run_on_batch,
+                                dataset_fs.getsyspath("/"),
+                                subbatch,
+                                pure=False)
+                            futures[worker_future] = subbatch
+                        del futures[future]
+
+                        # Restart the for loop so that the counter can update
+                        break
+                else:
+                    # Completed successfully - break out of the while loop.
+                    break
 
             # Move the USDs to the output FS
             print("Copying USDs to output FS...")
