@@ -168,6 +168,7 @@ class UndoableContext(object):
                 mesh_command.do()
                 mesh_copy = CollisionGeomPrim(mesh_copy_path, mesh_copy_path)
                 relative_pose = T.relative_pose_transform(*mesh.get_position_orientation(), *link.get_position_orientation())
+                relative_pose = (relative_pose[0], np.array([0, 0, 0, 1]))
                 if link_name not in self.robot_meshes_copy.keys():
                     self.robot_meshes_copy[link_name] = [mesh_copy]
                     self.robot_meshes_relative_poses[link_name] = [relative_pose]
