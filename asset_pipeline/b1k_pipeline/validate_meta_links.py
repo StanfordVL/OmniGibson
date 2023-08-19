@@ -30,8 +30,8 @@ META_REQUIRING_ABILITIES = {
 def check_meta_links(category, abilities, meta_links):
     errors = []
 
-    if category in ["walls", "floors", "lawn", "driveway"] and "collision" not in meta_links:
-        errors.append("Wall/floor/lawn/driveway objects must have a manual collision mesh.")
+    # if category in ["walls", "floors", "lawn", "driveway"] and "collision" not in meta_links:
+    #     errors.append("Wall/floor/lawn/driveway objects must have a manual collision mesh.")
 
     if "substance" in abilities:
         return []  # substances don't need any meta links
@@ -63,8 +63,14 @@ def check_meta_links(category, abilities, meta_links):
         ("particleRemover", "particleremover"),
     ]
     for ability, meta_link in particle_pairs:
-        if ability in abilities and abilities[ability]["method"] == 1:  # only the projection method (1) needs this
-            if meta_link not in meta_links:
+        if ability in abilities:
+            method = 1  # This corresponds to the projection method
+            if "method" not in abilities[ability]:
+                pass
+                # errors.append(f"{ability} parameters did not contain 'method' so we assumed projection.")
+            else:
+                method = abilities[ability]["method"]
+            if method == 1 and meta_link not in meta_links:
                 errors.append(f"{ability} objects with projection mode must have a {meta_link}")
 
     return errors
