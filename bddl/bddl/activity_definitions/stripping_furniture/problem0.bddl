@@ -5,7 +5,7 @@
         newspaper.n.03_1 - newspaper.n.03
         floor.n.01_1 - floor.n.01
         house_paint.n.01_1 - house_paint.n.01
-        worktable.n.01_1 - worktable.n.01
+        desk.n.01_1 - desk.n.01
         solvent.n.01_1 - solvent.n.01
         solvent__bottle.n.01_1 - solvent__bottle.n.01
         scraper.n.01_1 - scraper.n.01
@@ -16,21 +16,21 @@
     
     (:init 
         (ontop newspaper.n.03_1 floor.n.01_1) 
-        (covered worktable.n.01_1 house_paint.n.01_1)
+        (covered desk.n.01_1 house_paint.n.01_1)
         (filled solvent__bottle.n.01_1 solvent.n.01_1)
-        (ontop solvent__bottle.n.01_1 worktable.n.01_1)
-        (ontop scraper.n.01_1 worktable.n.01_1)
-        (ontop scrub_brush.n.01_1 worktable.n.01_1)
+        (ontop solvent__bottle.n.01_1 desk.n.01_1)
+        (ontop scraper.n.01_1 desk.n.01_1)
+        (ontop scrub_brush.n.01_1 desk.n.01_1)
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garage) 
-        (inroom worktable.n.01_1 garage)
+        (inroom desk.n.01_1 garage)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
             (not 
-                (covered ?worktable.n.01_1 ?house_paint.n.01_1)
+                (covered ?desk.n.01_1 ?house_paint.n.01_1)
             )
         )
     )
