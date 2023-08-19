@@ -34823,7 +34823,7 @@
     },
     "deep-freeze.n.02": {
         "coldSource": {
-            "requires_toggled_on": 0.0,
+            "requires_toggled_on": 1.0,
             "requires_closed": 1.0,
             "requires_inside": 1.0,
             "temperature": -18.0,
@@ -34845,6 +34845,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -51205,13 +51206,6 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {
-            "requires_toggled_on": 1.0,
-            "requires_closed": 0.0,
-            "requires_inside": 0.0,
-            "temperature": 200.0,
-            "heating_rate": 0.01
-        },
         "heatable": {
             "heat_temperature": 40.0
         },
