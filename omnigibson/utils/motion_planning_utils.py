@@ -111,24 +111,30 @@ def plan_arm_motion(
     algo="BITstar",
     simplifiers=[],
     setrange=0.0,
+    torso_fixed=True,
     **kwargs,
 ):
-    joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
-    dim = len(joint_control_idx)
-
-    if "combined" in robot.robot_arm_descriptor_yamls:
-        joint_combined_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
-        initial_joint_pos = np.array(robot.get_joint_positions()[joint_combined_idx])
-        control_idx_in_joint_pos = np.where(np.in1d(joint_combined_idx, joint_control_idx))[0]
-    else:
+    if torso_fixed:
+        joint_control_idx = robot.arm_control_idx[robot.default_arm]
+        dim = len(joint_control_idx)
         initial_joint_pos = np.array(robot.get_joint_positions()[joint_control_idx])
         control_idx_in_joint_pos = np.arange(dim)
+    else:
+        joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+        dim = len(joint_control_idx)
+        if "combined" in robot.robot_arm_descriptor_yamls:
+            joint_combined_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
+            initial_joint_pos = np.array(robot.get_joint_positions()[joint_combined_idx])
+            control_idx_in_joint_pos = np.where(np.in1d(joint_combined_idx, joint_control_idx))[0]
+        else:
+            initial_joint_pos = np.array(robot.get_joint_positions()[joint_control_idx])
+            control_idx_in_joint_pos = np.arange(dim)
 
-    # state validity function (collision checker)
-    def state_valid_fn(q):
-        joint_pos = initial_joint_pos
-        joint_pos[control_idx_in_joint_pos] = [q[i] for i in range(dim)]
-        return arm_planning_validity_fn(context, joint_pos)
+        # state validity function (collision checker)
+        def state_valid_fn(q):
+            joint_pos = initial_joint_pos
+            joint_pos[control_idx_in_joint_pos] = [q[i] for i in range(dim)]
+            return arm_planning_validity_fn(context, joint_pos)
     
     # breakpoint()
 

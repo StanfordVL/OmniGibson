@@ -82,6 +82,8 @@ DEFAULT_ANGLE_THRESHOLD = 0.05
 LOW_PRECISION_DIST_THRESHOLD = 0.1
 LOW_PRECISION_ANGLE_THRESHOLD = 0.2
 
+TORSO_FIXED = True
+
 logger = logging.getLogger(__name__)
 
 
@@ -116,7 +118,10 @@ class UndoableContext(object):
 
     def _copy_robot(self):
         # Create FK solver
-        fk_descriptor = "combined" if "combined" in self.robot.robot_arm_descriptor_yamls else self.robot.default_arm
+        if TORSO_FIXED:
+            fk_descriptor = "left_fixed"
+        else:
+            fk_descriptor = "combined" if "combined" in self.robot.robot_arm_descriptor_yamls else self.robot.default_arm
         self.fk_solver = FKSolver(
             robot_description_path=self.robot.robot_arm_descriptor_yamls[fk_descriptor],
             robot_urdf_path=self.robot.urdf_path,
@@ -137,9 +142,14 @@ class UndoableContext(object):
             robot_to_copy =  USDObject("tiago_copy", tiago_usd)
             og.sim.import_object(robot_to_copy)
 
-            joint_combined_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx["combined"]])
-            joint_pos = np.array(self.robot.get_joint_positions()[joint_combined_idx])
-            link_poses = self.fk_solver.get_link_poses(joint_pos, arm_links)
+            if TORSO_FIXED:
+                joint_control_idx = self.robot.arm_control_idx["left"]
+                joint_pos = np.array(self.robot.get_joint_positions()[joint_control_idx])
+                link_poses = self.fk_solver.get_link_poses(joint_pos, arm_links)
+            else:
+                joint_combined_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx["combined"]])
+                joint_pos = np.array(self.robot.get_joint_positions()[joint_combined_idx])
+                link_poses = self.fk_solver.get_link_poses(joint_pos, arm_links)
         else:
             robot_to_copy = self.robot
 
@@ -419,20 +429,29 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         return False if joint_pos is None else True
 
     def _ik_solver_cartesian_to_joint_space(self, relative_target_pose):
-        control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
-        ik_solver = IKSolver(
-            robot_description_path=self.robot.robot_arm_descriptor_yamls[self.arm],
-            robot_urdf_path=self.robot.urdf_path,
-            default_joint_pos=self.robot.get_joint_positions()[control_idx],
-            eef_name=self.robot.eef_link_names[self.arm],
-        )
+        if TORSO_FIXED:
+            control_idx = self.robot.arm_control_idx[self.arm]
+            ik_solver = IKSolver(
+                robot_description_path=self.robot.robot_arm_descriptor_yamls["left_fixed"],
+                robot_urdf_path=self.robot.urdf_path,
+                default_joint_pos=self.robot.get_joint_positions()[control_idx],
+                eef_name=self.robot.eef_link_names[self.arm],
+            )
+        else:
+            control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
+            ik_solver = IKSolver(
+                robot_description_path=self.robot.robot_arm_descriptor_yamls[self.arm],
+                robot_urdf_path=self.robot.urdf_path,
+                default_joint_pos=self.robot.get_joint_positions()[control_idx],
+                eef_name=self.robot.eef_link_names[self.arm],
+            )
         # Grab the joint positions in order to reach the desired pose target
         joint_pos = ik_solver.solve(
             target_pos=relative_target_pose[0],
             target_quat=relative_target_pose[1],
             max_iterations=100,
         )
-        
+
         if joint_pos is None:
             return None, control_idx
         else:
@@ -445,7 +464,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             plan = plan_arm_motion(
                 robot=self.robot,
                 end_conf=joint_pos,
-                context=context
+                context=context,
+                torso_fixed=TORSO_FIXED,
             )
         if plan is None:
             raise ActionPrimitiveError(
@@ -480,7 +500,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             plan = plan_arm_motion(
                 robot=self.robot,
                 end_conf=joint_pos,
-                context=context
+                context=context,
+                torso_fixed=TORSO_FIXED,
             )
         if plan is None:
             raise ActionPrimitiveError(
@@ -806,7 +827,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
     def _reset_hand(self, check_valid=False, obj_to_track=None):
         # if check_valid = True, plans a path back to home position. if False, homes joints without planning (may cause collision)
-        control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
+        if TORSO_FIXED:
+            control_idx = self.robot.arm_control_idx[self.arm]
+        else:
+            control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
         reset_joint_pos = self._get_reset_joint_pos()[control_idx]
 
         if check_valid:
