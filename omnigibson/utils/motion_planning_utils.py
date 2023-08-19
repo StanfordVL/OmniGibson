@@ -130,11 +130,11 @@ def plan_arm_motion(
             initial_joint_pos = np.array(robot.get_joint_positions()[joint_control_idx])
             control_idx_in_joint_pos = np.arange(dim)
 
-        # state validity function (collision checker)
-        def state_valid_fn(q):
-            joint_pos = initial_joint_pos
-            joint_pos[control_idx_in_joint_pos] = [q[i] for i in range(dim)]
-            return arm_planning_validity_fn(context, joint_pos)
+    # state validity function (collision checker)
+    def state_valid_fn(q):
+        joint_pos = initial_joint_pos
+        joint_pos[control_idx_in_joint_pos] = [q[i] for i in range(dim)]
+        return arm_planning_validity_fn(context, joint_pos)
     
     # breakpoint()
 

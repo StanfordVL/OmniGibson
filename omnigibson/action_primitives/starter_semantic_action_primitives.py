@@ -60,7 +60,7 @@ DEFAULT_BODY_OFFSET_FROM_FLOOR = 0.01
 
 MAX_STEPS_FOR_NAVIGATE_TO_POSE_DIRECT = 400
 MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT = 400
-# MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT = 1000
+MAX_STEPS_FOR_HAND_DIRECT_IK = 600
 
 MAX_STEPS_FOR_GRASP_OR_RELEASE = 30
 MAX_WAIT_FOR_GRASP_OR_RELEASE = 10
@@ -360,12 +360,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             try:
                 print("3. move down")
                 num_waypoints = 50
-                yield from self._move_hand_direct_cartesian_smoothly(approach_pose, num_waypoints, stop_on_contact=True, obj_to_track=obj_to_track, thresh=0.03)
-            except ActionPrimitiveError:
+                yield from self._move_hand_direct_cartesian_smoothly(approach_pose, num_waypoints, stop_on_contact=True, obj_to_track=obj_to_track, thresh=0.015)
+            except ActionPrimitiveError as err:
                 # An error will be raised when contact fails. If this happens, let's retry.
                 # Retreat back to the grasp pose.
-                print("contact failed. retrying")
-                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track, thresh=0.03)
+                print("retreat with error", err)
+                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track, thresh=0.015)
                 raise
             indented_print("Grasping.")
             try:
@@ -374,7 +374,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             except ActionPrimitiveError:
                 # Retreat back to the grasp pose.
                 print("retreat")
-                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track, thresh=0.03)
+                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track, thresh=0.015)
                 raise
 
             indented_print("Moving back to grasp pose.")
@@ -388,6 +388,78 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         print("resetting arm")
         yield from self._reset_hand(check_valid=True, obj_to_track=obj_to_track)
 
+        if self._get_obj_in_hand() == obj:
+            return
+
+    def grasp_ik(self, obj, track_obj=True, allow_nav=True): 
+        print("GRASP CALLED")
+        # track_obj: if true, tries to keep the object in view
+        obj_to_track = obj if track_obj else None
+        # Don't do anything if the object is already grasped.
+        obj_in_hand = self._get_obj_in_hand()
+        if obj_in_hand is not None:
+            if obj_in_hand == obj:
+                return
+            else:
+                raise ActionPrimitiveError(
+                    ActionPrimitiveError.Reason.PRE_CONDITION_ERROR,
+                    "Cannot grasp when hand is already full.",
+                    {"object": obj, "object_in_hand": obj_in_hand},
+                )
+            
+        if self._get_obj_in_hand() != obj:
+            # Open the hand first
+            # yield from self._execute_release() # TODO - WARNING commented out for data collection
+            # Allow grasping from suboptimal extents if we've tried enough times.
+            force_allow_any_extent = np.random.rand() < 0.5
+            grasp_poses = get_grasp_poses_for_object_sticky(obj, force_allow_any_extent=force_allow_any_extent)
+            grasp_pose, object_direction = random.choice(grasp_poses)
+            grasp_pose[0][2] = obj.get_position()[2]
+            # Prepare data for the approach later.
+            approach_pos = grasp_pose[0] + object_direction * 0.1
+            approach_pose = (approach_pos, grasp_pose[1])
+            # If the grasp pose is too far, navigate.
+            print("1. navigate")
+            if allow_nav:
+                yield from self._navigate_if_needed(obj, pose_on_obj=grasp_pose, obj_to_track=obj_to_track)
+            print("2. move hand to above pos")
+            yield from self._move_hand_direct_ik(grasp_pose, obj_to_track=obj_to_track)
+            # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
+            # It's okay if we can't go all the way because we run into the object.
+            indented_print("Performing grasp approach.")
+            try:
+                print("3. move down")
+                breakpoint()
+                yield from self._move_hand_direct_ik(approach_pose, obj_to_track=obj_to_track, pos_thresh=0.025, ori_thresh=1.5)
+                # num_waypoints = 50
+                # yield from self._move_hand_direct_cartesian_smoothly_ik(approach_pose, num_waypoints, stop_on_contact=True, obj_to_track=obj_to_track, pos_thresh=0.025)
+            except ActionPrimitiveError:
+                # An error will be raised when contact fails. If this happens, let's retry.
+                # Retreat back to the grasp pose.
+                print("contact failed. retrying")
+                yield from self._move_hand_direct_ik(grasp_pose, obj_to_track=obj_to_track)
+                # yield from self._move_hand_direct_cartesian_smoothly_ik(grasp_pose, num_waypoints, obj_to_track=obj_to_track)
+                # raise
+            indented_print("Grasping.")
+            try:
+                print("4. grip")
+                yield from self._execute_grasp(obj_to_track=obj_to_track)
+            except ActionPrimitiveError as err:
+                # Retreat back to the grasp pose.
+                print("retreat with error", err)
+                yield from self._move_hand_direct_ik(grasp_pose, obj_to_track=obj_to_track)
+                # yield from self._move_hand_direct_cartesian_smoothly_ik(grasp_pose, num_waypoints, obj_to_track=obj_to_track)
+                # raise
+            indented_print("Moving back to grasp pose.")
+            print("move back up")
+            num_waypoints = 50
+            above_pose = (grasp_pose[0], grasp_pose[1])
+            above_pose[0][2] += 0.1
+            # yield from self._move_hand_direct_cartesian_smoothly_ik(grasp_pose, num_waypoints, obj_to_track=obj_to_track)
+            yield from self._move_hand_direct_ik(above_pose, obj_to_track=obj_to_track)
+        # indented_print("Moving hand back to neutral position.")
+        # print("resetting arm")
+        # yield from self._reset_hand_ik(obj_to_track=None)
         if self._get_obj_in_hand() == obj:
             return
 
@@ -517,6 +589,42 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             yield from self._move_hand_direct_joint(joint_pos, control_idx, obj_to_track=obj_to_track)
         
         self._unfix_robot_base()
+    
+    def _move_hand_direct_ik(self, target_pose, obj_to_track=None, stop_on_contact=False, pos_thresh=0.05, ori_thresh=0.5):
+        
+        # make sure controller is InverseKinematicsController and in expected mode
+        controller_config = self.robot._controller_config["arm_" + self.arm]
+        assert controller_config["name"] == "InverseKinematicsController", "Controller must be InverseKinematicsController"
+        assert controller_config["motor_type"] == "velocity", "Controller must be in velocity mode"
+        assert controller_config["mode"] == "pose_delta_ori", "Controller must be in pose_delta_ori mode"
+        # target pose = (position, quat) IN WORLD FRAME
+        target_pose = self._get_pose_in_robot_frame(target_pose)
+        target_pos = target_pose[0]
+        target_ori = T.quat2euler(target_pose[1])
+        action = self._empty_action()
+        for _ in range(MAX_STEPS_FOR_MOVE_HAND_DIRECT_IK):
+            current_pose = self._get_pose_in_robot_frame((self.robot.get_eef_position(), self.robot.get_eef_orientation()))
+            current_pos = current_pose[0]
+            current_ori = T.quat2euler(current_pose[1])
+            pos_error = target_pos - current_pos
+            ori_error = target_ori - current_ori
+            reached_goal = (max(abs(pos_error)) < pos_thresh) and (max(abs(ori_error)) < ori_thresh)
+            if reached_goal:
+                return
+            
+            if obj_to_track is not None:
+                action = self.overwrite_head_action(action, obj=obj_to_track)
+            
+            control_idx = self.robot.controller_action_idx["arm_" + self.arm]
+            action[control_idx] = np.concatenate([pos_error, ori_error])
+            print("action", action[control_idx])
+            print("pos_error", pos_error)
+            print("ori_error", ori_error)
+            yield action, "manip:move_hand_direct_ik"
+        raise ActionPrimitiveError(
+            ActionPrimitiveError.Reason.EXECUTION_ERROR,
+            "MAX_STEPS_FOR_MOVE_HAND_DIRECT_IK reached",
+        )        
 
     # def _move_hand_direct_joint(self, joint_pos, control_idx, obj_to_track=None, stop_on_contact=False):
     #     action = self._empty_action()
@@ -571,9 +679,18 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 _action = gain * diff_joint_pos
                 _action[abs(_action) < min_action] = np.sign(_action[abs(_action) < min_action]) * min_action
                 _action[abs(diff_joint_pos) < thresh] = 0.0
+
+                # TODO - this is temporary
+                if TORSO_FIXED:
+                    _action = np.concatenate([np.zeros(1), _action])
+
                 action[self.robot.controller_action_idx[controller_name]] = _action
                 
+                # if an object to track is provided, compute head joint angles
+                if obj_to_track is not None:
+                    action = self.overwrite_head_action(action, obj=obj_to_track)
                 print("joint position error", max(abs(diff_joint_pos)))
+                
                 if max(abs(diff_joint_pos)) < thresh:
                     return
                 # print("action", action[control_idx])
@@ -622,23 +739,29 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 return
             joint_pos, control_idx = self._convert_cartesian_to_joint_space(waypoint)
             yield from self._move_hand_direct_joint(joint_pos, control_idx, stop_on_contact=stop_on_contact, obj_to_track=obj_to_track, thresh=thresh)
-
+    
+    def _move_hand_direct_cartesian_smoothly_ik(self, target_pose, num_waypoints, stop_on_contact=False, obj_to_track=None, pos_thresh=0.05, ori_thresh=0.5):
+        current_pose = self.robot.eef_links[self.arm].get_position_orientation()
+        waypoints = np.linspace(current_pose, target_pose, num=num_waypoints+1)[1:]
+        for waypoint in waypoints:
+            if stop_on_contact and detect_robot_collision_in_sim(self.robot):
+                return
+            yield from self._move_hand_direct_ik(waypoint, obj_to_track=obj_to_track, stop_on_contact=stop_on_contact, pos_thresh=pos_thresh, ori_thresh=ori_thresh)
+    
     def _execute_grasp(self, obj_to_track=None):
-        action = self._empty_action()
-        controller_name = "gripper_{}".format(self.arm)
-        action[self.robot.controller_action_idx[controller_name]] = -1.0
-        if obj_to_track is not None:
-            action = self.overwrite_head_action(action, obj=obj_to_track)
         for _ in range(MAX_STEPS_FOR_GRASP_OR_RELEASE):
+            action = self._empty_action()
+            if obj_to_track is not None:
+                action = self.overwrite_head_action(action, obj=obj_to_track)
+            controller_name = "gripper_{}".format(self.arm)
+            action[self.robot.controller_action_idx[controller_name]] = -1.0
             yield action, "manip:execute_grasp"
-
         # Do nothing for a bit so that AG can trigger.
         for _ in range(MAX_WAIT_FOR_GRASP_OR_RELEASE):
             action = self._empty_action()
             if obj_to_track is not None:
                 action = self.overwrite_head_action(action, obj=obj_to_track)
             yield action, "manip:execute_grasp"
-
         if self._get_obj_in_hand() is None:
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.EXECUTION_ERROR,
@@ -668,7 +791,18 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         assert self.robot_model == "Tiago", "Tracking object with camera is currently only supported for Tiago"
         head_q = self.get_head_goal_q(obj)
         head_idx = self.robot.controller_action_idx["camera"]
-        action[head_idx] = head_q
+        
+        # check controller type and mode
+        config = self.robot._controller_config["camera"]
+        assert config["name"] == "JointController", "Camera controller must be JointController"
+        assert config["motor_type"] == "position", "Camera controller must be in position control mode"
+        use_delta = config["use_delta_commands"]
+        if use_delta:
+            cur_head_q = self.robot.get_joint_positions()[self.robot.camera_control_idx]
+            head_action = head_q - cur_head_q
+        else:
+            head_action = head_q
+        action[head_idx] = head_action
         return action
 
     def get_head_goal_q(self, obj):
@@ -716,10 +850,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     def _empty_action(self):
         action = np.zeros(self.robot.action_dim)
         for name, controller in self.robot._controllers.items():
-
             # Get controller name
             controller_name = self.robot._controller_config[name]["name"]
-
             # Make sure base, arms, camera are in joint control mode
             if name in ["base", "arm_left", "arm_right", "camera"]:
                 assert (controller_name == "JointController",
@@ -728,7 +860,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # joint_idx = controller.dof_idx
             joint_idx = self.robot.controller_joint_idx[name]
             action_idx = self.robot.controller_action_idx[name]
-
             # JointController case
             if controller_name == "JointController":
                 # position control case
@@ -747,8 +878,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     continue
                 # effort control case - currently not supported
                 else:
-                    raise Exception("Effort control is currently not supported")
-
+                    print("WARNING: EFFORT CONTROL EMPTY ACTION IS UNDER DEVELOPMENT")
+                    continue
+                    # raise Exception("Effort control is currently not supported")
+                    
+            # InverseKinematicsController case
+            elif controller_name == "InverseKinematicsController":
+                # TODO - add cases to cover different modes (currently assumes position, pose_delta_ori) 
+                continue # deltas should be zero
             # MultiFingerGripperController case
             elif controller_name == "MultiFingerGripperController":
                 mode = self.robot._controller_config[name]["mode"]
@@ -772,6 +909,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
     #     return action
 
+    def _get_reset_eef_pose(self):
+        if self.robot_model == "Tiago":
+            return (
+                np.array([0.26758498, 0.37438491, 1.15903878]),
+                np.array([-0.21477139,  0.0464362 , -0.08764967,  0.97161436])
+            )
+        else:
+            raise Exception("_get_reset_eef_pose is only available for Tiago")
+    
     def _get_reset_joint_pos(self):
         if self.robot_model == "Fetch":
             return np.array(
@@ -802,7 +948,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 'gripper_left': array([23, 24]),
                 'arm_right': array([ 8, 11, 14, 16, 18, 20, 22]),
                 'gripper_right': array([25, 26])}
-
             """
             default_pos = {
                 "base" : np.array([0.0, 0.0, 0.0]),
@@ -816,14 +961,36 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             for name, idx in self.robot.controller_joint_idx.items():
                 reset_q[idx] = default_pos[name]
             return reset_q
-            # return np.array([
-            #     0.0,  0.0, 0.0, 0.0, 0.0,
-            #     0.0,  0.1, -0.61, -1.1,  0.0, -1.1,  1.47,
-            #     0.00000000e+00,  8.70000000e-01,  2.71000000e+00,  1.50000000e+00,
-            #     1.71000000e+00, -1.50000000e+00, -1.57000000e+00,  4.50000000e-01,
-            #     1.39000000e+00,  0.00000000e+00,  0.00000000e+00,  4.50000000e-02,
-            #     4.50000000e-02,  4.50000000e-02,  4.50000000e-02
+            # reset_pose_tiago = np.array([
+            #     -1.78029833e-04,  
+            #     3.20231302e-05, 
+            #     -1.85759447e-07, 
+            #     -1.16488536e-07,
+            #     4.55182843e-08,  
+            #     2.36128806e-04,  
+            #     0.15,  
+            #     0.94,
+            #     -1.1,  
+            #     0.0, 
+            #     -0.9,  
+            #     1.47,
+            #     0.0,  
+            #     2.1,  
+            #     2.71,  
+            #     1.5,
+            #     1.71,  
+            #     1.3, 
+            #     -1.57, 
+            #     -1.4,
+            #     1.39,  
+            #     0.0,  
+            #     0.0,  
+            #     0.045,
+            #     0.045,
+            #     0.045,
+            #     0.045,
             # ])
+            # return reset_pose_tiago
 
     def _reset_hand(self, check_valid=False, obj_to_track=None):
         # if check_valid = True, plans a path back to home position. if False, homes joints without planning (may cause collision)
@@ -837,6 +1004,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             yield from self._move_arm_to_joint_pos(reset_joint_pos, control_idx, obj_to_track=obj_to_track)
         else:
             yield from self._move_hand_direct_joint(reset_joint_pos, control_idx, obj_to_track=obj_to_track)
+
+    def _reset_hand_ik(self, obj_to_track=None):
+        # if check_valid = True, plans a path back to home position. if False, homes joints without planning (may cause collision)
+        control_idx = np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
+        reset_hand_pose = self._get_reset_eef_pose()
+        yield from self._move_hand_direct_ik(reset_hand_pose, obj_to_track=obj_to_track, stop_on_contact=False, pos_thresh=0.05, ori_thresh=0.5)
 
     def _navigate_to_pose(self, pose_2d, obj_to_track=None):
         with UndoableContext(self.robot, "base") as context:
