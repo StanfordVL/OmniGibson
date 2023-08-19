@@ -151,7 +151,19 @@ def main(use_future=False):
                 continue
             del scenes[scene]
 
-        success = len(skipped_files) == 0 and len(not_approved_rooms) == 0
+        # Check that the IDs of all the rooms are contiguous
+        non_contiguous_rooms = defaultdict(dict)
+        for scene_name, scene_info in scenes.items():
+            room_type_keys = defaultdict(set)
+            for rm_name in scene_info.keys():
+                room_type, room_id = rm_name.rsplit("_", 1)[0]
+                room_type_keys[room_type].add(int(room_id))
+
+            for room_type, room_ids in room_type_keys.items():
+                if room_ids != set(range(len(room_ids))):
+                    non_contiguous_rooms[scene_name][room_type] = room_ids
+
+        success = len(skipped_files) == 0 and len(not_approved_rooms) == 0 and len(non_contiguous_rooms) == 0
         with pipeline_fs.pipeline_output() as pipeline_output_fs:
             json_path = "combined_room_object_list_future.json" if use_future else "combined_room_object_list.json"
             with pipeline_output_fs.open(json_path, "w") as f:
@@ -160,6 +172,7 @@ def main(use_future=False):
                     "scenes": scenes,
                     "error_skipped_files": sorted(skipped_files),
                     "error_not_approved_rooms": {rm: list(scenes) for rm, scenes in sorted(not_approved_rooms.items())},
+                    "error_non_contiguous_rooms": non_contiguous_rooms,
                 }, f, indent=4)
 
 

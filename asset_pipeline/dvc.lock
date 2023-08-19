@@ -8209,24 +8209,24 @@ stages:
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     - path: metadata/category_mapping.csv
-      md5: 80b69f41d7b26ceb7d4fd9e57cb00430
-      size: 151345
+      md5: 5480046166fc16a9030c34301d6b2ead
+      size: 151342
     - path: metadata/non_sampleable_categories.csv
       md5: 1fdd0762be41ba03ee7a15db19b16c6b
       size: 562
     outs:
     - path: artifacts/parallels/metadata.zip
-      md5: 30065524a131d3fc4791836bc2267660
+      md5: 560b3e59582762bd1fa9a1c888c5eb80
       size: 62815
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: a85c3d186934db4535fbab5ae471f917
+      md5: 28fc3b6dd33962475d21741394a6a4a1
       size: 113201
   aggregate_metadata_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/aggregate_metadata.json
       artifacts/pipeline/aggregate_metadata.success
     deps:
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: a85c3d186934db4535fbab5ae471f917
+      md5: 28fc3b6dd33962475d21741394a6a4a1
       size: 113201
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
@@ -8239,7 +8239,7 @@ stages:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_objects
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: 30065524a131d3fc4791836bc2267660
+      md5: 560b3e59582762bd1fa9a1c888c5eb80
       size: 62815
     - path: artifacts/parallels/objects.zip
       md5: 3d955c31fd92d764ba96d5011675accd
@@ -9017,7 +9017,7 @@ stages:
       md5: eff695a8c690f3ad28dcb7c62b5b37a6
       size: 1539230
     - path: artifacts/parallels/metadata.zip
-      md5: 30065524a131d3fc4791836bc2267660
+      md5: 560b3e59582762bd1fa9a1c888c5eb80
       size: 62815
     - path: artifacts/parallels/objects_usd.zip
       md5: ff73133429f6c50f34666ea95d1c6014
@@ -9043,7 +9043,7 @@ stages:
       size: 19163495490
     - path: artifacts/pipeline/pack_dataset.json
       md5: 2ad066aadc9c024dff5e8d3c6587590d
-      size: 44
+      size: 47
     - path: artifacts/pipeline/pack_dataset.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
