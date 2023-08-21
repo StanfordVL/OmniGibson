@@ -1,0 +1,1001 @@
+{
+    "BlenderRule": [
+        {
+            "name": "drip_coffee",
+            "input_objects": null,
+            "input_systems": [
+                "water",
+                "coffee_bean"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "drip_coffee"
+            ]
+        },
+        {
+            "name": "iced_cappuccino",
+            "input_objects": {
+                "ice_cube": 3
+            },
+            "input_systems": [
+                "espresso",
+                "cane_sugar",
+                "chocolate_milk"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "iced_cappuccino"
+            ]
+        },
+        {
+            "name": "espresso",
+            "input_objects": null,
+            "input_systems": [
+                "water",
+                "instant_coffee"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "espresso"
+            ]
+        },
+        {
+            "name": "pastry_dough",
+            "input_objects": {
+                "butter": 1
+            },
+            "input_systems": [
+                "water",
+                "salt",
+                "flour"
+            ],
+            "output_objects": {
+                "pastry": 1
+            },
+            "output_systems": null
+        },
+        {
+            "name": "milkshake",
+            "input_objects": {
+                "ice_cube": 4,
+                "scoop_of_ice_cream": 1
+            },
+            "input_systems": [
+                "cane_sugar",
+                "drip_coffee"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "milkshake"
+            ]
+        },
+        {
+            "name": "milkshake",
+            "input_objects": {
+                "scoop_of_ice_cream": 1
+            },
+            "input_systems": [
+                "chocolate_sauce",
+                "whole_milk"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "milkshake"
+            ]
+        },
+        {
+            "name": "smoothie",
+            "input_objects": {
+                "strawberries": 3,
+                "ice_cube": 4
+            },
+            "input_systems": [
+                "lemon_juice"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "smoothie"
+            ]
+        },
+        {
+            "name": "chocolate_milk",
+            "input_objects": null,
+            "input_systems": [
+                "granulated_sugar",
+                "low_fat_milk",
+                "cocoa_powder"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "chocolate_milk"
+            ]
+        },
+        {
+            "name": "chocolate_spread",
+            "input_objects": {
+                "butter": 1
+            },
+            "input_systems": [
+                "honey",
+                "cocoa_powder"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "chocolate_sauce"
+            ]
+        },
+        {
+            "name": "coffee",
+            "input_objects": null,
+            "input_systems": [
+                "water",
+                "coffee_bean"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "drip_coffee"
+            ]
+        },
+        {
+            "name": "eggnog",
+            "input_objects": {
+                "raw_egg": 1
+            },
+            "input_systems": [
+                "vanilla",
+                "whole_milk",
+                "cinnamon",
+                "rum",
+                "nutmeg",
+                "granulated_sugar"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "eggnog"
+            ]
+        },
+        {
+            "name": "fruit_punch",
+            "input_objects": null,
+            "input_systems": [
+                "diced__orange",
+                "diced__apple",
+                "diced__strawberry",
+                "diced__lemon"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "fruit_punch"
+            ]
+        },
+        {
+            "name": "gazpacho",
+            "input_objects": {
+                "basil": 1,
+                "cucumber": 1
+            },
+            "input_systems": [
+                "water",
+                "salt",
+                "tomato_juice",
+                "black_pepper",
+                "lemon_juice"
+            ],
+            "output_objects": {
+                "basil": 1
+            },
+            "output_systems": [
+                "gazpacho"
+            ]
+        },
+        {
+            "name": "iced_chocolate",
+            "input_objects": {
+                "ice_cube": 2
+            },
+            "input_systems": [
+                "granulated_sugar",
+                "whole_milk",
+                "vanilla",
+                "cocoa_powder"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "iced_chocolate"
+            ]
+        },
+        {
+            "name": "jerk_seasoning",
+            "input_objects": {
+                "chili": 1,
+                "garlic_clove": 2
+            },
+            "input_systems": [
+                "brown_sugar",
+                "cayenne"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "jerk_seasoning"
+            ]
+        },
+        {
+            "name": "lemon_pepper_seasoning",
+            "input_objects": {
+                "lemon_peel": 1
+            },
+            "input_systems": [
+                "black_pepper",
+                "salt",
+                "lemon_juice"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "lemon_pepper_seasoning"
+            ]
+        },
+        {
+            "name": "mustard_seasoning",
+            "input_objects": {
+                "garlic_clove": 2
+            },
+            "input_systems": [
+                "sage",
+                "mustard_seed",
+                "rosemary",
+                "salt",
+                "cumin"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "mustard_seasoning"
+            ]
+        },
+        {
+            "name": "smoothie",
+            "input_objects": {
+                "raspberries": 6,
+                "strawberries": 4
+            },
+            "input_systems": [
+                "honey",
+                "yogurt",
+                "lemon_juice"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "smoothie"
+            ]
+        },
+        {
+            "name": "tomato_rice",
+            "input_objects": null,
+            "input_systems": [
+                "diced__vidalia_onion",
+                "olive_oil",
+                "diced__beefsteak_tomato",
+                "white_rice",
+                "chicken_broth"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "tomato_rice"
+            ]
+        },
+        {
+            "name": "waffle_batter",
+            "input_objects": null,
+            "input_systems": [
+                "waffle_batter"
+            ],
+            "output_objects": {
+                "waffle": 1
+            },
+            "output_systems": null
+        },
+        {
+            "name": "fruit_punch",
+            "input_objects": null,
+            "input_systems": [
+                "diced__watermelon",
+                "lemonade",
+                "tonic",
+                "lemon_juice"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "fruit_punch"
+            ]
+        }
+    ],
+    "MixingToolRule": [
+        {
+            "name": "cappuccino",
+            "input_objects": null,
+            "input_systems": [
+                "espresso",
+                "cane_sugar",
+                "whole_milk",
+                "foam"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cappuccino"
+            ]
+        },
+        {
+            "name": "vinegar_cleaning_solution",
+            "input_objects": null,
+            "input_systems": [
+                "water",
+                "lemon_juice",
+                "vinegar"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "vinegar_cleaning_solution"
+            ]
+        },
+        {
+            "name": "cafe_au_lait",
+            "input_objects": null,
+            "input_systems": [
+                "espresso",
+                "low_fat_milk",
+                "sugar_syrup"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cafe_au_lait"
+            ]
+        },
+        {
+            "name": "cake_mix",
+            "input_objects": null,
+            "input_systems": [
+                "baking_powder",
+                "flour",
+                "salt",
+                "sodium_carbonate",
+                "granulated_sugar"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cake_mix"
+            ]
+        },
+        {
+            "name": "cinnamon_sugar",
+            "input_objects": null,
+            "input_systems": [
+                "granulated_sugar",
+                "cinnamon"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cinnamon_sugar"
+            ]
+        },
+        {
+            "name": "fruit_punch",
+            "input_objects": null,
+            "input_systems": [
+                "orange_juice",
+                "pineapple_juice",
+                "ginger_beer",
+                "lemonade"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "fruit_punch"
+            ]
+        },
+        {
+            "name": "cream_soda",
+            "input_objects": null,
+            "input_systems": [
+                "soda_water",
+                "heavy_cream",
+                "sugar_syrup"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cream_soda"
+            ]
+        },
+        {
+            "name": "green_tea",
+            "input_objects": null,
+            "input_systems": [
+                "water",
+                "green_tea"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "tea"
+            ]
+        },
+        {
+            "name": "green_tea_latte",
+            "input_objects": null,
+            "input_systems": [
+                "tea",
+                "low_fat_milk"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "green_tea_latte"
+            ]
+        },
+        {
+            "name": "drip_coffee",
+            "input_objects": null,
+            "input_systems": [
+                "instant_coffee",
+                "water"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "drip_coffee"
+            ]
+        },
+        {
+            "name": "lemon_stain_remover",
+            "input_objects": null,
+            "input_systems": [
+                "sodium_carbonate",
+                "lemon_juice",
+                "vinegar"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "lemon_stain_remover"
+            ]
+        },
+        {
+            "name": "lemonade",
+            "input_objects": null,
+            "input_systems": [
+                "water",
+                "granulated_sugar",
+                "lemon_juice"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "lemonade"
+            ]
+        },
+        {
+            "name": "limeade",
+            "input_objects": null,
+            "input_systems": [
+                "water",
+                "lime_juice",
+                "granulated_sugar"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "limeade"
+            ]
+        },
+        {
+            "name": "poultry_seasoning",
+            "input_objects": null,
+            "input_systems": [
+                "sage",
+                "rosemary",
+                "thyme",
+                "nutmeg",
+                "black_pepper"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "poultry_seasoning"
+            ]
+        },
+        {
+            "name": "pumpkin_pie_spice_",
+            "input_objects": null,
+            "input_systems": [
+                "cinnamon",
+                "nutmeg",
+                "ginger",
+                "allspice",
+                "clove"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "pumpkin_pie_spice"
+            ]
+        }
+    ],
+    "CookingRule": [
+        {
+            "name": "sugar_cookies",
+            "input_objects": {
+                "sugar_cookie_dough": 1
+            },
+            "input_systems": null,
+            "fillable_categories": [
+                "baking_sheet"
+            ],
+            "output_objects": {
+                "sugar_cookie": 6
+            },
+            "output_systems": null
+        },
+        {
+            "name": "salt_water",
+            "input_objects": null,
+            "input_systems": [
+                "water",
+                "salt"
+            ],
+            "fillable_categories": [
+                "stockpot"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "seawater"
+            ]
+        },
+        {
+            "name": "cheese_tarts",
+            "input_objects": {
+                "pastry": 1
+            },
+            "input_systems": [
+                "cheese_pastry_filling"
+            ],
+            "fillable_categories": [
+                "baking_sheet"
+            ],
+            "output_objects": {
+                "cheese_tart": 6
+            },
+            "output_systems": null
+        },
+        {
+            "name": "red_meat_sauce",
+            "input_objects": {
+                "garlic_clove": 3,
+                "basil": 4
+            },
+            "input_systems": [
+                "ground_beef",
+                "rosemary",
+                "olive_oil",
+                "tomato_sauce"
+            ],
+            "fillable_categories": [
+                "saucepan"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cooked__red_meat_sauce"
+            ]
+        },
+        {
+            "name": "schnitzel",
+            "input_objects": {
+                "raw_egg": 1,
+                "veal": 1
+            },
+            "input_systems": [
+                "cooking_oil",
+                "salt",
+                "breadcrumb",
+                "flour"
+            ],
+            "fillable_categories": [
+                "frying_pan"
+            ],
+            "output_objects": {
+                "schnitzel": 1
+            },
+            "output_systems": null
+        },
+        {
+            "name": "applesauce",
+            "input_objects": {
+                "apple": 3
+            },
+            "input_systems": [
+                "water",
+                "cinnamon",
+                "granulated_sugar",
+                "lemon_juice"
+            ],
+            "fillable_categories": [
+                "saucepan"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "applesauce"
+            ]
+        },
+        {
+            "name": "bagels",
+            "input_objects": {
+                "raw_egg": 1,
+                "bagel_dough": 1
+            },
+            "input_systems": [
+                "sesame_seed"
+            ],
+            "fillable_categories": [
+                "baking_sheet"
+            ],
+            "output_objects": {
+                "bagel": 4
+            },
+            "output_systems": null
+        },
+        {
+            "name": "biscuits",
+            "input_objects": {
+                "biscuit_dough": 1
+            },
+            "input_systems": null,
+            "fillable_categories": [
+                "baking_sheet"
+            ],
+            "output_objects": {
+                "biscuit": 4
+            },
+            "output_systems": null
+        },
+        {
+            "name": "blueberry_compote",
+            "input_objects": null,
+            "input_systems": [
+                "blueberry",
+                "granulated_sugar",
+                "lemon_juice"
+            ],
+            "fillable_categories": [
+                "saucepan"
+            ],
+            "output_objects": {
+                "blueberry_compote": 1
+            },
+            "output_systems": null
+        },
+        {
+            "name": "chicken_curry",
+            "input_objects": null,
+            "input_systems": [
+                "diced__vidalia_onion",
+                "cooking_oil",
+                "diced__beefsteak_tomato",
+                "diced__chicken_breast",
+                "curry_powder"
+            ],
+            "fillable_categories": [
+                "stockpot"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "chicken_curry"
+            ]
+        },
+        {
+            "name": "chocolate_syrup",
+            "input_objects": null,
+            "input_systems": [
+                "granulated_sugar",
+                "vanilla",
+                "seawater",
+                "cocoa_powder"
+            ],
+            "fillable_categories": [
+                "saucepan"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "chocolate_sauce"
+            ]
+        },
+        {
+            "name": "spice_cookies",
+            "input_objects": {
+                "spice_cookie_dough": 1
+            },
+            "input_systems": null,
+            "fillable_categories": [
+                "baking_sheet"
+            ],
+            "output_objects": {
+                "spice_cookie": 6
+            },
+            "output_systems": null
+        },
+        {
+            "name": "baps",
+            "input_objects": {
+                "roll_dough": 1
+            },
+            "input_systems": null,
+            "fillable_categories": [
+                "baking_sheet"
+            ],
+            "output_objects": {
+                "bap": 4
+            },
+            "output_systems": null
+        },
+        {
+            "name": "granola",
+            "input_objects": null,
+            "input_systems": [
+                "oat",
+                "pecan",
+                "cinnamon",
+                "raisin",
+                "honey"
+            ],
+            "fillable_categories": [
+                "baking_sheet"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "granola"
+            ]
+        },
+        {
+            "name": "cocoa",
+            "input_objects": null,
+            "input_systems": [
+                "granulated_sugar",
+                "whole_milk",
+                "vanilla",
+                "cocoa_powder"
+            ],
+            "fillable_categories": [
+                "saucepan"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cocoa"
+            ]
+        },
+        {
+            "name": "ice_cubes",
+            "input_objects": null,
+            "input_systems": [
+                "water"
+            ],
+            "fillable_categories": [
+                "ice_tray"
+            ],
+            "output_objects": {
+                "ice_cube": 6
+            },
+            "output_systems": null
+        },
+        {
+            "name": "cheese_sauce",
+            "input_objects": {
+                "butter": 1
+            },
+            "input_systems": [
+                "whole_milk",
+                "salt",
+                "grated_cheese",
+                "parmesan",
+                "cream_cheese"
+            ],
+            "fillable_categories": [
+                "saucepan"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cheese_sauce"
+            ]
+        },
+        {
+            "name": "macaroni_and_cheese",
+            "input_objects": null,
+            "input_systems": [
+                "cooked__noodle",
+                "cheese_sauce",
+                "breadcrumb"
+            ],
+            "fillable_categories": [
+                "casserole"
+            ],
+            "output_objects": {
+                "mac_and_cheese": 1
+            },
+            "output_systems": null
+        },
+        {
+            "name": "meatloaf",
+            "input_objects": null,
+            "input_systems": [
+                "diced__vidalia_onion",
+                "whole_milk",
+                "ground_beef",
+                "brown_sugar",
+                "breadcrumb"
+            ],
+            "fillable_categories": [
+                "casserole"
+            ],
+            "output_objects": {
+                "meat_loaf": 1
+            },
+            "output_systems": null
+        },
+        {
+            "name": "muffins",
+            "input_objects": null,
+            "input_systems": [
+                "muffin_batter"
+            ],
+            "fillable_categories": [
+                "baking_sheet"
+            ],
+            "output_objects": {
+                "muffin": 6
+            },
+            "output_systems": null
+        },
+        {
+            "name": "oatmeal",
+            "input_objects": null,
+            "input_systems": [
+                "oat",
+                "cinnamon",
+                "seawater",
+                "honey",
+                "low_fat_milk"
+            ],
+            "fillable_categories": [
+                "saucepot"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "oatmeal"
+            ]
+        },
+        {
+            "name": "marinara",
+            "input_objects": {
+                "half_beefsteak_tomato": 6,
+                "garlic_clove": 5,
+                "basil": 4
+            },
+            "input_systems": [
+                "diced__vidalia_onion",
+                "granulated_sugar",
+                "marjoram",
+                "salt"
+            ],
+            "fillable_categories": [
+                "stockpot"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cooked__marinara"
+            ]
+        },
+        {
+            "name": "tomato_sauce",
+            "input_objects": {
+                "beefsteak_tomato": 1,
+                "garlic_clove": 2,
+                "basil": 1
+            },
+            "input_systems": [
+                "marjoram",
+                "tomato_paste"
+            ],
+            "fillable_categories": [
+                "stockpot"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "tomato_sauce"
+            ]
+        },
+        {
+            "name": "pizza",
+            "input_objects": {
+                "pizza_dough": 1,
+                "pepperoni": 7,
+                "half_mushroom": 10
+            },
+            "input_systems": [
+                "diced__vidalia_onion",
+                "grated_cheese",
+                "marjoram",
+                "tomato_sauce"
+            ],
+            "fillable_categories": [
+                "baking_sheet"
+            ],
+            "output_objects": {
+                "pizza": 1
+            },
+            "output_systems": null
+        },
+        {
+            "name": "popsicles",
+            "input_objects": null,
+            "input_systems": [
+                "smoothie"
+            ],
+            "fillable_categories": [
+                "cast"
+            ],
+            "output_objects": {
+                "ice_lolly": 4
+            },
+            "output_systems": null
+        },
+        {
+            "name": "fish_stew",
+            "input_objects": {
+                "clam": 6,
+                "shrimp": 5,
+                "scallop": 4,
+                "parsley": 1
+            },
+            "input_systems": [
+                "diced__beefsteak_tomato",
+                "olive_oil",
+                "tomato_sauce",
+                "marjoram",
+                "diced__bell_pepper",
+                "diced__clove",
+                "chicken_broth"
+            ],
+            "fillable_categories": [
+                "stockpot"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "fish_stew"
+            ]
+        },
+        {
+            "name": "chicken_soup",
+            "input_objects": {
+                "chicken": 1
+            },
+            "input_systems": [
+                "rosemary",
+                "salt",
+                "diced__celery",
+                "diced__carrot",
+                "chicken_broth"
+            ],
+            "fillable_categories": [
+                "stockpot"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "cooked__chicken_soup"
+            ]
+        },
+        {
+            "name": "beef_stew",
+            "input_objects": null,
+            "input_systems": [
+                "diced__vidalia_onion",
+                "beef_broth",
+                "ground_beef",
+                "pea",
+                "diced__carrot"
+            ],
+            "fillable_categories": [
+                "stockpot"
+            ],
+            "output_objects": null,
+            "output_systems": [
+                "beef_stew"
+            ]
+        }
+    ]
+}
