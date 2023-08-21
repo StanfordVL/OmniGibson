@@ -89,7 +89,7 @@ REJECTED_SCENES = {
     "school_chemistry",
     "school_computer_lab_and_infirmary",
     "school_geography",
-    "office_cubicles_left",
+    "office_cubicles_right",
 }
 
 READY_SCENES = {

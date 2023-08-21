@@ -39,12 +39,39 @@ stages:
     - cad/scenes/Rs_int/artifacts/scene.urdf
     - cad/scenes/Wainscott_0_int/artifacts/scene.urdf
     - cad/scenes/Wainscott_1_int/artifacts/scene.urdf
+    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/scene.urdf
+    - cad/scenes/commercial_kitchen_pans/artifacts/scene.urdf
+    - cad/scenes/gates_bedroom/artifacts/scene.urdf
+    - cad/scenes/grocery_store_asian/artifacts/scene.urdf
     - cad/scenes/grocery_store_cafe/artifacts/scene.urdf
+    - cad/scenes/grocery_store_convenience/artifacts/scene.urdf
+    - cad/scenes/grocery_store_half_stocked/artifacts/scene.urdf
+    - cad/scenes/hall_arch_wood/artifacts/scene.urdf
+    - cad/scenes/hall_conference_large/artifacts/scene.urdf
+    - cad/scenes/hall_glass_ceiling/artifacts/scene.urdf
+    - cad/scenes/hall_train_station/artifacts/scene.urdf
+    - cad/scenes/hotel_gym_spa/artifacts/scene.urdf
+    - cad/scenes/hotel_suite_large/artifacts/scene.urdf
+    - cad/scenes/hotel_suite_small/artifacts/scene.urdf
     - cad/scenes/house_double_floor_lower/artifacts/scene.urdf
     - cad/scenes/house_double_floor_upper/artifacts/scene.urdf
     - cad/scenes/house_single_floor/artifacts/scene.urdf
+    - cad/scenes/office_bike/artifacts/scene.urdf
+    - cad/scenes/office_cubicles_left/artifacts/scene.urdf
     - cad/scenes/office_large/artifacts/scene.urdf
+    - cad/scenes/office_vendor_machine/artifacts/scene.urdf
+    - cad/scenes/public_restroom_blue/artifacts/scene.urdf
+    - cad/scenes/public_restroom_brown/artifacts/scene.urdf
+    - cad/scenes/public_restroom_futuristic/artifacts/scene.urdf
+    - cad/scenes/public_restroom_marble/artifacts/scene.urdf
+    - cad/scenes/public_restroom_white/artifacts/scene.urdf
+    - cad/scenes/restaurant_asian/artifacts/scene.urdf
     - cad/scenes/restaurant_brunch/artifacts/scene.urdf
+    - cad/scenes/restaurant_cafeteria/artifacts/scene.urdf
+    - cad/scenes/restaurant_diner/artifacts/scene.urdf
+    - cad/scenes/restaurant_hotel/artifacts/scene.urdf
+    - cad/scenes/restaurant_urban/artifacts/scene.urdf
+    - cad/scenes/school_gym/artifacts/scene.urdf
     - cad/scenes/Beechwood_0_int/artifacts/export_scene.success
     - cad/scenes/Beechwood_1_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_0_int/artifacts/export_scene.success
@@ -61,12 +88,39 @@ stages:
     - cad/scenes/Rs_int/artifacts/export_scene.success
     - cad/scenes/Wainscott_0_int/artifacts/export_scene.success
     - cad/scenes/Wainscott_1_int/artifacts/export_scene.success
+    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/export_scene.success
+    - cad/scenes/commercial_kitchen_pans/artifacts/export_scene.success
+    - cad/scenes/gates_bedroom/artifacts/export_scene.success
+    - cad/scenes/grocery_store_asian/artifacts/export_scene.success
     - cad/scenes/grocery_store_cafe/artifacts/export_scene.success
+    - cad/scenes/grocery_store_convenience/artifacts/export_scene.success
+    - cad/scenes/grocery_store_half_stocked/artifacts/export_scene.success
+    - cad/scenes/hall_arch_wood/artifacts/export_scene.success
+    - cad/scenes/hall_conference_large/artifacts/export_scene.success
+    - cad/scenes/hall_glass_ceiling/artifacts/export_scene.success
+    - cad/scenes/hall_train_station/artifacts/export_scene.success
+    - cad/scenes/hotel_gym_spa/artifacts/export_scene.success
+    - cad/scenes/hotel_suite_large/artifacts/export_scene.success
+    - cad/scenes/hotel_suite_small/artifacts/export_scene.success
     - cad/scenes/house_double_floor_lower/artifacts/export_scene.success
     - cad/scenes/house_double_floor_upper/artifacts/export_scene.success
     - cad/scenes/house_single_floor/artifacts/export_scene.success
+    - cad/scenes/office_bike/artifacts/export_scene.success
+    - cad/scenes/office_cubicles_left/artifacts/export_scene.success
     - cad/scenes/office_large/artifacts/export_scene.success
+    - cad/scenes/office_vendor_machine/artifacts/export_scene.success
+    - cad/scenes/public_restroom_blue/artifacts/export_scene.success
+    - cad/scenes/public_restroom_brown/artifacts/export_scene.success
+    - cad/scenes/public_restroom_futuristic/artifacts/export_scene.success
+    - cad/scenes/public_restroom_marble/artifacts/export_scene.success
+    - cad/scenes/public_restroom_white/artifacts/export_scene.success
+    - cad/scenes/restaurant_asian/artifacts/export_scene.success
     - cad/scenes/restaurant_brunch/artifacts/export_scene.success
+    - cad/scenes/restaurant_cafeteria/artifacts/export_scene.success
+    - cad/scenes/restaurant_diner/artifacts/export_scene.success
+    - cad/scenes/restaurant_hotel/artifacts/export_scene.success
+    - cad/scenes/restaurant_urban/artifacts/export_scene.success
+    - cad/scenes/school_gym/artifacts/export_scene.success
     - b1k_pipeline/aggregate_scenes.py
     - params.yaml
     outs:
