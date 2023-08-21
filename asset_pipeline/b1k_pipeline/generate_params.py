@@ -32,42 +32,42 @@ FINAL_SCENES = [
     "Rs_int",
     "Wainscott_0_int",
     "Wainscott_1_int",
-    # "Beechwood_0_garden",
-    # "Rs_garden",
+    "Beechwood_0_garden",
+    "Rs_garden",
     "Pomaria_0_garden",
-    # "Merom_0_garden",
-    # "Wainscott_0_garden",
+    "Merom_0_garden",
+    "Wainscott_0_garden",
     "house_single_floor",
     "house_double_floor_lower",
     "house_double_floor_upper",
-    # "grocery_store_asian",
+    "grocery_store_asian",
     "grocery_store_cafe",
-    # "grocery_store_convenience",
-    # "grocery_store_half_stocked",
-    # "hall_arch_wood",
-    # "hall_train_station",
-    # "hall_glass_ceiling",
-    # "hall_conference_large",
-    # "hotel_suite_large",
-    # "hotel_suite_small",
-    # "hotel_gym_spa",
-    # "office_bike",
-    # "office_cubicles_left",
-    # "office_cubicles_right",
+    "grocery_store_convenience",
+    "grocery_store_half_stocked",
+    "hall_arch_wood",
+    "hall_train_station",
+    "hall_glass_ceiling",
+    "hall_conference_large",
+    "hotel_suite_large",
+    "hotel_suite_small",
+    "hotel_gym_spa",
+    "office_bike",
+    "office_cubicles_left",
+    "office_cubicles_right",
     "office_large",
-    # "office_vendor_machine",
-    # "restaurant_asian",
-    # "restaurant_cafeteria",
-    # "restaurant_diner",
+    "office_vendor_machine",
+    "restaurant_asian",
+    "restaurant_cafeteria",
+    "restaurant_diner",
     "restaurant_brunch",
-    # "restaurant_urban",
-    # "restaurant_hotel",
-    # "school_gym",
-    # "school_geography",
-    # "school_biology",
-    # "school_chemistry",
-    # "school_computer_lab_and_infirmary",
-    # "gates_bedroom",
+    "restaurant_urban",
+    "restaurant_hotel",
+    "school_gym",
+    "school_geography",
+    "school_biology",
+    "school_chemistry",
+    "school_computer_lab_and_infirmary",
+    "gates_bedroom",
 ]
 
 APPROVED_OBJS = {
@@ -89,7 +89,32 @@ REJECTED_SCENES = {
     "school_chemistry",
     "school_computer_lab_and_infirmary",
     "school_geography",
-    "office_cubicles_right",
+    "office_cubicles_left",
+}
+
+READY_SCENES = {
+    "Beechwood_0_int",
+    "Beechwood_1_int",
+    "Benevolence_0_int",
+    "Benevolence_1_int",
+    "Benevolence_2_int",
+    "Ihlen_0_int",
+    "Ihlen_1_int",
+    "Merom_0_int",
+    "Merom_1_int",
+    "Pomaria_0_int",
+    "Pomaria_1_int",
+    "Pomaria_2_int",
+    "Rs_int",
+    "Wainscott_0_int",
+    "Wainscott_1_int",
+    "Pomaria_0_garden",
+    "house_single_floor",
+    "house_double_floor_lower",
+    "house_double_floor_upper",
+    "grocery_store_cafe",
+    "office_large",
+    "restaurant_brunch",
 }
 
 def main():
@@ -127,11 +152,16 @@ def main():
     combined = objects + scenes
     combined_unfiltered = objects_unfiltered + scenes_unfiltered
 
-    found_final_scenes = set(FINAL_SCENES) & set(approved_scenes)
+    # TODO: Revert this to filter out non-final scenes
+    # found_final_scenes = # set(FINAL_SCENES) & set(approved_scenes)
+    found_final_scenes = set(approved_scenes)
     missing_final_scene_paths = set(FINAL_SCENES) - found_final_scenes
     if missing_final_scene_paths:
         print(f"Missing scenes: {missing_final_scene_paths}")
     final_scenes = sorted(["scenes/" + x for x in found_final_scenes])
+
+    found_ready_scenes = set(READY_SCENES) & set(approved_scenes)
+    ready_scenes = sorted(["scenes/" + x for x in found_ready_scenes])
 
     out_path = os.path.join(os.path.dirname(__file__), OUT_PATH)
     params = {
@@ -140,6 +170,7 @@ def main():
         "scenes": scenes,
         "scenes_unfiltered": scenes_unfiltered,
         "final_scenes": final_scenes,
+        "ready_scenes": ready_scenes,
         "combined": combined,
         "combined_unfiltered": combined_unfiltered,
         "root_path": root_path,
