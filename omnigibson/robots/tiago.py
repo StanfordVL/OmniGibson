@@ -582,6 +582,9 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             ['base_link', 'arm_right_5_link'],
             ['base_link', 'arm_left_4_link'],
             ['base_link', 'arm_left_5_link'],
+            ['arm_left_tool_link', 'wrist_left_ft_tool_link'],
+            ['arm_right_tool_link', 'wrist_right_ft_tool_link'],
+            ['wrist_left_ft_tool_link', 'arm_left_5_link'],
         ]
     
     @property

@@ -353,7 +353,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             if allow_nav:
                 yield from self._navigate_if_needed(obj, pose_on_obj=grasp_pose, obj_to_track=obj_to_track)
             print("2. move hand to above pos")
-            yield from self._move_hand(grasp_pose, obj_to_track=obj_to_track)
+            yield from self._move_hand(grasp_pose, use_cartesian_thresh=False, obj_to_track=obj_to_track)
 
             # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
             # It's okay if we can't go all the way because we run into the object.
@@ -361,12 +361,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             try:
                 print("3. move down")
                 num_waypoints = 50
-                yield from self._move_hand_direct_cartesian_smoothly(approach_pose, num_waypoints, stop_on_contact=True, obj_to_track=obj_to_track, thresh=0.015)
+                yield from self._move_hand_direct_cartesian_smoothly(approach_pose, num_waypoints, stop_on_contact=True, obj_to_track=obj_to_track, thresh=0.03)
             except ActionPrimitiveError as err:
                 # An error will be raised when contact fails. If this happens, let's retry.
                 # Retreat back to the grasp pose.
                 print("retreat with error", err)
-                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track, thresh=0.015)
+                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track, thresh=0.03)
                 raise
             indented_print("Grasping.")
             try:
@@ -375,7 +375,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             except ActionPrimitiveError:
                 # Retreat back to the grasp pose.
                 print("retreat")
-                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track, thresh=0.015)
+                yield from self._move_hand_direct_cartesian_smoothly(grasp_pose, num_waypoints, obj_to_track=obj_to_track, thresh=0.03)
                 raise
 
             indented_print("Moving back to grasp pose.")
@@ -565,7 +565,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         
         self._unfix_robot_base()
 
-    def _move_hand(self, target_pose, obj_to_track=None):
+    def _move_hand(self, target_pose, use_cartesian_thresh=False, cartesian_thresh=np.array([0.01, 0.1]), obj_to_track=None):
         # self._fix_robot_base()
         # self._settle_robot()
         joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
@@ -587,7 +587,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         indented_print("Plan has %d steps.", len(plan))
         for i, joint_pos in enumerate(plan):
             indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
-            yield from self._move_hand_direct_joint(joint_pos, control_idx, obj_to_track=obj_to_track)
+            goal_eef_pose = target_pose if use_cartesian_thresh else None
+            yield from self._move_hand_direct_joint(joint_pos, control_idx, obj_to_track=obj_to_track, goal_eef_pose=goal_eef_pose, cartesian_thresh=cartesian_thresh)
         
         self._unfix_robot_base()
     
@@ -627,32 +628,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             "MAX_STEPS_FOR_MOVE_HAND_DIRECT_IK reached",
         )        
 
-    # def _move_hand_direct_joint(self, joint_pos, control_idx, obj_to_track=None, stop_on_contact=False):
-    #     action = self._empty_action()
-    #     controller_name = "arm_{}".format(self.arm)
-    #     action[self.robot.controller_action_idx[controller_name]] = joint_pos
+    def _move_hand_direct_joint(
+            self, joint_pos, control_idx, obj_to_track=None, stop_on_contact=False, thresh=0.005,
+            goal_eef_pose=None, cartesian_thresh=np.array([0.01, 0.1]),
+        ):
 
-    #     # if an object to track is provided, compute head joint angles
-    #     if obj_to_track is not None:
-    #         action = self.overwrite_head_action(action, obj=obj_to_track)
-
-    #     for _ in range(MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT):
-    #         current_joint_pos = self.robot.get_joint_positions()[control_idx]
-    #         diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
-    #         # print("diff_joint_pos", max(abs(diff_joint_pos)))
-    #         if max(diff_joint_pos) < 0.005:
-    #             return
-    #         if stop_on_contact and detect_robot_collision_in_sim(self.robot):
-    #             print("contact. stopping")
-    #             return
-    #         yield action, "manip:move_hand_direct_joint"
-        
-    #     raise ActionPrimitiveError(
-    #         ActionPrimitiveError.Reason.EXECUTION_ERROR,
-    #         "MAX_STEPS_FOR_MOVE_HAND_DIRECT_JOINT reached",
-    #     )
-
-    def _move_hand_direct_joint(self, joint_pos, control_idx, obj_to_track=None, stop_on_contact=False, thresh=0.005):
+        """
+        If goal_eef_pose and cartesian_thresh are provided, use eef pose in cartesian as stopping condition
+        """
 
         # TODO - make sure controller is JointController and in position control mode
         ######## Delta Joiint Position Control Case ########
@@ -690,10 +673,19 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 # if an object to track is provided, compute head joint angles
                 if obj_to_track is not None:
                     action = self.overwrite_head_action(action, obj=obj_to_track)
-                print("joint position error", max(abs(diff_joint_pos)))
+                # print("joint position error", max(abs(diff_joint_pos)))
                 
-                if max(abs(diff_joint_pos)) < thresh:
+                # check if goal has been reached
+                reached_goal = max(abs(diff_joint_pos)) < thresh
+                cur_eef_pose = (self.robot.get_eef_position(), self.robot.get_eef_orientation()) # current eef pos, quat
+                if goal_eef_pose is not None:
+                    reached_cartesian = (max(abs(goal_eef_pose[0] - cur_eef_pose[0])) < cartesian_thresh[0]) \
+                        and (max(abs(goal_eef_pose[1] - cur_eef_pose[1])) < cartesian_thresh[1])
+                    reached_goal = reached_cartesian or reached_goal
+
+                if reached_goal:
                     return
+                # breakpoint()
                 # print("action", action[control_idx])
                 yield action, "manip:move_hand_direct_joint"
             
@@ -716,7 +708,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 current_joint_pos = self.robot.get_joint_positions()[control_idx]
                 diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
                 # print("diff_joint_pos", max(abs(diff_joint_pos)))
-                if max(diff_joint_pos) < 0.005:
+                
+                reached_goal = max(abs(diff_joint_pos)) < thresh
+                
+                if reached_goal:
                     return
                 if stop_on_contact and detect_robot_collision_in_sim(self.robot):
                     print("contact. stopping")
@@ -739,7 +734,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             if stop_on_contact and detect_robot_collision_in_sim(self.robot):
                 return
             joint_pos, control_idx = self._convert_cartesian_to_joint_space(waypoint)
-            yield from self._move_hand_direct_joint(joint_pos, control_idx, stop_on_contact=stop_on_contact, obj_to_track=obj_to_track, thresh=thresh)
+            yield from self._move_hand_direct_joint(joint_pos, control_idx, stop_on_contact=stop_on_contact, obj_to_track=obj_to_track, thresh=thresh, goal_eef_pose=waypoint)
     
     def _move_hand_direct_cartesian_smoothly_ik(self, target_pose, num_waypoints, stop_on_contact=False, obj_to_track=None, pos_thresh=0.05, ori_thresh=0.5):
         current_pose = self.robot.eef_links[self.arm].get_position_orientation()

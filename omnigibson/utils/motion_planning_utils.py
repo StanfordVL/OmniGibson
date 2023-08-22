@@ -392,7 +392,8 @@ def arm_planning_validity_fn(context, joint_pos):
         nonlocal mesh_hit
         
         valid_hit = hit.rigid_body not in context.disabled_collision_pairs_dict[mesh_hit]
-
+        # if valid_hit:
+        #     print(hit.rigid_body, mesh_hit)
         return not valid_hit
 
     def check_overlap():
@@ -412,7 +413,6 @@ def arm_planning_validity_fn(context, joint_pos):
                     og.sim.psqi.overlap_shape(*mesh_id, reportFn=overlap_callback)
             
         return valid_hit
-    
     return not check_overlap()
 
 def remove_unnecessary_rotations(path):
