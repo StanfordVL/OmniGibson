@@ -4180,23 +4180,14 @@
     "substance": {}
   },
   "blueberry_compote.n.01": {
+    "boilable": {},
     "cookable": {},
-    "disinfectable": {},
-    "dustyable": {},
     "flammable": {},
     "freezable": {},
-    "grassyable": {},
     "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
   },
   "blueberry_mousse.n.01": {
     "boilable": {},
@@ -13304,9 +13295,13 @@
     "wrinkleable": {}
   },
   "compote.n.01": {
+    "boilable": {},
     "flammable": {},
     "freezable": {},
-    "heatable": {}
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
   },
   "compound.n.02": {
     "freezable": {},
