@@ -129,8 +129,22 @@ def create_get_save_propagated_annots_params(syns_to_props):
 
                     if param_name == "synset": continue
 
+                    # Params that can have NaN values
+                    if param_name in [
+                        "substance_cooking_derivative_synset", 
+                        "sliceable_derivative_synset", 
+                        "uncooked_diceable_derivative_synset",
+                        "cooked_diceable_derivative_synset"
+                    ]:
+                        if not pd.isna(param_value):
+                            formatted_param_value = param_value
+                            syns_to_props[param_record["synset"]][prop][param_name] = formatted_param_value
+                        continue
+
+                    # Params that should not have NaN values
+
                     # NaN values
-                    if pd.isna(param_value):
+                    elif pd.isna(param_value):
                         if prop == "coldSource":
                             raise ValueError(f"synset {param_record['synset']} coldSource annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
                         elif prop == "cookable":
@@ -199,6 +213,8 @@ def create_get_save_propagated_annots_params(syns_to_props):
         json.dump(syns_to_props, f, indent=4)
     
     print("Params parsed and added to flat and hierarchical files, saved.")
+    return syns_to_props
+    
 
 
 if __name__ == "__main__":

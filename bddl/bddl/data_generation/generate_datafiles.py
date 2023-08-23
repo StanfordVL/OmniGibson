@@ -3,6 +3,8 @@ from bddl.data_generation.get_hierarchy_full import get_hierarchy, create_get_sa
 from bddl.data_generation.get_syn_prop_annots_canonical import create_get_save_annots_canonical, create_get_save_properties_to_synsets, create_get_save_synsets_to_descriptors
 from bddl.data_generation.propagate_by_intersection import create_get_save_propagated_canonical
 from bddl.data_generation.process_prop_param_annots import create_get_save_propagated_annots_params
+from bddl.data_generation.get_implicit_transition_rules import create_get_save_implicit_transition_rules
+from bddl.data_generation.get_explicit_transition_rules import create_save_explicit_transition_rules
 import pandas as pd
 import csv
 import nltk
@@ -39,13 +41,16 @@ def main():
     create_get_save_synsets_to_descriptors(propagated_canonical)
 
     # Add parameter info to syns-to-props
-    create_get_save_propagated_annots_params(propagated_canonical)
+    syns_to_param_props = create_get_save_propagated_annots_params(propagated_canonical)
 
     # Add prop-param info to hierarchy 
     create_get_save_hierarchy_with_properties(hierarchy)
 
-    # Add TM cleaning info to hierarchy
-    # parse_tm_cleaning_csv()
+    # Create and save implicit transition jsons
+    create_get_save_implicit_transition_rules(syns_to_param_props, props_to_syns)
+
+    # Create and save explicit transition jsons
+    create_save_explicit_transition_rules()
 
     # # Create and save activity-specific hierarchies (no getting because that will get complicated)
     # create_save_activity_specific_hierarchies()
