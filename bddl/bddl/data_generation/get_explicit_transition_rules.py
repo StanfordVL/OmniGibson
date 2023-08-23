@@ -8,9 +8,7 @@ import re
 
 from tm_submap_params import TM_SUBMAPS_TO_PARAMS
 
-# SHEETS_DIR = "tm_raw_data"
 SHEETS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "transition_map" / "tm_raw_data"
-# JSONS_DIR = "tm_jsons"
 JSONS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "transition_map" / "tm_jsons"
 
 OBJECT_CAT_AND_INST_RE = r"[A-Za-z-_]+\.n\.[0-9]+"
