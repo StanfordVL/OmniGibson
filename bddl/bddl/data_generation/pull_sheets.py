@@ -7,22 +7,24 @@ OUTPUT_ROOT = pathlib.Path(__file__).parents[1] / "generated_data"
 
 ASSETS_SHEET_KEY = "10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4"
 SYNSETS_SHEET_KEY = "1eIQn1HzUJV15nCP4MqsHvrdWAV9VrKoxOqSnQxF0_1A"
-SYMSET_PARAMS_SHEET_KEY = "1jQomcQS3DSMLctEOElafCPj_v498gwtb57NC9eNwu-4"
+SYNSET_PARAMS_SHEET_KEY = "1jQomcQS3DSMLctEOElafCPj_v498gwtb57NC9eNwu-4"
 
 ALL_SHEETS = [
   (ASSETS_SHEET_KEY, "Object Category Mapping", "category_mapping.csv"),
   (ASSETS_SHEET_KEY, "Allowed Room Types", "allowed_room_types.csv"),
   (ASSETS_SHEET_KEY, "Substance Hyperparams", "substance_hyperparams.csv"),
   (SYNSETS_SHEET_KEY, "Synsets", "synsets.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "heatSource", "prop_param_annots/heatSource.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "coldSource", "prop_param_annots/coldSource.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "cookable", "prop_param_annots/cookable.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "flammable", "prop_param_annots/flammable.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "heatable", "prop_param_annots/heatable.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "particleApplier", "prop_param_annots/particleApplier.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "particleSource", "prop_param_annots/particleSource.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "particleRemover", "prop_param_annots/particleRemover.csv"),
-  (SYMSET_PARAMS_SHEET_KEY, "particleSink", "prop_param_annots/particleSink.csv")
+  (SYNSET_PARAMS_SHEET_KEY, "heatSource", "prop_param_annots/heatSource.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "coldSource", "prop_param_annots/coldSource.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "cookable", "prop_param_annots/cookable.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "flammable", "prop_param_annots/flammable.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "heatable", "prop_param_annots/heatable.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "particleApplier", "prop_param_annots/particleApplier.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "particleSource", "prop_param_annots/particleSource.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "particleRemover", "prop_param_annots/particleRemover.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "particleSink", "prop_param_annots/particleSink.csv")
+  (SYNSET_PARAMS_SHEET_KEY, "diceable", "prop_param_annots/diceable.csv")
+  (SYNSET_PARAMS_SHEET_KEY, "sliceable", "prop_param_annots/sliceable.csv")
 ]
 
 def main():
