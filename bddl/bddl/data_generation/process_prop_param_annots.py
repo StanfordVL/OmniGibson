@@ -213,6 +213,8 @@ def create_get_save_propagated_annots_params(syns_to_props):
         json.dump(syns_to_props, f, indent=4)
     
     print("Params parsed and added to flat and hierarchical files, saved.")
+    return syns_to_props
+    
 
 
 if __name__ == "__main__":
