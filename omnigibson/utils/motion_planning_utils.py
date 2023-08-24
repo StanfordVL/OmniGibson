@@ -16,6 +16,7 @@ PLANNERS = {
     "RRTsharp" : ompl_geo.RRTsharp, # optim: faster-convergence version of RRT*
     "RRTXstatic" : ompl_geo.RRTXstatic, # optim: faster-convergence version of RRT*
     "BITstar": ompl_geo.BITstar, # optim
+    "RRT" : ompl_geo.RRT,
 }
 
 OPTIM_PLANNERS = [
