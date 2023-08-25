@@ -6,7 +6,7 @@ import os
 from collections import Counter
 import re
 
-from tm_submap_params import TM_SUBMAPS_TO_PARAMS
+from bddl.data_generation.tm_submap_params import TM_SUBMAPS_TO_PARAMS
 
 SHEETS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "transition_map" / "tm_raw_data"
 JSONS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "transition_map" / "tm_jsons"
