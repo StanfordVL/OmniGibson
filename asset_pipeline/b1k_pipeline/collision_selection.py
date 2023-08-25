@@ -45,6 +45,9 @@ def load_mesh(mesh_fs, mesh_fns, basename, index, offset=None, scale=None):
         b1k_pipeline.utils.load_mesh(mesh_fs, mesh_fn, force="mesh", skip_materials=index > 0)
         for mesh_fn in mesh_fns
     ]
+    # Check that none of the hulls has zero volume
+    if index != 0 and any(x.volume == 0 for x in hulls):
+        return
     m = trimesh.util.concatenate(hulls)
 
     # Apply the desired offset if one is provided. Otherwise, center.
