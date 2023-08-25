@@ -3,15 +3,15 @@ drip coffee,coffee_bean.n.01_(i) and water.n.06_(j),,coffee_maker.n.01_(k),drip_
 iced cappuccino,espresso.n.01_(j) and cane_sugar.n.02_(k) and chocolate_milk.n.01_(l) and ice_cube.n.01_(m) and ice_cube.n.01_(n) and ice_cube.n.01_(o),,blender.n.01_(p),iced_cappuccino.n.01_(q),
 espresso,water.n.06_(i) and instant_coffee.n.01_(j),,coffee_maker.n.01_(k),espresso.n.01_(m),
 pastry dough,water.n.06_(i) and butter.n.01_(j) and flour.n.01_(k) and salt.n.02_(l),,food_processor.n.01_(m),pastry.n.01_(n),not cooked pastry.n.01_(n)
-milkshake,drip_coffee.n.01_(j) and cane_sugar.n.02_(k) and ice_cube.n.01_(l) and ice_cube.n.01_(m) and ice_cube.n.01_(n) and ice_cube.n.01_(o) and scoop_of_ice_cream.n.01_(p),,blender.n.01_(q),milkshake.n.01_(r),
-milkshake,whole_milk.n.01_(i) and chocolate_sauce.n.01_(j) and scoop_of_ice_cream.n.01_(k),,blender.n.01_(l),milkshake.n.01_(m),
+coffee milkshake,drip_coffee.n.01_(j) and cane_sugar.n.02_(k) and ice_cube.n.01_(l) and ice_cube.n.01_(m) and ice_cube.n.01_(n) and ice_cube.n.01_(o) and scoop_of_ice_cream.n.01_(p),,blender.n.01_(q),milkshake.n.01_(r),
+chocolate milkshake,whole_milk.n.01_(i) and chocolate_sauce.n.01_(j) and scoop_of_ice_cream.n.01_(k),,blender.n.01_(l),milkshake.n.01_(m),
 smoothie,strawberry.n.01_(i) and strawberry.n.01_(j) and strawberry.n.01_(k) and ice_cube.n.01_(l) and ice_cube.n.01_(m) and ice_cube.n.01_(n) and ice_cube.n.01_(o) and lemon_juice.n.01_(p),,blender.n.01_(q),smoothie.n.02_(r),
 chocolate milk,granulated_sugar.n.01_(i) and cocoa_powder.n.01_(j) and low-fat_milk.n.01_(k),,blender.n.01_(l),chocolate_milk.n.01_(m),
 chocolate spread,butter.n.01_(i) and honey.n.01_(j) and cocoa_powder.n.01_(k),,food_processor.n.01_(l),chocolate_sauce.n.01_(m),
 coffee,coffee_bean.n.01_(i) and water.n.06_(j),,coffee_maker.n.01_(k),drip_coffee.n.01_(l),contains coffee_maker.n.01_(k) drip_coffee.n.01_(l)
 eggnog,granulated_sugar.n.01_(i) and nutmeg.n.02_(j) and cinnamon.n.03_(k) and vanilla.n.02_(l) and rum.n.01_(m) and whole_milk.n.01_(n) and raw_egg.n.01_(o),,blender.n.01_(p),eggnog.n.01_(q),
 fruit punch,diced__lemon.n.01_(i) and diced__strawberry.n.01_(j) and diced__orange.n.01_(k) and diced__apple.n.01_(l),,blender.n.01_(m),fruit_punch.n.01_(n),
-gazpacho,basil.n.03_(i) and salt.n.02_(j) and black_pepper.n.02_(k) and tomato_juice.n.01_(l) and cucumber.n.02_(m) and water.n.06_(n) and lemon_juice.n.01_(o),,blender.n.01_(p),gazpacho.n.01_(q) and basil.n.03_(i),contains blender.n.01_(p) gazpacho.n.01_(q)
+gazpacho,basil.n.03_(i) and salt.n.02_(j) and black_pepper.n.02_(k) and tomato_juice.n.01_(l) and cucumber.n.02_(m) and water.n.06_(n) and lemon_juice.n.01_(o),,blender.n.01_(p),gazpacho.n.01_(q),contains blender.n.01_(p) gazpacho.n.01_(q)
 iced chocolate,ice_cube.n.01_(i) and ice_cube.n.01_(j) and cocoa_powder.n.01_(k) and whole_milk.n.01_(l) and granulated_sugar.n.01_(m) and vanilla.n.02_(n),,blender.n.01_(o),iced_chocolate.n.01_(p),
 jerk seasoning,brown_sugar.n.01_(i) and chili.n.02_(j) and cayenne.n.02_(k) and clove.n.03_(l) and clove.n.03_(m),,blender.n.01_(n),jerk_seasoning.n.01_(o),
 lemon pepper seasoning,black_pepper.n.02_(i) and lemon_peel.n.01_(j) and salt.n.02_(k) and lemon_juice.n.01_(l),,blender.n.01_(m),lemon-pepper_seasoning.n.01_(n),
@@ -19,4 +19,4 @@ mustard seasoning,mustard_seed.n.01_(i) and sage.n.02_(j) and cumin.n.02_(k) and
 smoothie,raspberry.n.02_(i) and raspberry.n.02_(j) and raspberry.n.02_(k) and raspberry.n.02_(l) and raspberry.n.02_(m) and raspberry.n.02_(n) and strawberry.n.01_(o) and strawberry.n.01_(p) and strawberry.n.01_(q) and strawberry.n.01_(r) and lemon_juice.n.01_(s) and yogurt.n.01_(t) and honey.n.01_(u),,blender.n.01_(v),smoothie.n.02_(w),
 tomato rice,white_rice.n.01_(i) and diced__beefsteak_tomato.n.01_(j) and diced__vidalia_onion.n.01_(k) and olive_oil.n.01_(l) and chicken_broth.n.01_(m),,crock_pot.n.01_(n),tomato_rice.n.01_(o),
 waffle batter,waffle_batter.n.01_(i),,waffle_iron.n.01_(j),waffle.n.01_(k),cooked waffle.n.01_(k) and hot waffle.n.01_(k)
-fruit punch,diced__watermelon.n.01_(i) and lemonade.n.01_(j) and lemon_juice.n.01_(k) and tonic.n.01_(l),,blender.n.01_(m),fruit_punch.n.01_(n),contains blender.n.01_(m) fruit_punch.n.01_(n)
+lemonade punch,diced__watermelon.n.01_(i) and lemonade.n.01_(j) and lemon_juice.n.01_(k) and tonic.n.01_(l),,blender.n.01_(m),fruit_punch.n.01_(n),contains blender.n.01_(m) fruit_punch.n.01_(n)

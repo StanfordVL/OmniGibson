@@ -13845,6 +13845,15 @@
     "physicalSubstance": {},
     "substance": {}
   },
+  "cooked__blueberry_compote.n.01": {
+    "boilable": {},
+    "flammable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "cooked__blueberry_mousse.n.01": {
     "boilable": {},
     "freezable": {},
@@ -15275,6 +15284,13 @@
     "substance": {}
   },
   "cooked__diced__oxtail.n.01": {
+    "freezable": {},
+    "heatable": {},
+    "macroPhysicalSubstance": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "cooked__diced__papaya.n.01": {
     "freezable": {},
     "heatable": {},
     "macroPhysicalSubstance": {},
@@ -20243,6 +20259,7 @@
     "substance": {}
   },
   "diced__papaya.n.01": {
+    "cookable": {},
     "freezable": {},
     "heatable": {},
     "macroPhysicalSubstance": {},
@@ -29451,6 +29468,7 @@
     "wrinkleable": {}
   },
   "half__papaya.n.01": {
+    "cookable": {},
     "diceable": {},
     "disinfectable": {},
     "dustyable": {},
@@ -51891,7 +51909,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},

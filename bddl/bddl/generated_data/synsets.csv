@@ -1917,7 +1917,7 @@ tag.n.02,label.n.04,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 talcum.n.02,toilet_powder.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,microPhysicalSubstance
 tank_top.n.01,shirt.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 tank.n.02,vessel.n.03,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-tape.n.04,measuring_instrument.n.01,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+tape.n.04,measuring_instrument.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 tarnish.n.02,appearance.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,visualSubstance
 tarpaulin.n.01,canvas.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,cloth
 tartlet.n.01,tart.n.02,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2175,7 +2175,7 @@ half__kiwi.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,ri
 half__peach.n.01,"drupe.n.01,edible_fruit.n.01",1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__pear.n.01,"edible_fruit.n.01,pome.n.01",1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__strawberry.n.01,berry.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__papaya.n.01,edible_fruit.n.01,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+half__papaya.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 sliced__brisket.n.01,cut.n.06,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 dried_cranberry.n.01,dried_fruit.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 hard_candy.n.01,candy.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2461,7 +2461,7 @@ diced__sushi.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhy
 diced__broccoli_rabe.n.01,cruciferous_vegetable.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__pie_crust.n.01,pastry.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__hamburger_bun.n.01,bun.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-diced__papaya.n.01,edible_fruit.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__papaya.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__sugar_cookie.n.01,cookie.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__salmon.n.01,fish.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__muffin.n.01,quick_bread.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
@@ -2940,3 +2940,5 @@ electric_hand_mixer.n.01,mixer.n.04,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
 french_press.n.01,kitchen_appliance.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 kettle.n.01,pot.n.01,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 electric_cauldron.n.01,pot.n.01,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+cooked__blueberry_compote.n.01,compote.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
+cooked__diced__papaya.n.01,edible_fruit.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
