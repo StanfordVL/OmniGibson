@@ -89,11 +89,14 @@ def get_grasp_position_for_open(robot, target_obj, should_open, relevant_joint=N
     random.shuffle(relevant_joints)
     selected_joint = None
     for joint in relevant_joints:
-        current_position = joint.get_state()[0][0]
-        joint_range = joint.upper_limit - joint.lower_limit
-        openness_fraction = (current_position - joint.lower_limit) / joint_range
-        if (should_open and openness_fraction < 0.8) or (not should_open and openness_fraction > 0.05):
+        if joint.name == "bottom_cabinet:joint_j_link_2":
             selected_joint = joint
+            break
+        # current_position = joint.get_state()[0][0]
+        # joint_range = joint.upper_limit - joint.lower_limit
+        # openness_fraction = (current_position - joint.lower_limit) / joint_range
+        # if (should_open and openness_fraction < 0.8) or (not should_open and openness_fraction > 0.05):
+        #     selected_joint = joint
 
     if selected_joint is None:
         return None
@@ -118,17 +121,16 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
     ) = target_obj.get_base_aligned_bbox(link_name=link_name, visual=False)
 
     # Match the push axis to one of the bb axes.
-    push_axis_idx = JointAxis.index(relevant_joint.axis)
-    canonical_push_axis = np.eye(3)[push_axis_idx]
     joint_orientation = gf_quat_to_np_array(relevant_joint.get_attribute("physics:localRot0"))[[1, 2, 3, 0]]
     push_axis = R.from_quat(joint_orientation).apply([1, 0, 0])
     assert np.isclose(np.max(np.abs(push_axis)), 1.0)  # Make sure we're aligned with a bb axis.
     push_axis_idx = np.argmax(np.abs(push_axis))
     canonical_push_axis = np.eye(3)[push_axis_idx]
-
+    # from IPython import embed; embed()
 
     # TODO: Need to figure out how to get the correct push direction.
-    canonical_push_direction = canonical_push_axis * np.sign(push_axis[push_axis_idx])
+    push_direction = np.sign(push_axis[push_axis_idx]) if should_open else -1 * np.sign(push_axis[push_axis_idx])
+    canonical_push_direction = canonical_push_axis * push_direction
 
     # Pick the closer of the two faces along the push axis as our favorite.
     points_along_push_axis = (
@@ -158,7 +160,7 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
         PRISMATIC_JOINT_FRACTION_ACROSS_SURFACE_AXIS_BOUNDS[1] * diff_lateral_pos_wrt_surface_center,
     )
     lateral_pos_wrt_surface_center = min_lateral_pos_wrt_surface_center + sampled_lateral_pos_wrt_min
-    grasp_position_in_bbox_frame = center_of_selected_surface_along_push_axis + lateral_pos_wrt_surface_center + canonical_push_direction * 0.2
+    grasp_position_in_bbox_frame = center_of_selected_surface_along_push_axis + lateral_pos_wrt_surface_center + canonical_push_axis * push_axis_closer_side_sign * 0.2
     grasp_quat_in_bbox_frame = T.quat_inverse(joint_orientation)
 
     # Now apply the grasp offset.

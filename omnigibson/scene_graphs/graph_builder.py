@@ -9,9 +9,9 @@ from matplotlib import pyplot as plt
 from omnigibson import object_states
 from omnigibson.sensors import VisionSensor
 from omnigibson.object_states.factory import get_state_name
-from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanState, RelativeObjectState
+from omnigibson.object_states.object_state_base import AbsoluteObjectState, RelativeObjectState
 from omnigibson.utils import transform_utils as T
-
+BooleanState = None
 DRAW_EVERY = 1
 
 

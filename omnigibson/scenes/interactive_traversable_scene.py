@@ -169,8 +169,8 @@ class InteractiveTraversableScene(TraversableScene):
         category = obj_info["args"].get("category", "object")
         in_rooms = obj_info["args"].get("in_rooms", None)
 
-        if isinstance(in_rooms, str):
-            assert "," not in in_rooms
+        # if isinstance(in_rooms, str):
+        #     assert "," not in in_rooms
         in_rooms = [in_rooms] if isinstance(in_rooms, str) else in_rooms
 
         # Do not load these object categories (can blacklist building structures as well)

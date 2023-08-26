@@ -454,6 +454,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 approach_pos = grasp_pose[0] + object_direction * OPEN_GRASP_APPROACH_DISTANCE
                 approach_pose = (approach_pos, grasp_pose[1])
 
+                # self.markers[0].set_position_orientation(*grasp_pose)
+                # self.markers[1].set_position_orientation(*approach_pose)
+                # self.markers[2].set_position_orientation(*target_poses[0])
+                # og.sim.step()
+                # from IPython import embed; embed()
+
                 # If the grasp pose is too far, navigate
                 yield from self._navigate_if_needed(obj, pose_on_obj=grasp_pose)
 
@@ -480,7 +486,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 #             "Could not grasp the target object to open or close. Try again",
                 #             {"target object": obj.name},
                 #         )
-                
+
                 for i, target_pose in enumerate(target_poses):
                     reset_eef_pose = target_poses[i+1]
                     yield from self._move_hand_direct_cartesian(target_pose, ignore_failure=False)
@@ -492,6 +498,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 )
             except ActionPrimitiveError as e:
                 indented_print(e)
+                print(e)
                 # Let go - we do not want to be holding anything after return of primitive.
                 yield from self._execute_release()
                 if reset_eef_pose is not None:
@@ -504,7 +511,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 "Despite executing the planned trajectory, the object did not open or close as expected. Maybe try again",
                 {"target object": obj.name, "is it currently open": obj.states[object_states.Open].get_value()},
             )
-
+        
     def _grasp(self, obj):
         """
         Yields action for the robot to navigate to object if needed, then to grasp it
