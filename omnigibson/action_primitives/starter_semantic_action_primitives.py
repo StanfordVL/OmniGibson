@@ -61,10 +61,10 @@ KP_ANGLE_VEL = 0.2
 MAX_CARTESIAN_HAND_STEP = 0.002
 MAX_STEPS_FOR_HAND_MOVE = 500
 MAX_STEPS_FOR_HAND_MOVE_WHEN_OPENING = 30
-MAX_STEPS_FOR_GRASP_OR_RELEASE = 30
+MAX_STEPS_FOR_GRASP_OR_RELEASE = 50
 MAX_WAIT_FOR_GRASP_OR_RELEASE = 10
 MAX_STEPS_FOR_WAYPOINT_NAVIGATION = 200
-MAX_ATTEMPTS_FOR_OPEN_CLOSE = 20
+MAX_ATTEMPTS_FOR_OPEN_CLOSE = 50
 
 MAX_ATTEMPTS_FOR_SAMPLING_POSE_WITH_OBJECT_AND_PREDICATE = 20
 MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT = 200
@@ -447,16 +447,19 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     )
 
                 grasp_pose, target_poses, object_direction, relevant_joint, grasp_required, yaw_change = grasp_data
-                if abs(yaw_change) < 0.1:
+                if abs(yaw_change) < 0.05:
+                    print("Yaw change is small and done,", yaw_change)
                     return
 
                 # Prepare data for the approach later.
                 approach_pos = grasp_pose[0] + object_direction * OPEN_GRASP_APPROACH_DISTANCE
                 approach_pose = (approach_pos, grasp_pose[1])
 
-                # self.markers[0].set_position_orientation(*grasp_pose)
-                # self.markers[1].set_position_orientation(*approach_pose)
-                # self.markers[2].set_position_orientation(*target_poses[0])
+                self.markers[0].set_position_orientation(*grasp_pose)
+                self.markers[1].set_position_orientation(*approach_pose)
+                self.markers[2].set_position_orientation(*target_poses[0])
+                self.markers[3].set_position_orientation(*target_poses[1])
+                self.markers[4].set_position_orientation(*target_poses[2])
                 # og.sim.step()
                 # from IPython import embed; embed()
 
@@ -470,12 +473,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
                 # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
                 # It's okay if we can't go all the way because we run into the object.
-                indented_print("Performing grasp approach for open")
-
                 yield from self._navigate_if_needed(obj, pose_on_obj=approach_pose)  #, check_joint=check_joint)
                 
-                yield from self._move_hand_direct_cartesian(approach_pose, ignore_failure=False, stop_on_contact=True)
-
+                yield from self._move_hand_direct_cartesian(approach_pose, ignore_failure=False, stop_on_contact=True, max_stuck_steps=50)
+            
                 # Step once to update
                 yield self._empty_action()
 
@@ -486,23 +487,32 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 #             "Could not grasp the target object to open or close. Try again",
                 #             {"target object": obj.name},
                 #         )
-
                 for i, target_pose in enumerate(target_poses):
-                    reset_eef_pose = target_poses[i+1]
-                    yield from self._move_hand_direct_cartesian(target_pose, ignore_failure=False)
+                    reset_eef_pose = target_pose if i == len(target_poses) - 1 else target_poses[i+1]
+                    yield from self._move_hand_direct_cartesian(target_pose, ignore_failure=False, max_stuck_steps=50)
 
                 # Moving to target pose often fails. Let's get the hand to apply the correct actions for its current pos
                 # This prevents the hand from jerking into its desired position when we do a release.
                 yield from self._move_hand_direct_cartesian(
                     self.robot.eef_links[self.arm].get_position_orientation(), ignore_failure=True
                 )
-            except ActionPrimitiveError as e:
-                indented_print(e)
-                print(e)
-                # Let go - we do not want to be holding anything after return of primitive.
+
                 yield from self._execute_release()
-                if reset_eef_pose is not None:
-                    yield from self._move_hand_direct_cartesian(reset_eef_pose, ignore_failure=True)
+                print("_execute_release DONE")
+                yield from self._move_base_backward()
+                print("_move_base_backward DONE")
+
+                print("getting the fuck out of this loop")
+                print("cyuh")
+                break
+
+            except ActionPrimitiveError as e:
+                # Let go - we do not want to be holding anything after return of primitive.
+                print(e)
+                yield from self._execute_release()
+                print("_execute_release (reset after error) DONE")
+                yield from self._move_base_backward()
+                print("_move_base_backward (reset after error) DONE")
 
 
         if obj.states[object_states.Open].get_value() != should_open:
@@ -574,7 +584,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.POST_CONDITION_ERROR,
                 "An unexpected object was detected in hand after executing grasp. Consider releasing it",
-                {"expected object": obj.name, "actual object": self._get_obj_in_hand().name},
+                # {"expected object": obj.name, "actual object": self._get_obj_in_hand().name},
             )
 
     def _place_on_top(self, obj):
@@ -744,6 +754,23 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             return None, control_idx
         else:
             return joint_pos, control_idx
+        
+    def _move_base_backward(self, steps=20, speed=0.1):
+        """
+        Yields action for the robot to move hand so the eef is in the target pose using the planner
+
+        Args:
+            offset (Iterable of array): Position and orientation arrays in an iterable for pose
+
+        Returns:
+            np.array or None: Action array for one step for the robot to move hand or None if its at the target pose
+        """
+        for _ in range(steps):
+            print(self.robot.get_position())
+            action = self._empty_action()
+            action[self.robot.base_control_idx[0]] = -speed
+            yield action 
+
 
     def _move_hand(self, target_pose):
         """
@@ -817,7 +844,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         interpolated_plan.append(plan[-1].tolist())
         return interpolated_plan
 
-    def _move_hand_direct_joint(self, joint_pos, control_idx, stop_on_contact=False, max_steps_for_hand_move=MAX_STEPS_FOR_HAND_MOVE, ignore_failure=False):
+    def _move_hand_direct_joint(self, joint_pos, control_idx, stop_on_contact=False, max_steps_for_hand_move=MAX_STEPS_FOR_HAND_MOVE, ignore_failure=False, max_stuck_steps=None):
         """
         Yields action for the robot to move its arm to reach the specified joint positions by directly actuating with no planner
 
@@ -836,13 +863,27 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         action[self.robot.controller_action_idx[controller_name]] = joint_pos
         action = self._overwrite_head_action(action, self._tracking_object) if self._tracking_object is not None else action
 
-        for _ in range(max_steps_for_hand_move):
+        steps_this_goal = 0
+        prev_eef_pos = self.robot.get_eef_position(self.arm)
+        for i in range(max_steps_for_hand_move):
+            print("_move_hand_direct_joint step", i)
             current_joint_pos = self.robot.get_joint_positions()[control_idx]
             diff_joint_pos = np.absolute(np.array(current_joint_pos) - np.array(joint_pos))
             if max(diff_joint_pos) < 0.005:
                 return
             if stop_on_contact and detect_robot_collision_in_sim(self.robot, ignore_obj_in_hand=False):
                 return
+            if max_stuck_steps is not None and steps_this_goal > max_stuck_steps:
+                steps_this_goal = 0                
+                # check cartesian coordinate
+                cur_eef_pos = self.robot.get_eef_position(self.arm)
+                if np.linalg.norm(np.array(cur_eef_pos) - np.array(prev_eef_pos)) < 0.03:
+                    print("Hand stuck for", max_stuck_steps, "steps")
+                    raise ActionPrimitiveError(
+                        ActionPrimitiveError.Reason.EXECUTION_ERROR,
+                        f"Hand did not move for {max_stuck_steps} steps"
+                    )
+            steps_this_goal += 1
             yield action
 
         if not ignore_failure:
@@ -851,7 +892,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 "Your hand was obstructed from moving to the desired joint position"
             )
 
-    def _move_hand_direct_cartesian(self, target_pose, stop_on_contact=False, ignore_failure=False):
+    def _move_hand_direct_cartesian(self, target_pose, stop_on_contact=False, ignore_failure=False, max_stuck_steps=None):
         """
         Yields action for the robot to move its arm to reach the specified target pose by moving the eef along a line in cartesian
         space from its current pose
@@ -864,6 +905,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             np.array or None: Action array for one step for the robot to move arm or None if its at the target pose
         """
+        
         # To make sure that this happens in a roughly linear fashion, we will divide the trajectory
         # into 1cm-long pieces
         start_pos, start_orn = self.robot.eef_links[self.arm].get_position_orientation()
@@ -898,7 +940,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 )
 
             # Otherwise, move the joint
-            yield from self._move_hand_direct_joint(joint_pos, control_idx, stop_on_contact=stop_on_contact, ignore_failure=ignore_failure)
+            yield from self._move_hand_direct_joint(joint_pos, control_idx, stop_on_contact=stop_on_contact, ignore_failure=ignore_failure, max_stuck_steps=max_stuck_steps)
 
             # Also decide if we can stop early.
             current_pos, current_orn = self.robot.eef_links[self.arm].get_position_orientation()
@@ -923,11 +965,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             np.array or None: Action array for one step for the robot to grasp or None if its done grasping
         """
-        action = self._empty_action()
-        action = self._overwrite_head_action(action, self._tracking_object) if self._tracking_object is not None else action
-        controller_name = "gripper_{}".format(self.arm)
-        action[self.robot.controller_action_idx[controller_name]] = -1.0
+        
         for _ in range(MAX_STEPS_FOR_GRASP_OR_RELEASE):
+            action = self._empty_action()
+            action = self._overwrite_head_action(action, self._tracking_object) if self._tracking_object is not None else action
+            controller_name = "gripper_{}".format(self.arm)
+            action[self.robot.controller_action_idx[controller_name]] = -1.0
             yield action
 
         # Do nothing for a bit so that AG can trigger.
@@ -1147,7 +1190,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     "Could not make a navigation plan to get to the target position"
                 )
 
-            self._draw_plan(plan)
+            # self._draw_plan(plan)
             # Follow the plan to navigate.
             indented_print("Plan has %d steps", len(plan))
             for i, pose_2d in enumerate(plan):

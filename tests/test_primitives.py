@@ -151,7 +151,7 @@ def test_grasp():
                 scale=[0.3, 0.3, 0.3]
             ),
         "position": [-0.7, 0.5, 0.2],
-        "oreintation": [0, 0, 0, 1]
+        "orientation": [0, 0, 0, 1]
     }
     obj_2 = {
         "object": DatasetObject(
@@ -244,4 +244,3 @@ def test_open_revolute():
     primitives_args = [(obj_1['object'],)]    
 
     assert primitive_tester(categories, objects, primitives, primitives_args)
-

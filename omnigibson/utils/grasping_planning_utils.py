@@ -89,7 +89,14 @@ def get_grasp_position_for_open(robot, target_obj, should_open, relevant_joint=N
     random.shuffle(relevant_joints)
     selected_joint = None
     for joint in relevant_joints:
-        if joint.name == "bottom_cabinet:joint_j_link_2":
+        # from IPython import embed; embed()
+        # if joint.name == "drawer:joint_j_link_2":
+        #     selected_joint = joint
+        #     break
+        current_position = joint.get_state()[0][0]
+        joint_range = joint.upper_limit - joint.lower_limit
+        openness_fraction = (current_position - joint.lower_limit) / joint_range
+        if (should_open and openness_fraction < 0.8) or (not should_open and openness_fraction > 0.05):
             selected_joint = joint
             break
         # current_position = joint.get_state()[0][0]
@@ -126,7 +133,6 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
     assert np.isclose(np.max(np.abs(push_axis)), 1.0)  # Make sure we're aligned with a bb axis.
     push_axis_idx = np.argmax(np.abs(push_axis))
     canonical_push_axis = np.eye(3)[push_axis_idx]
-    # from IPython import embed; embed()
 
     # TODO: Need to figure out how to get the correct push direction.
     push_direction = np.sign(push_axis[push_axis_idx]) if should_open else -1 * np.sign(push_axis[push_axis_idx])
@@ -160,11 +166,11 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
         PRISMATIC_JOINT_FRACTION_ACROSS_SURFACE_AXIS_BOUNDS[1] * diff_lateral_pos_wrt_surface_center,
     )
     lateral_pos_wrt_surface_center = min_lateral_pos_wrt_surface_center + sampled_lateral_pos_wrt_min
-    grasp_position_in_bbox_frame = center_of_selected_surface_along_push_axis + lateral_pos_wrt_surface_center + canonical_push_axis * push_axis_closer_side_sign * 0.2
+    grasp_position_in_bbox_frame = center_of_selected_surface_along_push_axis + lateral_pos_wrt_surface_center
     grasp_quat_in_bbox_frame = T.quat_inverse(joint_orientation)
 
     # Now apply the grasp offset.
-    offset_grasp_pose_in_bbox_frame = (grasp_position_in_bbox_frame, grasp_quat_in_bbox_frame)
+    offset_grasp_pose_in_bbox_frame = (grasp_position_in_bbox_frame + canonical_push_axis * push_axis_closer_side_sign * 0.2, grasp_quat_in_bbox_frame)
     offset_grasp_pose_in_world_frame = T.pose_transform(
         bbox_center_in_world, bbox_quat_in_world, *offset_grasp_pose_in_bbox_frame
     )
@@ -173,8 +179,8 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
     target_joint_pos = relevant_joint.upper_limit if should_open else relevant_joint.lower_limit
     current_joint_pos = relevant_joint.get_state()[0][0]
     
-    required_pos_change = target_joint_pos - current_joint_pos
-    push_vector_in_bbox_frame = canonical_push_direction * required_pos_change
+    required_pos_change = (target_joint_pos - current_joint_pos) * 0.7
+    push_vector_in_bbox_frame = canonical_push_direction * abs(required_pos_change)
     target_hand_pos_in_bbox_frame = grasp_position_in_bbox_frame + push_vector_in_bbox_frame
     target_hand_pose_in_world_frame = T.pose_transform(
         bbox_center_in_world, bbox_quat_in_world, target_hand_pos_in_bbox_frame, grasp_quat_in_bbox_frame
@@ -185,7 +191,9 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
 
     # Decide whether a grasp is required. If approach direction and displacement are similar, no need to grasp.
     grasp_required = np.dot(push_vector_in_bbox_frame, canonical_push_axis * -push_axis_closer_side_sign) < 0
-    waypoints = interpolate_waypoints(offset_grasp_pose_in_world_frame, target_hand_pose_in_world_frame)
+    waypoint_start_pose = (offset_grasp_pose_in_world_frame[0] + approach_direction_in_world_frame * 0.2, offset_grasp_pose_in_world_frame[1])
+    waypoints = interpolate_waypoints(waypoint_start_pose, target_hand_pose_in_world_frame)
+
     return (
         offset_grasp_pose_in_world_frame,
         waypoints,
@@ -195,10 +203,12 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
         required_pos_change
     )
 
+
 def interpolate_waypoints(start_pose, end_pose):
     start_pos, start_orn = start_pose
     travel_distance = np.linalg.norm(end_pose[0] - start_pos)
-    num_poses = np.max([2, int(travel_distance / 0.01) + 1])
+    # num_poses = np.max([2, int(travel_distance / 0.01) + 1])
+    num_poses = 2
     pos_waypoints = np.linspace(start_pos, end_pose[0], num_poses)
 
     # Also interpolate the rotations
