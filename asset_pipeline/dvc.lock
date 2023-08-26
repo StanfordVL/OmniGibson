@@ -815,7 +815,7 @@ stages:
     deps:
     - path: b1k_pipeline/check_success_aggregate.py
       md5: 9f14dbc83e44b6840101c1edf8ac4728
-      size: 1287
+      size: 1252
     - path: cad/objects/batch-00/artifacts/object_list.json
       md5: dea9cfd97d652d7f5f5bd862c0320471
       size: 36067
@@ -1014,9 +1014,6 @@ stages:
     - path: cad/scenes/office_bike/artifacts/object_list.json
       md5: e404ecf6eaa433d014e15744cd9e1c8b
       size: 73670
-    - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
-      md5: bc5dafef423c33b8e8ae13a6e734a095
-      size: 251337
     - path: cad/scenes/office_large/artifacts/object_list.json
       md5: 25053653753a9128b4e629d576206ee3
       size: 256465
@@ -1060,8 +1057,8 @@ stages:
       md5: 68c0e4286cd416f41ed25f95b60d7af3
       size: 905040
     - path: params.yaml
-      md5: 6db6603bc2b49c414d0352f20dd448e5
-      size: 11207
+      md5: 67d9f2707473602d980b946efc178926
+      size: 10695
     outs:
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -1074,7 +1071,7 @@ stages:
       size: 0
     - path: b1k_pipeline/object_inventory.py
       md5: 34cd39a2e0a3f42168b0b6902340ba2c
-      size: 3394
+      size: 3318
     - path: cad/objects/batch-00/artifacts/object_list.json
       md5: dea9cfd97d652d7f5f5bd862c0320471
       size: 36067
@@ -1273,9 +1270,6 @@ stages:
     - path: cad/scenes/office_bike/artifacts/object_list.json
       md5: e404ecf6eaa433d014e15744cd9e1c8b
       size: 73670
-    - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
-      md5: bc5dafef423c33b8e8ae13a6e734a095
-      size: 251337
     - path: cad/scenes/office_large/artifacts/object_list.json
       md5: 25053653753a9128b4e629d576206ee3
       size: 256465
@@ -1319,12 +1313,12 @@ stages:
       md5: 68c0e4286cd416f41ed25f95b60d7af3
       size: 905040
     - path: params.yaml
-      md5: 6db6603bc2b49c414d0352f20dd448e5
-      size: 11207
+      md5: 67d9f2707473602d980b946efc178926
+      size: 10695
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 665706c6f5b37ddec98bb17b0979b7a6
-      size: 1342234
+      md5: 7b123d86b46812c409267e0da840780f
+      size: 1296359
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -4089,7 +4083,7 @@ stages:
     deps:
     - path: b1k_pipeline/check_success_aggregate.py
       md5: 9f14dbc83e44b6840101c1edf8ac4728
-      size: 1287
+      size: 1252
     - path: cad/objects/batch-00/artifacts/sanitycheck.json
       md5: 3a7464b1010e11fc97e8163350000cc3
       size: 141
@@ -4288,9 +4282,6 @@ stages:
     - path: cad/scenes/office_bike/artifacts/sanitycheck.json
       md5: 315fc993406b6da34721064b649dd6a6
       size: 1691
-    - path: cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
     - path: cad/scenes/office_large/artifacts/sanitycheck.json
       md5: 6801102d623b5466ca56cfa501ca0725
       size: 137
@@ -4334,8 +4325,8 @@ stages:
       md5: 50380e7647a34c18af72965e5ec76a1f
       size: 137
     - path: params.yaml
-      md5: 6db6603bc2b49c414d0352f20dd448e5
-      size: 11207
+      md5: 67d9f2707473602d980b946efc178926
+      size: 10695
     outs:
     - path: artifacts/pipeline/sanitycheck.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -7211,23 +7202,23 @@ stages:
       md5: e5715e03af0c009ce3dd15824ae052d9
       size: 12645
     - path: cad/objects/batch-00/artifacts/collision_meshes.zip
-      md5: cb818197249400980b1549ff4f865de7
-      size: 1319321
+      md5: 7f47a3e0283f67ab2c9d968ed59241ac
+      size: 1319323
     - path: cad/objects/batch-00/artifacts/collision_selection.json
       md5: c87d664564bd53fe5337b240b3a1d234
       size: 7173
     - path: cad/objects/batch-00/artifacts/meshes.zip
-      md5: 259a214b5e615c07884ceca14bb7a383
-      size: 219181718
+      md5: 1ebf6fca83510a1db20b425b2b20f193
+      size: 219216373
     - path: cad/objects/batch-00/artifacts/object_list.json
-      md5: a4b2a6c8b822e0c293c42405fd08c922
-      size: 35835
+      md5: dea9cfd97d652d7f5f5bd862c0320471
+      size: 36067
     - path: cad/objects/batch-01/artifacts/collision_meshes.zip
       md5: defd48778b69419017a8d7c230021cd8
       size: 1599438
     - path: cad/objects/batch-01/artifacts/collision_selection.json
-      md5: 55191d0bab2f372080535e8fdea611e0
-      size: 5913
+      md5: a14ed505bbefd18b2a8c3f79ff190461
+      size: 6042
     - path: cad/objects/batch-01/artifacts/meshes.zip
       md5: 7ffdea28e119ff5e676a703879fa569c
       size: 166996182
@@ -7235,17 +7226,17 @@ stages:
       md5: 23252bbc10f1f63b3f0650cac9169dbe
       size: 31214
     - path: cad/objects/batch-02/artifacts/collision_meshes.zip
-      md5: 1daa9bb350b5cc6a47748c4b0833af59
-      size: 1766385
+      md5: 47ac44ff7b5c06173d89c34533372a8b
+      size: 1572184
     - path: cad/objects/batch-02/artifacts/collision_selection.json
       md5: 983f344eccda07c98da99e280d755595
       size: 8964
     - path: cad/objects/batch-02/artifacts/meshes.zip
-      md5: 08adc9e1b0c0912de2514565a22e96cb
-      size: 267692436
+      md5: 672ff07e7a33088435dc2502230698eb
+      size: 267681980
     - path: cad/objects/batch-02/artifacts/object_list.json
-      md5: bcc821a30d34c024c839821f3fa346bf
-      size: 49518
+      md5: 0f69031dd4724eb33153cb6b23352422
+      size: 49709
     - path: cad/objects/batch-03/artifacts/collision_meshes.zip
       md5: ab9bfc95e3f8ef6efdf6a058e2bb0e7f
       size: 895302
@@ -7295,17 +7286,17 @@ stages:
       md5: 096dfb084c841c72ef10e6905273279a
       size: 25506
     - path: cad/objects/batch-07/artifacts/collision_meshes.zip
-      md5: 84a1448390059fd6bcd5db66f829544f
+      md5: ac80610843226fc2841f13939099c613
       size: 1108990
     - path: cad/objects/batch-07/artifacts/collision_selection.json
       md5: 98b73996893a0df763157c9ab49acb44
       size: 7120
     - path: cad/objects/batch-07/artifacts/meshes.zip
-      md5: dc017d30a886f351cc0b2c5cf3d639ee
-      size: 214290786
+      md5: 0ac4edefa46fc2e0d392bf41bcb92d55
+      size: 214088299
     - path: cad/objects/batch-07/artifacts/object_list.json
-      md5: ba6b0451e0ffabd48d37ae8c35dd032f
-      size: 38063
+      md5: 018426f0d19dfe215ed592bd7dc0ff36
+      size: 38270
     - path: cad/objects/batch-08/artifacts/collision_meshes.zip
       md5: c0a630181f431f4a5c6c4981a0cd266b
       size: 1207110
@@ -7319,17 +7310,17 @@ stages:
       md5: f7c7c07ac7bc264002147afab87f7a6a
       size: 34458
     - path: cad/objects/batch-09/artifacts/collision_meshes.zip
-      md5: 6479fb29e484dcc10f1f7004ecfb118b
-      size: 774723
+      md5: 0995a66c8482173f91b767dc7c419654
+      size: 774724
     - path: cad/objects/batch-09/artifacts/collision_selection.json
       md5: 59ae48182ad91b9ddb2f27ebe864354c
       size: 6257
     - path: cad/objects/batch-09/artifacts/meshes.zip
-      md5: d72129febde272040a1c31fd77408b7c
-      size: 169505511
+      md5: fbe952be5f20ff9cb4d47191e1e2ff33
+      size: 169751822
     - path: cad/objects/batch-09/artifacts/object_list.json
-      md5: 290718e68d3f569eab4dd1417c0ce93f
-      size: 33284
+      md5: a590a968eafb9b2dd0b5eee22f2cfe0f
+      size: 33460
     - path: cad/objects/batch-10/artifacts/collision_meshes.zip
       md5: 1d28bda3e6eb5cb0be7fac7ae735bd4e
       size: 1161258
@@ -7355,17 +7346,17 @@ stages:
       md5: fd200fd5396099f846b79fbbf47490fd
       size: 30929
     - path: cad/objects/batch-12/artifacts/collision_meshes.zip
-      md5: c7f0272a463e91641789034cbb0d862a
+      md5: f157d4c40cfa9266e51793fe9baa86b2
       size: 1174891
     - path: cad/objects/batch-12/artifacts/collision_selection.json
       md5: fc70faca7ec95337762b7f35fed3a343
       size: 6880
     - path: cad/objects/batch-12/artifacts/meshes.zip
-      md5: d6a1f0ef493bd006a253ff18ce92c23e
-      size: 210112928
+      md5: 429b7ddec20e95a74e0c9cc4ee94417c
+      size: 209978097
     - path: cad/objects/batch-12/artifacts/object_list.json
-      md5: c85ffc4d89a3b69d51132623e89755ad
-      size: 35027
+      md5: dd687b8b38574339b03c8e734b9f9ebf
+      size: 37054
     - path: cad/objects/batch-13/artifacts/collision_meshes.zip
       md5: 301465649c0e7a71b09297c844cc2b75
       size: 538367
@@ -7391,14 +7382,14 @@ stages:
       md5: e4eeb6f7558f30441f221d7a1cf61937
       size: 108434
     - path: cad/objects/legacy_batch-01/artifacts/collision_meshes.zip
-      md5: c2f13db030be73948dc9348a4c58822c
+      md5: 723cbeb7edfb5909421bd27d8589410d
       size: 3321615
     - path: cad/objects/legacy_batch-01/artifacts/collision_selection.json
       md5: 1481a457dafe87b9d7025d220dbd65a5
       size: 6819
     - path: cad/objects/legacy_batch-01/artifacts/meshes.zip
-      md5: 563401b93ec28458176246a26837b5f8
-      size: 222345376
+      md5: 22906e7c6a0b0204a4030c1f680529fb
+      size: 221970729
     - path: cad/objects/legacy_batch-01/artifacts/object_list.json
       md5: 0966500b8ced14ab65f362319d0381f6
       size: 27527
@@ -7427,14 +7418,14 @@ stages:
       md5: ebbad97997f9527f9456dbaaeaf3fd44
       size: 58095
     - path: cad/objects/legacy_batch-04/artifacts/collision_meshes.zip
-      md5: 80f83c90e876f406326e25dc1609a991
-      size: 3459145
+      md5: b37f57c05d189c892a130da4b27b8a81
+      size: 3459147
     - path: cad/objects/legacy_batch-04/artifacts/collision_selection.json
       md5: 651e4d4ff9ff5772bda0c214ba1cf296
       size: 17639
     - path: cad/objects/legacy_batch-04/artifacts/meshes.zip
-      md5: 0bcdfd36005d847948e119526d74f2f4
-      size: 301079959
+      md5: c54daa1a389b409c7df3e948dc25d947
+      size: 301510442
     - path: cad/objects/legacy_batch-04/artifacts/object_list.json
       md5: 5e8ccda1032bb0b4a9451b2b328c9145
       size: 85811
@@ -7511,17 +7502,17 @@ stages:
       md5: 3b34bdb55b252758849d0c18e9ed5740
       size: 36236
     - path: cad/objects/legacy_batch-11/artifacts/collision_meshes.zip
-      md5: 81a57a0a48ad0371988a9b24f16bf7e9
-      size: 899996
+      md5: 26d8e1cef9f97b732f4b2f5e985de711
+      size: 899998
     - path: cad/objects/legacy_batch-11/artifacts/collision_selection.json
       md5: c39aa7e9ac5c7715f162f586770b0d19
       size: 6662
     - path: cad/objects/legacy_batch-11/artifacts/meshes.zip
-      md5: aef1db121ecfc05e6c224c9023a26cd7
-      size: 157147898
+      md5: ef75c6fe6028ff2bff1e800ca5246021
+      size: 157313068
     - path: cad/objects/legacy_batch-11/artifacts/object_list.json
-      md5: 01c79f0464982e088bc6353178a2a013
-      size: 34717
+      md5: 7ed6d95f164cb77b55d98ce5452819bb
+      size: 34725
     - path: cad/objects/legacy_batch-12/artifacts/collision_meshes.zip
       md5: a01d92101318992d3301c2d0e1a47b93
       size: 131566
@@ -7787,29 +7778,29 @@ stages:
       md5: aebc38a246f0413e72ce076567fe7299
       size: 77671
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
-      md5: 154eab09a9b066ef90bb02c36bf59f3a
-      size: 2795415
+      md5: fe741f45ee24b13ab35905b975115a30
+      size: 2732050
     - path: 
         cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 3091c85bf44efc10504187361c8d7fb1
       size: 8670
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
-      md5: 73661ed63148882227c017ad3534e333
-      size: 130409344
+      md5: 73760f32f44cf9775a99583f737fb007
+      size: 130569234
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
-      md5: 832181b92c0520389c62f17f9a1c07f0
-      size: 79264
+      md5: 415243254044e7c2e639d342d90106d0
+      size: 79658
     - path: cad/scenes/commercial_kitchen_pans/artifacts/collision_meshes.zip
-      md5: 56b6388564a37cde434403cea9e7cd57
-      size: 1489955
+      md5: d2a47e5abb73f6083c8f6b2445c13d29
+      size: 1489954
     - path: cad/scenes/commercial_kitchen_pans/artifacts/collision_selection.json
       md5: f8be3f31c02aaaf3fb252b02dcf47336
       size: 3474
     - path: cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
-      md5: a0cd508f3043308bbb9437a346664da5
-      size: 183104258
+      md5: e346c06ff12b93dc6bd5126c16a11231
+      size: 182993038
     - path: cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-      md5: edc850f74bbbf56a726fb1335b5bc082
+      md5: 1d6ae5bd93e197383cdea0139aac6e90
       size: 108725
     - path: cad/scenes/gates_bedroom/artifacts/collision_meshes.zip
       md5: a69bacd83c566162230c9793114031f3
@@ -7836,23 +7827,23 @@ stages:
       md5: bd4166c5190315e98096db2a5ae2a159
       size: 524500
     - path: cad/scenes/grocery_store_cafe/artifacts/collision_meshes.zip
-      md5: 732311cfb495eab21d9ca68067727018
-      size: 1294259
+      md5: 6ee896d0a6c568325d374c7592f012f8
+      size: 1238185
     - path: cad/scenes/grocery_store_cafe/artifacts/collision_selection.json
-      md5: 5ac6ad72ab062981e6d99e3898ed5395
-      size: 6892
+      md5: 680090668a7f4c5c809bf6e4fa90ea55
+      size: 6832
     - path: cad/scenes/grocery_store_cafe/artifacts/meshes.zip
-      md5: 2f1883ac95342bd6abafa1a62b1d7330
-      size: 1078075176
+      md5: 208fc25e86fbaf7d2ef8b58cb3d86160
+      size: 1074625310
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
-      md5: 0d465c8a9ce50e00dba7bda947f3fdd4
-      size: 1042598
+      md5: 6f8328f8404827837716d7de04d9f85c
+      size: 1042589
     - path: cad/scenes/grocery_store_convenience/artifacts/collision_meshes.zip
-      md5: bd6113ebfe8434c3895fc5835c209fd4
-      size: 1462824
+      md5: fada7af736e14cfbdd014a367af460ab
+      size: 1533271
     - path: cad/scenes/grocery_store_convenience/artifacts/collision_selection.json
-      md5: 8ca12b5086092dd39375c1a9bd20c5b2
-      size: 10426
+      md5: 4fa8bb61beb3329608d80490def7b377
+      size: 10501
     - path: cad/scenes/grocery_store_convenience/artifacts/meshes.zip
       md5: 1116e93202d3db21511e1722af2979e7
       size: 136133468
@@ -7860,17 +7851,17 @@ stages:
       md5: 1b7c913e24c400a9f5301d1423a82ca6
       size: 314781
     - path: cad/scenes/grocery_store_half_stocked/artifacts/collision_meshes.zip
-      md5: fc0a2077f4f1989053a8364a1f69f6a0
-      size: 1624581
+      md5: e6fc432280c2522f3ed3db724050354e
+      size: 1023310
     - path: cad/scenes/grocery_store_half_stocked/artifacts/collision_selection.json
-      md5: 07ce78b8ecfcdd78bf57046dd75b1737
-      size: 7926
+      md5: 73d30ed32ebe7df56274b3e6baa8b0d5
+      size: 9121
     - path: cad/scenes/grocery_store_half_stocked/artifacts/meshes.zip
-      md5: afd29cafcb9b01e8df436b7bfed69d12
-      size: 119878459
+      md5: 71a130e58c517c457691bd6e07b2e7a3
+      size: 126218082
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
-      md5: ea2e500e0e0bf520bbe04bfbe85e83a6
-      size: 489736
+      md5: f04535fd679d93055d4a6bcab30a01ba
+      size: 492184
     - path: cad/scenes/hall_arch_wood/artifacts/collision_meshes.zip
       md5: edfad6bc4958ca7400fd3287c79d2772
       size: 229843
@@ -7908,11 +7899,11 @@ stages:
       md5: a8090ff152a823223c8ab64dc54c5fa8
       size: 13468
     - path: cad/scenes/hall_train_station/artifacts/collision_meshes.zip
-      md5: 804e85fc85a511aebf3d37f472ec1dd8
-      size: 437878
+      md5: 19cb5fef7c1d610d07841c8631b8a2b5
+      size: 152023
     - path: cad/scenes/hall_train_station/artifacts/collision_selection.json
-      md5: f3cafc997d77367e09c3c554059c9b77
-      size: 1253
+      md5: 47581dd999f65beb87e69fa125c1bc43
+      size: 1349
     - path: cad/scenes/hall_train_station/artifacts/meshes.zip
       md5: d38084d3e4af1c02dfcfe1e58b5fb6a9
       size: 65117676
@@ -7920,16 +7911,16 @@ stages:
       md5: 1b005ae5172bd0cfeaf1fe2bbf11ea27
       size: 18936
     - path: cad/scenes/hotel_gym_spa/artifacts/collision_meshes.zip
-      md5: fcbaf076d94bb518544dcd921f23cd11
-      size: 1651897
+      md5: c4f516e35ca72c79551e3444688026dd
+      size: 1651895
     - path: cad/scenes/hotel_gym_spa/artifacts/collision_selection.json
       md5: 55490cdfcaf938d7f947630d2973c16f
       size: 10679
     - path: cad/scenes/hotel_gym_spa/artifacts/meshes.zip
-      md5: 1f9a7d7a2360db844566fc8c0fb7b08e
-      size: 409757574
+      md5: a8cadbbb85e9591a61d8ae94fa4f0dac
+      size: 411922041
     - path: cad/scenes/hotel_gym_spa/artifacts/object_list.json
-      md5: 6f79fcbe7798f33045eb60800c5f727e
+      md5: b94742596cfd4638ed1fc4300953e026
       size: 127295
     - path: cad/scenes/hotel_suite_large/artifacts/collision_meshes.zip
       md5: 8c3f07740adfca5317aabb4d0f1ea754
@@ -7956,41 +7947,41 @@ stages:
       md5: e30d14323409dfe50be03da97f27f19a
       size: 18165
     - path: cad/scenes/house_double_floor_lower/artifacts/collision_meshes.zip
-      md5: ff9cf6753adfe33e498981f807ff4dba
-      size: 2607419
+      md5: 60e56f6b7a6ca8098c297f2fe4e28383
+      size: 2607417
     - path: cad/scenes/house_double_floor_lower/artifacts/collision_selection.json
       md5: 90141533c444d9b89eed4329116ef66f
       size: 12457
     - path: cad/scenes/house_double_floor_lower/artifacts/meshes.zip
-      md5: c8461cfe5ba1fb5e8c81b972fc4ad29c
-      size: 566841376
+      md5: c4684528080d5f97e65cf86d1b60a9d2
+      size: 566961092
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
-      md5: 252a6ac803204a441ab698a5b65509a9
+      md5: 913d5ddbb0c354534080f7d652c49356
       size: 111769
     - path: cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
-      md5: e059773a8e8fb8987d9b4afefc9ff042
-      size: 2187033
+      md5: 8821bad0432070b645670b0fbcd0f04e
+      size: 2187032
     - path: cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
       md5: 0e6b17915a8dbd462934e30dbb369942
       size: 13627
     - path: cad/scenes/house_double_floor_upper/artifacts/meshes.zip
-      md5: 56ca6be7ba8b65c1f79d7d21c0f28ff3
-      size: 414690704
+      md5: 1ad89589fef2310426d4de3b7900544d
+      size: 415301935
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
-      md5: a1b2205c972ab3b5bdbd865bcefb972c
-      size: 104616
+      md5: e60320c9a2287441e1e1855efcc0fd08
+      size: 104615
     - path: cad/scenes/house_single_floor/artifacts/collision_meshes.zip
-      md5: 977d5f75785ebca124c9df3d32bd37f5
-      size: 6252842
+      md5: 185f5fa87a36ffee8830879598bbabce
+      size: 6252841
     - path: cad/scenes/house_single_floor/artifacts/collision_selection.json
       md5: 354c1fc95b314308c71af0974c1775ea
       size: 44518
     - path: cad/scenes/house_single_floor/artifacts/meshes.zip
-      md5: 025a62de87adf49490b00b9e4dafee6a
-      size: 1526890468
+      md5: 350fbebff0ddb7b373d3dbefb845dfd9
+      size: 1538099505
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
-      md5: cd925b46d1ff43742a2d54882b9048c0
-      size: 314354
+      md5: 9de72c71a2f9beade565281a1c34f26c
+      size: 318058
     - path: cad/scenes/office_bike/artifacts/collision_meshes.zip
       md5: 8990c62903014d1aded0c5da40517845
       size: 973660
@@ -8004,17 +7995,17 @@ stages:
       md5: e404ecf6eaa433d014e15744cd9e1c8b
       size: 73670
     - path: cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
-      md5: 465f1c78d9445c699799780474a4b91a
+      md5: befdf4c41f4e427dc803d2f691ef190a
       size: 2200998
     - path: cad/scenes/office_cubicles_left/artifacts/collision_selection.json
-      md5: 52db9b85b49b3fc167b44647d28367c5
-      size: 4118
+      md5: fefc04af27276c1be9e82154864aeba3
+      size: 11875
     - path: cad/scenes/office_cubicles_left/artifacts/meshes.zip
-      md5: 01d0b0fb9833e1142cf1d4f3570eb4f2
-      size: 943710153
+      md5: f1387e3704a9fcb1c82e808c4bf7b82c
+      size: 945669717
     - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
-      md5: aca7d4da3c59cb8175f904b43bf3612e
-      size: 248216
+      md5: bc5dafef423c33b8e8ae13a6e734a095
+      size: 251337
     - path: cad/scenes/office_large/artifacts/collision_meshes.zip
       md5: 30319f0455fff26c2a77f4d0cbbf4cf6
       size: 1455429
@@ -8052,29 +8043,29 @@ stages:
       md5: 4cd3b70278c659b1afeb4703673b9d2c
       size: 17839
     - path: cad/scenes/public_restroom_brown/artifacts/collision_meshes.zip
-      md5: fafec4660858e37d7675b88b4e56785e
-      size: 164429
+      md5: afad432233f7c9af3be7a0c59c420e22
+      size: 164427
     - path: cad/scenes/public_restroom_brown/artifacts/collision_selection.json
       md5: da42c4470b5761d3d67ad2e3d0ea0305
       size: 1694
     - path: cad/scenes/public_restroom_brown/artifacts/meshes.zip
-      md5: 02b14aa97f872e1a2f171f5d83535a8f
-      size: 16527616
+      md5: 8c61d4d4e2231af8f74c4bce1916088a
+      size: 16521625
     - path: cad/scenes/public_restroom_brown/artifacts/object_list.json
-      md5: 5667c5653c51bc4bde0a46b0e135a160
-      size: 19247
+      md5: f9608f74446969f9a672719e448dc61d
+      size: 19450
     - path: cad/scenes/public_restroom_futuristic/artifacts/collision_meshes.zip
-      md5: 61f91225002156b13d078cbaaff5e28e
-      size: 148249
+      md5: da6f2417a699165d0e5fd4a03717d992
+      size: 148250
     - path: cad/scenes/public_restroom_futuristic/artifacts/collision_selection.json
       md5: dfbfe4027275dfa70dc831eea7807c46
       size: 1859
     - path: cad/scenes/public_restroom_futuristic/artifacts/meshes.zip
-      md5: 1ea020328898d433aabdcd378a8f4d87
-      size: 48548464
+      md5: 5de38df11e73ea0fd4614e0aa16651e6
+      size: 48578816
     - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.json
-      md5: b12ba4e80bb8fc46cffa3fe7b11ff9df
-      size: 28430
+      md5: e7c2f3ba58d2dff2af45cb306931d673
+      size: 28633
     - path: cad/scenes/public_restroom_marble/artifacts/collision_meshes.zip
       md5: 524daf2d7dd3775b7ec99c1f66b3c07e
       size: 119629
@@ -8088,17 +8079,17 @@ stages:
       md5: a41b96301b7fd7800c465dba0143479e
       size: 14632
     - path: cad/scenes/public_restroom_white/artifacts/collision_meshes.zip
-      md5: aef14d37676ccea6d4ef773bd697b7e6
-      size: 269321
+      md5: 62823301f486fa962d121629fe477ab7
+      size: 269322
     - path: cad/scenes/public_restroom_white/artifacts/collision_selection.json
       md5: 5b28d1007f8a36b060dd80ae9786ef94
       size: 1414
     - path: cad/scenes/public_restroom_white/artifacts/meshes.zip
-      md5: 23c286ea29dd6a3fa105a2b1ddd4475d
-      size: 49189072
+      md5: c38b05e5eadcdf12f4386ee4daed939e
+      size: 49213956
     - path: cad/scenes/public_restroom_white/artifacts/object_list.json
-      md5: 38f0cf47a4c854eda33a0e390f7e613a
-      size: 21410
+      md5: 58a12ecf378e5f3ab528591151f62499
+      size: 21613
     - path: cad/scenes/restaurant_asian/artifacts/collision_meshes.zip
       md5: 90793b3e67b6d55cc5aadd58d583141a
       size: 863018
@@ -8136,11 +8127,11 @@ stages:
       md5: 2d5d18c4934e435682ba6e54b77a0775
       size: 68324
     - path: cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
-      md5: 59230c65f4f1d51ec96aa3bfe19d6809
-      size: 1072647
+      md5: 46a73b770c7ec72e7e808159ca21516a
+      size: 827677
     - path: cad/scenes/restaurant_diner/artifacts/collision_selection.json
-      md5: f01be92f5846a27ad3b37943ab6a0739
-      size: 4617
+      md5: 645e0c49af65c79737b53ca0110eecd3
+      size: 4683
     - path: cad/scenes/restaurant_diner/artifacts/meshes.zip
       md5: 3f427dbfd1130e026963995625cabe86
       size: 84873472
@@ -8185,23 +8176,23 @@ stages:
       size: 905040
     outs:
     - path: artifacts/parallels/objects.zip
-      md5: a6b1b145555cf27dad16e1bf2c86606b
-      size: 16884737651
+      md5: cf7bbab5417d9e208349368f9a7177cd
+      size: 16987572767
     - path: artifacts/pipeline/export_objs.json
-      md5: 7e819be67229138cbded07b164d5b3c5
-      size: 8700
+      md5: 10bceeacded310bb4f13b2bf6efc71ba
+      size: 3897
   aggregate_metadata:
     cmd: python -m b1k_pipeline.aggregate_metadata
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: b1da8a14ccd1d7a79d36f54122cc241e
-      size: 80668
+      md5: caf31b345f8b7704992be45e4b8d08ca
+      size: 78999
     - path: artifacts/pipeline/collision_average_volumes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: artifacts/pipeline/object_inventory.json
-      md5: bff7773f3ef77d10bc58be2fef54910b
-      size: 1340310
+      md5: 7b123d86b46812c409267e0da840780f
+      size: 1296359
     - path: b1k_pipeline/aggregate_metadata.py
       md5: 85cc7ee37eb73b55ffa25d157c6fdd13
       size: 5874
@@ -8216,11 +8207,11 @@ stages:
       size: 562
     outs:
     - path: artifacts/parallels/metadata.zip
-      md5: 4ec0045d1d1cab592e022cacae24ac7f
-      size: 62810
+      md5: 0904e1654ea18cb79075ce93288ee92c
+      size: 62668
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: 9975399c7abde442599ec66531497f59
-      size: 113218
+      md5: bb85a69254e9f9ee43a09e5a9717d169
+      size: 112829
   aggregate_metadata_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/aggregate_metadata.json
       artifacts/pipeline/aggregate_metadata.success
@@ -8711,13 +8702,13 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/scene.urdf
-      md5: 68d0cfa0362ddac5cf7b2ab5554cffc3
+      md5: 50c47f50fcdc7bff65aeb286cc7a1224
       size: 31383
     - path: cad/scenes/commercial_kitchen_pans/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/commercial_kitchen_pans/artifacts/scene.urdf
-      md5: e63cdca09d0c1142db43d100fb5df632
+      md5: e367bf557eb06a7020964beedbbab8a8
       size: 18007
     - path: cad/scenes/gates_bedroom/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -8735,7 +8726,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/grocery_store_cafe/artifacts/scene.urdf
-      md5: cc458c9095e16e5cfed30fd350ef5891
+      md5: 9420972294c3431fbed33373d6bcc479
       size: 54151
     - path: cad/scenes/grocery_store_convenience/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -8777,7 +8768,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/hotel_gym_spa/artifacts/scene.urdf
-      md5: ea7238c4122c0f810e76b486d107e20a
+      md5: 01d54cb1e617e7ea2c302d056f6563b4
       size: 111318
     - path: cad/scenes/hotel_suite_large/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -8801,26 +8792,20 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/house_double_floor_upper/artifacts/scene.urdf
-      md5: a80fe63be380d9b5881d4e98c518f4cb
+      md5: fa4eec2bf8041eae425b36e2505f7b19
       size: 71872
     - path: cad/scenes/house_single_floor/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/house_single_floor/artifacts/scene.urdf
-      md5: b56e87f0a14d49206eebf14eff93f55a
-      size: 229697
+      md5: 32d62c58f2af27c99d719792a4a4f2e7
+      size: 233021
     - path: cad/scenes/office_bike/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/office_bike/artifacts/scene.urdf
       md5: de60b6804640156d50400d2514f1edfa
       size: 37534
-    - path: cad/scenes/office_cubicles_left/artifacts/export_scene.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
-    - path: cad/scenes/office_cubicles_left/artifacts/scene.urdf
-      md5: a9eb082d85530ace4fefdbf6b7fbbc1b
-      size: 237322
     - path: cad/scenes/office_large/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8843,7 +8828,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/public_restroom_brown/artifacts/scene.urdf
-      md5: 9acf9842cd4bb76e4b4a664327f947a1
+      md5: 62f2a01854fc006f43afbc989bcf1811
       size: 25820
     - path: cad/scenes/public_restroom_futuristic/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -8906,12 +8891,12 @@ stages:
       md5: e56428e266de516755d548649a2fa83d
       size: 710291
     - path: params.yaml
-      md5: 6db6603bc2b49c414d0352f20dd448e5
-      size: 10785
+      md5: 67d9f2707473602d980b946efc178926
+      size: 10695
     outs:
     - path: artifacts/parallels/scenes.zip
-      md5: c75010f5152788354587b328eaa020ba
-      size: 534006
+      md5: 4ba8d732b1d8560fed233dd2be5a9411
+      size: 506591
     - path: artifacts/pipeline/aggregate_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9061,14 +9046,14 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/house_double_floor_upper/artifacts/meshes.zip
-      md5: 56ca6be7ba8b65c1f79d7d21c0f28ff3
-      size: 414690704
+      md5: 1ad89589fef2310426d4de3b7900544d
+      size: 415301935
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/house_double_floor_upper/artifacts/scene.urdf
-      md5: a80fe63be380d9b5881d4e98c518f4cb
+      md5: fa4eec2bf8041eae425b36e2505f7b19
       size: 71872
   export_scene@scenes/house_double_floor_lower:
     cmd: python -m b1k_pipeline.export_scene scenes/house_double_floor_lower
@@ -9083,8 +9068,8 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/house_double_floor_lower/artifacts/meshes.zip
-      md5: c8461cfe5ba1fb5e8c81b972fc4ad29c
-      size: 566841376
+      md5: c4684528080d5f97e65cf86d1b60a9d2
+      size: 566961092
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -9127,14 +9112,14 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/grocery_store_cafe/artifacts/meshes.zip
-      md5: 2f1883ac95342bd6abafa1a62b1d7330
-      size: 1078075176
+      md5: 208fc25e86fbaf7d2ef8b58cb3d86160
+      size: 1074625310
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/grocery_store_cafe/artifacts/scene.urdf
-      md5: cc458c9095e16e5cfed30fd350ef5891
+      md5: 9420972294c3431fbed33373d6bcc479
       size: 54151
   export_scene@scenes/Pomaria_0_garden:
     cmd: python -m b1k_pipeline.export_scene scenes/Pomaria_0_garden
@@ -9287,8 +9272,8 @@ stages:
     cmd: python -m b1k_pipeline.collision_selection_validation
     deps:
     - path: b1k_pipeline/collision_selection_validation.py
-      md5: 0c83b482a68c455edac1fae0174c85d0
-      size: 7753
+      md5: 1b232a1530704f228948a0c68f32cbbb
+      size: 7804
     - path: cad/objects/batch-00/artifacts/collision_meshes.zip
       md5: 7f47a3e0283f67ab2c9d968ed59241ac
       size: 1319323
@@ -9942,8 +9927,8 @@ stages:
       md5: e6fc432280c2522f3ed3db724050354e
       size: 1023310
     - path: cad/scenes/grocery_store_half_stocked/artifacts/collision_selection.json
-      md5: 726eed31e765f2958582bea652766990
-      size: 7985
+      md5: 73d30ed32ebe7df56274b3e6baa8b0d5
+      size: 9121
     - path: cad/scenes/grocery_store_half_stocked/artifacts/meshes.zip
       md5: 71a130e58c517c457691bd6e07b2e7a3
       size: 126218082
@@ -10264,15 +10249,15 @@ stages:
       size: 905040
     outs:
     - path: artifacts/pipeline/collision_selection_validation.json
-      md5: 97dc12bebd5fa2377e01fa57cc4fe22d
-      size: 3297
+      md5: bc26358c07fe083eb89b9bda66747664
+      size: 41
   collision_selection_validation_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_selection_validation.json
       artifacts/pipeline/collision_selection_validation.success
     deps:
     - path: artifacts/pipeline/collision_selection_validation.json
-      md5: 3aecb5613ed8e7209c5f5316e63b02ea
-      size: 4147
+      md5: bc26358c07fe083eb89b9bda66747664
+      size: 41
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 707
@@ -10290,23 +10275,23 @@ stages:
       md5: a116c685621225b157d98a7eed116e47
       size: 2712
     - path: cad/objects/batch-00/artifacts/collision_meshes.zip
-      md5: cb818197249400980b1549ff4f865de7
-      size: 1319321
+      md5: 7f47a3e0283f67ab2c9d968ed59241ac
+      size: 1319323
     - path: cad/objects/batch-00/artifacts/collision_selection.json
       md5: c87d664564bd53fe5337b240b3a1d234
       size: 7173
     - path: cad/objects/batch-00/artifacts/meshes.zip
-      md5: 259a214b5e615c07884ceca14bb7a383
-      size: 219181718
+      md5: 1ebf6fca83510a1db20b425b2b20f193
+      size: 219216373
     - path: cad/objects/batch-00/artifacts/object_list.json
-      md5: a4b2a6c8b822e0c293c42405fd08c922
-      size: 35835
+      md5: dea9cfd97d652d7f5f5bd862c0320471
+      size: 36067
     - path: cad/objects/batch-01/artifacts/collision_meshes.zip
       md5: defd48778b69419017a8d7c230021cd8
       size: 1599438
     - path: cad/objects/batch-01/artifacts/collision_selection.json
-      md5: 55191d0bab2f372080535e8fdea611e0
-      size: 5913
+      md5: a14ed505bbefd18b2a8c3f79ff190461
+      size: 6042
     - path: cad/objects/batch-01/artifacts/meshes.zip
       md5: 7ffdea28e119ff5e676a703879fa569c
       size: 166996182
@@ -10314,17 +10299,17 @@ stages:
       md5: 23252bbc10f1f63b3f0650cac9169dbe
       size: 31214
     - path: cad/objects/batch-02/artifacts/collision_meshes.zip
-      md5: 1daa9bb350b5cc6a47748c4b0833af59
-      size: 1766385
+      md5: 47ac44ff7b5c06173d89c34533372a8b
+      size: 1572184
     - path: cad/objects/batch-02/artifacts/collision_selection.json
       md5: 983f344eccda07c98da99e280d755595
       size: 8964
     - path: cad/objects/batch-02/artifacts/meshes.zip
-      md5: 08adc9e1b0c0912de2514565a22e96cb
-      size: 267692436
+      md5: 672ff07e7a33088435dc2502230698eb
+      size: 267681980
     - path: cad/objects/batch-02/artifacts/object_list.json
-      md5: bcc821a30d34c024c839821f3fa346bf
-      size: 49518
+      md5: 0f69031dd4724eb33153cb6b23352422
+      size: 49709
     - path: cad/objects/batch-03/artifacts/collision_meshes.zip
       md5: ab9bfc95e3f8ef6efdf6a058e2bb0e7f
       size: 895302
@@ -10374,17 +10359,17 @@ stages:
       md5: 096dfb084c841c72ef10e6905273279a
       size: 25506
     - path: cad/objects/batch-07/artifacts/collision_meshes.zip
-      md5: 84a1448390059fd6bcd5db66f829544f
+      md5: ac80610843226fc2841f13939099c613
       size: 1108990
     - path: cad/objects/batch-07/artifacts/collision_selection.json
       md5: 98b73996893a0df763157c9ab49acb44
       size: 7120
     - path: cad/objects/batch-07/artifacts/meshes.zip
-      md5: dc017d30a886f351cc0b2c5cf3d639ee
-      size: 214290786
+      md5: 0ac4edefa46fc2e0d392bf41bcb92d55
+      size: 214088299
     - path: cad/objects/batch-07/artifacts/object_list.json
-      md5: ba6b0451e0ffabd48d37ae8c35dd032f
-      size: 38063
+      md5: 018426f0d19dfe215ed592bd7dc0ff36
+      size: 38270
     - path: cad/objects/batch-08/artifacts/collision_meshes.zip
       md5: c0a630181f431f4a5c6c4981a0cd266b
       size: 1207110
@@ -10398,17 +10383,17 @@ stages:
       md5: f7c7c07ac7bc264002147afab87f7a6a
       size: 34458
     - path: cad/objects/batch-09/artifacts/collision_meshes.zip
-      md5: 6479fb29e484dcc10f1f7004ecfb118b
-      size: 774723
+      md5: 0995a66c8482173f91b767dc7c419654
+      size: 774724
     - path: cad/objects/batch-09/artifacts/collision_selection.json
       md5: 59ae48182ad91b9ddb2f27ebe864354c
       size: 6257
     - path: cad/objects/batch-09/artifacts/meshes.zip
-      md5: d72129febde272040a1c31fd77408b7c
-      size: 169505511
+      md5: fbe952be5f20ff9cb4d47191e1e2ff33
+      size: 169751822
     - path: cad/objects/batch-09/artifacts/object_list.json
-      md5: 290718e68d3f569eab4dd1417c0ce93f
-      size: 33284
+      md5: a590a968eafb9b2dd0b5eee22f2cfe0f
+      size: 33460
     - path: cad/objects/batch-10/artifacts/collision_meshes.zip
       md5: 1d28bda3e6eb5cb0be7fac7ae735bd4e
       size: 1161258
@@ -10434,17 +10419,17 @@ stages:
       md5: fd200fd5396099f846b79fbbf47490fd
       size: 30929
     - path: cad/objects/batch-12/artifacts/collision_meshes.zip
-      md5: c7f0272a463e91641789034cbb0d862a
+      md5: f157d4c40cfa9266e51793fe9baa86b2
       size: 1174891
     - path: cad/objects/batch-12/artifacts/collision_selection.json
       md5: fc70faca7ec95337762b7f35fed3a343
       size: 6880
     - path: cad/objects/batch-12/artifacts/meshes.zip
-      md5: d6a1f0ef493bd006a253ff18ce92c23e
-      size: 210112928
+      md5: 429b7ddec20e95a74e0c9cc4ee94417c
+      size: 209978097
     - path: cad/objects/batch-12/artifacts/object_list.json
-      md5: c85ffc4d89a3b69d51132623e89755ad
-      size: 35027
+      md5: dd687b8b38574339b03c8e734b9f9ebf
+      size: 37054
     - path: cad/objects/batch-13/artifacts/collision_meshes.zip
       md5: 301465649c0e7a71b09297c844cc2b75
       size: 538367
@@ -10470,14 +10455,14 @@ stages:
       md5: e4eeb6f7558f30441f221d7a1cf61937
       size: 108434
     - path: cad/objects/legacy_batch-01/artifacts/collision_meshes.zip
-      md5: c2f13db030be73948dc9348a4c58822c
+      md5: 723cbeb7edfb5909421bd27d8589410d
       size: 3321615
     - path: cad/objects/legacy_batch-01/artifacts/collision_selection.json
       md5: 1481a457dafe87b9d7025d220dbd65a5
       size: 6819
     - path: cad/objects/legacy_batch-01/artifacts/meshes.zip
-      md5: 563401b93ec28458176246a26837b5f8
-      size: 222345376
+      md5: 22906e7c6a0b0204a4030c1f680529fb
+      size: 221970729
     - path: cad/objects/legacy_batch-01/artifacts/object_list.json
       md5: 0966500b8ced14ab65f362319d0381f6
       size: 27527
@@ -10506,14 +10491,14 @@ stages:
       md5: ebbad97997f9527f9456dbaaeaf3fd44
       size: 58095
     - path: cad/objects/legacy_batch-04/artifacts/collision_meshes.zip
-      md5: 80f83c90e876f406326e25dc1609a991
-      size: 3459145
+      md5: b37f57c05d189c892a130da4b27b8a81
+      size: 3459147
     - path: cad/objects/legacy_batch-04/artifacts/collision_selection.json
       md5: 651e4d4ff9ff5772bda0c214ba1cf296
       size: 17639
     - path: cad/objects/legacy_batch-04/artifacts/meshes.zip
-      md5: 0bcdfd36005d847948e119526d74f2f4
-      size: 301079959
+      md5: c54daa1a389b409c7df3e948dc25d947
+      size: 301510442
     - path: cad/objects/legacy_batch-04/artifacts/object_list.json
       md5: 5e8ccda1032bb0b4a9451b2b328c9145
       size: 85811
@@ -10590,17 +10575,17 @@ stages:
       md5: 3b34bdb55b252758849d0c18e9ed5740
       size: 36236
     - path: cad/objects/legacy_batch-11/artifacts/collision_meshes.zip
-      md5: 81a57a0a48ad0371988a9b24f16bf7e9
-      size: 899996
+      md5: 26d8e1cef9f97b732f4b2f5e985de711
+      size: 899998
     - path: cad/objects/legacy_batch-11/artifacts/collision_selection.json
       md5: c39aa7e9ac5c7715f162f586770b0d19
       size: 6662
     - path: cad/objects/legacy_batch-11/artifacts/meshes.zip
-      md5: aef1db121ecfc05e6c224c9023a26cd7
-      size: 157147898
+      md5: ef75c6fe6028ff2bff1e800ca5246021
+      size: 157313068
     - path: cad/objects/legacy_batch-11/artifacts/object_list.json
-      md5: 01c79f0464982e088bc6353178a2a013
-      size: 34717
+      md5: 7ed6d95f164cb77b55d98ce5452819bb
+      size: 34725
     - path: cad/objects/legacy_batch-12/artifacts/collision_meshes.zip
       md5: a01d92101318992d3301c2d0e1a47b93
       size: 131566
@@ -10866,29 +10851,29 @@ stages:
       md5: aebc38a246f0413e72ce076567fe7299
       size: 77671
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
-      md5: 154eab09a9b066ef90bb02c36bf59f3a
-      size: 2795415
+      md5: fe741f45ee24b13ab35905b975115a30
+      size: 2732050
     - path: 
         cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 3091c85bf44efc10504187361c8d7fb1
       size: 8670
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
-      md5: 73661ed63148882227c017ad3534e333
-      size: 130409344
+      md5: 73760f32f44cf9775a99583f737fb007
+      size: 130569234
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
-      md5: 832181b92c0520389c62f17f9a1c07f0
-      size: 79264
+      md5: 415243254044e7c2e639d342d90106d0
+      size: 79658
     - path: cad/scenes/commercial_kitchen_pans/artifacts/collision_meshes.zip
-      md5: 56b6388564a37cde434403cea9e7cd57
-      size: 1489955
+      md5: d2a47e5abb73f6083c8f6b2445c13d29
+      size: 1489954
     - path: cad/scenes/commercial_kitchen_pans/artifacts/collision_selection.json
       md5: f8be3f31c02aaaf3fb252b02dcf47336
       size: 3474
     - path: cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
-      md5: a0cd508f3043308bbb9437a346664da5
-      size: 183104258
+      md5: e346c06ff12b93dc6bd5126c16a11231
+      size: 182993038
     - path: cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-      md5: edc850f74bbbf56a726fb1335b5bc082
+      md5: 1d6ae5bd93e197383cdea0139aac6e90
       size: 108725
     - path: cad/scenes/gates_bedroom/artifacts/collision_meshes.zip
       md5: a69bacd83c566162230c9793114031f3
@@ -10915,23 +10900,23 @@ stages:
       md5: bd4166c5190315e98096db2a5ae2a159
       size: 524500
     - path: cad/scenes/grocery_store_cafe/artifacts/collision_meshes.zip
-      md5: 732311cfb495eab21d9ca68067727018
-      size: 1294259
+      md5: 6ee896d0a6c568325d374c7592f012f8
+      size: 1238185
     - path: cad/scenes/grocery_store_cafe/artifacts/collision_selection.json
-      md5: 5ac6ad72ab062981e6d99e3898ed5395
-      size: 6892
+      md5: 680090668a7f4c5c809bf6e4fa90ea55
+      size: 6832
     - path: cad/scenes/grocery_store_cafe/artifacts/meshes.zip
-      md5: 2f1883ac95342bd6abafa1a62b1d7330
-      size: 1078075176
+      md5: 208fc25e86fbaf7d2ef8b58cb3d86160
+      size: 1074625310
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
-      md5: 0d465c8a9ce50e00dba7bda947f3fdd4
-      size: 1042598
+      md5: 6f8328f8404827837716d7de04d9f85c
+      size: 1042589
     - path: cad/scenes/grocery_store_convenience/artifacts/collision_meshes.zip
-      md5: bd6113ebfe8434c3895fc5835c209fd4
-      size: 1462824
+      md5: fada7af736e14cfbdd014a367af460ab
+      size: 1533271
     - path: cad/scenes/grocery_store_convenience/artifacts/collision_selection.json
-      md5: 8ca12b5086092dd39375c1a9bd20c5b2
-      size: 10426
+      md5: 4fa8bb61beb3329608d80490def7b377
+      size: 10501
     - path: cad/scenes/grocery_store_convenience/artifacts/meshes.zip
       md5: 1116e93202d3db21511e1722af2979e7
       size: 136133468
@@ -10939,17 +10924,17 @@ stages:
       md5: 1b7c913e24c400a9f5301d1423a82ca6
       size: 314781
     - path: cad/scenes/grocery_store_half_stocked/artifacts/collision_meshes.zip
-      md5: fc0a2077f4f1989053a8364a1f69f6a0
-      size: 1624581
+      md5: e6fc432280c2522f3ed3db724050354e
+      size: 1023310
     - path: cad/scenes/grocery_store_half_stocked/artifacts/collision_selection.json
-      md5: 07ce78b8ecfcdd78bf57046dd75b1737
-      size: 7926
+      md5: 73d30ed32ebe7df56274b3e6baa8b0d5
+      size: 9121
     - path: cad/scenes/grocery_store_half_stocked/artifacts/meshes.zip
-      md5: afd29cafcb9b01e8df436b7bfed69d12
-      size: 119878459
+      md5: 71a130e58c517c457691bd6e07b2e7a3
+      size: 126218082
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
-      md5: ea2e500e0e0bf520bbe04bfbe85e83a6
-      size: 489736
+      md5: f04535fd679d93055d4a6bcab30a01ba
+      size: 492184
     - path: cad/scenes/hall_arch_wood/artifacts/collision_meshes.zip
       md5: edfad6bc4958ca7400fd3287c79d2772
       size: 229843
@@ -10987,11 +10972,11 @@ stages:
       md5: a8090ff152a823223c8ab64dc54c5fa8
       size: 13468
     - path: cad/scenes/hall_train_station/artifacts/collision_meshes.zip
-      md5: 804e85fc85a511aebf3d37f472ec1dd8
-      size: 437878
+      md5: 19cb5fef7c1d610d07841c8631b8a2b5
+      size: 152023
     - path: cad/scenes/hall_train_station/artifacts/collision_selection.json
-      md5: f3cafc997d77367e09c3c554059c9b77
-      size: 1253
+      md5: 47581dd999f65beb87e69fa125c1bc43
+      size: 1349
     - path: cad/scenes/hall_train_station/artifacts/meshes.zip
       md5: d38084d3e4af1c02dfcfe1e58b5fb6a9
       size: 65117676
@@ -10999,16 +10984,16 @@ stages:
       md5: 1b005ae5172bd0cfeaf1fe2bbf11ea27
       size: 18936
     - path: cad/scenes/hotel_gym_spa/artifacts/collision_meshes.zip
-      md5: fcbaf076d94bb518544dcd921f23cd11
-      size: 1651897
+      md5: c4f516e35ca72c79551e3444688026dd
+      size: 1651895
     - path: cad/scenes/hotel_gym_spa/artifacts/collision_selection.json
       md5: 55490cdfcaf938d7f947630d2973c16f
       size: 10679
     - path: cad/scenes/hotel_gym_spa/artifacts/meshes.zip
-      md5: 1f9a7d7a2360db844566fc8c0fb7b08e
-      size: 409757574
+      md5: a8cadbbb85e9591a61d8ae94fa4f0dac
+      size: 411922041
     - path: cad/scenes/hotel_gym_spa/artifacts/object_list.json
-      md5: 6f79fcbe7798f33045eb60800c5f727e
+      md5: b94742596cfd4638ed1fc4300953e026
       size: 127295
     - path: cad/scenes/hotel_suite_large/artifacts/collision_meshes.zip
       md5: 8c3f07740adfca5317aabb4d0f1ea754
@@ -11035,41 +11020,41 @@ stages:
       md5: e30d14323409dfe50be03da97f27f19a
       size: 18165
     - path: cad/scenes/house_double_floor_lower/artifacts/collision_meshes.zip
-      md5: ff9cf6753adfe33e498981f807ff4dba
-      size: 2607419
+      md5: 60e56f6b7a6ca8098c297f2fe4e28383
+      size: 2607417
     - path: cad/scenes/house_double_floor_lower/artifacts/collision_selection.json
       md5: 90141533c444d9b89eed4329116ef66f
       size: 12457
     - path: cad/scenes/house_double_floor_lower/artifacts/meshes.zip
-      md5: c8461cfe5ba1fb5e8c81b972fc4ad29c
-      size: 566841376
+      md5: c4684528080d5f97e65cf86d1b60a9d2
+      size: 566961092
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
-      md5: 252a6ac803204a441ab698a5b65509a9
+      md5: 913d5ddbb0c354534080f7d652c49356
       size: 111769
     - path: cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
-      md5: e059773a8e8fb8987d9b4afefc9ff042
-      size: 2187033
+      md5: 8821bad0432070b645670b0fbcd0f04e
+      size: 2187032
     - path: cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
       md5: 0e6b17915a8dbd462934e30dbb369942
       size: 13627
     - path: cad/scenes/house_double_floor_upper/artifacts/meshes.zip
-      md5: 56ca6be7ba8b65c1f79d7d21c0f28ff3
-      size: 414690704
+      md5: 1ad89589fef2310426d4de3b7900544d
+      size: 415301935
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
-      md5: a1b2205c972ab3b5bdbd865bcefb972c
-      size: 104616
+      md5: e60320c9a2287441e1e1855efcc0fd08
+      size: 104615
     - path: cad/scenes/house_single_floor/artifacts/collision_meshes.zip
-      md5: 977d5f75785ebca124c9df3d32bd37f5
-      size: 6252842
+      md5: 185f5fa87a36ffee8830879598bbabce
+      size: 6252841
     - path: cad/scenes/house_single_floor/artifacts/collision_selection.json
       md5: 354c1fc95b314308c71af0974c1775ea
       size: 44518
     - path: cad/scenes/house_single_floor/artifacts/meshes.zip
-      md5: 025a62de87adf49490b00b9e4dafee6a
-      size: 1526890468
+      md5: 350fbebff0ddb7b373d3dbefb845dfd9
+      size: 1538099505
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
-      md5: cd925b46d1ff43742a2d54882b9048c0
-      size: 314354
+      md5: 9de72c71a2f9beade565281a1c34f26c
+      size: 318058
     - path: cad/scenes/office_bike/artifacts/collision_meshes.zip
       md5: 8990c62903014d1aded0c5da40517845
       size: 973660
@@ -11083,17 +11068,17 @@ stages:
       md5: e404ecf6eaa433d014e15744cd9e1c8b
       size: 73670
     - path: cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
-      md5: 465f1c78d9445c699799780474a4b91a
+      md5: befdf4c41f4e427dc803d2f691ef190a
       size: 2200998
     - path: cad/scenes/office_cubicles_left/artifacts/collision_selection.json
-      md5: 52db9b85b49b3fc167b44647d28367c5
-      size: 4118
+      md5: fefc04af27276c1be9e82154864aeba3
+      size: 11875
     - path: cad/scenes/office_cubicles_left/artifacts/meshes.zip
-      md5: 01d0b0fb9833e1142cf1d4f3570eb4f2
-      size: 943710153
+      md5: f1387e3704a9fcb1c82e808c4bf7b82c
+      size: 945669717
     - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
-      md5: aca7d4da3c59cb8175f904b43bf3612e
-      size: 248216
+      md5: bc5dafef423c33b8e8ae13a6e734a095
+      size: 251337
     - path: cad/scenes/office_large/artifacts/collision_meshes.zip
       md5: 30319f0455fff26c2a77f4d0cbbf4cf6
       size: 1455429
@@ -11131,29 +11116,29 @@ stages:
       md5: 4cd3b70278c659b1afeb4703673b9d2c
       size: 17839
     - path: cad/scenes/public_restroom_brown/artifacts/collision_meshes.zip
-      md5: fafec4660858e37d7675b88b4e56785e
-      size: 164429
+      md5: afad432233f7c9af3be7a0c59c420e22
+      size: 164427
     - path: cad/scenes/public_restroom_brown/artifacts/collision_selection.json
       md5: da42c4470b5761d3d67ad2e3d0ea0305
       size: 1694
     - path: cad/scenes/public_restroom_brown/artifacts/meshes.zip
-      md5: 02b14aa97f872e1a2f171f5d83535a8f
-      size: 16527616
+      md5: 8c61d4d4e2231af8f74c4bce1916088a
+      size: 16521625
     - path: cad/scenes/public_restroom_brown/artifacts/object_list.json
-      md5: 5667c5653c51bc4bde0a46b0e135a160
-      size: 19247
+      md5: f9608f74446969f9a672719e448dc61d
+      size: 19450
     - path: cad/scenes/public_restroom_futuristic/artifacts/collision_meshes.zip
-      md5: 61f91225002156b13d078cbaaff5e28e
-      size: 148249
+      md5: da6f2417a699165d0e5fd4a03717d992
+      size: 148250
     - path: cad/scenes/public_restroom_futuristic/artifacts/collision_selection.json
       md5: dfbfe4027275dfa70dc831eea7807c46
       size: 1859
     - path: cad/scenes/public_restroom_futuristic/artifacts/meshes.zip
-      md5: 1ea020328898d433aabdcd378a8f4d87
-      size: 48548464
+      md5: 5de38df11e73ea0fd4614e0aa16651e6
+      size: 48578816
     - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.json
-      md5: b12ba4e80bb8fc46cffa3fe7b11ff9df
-      size: 28430
+      md5: e7c2f3ba58d2dff2af45cb306931d673
+      size: 28633
     - path: cad/scenes/public_restroom_marble/artifacts/collision_meshes.zip
       md5: 524daf2d7dd3775b7ec99c1f66b3c07e
       size: 119629
@@ -11167,17 +11152,17 @@ stages:
       md5: a41b96301b7fd7800c465dba0143479e
       size: 14632
     - path: cad/scenes/public_restroom_white/artifacts/collision_meshes.zip
-      md5: aef14d37676ccea6d4ef773bd697b7e6
-      size: 269321
+      md5: 62823301f486fa962d121629fe477ab7
+      size: 269322
     - path: cad/scenes/public_restroom_white/artifacts/collision_selection.json
       md5: 5b28d1007f8a36b060dd80ae9786ef94
       size: 1414
     - path: cad/scenes/public_restroom_white/artifacts/meshes.zip
-      md5: 23c286ea29dd6a3fa105a2b1ddd4475d
-      size: 49189072
+      md5: c38b05e5eadcdf12f4386ee4daed939e
+      size: 49213956
     - path: cad/scenes/public_restroom_white/artifacts/object_list.json
-      md5: 38f0cf47a4c854eda33a0e390f7e613a
-      size: 21410
+      md5: 58a12ecf378e5f3ab528591151f62499
+      size: 21613
     - path: cad/scenes/restaurant_asian/artifacts/collision_meshes.zip
       md5: 90793b3e67b6d55cc5aadd58d583141a
       size: 863018
@@ -11215,11 +11200,11 @@ stages:
       md5: 2d5d18c4934e435682ba6e54b77a0775
       size: 68324
     - path: cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
-      md5: 59230c65f4f1d51ec96aa3bfe19d6809
-      size: 1072647
+      md5: 46a73b770c7ec72e7e808159ca21516a
+      size: 827677
     - path: cad/scenes/restaurant_diner/artifacts/collision_selection.json
-      md5: f01be92f5846a27ad3b37943ab6a0739
-      size: 4617
+      md5: 645e0c49af65c79737b53ca0110eecd3
+      size: 4683
     - path: cad/scenes/restaurant_diner/artifacts/meshes.zip
       md5: 3f427dbfd1130e026963995625cabe86
       size: 84873472
@@ -11264,15 +11249,15 @@ stages:
       size: 905040
     outs:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: b1da8a14ccd1d7a79d36f54122cc241e
-      size: 80668
+      md5: caf31b345f8b7704992be45e4b8d08ca
+      size: 78999
   collision_average_volumes_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_average_volumes.json
       artifacts/pipeline/collision_average_volumes.success
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: b1da8a14ccd1d7a79d36f54122cc241e
-      size: 80668
+      md5: caf31b345f8b7704992be45e4b8d08ca
+      size: 78999
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 707
@@ -11335,15 +11320,15 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/house_single_floor/artifacts/meshes.zip
-      md5: 025a62de87adf49490b00b9e4dafee6a
-      size: 1526890468
+      md5: 350fbebff0ddb7b373d3dbefb845dfd9
+      size: 1538099505
     outs:
     - path: cad/scenes/house_single_floor/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/house_single_floor/artifacts/scene.urdf
-      md5: b56e87f0a14d49206eebf14eff93f55a
-      size: 229697
+      md5: 32d62c58f2af27c99d719792a4a4f2e7
+      size: 233021
   validate_meta_links:
     cmd: python -m b1k_pipeline.validate_meta_links
     deps:
@@ -11613,14 +11598,14 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
-      md5: 73661ed63148882227c017ad3534e333
-      size: 130409344
+      md5: 73760f32f44cf9775a99583f737fb007
+      size: 130569234
     outs:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/scene.urdf
-      md5: 68d0cfa0362ddac5cf7b2ab5554cffc3
+      md5: 50c47f50fcdc7bff65aeb286cc7a1224
       size: 31383
   export_scene@scenes/commercial_kitchen_pans:
     cmd: python -m b1k_pipeline.export_scene scenes/commercial_kitchen_pans
@@ -11635,14 +11620,14 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
-      md5: a0cd508f3043308bbb9437a346664da5
-      size: 183104258
+      md5: e346c06ff12b93dc6bd5126c16a11231
+      size: 182993038
     outs:
     - path: cad/scenes/commercial_kitchen_pans/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/commercial_kitchen_pans/artifacts/scene.urdf
-      md5: e63cdca09d0c1142db43d100fb5df632
+      md5: e367bf557eb06a7020964beedbbab8a8
       size: 18007
   export_scene@scenes/gates_bedroom:
     cmd: python -m b1k_pipeline.export_scene scenes/gates_bedroom
@@ -11723,8 +11708,8 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/grocery_store_half_stocked/artifacts/meshes.zip
-      md5: afd29cafcb9b01e8df436b7bfed69d12
-      size: 119878459
+      md5: 71a130e58c517c457691bd6e07b2e7a3
+      size: 126218082
     outs:
     - path: cad/scenes/grocery_store_half_stocked/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -11833,14 +11818,14 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/hotel_gym_spa/artifacts/meshes.zip
-      md5: 1f9a7d7a2360db844566fc8c0fb7b08e
-      size: 409757574
+      md5: a8cadbbb85e9591a61d8ae94fa4f0dac
+      size: 411922041
     outs:
     - path: cad/scenes/hotel_gym_spa/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/hotel_gym_spa/artifacts/scene.urdf
-      md5: ea7238c4122c0f810e76b486d107e20a
+      md5: 01d54cb1e617e7ea2c302d056f6563b4
       size: 111318
   export_scene@scenes/hotel_suite_large:
     cmd: python -m b1k_pipeline.export_scene scenes/hotel_suite_large
@@ -11921,8 +11906,8 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/office_cubicles_left/artifacts/meshes.zip
-      md5: 01d0b0fb9833e1142cf1d4f3570eb4f2
-      size: 943710153
+      md5: f1387e3704a9fcb1c82e808c4bf7b82c
+      size: 945669717
     outs:
     - path: cad/scenes/office_cubicles_left/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -11987,14 +11972,14 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/public_restroom_brown/artifacts/meshes.zip
-      md5: 02b14aa97f872e1a2f171f5d83535a8f
-      size: 16527616
+      md5: 8c61d4d4e2231af8f74c4bce1916088a
+      size: 16521625
     outs:
     - path: cad/scenes/public_restroom_brown/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/public_restroom_brown/artifacts/scene.urdf
-      md5: 9acf9842cd4bb76e4b4a664327f947a1
+      md5: 62f2a01854fc006f43afbc989bcf1811
       size: 25820
   export_scene@scenes/public_restroom_futuristic:
     cmd: python -m b1k_pipeline.export_scene scenes/public_restroom_futuristic
@@ -12009,8 +11994,8 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/public_restroom_futuristic/artifacts/meshes.zip
-      md5: 1ea020328898d433aabdcd378a8f4d87
-      size: 48548464
+      md5: 5de38df11e73ea0fd4614e0aa16651e6
+      size: 48578816
     outs:
     - path: cad/scenes/public_restroom_futuristic/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -12053,8 +12038,8 @@ stages:
       md5: 070bf01f4fb822eef0a26db1d69921a9
       size: 3640
     - path: cad/scenes/public_restroom_white/artifacts/meshes.zip
-      md5: 23c286ea29dd6a3fa105a2b1ddd4475d
-      size: 49189072
+      md5: c38b05e5eadcdf12f4386ee4daed939e
+      size: 49213956
     outs:
     - path: cad/scenes/public_restroom_white/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e

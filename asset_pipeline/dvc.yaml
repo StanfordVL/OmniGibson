@@ -57,7 +57,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/scene.urdf
     - cad/scenes/house_single_floor/artifacts/scene.urdf
     - cad/scenes/office_bike/artifacts/scene.urdf
-    - cad/scenes/office_cubicles_left/artifacts/scene.urdf
     - cad/scenes/office_large/artifacts/scene.urdf
     - cad/scenes/office_vendor_machine/artifacts/scene.urdf
     - cad/scenes/public_restroom_blue/artifacts/scene.urdf
@@ -106,7 +105,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/export_scene.success
     - cad/scenes/house_single_floor/artifacts/export_scene.success
     - cad/scenes/office_bike/artifacts/export_scene.success
-    - cad/scenes/office_cubicles_left/artifacts/export_scene.success
     - cad/scenes/office_large/artifacts/export_scene.success
     - cad/scenes/office_vendor_machine/artifacts/export_scene.success
     - cad/scenes/public_restroom_blue/artifacts/export_scene.success
@@ -196,7 +194,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/meshes.zip
     - cad/scenes/house_single_floor/artifacts/meshes.zip
     - cad/scenes/office_bike/artifacts/meshes.zip
-    - cad/scenes/office_cubicles_left/artifacts/meshes.zip
     - cad/scenes/office_large/artifacts/meshes.zip
     - cad/scenes/office_vendor_machine/artifacts/meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/meshes.zip
@@ -277,7 +274,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
     - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
-    - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
@@ -358,7 +354,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
     - cad/scenes/house_single_floor/artifacts/collision_meshes.zip
     - cad/scenes/office_bike/artifacts/collision_meshes.zip
-    - cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
     - cad/scenes/office_large/artifacts/collision_meshes.zip
     - cad/scenes/office_vendor_machine/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/collision_meshes.zip
@@ -439,7 +434,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
     - cad/scenes/house_single_floor/artifacts/collision_selection.json
     - cad/scenes/office_bike/artifacts/collision_selection.json
-    - cad/scenes/office_cubicles_left/artifacts/collision_selection.json
     - cad/scenes/office_large/artifacts/collision_selection.json
     - cad/scenes/office_vendor_machine/artifacts/collision_selection.json
     - cad/scenes/public_restroom_blue/artifacts/collision_selection.json
@@ -535,7 +529,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/meshes.zip
     - cad/scenes/house_single_floor/artifacts/meshes.zip
     - cad/scenes/office_bike/artifacts/meshes.zip
-    - cad/scenes/office_cubicles_left/artifacts/meshes.zip
     - cad/scenes/office_large/artifacts/meshes.zip
     - cad/scenes/office_vendor_machine/artifacts/meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/meshes.zip
@@ -616,7 +609,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
     - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
-    - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
@@ -697,7 +689,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
     - cad/scenes/house_single_floor/artifacts/collision_meshes.zip
     - cad/scenes/office_bike/artifacts/collision_meshes.zip
-    - cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
     - cad/scenes/office_large/artifacts/collision_meshes.zip
     - cad/scenes/office_vendor_machine/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/collision_meshes.zip
@@ -778,7 +769,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
     - cad/scenes/house_single_floor/artifacts/collision_selection.json
     - cad/scenes/office_bike/artifacts/collision_selection.json
-    - cad/scenes/office_cubicles_left/artifacts/collision_selection.json
     - cad/scenes/office_large/artifacts/collision_selection.json
     - cad/scenes/office_vendor_machine/artifacts/collision_selection.json
     - cad/scenes/public_restroom_blue/artifacts/collision_selection.json
@@ -840,7 +830,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/room_object_list.json
     - cad/scenes/house_single_floor/artifacts/room_object_list.json
     - cad/scenes/office_bike/artifacts/room_object_list.json
-    - cad/scenes/office_cubicles_left/artifacts/room_object_list.json
     - cad/scenes/office_large/artifacts/room_object_list.json
     - cad/scenes/office_vendor_machine/artifacts/room_object_list.json
     - cad/scenes/public_restroom_blue/artifacts/room_object_list.json
@@ -889,7 +878,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/room_object_list.success
     - cad/scenes/house_single_floor/artifacts/room_object_list.success
     - cad/scenes/office_bike/artifacts/room_object_list.success
-    - cad/scenes/office_cubicles_left/artifacts/room_object_list.success
     - cad/scenes/office_large/artifacts/room_object_list.success
     - cad/scenes/office_vendor_machine/artifacts/room_object_list.success
     - cad/scenes/public_restroom_blue/artifacts/room_object_list.success
@@ -1115,7 +1103,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/export_meshes.json
     - cad/scenes/house_single_floor/artifacts/export_meshes.json
     - cad/scenes/office_bike/artifacts/export_meshes.json
-    - cad/scenes/office_cubicles_left/artifacts/export_meshes.json
     - cad/scenes/office_large/artifacts/export_meshes.json
     - cad/scenes/office_vendor_machine/artifacts/export_meshes.json
     - cad/scenes/public_restroom_blue/artifacts/export_meshes.json
@@ -1202,7 +1189,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/meshes.zip
     - cad/scenes/house_single_floor/artifacts/meshes.zip
     - cad/scenes/office_bike/artifacts/meshes.zip
-    - cad/scenes/office_cubicles_left/artifacts/meshes.zip
     - cad/scenes/office_large/artifacts/meshes.zip
     - cad/scenes/office_vendor_machine/artifacts/meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/meshes.zip
@@ -1283,7 +1269,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
     - cad/scenes/house_single_floor/artifacts/collision_meshes.zip
     - cad/scenes/office_bike/artifacts/collision_meshes.zip
-    - cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
     - cad/scenes/office_large/artifacts/collision_meshes.zip
     - cad/scenes/office_vendor_machine/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/collision_meshes.zip
@@ -1364,7 +1349,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
     - cad/scenes/house_single_floor/artifacts/collision_selection.json
     - cad/scenes/office_bike/artifacts/collision_selection.json
-    - cad/scenes/office_cubicles_left/artifacts/collision_selection.json
     - cad/scenes/office_large/artifacts/collision_selection.json
     - cad/scenes/office_vendor_machine/artifacts/collision_selection.json
     - cad/scenes/public_restroom_blue/artifacts/collision_selection.json
@@ -1445,7 +1429,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
     - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
-    - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
@@ -1579,7 +1562,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
     - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
-    - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
@@ -1784,7 +1766,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
     - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
-    - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
@@ -1908,7 +1889,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
     - cad/scenes/house_single_floor/artifacts/sanitycheck.json
     - cad/scenes/office_bike/artifacts/sanitycheck.json
-    - cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
     - cad/scenes/office_large/artifacts/sanitycheck.json
     - cad/scenes/office_vendor_machine/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_blue/artifacts/sanitycheck.json
@@ -2030,7 +2010,6 @@ stages:
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
     - cad/scenes/house_single_floor/artifacts/object_list.json
     - cad/scenes/office_bike/artifacts/object_list.json
-    - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
     - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
