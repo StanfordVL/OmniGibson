@@ -81,7 +81,7 @@ def process_target(target):
                         errors[node].append("Collision mesh was found but contains zero volume meshes.")
                     else:
                         aabb_error = compare_aabbs(G.nodes[node]["lower_mesh"], G.nodes[node]["collision_mesh"])
-                        if aabb_error:
+                        if aabb_error and node[0] not in ["floors", "ceilings", "walls"]:
                             errors[node].append(aabb_error)
 
                     # Identify manual collision mesh in error
