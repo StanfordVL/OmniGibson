@@ -11245,15 +11245,15 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/validate_scenes.py
-      md5: 7bc64609c6c4803194e05d204050cb5d
-      size: 3194
+      md5: 2e0aa6053a616bc7924b77b31b990431
+      size: 3186
     - path: b1k_pipeline/validate_scenes_process.py
       md5: feb365a2846753d4177ea0f572ada834
       size: 3113
     outs:
     - path: artifacts/pipeline/validate_scenes.json
-      md5: 0f34cfad3afd11e7893941b6d1412e50
-      size: 2654189
+      md5: c6bde70d9e16250ebec076ff9198cd46
+      size: 2975092
   export_meshes@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/export_meshes.py
