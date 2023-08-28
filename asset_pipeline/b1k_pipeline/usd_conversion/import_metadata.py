@@ -565,7 +565,6 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                 assert mesh_type in UsdGeom.__dict__
                 # togglebutton has to be a sphere
                 if meta_link_type in ["togglebutton"]:
-                    assert mesh_type in ["Sphere"], f"Invalid mesh type for togglebutton: {mesh_type}"
                     is_mesh = True
                 # particle applier has to be a cone or cylinder because of the visualization of the particle flow
                 elif meta_link_type in ["particleapplier"]:

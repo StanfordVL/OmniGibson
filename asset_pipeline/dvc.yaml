@@ -51,7 +51,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/scene.urdf
     - cad/scenes/hall_train_station/artifacts/scene.urdf
     - cad/scenes/hotel_gym_spa/artifacts/scene.urdf
-    - cad/scenes/hotel_suite_large/artifacts/scene.urdf
     - cad/scenes/hotel_suite_small/artifacts/scene.urdf
     - cad/scenes/house_double_floor_lower/artifacts/scene.urdf
     - cad/scenes/house_double_floor_upper/artifacts/scene.urdf
@@ -70,7 +69,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/scene.urdf
     - cad/scenes/restaurant_hotel/artifacts/scene.urdf
     - cad/scenes/restaurant_urban/artifacts/scene.urdf
-    - cad/scenes/school_gym/artifacts/scene.urdf
     - cad/scenes/Beechwood_0_int/artifacts/export_scene.success
     - cad/scenes/Beechwood_1_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_0_int/artifacts/export_scene.success
@@ -99,7 +97,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/export_scene.success
     - cad/scenes/hall_train_station/artifacts/export_scene.success
     - cad/scenes/hotel_gym_spa/artifacts/export_scene.success
-    - cad/scenes/hotel_suite_large/artifacts/export_scene.success
     - cad/scenes/hotel_suite_small/artifacts/export_scene.success
     - cad/scenes/house_double_floor_lower/artifacts/export_scene.success
     - cad/scenes/house_double_floor_upper/artifacts/export_scene.success
@@ -118,7 +115,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/export_scene.success
     - cad/scenes/restaurant_hotel/artifacts/export_scene.success
     - cad/scenes/restaurant_urban/artifacts/export_scene.success
-    - cad/scenes/school_gym/artifacts/export_scene.success
     - b1k_pipeline/aggregate_scenes.py
     - params.yaml
     outs:
@@ -188,7 +184,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/meshes.zip
     - cad/scenes/hall_train_station/artifacts/meshes.zip
     - cad/scenes/hotel_gym_spa/artifacts/meshes.zip
-    - cad/scenes/hotel_suite_large/artifacts/meshes.zip
     - cad/scenes/hotel_suite_small/artifacts/meshes.zip
     - cad/scenes/house_double_floor_lower/artifacts/meshes.zip
     - cad/scenes/house_double_floor_upper/artifacts/meshes.zip
@@ -207,7 +202,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/meshes.zip
     - cad/scenes/restaurant_urban/artifacts/meshes.zip
-    - cad/scenes/school_gym/artifacts/meshes.zip
     - cad/objects/batch-00/artifacts/object_list.json
     - cad/objects/batch-01/artifacts/object_list.json
     - cad/objects/batch-02/artifacts/object_list.json
@@ -268,7 +262,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/object_list.json
     - cad/scenes/hall_train_station/artifacts/object_list.json
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
-    - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
@@ -287,7 +280,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
     - cad/scenes/restaurant_urban/artifacts/object_list.json
-    - cad/scenes/school_gym/artifacts/object_list.json
     - cad/objects/batch-00/artifacts/collision_meshes.zip
     - cad/objects/batch-01/artifacts/collision_meshes.zip
     - cad/objects/batch-02/artifacts/collision_meshes.zip
@@ -348,7 +340,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/collision_meshes.zip
     - cad/scenes/hall_train_station/artifacts/collision_meshes.zip
     - cad/scenes/hotel_gym_spa/artifacts/collision_meshes.zip
-    - cad/scenes/hotel_suite_large/artifacts/collision_meshes.zip
     - cad/scenes/hotel_suite_small/artifacts/collision_meshes.zip
     - cad/scenes/house_double_floor_lower/artifacts/collision_meshes.zip
     - cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
@@ -367,7 +358,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_urban/artifacts/collision_meshes.zip
-    - cad/scenes/school_gym/artifacts/collision_meshes.zip
     - cad/objects/batch-00/artifacts/collision_selection.json
     - cad/objects/batch-01/artifacts/collision_selection.json
     - cad/objects/batch-02/artifacts/collision_selection.json
@@ -428,7 +418,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/collision_selection.json
     - cad/scenes/hall_train_station/artifacts/collision_selection.json
     - cad/scenes/hotel_gym_spa/artifacts/collision_selection.json
-    - cad/scenes/hotel_suite_large/artifacts/collision_selection.json
     - cad/scenes/hotel_suite_small/artifacts/collision_selection.json
     - cad/scenes/house_double_floor_lower/artifacts/collision_selection.json
     - cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
@@ -447,7 +436,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/collision_selection.json
     - cad/scenes/restaurant_hotel/artifacts/collision_selection.json
     - cad/scenes/restaurant_urban/artifacts/collision_selection.json
-    - cad/scenes/school_gym/artifacts/collision_selection.json
     - artifacts/pipeline/collision_selection_validation.success
     outs:
     - artifacts/pipeline/collision_average_volumes.json
@@ -523,7 +511,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/meshes.zip
     - cad/scenes/hall_train_station/artifacts/meshes.zip
     - cad/scenes/hotel_gym_spa/artifacts/meshes.zip
-    - cad/scenes/hotel_suite_large/artifacts/meshes.zip
     - cad/scenes/hotel_suite_small/artifacts/meshes.zip
     - cad/scenes/house_double_floor_lower/artifacts/meshes.zip
     - cad/scenes/house_double_floor_upper/artifacts/meshes.zip
@@ -542,7 +529,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/meshes.zip
     - cad/scenes/restaurant_urban/artifacts/meshes.zip
-    - cad/scenes/school_gym/artifacts/meshes.zip
     - cad/objects/batch-00/artifacts/object_list.json
     - cad/objects/batch-01/artifacts/object_list.json
     - cad/objects/batch-02/artifacts/object_list.json
@@ -603,7 +589,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/object_list.json
     - cad/scenes/hall_train_station/artifacts/object_list.json
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
-    - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
@@ -622,7 +607,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
     - cad/scenes/restaurant_urban/artifacts/object_list.json
-    - cad/scenes/school_gym/artifacts/object_list.json
     - cad/objects/batch-00/artifacts/collision_meshes.zip
     - cad/objects/batch-01/artifacts/collision_meshes.zip
     - cad/objects/batch-02/artifacts/collision_meshes.zip
@@ -683,7 +667,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/collision_meshes.zip
     - cad/scenes/hall_train_station/artifacts/collision_meshes.zip
     - cad/scenes/hotel_gym_spa/artifacts/collision_meshes.zip
-    - cad/scenes/hotel_suite_large/artifacts/collision_meshes.zip
     - cad/scenes/hotel_suite_small/artifacts/collision_meshes.zip
     - cad/scenes/house_double_floor_lower/artifacts/collision_meshes.zip
     - cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
@@ -702,7 +685,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_urban/artifacts/collision_meshes.zip
-    - cad/scenes/school_gym/artifacts/collision_meshes.zip
     - cad/objects/batch-00/artifacts/collision_selection.json
     - cad/objects/batch-01/artifacts/collision_selection.json
     - cad/objects/batch-02/artifacts/collision_selection.json
@@ -763,7 +745,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/collision_selection.json
     - cad/scenes/hall_train_station/artifacts/collision_selection.json
     - cad/scenes/hotel_gym_spa/artifacts/collision_selection.json
-    - cad/scenes/hotel_suite_large/artifacts/collision_selection.json
     - cad/scenes/hotel_suite_small/artifacts/collision_selection.json
     - cad/scenes/house_double_floor_lower/artifacts/collision_selection.json
     - cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
@@ -782,7 +763,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/collision_selection.json
     - cad/scenes/restaurant_hotel/artifacts/collision_selection.json
     - cad/scenes/restaurant_urban/artifacts/collision_selection.json
-    - cad/scenes/school_gym/artifacts/collision_selection.json
     outs:
     - artifacts/pipeline/collision_selection_validation.json
   collision_selection_validation_success:
@@ -824,7 +804,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/room_object_list.json
     - cad/scenes/hall_train_station/artifacts/room_object_list.json
     - cad/scenes/hotel_gym_spa/artifacts/room_object_list.json
-    - cad/scenes/hotel_suite_large/artifacts/room_object_list.json
     - cad/scenes/hotel_suite_small/artifacts/room_object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/room_object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/room_object_list.json
@@ -843,7 +822,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/room_object_list.json
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.json
     - cad/scenes/restaurant_urban/artifacts/room_object_list.json
-    - cad/scenes/school_gym/artifacts/room_object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/room_object_list.success
     - cad/scenes/Beechwood_1_int/artifacts/room_object_list.success
     - cad/scenes/Benevolence_0_int/artifacts/room_object_list.success
@@ -872,7 +850,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/room_object_list.success
     - cad/scenes/hall_train_station/artifacts/room_object_list.success
     - cad/scenes/hotel_gym_spa/artifacts/room_object_list.success
-    - cad/scenes/hotel_suite_large/artifacts/room_object_list.success
     - cad/scenes/hotel_suite_small/artifacts/room_object_list.success
     - cad/scenes/house_double_floor_lower/artifacts/room_object_list.success
     - cad/scenes/house_double_floor_upper/artifacts/room_object_list.success
@@ -891,7 +868,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/room_object_list.success
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.success
     - cad/scenes/restaurant_urban/artifacts/room_object_list.success
-    - cad/scenes/school_gym/artifacts/room_object_list.success
     - b1k_pipeline/combined_room_object_list.py
     - metadata/allowed_room_types.csv
     - params.yaml
@@ -1097,7 +1073,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/export_meshes.json
     - cad/scenes/hall_train_station/artifacts/export_meshes.json
     - cad/scenes/hotel_gym_spa/artifacts/export_meshes.json
-    - cad/scenes/hotel_suite_large/artifacts/export_meshes.json
     - cad/scenes/hotel_suite_small/artifacts/export_meshes.json
     - cad/scenes/house_double_floor_lower/artifacts/export_meshes.json
     - cad/scenes/house_double_floor_upper/artifacts/export_meshes.json
@@ -1116,7 +1091,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/export_meshes.json
     - cad/scenes/restaurant_hotel/artifacts/export_meshes.json
     - cad/scenes/restaurant_urban/artifacts/export_meshes.json
-    - cad/scenes/school_gym/artifacts/export_meshes.json
     - b1k_pipeline/check_success_aggregate.py
     outs:
     - artifacts/pipeline/export_meshes.success
@@ -1183,7 +1157,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/meshes.zip
     - cad/scenes/hall_train_station/artifacts/meshes.zip
     - cad/scenes/hotel_gym_spa/artifacts/meshes.zip
-    - cad/scenes/hotel_suite_large/artifacts/meshes.zip
     - cad/scenes/hotel_suite_small/artifacts/meshes.zip
     - cad/scenes/house_double_floor_lower/artifacts/meshes.zip
     - cad/scenes/house_double_floor_upper/artifacts/meshes.zip
@@ -1202,7 +1175,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/meshes.zip
     - cad/scenes/restaurant_urban/artifacts/meshes.zip
-    - cad/scenes/school_gym/artifacts/meshes.zip
     - cad/objects/batch-00/artifacts/collision_meshes.zip
     - cad/objects/batch-01/artifacts/collision_meshes.zip
     - cad/objects/batch-02/artifacts/collision_meshes.zip
@@ -1263,7 +1235,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/collision_meshes.zip
     - cad/scenes/hall_train_station/artifacts/collision_meshes.zip
     - cad/scenes/hotel_gym_spa/artifacts/collision_meshes.zip
-    - cad/scenes/hotel_suite_large/artifacts/collision_meshes.zip
     - cad/scenes/hotel_suite_small/artifacts/collision_meshes.zip
     - cad/scenes/house_double_floor_lower/artifacts/collision_meshes.zip
     - cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
@@ -1282,7 +1253,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_urban/artifacts/collision_meshes.zip
-    - cad/scenes/school_gym/artifacts/collision_meshes.zip
     - cad/objects/batch-00/artifacts/collision_selection.json
     - cad/objects/batch-01/artifacts/collision_selection.json
     - cad/objects/batch-02/artifacts/collision_selection.json
@@ -1343,7 +1313,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/collision_selection.json
     - cad/scenes/hall_train_station/artifacts/collision_selection.json
     - cad/scenes/hotel_gym_spa/artifacts/collision_selection.json
-    - cad/scenes/hotel_suite_large/artifacts/collision_selection.json
     - cad/scenes/hotel_suite_small/artifacts/collision_selection.json
     - cad/scenes/house_double_floor_lower/artifacts/collision_selection.json
     - cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
@@ -1362,7 +1331,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/collision_selection.json
     - cad/scenes/restaurant_hotel/artifacts/collision_selection.json
     - cad/scenes/restaurant_urban/artifacts/collision_selection.json
-    - cad/scenes/school_gym/artifacts/collision_selection.json
     - cad/objects/batch-00/artifacts/object_list.json
     - cad/objects/batch-01/artifacts/object_list.json
     - cad/objects/batch-02/artifacts/object_list.json
@@ -1423,7 +1391,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/object_list.json
     - cad/scenes/hall_train_station/artifacts/object_list.json
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
-    - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
@@ -1442,7 +1409,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
     - cad/scenes/restaurant_urban/artifacts/object_list.json
-    - cad/scenes/school_gym/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/collision_selection_validation.success
     - artifacts/pipeline/sanitycheck.success
@@ -1556,7 +1522,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/object_list.json
     - cad/scenes/hall_train_station/artifacts/object_list.json
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
-    - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
@@ -1575,7 +1540,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
     - cad/scenes/restaurant_urban/artifacts/object_list.json
-    - cad/scenes/school_gym/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - b1k_pipeline/object_inventory.py
     - params.yaml
@@ -1760,7 +1724,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/object_list.json
     - cad/scenes/hall_train_station/artifacts/object_list.json
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
-    - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
@@ -1779,7 +1742,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
     - cad/scenes/restaurant_urban/artifacts/object_list.json
-    - cad/scenes/school_gym/artifacts/object_list.json
     - b1k_pipeline/check_success_aggregate.py
     - params.yaml
     outs:
@@ -1883,7 +1845,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/sanitycheck.json
     - cad/scenes/hall_train_station/artifacts/sanitycheck.json
     - cad/scenes/hotel_gym_spa/artifacts/sanitycheck.json
-    - cad/scenes/hotel_suite_large/artifacts/sanitycheck.json
     - cad/scenes/hotel_suite_small/artifacts/sanitycheck.json
     - cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
     - cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
@@ -1902,7 +1863,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/sanitycheck.json
     - cad/scenes/restaurant_hotel/artifacts/sanitycheck.json
     - cad/scenes/restaurant_urban/artifacts/sanitycheck.json
-    - cad/scenes/school_gym/artifacts/sanitycheck.json
     - b1k_pipeline/check_success_aggregate.py
     - params.yaml
     outs:
@@ -2004,7 +1964,6 @@ stages:
     - cad/scenes/hall_glass_ceiling/artifacts/object_list.json
     - cad/scenes/hall_train_station/artifacts/object_list.json
     - cad/scenes/hotel_gym_spa/artifacts/object_list.json
-    - cad/scenes/hotel_suite_large/artifacts/object_list.json
     - cad/scenes/hotel_suite_small/artifacts/object_list.json
     - cad/scenes/house_double_floor_lower/artifacts/object_list.json
     - cad/scenes/house_double_floor_upper/artifacts/object_list.json
@@ -2023,7 +1982,6 @@ stages:
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
     - cad/scenes/restaurant_urban/artifacts/object_list.json
-    - cad/scenes/school_gym/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - b1k_pipeline/validate_meta_links.py
     outs:

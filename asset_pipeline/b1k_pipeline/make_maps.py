@@ -195,7 +195,7 @@ def main():
         with tqdm.tqdm(total=total_files) as pbar:
             fs.copy.copy_fs(multi_fs, temp_fs, on_copy=lambda *args: pbar.update(1))
 
-        with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=2) as executor:
             all_futures = {}
             with ParallelZipFS("maps.zip", write=True) as zip_fs:
                 for scene_id in temp_fs.listdir("scenes"):

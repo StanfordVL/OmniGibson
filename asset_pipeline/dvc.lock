@@ -996,9 +996,6 @@ stages:
     - path: cad/scenes/hotel_gym_spa/artifacts/object_list.json
       md5: b94742596cfd4638ed1fc4300953e026
       size: 127295
-    - path: cad/scenes/hotel_suite_large/artifacts/object_list.json
-      md5: 7d029278645897b5ca388993412ece69
-      size: 65166
     - path: cad/scenes/hotel_suite_small/artifacts/object_list.json
       md5: e30d14323409dfe50be03da97f27f19a
       size: 18165
@@ -1053,12 +1050,9 @@ stages:
     - path: cad/scenes/restaurant_urban/artifacts/object_list.json
       md5: b17f37019bf08a416f7e643521059cab
       size: 167639
-    - path: cad/scenes/school_gym/artifacts/object_list.json
-      md5: 68c0e4286cd416f41ed25f95b60d7af3
-      size: 905040
     - path: params.yaml
-      md5: 67d9f2707473602d980b946efc178926
-      size: 10695
+      md5: f2b06c47903a2acee69308f86885c0ba
+      size: 10554
     outs:
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -1252,9 +1246,6 @@ stages:
     - path: cad/scenes/hotel_gym_spa/artifacts/object_list.json
       md5: b94742596cfd4638ed1fc4300953e026
       size: 127295
-    - path: cad/scenes/hotel_suite_large/artifacts/object_list.json
-      md5: 7d029278645897b5ca388993412ece69
-      size: 65166
     - path: cad/scenes/hotel_suite_small/artifacts/object_list.json
       md5: e30d14323409dfe50be03da97f27f19a
       size: 18165
@@ -1309,16 +1300,13 @@ stages:
     - path: cad/scenes/restaurant_urban/artifacts/object_list.json
       md5: b17f37019bf08a416f7e643521059cab
       size: 167639
-    - path: cad/scenes/school_gym/artifacts/object_list.json
-      md5: 68c0e4286cd416f41ed25f95b60d7af3
-      size: 905040
     - path: params.yaml
-      md5: 67d9f2707473602d980b946efc178926
-      size: 10695
+      md5: f2b06c47903a2acee69308f86885c0ba
+      size: 10554
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 7b123d86b46812c409267e0da840780f
-      size: 1296359
+      md5: 34dd35ab2e92439280a6c991ed865cbf
+      size: 1212479
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -4264,9 +4252,6 @@ stages:
     - path: cad/scenes/hotel_gym_spa/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
-    - path: cad/scenes/hotel_suite_large/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
     - path: cad/scenes/hotel_suite_small/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
@@ -4321,12 +4306,9 @@ stages:
     - path: cad/scenes/restaurant_urban/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
-    - path: cad/scenes/school_gym/artifacts/sanitycheck.json
-      md5: 50380e7647a34c18af72965e5ec76a1f
-      size: 137
     - path: params.yaml
-      md5: 67d9f2707473602d980b946efc178926
-      size: 10695
+      md5: f2b06c47903a2acee69308f86885c0ba
+      size: 10554
     outs:
     - path: artifacts/pipeline/sanitycheck.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -8191,8 +8173,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: artifacts/pipeline/object_inventory.json
-      md5: 7b123d86b46812c409267e0da840780f
-      size: 1296359
+      md5: 34dd35ab2e92439280a6c991ed865cbf
+      size: 1212479
     - path: b1k_pipeline/aggregate_metadata.py
       md5: 85cc7ee37eb73b55ffa25d157c6fdd13
       size: 5874
@@ -8207,18 +8189,18 @@ stages:
       size: 562
     outs:
     - path: artifacts/parallels/metadata.zip
-      md5: 0904e1654ea18cb79075ce93288ee92c
-      size: 62668
+      md5: a18becbb0379e488c60dcf9664704629
+      size: 60970
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: bb85a69254e9f9ee43a09e5a9717d169
-      size: 112829
+      md5: 866533a69570f0ca617d76f2a93e9489
+      size: 109868
   aggregate_metadata_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/aggregate_metadata.json
       artifacts/pipeline/aggregate_metadata.success
     deps:
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: 28fc3b6dd33962475d21741394a6a4a1
-      size: 113201
+      md5: 866533a69570f0ca617d76f2a93e9489
+      size: 109868
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 707
@@ -8230,11 +8212,11 @@ stages:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_objects
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: 560b3e59582762bd1fa9a1c888c5eb80
-      size: 62815
+      md5: a18becbb0379e488c60dcf9664704629
+      size: 60970
     - path: artifacts/parallels/objects.zip
-      md5: 3d955c31fd92d764ba96d5011675accd
-      size: 16719339710
+      md5: cf7bbab5417d9e208349368f9a7177cd
+      size: 16987572767
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8242,8 +8224,8 @@ stages:
       md5: 3a697ffec67cfa78eebde7eda87edd9a
       size: 4038
     - path: b1k_pipeline/usd_conversion/import_metadata.py
-      md5: 0b6b08c64f2ee1db6da6b4130b3b78ed
-      size: 40304
+      md5: bd7368a885e736eca1b8c97e213918af
+      size: 40201
     - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
       md5: b372316a3b444fdf34c1a88b28308cef
       size: 2640
@@ -8258,11 +8240,11 @@ stages:
       size: 1988
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: ff73133429f6c50f34666ea95d1c6014
-      size: 19161270777
+      md5: e0ba8877800776d2baf152240cd02b9c
+      size: 19445719852
     - path: artifacts/pipeline/usdify_objects.json
-      md5: 43d83bdef4d3cf4f791da0f35c3a5283
-      size: 655662853
+      md5: b5b0f1670973cfa45a07cb3f8b45eb9f
+      size: 48425910
     - path: artifacts/pipeline/usdify_objects.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8770,12 +8752,6 @@ stages:
     - path: cad/scenes/hotel_gym_spa/artifacts/scene.urdf
       md5: 01d54cb1e617e7ea2c302d056f6563b4
       size: 111318
-    - path: cad/scenes/hotel_suite_large/artifacts/export_scene.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
-    - path: cad/scenes/hotel_suite_large/artifacts/scene.urdf
-      md5: 25b2864cf50b062c56a411edb5537174
-      size: 27968
     - path: cad/scenes/hotel_suite_small/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8884,19 +8860,13 @@ stages:
     - path: cad/scenes/restaurant_urban/artifacts/scene.urdf
       md5: aafe28723d50b950adc9d07f888c1394
       size: 72103
-    - path: cad/scenes/school_gym/artifacts/export_scene.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
-    - path: cad/scenes/school_gym/artifacts/scene.urdf
-      md5: e56428e266de516755d548649a2fa83d
-      size: 710291
     - path: params.yaml
-      md5: 67d9f2707473602d980b946efc178926
-      size: 10695
+      md5: f2b06c47903a2acee69308f86885c0ba
+      size: 10554
     outs:
     - path: artifacts/parallels/scenes.zip
-      md5: 4ba8d732b1d8560fed233dd2be5a9411
-      size: 506591
+      md5: 2586735b7edd9a3f8a21cef6d25c9149
+      size: 430793
     - path: artifacts/pipeline/aggregate_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9161,17 +9131,17 @@ stages:
     cmd: python -m b1k_pipeline.pack_dataset
     deps:
     - path: artifacts/parallels/maps.zip
-      md5: eff695a8c690f3ad28dcb7c62b5b37a6
-      size: 1539230
+      md5: d4c242ce23283c08dc93bc44b308e578
+      size: 2496173
     - path: artifacts/parallels/metadata.zip
-      md5: 560b3e59582762bd1fa9a1c888c5eb80
-      size: 62815
+      md5: a18becbb0379e488c60dcf9664704629
+      size: 60970
     - path: artifacts/parallels/objects_usd.zip
-      md5: ff73133429f6c50f34666ea95d1c6014
-      size: 19161270777
+      md5: e0ba8877800776d2baf152240cd02b9c
+      size: 19445719852
     - path: artifacts/parallels/scenes_json.zip
-      md5: 741ff0122f36f1c3452dbf5bbf9475da
-      size: 625251
+      md5: 344999e3f32d4225eb157f78df9ac064
+      size: 1090226
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9182,15 +9152,15 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/pack_dataset.py
-      md5: a2fa5d08490e4da8fa8c6647be798c05
-      size: 2060
+      md5: 85283d1cdb3749e017ca21c40f43f3a5
+      size: 2923
     outs:
     - path: artifacts/og_dataset.zip
-      md5: 16b6c41620ec1f2aec0e4ce04722dfa6
-      size: 19163495490
+      md5: 62a1bcaa9130009c709ab39ca7110c50
+      size: 19449363556
     - path: artifacts/pipeline/pack_dataset.json
       md5: 2ad066aadc9c024dff5e8d3c6587590d
-      size: 47
+      size: 44
     - path: artifacts/pipeline/pack_dataset.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9198,14 +9168,14 @@ stages:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_scenes
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: 30065524a131d3fc4791836bc2267660
-      size: 62815
+      md5: a18becbb0379e488c60dcf9664704629
+      size: 60970
     - path: artifacts/parallels/objects_usd.zip
-      md5: ff73133429f6c50f34666ea95d1c6014
-      size: 19161270777
+      md5: e0ba8877800776d2baf152240cd02b9c
+      size: 19445719852
     - path: artifacts/parallels/scenes.zip
-      md5: e36720d146cbad7a9efcbc119614cd41
-      size: 248158
+      md5: 2586735b7edd9a3f8a21cef6d25c9149
+      size: 430793
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9216,8 +9186,8 @@ stages:
       md5: 3a697ffec67cfa78eebde7eda87edd9a
       size: 4038
     - path: b1k_pipeline/usd_conversion/import_metadata.py
-      md5: 0b6b08c64f2ee1db6da6b4130b3b78ed
-      size: 40304
+      md5: bd7368a885e736eca1b8c97e213918af
+      size: 40201
     - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
       md5: b372316a3b444fdf34c1a88b28308cef
       size: 2640
@@ -9232,11 +9202,11 @@ stages:
       size: 1573
     outs:
     - path: artifacts/parallels/scenes_json.zip
-      md5: 741ff0122f36f1c3452dbf5bbf9475da
-      size: 625251
+      md5: 344999e3f32d4225eb157f78df9ac064
+      size: 1090226
     - path: artifacts/pipeline/usdify_scenes.json
-      md5: ec8a9eda8fc6341163da62f3ca39c15e
-      size: 1625737
+      md5: 250b1ef668ba7bde92b87c88199b4031
+      size: 3181777
     - path: artifacts/pipeline/usdify_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9244,27 +9214,27 @@ stages:
     cmd: python -m b1k_pipeline.make_maps
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: 30065524a131d3fc4791836bc2267660
-      size: 62815
+      md5: a18becbb0379e488c60dcf9664704629
+      size: 60970
     - path: artifacts/parallels/objects.zip
-      md5: 3d955c31fd92d764ba96d5011675accd
-      size: 16719339710
+      md5: cf7bbab5417d9e208349368f9a7177cd
+      size: 16987572767
     - path: artifacts/parallels/scenes.zip
-      md5: e36720d146cbad7a9efcbc119614cd41
-      size: 248158
+      md5: 2586735b7edd9a3f8a21cef6d25c9149
+      size: 430793
     - path: artifacts/pipeline/aggregate_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/make_maps.py
-      md5: 1c581356a19088c7ef13ca3703b5741b
+      md5: ad1673cded52ab52da905d3edfe3ddd0
       size: 9866
     - path: metadata/allowed_room_types.csv
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     outs:
     - path: artifacts/parallels/maps.zip
-      md5: eff695a8c690f3ad28dcb7c62b5b37a6
-      size: 1539230
+      md5: d4c242ce23283c08dc93bc44b308e578
+      size: 2496173
     - path: artifacts/pipeline/make_maps.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -11269,8 +11239,8 @@ stages:
     cmd: python -m b1k_pipeline.validate_scenes
     deps:
     - path: artifacts/og_dataset.zip
-      md5: 16b6c41620ec1f2aec0e4ce04722dfa6
-      size: 19163495490
+      md5: 62a1bcaa9130009c709ab39ca7110c50
+      size: 19449363556
     - path: artifacts/pipeline/pack_dataset.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -11282,8 +11252,8 @@ stages:
       size: 3113
     outs:
     - path: artifacts/pipeline/validate_scenes.json
-      md5: fdcb797874c40aaee1f73742fb7406c1
-      size: 1470517
+      md5: 0f34cfad3afd11e7893941b6d1412e50
+      size: 2654189
   export_meshes@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/export_meshes.py
