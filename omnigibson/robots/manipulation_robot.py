@@ -28,7 +28,7 @@ m = create_module_macros(module_path=__file__)
 
 # Assisted grasping parameters
 m.ASSIST_FRACTION = 1.0
-m.ASSIST_GRASP_MASS_THRESHOLD = 100.0
+m.ASSIST_GRASP_MASS_THRESHOLD = 10.0
 m.ARTICULATED_ASSIST_FRACTION = 0.7
 m.MIN_ASSIST_FORCE = 0
 m.MAX_ASSIST_FORCE = 100

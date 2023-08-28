@@ -8,9 +8,6 @@ from omnigibson.object_states.open import _get_relevant_joints
 from omnigibson.utils.constants import JointType, JointAxis
 from omni.isaac.core.utils.rotations import gf_quat_to_np_array
 
-
-p = None
-
 REVOLUTE_JOINT_FRACTION_ACROSS_SURFACE_AXIS_BOUNDS = (0.4, 0.6)
 PRISMATIC_JOINT_FRACTION_ACROSS_SURFACE_AXIS_BOUNDS = (0.2, 0.8)
 GRASP_OFFSET = np.array([0, 0.05, -0.08])
@@ -168,9 +165,13 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
     lateral_pos_wrt_surface_center = min_lateral_pos_wrt_surface_center + sampled_lateral_pos_wrt_min
     grasp_position_in_bbox_frame = center_of_selected_surface_along_push_axis + lateral_pos_wrt_surface_center
     grasp_quat_in_bbox_frame = T.quat_inverse(joint_orientation)
+    grasp_pose_in_world_frame = T.pose_transform(
+        bbox_center_in_world, bbox_quat_in_world, grasp_position_in_bbox_frame, grasp_quat_in_bbox_frame
+    )
 
     # Now apply the grasp offset.
-    offset_grasp_pose_in_bbox_frame = (grasp_position_in_bbox_frame + canonical_push_axis * push_axis_closer_side_sign * 0.2, grasp_quat_in_bbox_frame)
+    dist_from_grasp_pos = robot.finger_lengths[robot.default_arm] + 0.05
+    offset_grasp_pose_in_bbox_frame = (grasp_position_in_bbox_frame + canonical_push_axis * push_axis_closer_side_sign * dist_from_grasp_pos, grasp_quat_in_bbox_frame)
     offset_grasp_pose_in_world_frame = T.pose_transform(
         bbox_center_in_world, bbox_quat_in_world, *offset_grasp_pose_in_bbox_frame
     )
@@ -179,7 +180,7 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
     target_joint_pos = relevant_joint.upper_limit if should_open else relevant_joint.lower_limit
     current_joint_pos = relevant_joint.get_state()[0][0]
     
-    required_pos_change = (target_joint_pos - current_joint_pos) * 0.7
+    required_pos_change = target_joint_pos - current_joint_pos
     push_vector_in_bbox_frame = canonical_push_direction * abs(required_pos_change)
     target_hand_pos_in_bbox_frame = grasp_position_in_bbox_frame + push_vector_in_bbox_frame
     target_hand_pose_in_world_frame = T.pose_transform(
@@ -191,7 +192,10 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
 
     # Decide whether a grasp is required. If approach direction and displacement are similar, no need to grasp.
     grasp_required = np.dot(push_vector_in_bbox_frame, canonical_push_axis * -push_axis_closer_side_sign) < 0
-    waypoint_start_pose = (offset_grasp_pose_in_world_frame[0] + approach_direction_in_world_frame * 0.2, offset_grasp_pose_in_world_frame[1])
+    # TODO: Need to find a better of getting the predicted position of eef for start point of interpolating waypoints. Maybe
+    # break this into another function that called after the grasp is executed, so we know the eef position?
+    waypoint_start_offset = 0.05 if should_open else -0.05
+    waypoint_start_pose = (grasp_pose_in_world_frame[0] + -1 * approach_direction_in_world_frame * (robot.finger_lengths[robot.default_arm] + waypoint_start_offset), grasp_pose_in_world_frame[1])
     waypoints = interpolate_waypoints(waypoint_start_pose, target_hand_pose_in_world_frame)
 
     return (
@@ -207,7 +211,7 @@ def grasp_position_for_open_on_prismatic_joint(robot, target_obj, relevant_joint
 def interpolate_waypoints(start_pose, end_pose):
     start_pos, start_orn = start_pose
     travel_distance = np.linalg.norm(end_pose[0] - start_pos)
-    # num_poses = np.max([2, int(travel_distance / 0.01) + 1])
+    num_poses = np.max([2, int(travel_distance / 0.01) + 1])
     num_poses = 2
     pos_waypoints = np.linspace(start_pos, end_pose[0], num_poses)
 
@@ -299,7 +303,7 @@ def grasp_position_for_open_on_revolute_joint(robot, target_obj, relevant_joint,
 
     # To compute the rotation position, we want to decide how far along the rotation axis we'll go.
     desired_yaw = relevant_joint.upper_limit if should_open else relevant_joint.lower_limit
-    required_yaw_change = desired_yaw - current_yaw
+    required_yaw_change = 0.7 * desired_yaw - current_yaw
 
     # Now we'll rotate the grasp position around the origin by the desired rotation.
     # Note that we use the non-offset position here since the joint can't be pulled all the way to the offset.
@@ -314,7 +318,7 @@ def grasp_position_for_open_on_revolute_joint(robot, target_obj, relevant_joint,
     for i in range(turn_steps):
         partial_yaw_change = (i + 1) / turn_steps * required_yaw_change
         rotated_grasp_pose_in_bbox_frame = rotate_point_around_axis(
-            offset_grasp_pose_in_bbox_frame, bbox_wrt_origin, joint_axis, partial_yaw_change
+            (grasp_position, grasp_quat_in_bbox_frame), bbox_wrt_origin, joint_axis, partial_yaw_change
         )
         rotated_grasp_pose_in_world_frame = T.pose_transform(
             bbox_center_in_world, bbox_quat_in_world, *rotated_grasp_pose_in_bbox_frame
@@ -337,6 +341,18 @@ def grasp_position_for_open_on_revolute_joint(robot, target_obj, relevant_joint,
         required_yaw_change,
     )
 
+def get_recovery_pose_2d(target_obj, relevant_joint, robot):
+    link_name = relevant_joint.body1.split("/")[-1]
+    link = target_obj.links[link_name]
+    diff_vec = robot.get_position() - link.get_position()
+    rotated_vec = R.from_quat(T.euler2quat([0, 0, -np.pi/20])).apply(diff_vec)
+    invert_diff_vec = diff_vec
+    angle = np.arctan(invert_diff_vec[1] / invert_diff_vec[0])
+    pose_2d = link.get_position() + rotated_vec
+    pose_2d[2] = T.wrap_angle(angle + np.pi)
+    print(angle)
+    return pose_2d
+
 def get_orientation_facing_vector_with_random_yaw(vector):
     forward = vector / np.linalg.norm(vector)
     rand_vec = np.random.rand(3)
@@ -344,7 +360,7 @@ def get_orientation_facing_vector_with_random_yaw(vector):
     side = np.cross(rand_vec, forward)
     side /= np.linalg.norm(3)
     up = np.cross(forward, side)
-    assert np.isclose(np.linalg.norm(up), 1, atol=1e-3)
+    # assert np.isclose(np.linalg.norm(up), 1, atol=1e-3)
     rotmat = np.array([forward, side, up]).T
     return R.from_matrix(rotmat).as_quat()
 

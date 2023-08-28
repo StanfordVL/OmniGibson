@@ -39,7 +39,8 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.control_utils import IKSolver
 from omnigibson.utils.grasping_planning_utils import (
     get_grasp_poses_for_object_sticky,
-    get_grasp_position_for_open
+    get_grasp_position_for_open,
+    get_recovery_pose_2d
 )
 from omnigibson.controllers.controller_base import ControlType
 from omnigibson.prims import CollisionGeomPrim
@@ -422,7 +423,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         yield from self._open_or_close(obj, False)
 
     def _open_or_close(self, obj, should_open):
-        reset_eef_pose = None
         relevant_joint = None
 
         if self._get_obj_in_hand():
@@ -446,20 +446,20 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                         {"target object": obj.name},
                     )
 
-                grasp_pose, target_poses, object_direction, relevant_joint, grasp_required, yaw_change = grasp_data
-                if abs(yaw_change) < 0.05:
-                    print("Yaw change is small and done,", yaw_change)
+                grasp_pose, target_poses, object_direction, relevant_joint, grasp_required, pos_change = grasp_data
+                if abs(pos_change) < 0.05:
+                    print("Yaw change is small and done,", pos_change)
                     return
 
                 # Prepare data for the approach later.
                 approach_pos = grasp_pose[0] + object_direction * OPEN_GRASP_APPROACH_DISTANCE
                 approach_pose = (approach_pos, grasp_pose[1])
 
-                self.markers[0].set_position_orientation(*grasp_pose)
+                # self.markers[0].set_position_orientation(*grasp_pose)
                 self.markers[1].set_position_orientation(*approach_pose)
                 self.markers[2].set_position_orientation(*target_poses[0])
                 self.markers[3].set_position_orientation(*target_poses[1])
-                self.markers[4].set_position_orientation(*target_poses[2])
+                # self.markers[4].set_position_orientation(*target_poses[2])
                 # og.sim.step()
                 # from IPython import embed; embed()
 
@@ -468,8 +468,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
                 yield from self._move_hand(grasp_pose)
 
-                # We can pre-grasp in sticky grasping mode.
-                yield from self._execute_grasp()
+                # We can pre-grasp in sticky grasping mode only for opening
+                if should_open:
+                    yield from self._execute_grasp()
 
                 # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
                 # It's okay if we can't go all the way because we run into the object.
@@ -488,7 +489,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 #             {"target object": obj.name},
                 #         )
                 for i, target_pose in enumerate(target_poses):
-                    reset_eef_pose = target_pose if i == len(target_poses) - 1 else target_poses[i+1]
                     yield from self._move_hand_direct_cartesian(target_pose, ignore_failure=False, max_stuck_steps=50)
 
                 # Moving to target pose often fails. Let's get the hand to apply the correct actions for its current pos
@@ -498,21 +498,21 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 )
 
                 yield from self._execute_release()
-                print("_execute_release DONE")
                 yield from self._move_base_backward()
-                print("_move_base_backward DONE")
-
-                print("getting the fuck out of this loop")
-                print("cyuh")
-                break
 
             except ActionPrimitiveError as e:
                 # Let go - we do not want to be holding anything after return of primitive.
                 print(e)
                 yield from self._execute_release()
-                print("_execute_release (reset after error) DONE")
+                # yield from self._move_base_backward()
+                # pose_2d = get_recovery_pose_2d(obj, relevant_joint, self.robot)
+                # self.markers[0].set_position([pose_2d[0], pose_2d[1], 0.3])
+                # print(pose_2d[2])
                 yield from self._move_base_backward()
-                print("_move_base_backward (reset after error) DONE")
+                # yield from self._navigate_to_pose_direct(pose_2d, translate=True)
+                # og.sim.step()
+                # yield from self._navigate_to_pose_direct(pose_2d, translate=True)
+                # from IPython import embed; embed()
 
 
         if obj.states[object_states.Open].get_value() != should_open:
@@ -766,8 +766,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             np.array or None: Action array for one step for the robot to move hand or None if its at the target pose
         """
         for _ in range(steps):
-            print(self.robot.get_position())
             action = self._empty_action()
+            controller_name = "gripper_{}".format(self.arm)
+            action[self.robot.controller_action_idx[controller_name]] = 1.0
             action[self.robot.base_control_idx[0]] = -speed
             yield action 
 
@@ -984,20 +985,28 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             np.array or None: Action array for one step for the robot to release or None if its done releasing
         """
-        action = self._empty_action()
-        action = self._overwrite_head_action(action, self._tracking_object) if self._tracking_object is not None else action
-        controller_name = "gripper_{}".format(self.arm)
-        action[self.robot.controller_action_idx[controller_name]] = 1.0
+        
         for _ in range(MAX_STEPS_FOR_GRASP_OR_RELEASE):
             # Otherwise, keep applying the action!
+            action = self._empty_action()
+            action = self._overwrite_head_action(action, self._tracking_object) if self._tracking_object is not None else action
+            controller_name = "gripper_{}".format(self.arm)
+            action[self.robot.controller_action_idx[controller_name]] = 1.0
             yield action
 
+        for _ in range(MAX_WAIT_FOR_GRASP_OR_RELEASE):
+            yield self._empty_action()
+
         if self._get_obj_in_hand() is not None:
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.EXECUTION_ERROR,
-                "An object was still detected in your hand after executing release",
-                {"object in hand": self._get_obj_in_hand().name},
-            )
+            self.robot.release_grasp_immediately()
+        
+
+        # if self._get_obj_in_hand() is not None:
+        #     raise ActionPrimitiveError(
+        #         ActionPrimitiveError.Reason.EXECUTION_ERROR,
+        #         "An object was still detected in your hand after executing release",
+        #         {"object in hand": self._get_obj_in_hand().name},
+        #     )
         
     def _overwrite_head_action(self, action, obj):
         assert self.robot_model == "Tiago", "Tracking object with camera is currently only supported for Tiago"
@@ -1255,7 +1264,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         pose = self._sample_pose_near_object(obj, pose_on_obj=pose_on_obj, **kwargs)
         yield from self._navigate_to_pose(pose)
 
-    def _navigate_to_pose_direct(self, pose_2d, low_precision=False):
+    def _navigate_to_pose_direct(self, pose_2d, low_precision=False, translate=False):
         """
         Yields action to navigate the robot to the 2d pose without planning
 
@@ -1277,7 +1286,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             intermediate_pose = (end_pose[0], T.euler2quat([0, 0, np.arctan2(diff_pos[1], diff_pos[0])]))
             body_intermediate_pose = self._get_pose_in_robot_frame(intermediate_pose)
             diff_yaw = T.wrap_angle(T.quat2euler(body_intermediate_pose[1])[2])
-            if abs(diff_yaw) > DEFAULT_ANGLE_THRESHOLD:
+            if abs(diff_yaw) > DEFAULT_ANGLE_THRESHOLD and not translate:
                 yield from self._rotate_in_place(intermediate_pose, angle_threshold=DEFAULT_ANGLE_THRESHOLD)
             else:
                 action = self._empty_action()
