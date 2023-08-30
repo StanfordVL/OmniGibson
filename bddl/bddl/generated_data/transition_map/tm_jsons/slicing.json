@@ -1,1 +1,2045 @@
-[{"rule_name": "agave.n.01-slicing", "input_objects": {"agave.n.01": 1}, "output_objects": {"half__agave.n.01": 2}}, {"rule_name": "antipasto.n.01-slicing", "input_objects": {"antipasto.n.01": 1}, "output_objects": {"half__antipasto.n.01": 2}}, {"rule_name": "apple.n.01-slicing", "input_objects": {"apple.n.01": 1}, "output_objects": {"half__apple.n.01": 2}}, {"rule_name": "apple_pie.n.01-slicing", "input_objects": {"apple_pie.n.01": 1}, "output_objects": {"half__apple_pie.n.01": 2}}, {"rule_name": "apricot.n.02-slicing", "input_objects": {"apricot.n.02": 1}, "output_objects": {"half__apricot.n.01": 2}}, {"rule_name": "arepa.n.01-slicing", "input_objects": {"arepa.n.01": 1}, "output_objects": {"half__arepa.n.01": 2}}, {"rule_name": "artichoke.n.02-slicing", "input_objects": {"artichoke.n.02": 1}, "output_objects": {"half__artichoke.n.01": 2}}, {"rule_name": "arugula.n.02-slicing", "input_objects": {"arugula.n.02": 1}, "output_objects": {"half__arugula.n.01": 2}}, {"rule_name": "asparagus.n.02-slicing", "input_objects": {"asparagus.n.02": 1}, "output_objects": {"half__asparagus.n.01": 2}}, {"rule_name": "auricularia.n.01-slicing", "input_objects": {"auricularia.n.01": 1}, "output_objects": {"half__auricularia.n.01": 2}}, {"rule_name": "avocado.n.01-slicing", "input_objects": {"avocado.n.01": 1}, "output_objects": {"half__avocado.n.01": 2}}, {"rule_name": "bacon.n.01-slicing", "input_objects": {"bacon.n.01": 1}, "output_objects": {"half__bacon.n.01": 2}}, {"rule_name": "bagel.n.01-slicing", "input_objects": {"bagel.n.01": 1}, "output_objects": {"half__bagel.n.01": 2}}, {"rule_name": "bagel_dough.n.01-slicing", "input_objects": {"bagel_dough.n.01": 1}, "output_objects": {"half__bagel_dough.n.01": 2}}, {"rule_name": "baguet.n.01-slicing", "input_objects": {"baguet.n.01": 1}, "output_objects": {"half__baguet.n.01": 2}}, {"rule_name": "bamboo.n.01-slicing", "input_objects": {"bamboo.n.01": 1}, "output_objects": {"half__bamboo.n.01": 2}}, {"rule_name": "banana.n.02-slicing", "input_objects": {"banana.n.02": 1}, "output_objects": {"half__banana.n.01": 2}}, {"rule_name": "banana_bread.n.01-slicing", "input_objects": {"banana_bread.n.01": 1}, "output_objects": {"half__banana_bread.n.01": 2}}, {"rule_name": "bay_leaf.n.01-slicing", "input_objects": {"bay_leaf.n.01": 1}, "output_objects": {"half__bay_leaf.n.01": 2}}, {"rule_name": "bean_curd.n.01-slicing", "input_objects": {"bean_curd.n.01": 1}, "output_objects": {"half__bean_curd.n.01": 2}}, {"rule_name": "beefsteak_tomato.n.01-slicing", "input_objects": {"beefsteak_tomato.n.01": 1}, "output_objects": {"half__beefsteak_tomato.n.01": 2}}, {"rule_name": "beet.n.02-slicing", "input_objects": {"beet.n.02": 1}, "output_objects": {"half__beet.n.01": 2}}, {"rule_name": "bell_pepper.n.02-slicing", "input_objects": {"bell_pepper.n.02": 1}, "output_objects": {"half__bell_pepper.n.01": 2}}, {"rule_name": "biscuit_dough.n.01-slicing", "input_objects": {"biscuit_dough.n.01": 1}, "output_objects": {"half__biscuit_dough.n.01": 2}}, {"rule_name": "blackberry.n.01-slicing", "input_objects": {"blackberry.n.01": 1}, "output_objects": {"half__blackberry.n.01": 2}}, {"rule_name": "bleu.n.01-slicing", "input_objects": {"bleu.n.01": 1}, "output_objects": {"half__bleu.n.01": 2}}, {"rule_name": "bok_choy.n.02-slicing", "input_objects": {"bok_choy.n.02": 1}, "output_objects": {"half__bok_choy.n.01": 2}}, {"rule_name": "bouquet.n.01-slicing", "input_objects": {"bouquet.n.01": 1}, "output_objects": {"half__bouquet.n.01": 2}}, {"rule_name": "branch.n.02-slicing", "input_objects": {"branch.n.02": 1}, "output_objects": {"half__branch.n.01": 2}}, {"rule_name": "bratwurst.n.01-slicing", "input_objects": {"bratwurst.n.01": 1}, "output_objects": {"half__bratwurst.n.01": 2}}, {"rule_name": "brisket.n.01-slicing", "input_objects": {"brisket.n.01": 1}, "output_objects": {"half__brisket.n.01": 2}}, {"rule_name": "broccoli.n.02-slicing", "input_objects": {"broccoli.n.02": 1}, "output_objects": {"half__broccoli.n.01": 2}}, {"rule_name": "broccoli_rabe.n.02-slicing", "input_objects": {"broccoli_rabe.n.02": 1}, "output_objects": {"half__broccoli_rabe.n.01": 2}}, {"rule_name": "broccolini.n.01-slicing", "input_objects": {"broccolini.n.01": 1}, "output_objects": {"half__broccolini.n.01": 2}}, {"rule_name": "brownie.n.03-slicing", "input_objects": {"brownie.n.03": 1}, "output_objects": {"half__brownie.n.01": 2}}, {"rule_name": "brussels_sprouts.n.01-slicing", "input_objects": {"brussels_sprouts.n.01": 1}, "output_objects": {"half__brussels_sprouts.n.01": 2}}, {"rule_name": "burrito.n.01-slicing", "input_objects": {"burrito.n.01": 1}, "output_objects": {"half__burrito.n.01": 2}}, {"rule_name": "butter.n.01-slicing", "input_objects": {"butter.n.01": 1}, "output_objects": {"half__butter.n.01": 2}}, {"rule_name": "butter_cookie.n.01-slicing", "input_objects": {"butter_cookie.n.01": 1}, "output_objects": {"half__butter_cookie.n.01": 2}}, {"rule_name": "buttermilk_pancake.n.01-slicing", "input_objects": {"buttermilk_pancake.n.01": 1}, "output_objects": {"half__buttermilk_pancake.n.01": 2}}, {"rule_name": "butternut_squash.n.01-slicing", "input_objects": {"butternut_squash.n.01": 1}, "output_objects": {"half__butternut_squash.n.01": 2}}, {"rule_name": "cactus.n.01-slicing", "input_objects": {"cactus.n.01": 1}, "output_objects": {"half__cactus.n.01": 2}}, {"rule_name": "cantaloup.n.02-slicing", "input_objects": {"cantaloup.n.02": 1}, "output_objects": {"half__cantaloup.n.01": 2}}, {"rule_name": "card.n.04-slicing", "input_objects": {"card.n.04": 1}, "output_objects": {"half__card.n.01": 2}}, {"rule_name": "carne_asada.n.01-slicing", "input_objects": {"carne_asada.n.01": 1}, "output_objects": {"half__carne_asada.n.01": 2}}, {"rule_name": "cauliflower.n.02-slicing", "input_objects": {"cauliflower.n.02": 1}, "output_objects": {"half__cauliflower.n.01": 2}}, {"rule_name": "celery.n.02-slicing", "input_objects": {"celery.n.02": 1}, "output_objects": {"half__celery.n.01": 2}}, {"rule_name": "chanterelle.n.01-slicing", "input_objects": {"chanterelle.n.01": 1}, "output_objects": {"half__chanterelle.n.01": 2}}, {"rule_name": "chard.n.02-slicing", "input_objects": {"chard.n.02": 1}, "output_objects": {"half__chard.n.01": 2}}, {"rule_name": "cheddar.n.02-slicing", "input_objects": {"cheddar.n.02": 1}, "output_objects": {"half__cheddar.n.01": 2}}, {"rule_name": "cheese_tart.n.01-slicing", "input_objects": {"cheese_tart.n.01": 1}, "output_objects": {"half__cheese_tart.n.01": 2}}, {"rule_name": "cheesecake.n.01-slicing", "input_objects": {"cheesecake.n.01": 1}, "output_objects": {"half__cheesecake.n.01": 2}}, {"rule_name": "cherry.n.03-slicing", "input_objects": {"cherry.n.03": 1}, "output_objects": {"half__cherry.n.01": 2}}, {"rule_name": "cherry_tomato.n.02-slicing", "input_objects": {"cherry_tomato.n.02": 1}, "output_objects": {"half__cherry_tomato.n.01": 2}}, {"rule_name": "chicken.n.01-slicing", "input_objects": {"chicken.n.01": 1}, "output_objects": {"half__chicken.n.01": 2}}, {"rule_name": "chicken_breast.n.02-slicing", "input_objects": {"chicken_breast.n.02": 1}, "output_objects": {"half__chicken_breast.n.01": 2}}, {"rule_name": "chicken_leg.n.01-slicing", "input_objects": {"chicken_leg.n.01": 1}, "output_objects": {"half__chicken_leg.n.01": 2}}, {"rule_name": "chicken_tender.n.01-slicing", "input_objects": {"chicken_tender.n.01": 1}, "output_objects": {"half__chicken_tender.n.01": 2}}, {"rule_name": "chicken_wing.n.01-slicing", "input_objects": {"chicken_wing.n.01": 1}, "output_objects": {"half__chicken_wing.n.01": 2}}, {"rule_name": "chili.n.02-slicing", "input_objects": {"chili.n.02": 1}, "output_objects": {"half__chili.n.01": 2}}, {"rule_name": "chives.n.01-slicing", "input_objects": {"chives.n.01": 1}, "output_objects": {"half__chives.n.01": 2}}, {"rule_name": "chocolate_biscuit.n.01-slicing", "input_objects": {"chocolate_biscuit.n.01": 1}, "output_objects": {"half__chocolate_biscuit.n.01": 2}}, {"rule_name": "chocolate_cake.n.01-slicing", "input_objects": {"chocolate_cake.n.01": 1}, "output_objects": {"half__chocolate_cake.n.01": 2}}, {"rule_name": "chocolate_chip_cookie.n.01-slicing", "input_objects": {"chocolate_chip_cookie.n.01": 1}, "output_objects": {"half__chocolate_chip_cookie.n.01": 2}}, {"rule_name": "chocolate_cookie_dough.n.01-slicing", "input_objects": {"chocolate_cookie_dough.n.01": 1}, "output_objects": {"half__chocolate_cookie_dough.n.01": 2}}, {"rule_name": "chorizo.n.01-slicing", "input_objects": {"chorizo.n.01": 1}, "output_objects": {"half__chorizo.n.01": 2}}, {"rule_name": "cinnamon_roll.n.01-slicing", "input_objects": {"cinnamon_roll.n.01": 1}, "output_objects": {"half__cinnamon_roll.n.01": 2}}, {"rule_name": "clam.n.03-slicing", "input_objects": {"clam.n.03": 1}, "output_objects": {"half__clam.n.01": 2}}, {"rule_name": "club_sandwich.n.01-slicing", "input_objects": {"club_sandwich.n.01": 1}, "output_objects": {"half__club_sandwich.n.01": 2}}, {"rule_name": "coconut.n.02-slicing", "input_objects": {"coconut.n.02": 1}, "output_objects": {"half__coconut.n.01": 2}}, {"rule_name": "cod.n.02-slicing", "input_objects": {"cod.n.02": 1}, "output_objects": {"half__cod.n.01": 2}}, {"rule_name": "cold_cuts.n.01-slicing", "input_objects": {"cold_cuts.n.01": 1}, "output_objects": {"half__cold_cuts.n.01": 2}}, {"rule_name": "crab.n.05-slicing", "input_objects": {"crab.n.05": 1}, "output_objects": {"half__crab.n.01": 2}}, {"rule_name": "crayfish.n.02-slicing", "input_objects": {"crayfish.n.02": 1}, "output_objects": {"half__crayfish.n.01": 2}}, {"rule_name": "crescent_roll.n.01-slicing", "input_objects": {"crescent_roll.n.01": 1}, "output_objects": {"half__crescent_roll.n.01": 2}}, {"rule_name": "cucumber.n.02-slicing", "input_objects": {"cucumber.n.02": 1}, "output_objects": {"half__cucumber.n.01": 2}}, {"rule_name": "cupcake.n.01-slicing", "input_objects": {"cupcake.n.01": 1}, "output_objects": {"half__cupcake.n.01": 2}}, {"rule_name": "danish.n.02-slicing", "input_objects": {"danish.n.02": 1}, "output_objects": {"half__danish.n.01": 2}}, {"rule_name": "date.n.08-slicing", "input_objects": {"date.n.08": 1}, "output_objects": {"half__date.n.01": 2}}, {"rule_name": "doughnut.n.02-slicing", "input_objects": {"doughnut.n.02": 1}, "output_objects": {"half__doughnut.n.01": 2}}, {"rule_name": "dried_apricot.n.01-slicing", "input_objects": {"dried_apricot.n.01": 1}, "output_objects": {"half__dried_apricot.n.01": 2}}, {"rule_name": "duck.n.03-slicing", "input_objects": {"duck.n.03": 1}, "output_objects": {"half__duck.n.01": 2}}, {"rule_name": "dumpling.n.02-slicing", "input_objects": {"dumpling.n.02": 1}, "output_objects": {"half__dumpling.n.01": 2}}, {"rule_name": "durian.n.02-slicing", "input_objects": {"durian.n.02": 1}, "output_objects": {"half__durian.n.01": 2}}, {"rule_name": "edible_cookie_dough.n.01-slicing", "input_objects": {"edible_cookie_dough.n.01": 1}, "output_objects": {"half__edible_cookie_dough.n.01": 2}}, {"rule_name": "eggplant.n.01-slicing", "input_objects": {"eggplant.n.01": 1}, "output_objects": {"half__eggplant.n.01": 2}}, {"rule_name": "enchilada.n.01-slicing", "input_objects": {"enchilada.n.01": 1}, "output_objects": {"half__enchilada.n.01": 2}}, {"rule_name": "entire_leaf.n.01-slicing", "input_objects": {"entire_leaf.n.01": 1}, "output_objects": {"half__entire_leaf.n.01": 2}}, {"rule_name": "fennel.n.02-slicing", "input_objects": {"fennel.n.02": 1}, "output_objects": {"half__fennel.n.01": 2}}, {"rule_name": "feta.n.01-slicing", "input_objects": {"feta.n.01": 1}, "output_objects": {"half__feta.n.01": 2}}, {"rule_name": "fillet.n.02-slicing", "input_objects": {"fillet.n.02": 1}, "output_objects": {"half__fillet.n.01": 2}}, {"rule_name": "flower.n.02-slicing", "input_objects": {"flower.n.02": 1}, "output_objects": {"half__flower.n.01": 2}}, {"rule_name": "frank.n.02-slicing", "input_objects": {"frank.n.02": 1}, "output_objects": {"half__frank.n.01": 2}}, {"rule_name": "frankfurter_bun.n.01-slicing", "input_objects": {"frankfurter_bun.n.01": 1}, "output_objects": {"half__frankfurter_bun.n.01": 2}}, {"rule_name": "french_fries.n.02-slicing", "input_objects": {"french_fries.n.02": 1}, "output_objects": {"half__french_fries.n.01": 2}}, {"rule_name": "french_toast.n.01-slicing", "input_objects": {"french_toast.n.01": 1}, "output_objects": {"half__french_toast.n.01": 2}}, {"rule_name": "fruitcake.n.02-slicing", "input_objects": {"fruitcake.n.02": 1}, "output_objects": {"half__fruitcake.n.01": 2}}, {"rule_name": "garden_plant.n.01-slicing", "input_objects": {"garden_plant.n.01": 1}, "output_objects": {"half__garden_plant.n.01": 2}}, {"rule_name": "garlic_bread.n.01-slicing", "input_objects": {"garlic_bread.n.01": 1}, "output_objects": {"half__garlic_bread.n.01": 2}}, {"rule_name": "gelatin.n.02-slicing", "input_objects": {"gelatin.n.02": 1}, "output_objects": {"half__gelatin.n.01": 2}}, {"rule_name": "ginger.n.03-slicing", "input_objects": {"ginger.n.03": 1}, "output_objects": {"half__ginger.n.01": 2}}, {"rule_name": "gingerbread.n.01-slicing", "input_objects": {"gingerbread.n.01": 1}, "output_objects": {"half__gingerbread.n.01": 2}}, {"rule_name": "gooseberry.n.02-slicing", "input_objects": {"gooseberry.n.02": 1}, "output_objects": {"half__gooseberry.n.01": 2}}, {"rule_name": "gourd.n.02-slicing", "input_objects": {"gourd.n.02": 1}, "output_objects": {"half__gourd.n.01": 2}}, {"rule_name": "granola_bar.n.01-slicing", "input_objects": {"granola_bar.n.01": 1}, "output_objects": {"half__granola_bar.n.01": 2}}, {"rule_name": "grapefruit.n.02-slicing", "input_objects": {"grapefruit.n.02": 1}, "output_objects": {"half__grapefruit.n.01": 2}}, {"rule_name": "green_bean.n.01-slicing", "input_objects": {"green_bean.n.01": 1}, "output_objects": {"half__green_bean.n.01": 2}}, {"rule_name": "green_onion.n.01-slicing", "input_objects": {"green_onion.n.01": 1}, "output_objects": {"half__green_onion.n.01": 2}}, {"rule_name": "grouper.n.01-slicing", "input_objects": {"grouper.n.01": 1}, "output_objects": {"half__grouper.n.01": 2}}, {"rule_name": "halibut.n.01-slicing", "input_objects": {"halibut.n.01": 1}, "output_objects": {"half__halibut.n.01": 2}}, {"rule_name": "ham_hock.n.01-slicing", "input_objects": {"ham_hock.n.01": 1}, "output_objects": {"half__ham_hock.n.01": 2}}, {"rule_name": "hamburger.n.01-slicing", "input_objects": {"hamburger.n.01": 1}, "output_objects": {"half__hamburger.n.01": 2}}, {"rule_name": "hamburger_bun.n.01-slicing", "input_objects": {"hamburger_bun.n.01": 1}, "output_objects": {"half__hamburger_bun.n.01": 2}}, {"rule_name": "hard-boiled_egg.n.01-slicing", "input_objects": {"hard-boiled_egg.n.01": 1}, "output_objects": {"half__hard-boiled_egg.n.01": 2}}, {"rule_name": "hazelnut.n.02-slicing", "input_objects": {"hazelnut.n.02": 1}, "output_objects": {"half__hazelnut.n.01": 2}}, {"rule_name": "head_cabbage.n.02-slicing", "input_objects": {"head_cabbage.n.02": 1}, "output_objects": {"half__head_cabbage.n.01": 2}}, {"rule_name": "hemp.n.01-slicing", "input_objects": {"hemp.n.01": 1}, "output_objects": {"half__hemp.n.01": 2}}, {"rule_name": "hip.n.05-slicing", "input_objects": {"hip.n.05": 1}, "output_objects": {"half__hip.n.01": 2}}, {"rule_name": "hotdog.n.02-slicing", "input_objects": {"hotdog.n.02": 1}, "output_objects": {"half__hotdog.n.01": 2}}, {"rule_name": "huitre.n.01-slicing", "input_objects": {"huitre.n.01": 1}, "output_objects": {"half__huitre.n.01": 2}}, {"rule_name": "ivy.n.01-slicing", "input_objects": {"ivy.n.01": 1}, "output_objects": {"half__ivy.n.01": 2}}, {"rule_name": "kabob.n.01-slicing", "input_objects": {"kabob.n.01": 1}, "output_objects": {"half__kabob.n.01": 2}}, {"rule_name": "kale.n.03-slicing", "input_objects": {"kale.n.03": 1}, "output_objects": {"half__kale.n.01": 2}}, {"rule_name": "kielbasa.n.01-slicing", "input_objects": {"kielbasa.n.01": 1}, "output_objects": {"half__kielbasa.n.01": 2}}, {"rule_name": "kiwi.n.03-slicing", "input_objects": {"kiwi.n.03": 1}, "output_objects": {"half__kiwi.n.01": 2}}, {"rule_name": "lamb.n.05-slicing", "input_objects": {"lamb.n.05": 1}, "output_objects": {"half__lamb.n.01": 2}}, {"rule_name": "leek.n.02-slicing", "input_objects": {"leek.n.02": 1}, "output_objects": {"half__leek.n.01": 2}}, {"rule_name": "lemon.n.01-slicing", "input_objects": {"lemon.n.01": 1}, "output_objects": {"half__lemon.n.01": 2}}, {"rule_name": "lemon_peel.n.01-slicing", "input_objects": {"lemon_peel.n.01": 1}, "output_objects": {"half__lemon_peel.n.01": 2}}, {"rule_name": "lettuce.n.03-slicing", "input_objects": {"lettuce.n.03": 1}, "output_objects": {"half__lettuce.n.01": 2}}, {"rule_name": "lime.n.06-slicing", "input_objects": {"lime.n.06": 1}, "output_objects": {"half__lime.n.01": 2}}, {"rule_name": "lobster.n.01-slicing", "input_objects": {"lobster.n.01": 1}, "output_objects": {"half__lobster.n.01": 2}}, {"rule_name": "log.n.01-slicing", "input_objects": {"log.n.01": 1}, "output_objects": {"half__log.n.01": 2}}, {"rule_name": "macaroon.n.01-slicing", "input_objects": {"macaroon.n.01": 1}, "output_objects": {"half__macaroon.n.01": 2}}, {"rule_name": "mango.n.02-slicing", "input_objects": {"mango.n.02": 1}, "output_objects": {"half__mango.n.01": 2}}, {"rule_name": "marigold.n.01-slicing", "input_objects": {"marigold.n.01": 1}, "output_objects": {"half__marigold.n.01": 2}}, {"rule_name": "marshmallow.n.01-slicing", "input_objects": {"marshmallow.n.01": 1}, "output_objects": {"half__marshmallow.n.01": 2}}, {"rule_name": "meat_loaf.n.01-slicing", "input_objects": {"meat_loaf.n.01": 1}, "output_objects": {"half__meat_loaf.n.01": 2}}, {"rule_name": "meatball.n.01-slicing", "input_objects": {"meatball.n.01": 1}, "output_objects": {"half__meatball.n.01": 2}}, {"rule_name": "mozzarella.n.01-slicing", "input_objects": {"mozzarella.n.01": 1}, "output_objects": {"half__mozzarella.n.01": 2}}, {"rule_name": "muffin.n.01-slicing", "input_objects": {"muffin.n.01": 1}, "output_objects": {"half__muffin.n.01": 2}}, {"rule_name": "mushroom.n.05-slicing", "input_objects": {"mushroom.n.05": 1}, "output_objects": {"half__mushroom.n.01": 2}}, {"rule_name": "mussel.n.01-slicing", "input_objects": {"mussel.n.01": 1}, "output_objects": {"half__mussel.n.01": 2}}, {"rule_name": "mustard.n.03-slicing", "input_objects": {"mustard.n.03": 1}, "output_objects": {"half__mustard.n.01": 2}}, {"rule_name": "nectarine.n.02-slicing", "input_objects": {"nectarine.n.02": 1}, "output_objects": {"half__nectarine.n.01": 2}}, {"rule_name": "olive.n.04-slicing", "input_objects": {"olive.n.04": 1}, "output_objects": {"half__olive.n.01": 2}}, {"rule_name": "omelet.n.01-slicing", "input_objects": {"omelet.n.01": 1}, "output_objects": {"half__omelet.n.01": 2}}, {"rule_name": "orange.n.01-slicing", "input_objects": {"orange.n.01": 1}, "output_objects": {"half__orange.n.01": 2}}, {"rule_name": "oxtail.n.01-slicing", "input_objects": {"oxtail.n.01": 1}, "output_objects": {"half__oxtail.n.01": 2}}, {"rule_name": "papaya.n.02-slicing", "input_objects": {"papaya.n.02": 1}, "output_objects": {"half__papaya.n.01": 2}}, {"rule_name": "parsley.n.02-slicing", "input_objects": {"parsley.n.02": 1}, "output_objects": {"half__parsley.n.01": 2}}, {"rule_name": "parsnip.n.03-slicing", "input_objects": {"parsnip.n.03": 1}, "output_objects": {"half__parsnip.n.01": 2}}, {"rule_name": "pastry.n.01-slicing", "input_objects": {"pastry.n.01": 1}, "output_objects": {"half__pastry.n.01": 2}}, {"rule_name": "peach.n.03-slicing", "input_objects": {"peach.n.03": 1}, "output_objects": {"half__peach.n.01": 2}}, {"rule_name": "pear.n.01-slicing", "input_objects": {"pear.n.01": 1}, "output_objects": {"half__pear.n.01": 2}}, {"rule_name": "peppermint.n.03-slicing", "input_objects": {"peppermint.n.03": 1}, "output_objects": {"half__peppermint.n.01": 2}}, {"rule_name": "pepperoni.n.01-slicing", "input_objects": {"pepperoni.n.01": 1}, "output_objects": {"half__pepperoni.n.01": 2}}, {"rule_name": "pickle.n.01-slicing", "input_objects": {"pickle.n.01": 1}, "output_objects": {"half__pickle.n.01": 2}}, {"rule_name": "pie_crust.n.01-slicing", "input_objects": {"pie_crust.n.01": 1}, "output_objects": {"half__pie_crust.n.01": 2}}, {"rule_name": "pieplant.n.01-slicing", "input_objects": {"pieplant.n.01": 1}, "output_objects": {"half__pieplant.n.01": 2}}, {"rule_name": "pineapple.n.02-slicing", "input_objects": {"pineapple.n.02": 1}, "output_objects": {"half__pineapple.n.01": 2}}, {"rule_name": "pita.n.01-slicing", "input_objects": {"pita.n.01": 1}, "output_objects": {"half__pita.n.01": 2}}, {"rule_name": "pizza.n.01-slicing", "input_objects": {"pizza.n.01": 1}, "output_objects": {"half__pizza.n.01": 2}}, {"rule_name": "pizza_dough.n.01-slicing", "input_objects": {"pizza_dough.n.01": 1}, "output_objects": {"half__pizza_dough.n.01": 2}}, {"rule_name": "plum.n.02-slicing", "input_objects": {"plum.n.02": 1}, "output_objects": {"half__plum.n.01": 2}}, {"rule_name": "pork.n.01-slicing", "input_objects": {"pork.n.01": 1}, "output_objects": {"half__pork.n.01": 2}}, {"rule_name": "porkchop.n.01-slicing", "input_objects": {"porkchop.n.01": 1}, "output_objects": {"half__porkchop.n.01": 2}}, {"rule_name": "potato.n.01-slicing", "input_objects": {"potato.n.01": 1}, "output_objects": {"half__potato.n.01": 2}}, {"rule_name": "potato_pancake.n.01-slicing", "input_objects": {"potato_pancake.n.01": 1}, "output_objects": {"half__potato_pancake.n.01": 2}}, {"rule_name": "prawn.n.01-slicing", "input_objects": {"prawn.n.01": 1}, "output_objects": {"half__prawn.n.01": 2}}, {"rule_name": "pretzel.n.01-slicing", "input_objects": {"pretzel.n.01": 1}, "output_objects": {"half__pretzel.n.01": 2}}, {"rule_name": "prosciutto.n.01-slicing", "input_objects": {"prosciutto.n.01": 1}, "output_objects": {"half__prosciutto.n.01": 2}}, {"rule_name": "pumpkin.n.02-slicing", "input_objects": {"pumpkin.n.02": 1}, "output_objects": {"half__pumpkin.n.01": 2}}, {"rule_name": "quail.n.01-slicing", "input_objects": {"quail.n.01": 1}, "output_objects": {"half__quail.n.01": 2}}, {"rule_name": "quiche.n.02-slicing", "input_objects": {"quiche.n.02": 1}, "output_objects": {"half__quiche.n.01": 2}}, {"rule_name": "radish.n.01-slicing", "input_objects": {"radish.n.01": 1}, "output_objects": {"half__radish.n.01": 2}}, {"rule_name": "ramen.n.01-slicing", "input_objects": {"ramen.n.01": 1}, "output_objects": {"half__ramen.n.01": 2}}, {"rule_name": "rib.n.03-slicing", "input_objects": {"rib.n.03": 1}, "output_objects": {"half__rib.n.01": 2}}, {"rule_name": "rope.n.01-slicing", "input_objects": {"rope.n.01": 1}, "output_objects": {"half__rope.n.01": 2}}, {"rule_name": "rutabaga.n.01-slicing", "input_objects": {"rutabaga.n.01": 1}, "output_objects": {"half__rutabaga.n.01": 2}}, {"rule_name": "salmon.n.03-slicing", "input_objects": {"salmon.n.03": 1}, "output_objects": {"half__salmon.n.01": 2}}, {"rule_name": "scallop.n.02-slicing", "input_objects": {"scallop.n.02": 1}, "output_objects": {"half__scallop.n.01": 2}}, {"rule_name": "scone.n.01-slicing", "input_objects": {"scone.n.01": 1}, "output_objects": {"half__scone.n.01": 2}}, {"rule_name": "shiitake.n.01-slicing", "input_objects": {"shiitake.n.01": 1}, "output_objects": {"half__shiitake.n.01": 2}}, {"rule_name": "sirloin.n.01-slicing", "input_objects": {"sirloin.n.01": 1}, "output_objects": {"half__sirloin.n.01": 2}}, {"rule_name": "snapper.n.02-slicing", "input_objects": {"snapper.n.02": 1}, "output_objects": {"half__snapper.n.01": 2}}, {"rule_name": "sour_bread.n.01-slicing", "input_objects": {"sour_bread.n.01": 1}, "output_objects": {"half__sour_bread.n.01": 2}}, {"rule_name": "spice_cookie.n.01-slicing", "input_objects": {"spice_cookie.n.01": 1}, "output_objects": {"half__spice_cookie.n.01": 2}}, {"rule_name": "spice_cookie_dough.n.01-slicing", "input_objects": {"spice_cookie_dough.n.01": 1}, "output_objects": {"half__spice_cookie_dough.n.01": 2}}, {"rule_name": "spinach.n.02-slicing", "input_objects": {"spinach.n.02": 1}, "output_objects": {"half__spinach.n.01": 2}}, {"rule_name": "sprout.n.01-slicing", "input_objects": {"sprout.n.01": 1}, "output_objects": {"half__sprout.n.01": 2}}, {"rule_name": "squid.n.01-slicing", "input_objects": {"squid.n.01": 1}, "output_objects": {"half__squid.n.01": 2}}, {"rule_name": "steak.n.01-slicing", "input_objects": {"steak.n.01": 1}, "output_objects": {"half__steak.n.01": 2}}, {"rule_name": "strawberry.n.01-slicing", "input_objects": {"strawberry.n.01": 1}, "output_objects": {"half__strawberry.n.01": 2}}, {"rule_name": "sugar_cookie.n.01-slicing", "input_objects": {"sugar_cookie.n.01": 1}, "output_objects": {"half__sugar_cookie.n.01": 2}}, {"rule_name": "sugar_cookie_dough.n.01-slicing", "input_objects": {"sugar_cookie_dough.n.01": 1}, "output_objects": {"half__sugar_cookie_dough.n.01": 2}}, {"rule_name": "sunflower.n.01-slicing", "input_objects": {"sunflower.n.01": 1}, "output_objects": {"half__sunflower.n.01": 2}}, {"rule_name": "sushi.n.01-slicing", "input_objects": {"sushi.n.01": 1}, "output_objects": {"half__sushi.n.01": 2}}, {"rule_name": "sweet_corn.n.02-slicing", "input_objects": {"sweet_corn.n.02": 1}, "output_objects": {"half__sweet_corn.n.01": 2}}, {"rule_name": "swiss_cheese.n.01-slicing", "input_objects": {"swiss_cheese.n.01": 1}, "output_objects": {"half__swiss_cheese.n.01": 2}}, {"rule_name": "taco.n.02-slicing", "input_objects": {"taco.n.02": 1}, "output_objects": {"half__taco.n.01": 2}}, {"rule_name": "tenderloin.n.02-slicing", "input_objects": {"tenderloin.n.02": 1}, "output_objects": {"half__tenderloin.n.01": 2}}, {"rule_name": "tiramisu.n.01-slicing", "input_objects": {"tiramisu.n.01": 1}, "output_objects": {"half__tiramisu.n.01": 2}}, {"rule_name": "toast.n.01-slicing", "input_objects": {"toast.n.01": 1}, "output_objects": {"half__toast.n.01": 2}}, {"rule_name": "tofu.n.02-slicing", "input_objects": {"tofu.n.02": 1}, "output_objects": {"half__tofu.n.01": 2}}, {"rule_name": "tortilla.n.01-slicing", "input_objects": {"tortilla.n.01": 1}, "output_objects": {"half__tortilla.n.01": 2}}, {"rule_name": "tortilla_chip.n.01-slicing", "input_objects": {"tortilla_chip.n.01": 1}, "output_objects": {"half__tortilla_chip.n.01": 2}}, {"rule_name": "trout.n.01-slicing", "input_objects": {"trout.n.01": 1}, "output_objects": {"half__trout.n.01": 2}}, {"rule_name": "trunk.n.01-slicing", "input_objects": {"trunk.n.01": 1}, "output_objects": {"half__trunk.n.01": 2}}, {"rule_name": "tulip.n.01-slicing", "input_objects": {"tulip.n.01": 1}, "output_objects": {"half__tulip.n.01": 2}}, {"rule_name": "tuna.n.02-slicing", "input_objects": {"tuna.n.02": 1}, "output_objects": {"half__tuna.n.01": 2}}, {"rule_name": "turkey.n.04-slicing", "input_objects": {"turkey.n.04": 1}, "output_objects": {"half__turkey.n.01": 2}}, {"rule_name": "turkey_leg.n.01-slicing", "input_objects": {"turkey_leg.n.01": 1}, "output_objects": {"half__turkey_leg.n.01": 2}}, {"rule_name": "vanilla.n.01-slicing", "input_objects": {"vanilla.n.01": 1}, "output_objects": {"half__vanilla.n.01": 2}}, {"rule_name": "veal.n.01-slicing", "input_objects": {"veal.n.01": 1}, "output_objects": {"half__veal.n.01": 2}}, {"rule_name": "venison.n.01-slicing", "input_objects": {"venison.n.01": 1}, "output_objects": {"half__venison.n.01": 2}}, {"rule_name": "vidalia_onion.n.01-slicing", "input_objects": {"vidalia_onion.n.01": 1}, "output_objects": {"half__vidalia_onion.n.01": 2}}, {"rule_name": "virginia_ham.n.01-slicing", "input_objects": {"virginia_ham.n.01": 1}, "output_objects": {"half__virginia_ham.n.01": 2}}, {"rule_name": "wafer.n.02-slicing", "input_objects": {"wafer.n.02": 1}, "output_objects": {"half__wafer.n.01": 2}}, {"rule_name": "waffle.n.01-slicing", "input_objects": {"waffle.n.01": 1}, "output_objects": {"half__waffle.n.01": 2}}, {"rule_name": "walnut.n.01-slicing", "input_objects": {"walnut.n.01": 1}, "output_objects": {"half__walnut.n.01": 2}}, {"rule_name": "watermelon.n.02-slicing", "input_objects": {"watermelon.n.02": 1}, "output_objects": {"half__watermelon.n.01": 2}}, {"rule_name": "white_turnip.n.02-slicing", "input_objects": {"white_turnip.n.02": 1}, "output_objects": {"half__white_turnip.n.01": 2}}, {"rule_name": "whole_garlic.n.01-slicing", "input_objects": {"whole_garlic.n.01": 1}, "output_objects": {"half__whole_garlic.n.01": 2}}, {"rule_name": "wrapping_paper.n.01-slicing", "input_objects": {"wrapping_paper.n.01": 1}, "output_objects": {"half__wrapping_paper.n.01": 2}}, {"rule_name": "yam.n.03-slicing", "input_objects": {"yam.n.03": 1}, "output_objects": {"half__yam.n.01": 2}}, {"rule_name": "zucchini.n.02-slicing", "input_objects": {"zucchini.n.02": 1}, "output_objects": {"half__zucchini.n.01": 2}}]
+[
+    {
+        "rule_name": "agave.n.01-slicing",
+        "input_objects": {
+            "agave.n.01": 1
+        },
+        "output_objects": {
+            "half__agave.n.01": 2
+        }
+    },
+    {
+        "rule_name": "antipasto.n.01-slicing",
+        "input_objects": {
+            "antipasto.n.01": 1
+        },
+        "output_objects": {
+            "half__antipasto.n.01": 2
+        }
+    },
+    {
+        "rule_name": "apple.n.01-slicing",
+        "input_objects": {
+            "apple.n.01": 1
+        },
+        "output_objects": {
+            "half__apple.n.01": 2
+        }
+    },
+    {
+        "rule_name": "apple_pie.n.01-slicing",
+        "input_objects": {
+            "apple_pie.n.01": 1
+        },
+        "output_objects": {
+            "half__apple_pie.n.01": 2
+        }
+    },
+    {
+        "rule_name": "apricot.n.02-slicing",
+        "input_objects": {
+            "apricot.n.02": 1
+        },
+        "output_objects": {
+            "half__apricot.n.01": 2
+        }
+    },
+    {
+        "rule_name": "arepa.n.01-slicing",
+        "input_objects": {
+            "arepa.n.01": 1
+        },
+        "output_objects": {
+            "half__arepa.n.01": 2
+        }
+    },
+    {
+        "rule_name": "artichoke.n.02-slicing",
+        "input_objects": {
+            "artichoke.n.02": 1
+        },
+        "output_objects": {
+            "half__artichoke.n.01": 2
+        }
+    },
+    {
+        "rule_name": "arugula.n.02-slicing",
+        "input_objects": {
+            "arugula.n.02": 1
+        },
+        "output_objects": {
+            "half__arugula.n.01": 2
+        }
+    },
+    {
+        "rule_name": "asparagus.n.02-slicing",
+        "input_objects": {
+            "asparagus.n.02": 1
+        },
+        "output_objects": {
+            "half__asparagus.n.01": 2
+        }
+    },
+    {
+        "rule_name": "auricularia.n.01-slicing",
+        "input_objects": {
+            "auricularia.n.01": 1
+        },
+        "output_objects": {
+            "half__auricularia.n.01": 2
+        }
+    },
+    {
+        "rule_name": "avocado.n.01-slicing",
+        "input_objects": {
+            "avocado.n.01": 1
+        },
+        "output_objects": {
+            "half__avocado.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bacon.n.01-slicing",
+        "input_objects": {
+            "bacon.n.01": 1
+        },
+        "output_objects": {
+            "half__bacon.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bagel.n.01-slicing",
+        "input_objects": {
+            "bagel.n.01": 1
+        },
+        "output_objects": {
+            "half__bagel.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bagel_dough.n.01-slicing",
+        "input_objects": {
+            "bagel_dough.n.01": 1
+        },
+        "output_objects": {
+            "half__bagel_dough.n.01": 2
+        }
+    },
+    {
+        "rule_name": "baguet.n.01-slicing",
+        "input_objects": {
+            "baguet.n.01": 1
+        },
+        "output_objects": {
+            "half__baguet.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bamboo.n.01-slicing",
+        "input_objects": {
+            "bamboo.n.01": 1
+        },
+        "output_objects": {
+            "half__bamboo.n.01": 2
+        }
+    },
+    {
+        "rule_name": "banana.n.02-slicing",
+        "input_objects": {
+            "banana.n.02": 1
+        },
+        "output_objects": {
+            "half__banana.n.01": 2
+        }
+    },
+    {
+        "rule_name": "banana_bread.n.01-slicing",
+        "input_objects": {
+            "banana_bread.n.01": 1
+        },
+        "output_objects": {
+            "half__banana_bread.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bay_leaf.n.01-slicing",
+        "input_objects": {
+            "bay_leaf.n.01": 1
+        },
+        "output_objects": {
+            "half__bay_leaf.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bean_curd.n.01-slicing",
+        "input_objects": {
+            "bean_curd.n.01": 1
+        },
+        "output_objects": {
+            "half__bean_curd.n.01": 2
+        }
+    },
+    {
+        "rule_name": "beefsteak_tomato.n.01-slicing",
+        "input_objects": {
+            "beefsteak_tomato.n.01": 1
+        },
+        "output_objects": {
+            "half__beefsteak_tomato.n.01": 2
+        }
+    },
+    {
+        "rule_name": "beet.n.02-slicing",
+        "input_objects": {
+            "beet.n.02": 1
+        },
+        "output_objects": {
+            "half__beet.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bell_pepper.n.02-slicing",
+        "input_objects": {
+            "bell_pepper.n.02": 1
+        },
+        "output_objects": {
+            "half__bell_pepper.n.01": 2
+        }
+    },
+    {
+        "rule_name": "biscuit_dough.n.01-slicing",
+        "input_objects": {
+            "biscuit_dough.n.01": 1
+        },
+        "output_objects": {
+            "half__biscuit_dough.n.01": 2
+        }
+    },
+    {
+        "rule_name": "blackberry.n.01-slicing",
+        "input_objects": {
+            "blackberry.n.01": 1
+        },
+        "output_objects": {
+            "half__blackberry.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bleu.n.01-slicing",
+        "input_objects": {
+            "bleu.n.01": 1
+        },
+        "output_objects": {
+            "half__bleu.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bok_choy.n.02-slicing",
+        "input_objects": {
+            "bok_choy.n.02": 1
+        },
+        "output_objects": {
+            "half__bok_choy.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bouquet.n.01-slicing",
+        "input_objects": {
+            "bouquet.n.01": 1
+        },
+        "output_objects": {
+            "half__bouquet.n.01": 2
+        }
+    },
+    {
+        "rule_name": "branch.n.02-slicing",
+        "input_objects": {
+            "branch.n.02": 1
+        },
+        "output_objects": {
+            "half__branch.n.01": 2
+        }
+    },
+    {
+        "rule_name": "bratwurst.n.01-slicing",
+        "input_objects": {
+            "bratwurst.n.01": 1
+        },
+        "output_objects": {
+            "half__bratwurst.n.01": 2
+        }
+    },
+    {
+        "rule_name": "brisket.n.01-slicing",
+        "input_objects": {
+            "brisket.n.01": 1
+        },
+        "output_objects": {
+            "half__brisket.n.01": 2
+        }
+    },
+    {
+        "rule_name": "broccoli.n.02-slicing",
+        "input_objects": {
+            "broccoli.n.02": 1
+        },
+        "output_objects": {
+            "half__broccoli.n.01": 2
+        }
+    },
+    {
+        "rule_name": "broccoli_rabe.n.02-slicing",
+        "input_objects": {
+            "broccoli_rabe.n.02": 1
+        },
+        "output_objects": {
+            "half__broccoli_rabe.n.01": 2
+        }
+    },
+    {
+        "rule_name": "broccolini.n.01-slicing",
+        "input_objects": {
+            "broccolini.n.01": 1
+        },
+        "output_objects": {
+            "half__broccolini.n.01": 2
+        }
+    },
+    {
+        "rule_name": "brownie.n.03-slicing",
+        "input_objects": {
+            "brownie.n.03": 1
+        },
+        "output_objects": {
+            "half__brownie.n.01": 2
+        }
+    },
+    {
+        "rule_name": "brussels_sprouts.n.01-slicing",
+        "input_objects": {
+            "brussels_sprouts.n.01": 1
+        },
+        "output_objects": {
+            "half__brussels_sprouts.n.01": 2
+        }
+    },
+    {
+        "rule_name": "burrito.n.01-slicing",
+        "input_objects": {
+            "burrito.n.01": 1
+        },
+        "output_objects": {
+            "half__burrito.n.01": 2
+        }
+    },
+    {
+        "rule_name": "butter.n.01-slicing",
+        "input_objects": {
+            "butter.n.01": 1
+        },
+        "output_objects": {
+            "half__butter.n.01": 2
+        }
+    },
+    {
+        "rule_name": "butter_cookie.n.01-slicing",
+        "input_objects": {
+            "butter_cookie.n.01": 1
+        },
+        "output_objects": {
+            "half__butter_cookie.n.01": 2
+        }
+    },
+    {
+        "rule_name": "buttermilk_pancake.n.01-slicing",
+        "input_objects": {
+            "buttermilk_pancake.n.01": 1
+        },
+        "output_objects": {
+            "half__buttermilk_pancake.n.01": 2
+        }
+    },
+    {
+        "rule_name": "butternut_squash.n.01-slicing",
+        "input_objects": {
+            "butternut_squash.n.01": 1
+        },
+        "output_objects": {
+            "half__butternut_squash.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cactus.n.01-slicing",
+        "input_objects": {
+            "cactus.n.01": 1
+        },
+        "output_objects": {
+            "half__cactus.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cantaloup.n.02-slicing",
+        "input_objects": {
+            "cantaloup.n.02": 1
+        },
+        "output_objects": {
+            "half__cantaloup.n.01": 2
+        }
+    },
+    {
+        "rule_name": "card.n.04-slicing",
+        "input_objects": {
+            "card.n.04": 1
+        },
+        "output_objects": {
+            "half__card.n.01": 2
+        }
+    },
+    {
+        "rule_name": "carne_asada.n.01-slicing",
+        "input_objects": {
+            "carne_asada.n.01": 1
+        },
+        "output_objects": {
+            "half__carne_asada.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cauliflower.n.02-slicing",
+        "input_objects": {
+            "cauliflower.n.02": 1
+        },
+        "output_objects": {
+            "half__cauliflower.n.01": 2
+        }
+    },
+    {
+        "rule_name": "celery.n.02-slicing",
+        "input_objects": {
+            "celery.n.02": 1
+        },
+        "output_objects": {
+            "half__celery.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chanterelle.n.01-slicing",
+        "input_objects": {
+            "chanterelle.n.01": 1
+        },
+        "output_objects": {
+            "half__chanterelle.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chard.n.02-slicing",
+        "input_objects": {
+            "chard.n.02": 1
+        },
+        "output_objects": {
+            "half__chard.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cheddar.n.02-slicing",
+        "input_objects": {
+            "cheddar.n.02": 1
+        },
+        "output_objects": {
+            "half__cheddar.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cheese_tart.n.01-slicing",
+        "input_objects": {
+            "cheese_tart.n.01": 1
+        },
+        "output_objects": {
+            "half__cheese_tart.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cheesecake.n.01-slicing",
+        "input_objects": {
+            "cheesecake.n.01": 1
+        },
+        "output_objects": {
+            "half__cheesecake.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cherry.n.03-slicing",
+        "input_objects": {
+            "cherry.n.03": 1
+        },
+        "output_objects": {
+            "half__cherry.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cherry_tomato.n.02-slicing",
+        "input_objects": {
+            "cherry_tomato.n.02": 1
+        },
+        "output_objects": {
+            "half__cherry_tomato.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chicken.n.01-slicing",
+        "input_objects": {
+            "chicken.n.01": 1
+        },
+        "output_objects": {
+            "half__chicken.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chicken_breast.n.02-slicing",
+        "input_objects": {
+            "chicken_breast.n.02": 1
+        },
+        "output_objects": {
+            "half__chicken_breast.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chicken_leg.n.01-slicing",
+        "input_objects": {
+            "chicken_leg.n.01": 1
+        },
+        "output_objects": {
+            "half__chicken_leg.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chicken_tender.n.01-slicing",
+        "input_objects": {
+            "chicken_tender.n.01": 1
+        },
+        "output_objects": {
+            "half__chicken_tender.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chicken_wing.n.01-slicing",
+        "input_objects": {
+            "chicken_wing.n.01": 1
+        },
+        "output_objects": {
+            "half__chicken_wing.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chili.n.02-slicing",
+        "input_objects": {
+            "chili.n.02": 1
+        },
+        "output_objects": {
+            "half__chili.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chives.n.01-slicing",
+        "input_objects": {
+            "chives.n.01": 1
+        },
+        "output_objects": {
+            "half__chives.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chocolate_biscuit.n.01-slicing",
+        "input_objects": {
+            "chocolate_biscuit.n.01": 1
+        },
+        "output_objects": {
+            "half__chocolate_biscuit.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chocolate_cake.n.01-slicing",
+        "input_objects": {
+            "chocolate_cake.n.01": 1
+        },
+        "output_objects": {
+            "half__chocolate_cake.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chocolate_chip_cookie.n.01-slicing",
+        "input_objects": {
+            "chocolate_chip_cookie.n.01": 1
+        },
+        "output_objects": {
+            "half__chocolate_chip_cookie.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chocolate_cookie_dough.n.01-slicing",
+        "input_objects": {
+            "chocolate_cookie_dough.n.01": 1
+        },
+        "output_objects": {
+            "half__chocolate_cookie_dough.n.01": 2
+        }
+    },
+    {
+        "rule_name": "chorizo.n.01-slicing",
+        "input_objects": {
+            "chorizo.n.01": 1
+        },
+        "output_objects": {
+            "half__chorizo.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cinnamon_roll.n.01-slicing",
+        "input_objects": {
+            "cinnamon_roll.n.01": 1
+        },
+        "output_objects": {
+            "half__cinnamon_roll.n.01": 2
+        }
+    },
+    {
+        "rule_name": "clam.n.03-slicing",
+        "input_objects": {
+            "clam.n.03": 1
+        },
+        "output_objects": {
+            "half__clam.n.01": 2
+        }
+    },
+    {
+        "rule_name": "club_sandwich.n.01-slicing",
+        "input_objects": {
+            "club_sandwich.n.01": 1
+        },
+        "output_objects": {
+            "half__club_sandwich.n.01": 2
+        }
+    },
+    {
+        "rule_name": "coconut.n.02-slicing",
+        "input_objects": {
+            "coconut.n.02": 1
+        },
+        "output_objects": {
+            "half__coconut.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cod.n.02-slicing",
+        "input_objects": {
+            "cod.n.02": 1
+        },
+        "output_objects": {
+            "half__cod.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cold_cuts.n.01-slicing",
+        "input_objects": {
+            "cold_cuts.n.01": 1
+        },
+        "output_objects": {
+            "half__cold_cuts.n.01": 2
+        }
+    },
+    {
+        "rule_name": "crab.n.05-slicing",
+        "input_objects": {
+            "crab.n.05": 1
+        },
+        "output_objects": {
+            "half__crab.n.01": 2
+        }
+    },
+    {
+        "rule_name": "crayfish.n.02-slicing",
+        "input_objects": {
+            "crayfish.n.02": 1
+        },
+        "output_objects": {
+            "half__crayfish.n.01": 2
+        }
+    },
+    {
+        "rule_name": "crescent_roll.n.01-slicing",
+        "input_objects": {
+            "crescent_roll.n.01": 1
+        },
+        "output_objects": {
+            "half__crescent_roll.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cucumber.n.02-slicing",
+        "input_objects": {
+            "cucumber.n.02": 1
+        },
+        "output_objects": {
+            "half__cucumber.n.01": 2
+        }
+    },
+    {
+        "rule_name": "cupcake.n.01-slicing",
+        "input_objects": {
+            "cupcake.n.01": 1
+        },
+        "output_objects": {
+            "half__cupcake.n.01": 2
+        }
+    },
+    {
+        "rule_name": "danish.n.02-slicing",
+        "input_objects": {
+            "danish.n.02": 1
+        },
+        "output_objects": {
+            "half__danish.n.01": 2
+        }
+    },
+    {
+        "rule_name": "date.n.08-slicing",
+        "input_objects": {
+            "date.n.08": 1
+        },
+        "output_objects": {
+            "half__date.n.01": 2
+        }
+    },
+    {
+        "rule_name": "doughnut.n.02-slicing",
+        "input_objects": {
+            "doughnut.n.02": 1
+        },
+        "output_objects": {
+            "half__doughnut.n.01": 2
+        }
+    },
+    {
+        "rule_name": "dried_apricot.n.01-slicing",
+        "input_objects": {
+            "dried_apricot.n.01": 1
+        },
+        "output_objects": {
+            "half__dried_apricot.n.01": 2
+        }
+    },
+    {
+        "rule_name": "duck.n.03-slicing",
+        "input_objects": {
+            "duck.n.03": 1
+        },
+        "output_objects": {
+            "half__duck.n.01": 2
+        }
+    },
+    {
+        "rule_name": "dumpling.n.02-slicing",
+        "input_objects": {
+            "dumpling.n.02": 1
+        },
+        "output_objects": {
+            "half__dumpling.n.01": 2
+        }
+    },
+    {
+        "rule_name": "durian.n.02-slicing",
+        "input_objects": {
+            "durian.n.02": 1
+        },
+        "output_objects": {
+            "half__durian.n.01": 2
+        }
+    },
+    {
+        "rule_name": "edible_cookie_dough.n.01-slicing",
+        "input_objects": {
+            "edible_cookie_dough.n.01": 1
+        },
+        "output_objects": {
+            "half__edible_cookie_dough.n.01": 2
+        }
+    },
+    {
+        "rule_name": "eggplant.n.01-slicing",
+        "input_objects": {
+            "eggplant.n.01": 1
+        },
+        "output_objects": {
+            "half__eggplant.n.01": 2
+        }
+    },
+    {
+        "rule_name": "enchilada.n.01-slicing",
+        "input_objects": {
+            "enchilada.n.01": 1
+        },
+        "output_objects": {
+            "half__enchilada.n.01": 2
+        }
+    },
+    {
+        "rule_name": "entire_leaf.n.01-slicing",
+        "input_objects": {
+            "entire_leaf.n.01": 1
+        },
+        "output_objects": {
+            "half__entire_leaf.n.01": 2
+        }
+    },
+    {
+        "rule_name": "fennel.n.02-slicing",
+        "input_objects": {
+            "fennel.n.02": 1
+        },
+        "output_objects": {
+            "half__fennel.n.01": 2
+        }
+    },
+    {
+        "rule_name": "feta.n.01-slicing",
+        "input_objects": {
+            "feta.n.01": 1
+        },
+        "output_objects": {
+            "half__feta.n.01": 2
+        }
+    },
+    {
+        "rule_name": "fillet.n.02-slicing",
+        "input_objects": {
+            "fillet.n.02": 1
+        },
+        "output_objects": {
+            "half__fillet.n.01": 2
+        }
+    },
+    {
+        "rule_name": "flower.n.02-slicing",
+        "input_objects": {
+            "flower.n.02": 1
+        },
+        "output_objects": {
+            "half__flower.n.01": 2
+        }
+    },
+    {
+        "rule_name": "frank.n.02-slicing",
+        "input_objects": {
+            "frank.n.02": 1
+        },
+        "output_objects": {
+            "half__frank.n.01": 2
+        }
+    },
+    {
+        "rule_name": "frankfurter_bun.n.01-slicing",
+        "input_objects": {
+            "frankfurter_bun.n.01": 1
+        },
+        "output_objects": {
+            "half__frankfurter_bun.n.01": 2
+        }
+    },
+    {
+        "rule_name": "french_fries.n.02-slicing",
+        "input_objects": {
+            "french_fries.n.02": 1
+        },
+        "output_objects": {
+            "half__french_fries.n.01": 2
+        }
+    },
+    {
+        "rule_name": "french_toast.n.01-slicing",
+        "input_objects": {
+            "french_toast.n.01": 1
+        },
+        "output_objects": {
+            "half__french_toast.n.01": 2
+        }
+    },
+    {
+        "rule_name": "fruitcake.n.02-slicing",
+        "input_objects": {
+            "fruitcake.n.02": 1
+        },
+        "output_objects": {
+            "half__fruitcake.n.01": 2
+        }
+    },
+    {
+        "rule_name": "garden_plant.n.01-slicing",
+        "input_objects": {
+            "garden_plant.n.01": 1
+        },
+        "output_objects": {
+            "half__garden_plant.n.01": 2
+        }
+    },
+    {
+        "rule_name": "garlic_bread.n.01-slicing",
+        "input_objects": {
+            "garlic_bread.n.01": 1
+        },
+        "output_objects": {
+            "half__garlic_bread.n.01": 2
+        }
+    },
+    {
+        "rule_name": "gelatin.n.02-slicing",
+        "input_objects": {
+            "gelatin.n.02": 1
+        },
+        "output_objects": {
+            "half__gelatin.n.01": 2
+        }
+    },
+    {
+        "rule_name": "ginger.n.03-slicing",
+        "input_objects": {
+            "ginger.n.03": 1
+        },
+        "output_objects": {
+            "half__ginger.n.01": 2
+        }
+    },
+    {
+        "rule_name": "gingerbread.n.01-slicing",
+        "input_objects": {
+            "gingerbread.n.01": 1
+        },
+        "output_objects": {
+            "half__gingerbread.n.01": 2
+        }
+    },
+    {
+        "rule_name": "gooseberry.n.02-slicing",
+        "input_objects": {
+            "gooseberry.n.02": 1
+        },
+        "output_objects": {
+            "half__gooseberry.n.01": 2
+        }
+    },
+    {
+        "rule_name": "gourd.n.02-slicing",
+        "input_objects": {
+            "gourd.n.02": 1
+        },
+        "output_objects": {
+            "half__gourd.n.01": 2
+        }
+    },
+    {
+        "rule_name": "granola_bar.n.01-slicing",
+        "input_objects": {
+            "granola_bar.n.01": 1
+        },
+        "output_objects": {
+            "half__granola_bar.n.01": 2
+        }
+    },
+    {
+        "rule_name": "grapefruit.n.02-slicing",
+        "input_objects": {
+            "grapefruit.n.02": 1
+        },
+        "output_objects": {
+            "half__grapefruit.n.01": 2
+        }
+    },
+    {
+        "rule_name": "green_bean.n.01-slicing",
+        "input_objects": {
+            "green_bean.n.01": 1
+        },
+        "output_objects": {
+            "half__green_bean.n.01": 2
+        }
+    },
+    {
+        "rule_name": "green_onion.n.01-slicing",
+        "input_objects": {
+            "green_onion.n.01": 1
+        },
+        "output_objects": {
+            "half__green_onion.n.01": 2
+        }
+    },
+    {
+        "rule_name": "grouper.n.01-slicing",
+        "input_objects": {
+            "grouper.n.01": 1
+        },
+        "output_objects": {
+            "half__grouper.n.01": 2
+        }
+    },
+    {
+        "rule_name": "halibut.n.01-slicing",
+        "input_objects": {
+            "halibut.n.01": 1
+        },
+        "output_objects": {
+            "half__halibut.n.01": 2
+        }
+    },
+    {
+        "rule_name": "ham_hock.n.01-slicing",
+        "input_objects": {
+            "ham_hock.n.01": 1
+        },
+        "output_objects": {
+            "half__ham_hock.n.01": 2
+        }
+    },
+    {
+        "rule_name": "hamburger.n.01-slicing",
+        "input_objects": {
+            "hamburger.n.01": 1
+        },
+        "output_objects": {
+            "half__hamburger.n.01": 2
+        }
+    },
+    {
+        "rule_name": "hamburger_bun.n.01-slicing",
+        "input_objects": {
+            "hamburger_bun.n.01": 1
+        },
+        "output_objects": {
+            "half__hamburger_bun.n.01": 2
+        }
+    },
+    {
+        "rule_name": "hard-boiled_egg.n.01-slicing",
+        "input_objects": {
+            "hard-boiled_egg.n.01": 1
+        },
+        "output_objects": {
+            "half__hard-boiled_egg.n.01": 2
+        }
+    },
+    {
+        "rule_name": "hazelnut.n.02-slicing",
+        "input_objects": {
+            "hazelnut.n.02": 1
+        },
+        "output_objects": {
+            "half__hazelnut.n.01": 2
+        }
+    },
+    {
+        "rule_name": "head_cabbage.n.02-slicing",
+        "input_objects": {
+            "head_cabbage.n.02": 1
+        },
+        "output_objects": {
+            "half__head_cabbage.n.01": 2
+        }
+    },
+    {
+        "rule_name": "hemp.n.01-slicing",
+        "input_objects": {
+            "hemp.n.01": 1
+        },
+        "output_objects": {
+            "half__hemp.n.01": 2
+        }
+    },
+    {
+        "rule_name": "hip.n.05-slicing",
+        "input_objects": {
+            "hip.n.05": 1
+        },
+        "output_objects": {
+            "half__hip.n.01": 2
+        }
+    },
+    {
+        "rule_name": "hotdog.n.02-slicing",
+        "input_objects": {
+            "hotdog.n.02": 1
+        },
+        "output_objects": {
+            "half__hotdog.n.01": 2
+        }
+    },
+    {
+        "rule_name": "huitre.n.01-slicing",
+        "input_objects": {
+            "huitre.n.01": 1
+        },
+        "output_objects": {
+            "half__huitre.n.01": 2
+        }
+    },
+    {
+        "rule_name": "ivy.n.01-slicing",
+        "input_objects": {
+            "ivy.n.01": 1
+        },
+        "output_objects": {
+            "half__ivy.n.01": 2
+        }
+    },
+    {
+        "rule_name": "kabob.n.01-slicing",
+        "input_objects": {
+            "kabob.n.01": 1
+        },
+        "output_objects": {
+            "half__kabob.n.01": 2
+        }
+    },
+    {
+        "rule_name": "kale.n.03-slicing",
+        "input_objects": {
+            "kale.n.03": 1
+        },
+        "output_objects": {
+            "half__kale.n.01": 2
+        }
+    },
+    {
+        "rule_name": "kielbasa.n.01-slicing",
+        "input_objects": {
+            "kielbasa.n.01": 1
+        },
+        "output_objects": {
+            "half__kielbasa.n.01": 2
+        }
+    },
+    {
+        "rule_name": "kiwi.n.03-slicing",
+        "input_objects": {
+            "kiwi.n.03": 1
+        },
+        "output_objects": {
+            "half__kiwi.n.01": 2
+        }
+    },
+    {
+        "rule_name": "lamb.n.05-slicing",
+        "input_objects": {
+            "lamb.n.05": 1
+        },
+        "output_objects": {
+            "half__lamb.n.01": 2
+        }
+    },
+    {
+        "rule_name": "leek.n.02-slicing",
+        "input_objects": {
+            "leek.n.02": 1
+        },
+        "output_objects": {
+            "half__leek.n.01": 2
+        }
+    },
+    {
+        "rule_name": "lemon.n.01-slicing",
+        "input_objects": {
+            "lemon.n.01": 1
+        },
+        "output_objects": {
+            "half__lemon.n.01": 2
+        }
+    },
+    {
+        "rule_name": "lemon_peel.n.01-slicing",
+        "input_objects": {
+            "lemon_peel.n.01": 1
+        },
+        "output_objects": {
+            "half__lemon_peel.n.01": 2
+        }
+    },
+    {
+        "rule_name": "lettuce.n.03-slicing",
+        "input_objects": {
+            "lettuce.n.03": 1
+        },
+        "output_objects": {
+            "half__lettuce.n.01": 2
+        }
+    },
+    {
+        "rule_name": "lime.n.06-slicing",
+        "input_objects": {
+            "lime.n.06": 1
+        },
+        "output_objects": {
+            "half__lime.n.01": 2
+        }
+    },
+    {
+        "rule_name": "lobster.n.01-slicing",
+        "input_objects": {
+            "lobster.n.01": 1
+        },
+        "output_objects": {
+            "half__lobster.n.01": 2
+        }
+    },
+    {
+        "rule_name": "log.n.01-slicing",
+        "input_objects": {
+            "log.n.01": 1
+        },
+        "output_objects": {
+            "half__log.n.01": 2
+        }
+    },
+    {
+        "rule_name": "macaroon.n.01-slicing",
+        "input_objects": {
+            "macaroon.n.01": 1
+        },
+        "output_objects": {
+            "half__macaroon.n.01": 2
+        }
+    },
+    {
+        "rule_name": "mango.n.02-slicing",
+        "input_objects": {
+            "mango.n.02": 1
+        },
+        "output_objects": {
+            "half__mango.n.01": 2
+        }
+    },
+    {
+        "rule_name": "marigold.n.01-slicing",
+        "input_objects": {
+            "marigold.n.01": 1
+        },
+        "output_objects": {
+            "half__marigold.n.01": 2
+        }
+    },
+    {
+        "rule_name": "marshmallow.n.01-slicing",
+        "input_objects": {
+            "marshmallow.n.01": 1
+        },
+        "output_objects": {
+            "half__marshmallow.n.01": 2
+        }
+    },
+    {
+        "rule_name": "meat_loaf.n.01-slicing",
+        "input_objects": {
+            "meat_loaf.n.01": 1
+        },
+        "output_objects": {
+            "half__meat_loaf.n.01": 2
+        }
+    },
+    {
+        "rule_name": "meatball.n.01-slicing",
+        "input_objects": {
+            "meatball.n.01": 1
+        },
+        "output_objects": {
+            "half__meatball.n.01": 2
+        }
+    },
+    {
+        "rule_name": "mozzarella.n.01-slicing",
+        "input_objects": {
+            "mozzarella.n.01": 1
+        },
+        "output_objects": {
+            "half__mozzarella.n.01": 2
+        }
+    },
+    {
+        "rule_name": "muffin.n.01-slicing",
+        "input_objects": {
+            "muffin.n.01": 1
+        },
+        "output_objects": {
+            "half__muffin.n.01": 2
+        }
+    },
+    {
+        "rule_name": "mushroom.n.05-slicing",
+        "input_objects": {
+            "mushroom.n.05": 1
+        },
+        "output_objects": {
+            "half__mushroom.n.01": 2
+        }
+    },
+    {
+        "rule_name": "mussel.n.01-slicing",
+        "input_objects": {
+            "mussel.n.01": 1
+        },
+        "output_objects": {
+            "half__mussel.n.01": 2
+        }
+    },
+    {
+        "rule_name": "mustard.n.03-slicing",
+        "input_objects": {
+            "mustard.n.03": 1
+        },
+        "output_objects": {
+            "half__mustard.n.01": 2
+        }
+    },
+    {
+        "rule_name": "nectarine.n.02-slicing",
+        "input_objects": {
+            "nectarine.n.02": 1
+        },
+        "output_objects": {
+            "half__nectarine.n.01": 2
+        }
+    },
+    {
+        "rule_name": "olive.n.04-slicing",
+        "input_objects": {
+            "olive.n.04": 1
+        },
+        "output_objects": {
+            "half__olive.n.01": 2
+        }
+    },
+    {
+        "rule_name": "omelet.n.01-slicing",
+        "input_objects": {
+            "omelet.n.01": 1
+        },
+        "output_objects": {
+            "half__omelet.n.01": 2
+        }
+    },
+    {
+        "rule_name": "orange.n.01-slicing",
+        "input_objects": {
+            "orange.n.01": 1
+        },
+        "output_objects": {
+            "half__orange.n.01": 2
+        }
+    },
+    {
+        "rule_name": "oxtail.n.01-slicing",
+        "input_objects": {
+            "oxtail.n.01": 1
+        },
+        "output_objects": {
+            "half__oxtail.n.01": 2
+        }
+    },
+    {
+        "rule_name": "papaya.n.02-slicing",
+        "input_objects": {
+            "papaya.n.02": 1
+        },
+        "output_objects": {
+            "half__papaya.n.01": 2
+        }
+    },
+    {
+        "rule_name": "parsley.n.02-slicing",
+        "input_objects": {
+            "parsley.n.02": 1
+        },
+        "output_objects": {
+            "half__parsley.n.01": 2
+        }
+    },
+    {
+        "rule_name": "parsnip.n.03-slicing",
+        "input_objects": {
+            "parsnip.n.03": 1
+        },
+        "output_objects": {
+            "half__parsnip.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pastry.n.01-slicing",
+        "input_objects": {
+            "pastry.n.01": 1
+        },
+        "output_objects": {
+            "half__pastry.n.01": 2
+        }
+    },
+    {
+        "rule_name": "peach.n.03-slicing",
+        "input_objects": {
+            "peach.n.03": 1
+        },
+        "output_objects": {
+            "half__peach.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pear.n.01-slicing",
+        "input_objects": {
+            "pear.n.01": 1
+        },
+        "output_objects": {
+            "half__pear.n.01": 2
+        }
+    },
+    {
+        "rule_name": "peppermint.n.03-slicing",
+        "input_objects": {
+            "peppermint.n.03": 1
+        },
+        "output_objects": {
+            "half__peppermint.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pepperoni.n.01-slicing",
+        "input_objects": {
+            "pepperoni.n.01": 1
+        },
+        "output_objects": {
+            "half__pepperoni.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pickle.n.01-slicing",
+        "input_objects": {
+            "pickle.n.01": 1
+        },
+        "output_objects": {
+            "half__pickle.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pie_crust.n.01-slicing",
+        "input_objects": {
+            "pie_crust.n.01": 1
+        },
+        "output_objects": {
+            "half__pie_crust.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pieplant.n.01-slicing",
+        "input_objects": {
+            "pieplant.n.01": 1
+        },
+        "output_objects": {
+            "half__pieplant.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pineapple.n.02-slicing",
+        "input_objects": {
+            "pineapple.n.02": 1
+        },
+        "output_objects": {
+            "half__pineapple.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pita.n.01-slicing",
+        "input_objects": {
+            "pita.n.01": 1
+        },
+        "output_objects": {
+            "half__pita.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pizza.n.01-slicing",
+        "input_objects": {
+            "pizza.n.01": 1
+        },
+        "output_objects": {
+            "half__pizza.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pizza_dough.n.01-slicing",
+        "input_objects": {
+            "pizza_dough.n.01": 1
+        },
+        "output_objects": {
+            "half__pizza_dough.n.01": 2
+        }
+    },
+    {
+        "rule_name": "plum.n.02-slicing",
+        "input_objects": {
+            "plum.n.02": 1
+        },
+        "output_objects": {
+            "half__plum.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pork.n.01-slicing",
+        "input_objects": {
+            "pork.n.01": 1
+        },
+        "output_objects": {
+            "half__pork.n.01": 2
+        }
+    },
+    {
+        "rule_name": "porkchop.n.01-slicing",
+        "input_objects": {
+            "porkchop.n.01": 1
+        },
+        "output_objects": {
+            "half__porkchop.n.01": 2
+        }
+    },
+    {
+        "rule_name": "potato.n.01-slicing",
+        "input_objects": {
+            "potato.n.01": 1
+        },
+        "output_objects": {
+            "half__potato.n.01": 2
+        }
+    },
+    {
+        "rule_name": "potato_pancake.n.01-slicing",
+        "input_objects": {
+            "potato_pancake.n.01": 1
+        },
+        "output_objects": {
+            "half__potato_pancake.n.01": 2
+        }
+    },
+    {
+        "rule_name": "prawn.n.01-slicing",
+        "input_objects": {
+            "prawn.n.01": 1
+        },
+        "output_objects": {
+            "half__prawn.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pretzel.n.01-slicing",
+        "input_objects": {
+            "pretzel.n.01": 1
+        },
+        "output_objects": {
+            "half__pretzel.n.01": 2
+        }
+    },
+    {
+        "rule_name": "prosciutto.n.01-slicing",
+        "input_objects": {
+            "prosciutto.n.01": 1
+        },
+        "output_objects": {
+            "half__prosciutto.n.01": 2
+        }
+    },
+    {
+        "rule_name": "pumpkin.n.02-slicing",
+        "input_objects": {
+            "pumpkin.n.02": 1
+        },
+        "output_objects": {
+            "half__pumpkin.n.01": 2
+        }
+    },
+    {
+        "rule_name": "quail.n.01-slicing",
+        "input_objects": {
+            "quail.n.01": 1
+        },
+        "output_objects": {
+            "half__quail.n.01": 2
+        }
+    },
+    {
+        "rule_name": "quiche.n.02-slicing",
+        "input_objects": {
+            "quiche.n.02": 1
+        },
+        "output_objects": {
+            "half__quiche.n.01": 2
+        }
+    },
+    {
+        "rule_name": "radish.n.01-slicing",
+        "input_objects": {
+            "radish.n.01": 1
+        },
+        "output_objects": {
+            "half__radish.n.01": 2
+        }
+    },
+    {
+        "rule_name": "ramen.n.01-slicing",
+        "input_objects": {
+            "ramen.n.01": 1
+        },
+        "output_objects": {
+            "half__ramen.n.01": 2
+        }
+    },
+    {
+        "rule_name": "rib.n.03-slicing",
+        "input_objects": {
+            "rib.n.03": 1
+        },
+        "output_objects": {
+            "half__rib.n.01": 2
+        }
+    },
+    {
+        "rule_name": "rope.n.01-slicing",
+        "input_objects": {
+            "rope.n.01": 1
+        },
+        "output_objects": {
+            "half__rope.n.01": 2
+        }
+    },
+    {
+        "rule_name": "rutabaga.n.01-slicing",
+        "input_objects": {
+            "rutabaga.n.01": 1
+        },
+        "output_objects": {
+            "half__rutabaga.n.01": 2
+        }
+    },
+    {
+        "rule_name": "salmon.n.03-slicing",
+        "input_objects": {
+            "salmon.n.03": 1
+        },
+        "output_objects": {
+            "half__salmon.n.01": 2
+        }
+    },
+    {
+        "rule_name": "scallop.n.02-slicing",
+        "input_objects": {
+            "scallop.n.02": 1
+        },
+        "output_objects": {
+            "half__scallop.n.01": 2
+        }
+    },
+    {
+        "rule_name": "scone.n.01-slicing",
+        "input_objects": {
+            "scone.n.01": 1
+        },
+        "output_objects": {
+            "half__scone.n.01": 2
+        }
+    },
+    {
+        "rule_name": "shiitake.n.01-slicing",
+        "input_objects": {
+            "shiitake.n.01": 1
+        },
+        "output_objects": {
+            "half__shiitake.n.01": 2
+        }
+    },
+    {
+        "rule_name": "sirloin.n.01-slicing",
+        "input_objects": {
+            "sirloin.n.01": 1
+        },
+        "output_objects": {
+            "half__sirloin.n.01": 2
+        }
+    },
+    {
+        "rule_name": "snapper.n.02-slicing",
+        "input_objects": {
+            "snapper.n.02": 1
+        },
+        "output_objects": {
+            "half__snapper.n.01": 2
+        }
+    },
+    {
+        "rule_name": "sour_bread.n.01-slicing",
+        "input_objects": {
+            "sour_bread.n.01": 1
+        },
+        "output_objects": {
+            "half__sour_bread.n.01": 2
+        }
+    },
+    {
+        "rule_name": "spice_cookie.n.01-slicing",
+        "input_objects": {
+            "spice_cookie.n.01": 1
+        },
+        "output_objects": {
+            "half__spice_cookie.n.01": 2
+        }
+    },
+    {
+        "rule_name": "spice_cookie_dough.n.01-slicing",
+        "input_objects": {
+            "spice_cookie_dough.n.01": 1
+        },
+        "output_objects": {
+            "half__spice_cookie_dough.n.01": 2
+        }
+    },
+    {
+        "rule_name": "spinach.n.02-slicing",
+        "input_objects": {
+            "spinach.n.02": 1
+        },
+        "output_objects": {
+            "half__spinach.n.01": 2
+        }
+    },
+    {
+        "rule_name": "sprout.n.01-slicing",
+        "input_objects": {
+            "sprout.n.01": 1
+        },
+        "output_objects": {
+            "half__sprout.n.01": 2
+        }
+    },
+    {
+        "rule_name": "squid.n.01-slicing",
+        "input_objects": {
+            "squid.n.01": 1
+        },
+        "output_objects": {
+            "half__squid.n.01": 2
+        }
+    },
+    {
+        "rule_name": "steak.n.01-slicing",
+        "input_objects": {
+            "steak.n.01": 1
+        },
+        "output_objects": {
+            "half__steak.n.01": 2
+        }
+    },
+    {
+        "rule_name": "strawberry.n.01-slicing",
+        "input_objects": {
+            "strawberry.n.01": 1
+        },
+        "output_objects": {
+            "half__strawberry.n.01": 2
+        }
+    },
+    {
+        "rule_name": "sugar_cookie.n.01-slicing",
+        "input_objects": {
+            "sugar_cookie.n.01": 1
+        },
+        "output_objects": {
+            "half__sugar_cookie.n.01": 2
+        }
+    },
+    {
+        "rule_name": "sugar_cookie_dough.n.01-slicing",
+        "input_objects": {
+            "sugar_cookie_dough.n.01": 1
+        },
+        "output_objects": {
+            "half__sugar_cookie_dough.n.01": 2
+        }
+    },
+    {
+        "rule_name": "sunflower.n.01-slicing",
+        "input_objects": {
+            "sunflower.n.01": 1
+        },
+        "output_objects": {
+            "half__sunflower.n.01": 2
+        }
+    },
+    {
+        "rule_name": "sushi.n.01-slicing",
+        "input_objects": {
+            "sushi.n.01": 1
+        },
+        "output_objects": {
+            "half__sushi.n.01": 2
+        }
+    },
+    {
+        "rule_name": "sweet_corn.n.02-slicing",
+        "input_objects": {
+            "sweet_corn.n.02": 1
+        },
+        "output_objects": {
+            "half__sweet_corn.n.01": 2
+        }
+    },
+    {
+        "rule_name": "swiss_cheese.n.01-slicing",
+        "input_objects": {
+            "swiss_cheese.n.01": 1
+        },
+        "output_objects": {
+            "half__swiss_cheese.n.01": 2
+        }
+    },
+    {
+        "rule_name": "taco.n.02-slicing",
+        "input_objects": {
+            "taco.n.02": 1
+        },
+        "output_objects": {
+            "half__taco.n.01": 2
+        }
+    },
+    {
+        "rule_name": "tenderloin.n.02-slicing",
+        "input_objects": {
+            "tenderloin.n.02": 1
+        },
+        "output_objects": {
+            "half__tenderloin.n.01": 2
+        }
+    },
+    {
+        "rule_name": "tiramisu.n.01-slicing",
+        "input_objects": {
+            "tiramisu.n.01": 1
+        },
+        "output_objects": {
+            "half__tiramisu.n.01": 2
+        }
+    },
+    {
+        "rule_name": "toast.n.01-slicing",
+        "input_objects": {
+            "toast.n.01": 1
+        },
+        "output_objects": {
+            "half__toast.n.01": 2
+        }
+    },
+    {
+        "rule_name": "tofu.n.02-slicing",
+        "input_objects": {
+            "tofu.n.02": 1
+        },
+        "output_objects": {
+            "half__tofu.n.01": 2
+        }
+    },
+    {
+        "rule_name": "tortilla.n.01-slicing",
+        "input_objects": {
+            "tortilla.n.01": 1
+        },
+        "output_objects": {
+            "half__tortilla.n.01": 2
+        }
+    },
+    {
+        "rule_name": "tortilla_chip.n.01-slicing",
+        "input_objects": {
+            "tortilla_chip.n.01": 1
+        },
+        "output_objects": {
+            "half__tortilla_chip.n.01": 2
+        }
+    },
+    {
+        "rule_name": "trout.n.01-slicing",
+        "input_objects": {
+            "trout.n.01": 1
+        },
+        "output_objects": {
+            "half__trout.n.01": 2
+        }
+    },
+    {
+        "rule_name": "trunk.n.01-slicing",
+        "input_objects": {
+            "trunk.n.01": 1
+        },
+        "output_objects": {
+            "half__trunk.n.01": 2
+        }
+    },
+    {
+        "rule_name": "tulip.n.01-slicing",
+        "input_objects": {
+            "tulip.n.01": 1
+        },
+        "output_objects": {
+            "half__tulip.n.01": 2
+        }
+    },
+    {
+        "rule_name": "tuna.n.02-slicing",
+        "input_objects": {
+            "tuna.n.02": 1
+        },
+        "output_objects": {
+            "half__tuna.n.01": 2
+        }
+    },
+    {
+        "rule_name": "turkey.n.04-slicing",
+        "input_objects": {
+            "turkey.n.04": 1
+        },
+        "output_objects": {
+            "half__turkey.n.01": 2
+        }
+    },
+    {
+        "rule_name": "turkey_leg.n.01-slicing",
+        "input_objects": {
+            "turkey_leg.n.01": 1
+        },
+        "output_objects": {
+            "half__turkey_leg.n.01": 2
+        }
+    },
+    {
+        "rule_name": "vanilla.n.01-slicing",
+        "input_objects": {
+            "vanilla.n.01": 1
+        },
+        "output_objects": {
+            "half__vanilla.n.01": 2
+        }
+    },
+    {
+        "rule_name": "veal.n.01-slicing",
+        "input_objects": {
+            "veal.n.01": 1
+        },
+        "output_objects": {
+            "half__veal.n.01": 2
+        }
+    },
+    {
+        "rule_name": "venison.n.01-slicing",
+        "input_objects": {
+            "venison.n.01": 1
+        },
+        "output_objects": {
+            "half__venison.n.01": 2
+        }
+    },
+    {
+        "rule_name": "vidalia_onion.n.01-slicing",
+        "input_objects": {
+            "vidalia_onion.n.01": 1
+        },
+        "output_objects": {
+            "half__vidalia_onion.n.01": 2
+        }
+    },
+    {
+        "rule_name": "virginia_ham.n.01-slicing",
+        "input_objects": {
+            "virginia_ham.n.01": 1
+        },
+        "output_objects": {
+            "half__virginia_ham.n.01": 2
+        }
+    },
+    {
+        "rule_name": "wafer.n.02-slicing",
+        "input_objects": {
+            "wafer.n.02": 1
+        },
+        "output_objects": {
+            "half__wafer.n.01": 2
+        }
+    },
+    {
+        "rule_name": "waffle.n.01-slicing",
+        "input_objects": {
+            "waffle.n.01": 1
+        },
+        "output_objects": {
+            "half__waffle.n.01": 2
+        }
+    },
+    {
+        "rule_name": "walnut.n.01-slicing",
+        "input_objects": {
+            "walnut.n.01": 1
+        },
+        "output_objects": {
+            "half__walnut.n.01": 2
+        }
+    },
+    {
+        "rule_name": "watermelon.n.02-slicing",
+        "input_objects": {
+            "watermelon.n.02": 1
+        },
+        "output_objects": {
+            "half__watermelon.n.01": 2
+        }
+    },
+    {
+        "rule_name": "white_turnip.n.02-slicing",
+        "input_objects": {
+            "white_turnip.n.02": 1
+        },
+        "output_objects": {
+            "half__white_turnip.n.01": 2
+        }
+    },
+    {
+        "rule_name": "whole_garlic.n.01-slicing",
+        "input_objects": {
+            "whole_garlic.n.01": 1
+        },
+        "output_objects": {
+            "half__whole_garlic.n.01": 2
+        }
+    },
+    {
+        "rule_name": "wrapping_paper.n.01-slicing",
+        "input_objects": {
+            "wrapping_paper.n.01": 1
+        },
+        "output_objects": {
+            "half__wrapping_paper.n.01": 2
+        }
+    },
+    {
+        "rule_name": "yam.n.03-slicing",
+        "input_objects": {
+            "yam.n.03": 1
+        },
+        "output_objects": {
+            "half__yam.n.01": 2
+        }
+    },
+    {
+        "rule_name": "zucchini.n.02-slicing",
+        "input_objects": {
+            "zucchini.n.02": 1
+        },
+        "output_objects": {
+            "half__zucchini.n.01": 2
+        }
+    }
+]
