@@ -43,6 +43,7 @@ def generate_slicing_rules(syns_to_param_props, props_to_syns):
 
         rules.append(rule)
     
+    rules.sort(key=lambda x: x["rule_name"])
     return rules
 
 
@@ -122,6 +123,7 @@ def generate_dicing_rules(syns_to_param_props, props_to_syns):
             }
             rules.append(cooked_rule)
     
+    rules.sort(key=lambda x: x["rule_name"])
     return rules 
 
 
@@ -161,6 +163,7 @@ def generate_substance_cooking_rules(syns_to_param_props, props_to_syns):
         }
         rules.append(rule)
     
+    rules.sort(key=lambda x: x["rule_name"])
     return rules 
 
 
