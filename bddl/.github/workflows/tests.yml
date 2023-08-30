@@ -1,12 +1,6 @@
 name: Run BDDL tests
 
-on:
-  schedule:
-    - cron: "50 * * * *"  # 50 past every hour
-  workflow_dispatch:
-  push:
-    branches:
-      - develop
+on: [push, pull_request]
 
 jobs:
   run-tests:
