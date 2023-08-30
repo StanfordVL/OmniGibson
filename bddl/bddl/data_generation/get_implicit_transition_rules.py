@@ -171,9 +171,9 @@ def create_get_save_implicit_transition_rules(syns_to_param_props, props_to_syns
     substance_cooking_rules = generate_substance_cooking_rules(syns_to_param_props, props_to_syns)
 
     with open(os.path.join(TRANSITION_MAP_DIR, "slicing.json"), "w") as f:
-        json.dump(slicing_rules, f)
+        json.dump(slicing_rules, f, indent=4)
     with open(os.path.join(TRANSITION_MAP_DIR, "dicing.json"), "w") as f:
-        json.dump(dicing_rules, f)
+        json.dump(dicing_rules, f, indent=4)
     with open(os.path.join(TRANSITION_MAP_DIR, "substance_cooking.json"), "w") as f:
-        json.dump(substance_cooking_rules, f)
+        json.dump(substance_cooking_rules, f, indent=4)
     print("Created and saved implicit transition rule jsons.")
