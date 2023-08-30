@@ -1,14 +1,18 @@
+import collections
+import glob
 import json
 import os
+import pathlib
 import re 
 
-from bddl.generated_data.transition_map.tm_submap_params import TM_SUBMAPS_TO_PARAMS
+import bddl
+from bddl.data_generation.tm_submap_params import TM_SUBMAPS_TO_PARAMS
 from bddl.parsing import parse_domain
 from test_utils import check_synset_predicate_alignment, check_clashing_transition_rules
 
-
-TRANSITION_MAP_DIR = "../bddl/generated_data/transition_map/tm_jsons"
-SYNS_TO_PROPS_JSON = "../bddl/generated_data/propagated_annots_canonical.json"
+BDDL_DIR = pathlib.Path(bddl.__file__).parent
+TRANSITION_MAP_DIR = BDDL_DIR / "generated_data/transition_map/tm_jsons"
+SYNS_TO_PROPS_JSON = BDDL_DIR / "generated_data/propagated_annots_canonical.json"
 
 OBJECT_CAT_RE = r"[A-Za-z-_]+\.n\.[0-9]+$"
 
@@ -113,6 +117,19 @@ def no_substances_with_multiple_instances(rule, submap, syns_to_props):
         else:
             raise ValueError(f"Unhandled parameter type {param_metadata[param]['type']}")
 
+def no_duplicate_rule_names():
+    # Get the JSON files
+    json_paths = glob.glob(os.path.join(TRANSITION_MAP_DIR, "*.json"))
+    data = []
+    for jp in json_paths:
+        with open(jp) as f:
+            data.append(json.load(f))
+    transitions = [rule for rules in data for rule in rules]
+    rule_names = [rule["rule_name"] for rule in transitions]
+    repeated_rule_names = [k for k, v in collections.Counter(rule_names).items() if v > 1]
+    if repeated_rule_names:
+        raise ValueError(f"Repeated rule names: {repeated_rule_names}") 
+    
 
 def verify_tms(): 
     with open(SYNS_TO_PROPS_JSON, "r") as f:
@@ -130,6 +147,8 @@ def verify_tms():
             no_invalid_predicates(rule, submap, domain_predicates)
             no_misaligned_synsets_predicates(rule, submap, syns_to_props)
             no_substances_with_multiple_instances(rule, submap, syns_to_props)
+
+    no_duplicate_rule_names()
     
 
 if __name__ == "__main__":

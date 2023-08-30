@@ -1,15 +1,18 @@
 import json
 import os
+import pathlib
 import re 
 
-from bddl.generated_data.transition_map.tm_submap_params import TM_SUBMAPS_TO_PARAMS
+import bddl
+from bddl.data_generation.tm_submap_params import TM_SUBMAPS_TO_PARAMS
 from bddl.parsing import parse_problem, parse_domain
 
 # Files
+BDDL_DIR = pathlib.Path(bddl.__file__).parent
 
-PROBLEM_FILE_DIR = "../bddl/activity_definitions"
-PROPS_TO_SYNS_JSON = "../bddl/generated_data/properties_to_synsets.json"
-SYNS_TO_PROPS_JSON = "../bddl/generated_data/propagated_annots_canonical.json"
+PROBLEM_FILE_DIR = BDDL_DIR / "activity_definitions"
+PROPS_TO_SYNS_JSON = BDDL_DIR / "generated_data/properties_to_synsets.json"
+SYNS_TO_PROPS_JSON = BDDL_DIR / "generated_data/propagated_annots_canonical.json"
 CSVS_DIR = "tm_csvs"
 
 # Constants
