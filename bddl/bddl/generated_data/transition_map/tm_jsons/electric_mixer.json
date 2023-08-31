@@ -348,5 +348,53 @@
                 ]
             ]
         }
+    },
+    {
+        "rule_name": "roll_dough",
+        "input_objects": {
+            "whole_milk.n.01": 1,
+            "yeast.n.01": 1,
+            "granulated_sugar.n.01": 1,
+            "flour.n.01": 1,
+            "butter.n.01": 1,
+            "salt.n.02": 1
+        },
+        "input_states": null,
+        "output_objects": {
+            "roll_dough.n.01": 1
+        },
+        "output_states": {
+            "roll_dough.n.01": [
+                [
+                    "cooked",
+                    false
+                ]
+            ]
+        }
+    },
+    {
+        "rule_name": "waffle_batter",
+        "input_objects": {
+            "flour.n.01": 1,
+            "granulated_sugar.n.01": 1,
+            "raw_egg.n.01": 2,
+            "vanilla.n.02": 1,
+            "melted__butter.n.01": 1,
+            "yogurt.n.01": 1,
+            "salt.n.02": 1,
+            "whole_milk.n.01": 1
+        },
+        "input_states": {
+            "raw_egg.n.01": [
+                [
+                    "cooked",
+                    false
+                ]
+            ]
+        },
+        "output_objects": {
+            "waffle_batter.n.01": 1
+        },
+        "output_states": null
     }
 ]
