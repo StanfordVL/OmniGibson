@@ -7,7 +7,6 @@
         clove.n.03_1 clove.n.03_2 clove.n.03_3 - clove.n.03
         ground_beef.n.01_1 - ground_beef.n.01
         basil.n.03_1 basil.n.03_2 basil.n.03_3 basil.n.03_4 - basil.n.03
-        red_meat_sauce.n.01_1 - red_meat_sauce.n.01
         cooked__red_meat_sauce.n.01_1 - cooked__red_meat_sauce.n.01
         stove.n.01_1 - stove.n.01
         saucepan.n.01_1 - saucepan.n.01
@@ -47,21 +46,14 @@
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (future cooked__red_meat_sauce.n.01_1) 
-        (future red_meat_sauce.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (or 
-                (real ?cooked__red_meat_sauce.n.01_1) 
-                (real ?red_meat_sauce.n.01_1)
-            ) 
-            (or 
-                (contains ?saucepan.n.01_1 ?cooked__red_meat_sauce.n.01_1) 
-                (contains ?saucepan.n.01_1 ?red_meat_sauce.n.01_1)
-            )
+            (real ?cooked__red_meat_sauce.n.01_1) 
+            (contains ?saucepan.n.01_1 ?cooked__red_meat_sauce.n.01_1) 
         )
     )
 )
