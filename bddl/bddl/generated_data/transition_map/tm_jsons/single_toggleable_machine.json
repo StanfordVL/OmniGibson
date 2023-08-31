@@ -12,14 +12,7 @@
         "output_objects": {
             "drip_coffee.n.01": 1
         },
-        "output_states": {
-            "coffee_maker.n.01,drip_coffee.n.01": [
-                [
-                    "contains",
-                    true
-                ]
-            ]
-        }
+        "output_states": null
     },
     {
         "rule_name": "iced_cappuccino",
@@ -171,14 +164,7 @@
         "output_objects": {
             "drip_coffee.n.01": 1
         },
-        "output_states": {
-            "coffee_maker.n.01,drip_coffee.n.01": [
-                [
-                    "contains",
-                    true
-                ]
-            ]
-        }
+        "output_states": null
     },
     {
         "rule_name": "eggnog",
@@ -235,14 +221,7 @@
         "output_objects": {
             "gazpacho.n.01": 1
         },
-        "output_states": {
-            "blender.n.01,gazpacho.n.01": [
-                [
-                    "contains",
-                    true
-                ]
-            ]
-        }
+        "output_states": null
     },
     {
         "rule_name": "iced_chocolate",
@@ -352,7 +331,7 @@
         "output_states": null
     },
     {
-        "rule_name": "waffle_batter",
+        "rule_name": "waffle",
         "input_objects": {
             "waffle_batter.n.01": 1
         },
@@ -387,13 +366,22 @@
         "output_objects": {
             "fruit_punch.n.01": 1
         },
-        "output_states": {
-            "blender.n.01,fruit_punch.n.01": [
-                [
-                    "contains",
-                    true
-                ]
-            ]
-        }
+        "output_states": null
+    },
+    {
+        "rule_name": "sugar_syrup",
+        "input_objects": {
+            "granulated_sugar.n.01": 1,
+            "water.n.06": 1,
+            "mint.n.04": 1
+        },
+        "input_states": null,
+        "machine": {
+            "blender.n.01": 1
+        },
+        "output_objects": {
+            "sugar_syrup.n.01": 1
+        },
+        "output_states": null
     }
 ]
