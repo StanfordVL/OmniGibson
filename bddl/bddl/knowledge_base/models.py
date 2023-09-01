@@ -415,7 +415,7 @@ class Task(Model):
     synsets_fk : ManyToMany = ManyToManyField(Synset, 'tasks') # the synsets required by this task
     future_synsets_fk : ManyToMany = ManyToManyField(Synset, 'tasks_using_as_future') # the synsets that show up as future synsets in this task (e.g. don't exist in initial)
     uses_predicates_fk : ManyToMany = ManyToManyField(Predicate, 'tasks')
-    roomrequirements_fk : OneToMany = OneToManyField('RoomRequirement', 'task')
+    room_requirements_fk : OneToMany = OneToManyField('RoomRequirement', 'task')
     
     class Meta:
         pk = 'name'
@@ -433,7 +433,7 @@ class Task(Model):
     def matching_scene(self, scene: Scene, ready: bool=True) -> str:
         '''checks whether a scene satisfies task requirements'''
         ret = ''
-        for room_requirement in self.roomrequirements:
+        for room_requirement in self.room_requirements:
             scene_ret = f'Cannot find suitable {room_requirement.type}: '
             for room in scene.rooms:
                 if room.type != room_requirement.type or room.ready != ready:
@@ -615,7 +615,7 @@ class RoomRequirement(Model):
     # TODO: make this one of the room types. enum?
     type : str
     id : str = UUIDField()
-    task_fk : ManyToOne = ManyToOneField(Task, 'roomrequirements')
+    task_fk : ManyToOne = ManyToOneField(Task, 'room_requirements')
     roomsynsetrequirements_fk : OneToMany = OneToManyField('RoomSynsetRequirement', 'room_requirement')
 
     class Meta:

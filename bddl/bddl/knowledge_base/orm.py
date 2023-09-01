@@ -240,13 +240,13 @@ class ManyToMany:
         getattr(target_inst, self._target_field)._values.add(self._this_inst._key)
 
 def ManyToOneField(target_model, target_field, **kwargs):
-    return field(default_factory=lambda: ManyToOne(target_model, target_field), repr=False, **kwargs)
+    return field(default_factory=lambda: ManyToOne(target_model, target_field), repr=False, compare=False, **kwargs)
 
 def OneToManyField(target_model, target_field, **kwargs):
-    return field(default_factory=lambda: OneToMany(target_model, target_field), repr=False, **kwargs)
+    return field(default_factory=lambda: OneToMany(target_model, target_field), repr=False, compare=False, **kwargs)
 
 def ManyToManyField(target_model, target_field, **kwargs):
-    return field(default_factory=lambda: ManyToMany(target_model, target_field), repr=False, **kwargs)
+    return field(default_factory=lambda: ManyToMany(target_model, target_field), repr=False, compare=False, **kwargs)
 
 def UUIDField(**kwargs):
     return field(default_factory=lambda: uuid.uuid4(), **kwargs)

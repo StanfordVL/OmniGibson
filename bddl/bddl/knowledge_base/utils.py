@@ -123,8 +123,9 @@ def get_synsets(cond):
         synset = f"{lemma}.{n}.{number}"
         assert re.fullmatch(r'^[A-Za-z-_]+\.n\.[0-9]+$', synset), f"Invalid synset name: {synset}"
         return synset
-    assert isinstance(cond, (UnaryAtomicFormula, BinaryAtomicFormula)), "This only works with atomic formulae"
-    if isinstance(cond, UnaryAtomicFormula):
+    # TODO: Too slow!
+    # assert isinstance(cond, (UnaryAtomicFormula, BinaryAtomicFormula)), "This only works with atomic formulae"
+    if hasattr(cond, "input"):
         return [get_synset_from_scope_name(cond.input)]
     else:
         return [get_synset_from_scope_name(cond.input1), get_synset_from_scope_name(cond.input2)]
@@ -148,7 +149,7 @@ def object_substance_match(cond, synset) -> Tuple[bool, bool]:
     is_used_as_non_substance_in_substance_predicate = any(
         synset == get_synsets(leaf)[0]
         for leaf in leafs
-        if leaf.STATE_NAME in SUBSTANCE_PREDICATES and isinstance(leaf, BinaryAtomicFormula))
+        if leaf.STATE_NAME in SUBSTANCE_PREDICATES and hasattr(leaf, "input2"))
     is_used_as_non_substance = is_used_as_non_substance_in_non_substance_predicate or is_used_as_non_substance_in_substance_predicate
     return is_used_as_non_substance, is_used_as_substance
 

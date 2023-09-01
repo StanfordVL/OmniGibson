@@ -1,4 +1,5 @@
 import csv
+from collections import defaultdict, Counter
 import logging
 import os
 import json
@@ -270,17 +271,18 @@ class Command():
                     task.future_synsets.add(synset)
 
             # generate room requirements for task
+            room_synset_requirements = defaultdict(Counter)  # room[synset] = count
             for cond in leaf_inroom_conds(conds.parsed_initial_conditions, synsets):
                 assert len(cond) == 2, f"{task_name}: {str(cond)} not in correct format"
-                room_requirement, _ = RoomRequirement.get_or_create(task=task, type=cond[1])
-                room_synset_requirements, created = RoomSynsetRequirement.get_or_create(
-                    room_requirement=room_requirement,
-                    synset=Synset.get(name=cond[0]),
-                    defaults={"count": 1}
-                )
-                # if the requirement already occurred before, we increment the count by 1
-                if not created:
-                    room_synset_requirements.count += 1
+                rr_type = cond[1]
+                rr_synset = cond[0]
+                room_synset_requirements[rr_type][rr_synset] += 1
+
+            for rr_type, synset_counter in room_synset_requirements.items():
+                room_requirement = RoomRequirement.create(task=task, type=rr_type)
+                for rsr_synset, count in synset_counter.items():
+                    rsr_synset_obj = Synset.get(name=rsr_synset)
+                    RoomSynsetRequirement.create(room_requirement=room_requirement, synset=rsr_synset_obj, count=count)
 
 
     def create_transitions(self):
