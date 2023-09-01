@@ -134,7 +134,8 @@ def create_get_save_propagated_annots_params(syns_to_props):
                         "substance_cooking_derivative_synset", 
                         "sliceable_derivative_synset", 
                         "uncooked_diceable_derivative_synset",
-                        "cooked_diceable_derivative_synset"                    ]:
+                        "cooked_diceable_derivative_synset"                    
+                    ]:
                         if not pd.isna(param_value):
                             formatted_param_value = param_value
                             syns_to_props[param_record["synset"]][prop][param_name] = formatted_param_value
