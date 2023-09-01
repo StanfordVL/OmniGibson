@@ -3,8 +3,8 @@ from functools import cached_property
 import itertools
 import json
 import networkx as nx
-from typing import Dict, Optional, Set
-from bddl.knowledge_base.orm import Model, OneToMany, ManyToMany, ManyToOne, OneToManyField, ManyToManyField, ManyToOneField
+from typing import Dict, Set
+from bddl.knowledge_base.orm import Model, ManyToOne, ManyToMany, OneToMany, ManyToOneField, ManyToManyField, OneToManyField, UUIDField
 from bddl.knowledge_base.utils import *
 from collections import defaultdict
 
@@ -56,11 +56,13 @@ ROOM_TYPE_CHOICES = [
 
 @dataclass
 class Property(Model):
-    synset : OneToMany = OneToManyField('Synset', 'properties')
+    id : str = UUIDField(primary_key=True)
+    synset_fk : ManyToOne = ManyToOneField('Synset', 'properties')
     name : str
     parameters : str
 
     class Meta:
+        pk = 'id'
         unique_together = ('synset', 'name')
         ordering = ['name']
 
@@ -71,23 +73,27 @@ class Property(Model):
 @dataclass
 class MetaLink(Model):
     name : str
+    on_objects_fk : ManyToMany = ManyToManyField('Object', 'meta_links')
 
-    def __str__(self):
-        return self.name
-    
+    class Meta:
+        pk = 'name'
+
+
 @dataclass
 class Predicate(Model):
     name : str
+    synsets_fk : ManyToMany = ManyToManyField('Synset', 'used_in_predicates')
+    tasks_fk : ManyToMany = ManyToManyField('Task', 'uses_predicates')
     
-    def __str__(self):
-        return self.name
+    class Meta:
+        pk = 'name'
 
 
 @dataclass
 class Scene(Model):
     name : str
 
-    rooms : List['Room']
+    rooms_fk : OneToMany = OneToManyField('Room', 'scene')
 
     @cached_property
     def room_count(self):
@@ -116,11 +122,9 @@ class Scene(Model):
         )
         unready_count = self.object_count
         return ready_count == unready_count
-
-    def __str__(self):
-        return self.name 
-    
+   
     class Meta:
+        pk = 'name'
         ordering = ['name']
 
 @dataclass
@@ -128,12 +132,16 @@ class Category(Model):
     name : str
 
     # the synset that the category belongs to
-    synset : Optional['Synset']
+    synset_fk : ManyToOne = ManyToOneField('Synset', 'categories')
+
+    # objects that belong to this category
+    objects_fk : OneToMany = OneToManyField('Object', 'category')
 
     def __str__(self):
         return self.name
     
     class Meta:
+        pk = 'name'
         ordering = ['name']
 
     def matching_synset(self, synset) -> bool:
@@ -157,17 +165,17 @@ class Object(Model):
     # whether the object is planned 
     planned : bool = True
     # the category that the object belongs to
-    category : Category
+    category : ManyToOne = ManyToOneField(Category, 'objects')
     # meta links owned by the object
-    meta_links = models.ManyToManyField(MetaLink, blank=True, related_name='on_objects')
-    # the photo of the object
-    # this is currently hosted on stanford's www to avoid quota issues
-    # photo = models.FileField('Object photo', blank=True, null=True)
+    meta_links : ManyToMany = ManyToManyField(MetaLink, 'on_objects')
+    # roomobject counts of this object
+    roomobjects_fk : OneToMany = OneToManyField('RoomObject', 'object')
 
     def __str__(self):
         return self.name
     
     class Meta:
+        pk = 'name'
         ordering = ['name']
 
     def matching_synset(self, synset) -> bool:
@@ -189,35 +197,39 @@ class Object(Model):
     def fully_supports_synset(self, synset) -> bool:       
         return synset.required_meta_links.issubset(self.meta_links.values_list('name', flat=True))
 
-
-class Synset(models.Model):
-    name = models.CharField(max_length=64, primary_key=True)
+@dataclass
+class Synset(Model):
+    name : str
     # whether the synset is a custom synset or not
-    is_custom = models.BooleanField(default=False)
+    is_custom : bool = False
     # wordnet definitions
-    definition = models.CharField(max_length=1000, default='')
+    definition : str = ""
     # whether the synset is used as a substance in some task
-    is_used_as_substance = models.BooleanField(default=False)
+    is_used_as_substance : bool = False
     # whether the synset is used as a non-substance in some task
-    is_used_as_non_substance = models.BooleanField(default=False)
+    is_used_as_non_substance : bool = False
     # whether the synset is ever used as a fillable in any task
-    is_used_as_fillable = models.BooleanField(default=False)
+    is_used_as_fillable : bool = False
     # predicates the synset was used in as the first argument
-    used_in_predicates = models.ManyToManyField(Predicate, blank=True, related_name='synsets')
+    used_in_predicates : ManyToMany = ManyToManyField(Predicate, 'synsets')
     # all it's parents in the synset graph (NOTE: this does not include self)
-    parents = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='children')
-    # all ancestors (NOTE: this include self)
-    ancestors = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='descendants')
+    parents_fk : ManyToMany = ManyToManyField('Synset', 'children')
+    children_fk : ManyToMany = ManyToManyField('Synset', 'parents')
+    # all ancestors (NOTE: this includes self)
+    ancestors_fk : ManyToMany = ManyToManyField('Synset', 'descendants')
+    descendants_fk : ManyToMany = ManyToManyField('Synset', 'ancestors')
     # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
-    state = models.CharField(max_length=64, default=STATE_ILLEGAL)
+    state : str = STATE_ILLEGAL
 
-    # Foreign key fields
-    properties : List[Property]
+    properties_fk : ManyToMany = ManyToOneField(Property, 'synset')
+    tasks_fk : ManyToMany = ManyToManyField('Task', 'synsets')
+    tasks_using_as_future_fk : ManyToMany = ManyToManyField('Task', 'future_synsets')
+    used_by_transition_rules_fk : ManyToMany = ManyToManyField('TransitionRule', 'input_synsets')
+    produced_by_transition_rules_fk : ManyToMany = ManyToManyField('TransitionRule', 'output_synsets')
+    roomsynsetrequirements_fk : OneToManyField = OneToManyField('RoomSynsetRequirement', 'synset')
 
-    def __str__(self):
-        return self.name
-    
     class Meta:
+        pk = 'name'
         ordering = ['name']
 
     @cached_property
@@ -363,10 +375,15 @@ class Synset(models.Model):
         return True, recipe_alternatives
 
 
-class TransitionRule(models.Model):
-    name = models.CharField(max_length=256, primary_key=True)
-    input_synsets = models.ManyToManyField(Synset, related_name='used_by_transition_rules')
-    output_synsets = models.ManyToManyField(Synset, related_name='produced_by_transition_rules')
+@dataclass
+class TransitionRule(Model):
+    name : str
+    input_synsets_fk : ManyToMany = ManyToManyField(Synset, 'used_by_transition_rules')
+    output_synsets_fk : ManyToMany = ManyToManyField(Synset, 'produced_by_transition_rules')
+
+    class Meta:
+        pk = 'name'
+        ordering = ['name']
 
     @cached_property
     def subgraph(self):
@@ -391,18 +408,17 @@ class TransitionRule(models.Model):
         return G
 
 
-class Task(models.Model):
-    objects = get_caching_manager(['synsets', 'roomrequirement_set__roomsynsetrequirement_set__synset'])()
-    name = models.CharField(max_length=64, primary_key=True)
-    definition = models.TextField()
-    synsets = models.ManyToManyField(Synset) # the synsets required by this task
-    future_synsets = models.ManyToManyField(Synset, related_name='tasks_using_as_future') # the synsets that show up as future synsets in this task (e.g. don't exist in initial)
-    uses_predicates = models.ManyToManyField(Predicate, blank=True, related_name='tasks')
-
-    def __str__(self):
-        return self.name
+@dataclass
+class Task(Model):
+    name : str
+    definition : str
+    synsets_fk : ManyToManyField = ManyToManyField(Synset, 'tasks') # the synsets required by this task
+    future_synsets_fk : ManyToManyField = ManyToManyField(Synset, 'tasks_using_as_future') # the synsets that show up as future synsets in this task (e.g. don't exist in initial)
+    uses_predicates_fk : ManyToManyField = ManyToManyField(Predicate, 'tasks')
+    roomrequirements_fk : OneToManyField = OneToManyField('RoomRequirement', 'task')
     
     class Meta:
+        pk = 'name'
         ordering = ['name']
 
     @cached_property
@@ -595,44 +611,54 @@ class Task(models.Model):
         return len(self.unreachable_goal_synsets) == 0
 
 
-class RoomRequirement(models.Model):
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    type = models.CharField(max_length=64, choices=ROOM_TYPE_CHOICES)
+@dataclass
+class RoomRequirement(Model):
+    id : str = UUIDField(primary_key=True)
+    task_fk : ManyToOneField = ManyToOneField(Task, 'roomrequirements')
+    # TODO: make this one of the room types
+    type : str
+    roomsynsetrequirements_fk : OneToManyField = OneToManyField('RoomSynsetRequirement', 'room_requirement')
+
     class Meta:
+        pk = 'id'
         unique_together = ('task', 'type')
-        ordering = ['type']
-
-    def __str__(self):
-        return f'{self.task.name}_{self.type}'        
+        ordering = ['type']  
 
 
-class RoomSynsetRequirement(models.Model):
-    room_requirement = models.ForeignKey(RoomRequirement, on_delete=models.CASCADE)
-    synset = models.ForeignKey(Synset, on_delete=models.CASCADE)
-    count = models.IntegerField()
+@dataclass
+class RoomSynsetRequirement(Model):
+    id : str = UUIDField(primary_key=True)
+    room_requirement_fk : ManyToOneField = ManyToOneField(RoomRequirement, 'roomsynsetrequirements')
+    synset_fk : ManyToOneField = ManyToOneField(Synset, 'roomsynsetrequirements')
+    count : int
 
     class Meta:
+        pk = 'id'
         unique_together = ('room_requirement', 'synset')
         ordering = ['synset__name']
-
-    def __str__(self):
-        return f'{str(self.room_requirement)}_{self.synset.name}' 
     
 
-class Room(models.Model):
-    name = models.CharField(max_length=64)
+@dataclass
+class Room(Model):
+    id : str = UUIDField(primary_key=True)
+    name : str
     # type of the room
-    type = models.CharField(max_length=64, choices=ROOM_TYPE_CHOICES)
+    # TODO: make this one of the room types
+    type : str
     # whether the scene is ready in the current dataset
-    ready = models.BooleanField(default=False)
+    ready : bool = False
     # the scene the room belongs to
-    scene = models.ForeignKey(Scene, on_delete=models.CASCADE)
+    scene_fk : ManyToOne = ManyToOneField(Scene, 'rooms')
+    # the room objects in this object
+    roomobjects_fk : OneToMany = OneToManyField('RoomObject', 'room')
+
     class Meta:
+        pk = 'id'
         unique_together = ('name', 'ready', 'scene')
         ordering = ['name']
     
     def __str__(self):
-        return f'{self.scene.name}_{self.type}_{'ready' if self.ready else 'planned'}' 
+        return f'{self.scene.name}_{self.type}_{"ready" if self.ready else "planned"}' 
 
     def matching_room_requirement(self, room_requirement: RoomRequirement) -> str:
         '''
@@ -669,16 +695,18 @@ class Room(models.Model):
                     missing_synsets[synset.name] += 1
             return ', '.join([f'{count} {synset}' for synset, count in missing_synsets.items()])
 
-
-class RoomObject(models.Model):
+@dataclass
+class RoomObject(Model):
+    id : str = UUIDField(primary_key=True)
     # the room that the object belongs to
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    room_fk : ManyToOne = ManyToOneField(Room, 'roomobjects')
     # the actual object that the room object maps to
-    object = models.ForeignKey(Object, on_delete=models.CASCADE)
+    object_fk : ManyToOne = ManyToOneField(Object, 'roomobjects')
     # number of objects in the room
-    count = models.IntegerField()
+    count : int
 
     class Meta:
+        pk = 'id'
         unique_together = ('room', 'object')
         ordering = ['room__name', 'object__name']
 
