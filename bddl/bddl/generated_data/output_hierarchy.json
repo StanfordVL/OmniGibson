@@ -18030,6 +18030,22 @@
                                         {
                                           "name": "cooked__cinnamon_sugar.n.01",
                                           "hasModel": true
+                                        },
+                                        {
+                                          "name": "melted__cane_sugar.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "cooked__melted__cane_sugar.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "melted__granulated_sugar.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "cooked__melted__granulated_sugar.n.01",
+                                          "hasModel": true
                                         }
                                       ]
                                     },
@@ -18114,13 +18130,6 @@
                                   "hasModel": true,
                                   "children": [
                                     {
-                                      "name": "clove.n.03",
-                                      "hasModel": true,
-                                      "categories": [
-                                        "garlic_clove"
-                                      ]
-                                    },
-                                    {
                                       "name": "cooked__diced__clove.n.01",
                                       "hasModel": true,
                                       "categories": [
@@ -18132,6 +18141,17 @@
                                       "hasModel": true,
                                       "categories": [
                                         "diced__clove"
+                                      ]
+                                    },
+                                    {
+                                      "name": "half__clove.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "clove.n.03",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "garlic_clove"
                                       ]
                                     },
                                     {
@@ -19550,6 +19570,38 @@
                                 },
                                 {
                                   "name": "cooked__cottage_cheese.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "melted__feta.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "cooked__melted__feta.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "melted__mozzarella.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "cooked__melted__mozzarella.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "melted__swiss_cheese.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "cooked__melted__swiss_cheese.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "melted__bleu.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "cooked__melted__bleu.n.01",
                                   "hasModel": true
                                 }
                               ]
@@ -23724,17 +23776,28 @@
                                   ]
                                 },
                                 {
-                                  "name": "carrot.n.03",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "carrot"
-                                  ]
-                                },
-                                {
                                   "name": "cooked__diced__carrot.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "cooked__diced__carrot"
+                                  ]
+                                },
+                                {
+                                  "name": "diced__carrot.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "diced__carrot"
+                                  ]
+                                },
+                                {
+                                  "name": "half__carrot.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "carrot.n.03",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "carrot"
                                   ]
                                 },
                                 {
@@ -23749,13 +23812,6 @@
                                   "hasModel": true,
                                   "categories": [
                                     "diced__beet"
-                                  ]
-                                },
-                                {
-                                  "name": "diced__carrot.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "diced__carrot"
                                   ]
                                 },
                                 {
@@ -25331,6 +25387,38 @@
                         {
                           "name": "cooked__cottage_cheese.n.01",
                           "hasModel": true
+                        },
+                        {
+                          "name": "melted__feta.n.01",
+                          "hasModel": true
+                        },
+                        {
+                          "name": "cooked__melted__feta.n.01",
+                          "hasModel": true
+                        },
+                        {
+                          "name": "melted__mozzarella.n.01",
+                          "hasModel": true
+                        },
+                        {
+                          "name": "cooked__melted__mozzarella.n.01",
+                          "hasModel": true
+                        },
+                        {
+                          "name": "melted__swiss_cheese.n.01",
+                          "hasModel": true
+                        },
+                        {
+                          "name": "cooked__melted__swiss_cheese.n.01",
+                          "hasModel": true
+                        },
+                        {
+                          "name": "melted__bleu.n.01",
+                          "hasModel": true
+                        },
+                        {
+                          "name": "cooked__melted__bleu.n.01",
+                          "hasModel": true
                         }
                       ]
                     },
@@ -25399,6 +25487,14 @@
                             },
                             {
                               "name": "cooked__jimmies.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "melted__chocolate.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "cooked__melted__chocolate.n.01",
                               "hasModel": true
                             }
                           ]
