@@ -212,7 +212,6 @@ def create_get_save_propagated_annots_params(syns_to_props):
                         except ValueError:
                             raise ValueError(f"Synset {param_record['synset']} property {prop} has param {param_name} that is not named `method`, `conditions`, or `system` and is not a NaN or a float. This is unhandled - please check.")
 
-                    print(param_record["synset"])
                     syns_to_props[param_record["synset"]][prop][param_name] = formatted_param_value
     
 
