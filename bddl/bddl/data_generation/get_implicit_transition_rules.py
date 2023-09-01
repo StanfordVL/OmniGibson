@@ -204,12 +204,90 @@ def generate_melting_rules(syns_to_param_props, props_to_syns):
     return rules
 
 
+def generate_washer_particleremover_rules(props_to_syns):
+    """
+    Generates transition rules for adding water to particleRemovers that come out of a washer
+    Form: 
+    {
+        "rule_name": <particleRemover>-washer-saturate-cover,
+        "input_objects": {},
+        "washed_item": {
+            <particleRemover>: 1,
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    }
+    Invariants not explicitly stated in rule: 
+    - At input time washer.n.03 exists and is toggled on, `washed_item` is inside
+    - At output time `washed_item` is covered and saturated in water
+    """
+    rules = []
+    particleRemovers = set(props_to_syns["particleRemover"])
+    for particleRemover in particleRemovers: 
+        rule = {
+            "rule_name": f"{particleRemover}-washer-saturate-cover",
+            "input_objects": {},
+            "washed_item": {
+                particleRemover: 1
+            },
+            "output_objects": {
+                "water.n.06": 1
+            }
+        }
+        rules.append(rule)
+    rules.sort(key=lambda x: x["rule_name"])
+    return rules
+
+
+def generate_washer_nonparticleremover_rules(props_to_syns):
+    """
+    Generates transition rules for adding water to non-particleRemover nonSubstances that come 
+    out of a washer.
+    Form: 
+    {
+        "rule_name": <nonSubstance,non-particleRemover>-washer-cover,
+        "input_objects": {},
+        "washed_item": {
+            <non-particleRemover,nonSubstance>: 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    }
+    Invariants not explicitly stated in rule: 
+    - At input time washer.n.03 exists and is toggled on, `washed_item` is
+    inside
+    - At output time `washed_item` is covered and saturated in water
+    """
+    rules = []
+    particleRemovers = set(props_to_syns["particleRemover"])
+    nonSubstances = set(props_to_syns["nonSubstance"])
+    nonparticleremover_nonsubstances = nonSubstances.difference(particleRemovers)
+    for syn in nonparticleremover_nonsubstances: 
+        rule = {
+            "rule_name": f"{syn}-washer-cover",
+            "input_objects": {},
+            "washed_item": {
+                syn: 1
+            },
+            "output_objects": {
+                "water.n.06": 1
+            }
+        }
+        rules.append(rule)
+    rules.sort(key=lambda x: x["rule_name"])
+    return rules
+
+
 def create_get_save_implicit_transition_rules(syns_to_param_props, props_to_syns):
     print("Creating implicit transition rule jsons...")
     slicing_rules = generate_slicing_rules(syns_to_param_props, props_to_syns)
     dicing_rules = generate_dicing_rules(syns_to_param_props, props_to_syns)
     substance_cooking_rules = generate_substance_cooking_rules(syns_to_param_props, props_to_syns)
     melting_rules = generate_melting_rules(syns_to_param_props, props_to_syns)
+    washer_particleremover_rules = generate_washer_particleremover_rules(props_to_syns)
+    washer_nonparticleremover_rules = generate_washer_nonparticleremover_rules(props_to_syns)
 
     with open(os.path.join(TRANSITION_MAP_DIR, "slicing.json"), "w") as f:
         json.dump(slicing_rules, f, indent=4)
@@ -219,4 +297,8 @@ def create_get_save_implicit_transition_rules(syns_to_param_props, props_to_syns
         json.dump(substance_cooking_rules, f, indent=4)
     with open(os.path.join(TRANSITION_MAP_DIR, "melting.json"), "w") as f:
         json.dump(melting_rules, f, indent=4)
+    with open(os.path.join(TRANSITION_MAP_DIR, "washer_particleremover.json"), "w") as f:
+        json.dump(washer_particleremover_rules, f, indent=4)
+    with open(os.path.join(TRANSITION_MAP_DIR, "washer_nonparticleremover.json"), "w") as f:
+        json.dump(washer_nonparticleremover_rules, f, indent=4)
     print("Created and saved implicit transition rule jsons.")
