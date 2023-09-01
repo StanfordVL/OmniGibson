@@ -52,7 +52,7 @@ def generate_dicing_rules(syns_to_param_props, props_to_syns):
     Generates transition rules for dicing of diceable objects.
     Form: 
     {
-        "rule_name": <non-unique string>,
+        "rule_name": <unique string name>,
         "input_objects": {
             <diceable>: 1 
         },
@@ -165,6 +165,43 @@ def generate_substance_cooking_rules(syns_to_param_props, props_to_syns):
     
     rules.sort(key=lambda x: x["rule_name"])
     return rules 
+
+
+def generate_melting_rules(syns_to_param_props, props_to_syns):
+    """
+    Generates transition rules for melting of meltable objects.
+    Form: 
+    {
+        "rule_name": <unique string name>,
+        "input_objects": {
+            <meltable>: 1
+        },
+        "output_objects": {
+            <meltable_derivative_synset>: 1
+        }
+    }
+    """
+    rules = []
+    meltables = props_to_syns["meltable"]
+    for meltable in meltables: 
+        assert "meltable_derivative_synset" in syns_to_param_props[meltable]["meltable"], f"Synset {meltable} has no meltable derivative synset. Add one in the parameter annotations or handle otherwise."
+        assert syns_to_param_props[meltable]["meltable"]["meltable_derivative_synset"] in syns_to_param_props, f"Synset {meltable} has meltable derivative synset {syns_to_param_props[meltable]['meltable_derivative_synset']} that is not a valid synset. Please check."
+        meltable_derivative_synset = syns_to_param_props[meltable]["meltable"]["meltable_derivative_synset"]
+
+        rule = {
+            "rule_name": f"{meltable}-melting",
+            "input_objects": {
+                meltable: 1
+            },
+            "output_objects": {
+                meltable_derivative_synset: 1
+            }
+        }
+
+        rules.append(rule)
+    
+    rules.sort(key=lambda x: x["rule_name"])
+    return rules
 
 
 def create_get_save_implicit_transition_rules(syns_to_param_props, props_to_syns):
