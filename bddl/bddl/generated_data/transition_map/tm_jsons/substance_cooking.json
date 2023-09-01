@@ -3006,12 +3006,30 @@
         }
     },
     {
+        "rule_name": "melted__bleu.n.01-cooking",
+        "input_objects": {
+            "melted__bleu.n.01": 1
+        },
+        "output_objects": {
+            "cooked__melted__bleu.n.01": 1
+        }
+    },
+    {
         "rule_name": "melted__butter.n.01-cooking",
         "input_objects": {
             "melted__butter.n.01": 1
         },
         "output_objects": {
             "cooked__melted__butter.n.01": 1
+        }
+    },
+    {
+        "rule_name": "melted__cane_sugar.n.01-cooking",
+        "input_objects": {
+            "melted__cane_sugar.n.01": 1
+        },
+        "output_objects": {
+            "cooked__melted__cane_sugar.n.01": 1
         }
     },
     {
@@ -3024,6 +3042,33 @@
         }
     },
     {
+        "rule_name": "melted__chocolate.n.01-cooking",
+        "input_objects": {
+            "melted__chocolate.n.01": 1
+        },
+        "output_objects": {
+            "cooked__melted__chocolate.n.01": 1
+        }
+    },
+    {
+        "rule_name": "melted__feta.n.01-cooking",
+        "input_objects": {
+            "melted__feta.n.01": 1
+        },
+        "output_objects": {
+            "cooked__melted__feta.n.01": 1
+        }
+    },
+    {
+        "rule_name": "melted__granulated_sugar.n.01-cooking",
+        "input_objects": {
+            "melted__granulated_sugar.n.01": 1
+        },
+        "output_objects": {
+            "cooked__melted__granulated_sugar.n.01": 1
+        }
+    },
+    {
         "rule_name": "melted__grated_cheese.n.01-cooking",
         "input_objects": {
             "melted__grated_cheese.n.01": 1
@@ -3033,12 +3078,30 @@
         }
     },
     {
+        "rule_name": "melted__mozzarella.n.01-cooking",
+        "input_objects": {
+            "melted__mozzarella.n.01": 1
+        },
+        "output_objects": {
+            "cooked__melted__mozzarella.n.01": 1
+        }
+    },
+    {
         "rule_name": "melted__parmesan.n.01-cooking",
         "input_objects": {
             "melted__parmesan.n.01": 1
         },
         "output_objects": {
             "cooked__melted__parmesan.n.01": 1
+        }
+    },
+    {
+        "rule_name": "melted__swiss_cheese.n.01-cooking",
+        "input_objects": {
+            "melted__swiss_cheese.n.01": 1
+        },
+        "output_objects": {
+            "cooked__melted__swiss_cheese.n.01": 1
         }
     },
     {

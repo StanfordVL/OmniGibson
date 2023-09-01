@@ -1409,7 +1409,6 @@
     "freezable": {},
     "heatable": {},
     "liquid": {},
-    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -1928,7 +1927,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -1983,7 +1981,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -2582,7 +2579,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -3472,7 +3468,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -8824,6 +8819,7 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
+    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -9425,7 +9421,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -9991,6 +9986,7 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
+    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -11206,7 +11202,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rustable": {},
@@ -12424,6 +12419,7 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
+    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -14195,7 +14191,6 @@
   "cooked__cottage_cheese.n.01": {
     "freezable": {},
     "heatable": {},
-    "meltable": {},
     "microPhysicalSubstance": {},
     "physicalSubstance": {},
     "substance": {}
@@ -14492,6 +14487,7 @@
     "freezable": {},
     "heatable": {},
     "macroPhysicalSubstance": {},
+    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -15946,6 +15942,7 @@
     "freezable": {},
     "heatable": {},
     "macroPhysicalSubstance": {},
+    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -16238,7 +16235,23 @@
     "physicalSubstance": {},
     "substance": {}
   },
+  "cooked__melted__bleu.n.01": {
+    "boilable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "cooked__melted__butter.n.01": {
+    "boilable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "cooked__melted__cane_sugar.n.01": {
     "boilable": {},
     "freezable": {},
     "heatable": {},
@@ -16254,6 +16267,30 @@
     "physicalSubstance": {},
     "substance": {}
   },
+  "cooked__melted__chocolate.n.01": {
+    "boilable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "cooked__melted__feta.n.01": {
+    "boilable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "cooked__melted__granulated_sugar.n.01": {
+    "boilable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "cooked__melted__grated_cheese.n.01": {
     "boilable": {},
     "freezable": {},
@@ -16262,7 +16299,23 @@
     "physicalSubstance": {},
     "substance": {}
   },
+  "cooked__melted__mozzarella.n.01": {
+    "boilable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "cooked__melted__parmesan.n.01": {
+    "boilable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "cooked__melted__swiss_cheese.n.01": {
     "boilable": {},
     "freezable": {},
     "heatable": {},
@@ -16346,7 +16399,6 @@
     "freezable": {},
     "heatable": {},
     "liquid": {},
-    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -16593,7 +16645,6 @@
   "cooked__ricotta.n.01": {
     "freezable": {},
     "heatable": {},
-    "meltable": {},
     "microPhysicalSubstance": {},
     "physicalSubstance": {},
     "substance": {}
@@ -17333,7 +17384,6 @@
     "cookable": {},
     "freezable": {},
     "heatable": {},
-    "meltable": {},
     "microPhysicalSubstance": {},
     "physicalSubstance": {},
     "substance": {}
@@ -18710,7 +18760,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -19311,6 +19360,7 @@
     "freezable": {},
     "heatable": {},
     "macroPhysicalSubstance": {},
+    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -21012,7 +21062,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -25613,7 +25662,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -26059,6 +26107,7 @@
     "freezable": {},
     "heatable": {},
     "macroPhysicalSubstance": {},
+    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -27285,6 +27334,7 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
+    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -27413,6 +27463,25 @@
     "wrinkleable": {}
   },
   "half__carne_asada.n.01": {
+    "cookable": {},
+    "diceable": {},
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "moldyable": {},
+    "nonSubstance": {},
+    "rigidBody": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
+  "half__carrot.n.01": {
     "cookable": {},
     "diceable": {},
     "disinfectable": {},
@@ -27882,6 +27951,25 @@
     "wrinkleable": {}
   },
   "half__clam.n.01": {
+    "cookable": {},
+    "diceable": {},
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "moldyable": {},
+    "nonSubstance": {},
+    "rigidBody": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
+  "half__clove.n.01": {
     "cookable": {},
     "diceable": {},
     "disinfectable": {},
@@ -33638,7 +33726,6 @@
     "freezable": {},
     "heatable": {},
     "liquid": {},
-    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -37238,7 +37325,25 @@
     "freezable": {},
     "heatable": {}
   },
+  "melted__bleu.n.01": {
+    "boilable": {},
+    "cookable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "melted__butter.n.01": {
+    "boilable": {},
+    "cookable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "melted__cane_sugar.n.01": {
     "boilable": {},
     "cookable": {},
     "freezable": {},
@@ -37256,6 +37361,33 @@
     "physicalSubstance": {},
     "substance": {}
   },
+  "melted__chocolate.n.01": {
+    "boilable": {},
+    "cookable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "melted__feta.n.01": {
+    "boilable": {},
+    "cookable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "melted__granulated_sugar.n.01": {
+    "boilable": {},
+    "cookable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "melted__grated_cheese.n.01": {
     "boilable": {},
     "cookable": {},
@@ -37265,7 +37397,25 @@
     "physicalSubstance": {},
     "substance": {}
   },
+  "melted__mozzarella.n.01": {
+    "boilable": {},
+    "cookable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
   "melted__parmesan.n.01": {
+    "boilable": {},
+    "cookable": {},
+    "freezable": {},
+    "heatable": {},
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
+  },
+  "melted__swiss_cheese.n.01": {
     "boilable": {},
     "cookable": {},
     "freezable": {},
@@ -38875,7 +39025,6 @@
     "freezable": {},
     "heatable": {},
     "liquid": {},
-    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -41290,7 +41439,6 @@
     "freezable": {},
     "heatable": {},
     "liquid": {},
-    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -41686,7 +41834,6 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
-    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -45022,7 +45169,6 @@
     "cookable": {},
     "freezable": {},
     "heatable": {},
-    "meltable": {},
     "microPhysicalSubstance": {},
     "physicalSubstance": {},
     "substance": {}
@@ -54368,7 +54514,6 @@
     "freezable": {},
     "heatable": {},
     "liquid": {},
-    "meltable": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -55492,7 +55637,6 @@
   "wax_remnant.n.01": {
     "freezable": {},
     "heatable": {},
-    "meltable": {},
     "substance": {},
     "visualSubstance": {}
   },
@@ -55838,6 +55982,7 @@
     "freezable": {},
     "grassyable": {},
     "heatable": {},
+    "meltable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},

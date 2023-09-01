@@ -663,6 +663,23 @@
         }
     },
     {
+        "rule_name": "cooked-half__carrot.n.01-dicing",
+        "input_objects": {
+            "half__carrot.n.01": 1
+        },
+        "input_states": {
+            "half__carrot.n.01": [
+                [
+                    "cooked",
+                    true
+                ]
+            ]
+        },
+        "output_objects": {
+            "cooked__diced__carrot.n.01": 1
+        }
+    },
+    {
         "rule_name": "cooked-half__cauliflower.n.01-dicing",
         "input_objects": {
             "half__cauliflower.n.01": 1
@@ -1068,6 +1085,23 @@
         },
         "output_objects": {
             "cooked__diced__clam.n.01": 1
+        }
+    },
+    {
+        "rule_name": "cooked-half__clove.n.01-dicing",
+        "input_objects": {
+            "half__clove.n.01": 1
+        },
+        "input_states": {
+            "half__clove.n.01": [
+                [
+                    "cooked",
+                    true
+                ]
+            ]
+        },
+        "output_objects": {
+            "cooked__diced__clove.n.01": 1
         }
     },
     {
@@ -4454,6 +4488,23 @@
         }
     },
     {
+        "rule_name": "uncooked-half__carrot.n.01-dicing",
+        "input_objects": {
+            "half__carrot.n.01": 1
+        },
+        "input_states": {
+            "half__carrot.n.01": [
+                [
+                    "cooked",
+                    false
+                ]
+            ]
+        },
+        "output_objects": {
+            "diced__carrot.n.01": 1
+        }
+    },
+    {
         "rule_name": "uncooked-half__cauliflower.n.01-dicing",
         "input_objects": {
             "half__cauliflower.n.01": 1
@@ -4859,6 +4910,23 @@
         },
         "output_objects": {
             "diced__clam.n.01": 1
+        }
+    },
+    {
+        "rule_name": "uncooked-half__clove.n.01-dicing",
+        "input_objects": {
+            "half__clove.n.01": 1
+        },
+        "input_states": {
+            "half__clove.n.01": [
+                [
+                    "cooked",
+                    false
+                ]
+            ]
+        },
+        "output_objects": {
+            "diced__clove.n.01": 1
         }
     },
     {
