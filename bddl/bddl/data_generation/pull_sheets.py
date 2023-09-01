@@ -26,6 +26,7 @@ ALL_SHEETS = [
   (SYNSET_PARAMS_SHEET_KEY, "particleSink", "prop_param_annots/particleSink.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "diceable", "prop_param_annots/diceable.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "sliceable", "prop_param_annots/sliceable.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "meltable", "prop_param_annots/meltable.csv"),
   (EXPLICIT_TRANSITION_RULES_SHEET_KEY, "electric_mixer", "transition_map/tm_raw_data/electric_mixer.csv"),
   (EXPLICIT_TRANSITION_RULES_SHEET_KEY, "heat_cook", "transition_map/tm_raw_data/heat_cook.csv"),
   (EXPLICIT_TRANSITION_RULES_SHEET_KEY, "mixing_stick", "transition_map/tm_raw_data/mixing_stick.csv"),
