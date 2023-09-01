@@ -56,10 +56,10 @@ ROOM_TYPE_CHOICES = [
 
 @dataclass
 class Property(Model):
-    id : str = UUIDField(primary_key=True)
-    synset_fk : ManyToOne = ManyToOneField('Synset', 'properties')
     name : str
     parameters : str
+    id : str = UUIDField()
+    synset_fk : ManyToOne = ManyToOneField('Synset', 'properties')
 
     class Meta:
         pk = 'id'
@@ -159,15 +159,15 @@ class Object(Model):
     # the name of the object prior to getting renamed
     original_name : str
     # providing target
-    provider : str
+    provider : str = ""
     # whether the object is in the current dataset
     ready : bool = False
     # whether the object is planned 
     planned : bool = True
     # the category that the object belongs to
-    category : ManyToOne = ManyToOneField(Category, 'objects')
+    category_fk : ManyToOne = ManyToOneField(Category, 'objects')
     # meta links owned by the object
-    meta_links : ManyToMany = ManyToManyField(MetaLink, 'on_objects')
+    meta_links_fk : ManyToMany = ManyToManyField(MetaLink, 'on_objects')
     # roomobject counts of this object
     roomobjects_fk : OneToMany = OneToManyField('RoomObject', 'object')
 
@@ -211,7 +211,7 @@ class Synset(Model):
     # whether the synset is ever used as a fillable in any task
     is_used_as_fillable : bool = False
     # predicates the synset was used in as the first argument
-    used_in_predicates : ManyToMany = ManyToManyField(Predicate, 'synsets')
+    used_in_predicates_fk : ManyToMany = ManyToManyField(Predicate, 'synsets')
     # all it's parents in the synset graph (NOTE: this does not include self)
     parents_fk : ManyToMany = ManyToManyField('Synset', 'children')
     children_fk : ManyToMany = ManyToManyField('Synset', 'parents')
@@ -221,12 +221,13 @@ class Synset(Model):
     # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
     state : str = STATE_ILLEGAL
 
-    properties_fk : ManyToMany = ManyToOneField(Property, 'synset')
+    categories_fk : OneToMany = OneToManyField(Category, 'synset')
+    properties_fk : OneToMany = OneToManyField(Property, 'synset')
     tasks_fk : ManyToMany = ManyToManyField('Task', 'synsets')
     tasks_using_as_future_fk : ManyToMany = ManyToManyField('Task', 'future_synsets')
     used_by_transition_rules_fk : ManyToMany = ManyToManyField('TransitionRule', 'input_synsets')
     produced_by_transition_rules_fk : ManyToMany = ManyToManyField('TransitionRule', 'output_synsets')
-    roomsynsetrequirements_fk : OneToManyField = OneToManyField('RoomSynsetRequirement', 'synset')
+    roomsynsetrequirements_fk : OneToMany = OneToManyField('RoomSynsetRequirement', 'synset')
 
     class Meta:
         pk = 'name'
@@ -235,35 +236,35 @@ class Synset(Model):
     @cached_property
     def direct_matching_objects(self) -> Set[Object]:
         matched_objs = set()
-        for category in self.category_set.all():
-            matched_objs.update(category.object_set.all())
+        for category in self.categories:
+            matched_objs.update(category.objects)
         return matched_objs
     
     @cached_property
     def direct_matching_ready_objects(self) -> Set[Object]:
         matched_objs = set()
-        for category in self.category_set.all():
-            matched_objs.update(category.object_set.filter(ready=True).all())
+        for category in self.categories:
+            matched_objs.update(x for x in category.objects if x.ready)
         return matched_objs
 
     @cached_property
     def matching_objects(self) -> Set[Object]:
         matched_objs = set(self.direct_matching_objects)
-        for synset in self.descendants.all():
+        for synset in self.descendants:
             matched_objs.update(synset.direct_matching_objects)
         return matched_objs
     
     @cached_property
     def matching_ready_objects(self) -> Set[Object]:
         matched_objs = set(self.direct_matching_ready_objects)
-        for synset in self.descendants.all():
+        for synset in self.descendants:
             matched_objs.update(synset.direct_matching_ready_objects)
         return matched_objs
     
     @cached_property
     def required_meta_links(self) -> Set[str]:
-        properties = {prop.name: json.loads(prop.parameters) for prop in self.property_set.all()}
-        predicates = {pred.name.lower() for pred in self.used_in_predicates.all()}
+        properties = {prop.name: json.loads(prop.parameters) for prop in self.properties}
+        predicates = {pred.name.lower() for pred in self.used_in_predicates}
 
         if 'substance' in properties:
             return set()  # substances don't need any meta links
@@ -318,7 +319,7 @@ class Synset(Model):
     @cached_property
     def n_task_required(self):
         '''Get whether the synset is required in any task, returns STATE METADATA'''
-        return self.task_set.count()
+        return len(self.tasks)
     
     @cached_property
     def subgraph(self):
@@ -328,30 +329,30 @@ class Synset(Model):
         while next_to_query:
             synset, query_parents, query_children = next_to_query.pop()
             if query_parents:
-                for parent in synset.parents.all():
+                for parent in synset.parents:
                     G.add_edge(parent, synset)
                     next_to_query.append((parent, True, False))
             if query_children:
-                for child in synset.children.all():
+                for child in synset.children:
                     G.add_edge(synset, child)
                     next_to_query.append((child, False, True))
         return G    
 
     @cached_property
     def task_relevant(self):
-        return self.task_set.exists() or self.ancestors.filter(task__isnull=False).exists()
+        return self.tasks or any(ancestor.tasks for ancestor in self.ancestors)
     
     @cached_property
     def transition_subgraph(self):
-        producing_recipes = self.produced_by_transition_rules.all()
-        consuming_recipes = self.used_by_transition_rules.all()
+        producing_recipes = list(self.produced_by_transition_rules)
+        consuming_recipes = list(self.used_by_transition_rules)
         transitions = set(itertools.chain(producing_recipes, consuming_recipes))
         G = nx.DiGraph()
         for transition in transitions:
             G.add_node(transition)
-            for input_synset in transition.input_synsets.all():
+            for input_synset in transition.input_synsets:
                 G.add_edge(input_synset, transition)
-            for output_synset in transition.output_synsets.all():
+            for output_synset in transition.output_synsets:
                 G.add_edge(transition, output_synset)
         return nx.relabel_nodes(G, lambda x: (x.name if isinstance(x, Synset) else f'recipe: {x.name}'), copy=True)
 
@@ -362,8 +363,8 @@ class Synset(Model):
 
         # Otherwise, are there any recipes that I can use to obtain it?
         recipe_alternatives = set()
-        for recipe in self.produced_by_transition_rules.all():
-            producabilities_and_recipe_sets = [ingredient.is_produceable_from(synsets) for ingredient in recipe.input_synsets.all()]
+        for recipe in self.produced_by_transition_rules:
+            producabilities_and_recipe_sets = [ingredient.is_produceable_from(synsets) for ingredient in recipe.input_synsets]
             producabilities, recipe_sets = zip(*producabilities_and_recipe_sets)
             if all(producabilities):
                 recipe_alternatives.add(recipe)
@@ -389,21 +390,20 @@ class TransitionRule(Model):
     def subgraph(self):
         G = nx.DiGraph()
         G.add_node(self)
-        for input_synset in self.input_synsets.all():
+        for input_synset in self.input_synsets:
             G.add_edge(input_synset, self)
-        for output_synset in self.output_synsets.all():
+        for output_synset in self.output_synsets:
             G.add_edge(self, output_synset)
         return nx.relabel_nodes(G, lambda x: (x.name if isinstance(x, Synset) else f'recipe: {x.name}'), copy=True)
 
     @staticmethod
     def get_graph():
-        transitions = TransitionRule.objects.all()
         G = nx.DiGraph()
-        for transition in transitions:
+        for transition in TransitionRule.all_objects():
             G.add_node(transition)
-            for input_synset in transition.input_synsets.all():
+            for input_synset in transition.input_synsets:
                 G.add_edge(input_synset, transition)
-            for output_synset in transition.output_synsets.all():
+            for output_synset in transition.output_synsets:
                 G.add_edge(transition, output_synset)
         return G
 
@@ -412,10 +412,10 @@ class TransitionRule(Model):
 class Task(Model):
     name : str
     definition : str
-    synsets_fk : ManyToManyField = ManyToManyField(Synset, 'tasks') # the synsets required by this task
-    future_synsets_fk : ManyToManyField = ManyToManyField(Synset, 'tasks_using_as_future') # the synsets that show up as future synsets in this task (e.g. don't exist in initial)
-    uses_predicates_fk : ManyToManyField = ManyToManyField(Predicate, 'tasks')
-    roomrequirements_fk : OneToManyField = OneToManyField('RoomRequirement', 'task')
+    synsets_fk : ManyToMany = ManyToManyField(Synset, 'tasks') # the synsets required by this task
+    future_synsets_fk : ManyToMany = ManyToManyField(Synset, 'tasks_using_as_future') # the synsets that show up as future synsets in this task (e.g. don't exist in initial)
+    uses_predicates_fk : ManyToMany = ManyToManyField(Predicate, 'tasks')
+    roomrequirements_fk : OneToMany = OneToManyField('RoomRequirement', 'task')
     
     class Meta:
         pk = 'name'
@@ -433,9 +433,9 @@ class Task(Model):
     def matching_scene(self, scene: Scene, ready: bool=True) -> str:
         '''checks whether a scene satisfies task requirements'''
         ret = ''
-        for room_requirement in self.roomrequirement_set.all():
+        for room_requirement in self.roomrequirements:
             scene_ret = f'Cannot find suitable {room_requirement.type}: '
-            for room in scene.room_set.all():
+            for room in scene.rooms:
                 if room.type != room_requirement.type or room.ready != ready:
                     continue
                 room_ret = room.matching_room_requirement(room_requirement)
@@ -449,46 +449,45 @@ class Task(Model):
         return ret
     
     def uses_transition(self):
-        return self.uses_predicates.filter(name='future').exists()
+        return any(pred.name == "future" for pred in self.uses_predicates)
     
     def uses_visual_substance(self):
-        return self.synsets.filter(property__name='visualSubstance').exists()
+        return any(prop.name == "visualSubstance" for synset in self.synsets for prop in synset.properties)
 
     def uses_physical_substance(self):
-        return self.synsets.filter(property__name='physicalSubstance').exists()
+        return any(prop.name == "physicalSubstance" for synset in self.synsets for prop in synset.properties)
 
     def uses_attachment(self):
-        return self.uses_predicates.filter(name__in=['assembled', 'attached']).exists()
+        return any(pred.name in ['assembled', 'attached'] for pred in self.uses_predicates)
 
     def uses_cloth(self):
-        return self.uses_predicates.filter(name__in=['folded', 'draped', 'unfolded']).exists()
-
+        return any(pred.name in ['folded', 'draped', 'unfolded'] for pred in self.uses_predicates)
 
     @cached_property
     def substance_synsets(self):
         '''synsets that represent a substance'''
-        return self.synsets.filter(state=STATE_SUBSTANCE)
+        return [x for x in self.synsets if x.state == STATE_SUBSTANCE]
     
     @cached_property
     def synset_state(self) -> str:
-        if self.synsets.filter(state=STATE_ILLEGAL).count() > 0:
+        if any(synset.state == STATE_ILLEGAL for synset in self.synsets):
             return STATE_UNMATCHED
-        elif self.synsets.filter(state=STATE_UNMATCHED).count() > 0:
+        elif any(synset.state == STATE_UNMATCHED for synset in self.synsets):
             return STATE_UNMATCHED
-        elif self.synsets.filter(state=STATE_MATCHED).count() == 0:
+        elif any(synset.state == STATE_MATCHED for synset in self.synsets):
             return STATE_PLANNED
         else:
             return STATE_MATCHED
         
     @cached_property
     def problem_synsets(self):
-        return self.synsets.filter(state=STATE_ILLEGAL) | self.synsets.filter(state=STATE_UNMATCHED)
+        return [synset for synset in self.synsets if synset.state in (STATE_ILLEGAL, STATE_UNMATCHED)]
        
     @cached_property
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
         ret = {}
-        for scene in Scene.objects.all():
-            if scene.room_set.filter(ready=True).count() == 0:
+        for scene in Scene.all_objects():
+            if not any(room.ready for room in scene.rooms):
                 result_ready = 'Scene does not have a ready version currently.'
             else:
                 result_ready = self.matching_scene(scene=scene, ready=True)
@@ -513,7 +512,7 @@ class Task(Model):
         
     @cached_property
     def substance_required(self) -> str:
-        if self.substance_synsets.count() > 0:
+        if self.substance_synsets:
             return STATE_SUBSTANCE
         else:
             return STATE_NONE
@@ -521,8 +520,8 @@ class Task(Model):
     @cached_property
     def producability_data(self) -> Dict[Synset, Tuple[bool, Set[TransitionRule]]]:
         '''Map each synset to a tuple of whether it is produceable and the transition rules that can be used to produce it'''
-        starting_synsets = set(self.synsets.all()) - set(self.future_synsets.all())
-        return {synset: synset.is_produceable_from(starting_synsets) for synset in self.synsets.all()}
+        starting_synsets = set(self.synsets) - set(self.future_synsets)
+        return {synset: synset.is_produceable_from(starting_synsets) for synset in self.synsets}
     
     @cached_property
     def relevant_transitions(self):
@@ -531,8 +530,8 @@ class Task(Model):
     @cached_property
     def transition_graph(self):
         G  = nx.DiGraph()
-        future_synsets = set(self.future_synsets.all())
-        starting_synsets = set(self.synsets.all()) - future_synsets
+        future_synsets = set(self.future_synsets)
+        starting_synsets = set(self.synsets) - future_synsets
         
         def human_readable_name(s):
             if s in starting_synsets:
@@ -542,14 +541,14 @@ class Task(Model):
             else:
                 return s.name
 
-        for synset in self.synsets.all():
+        for synset in self.synsets:
             G.add_node(human_readable_name(synset), type='obj')
         for transition in self.relevant_transitions:
             transition_name = f'recipe: {transition.name}'
             G.add_node(transition_name, type='transition', text=transition.name)
-            for input_synset in transition.input_synsets.all():
+            for input_synset in transition.input_synsets:
                 G.add_edge(human_readable_name(input_synset), transition_name)
-            for output_synset in transition.output_synsets.all():
+            for output_synset in transition.output_synsets:
                 G.add_edge(transition_name, human_readable_name(output_synset))
 
         # Prune the graph so that it only contains all the future nodes and everything that can be used
@@ -563,8 +562,8 @@ class Task(Model):
     
     @cached_property
     def partial_transition_graph(self):
-        future_synsets = set(self.future_synsets.all())
-        starting_synsets = set(self.synsets.all()) - future_synsets
+        future_synsets = set(self.future_synsets)
+        starting_synsets = set(self.synsets) - future_synsets
 
         def human_readable_name(s):
             if isinstance(s, Synset):
@@ -592,7 +591,7 @@ class Task(Model):
 
         # Also add all ingredients of each recipe
         all_recipes = [x for x in all_nodes_on_path if isinstance(x, TransitionRule)]
-        all_ingredients = {inp for recipe in all_recipes for inp in recipe.input_synsets.all()}
+        all_ingredients = {inp for recipe in all_recipes for inp in recipe.input_synsets}
         all_nodes_to_keep = all_nodes_on_path | all_ingredients
 
         # Get the subgraph, convert that to a text graph.
@@ -603,7 +602,7 @@ class Task(Model):
     @cached_property
     def unreachable_goal_synsets(self) -> List[str]:
         '''Get a list of synsets that are in the goal but cannot be reached from the initial state'''
-        return [s for s in self.future_synsets.all() if not self.producability_data[s][0]]
+        return [s for s in self.future_synsets if not self.producability_data[s][0]]
 
     @cached_property
     def goal_is_reachable(self) -> bool:
@@ -613,11 +612,11 @@ class Task(Model):
 
 @dataclass
 class RoomRequirement(Model):
-    id : str = UUIDField(primary_key=True)
-    task_fk : ManyToOneField = ManyToOneField(Task, 'roomrequirements')
-    # TODO: make this one of the room types
+    # TODO: make this one of the room types. enum?
     type : str
-    roomsynsetrequirements_fk : OneToManyField = OneToManyField('RoomSynsetRequirement', 'room_requirement')
+    id : str = UUIDField()
+    task_fk : ManyToOne = ManyToOneField(Task, 'roomrequirements')
+    roomsynsetrequirements_fk : OneToMany = OneToManyField('RoomSynsetRequirement', 'room_requirement')
 
     class Meta:
         pk = 'id'
@@ -627,10 +626,10 @@ class RoomRequirement(Model):
 
 @dataclass
 class RoomSynsetRequirement(Model):
-    id : str = UUIDField(primary_key=True)
-    room_requirement_fk : ManyToOneField = ManyToOneField(RoomRequirement, 'roomsynsetrequirements')
-    synset_fk : ManyToOneField = ManyToOneField(Synset, 'roomsynsetrequirements')
-    count : int
+    id : str = UUIDField()
+    room_requirement_fk : ManyToOne = ManyToOneField(RoomRequirement, 'roomsynsetrequirements')
+    synset_fk : ManyToOne = ManyToOneField(Synset, 'roomsynsetrequirements')
+    count : int = 0
 
     class Meta:
         pk = 'id'
@@ -640,13 +639,13 @@ class RoomSynsetRequirement(Model):
 
 @dataclass
 class Room(Model):
-    id : str = UUIDField(primary_key=True)
     name : str
     # type of the room
     # TODO: make this one of the room types
     type : str
     # whether the scene is ready in the current dataset
     ready : bool = False
+    id : str = UUIDField()
     # the scene the room belongs to
     scene_fk : ManyToOne = ManyToOneField(Scene, 'rooms')
     # the room objects in this object
@@ -668,14 +667,14 @@ class Room(Model):
         G = nx.Graph()
         # Add a node for each required object
         synset_node_to_synset = {}
-        for room_synset_requirement in room_requirement.roomsynsetrequirement_set.all():
+        for room_synset_requirement in room_requirement.roomsynsetrequirements:
             synset_name = room_synset_requirement.synset.name
             for i in range(room_synset_requirement.count):
                 node_name = f'{synset_name}_{i}'
                 G.add_node(node_name)
                 synset_node_to_synset[node_name] = room_synset_requirement.synset
         # Add a node for each object in the room
-        for roomobject in self.roomobject_set.all():
+        for roomobject in self.roomobjects:
             for i in range(roomobject.count):
                 object_name = f'{roomobject.object.name}_{i}'
                 G.add_node(object_name)
@@ -697,13 +696,13 @@ class Room(Model):
 
 @dataclass
 class RoomObject(Model):
-    id : str = UUIDField(primary_key=True)
+    id : str = UUIDField()
     # the room that the object belongs to
     room_fk : ManyToOne = ManyToOneField(Room, 'roomobjects')
     # the actual object that the room object maps to
     object_fk : ManyToOne = ManyToOneField(Object, 'roomobjects')
     # number of objects in the room
-    count : int
+    count : int = 0
 
     class Meta:
         pk = 'id'

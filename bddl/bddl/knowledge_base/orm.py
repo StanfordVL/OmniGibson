@@ -3,6 +3,9 @@ from collections import defaultdict
 from dataclasses import field, fields
 import uuid
 
+class IntegrityError(Exception):
+    pass
+
 class Model:
     _CLASS_REGISTRY = dict()
     def __init_subclass__(cls, **kwargs):
@@ -14,31 +17,108 @@ class Model:
         return Model._CLASS_REGISTRY[target_model]
 
     _OBJECT_REGISTRY = defaultdict(dict)
-    def __post_init__(self, *args, **kwargs):
+    def __post_init__(self):
         key = self._key
         assert key not in self._OBJECT_REGISTRY[self.__class__.__name__], f"Duplicate key {key} for {self.__class__.__name__}"
+
         self._OBJECT_REGISTRY[self.__class__.__name__][key] = self
 
         # Also bind the "this_instance" member of each fk field
         for field in fields(self):
-            if field.type == ManyToOne:
+            if field.type in (ManyToOne, OneToMany, ManyToMany):
                 fk = getattr(self, field.name)
-                fk._this_instance = self
-            elif field.type == OneToMany:
-                fk = getattr(self, field.name)
-                fk._this_instance = self
-            elif field.type == ManyToMany:
-                fk = getattr(self, field.name)
-                fk._this_instance = self
+                fk._this_inst = self
 
     @cached_property
     def _key(self):
-        return tuple([getattr(self, self.Meta.pk)])
+        return getattr(self, self.Meta.pk)
 
     @classmethod
-    def get(cls, *args):
-        return cls._OBJECT_REGISTRY[cls.__name__][args]
+    def get(cls, *args, **kwargs):
+        if args:
+            assert not kwargs, "Cannot specify both positional and keyword arguments to get"
+            pk, = args
+            kwargs = {cls.Meta.pk: pk}
+        assert kwargs, "Must specify either positional or keyword arguments to get"
+        # Use a fast lookup for the PK.
+        if len(kwargs) == 1 and cls.Meta.pk in kwargs:
+            return cls._OBJECT_REGISTRY[cls.__name__][kwargs[cls.Meta.pk]]
+        objs = [x for x in cls.all_objects() if all(getattr(x, attr) == value for attr, value in kwargs.items())]
+        if not objs:
+            raise KeyError(f"No object matching {kwargs}")
+        assert len(objs) == 1, f"Expected exactly one object matching {kwargs} but found {objs}"
+        return objs[0]
     
+    @classmethod
+    def exists(cls, *args, **kwargs):
+        if args:
+            assert not kwargs, "Cannot specify both positional and keyword arguments to get"
+            pk, = args
+            kwargs = {cls.Meta.pk: pk}
+        assert kwargs, "Must specify either positional or keyword arguments to get"
+        # Use a fast lookup for the PK.
+        if len(kwargs) == 1 and cls.Meta.pk in kwargs:
+            return kwargs[cls.Meta.pk] in cls._OBJECT_REGISTRY[cls.__name__]
+        objs = [x for x in cls.all_objects() if all(getattr(x, attr) == value for attr, value in kwargs.items())]
+        return bool(objs)
+    
+    @classmethod
+    def get_or_create(cls, defaults=None, *args, **kwargs):
+        if cls.exists(*args, **kwargs):
+            return cls.get(*args, **kwargs), False
+        else:
+            create_args = {}
+            if defaults:
+                create_args.update(defaults)
+            if args:
+                assert not kwargs, "Cannot specify both positional and keyword arguments to get"
+                pk, = args
+                create_args[cls.Meta.pk] = pk
+            if kwargs:
+                create_args.update(kwargs)
+            return cls.create(**create_args), True
+
+    @classmethod
+    def create(cls, **kwargs):
+        # Check the kwargs to see if any are foreign keys
+        sanitized_kwargs = {k: v for k, v in kwargs.items() if k not in cls.foreign_key_field_names()}
+        obj = cls(**sanitized_kwargs)
+
+        foreign_kwargs = {k + "_fk": v for k, v in kwargs.items() if k in cls.foreign_key_field_names()}
+        for field_name, field_value in foreign_kwargs.items():
+            fk = getattr(obj, field_name)
+            if isinstance(fk, ManyToOne):
+                fk.set(field_value)
+            elif isinstance(fk, ManyToMany):
+                for obj in field_value:
+                    fk.add(obj)
+            elif isinstance(fk, OneToMany):
+                for obj in field_value:
+                    fk.add(obj)
+                fk.add(obj, field_value)
+            else:
+                raise ValueError(f"Unknown foreign key type {fk}")
+            
+        # Build the unique-together key
+        # TODO: Make this work beyond just creation.
+        # if hasattr(cls.Meta, "unique_together"):
+        #     unique_together_keys = cls.Meta.unique_together
+        #     this_key = tuple([getattr(obj, attr) for attr in unique_together_keys])
+        #     for other in cls._OBJECT_REGISTRY[cls.__name__].values():
+        #         if other is obj:
+        #             continue
+        #         other_key = tuple([getattr(other, attr) for attr in unique_together_keys])
+        #         if this_key == other_key:
+        #             raise IntegrityError(f"Unique together constraint violated for {cls.__name__}. New item: {obj!r}. Existing item: {other!r}. Uniqueness constraint: {unique_together_keys}")
+
+        return obj
+
+    @classmethod
+    def foreign_key_field_names(cls):
+        fk_fields = [field.name for field in fields(cls) if field.type in (ManyToOne, OneToMany, ManyToMany)]
+        assert all(field.endswith("_fk") for field in fk_fields), f"Foreign key fields must end with _fk. Fields: {fk_fields}"
+        return [field[:-3] for field in fk_fields]
+
     @classmethod
     def all_objects(cls):
         return cls._OBJECT_REGISTRY[cls.__name__].values()
@@ -52,25 +132,31 @@ class Model:
         other_order_key = [getattr(other, attr) for attr in order_attrs]
         return self_order_key < other_order_key
     
+    def hasfield(self, field_name):
+        return any(x.name == field_name for x in fields(self))
+
     def __getattr__(self, key):
-        if hasattr(self, key + "_fk"):
-            fk = getattr(self, key + "_fk")
+        if self.hasfield(key + "_fk"):
+            fk = self.__getattribute__(key + "_fk")
             if isinstance(fk, ManyToOne):
                 return fk.get()
             else:
                 return fk
         else:
-            super().__getattr__(key)
+            self.__getattribute__(key)
 
     def __setattr__(self, key, value):
-        if hasattr(self, key + "_fk"):
-            fk = getattr(self, key + "_fk")
+        if self.hasfield(key + "_fk"):
+            fk = self.__getattribute__(key + "_fk")
             if isinstance(fk, ManyToOne):
                 return fk.set(self, value)
             else:
                 raise ValueError(f"Cannot set {key} because it is a OneToMany or ManyToMany field.")
         else:
             super().__setattr__(key, value)
+
+    def __hash__(self) -> int:
+        return hash(self._key)
 
 def has_field_with_type(cls, field_name, field_type):
     cls_fields = [x for x in fields(cls) if x.name == field_name]
@@ -91,7 +177,7 @@ class ManyToOne:
     def __init__(self, target_model, target_field):
         target_model = get_model_class(target_model)
         target_field = target_field + "_fk"
-        assert has_field_with_type(target_model, target_field, OneToMany)
+        assert has_field_with_type(target_model, target_field, OneToMany), f"Target model {target_model} does not have a OneToMany field {target_field}. Fields: {[x for x in fields(target_model)]}"
 
         self._target_model = target_model
         self._target_field = target_field
@@ -104,16 +190,17 @@ class ManyToOne:
         return self._target_model.get(self._target_key)
     
     def set(self, target_inst):
+        assert self._target_key is None, "Foreign key object already bound"
         assert self._this_inst is not None, "Unbound foreign key object"
         assert target_inst.__class__ == self._target_model, f"Target instance {target_inst} is not of type {self._target_model}"
         self._target_key = target_inst._key
-        getattr(target_inst, self._target_field)._values.add(self._this_inst)
+        getattr(target_inst, self._target_field)._values.add(self._this_inst._key)
 
 class OneToMany:
     def __init__(self, target_model, target_field) -> None:
         target_model = get_model_class(target_model)
         target_field = target_field + "_fk"
-        assert has_field_with_type(target_model, target_field, ManyToOne)
+        assert has_field_with_type(target_model, target_field, ManyToOne), f"Target model {target_model} does not have a ManyToOne field {target_field}. Fields: {[x for x in fields(target_model)]}"
 
         self._target_model = target_model
         self._target_field = target_field
@@ -123,13 +210,18 @@ class OneToMany:
 
     def __iter__(self):
         assert self._this_inst is not None, "Unbound foreign key object"
-        return iter(self._values)
+        return (self._target_model.get(key) for key in self._values)
+    
+    def add(self, target_inst):
+        # Directly call their setter for verification
+        assert self._this_inst is not None, "Unbound foreign key object"
+        getattr(target_inst, self._target_field).set(self._this_inst._key)
 
 class ManyToMany:
     def __init__(self, target_model, target_field) -> None:
         target_model = get_model_class(target_model)
         target_field = target_field + "_fk"
-        assert has_field_with_type(target_model, target_field, ManyToMany)
+        assert has_field_with_type(target_model, target_field, ManyToMany), f"Target model {target_model} does not have a ManyToMany field {target_field}. Fields: {[x for x in fields(target_model)]}"
 
         self._target_model = target_model
         self._target_field = target_field
@@ -139,22 +231,22 @@ class ManyToMany:
 
     def __iter__(self):
         assert self._this_inst is not None, "Unbound foreign key object"
-        return iter(self._values)
+        return (self._target_model.get(key) for key in self._values)
     
-    def add(self, this_inst, target_inst):
+    def add(self, target_inst):
         assert self._this_inst is not None, "Unbound foreign key object"
         assert target_inst.__class__ == self._target_model, f"Target instance {target_inst} is not of type {self._target_model}"
-        self._values.add(target_inst)
-        getattr(target_inst, self._target_field)._values.add(self._this_inst)
+        self._values.add(target_inst._key)
+        getattr(target_inst, self._target_field)._values.add(self._this_inst._key)
 
 def ManyToOneField(target_model, target_field, **kwargs):
-    return field(default_factory=lambda: ManyToOne(target_model, target_field), **kwargs)
+    return field(default_factory=lambda: ManyToOne(target_model, target_field), repr=False, **kwargs)
 
 def OneToManyField(target_model, target_field, **kwargs):
-    return field(default_factory=lambda: OneToMany(target_model, target_field), **kwargs)
+    return field(default_factory=lambda: OneToMany(target_model, target_field), repr=False, **kwargs)
 
 def ManyToManyField(target_model, target_field, **kwargs):
-    return field(default_factory=lambda: ManyToMany(target_model, target_field), **kwargs)
+    return field(default_factory=lambda: ManyToMany(target_model, target_field), repr=False, **kwargs)
 
 def UUIDField(**kwargs):
     return field(default_factory=lambda: uuid.uuid4(), **kwargs)

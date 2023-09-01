@@ -1,7 +1,6 @@
 import re
 from nltk.corpus import wordnet as wn
 from typing import Tuple, List, Set
-from data.models import *
 from bddl.activity import get_initial_conditions, get_goal_conditions, get_object_scope
 from bddl.logic_base import UnaryAtomicFormula, BinaryAtomicFormula, Expression
 from bddl.backend_abc import BDDLBackend
@@ -103,9 +102,10 @@ def get_initial_and_goal_conditions(conds) -> Tuple[List, List]:
 def get_leaf_conditions(cond) -> List:
     if isinstance(cond, list):
         return [leaf_cond for child in cond for leaf_cond in get_leaf_conditions(child)]
-    elif isinstance(cond, (UnaryAtomicFormula, BinaryAtomicFormula)):
+    # elif isinstance(cond, (UnaryAtomicFormula, BinaryAtomicFormula)):   # This is too slow.
+    if hasattr(cond, "input") or hasattr(cond, "input1"):
         if cond.children:
-            return [leaf_cond for child in cond.children for leaf_cond in get_leaf_conditions(child)]
+            raise ValueError(f"Found an atomic formula {cond} with children.")
         else:
             return [cond]
     elif isinstance(cond, Expression):
@@ -118,7 +118,9 @@ def get_leaf_conditions(cond) -> List:
     
 def get_synsets(cond):
     def get_synset_from_scope_name(scope_name):
-        synset = scope_name.rsplit('_', 1)[0]
+        lemma, n, number = scope_name.split(".")
+        number = number.rsplit('_', 1)[0]
+        synset = f"{lemma}.{n}.{number}"
         assert re.fullmatch(r'^[A-Za-z-_]+\.n\.[0-9]+$', synset), f"Invalid synset name: {synset}"
         return synset
     assert isinstance(cond, (UnaryAtomicFormula, BinaryAtomicFormula)), "This only works with atomic formulae"
@@ -135,17 +137,16 @@ def object_substance_match(cond, synset) -> Tuple[bool, bool]:
     leafs = get_leaf_conditions(cond)
 
     # It's used as a substance if it shows up as the last argument of any substance predicate
-    is_used_as_substance = any(synset in get_synsets(leaf)[-1] for leaf in leafs if leaf.STATE_NAME in SUBSTANCE_PREDICATES)
+    is_used_as_substance = any(synset == get_synsets(leaf)[-1] for leaf in leafs if leaf.STATE_NAME in SUBSTANCE_PREDICATES)
 
     # It's used as a non-substance if it shows up as any argument of a non-substance predicate
     is_used_as_non_substance_in_non_substance_predicate = any(
-        synset in synset_list
+        synset in get_synsets(leaf)
         for leaf in leafs
-        for synset_list in get_synsets(leaf)
-        if leaf.STATE_NAME not in SUBSTANCE_PREDICATES)
+        if leaf.STATE_NAME not in SUBSTANCE_PREDICATES | {"future", "real"})
     # or the first argument of a two-argument substance predicate
     is_used_as_non_substance_in_substance_predicate = any(
-        synset in get_synsets(leaf)[0]
+        synset == get_synsets(leaf)[0]
         for leaf in leafs
         if leaf.STATE_NAME in SUBSTANCE_PREDICATES and isinstance(leaf, BinaryAtomicFormula))
     is_used_as_non_substance = is_used_as_non_substance_in_non_substance_predicate or is_used_as_non_substance_in_substance_predicate
@@ -160,12 +161,12 @@ def object_used_as_fillable(cond, synset) -> Tuple[bool, bool]:
     
     # Looking for the first argument of one of the fillable predicates.
     leafs = get_leaf_conditions(cond)
-    return any(synset in get_synsets(leaf)[0] for leaf in leafs if leaf.STATE_NAME in FILLABLE_PREDICATES)
+    return any(synset == get_synsets(leaf)[0] for leaf in leafs if leaf.STATE_NAME in FILLABLE_PREDICATES)
     
 
 def object_used_predicates(cond, synset) -> Tuple[bool, bool]:
     leafs = get_leaf_conditions(cond)
-    return {leaf.STATE_NAME for leaf in leafs if any(synset in synsets for synsets in get_synsets(leaf))}
+    return {leaf.STATE_NAME for leaf in leafs if synset in get_synsets(leaf)}
 
 
 def all_task_predicates(cond) -> Set[str]:
