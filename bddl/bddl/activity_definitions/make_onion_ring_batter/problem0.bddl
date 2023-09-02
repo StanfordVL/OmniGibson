@@ -12,6 +12,8 @@
         mixing_bowl.n.01_1 - mixing_bowl.n.01
         flour__sack.n.01_1 - flour__sack.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
+        onion_powder__shaker.n.01_1 - onion_powder__shaker.n.01
+        onion_powder.n.01_1 - onion_powder.n.01
         countertop.n.01_1 - countertop.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         cabinet.n.01_1 - cabinet.n.01
@@ -32,7 +34,9 @@
         (filled cooking_oil__bottle.n.01_1 cooking_oil.n.01_1) 
         (ontop cooking_oil__bottle.n.01_1 countertop.n.01_1) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
+        (insource onion_powder__shaker.n.01_1 onion_powder.n.01_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (ontop onion_powder__shaker.n.01_1 countertop.n.01_1)
         (ontop electric_mixer.n.01_1 countertop.n.01_1) 
         (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (future onion_ring_batter.n.01_1) 
