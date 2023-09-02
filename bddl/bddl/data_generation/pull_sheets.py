@@ -14,6 +14,8 @@ ALL_SHEETS = [
   (ASSETS_SHEET_KEY, "Object Category Mapping", "category_mapping.csv"),
   (ASSETS_SHEET_KEY, "Allowed Room Types", "allowed_room_types.csv"),
   (ASSETS_SHEET_KEY, "Substance Hyperparams", "substance_hyperparams.csv"),
+  (ASSETS_SHEET_KEY, "Object Renames", "object_renames.csv"),
+  (ASSETS_SHEET_KEY, "Deletion Queue", "deletion_queue.csv"),
   (SYNSETS_SHEET_KEY, "Synsets", "synsets.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "heatSource", "prop_param_annots/heatSource.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "coldSource", "prop_param_annots/coldSource.csv"),
