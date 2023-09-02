@@ -33,6 +33,11 @@ jobs:
         python-version: "3.8"
         architecture: x64
 
+    - name: Authenticate on Google Cloud
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
     # See if we need to re-pull any ig_pipeline data from DVC.
     - name: Check cache for ig_pipeline data
       id: cache-pipeline
@@ -48,12 +53,6 @@ jobs:
     - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
       name: Install dvc
       run: pip install dvc[gs]
-
-    - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
-      name: Authenticate on Google Cloud
-      uses: 'google-github-actions/auth@v1'
-      with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
     - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
       name: Pull dvc data
