@@ -233,7 +233,7 @@ class KnowledgeBaseProcessor():
         create tasks and map to synsets
         """
         self.debug_print("Creating tasks...")
-        tasks = glob.glob(BDDL_DIR / "activity_definitions/*")
+        tasks = glob.glob(str(BDDL_DIR / "activity_definitions/*"))
         tasks = [(act, inst) for act in get_all_activities() for inst in range(get_instance_count(act))]
         for act, inst in self.tqdm(tasks):
             # Load task definition
@@ -306,7 +306,7 @@ class KnowledgeBaseProcessor():
 
     def create_transitions(self):
         # Load the transition data
-        json_paths = glob.glob(GENERATED_DATA_DIR / "transition_map/tm_jsons/*.json")
+        json_paths = glob.glob(str(GENERATED_DATA_DIR / "transition_map/tm_jsons/*.json"))
         transitions = []
         for jp in json_paths:
             with open(jp) as f:
