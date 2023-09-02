@@ -492,7 +492,6 @@ class Task(Model):
     @cached_property
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
         ret = {}
-        return {}
         for scene in Scene.all_objects():
             if not any(room.ready for room in scene.rooms):
                 result_ready = 'Scene does not have a ready version currently.'

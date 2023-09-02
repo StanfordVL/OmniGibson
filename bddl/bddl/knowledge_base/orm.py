@@ -1,4 +1,4 @@
-from functools import cached_property
+from functools import cached_property, cache
 from collections import defaultdict
 from dataclasses import field, fields
 import uuid
@@ -131,29 +131,26 @@ class Model:
         self_order_key = [getattr(self, attr) for attr in order_attrs]
         other_order_key = [getattr(other, attr) for attr in order_attrs]
         return self_order_key < other_order_key
-    
-    def hasfield(self, field_name):
-        return any(x.name == field_name for x in fields(self))
 
     def __getattr__(self, key):
-        if self.hasfield(key + "_fk"):
+        try:
             fk = self.__getattribute__(key + "_fk")
-            if isinstance(fk, ManyToOne):
+            if hasattr(fk, "get"):  # ManyToOne
                 return fk.get()
             else:
                 return fk
-        else:
-            self.__getattribute__(key)
+        except AttributeError:
+            return self.__getattribute__(key)
 
     def __setattr__(self, key, value):
-        if self.hasfield(key + "_fk"):
+        try:
             fk = self.__getattribute__(key + "_fk")
-            if isinstance(fk, ManyToOne):
+            if hasattr(fk, "set"):  # ManyToOne
                 return fk.set(self, value)
             else:
                 raise ValueError(f"Cannot set {key} because it is a OneToMany or ManyToMany field.")
-        else:
-            super().__setattr__(key, value)
+        except AttributeError:
+            return super().__setattr__(key, value)
 
     def __hash__(self) -> int:
         return hash(self._key)
