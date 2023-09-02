@@ -309,16 +309,24 @@ class KnowledgeBaseProcessor():
         json_paths = glob.glob(str(GENERATED_DATA_DIR / "transition_map/tm_jsons/*.json"))
         transitions = []
         for jp in json_paths:
+            if "washer_" in jp:
+                continue
             with open(jp) as f:
                 transitions.extend(json.load(f))
 
         # Create the transition objects
         for transition_data in self.tqdm(transitions):
-            transition = TransitionRule.create(name=transition_data["rule_name"])
-            for synset_name in transition_data["input_objects"].keys():
+            rule_name = transition_data["rule_name"]
+            transition = TransitionRule.create(name=rule_name)
+            inputs = set(transition_data["input_objects"].keys())
+            assert inputs, f"Transition {transition.name} has no inputs!"
+            outputs = set(transition_data["output_objects"].keys())
+            assert outputs, f"Transition {transition.name} has no outputs!"
+            assert inputs & outputs == set(), f"Inputs and outputs of {transition.name} overlap!"
+            for synset_name in inputs:
                 synset = Synset.get(name=synset_name)
                 transition.input_synsets.add(synset)
-            for synset_name in transition_data["output_objects"].keys():
+            for synset_name in outputs:
                 synset = Synset.get(name=synset_name)
                 transition.output_synsets.add(synset)
 

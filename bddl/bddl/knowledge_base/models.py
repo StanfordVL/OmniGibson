@@ -357,23 +357,29 @@ class Synset(Model):
         return nx.relabel_nodes(G, lambda x: (x.name if isinstance(x, Synset) else f'recipe: {x.name}'), copy=True)
 
     def is_produceable_from(self, synsets):
-        # If it's already available, then we're good.
-        if self in synsets:
-            return True, set()
+        def _is_produceable_from(_self, _synsets, _seen):
+            if _self in _seen:
+                return False, set()
 
-        # Otherwise, are there any recipes that I can use to obtain it?
-        recipe_alternatives = set()
-        for recipe in self.produced_by_transition_rules:
-            producabilities_and_recipe_sets = [ingredient.is_produceable_from(synsets) for ingredient in recipe.input_synsets]
-            producabilities, recipe_sets = zip(*producabilities_and_recipe_sets)
-            if all(producabilities):
-                recipe_alternatives.add(recipe)
-                recipe_alternatives.update(ingredient_recipe for recipe_set in recipe_sets for ingredient_recipe in recipe_set)
+            # If it's already available, then we're good.
+            if _self in _synsets:
+                return True, set()
+
+            # Otherwise, are there any recipes that I can use to obtain it?
+            recipe_alternatives = set()
+            for recipe in _self.produced_by_transition_rules:
+                producabilities_and_recipe_sets = [_is_produceable_from(ingredient, _synsets, _seen | {self}) for ingredient in recipe.input_synsets]
+                producabilities, recipe_sets = zip(*producabilities_and_recipe_sets)
+                if all(producabilities):
+                    recipe_alternatives.add(recipe)
+                    recipe_alternatives.update(ingredient_recipe for recipe_set in recipe_sets for ingredient_recipe in recipe_set)
+                
+            if not recipe_alternatives:
+                return False, set()
             
-        if not recipe_alternatives:
-            return False, set()
+            return True, recipe_alternatives
         
-        return True, recipe_alternatives
+        return _is_produceable_from(self, synsets, set())
 
 
 @dataclass(eq=False, order=False)
