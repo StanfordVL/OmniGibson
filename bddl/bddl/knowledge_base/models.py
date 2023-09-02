@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from functools import cached_property
+from functools import cached_property, cache
 import itertools
 import json
 import networkx as nx
@@ -144,6 +144,7 @@ class Category(Model):
         pk = 'name'
         ordering = ['name']
 
+    @cache
     def matching_synset(self, synset) -> bool:
         return synset.name in self.matching_synsets
 
@@ -178,6 +179,7 @@ class Object(Model):
         pk = 'name'
         ordering = ['name']
 
+    @cache
     def matching_synset(self, synset) -> bool:
         return self.category.matching_synset(synset)
     
