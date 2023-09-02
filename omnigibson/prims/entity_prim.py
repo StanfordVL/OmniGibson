@@ -138,6 +138,10 @@ class EntityPrim(XFormPrim):
             if gm.AG_CLOTH:
                 self.create_attachment_point_link()
 
+        # Globally disable any requested collision links
+        for link_name in self.disabled_collision_link_names:
+            self._links[link_name].disable_collisions()
+        
         # Disable any requested collision pairs
         for a_name, b_name in self.disabled_collision_pairs:
             link_a, link_b = self._links[a_name], self._links[b_name]
@@ -1109,6 +1113,14 @@ class EntityPrim(XFormPrim):
         Returns:
             list of (str, str): List of rigid body collision pairs to disable within this object prim.
                 Default is an empty list (no pairs)
+        """
+        return []
+    
+    @property
+    def disabled_collision_link_names(self):
+        """
+        Returns:
+            list of str: List of link names for this entity whose collisions should be globally disabled
         """
         return []
 
