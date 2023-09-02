@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import cached_property
 import itertools
 import json
@@ -195,21 +195,21 @@ class Object(Model):
         return f'https://cvgl.stanford.edu/b1k/object_images/{model_id}.webp'
     
     def fully_supports_synset(self, synset) -> bool:       
-        return synset.required_meta_links.issubset(self.meta_links.values_list('name', flat=True))
+        return synset.required_meta_links.issubset({x.name for x in self.meta_links})
 
 @dataclass(eq=False, order=False)
 class Synset(Model):
     name : str
     # whether the synset is a custom synset or not
-    is_custom : bool = False
+    is_custom : bool = field(default=False, repr=False)
     # wordnet definitions
-    definition : str = ""
+    definition : str = field(default="", repr=False)
     # whether the synset is used as a substance in some task
-    is_used_as_substance : bool = False
+    is_used_as_substance : bool = field(default=False, repr=False)
     # whether the synset is used as a non-substance in some task
-    is_used_as_non_substance : bool = False
+    is_used_as_non_substance : bool = field(default=False, repr=False)
     # whether the synset is ever used as a fillable in any task
-    is_used_as_fillable : bool = False
+    is_used_as_fillable : bool = field(default=False, repr=False)
     # predicates the synset was used in as the first argument
     used_in_predicates_fk : ManyToMany = ManyToManyField(Predicate, 'synsets')
     # all it's parents in the synset graph (NOTE: this does not include self)
@@ -219,7 +219,7 @@ class Synset(Model):
     ancestors_fk : ManyToMany = ManyToManyField('Synset', 'descendants')
     descendants_fk : ManyToMany = ManyToManyField('Synset', 'ancestors')
     # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
-    state : str = STATE_ILLEGAL
+    state : str = field(default=STATE_ILLEGAL, repr=False)
 
     categories_fk : OneToMany = OneToManyField(Category, 'synset')
     properties_fk : OneToMany = OneToManyField(Property, 'synset')
@@ -360,7 +360,7 @@ class Synset(Model):
         def _is_produceable_from(_self, _synsets, _seen):
             if _self in _seen:
                 return False, set()
-
+            
             # If it's already available, then we're good.
             if _self in _synsets:
                 return True, set()
@@ -368,7 +368,7 @@ class Synset(Model):
             # Otherwise, are there any recipes that I can use to obtain it?
             recipe_alternatives = set()
             for recipe in _self.produced_by_transition_rules:
-                producabilities_and_recipe_sets = [_is_produceable_from(ingredient, _synsets, _seen | {self}) for ingredient in recipe.input_synsets]
+                producabilities_and_recipe_sets = [_is_produceable_from(ingredient, _synsets, _seen | {_self}) for ingredient in recipe.input_synsets]
                 producabilities, recipe_sets = zip(*producabilities_and_recipe_sets)
                 if all(producabilities):
                     recipe_alternatives.add(recipe)
@@ -603,7 +603,6 @@ class Task(Model):
 
         # Get the subgraph, convert that to a text graph.
         subgraph = G.subgraph(all_nodes_to_keep)
-        print(list(subgraph.nodes))
         return nx.relabel_nodes(subgraph, human_readable_name, copy=True)
     
     @cached_property

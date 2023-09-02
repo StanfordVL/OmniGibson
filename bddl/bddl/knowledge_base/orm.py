@@ -121,7 +121,7 @@ class Model:
 
     @classmethod
     def all_objects(cls):
-        return (x for x in cls._OBJECT_REGISTRY[cls.__name__].values())
+        return sorted(x for x in cls._OBJECT_REGISTRY[cls.__name__].values())
     
     def __lt__(self, other):
         if hasattr(self.Meta, "ordering"):
