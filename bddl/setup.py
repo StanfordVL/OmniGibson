@@ -20,6 +20,7 @@ setup(
         'networkx',
         'jupytext',
         'future',
+        'nltk~=3.7'
     ],
     package_data={},
     include_package_data=True
