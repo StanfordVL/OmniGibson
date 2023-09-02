@@ -54,7 +54,7 @@ ROOM_TYPE_CHOICES = [
 
 
 
-@dataclass
+@dataclass(eq=False, order=False)
 class Property(Model):
     name : str
     parameters : str
@@ -70,7 +70,7 @@ class Property(Model):
         return self.synset.name + '-' + self.name
         
     
-@dataclass
+@dataclass(eq=False, order=False)
 class MetaLink(Model):
     name : str
     on_objects_fk : ManyToMany = ManyToManyField('Object', 'meta_links')
@@ -79,7 +79,7 @@ class MetaLink(Model):
         pk = 'name'
 
 
-@dataclass
+@dataclass(eq=False, order=False)
 class Predicate(Model):
     name : str
     synsets_fk : ManyToMany = ManyToManyField('Synset', 'used_in_predicates')
@@ -89,7 +89,7 @@ class Predicate(Model):
         pk = 'name'
 
 
-@dataclass
+@dataclass(eq=False, order=False)
 class Scene(Model):
     name : str
 
@@ -127,7 +127,7 @@ class Scene(Model):
         pk = 'name'
         ordering = ['name']
 
-@dataclass
+@dataclass(eq=False, order=False)
 class Category(Model):
     name : str
 
@@ -151,9 +151,9 @@ class Category(Model):
     def matching_synsets(self) -> Set['Synset']:
         if not self.synset:
             return set()
-        return set(self.synset.ancestors.values_list('name', flat=True)) | {self.synset.name}
+        return {anc.name for anc in self.synset.ancestors} | {self.synset.name}
 
-@dataclass
+@dataclass(eq=False, order=False)
 class Object(Model):
     name : str
     # the name of the object prior to getting renamed
@@ -197,7 +197,7 @@ class Object(Model):
     def fully_supports_synset(self, synset) -> bool:       
         return synset.required_meta_links.issubset(self.meta_links.values_list('name', flat=True))
 
-@dataclass
+@dataclass(eq=False, order=False)
 class Synset(Model):
     name : str
     # whether the synset is a custom synset or not
@@ -376,7 +376,7 @@ class Synset(Model):
         return True, recipe_alternatives
 
 
-@dataclass
+@dataclass(eq=False, order=False)
 class TransitionRule(Model):
     name : str
     input_synsets_fk : ManyToMany = ManyToManyField(Synset, 'used_by_transition_rules')
@@ -408,7 +408,7 @@ class TransitionRule(Model):
         return G
 
 
-@dataclass
+@dataclass(eq=False, order=False)
 class Task(Model):
     name : str
     definition : str
@@ -486,6 +486,7 @@ class Task(Model):
     @cached_property
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
         ret = {}
+        return {}
         for scene in Scene.all_objects():
             if not any(room.ready for room in scene.rooms):
                 result_ready = 'Scene does not have a ready version currently.'
@@ -610,7 +611,7 @@ class Task(Model):
         return len(self.unreachable_goal_synsets) == 0
 
 
-@dataclass
+@dataclass(eq=False, order=False)
 class RoomRequirement(Model):
     # TODO: make this one of the room types. enum?
     type : str
@@ -624,7 +625,7 @@ class RoomRequirement(Model):
         ordering = ['type']  
 
 
-@dataclass
+@dataclass(eq=False, order=False)
 class RoomSynsetRequirement(Model):
     id : str = UUIDField()
     room_requirement_fk : ManyToOne = ManyToOneField(RoomRequirement, 'roomsynsetrequirements')
@@ -637,7 +638,7 @@ class RoomSynsetRequirement(Model):
         ordering = ['synset__name']
     
 
-@dataclass
+@dataclass(eq=False, order=False)
 class Room(Model):
     name : str
     # type of the room
@@ -694,7 +695,7 @@ class Room(Model):
                     missing_synsets[synset.name] += 1
             return ', '.join([f'{count} {synset}' for synset, count in missing_synsets.items()])
 
-@dataclass
+@dataclass(eq=False, order=False)
 class RoomObject(Model):
     id : str = UUIDField()
     # the room that the object belongs to

@@ -249,7 +249,8 @@ class Command():
                     logging.debug(f"Synset {synset_name} is not used in any predicate in {task_name}")
                 for predicate in synset_used_predicates:
                     pred_obj, _ = Predicate.get_or_create(name=predicate)
-                    synset.used_in_predicates.add(pred_obj)
+                    if pred_obj not in synset.used_in_predicates:
+                        synset.used_in_predicates.add(pred_obj)
                 task.synsets.add(synset)
 
                 # If the synset ever shows up as future or real, check validity

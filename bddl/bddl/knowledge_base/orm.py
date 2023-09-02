@@ -121,7 +121,7 @@ class Model:
 
     @classmethod
     def all_objects(cls):
-        return cls._OBJECT_REGISTRY[cls.__name__].values()
+        return (x for x in cls._OBJECT_REGISTRY[cls.__name__].values())
     
     def __lt__(self, other):
         if hasattr(self.Meta, "ordering"):
@@ -157,6 +157,9 @@ class Model:
 
     def __hash__(self) -> int:
         return hash(self._key)
+    
+    def __eq__(self, __value: object) -> bool:
+        return __value is self
 
 def has_field_with_type(cls, field_name, field_type):
     cls_fields = [x for x in fields(cls) if x.name == field_name]
@@ -194,7 +197,8 @@ class ManyToOne:
         assert self._this_inst is not None, "Unbound foreign key object"
         assert target_inst.__class__ == self._target_model, f"Target instance {target_inst} is not of type {self._target_model}"
         self._target_key = target_inst._key
-        getattr(target_inst, self._target_field)._values.add(self._this_inst._key)
+        assert self._this_inst._key not in getattr(target_inst, self._target_field)._values, f"Foreign key constraint violated: {self._this_inst} already has a foreign key to {target_inst}"
+        getattr(target_inst, self._target_field)._values.append(self._this_inst._key)
 
 class OneToMany:
     def __init__(self, target_model, target_field) -> None:
@@ -205,12 +209,23 @@ class OneToMany:
         self._target_model = target_model
         self._target_field = target_field
 
-        self._values = set()
+        self._values = []
         self._this_inst = None
 
     def __iter__(self):
         assert self._this_inst is not None, "Unbound foreign key object"
         return (self._target_model.get(key) for key in self._values)
+    
+    def __len__(self):
+        assert self._this_inst is not None, "Unbound foreign key object"
+        return len(self._values)
+    
+    def __getitem__(self, key):
+        assert self._this_inst is not None, "Unbound foreign key object"
+        if isinstance(key, slice):
+            return (self._target_model.get(key) for key in self._values[key])
+        else:
+            return self._target_model.get(self._values[key])
     
     def add(self, target_inst):
         # Directly call their setter for verification
@@ -226,18 +241,31 @@ class ManyToMany:
         self._target_model = target_model
         self._target_field = target_field
 
-        self._values = set()
+        self._values = []
         self._this_inst = None
 
     def __iter__(self):
         assert self._this_inst is not None, "Unbound foreign key object"
         return (self._target_model.get(key) for key in self._values)
     
+    def __getitem__(self, key):
+        assert self._this_inst is not None, "Unbound foreign key object"
+        if isinstance(key, slice):
+            return (self._target_model.get(key) for key in self._values[key])
+        else:
+            return self._target_model.get(self._values[key])
+
+    def __len__(self):
+        assert self._this_inst is not None, "Unbound foreign key object"
+        return len(self._values)
+
     def add(self, target_inst):
         assert self._this_inst is not None, "Unbound foreign key object"
         assert target_inst.__class__ == self._target_model, f"Target instance {target_inst} is not of type {self._target_model}"
-        self._values.add(target_inst._key)
-        getattr(target_inst, self._target_field)._values.add(self._this_inst._key)
+        assert target_inst._key not in self._values, f"Foreign key constraint violated: {self._this_inst} already has a foreign key to {target_inst}"
+        assert self._this_inst._key not in getattr(target_inst, self._target_field)._values, f"Foreign key constraint violated: {self._this_inst} already has a foreign key to {target_inst}"
+        self._values.append(target_inst._key)
+        getattr(target_inst, self._target_field)._values.append(self._this_inst._key)
 
 def ManyToOneField(target_model, target_field, **kwargs):
     return field(default_factory=lambda: ManyToOne(target_model, target_field), repr=False, compare=False, **kwargs)
@@ -249,4 +277,4 @@ def ManyToManyField(target_model, target_field, **kwargs):
     return field(default_factory=lambda: ManyToMany(target_model, target_field), repr=False, compare=False, **kwargs)
 
 def UUIDField(**kwargs):
-    return field(default_factory=lambda: uuid.uuid4(), **kwargs)
+    return field(default_factory=lambda: str(uuid.uuid4()), **kwargs)
