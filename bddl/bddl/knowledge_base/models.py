@@ -340,7 +340,7 @@ class Synset(Model):
 
     @cached_property
     def task_relevant(self):
-        return self.tasks or any(ancestor.tasks for ancestor in self.ancestors)
+        return bool(self.tasks or any(ancestor.tasks for ancestor in self.ancestors))
     
     @cached_property
     def transition_subgraph(self):

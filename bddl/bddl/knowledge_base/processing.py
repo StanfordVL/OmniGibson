@@ -1,10 +1,11 @@
 import csv
 from collections import defaultdict, Counter
 import logging
-import os
 import json
 import glob
 import nltk
+import pathlib
+import bddl
 from bddl.knowledge_base.orm import IntegrityError
 from bddl.object_taxonomy import ObjectTaxonomy
 from bddl.activity import Conditions, get_all_activities, get_instance_count
@@ -13,11 +14,28 @@ import tqdm
 from bddl.knowledge_base.models import *
 from bddl.knowledge_base.utils import *
 
-class Command():
-    help = "generates all the Django objects using data from ig_pipeline, B1K google sheets, and bddl"
 
+BDDL_DIR = pathlib.Path(bddl.__file__).parent
+GENERATED_DATA_DIR = BDDL_DIR / "generated_data"
 
-    def handle(self, *args, **options):
+logger = logging.getLogger(__name__)
+
+class KnowledgeBaseProcessor():
+    def __init__(self, verbose=True) -> None:
+        self._verbose = verbose
+
+    def tqdm(self, iterable, *args, **kwargs):
+        if self._verbose:
+            return tqdm.tqdm(iterable, *args, **kwargs)
+        else:
+            return iterable
+        
+    def debug_print(self, *args, **kwargs):
+        if self._verbose:
+            print(*args, **kwargs)
+
+    def run(self):
+        logger.warning("Loading BDDL knowledge base... This may take a few seconds.")
         self.preparation()
         self.create_synsets()
         self.create_objects()
@@ -32,7 +50,7 @@ class Command():
         """
         put any preparation work (e.g. sanity check) here
         """
-        print("Running preparation work...")
+        self.debug_print("Running preparation work...")
 
         nltk.download('wordnet')
 
@@ -40,7 +58,7 @@ class Command():
 
         # sanity check room types are up to date
         room_types_from_model = set([room_type for _, room_type in ROOM_TYPE_CHOICES])
-        with open(f'{os.path.pardir}/bddl/bddl/generated_data/allowed_room_types.csv', newline='') as csvfile:
+        with open(GENERATED_DATA_DIR / 'allowed_room_types.csv', newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             room_types_from_csv = set([row[0] for row in reader][1:])
         assert room_types_from_model == room_types_from_csv, "room types are not up to date with allowed_room_types.csv"
@@ -49,7 +67,7 @@ class Command():
         self.object_rename_mapping = {}
         self.obj_rename_mapping_unique_set = set()
         self.obj_rename_mapping_duplicate_set = set()
-        with open(f"{os.path.pardir}/ig_pipeline/metadata/object_renames.csv", newline='') as csvfile:
+        with open(GENERATED_DATA_DIR / "object_renames.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 new_cat = row["New Category"].strip()
@@ -65,13 +83,13 @@ class Command():
                     self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_id}"
             assert len(self.obj_rename_mapping_duplicate_set) == 0, f"object rename mapping have duplicates: {self.obj_rename_mapping_duplicate_set}"
 
-        print("Finished prep work...")
+        self.debug_print("Finished prep work...")
 
     def post_complete_operation(self):
         """
         put any post completion work (e.g. update stuff) here
         """
-        print("Running post completion operations...")
+        self.debug_print("Running post completion operations...")
         self.generate_synset_state()
         # self.generate_object_images()
         # self.nuke_unused_synsets()
@@ -83,11 +101,11 @@ class Command():
         """
         from nltk.corpus import wordnet as wn
 
-        print("Creating synsets...")
-        for synset_name in tqdm.tqdm(self.object_taxonomy.get_all_synsets()):
+        self.debug_print("Creating synsets...")
+        for synset_name in self.tqdm(self.object_taxonomy.get_all_synsets()):
             synset_is_custom = not wn_synset_exists(synset_name)  # TODO: use data from hierarchy. synset_sub_hierarchy["is_custom"] == "1"
             if synset_name != canonicalize(synset_name):
-                logging.debug(f"synset {synset_name} is not canonicalized!")
+                self.debug_print(f"synset {synset_name} is not canonicalized!")
             synset_definition = wn.synset(synset_name).definition() if wn_synset_exists(synset_name) else ""
             synset, created = Synset.get_or_create(name=synset_name, defaults={"definition": synset_definition, "is_custom": synset_is_custom})
             parents = self.object_taxonomy.get_parents(synset_name)
@@ -114,17 +132,17 @@ class Command():
         """
         Create objects and map to categories (with object inventory)
         """
-        print("Creating objects...")
+        self.debug_print("Creating objects...")
         # first get Deletion Queue
         self.deletion_queue = set()
-        with open(f"{os.path.pardir}/ig_pipeline/metadata/deletion_queue.csv", newline='') as csvfile:
+        with open(GENERATED_DATA_DIR / "deletion_queue.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 self.deletion_queue.add(row["Object"].strip().split("-")[1])
         # then create objects
-        with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory_future.json", "r") as f:
+        with open(GENERATED_DATA_DIR / "object_inventory_future.json", "r") as f:
             inventory = json.load(f)
-            for orig_name, provider in tqdm.tqdm(inventory["providers"].items()):
+            for orig_name, provider in self.tqdm(inventory["providers"].items()):
                 object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
                 if object_name.split("-")[1] in self.deletion_queue:
                     continue
@@ -138,9 +156,9 @@ class Command():
                         meta_link_obj, _ = MetaLink.get_or_create(name=meta_link)
                         object.meta_links.add(meta_link_obj)
 
-        with open(f"{os.path.pardir}/ig_pipeline/artifacts/pipeline/object_inventory.json", "r") as f:
+        with open(GENERATED_DATA_DIR / "object_inventory.json", "r") as f:
             objs = []
-            for orig_name in tqdm.tqdm(json.load(f)["providers"].keys()):
+            for orig_name in self.tqdm(json.load(f)["providers"].keys()):
                 object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
                 if object_name.split("-")[1] not in self.deletion_queue:
                     category_name = object_name.split("-")[0]
@@ -157,10 +175,10 @@ class Command():
         create scene objects (which stores the room config)
         scene matching to tasks will be generated later when creating task objects
         """
-        print("Creating scenes...")
-        with open(rf"{os.path.pardir}/ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json", "r") as f:
+        self.debug_print("Creating scenes...")
+        with open(GENERATED_DATA_DIR / "combined_room_object_list_future.json", "r") as f:
             planned_scene_dict = json.load(f)["scenes"]
-            for scene_name in tqdm.tqdm(planned_scene_dict):
+            for scene_name in self.tqdm(planned_scene_dict):
                 scene, _ = Scene.get_or_create(name=scene_name)
                 for room_name in planned_scene_dict[scene_name]:
                     # TODO: Implement unique_together constraints
@@ -184,9 +202,9 @@ class Command():
                             })
                             RoomObject.create(room=room, object=object, count=count)
 
-        with open(rf"{os.path.pardir}/ig_pipeline/artifacts/pipeline/combined_room_object_list.json", "r") as f:
+        with open(GENERATED_DATA_DIR / "combined_room_object_list.json", "r") as f:
             current_scene_dict = json.load(f)["scenes"]
-            for scene_name in tqdm.tqdm(current_scene_dict):
+            for scene_name in self.tqdm(current_scene_dict):
                 scene, _ = Scene.get_or_create(name=scene_name)
                 for room_name in current_scene_dict[scene_name]:
                     try:
@@ -214,10 +232,10 @@ class Command():
         """
         create tasks and map to synsets
         """
-        print("Creating tasks...")
-        tasks = glob.glob(rf"{os.path.pardir}/bddl/bddl/activity_definitions/*")
+        self.debug_print("Creating tasks...")
+        tasks = glob.glob(BDDL_DIR / "activity_definitions/*")
         tasks = [(act, inst) for act in get_all_activities() for inst in range(get_instance_count(act))]
-        for act, inst in tqdm.tqdm(tasks):
+        for act, inst in self.tqdm(tasks):
             # Load task definition
             conds = Conditions(act, inst, "omnigibson")
             synsets = set(synset for synset in conds.parsed_objects if synset != "agent.n.01")
@@ -246,7 +264,7 @@ class Command():
                 synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
                 synset_used_predicates = object_used_predicates(combined_conds, synset_name)
                 if not synset_used_predicates:
-                    logging.debug(f"Synset {synset_name} is not used in any predicate in {task_name}")
+                    self.debug_print(f"Synset {synset_name} is not used in any predicate in {task_name}")
                 for predicate in synset_used_predicates:
                     pred_obj, _ = Predicate.get_or_create(name=predicate)
                     if pred_obj not in synset.used_in_predicates:
@@ -259,15 +277,15 @@ class Command():
                     # Assert that it's used as future in initial and as real in goal
                     initial_preds = object_used_predicates(initial_conds, synset_name)
                     if "future" not in initial_preds:
-                        logging.debug(f"Synset {synset_name} is not used as future in initial in {task_name}")
+                        self.debug_print(f"Synset {synset_name} is not used as future in initial in {task_name}")
                     if "real" in initial_preds:
-                        logging.debug(f"Synset {synset_name} is used as real in initial in {task_name}")
+                        self.debug_print(f"Synset {synset_name} is used as real in initial in {task_name}")
 
                     goal_preds = object_used_predicates(goal_conds, synset_name)
                     if "real" not in goal_preds:
-                        logging.debug(f"Synset {synset_name} is not used as real in goal in {task_name}")
+                        self.debug_print(f"Synset {synset_name} is not used as real in goal in {task_name}")
                     if "future" in goal_preds:
-                        logging.debug(f"Synset {synset_name} is used as future in goal in {task_name}")
+                        self.debug_print(f"Synset {synset_name} is used as future in goal in {task_name}")
 
                     task.future_synsets.add(synset)
 
@@ -288,14 +306,14 @@ class Command():
 
     def create_transitions(self):
         # Load the transition data
-        json_paths = glob.glob(f"{os.path.pardir}/bddl/bddl/generated_data/transition_map/tm_jsons/*.json")
+        json_paths = glob.glob(GENERATED_DATA_DIR / "transition_map/tm_jsons/*.json")
         transitions = []
         for jp in json_paths:
             with open(jp) as f:
                 transitions.extend(json.load(f))
 
         # Create the transition objects
-        for transition_data in tqdm.tqdm(transitions):
+        for transition_data in self.tqdm(transitions):
             transition = TransitionRule.create(name=transition_data["rule_name"])
             for synset_name in transition_data["input_objects"].keys():
                 synset = Synset.get(name=synset_name)
@@ -307,7 +325,7 @@ class Command():
     def generate_synset_state(self):
         synsets = []
         substances = {s.name for s in Synset.all_objects() for prop in s.properties if prop.name == "substance"}
-        for synset in tqdm.tqdm(Synset.all_objects()):
+        for synset in self.tqdm(Synset.all_objects()):
             if synset.name == "entity.n.01": synset.state = STATE_MATCHED   # root synset is always legal
             elif synset.name in substances:
                 synset.state = STATE_SUBSTANCE
@@ -359,5 +377,5 @@ class Command():
 
 if __name__ == "__main__":
     import IPython
-    Command().handle()
+    KnowledgeBaseProcessor().run()
     IPython.embed()

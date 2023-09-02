@@ -19,6 +19,7 @@ from bddl.knowledge_base.utils import STATE_MATCHED, \
   STATE_ILLEGAL, \
   STATE_NONE
 
-from bddl.knowledge_base.processing import Command
+from bddl.knowledge_base.processing import KnowledgeBaseProcessor
 
-Command().handle()
+# Load the knowledge base
+KnowledgeBaseProcessor(verbose=False).run()
