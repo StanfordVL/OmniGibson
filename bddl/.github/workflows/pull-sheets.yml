@@ -66,7 +66,7 @@ jobs:
       run: dvc unprotect artifacts/pipeline/combined_room_object_list.json artifacts/pipeline/combined_room_object_list_future.json artifacts/pipeline/object_inventory.json artifacts/pipeline/object_inventory_future.json
 
     - name: Copy over ig_pipeline files
-      run: cp ig_pipeline/artifacts/pipeline/*.json inventory.json bddl/bddl/generated_data
+      run: cp ig_pipeline/artifacts/pipeline/{combined_room_object_list,combined_room_object_list_future,object_inventory,object_inventory_future}.json bddl/bddl/generated_data
 
     - name: Install BDDL
       working-directory: bddl
