@@ -1,5 +1,6 @@
 import os
 import pathlib
+import time
 import gspread
 import csv
 
@@ -43,6 +44,9 @@ def main():
     with open(OUTPUT_ROOT / filename, "w") as f:
       writer = csv.writer(f)
       writer.writerows(worksheet.get_all_values())
+
+    # Stop Google from complaining.
+    time.sleep(10)
 
 if __name__ == "__main__":
   main()
