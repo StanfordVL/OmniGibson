@@ -244,3 +244,5 @@ def test_open_revolute():
     primitives_args = [(obj_1['object'],)]    
 
     assert primitive_tester(categories, objects, primitives, primitives_args)
+
+test_navigate()

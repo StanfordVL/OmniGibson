@@ -341,18 +341,6 @@ def grasp_position_for_open_on_revolute_joint(robot, target_obj, relevant_joint,
         required_yaw_change,
     )
 
-def get_recovery_pose_2d(target_obj, relevant_joint, robot):
-    link_name = relevant_joint.body1.split("/")[-1]
-    link = target_obj.links[link_name]
-    diff_vec = robot.get_position() - link.get_position()
-    rotated_vec = R.from_quat(T.euler2quat([0, 0, -np.pi/20])).apply(diff_vec)
-    invert_diff_vec = diff_vec
-    angle = np.arctan(invert_diff_vec[1] / invert_diff_vec[0])
-    pose_2d = link.get_position() + rotated_vec
-    pose_2d[2] = T.wrap_angle(angle + np.pi)
-    print(angle)
-    return pose_2d
-
 def get_orientation_facing_vector_with_random_yaw(vector):
     forward = vector / np.linalg.norm(vector)
     rand_vec = np.random.rand(3)

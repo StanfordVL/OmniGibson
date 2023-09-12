@@ -39,8 +39,7 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.control_utils import IKSolver
 from omnigibson.utils.grasping_planning_utils import (
     get_grasp_poses_for_object_sticky,
-    get_grasp_position_for_open,
-    get_recovery_pose_2d
+    get_grasp_position_for_open
 )
 from omnigibson.controllers.controller_base import ControlType
 from omnigibson.prims import CollisionGeomPrim
@@ -501,18 +500,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 yield from self._move_base_backward()
 
             except ActionPrimitiveError as e:
-                # Let go - we do not want to be holding anything after return of primitive.
-                print(e)
                 yield from self._execute_release()
-                # yield from self._move_base_backward()
-                # pose_2d = get_recovery_pose_2d(obj, relevant_joint, self.robot)
-                # self.markers[0].set_position([pose_2d[0], pose_2d[1], 0.3])
-                # print(pose_2d[2])
                 yield from self._move_base_backward()
-                # yield from self._navigate_to_pose_direct(pose_2d, translate=True)
-                # og.sim.step()
-                # yield from self._navigate_to_pose_direct(pose_2d, translate=True)
-                # from IPython import embed; embed()
 
 
         if obj.states[object_states.Open].get_value() != should_open:
