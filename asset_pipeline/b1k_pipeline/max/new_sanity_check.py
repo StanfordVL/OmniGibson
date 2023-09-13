@@ -122,6 +122,7 @@ class SanityCheck:
             rt.Cone,
             rt.Physical_Camera,
             rt.FreeCamera,
+            rt.Plane,
         ]
 
         self.expect(is_valid_type, f"{row.object_name} has disallowed type {row.type}.")
@@ -132,6 +133,7 @@ class SanityCheck:
                 rt.VRayPhysicalCamera,
                 rt.Physical_Camera,
                 rt.FreeCamera,
+                rt.Plane,
             ]
             self.expect(is_valid_root, f"Root-level object {row.object_name} has disallowed type {row.type}.")
         return is_valid_type
