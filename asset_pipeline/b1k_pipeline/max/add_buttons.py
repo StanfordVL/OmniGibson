@@ -30,6 +30,7 @@ ENTRYPOINTS = {
     "category_qa.py": "Walk through scene categories for quality assurance.",
     "prereduce.py": "Apply vertex reduction without collapsing.",
     "randomize_obj_names.py": "Randomize objects named in the legacy format.",
+    "renumber.py": "Renumber all objects in this file s.t. they're consecutive",
     "resolve_complaints.py": "Resolve QA complaints for this file.",
     "rpc_server.py": "Run RPC Server for DVC stages.",
     "select_mismatched_pivot.py": "Select groups of object instances whose pivots dont match.",
