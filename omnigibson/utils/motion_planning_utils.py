@@ -435,7 +435,6 @@ def set_base_and_detect_collision(context, pose):
     # context.robot_copy.prim.set_local_poses(np.array([translation]), np.array([orientation]))
     translation = Gf.Vec3d(*np.array(translation, dtype=float))
     robot_copy.prims[robot_copy_type].GetAttribute("xformOp:translate").Set(translation)
-
     orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
     robot_copy.prims[robot_copy_type].GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
 
@@ -457,8 +456,9 @@ def set_arm_and_detect_collision(context, joint_pos):
     
     arm_links = context.robot.manipulation_link_names
     link_poses = context.fk_solver.get_link_poses(joint_pos, arm_links)
+    arm_links_to_move = [l for l in arm_links if "grasping_frame" not in l]
 
-    for link in arm_links:
+    for link in arm_links_to_move:
         pose = link_poses[link]
         if link in robot_copy.meshes[robot_copy_type].keys():
             for mesh_name, mesh in robot_copy.meshes[robot_copy_type][link].items():
@@ -469,6 +469,21 @@ def set_arm_and_detect_collision(context, joint_pos):
                 orientation = np.array(mesh_pose[1], dtype=float)[[3, 0, 1, 2]]
                 mesh.GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation))
 
+    if context.obj_in_hand_copy is not None:
+        eef_link_name = context.robot.eef_links[context.robot.default_arm].name
+        eef_link_name = eef_link_name.split(":")[-1]
+        eef_link_pose_robot_frame = link_poses[eef_link_name]
+
+        obj_in_hand_relative_pose = context.obj_in_hand_copy['relative_pose']
+        eef_link_pose_in_world_frame = T.pose_transform(*context.robot.get_position_orientation(), *eef_link_pose_robot_frame)
+        obj_in_hand_pose_in_world_frame = T.pose_transform(*eef_link_pose_in_world_frame, *obj_in_hand_relative_pose)
+
+        # from IPython import embed; embed()
+
+        translation = Gf.Vec3d(*np.array(obj_in_hand_pose_in_world_frame[0], dtype=float))
+        context.obj_in_hand_copy['prim'].GetAttribute("xformOp:translate").Set(translation)
+        orientation = np.array(obj_in_hand_pose_in_world_frame[1], dtype=float)[[3, 0, 1, 2]]
+        context.obj_in_hand_copy['prim'].GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation))
 
     return detect_robot_collision(context)
 
