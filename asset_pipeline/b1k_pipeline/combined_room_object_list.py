@@ -4,6 +4,8 @@ from collections import Counter, defaultdict
 import glob
 import json
 import os
+
+import numpy as np
 import b1k_pipeline.utils
 from nltk.corpus import wordnet as wn
 import yaml
@@ -19,55 +21,6 @@ def get_approved_room_types(pipeline_fs):
 
     return approved
 
-
-SCENE_ROOMS_TO_REMOVE = {
-    # "school_biology": ['chemistry_lab_0', 'classroom_0', 'corridor_0', 'gym_0', 'locker_room_1', 'locker_room_0', 'corridor_5', 'computer_lab_0', 'corridor_1', 'corridor_4', 'infirmary_0'],
-    # "school_chemistry": ['classroom_0', 'corridor_0', 'gym_0', 'locker_room_1', 'locker_room_0', 'corridor_5', 'computer_lab_0', 'corridor_1', 'corridor_4', 'infirmary_0', 'biology_lab_0'],
-    # "school_gym": ['corridor_3', 'chemistry_lab_0', 'classroom_0', 'corridor_5', 'computer_lab_0', 'corridor_4', 'infirmary_0', 'biology_lab_0'],
-    # "school_geography": ['corridor_3', 'chemistry_lab_0', 'gym_0', 'locker_room_1', 'locker_room_0', 'corridor_5', 'computer_lab_0', 'corridor_4', 'infirmary_0', 'biology_lab_0'],
-    # "school_computer_lab_and_infirmary": ['corridor_3', 'chemistry_lab_0', 'classroom_0', 'corridor_0', 'gym_0', 'locker_room_1', 'locker_room_0', 'corridor_1', 'biology_lab_0'],
-    # "office_cubicles_left": ['private_office_0', 'private_office_7', 'private_office_8', 'private_office_9', 'meeting_room_1', 'shared_office_1', 'private_office_6', 'copy_room_1'],
-    # "office_cubicles_right": ['shared_office_0', 'private_office_0', 'copy_room_0', 'meeting_room_0', 'private_office_4', 'private_office_5', 'private_office_1', 'private_office_2', 'private_office_3'],
-    # "house_double_floor_lower": ["bathroom_1", "bedroom_0", "bedroom_1", "bedroom_2", "television_room_0"],
-    # "house_double_floor_upper": ['garden_0', 'bathroom_0', 'living_room_0', "kitchen_0", "garage_0", "corridor_0"],
-    # "Beechwood_0_garden": ["living_room_0"],
-    # "Rs_garden": ["living_room_0"],
-    # "Pomaria_0_garden": ["living_room_0"],
-    # "Merom_0_garden": ["living_room_0"],
-    # "Wainscott_0_garden": ["living_room_0"],
-}
-
-SCENES_TO_ADD = {
-    "grocery_store_asian": ["public_restroom_brown"],
-    "grocery_store_cafe": ["public_restroom_futuristic"],
-    "grocery_store_convenience": ["public_restroom_marble"],
-    "grocery_store_half_stocked": ["public_restroom_marble"],
-    "hall_arch_wood": ["public_restroom_marble"],
-    "hall_train_station": ["public_restroom_white"],
-    "hall_glass_ceiling": ["public_restroom_brown"],
-    "hall_conference_large": ["public_restroom_white"],
-    "office_bike": ["public_restroom_white"],
-    "office_cubicles_left": ["public_restroom_brown"],
-    "office_cubicles_right": ["public_restroom_white"],
-    "office_large": ["public_restroom_futuristic"],
-    "office_vendor_machine": ["public_restroom_brown"],
-    "restaurant_asian": ["public_restroom_white", "commercial_kitchen_pans"],
-    "restaurant_cafeteria": ["public_restroom_marble"],
-    "restaurant_diner": ["public_restroom_marble"],
-    "restaurant_brunch": ["public_restroom_futuristic",  "commercial_kitchen_pans"],
-    "restaurant_urban": ["public_restroom_brown", "commercial_kitchen_fire_extinguisher"],
-    "restaurant_hotel": ["commercial_kitchen_fire_extinguisher"],  # "public_restroom_futuristic"
-    "school_gym": ["public_restroom_blue"],
-    "school_geography": ["public_restroom_blue"],
-    "school_biology": ["public_restroom_blue"],
-    "school_chemistry": ["public_restroom_blue"],
-    "school_computer_lab_and_infirmary": ["public_restroom_blue"],
-    "Beechwood_0_garden": ["Beechwood_0_int"],
-    # "Rs_garden": ["Rs_int"],
-    # "Pomaria_0_garden": ["Pomaria_0_int"],
-    "Merom_0_garden": ["Merom_0_int"],
-    "Wainscott_0_garden": ["Wainscott_0_int"],
-}
 
 SCENES_TO_EXCLUDE = {
     "public_restroom_blue",
@@ -93,6 +46,9 @@ def main(use_future=False):
             params = yaml.load(f, Loader=yaml.SafeLoader)
             targets = params["scenes_unfiltered"] if use_future else params["scenes"]
 
+        outgoing_portals = {}
+        incoming_portals = {}
+
         # Add the object lists.
         for target in targets:
             with pipeline_fs.target_output(target) as target_output_fs:
@@ -116,36 +72,44 @@ def main(use_future=False):
                 contents = Counter()
 
                 for model, cnt in models.items():
-                    cat = model.split("-")[0]
-
                     contents[model] += cnt
 
                 # synsets["floor.n.01"] = 1
                 # synsets["wall.n.01"] = 1
                 scene_content_info[rm] = dict(contents)
             
-            if scene_name in SCENE_ROOMS_TO_REMOVE:
-                for rm in SCENE_ROOMS_TO_REMOVE[scene_name]:
-                    assert rm in scene_content_info, f"{scene_name} does not contain removal-requested room {rm}. Valid keys: {list(scene_content_info.keys())}"
-                    del scene_content_info[rm]
+            # if scene_name in SCENE_ROOMS_TO_REMOVE:
+            #     for rm in SCENE_ROOMS_TO_REMOVE[scene_name]:
+            #         assert rm in scene_content_info, f"{scene_name} does not contain removal-requested room {rm}. Valid keys: {list(scene_content_info.keys())}"
+            #         del scene_content_info[rm]
 
             scenes[scene_name] = scene_content_info
 
+            outgoing_portals[scene_name] = object_list["outgoing_portals"]
+            incoming_portals[scene_name] = object_list["incoming_portal"]
+
         # Merge the stuff
-        if use_future:
-            for base, additions in SCENES_TO_ADD.items():
-                if base not in scenes:
-                    continue 
+        room_collision_errors = []
+        for base, room_objects in scenes.items():
+            for addition_scene, portal_info in outgoing_portals[base].items():
+                # Check that the corresponding scene also has the incoming portal
+                assert incoming_portals[addition_scene], f"Scene {addition_scene} has no incoming portal but is linked to {base}"
 
-                for addition in additions:
-                    if addition not in scenes:
-                        continue
+                # Assert the portal sizes are the same
+                outgoing_size = portal_info[2]
+                incoming_size = incoming_portals[addition_scene][2]
+                assert np.allclose(outgoing_size, incoming_size), f"Scene {addition_scene} has incoming portal size {incoming_size} but {base} has outgoing portal size {outgoing_size}"
 
-                    base_keys = set(scenes[base].keys())
-                    add_keys = set(scenes[addition].keys())
-                    assert base_keys.isdisjoint(add_keys), f"Keys colliding between {base} and {addition}: {base_keys} vs {add_keys}"
-                    scenes[base].update(scenes[addition])
+                # Add all the rooms
+                base_keys = set(room_objects.keys())
+                add_keys = set(scenes[addition_scene].keys())
+                if not base_keys.isdisjoint(add_keys):
+                    room_collision_errors.append(f"Rooms colliding between {base} and {addition_scene}: {base_keys} vs {add_keys}")
+                scenes[base].update(scenes[addition_scene])
 
+        assert not room_collision_errors, "\n".join(room_collision_errors)
+
+        # Delete any exclusion scenes
         for scene in SCENES_TO_EXCLUDE:
             if scene not in scenes:
                 continue

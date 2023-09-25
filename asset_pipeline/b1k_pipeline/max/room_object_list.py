@@ -1,10 +1,11 @@
 import sys
 
+import numpy as np
+
 sys.path.append(r"D:\ig_pipeline")
 
 import json
 import os
-import re
 from collections import Counter, defaultdict
 
 import pymxs
@@ -13,9 +14,6 @@ import b1k_pipeline.utils
 
 rt = pymxs.runtime
 
-PATTERN = re.compile(
-    r"^(?P<bad>B-)?(?P<randomization_disabled>F-)?(?P<loose>L-)?(?P<category>[a-z_]+)-(?P<model_id>[A-Za-z0-9_]+)-(?P<instance_id>[0-9]+)(?:-(?P<link_name>[a-z0-9_]+))?(?:-(?P<parent_link_name>[A-Za-z0-9_]+)-(?P<joint_type>[RP])-(?P<joint_side>lower|upper))?(?:-L(?P<light_id>[0-9]+))?$"
-)
 OUTPUT_FILENAME = "room_object_list.json"
 SUCCESS_FILENAME = "room_object_list.success"
 
@@ -44,7 +42,36 @@ def main():
             if link_name == "base_link" or not link_name:
                 objects_by_room[room_str][model] += 1
 
-    success = True  # len(nomatch) == 0
+    # Separately process portals
+    portals = [x for x in rt.objects if rt.classOf(x) == rt.Plane]
+    incoming_portal = None
+    outgoing_portals = {}
+    for portal in portals:
+        portal_match = b1k_pipeline.utils.parse_portal_name(portal.name)
+        if not portal_match:
+            nomatch.append(portal.name)
+            continue
+
+        # Get portal info
+        object_transform = portal.objecttransform
+        position = list(object_transform.position)
+        rotation = object_transform.rotation
+        quat = [rotation.x, rotation.y, rotation.z, rotation.w]
+        scale = np.array(list(object_transform.scale))
+        size = list(np.array([portal.width, portal.length]) * scale[:2])
+
+        portal_info = [position, quat, size]
+
+        # Process incoming portal
+        if portal_match.group("partial_scene") is None:
+            assert incoming_portal is None, "Duplicate incoming portal"
+            incoming_portal = portal_info
+        else:
+            scene_name = portal_match.group("partial_scene")
+            assert scene_name not in outgoing_portals, f"Duplicate outgoing portal for scene {scene_name}"
+            outgoing_portals[scene_name] = portal_info
+
+    success = len(nomatch) == 0
 
     output_dir = os.path.join(rt.maxFilePath, "artifacts")
     os.makedirs(output_dir, exist_ok=True)
@@ -55,6 +82,8 @@ def main():
             {
                 "success": success,
                 "objects_by_room": objects_by_room,
+                "incoming_portal": incoming_portal,
+                "outgoing_portals": outgoing_portals,
                 "error_invalid_name": sorted(nomatch),
             },
             f,

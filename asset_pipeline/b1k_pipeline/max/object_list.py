@@ -1,5 +1,7 @@
 import sys
 
+import numpy as np
+
 sys.path.append(r"D:\ig_pipeline")
 
 import json
@@ -19,17 +21,6 @@ def main():
     object_names = [x.name for x in rt.objects if rt.classOf(x) == rt.Editable_Poly]
     matches = [b1k_pipeline.utils.parse_name(name) for name in object_names]
     nomatch = [name for name, match in zip(object_names, matches) if match is None]
-
-    portals = [x.name for x in rt.objects if rt.classOf(x) == rt.Plane]
-    portal_matches = [b1k_pipeline.utils.parse_portal_name(name) for name in portals]
-
-    # Check if an incoming portal exists
-    good_portal_matches = [x for x in portal_matches if x is not None]
-    has_incoming_portal = any(x.group("partial_scene") is None for x in good_portal_matches)
-    outgoing_portals = [x.group("partial_scene") for x in good_portal_matches if x.group("partial_scene") is not None]
-
-    portal_nomatch = [name for name, match in zip(portals, portal_matches) if match is None]
-    nomatch += portal_nomatch
 
     success = len(nomatch) == 0
     needed = sorted(
@@ -87,8 +78,6 @@ def main():
         "meta_links": meta_links,
         "max_tree": max_tree, 
         "object_counts": counts,
-        "has_incoming_portal": has_incoming_portal,
-        "outgoing_portals": outgoing_portals,
         "error_invalid_name": sorted(nomatch),
     }
     with open(filename, "w") as f:
