@@ -52,5 +52,11 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: wall too big, needs segmentation",
         "processed": false
+    },
+    {
+        "object": "walls-hwglfw",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "holes blocked",
+        "processed": false
     }
 ]
