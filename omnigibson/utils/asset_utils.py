@@ -67,22 +67,6 @@ def get_og_avg_category_specs():
         return dict()
 
 
-def get_assisted_grasping_categories():
-    """
-    Generate a list of categories that can be grasped using assisted grasping,
-    using labels provided in average category specs file.
-
-    Returns:
-        list of str: Object category allowlist for assisted grasping
-    """
-    assisted_grasp_category_allow_list = set()
-    avg_category_spec = get_og_avg_category_specs()
-    for k, v in avg_category_spec.items():
-        if v["enable_ag"]:
-            assisted_grasp_category_allow_list.add(k)
-    return assisted_grasp_category_allow_list
-
-
 def get_og_category_ids():
     """
     Get OmniGibson object categories
@@ -490,10 +474,9 @@ def encrypt_file(original_filename, encrypted_filename=None, encrypted_file=None
 @contextlib.contextmanager
 def decrypted(encrypted_filename):
     fpath = Path(encrypted_filename)
-    decrypted_filename = f"{fpath.stem}.tmp{fpath.suffix}"
+    decrypted_filename = os.path.join(og.tempdir, f"{fpath.stem}.tmp{fpath.suffix}")
     decrypt_file(encrypted_filename=encrypted_filename, decrypted_filename=decrypted_filename)
     yield decrypted_filename
-    os.remove(decrypted_filename)
 
 
 if __name__ == "__main__":

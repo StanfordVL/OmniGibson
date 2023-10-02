@@ -34,7 +34,12 @@ class ModifiedParticles(RelativeObjectState):
         return self.particle_counts.get(system, 0)
 
     def _set_value(self, system, new_value):
-        self.particle_counts[system] = new_value
+        assert new_value >= 0, "Cannot set ModifiedParticles value to be less than 0!"
+        # Remove the value from the dictionary if we're setting it to zero (save memory)
+        if new_value == 0 and system in self.particle_counts:
+            self.particle_counts.pop(system)
+        else:
+            self.particle_counts[system] = new_value
 
     def _sync_systems(self, systems):
         """
@@ -59,7 +64,7 @@ class ModifiedParticles(RelativeObjectState):
         return state
 
     def _load_state(self, state):
-        self.particle_counts = {REGISTERED_SYSTEMS[system_name]: val for system_name, val in state.items() if system_name != "n_systems"}
+        self.particle_counts = {REGISTERED_SYSTEMS[system_name]: val for system_name, val in state.items() if system_name != "n_systems" and val > 0}
 
     def _serialize(self, state):
         state_flat = np.array([state["n_systems"]], dtype=float)
@@ -102,6 +107,14 @@ class Saturated(RelativeObjectState, BooleanStateMixin):
         # Set internal variables
         self._limits = dict()
 
+    @property
+    def limits(self):
+        """
+        Returns:
+            dict: Maps system to limit count for that system, if it exists
+        """
+        return self._limits
+
     def get_limit(self, system):
         """
         Grabs the internal particle limit for @system
@@ -123,9 +136,6 @@ class Saturated(RelativeObjectState, BooleanStateMixin):
             limit (int): Number of particles representing limit for the given @system
         """
         self._limits[system] = limit
-        # Make sure the modified particles is populated as well
-        if system not in self.obj.states[ModifiedParticles].particle_counts:
-            self.obj.states[ModifiedParticles].set_value(system, 0)
 
     def _get_value(self, system):
         limit = self.get_limit(system=system)
@@ -139,7 +149,7 @@ class Saturated(RelativeObjectState, BooleanStateMixin):
     def _set_value(self, system, new_value):
         # Only set the value if it's different than what currently exists
         if new_value != self.get_value(system):
-            self.obj.states[ModifiedParticles].set_value(system, self.get_limit(system=system))
+            self.obj.states[ModifiedParticles].set_value(system, self.get_limit(system=system) if new_value else 0)
         return True
 
     def get_texture_change_params(self):
@@ -200,7 +210,8 @@ class Saturated(RelativeObjectState, BooleanStateMixin):
                 continue
             elif k == "default_limit":
                 self._default_limit = v
-            else:
+            # TODO: Make this an else once fresh round of sampling occurs (i.e.: no more outdated systems stored)
+            elif k in REGISTERED_SYSTEMS:
                 self._limits[REGISTERED_SYSTEMS[k]] = v
 
     def _serialize(self, state):

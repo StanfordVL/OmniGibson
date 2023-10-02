@@ -33,6 +33,15 @@ robots:
     default_trunk_offset: 0.365
     default_arm_pose: diagonal30
     reset_joint_pos: tuck
+    sensor_config:
+      VisionSensor:
+        sensor_kwargs:
+          image_height: 128
+          image_width: 128
+      ScanSensor:
+          sensor_kwargs:
+            min_range: 0.05
+            max_range: 10.0
     controller_config:
       base:
         name: DifferentialDriveController
@@ -50,7 +59,7 @@ objects: []
 
 task:
   type: BehaviorTask
-  activity_name: assembling_gift_baskets
+  activity_name: prepare_sea_salt_soak
   activity_definition_id: 0
   activity_instance_id: 0
   predefined_problem: null

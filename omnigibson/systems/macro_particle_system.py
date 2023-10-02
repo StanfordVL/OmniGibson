@@ -604,7 +604,7 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
             # If we're a cloth, store the face_id as well
             if obj.prim_type == PrimType.CLOTH:
                 for particle_name, face_id in zip(cls._group_particles[group].keys(), cls._cloth_face_ids[group]):
-                    cls._particles_info[particle_name]["face_id"] = face_id
+                    cls._particles_info[particle_name]["face_id"] = int(face_id)
 
         return success
 
@@ -928,7 +928,7 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
                 cls._particles_info[particle.name] = dict(obj=obj)
                 # Add face_id if is_cloth, otherwise, add link
                 if is_cloth:
-                    cls._particles_info[particle.name]["face_id"] = reference
+                    cls._particles_info[particle.name]["face_id"] = int(reference)
                 else:
                     cls._particles_info[particle.name]["link"] = obj.links[reference]
 
@@ -1052,7 +1052,7 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
                 [group_dict["particle_attached_obj_uuid"]],
                 [group_dict["n_particles"]],
                 group_dict["particle_idns"],
-                ([reference for reference in group_dict["particle_attached_references"]] if is_cloth else
+                (group_dict["particle_attached_references"] if is_cloth else
                  [group_obj_link2id[reference] for reference in group_dict["particle_attached_references"]]),
             ]
 
@@ -1472,58 +1472,3 @@ class MacroPhysicalParticleSystem(PhysicalParticleSystem, MacroParticleSystem):
             idx += len_velocities
 
         return state_dict, idx
-
-
-MacroVisualParticleSystem.create(
-    name="dust",
-    scale_relative_to_parent=False,
-    create_particle_template=lambda prim_path, name: og.objects.PrimitiveObject(
-        prim_path=prim_path,
-        primitive_type="Cube",
-        name=name,
-        class_id=SemanticClass.DIRT,
-        size=0.01,
-        rgba=[0.2, 0.2, 0.1, 1.0],
-        visible=False,
-        fixed_base=False,
-        visual_only=True,
-        include_default_states=False,
-        abilities={},
-    )
-)
-
-
-MacroVisualParticleSystem.create(
-    name="stain",
-    scale_relative_to_parent=True,
-    create_particle_template=lambda prim_path, name: og.objects.USDObject(
-        prim_path=prim_path,
-        usd_path=os.path.join(gm.ASSET_PATH, "models", "stain", "stain.usd"),
-        name=name,
-        class_id=SemanticClass.DIRT,
-        visible=False,
-        fixed_base=False,
-        visual_only=True,
-        include_default_states=False,
-        abilities={},
-    ),
-)
-
-
-MacroPhysicalParticleSystem.create(
-    name="raspberry",
-    particle_density=800.0,
-    create_particle_template=lambda prim_path, name: og.objects.DatasetObject(
-        prim_path=prim_path,
-        name=name,
-        # class_id=SemanticClass.DIRT,
-        visible=False,
-        fixed_base=False,
-        visual_only=True,
-        include_default_states=False,
-        category="raspberry",
-        model="spkers",
-        abilities={},
-    ),
-    scale=np.ones(3) * 5.0,
-)
