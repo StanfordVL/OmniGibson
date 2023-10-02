@@ -36,8 +36,18 @@ def processFile(filename: pathlib.Path):
     assert rt.renderpresets.Load(0, RENDER_PRESET_FILENAME, preset_categories)
 
     # Fix any bad materials
-    rt.select(rt.objects)
-    rt.convertToVRay(True)
+    # rt.select(rt.objects)
+    # rt.convertToVRay(True)
+
+    # Fix layers called hallway
+    existing_layer_names = {rt.LayerManager.getLayer(x).name for x in range(rt.LayerManager.count)}
+    for layer_id in range(rt.LayerManager.count):
+        layer = rt.LayerManager.getLayer(layer_id)
+        if "hallway_" in layer.name:
+            to_name = layer.name.replace("hallway_", "corridor_")
+            assert to_name not in existing_layer_names, f"Layer {to_name} already exists"
+            layer.setName(to_name)
+
 
     # Fix any old names
     # objs_by_model = defaultdict(list)
@@ -70,7 +80,7 @@ def processFile(filename: pathlib.Path):
 def fix_common_issues_in_all_files():
     candidates = [
         pathlib.Path(x)
-        for x in glob.glob(r"D:\ig_pipeline\cad\objects\legacy_*\processed.max")
+        for x in glob.glob(r"D:\ig_pipeline\cad\scenes\*\processed.max")
     ]
     # has_matching_processed = [processed_fn(x).exists() for x in candidates]
     for i, f in enumerate(tqdm.tqdm(candidates)):
