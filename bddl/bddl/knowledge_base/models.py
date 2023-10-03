@@ -102,7 +102,7 @@ class Scene(Model):
     @cached_property
     def object_count(self):
         return sum(
-            roomobject.object_count
+            roomobject.count
             for room in self.rooms
             for roomobject in room.roomobjects
             if not room.ready
@@ -115,7 +115,7 @@ class Scene(Model):
     @cached_property
     def fully_ready(self):
         ready_count = sum(
-            roomobject.object_count
+            roomobject.count
             for room in self.rooms
             for roomobject in room.roomobjects
             if room.ready
@@ -482,7 +482,7 @@ class Task(Model):
             return STATE_UNMATCHED
         elif any(synset.state == STATE_UNMATCHED for synset in self.synsets):
             return STATE_UNMATCHED
-        elif any(synset.state == STATE_MATCHED for synset in self.synsets):
+        elif any(synset.state == STATE_PLANNED for synset in self.synsets):
             return STATE_PLANNED
         else:
             return STATE_MATCHED
