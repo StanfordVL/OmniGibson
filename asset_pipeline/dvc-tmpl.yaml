@@ -279,6 +279,8 @@ stages:
       deps:
       - artifacts/pipeline/export_meshes.success
       - cad/${item}/artifacts/meshes.zip
+      - cad/${item}/artifacts/room_object_list.json
+      - cad/${item}/artifacts/room_object_list.success
       - b1k_pipeline/export_scene.py
       - b1k_pipeline/export_objs_global.py
       # - b1k_pipeline/mesh_tree.py
