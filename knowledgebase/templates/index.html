@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}BEHAVIOR-1K Integration{% endblock %}
+
+{% block customstyle %}
+<style>
+  .card:hover {
+    cursor: pointer;
+    text-decoration: none;
+    color: #8C1515;
+    border-color: #8C1515;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="text-center">B1K Integration Dashboard</h1>
+    <br>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card text-center mb-4">
+          <div class="card-header h5">Tasks</div>
+          <div class="row no-gutters">
+            <div class="col-sm-6 border-right border-bottom py-4">
+              <h6 class="text-success">Sampleable:</h6>
+              <strong>{{ task_metadata.0 }}</strong>
+            </div>
+            <div class="col-sm-6 border-right border-bottom py-4">
+              <h6 class="text-warning">In Progress:</h6>
+              <strong>{{ task_metadata.1 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-danger">Missing Objects:</h6>
+              <strong>{{ task_metadata.2 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-danger">Missing Scene:</h6>
+              <strong>{{ task_metadata.3 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-primary">Total:</h6>
+              <strong>{{ task_metadata.4 }}</strong>
+            </div>
+          </div>
+          <a href="{{ url_for('task_list') }}" class="stretched-link"></a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card text-center mb-4">
+          <div class="card-header h5">Synsets</div>
+          <div class="row no-gutters">
+            <div class="col-sm-4 border-right border-bottom py-4">
+              <h6 class="text-success">Valid:</h6>
+              <strong>{{ synset_metadata.0 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right border-bottom py-4">
+              <h6 class="text-warning">Planned:</h6>
+              <strong>{{ synset_metadata.1 }}</strong>
+            </div>
+            <div class="col-sm-4 border-bottom py-4">
+              <h6 class="text-info">Substances:</h6>
+              <strong>{{ synset_metadata.2 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-danger">Missing Objects:</h6>
+              <strong>{{ synset_metadata.3 }}</strong>
+            </div>
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-danger">Missing Definition:</h6>
+              <strong>{{ synset_metadata.4 }}</strong>
+            </div>
+            <div class="col-sm-4 py-4">
+              <h6 class="text-primary">Total:</h6>
+              <strong>{{ synset_metadata.5 }}</strong>
+            </div>
+          </div>
+          <a href="{{ url_for('synset_list') }}" class="stretched-link"></a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card text-center mb-4">
+          <div class="card-header h5">Objects</div>
+          <div class="row no-gutters">
+            <div class="col-sm-4 border-right py-4">
+              <h6 class="text-success">Valid:</h6>
+              <strong>{{ object_metadata.0 }}</strong>
+            </div>
+            <div class="col-sm-4 py-4">
+              <h6 class="text-warning">In Progress:</h6>
+              <strong>{{ object_metadata.1 }}</strong>
+            </div>
+            <div class="col-sm-4 border-left py-4">
+              <!-- This is for things like missing synset assignment, etc. -->
+              <h6 class="text-danger">Needs Action:</h6>
+              <strong>{{ object_metadata.2 }}</strong>
+            </div>
+          </div>
+          <a href="{{ url_for('object_list') }}" class="stretched-link"></a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card text-center mb-4">
+          <div class="card-header h5">Scenes</div>
+          <div class="row no-gutters">
+            <div class="col-sm-6 border-right py-4">
+              <h6 class="text-success">Sampleable:</h6>
+              <strong>{{ scene_metadata.0 }}</strong>
+            </div>
+            <div class="col-sm-6 py-4">
+              <h6 class="text-warning">In Progress:</h6>
+              <strong>{{ scene_metadata.1 }}</strong>
+            </div>
+          </div>
+          <a href="{{ url_for('scene_list') }}" class="stretched-link"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+{% endblock %}

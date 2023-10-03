@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}{% endblock %}
+{% block customstyle %}
+  <style>
+    table {
+      border: 0.3vh solid #dee2e6;
+    }
+    td, th {
+      border: 0.3vh solid #dee2e6;
+    }
+    td a{
+      display: block;
+      color: black;
+    }
+    a:hover {
+      cursor: pointer;
+      color: darkorange;
+    }
+  </style>
+  <!-- datatable search -->
+  <script>
+    $(document).ready(function() {
+      var table = $('#datatable').DataTable({
+        dom: 'Bfrtip',
+        buttons: ['csv'],
+        paging: false,
+        searchPanes: {
+            viewTotal: true,
+            columns: [2, 3]
+        },
+        columnDefs: [
+          {
+            searchPanes: {
+              options: [
+                {
+                  label: 'Matched',
+                  value: function(rowData, rowIdx) {return rowData[2] !== "";}
+                },
+                {
+                  label: 'Unmatched',
+                  value: function(rowData, rowIdx) {return rowData[2] === "";}
+                },
+              ]
+            },
+            targets: [2]
+          },
+        ],
+      });
+      table.searchPanes.container().prependTo(table.table().container());
+      table.searchPanes.resizePanes();
+  });
+  </script>
+{% endblock %}
+{% block content %}
+  <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}</h1>
+  <h4 class="text-center">Total count: {{ object_list | length }}</h4>
+  <br>
+  <table class="table table-striped" id="datatable">
+    <thead>
+      <tr>
+        <th>Object</th>
+        <th>Category</th>
+        <th>Synset</th>
+        <th>Task Relevant</th>
+        <th>Used Rooms</th>
+        <th>Ready?</th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      {% for object in object_list %}
+      <tr>
+        <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object.name }}</a></td>
+        <td>{{ object.category.name }}</td>
+        <td>{{ object.category.synset.name }}</td>
+        <td>{{ object.category.synset.task_relevant }}</td>
+        <td>{{ object.roomobjects|length }}</td>
+        <td class="{% if object.ready %}bg-success{% else %}bg-warning{% endif %}">{{ object.ready }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

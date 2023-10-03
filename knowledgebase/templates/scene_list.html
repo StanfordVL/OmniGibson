@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Scenes{% endif %}{% endblock %}
+{% block customstyle %}
+  <style>
+    table {
+      border: 0.3vh solid #dee2e6;
+    }
+    td, th {
+      border: 0.3vh solid #dee2e6;
+    }
+    td a{
+      display: block;
+      color: black;
+    }
+    a:hover {
+      cursor: pointer;
+      color: darkorange;
+    }
+  </style>
+  <!-- datatable search -->
+  <script>
+    $(document).ready(function() {
+      var table = $('#datatable').DataTable({
+        dom: 'Bfrtip',
+        buttons: ['csv'],
+        paging: false,
+        searchPanes: {
+            viewTotal: true,
+            columns: [3]
+        },
+      });
+      table.searchPanes.container().prependTo(table.table().container());
+      table.searchPanes.resizePanes();
+  });
+  </script>
+{% endblock %}
+{% block content %}
+  <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Scenes{% endif %}</h1>
+  <h4 class="text-center">Total count: {{ scene_list | length }}</h4>
+  <br>
+  <table class="table table-striped" id="datatable">
+    <thead>
+      <tr>
+        <th>Scene</th>
+        <th>Rooms</th>
+        <th>Objects</th>
+        <th>Ready?</th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      {% for scene in scene_list %}
+      <tr>
+        <td><a href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene.name }}</a></td>
+        <td>{{ scene.room_count }}</td>
+        <td>{{ scene.object_count }}</td>
+        <td class="{% if scene.fully_ready %}bg-success{% elif scene.any_ready %}bg-warning{% else %}bg-danger{% endif %}">
+          {% if scene.fully_ready %}Fully Ready{% elif scene.any_ready %}Partially Ready{% else %}Not Ready{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

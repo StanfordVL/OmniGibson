@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.1.2/js/dataTables.searchPanes.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.1.2/js/searchPanes.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.6.2/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.1.2/css/searchPanes.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.6.2/css/select.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: false });
+      import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+      window.addEventListener('load', function () {
+        mermaid.run();
+        var svgs = d3.selectAll(".mermaid svg");
+        svgs.each(function() {
+          var svg = d3.select(this);
+          svg.html("<g>" + svg.html() + "</g>");
+          var inner = svg.select("g");
+          var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+          });
+          svg.call(zoom);
+        });
+      });
+    </script>
+    <style type="text/css">
+      .mermaid>svg {
+        width: 100%;
+        aspect-ratio: 1.0;
+      }
+    </style>
+    {% block customstyle %}{% endblock %}
+  </head>
+  <body>
+    <nav class="navbar navbar-static-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">BEHAVIOR-1K</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdownTasks" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Tasks
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownTasks">
+                <a class="dropdown-item" href="{{ url_for('task_list') }}">All Tasks</a>
+                <a class="dropdown-item" href="{{ url_for('non-scene-matched_task_list') }}">Non-Scene-Matched Tasks</a>
+                <a class="dropdown-item" href="{{ url_for('transition_failure_task_list') }}">Transition Failure Tasks</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdownSynsets" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Synsets
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownSynsets">
+                <a class="dropdown-item" href="{{ url_for('synset_list') }}">All Synsets</a>
+                <a class="dropdown-item" href="{{ url_for('non-leaf_synset_list') }}">Object-Assigned Non-Leaf Synsets</a>
+                <a class="dropdown-item" href="{{ url_for('substance_error_synset_list') }}">Substanceness Mismatch Synsets</a>
+                <a class="dropdown-item" href="{{ url_for('fillable_synset_list') }}">Synsets Used as Fillable</a>
+                <a class="dropdown-item" href="{{ url_for('unsupported_property_synset_list') }}">Task-Relevant Synsets with Object-Unsupported Properties</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdownObjects" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Objects
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownObjects">
+                <a class="dropdown-item" href="{{ url_for('object_list') }}">All Objects</a>
+                <a class="dropdown-item" href="{{ url_for('substance_mapped_object_list') }}">Objects Assigned to Substance Synsets</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('category_list') }}">Categories</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('scene_list') }}">Scenes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('transition_list') }}">Transition Rules</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid mt-4">
+      {% block content %}{% endblock %}
+    </div>
+    {% block customscript %}{% endblock %}
+  </body>
+</html>

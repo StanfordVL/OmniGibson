@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Scene {{ scene.name }} Details{% endblock %}
+{% block content %}
+  <h1 class="text-center">{{ scene.name }}</h1>
+  <hr>
+  {% if scene.fully_ready %}
+  <h4 class="text-center text-success">Fully Ready</h4>
+  {% elif scene.any_ready %}
+  <h4 class="text-center text-warning">Partially Ready</h4>
+  {% else %}
+  <h4 class="text-center text-danger">Not Ready</h4>
+  {% endif %}
+  <h2>Rooms</h2>
+  {% for room in scene.rooms %}
+  <h3>{{ room.name }}</h3>
+  <ul>
+    {% for roomobject in room.roomobjects %}
+    <li><a href="{{ url_for('object_detail', name=roomobject.object.name) }}">{{ roomobject.object.name }}</a>: {{ roomobject.count }}</li>
+    {% else %}
+    <li>None</li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Object {{ object.name }} Details{% endblock %}
+{% block content %}
+  <h1 class="text-center">{{ object.name }}</h1>
+  <hr>
+  <h4 class="text-center">
+    {% if object.ready %}<span class="text-success">Ready</span>{% elif object.planned %}<div class="text-warning">Planned</div>{% else %}<div class="text-danger">Need Action</div>{% endif %} 
+    | Category: <a href="{{ url_for('category_detail', name=object.category.name) }}">{{ object.category }}</a> | Original name: {{ object.original_name }}
+  </h4>
+
+  <img class="img-fluid" src="{{ object.image_url }}" alt="{{ object.name }} photo" />
+
+  <h2>Meta Links</h2>
+  <div class="container">
+    <div class="row justify-content-md-center">
+      {% for meta_link in object.meta_links %}
+      <div class="col-md-auto my-1 py-2 border">{{ meta_link.name }}</div>
+      {% else %}
+      <p>None</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <h2>Scene / Rooms</h2>
+  <ul>
+      {% for roomobject in object.roomobjects %}
+      <li><a href="{{ url_for('scene_detail', name=roomobject.room.scene.name) }}">{{ roomobject.room.scene.name }} - {{ roomobject.room.name }} - {% if roomobject.room.ready %}Ready{% else %}Future{% endif %}: {{ roomobject.count }}</a></li>
+      {% else %}
+      <li>None</li>
+      {% endfor %}
+  </ul>
+
+  <h2>Synsets</h2>
+  {% with G=object.category.synset.subgraph, center_node=object.category.synset %}
+    {% include "synset_graph_module.html" %}
+  {% endwith %}
+{% endblock %}

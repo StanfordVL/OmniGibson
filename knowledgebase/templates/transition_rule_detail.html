@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Transition {{ transition.name }} Details{% endblock %}
+{% block content %}
+  <h1 class="text-center">{{ transition.name }}</h1>
+  <hr>
+  <h2>Transition inputs and outputs</h2>
+  <div class="mermaid">
+    graph TD;
+      {% for node in transition.subgraph.nodes %}
+        {{ node|slugify }}({{ node }});
+      {% endfor %}
+      {% for edge in transition.subgraph.edges %}
+        {{ edge.0|slugify }} --> {{ edge.1|slugify }};
+      {% endfor %}
+  </div>
+{% endblock %}

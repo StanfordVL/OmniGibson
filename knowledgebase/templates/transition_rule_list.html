@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Transitions{% endif %}{% endblock %}
+{% block customstyle %}
+  <style>
+    table {
+      border: 0.3vh solid #dee2e6;
+    }
+    td, th {
+      border: 0.3vh solid #dee2e6;
+    }
+    td a{
+      display: block;
+      color: black;
+    }
+    a:hover {
+      cursor: pointer;
+      color: darkorange;
+    }
+  </style>
+  <!-- datatable search -->
+{% endblock %}
+{% block content %}
+  <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Transitions{% endif %}</h1>
+  <h3 class="text-center">Total count: {{ transition_list | length }}</h3>
+  <br>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Transition Name</th>
+        <th>Input Synsets</th>
+        <th>Output Synsets</th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      {% for transition in transition_list %}
+      <tr>
+        <td><a href="{{ url_for('transition_detail', name=transition.name) }}">{{ transition.name }}</a></td>
+        <td>
+          {% for synset in transition.input_synsets %}
+            {{ synset.name }}, 
+          {% endfor %}
+        </td>
+        <td>
+          {% for synset in transition.output_synsets %}
+            {{ synset.name }}, 
+          {% endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
