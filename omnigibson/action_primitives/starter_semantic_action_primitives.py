@@ -119,8 +119,8 @@ class UndoableContext(object):
         self.obj_in_hand_copy = None
 
     def __enter__(self):
-        self._assemble_robot_copy()
         self._copy_obj_in_hand()
+        self._assemble_robot_copy()
         self._construct_disabled_collision_pairs()
         return self 
 
@@ -131,21 +131,33 @@ class UndoableContext(object):
 
     def _copy_obj_in_hand(self):
         obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm]
+        meshes_path = []
         if obj_in_hand is not None:
             eef_pose = self.robot.eef_links[self.robot.default_arm].get_position_orientation()
             relative_pose = T.relative_pose_transform(*obj_in_hand.get_position_orientation(), *eef_pose)
             
             copy_prim_path = obj_in_hand.prim_path + "_copy"
-            CopyPrimCommand(obj_in_hand.prim_path, copy_prim_path).do()
+            CreatePrimCommand("Xform", copy_prim_path).do()
+            copy_prim = get_prim_at_path(copy_prim_path)
             self.obj_in_hand_copy = {}
-            self.obj_in_hand_copy['prim'] = get_prim_at_path(copy_prim_path)
-            self.obj_in_hand_copy['relative_pose'] = relative_pose
-            self.obj_in_hand_copy['meshes_path'] = []
+
             for link in obj_in_hand.links.values():
+                link_name = link.prim_path.split("/")[-1]
                 for mesh in link.collision_meshes.values():
-                    mesh_prim_path = mesh.prim_path.replace(obj_in_hand.prim_path, copy_prim_path)
-                    self.obj_in_hand_copy['meshes_path'].append(mesh_prim_path)
-            # og.sim.step()
+                    split_path = mesh.prim_path.split("/")
+                    copy_mesh_path = copy_prim_path + "/" + link_name
+                    copy_mesh_path += f"_{split_path[-1]}" if split_path[-1] != "collisions" else ""
+                    CopyPrimCommand(mesh.prim_path, path_to=copy_mesh_path).do()
+                    meshes_path.append(copy_mesh_path)
+
+            self.obj_in_hand_copy['prim'] = copy_prim
+            self.obj_in_hand_copy['relative_pose'] = relative_pose
+            self.obj_in_hand_copy['meshes_path'] = meshes_path
+
+            # Set it at a location that does not collide with the environment
+            self._set_prim_pose(copy_prim, ([0, 0, -10], [0, 0, 0, 1]))
+            
+            og.sim.step()
 
     def _assemble_robot_copy(self):
         if TORSO_FIXED:
@@ -228,6 +240,7 @@ class UndoableContext(object):
                     if obj_mesh_path not in self.disabled_collision_pairs_dict.keys():
                         self.disabled_collision_pairs_dict[obj_mesh_path] = []
                     self.disabled_collision_pairs_dict[obj_mesh_path].append(mesh_prim_path)
+            from IPython import embed; embed()
 
         # Filter out colliders all robot copy meshes should ignore
         disabled_colliders = []
@@ -663,7 +676,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     {"target object": obj.name},
                 )
             
-            yield from self._reset_hand()
+            # yield from self._reset_hand()
 
         if self._get_obj_in_hand() != obj:
             raise ActionPrimitiveError(
