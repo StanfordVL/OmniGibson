@@ -516,11 +516,23 @@ def detect_robot_collision(context):
 
         return not valid_hit
 
+    # Check for collisions for the robot
     for meshes in robot_copy.meshes[robot_copy_type].values():
         for mesh in meshes.values():
             if valid_hit:
                 return valid_hit
             mesh_path = mesh.GetPrimPath().pathString
+            mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh_path)
+            if mesh.GetTypeName() == "Mesh":
+                og.sim.psqi.overlap_mesh(*mesh_id, reportFn=overlap_callback)
+            else:
+                og.sim.psqi.overlap_shape(*mesh_id, reportFn=overlap_callback)
+
+    # Check for collisions for the object in hand
+    if context.obj_in_hand_copy is not None:
+        for mesh_path in context.obj_in_hand_copy['meshes_path']:
+            if valid_hit:
+                return valid_hit
             mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh_path)
             if mesh.GetTypeName() == "Mesh":
                 og.sim.psqi.overlap_mesh(*mesh_id, reportFn=overlap_callback)

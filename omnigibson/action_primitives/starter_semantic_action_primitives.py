@@ -131,7 +131,7 @@ class UndoableContext(object):
 
     def _copy_obj_in_hand(self):
         obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm]
-        meshes_path = []
+        copy_meshes = []
         if obj_in_hand is not None:
             eef_pose = self.robot.eef_links[self.robot.default_arm].get_position_orientation()
             relative_pose = T.relative_pose_transform(*obj_in_hand.get_position_orientation(), *eef_pose)
@@ -148,11 +148,12 @@ class UndoableContext(object):
                     copy_mesh_path = copy_prim_path + "/" + link_name
                     copy_mesh_path += f"_{split_path[-1]}" if split_path[-1] != "collisions" else ""
                     CopyPrimCommand(mesh.prim_path, path_to=copy_mesh_path).do()
-                    meshes_path.append(copy_mesh_path)
+                    copy_mesh = get_prim_at_path(copy_mesh_path)
+                    copy_meshes.append(copy_mesh)
 
             self.obj_in_hand_copy['prim'] = copy_prim
             self.obj_in_hand_copy['relative_pose'] = relative_pose
-            self.obj_in_hand_copy['meshes_path'] = meshes_path
+            self.obj_in_hand_copy['meshes'] = copy_meshes
 
             # Set it at a location that does not collide with the environment
             self._set_prim_pose(copy_prim, ([0, 0, -10], [0, 0, 0, 1]))
@@ -213,6 +214,7 @@ class UndoableContext(object):
             for link in robot_meshes_copy.keys():
                 for mesh in robot_meshes_copy[link].values():
                     self.disabled_collision_pairs_dict[mesh.GetPrimPath().pathString] += all_meshes
+
         # Filter out collision pairs of meshes part of disabled collision pairs
         else:
             for pair in self.robot.primitive_disabled_collision_pairs:
