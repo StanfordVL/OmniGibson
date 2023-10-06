@@ -15,7 +15,7 @@ from b1k_pipeline.utils import PIPELINE_ROOT
 
 import igibson
 igibson.ignore_visual_shape = False
-igibson.ig_dataset_path = r"D:\dataset-6-25"
+igibson.ig_dataset_path = r"/scr/dataset-10-6"
 
 from igibson.objects.articulated_object import URDFObject
 from igibson.simulator import Simulator

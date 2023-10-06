@@ -30,10 +30,10 @@ def main(target):
     scene_parts = {scene_name: None}
     with target_output_fs.open("room_object_list.json") as f:
         room_object_list = json.load(f)
-    for partial_scene_name, (portal_pos, portal_quat, _) in room_object_list["outgoing_portals"]:
+    for partial_scene_name, (portal_pos, portal_quat, _) in room_object_list["outgoing_portals"].items():
         transform = np.eye(4)
         transform[:3, :3] = R.from_quat(portal_quat).as_matrix()
-        transform[:3, 3] = portal_pos
+        transform[:3, 3] = np.array(portal_pos) / 1000.
         scene_parts[partial_scene_name] = transform
 
     # Get the mesh tree of each part.
@@ -49,10 +49,19 @@ def main(target):
             portal_pos, portal_quat, _ = room_object_list["incoming_portal"]
             incoming_portal_transform = np.eye(4)
             incoming_portal_transform[:3, :3] = R.from_quat(portal_quat).as_matrix()
-            incoming_portal_transform[:3, 3] = portal_pos
+            incoming_portal_transform[:3, 3] = np.array(portal_pos) / 1000.
 
             # Each object needs to be reorigined at the incoming portal and then moved to the outgoing
+            print("Portal pose in parent:", portal_pose_in_parent)
+            print("Incoming portal transform:", incoming_portal_transform)
             rel_transform = portal_pose_in_parent @ np.linalg.inv(incoming_portal_transform)
+
+        # Assert that the rel transform represents only a Z rotation
+        print("Relative transform:", rel_transform)
+        rel_rot = R.from_matrix(rel_transform[:3, :3])
+        if rel_rot.magnitude() > 1e-4:
+            rot_axis = np.abs(rel_rot.as_rotvec() / rel_rot.magnitude())
+            assert np.allclose(rot_axis, [0, 0, 1]), f"Relative transform should only be a Z rotation. Current axis: {rot_axis}"
 
         # Load the mesh list from the object list json.
         with partial_scene_output_fs.open("object_list.json", "r") as f:
@@ -111,7 +120,7 @@ def main(target):
             }
             joint_origin = ET.SubElement(joint, "origin")
             joint_origin_xyz = corrected_bbox_center.tolist()
-            joint_origin_rpy = corrected_bbox_rot.as_euler("xyz")
+            joint_origin_rpy = [0, 0, corrected_bbox_rot.as_rotvec()[2]]
             joint_origin.attrib = {
                 "xyz": " ".join([str(item) for item in joint_origin_xyz]),
                 "rpy": " ".join([str(item) for item in joint_origin_rpy]),
