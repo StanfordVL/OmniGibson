@@ -438,9 +438,18 @@ def set_base_and_detect_collision(context, pose):
     orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
     robot_copy.prims[robot_copy_type].GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation)) 
 
-    # # Set the object in hand pose
-    # if context.obj_in_hand_copy is not None:
+    # Set the object in hand pose
+    if context.obj_in_hand_copy is not None:
+        position = np.array(robot_copy.prims[robot_copy_type].GetAttribute("xformOp:translate").Get())
+        orientation = np.array(robot_copy.prims[robot_copy_type].GetAttribute("xformOp:orient").Get().GetImaginary())
+        orientation = np.append(orientation, robot_copy.prims[robot_copy_type].GetAttribute("xformOp:orient").Get().GetReal())
 
+        obj_in_hand_pose_in_world_frame = T.pose_transform(position, orientation, *context.obj_in_hand_copy['relative_pose_to_robot'])
+
+        translation = Gf.Vec3d(*np.array(obj_in_hand_pose_in_world_frame[0], dtype=float))
+        context.obj_in_hand_copy['prim'].GetAttribute("xformOp:translate").Set(translation)
+        orientation = np.array(obj_in_hand_pose_in_world_frame[1], dtype=float)[[3, 0, 1, 2]]
+        context.obj_in_hand_copy['prim'].GetAttribute("xformOp:orient").Set(Gf.Quatd(*orientation))
 
     return detect_robot_collision(context)
 
@@ -480,7 +489,7 @@ def set_arm_and_detect_collision(context, joint_pos):
         eef_link_name = eef_link_name.split(":")[-1]
         eef_link_pose_robot_frame = link_poses[eef_link_name]
 
-        obj_in_hand_relative_pose = context.obj_in_hand_copy['relative_pose']
+        obj_in_hand_relative_pose = context.obj_in_hand_copy['relative_pose_to_eef_link']
         eef_link_pose_in_world_frame = T.pose_transform(*context.robot.get_position_orientation(), *eef_link_pose_robot_frame)
         obj_in_hand_pose_in_world_frame = T.pose_transform(*eef_link_pose_in_world_frame, *obj_in_hand_relative_pose)
 
@@ -530,9 +539,10 @@ def detect_robot_collision(context):
 
     # Check for collisions for the object in hand
     if context.obj_in_hand_copy is not None:
-        for mesh_path in context.obj_in_hand_copy['meshes_path']:
+        for mesh in context.obj_in_hand_copy['meshes']:
             if valid_hit:
                 return valid_hit
+            mesh_path = mesh.GetPrimPath().pathString
             mesh_id = PhysicsSchemaTools.encodeSdfPath(mesh_path)
             if mesh.GetTypeName() == "Mesh":
                 og.sim.psqi.overlap_mesh(*mesh_id, reportFn=overlap_callback)

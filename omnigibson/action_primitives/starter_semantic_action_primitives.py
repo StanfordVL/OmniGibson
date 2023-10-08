@@ -132,10 +132,7 @@ class UndoableContext(object):
     def _copy_obj_in_hand(self):
         obj_in_hand = self.robot._ag_obj_in_hand[self.robot.default_arm]
         copy_meshes = []
-        if obj_in_hand is not None:
-            eef_pose = self.robot.eef_links[self.robot.default_arm].get_position_orientation()
-            relative_pose = T.relative_pose_transform(*obj_in_hand.get_position_orientation(), *eef_pose)
-            
+        if obj_in_hand is not None:            
             copy_prim_path = obj_in_hand.prim_path + "_copy"
             CreatePrimCommand("Xform", copy_prim_path).do()
             copy_prim = get_prim_at_path(copy_prim_path)
@@ -152,13 +149,15 @@ class UndoableContext(object):
                     copy_meshes.append(copy_mesh)
 
             self.obj_in_hand_copy['prim'] = copy_prim
-            self.obj_in_hand_copy['relative_pose'] = relative_pose
+            
+            eef_pose = self.robot.eef_links[self.robot.default_arm].get_position_orientation()
+            relative_pose_to_eef_link = T.relative_pose_transform(*obj_in_hand.get_position_orientation(), *eef_pose)
+            self.obj_in_hand_copy['relative_pose_to_eef_link'] = relative_pose_to_eef_link
+            self.obj_in_hand_copy['relative_pose_to_robot'] = T.relative_pose_transform(*obj_in_hand.get_position_orientation(), *self.robot.get_position_orientation())
             self.obj_in_hand_copy['meshes'] = copy_meshes
 
             # Set it at a location that does not collide with the environment
             self._set_prim_pose(copy_prim, ([0, 0, -10], [0, 0, 0, 1]))
-            
-            og.sim.step()
 
     def _assemble_robot_copy(self):
         if TORSO_FIXED:
@@ -214,7 +213,6 @@ class UndoableContext(object):
             for link in robot_meshes_copy.keys():
                 for mesh in robot_meshes_copy[link].values():
                     self.disabled_collision_pairs_dict[mesh.GetPrimPath().pathString] += all_meshes
-
         # Filter out collision pairs of meshes part of disabled collision pairs
         else:
             for pair in self.robot.primitive_disabled_collision_pairs:
@@ -223,26 +221,31 @@ class UndoableContext(object):
                 if link_1 in robot_meshes_copy.keys() and link_2 in robot_meshes_copy.keys():
                     for mesh in robot_meshes_copy[link_1].values():
                         self.disabled_collision_pairs_dict[mesh.GetPrimPath().pathString] += [m.GetPrimPath().pathString for m in robot_meshes_copy[link_2].values()]
-
                     for mesh in robot_meshes_copy[link_2].values():
                         self.disabled_collision_pairs_dict[mesh.GetPrimPath().pathString] += [m.GetPrimPath().pathString for m in robot_meshes_copy[link_1].values()]
         
         # Filter out collisions between object in hand and robot eef
         robot_copy_prim_path = self.robot_copy.prims[self.robot_copy_type].GetPrimPath().pathString
         if self.obj_in_hand_copy is not None:
-            for mesh in self.robot.eef_links[self.robot.default_arm].collision_meshes.values():
-                # Skip grasping frame (this is necessary for Tiago, but should be cleaned up in the future)
-                if "grasping_frame" in mesh.prim_path:
+            eef_links = [self.robot.eef_links[self.robot.default_arm]] + self.robot.finger_links[self.robot.default_arm]
+            for eef_link in eef_links:
+                for mesh in eef_link.collision_meshes.values():
+                    # Skip grasping frame (this is necessary for Tiago, but should be cleaned up in the future)
+                    if "grasping_frame" in mesh.prim_path:
                         continue
-                mesh_prim_path = mesh.prim_path.replace(self.robot.prim_path, robot_copy_prim_path)
-                # Disable collision between robot eef and object in hand meshes
-                self.disabled_collision_pairs_dict[mesh_prim_path] += self.obj_in_hand_copy['meshes_path']
-                # Disable collision between object in hand meshes and robot eef (different direction than above)
-                for obj_mesh_path in self.obj_in_hand_copy['meshes_path']:
-                    if obj_mesh_path not in self.disabled_collision_pairs_dict.keys():
-                        self.disabled_collision_pairs_dict[obj_mesh_path] = []
-                    self.disabled_collision_pairs_dict[obj_mesh_path].append(mesh_prim_path)
-            from IPython import embed; embed()
+                    # Mesh prim path for eef link in the robot copy
+                    eef_link_name = eef_link.name.split(":")[-1]
+                    mesh_prim_path = robot_copy_prim_path + "/" + eef_link_name
+                    split_path = mesh.prim_path.split("/")
+                    mesh_prim_path += f"_{split_path[-1]}" if split_path[-1] != "collisions" else ""
+                    # Disable collision between robot eef and object in hand meshes
+                    self.disabled_collision_pairs_dict[mesh_prim_path] += [m.GetPrimPath().pathString for m in self.obj_in_hand_copy['meshes']]
+                    # Disable collision between object in hand meshes and robot eef (different direction than above)
+                    for obj_mesh in self.obj_in_hand_copy['meshes']:
+                        obj_mesh_path = obj_mesh.GetPrimPath().pathString
+                        if obj_mesh_path not in self.disabled_collision_pairs_dict:
+                            self.disabled_collision_pairs_dict[obj_mesh_path] = []
+                        self.disabled_collision_pairs_dict[obj_mesh_path].append(mesh_prim_path)
 
         # Filter out colliders all robot copy meshes should ignore
         disabled_colliders = []
@@ -677,8 +680,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     "Grasp completed, but no object detected in hand after executing grasp",
                     {"target object": obj.name},
                 )
-            
-            # yield from self._reset_hand()
+
+            yield from self._move_hand_direct_cartesian(grasp_pose, stop_on_contact=False)
+
+            yield from self._reset_hand()
 
         if self._get_obj_in_hand() != obj:
             raise ActionPrimitiveError(
