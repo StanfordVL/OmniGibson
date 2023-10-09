@@ -52,12 +52,9 @@ def main(target):
             incoming_portal_transform[:3, 3] = np.array(portal_pos) / 1000.
 
             # Each object needs to be reorigined at the incoming portal and then moved to the outgoing
-            print("Portal pose in parent:", portal_pose_in_parent)
-            print("Incoming portal transform:", incoming_portal_transform)
             rel_transform = portal_pose_in_parent @ np.linalg.inv(incoming_portal_transform)
 
         # Assert that the rel transform represents only a Z rotation
-        print("Relative transform:", rel_transform)
         rel_rot = R.from_matrix(rel_transform[:3, :3])
         if rel_rot.magnitude() > 1e-4:
             rot_axis = np.abs(rel_rot.as_rotvec() / rel_rot.magnitude())
