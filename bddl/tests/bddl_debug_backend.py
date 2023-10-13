@@ -7,41 +7,234 @@ from bddl.parsing import parse_domain
 UNARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 1]
 BINARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 2]
 
-class DebugUnaryFormula(UnaryAtomicFormula):
-    def _evaluate():
-        return True 
-    def _sample():
-        return True
-    
-
-class DebugBinaryFormula(BinaryAtomicFormula):
-    def _evaluate():
-        return True 
-    def _sample():
-        return True
-
-
-def gen_unary_token(predicate_name, generate_ground_options=True):
-    return type(f"{predicate_name}StateUnaryPredicate", (DebugUnaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
-
-
-def gen_binary_token(predicate_name, generate_ground_options=True):
-    return type(f"{predicate_name}StateBinaryPredicate", (DebugBinaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
-
 
 class DebugBackend(BDDLBackend):
     def get_predicate_class(self, predicate_name):
-        if predicate_name in UNARIES: 
-            return gen_unary_token(predicate_name)
-        elif predicate_name in BINARIES:
-            return gen_binary_token(predicate_name)
+        PREDICATE_MAPPING = {
+            "cooked": DebugCookedPredicate,
+            "frozen": DebugFrozenPredicate,
+            "covered": DebugCoveredPredicate,
+            "ontop": DebugOntopPredicate,
+            "inside": DebugInsidePredicate,
+            "filled": DebugFilledPredicate
+        } 
+        return PREDICATE_MAPPING[predicate_name]
+
+
+class DebugSimulator(object):
+    def __init__(self):
+        # Unaries - populated with 1-tuples of string names 
+        self.cooked = set()
+        self.frozen = set()
+        self.open = set()
+        self.folded = set()
+        self.unfolded = set()
+        self.toggled_on = set() 
+        self.hot = set() 
+        self.on_fire = set() 
+        self.future = set() 
+        self.real = set() 
+        self.broken = set()
+        self.assembled = set()
+        # Binaries - populated with 2-tuples of string names
+        self.saturated = set()
+        self.covered = set() 
+        self.filled = set() 
+        self.contains = set() 
+        self.ontop = set() 
+        self.nextto = set() 
+        self.under = set() 
+        self.touching = set() 
+        self.inside = set() 
+        self.overlaid = set() 
+        self.attached = set() 
+        self.draped = set() 
+        self.insource = set() 
+
+        self.create_predicate_to_setters()
+    
+    def create_predicate_to_setters(self):
+        self.predicate_to_setters = {
+            "cooked": self.set_cooked,
+            "frozen": self.set_frozen,
+            "inside": self.set_inside,
+            "ontop": self.set_ontop,
+            "covered": self.set_covered,
+            "filled": self.set_filled,
+        }
+
+    def set_state(self, literals): 
+        """
+        Given a set of non-contradictory parsed ground literals, set this backend to them. 
+        """
+        for literal in literals: 
+            is_predicate = not(literal[0] == "not")
+            predicate, *objects = literal[1] if (literal[0] == "not") else literal
+            if predicate == "inroom": 
+                print(f"Skipping inroom literal {literal}")
+                continue
+            self.predicate_to_setters[predicate](tuple(objects), is_predicate)
+
+    def set_cooked(self, objs, is_cooked):
+        assert len(objs) == 1
+        if is_cooked: 
+            self.cooked.add(obj.name)
         else: 
-            raise KeyError(predicate_name)
+            self.cooked.discard(obj.name)
+    
+    def get_cooked(self, objs):
+        return tuple(obj.name for obj in objs) in self.cooked
+    
+    def set_frozen(self, objs, is_frozen):
+        assert len(objs) == 1
+        if is_frozen: 
+            self.frozen.add(obj)
+        else: 
+            self.frozen.discard(obj)
+    
+    def get_frozen(self, objs):
+        return tuple(obj.name for obj in objs) in self.frozen
+    
+    # TODO remaining unaries 
+
+    def set_covered(self, objs, is_covered):
+        assert len(objs) == 2
+        if is_covered:
+            self.covered.add(objs)
+        else:
+            self.covered.discard(objs)
+
+    def get_covered(self, objs):
+        return tuple(obj.name for obj in objs) in self.covered
+    
+    def set_ontop(self, objs, is_ontop):
+        assert len(objs) == 2
+        if is_ontop:
+            self.ontop.add(objs)
+        else:
+            self.ontop.discard(objs)
+
+    def get_ontop(self, objs):
+        return tuple(obj.name for obj in objs) in self.ontop
+    
+    def set_inside(self, objs, is_inside):
+        assert len(objs) == 2
+        if is_inside:
+            self.inside.add(objs)
+        else:
+            self.inside.discard(objs)
+    
+    def get_inside(self, objs):
+        return tuple(obj.name for obj in objs) in self.inside
+    
+    def set_filled(self, objs, is_filled):
+        assert len(objs) == 2
+        if is_filled:
+            self.filled.add(objs)
+        else:
+            self.filled.discard(objs)
+    
+    def get_filled(self, objs):
+        return tuple(obj.name for obj in objs) in self.filled
+
+    
+    # TODO remaining binaries
 
 
 class DebugGenericObject(object): 
-    def __init__(self, name):
+    def __init__(self, name, simulator):
         self.name = name
+        self.simulator = simulator
+    
+    def get_cooked(self):
+        return self.simulator.get_cooked((self,))
+    
+    def get_frozen(self):
+        return self.simulator.get_frozen((self,))
+    
+    def get_ontop(self, other):
+        return self.simulator.get_ontop((self, other))
+    
+    def get_covered(self, other):
+        return self.simulator.get_covered((self, other))
+
+    def get_inside(self, other):
+        return self.simulator.get_inside((self, other))
+    
+    def get_filled(self, other):
+        return self.simulator.get_filled((self, other))
+
+
+# OmniGibson debug predicates
+class DebugCookedPredicate(UnaryAtomicFormula):
+    STATE_NAME = "cooked"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_cooked())
+        return obj.get_cooked()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugFrozenPredicate(UnaryAtomicFormula):
+    STATE_NAME = "frozen"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_frozen())
+        return obj.get_frozen()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugCoveredPredicate(BinaryAtomicFormula):
+    STATE_NAME = "covered"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_covered(obj2))
+        return obj1.get_covered(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugInsidePredicate(BinaryAtomicFormula):
+    STATE_NAME = "inside"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_inside(obj2))
+        return obj1.get_inside(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugOntopPredicate(BinaryAtomicFormula):
+    STATE_NAME = "ontop"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_ontop(obj2))
+        return obj1.get_ontop(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugFilledPredicate(BinaryAtomicFormula):
+    STATE_NAME = "ontop"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_ontop(obj2))
+        return obj1.get_ontop(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+# TODO remaining debug predicates
+
+# TODO sample functions where we do original setting
 
 
 VALID_ATTACHMENTS = set([
