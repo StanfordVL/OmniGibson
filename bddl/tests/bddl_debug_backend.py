@@ -23,21 +23,21 @@ class DebugBackend(BDDLBackend):
             "future": DebugFuturePredicate,
             "real": DebugRealPredicate,
             "covered": DebugCoveredPredicate,
-            "ontop": DebugOntopPredicate,
+            "ontop": DebugOnTopPredicate,
             "inside": DebugInsidePredicate,
-            "filled": DebugFilledPredicate
-            "saturated": DebugSaturatedPredicate
-            "contains": DebugContainsPredicate
-            "ontop": DebugOnTopPredicate
-            "nextto": DebugNextToPredicate
-            "under": DebugUnderPredicate
-            "touching": DebugTouchingPredicate
-            "overlaid": DebugOverlaidPredicate
-            "attached": DebugAttachedPredicate
-            "draped": DebugDrapedPredicate
-            "insource": DebugInsourcePredicate
-            "broken": DebugBrokenPredicate
-            "assembled": DebugAssembledPredicate
+            "filled": DebugFilledPredicate,
+            "saturated": DebugSaturatedPredicate,
+            "contains": DebugContainsPredicate,
+            "ontop": DebugOnTopPredicate,
+            "nextto": DebugNextToPredicate,
+            "under": DebugUnderPredicate,
+            "touching": DebugTouchingPredicate,
+            "overlaid": DebugOverlaidPredicate,
+            "attached": DebugAttachedPredicate,
+            "draped": DebugDrapedPredicate,
+            "insource": DebugInsourcePredicate,
+            "broken": DebugBrokenPredicate,
+            "assembled": DebugAssembledPredicate,
         } 
         return PREDICATE_MAPPING[predicate_name]
 
@@ -599,7 +599,7 @@ class DebugInsidePredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugOntopPredicate(BinaryAtomicFormula):
+class DebugOnTopPredicate(BinaryAtomicFormula):
     STATE_NAME = "ontop"
 
     def _evaluate(self, obj1, obj2):
