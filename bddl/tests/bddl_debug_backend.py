@@ -7,41 +7,717 @@ from bddl.parsing import parse_domain
 UNARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 1]
 BINARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 2]
 
-class DebugUnaryFormula(UnaryAtomicFormula):
-    def _evaluate():
-        return True 
-    def _sample():
-        return True
-    
-
-class DebugBinaryFormula(BinaryAtomicFormula):
-    def _evaluate():
-        return True 
-    def _sample():
-        return True
-
-
-def gen_unary_token(predicate_name, generate_ground_options=True):
-    return type(f"{predicate_name}StateUnaryPredicate", (DebugUnaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
-
-
-def gen_binary_token(predicate_name, generate_ground_options=True):
-    return type(f"{predicate_name}StateBinaryPredicate", (DebugBinaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
-
 
 class DebugBackend(BDDLBackend):
     def get_predicate_class(self, predicate_name):
-        if predicate_name in UNARIES: 
-            return gen_unary_token(predicate_name)
-        elif predicate_name in BINARIES:
-            return gen_binary_token(predicate_name)
+        PREDICATE_MAPPING = {
+            "cooked": DebugCookedPredicate,
+            "frozen": DebugFrozenPredicate,
+            "open": DebugOpenPredicate,
+            "folded": DebugFoldedPredicate,
+            "unfolded": DebugUnfoldedPredicate,
+            "toggled_on": DebugToggledOnPredicate,
+            "hot": DebugHotPredicate,
+            "frozen": DebugFrozenPredicate,
+            "on_fire": DebugOnFirePredicate,
+            "future": DebugFuturePredicate,
+            "real": DebugRealPredicate,
+            "covered": DebugCoveredPredicate,
+            "ontop": DebugOnTopPredicate,
+            "inside": DebugInsidePredicate,
+            "filled": DebugFilledPredicate,
+            "saturated": DebugSaturatedPredicate,
+            "contains": DebugContainsPredicate,
+            "ontop": DebugOnTopPredicate,
+            "nextto": DebugNextToPredicate,
+            "under": DebugUnderPredicate,
+            "touching": DebugTouchingPredicate,
+            "overlaid": DebugOverlaidPredicate,
+            "attached": DebugAttachedPredicate,
+            "draped": DebugDrapedPredicate,
+            "insource": DebugInsourcePredicate,
+            "broken": DebugBrokenPredicate,
+            "assembled": DebugAssembledPredicate,
+        } 
+        return PREDICATE_MAPPING[predicate_name]
+
+
+class DebugSimulator(object):
+    def __init__(self):
+        # Unaries - populated with 1-tuples of string names 
+        self.cooked = set()
+        self.frozen = set()
+        self.open = set()
+        self.folded = set()
+        self.unfolded = set()
+        self.toggled_on = set() 
+        self.hot = set() 
+        self.on_fire = set() 
+        self.future = set() 
+        self.real = set() 
+        self.broken = set()
+        self.assembled = set()
+        # Binaries - populated with 2-tuples of string names
+        self.saturated = set()
+        self.covered = set() 
+        self.filled = set() 
+        self.contains = set() 
+        self.ontop = set() 
+        self.nextto = set() 
+        self.under = set() 
+        self.touching = set() 
+        self.inside = set() 
+        self.overlaid = set() 
+        self.attached = set() 
+        self.draped = set() 
+        self.insource = set() 
+
+        self.create_predicate_to_setters()
+    
+    def create_predicate_to_setters(self):
+        self.predicate_to_setters = {
+            "cooked": self.set_cooked,
+            "frozen": self.set_frozen,
+            "open": self.set_open,
+            "folded": self.set_folded,
+            "unfolded": self.set_unfolded,
+            "toggled_on": self.set_toggled_on,
+            "hot": self.set_hot,
+            "on_fire": self.set_on_fire,
+            "broken": self.set_broken,
+            "assembled": self.set_assembled,
+            "future": self.set_future,
+            "real": self.set_real,
+            "inside": self.set_inside,
+            "ontop": self.set_ontop,
+            "covered": self.set_covered,
+            "filled": self.set_filled,
+            "saturated": self.set_saturated,
+            "nextto": self.set_nextto,
+            "contains": self.set_contains,
+            "under": self.set_under,
+            "touching": self.set_touching,
+            "overlaid": self.set_overlaid,
+            "attached": self.set_attached,
+            "draped": self.set_draped,
+            "insource": self.set_insource,
+        }
+
+    def set_state(self, literals): 
+        """
+        Given a set of non-contradictory parsed ground literals, set this backend to them. 
+        """
+        for literal in literals: 
+            is_predicate = not(literal[0] == "not")
+            predicate, *objects = literal[1] if (literal[0] == "not") else literal
+            if predicate == "inroom": 
+                print(f"Skipping inroom literal {literal}")
+                continue
+            self.predicate_to_setters[predicate](tuple(objects), is_predicate)
+
+    def set_cooked(self, objs, is_cooked):
+        assert len(objs) == 1
+        if is_cooked: 
+            self.cooked.add(obj.name)
         else: 
-            raise KeyError(predicate_name)
+            self.cooked.discard(obj.name)
+    
+    def get_cooked(self, objs):
+        return tuple(obj.name for obj in objs) in self.cooked
+    
+    def set_frozen(self, objs, is_frozen):
+        assert len(objs) == 1
+        if is_frozen: 
+            self.frozen.add(obj)
+        else: 
+            self.frozen.discard(obj)
+    
+    def get_frozen(self, objs):
+        return tuple(obj.name for obj in objs) in self.frozen
+    
+    def set_open(self, objs, is_open):
+        assert len(objs) == 1
+        if is_open: 
+            self.open.add(obj)
+        else: 
+            self.open.discard(obj)
+    
+    def get_open(self, objs):
+        return tuple(obj.name for obj in objs) in self.open
+    
+    def set_folded(self, objs, is_folded):
+        assert len(objs) == 1
+        if is_folded: 
+            self.folded.add(obj)
+        else: 
+            self.folded.discard(obj)
+    
+    def get_folded(self, objs):
+        return tuple(obj.name for obj in objs) in self.folded
+    
+    def set_unfolded(self, objs, is_unfolded):
+        assert len(objs) == 1
+        if is_unfolded: 
+            self.unfolded.add(obj)
+        else: 
+            self.unfolded.discard(obj)
+    
+    def get_unfolded(self, objs):
+        return tuple(obj.name for obj in objs) in self.unfolded
+    
+    def set_toggled_on(self, objs, is_toggled_on):
+        assert len(objs) == 1
+        if is_toggled_on: 
+            self.toggled_on.add(obj)
+        else: 
+            self.toggled_on.discard(obj)
+    
+    def get_toggled_on(self, objs):
+        return tuple(obj.name for obj in objs) in self.toggled_on
+    
+    def set_hot(self, objs, is_hot):
+        assert len(objs) == 1
+        if is_hot: 
+            self.hot.add(obj)
+        else: 
+            self.hot.discard(obj)
+    
+    def get_hot(self, objs):
+        return tuple(obj.name for obj in objs) in self.hot
+    
+    def set_on_fire(self, objs, is_on_fire):
+        assert len(objs) == 1
+        if is_on_fire: 
+            self.on_fire.add(obj)
+        else: 
+            self.on_fire.discard(obj)
+    
+    def get_on_fire(self, objs):
+        return tuple(obj.name for obj in objs) in self.on_fire
+    
+    def set_broken(self, objs, is_broken):
+        assert len(objs) == 1
+        if is_broken: 
+            self.broken.add(obj)
+        else: 
+            self.broken.discard(obj)
+    
+    def get_broken(self, objs):
+        return tuple(obj.name for obj in objs) in self.broken
+    
+    def set_assembled(self, objs, is_assembled):
+        assert len(objs) == 1
+        if is_assembled: 
+            self.assembled.add(obj)
+        else: 
+            self.assembled.discard(obj)
+    
+    def get_assembled(self, objs):
+        return tuple(obj.name for obj in objs) in self.assembled
+    
+    def set_future(self, objs, is_future):
+        assert len(objs) == 1
+        if is_future: 
+            self.future.add(obj)
+        else: 
+            self.future.discard(obj)
+    
+    def get_future(self, objs):
+        return tuple(obj.name for obj in objs) in self.future
+    
+    def set_real(self, objs, is_real):
+        assert len(objs) == 1
+        if is_real: 
+            self.real.add(obj)
+        else: 
+            self.real.discard(obj)
+    
+    def get_real(self, objs):
+        return tuple(obj.name for obj in objs) in self.real
+
+    def set_covered(self, objs, is_covered):
+        assert len(objs) == 2
+        if is_covered:
+            self.covered.add(objs)
+        else:
+            self.covered.discard(objs)
+
+    def get_covered(self, objs):
+        return tuple(obj.name for obj in objs) in self.covered
+    
+    def set_ontop(self, objs, is_ontop):
+        assert len(objs) == 2
+        if is_ontop:
+            self.ontop.add(objs)
+        else:
+            self.ontop.discard(objs)
+
+    def get_ontop(self, objs):
+        return tuple(obj.name for obj in objs) in self.ontop
+    
+    def set_inside(self, objs, is_inside):
+        assert len(objs) == 2
+        if is_inside:
+            self.inside.add(objs)
+        else:
+            self.inside.discard(objs)
+    
+    def get_inside(self, objs):
+        return tuple(obj.name for obj in objs) in self.inside
+    
+    def set_filled(self, objs, is_filled):
+        assert len(objs) == 2
+        if is_filled:
+            self.filled.add(objs)
+        else:
+            self.filled.discard(objs)
+    
+    def get_filled(self, objs):
+        return tuple(obj.name for obj in objs) in self.filled
+
+    def set_saturated(self, objs, is_saturated):
+        assert len(objs) == 2
+        if is_saturated:
+            self.saturated.add(objs)
+        else:
+            self.saturated.discard(objs)
+    
+    def get_saturated(self, objs):
+        return tuple(obj.name for obj in objs) in self.saturated
+
+    def set_nextto(self, objs, is_nextto):
+        assert len(objs) == 2
+        if is_nextto:
+            self.nextto.add(objs)
+        else:
+            self.nextto.discard(objs)
+    
+    def get_nextto(self, objs):
+        return tuple(obj.name for obj in objs) in self.nextto
+
+    def set_contains(self, objs, is_contains):
+        assert len(objs) == 2
+        if is_contains:
+            self.contains.add(objs)
+        else:
+            self.contains.discard(objs)
+    
+    def get_contains(self, objs):
+        return tuple(obj.name for obj in objs) in self.contains
+    
+    def set_under(self, objs, is_under):
+        assert len(objs) == 2
+        if is_under:
+            self.under.add(objs)
+        else:
+            self.under.discard(objs)
+    
+    def get_under(self, objs):
+        return tuple(obj.name for obj in objs) in self.under
+
+    def set_touching(self, objs, is_touching):
+        assert len(objs) == 2
+        if is_touching:
+            self.touching.add(objs)
+        else:
+            self.touching.discard(objs)
+    
+    def get_touching(self, objs):
+        return tuple(obj.name for obj in objs) in self.touching
+    
+    def set_overlaid(self, objs, is_overlaid):
+        assert len(objs) == 2
+        if is_overlaid:
+            self.overlaid.add(objs)
+        else:
+            self.overlaid.discard(objs)
+    
+    def get_overlaid(self, objs):
+        return tuple(obj.name for obj in objs) in self.overlaid
+    
+    def set_attached(self, objs, is_attached):
+        assert len(objs) == 2
+        if is_attached:
+            self.attached.add(objs)
+        else:
+            self.attached.discard(objs)
+    
+    def get_attached(self, objs):
+        return tuple(obj.name for obj in objs) in self.attached
+
+    def set_draped(self, objs, is_draped):
+        assert len(objs) == 2
+        if is_draped:
+            self.draped.add(objs)
+        else:
+            self.draped.discard(objs)
+    
+    def get_draped(self, objs):
+        return tuple(obj.name for obj in objs) in self.draped
+    
+    def set_insource(self, objs, is_insource):
+        assert len(objs) == 2
+        if is_insource:
+            self.insource.add(objs)
+        else:
+            self.insource.discard(objs)
+    
+    def get_insource(self, objs):
+        return tuple(obj.name for obj in objs) in self.insource
 
 
 class DebugGenericObject(object): 
-    def __init__(self, name):
+    def __init__(self, name, simulator):
         self.name = name
+        self.simulator = simulator
+    
+    def get_cooked(self):
+        return self.simulator.get_cooked((self,))
+    
+    def get_frozen(self):
+        return self.simulator.get_frozen((self,))
+    
+    def get_open(self):
+        return self.simulator.get_open((self,))
+    
+    def get_folded(self):
+        return self.simulator.get_folded((self,))
+    
+    def get_unfolded(self):
+        return self.simulator.get_unfolded((self,))
+    
+    def get_toggled_on(self):
+        return self.simulator.get_toggled_on((self,))
+    
+    def get_hot(self):
+        return self.simulator.get_hot((self,))
+    
+    def get_on_fire(self):
+        return self.simulator.get_on_fire((self,))
+    
+    def get_broken(self):
+        return self.simulator.get_broken((self,))
+    
+    def get_assembled(self):
+        return self.simulator.get_assembled((self,))
+    
+    def get_future(self):
+        return self.simulator.get_future((self,))
+    
+    def get_real(self):
+        return self.simulator.get_real((self,))
+    
+    def get_ontop(self, other):
+        return self.simulator.get_ontop((self, other))
+    
+    def get_covered(self, other):
+        return self.simulator.get_covered((self, other))
+
+    def get_inside(self, other):
+        return self.simulator.get_inside((self, other))
+    
+    def get_saturated(self, other):
+        return self.simulator.get_saturated((self, other))
+
+    def get_nextto(self, other):
+        return self.simulator.get_nextto((self, other))
+
+    def get_contains(self, other):
+        return self.simulator.get_contains((self, other))
+
+    def get_under(self, other):
+        return self.simulator.get_under((self, other))
+
+    def get_touching(self, other):
+        return self.simulator.get_touching((self, other))
+
+    def get_overlaid(self, other):
+        return self.simulator.get_overlaid((self, other))
+
+    def get_attached(self, other):
+        return self.simulator.get_attached((self, other))
+
+    def get_draped(self, other):
+        return self.simulator.get_draped((self, other))
+
+    def get_insource(self, other):
+        return self.simulator.get_insource((self, other))
+
+
+# OmniGibson debug predicates
+class DebugCookedPredicate(UnaryAtomicFormula):
+    STATE_NAME = "cooked"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_cooked())
+        return obj.get_cooked()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugFrozenPredicate(UnaryAtomicFormula):
+    STATE_NAME = "frozen"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_frozen())
+        return obj.get_frozen()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugOpenPredicate(UnaryAtomicFormula):
+    STATE_NAME = "open"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_open())
+        return obj.get_open()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugFoldedPredicate(UnaryAtomicFormula):
+    STATE_NAME = "folded"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_folded())
+        return obj.get_folded()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugUnfoldedPredicate(UnaryAtomicFormula):
+    STATE_NAME = "unfolded"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_unfolded())
+        return obj.get_unfolded()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugToggledOnPredicate(UnaryAtomicFormula):
+    STATE_NAME = "toggled_on"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_toggled_on())
+        return obj.get_toggled_on()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugHotPredicate(UnaryAtomicFormula):
+    STATE_NAME = "hot"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_hot())
+        return obj.get_hot()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugOnFirePredicate(UnaryAtomicFormula):
+    STATE_NAME = "on_fire"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_on_fire())
+        return obj.get_on_fire()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugBrokenPredicate(UnaryAtomicFormula):
+    STATE_NAME = "broken"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_broken())
+        return obj.get_broken()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugAssembledPredicate(UnaryAtomicFormula):
+    STATE_NAME = "assembled"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_assembled())
+        return obj.get_assembled()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugFuturePredicate(UnaryAtomicFormula):
+    STATE_NAME = "future"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_future())
+        return obj.get_future()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugRealPredicate(UnaryAtomicFormula):
+    STATE_NAME = "real"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_real())
+        return obj.get_real()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class DebugCoveredPredicate(BinaryAtomicFormula):
+    STATE_NAME = "covered"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_covered(obj2))
+        return obj1.get_covered(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugInsidePredicate(BinaryAtomicFormula):
+    STATE_NAME = "inside"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_inside(obj2))
+        return obj1.get_inside(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugOnTopPredicate(BinaryAtomicFormula):
+    STATE_NAME = "ontop"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_ontop(obj2))
+        return obj1.get_ontop(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugFilledPredicate(BinaryAtomicFormula):
+    STATE_NAME = "ontop"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_ontop(obj2))
+        return obj1.get_ontop(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugSaturatedPredicate(BinaryAtomicFormula):
+    STATE_NAME = "saturated"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_saturated(obj2))
+        return obj1.get_saturated(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugNextToPredicate(BinaryAtomicFormula):
+    STATE_NAME = "ontop"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_nextto(obj2))
+        return obj1.get_nextto(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugContainsPredicate(BinaryAtomicFormula):
+    STATE_NAME = "ontop"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_contains(obj2))
+        return obj1.get_contains(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugUnderPredicate(BinaryAtomicFormula):
+    STATE_NAME = "under"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_under(obj2))
+        return obj1.get_under(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugTouchingPredicate(BinaryAtomicFormula):
+    STATE_NAME = "ontop"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_touching(obj2))
+        return obj1.get_touching(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugOverlaidPredicate(BinaryAtomicFormula):
+    STATE_NAME = "ontop"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_overlaid(obj2))
+        return obj1.get_overlaid(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugAttachedPredicate(BinaryAtomicFormula):
+    STATE_NAME = "ontop"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_attached(obj2))
+        return obj1.get_attached(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugDrapedPredicate(BinaryAtomicFormula):
+    STATE_NAME = "draped"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_draped(obj2))
+        return obj1.get_draped(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class DebugInsourcePredicate(BinaryAtomicFormula):
+    STATE_NAME = "insource"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_insource(obj2))
+        return obj1.get_insource(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
 
 
 VALID_ATTACHMENTS = set([

@@ -488,6 +488,7 @@ def compile_state(parsed_state, backend, scope=None, object_map=None, generate_g
 def evaluate_state(compiled_state):
     results = {"satisfied": [], "unsatisfied": []}
     for i, compiled_condition in enumerate(compiled_state):
+        print()
         if compiled_condition.evaluate():
             results["satisfied"].append(i)
         else:
