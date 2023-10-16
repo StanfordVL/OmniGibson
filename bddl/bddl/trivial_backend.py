@@ -286,7 +286,7 @@ class TrivialSimulator(object):
         return tuple(obj.name for obj in objs) in self.saturated
 
     def set_nextto(self, objs, is_nextto):
-        assert len(objs) == 2
+         assert len(objs) == 2
         if is_nextto:
             self.nextto.add(objs)
         else:
