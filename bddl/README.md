@@ -93,7 +93,7 @@ simulator = "omnigibson"                        # this does not require an actua
 
 conds = Conditions(behavior_activity, activity_definition, simulator)
 
-# You can now use the functions in bddl/activity.py to interact with the conds object. This generally requires a backend that's based on the simulator; in this case, you can use a stub backend. You can create something similar to, or directly use, the DebugBackend and DebugObject found in tests/bddl_debug_backend.py.
+# You can now use the functions in bddl/activity.py to interact with the conds object. This generally requires a backend that's based on the simulator; in this case, you can use a stub backend. You can create something similar to, or directly use, the TrivialBackend, TrivialObject, TrivialSimulator, and various Trivial*Predicate classes found in bddl/bddl/trivial_backend.py.
 ```
 
 ### With simulator 

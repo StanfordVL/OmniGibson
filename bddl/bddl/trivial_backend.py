@@ -8,41 +8,41 @@ UNARIES = [predicate for predicate, inputs in domain_predicates.items() if len(i
 BINARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 2]
 
 
-class DebugBackend(BDDLBackend):
+class TrivialBackend(BDDLBackend):
     def get_predicate_class(self, predicate_name):
         PREDICATE_MAPPING = {
-            "cooked": DebugCookedPredicate,
-            "frozen": DebugFrozenPredicate,
-            "open": DebugOpenPredicate,
-            "folded": DebugFoldedPredicate,
-            "unfolded": DebugUnfoldedPredicate,
-            "toggled_on": DebugToggledOnPredicate,
-            "hot": DebugHotPredicate,
-            "frozen": DebugFrozenPredicate,
-            "on_fire": DebugOnFirePredicate,
-            "future": DebugFuturePredicate,
-            "real": DebugRealPredicate,
-            "covered": DebugCoveredPredicate,
-            "ontop": DebugOnTopPredicate,
-            "inside": DebugInsidePredicate,
-            "filled": DebugFilledPredicate,
-            "saturated": DebugSaturatedPredicate,
-            "contains": DebugContainsPredicate,
-            "ontop": DebugOnTopPredicate,
-            "nextto": DebugNextToPredicate,
-            "under": DebugUnderPredicate,
-            "touching": DebugTouchingPredicate,
-            "overlaid": DebugOverlaidPredicate,
-            "attached": DebugAttachedPredicate,
-            "draped": DebugDrapedPredicate,
-            "insource": DebugInsourcePredicate,
-            "broken": DebugBrokenPredicate,
-            "assembled": DebugAssembledPredicate,
+            "cooked": TrivialCookedPredicate,
+            "frozen": TrivialFrozenPredicate,
+            "open": TrivialOpenPredicate,
+            "folded": TrivialFoldedPredicate,
+            "unfolded": TrivialUnfoldedPredicate,
+            "toggled_on": TrivialToggledOnPredicate,
+            "hot": TrivialHotPredicate,
+            "frozen": TrivialFrozenPredicate,
+            "on_fire": TrivialOnFirePredicate,
+            "future": TrivialFuturePredicate,
+            "real": TrivialRealPredicate,
+            "covered": TrivialCoveredPredicate,
+            "ontop": TrivialOnTopPredicate,
+            "inside": TrivialInsidePredicate,
+            "filled": TrivialFilledPredicate,
+            "saturated": TrivialSaturatedPredicate,
+            "contains": TrivialContainsPredicate,
+            "ontop": TrivialOnTopPredicate,
+            "nextto": TrivialNextToPredicate,
+            "under": TrivialUnderPredicate,
+            "touching": TrivialTouchingPredicate,
+            "overlaid": TrivialOverlaidPredicate,
+            "attached": TrivialAttachedPredicate,
+            "draped": TrivialDrapedPredicate,
+            "insource": TrivialInsourcePredicate,
+            "broken": TrivialBrokenPredicate,
+            "assembled": TrivialAssembledPredicate,
         } 
         return PREDICATE_MAPPING[predicate_name]
 
 
-class DebugSimulator(object):
+class TrivialSimulator(object):
     def __init__(self):
         # Unaries - populated with 1-tuples of string names 
         self.cooked = set()
@@ -366,7 +366,7 @@ class DebugSimulator(object):
         return tuple(obj.name for obj in objs) in self.insource
 
 
-class DebugGenericObject(object): 
+class TrivialGenericObject(object): 
     def __init__(self, name, simulator):
         self.name = name
         self.simulator = simulator
@@ -444,8 +444,8 @@ class DebugGenericObject(object):
         return self.simulator.get_insource((self, other))
 
 
-# OmniGibson debug predicates
-class DebugCookedPredicate(UnaryAtomicFormula):
+# OmniGibson trivial predicates
+class TrivialCookedPredicate(UnaryAtomicFormula):
     STATE_NAME = "cooked"
 
     def _evaluate(self, obj):
@@ -456,7 +456,7 @@ class DebugCookedPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugFrozenPredicate(UnaryAtomicFormula):
+class TrivialFrozenPredicate(UnaryAtomicFormula):
     STATE_NAME = "frozen"
 
     def _evaluate(self, obj):
@@ -467,7 +467,7 @@ class DebugFrozenPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugOpenPredicate(UnaryAtomicFormula):
+class TrivialOpenPredicate(UnaryAtomicFormula):
     STATE_NAME = "open"
 
     def _evaluate(self, obj):
@@ -478,7 +478,7 @@ class DebugOpenPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugFoldedPredicate(UnaryAtomicFormula):
+class TrivialFoldedPredicate(UnaryAtomicFormula):
     STATE_NAME = "folded"
 
     def _evaluate(self, obj):
@@ -489,7 +489,7 @@ class DebugFoldedPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugUnfoldedPredicate(UnaryAtomicFormula):
+class TrivialUnfoldedPredicate(UnaryAtomicFormula):
     STATE_NAME = "unfolded"
 
     def _evaluate(self, obj):
@@ -500,7 +500,7 @@ class DebugUnfoldedPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugToggledOnPredicate(UnaryAtomicFormula):
+class TrivialToggledOnPredicate(UnaryAtomicFormula):
     STATE_NAME = "toggled_on"
 
     def _evaluate(self, obj):
@@ -511,7 +511,7 @@ class DebugToggledOnPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugHotPredicate(UnaryAtomicFormula):
+class TrivialHotPredicate(UnaryAtomicFormula):
     STATE_NAME = "hot"
 
     def _evaluate(self, obj):
@@ -522,7 +522,7 @@ class DebugHotPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugOnFirePredicate(UnaryAtomicFormula):
+class TrivialOnFirePredicate(UnaryAtomicFormula):
     STATE_NAME = "on_fire"
 
     def _evaluate(self, obj):
@@ -533,7 +533,7 @@ class DebugOnFirePredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugBrokenPredicate(UnaryAtomicFormula):
+class TrivialBrokenPredicate(UnaryAtomicFormula):
     STATE_NAME = "broken"
 
     def _evaluate(self, obj):
@@ -544,7 +544,7 @@ class DebugBrokenPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugAssembledPredicate(UnaryAtomicFormula):
+class TrivialAssembledPredicate(UnaryAtomicFormula):
     STATE_NAME = "assembled"
 
     def _evaluate(self, obj):
@@ -555,7 +555,7 @@ class DebugAssembledPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugFuturePredicate(UnaryAtomicFormula):
+class TrivialFuturePredicate(UnaryAtomicFormula):
     STATE_NAME = "future"
 
     def _evaluate(self, obj):
@@ -566,7 +566,7 @@ class DebugFuturePredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugRealPredicate(UnaryAtomicFormula):
+class TrivialRealPredicate(UnaryAtomicFormula):
     STATE_NAME = "real"
 
     def _evaluate(self, obj):
@@ -577,7 +577,7 @@ class DebugRealPredicate(UnaryAtomicFormula):
         pass
 
 
-class DebugCoveredPredicate(BinaryAtomicFormula):
+class TrivialCoveredPredicate(BinaryAtomicFormula):
     STATE_NAME = "covered"
 
     def _evaluate(self, obj1, obj2):
@@ -588,7 +588,7 @@ class DebugCoveredPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugInsidePredicate(BinaryAtomicFormula):
+class TrivialInsidePredicate(BinaryAtomicFormula):
     STATE_NAME = "inside"
 
     def _evaluate(self, obj1, obj2):
@@ -599,7 +599,7 @@ class DebugInsidePredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugOnTopPredicate(BinaryAtomicFormula):
+class TrivialOnTopPredicate(BinaryAtomicFormula):
     STATE_NAME = "ontop"
 
     def _evaluate(self, obj1, obj2):
@@ -610,7 +610,7 @@ class DebugOnTopPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugFilledPredicate(BinaryAtomicFormula):
+class TrivialFilledPredicate(BinaryAtomicFormula):
     STATE_NAME = "ontop"
 
     def _evaluate(self, obj1, obj2):
@@ -621,7 +621,7 @@ class DebugFilledPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugSaturatedPredicate(BinaryAtomicFormula):
+class TrivialSaturatedPredicate(BinaryAtomicFormula):
     STATE_NAME = "saturated"
 
     def _evaluate(self, obj1, obj2):
@@ -632,7 +632,7 @@ class DebugSaturatedPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugNextToPredicate(BinaryAtomicFormula):
+class TrivialNextToPredicate(BinaryAtomicFormula):
     STATE_NAME = "ontop"
 
     def _evaluate(self, obj1, obj2):
@@ -643,7 +643,7 @@ class DebugNextToPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugContainsPredicate(BinaryAtomicFormula):
+class TrivialContainsPredicate(BinaryAtomicFormula):
     STATE_NAME = "ontop"
 
     def _evaluate(self, obj1, obj2):
@@ -654,7 +654,7 @@ class DebugContainsPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugUnderPredicate(BinaryAtomicFormula):
+class TrivialUnderPredicate(BinaryAtomicFormula):
     STATE_NAME = "under"
 
     def _evaluate(self, obj1, obj2):
@@ -665,7 +665,7 @@ class DebugUnderPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugTouchingPredicate(BinaryAtomicFormula):
+class TrivialTouchingPredicate(BinaryAtomicFormula):
     STATE_NAME = "ontop"
 
     def _evaluate(self, obj1, obj2):
@@ -676,7 +676,7 @@ class DebugTouchingPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugOverlaidPredicate(BinaryAtomicFormula):
+class TrivialOverlaidPredicate(BinaryAtomicFormula):
     STATE_NAME = "ontop"
 
     def _evaluate(self, obj1, obj2):
@@ -687,7 +687,7 @@ class DebugOverlaidPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugAttachedPredicate(BinaryAtomicFormula):
+class TrivialAttachedPredicate(BinaryAtomicFormula):
     STATE_NAME = "ontop"
 
     def _evaluate(self, obj1, obj2):
@@ -698,7 +698,7 @@ class DebugAttachedPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugDrapedPredicate(BinaryAtomicFormula):
+class TrivialDrapedPredicate(BinaryAtomicFormula):
     STATE_NAME = "draped"
 
     def _evaluate(self, obj1, obj2):
@@ -709,7 +709,7 @@ class DebugDrapedPredicate(BinaryAtomicFormula):
         pass
 
 
-class DebugInsourcePredicate(BinaryAtomicFormula):
+class TrivialInsourcePredicate(BinaryAtomicFormula):
     STATE_NAME = "insource"
 
     def _evaluate(self, obj1, obj2):
