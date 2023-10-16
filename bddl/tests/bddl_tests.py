@@ -10,7 +10,7 @@ from collections import Counter
 
 from bddl.parsing import parse_problem, parse_domain
 import bddl.activity
-from bddl_debug_backend import *
+from bddl.trivial_backend import *
 import test_utils
 
 
@@ -189,11 +189,11 @@ def no_contradictory_init_atoms(init):
 def no_uncontrolled_category(activity, defn):
     conds = bddl.activity.Conditions(activity, 0, "omnigibson", predefined_problem=defn)
     scope = bddl.activity.get_object_scope(conds)
-    bddl.activity.get_initial_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
+    bddl.activity.get_initial_conditions(conds, TrivialBackend(), scope, generate_ground_options=False)
     # Pretend scope has been filled 
     for name in scope: 
-        scope[name] = DebugGenericObject(name, DebugSimulator())
-    bddl.activity.get_goal_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
+        scope[name] = TrivialGenericObject(name, TrivialSimulator())
+    bddl.activity.get_goal_conditions(conds, TrivialBackend(), scope, generate_ground_options=False)
 
 
 def agent_present(init):

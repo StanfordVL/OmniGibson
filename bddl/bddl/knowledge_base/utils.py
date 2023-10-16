@@ -53,14 +53,14 @@ def wn_synset_exists(synset):
 UNARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 1]
 BINARIES = [predicate for predicate, inputs in domain_predicates.items() if len(inputs) == 2]
 
-class DebugUnaryFormula(UnaryAtomicFormula):
+class TrivialUnaryFormula(UnaryAtomicFormula):
     def _evaluate():
         return True 
     def _sample():
         return True
     
 
-class DebugBinaryFormula(BinaryAtomicFormula):
+class TrivialBinaryFormula(BinaryAtomicFormula):
     def _evaluate():
         return True 
     def _sample():
@@ -68,14 +68,14 @@ class DebugBinaryFormula(BinaryAtomicFormula):
 
 
 def gen_unary_token(predicate_name, generate_ground_options=True):
-    return type(f"{predicate_name}StateUnaryPredicate", (DebugUnaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
+    return type(f"{predicate_name}StateUnaryPredicate", (TrivialUnaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
 
 
 def gen_binary_token(predicate_name, generate_ground_options=True):
-    return type(f"{predicate_name}StateBinaryPredicate", (DebugBinaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
+    return type(f"{predicate_name}StateBinaryPredicate", (TrivialBinaryFormula,), {"STATE_CLASS": "HowDoesItMatter", "STATE_NAME": predicate_name})
 
 
-class DebugBackend(BDDLBackend):
+class TrivialBackend(BDDLBackend):
     def get_predicate_class(self, predicate_name):
         if predicate_name in UNARIES: 
             return gen_unary_token(predicate_name)
@@ -85,7 +85,7 @@ class DebugBackend(BDDLBackend):
             raise KeyError(predicate_name)
 
 
-class DebugGenericObject(object): 
+class TrivialGenericObject(object): 
     def __init__(self, name):
         self.name = name
 
@@ -94,9 +94,9 @@ def get_initial_and_goal_conditions(conds) -> Tuple[List, List]:
     scope = get_object_scope(conds)
     # Pretend scope has been filled 
     for name in scope: 
-        scope[name] = DebugGenericObject(name)
-    initial_conds = get_initial_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
-    goal_conds = get_goal_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
+        scope[name] = TrivialGenericObject(name)
+    initial_conds = get_initial_conditions(conds, TrivialBackend(), scope, generate_ground_options=False)
+    goal_conds = get_goal_conditions(conds, TrivialBackend(), scope, generate_ground_options=False)
     return initial_conds, goal_conds
 
 def get_leaf_conditions(cond) -> List:

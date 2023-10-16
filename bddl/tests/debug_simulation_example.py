@@ -1,5 +1,5 @@
 from bddl.activity import *
-from bddl_debug_backend import DebugBackend, DebugGenericObject, DebugSimulator
+from bddl.trivial_backend import TrivialBackend, TrivialGenericObject, TrivialSimulator
 
 
 def main():
@@ -11,11 +11,11 @@ def main():
     # Load and compile activity, stub backend, and stub simulator
     print(f"Loading activity {activity}")
     conds = Conditions(activity, activity_definition, desired_simulator)
-    backend = DebugBackend()
-    simulator = DebugSimulator()
+    backend = TrivialBackend()
+    simulator = TrivialSimulator()
     scope = get_object_scope(conds)
     for name in scope:
-        scope[name] = DebugGenericObject(name, simulator)
+        scope[name] = TrivialGenericObject(name, simulator)
 
     # Compile goal conditions and (optionally) ground goal solutions (in parsed format)
     goal_conds = get_goal_conditions(conds, backend, scope, generate_ground_options=True)
