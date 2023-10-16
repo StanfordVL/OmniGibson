@@ -34,7 +34,9 @@ def main():
     # Evaluate compiled goal conditions on current state
     print(); print("Evaluating")
     is_successful, satisfied = evaluate_goal_conditions(goal_conds)
-    print(is_successful); print(satisfied); input()
+    # reward = max(len(evaluate_goal_conditions(option)[-1]["satisfied"])/float(len(option)) for option in ground_goal_state_options)
+    reward = get_reward(ground_goal_state_options)
+    print(is_successful); print(satisfied); print(reward); input()
     
     simulator.set_state([["not", ["covered", "plate.n.04_3", "stain.n.01_1"]]])
     simulator.set_state([["not", ["covered", "plate.n.04_4", "stain.n.01_1"]]])
@@ -46,7 +48,8 @@ def main():
     # Evaluate compiled goal conditions on current state
     print(); print("Evaluating")
     is_successful, satisfied = evaluate_goal_conditions(goal_conds)
-    print(is_successful); print(satisfied); input()
+    reward = get_reward(ground_goal_state_options)
+    print(is_successful); print(satisfied); print(reward); input()
     
     simulator.set_state([["ontop", "sack.n.01_1", "floor.n.01_1"]])
     simulator.set_state([["not", ["covered", "table.n.02_1", "stain.n.01_1"]]])
@@ -54,7 +57,8 @@ def main():
     # Evaluate compiled goal conditions on current state
     print(); print("Evaluating")
     is_successful, satisfied = evaluate_goal_conditions(goal_conds)
-    print(is_successful); print(satisfied); input()
+    reward = get_reward(ground_goal_state_options)
+    print(is_successful); print(satisfied); print(reward); input()
 
     return is_successful
 

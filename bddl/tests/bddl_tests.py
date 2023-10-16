@@ -10,7 +10,7 @@ from collections import Counter
 
 from bddl.parsing import parse_problem, parse_domain
 import bddl.activity
-from bddl_debug_backend import DebugBackend, DebugGenericObject
+from bddl_debug_backend import *
 import test_utils
 
 
@@ -192,7 +192,7 @@ def no_uncontrolled_category(activity, defn):
     bddl.activity.get_initial_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
     # Pretend scope has been filled 
     for name in scope: 
-        scope[name] = DebugGenericObject(name)
+        scope[name] = DebugGenericObject(name, DebugSimulator())
     bddl.activity.get_goal_conditions(conds, DebugBackend(), scope, generate_ground_options=False)
 
 
