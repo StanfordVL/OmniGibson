@@ -38,6 +38,7 @@ class TrivialBackend(BDDLBackend):
             "insource": TrivialInsourcePredicate,
             "broken": TrivialBrokenPredicate,
             "assembled": TrivialAssembledPredicate,
+            "grasped": TrivialGraspedPredicate,
         } 
         return PREDICATE_MAPPING[predicate_name]
 
@@ -71,6 +72,7 @@ class TrivialSimulator(object):
         self.attached = set() 
         self.draped = set() 
         self.insource = set() 
+        self.grasped = set()
 
         self.create_predicate_to_setters()
     
@@ -101,6 +103,7 @@ class TrivialSimulator(object):
             "attached": self.set_attached,
             "draped": self.set_draped,
             "insource": self.set_insource,
+            "grasped": self.set_grasped,
         }
 
     def set_state(self, literals): 
@@ -286,7 +289,7 @@ class TrivialSimulator(object):
         return tuple(obj.name for obj in objs) in self.saturated
 
     def set_nextto(self, objs, is_nextto):
-         assert len(objs) == 2
+        assert len(objs) == 2
         if is_nextto:
             self.nextto.add(objs)
         else:
@@ -364,6 +367,16 @@ class TrivialSimulator(object):
     
     def get_insource(self, objs):
         return tuple(obj.name for obj in objs) in self.insource
+    
+    def set_grasped(self, objs, is_grasped):
+        assert len(objs) == 2
+        if is_grasped:
+            self.grasped.add(objs)
+        else:
+            self.grasped.discard(objs)
+    
+    def get_grasped(self, objs):
+        return tuple(obj.name for obj in objs) in self.grasped
 
 
 class TrivialGenericObject(object): 
@@ -442,6 +455,9 @@ class TrivialGenericObject(object):
 
     def get_insource(self, other):
         return self.simulator.get_insource((self, other))
+    
+    def get_grasped(self, other):
+        return self.simulator.get_grasped((self, other))
 
 
 # OmniGibson trivial predicates
@@ -715,6 +731,17 @@ class TrivialInsourcePredicate(BinaryAtomicFormula):
     def _evaluate(self, obj1, obj2):
         print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_insource(obj2))
         return obj1.get_insource(obj2)
+
+    def _sample(self, obj1, obj2, binary_state):
+        pass
+
+
+class TrivialGraspedPredicate(BinaryAtomicFormula):
+    STATE_NAME = "grasped"
+
+    def _evaluate(self, obj1, obj2):
+        print(self.STATE_NAME, obj1.name, obj2.name, obj1.get_grasped(obj2))
+        return obj1.get_grasped(obj2)
 
     def _sample(self, obj1, obj2, binary_state):
         pass
