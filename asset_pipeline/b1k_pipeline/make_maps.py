@@ -150,7 +150,7 @@ def process_scene(scene_id, dataset_path, out_path):
             # Get a list of all of the room instances in the scene
             all_insts = {
                 room
-                for floor in floor_objs
+                for floor in scene.get_objects()
                 for room in (floor.in_rooms if floor.in_rooms else [])
             }
             sorted_all_insts = sorted(all_insts)

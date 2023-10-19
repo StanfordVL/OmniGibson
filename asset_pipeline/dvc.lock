@@ -9485,17 +9485,17 @@ stages:
     cmd: python -m b1k_pipeline.pack_dataset
     deps:
     - path: artifacts/parallels/maps.zip
-      md5: d4c242ce23283c08dc93bc44b308e578
-      size: 2496173
+      md5: 8cd2729b53415cfed4627a41f60514f3
+      size: 3941921
     - path: artifacts/parallels/metadata.zip
-      md5: a18becbb0379e488c60dcf9664704629
-      size: 60970
+      md5: 80c17db2c3d1b60bc84944f83df4d597
+      size: 62812
     - path: artifacts/parallels/objects_usd.zip
-      md5: e0ba8877800776d2baf152240cd02b9c
-      size: 19445719852
+      md5: aa042bfda9c3e94a9d32764911d331c8
+      size: 20369346713
     - path: artifacts/parallels/scenes_json.zip
-      md5: 344999e3f32d4225eb157f78df9ac064
-      size: 1090226
+      md5: 3adc727d8b5f24b7e98a66f2fb004e4e
+      size: 1644340
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9510,8 +9510,8 @@ stages:
       size: 2923
     outs:
     - path: artifacts/og_dataset.zip
-      md5: 62a1bcaa9130009c709ab39ca7110c50
-      size: 19449363556
+      md5: 0a4cd0ff79a578fdf1a236cc5da385df
+      size: 20374991795
     - path: artifacts/pipeline/pack_dataset.json
       md5: 2ad066aadc9c024dff5e8d3c6587590d
       size: 44
@@ -9568,27 +9568,27 @@ stages:
     cmd: python -m b1k_pipeline.make_maps
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: a18becbb0379e488c60dcf9664704629
-      size: 60970
+      md5: 80c17db2c3d1b60bc84944f83df4d597
+      size: 62812
     - path: artifacts/parallels/objects.zip
-      md5: cf7bbab5417d9e208349368f9a7177cd
-      size: 16987572767
+      md5: e35065e35823ca23803219fb4dc9fb3a
+      size: 17870737808
     - path: artifacts/parallels/scenes.zip
-      md5: 2586735b7edd9a3f8a21cef6d25c9149
-      size: 430793
+      md5: 0ed4a78bde19c07ca92befa4e02737bd
+      size: 648594
     - path: artifacts/pipeline/aggregate_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/make_maps.py
-      md5: ad1673cded52ab52da905d3edfe3ddd0
-      size: 9866
+      md5: c830598b5b95a53e61e6fd36f21d77c2
+      size: 9875
     - path: metadata/allowed_room_types.csv
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     outs:
     - path: artifacts/parallels/maps.zip
-      md5: d4c242ce23283c08dc93bc44b308e578
-      size: 2496173
+      md5: 8cd2729b53415cfed4627a41f60514f3
+      size: 3941921
     - path: artifacts/pipeline/make_maps.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -11713,8 +11713,8 @@ stages:
     cmd: python -m b1k_pipeline.validate_scenes
     deps:
     - path: artifacts/og_dataset.zip
-      md5: 62a1bcaa9130009c709ab39ca7110c50
-      size: 19449363556
+      md5: 0a4cd0ff79a578fdf1a236cc5da385df
+      size: 20374991795
     - path: artifacts/pipeline/pack_dataset.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -11726,8 +11726,8 @@ stages:
       size: 3113
     outs:
     - path: artifacts/pipeline/validate_scenes.json
-      md5: c6bde70d9e16250ebec076ff9198cd46
-      size: 2975092
+      md5: 8de394f3859712ddbdaee7fe9ce2c970
+      size: 29619613
   export_meshes@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/export_meshes.py
