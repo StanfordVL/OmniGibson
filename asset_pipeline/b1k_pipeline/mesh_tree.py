@@ -96,13 +96,13 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
             metadata = json.load(metadata_file)
 
         # Rename parts
-        renamed_parts = {}
+        renamed_parts = []
         for part_name in metadata["parts"]:
             part_name_parsed = parse_name(part_name)
             part_cat = part_name_parsed.group("category")
             part_model = part_name_parsed.group("model_id")
             part_name_renamed = part_name.replace(part_cat, maybe_rename_category(part_cat, part_model))
-            renamed_parts[part_name_renamed] = metadata["parts"][part_name]
+            renamed_parts.append(part_name_renamed)
         metadata["parts"] = renamed_parts
 
         meta_links = metadata["meta_links"]
