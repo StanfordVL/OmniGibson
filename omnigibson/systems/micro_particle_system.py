@@ -25,7 +25,7 @@ from pxr import Gf, Vt, UsdShade, UsdGeom, PhysxSchema
 from collections import defaultdict
 
 
-# physics settins
+# physics settings
 from omni.physx.bindings._physx import (
     SETTING_UPDATE_TO_USD,
     SETTING_UPDATE_VELOCITIES_TO_USD,
@@ -1200,7 +1200,7 @@ class MicroPhysicalParticleSystem(MicroParticleSystem, PhysicalParticleSystem):
         Args:
             name (str): Name of the system, in snake case.
             particle_density (float): Particle density for the generated system
-            min_scale (None or 3-array): If specified, sets the minumum bound for particles' relative scale.
+            min_scale (None or 3-array): If specified, sets the minimum bound for particles' relative scale.
                 Else, defaults to 1
             max_scale (None or 3-array): If specified, sets the maximum bound for particles' relative scale.
                 Else, defaults to 1

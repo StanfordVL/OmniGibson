@@ -1423,7 +1423,7 @@ class MacroPhysicalParticleSystem(PhysicalParticleSystem, MacroParticleSystem):
 
     @classproperty
     def state_size(cls):
-        # In additon to super, we have:
+        # In addition to super, we have:
         # velocities (6*n)
         return super().state_size + 6 * cls.n_particles
 

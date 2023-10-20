@@ -483,7 +483,7 @@ class GlobalVolumetricEffectsSettings(SubSettingsBase):
         self.transmittance_measurement_distance = SettingItem(
             self,
             SettingType.FLOAT,
-            "Transmittance Measurment Distance",
+            "Transmittance Measurement Distance",
             "/rtx/raytracing/inscattering/transmittanceMeasurementDistance",
             range_from=0.0001,
             range_to=1000000,
