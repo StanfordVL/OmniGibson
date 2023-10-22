@@ -20,6 +20,8 @@ class TrivialBackend(BDDLBackend):
             "hot": TrivialHotPredicate,
             "frozen": TrivialFrozenPredicate,
             "on_fire": TrivialOnFirePredicate,
+            "empty": TrivialEmptyPredicate,
+            "closed": TrivialClosedPredicate,
             "future": TrivialFuturePredicate,
             "real": TrivialRealPredicate,
             "covered": TrivialCoveredPredicate,
@@ -54,9 +56,11 @@ class TrivialSimulator(object):
         self.toggled_on = set() 
         self.hot = set() 
         self.on_fire = set() 
+        self.empty = set() 
         self.future = set() 
         self.real = set() 
         self.broken = set()
+        self.closed = set()
         self.assembled = set()
         # Binaries - populated with 2-tuples of string names
         self.saturated = set()
@@ -86,8 +90,10 @@ class TrivialSimulator(object):
             "toggled_on": self.set_toggled_on,
             "hot": self.set_hot,
             "on_fire": self.set_on_fire,
+            "empty": self.set_empty,
             "broken": self.set_broken,
             "assembled": self.set_assembled,
+            "closed": self.set_closed,
             "future": self.set_future,
             "real": self.set_real,
             "inside": self.set_inside,
@@ -131,9 +137,9 @@ class TrivialSimulator(object):
     def set_frozen(self, objs, is_frozen):
         assert len(objs) == 1
         if is_frozen: 
-            self.frozen.add(obj)
+            self.frozen.add(objs)
         else: 
-            self.frozen.discard(obj)
+            self.frozen.discard(objs)
     
     def get_frozen(self, objs):
         return tuple(obj.name for obj in objs) in self.frozen
@@ -141,9 +147,9 @@ class TrivialSimulator(object):
     def set_open(self, objs, is_open):
         assert len(objs) == 1
         if is_open: 
-            self.open.add(obj)
+            self.open.add(objs)
         else: 
-            self.open.discard(obj)
+            self.open.discard(objs)
     
     def get_open(self, objs):
         return tuple(obj.name for obj in objs) in self.open
@@ -151,9 +157,9 @@ class TrivialSimulator(object):
     def set_folded(self, objs, is_folded):
         assert len(objs) == 1
         if is_folded: 
-            self.folded.add(obj)
+            self.folded.add(objs)
         else: 
-            self.folded.discard(obj)
+            self.folded.discard(objs)
     
     def get_folded(self, objs):
         return tuple(obj.name for obj in objs) in self.folded
@@ -161,9 +167,9 @@ class TrivialSimulator(object):
     def set_unfolded(self, objs, is_unfolded):
         assert len(objs) == 1
         if is_unfolded: 
-            self.unfolded.add(obj)
+            self.unfolded.add(objs)
         else: 
-            self.unfolded.discard(obj)
+            self.unfolded.discard(objs)
     
     def get_unfolded(self, objs):
         return tuple(obj.name for obj in objs) in self.unfolded
@@ -171,9 +177,9 @@ class TrivialSimulator(object):
     def set_toggled_on(self, objs, is_toggled_on):
         assert len(objs) == 1
         if is_toggled_on: 
-            self.toggled_on.add(obj)
+            self.toggled_on.add(objs)
         else: 
-            self.toggled_on.discard(obj)
+            self.toggled_on.discard(objs)
     
     def get_toggled_on(self, objs):
         return tuple(obj.name for obj in objs) in self.toggled_on
@@ -181,9 +187,9 @@ class TrivialSimulator(object):
     def set_hot(self, objs, is_hot):
         assert len(objs) == 1
         if is_hot: 
-            self.hot.add(obj)
+            self.hot.add(objs)
         else: 
-            self.hot.discard(obj)
+            self.hot.discard(objs)
     
     def get_hot(self, objs):
         return tuple(obj.name for obj in objs) in self.hot
@@ -191,19 +197,39 @@ class TrivialSimulator(object):
     def set_on_fire(self, objs, is_on_fire):
         assert len(objs) == 1
         if is_on_fire: 
-            self.on_fire.add(obj)
+            self.on_fire.add(objs)
         else: 
-            self.on_fire.discard(obj)
+            self.on_fire.discard(objs)
     
     def get_on_fire(self, objs):
         return tuple(obj.name for obj in objs) in self.on_fire
     
+    def set_empty(self, objs, is_empty):
+        assert len(objs) == 1
+        if is_empty: 
+            self.empty.add(objs)
+        else: 
+            self.empty.discard(objs)
+    
+    def get_empty(self, objs):
+        return tuple(obj.name for obj in objs) in self.empty
+    
+    def set_closed(self, objs, is_closed):
+        assert len(objs) == 1
+        if is_closed: 
+            self.closed.add(objs)
+        else: 
+            self.closed.discard(objs)
+    
+    def get_closed(self, objs):
+        return tuple(obj.name for obj in objs) in self.closed
+    
     def set_broken(self, objs, is_broken):
         assert len(objs) == 1
         if is_broken: 
-            self.broken.add(obj)
+            self.broken.add(objs)
         else: 
-            self.broken.discard(obj)
+            self.broken.discard(objs)
     
     def get_broken(self, objs):
         return tuple(obj.name for obj in objs) in self.broken
@@ -211,9 +237,9 @@ class TrivialSimulator(object):
     def set_assembled(self, objs, is_assembled):
         assert len(objs) == 1
         if is_assembled: 
-            self.assembled.add(obj)
+            self.assembled.add(objs)
         else: 
-            self.assembled.discard(obj)
+            self.assembled.discard(objs)
     
     def get_assembled(self, objs):
         return tuple(obj.name for obj in objs) in self.assembled
@@ -221,9 +247,9 @@ class TrivialSimulator(object):
     def set_future(self, objs, is_future):
         assert len(objs) == 1
         if is_future: 
-            self.future.add(obj)
+            self.future.add(objs)
         else: 
-            self.future.discard(obj)
+            self.future.discard(objs)
     
     def get_future(self, objs):
         return tuple(obj.name for obj in objs) in self.future
@@ -231,9 +257,9 @@ class TrivialSimulator(object):
     def set_real(self, objs, is_real):
         assert len(objs) == 1
         if is_real: 
-            self.real.add(obj)
+            self.real.add(objs)
         else: 
-            self.real.discard(obj)
+            self.real.discard(objs)
     
     def get_real(self, objs):
         return tuple(obj.name for obj in objs) in self.real
@@ -402,11 +428,17 @@ class TrivialGenericObject(object):
     def get_toggled_on(self):
         return self.simulator.get_toggled_on((self,))
     
+    def get_closed(self):
+        return self.simulator.get_closed((self,))
+    
     def get_hot(self):
         return self.simulator.get_hot((self,))
     
     def get_on_fire(self):
         return self.simulator.get_on_fire((self,))
+    
+    def get_empty(self):
+        return self.simulator.get_empty((self,))
     
     def get_broken(self):
         return self.simulator.get_broken((self,))
@@ -527,12 +559,12 @@ class TrivialToggledOnPredicate(UnaryAtomicFormula):
         pass
 
 
-class TrivialHotPredicate(UnaryAtomicFormula):
-    STATE_NAME = "hot"
+class TrivialClosedPredicate(UnaryAtomicFormula):
+    STATE_NAME = "closed"
 
     def _evaluate(self, obj):
-        print(self.STATE_NAME, obj.name, obj.get_hot())
-        return obj.get_hot()
+        print(self.STATE_NAME, obj.name, obj.get_closed())
+        return obj.get_closed()
 
     def _sample(self, obj1, binary_state):
         pass
@@ -544,6 +576,39 @@ class TrivialOnFirePredicate(UnaryAtomicFormula):
     def _evaluate(self, obj):
         print(self.STATE_NAME, obj.name, obj.get_on_fire())
         return obj.get_on_fire()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class TrivialHotPredicate(UnaryAtomicFormula):
+    STATE_NAME = "hot"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_hot())
+        return obj.get_hot()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class TrivialHotPredicate(UnaryAtomicFormula):
+    STATE_NAME = "on_fire"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_on_fire())
+        return obj.get_on_fire()
+
+    def _sample(self, obj1, binary_state):
+        pass
+
+
+class TrivialEmptyPredicate(UnaryAtomicFormula):
+    STATE_NAME = "on_fire"
+
+    def _evaluate(self, obj):
+        print(self.STATE_NAME, obj.name, obj.get_empty())
+        return obj.get_empty()
 
     def _sample(self, obj1, binary_state):
         pass
