@@ -348,13 +348,10 @@ def plan_arm_motion_ik(
         control_joint_pos = ik_solver.solve(
             target_pos=eef_pose[:3],
             target_quat=T.axisangle2quat(eef_pose[3:]),
-            max_iterations=1000,
+            tolerance_pos=0.02,
+            max_iterations=10000,
+            #initial_joint_pos=joint_pos[control_idx_in_joint_pos],
         )
-# ik_solver.solve(
-#     target_pos=eef_pose[:3],
-#     target_quat=T.axisangle2quat(eef_pose[3:]),
-#     max_iterations=1000,
-# )
         if control_joint_pos is None:
             return False
         joint_pos[control_idx_in_joint_pos] = control_joint_pos

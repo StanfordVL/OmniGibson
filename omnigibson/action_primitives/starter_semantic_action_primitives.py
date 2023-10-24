@@ -886,7 +886,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         joint_pos = ik_solver.solve(
             target_pos=relative_target_pose[0],
             target_quat=relative_target_pose[1],
-            max_iterations=100,
+            tolerance_pos=0.02,
+            max_iterations=10000,
+            # initial_joint_pos=self.robot.get_joint_positions()[control_idx],
         )
         
         if joint_pos is None:
@@ -1101,11 +1103,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # if i > 0 and stop_if_stuck and detect_robot_collision_in_sim(self.robot, ignore_obj_in_hand=False):
             if i > 0 and stop_if_stuck:
                 pos_diff = np.linalg.norm(prev_pos - current_pos)
-                orn_diff = (Rotation.from_quat(prev_orn) * Rotation.from_quat(current_orn).inv()).magnitude() 
-                orn_diff = (Rotation.from_quat(prev_orn) * Rotation.from_quat(current_orn).inv()).magnitude() 
-                print(pos_diff, orn_diff)
                 orn_diff = (Rotation.from_quat(prev_orn) * Rotation.from_quat(current_orn).inv()).magnitude()
-                print(pos_diff, orn_diff)
                 if pos_diff < 0.0003 and orn_diff < 0.01:
                     raise ActionPrimitiveError(
                         ActionPrimitiveError.Reason.EXECUTION_ERROR,
