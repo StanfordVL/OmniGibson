@@ -31,9 +31,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
         automatic_reset=False,
         flatten_action_space=False,
         flatten_obs_space=False,
-        use_external_camera=False,
-        external_camera_modalities='all',
-        external_camera_pose=None,
+        external_camera_kwargs=[],
+        external_camera_poses={},
     ):
         """
         Args:
@@ -46,15 +45,15 @@ class Environment(gym.Env, GymObservable, Recreatable):
             automatic_reset (bool): whether to automatic reset after an episode finishes
             flatten_action_space (bool): whether to flatten the action space as a sinle 1D-array
             flatten_obs_space (bool): whether the observation space should be flattened when generated
-            use_external_camera (bool): whether to use external camera as additional modalities in observation.
-            external_camera_modality (str or list of str): Modality(s) supported by this sensor. 
-                Default is "all", which corresponds to all modalities being used. 
-                Otherwise, valid options should be part of cls.all_modalities. 
-                For this vision sensor, this includes any of: {
-                    rgb, depth, depth_linear, normal, seg_semantic, seg_instance, 
-                    flow, bbox_2d_tight, bbox_2d_loose, bbox_3d, camera
-                }
-            external_camera_pose (list of lists or of n-arrays): desired position and orientation of external camera.
+            external_camera_kwargs (list or tuple of dict): List of keyword-specific arguments for external cameras. 
+                Default is an empty list, which represents no external cameras being used for observations.
+                Each kwargs in the list will be passed in to the VisionSensor constructor.
+                Please refer to the VisionSensor class for detailed descriptions on cameras.
+                Note: prim_path and name arguments are required.
+            external_camera_poses (dict): desired position and orientation of external cameras.
+                This dictionary maps the camera name parameter to its desired pose.
+                If not specified, the camera will be initialized in the default pose.
+
         """
         # Call super first
         super().__init__()
@@ -93,20 +92,20 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # Load this environment
         self.load()
 
-        # Set the initial camera if required.
-        self.use_external_camera = use_external_camera
-        if use_external_camera:
-            self.camera = VisionSensor(
-                prim_path="/World/viewer_camera",
-                name="camera",
-                modalities=external_camera_modalities, 
-            )
-            self.camera.initialize()
-            if external_camera_pose is not None:
-                self.camera.set_position_orientation(
-                    external_camera_pose[0],
-                    external_camera_pose[1],
+        # Set up external cameras
+        self._external_cameras = {}
+        for ec_kwargs in external_camera_kwargs:
+            camera = VisionSensor(**ec_kwargs)
+            camera.load()
+            camera.initialize()
+
+            camera_name = ec_kwargs["name"]
+            if camera_name in external_camera_poses:
+                camera.set_position_orientation(
+                    external_camera_poses[camera_name][0],
+                    external_camera_poses[camera_name][1],
                 )
+            self._external_cameras[camera_name] = camera
 
     def reload(self, configs, overwrite_old=True):
         """
@@ -374,8 +373,11 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # Add task observations
         obs["task"] = self._task.get_obs(env=self)
 
-        if self.use_external_camera:
-            obs["external"] = self.camera.get_obs()
+        # Add external camera observations
+        external_obs = dict()
+        for camera_name, camera in self._external_cameras.items():
+            external_obs[camera_name] = camera.get_obs()
+        obs["external"] = external_obs
 
         # Possibly flatten obs if requested
         if self._flatten_obs_space:
@@ -523,6 +525,14 @@ class Environment(gym.Env, GymObservable, Recreatable):
             list of BaseRobot: Robots in the current scene
         """
         return self.scene.robots
+    
+    @property
+    def external_cameras(self):
+        """
+        Returns:
+            dict (string, VisionSensor): External cameras for additional observation in the environment
+        """
+        return self._external_cameras
 
     @property
     def env_config(self):
