@@ -61,7 +61,7 @@ class EntityPrim(XFormPrim):
         self._visual_only = None
 
         # This needs to be initialized to be used for _load() of PrimitiveObject
-        self._prim_type = load_config["prim_type"] if "prim_type" in load_config else PrimType.RIGID
+        self._prim_type = load_config["prim_type"] if load_config is not None and "prim_type" in load_config else PrimType.RIGID
         assert self._prim_type in iter(PrimType), f"Unknown prim type {self._prim_type}!"
 
         # Run super init
@@ -138,6 +138,10 @@ class EntityPrim(XFormPrim):
             if gm.AG_CLOTH:
                 self.create_attachment_point_link()
 
+        # Globally disable any requested collision links
+        for link_name in self.disabled_collision_link_names:
+            self._links[link_name].disable_collisions()
+
         # Disable any requested collision pairs
         for a_name, b_name in self.disabled_collision_pairs:
             link_a, link_b = self._links[a_name], self._links[b_name]
@@ -159,17 +163,6 @@ class EntityPrim(XFormPrim):
                         material_paths.add(mat_path)
 
         self._materials = materials
-
-    @property
-    def aabb(self):
-        if self._prim_type == PrimType.CLOTH:
-            particle_positions = self.root_link.particle_positions
-            aabb_low, aabb_hi = np.min(particle_positions, axis=0), np.max(particle_positions, axis=0)
-        else:  # Rigid
-            aabb_low, aabb_hi = super().aabb
-            aabb_low, aabb_hi = np.array(aabb_low), np.array(aabb_hi)
-
-        return aabb_low, aabb_hi
 
     def update_links(self, load_config=None):
         """
@@ -1104,6 +1097,14 @@ class EntityPrim(XFormPrim):
         return np.array([j.has_limit for j in self._joints.values()])
 
     @property
+    def disabled_collision_link_names(self):
+        """
+        Returns:
+            list of str: List of link names for this entity whose collisions should be globally disabled
+        """
+        return []
+
+    @property
     def disabled_collision_pairs(self):
         """
         Returns:
@@ -1264,8 +1265,10 @@ class EntityPrim(XFormPrim):
         # If we're a cloth prim type, we compute the bounding box from the limits of the particles. Otherwise, use the
         # normal method for computing bounding box
         if self._prim_type == PrimType.CLOTH:
-            particle_positions = self.root_link.particle_positions
-            aabb_lo, aabb_hi = np.min(particle_positions, axis=0), np.max(particle_positions, axis=0)
+            particle_contact_offset = self.root_link.cloth_system.particle_contact_offset
+            particle_positions = self.root_link.compute_particle_positions()
+            aabb_lo, aabb_hi = np.min(particle_positions, axis=0) - particle_contact_offset, \
+                               np.max(particle_positions, axis=0) + particle_contact_offset
         else:
             aabb_lo, aabb_hi = super().aabb
             aabb_lo, aabb_hi = np.array(aabb_lo), np.array(aabb_hi)
@@ -1300,6 +1303,8 @@ class EntityPrim(XFormPrim):
         self.set_angular_velocity(velocity=np.zeros(3))
         for joint in self._joints.values():
             joint.keep_still()
+        # Make sure object is awake
+        self.wake()
 
     def create_attachment_point_link(self):
         """
@@ -1369,6 +1374,9 @@ class EntityPrim(XFormPrim):
         self.root_link._load_state(state=state["root_link"])
         for joint_name, joint_state in state["joints"].items():
             self._joints[joint_name]._load_state(state=joint_state)
+
+        # Make sure this object is awake
+        self.wake()
 
     def _serialize(self, state):
         # We serialize by first flattening the root link state and then iterating over all joints and

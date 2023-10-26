@@ -1,7 +1,6 @@
 import itertools
 import math
 import os
-import tempfile
 import stat
 import cv2
 import numpy as np
@@ -16,7 +15,7 @@ from omnigibson.objects.usd_object import USDObject
 from omnigibson.utils.constants import AVERAGE_CATEGORY_SPECS, DEFAULT_JOINT_FRICTION, SPECIAL_JOINT_FRICTIONS, JointType
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import BoundingBoxAPI
-from omnigibson.utils.asset_utils import decrypt_file, get_all_object_category_models
+from omnigibson.utils.asset_utils import get_all_object_category_models
 from omnigibson.utils.constants import PrimType
 from omnigibson.macros import gm, create_module_macros
 from omnigibson.utils.ui_utils import create_module_logger
@@ -97,12 +96,15 @@ class DatasetObject(USDObject):
                 -- not both!
             fit_avg_dim_volume (bool): whether to fit the object to have the same volume as the average dimension
                 while keeping the aspect ratio. Note that if this is set, it will override both @scale and @bounding_box
-            in_rooms (None or list): If specified, sets the rooms that this object should belong to
+            in_rooms (None or str or list): If specified, sets the room(s) that this object should belong to. Either
+                a list of room type(s) or a single room type
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
         # Store variables
-        self._in_rooms = in_rooms
+        if isinstance(in_rooms, str):
+            assert "," not in in_rooms
+        self._in_rooms = [in_rooms] if isinstance(in_rooms, str) else in_rooms
 
         # Make sure only one of bounding_box and scale are specified
         if bounding_box is not None and scale is not None:
@@ -125,6 +127,7 @@ class DatasetObject(USDObject):
         super().__init__(
             prim_path=prim_path,
             usd_path=usd_path,
+            encrypted=True,
             name=name,
             category=category,
             class_id=class_id,
@@ -203,29 +206,16 @@ class DatasetObject(USDObject):
 
         # Apply any forced roughness updates
         for material in self.materials:
-            material.reflection_roughness_texture_influence = 0.0
-            material.reflection_roughness_constant = gm.FORCE_ROUGHNESS
+            if ("reflection_roughness_texture_influence" in material.shader_input_names and
+                "reflection_roughness_constant" in material.shader_input_names):
+                material.reflection_roughness_texture_influence = 0.0
+                material.reflection_roughness_constant = gm.FORCE_ROUGHNESS
 
         # Set the joint frictions based on category
         friction = SPECIAL_JOINT_FRICTIONS.get(self.category, DEFAULT_JOINT_FRICTION)
         for joint in self._joints.values():
             if joint.joint_type != JointType.JOINT_FIXED:
                 joint.friction = friction
-
-    def _load(self):
-        # Create a temporary file to store the decrytped asset, load it, and then delete it.
-        original_usd_path = self._usd_path
-        encrypted_filename = original_usd_path.replace(".usd", ".encrypted.usd")
-        decrypted_fd, decrypted_filename = tempfile.mkstemp(os.path.basename(original_usd_path), dir=og.tempdir)
-        decrypt_file(encrypted_filename, decrypted_filename)
-        self._usd_path = decrypted_filename
-        prim = super()._load()
-        os.close(decrypted_fd)
-        # On Windows, Isaac Sim won't let go of the file until the prim is removed, so we can't delete it.
-        if os.name == "posix":
-            os.remove(decrypted_filename)
-        self._usd_path = original_usd_path
-        return prim
 
     def _post_load(self):
         # We run this post loading first before any others because we're modifying the load config that will be used
@@ -289,7 +279,7 @@ class DatasetObject(USDObject):
         it modifies the current albedo map by adding and scaling the values. See @self._update_albedo_value for details.
 
         Args:
-            object_state (BooleanState or None): the object state that the diffuse color should match to
+            object_state (BooleanStateMixin or None): the object state that the diffuse color should match to
         """
         # TODO: uncomment these once our dataset has the object state-conditioned texture maps
         # DEFAULT_ALBEDO_MAP_SUFFIX = frozenset({"DIFFUSE", "COMBINED", "albedo"})
@@ -318,6 +308,7 @@ class DatasetObject(USDObject):
             # else:
             #     print(f"Warning: DatasetObject [{self.prim_path}] does not have texture map: "
             #           f"[{target_texture_path}]. Falling back to directly updating albedo value.")
+
             self._update_albedo_value(object_state, material)
 
     def set_bbox_center_position_orientation(self, position=None, orientation=None):
@@ -407,6 +398,21 @@ class DatasetObject(USDObject):
         return None if metadata is None else metadata.get("orientations", None)
 
     @property
+    def scale(self):
+        # Just super call
+        return super().scale
+
+    @scale.setter
+    def scale(self, scale):
+        # call super first
+        # A bit esoteric -- see https://gist.github.com/Susensio/979259559e2bebcd0273f1a95d7c1e79
+        super(DatasetObject, type(self)).scale.fset(self, scale)
+
+        # Remove bounding_box from scale if it's in our args
+        if "bounding_box" in self._init_info["args"]:
+            self._init_info["args"].pop("bounding_box")
+
+    @property
     def scaled_bbox_center_in_base_frame(self):
         """
         where the base_link origin is wrt. the bounding box center. This allows us to place the model correctly
@@ -474,7 +480,7 @@ class DatasetObject(USDObject):
             4-tuple:
                 - 3-array: (x,y,z) bbox center position in world frame
                 - 3-array: (x,y,z,w) bbox quaternion orientation in world frame
-                - 3-array: (x,y,z) bbox extent in world frame
+                - 3-array: (x,y,z) bbox extent in desired frame
                 - 3-array: (x,y,z) bbox center in desired frame
         """
         assert self.prim_type == PrimType.RIGID, "get_base_aligned_bbox is only supported for rigid objects."
@@ -500,26 +506,9 @@ class DatasetObject(USDObject):
 
             # If the link has a bounding box annotation.
             if self.native_link_bboxes is not None and link_name in self.native_link_bboxes:
-                # If a visual bounding box does not exist in the dictionary, try switching to collision.
-                # We expect that every link has its collision bb annotated (or set to None if none exists).
-                if bbox_type == "visual" and "visual" not in self.native_link_bboxes[link_name]:
-                    log.debug(
-                        "Falling back to collision bbox for object %s link %s since no visual bbox exists.",
-                        self.name,
-                        link_name,
-                    )
-                    bbox_type = "collision"
-
                 # Check if the annotation is still missing.
                 if bbox_type not in self.native_link_bboxes[link_name]:
-                    raise ValueError(
-                        "Could not find %s bounding box for object %s link %s" % (bbox_type, self.name, link_name)
-                    )
-
-                # Check if a mesh exists for this link. If None, the link is meshless, so we continue to the next link.
-                # TODO: Because of encoding, may need to be UsdTokens.none, not None
-                if self.native_link_bboxes[link_name][bbox_type] is None:
-                    continue
+                    raise ValueError(f"Could not find {bbox_type} bounding box for object {self.name} link {link_name}")
 
                 # Get the extent and transform.
                 bb_data = self.native_link_bboxes[link_name][bbox_type][link_bbox_type]
@@ -546,6 +535,9 @@ class DatasetObject(USDObject):
                 # Add the points to our collection of points.
                 points.extend(trimesh.transformations.transform_points(vertices_in_base_frame, bbox_center_in_base_frame))
             elif fallback_to_aabb:
+                # If we're visual and the mesh is not visible, there is no fallback so continue
+                if bbox_type == "visual" and not np.all(tuple(mesh.visible for mesh in meshes.values())):
+                    continue
                 # If no BB annotation is available, get the AABB for this link.
                 aabb_center, aabb_extent = BoundingBoxAPI.compute_center_extent(prim=link)
                 aabb_vertices_in_world = aabb_center + np.array(list(itertools.product((1, -1), repeat=3))) * (

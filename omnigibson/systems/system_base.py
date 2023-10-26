@@ -20,15 +20,19 @@ m = create_module_macros(module_path=__file__)
 
 # Parameters used if scaling particles relative to its parent object's scale
 m.BBOX_LOWER_LIMIT_FRACTION_OF_AABB = 0.06
-m.BBOX_LOWER_LIMIT_MIN = 0.01
+m.BBOX_LOWER_LIMIT_MIN = 0.002
 m.BBOX_LOWER_LIMIT_MAX = 0.02
 m.BBOX_UPPER_LIMIT_FRACTION_OF_AABB = 0.1
-m.BBOX_UPPER_LIMIT_MIN = 0.02
+m.BBOX_UPPER_LIMIT_MIN = 0.01
 m.BBOX_UPPER_LIMIT_MAX = 0.1
 
 
 _CALLBACKS_ON_SYSTEM_INIT = dict()
 _CALLBACKS_ON_SYSTEM_CLEAR = dict()
+
+
+# Modifiers denoting a semantic difference in the system
+SYSTEM_PREFIXES = {"diced", "cooked"}
 
 
 class BaseSystem(SerializableNonInstance, UniquelyNamedNonInstance):
@@ -52,7 +56,11 @@ class BaseSystem(SerializableNonInstance, UniquelyNamedNonInstance):
 
     def __init_subclass__(cls, **kwargs):
         # While class names are camel case, we convert them to snake case to be consistent with object categories.
-        cls._snake_case_name = camel_case_to_snake_case(cls.__name__)
+        name = camel_case_to_snake_case(cls.__name__)
+        # Make sure prefixes preserve their double underscore
+        for prefix in SYSTEM_PREFIXES:
+            name = name.replace(f"{prefix}_", f"{prefix}__")
+        cls._snake_case_name = name
         cls.min_scale = np.ones(3)
         cls.max_scale = np.ones(3)
 
@@ -140,6 +148,14 @@ class BaseSystem(SerializableNonInstance, UniquelyNamedNonInstance):
         # Run any callbacks
         for callback in _CALLBACKS_ON_SYSTEM_INIT.values():
             callback(cls)
+
+    @classmethod
+    def update(cls):
+        """
+        Executes any necessary system updates, once per og.sim._non_physics_step
+        """
+        # Default is no-op
+        pass
 
     @classmethod
     def remove_all_particles(cls):
@@ -1112,12 +1128,19 @@ def _create_system_from_metadata(system_name):
         system_type = metadata["type"]
         system_kwargs = dict(name=system_name)
 
-        asset_path = os.path.join(system_dir, f"{system_name}.usd")
-        has_asset = os.path.exists(asset_path)
+        particle_assets = set(os.listdir(system_dir))
+        particle_assets.remove("metadata.json")
+        has_asset = len(particle_assets) > 0
+        if has_asset:
+            model = sorted(particle_assets)[0]
+            asset_path = os.path.join(system_dir, model, "usd", f"{model}.usd")
+        else:
+            asset_path = None
+
         if not has_asset:
             if system_type == "macro_visual_particle":
                 # Fallback to stain asset
-                asset_path = os.path.join(gm.ASSET_PATH, "models", "stain", "stain.usd")
+                asset_path = os.path.join(gm.DATASET_PATH, "systems", "stain", "ahkjul", "usd", "stain.usd")
                 has_asset = True
         if has_asset:
             def generate_particle_template_fcn():
@@ -1126,6 +1149,7 @@ def _create_system_from_metadata(system_name):
                         prim_path=prim_path,
                         name=name,
                         usd_path=asset_path,
+                        encrypted=True,
                         category=system_name,
                         visible=False,
                         fixed_base=False,
@@ -1157,8 +1181,8 @@ def _create_system_from_metadata(system_name):
 
         if system_type == "macro_visual_particle":
             system_kwargs["create_particle_template"] = generate_particle_template_fcn()
-            system_kwargs["relative_particle_scaling"] = metadata["relative_particle_scaling"]
-        elif system_type == "micro_physical_particle" or system_type == "macro_physical_particle":
+            system_kwargs["scale_relative_to_parent"] = metadata["relative_particle_scaling"]
+        elif system_type == "granular" or system_type == "macro_physical_particle":
             system_kwargs["create_particle_template"] = generate_particle_template_fcn()
             system_kwargs["particle_density"] = metadata["particle_density"]
         elif system_type == "fluid":
@@ -1169,8 +1193,8 @@ def _create_system_from_metadata(system_name):
             system_kwargs["customize_particle_material"] = \
                 generate_customize_particle_material_fcn(mat_kwargs=metadata["customize_material_kwargs"])
         else:
-            raise ValueError(f"{system_name} system's type {system_type} is invalid! "
-                             f"Must be one of {{ 'macro_visual_particle', 'micro_physical_particle', 'macro_physical_particle', or 'fluid' }}")
+            raise ValueError(f"{system_name} system's type {system_type} is invalid! Must be one of "
+                             f"{{ 'macro_visual_particle', 'macro_physical_particle', 'granular', or 'fluid' }}")
 
         # Generate the requested system
         system_cls = "".join([st.capitalize() for st in system_type.split("_")])
@@ -1182,7 +1206,7 @@ def import_og_systems():
     if os.path.exists(system_dir):
         system_names = os.listdir(system_dir)
         for system_name in system_names:
-            if system_name.replace("__", "_") not in REGISTERED_SYSTEMS:
+            if system_name not in REGISTERED_SYSTEMS:
                 _create_system_from_metadata(system_name=system_name)
 
 

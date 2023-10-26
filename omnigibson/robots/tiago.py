@@ -71,6 +71,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # Unique to BaseRobot
         obs_modalities="all",
         proprio_obs="default",
+        sensor_config=None,
 
         # Unique to ManipulationRobot
         grasping_mode="physical",
@@ -116,10 +117,14 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             obs_modalities (str or list of str): Observation modalities to use for this robot. Default is "all", which
                 corresponds to all modalities being used.
                 Otherwise, valid options should be part of omnigibson.sensors.ALL_SENSOR_MODALITIES.
+                Note: If @sensor_config explicitly specifies `modalities` for a given sensor class, it will
+                    override any values specified from @obs_modalities!
             proprio_obs (str or list of str): proprioception observation key(s) to use for generating proprioceptive
                 observations. If str, should be exactly "default" -- this results in the default proprioception
                 observations being used, as defined by self.default_proprio_obs. See self._get_proprioception_dict
                 for valid key choices
+            sensor_config (None or dict): nested dictionary mapping sensor class name(s) to specific sensor
+                configurations for this object. This will override any default values specified by this class.
             grasping_mode (str): One of {"physical", "assisted", "sticky"}.
                 If "physical", no assistive grasping will be applied (relies on contact friction + finger force).
                 If "assisted", will magnetize any object touching and within the gripper's fingers.
@@ -169,6 +174,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             reset_joint_pos=reset_joint_pos,
             obs_modalities=obs_modalities,
             proprio_obs=proprio_obs,
+            sensor_config=sensor_config,
             grasping_mode=grasping_mode,
             **kwargs,
         )
@@ -510,8 +516,19 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         return {arm: 0.12 for arm in self.arm_names}
 
     @property
+    def disabled_collision_link_names(self):
+        # These should NEVER have collisions in the first place (i.e.: these are poorly modeled geoms from the source
+        # asset) -- they are strictly engulfed within ANOTHER collision mesh from a DIFFERENT link
+        return [name for arm in self.arm_names for name in [f"arm_{arm}_tool_link", f"wrist_{arm}_ft_link", f"wrist_{arm}_ft_tool_link"]]
+
+    @property
     def disabled_collision_pairs(self):
-        return []
+        return [
+            ["torso_fixed_column_link", "torso_fixed_link"],
+            ["torso_fixed_column_link", "torso_lift_link"],
+            ["arm_left_6_link", "gripper_left_link"],
+            ["arm_right_6_link", "gripper_right_link"],
+        ]
 
     @property
     def arm_link_names(self):
@@ -559,7 +576,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             position = current_position
         if orientation is None:
             orientation = current_orientation
-
+            
         # If the simulator is playing, set the 6 base joints to achieve the desired pose of base_footprint link frame
         if self._dc is not None and self._dc.is_simulating():
             # Find the relative transformation from base_footprint_link ("base_footprint") frame to root_link

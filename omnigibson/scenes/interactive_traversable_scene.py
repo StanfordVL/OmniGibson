@@ -1,4 +1,5 @@
 import os
+from omnigibson.robots.robot_base import REGISTERED_ROBOTS
 from omnigibson.robots.robot_base import m as robot_macros
 from omnigibson.scenes.traversable_scene import TraversableScene
 from omnigibson.maps.segmentation_map import SegmentationMap
@@ -162,7 +163,11 @@ class InteractiveTraversableScene(TraversableScene):
 
     def _should_load_object(self, obj_info):
         category = obj_info["args"].get("category", "object")
-        in_rooms = obj_info["args"].get("in_rooms", [])
+        in_rooms = obj_info["args"].get("in_rooms", None)
+
+        if isinstance(in_rooms, str):
+            assert "," not in in_rooms
+        in_rooms = [in_rooms] if isinstance(in_rooms, str) else in_rooms
 
         # Do not load these object categories (can blacklist building structures as well)
         not_blacklisted = self.not_load_object_categories is None or category not in self.not_load_object_categories
@@ -174,7 +179,7 @@ class InteractiveTraversableScene(TraversableScene):
         valid_room = self.load_room_instances is None or len(set(self.load_room_instances) & set(in_rooms)) > 0
 
         # Check whether this is an agent and we allow agents
-        agent_ok = self.include_robots or category != robot_macros.ROBOT_CATEGORY
+        agent_ok = self.include_robots or obj_info["class_name"] not in REGISTERED_ROBOTS
 
         # We only load this model if all the above conditions are met
         return not_blacklisted and whitelisted and valid_room and agent_ok

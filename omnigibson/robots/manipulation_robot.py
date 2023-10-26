@@ -5,7 +5,6 @@ import numpy as np
 import omnigibson as og
 from omnigibson.macros import gm, create_module_macros
 from omnigibson.object_states import ContactBodies
-from omnigibson.utils.asset_utils import get_assisted_grasping_categories
 import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import (
     IsGraspingState,
@@ -29,7 +28,6 @@ m = create_module_macros(module_path=__file__)
 
 # Assisted grasping parameters
 m.ASSIST_FRACTION = 1.0
-m.ASSIST_GRASP_OBJ_CATEGORIES = get_assisted_grasping_categories()
 m.ASSIST_GRASP_MASS_THRESHOLD = 10.0
 m.ARTICULATED_ASSIST_FRACTION = 0.7
 m.MIN_ASSIST_FORCE = 0
@@ -57,15 +55,10 @@ def can_assisted_grasp(obj):
     Returns:
         bool: Whether or not this object can be grasped
     """
-
-    if isinstance(obj, DatasetObject) and obj.category != "object":
-        # Use manually defined allowlist
-        return obj.category in m.ASSIST_GRASP_OBJ_CATEGORIES
-    else:
-        # Use fallback based on mass
-        mass = obj.mass
-        print(f"Mass for AG: obj: {mass}, max mass: {m.ASSIST_GRASP_MASS_THRESHOLD}, obj: {obj.name}")
-        return mass <= m.ASSIST_GRASP_MASS_THRESHOLD
+    # Use fallback based on mass
+    mass = obj.mass
+    print(f"Mass for AG: obj: {mass}, max mass: {m.ASSIST_GRASP_MASS_THRESHOLD}, obj: {obj.name}")
+    return mass <= m.ASSIST_GRASP_MASS_THRESHOLD
 
 
 class ManipulationRobot(BaseRobot):
@@ -109,6 +102,7 @@ class ManipulationRobot(BaseRobot):
         # Unique to BaseRobot
         obs_modalities="all",
         proprio_obs="default",
+        sensor_config=None,
 
         # Unique to ManipulationRobot
         grasping_mode="physical",
@@ -148,10 +142,14 @@ class ManipulationRobot(BaseRobot):
             obs_modalities (str or list of str): Observation modalities to use for this robot. Default is "all", which
                 corresponds to all modalities being used.
                 Otherwise, valid options should be part of omnigibson.sensors.ALL_SENSOR_MODALITIES.
+                Note: If @sensor_config explicitly specifies `modalities` for a given sensor class, it will
+                    override any values specified from @obs_modalities!
             proprio_obs (str or list of str): proprioception observation key(s) to use for generating proprioceptive
                 observations. If str, should be exactly "default" -- this results in the default proprioception
                 observations being used, as defined by self.default_proprio_obs. See self._get_proprioception_dict
                 for valid key choices
+            sensor_config (None or dict): nested dictionary mapping sensor class name(s) to specific sensor
+                configurations for this object. This will override any default values specified by this class.
             grasping_mode (str): One of {"physical", "assisted", "sticky"}.
                 If "physical", no assistive grasping will be applied (relies on contact friction + finger force).
                 If "assisted", will magnetize any object touching and within the gripper's fingers.
@@ -196,6 +194,7 @@ class ManipulationRobot(BaseRobot):
             reset_joint_pos=reset_joint_pos,
             obs_modalities=obs_modalities,
             proprio_obs=proprio_obs,
+            sensor_config=sensor_config,
             **kwargs,
         )
 
@@ -968,7 +967,7 @@ class ManipulationRobot(BaseRobot):
 
         return cfg
 
-    def _establish_grasp_rigid(self, arm="default", ag_data=None):
+    def _establish_grasp_rigid(self, arm="default", ag_data=None, contact_pos=None):
         """
         Establishes an ag-assisted grasp, if enabled.
 
@@ -977,6 +976,7 @@ class ManipulationRobot(BaseRobot):
                 Default is "default" which corresponds to the first entry in self.arm_names
             ag_data (None or 2-tuple): if specified, assisted-grasp object, link tuple (i.e. :(BaseObject, RigidPrim)).
                 Otherwise, does a no-op
+            contact_pos (None or np.array): if specified, contact position to use for grasp.
         """
         arm = self.default_arm if arm == "default" else arm
 
@@ -1002,12 +1002,12 @@ class ManipulationRobot(BaseRobot):
                 link_handle = self._dc.get_joint_parent_body(joint_handle)
                 joint_handle = self._dc.get_rigid_body_parent_joint(link_handle)
 
-        force_data, _ = self._find_gripper_contacts(arm=arm, return_contact_positions=True)
-        contact_pos = None
-        for c_link_prim_path, c_contact_pos in force_data:
-            if c_link_prim_path == ag_link.prim_path:
-                contact_pos = np.array(c_contact_pos)
-                break
+        if contact_pos is None:
+            force_data, _ = self._find_gripper_contacts(arm=arm, return_contact_positions=True)
+            for c_link_prim_path, c_contact_pos in force_data:
+                if c_link_prim_path == ag_link.prim_path:
+                    contact_pos = np.array(c_contact_pos)
+                    break
         assert contact_pos is not None
 
         # Joint frame set at the contact point
@@ -1049,6 +1049,7 @@ class ManipulationRobot(BaseRobot):
             "joint_type": joint_type,
             "gripper_pos": self.get_joint_positions()[self.gripper_control_idx[arm]],
             "max_force": max_force,
+            "contact_pos": contact_pos,
         }
         self._ag_obj_in_hand[arm] = ag_obj
         self._ag_freeze_gripper[arm] = True
@@ -1121,11 +1122,11 @@ class ManipulationRobot(BaseRobot):
         else:
             return self._calculate_in_hand_object_rigid(arm)
 
-    def _establish_grasp(self, arm="default", ag_data=None):
+    def _establish_grasp(self, arm="default", ag_data=None, contact_pos=None):
         if gm.AG_CLOTH:
             return self._establish_grasp_cloth(arm, ag_data)
         else:
-            return self._establish_grasp_rigid(arm, ag_data)
+            return self._establish_grasp_rigid(arm, ag_data, contact_pos)
 
     def _calculate_in_hand_object_cloth(self, arm="default"):
         """
@@ -1250,8 +1251,8 @@ class ManipulationRobot(BaseRobot):
         if self.grasping_mode == "physical":
             return state
 
-        # TODO: Include AG_state
-
+        # Include AG_state
+        state["ag_obj_constraint_params"] = self._ag_obj_constraint_params
         return state
 
     def _load_state(self, state):
@@ -1261,7 +1262,15 @@ class ManipulationRobot(BaseRobot):
         if self.grasping_mode == "physical":
             return
 
-        # TODO: Include AG_state
+        # Include AG_state
+        # TODO: currently does not take care of cloth objects
+        for arm in state["ag_obj_constraint_params"].keys():
+            if len(state["ag_obj_constraint_params"][arm]) > 0:
+                data = state["ag_obj_constraint_params"][arm]
+                obj = og.sim.scene.object_registry("prim_path", data["ag_obj_prim_path"])
+                link = obj.links[data["ag_link_prim_path"].split("/")[-1]]
+                self._ag_data[arm] = (obj, link)
+                self._establish_grasp(arm=arm, ag_data=self._ag_data[arm], contact_pos=data["contact_pos"])
 
     def _serialize(self, state):
         # Call super first
