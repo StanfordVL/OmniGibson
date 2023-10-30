@@ -37,3 +37,12 @@ year={2022},
 url={https://openreview.net/forum?id=_8DoIe8G3t}
 }
 ```
+
+## All Thanks To Our Contributors
+
+<a href="https://github.com/StanfordVL/OmniGibson/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=StanfordVL/OmniGibson" />
+</a>
+
+
+
