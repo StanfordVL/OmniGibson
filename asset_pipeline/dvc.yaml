@@ -1586,18 +1586,6 @@ stages:
     - artifacts/pipeline/usdify_objects.success
     outs:
     - artifacts/pipeline/object_images.zip
-  make_maps:
-    cmd: python -m b1k_pipeline.make_maps
-    deps:
-    - artifacts/parallels/objects.zip
-    - artifacts/parallels/scenes.zip
-    - artifacts/parallels/metadata.zip
-    - artifacts/pipeline/aggregate_scenes.success
-    - b1k_pipeline/make_maps.py
-    - metadata/allowed_room_types.csv
-    outs:
-    - artifacts/parallels/maps.zip
-    - artifacts/pipeline/make_maps.success
   object_inventory:
     cmd: python -m b1k_pipeline.object_inventory
     deps:
@@ -1904,13 +1892,11 @@ stages:
   pack_dataset:
     cmd: python -m b1k_pipeline.pack_dataset
     deps:
-    - artifacts/pipeline/make_maps.success
     - artifacts/pipeline/aggregate_metadata.success
     - artifacts/pipeline/aggregate_scenes.success
     - artifacts/parallels/metadata.zip
     - artifacts/parallels/objects_usd.zip
     - artifacts/parallels/scenes_json.zip
-    - artifacts/parallels/maps.zip
     - b1k_pipeline/pack_dataset.py
     outs:
     - artifacts/og_dataset.zip
@@ -2057,6 +2043,7 @@ stages:
     - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
     - b1k_pipeline/usd_conversion/import_metadata.py
     - b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
+    - b1k_pipeline/usd_conversion/make_maps.py
     - b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
     - b1k_pipeline/usd_conversion/usdify_scenes.py
     - b1k_pipeline/usd_conversion/usdify_scenes_process.py

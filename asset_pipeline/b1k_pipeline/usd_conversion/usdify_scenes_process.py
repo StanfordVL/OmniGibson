@@ -2,6 +2,7 @@
 Script to import scene and objects
 """
 import sys
+import time
 
 from omnigibson.macros import gm
 
@@ -18,6 +19,7 @@ from omnigibson.systems import REGISTERED_SYSTEMS, FluidSystem
 from b1k_pipeline.usd_conversion.convert_scene_urdfs_to_json_templates import (
     convert_scene_urdf_to_json,
 )
+from b1k_pipeline.usd_conversion.make_maps import generate_maps_for_current_scene
 
 IMPORT_RENDER_CHANNELS = True
 
@@ -44,6 +46,13 @@ if __name__ == "__main__":
 
     # Convert URDF to USD
     convert_scene_urdf_to_json(urdf=urdf_path, json_path=json_path)
+
+    # Generate the maps
+    print("Starting map generation")
+    map_start = time.time()
+    generate_maps_for_current_scene(scene)
+    map_end = time.time()
+    print("Generated maps in ", map_end - map_start, "seconds")
 
     # Clear the sim
     og.sim.clear()

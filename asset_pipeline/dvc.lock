@@ -9484,9 +9484,6 @@ stages:
   pack_dataset:
     cmd: python -m b1k_pipeline.pack_dataset
     deps:
-    - path: artifacts/parallels/maps.zip
-      md5: 8cd2729b53415cfed4627a41f60514f3
-      size: 3941921
     - path: artifacts/parallels/metadata.zip
       md5: 80c17db2c3d1b60bc84944f83df4d597
       size: 62812
@@ -9494,24 +9491,21 @@ stages:
       md5: aa042bfda9c3e94a9d32764911d331c8
       size: 20369346713
     - path: artifacts/parallels/scenes_json.zip
-      md5: 3adc727d8b5f24b7e98a66f2fb004e4e
-      size: 1644340
+      md5: 6de94c05aa6c62fbbbdc241118441a6d
+      size: 4742973
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: artifacts/pipeline/aggregate_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
-    - path: artifacts/pipeline/make_maps.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
     - path: b1k_pipeline/pack_dataset.py
-      md5: 85283d1cdb3749e017ca21c40f43f3a5
-      size: 2923
+      md5: 7294a04e62b78ffeb07ef8c4c1624312
+      size: 2907
     outs:
     - path: artifacts/og_dataset.zip
-      md5: 0a4cd0ff79a578fdf1a236cc5da385df
-      size: 20374991795
+      md5: b28884e6bea883c988835d5cc3fc4c24
+      size: 20374155429
     - path: artifacts/pipeline/pack_dataset.json
       md5: 2ad066aadc9c024dff5e8d3c6587590d
       size: 44
@@ -9545,22 +9539,25 @@ stages:
     - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
       md5: b372316a3b444fdf34c1a88b28308cef
       size: 2640
+    - path: b1k_pipeline/usd_conversion/make_maps.py
+      md5: b233b921a162ab66a07b5032f38ae3a4
+      size: 8433
     - path: b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
       md5: 34bda2403ce5837ea9d00b3c4142aa9e
       size: 11887
     - path: b1k_pipeline/usd_conversion/usdify_scenes.py
-      md5: 49b06ae3faacb7ebb6b022e1765d41bd
-      size: 3474
+      md5: 01e10d22f3c5620e61599c849770892a
+      size: 3571
     - path: b1k_pipeline/usd_conversion/usdify_scenes_process.py
-      md5: 5c6c99304c92868c281c973fa1e174c3
-      size: 1573
+      md5: 0516ac6ac656699dafbacce8adaf93d6
+      size: 1890
     outs:
     - path: artifacts/parallels/scenes_json.zip
-      md5: 3adc727d8b5f24b7e98a66f2fb004e4e
-      size: 1644340
+      md5: 6de94c05aa6c62fbbbdc241118441a6d
+      size: 4742973
     - path: artifacts/pipeline/usdify_scenes.json
-      md5: 02b4a9ea50b060e475105d644dfd96c1
-      size: 34905828
+      md5: 134efe4c3c9857e1ba568df3d2160eab
+      size: 34821394
     - path: artifacts/pipeline/usdify_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0

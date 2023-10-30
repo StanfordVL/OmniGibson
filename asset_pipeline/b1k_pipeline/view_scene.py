@@ -63,7 +63,7 @@ def main():
     # Load the scene into iGibson 2
     s = Simulator(mode="headless", use_pb_gui=True)
     try:
-        scene = InteractiveIndoorScene(scene_name)
+        scene = InteractiveIndoorScene(scene_name, not_load_object_categories=["ceilings"])
         s.import_scene(scene)
 
         # Get the points this object thinks are its bounding box

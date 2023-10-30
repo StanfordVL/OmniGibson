@@ -67,7 +67,9 @@ def main():
 
             # Move the USDs to the output FS
             print("Copying scene JSONs to output FS...")
-            usd_glob = [x.path for x in dataset_fs.glob("scenes/*/json/")]
+            usd_glob = sorted(
+                {x.path for x in dataset_fs.glob("scenes/*/json/")} |
+                {x.path for x in dataset_fs.glob("scenes/*/layout/")})
             for item in tqdm.tqdm(usd_glob):
                 fs.copy.copy_fs(dataset_fs.opendir(item), out_fs.makedirs(item))
 

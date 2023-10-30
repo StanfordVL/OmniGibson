@@ -1,23 +1,17 @@
+import csv
 import os
+import pathlib
 
-import concurrent.futures
-import pdb
-import fs
-from fs.multifs import MultiFS
-from fs.tempfs import TempFS
-from fs.osfs import OSFS
 import numpy as np
-import pybullet as p
 from PIL import Image
-from b1k_pipeline.utils import TMP_DIR, PipelineFS, ParallelZipFS
-import tqdm
 
-
-MAX_RAYS = p.MAX_RAY_INTERSECTION_BATCH_SIZE - 1
+PIPELINE_ROOT = pathlib.Path(__file__).parents[2]
 
 RESOLUTION = 0.01
 Z_START = 2.  # Just above the typical robot height
 Z_END = -0.1  # Just below the floor
+HALF_Z = (Z_START + Z_END) / 2.
+HALF_HEIGHT = (Z_START - Z_END) / 2.
 
 WALL_CATEGORIES = ["walls", "fence"]
 FLOOR_CATEGORIES = ["floors", "driveway", "lawn"]
@@ -58,54 +52,40 @@ def map_to_world(xy, trav_map_resolution, trav_map_size):
     return np.flip((xy - trav_map_size / 2.0) * trav_map_resolution, axis=axis)
 
 
-def process_scene(scene_id, dataset_path, out_path):
-    # Don't import this outside the processes so that they don't share any state.
-    import igibson
-    import igibson.external.pybullet_tools.utils
-    from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
-    from igibson.simulator import Simulator
-    from igibson import object_states
-
-    igibson.ig_dataset_path = dataset_path
+def generate_maps_for_current_scene(scene_id):
+    import omnigibson as og
+    from omnigibson.macros import gm
+    import omnigibson.object_states as object_states
 
     # Create the output directory
-    save_path = os.path.join(out_path, "scenes", scene_id, "layout")
+    save_path = os.path.join(gm.DATASET_PATH, "scenes", scene_id, "layout")
     os.makedirs(save_path, exist_ok=True)
 
     # Get the room type to room id mapping
-    room_categories_path = os.path.join(igibson.ig_dataset_path, "metadata", "room_categories.txt")
-    with open(room_categories_path) as f:
-        sem_to_id = {line.strip(): i + 1 for i, line in enumerate(f.readlines())}
+    with open(PIPELINE_ROOT / "metadata/allowed_room_types.csv") as f:
+        sem_to_id = {row["Room Name"].strip(): i + 1 for i, row in enumerate(csv.DictReader(f))}
 
-    s = Simulator(mode="headless", use_pb_gui=False)
     for fname, (load_categories, not_load_categories) in LOAD_NOT_LOAD_MAPPING.items():
-        # Load the scene with the right categories
-        scene = InteractiveIndoorScene(scene_id, load_object_categories=load_categories, not_load_object_categories=not_load_categories)
-        s.import_scene(scene)
-
         # Move the doors to the open position if necessary
         if fname == "floor_trav_open_door_0.png":
             for door_cat in DOOR_CATEGORIES:
-                for door in scene.objects_by_category[door_cat]:
+                for door in og.sim.scene.object_registry("category", door_cat, []):
                     if object_states.Open not in door.states:
                         continue
                     door.states[object_states.Open].set_value(True, fully=True)
 
         # Compute the map dimensions by finding the AABB of all objects and calculating max distance from origin.
-        floor_objs = [
+        floor_objs = {
             floor
             for floor_cat in FLOOR_CATEGORIES
-            for floor in scene.objects_by_category[floor_cat]
-        ]
+            for floor in og.sim.scene.object_registry("category", floor_cat, [])
+        }
         roomless_floor_objs = [(floor, len(floor.in_rooms)) for floor in floor_objs if len(floor.in_rooms) != 1]
         assert not roomless_floor_objs, f"Found {len(roomless_floor_objs)} floor objects without exactly one room: {roomless_floor_objs}"
-        floor_bids = [
-            bid
-            for floor in floor_objs
-            for bid in floor.get_body_ids()
-        ]
-        aabbs = [igibson.external.pybullet_tools.utils.get_aabb(b) for b in floor_bids]
-        combined_aabb = np.array(igibson.external.pybullet_tools.utils.aabb_union(aabbs))
+        aabb_corners = np.concatenate([floor.aabb for floor in floor_objs], axis=0)
+        combined_low = np.min(list(aabb_corners), axis=0)
+        combined_high = np.max(list(aabb_corners), axis=0)
+        combined_aabb = np.array([combined_low, combined_high])
         aabb_dist_from_zero = np.abs(combined_aabb)
         dist_from_center = np.max(aabb_dist_from_zero)
         map_size_in_meters = dist_from_center * 2
@@ -124,24 +104,38 @@ def process_scene(scene_id, dataset_path, out_path):
         # Get the points to cast rays from
         pixel_indices = np.array(list(np.ndindex(scannable_map.shape)), dtype=int)
         corresponding_world_centers = map_to_world(pixel_indices + np.array([[x_min, y_min]]), RESOLUTION, map_size_in_pixels)
-        start_pts = np.concatenate([corresponding_world_centers, np.full((len(pixel_indices), 1), Z_START)], axis=1)
-        end_pts = np.concatenate([corresponding_world_centers, np.full((len(pixel_indices), 1), Z_END)], axis=1)
+
+        # Using the load/not load params, build the set of allowed hits
+        allowed_hit_paths = {
+            link.prim_path: obj
+            for obj in og.sim.scene.objects
+            for link in obj.links.values()
+            if not load_categories or obj.category in load_categories
+        }
+        if not_load_categories:
+            for obj in og.sim.scene.objects:
+                for link in obj.links.values():
+                    if obj.category in not_load_categories:
+                        allowed_hit_paths.pop(link.prim_path, None)
 
         # Get the ray cast results (in batches so that pybullet does not complain)
-        ray_results = []
-        for batch_start in range(0, len(pixel_indices), MAX_RAYS):
-            batch_end = batch_start + MAX_RAYS
-            ray_results.extend(
-                p.rayTestBatch(
-                    start_pts[batch_start: batch_end],
-                    end_pts[batch_start: batch_end],
-                    numThreads=0,
-                )
+        hit_object_sets = [set() for _ in corresponding_world_centers]
+        for i, cwc in enumerate(corresponding_world_centers):
+            def _check_hit(hit):
+                if hit.rigid_body in allowed_hit_paths:
+                    hit_object_sets[i].add(allowed_hit_paths[hit.rigid_body])
+                
+                return True
+                
+            og.sim.psqi.overlap_box(
+                halfExtent=np.array([RESOLUTION / 2, RESOLUTION / 2, HALF_HEIGHT]),
+                pos=np.array([cwc[0], cwc[1], HALF_Z]),
+                rot=np.array([0, 0, 0, 1.0]),
+                reportFn=_check_hit,
             )
-        assert len(ray_results) == len(pixel_indices)
 
-        # Check which rays hit floors
-        hit_floor = np.array([item[0] in floor_bids for item in ray_results]).astype(np.uint8)
+        # Check which rays hit *only* floors
+        hit_floor = np.array([hit_objects.issubset(floor_objs) for hit_objects in hit_object_sets]).astype(np.uint8)
         scannable_map[:, :] = np.reshape(hit_floor * 255, scannable_map.shape)
         Image.fromarray(new_trav_map).save(os.path.join(save_path, fname))
 
@@ -150,7 +144,7 @@ def process_scene(scene_id, dataset_path, out_path):
             # Get a list of all of the room instances in the scene
             all_insts = {
                 room
-                for floor in scene.get_objects()
+                for floor in og.sim.scene.objects
                 for room in (floor.in_rooms if floor.in_rooms else [])
             }
             sorted_all_insts = sorted(all_insts)
@@ -162,9 +156,10 @@ def process_scene(scene_id, dataset_path, out_path):
             insseg_map_fname = "floor_insseg_0.png"
             insseg_map = np.zeros_like(new_trav_map, dtype=np.uint8)
             scannable_insseg_map = insseg_map[x_min:x_max+1, y_min:y_max+1]
+            first_hit_floors = [next(iter(sorted(hit_objects & floor_objs, key=lambda x: x.name)), None) if hit_objects else None for hit_objects in hit_object_sets]
             hit_room_inst_name = [
-                scene.objects_by_id[item[0]].in_rooms[0] if item[0] in scene.objects_by_id and scene.objects_by_id[item[0]].in_rooms else None
-                for item in ray_results
+                hit_obj.in_rooms[0] if hit_obj and hit_obj.in_rooms else None
+                for hit_obj in first_hit_floors
             ]
             insseg_val = np.array([inst_to_id[inst] if inst else 0 for inst in hit_room_inst_name], dtype=np.uint8)
             scannable_insseg_map[:, :] = np.reshape(insseg_val, scannable_insseg_map.shape)
@@ -178,35 +173,3 @@ def process_scene(scene_id, dataset_path, out_path):
             semseg_val = np.array([sem_to_id[rm_type] if rm_type else 0 for rm_type in hit_room_type], dtype=np.uint8)
             scannable_semseg_map[:, :] = np.reshape(semseg_val, scannable_semseg_map.shape)
             Image.fromarray(semseg_map).save(os.path.join(save_path, semseg_map_fname))
-
-        s.reload()
-
-
-def main():
-    with TempFS(temp_dir=TMP_DIR) as temp_fs:
-        # Extract objects/scenes to a common directory
-        multi_fs = MultiFS()
-        multi_fs.add_fs("metadata", ParallelZipFS("metadata.zip"), priority=1)
-        multi_fs.add_fs("objects", ParallelZipFS("objects.zip"), priority=1)
-        multi_fs.add_fs("scenes", ParallelZipFS("scenes.zip"), priority=1)
-        
-        # Copy all the files to the output zip filesystem.
-        total_files = sum(1 for f in multi_fs.walk.files())
-        with tqdm.tqdm(total=total_files) as pbar:
-            fs.copy.copy_fs(multi_fs, temp_fs, on_copy=lambda *args: pbar.update(1))
-
-        with concurrent.futures.ProcessPoolExecutor(max_workers=2) as executor:
-            all_futures = {}
-            with ParallelZipFS("maps.zip", write=True) as zip_fs:
-                for scene_id in temp_fs.listdir("scenes"):
-                    all_futures[executor.submit(process_scene, scene_id, temp_fs.getsyspath("/"), zip_fs.getsyspath("/"))] = scene_id
-
-                for future in tqdm.tqdm(concurrent.futures.as_completed(all_futures.keys()), total=len(all_futures)):
-                    # Check for an exception
-                    future.result()
-
-        # If we got here, we were successful. Let's create the success file.
-        PipelineFS().pipeline_output().touch("make_maps.success")
-
-if __name__ == "__main__":
-    main()
