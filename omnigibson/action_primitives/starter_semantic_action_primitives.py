@@ -34,7 +34,7 @@ from omnigibson.utils.motion_planning_utils import (
 )
 
 import omnigibson.utils.transform_utils as T
-from omnigibson.utils.control_utils import IKSolver
+from omnigibson.utils.control_utils import IKSolver, orientation_error
 from omnigibson.utils.grasping_planning_utils import (
     get_grasp_poses_for_object_sticky,
     get_grasp_position_for_open
@@ -911,6 +911,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if controller_config["name"] == "InverseKinematicsController":
             target_pose_relative = self._get_pose_in_robot_frame(target_pose)
             yield from self._move_hand_ik(target_pose_relative, stop_if_stuck=stop_if_stuck)
+        elif controller_config["name"] == "OperationalSpaceController":
+            target_pose_relative = self._get_pose_in_robot_frame(target_pose)
+            yield from self._move_hand_osc(target_pose_relative)
         else:
             joint_pos, control_idx = self._convert_cartesian_to_joint_space(target_pose)
             yield from self._move_hand_joint(joint_pos, control_idx)
@@ -983,6 +986,43 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             target_quat = T.axisangle2quat(target_pose[3:])
             indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
             yield from self._move_hand_direct_ik((target_pos, target_quat), ignore_failure=True, in_world_frame=False, stop_if_stuck=stop_if_stuck)
+    
+    def _move_hand_osc(self, eef_pose, stop_if_stuck=False):
+        """
+        Yields action for the robot to move arm to reach the specified eef positions using the planner
+
+        Args:
+            eef_pose (np.array): End Effector pose for the arm
+        
+        Returns:
+            np.array or None: Action array for one step for the robot to move arm or None if its at the joint positions
+        """
+        eef_pos = eef_pose[0]
+        eef_ori = T.quat2axisangle(eef_pose[1])
+        end_conf = np.append(eef_pos, eef_ori)
+
+        with UndoableContext(self.robot, self.robot_copy, "original") as context:
+            plan = plan_arm_motion_ik(
+                robot=self.robot,
+                end_conf=end_conf,
+                context=context,
+                torso_fixed=TORSO_FIXED,
+            )
+
+        # plan = self._add_linearly_interpolated_waypoints(plan, 0.1)
+        if plan is None:
+            raise ActionPrimitiveError(
+                ActionPrimitiveError.Reason.PLANNING_ERROR,
+                "There is no accessible path from where you are to the desired joint position. Try again"
+            )
+        
+        # Follow the plan to navigate.
+        indented_print("Plan has %d steps", len(plan))
+        for i, target_pose in enumerate(plan):
+            target_pos = target_pose[:3]
+            target_quat = T.axisangle2quat(target_pose[3:])
+            indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
+            yield from self._move_hand_direct_osc((target_pos, target_quat), ignore_failure=True, in_world_frame=False, stop_if_stuck=stop_if_stuck)
 
     def _add_linearly_interpolated_waypoints(self, plan, max_inter_dist):
         """
@@ -1122,6 +1162,65 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 ActionPrimitiveError.Reason.EXECUTION_ERROR,
                 "Your hand was obstructed from moving to the desired joint position"
             )      
+
+    def _move_hand_direct_osc(self, target_pose, stop_on_contact=False, ignore_failure=False, pos_thresh=0.04, ori_thresh=0.4, in_world_frame=True, stop_if_stuck=False):
+        # make sure controller is InverseKinematicsController and in expected mode
+        controller_config = self.robot._controller_config["arm_" + self.arm]
+        assert controller_config["name"] == "OperationalSpaceController", "Controller must be OperationalSpaceController"
+        # assert controller_config["motor_type"] == "velocity", "Controller must be in velocity mode"
+        assert controller_config["mode"] == "pose_delta_ori", "Controller must be in pose_delta_ori mode"
+        # target pose = (position, quat) IN WORLD FRAME
+        if in_world_frame:
+            target_pose = self._get_pose_in_robot_frame(target_pose)
+        target_pos = target_pose[0]
+        target_orn = target_pose[1]
+        target_orn_mat = T.quat2mat(target_pose[1])
+        # target_orn_axisangle = T.quat2axisangle(target_pose[1])
+        action = self._empty_action()
+        control_idx = self.robot.controller_action_idx["arm_" + self.arm]
+        prev_pos = prev_orn = None
+
+        for i in range(MAX_STEPS_FOR_HAND_MOVE_IK):
+            current_pose = self._get_pose_in_robot_frame((self.robot.get_eef_position(), self.robot.get_eef_orientation()))
+            current_pos = current_pose[0]
+            current_orn = current_pose[1]
+            current_orn_mat = T.quat2mat(current_pose[1])
+
+            delta_pos = target_pos - current_pos
+            target_pos_diff = np.linalg.norm(delta_pos)
+            # target_orn_diff = (Rotation.from_quat(target_orn) * Rotation.from_quat(current_orn).inv()).magnitude() 
+            delta_orn = orientation_error(target_orn_mat, current_orn_mat)
+            target_orn_diff = np.linalg.norm(delta_orn)
+            reached_goal = target_pos_diff < pos_thresh and target_orn_diff < ori_thresh
+            if reached_goal:
+                return
+            
+            if stop_on_contact and detect_robot_collision_in_sim(self.robot, ignore_obj_in_hand=False):
+                return
+            
+            # if i > 0 and stop_if_stuck and detect_robot_collision_in_sim(self.robot, ignore_obj_in_hand=False):
+            if i > 0 and stop_if_stuck:
+                pos_diff = np.linalg.norm(prev_pos - current_pos)
+                orn_diff = (Rotation.from_quat(prev_orn) * Rotation.from_quat(current_orn).inv()).magnitude()
+                if pos_diff < 0.0003 and orn_diff < 0.01:
+                    raise ActionPrimitiveError(
+                        ActionPrimitiveError.Reason.EXECUTION_ERROR,
+                        f"Hand is stuck"
+                    )
+
+            prev_pos = current_pos
+            prev_orn = current_orn
+
+            action[control_idx] = np.concatenate([delta_pos, delta_orn])
+            action = self._overwrite_head_action(action, self._tracking_object_pose)
+            yield self.with_context(action)
+
+        if not ignore_failure:
+            raise ActionPrimitiveError(
+                ActionPrimitiveError.Reason.EXECUTION_ERROR,
+                "Your hand was obstructed from moving to the desired joint position"
+            )      
+
 
     def _move_hand_direct_cartesian(self, target_pose, stop_on_contact=False, ignore_failure=False, stop_if_stuck=False):
         """
@@ -1375,7 +1474,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 action[control_idx[3:]] = current_ori
                 if arm_pose_to_keep is not None:
                     action[control_idx[:3]] = arm_pose_to_keep - self.robot.get_eef_position()
-
         return action
 
     def _reset_hand(self):
