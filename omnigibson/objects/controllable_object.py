@@ -438,6 +438,7 @@ class ControllableObject(BaseObject):
             elif ctrl_type == ControlType.NONE:
                 # Do nothing
                 pass
+                # joint.set_effort(0, normalized=False) # NOTE - this is needed to prevent Tiago from floating when using effort control
             else:
                 raise ValueError("Invalid control type specified: {}".format(ctrl_type))
 

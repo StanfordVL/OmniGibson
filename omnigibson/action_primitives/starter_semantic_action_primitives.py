@@ -947,6 +947,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # Follow the plan to navigate.
         indented_print("Plan has %d steps", len(plan))
         for i, joint_pos in enumerate(plan):
+            print("joint pos\n", joint_pos)
             indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
             yield from self._move_hand_direct_joint(joint_pos, control_idx, ignore_failure=True)
 
@@ -1113,9 +1114,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # make sure controller is InverseKinematicsController and in expected mode
         controller_config = self.robot._controller_config["arm_" + self.arm]
         assert controller_config["name"] == "InverseKinematicsController", "Controller must be InverseKinematicsController"
-        # assert controller_config["motor_type"] == "velocity", "Controller must be in velocity mode"
-        assert controller_config["mode"] == "pose_absolute_ori", "Controller must be in pose_delta_ori mode"
-        # target pose = (position, quat) IN WORLD FRAME
+        controller_mode = controller_config["mode"]
+
         if in_world_frame:
             target_pose = self._get_pose_in_robot_frame(target_pose)
         target_pos = target_pose[0]
@@ -1132,7 +1132,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
             delta_pos = target_pos - current_pos
             target_pos_diff = np.linalg.norm(delta_pos)
-            target_orn_diff = (Rotation.from_quat(target_orn) * Rotation.from_quat(current_orn).inv()).magnitude() 
+            delta_orn = (Rotation.from_quat(target_orn) * Rotation.from_quat(current_orn).inv()).as_rotvec()
+            target_orn_diff = np.linalg.norm(delta_orn)
             reached_goal = target_pos_diff < pos_thresh and target_orn_diff < ori_thresh
             if reached_goal:
                 return
@@ -1153,7 +1154,17 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             prev_pos = current_pos
             prev_orn = current_orn
 
-            action[control_idx] = np.concatenate([delta_pos, target_orn_axisangle])
+            if controller_mode == "pose_absolute_ori":
+                action[control_idx] = np.concatenate([delta_pos, target_orn_axisangle])
+            elif controller_mode == "pose_delta_ori":
+                max_delta = 0.05 # maximum allwed input
+                arm_action = np.concatenate([delta_pos, delta_orn])
+                # Scale actions
+                # max = np.max(np.abs(arm_action))
+                # if max > max_delta:
+                #     arm_action = 0.05 * arm_action / max
+                action[control_idx] = arm_action
+            
             action = self._overwrite_head_action(action, self._tracking_object_pose)
             yield self.with_context(action)
 
@@ -1288,6 +1299,30 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     ActionPrimitiveError.Reason.EXECUTION_ERROR,
                     "Your hand was obstructed from moving to the desired world position"
                 )
+        elif controller_config["name"] == "OperationalSpaceController":
+            waypoints = list(zip(pos_waypoints, quat_waypoints))
+            
+            for waypoint in waypoints[:-1]:
+                yield from self._move_hand_direct_osc(waypoint, stop_on_contact=stop_on_contact, ignore_failure=ignore_failure, stop_if_stuck=stop_if_stuck)
+
+                # Also decide if we can stop early.
+                current_pos, current_orn = self.robot.eef_links[self.arm].get_position_orientation()
+                pos_diff = np.linalg.norm(np.array(current_pos) - np.array(target_pose[0]))
+                orn_diff = (Rotation.from_quat(current_orn) * Rotation.from_quat(target_pose[1]).inv()).magnitude()
+                if pos_diff < 0.005 and orn_diff < np.deg2rad(0.1):
+                    return
+                
+                if stop_on_contact and detect_robot_collision_in_sim(self.robot, ignore_obj_in_hand=False):
+                    return
+            
+            yield from self._move_hand_direct_osc(
+                waypoints[-1], 
+                pos_thresh=0.01, ori_thresh=0.1,
+                stop_on_contact=stop_on_contact, 
+                ignore_failure=ignore_failure, 
+                stop_if_stuck=stop_if_stuck
+            )
+
         else:
             # Use joint positions
             joint_space_data = [self._convert_cartesian_to_joint_space(waypoint) for waypoint in zip(pos_waypoints, quat_waypoints)]
@@ -1465,13 +1500,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             elif self.robot._controller_config[name]["name"] == "InverseKinematicsController":
                 # overwrite the goal orientation, since it is in absolute frame.
                 controller_config = self.robot._controller_config["arm_" + self.arm]
+                controller_mode = controller_config["mode"]
                 # assert controller_config["motor_type"] == "velocity", "Controller must be in velocity mode"
-                assert controller_config["mode"] == "pose_absolute_ori", "Controller must be in pose_delta_ori mode"
+                # assert controller_config["mode"] == "pose_absolute_ori", "Controller must be in pose_delta_ori mode"
                 # current_pose = self._get_pose_in_robot_frame((self.robot.get_eef_position(), self.robot.get_eef_orientation()))
                 current_quat = self.robot.get_relative_eef_orientation()
                 current_ori = T.quat2axisangle(current_quat)
                 control_idx = self.robot.controller_action_idx["arm_" + self.arm]
-                action[control_idx[3:]] = current_ori
+                if controller_mode == "pose_absolute_ori":
+                    action[control_idx[3:]] = current_ori
                 if arm_pose_to_keep is not None:
                     action[control_idx[:3]] = arm_pose_to_keep - self.robot.get_eef_position()
         return action
@@ -1497,6 +1534,16 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             except ActionPrimitiveError:
                 indented_print("Could not do a planned reset of the hand - probably obj_in_hand collides with body")
                 yield from self._move_hand_direct_ik(reset_eef_pose, ignore_failure=True, in_world_frame=False)
+        
+        elif controller_config["name"] == "OperationalSpaceController":
+            indented_print("Resetting hand")
+            reset_eef_pose = self._get_reset_eef_pose()
+            try:
+                yield from self._move_hand_ik(reset_eef_pose)
+            except ActionPrimitiveError:
+                indented_print("Could not do a planned reset of the hand - probably obj_in_hand collides with body")
+                yield from self._move_hand_direct_osc(reset_eef_pose, ignore_failure=True, in_world_frame=False)
+        
         else:
             indented_print("Resetting hand")
             reset_pose = self._get_reset_joint_pos()[control_idx]
