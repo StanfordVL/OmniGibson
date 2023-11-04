@@ -907,8 +907,8 @@ stages:
       md5: 49637931a9dd991b8907babb518b91f6
       size: 33383
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
-      md5: 15e3f681b78cf4505681433e3b9cc253
-      size: 63073
+      md5: 1a0e90e5b27f0224216b3ce8a961e12b
+      size: 63825
     - path: cad/objects/task_relevant-xy/artifacts/object_list.json
       md5: 37c665eb869ba9a7e34df3fbafceb77f
       size: 49136
@@ -1181,8 +1181,8 @@ stages:
       md5: 49637931a9dd991b8907babb518b91f6
       size: 33383
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
-      md5: 15e3f681b78cf4505681433e3b9cc253
-      size: 63073
+      md5: 1a0e90e5b27f0224216b3ce8a961e12b
+      size: 63825
     - path: cad/objects/task_relevant-xy/artifacts/object_list.json
       md5: 37c665eb869ba9a7e34df3fbafceb77f
       size: 49136
@@ -1455,8 +1455,8 @@ stages:
       md5: 49637931a9dd991b8907babb518b91f6
       size: 33383
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
-      md5: 15e3f681b78cf4505681433e3b9cc253
-      size: 63073
+      md5: 1a0e90e5b27f0224216b3ce8a961e12b
+      size: 63825
     - path: cad/objects/task_relevant-xy/artifacts/object_list.json
       md5: 37c665eb869ba9a7e34df3fbafceb77f
       size: 49136
@@ -4238,7 +4238,7 @@ stages:
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
     - path: cad/objects/task_relavant-ab/artifacts/sanitycheck.json
-      md5: 0448ea3f466b70ed6a021fe4e542c39b
+      md5: 428261197306401871d711aac4cd8dff
       size: 370
     - path: cad/objects/task_relevant-xy/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -6920,8 +6920,8 @@ stages:
       md5: 0db729f45e88c2418df5e854fc849bb1
       size: 9944
     - path: cad/objects/task_relavant-ab/artifacts/export_meshes.json
-      md5: 17655f961b32ecad28272d302e32d882
-      size: 38959
+      md5: e941e01f6986142bee7a1e1c58c37bde
+      size: 39778
     - path: cad/objects/task_relevant-xy/artifacts/export_meshes.json
       md5: 1928cffb755d120862bcdd6447ac1724
       size: 28695
@@ -7113,11 +7113,11 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/objects/task_relavant-ab/processed.max
-      md5: 75a528462c9067daef34259a69310e95
-      size: 125955502
+      md5: 2a9640eff9f5abb9cd20696a7e86bbae
+      size: 126270894
     outs:
     - path: cad/objects/task_relavant-ab/artifacts/sanitycheck.json
-      md5: 0448ea3f466b70ed6a021fe4e542c39b
+      md5: 428261197306401871d711aac4cd8dff
       size: 370
   object_list@objects/substances-01:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/substances-01/processed.max
@@ -7164,12 +7164,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/objects/task_relavant-ab/processed.max
-      md5: 75a528462c9067daef34259a69310e95
-      size: 125955502
+      md5: 2a9640eff9f5abb9cd20696a7e86bbae
+      size: 126270894
     outs:
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
-      md5: 15e3f681b78cf4505681433e3b9cc253
-      size: 63073
+      md5: 1a0e90e5b27f0224216b3ce8a961e12b
+      size: 63825
   export_meshes@objects/task_relavant-ab:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/task_relavant-ab/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -7181,18 +7181,18 @@ stages:
       md5: 8f67c8a3cae22b0303e1082e4d76f9c9
       size: 23730
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
-      md5: 15e3f681b78cf4505681433e3b9cc253
-      size: 63073
+      md5: 1a0e90e5b27f0224216b3ce8a961e12b
+      size: 63825
     - path: cad/objects/task_relavant-ab/processed.max
-      md5: 75a528462c9067daef34259a69310e95
-      size: 125955502
+      md5: 2a9640eff9f5abb9cd20696a7e86bbae
+      size: 126270894
     outs:
     - path: cad/objects/task_relavant-ab/artifacts/export_meshes.json
-      md5: 17655f961b32ecad28272d302e32d882
-      size: 38959
+      md5: e941e01f6986142bee7a1e1c58c37bde
+      size: 39778
     - path: cad/objects/task_relavant-ab/artifacts/meshes.zip
-      md5: fc69edbc85b603d89975102372e6ae78
-      size: 117416792
+      md5: 617331434a5b7bea722b41c11b8a7e6b
+      size: 120993788
   export_meshes@scenes/grocery_store_cafe:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_cafe/processed.max
       b1k_pipeline/max/export_meshes.py
