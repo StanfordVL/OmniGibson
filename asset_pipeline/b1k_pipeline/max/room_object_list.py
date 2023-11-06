@@ -53,11 +53,10 @@ def main():
             continue
 
         # Get portal info
-        object_transform = portal.objecttransform
-        position = list(object_transform.position)
-        rotation = object_transform.rotation
+        position = list(portal.position)
+        rotation = portal.rotation
         quat = [rotation.x, rotation.y, rotation.z, rotation.w]
-        scale = np.array(list(object_transform.scale))
+        scale = np.array(list(portal.scale))
         size = list(np.array([portal.width, portal.length]) * scale[:2])
 
         portal_info = [position, quat, size]

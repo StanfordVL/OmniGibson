@@ -193,7 +193,7 @@ stages:
     - cad/#{combined}/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/collision_selection_validation.success
-    # - artifacts/pipeline/object_inventory.success  # TODO: Reactivate
+    - artifacts/pipeline/object_inventory.success  # TODO: Reactivate
     - artifacts/pipeline/sanitycheck.success
     - artifacts/pipeline/export_meshes.success
     - b1k_pipeline/export_objs_global.py
@@ -279,6 +279,8 @@ stages:
       deps:
       - artifacts/pipeline/export_meshes.success
       - cad/${item}/artifacts/meshes.zip
+      - cad/${item}/artifacts/room_object_list.json
+      - cad/${item}/artifacts/room_object_list.success
       - b1k_pipeline/export_scene.py
       - b1k_pipeline/export_objs_global.py
       # - b1k_pipeline/mesh_tree.py
@@ -356,6 +358,7 @@ stages:
     - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
     - b1k_pipeline/usd_conversion/import_metadata.py
     - b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
+    - b1k_pipeline/usd_conversion/make_maps.py
     - b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
     - b1k_pipeline/usd_conversion/usdify_scenes.py
     - b1k_pipeline/usd_conversion/usdify_scenes_process.py
@@ -363,19 +366,6 @@ stages:
     - artifacts/parallels/scenes_json.zip
     - artifacts/pipeline/usdify_scenes.success
     - artifacts/pipeline/usdify_scenes.json
-
-  make_maps:
-    cmd: 'python -m b1k_pipeline.make_maps'
-    deps:
-    - artifacts/parallels/objects.zip
-    - artifacts/parallels/scenes.zip
-    - artifacts/parallels/metadata.zip
-    - artifacts/pipeline/aggregate_scenes.success
-    - b1k_pipeline/make_maps.py
-    - metadata/allowed_room_types.csv
-    outs:
-    - artifacts/parallels/maps.zip
-    - artifacts/pipeline/make_maps.success
 
   collision_average_volumes:
     cmd: 'python -m b1k_pipeline.collision_average_volumes'
@@ -425,7 +415,6 @@ stages:
     # Zip the dataset.
     cmd: 'python -m b1k_pipeline.pack_dataset'
     deps:
-    - artifacts/pipeline/make_maps.success
     # - artifacts/pipeline/validate_scene.success
     - artifacts/pipeline/aggregate_metadata.success
     - artifacts/pipeline/aggregate_scenes.success
@@ -433,7 +422,6 @@ stages:
     - artifacts/parallels/metadata.zip
     - artifacts/parallels/objects_usd.zip
     - artifacts/parallels/scenes_json.zip
-    - artifacts/parallels/maps.zip
     - b1k_pipeline/pack_dataset.py
     outs:
     - artifacts/og_dataset.zip

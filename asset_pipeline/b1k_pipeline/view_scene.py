@@ -15,7 +15,7 @@ from b1k_pipeline.utils import PIPELINE_ROOT
 
 import igibson
 igibson.ignore_visual_shape = False
-igibson.ig_dataset_path = r"D:\dataset-6-25"
+igibson.ig_dataset_path = r"/scr/dataset-10-6"
 
 from igibson.objects.articulated_object import URDFObject
 from igibson.simulator import Simulator
@@ -63,7 +63,7 @@ def main():
     # Load the scene into iGibson 2
     s = Simulator(mode="headless", use_pb_gui=True)
     try:
-        scene = InteractiveIndoorScene(scene_name)
+        scene = InteractiveIndoorScene(scene_name, not_load_object_categories=["ceilings"])
         s.import_scene(scene)
 
         # Get the points this object thinks are its bounding box

@@ -217,23 +217,8 @@ def main():
                         if not should_convert:
                             continue
 
-                        collision_found = False
-                        for item in meshes_zip_fs.listdir(mesh_name):
-                            parsed_item = b1k_pipeline.utils.parse_name(item)
-                            if not parsed_item:
-                                continue
-                            item_model = parsed_item.group("model_id")
-                            item_link = parsed_item.group("link_name")
-                            if not item_link:
-                                item_link = "base_link"
-                            if item_model == mesh_model and \
-                                    item_link == mesh_link and \
-                                    parsed_item.group("meta_type") == "collision":
-                                collision_found = True
-                                break
-
+                        collision_found = any("Mcollision" in item for item in meshes_zip_fs.listdir(mesh_name))
                         if collision_found:
-                            print("Found collision mesh for", mesh_name)
                             continue
 
                         if not zip_fs.exists(mesh_name):
