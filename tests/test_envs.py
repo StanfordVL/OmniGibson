@@ -28,7 +28,7 @@ def task_tester(task_type):
     # Make sure sim is stopped
     og.sim.stop()
 
-    # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth) and no flatcache
+    # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth)
     gm.ENABLE_OBJECT_STATES = True
     gm.USE_GPU_DYNAMICS = True
 

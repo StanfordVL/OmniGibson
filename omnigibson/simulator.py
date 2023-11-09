@@ -538,9 +538,8 @@ class Simulator(SimulationContext, Serializable):
         if not self.is_stopped():
             super().stop()
 
-        # If we're using flatcache, we also need to reset its API
-        if gm.ENABLE_FLATCACHE:
-            FlatcacheAPI.reset()
+        # Reset the FlatCache sync API
+        FlatcacheAPI.reset()
 
         # Run all callbacks
         for callback in self._callbacks_on_stop.values():
