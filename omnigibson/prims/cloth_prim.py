@@ -10,7 +10,7 @@ from omnigibson.utils.geometry_utils import get_particle_positions_from_frame, g
 from pxr import UsdPhysics, Gf, Vt, PhysxSchema
 from pxr.Sdf import ValueTypeNames as VT
 
-from omni.isaac.core.prims.soft import ClothPrimView
+from omni.isaac.core.prims import ClothPrimView
 
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.prims.geom_prim import GeomPrim
