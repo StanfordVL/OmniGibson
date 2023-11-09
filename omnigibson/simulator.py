@@ -205,9 +205,9 @@ class Simulator(SimulationContext, Serializable):
         self._physics_context.enable_ccd(gm.ENABLE_CCD)
 
         if meets_minimum_isaac_version("2023.0.0"):
-            self._physics_context.enable_fabric(gm.ENABLE_FLATCACHE)
+            self._physics_context.enable_fabric(True)
         else:
-            self._physics_context.enable_flatcache(gm.ENABLE_FLATCACHE)
+            self._physics_context.enable_flatcache(True)
 
         # Enable GPU dynamics based on whether we need omni particles feature
         if gm.USE_GPU_DYNAMICS:
@@ -490,8 +490,8 @@ class Simulator(SimulationContext, Serializable):
             # We also need to suppress the following error when flat cache is used:
             # [omni.physx.plugin] Transformation change on non-root links is not supported.
             channels = ["omni.usd", "omni.physicsschema.plugin"]
-            if gm.ENABLE_FLATCACHE:
-                channels.append("omni.physx.plugin")
+            # TODO: Decide what to do with this. Suppressing all physx errors is way too aggressive.
+            # channels.append("omni.physx.plugin")
             with suppress_omni_log(channels=channels):
                 super().play()
 
