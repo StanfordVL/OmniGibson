@@ -235,7 +235,7 @@ def test_aabb():
     assert np.allclose(breakfast_table.states[AABB].get_value(), BoundingBoxAPI.compute_aabb(breakfast_table))
     assert np.all((breakfast_table.states[AABB].get_value()[0] < pos1) & (pos1 < breakfast_table.states[AABB].get_value()[1]))
 
-    pp = dishtowel.root_link.compute_particle_positions()
+    pp = dishtowel.root_link.get_particle_positions()
     offset = dishtowel.root_link.cloth_system.particle_contact_offset
     assert np.allclose(dishtowel.states[AABB].get_value(), (pp.min(axis=0) - offset, pp.max(axis=0) + offset))
     assert np.all((dishtowel.states[AABB].get_value()[0] < pos2) & (pos2 < dishtowel.states[AABB].get_value()[1]))
@@ -993,7 +993,7 @@ def test_folded_unfolded():
     assert not carpet.states[Folded].get_value()
     assert carpet.states[Unfolded].get_value()
 
-    pos = carpet.root_link.compute_particle_positions()
+    pos = carpet.root_link.get_particle_positions()
     x_min, x_max = np.min(pos, axis=0)[0], np.max(pos, axis=0)[0]
     x_extent = x_max - x_min
     # Get indices for the bottom 10 percent vertices in the x-axis

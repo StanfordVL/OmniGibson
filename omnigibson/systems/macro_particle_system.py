@@ -13,7 +13,6 @@ from omnigibson.utils.constants import SemanticClass, PrimType
 from omnigibson.utils.python_utils import classproperty, subclass_factory, snake_case_to_camel_case
 from omnigibson.utils.sampling_utils import sample_cuboid_on_object_symmetric_bimodal_distribution
 import omnigibson.utils.transform_utils as T
-from omnigibson.utils.usd_utils import FlatcacheAPI
 from omnigibson.prims.geom_prim import VisualGeomPrim, CollisionVisualGeomPrim
 import numpy as np
 from scipy.spatial.transform import Rotation as R
@@ -381,7 +380,7 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
                 cloth = obj.root_link
                 face_ids = cls._cloth_face_ids[group]
                 idxs = cloth.faces[face_ids].flatten()
-                positions = cloth.compute_particle_positions(idxs=idxs).reshape(-1, 3, 3)
+                positions = cloth.get_particle_positions(idxs=idxs).reshape(-1, 3, 3)
                 normals = cloth.compute_face_normals_from_particle_positions(positions=positions)
 
                 # The actual positions we want are the face centroids, or the mean of all the positions
@@ -495,10 +494,6 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
         scales = cls.sample_scales_by_group(group=group, n=n_particles) if scales is None else scales
         bbox_extents_local = [(cls._particle_object.aabb_extent * scale).tolist() for scale in scales]
 
-        # If we're using flatcache, we need to update the object's pose on the USD manually
-        if gm.ENABLE_FLATCACHE:
-            FlatcacheAPI.sync_raw_object_transforms_in_usd(prim=obj)
-
         # Generate particles
         z_up = np.zeros((3, 1))
         z_up[-1] = 1.0
@@ -557,7 +552,7 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
             face_ids = np.random.choice(n_faces, min(max_samples, n_faces), replace=False)
             # Positions are the midpoints of each requested face
             normals = cloth.compute_face_normals(face_ids=face_ids)
-            positions = cloth.compute_particle_positions(idxs=cloth.faces[face_ids].flatten()).reshape(-1, 3, 3).mean(axis=1)
+            positions = cloth.get_particle_positions(idxs=cloth.faces[face_ids].flatten()).reshape(-1, 3, 3).mean(axis=1)
             # Orientations are the normals
             z_up = np.zeros_like(normals)
             z_up[:, 2] = 1.0

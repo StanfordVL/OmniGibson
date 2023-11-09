@@ -21,7 +21,7 @@ from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_fu
     get_particle_positions_in_frame, get_particle_positions_from_frame
 from omnigibson.utils.python_utils import classproperty
 from omnigibson.utils.ui_utils import suppress_omni_log
-from omnigibson.utils.usd_utils import create_primitive_mesh, FlatcacheAPI
+from omnigibson.utils.usd_utils import create_primitive_mesh
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.sampling_utils import sample_cuboid_on_object
 from omni.isaac.core.utils.prims import get_prim_at_path, delete_prim, is_prim_path_valid
@@ -541,11 +541,6 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
         return all(condition(self.obj) for condition in self.conditions[system_name])
 
     def _update(self):
-        # If we're using projection method and flatcache, we need to manually update this object's transforms on the USD
-        # so the corresponding visualization and overlap meshes are updated properly
-        if self.method == ParticleModifyMethod.PROJECTION and gm.ENABLE_FLATCACHE:
-            FlatcacheAPI.sync_raw_object_transforms_in_usd(prim=self.obj)
-
         # Check if there's any overlap and if we're at the correct step
         if self._current_step == 0 and (not self.requires_overlap or self._check_overlap()):
             # Iterate over all owned systems for this particle modifier

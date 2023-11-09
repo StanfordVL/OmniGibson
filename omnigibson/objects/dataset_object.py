@@ -498,7 +498,7 @@ class DatasetObject(USDObject):
 
         if self.prim_type == PrimType.CLOTH:
             particle_contact_offset = self.root_link.cloth_system.particle_contact_offset
-            particle_positions = self.root_link.compute_particle_positions()
+            particle_positions = self.root_link.get_particle_positions()
             particles_in_world_frame = np.concatenate([
                 particle_positions - particle_contact_offset,
                 particle_positions + particle_contact_offset
