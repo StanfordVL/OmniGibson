@@ -431,8 +431,7 @@ class BoundingBoxAPI:
                 - 3-array: end (x,y,z) corner of world-coordinate frame aligned bounding box
         """
         # Use the correct API to calculate AABB based on whether flatcache is enabled or not
-        return cls._compute_flatcache_aabb(prim=prim) if gm.ENABLE_FLATCACHE else \
-            cls._compute_non_flatcache_aabb(prim_path=prim.prim_path)
+        return cls._compute_flatcache_aabb(prim=prim)
 
     @classmethod
     def _compute_flatcache_aabb(cls, prim):

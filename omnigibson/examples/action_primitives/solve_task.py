@@ -13,9 +13,8 @@ from omnigibson.robots import REGISTERED_ROBOTS
 from omnigibson.utils.ui_utils import KeyboardRobotController
 
 
-# Don't use GPU dynamics and use flatcache for performance boost
+# Don't use GPU dynamics
 gm.USE_GPU_DYNAMICS = True
-gm.ENABLE_FLATCACHE = True
 
 def pause(time):
     for _ in range(int(time*100)):

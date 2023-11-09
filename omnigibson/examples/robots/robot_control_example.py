@@ -21,9 +21,8 @@ SCENES = dict(
     empty="Empty environment with no objects",
 )
 
-# Don't use GPU dynamics and use flatcache for performance boost
+# Don't use GPU dynamics
 gm.USE_GPU_DYNAMICS = False
-gm.ENABLE_FLATCACHE = True
 
 
 def choose_controllers(robot, random_selection=False):

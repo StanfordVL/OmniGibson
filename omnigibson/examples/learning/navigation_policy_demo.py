@@ -36,10 +36,9 @@ except ModuleNotFoundError:
 
 assert meets_minimum_version(gym.__version__, "0.26.1"), "Please install/update gym to version >= 0.26.1"
 
-# We don't need object states nor transitions rules, so we disable them now, and also enable flatcache for maximum speed
+# We don't need object states nor transitions rules, so we disable them now
 gm.ENABLE_OBJECT_STATES = False
 gm.ENABLE_TRANSITION_RULES = False
-gm.ENABLE_FLATCACHE = True
 
 
 class CustomCombinedExtractor(BaseFeaturesExtractor):
