@@ -519,10 +519,6 @@ class Simulator(SimulationContext, Serializable):
 
                 self.step_physics()
 
-                # Initialize physics view and RigidContactAPI
-                self._physics_sim_view = omni.physics.tensors.create_simulation_view(self.backend)
-                self._physics_sim_view.set_subspace_roots("/")
-
             # Additionally run non physics things
             self._non_physics_step()
 

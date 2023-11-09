@@ -123,7 +123,7 @@ class ClothPrim(GeomPrim):
     def _initialize(self):
         super()._initialize()
 
-        self._cloth_prim_view.initialize(og.sim._physics_sim_view)
+        self._cloth_prim_view.initialize(og.sim.physics_sim_view)
 
         # TODO (eric): hacky way to get cloth rendering to work (otherwise, there exist some rendering artifacts).
         self._prim.CreateAttribute("primvars:isVolume", VT.Bool, False).Set(True)
