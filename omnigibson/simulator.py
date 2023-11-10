@@ -9,10 +9,10 @@ import json
 import omni
 import carb
 import omni.physics
+from omni.isaac.core.physics_context import PhysicsContext
 from omni.isaac.core.simulation_context import SimulationContext
 from omni.isaac.core.utils.prims import get_prim_at_path
-from omni.isaac.core.utils.stage import open_stage, create_new_stage
-from omni.isaac.dynamic_control import _dynamic_control
+from omni.isaac.core.utils.stage import open_stage, create_new_stage, get_current_stage, set_stage_units, set_stage_up_axis
 from omni.physx.bindings._physx import ContactEventType, SimulationEvent
 import omni.kit.loop._loop as omni_loop
 from pxr import Usd, PhysicsSchemaTools, UsdUtils
@@ -401,11 +401,6 @@ class Simulator(SimulationContext, Serializable):
         # Refresh all current rules
         TransitionRuleAPI.prune_active_rules()
 
-    def _reset_variables(self):
-        """
-        Reset internal variables when a new stage is loaded
-        """
-
     def _non_physics_step(self):
         """
         Complete any non-physics steps such as state updates.
@@ -518,6 +513,10 @@ class Simulator(SimulationContext, Serializable):
                             robot.update_controller_mode()
 
                 self.step_physics()
+
+                # Initialize physics view and RigidContactAPI
+                self._physics_sim_view = omni.physics.tensors.create_simulation_view(self.backend)
+                self._physics_sim_view.set_subspace_roots("/")
 
             # Additionally run non physics things
             self._non_physics_step()
@@ -1066,17 +1065,26 @@ class Simulator(SimulationContext, Serializable):
         backend="numpy",
         device=None,
     ):
-        # Run super first
-        super()._init_stage(
+        # This below code is copied verbatim from the super class except for the removal of a render
+        # call from the original
+        if get_current_stage() is None:
+            create_new_stage()
+            self.render()
+        set_stage_up_axis("z")
+        if stage_units_in_meters is not None:
+            set_stage_units(stage_units_in_meters=stage_units_in_meters)
+        # self.render()  # This line causes crashes in Isaac Sim 2023.1.0. We don't need to render here.
+        self._physics_context = PhysicsContext(
             physics_dt=physics_dt,
-            rendering_dt=rendering_dt,
-            stage_units_in_meters=stage_units_in_meters,
-            physics_prim_path=physics_prim_path,
+            prim_path=physics_prim_path,
             sim_params=sim_params,
             set_defaults=set_defaults,
             backend=backend,
             device=device,
         )
+        self.set_simulation_dt(physics_dt=physics_dt, rendering_dt=rendering_dt)
+        self.render()
+        # End of super class code
 
         # Update internal vars
         self._physx_interface = get_physx_interface()
