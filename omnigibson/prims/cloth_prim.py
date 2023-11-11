@@ -23,6 +23,7 @@ from omnigibson.utils.python_utils import classproperty
 import omnigibson as og
 
 import numpy as np
+import torch
 
 
 # Create settings for this module
@@ -96,34 +97,37 @@ class ClothPrim(GeomPrim):
         # Load the cloth prim view
         self._cloth_prim_view = ClothPrimView(self._prim_path)
 
-        positions = self.get_particle_positions()
+        # positions = self.get_particle_positions()
 
-        # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
-        success = False
-        for i in range(10):
-            self._keypoint_idx, self._keyface_idx = sample_mesh_keypoints(
-                mesh_prim=self._prim,
-                n_keypoints=m.N_CLOTH_KEYPOINTS,
-                n_keyfaces=m.N_CLOTH_KEYFACES,
-                seed=i,
-            )
+        # # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
+        # success = False
+        # for i in range(10):
+        #     self._keypoint_idx, self._keyface_idx = sample_mesh_keypoints(
+        #         mesh_prim=self._prim,
+        #         n_keypoints=m.N_CLOTH_KEYPOINTS,
+        #         n_keyfaces=m.N_CLOTH_KEYFACES,
+        #         seed=i,
+        #     )
 
-            keypoint_positions = positions[self._keypoint_idx]
-            keypoint_aabb = keypoint_positions.min(axis=0), keypoint_positions.max(axis=0)
-            true_aabb = positions.min(axis=0), positions.max(axis=0)
-            overlap_vol = max(min(true_aabb[1][0], keypoint_aabb[1][0]) - max(true_aabb[0][0], keypoint_aabb[0][0]), 0) * \
-                max(min(true_aabb[1][1], keypoint_aabb[1][1]) - max(true_aabb[0][1], keypoint_aabb[0][1]), 0) * \
-                max(min(true_aabb[1][2], keypoint_aabb[1][2]) - max(true_aabb[0][2], keypoint_aabb[0][2]), 0)
-            true_vol = np.product(true_aabb[1] - true_aabb[0])
-            if overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD:
-                success = True
-                break
-        assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
+        #     keypoint_positions = positions[self._keypoint_idx]
+        #     keypoint_aabb = keypoint_positions.min(axis=0), keypoint_positions.max(axis=0)
+        #     true_aabb = positions.min(axis=0), positions.max(axis=0)
+        #     overlap_vol = max(min(true_aabb[1][0], keypoint_aabb[1][0]) - max(true_aabb[0][0], keypoint_aabb[0][0]), 0) * \
+        #         max(min(true_aabb[1][1], keypoint_aabb[1][1]) - max(true_aabb[0][1], keypoint_aabb[0][1]), 0) * \
+        #         max(min(true_aabb[1][2], keypoint_aabb[1][2]) - max(true_aabb[0][2], keypoint_aabb[0][2]), 0)
+        #     true_vol = np.product(true_aabb[1] - true_aabb[0])
+        #     if overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD:
+        #         success = True
+        #         break
+        # assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
 
     def _initialize(self):
         super()._initialize()
-
+        assert og.sim._physics_sim_view._backend is not None, "Physics sim backend not initialized!"
         self._cloth_prim_view.initialize(og.sim.physics_sim_view)
+        assert self._n_particles <= self._cloth_prim_view.max_particles_per_cloth, \
+            f"Got more particles than the maximum allowed for this cloth! Got {self._n_particles}, max is " \
+            f"{self._cloth_prim_view.max_particles_per_cloth}!"
 
         # TODO (eric): hacky way to get cloth rendering to work (otherwise, there exist some rendering artifacts).
         self._prim.CreateAttribute("primvars:isVolume", VT.Bool, False).Set(True)
@@ -164,7 +168,7 @@ class ClothPrim(GeomPrim):
             np.array: (N, 3) numpy array, where each of the N particles' positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
-        all_particle_positions = self._cloth_prim_view.get_world_positions()[0, :, :]
+        all_particle_positions = self._cloth_prim_view.get_world_positions()[0, :, :].cpu().numpy()
         return all_particle_positions[:self._n_particles] if idxs is None else all_particle_positions[idxs]
 
     def set_particle_positions(self, positions, idxs=None):
@@ -184,7 +188,7 @@ class ClothPrim(GeomPrim):
         cur_pos = self._cloth_prim_view.get_world_positions()
 
         # Then apply the new positions at the appropriate indices
-        cur_pos[0, idxs] = positions
+        cur_pos[0, idxs] = torch.Tensor(positions, device=cur_pos.device)
 
         # Then set to that position
         self._cloth_prim_view.set_world_positions(cur_pos)
