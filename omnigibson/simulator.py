@@ -75,7 +75,6 @@ class Simulator(SimulationContext, Serializable):
             stage_units_in_meters=1.0,
             viewer_width=gm.DEFAULT_VIEWER_WIDTH,
             viewer_height=gm.DEFAULT_VIEWER_HEIGHT,
-            device=None,
     ):
         # Store vars needed for initialization
         self.gravity = gravity
@@ -87,7 +86,8 @@ class Simulator(SimulationContext, Serializable):
             physics_dt=physics_dt,
             rendering_dt=rendering_dt,
             stage_units_in_meters=stage_units_in_meters,
-            device=device,
+            device="cuda" if gm.USE_GPU_DYNAMICS else "cpu",
+            backend="torch" if gm.USE_GPU_DYNAMICS else "numpy"
         )
 
         if self._world_initialized:
@@ -143,22 +143,9 @@ class Simulator(SimulationContext, Serializable):
         # and crashes
         self._set_physics_engine_settings()
 
-    def __new__(
-        cls,
-        gravity=9.81,
-        physics_dt=1.0 / 60.0,
-        rendering_dt=1.0 / 60.0,
-        stage_units_in_meters=1.0,
-        viewer_width=gm.DEFAULT_VIEWER_WIDTH,
-        viewer_height=gm.DEFAULT_VIEWER_HEIGHT,
-        device_idx=0,
-    ):
-        # Overwrite since we have different kwargs
-        if Simulator._instance is None:
-            Simulator._instance = object.__new__(cls)
-        else:
-            carb.log_info("Simulator is defined already, returning the previously defined one")
-        return Simulator._instance
+    def __new__(cls, *args, **kwargs):
+        print("Outer")
+        return SimulationContext.__new__(cls, *args, **kwargs)
 
     def _set_viewer_camera(self, prim_path="/World/viewer_camera", viewport_name="Viewport"):
         """
@@ -1079,8 +1066,8 @@ class Simulator(SimulationContext, Serializable):
             prim_path=physics_prim_path,
             sim_params=sim_params,
             set_defaults=set_defaults,
-            backend=backend,
-            device=device,
+            backend=self.backend,
+            device=self.device
         )
         self.set_simulation_dt(physics_dt=physics_dt, rendering_dt=rendering_dt)
         self.render()
@@ -1185,3 +1172,19 @@ class Simulator(SimulationContext, Serializable):
     def _deserialize(self, state):
         # Default state is from the scene
         return self._scene.deserialize(state=state), self._scene.state_size
+
+    def _stage_open_callback_fn(self, event):
+        # This below is copied from omni.isaac.core.simulation_context.SimulationContext
+        self._physics_callback_functions = dict()
+        self._physics_functions = dict()
+        self._stage_callback_functions = dict()
+        self._timeline_callback_functions = dict()
+        self._render_callback_functions = dict()
+        # This below part causes bugs and as such is removed.
+        # if SimulationContext._instance is not None:
+        #     SimulationContext._instance.clear_instance()
+        #     carb.log_warn(
+        #         "A new stage was opened, World or Simulation Object are invalidated and you would need to initialize them again before using them."
+        #     )
+        self._stage_open_callback = None
+        return
