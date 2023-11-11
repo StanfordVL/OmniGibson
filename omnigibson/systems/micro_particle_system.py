@@ -1,3 +1,4 @@
+import uuid
 import omnigibson as og
 from omnigibson.macros import gm, create_module_macros
 from omnigibson.prims.prim_base import BasePrim
@@ -1535,7 +1536,7 @@ class Cloth(MicroParticleSystem):
             # we convert our mesh into a trimesh mesh, then export it to a temp file, then load it into pymeshlab
             tm = mesh_prim_to_trimesh_mesh(mesh_prim=mesh_prim, include_normals=True, include_texcoord=True)
             # Tmp file written to: {tmp_dir}/{tmp_fname}/{tmp_fname}.obj
-            tmp_name = f"{mesh_prim.GetName()}_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
+            tmp_name = str(uuid.uuid4())
             tmp_dir = os.path.join(tempfile.gettempdir(), tmp_name)
             tmp_fpath = os.path.join(tmp_dir, f"{tmp_name}.obj")
             Path(tmp_dir).mkdir(parents=True, exist_ok=True)
@@ -1564,15 +1565,14 @@ class Cloth(MicroParticleSystem):
             # Re-write data to @mesh_prim
             cm = ms.current_mesh()
             new_face_vertex_ids = cm.face_matrix().flatten()
-            new_texcoord = cm.wedge_tex_coord_matrix()
-            new_vertices = cm.vertex_matrix()[new_face_vertex_ids]
-            new_normals = cm.vertex_normal_matrix()[new_face_vertex_ids]
-            n_vertices = len(new_vertices)
+            new_texcoord = cm.vertex_tex_coord_matrix()
+            new_vertices = cm.vertex_matrix()
+            new_normals = cm.vertex_normal_matrix()
             n_faces = len(cm.face_matrix())
 
             mesh_prim.GetAttribute("faceVertexCounts").Set(np.ones(n_faces, dtype=int) * 3)
             mesh_prim.GetAttribute("points").Set(Vt.Vec3fArray.FromNumpy(new_vertices))
-            mesh_prim.GetAttribute("faceVertexIndices").Set(np.arange(n_vertices))
+            mesh_prim.GetAttribute("faceVertexIndices").Set(new_face_vertex_ids)
             mesh_prim.GetAttribute("normals").Set(Vt.Vec3fArray.FromNumpy(new_normals))
             mesh_prim.GetAttribute("primvars:st").Set(Vt.Vec2fArray.FromNumpy(new_texcoord))
 
