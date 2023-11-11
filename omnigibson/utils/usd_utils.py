@@ -765,10 +765,9 @@ def sample_mesh_keypoints(mesh_prim, n_keypoints, n_keyfaces, seed=None):
     tm = mesh_prim_to_trimesh_mesh(mesh_prim=mesh_prim, include_normals=False, include_texcoord=False)
     n_unique_vertices, n_unique_faces = len(tm.vertices), len(tm.faces)
     faces_flat = tm.faces.flatten()
-    n_vertices = len(faces_flat)
 
     # Sample vertices
-    unique_vertices = np.unique(faces_flat, return_index=True)[1]
+    unique_vertices = np.unique(faces_flat)
     assert len(unique_vertices) == n_unique_vertices
     keypoint_idx = np.random.choice(unique_vertices, size=n_keypoints, replace=False) if \
         n_unique_vertices > n_keypoints else unique_vertices
