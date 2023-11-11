@@ -168,7 +168,7 @@ class ClothPrim(GeomPrim):
             np.array: (N, 3) numpy array, where each of the N particles' positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
-        all_particle_positions = self._cloth_prim_view.get_world_positions()[0, :, :].cpu().numpy()
+        all_particle_positions = self._cloth_prim_view.get_world_positions(clone=False)[0, :, :].cpu().numpy()
         return all_particle_positions[:self._n_particles] if idxs is None else all_particle_positions[idxs]
 
     def set_particle_positions(self, positions, idxs=None):
