@@ -28,11 +28,11 @@ def parse_name(name):
 
 
 def randomize_names():
-    objs = list(rt.objects)
+    objs = list(rt.selection)
 
     # Start by grouping objects by category / model.
     objs_by_model = defaultdict(list)
-    for obj in rt.objects:
+    for obj in objs:
         if obj in rt.cameras:
             continue
 
@@ -54,8 +54,8 @@ def randomize_names():
 
     # Then for each group, we assign a new random model ID.
     for category, model_id in objs_by_model:
-        if re.fullmatch(r"^[a-z]{6}$", model_id):
-            continue
+        # if re.fullmatch(r"^[a-z]{6}$", model_id):
+        #     continue
 
         new_cat = category
         new_model = "".join(random.choice(string.ascii_lowercase) for _ in range(6))
