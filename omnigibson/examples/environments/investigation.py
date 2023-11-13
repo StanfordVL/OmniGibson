@@ -24,9 +24,41 @@ cfg = {
         }
     }
 
+from omnigibson.maps.segmentation_map import SegmentationMap
+from omnigibson.utils.asset_utils import get_og_scene_path, get_available_og_scenes
+from omni.isaac.core.utils.viewports import set_camera_view
+
+# Get segmentation map
+scene_path = get_og_scene_path("Rs_int")
+seg_map = SegmentationMap(scene_path)
+
+print(seg_map.room_sem_name_to_sem_id)
+room_instance = "living_room_0"
+center = None
+if room_instance not in seg_map.room_ins_name_to_ins_id:
+    print("room_instance [{}] does not exist.".format(room_instance))
+    print(seg_map.room_ins_id_to_ins_name.items())
+else:
+    ins_id = seg_map.room_ins_name_to_ins_id[room_instance]
+    room_pixel_coords = np.nonzero(seg_map.room_ins_map == ins_id)
+
+    center = np.mean(room_pixel_coords, 1)
+    print("CENTER:", center)
+
+    print("ROOM PIXELS")
+    print(room_pixel_coords)
+    for x in room_pixel_coords:
+        print(x.shape)
+
+print("SEG_MAP")
+print(seg_map.room_ins_map)
+print(seg_map.room_ins_map.shape)
+
+
 
 #Simulator must be stopped before loading scene!
 og.sim.stop()
+
 # Load the environment
 env = og.Environment(configs=cfg)
 
@@ -132,7 +164,7 @@ def get_bbox(category, model):
         bbox = prim.GetAttribute("ig:nativeBB").Get()
     return bbox
 
-openai.api_key = "API_KEY"
+openai.api_key = "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"
    
 messages = [
     {"role": "system", "content": system_prompt},
@@ -146,7 +178,45 @@ for message in messages:
 function_calls = []
 # "gpt-3.5-turbo"
 # "gpt-4-32k"
-for _ in range(10):
+
+for _ in range(4):
+    print("Stopping...")
+    print(seg_map.room_sem_name_to_sem_id)
+    room_instance = "living_room_0"
+    if room_instance not in seg_map.room_ins_name_to_ins_id:
+        print("room_instance [{}] does not exist.".format(room_instance))
+        print(seg_map.room_ins_id_to_ins_name.items())
+    else:
+        ins_id = seg_map.room_ins_name_to_ins_id[room_instance]
+        room_pixel_coords = np.nonzero(seg_map.room_ins_map == ins_id)
+        print("ROOM PIXELS")
+        print(room_pixel_coords)
+        for x in room_pixel_coords:
+            print(x.shape)
+        center = np.mean(room_pixel_coords, 1)
+        print("CENTER:", center)
+
+    print("SEG_MAP")
+    print(seg_map.room_ins_map)
+    print(seg_map.room_ins_map.shape)
+    eps = 0.0000001
+    scene_path = get_og_scene_path("Rs_int")
+
+    # add z -dimension
+    camera_loc = np.concatenate((center, [10]))
+    camera_target = np.concatenate((center + eps, [0]))
+
+    set_camera_view(camera_loc, camera_target, "/World/viewer_camera")
+
+
+    try:
+        while True:
+            og.sim.render()
+
+    except KeyboardInterrupt:
+        print("continuing...")
+
+    print("Generating...")
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
@@ -174,7 +244,7 @@ for _ in range(10):
     target_object1 = DatasetObject(name = target_object1_name, category = target_object1_category, model = target_object1_model)
 
     bounding_box = get_bbox(target_object1_category, target_object1_model)
-    if not np.all(bounding_box < 0.5):
+    if not np.all(np.array(bounding_box) < 0.5):
         print(bounding_box)
         continue
     og.sim.import_object(target_object1)
@@ -220,11 +290,13 @@ for _ in range(10):
     {"role": "user", "content": human_prompt},
     ]
 # In[]
+
 for _ in range(20):
     env.step([])
 
 print(function_calls)
 
 # In[]
-
+while True:
+    og.sim.render()
 # %%
