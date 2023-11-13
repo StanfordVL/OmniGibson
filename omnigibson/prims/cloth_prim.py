@@ -123,11 +123,9 @@ class ClothPrim(GeomPrim):
 
     def _initialize(self):
         super()._initialize()
-        assert og.sim._physics_sim_view._backend is not None, "Physics sim backend not initialized!"
-        self._cloth_prim_view.initialize(og.sim.physics_sim_view)
-        assert self._n_particles <= self._cloth_prim_view.max_particles_per_cloth, \
-            f"Got more particles than the maximum allowed for this cloth! Got {self._n_particles}, max is " \
-            f"{self._cloth_prim_view.max_particles_per_cloth}!"
+
+        # Update the handles so that we can access particles
+        self.update_handles()
 
         # TODO (eric): hacky way to get cloth rendering to work (otherwise, there exist some rendering artifacts).
         self._prim.CreateAttribute("primvars:isVolume", VT.Bool, False).Set(True)
@@ -334,8 +332,11 @@ class ClothPrim(GeomPrim):
         return contacts
 
     def update_handles(self):
-        # no handles to update
-        pass
+        assert og.sim._physics_sim_view._backend is not None, "Physics sim backend not initialized!"
+        self._cloth_prim_view.initialize(og.sim.physics_sim_view)
+        assert self._n_particles <= self._cloth_prim_view.max_particles_per_cloth, \
+            f"Got more particles than the maximum allowed for this cloth! Got {self._n_particles}, max is " \
+            f"{self._cloth_prim_view.max_particles_per_cloth}!"
 
     @property
     def volume(self):
