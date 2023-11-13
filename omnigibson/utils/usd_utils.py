@@ -573,9 +573,6 @@ class FlatcacheAPI:
             prim (EntityPrim): prim whose owned links and joints should have their raw local states updated to match the
                 "true" values found from the dynamic control interface
         """
-        # Make sure flatcache is enabled -- this should NEVER be called otherwise!!
-        assert gm.ENABLE_FLATCACHE, "Syncing raw object transforms should only occur if flatcache is being used!"
-
         # We're somewhat abusing low-level dynamic control - physx - usd integration, but we (supposedly) know
         # what we're doing so we suppress logging so we don't see any error messages :D
         with suppress_omni_log(["omni.physx.plugin"]):
@@ -617,9 +614,6 @@ class FlatcacheAPI:
         Args:
             prim (EntityPrim): prim whose owned links and joints should have their local values reset to be zero
         """
-        # Make sure flatcache is enabled -- this should NEVER be called otherwise!!
-        assert gm.ENABLE_FLATCACHE, "Resetting raw object transforms should only occur if flatcache is being used!"
-
         # We're somewhat abusing low-level dynamic control - physx - usd integration, but we (supposedly) know
         # what we're doing so we suppress logging so we don't see any error messages :D
         with suppress_omni_log(["omni.physx.plugin"]):
