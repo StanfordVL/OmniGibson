@@ -163,6 +163,7 @@ def plan_base_motion(
     # TODO: Try changing to RRTConnect in the future. Currently using RRT because movement is not direction invariant. Can change to RRTConnect
     # possibly if hasSymmetricInterpolate is set to False for the state space. Doc here https://ompl.kavrakilab.org/classompl_1_1base_1_1StateSpace.html
     planner = ompl_geo.RRT(si)
+    planner.setRange
     ss.setPlanner(planner)
 
     start = create_state(space, start_conf[0], start_conf[1], T.wrap_angle(start_conf[2]))
@@ -384,7 +385,12 @@ def plan_arm_motion_ik(
     ss.setStateValidityChecker(ob.StateValidityCheckerFn(state_valid_fn))
 
     si = ss.getSpaceInformation()
-    planner = ompl_geo.BITstar(si)
+    # si.setStateValidityCheckingResolution(0.00001)
+    # print("OMPL RESOLUTION:", si.getStateValidityCheckingResolution())
+    planner = ompl_geo.RRTstar(si)
+    planner.setGoalBias(0.4)
+    planner.setRange(0.2)
+    # planner = ompl_geo.BITstar(si)
     ss.setPlanner(planner)
 
     start_conf = np.append(robot.get_relative_eef_position(), T.quat2axisangle(robot.get_relative_eef_orientation()))

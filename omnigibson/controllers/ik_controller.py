@@ -152,6 +152,15 @@ class InverseKinematicsController(ManipulationController):
                 else:
                     command_output_limits[0][3:] = -np.pi
                     command_output_limits[1][3:] = np.pi
+        # if self.mode == "pose_delta_ori":
+        #     command_input_limits == [
+        #         [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
+        #         [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],
+        #     ]
+        #     command_output_limits = [
+        #         [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
+        #         [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],
+        #     ]
 
         # Run super init
         super().__init__(
@@ -240,6 +249,14 @@ class InverseKinematicsController(ManipulationController):
         pos_relative = np.array(control_dict["{}_pos_relative".format(self.task_name)])
         quat_relative = np.array(control_dict["{}_quat_relative".format(self.task_name)])
 
+        # Check for empty action
+        if self.mode == "pose_absolute_ori":
+            if not np.any(command[:3]) and command[3:] == quat_relative:
+                return np.zeros(self.control_dim) if self.control_type == ControlType.VELOCITY else current_joint_pos
+        else:
+            if not np.any(command):
+                return np.zeros(self.control_dim) if self.control_type == ControlType.VELOCITY else current_joint_pos
+            
         # The first three values of the command are always the (delta) position, convert to absolute values
         dpos = command[:3]
         target_pos = pos_relative + dpos
