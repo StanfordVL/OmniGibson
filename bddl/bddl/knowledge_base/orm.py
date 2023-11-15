@@ -127,7 +127,7 @@ class Model:
         if hasattr(self.Meta, "ordering"):
             order_attrs = self.Meta.ordering
         else:
-            order_attrs = self._key
+            order_attrs = [self.Meta.pk]
         self_order_key = [getattr(self, attr) for attr in order_attrs]
         other_order_key = [getattr(other, attr) for attr in order_attrs]
         return self_order_key < other_order_key
