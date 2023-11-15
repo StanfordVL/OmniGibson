@@ -395,7 +395,6 @@ class TrivialSimulator(object):
         return tuple(obj.name for obj in objs) in self.insource
     
     def set_grasped(self, objs, is_grasped):
-        print(objs)
         assert len(objs) == 2, f"`objs` has length other than 2: {objs}"
         if is_grasped:
             self.grasped.add(objs)

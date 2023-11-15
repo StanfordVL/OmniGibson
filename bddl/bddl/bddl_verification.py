@@ -23,9 +23,9 @@ BDDL_DIR = pathlib.Path(bddl.__file__).parent
 PROBLEM_FILE_DIR = BDDL_DIR / "activity_definitions"
 PROPS_TO_SYNS_JSON = BDDL_DIR / "generated_data/properties_to_synsets.json"
 SYNS_TO_PROPS_JSON = BDDL_DIR / "generated_data/propagated_annots_canonical.json"
+SYNS_TO_PROPS_PARAMS_JSON = BDDL_DIR / "generated_data/propagated_annots_params.json"
 CSVS_DIR = "tm_csvs"
 TRANSITION_MAP_DIR = BDDL_DIR / "generated_data/transition_map/tm_jsons"
-SYNS_TO_PROPS_JSON = BDDL_DIR / "generated_data/propagated_annots_canonical.json"
 
 # Constants
 
