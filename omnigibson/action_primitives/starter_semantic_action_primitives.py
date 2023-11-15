@@ -55,7 +55,7 @@ KP_ANGLE_VEL = 0.2
 
 MAX_STEPS_FOR_SETTLING = 500
 
-MAX_CARTESIAN_HAND_STEP = 0.01
+MAX_CARTESIAN_HAND_STEP = 0.002
 MAX_STEPS_FOR_HAND_MOVE = 500
 MAX_STEPS_FOR_HAND_MOVE_IK = 1000
 MAX_STEPS_FOR_HAND_MOVE_WHEN_OPENING = 30
@@ -649,7 +649,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if self._get_obj_in_hand() != obj:
             # Open the hand first
             yield from self._execute_release()
-            # breakpoint()
 
             # Allow grasping from suboptimal extents if we've tried enough times.
             grasp_poses = get_grasp_poses_for_object_sticky(obj)
@@ -982,11 +981,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
         
         # Follow the plan to navigate.
-        print("Plan has %d steps", len(plan))
+        indented_print("Plan has %d steps", len(plan))
         for i, target_pose in enumerate(plan):
             target_pos = target_pose[:3]
             target_quat = T.axisangle2quat(target_pose[3:])
-            print("Executing grasp plan step %d/%d", i + 1, len(plan))
+            indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
             yield from self._move_hand_direct_ik((target_pos, target_quat), ignore_failure=True, in_world_frame=False, stop_if_stuck=stop_if_stuck)
             # yield from self._move_hand_direct_cartesian((target_pos, target_quat), ignore_failure=False, in_world_frame=False, stop_if_stuck=stop_if_stuck)
     
@@ -1122,21 +1121,26 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             target_pose = self._get_pose_in_robot_frame(target_pose)
         target_pos = target_pose[0]
         target_orn = target_pose[1]
+        target_rotation = Rotation.from_quat(target_orn)
         target_orn_axisangle = T.quat2axisangle(target_pose[1])
+
         action = self._empty_action()
         control_idx = self.robot.controller_action_idx["arm_" + self.arm]
-        prev_pos = prev_orn = None
+        prev_pos = prev_rotation = None
 
         for i in range(MAX_STEPS_FOR_HAND_MOVE_IK):
             current_pose = self._get_pose_in_robot_frame((self.robot.get_eef_position(), self.robot.get_eef_orientation()))
             current_pos = current_pose[0]
             current_orn = current_pose[1]
+            current_rotation = Rotation.from_quat(current_orn)
 
             delta_pos = target_pos - current_pos
             target_pos_diff = np.linalg.norm(delta_pos)
-            delta_orn = (Rotation.from_quat(target_orn) * Rotation.from_quat(current_orn).inv()).as_rotvec()
-            target_orn_diff = np.linalg.norm(delta_orn)
-            reached_goal = target_pos_diff < pos_thresh and target_orn_diff < ori_thresh
+            delta_rotation = target_rotation * current_rotation.inv()
+            
+            target_orn_diff = delta_rotation.magnitude()
+            
+            reached_goal = target_pos_diff < pos_thresh and target_orn_diff < np.deg2rad(ori_thresh)
             if reached_goal:
                 return
             
@@ -1146,7 +1150,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # if i > 0 and stop_if_stuck and detect_robot_collision_in_sim(self.robot, ignore_obj_in_hand=False):
             if i > 0 and stop_if_stuck:
                 pos_diff = np.linalg.norm(prev_pos - current_pos)
-                orn_diff = (Rotation.from_quat(prev_orn) * Rotation.from_quat(current_orn).inv()).magnitude()
+                orn_diff = (prev_rotation * current_rotation.inv()).magnitude()
                 if pos_diff < 0.0003 and orn_diff < 0.01:
                     raise ActionPrimitiveError(
                         ActionPrimitiveError.Reason.EXECUTION_ERROR,
@@ -1154,18 +1158,23 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     )
 
             prev_pos = current_pos
-            prev_orn = current_orn
+            prev_rotation = current_rotation
 
             if controller_mode == "pose_absolute_ori":
                 action[control_idx] = np.concatenate([delta_pos, target_orn_axisangle])
             elif controller_mode == "pose_delta_ori":
-                max_delta = 0.3 # maximum allowed input
-                arm_action = np.concatenate([delta_pos, delta_orn])
-                # Scale actions
-                arm_action = self._scale_action(arm_action)
-                # max = np.max(np.abs(arm_action))
-                # if max > max_delta:
-                #     arm_action = 0.05 * arm_action / max
+                max_abs_pos = max(abs(delta_pos))
+                if max_abs_pos < 0.05:
+                    delta_orn = delta_rotation.as_rotvec()
+                    arm_action = np.concatenate([delta_pos, delta_orn])
+                else:
+                    scale = 0.05 / max_abs_pos
+                    scaled_delta_pos = delta_pos * scale
+                    combined_rotation = Rotation.from_quat(np.array([current_orn, target_orn]))
+                    scaled_target_rotation = Slerp([0, 1], combined_rotation)(scale)
+                    scaled_delta_orn = (scaled_target_rotation * current_rotation.inv()).as_rotvec()
+                    arm_action = np.concatenate([scaled_delta_pos, scaled_delta_orn])
+
                 action[control_idx] = arm_action
             
             action = self._overwrite_head_action(action, self._tracking_object_pose)
@@ -1177,17 +1186,16 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 "Your hand was obstructed from moving to the desired joint position"
             )  
 
-    def _scale_action(self, action, max_delta_pos=0.1, max_delta_ori=np.pi/10):
-        max_pos, max_ori = max(action[:3]), max(action[3:])
-        print(max_pos, max_ori)
-        _scaled_action = action.copy()
-        if max_pos > max_delta_pos:
-            print("SCALING POS", max_delta_pos)
-            _scaled_action *= (max_delta_pos / max_pos)
-        if max_ori > max_delta_ori:
-            print("SCALING ORI", max_delta_ori)
-            _scaled_action *= (max_delta_ori / max_ori)
-        return _scaled_action
+    # def _scale_action(self, action, max_delta_pos=0.1):
+    #     max_abs_pos, max_abs_ori = max(abs(action[:3])), max(abs(action[3:]))
+    #     print(max_abs_pos, max_abs_ori)
+    #     _scaled_action = action.copy()
+
+    #     if max_abs_pos > max_delta_pos or max_abs_ori > max_delta_ori:
+    #         scale = min((max_delta_pos / max_abs_pos), (max_delta_ori / max_abs_ori))
+    #         _scaled_action *= scale
+
+    #     return _scaled_action
 
     def _move_hand_direct_osc(self, target_pose, stop_on_contact=False, ignore_failure=False, pos_thresh=0.04, ori_thresh=0.4, in_world_frame=True, stop_if_stuck=False):
         # make sure controller is InverseKinematicsController and in expected mode
@@ -1521,7 +1529,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             action_idx = self.robot.controller_action_idx[name]
             if controller.control_type == ControlType.POSITION and len(joint_idx) == len(action_idx) and not controller.use_delta_commands:
                 action[action_idx] = self.robot.get_joint_positions()[joint_idx]
-            
+
             # # InverseKinematicsController case
             # elif self.robot._controller_config[name]["name"] == "InverseKinematicsController":
             #     # overwrite the goal orientation, since it is in absolute frame.
@@ -1535,8 +1543,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             #             action[control_idx[3:]] = arm_pose_to_keep[1]
             #         elif controller_mode == "pose_delta_ori":
             #             action[control_idx[:3]] = arm_pose_to_keep[0] - current_pose[0]
-            #             action[control_idx[3:]] = (Rotation.from_quat(arm_pose_to_keep[1]) * Rotation.from_quat(current_pose[1]).inv()).as_rotvec()
-                    
+            #             action[control_idx[3:]] = (Rotation.from_quat(arm_pose_to_keep[1]) * Rotation.from_quat(current_pose[1]).inv()).as_rotvec()    
         return action
 
     def _reset_hand(self):
@@ -1554,7 +1561,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         controller_config = self.robot._controller_config["arm_" + self.arm]
         if controller_config["name"] == "InverseKinematicsController":
             indented_print("Resetting hand")
-            reset_eef_pose = self._get_reset_eef_pose()
+            # reset_eef_pose = self._get_reset_eef_pose()
+            reset_eef_pose = self.reset_eef_pose
             try:
                 yield from self._move_hand_ik(reset_eef_pose)
             except ActionPrimitiveError:
@@ -1563,7 +1571,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         
         elif controller_config["name"] == "OperationalSpaceController":
             indented_print("Resetting hand")
-            reset_eef_pose = self._get_reset_eef_pose()
+            # reset_eef_pose = self._get_reset_eef_pose()
+            reset_eef_pose = self.reset_eef_pose
             try:
                 yield from self._move_hand_ik(reset_eef_pose)
             except ActionPrimitiveError:
@@ -1572,7 +1581,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         
         else:
             indented_print("Resetting hand")
-            reset_pose = self._get_reset_joint_pos()[control_idx]
+            # reset_pose = self._get_reset_joint_pos()[control_idx]
+            reset_pose = self.reset_joint_pos[control_idx]
             try:
                 yield from self._move_hand_joint(reset_pose, control_idx)
             except ActionPrimitiveError:
@@ -2070,7 +2080,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     @property
     def reset_eef_pose(self):
         if self.robot_model == "Tiago":
-            return np.array([0.28493954, 0.37450749, 1.1512334]), np.array([-0.21533823,  0.05361032, -0.08631776,  0.97123871])
+            # return np.array([0.28493954, 0.37450749, 1.1512334]), np.array([-0.21533823,  0.05361032, -0.08631776,  0.97123871])
+            return np.array([0.25096153, 0.51397772, 1.13984486]), np.array([-0.19669141,  0.0537902 , -0.04942775,  0.97774025])
+
         else:
             raise NotImplementedError
 
@@ -2078,13 +2090,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     def reset_joint_pos(self):
         if self.robot_model == "Tiago":
             return np.array([
-                -2.0002280e-01, -4.9935400e-02, -2.3110383e-07,  9.3996775e-08,
-                -2.0287105e-07, -2.5131834e+00,  3.3938321e-01, -4.2761338e-01,
-                -1.1000005e+00,  8.7126117e-10, -7.9887557e-01,  1.4699999e+00,
-                1.4363909e-10,  1.1576128e+00,  2.7100000e+00,  2.3561907e+00,
-                1.7099998e+00, -1.5185419e+00, -1.5700004e+00, -1.6720568e-01,
-                1.3900000e+00, -3.9434132e-01,  6.4477845e-10,  4.5000002e-02,
-                4.4999857e-02,  4.4999957e-02,  4.4999994e-02
+                -2.0000036e-01, -4.9999904e-02, -3.0463346e-07,  3.0402478e-07, 
+                -1.9540164e-07, -2.5132689e+00,  3.4999999e-01, -5.7448947e-01, 
+                -1.1000007e+00,  1.1040072e+00, -4.2924511e-01,  1.4700018e+00, 
+                -3.3765414e-01,  1.2924887e+00,  2.7099981e+00,  2.1235707e+00, 
+                1.7099997e+00, -1.8463612e+00, -1.5699986e+00,  1.1353362e-01, 
+                1.3899980e+00, -3.9001831e-01, -1.2095362e-07,  4.4999409e-02,
+                4.5000002e-02,  4.4999607e-02,  4.5000002e-02
             ])
+
         else:
             raise NotImplementedError
