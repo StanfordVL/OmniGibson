@@ -1,0 +1,32 @@
+{
+    "title": "MixingStickTransitionRule",
+    "description": "A mixing stick-based transition rule",
+    "properties": {
+        "rule_name": {
+            "type": "string",
+            "description": "The name of the specific rule - human readable and often having to do with inputs and outputs."
+        },
+        "input_objects": {
+            "type": "object"
+        },
+        "input_states": {
+            "type": "object"
+        },
+        "container": {
+            "type": "object"
+        },
+        "heat_source": {
+            "type": "object"
+        },
+        "output_objects": {
+            "type": "object"
+        },
+        "output_states": {
+            "type": "object"
+        },
+        "timesteps": {
+            "type": "integer"
+        }
+    },
+    "required": [ "rule_name", "input_objects", "container", "heat_source", "output_objects" ]
+}
