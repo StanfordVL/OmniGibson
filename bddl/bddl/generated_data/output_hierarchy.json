@@ -10505,7 +10505,8 @@
                               "name": "mat.n.01",
                               "hasModel": true,
                               "categories": [
-                                "floor_mat"
+                                "floor_mat",
+                                "mat"
                               ]
                             },
                             {
@@ -12511,7 +12512,10 @@
                         },
                         {
                           "name": "half__rope.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_rope"
+                          ]
                         }
                       ]
                     },
@@ -12968,7 +12972,10 @@
                                             },
                                             {
                                               "name": "half__blackberry.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_blackberry"
+                                              ]
                                             },
                                             {
                                               "name": "diced__blackberry.n.01",
@@ -13024,11 +13031,17 @@
                                         },
                                         {
                                           "name": "half__cherry.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_cherry"
+                                          ]
                                         },
                                         {
                                           "name": "half__olive.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_olive"
+                                          ]
                                         },
                                         {
                                           "name": "diced__cherry.n.01",
@@ -13166,11 +13179,17 @@
                                                 },
                                                 {
                                                   "name": "half__hazelnut.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "half_hazelnut"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "half__walnut.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "half_walnut"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "diced__coconut.n.01",
@@ -13375,7 +13394,10 @@
                                                 },
                                                 {
                                                   "name": "half__gooseberry.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "half_gooseberry"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "diced__gooseberry.n.01",
@@ -13416,7 +13438,10 @@
                                             },
                                             {
                                               "name": "half__blackberry.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_blackberry"
+                                              ]
                                             },
                                             {
                                               "name": "diced__blackberry.n.01",
@@ -13457,7 +13482,10 @@
                                                 },
                                                 {
                                                   "name": "half__cantaloup.n.01",
-                                                  "hasModel": true
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "half_cantaloup"
+                                                  ]
                                                 },
                                                 {
                                                   "name": "diced__cantaloup.n.01",
@@ -13640,7 +13668,10 @@
                                             },
                                             {
                                               "name": "half__grapefruit.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_grapefruit"
+                                              ]
                                             },
                                             {
                                               "name": "diced__lime.n.01",
@@ -13717,7 +13748,10 @@
                                             },
                                             {
                                               "name": "half__dried_apricot.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_dried_apricot"
+                                              ]
                                             },
                                             {
                                               "name": "diced__dried_apricot.n.01",
@@ -13889,27 +13923,45 @@
                                         },
                                         {
                                           "name": "half__cherry.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_cherry"
+                                          ]
                                         },
                                         {
                                           "name": "half__banana.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_banana"
+                                          ]
                                         },
                                         {
                                           "name": "half__date.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_date"
+                                          ]
                                         },
                                         {
                                           "name": "half__durian.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_durian"
+                                          ]
                                         },
                                         {
                                           "name": "half__nectarine.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_nectarine"
+                                          ]
                                         },
                                         {
                                           "name": "half__avocado.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_avocado"
+                                          ]
                                         },
                                         {
                                           "name": "diced__banana.n.01",
@@ -14120,7 +14172,10 @@
                                     },
                                     {
                                       "name": "half__gourd.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_gourd"
+                                      ]
                                     },
                                     {
                                       "name": "half__hip.n.01",
@@ -14235,7 +14290,10 @@
                                 },
                                 {
                                   "name": "half__branch.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_branch"
+                                  ]
                                 },
                                 {
                                   "name": "diced__trunk.n.01",
@@ -14467,11 +14525,17 @@
                                   "children": [
                                     {
                                       "name": "agave.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "agave"
+                                      ]
                                     },
                                     {
                                       "name": "half__agave.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_agave"
+                                      ]
                                     },
                                     {
                                       "name": "diced__agave.n.01",
@@ -14560,7 +14624,10 @@
                                       "children": [
                                         {
                                           "name": "peppermint.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "peppermint"
+                                          ]
                                         }
                                       ]
                                     },
@@ -14600,7 +14667,10 @@
                                             },
                                             {
                                               "name": "half__butternut_squash.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_butternut_squash"
+                                              ]
                                             },
                                             {
                                               "name": "diced__butternut_squash.n.01",
@@ -14735,7 +14805,10 @@
                                             },
                                             {
                                               "name": "half__chives.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_chives"
+                                              ]
                                             },
                                             {
                                               "name": "diced__chives.n.01",
@@ -14763,7 +14836,10 @@
                                         },
                                         {
                                           "name": "half__tulip.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_tulip"
+                                          ]
                                         },
                                         {
                                           "name": "diced__tulip.n.01",
@@ -14860,7 +14936,10 @@
                                             },
                                             {
                                               "name": "half__sunflower.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_sunflower"
+                                              ]
                                             },
                                             {
                                               "name": "half__marigold.n.01",
@@ -14996,11 +15075,17 @@
                                   "children": [
                                     {
                                       "name": "chanterelle.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "chanterelle"
+                                      ]
                                     },
                                     {
                                       "name": "half__chanterelle.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_chanterelle"
+                                      ]
                                     },
                                     {
                                       "name": "diced__chanterelle.n.01",
@@ -15037,7 +15122,10 @@
                             },
                             {
                               "name": "half__shiitake.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_shiitake"
+                              ]
                             },
                             {
                               "name": "diced__shiitake.n.01",
@@ -16301,7 +16389,10 @@
                         },
                         {
                           "name": "half__wrapping_paper.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_wrapping_paper"
+                          ]
                         }
                       ]
                     },
@@ -17651,11 +17742,17 @@
                                         },
                                         {
                                           "name": "half__olive.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_olive"
+                                          ]
                                         },
                                         {
                                           "name": "half__pickle.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_pickle"
+                                          ]
                                         },
                                         {
                                           "name": "diced__olive.n.01",
@@ -17910,11 +18007,17 @@
                                     },
                                     {
                                       "name": "half__parsley.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_parsley"
+                                      ]
                                     },
                                     {
                                       "name": "half__bay_leaf.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_bay_leaf"
+                                      ]
                                     },
                                     {
                                       "name": "diced__bay_leaf.n.01",
@@ -18498,7 +18601,10 @@
                                 },
                                 {
                                   "name": "half__sweet_corn.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_sweet_corn"
+                                  ]
                                 },
                                 {
                                   "name": "diced__sweet_corn.n.01",
@@ -18641,7 +18747,10 @@
                                         },
                                         {
                                           "name": "half__cinnamon_roll.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_cinnamon_roll"
+                                          ]
                                         },
                                         {
                                           "name": "diced__danish.n.01",
@@ -18691,11 +18800,17 @@
                                     },
                                     {
                                       "name": "half__bagel.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_bagel"
+                                      ]
                                     },
                                     {
                                       "name": "half__hamburger_bun.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_hamburger_bun"
+                                      ]
                                     },
                                     {
                                       "name": "half__crescent_roll.n.01",
@@ -18776,7 +18891,10 @@
                                   "children": [
                                     {
                                       "name": "banana_bread.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "banana_bread"
+                                      ]
                                     },
                                     {
                                       "name": "biscuit.n.01",
@@ -18801,15 +18919,24 @@
                                     },
                                     {
                                       "name": "half__scone.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_scone"
+                                      ]
                                     },
                                     {
                                       "name": "half__muffin.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_muffin"
+                                      ]
                                     },
                                     {
                                       "name": "half__banana_bread.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_banana_bread"
+                                      ]
                                     },
                                     {
                                       "name": "diced__banana_bread.n.01",
@@ -18853,7 +18980,10 @@
                                 },
                                 {
                                   "name": "garlic_bread.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "garlic_bread"
+                                  ]
                                 },
                                 {
                                   "name": "loaf_of_bread.n.01",
@@ -18868,7 +18998,10 @@
                                     },
                                     {
                                       "name": "half__meat_loaf.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_meat_loaf"
+                                      ]
                                     },
                                     {
                                       "name": "diced__meat_loaf.n.01",
@@ -18886,11 +19019,17 @@
                                   "children": [
                                     {
                                       "name": "pita.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "pita"
+                                      ]
                                     },
                                     {
                                       "name": "half__pita.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_pita"
+                                      ]
                                     },
                                     {
                                       "name": "diced__pita.n.01",
@@ -18915,7 +19054,10 @@
                                     },
                                     {
                                       "name": "half__pretzel.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_pretzel"
+                                      ]
                                     },
                                     {
                                       "name": "diced__pretzel.n.01",
@@ -18946,7 +19088,10 @@
                                 },
                                 {
                                   "name": "half__toast.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_toast"
+                                  ]
                                 },
                                 {
                                   "name": "half__sour_bread.n.01",
@@ -18954,7 +19099,10 @@
                                 },
                                 {
                                   "name": "half__garlic_bread.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_garlic_bread"
+                                  ]
                                 },
                                 {
                                   "name": "diced__toast.n.01",
@@ -19030,7 +19178,10 @@
                             },
                             {
                               "name": "half__french_fries.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_french_fries"
+                              ]
                             },
                             {
                               "name": "diced__french_fries.n.01",
@@ -19070,7 +19221,10 @@
                                 },
                                 {
                                   "name": "chocolate_cookie_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "chocolate_cookie_dough"
+                                  ]
                                 },
                                 {
                                   "name": "cookie_dough.n.01",
@@ -19123,35 +19277,59 @@
                                 },
                                 {
                                   "name": "half__edible_cookie_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_edible_cookie_dough"
+                                  ]
                                 },
                                 {
                                   "name": "half__biscuit_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_biscuit_dough"
+                                  ]
                                 },
                                 {
                                   "name": "half__chocolate_cookie_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_chocolate_cookie_dough"
+                                  ]
                                 },
                                 {
                                   "name": "half__spice_cookie_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_spice_cookie_dough"
+                                  ]
                                 },
                                 {
                                   "name": "half__sugar_cookie_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_sugar_cookie_dough"
+                                  ]
                                 },
                                 {
                                   "name": "half__pastry.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_pastry"
+                                  ]
                                 },
                                 {
                                   "name": "half__pizza_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_pizza_dough"
+                                  ]
                                 },
                                 {
                                   "name": "half__bagel_dough.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_bagel_dough"
+                                  ]
                                 },
                                 {
                                   "name": "diced__chocolate_cookie_dough.n.01",
@@ -19348,7 +19526,10 @@
                           "children": [
                             {
                               "name": "bean_curd.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "bean_curd"
+                              ]
                             },
                             {
                               "name": "tofu.n.02",
@@ -19359,11 +19540,17 @@
                             },
                             {
                               "name": "half__bean_curd.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_bean_curd"
+                              ]
                             },
                             {
                               "name": "half__tofu.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_tofu"
+                              ]
                             },
                             {
                               "name": "diced__tofu.n.01",
@@ -19400,7 +19587,10 @@
                               "children": [
                                 {
                                   "name": "bleu.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bleu"
+                                  ]
                                 },
                                 {
                                   "name": "cheddar.n.02",
@@ -19472,7 +19662,10 @@
                                 },
                                 {
                                   "name": "mozzarella.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "mozzarella"
+                                  ]
                                 },
                                 {
                                   "name": "parmesan.n.01",
@@ -19494,19 +19687,31 @@
                                 },
                                 {
                                   "name": "half__cheddar.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_cheddar"
+                                  ]
                                 },
                                 {
                                   "name": "half__swiss_cheese.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_swiss_cheese"
+                                  ]
                                 },
                                 {
                                   "name": "half__bleu.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_bleu"
+                                  ]
                                 },
                                 {
                                   "name": "half__mozzarella.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_mozzarella"
+                                  ]
                                 },
                                 {
                                   "name": "diced__swiss_cheese.n.01",
@@ -19696,7 +19901,10 @@
                             },
                             {
                               "name": "half__butter.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_butter"
+                              ]
                             },
                             {
                               "name": "diced__butter.n.01",
@@ -19946,7 +20154,10 @@
                                 },
                                 {
                                   "name": "half__tiramisu.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_tiramisu"
+                                  ]
                                 },
                                 {
                                   "name": "diced__tiramisu.n.01",
@@ -20013,19 +20224,31 @@
                                     },
                                     {
                                       "name": "half__arepa.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_arepa"
+                                      ]
                                     },
                                     {
                                       "name": "half__hotdog.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_hotdog"
+                                      ]
                                     },
                                     {
                                       "name": "half__hamburger.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_hamburger"
+                                      ]
                                     },
                                     {
                                       "name": "half__club_sandwich.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_club_sandwich"
+                                      ]
                                     },
                                     {
                                       "name": "diced__hamburger.n.01",
@@ -20253,7 +20476,10 @@
                             },
                             {
                               "name": "enchilada.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "enchilada"
+                              ]
                             },
                             {
                               "name": "french_toast.n.01",
@@ -20444,15 +20670,24 @@
                             },
                             {
                               "name": "half__meatball.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_meatball"
+                              ]
                             },
                             {
                               "name": "half__taco.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_taco"
+                              ]
                             },
                             {
                               "name": "half__burrito.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_burrito"
+                              ]
                             },
                             {
                               "name": "half__carne_asada.n.01",
@@ -20460,19 +20695,31 @@
                             },
                             {
                               "name": "half__omelet.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_omelet"
+                              ]
                             },
                             {
                               "name": "half__sushi.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_sushi"
+                              ]
                             },
                             {
                               "name": "half__pizza.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_pizza"
+                              ]
                             },
                             {
                               "name": "half__ramen.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_ramen"
+                              ]
                             },
                             {
                               "name": "half__kabob.n.01",
@@ -20480,15 +20727,24 @@
                             },
                             {
                               "name": "half__enchilada.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_enchilada"
+                              ]
                             },
                             {
                               "name": "half__meat_loaf.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_meat_loaf"
+                              ]
                             },
                             {
                               "name": "half__french_toast.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_french_toast"
+                              ]
                             },
                             {
                               "name": "diced__meatball.n.01",
@@ -20677,7 +20933,10 @@
                                         },
                                         {
                                           "name": "half__peppermint.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_peppermint"
+                                          ]
                                         },
                                         {
                                           "name": "diced__peppermint.n.01",
@@ -20698,7 +20957,10 @@
                                     },
                                     {
                                       "name": "half__marshmallow.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_marshmallow"
+                                      ]
                                     },
                                     {
                                       "name": "diced__marshmallow.n.01",
@@ -20760,7 +21022,10 @@
                             },
                             {
                               "name": "half__gelatin.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_gelatin"
+                              ]
                             },
                             {
                               "name": "diced__gelatin.n.01",
@@ -21875,11 +22140,17 @@
                                     },
                                     {
                                       "name": "half__cheese_tart.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_cheese_tart"
+                                      ]
                                     },
                                     {
                                       "name": "half__quiche.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_quiche"
+                                      ]
                                     },
                                     {
                                       "name": "diced__cheese_tart.n.01",
@@ -21972,7 +22243,10 @@
                                     },
                                     {
                                       "name": "half__cinnamon_roll.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_cinnamon_roll"
+                                      ]
                                     },
                                     {
                                       "name": "diced__danish.n.01",
@@ -22022,11 +22296,17 @@
                                 },
                                 {
                                   "name": "half__bagel.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_bagel"
+                                  ]
                                 },
                                 {
                                   "name": "half__hamburger_bun.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_hamburger_bun"
+                                  ]
                                 },
                                 {
                                   "name": "half__crescent_roll.n.01",
@@ -22107,7 +22387,10 @@
                               "children": [
                                 {
                                   "name": "banana_bread.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "banana_bread"
+                                  ]
                                 },
                                 {
                                   "name": "biscuit.n.01",
@@ -22132,15 +22415,24 @@
                                 },
                                 {
                                   "name": "half__scone.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_scone"
+                                  ]
                                 },
                                 {
                                   "name": "half__muffin.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_muffin"
+                                  ]
                                 },
                                 {
                                   "name": "half__banana_bread.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_banana_bread"
+                                  ]
                                 },
                                 {
                                   "name": "diced__banana_bread.n.01",
@@ -22184,7 +22476,10 @@
                             },
                             {
                               "name": "garlic_bread.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "garlic_bread"
+                              ]
                             },
                             {
                               "name": "loaf_of_bread.n.01",
@@ -22199,7 +22494,10 @@
                                 },
                                 {
                                   "name": "half__meat_loaf.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_meat_loaf"
+                                  ]
                                 },
                                 {
                                   "name": "diced__meat_loaf.n.01",
@@ -22217,11 +22515,17 @@
                               "children": [
                                 {
                                   "name": "pita.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "pita"
+                                  ]
                                 },
                                 {
                                   "name": "half__pita.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_pita"
+                                  ]
                                 },
                                 {
                                   "name": "diced__pita.n.01",
@@ -22246,7 +22550,10 @@
                                 },
                                 {
                                   "name": "half__pretzel.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_pretzel"
+                                  ]
                                 },
                                 {
                                   "name": "diced__pretzel.n.01",
@@ -22277,7 +22584,10 @@
                             },
                             {
                               "name": "half__toast.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_toast"
+                              ]
                             },
                             {
                               "name": "half__sour_bread.n.01",
@@ -22285,7 +22595,10 @@
                             },
                             {
                               "name": "half__garlic_bread.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_garlic_bread"
+                              ]
                             },
                             {
                               "name": "diced__toast.n.01",
@@ -22405,31 +22718,52 @@
                                 },
                                 {
                                   "name": "half__chocolate_chip_cookie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_chocolate_chip_cookie"
+                                  ]
                                 },
                                 {
                                   "name": "half__sugar_cookie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_sugar_cookie"
+                                  ]
                                 },
                                 {
                                   "name": "half__butter_cookie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_butter_cookie"
+                                  ]
                                 },
                                 {
                                   "name": "half__chocolate_biscuit.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_chocolate_biscuit"
+                                  ]
                                 },
                                 {
                                   "name": "half__spice_cookie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_spice_cookie"
+                                  ]
                                 },
                                 {
                                   "name": "half__brownie.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_brownie"
+                                  ]
                                 },
                                 {
                                   "name": "half__granola_bar.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_granola_bar"
+                                  ]
                                 },
                                 {
                                   "name": "diced__butter_cookie.n.01",
@@ -22529,7 +22863,10 @@
                                 },
                                 {
                                   "name": "half__tortilla.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_tortilla"
+                                  ]
                                 },
                                 {
                                   "name": "half__potato_pancake.n.01",
@@ -22537,7 +22874,10 @@
                                 },
                                 {
                                   "name": "half__buttermilk_pancake.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_buttermilk_pancake"
+                                  ]
                                 },
                                 {
                                   "name": "diced__potato_pancake.n.01",
@@ -22641,27 +22981,45 @@
                             },
                             {
                               "name": "half__gingerbread.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_gingerbread"
+                              ]
                             },
                             {
                               "name": "half__cheesecake.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_cheesecake"
+                              ]
                             },
                             {
                               "name": "half__fruitcake.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_fruitcake"
+                              ]
                             },
                             {
                               "name": "half__chocolate_cake.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_chocolate_cake"
+                              ]
                             },
                             {
                               "name": "half__waffle.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_waffle"
+                              ]
                             },
                             {
                               "name": "half__cupcake.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_cupcake"
+                              ]
                             },
                             {
                               "name": "diced__cupcake.n.01",
@@ -22786,7 +23144,10 @@
                                     },
                                     {
                                       "name": "half__gooseberry.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_gooseberry"
+                                      ]
                                     },
                                     {
                                       "name": "diced__gooseberry.n.01",
@@ -22827,7 +23188,10 @@
                                 },
                                 {
                                   "name": "half__blackberry.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_blackberry"
+                                  ]
                                 },
                                 {
                                   "name": "diced__blackberry.n.01",
@@ -22868,7 +23232,10 @@
                                     },
                                     {
                                       "name": "half__cantaloup.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_cantaloup"
+                                      ]
                                     },
                                     {
                                       "name": "diced__cantaloup.n.01",
@@ -23051,7 +23418,10 @@
                                 },
                                 {
                                   "name": "half__grapefruit.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_grapefruit"
+                                  ]
                                 },
                                 {
                                   "name": "diced__lime.n.01",
@@ -23128,7 +23498,10 @@
                                 },
                                 {
                                   "name": "half__dried_apricot.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_dried_apricot"
+                                  ]
                                 },
                                 {
                                   "name": "diced__dried_apricot.n.01",
@@ -23300,27 +23673,45 @@
                             },
                             {
                               "name": "half__cherry.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_cherry"
+                              ]
                             },
                             {
                               "name": "half__banana.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_banana"
+                              ]
                             },
                             {
                               "name": "half__date.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_date"
+                              ]
                             },
                             {
                               "name": "half__durian.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_durian"
+                              ]
                             },
                             {
                               "name": "half__nectarine.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_nectarine"
+                              ]
                             },
                             {
                               "name": "half__avocado.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_avocado"
+                              ]
                             },
                             {
                               "name": "diced__banana.n.01",
@@ -23481,11 +23872,17 @@
                                     },
                                     {
                                       "name": "half__arugula.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_arugula"
+                                      ]
                                     },
                                     {
                                       "name": "half__lettuce.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_lettuce"
+                                      ]
                                     },
                                     {
                                       "name": "diced__arugula.n.01",
@@ -23535,11 +23932,17 @@
                                 },
                                 {
                                   "name": "half__chard.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_chard"
+                                  ]
                                 },
                                 {
                                   "name": "half__spinach.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_spinach"
+                                  ]
                                 },
                                 {
                                   "name": "cooked__diced__spinach.n.01",
@@ -23606,7 +24009,10 @@
                                     },
                                     {
                                       "name": "half__cherry_tomato.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_cherry_tomato"
+                                      ]
                                     },
                                     {
                                       "name": "diced__tomato.n.01",
@@ -23699,7 +24105,10 @@
                                         },
                                         {
                                           "name": "half__chili.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_chili"
+                                          ]
                                         }
                                       ]
                                     }
@@ -23791,7 +24200,10 @@
                                 },
                                 {
                                   "name": "half__carrot.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_carrot"
+                                  ]
                                 },
                                 {
                                   "name": "carrot.n.03",
@@ -23869,11 +24281,17 @@
                                     },
                                     {
                                       "name": "half__white_turnip.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_white_turnip"
+                                      ]
                                     },
                                     {
                                       "name": "half__rutabaga.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_rutabaga"
+                                      ]
                                     },
                                     {
                                       "name": "diced__white_turnip.n.01",
@@ -23920,15 +24338,24 @@
                                 },
                                 {
                                   "name": "half__radish.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_radish"
+                                  ]
                                 },
                                 {
                                   "name": "half__parsnip.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_parsnip"
+                                  ]
                                 },
                                 {
                                   "name": "half__beet.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_beet"
+                                  ]
                                 },
                                 {
                                   "name": "diced__parsnip.n.01",
@@ -24005,7 +24432,10 @@
                                             },
                                             {
                                               "name": "half__green_bean.n.01",
-                                              "hasModel": true
+                                              "hasModel": true,
+                                              "categories": [
+                                                "half_green_bean"
+                                              ]
                                             },
                                             {
                                               "name": "diced__green_bean.n.01",
@@ -24112,15 +24542,24 @@
                                     },
                                     {
                                       "name": "half__bok_choy.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_bok_choy"
+                                      ]
                                     },
                                     {
                                       "name": "half__head_cabbage.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_head_cabbage"
+                                      ]
                                     },
                                     {
                                       "name": "half__kale.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_kale"
+                                      ]
                                     },
                                     {
                                       "name": "diced__kale.n.01",
@@ -24217,11 +24656,17 @@
                                     },
                                     {
                                       "name": "half__white_turnip.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_white_turnip"
+                                      ]
                                     },
                                     {
                                       "name": "half__rutabaga.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_rutabaga"
+                                      ]
                                     },
                                     {
                                       "name": "diced__white_turnip.n.01",
@@ -24243,19 +24688,31 @@
                                 },
                                 {
                                   "name": "half__radish.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_radish"
+                                  ]
                                 },
                                 {
                                   "name": "half__broccolini.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_broccolini"
+                                  ]
                                 },
                                 {
                                   "name": "half__cauliflower.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_cauliflower"
+                                  ]
                                 },
                                 {
                                   "name": "half__broccoli.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_broccoli"
+                                  ]
                                 },
                                 {
                                   "name": "half__mustard.n.01",
@@ -24263,11 +24720,17 @@
                                 },
                                 {
                                   "name": "half__brussels_sprouts.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_brussels_sprouts"
+                                  ]
                                 },
                                 {
                                   "name": "half__broccoli_rabe.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_broccoli_rabe"
+                                  ]
                                 },
                                 {
                                   "name": "diced__broccoli_rabe.n.01",
@@ -24388,7 +24851,10 @@
                                 },
                                 {
                                   "name": "half__green_onion.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_green_onion"
+                                  ]
                                 },
                                 {
                                   "name": "diced__onion.n.01",
@@ -24516,15 +24982,24 @@
                             },
                             {
                               "name": "half__pumpkin.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_pumpkin"
+                              ]
                             },
                             {
                               "name": "half__celery.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_celery"
+                              ]
                             },
                             {
                               "name": "half__cucumber.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_cucumber"
+                              ]
                             },
                             {
                               "name": "half__pieplant.n.01",
@@ -24532,19 +25007,31 @@
                             },
                             {
                               "name": "half__fennel.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_fennel"
+                              ]
                             },
                             {
                               "name": "half__leek.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_leek"
+                              ]
                             },
                             {
                               "name": "half__artichoke.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_artichoke"
+                              ]
                             },
                             {
                               "name": "half__asparagus.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_asparagus"
+                              ]
                             },
                             {
                               "name": "diced__pieplant.n.01",
@@ -24667,11 +25154,17 @@
                                     },
                                     {
                                       "name": "half__virginia_ham.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_virginia_ham"
+                                      ]
                                     },
                                     {
                                       "name": "half__prosciutto.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_prosciutto"
+                                      ]
                                     },
                                     {
                                       "name": "diced__prosciutto.n.01",
@@ -24685,7 +25178,10 @@
                                 },
                                 {
                                   "name": "half__bacon.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_bacon"
+                                  ]
                                 },
                                 {
                                   "name": "diced__bacon.n.01",
@@ -24728,7 +25224,10 @@
                                 },
                                 {
                                   "name": "half__ham_hock.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_ham_hock"
+                                  ]
                                 },
                                 {
                                   "name": "diced__ham_hock.n.01",
@@ -24834,15 +25333,24 @@
                             },
                             {
                               "name": "half__steak.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_steak"
+                              ]
                             },
                             {
                               "name": "half__tenderloin.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_tenderloin"
+                              ]
                             },
                             {
                               "name": "half__brisket.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_brisket"
+                              ]
                             },
                             {
                               "name": "diced__sirloin.n.01",
@@ -24903,7 +25411,10 @@
                                 },
                                 {
                                   "name": "half__bratwurst.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_bratwurst"
+                                  ]
                                 }
                               ]
                             },
@@ -24948,15 +25459,24 @@
                             },
                             {
                               "name": "half__pepperoni.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_pepperoni"
+                              ]
                             },
                             {
                               "name": "half__chorizo.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_chorizo"
+                              ]
                             },
                             {
                               "name": "half__kielbasa.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_kielbasa"
+                              ]
                             },
                             {
                               "name": "diced__chorizo.n.01",
@@ -25040,15 +25560,24 @@
                                 },
                                 {
                                   "name": "half__duck.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_duck"
+                                  ]
                                 },
                                 {
                                   "name": "half__chicken.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_chicken"
+                                  ]
                                 },
                                 {
                                   "name": "half__turkey.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_turkey"
+                                  ]
                                 },
                                 {
                                   "name": "diced__turkey.n.01",
@@ -25095,7 +25624,10 @@
                         },
                         {
                           "name": "cold_cuts.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "cold_cuts"
+                          ]
                         },
                         {
                           "name": "beef.n.02",
@@ -25144,11 +25676,17 @@
                           "children": [
                             {
                               "name": "venison.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "venison"
+                              ]
                             },
                             {
                               "name": "half__venison.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_venison"
+                              ]
                             },
                             {
                               "name": "diced__venison.n.01",
@@ -25162,19 +25700,31 @@
                         },
                         {
                           "name": "half__pork.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_pork"
+                          ]
                         },
                         {
                           "name": "half__veal.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_veal"
+                          ]
                         },
                         {
                           "name": "half__lamb.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_lamb"
+                          ]
                         },
                         {
                           "name": "half__cold_cuts.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_cold_cuts"
+                          ]
                         },
                         {
                           "name": "diced__pork.n.01",
@@ -25216,7 +25766,10 @@
                       "children": [
                         {
                           "name": "bleu.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "bleu"
+                          ]
                         },
                         {
                           "name": "cheddar.n.02",
@@ -25288,7 +25841,10 @@
                         },
                         {
                           "name": "mozzarella.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "mozzarella"
+                          ]
                         },
                         {
                           "name": "parmesan.n.01",
@@ -25310,19 +25866,31 @@
                         },
                         {
                           "name": "half__cheddar.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_cheddar"
+                          ]
                         },
                         {
                           "name": "half__swiss_cheese.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_swiss_cheese"
+                          ]
                         },
                         {
                           "name": "half__bleu.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_bleu"
+                          ]
                         },
                         {
                           "name": "half__mozzarella.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_mozzarella"
+                          ]
                         },
                         {
                           "name": "diced__swiss_cheese.n.01",
@@ -25589,11 +26157,17 @@
                             },
                             {
                               "name": "half__lobster.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_lobster"
+                              ]
                             },
                             {
                               "name": "half__crab.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_crab"
+                              ]
                             },
                             {
                               "name": "half__clam.n.01",
@@ -25724,7 +26298,10 @@
                             },
                             {
                               "name": "half__snapper.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_snapper"
+                              ]
                             },
                             {
                               "name": "half__grouper.n.01",
@@ -25732,7 +26309,10 @@
                             },
                             {
                               "name": "half__tuna.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_tuna"
+                              ]
                             },
                             {
                               "name": "diced__cod.n.01",
@@ -25791,7 +26371,10 @@
                         },
                         {
                           "name": "half__squid.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_squid"
+                          ]
                         },
                         {
                           "name": "half__prawn.n.01",
@@ -25963,11 +26546,17 @@
                         },
                         {
                           "name": "half__salmon.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_salmon"
+                          ]
                         },
                         {
                           "name": "half__trout.n.01",
-                          "hasModel": true
+                          "hasModel": true,
+                          "categories": [
+                            "half_trout"
+                          ]
                         },
                         {
                           "name": "diced__salmon.n.01",
@@ -25996,7 +26585,10 @@
                     },
                     {
                       "name": "half__butter.n.01",
-                      "hasModel": true
+                      "hasModel": true,
+                      "categories": [
+                        "half_butter"
+                      ]
                     },
                     {
                       "name": "diced__butter.n.01",
@@ -27839,7 +28431,10 @@
                             },
                             {
                               "name": "half__wrapping_paper.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_wrapping_paper"
+                              ]
                             }
                           ]
                         },
@@ -29400,11 +29995,17 @@
                           "children": [
                             {
                               "name": "auricularia.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "auricularia"
+                              ]
                             },
                             {
                               "name": "half__auricularia.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_auricularia"
+                              ]
                             },
                             {
                               "name": "diced__auricularia.n.01",
@@ -30125,11 +30726,17 @@
                             },
                             {
                               "name": "half__chicken_breast.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_chicken_breast"
+                              ]
                             },
                             {
                               "name": "half__chicken_tender.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_chicken_tender"
+                              ]
                             },
                             {
                               "name": "diced__chicken_tender.n.01",
@@ -30166,11 +30773,17 @@
                             },
                             {
                               "name": "half__turkey_leg.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_turkey_leg"
+                              ]
                             },
                             {
                               "name": "half__chicken_leg.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_chicken_leg"
+                              ]
                             },
                             {
                               "name": "diced__turkey_leg.n.01",
@@ -30203,7 +30816,10 @@
                             },
                             {
                               "name": "half__chicken_wing.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_chicken_wing"
+                              ]
                             },
                             {
                               "name": "diced__chicken_wing.n.01",
@@ -30228,7 +30844,10 @@
                             },
                             {
                               "name": "half__fillet.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_fillet"
+                              ]
                             },
                             {
                               "name": "diced__fillet.n.01",
