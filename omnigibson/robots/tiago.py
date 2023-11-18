@@ -516,6 +516,15 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         return {"left": np.array([7, 10, 13, 15, 17, 19, 21]),
                 "right": np.array([8, 11, 14, 16, 18, 20, 22]),
                 "combined": np.array([7, 8, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22])}
+    
+    @property
+    def manipulation_control_idx(self):
+        if self.rigid_trunk:
+            return {"left": self.arm_control_idx["left"],
+                    "right": self.arm_control_idx["right"]}
+        else:
+            return {"left": np.concatenate([self.trunk_control_idx, self.arm_control_idx["left"]]),
+                    "right": np.concatenate([self.trunk_control_idx, self.arm_control_idx["right"]])}
 
     @property
     def gripper_control_idx(self):

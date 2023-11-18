@@ -80,7 +80,6 @@ m.DEFAULT_ANGLE_THRESHOLD = 0.05
 m.LOW_PRECISION_DIST_THRESHOLD = 0.1
 m.LOW_PRECISION_ANGLE_THRESHOLD = 0.2
 
-m.TIAGO_TORSO_FIXED = False
 m.JOINT_POS_DIFF_THRESHOLD = 0.005
 m.JOINT_CONTROL_MIN_ACTION = 0.0
 m.MAX_ALLOWED_JOINT_ERROR_FOR_LINEAR_MOTION = np.deg2rad(45)
@@ -122,7 +121,7 @@ class PlanningContext(object):
         self._set_prim_pose(self.robot_copy.prims[self.robot_copy_type], self.robot_copy.reset_pose[self.robot_copy_type])
 
     def _assemble_robot_copy(self):
-        if m.TIAGO_TORSO_FIXED:
+        if self.robot.rigid_trunk:
             fk_descriptor = "left_fixed"
         else:
             fk_descriptor = "combined" if "combined" in self.robot.robot_arm_descriptor_yamls else self.robot.default_arm
@@ -134,7 +133,7 @@ class PlanningContext(object):
         # TODO: Remove the need for this after refactoring the FK / descriptors / etc.
         arm_links = self.robot.manipulation_link_names
 
-        if m.TIAGO_TORSO_FIXED:
+        if self.robot.rigid_trunk:
             assert self.arm == "left", "Fixed torso mode only supports left arm!"
             joint_control_idx = self.robot.arm_control_idx["left"]
             joint_pos = np.array(self.robot.get_joint_positions()[joint_control_idx])
@@ -274,6 +273,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self._tracking_object = None
 
         self.robot_copy = self._load_robot_copy()
+
+        self.torso_fixed = self.robot
 
     def _postprocess_action(self, action):
         """Postprocesses action by applying head tracking and adding context if necessary."""
@@ -827,24 +828,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             bool: Whether eef can the reach target pose
         """
         return self._ik_solver_cartesian_to_joint_space(relative_target_pose) is not None
-
-    @cached_property
-    def _manipulation_control_idx(self):
-        """The appropriate manipulation control idx for the current settings."""           
-        if isinstance(self.robot, Tiago):
-            if m.TIAGO_TORSO_FIXED:
-                assert self.arm == "left", "Fixed torso mode only supports left arm!"
-                return self.robot.arm_control_idx["left"]
-            else:
-                return np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
-            
-        # Otherwise just return the default arm control idx
-        return self.robot.arm_control_idx[self.arm]
     
     @cached_property
     def _manipulation_descriptor_path(self):
         """The appropriate manipulation descriptor for the current settings."""           
-        if isinstance(self.robot, Tiago) and m.TIAGO_TORSO_FIXED:
+        if isinstance(self.robot, Tiago) and self.robot.rigid_trunk:
             assert self.arm == "left", "Fixed torso mode only supports left arm!"
             return self.robot.robot_arm_descriptor_yamls["left_fixed"]
             
@@ -866,7 +854,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         ik_solver = IKSolver(
             robot_description_path=self._manipulation_descriptor_path,
             robot_urdf_path=self.robot.urdf_path,
-            default_joint_pos=self.robot.default_joint_pos[self._manipulation_control_idx],
+            default_joint_pos=self.robot.default_joint_pos[self.robot.manipulation_control_idx],
             eef_name=self.robot.eef_link_names[self.arm],
         )
         # Grab the joint positions in order to reach the desired pose target
@@ -912,7 +900,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 robot=self.robot,
                 end_conf=joint_pos,
                 context=context,
-                torso_fixed=m.TIAGO_TORSO_FIXED,
+                torso_fixed=self.robot.rigid_trunk,
             )
 
         # plan = self._add_linearly_interpolated_waypoints(plan, 0.1)
@@ -947,7 +935,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 robot=self.robot,
                 end_conf=end_conf,
                 context=context,
-                torso_fixed=m.TIAGO_TORSO_FIXED,
+                torso_fixed=self.robot.rigid_trunk,
             )
 
         # plan = self._add_linearly_interpolated_waypoints(plan, 0.1)
@@ -1007,7 +995,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         prev_eef_pos = np.zeros(3)
 
         for _ in range(m.MAX_STEPS_FOR_HAND_MOVE_JOINT):
-            current_joint_pos = self.robot.get_joint_positions()[self._manipulation_control_idx]
+            current_joint_pos = self.robot.get_joint_positions()[self.robot.manipulation_control_idx]
             diff_joint_pos = np.array(current_joint_pos) - np.array(joint_pos)
             if np.max(np.abs(diff_joint_pos)) < m.JOINT_POS_DIFF_THRESHOLD:
                 return
@@ -1167,10 +1155,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             
             for joint_pos in joint_space_data:
                 # Check if the movement can be done roughly linearly.
-                current_joint_positions = self.robot.get_joint_positions()[self._manipulation_control_idx]
+                current_joint_positions = self.robot.get_joint_positions()[self.robot.manipulation_control_idx]
 
                 failed_joints = []
-                for joint_idx, target_joint_pos, current_joint_pos in zip(self._manipulation_control_idx, joint_pos, current_joint_positions):
+                for joint_idx, target_joint_pos, current_joint_pos in zip(self.robot.manipulation_control_idx, joint_pos, current_joint_positions):
                     if np.abs(target_joint_pos - current_joint_pos) > m.MAX_ALLOWED_JOINT_ERROR_FOR_LINEAR_MOTION:
                         failed_joints.append(joints[joint_idx].joint_name)
 
@@ -1354,7 +1342,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 yield from self._move_hand_direct_ik(reset_eef_pose, ignore_failure=True, in_world_frame=False)
         else:
             indented_print("Resetting hand")
-            reset_pose = self._get_reset_joint_pos()[self._manipulation_control_idx]
+            reset_pose = self._get_reset_joint_pos()[self.robot.manipulation_control_idx]
             try:
                 yield from self._move_hand_joint(reset_pose)
             except ActionPrimitiveError:

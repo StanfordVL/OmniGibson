@@ -401,6 +401,14 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
     @property
     def arm_control_idx(self):
         return {self.default_arm: np.array([4, 6, 7, 8, 9, 10, 11])}
+    
+    @property
+    def manipulation_control_idx(self):
+        if self.rigid_trunk:
+            return self.arm_control_idx
+        else:
+            return {self.default_arm: np.concatenate([self.trunk_control_idx, self.arm_control_idx[self.default_arm]])}
+
 
     @property
     def gripper_control_idx(self):
