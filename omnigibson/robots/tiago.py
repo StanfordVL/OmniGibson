@@ -524,7 +524,8 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                     "right": self.arm_control_idx["right"]}
         else:
             return {"left": np.concatenate([self.trunk_control_idx, self.arm_control_idx["left"]]),
-                    "right": np.concatenate([self.trunk_control_idx, self.arm_control_idx["right"]])}
+                    "right": np.concatenate([self.trunk_control_idx, self.arm_control_idx["right"]]),
+                    "combined": np.concatenate([self.trunk_control_idx, self.arm_control_idx["combined"]])}
 
     @property
     def gripper_control_idx(self):

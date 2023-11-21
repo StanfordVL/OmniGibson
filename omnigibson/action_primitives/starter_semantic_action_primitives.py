@@ -274,8 +274,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         self.robot_copy = self._load_robot_copy()
 
-        self.torso_fixed = self.robot
-
     def _postprocess_action(self, action):
         """Postprocesses action by applying head tracking and adding context if necessary."""
         action = self._overwrite_head_action(action)
