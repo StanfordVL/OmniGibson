@@ -1,3 +1,4 @@
+import collections
 import os
 import pytest
 import yaml
@@ -11,6 +12,7 @@ from omnigibson import object_states
 from omnigibson.action_primitives.symbolic_semantic_action_primitives import SymbolicSemanticActionPrimitiveSet, SymbolicSemanticActionPrimitives
 from omnigibson.systems import get_system
 
+from omni.syntheticdata import helpers
 
 def start_env():
   config = {
@@ -33,7 +35,9 @@ def start_env():
         "obs_modalities": [
           "scan",
           "rgb",
-          "depth"
+          "depth",
+          "seg_instance",
+          "seg_semantic",
         ],
         "scale": 1,
         "self_collisions": True,
@@ -292,12 +296,26 @@ def main():
   print("Will start in 3 seconds")
   for _ in range(180): env.step(prim_gen._empty_action())
 
-  try:
-    test_cut(env, prim_gen, apple, knife, countertop)
-  except:
-    raise
+  r = env.robots[0]
+  cam = r.sensors["robot0:eyes_Camera_sensor"]
+
+  import IPython; IPython.embed()
+
   while True:
     og.sim.step()
+    insts = cam.get_obs()["seg_instance"].flatten()
+    inst_counts = collections.Counter(insts)
+    total_pixels = len(insts)
+
+    im = helpers.get_instance_mappings()
+    ins_to_prim = {entry[0]: entry[1] for entry in im}
+
+    prim_counts = {ins_to_prim[k]: v for k, v in inst_counts.items() if k in ins_to_prim}
+    prim_counts["unknown"] = total_pixels - sum(prim_counts.values())
+
+    print("-------------------- New frame --------------------")
+    for k, v in prim_counts.items():
+      print(f"{k}: {v*100/total_pixels:d}%")
 
 if __name__ == "__main__":
   main()

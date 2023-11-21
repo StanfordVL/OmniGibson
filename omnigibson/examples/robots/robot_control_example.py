@@ -3,12 +3,15 @@ Example script demo'ing robot control.
 
 Options for random actions, as well as selection of robot action space
 """
+import collections
 import numpy as np
 
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.robots import REGISTERED_ROBOTS
 from omnigibson.utils.ui_utils import choose_from_options, KeyboardRobotController
+
+from omni.syntheticdata import helpers
 
 
 CONTROL_MODES = dict(
@@ -126,14 +129,30 @@ def main(random_selection=False, headless=False, short_exec=False):
     print("Running demo.")
     print("Press ESC to quit")
 
+    cam = robot.sensors["robot0:eyes_Camera_sensor"]
+
     # Loop control until user quits
-    max_steps = -1 if not short_exec else 100
+    max_steps = -1
     step = 0
     while step != max_steps:
         action = action_generator.get_random_action() if control_mode == "random" else action_generator.get_teleop_action()
         for _ in range(10):
             env.step(action=action)
             step += 1
+            
+        insts = cam.get_obs()["seg_instance"].flatten()
+        inst_counts = collections.Counter(insts)
+        total_pixels = len(insts)
+
+        im = helpers.get_instance_mappings()
+        ins_to_prim = {entry[0]: entry[1] for entry in im}
+
+        prim_counts = {ins_to_prim[k]: v for k, v in inst_counts.items() if k in ins_to_prim}
+        prim_counts["unknown"] = total_pixels - sum(prim_counts.values())
+
+        print("-------------------- New frame --------------------")
+        for k, v in prim_counts.items():
+            print(f"{k}: {v/total_pixels:.2f}")
 
     # Always shut down the environment cleanly at the end
     env.close()
