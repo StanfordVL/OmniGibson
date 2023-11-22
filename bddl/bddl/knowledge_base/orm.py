@@ -42,7 +42,10 @@ class Model:
         assert kwargs, "Must specify either positional or keyword arguments to get"
         # Use a fast lookup for the PK.
         if len(kwargs) == 1 and cls.Meta.pk in kwargs:
-            return cls._OBJECT_REGISTRY[cls.__name__][kwargs[cls.Meta.pk]]
+            key = kwargs[cls.Meta.pk]
+            if key is None:
+                return None
+            return cls._OBJECT_REGISTRY[cls.__name__][key]
         objs = [x for x in cls.all_objects() if all(getattr(x, attr) == value for attr, value in kwargs.items())]
         if not objs:
             raise KeyError(f"No object matching {kwargs}")
