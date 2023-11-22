@@ -2965,7 +2965,7 @@ cooked__melted__bleu.n.01,cheese.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 half__vanilla_flower.n.01,orchid.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__tortilla_chips.n.01,corn_chip.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__sourdough.n.01,dough.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__shrimp.n.01,prawn.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+half__shrimp.n.01,seafood.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__rosehip.n.01,fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__roll_dough.n.01,dough.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__rhubarb.n.01,vegetable.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2977,7 +2977,7 @@ half__cheese_danish.n.01,sweet_roll.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 half__cookie_dough.n.01,dough.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__crawfish.n.01,shellfish.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__croissant.n.01,bun.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__donut.n.01,doughnut.n.02,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+half__donut.n.01,friedcake.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__garlic.n.01,garlic.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__garlic_clove.n.01,garlic.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__ginger_root.n.01,flavorer.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2991,3 +2991,5 @@ half__peppermint_candy.n.01,mint.n.05,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 half__pork_chop.n.01,chop.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__pork_rib.n.01,cut.n.06,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 diced__doughnut.n.01,friedcake.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__cookie_dough.n.01,dough.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+cooked__diced__cookie_dough.n.01,dough.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
