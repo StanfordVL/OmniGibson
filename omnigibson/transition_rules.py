@@ -1668,7 +1668,7 @@ def import_recipes():
     import bddl
     recipe_fpath = f"{os.path.dirname(bddl.__file__)}/generated_data/transition_rule_recipes.json"
     if not os.path.exists(recipe_fpath):
-        log.warning(f"Cannot find recipe file at {recipe_fpath}. Skipping importing recipes.")
+        # log.warning(f"Cannot find recipe file at {recipe_fpath}. Skipping importing recipes.")
         return
     with open(recipe_fpath, "r") as f:
         rule_recipes = json.load(f)
