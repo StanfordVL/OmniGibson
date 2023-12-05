@@ -1434,7 +1434,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 {"object in hand": self._get_obj_in_hand().name},
             )
         
-    def _overwrite_head_action(self, action, target_obj_pose):
+    def _overwrite_head_action(self, action, target_obj_pose=None):
         """
         Overwrites camera control actions to track an object of interest.
         If self._track_eef is True, target_obj_pose is ignored and the camera tracks the robot's end-effector.
