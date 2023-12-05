@@ -277,7 +277,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
     def _postprocess_action(self, action):
         """Postprocesses action by applying head tracking and adding context if necessary."""
-        action = self._overwrite_head_action(action)
+        if self._enable_head_tracking:
+            action = self._overwrite_head_action(action)
 
         if not self.add_context:
             return action
@@ -1243,19 +1244,23 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             action (array) : action array to overwrite
         """
         if self._always_track_eef:
-            target_obj_pose = (self.robot.get_eef_position(), self.robot.get_eef_orientation())
+            target_obj_pos = self.robot.get_eef_position()
         else:
             if self._tracking_object is None:
                 return action
             
             if self._tracking_object == self.robot:
-                target_obj_pose = (self.robot.get_eef_position(), self.robot.get_eef_orientation())
+                target_obj_pos = self.robot.get_eef_position()
             else:
-                target_obj_pose = self._tracking_object.get_position_orientation()
+                target_obj_pos = self._tracking_object.get_position()
 
         assert self.robot_model == "Tiago", "Tracking object with camera is currently only supported for Tiago"
 
-        head_q = self._get_head_goal_q(target_obj_pose)
+        head_q = self.robot.get_head_joint_positions_for_target(target_obj_pos)
+        # if not possible to look at object, use current head joint positions
+        if head_q is None:
+            default_head_pos = self._get_reset_joint_pos()[self.robot.controller_action_idx["camera"]]
+            head_q = [default_head_pos[0], default_head_pos[1]]
         head_idx = self.robot.controller_action_idx["camera"]
         
         config = self.robot._controller_config["camera"]
@@ -1270,49 +1275,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             head_action = head_q
         action[head_idx] = head_action
         return action
-
-    def _get_head_goal_q(self, target_obj_pose):
-        """
-        Get goal joint positions for head to look at an object of interest,
-        If the object cannot be seen, return the current head joint positions.
-        """
-
-        # get current head joint positions
-        head1_joint = self.robot.joints["head_1_joint"]
-        head2_joint = self.robot.joints["head_2_joint"]
-        head1_joint_limits = [head1_joint.lower_limit, head1_joint.upper_limit]
-        head2_joint_limits = [head2_joint.lower_limit, head2_joint.upper_limit]
-        head1_joint_goal = head1_joint.get_state()[0][0]
-        head2_joint_goal = head2_joint.get_state()[0][0]
-
-        # grab robot and object poses
-        robot_pose = self.robot.get_position_orientation()
-        # obj_pose = obj.get_position_orientation()
-        obj_in_base = T.relative_pose_transform(*target_obj_pose, *robot_pose)
-
-        # compute angle between base and object in xy plane (parallel to floor)
-        theta = np.arctan2(obj_in_base[0][1], obj_in_base[0][0])
-        
-        # if it is possible to get object in view, compute both head joint positions
-        if head1_joint_limits[0] < theta < head1_joint_limits[1]:
-            head1_joint_goal = theta
-            
-            # compute angle between base and object in xz plane (perpendicular to floor)
-            head2_pose = self.robot.links["head_2_link"].get_position_orientation()
-            head2_in_base = T.relative_pose_transform(*head2_pose, *robot_pose)
-
-            phi = np.arctan2(obj_in_base[0][2] - head2_in_base[0][2], obj_in_base[0][0])
-            if head2_joint_limits[0] < phi < head2_joint_limits[1]:
-                head2_joint_goal = phi
-
-        # if not possible to look at object, return current head joint positions
-        else:
-            default_head_pos = self._get_reset_joint_pos()[self.robot.controller_action_idx["camera"]]
-            head1_joint_goal = default_head_pos[0]
-            head2_joint_goal = default_head_pos[1]
-
-        return [head1_joint_goal, head2_joint_goal]
-        
+       
     def _empty_action(self):
         """
         Get a no-op action that allows us to run simulation without changing robot configuration.

@@ -765,3 +765,39 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     def get_angular_velocity(self) -> np.ndarray:
         # Note that the link we are interested in is self.base_footprint_link, not self.root_link
         return self.base_footprint_link.get_angular_velocity()
+
+    def get_head_joint_positions_for_target(self, target_obj_pos):
+        """
+        Get goal joint positions for head to look at an object of interest,
+        """
+
+        # get current head joint positions
+        head1_joint = self.joints["head_1_joint"]
+        head2_joint = self.joints["head_2_joint"]
+        head1_joint_limits = [head1_joint.lower_limit, head1_joint.upper_limit]
+        head2_joint_limits = [head2_joint.lower_limit, head2_joint.upper_limit]
+        head1_joint_goal = head1_joint.get_state()[0][0]
+        head2_joint_goal = head2_joint.get_state()[0][0]
+
+        # grab robot and object poses
+        robot_pose = self.get_position_orientation()
+        obj_in_base = T.relative_pose_transform((target_obj_pos, [0, 0, 0, 1]), *robot_pose)[0]
+
+        # compute angle between base and object in xy plane (parallel to floor)
+        theta = np.arctan2(obj_in_base[1], obj_in_base[0])
+        
+        # if it is not possible to get object in view, return None
+        if not head1_joint_limits[0] < theta < head1_joint_limits[1]:
+            return None
+        
+        head1_joint_goal = theta
+        
+        # compute angle between base and object in xz plane (perpendicular to floor)
+        head2_pose = self.links["head_2_link"].get_position_orientation()
+        head2_in_base = T.relative_pose_transform(*head2_pose, *robot_pose)
+
+        phi = np.arctan2(obj_in_base[2] - head2_in_base[0][2], obj_in_base[0])
+        if head2_joint_limits[0] < phi < head2_joint_limits[1]:
+            head2_joint_goal = phi
+
+        return [head1_joint_goal, head2_joint_goal]
