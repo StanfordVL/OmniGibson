@@ -337,7 +337,7 @@ class ManipulationRobot(BaseRobot):
 
         # Then run assisted grasping
         if self.grasping_mode != "physical" and not self._disable_grasp_handling:
-            self._handle_assisted_grasping(action=action)
+            self._handle_assisted_grasping()
 
         # Potentially freeze gripper joints
         for arm in self.arm_names:
@@ -1155,12 +1155,9 @@ class ManipulationRobot(BaseRobot):
             j_val = joint.get_state()[0][0]
             self._ag_freeze_joint_pos[arm][joint.joint_name] = j_val
 
-    def _handle_assisted_grasping(self, action):
+    def _handle_assisted_grasping(self):
         """
-        Handles assisted grasping.
-
-        Args:
-            action (n-array): gripper action to apply. >= 0 is release (open), < 0 is grasp (close).
+        Handles assisted grasping by creating / removing constraints as necessary.
         """
         # Loop over all arms
         for arm in self.arm_names:
@@ -1172,7 +1169,8 @@ class ManipulationRobot(BaseRobot):
             controller = self._controllers[f"gripper_{arm}"]
             controlled_joints = controller.dof_idx
             threshold = np.mean(np.array(self.control_limits["position"])[:, controlled_joints], axis=0)
-            applying_grasp = np.any(controller.control < threshold)
+            control = controller.compute_control(control_dict=self.get_control_dict())
+            applying_grasp = np.any(control < threshold)
 
             # Execute gradual release of object
             if self._ag_obj_in_hand[arm]:

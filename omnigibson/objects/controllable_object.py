@@ -335,7 +335,7 @@ class ControllableObject(BaseObject):
 
         for name, controller in self._controllers.items():
             control[name] = {
-                "value": controller.step(control_dict=control_dict),
+                "value": controller.compute_control(control_dict=control_dict),
                 "type": controller.control_type,
             }
             # Update idx

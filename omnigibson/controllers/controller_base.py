@@ -114,7 +114,6 @@ class BaseController(Serializable, Registerable, Recreatable):
         self._dof_idx = np.array(dof_idx, dtype=int)
 
         # Initialize some other variables that will be filled in during runtime
-        self._control = None
         self._command = None
         self._command_scale_factor = None
         self._command_output_transform = None
@@ -219,9 +218,11 @@ class BaseController(Serializable, Registerable, Recreatable):
         control[idx] = clipped_control[idx]
         return control
 
-    def step(self, control_dict):
+    def compute_control(self, control_dict):
         """
-        Take a controller step.
+        Compute control from this controller given the current control dict. This function is
+        idempotent - calling it multiple times with the same control dict should return the same
+        control.
 
         Args:
             control_dict (Dict[str, Any]): dictionary that should include any relevant keyword-mapped
@@ -231,8 +232,7 @@ class BaseController(Serializable, Registerable, Recreatable):
             Array[float]: numpy array of outputted control signals
         """
         control = self._command_to_control(command=self._command, control_dict=control_dict)
-        self._control = self.clip_control(control=control)
-        return self._control
+        return self.clip_control(control=control)
 
     def reset(self):
         """
@@ -259,7 +259,8 @@ class BaseController(Serializable, Registerable, Recreatable):
     def _command_to_control(self, command, control_dict):
         """
         Converts the (already preprocessed) inputted @command into deployable (non-clipped!) control signal.
-        Should be implemented by subclass.
+        Should be implemented by subclass. Should be idempotent - should return the same control signal if
+        called multiple times with the same command and control_dict.
 
         Args:
             command (Array[float]): desired (already preprocessed) command to convert into control signals
@@ -296,14 +297,6 @@ class BaseController(Serializable, Registerable, Recreatable):
     def state_size(self):
         # Default is no state, so return 0
         return 0
-
-    @property
-    def control(self):
-        """
-        Returns:
-            n-array: Array of most recent controls deployed by this controller
-        """
-        return self._control
 
     @property
     def control_freq(self):

@@ -184,14 +184,11 @@ class MultiFingerGripperController(GripperController):
         if self._mode == "independent":
             is_grasping = IsGraspingState.UNKNOWN
 
-        # No control has been issued before -- we assume not grasping
-        elif self._control is None:
-            is_grasping = IsGraspingState.FALSE
-
         else:
+            control = self.compute_control(control_dict=control_dict)
             assert np.all(
-                self._control == self._control[0]
-            ), f"MultiFingerGripperController has different values in the command for non-independent mode: {self._control}"
+                control == control[0]
+            ), f"MultiFingerGripperController has different values in the command for non-independent mode: {control}"
 
             assert m.POS_TOLERANCE > self._limit_tolerance, (
                 "Joint position tolerance for is_grasping heuristics checking is smaller than or equal to the "
@@ -203,14 +200,14 @@ class MultiFingerGripperController(GripperController):
             # For joint position control, if the desired positions are the same as the current positions, is_grasping unknown
             if (
                     self._motor_type == "position"
-                    and np.mean(np.abs(finger_pos - self._control)) < m.POS_TOLERANCE
+                    and np.mean(np.abs(finger_pos - control)) < m.POS_TOLERANCE
             ):
                 is_grasping = IsGraspingState.UNKNOWN
 
             # For joint velocity / torque control, if the desired velocities / torques are zeros, is_grasping unknown
             elif (
                     self._motor_type in {"velocity", "torque"}
-                    and np.mean(np.abs(self._control)) < m.VEL_TOLERANCE
+                    and np.mean(np.abs(control)) < m.VEL_TOLERANCE
             ):
                 is_grasping = IsGraspingState.UNKNOWN
 
