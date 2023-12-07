@@ -233,6 +233,12 @@ class BaseController(Serializable, Registerable, Recreatable):
         """
         control = self._command_to_control(command=self._command, control_dict=control_dict)
         return self.clip_control(control=control)
+    
+    def step(self):
+        """
+        Steps the internal state of this controller, e.g. filters. Can be implemented by subclass.
+        """
+        pass
 
     def reset(self):
         """

@@ -338,6 +338,8 @@ class ControllableObject(BaseObject):
                 "value": controller.compute_control(control_dict=control_dict),
                 "type": controller.control_type,
             }
+            # Step the controller to update internal state
+            controller.step()
             # Update idx
             idx += controller.command_dim
 

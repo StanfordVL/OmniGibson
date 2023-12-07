@@ -8,7 +8,8 @@ class Filter(Serializable):
     """
     def estimate(self, observation):
         """
-        Takes an observation and returns a de-noised estimate.
+        Takes an observation and returns a de-noised estimate. Should return the same value if
+        called multiple times in a row without an intervening step() call.
 
         Args:
             observation (n-array): A current observation.
@@ -17,6 +18,10 @@ class Filter(Serializable):
             n-array: De-noised estimate.
         """
         raise NotImplementedError
+
+    def step(self):
+        """Updates the filter's internal state after a simulation step. Default is no-op."""
+        pass
 
     def reset(self):
         """
@@ -69,7 +74,9 @@ class MovingAverageFilter(Filter):
 
     def estimate(self, observation):
         """
-        Do an online hold for state estimation given a recent observation.
+        Do an online hold for state estimation given a recent observation. Note that this will
+        repeatedly update the same current step's observation until the current index is moved
+        along by the step function.
 
         Args:
             observation (n-array): New observation to hold internal estimate of state.
@@ -89,10 +96,11 @@ class MovingAverageFilter(Filter):
         else:
             val = self.past_samples.mean(axis=0)
 
-        # Increment the index to write the next sample to
-        self.current_idx = (self.current_idx + 1) % self.filter_width
-
         return val
+    
+    def step(self):
+        """Increment the index to write the next sample to"""
+        self.current_idx = (self.current_idx + 1) % self.filter_width
 
     def reset(self):
         # Clear internal state

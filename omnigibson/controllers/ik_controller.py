@@ -173,6 +173,10 @@ class InverseKinematicsController(ManipulationController):
             command_output_limits=command_output_limits,
         )
 
+    def step(self):
+        if self.control_filter is not None:
+            self.control_filter.step()
+
     def reset(self):
         # Reset the filter and clear internal control state
         if self.control_filter is not None:
