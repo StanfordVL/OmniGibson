@@ -314,7 +314,6 @@ class InverseKinematicsController(ManipulationController):
                 target_joint_pos = current_joint_pos
 
         # Optionally pass through smoothing filter for better stability
-        # TODO: This is not idempotent!
         if self.control_filter is not None:
             target_joint_pos = self.control_filter.estimate(target_joint_pos)
 
