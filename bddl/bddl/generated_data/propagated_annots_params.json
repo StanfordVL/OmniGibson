@@ -17882,6 +17882,7 @@
         },
         "moldyable": {},
         "nonSubstance": {},
+        "openable": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -18966,7 +18967,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -23639,6 +23639,7 @@
         },
         "moldyable": {},
         "nonSubstance": {},
+        "openable": {},
         "rigidBody": {},
         "rustable": {},
         "sceneObject": {},
@@ -27317,6 +27318,13 @@
         "physicalSubstance": {},
         "substance": {}
     },
+    "cooked__diced__cookie_dough.n.01": {
+        "freezable": {},
+        "heatable": {},
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
     "cooked__diced__crab.n.01": {
         "freezable": {},
         "heatable": {
@@ -28354,6 +28362,13 @@
         "physicalSubstance": {},
         "substance": {}
     },
+    "cooked__diced__roll_dough.n.01": {
+        "freezable": {},
+        "heatable": {},
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
     "cooked__diced__rutabaga.n.01": {
         "freezable": {},
         "heatable": {
@@ -28428,6 +28443,13 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
+    "cooked__diced__sourdough.n.01": {
+        "freezable": {},
+        "heatable": {},
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
         "substance": {}
@@ -35209,6 +35231,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -37319,6 +37342,17 @@
         "physicalSubstance": {},
         "substance": {}
     },
+    "diced__cookie_dough.n.01": {
+        "cookable": {
+            "cook_temperature": 93.0,
+            "substance_cooking_derivative_synset": "cooked__diced__cookie_dough.n.01"
+        },
+        "freezable": {},
+        "heatable": {},
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
     "diced__crab.n.01": {
         "cookable": {
             "cook_temperature": 63.0,
@@ -38844,6 +38878,17 @@
         "physicalSubstance": {},
         "substance": {}
     },
+    "diced__roll_dough.n.01": {
+        "cookable": {
+            "cook_temperature": 93.0,
+            "substance_cooking_derivative_synset": "cooked__diced__roll_dough.n.01"
+        },
+        "freezable": {},
+        "heatable": {},
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
     "diced__rutabaga.n.01": {
         "cookable": {
             "cook_temperature": 100.0,
@@ -38950,6 +38995,17 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
+    "diced__sourdough.n.01": {
+        "cookable": {
+            "cook_temperature": 93.0,
+            "substance_cooking_derivative_synset": "cooked__diced__sourdough.n.01"
+        },
+        "freezable": {},
+        "heatable": {},
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
         "substance": {}
@@ -52640,6 +52696,24 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__baguette.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__bamboo.n.01": {
         "diceable": {
             "uncooked_diceable_derivative_synset": "diced__bamboo.n.01"
@@ -53382,6 +53456,24 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__candied_yam.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__cantaloup.n.01": {
         "cookable": {
             "cook_temperature": 58.0
@@ -53428,6 +53520,23 @@
         "rustable": {},
         "scratchable": {},
         "slicer": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__cardstock.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -53618,6 +53727,24 @@
         "rustable": {},
         "scratchable": {},
         "softBody": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__cheese_danish.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -54297,6 +54424,30 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__cookie_dough.n.01": {
+        "cookable": {
+            "cook_temperature": 93.0
+        },
+        "diceable": {
+            "uncooked_diceable_derivative_synset": "diced__cookie_dough.n.01",
+            "cooked_diceable_derivative_synset": "cooked__diced__cookie_dough.n.01"
+        },
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__crab.n.01": {
         "cookable": {
             "cook_temperature": 63.0
@@ -54312,6 +54463,24 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__crawfish.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -54376,6 +54545,24 @@
         "rustable": {},
         "scratchable": {},
         "softBody": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__croissant.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -54488,7 +54675,6 @@
         "cookable": {
             "cook_temperature": 180.0
         },
-        "deformable": {},
         "diceable": {
             "uncooked_diceable_derivative_synset": "diced__doughnut.n.01",
             "cooked_diceable_derivative_synset": "cooked__diced__doughnut.n.01"
@@ -54508,9 +54694,9 @@
         },
         "moldyable": {},
         "nonSubstance": {},
+        "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "softBody": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -55028,6 +55214,24 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__garlic.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__garlic_bread.n.01": {
         "cookable": {
             "cook_temperature": 176.0
@@ -55049,6 +55253,24 @@
         "rustable": {},
         "scratchable": {},
         "softBody": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__garlic_clove.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -55097,6 +55319,24 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__ginger_root.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -55586,6 +55826,42 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__hotdog_bun.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__hotdog_frank.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__huitre.n.01": {
         "cookable": {
             "cook_temperature": 74.0
@@ -55760,6 +56036,23 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__leaf.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -56252,6 +56545,24 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__mustard_leaf.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__nectarine.n.01": {
         "cookable": {
             "cook_temperature": 58.0
@@ -56371,6 +56682,24 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__oyster.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -56554,6 +56883,24 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__peppermint_candy.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -56881,6 +57228,42 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__pork_chop.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__pork_rib.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__porkchop.n.01": {
         "cookable": {
             "cook_temperature": 74.0
@@ -57091,6 +57474,24 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__quail_breast.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__quiche.n.01": {
         "cookable": {
             "cook_temperature": 180.0
@@ -57169,6 +57570,24 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__rhubarb.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__rib.n.01": {
         "cookable": {
             "cook_temperature": 63.0
@@ -57184,6 +57603,30 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__roll_dough.n.01": {
+        "cookable": {
+            "cook_temperature": 93.0
+        },
+        "diceable": {
+            "uncooked_diceable_derivative_synset": "diced__roll_dough.n.01",
+            "cooked_diceable_derivative_synset": "cooked__diced__roll_dough.n.01"
+        },
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -57214,6 +57657,24 @@
         "moldyable": {},
         "nonSubstance": {},
         "rope": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__rosehip.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
@@ -57353,6 +57814,24 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "half__shrimp.n.01": {
+        "cookable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "half__sirloin.n.01": {
         "cookable": {
             "cook_temperature": 63.0
@@ -57432,6 +57911,30 @@
         "rustable": {},
         "scratchable": {},
         "softBody": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__sourdough.n.01": {
+        "cookable": {
+            "cook_temperature": 93.0
+        },
+        "diceable": {
+            "uncooked_diceable_derivative_synset": "diced__sourdough.n.01",
+            "cooked_diceable_derivative_synset": "cooked__diced__sourdough.n.01"
+        },
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -58158,6 +58661,23 @@
         "heatable": {
             "heat_temperature": 40.0
         },
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "half__vanilla_flower.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -81593,7 +82113,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -123373,6 +123892,7 @@
         "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
+        "openable": {},
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},

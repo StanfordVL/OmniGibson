@@ -27459,6 +27459,10 @@
             "moldy"
         ],
         [
+            "open",
+            "open"
+        ],
+        [
             "rusty",
             "rusty"
         ],
@@ -37561,6 +37565,10 @@
             "moldy"
         ],
         [
+            "open",
+            "open"
+        ],
+        [
             "rusty",
             "rusty"
         ],
@@ -43365,6 +43373,16 @@
             "hot"
         ]
     ],
+    "cooked__diced__cookie_dough.n.01": [
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "hot",
+            "hot"
+        ]
+    ],
     "cooked__diced__crab.n.01": [
         [
             "frozen",
@@ -44469,6 +44487,16 @@
             "hot"
         ]
     ],
+    "cooked__diced__roll_dough.n.01": [
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "hot",
+            "hot"
+        ]
+    ],
     "cooked__diced__rutabaga.n.01": [
         [
             "frozen",
@@ -44544,6 +44572,16 @@
             "on_fire",
             "on_fire"
         ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "hot",
+            "hot"
+        ]
+    ],
+    "cooked__diced__sourdough.n.01": [
         [
             "frozen",
             "frozen"
@@ -51957,6 +51995,10 @@
             "tarnished"
         ],
         [
+            "toggled_on",
+            "toggled_on"
+        ],
+        [
             "wet",
             "wet"
         ],
@@ -54271,6 +54313,20 @@
             "hot"
         ]
     ],
+    "diced__cookie_dough.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "hot",
+            "hot"
+        ]
+    ],
     "diced__crab.n.01": [
         [
             "cooked",
@@ -55867,6 +55923,20 @@
             "hot"
         ]
     ],
+    "diced__roll_dough.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "hot",
+            "hot"
+        ]
+    ],
     "diced__rutabaga.n.01": [
         [
             "cooked",
@@ -55973,6 +56043,20 @@
         [
             "on_fire",
             "on_fire"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "hot",
+            "hot"
+        ]
+    ],
+    "diced__sourdough.n.01": [
+        [
+            "cooked",
+            "cooked"
         ],
         [
             "frozen",
@@ -74167,6 +74251,64 @@
             "wrinkly"
         ]
     ],
+    "half__baguette.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__bamboo.n.01": [
         [
             "diced",
@@ -75865,6 +76007,64 @@
             "wrinkly"
         ]
     ],
+    "half__candied_yam.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__cantaloup.n.01": [
         [
             "cooked",
@@ -75932,6 +76132,60 @@
         ]
     ],
     "half__card.n.01": [
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__cardstock.n.01": [
         [
             "disinfected",
             "disinfected"
@@ -76393,6 +76647,64 @@
         [
             "melted",
             "melted"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__cheese_danish.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
         ],
         [
             "moldy",
@@ -77947,6 +78259,68 @@
             "wrinkly"
         ]
     ],
+    "half__cookie_dough.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "diced",
+            "diced"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__crab.n.01": [
         [
             "cooked",
@@ -77955,6 +78329,64 @@
         [
             "diced",
             "diced"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__crawfish.n.01": [
+        [
+            "cooked",
+            "cooked"
         ],
         [
             "disinfected",
@@ -78091,6 +78523,64 @@
         [
             "on_fire",
             "on_fire"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__croissant.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
         ],
         [
             "frozen",
@@ -79587,6 +80077,64 @@
             "wrinkly"
         ]
     ],
+    "half__garlic.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__garlic_bread.n.01": [
         [
             "cooked",
@@ -79595,6 +80143,64 @@
         [
             "diced",
             "diced"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__garlic_clove.n.01": [
+        [
+            "cooked",
+            "cooked"
         ],
         [
             "disinfected",
@@ -79719,6 +80325,64 @@
         [
             "diced",
             "diced"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__ginger_root.n.01": [
+        [
+            "cooked",
+            "cooked"
         ],
         [
             "disinfected",
@@ -80893,6 +81557,122 @@
             "wrinkly"
         ]
     ],
+    "half__hotdog_bun.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__hotdog_frank.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__huitre.n.01": [
         [
             "cooked",
@@ -81274,6 +82054,60 @@
             "diced",
             "diced"
         ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__leaf.n.01": [
         [
             "disinfected",
             "disinfected"
@@ -82447,6 +83281,64 @@
             "wrinkly"
         ]
     ],
+    "half__mustard_leaf.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__nectarine.n.01": [
         [
             "cooked",
@@ -82703,6 +83595,64 @@
         [
             "diced",
             "diced"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__oyster.n.01": [
+        [
+            "cooked",
+            "cooked"
         ],
         [
             "disinfected",
@@ -83137,6 +84087,64 @@
         [
             "diced",
             "diced"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__peppermint_candy.n.01": [
+        [
+            "cooked",
+            "cooked"
         ],
         [
             "disinfected",
@@ -83935,6 +84943,122 @@
             "wrinkly"
         ]
     ],
+    "half__pork_chop.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__pork_rib.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__porkchop.n.01": [
         [
             "cooked",
@@ -84431,6 +85555,64 @@
             "wrinkly"
         ]
     ],
+    "half__quail_breast.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__quiche.n.01": [
         [
             "cooked",
@@ -84617,7 +85799,127 @@
             "wrinkly"
         ]
     ],
+    "half__rhubarb.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__rib.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "diced",
+            "diced"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__roll_dough.n.01": [
         [
             "cooked",
             "cooked"
@@ -84691,6 +85993,64 @@
         [
             "on_fire",
             "on_fire"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__rosehip.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
         ],
         [
             "frozen",
@@ -85047,6 +86407,64 @@
             "wrinkly"
         ]
     ],
+    "half__shrimp.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
     "half__sirloin.n.01": [
         [
             "cooked",
@@ -85191,6 +86609,68 @@
         [
             "on_fire",
             "on_fire"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__sourdough.n.01": [
+        [
+            "cooked",
+            "cooked"
+        ],
+        [
+            "diced",
+            "diced"
+        ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
         ],
         [
             "frozen",
@@ -86870,6 +88350,60 @@
             "diced",
             "diced"
         ],
+        [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
+            "frozen",
+            "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
+        ]
+    ],
+    "half__vanilla_flower.n.01": [
         [
             "disinfected",
             "disinfected"
@@ -162053,6 +163587,10 @@
         [
             "moldy",
             "moldy"
+        ],
+        [
+            "open",
+            "open"
         ],
         [
             "rusty",

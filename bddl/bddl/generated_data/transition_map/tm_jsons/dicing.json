@@ -1173,6 +1173,23 @@
         }
     },
     {
+        "rule_name": "cooked-half__cookie_dough.n.01-dicing",
+        "input_objects": {
+            "half__cookie_dough.n.01": 1
+        },
+        "input_states": {
+            "half__cookie_dough.n.01": [
+                [
+                    "cooked",
+                    true
+                ]
+            ]
+        },
+        "output_objects": {
+            "cooked__diced__cookie_dough.n.01": 1
+        }
+    },
+    {
         "rule_name": "cooked-half__crab.n.01-dicing",
         "input_objects": {
             "half__crab.n.01": 1
@@ -2856,6 +2873,23 @@
         }
     },
     {
+        "rule_name": "cooked-half__roll_dough.n.01-dicing",
+        "input_objects": {
+            "half__roll_dough.n.01": 1
+        },
+        "input_states": {
+            "half__roll_dough.n.01": [
+                [
+                    "cooked",
+                    true
+                ]
+            ]
+        },
+        "output_objects": {
+            "cooked__diced__roll_dough.n.01": 1
+        }
+    },
+    {
         "rule_name": "cooked-half__rutabaga.n.01-dicing",
         "input_objects": {
             "half__rutabaga.n.01": 1
@@ -2989,6 +3023,23 @@
         },
         "output_objects": {
             "cooked__diced__sour_bread.n.01": 1
+        }
+    },
+    {
+        "rule_name": "cooked-half__sourdough.n.01-dicing",
+        "input_objects": {
+            "half__sourdough.n.01": 1
+        },
+        "input_states": {
+            "half__sourdough.n.01": [
+                [
+                    "cooked",
+                    true
+                ]
+            ]
+        },
+        "output_objects": {
+            "cooked__diced__sourdough.n.01": 1
         }
     },
     {
@@ -4998,6 +5049,23 @@
         }
     },
     {
+        "rule_name": "uncooked-half__cookie_dough.n.01-dicing",
+        "input_objects": {
+            "half__cookie_dough.n.01": 1
+        },
+        "input_states": {
+            "half__cookie_dough.n.01": [
+                [
+                    "cooked",
+                    false
+                ]
+            ]
+        },
+        "output_objects": {
+            "diced__cookie_dough.n.01": 1
+        }
+    },
+    {
         "rule_name": "uncooked-half__crab.n.01-dicing",
         "input_objects": {
             "half__crab.n.01": 1
@@ -6817,6 +6885,23 @@
         }
     },
     {
+        "rule_name": "uncooked-half__roll_dough.n.01-dicing",
+        "input_objects": {
+            "half__roll_dough.n.01": 1
+        },
+        "input_states": {
+            "half__roll_dough.n.01": [
+                [
+                    "cooked",
+                    false
+                ]
+            ]
+        },
+        "output_objects": {
+            "diced__roll_dough.n.01": 1
+        }
+    },
+    {
         "rule_name": "uncooked-half__rutabaga.n.01-dicing",
         "input_objects": {
             "half__rutabaga.n.01": 1
@@ -6950,6 +7035,23 @@
         },
         "output_objects": {
             "diced__sour_bread.n.01": 1
+        }
+    },
+    {
+        "rule_name": "uncooked-half__sourdough.n.01-dicing",
+        "input_objects": {
+            "half__sourdough.n.01": 1
+        },
+        "input_states": {
+            "half__sourdough.n.01": [
+                [
+                    "cooked",
+                    false
+                ]
+            ]
+        },
+        "output_objects": {
+            "diced__sourdough.n.01": 1
         }
     },
     {
