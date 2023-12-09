@@ -81,13 +81,10 @@ APPROVED_SCENES = {
 }
 
 REJECTED_SCENES = {
-    "Beechwood_0_garden",
-    "Rs_garden",
-    "Merom_0_garden",
-    "Wainscott_0_garden",
+    "gates_bedroom",
 }
 
-READY_SCENES = {
+VERIFIED_SCENES = {
     "Beechwood_0_int",
     "Beechwood_1_int",
     "Benevolence_0_int",
@@ -155,8 +152,8 @@ def main():
         print(f"Missing scenes: {missing_final_scene_paths}")
     final_scenes = sorted(["scenes/" + x for x in found_final_scenes])
 
-    found_ready_scenes = set(READY_SCENES) & set(approved_scenes)
-    ready_scenes = sorted(["scenes/" + x for x in found_ready_scenes])
+    found_verified_scenes = set(VERIFIED_SCENES) & set(approved_scenes)
+    verified_scenes = sorted(["scenes/" + x for x in found_verified_scenes])
 
     out_path = os.path.join(os.path.dirname(__file__), OUT_PATH)
     params = {
@@ -165,7 +162,7 @@ def main():
         "scenes": scenes,
         "scenes_unfiltered": scenes_unfiltered,
         "final_scenes": final_scenes,
-        "ready_scenes": ready_scenes,
+        "verified_scenes": verified_scenes,
         "combined": combined,
         "combined_unfiltered": combined_unfiltered,
         "root_path": root_path,

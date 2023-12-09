@@ -51,7 +51,7 @@ def main():
             print("Renaming WIP scenes")
             scenes_dir = out_fs.opendir("scenes")
             for scene_dir in list(scenes_dir.listdir("/")):
-                if "scenes/" + scene_dir in b1k_pipeline.utils.get_targets("ready_scenes"):
+                if "scenes/" + scene_dir in b1k_pipeline.utils.get_targets("verified_scenes"):
                     continue
 
                 # First rename the main dir

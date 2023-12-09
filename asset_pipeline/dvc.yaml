@@ -23,6 +23,7 @@ stages:
   aggregate_scenes:
     cmd: python -m b1k_pipeline.aggregate_scenes
     deps:
+    - cad/scenes/Beechwood_0_garden/artifacts/scene.urdf
     - cad/scenes/Beechwood_0_int/artifacts/scene.urdf
     - cad/scenes/Beechwood_1_int/artifacts/scene.urdf
     - cad/scenes/Benevolence_0_int/artifacts/scene.urdf
@@ -30,18 +31,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/scene.urdf
     - cad/scenes/Ihlen_0_int/artifacts/scene.urdf
     - cad/scenes/Ihlen_1_int/artifacts/scene.urdf
+    - cad/scenes/Merom_0_garden/artifacts/scene.urdf
     - cad/scenes/Merom_0_int/artifacts/scene.urdf
     - cad/scenes/Merom_1_int/artifacts/scene.urdf
     - cad/scenes/Pomaria_0_garden/artifacts/scene.urdf
     - cad/scenes/Pomaria_0_int/artifacts/scene.urdf
     - cad/scenes/Pomaria_1_int/artifacts/scene.urdf
     - cad/scenes/Pomaria_2_int/artifacts/scene.urdf
+    - cad/scenes/Rs_garden/artifacts/scene.urdf
     - cad/scenes/Rs_int/artifacts/scene.urdf
+    - cad/scenes/Wainscott_0_garden/artifacts/scene.urdf
     - cad/scenes/Wainscott_0_int/artifacts/scene.urdf
     - cad/scenes/Wainscott_1_int/artifacts/scene.urdf
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/scene.urdf
     - cad/scenes/commercial_kitchen_pans/artifacts/scene.urdf
-    - cad/scenes/gates_bedroom/artifacts/scene.urdf
     - cad/scenes/grocery_store_asian/artifacts/scene.urdf
     - cad/scenes/grocery_store_cafe/artifacts/scene.urdf
     - cad/scenes/grocery_store_convenience/artifacts/scene.urdf
@@ -77,6 +80,7 @@ stages:
     - cad/scenes/school_computer_lab_and_infirmary/artifacts/scene.urdf
     - cad/scenes/school_geography/artifacts/scene.urdf
     - cad/scenes/school_gym/artifacts/scene.urdf
+    - cad/scenes/Beechwood_0_garden/artifacts/export_scene.success
     - cad/scenes/Beechwood_0_int/artifacts/export_scene.success
     - cad/scenes/Beechwood_1_int/artifacts/export_scene.success
     - cad/scenes/Benevolence_0_int/artifacts/export_scene.success
@@ -84,18 +88,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/export_scene.success
     - cad/scenes/Ihlen_0_int/artifacts/export_scene.success
     - cad/scenes/Ihlen_1_int/artifacts/export_scene.success
+    - cad/scenes/Merom_0_garden/artifacts/export_scene.success
     - cad/scenes/Merom_0_int/artifacts/export_scene.success
     - cad/scenes/Merom_1_int/artifacts/export_scene.success
     - cad/scenes/Pomaria_0_garden/artifacts/export_scene.success
     - cad/scenes/Pomaria_0_int/artifacts/export_scene.success
     - cad/scenes/Pomaria_1_int/artifacts/export_scene.success
     - cad/scenes/Pomaria_2_int/artifacts/export_scene.success
+    - cad/scenes/Rs_garden/artifacts/export_scene.success
     - cad/scenes/Rs_int/artifacts/export_scene.success
+    - cad/scenes/Wainscott_0_garden/artifacts/export_scene.success
     - cad/scenes/Wainscott_0_int/artifacts/export_scene.success
     - cad/scenes/Wainscott_1_int/artifacts/export_scene.success
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/export_scene.success
     - cad/scenes/commercial_kitchen_pans/artifacts/export_scene.success
-    - cad/scenes/gates_bedroom/artifacts/export_scene.success
     - cad/scenes/grocery_store_asian/artifacts/export_scene.success
     - cad/scenes/grocery_store_cafe/artifacts/export_scene.success
     - cad/scenes/grocery_store_convenience/artifacts/export_scene.success
@@ -172,6 +178,7 @@ stages:
     - cad/objects/substances-02/artifacts/meshes.zip
     - cad/objects/task_relavant-ab/artifacts/meshes.zip
     - cad/objects/task_relevant-xy/artifacts/meshes.zip
+    - cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/meshes.zip
     - cad/scenes/Beechwood_1_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/meshes.zip
@@ -179,18 +186,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/meshes.zip
     - cad/scenes/Ihlen_0_int/artifacts/meshes.zip
     - cad/scenes/Ihlen_1_int/artifacts/meshes.zip
+    - cad/scenes/Merom_0_garden/artifacts/meshes.zip
     - cad/scenes/Merom_0_int/artifacts/meshes.zip
     - cad/scenes/Merom_1_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_0_garden/artifacts/meshes.zip
     - cad/scenes/Pomaria_0_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_1_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_2_int/artifacts/meshes.zip
+    - cad/scenes/Rs_garden/artifacts/meshes.zip
     - cad/scenes/Rs_int/artifacts/meshes.zip
+    - cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
     - cad/scenes/Wainscott_0_int/artifacts/meshes.zip
     - cad/scenes/Wainscott_1_int/artifacts/meshes.zip
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
     - cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
-    - cad/scenes/gates_bedroom/artifacts/meshes.zip
     - cad/scenes/grocery_store_asian/artifacts/meshes.zip
     - cad/scenes/grocery_store_cafe/artifacts/meshes.zip
     - cad/scenes/grocery_store_convenience/artifacts/meshes.zip
@@ -258,6 +267,7 @@ stages:
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
+    - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
@@ -265,18 +275,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
+    - cad/scenes/Merom_0_garden/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
     - cad/scenes/Merom_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/object_list.json
+    - cad/scenes/Rs_garden/artifacts/object_list.json
     - cad/scenes/Rs_int/artifacts/object_list.json
+    - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-    - cad/scenes/gates_bedroom/artifacts/object_list.json
     - cad/scenes/grocery_store_asian/artifacts/object_list.json
     - cad/scenes/grocery_store_cafe/artifacts/object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/object_list.json
@@ -344,6 +356,7 @@ stages:
     - cad/objects/substances-02/artifacts/collision_meshes.zip
     - cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
     - cad/objects/task_relevant-xy/artifacts/collision_meshes.zip
+    - cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/collision_meshes.zip
@@ -351,18 +364,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/collision_meshes.zip
     - cad/scenes/Ihlen_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Ihlen_1_int/artifacts/collision_meshes.zip
+    - cad/scenes/Merom_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Merom_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Merom_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_2_int/artifacts/collision_meshes.zip
+    - cad/scenes/Rs_garden/artifacts/collision_meshes.zip
     - cad/scenes/Rs_int/artifacts/collision_meshes.zip
+    - cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Wainscott_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Wainscott_1_int/artifacts/collision_meshes.zip
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
     - cad/scenes/commercial_kitchen_pans/artifacts/collision_meshes.zip
-    - cad/scenes/gates_bedroom/artifacts/collision_meshes.zip
     - cad/scenes/grocery_store_asian/artifacts/collision_meshes.zip
     - cad/scenes/grocery_store_cafe/artifacts/collision_meshes.zip
     - cad/scenes/grocery_store_convenience/artifacts/collision_meshes.zip
@@ -430,6 +445,7 @@ stages:
     - cad/objects/substances-02/artifacts/collision_selection.json
     - cad/objects/task_relavant-ab/artifacts/collision_selection.json
     - cad/objects/task_relevant-xy/artifacts/collision_selection.json
+    - cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
     - cad/scenes/Beechwood_1_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_0_int/artifacts/collision_selection.json
@@ -437,18 +453,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/collision_selection.json
     - cad/scenes/Ihlen_0_int/artifacts/collision_selection.json
     - cad/scenes/Ihlen_1_int/artifacts/collision_selection.json
+    - cad/scenes/Merom_0_garden/artifacts/collision_selection.json
     - cad/scenes/Merom_0_int/artifacts/collision_selection.json
     - cad/scenes/Merom_1_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_0_garden/artifacts/collision_selection.json
     - cad/scenes/Pomaria_0_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_1_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_2_int/artifacts/collision_selection.json
+    - cad/scenes/Rs_garden/artifacts/collision_selection.json
     - cad/scenes/Rs_int/artifacts/collision_selection.json
+    - cad/scenes/Wainscott_0_garden/artifacts/collision_selection.json
     - cad/scenes/Wainscott_0_int/artifacts/collision_selection.json
     - cad/scenes/Wainscott_1_int/artifacts/collision_selection.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
     - cad/scenes/commercial_kitchen_pans/artifacts/collision_selection.json
-    - cad/scenes/gates_bedroom/artifacts/collision_selection.json
     - cad/scenes/grocery_store_asian/artifacts/collision_selection.json
     - cad/scenes/grocery_store_cafe/artifacts/collision_selection.json
     - cad/scenes/grocery_store_convenience/artifacts/collision_selection.json
@@ -531,6 +549,7 @@ stages:
     - cad/objects/substances-02/artifacts/meshes.zip
     - cad/objects/task_relavant-ab/artifacts/meshes.zip
     - cad/objects/task_relevant-xy/artifacts/meshes.zip
+    - cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/meshes.zip
     - cad/scenes/Beechwood_1_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/meshes.zip
@@ -538,18 +557,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/meshes.zip
     - cad/scenes/Ihlen_0_int/artifacts/meshes.zip
     - cad/scenes/Ihlen_1_int/artifacts/meshes.zip
+    - cad/scenes/Merom_0_garden/artifacts/meshes.zip
     - cad/scenes/Merom_0_int/artifacts/meshes.zip
     - cad/scenes/Merom_1_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_0_garden/artifacts/meshes.zip
     - cad/scenes/Pomaria_0_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_1_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_2_int/artifacts/meshes.zip
+    - cad/scenes/Rs_garden/artifacts/meshes.zip
     - cad/scenes/Rs_int/artifacts/meshes.zip
+    - cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
     - cad/scenes/Wainscott_0_int/artifacts/meshes.zip
     - cad/scenes/Wainscott_1_int/artifacts/meshes.zip
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
     - cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
-    - cad/scenes/gates_bedroom/artifacts/meshes.zip
     - cad/scenes/grocery_store_asian/artifacts/meshes.zip
     - cad/scenes/grocery_store_cafe/artifacts/meshes.zip
     - cad/scenes/grocery_store_convenience/artifacts/meshes.zip
@@ -617,6 +638,7 @@ stages:
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
+    - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
@@ -624,18 +646,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
+    - cad/scenes/Merom_0_garden/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
     - cad/scenes/Merom_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/object_list.json
+    - cad/scenes/Rs_garden/artifacts/object_list.json
     - cad/scenes/Rs_int/artifacts/object_list.json
+    - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-    - cad/scenes/gates_bedroom/artifacts/object_list.json
     - cad/scenes/grocery_store_asian/artifacts/object_list.json
     - cad/scenes/grocery_store_cafe/artifacts/object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/object_list.json
@@ -703,6 +727,7 @@ stages:
     - cad/objects/substances-02/artifacts/collision_meshes.zip
     - cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
     - cad/objects/task_relevant-xy/artifacts/collision_meshes.zip
+    - cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/collision_meshes.zip
@@ -710,18 +735,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/collision_meshes.zip
     - cad/scenes/Ihlen_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Ihlen_1_int/artifacts/collision_meshes.zip
+    - cad/scenes/Merom_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Merom_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Merom_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_2_int/artifacts/collision_meshes.zip
+    - cad/scenes/Rs_garden/artifacts/collision_meshes.zip
     - cad/scenes/Rs_int/artifacts/collision_meshes.zip
+    - cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Wainscott_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Wainscott_1_int/artifacts/collision_meshes.zip
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
     - cad/scenes/commercial_kitchen_pans/artifacts/collision_meshes.zip
-    - cad/scenes/gates_bedroom/artifacts/collision_meshes.zip
     - cad/scenes/grocery_store_asian/artifacts/collision_meshes.zip
     - cad/scenes/grocery_store_cafe/artifacts/collision_meshes.zip
     - cad/scenes/grocery_store_convenience/artifacts/collision_meshes.zip
@@ -789,6 +816,7 @@ stages:
     - cad/objects/substances-02/artifacts/collision_selection.json
     - cad/objects/task_relavant-ab/artifacts/collision_selection.json
     - cad/objects/task_relevant-xy/artifacts/collision_selection.json
+    - cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
     - cad/scenes/Beechwood_1_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_0_int/artifacts/collision_selection.json
@@ -796,18 +824,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/collision_selection.json
     - cad/scenes/Ihlen_0_int/artifacts/collision_selection.json
     - cad/scenes/Ihlen_1_int/artifacts/collision_selection.json
+    - cad/scenes/Merom_0_garden/artifacts/collision_selection.json
     - cad/scenes/Merom_0_int/artifacts/collision_selection.json
     - cad/scenes/Merom_1_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_0_garden/artifacts/collision_selection.json
     - cad/scenes/Pomaria_0_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_1_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_2_int/artifacts/collision_selection.json
+    - cad/scenes/Rs_garden/artifacts/collision_selection.json
     - cad/scenes/Rs_int/artifacts/collision_selection.json
+    - cad/scenes/Wainscott_0_garden/artifacts/collision_selection.json
     - cad/scenes/Wainscott_0_int/artifacts/collision_selection.json
     - cad/scenes/Wainscott_1_int/artifacts/collision_selection.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
     - cad/scenes/commercial_kitchen_pans/artifacts/collision_selection.json
-    - cad/scenes/gates_bedroom/artifacts/collision_selection.json
     - cad/scenes/grocery_store_asian/artifacts/collision_selection.json
     - cad/scenes/grocery_store_cafe/artifacts/collision_selection.json
     - cad/scenes/grocery_store_convenience/artifacts/collision_selection.json
@@ -856,6 +886,7 @@ stages:
   combined_room_object_list:
     cmd: python -m b1k_pipeline.combined_room_object_list
     deps:
+    - cad/scenes/Beechwood_0_garden/artifacts/room_object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/room_object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/room_object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/room_object_list.json
@@ -863,18 +894,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/room_object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/room_object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/room_object_list.json
+    - cad/scenes/Merom_0_garden/artifacts/room_object_list.json
     - cad/scenes/Merom_0_int/artifacts/room_object_list.json
     - cad/scenes/Merom_1_int/artifacts/room_object_list.json
     - cad/scenes/Pomaria_0_garden/artifacts/room_object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/room_object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/room_object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/room_object_list.json
+    - cad/scenes/Rs_garden/artifacts/room_object_list.json
     - cad/scenes/Rs_int/artifacts/room_object_list.json
+    - cad/scenes/Wainscott_0_garden/artifacts/room_object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/room_object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/room_object_list.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
     - cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.json
-    - cad/scenes/gates_bedroom/artifacts/room_object_list.json
     - cad/scenes/grocery_store_asian/artifacts/room_object_list.json
     - cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/room_object_list.json
@@ -910,6 +943,7 @@ stages:
     - cad/scenes/school_computer_lab_and_infirmary/artifacts/room_object_list.json
     - cad/scenes/school_geography/artifacts/room_object_list.json
     - cad/scenes/school_gym/artifacts/room_object_list.json
+    - cad/scenes/Beechwood_0_garden/artifacts/room_object_list.success
     - cad/scenes/Beechwood_0_int/artifacts/room_object_list.success
     - cad/scenes/Beechwood_1_int/artifacts/room_object_list.success
     - cad/scenes/Benevolence_0_int/artifacts/room_object_list.success
@@ -917,18 +951,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/room_object_list.success
     - cad/scenes/Ihlen_0_int/artifacts/room_object_list.success
     - cad/scenes/Ihlen_1_int/artifacts/room_object_list.success
+    - cad/scenes/Merom_0_garden/artifacts/room_object_list.success
     - cad/scenes/Merom_0_int/artifacts/room_object_list.success
     - cad/scenes/Merom_1_int/artifacts/room_object_list.success
     - cad/scenes/Pomaria_0_garden/artifacts/room_object_list.success
     - cad/scenes/Pomaria_0_int/artifacts/room_object_list.success
     - cad/scenes/Pomaria_1_int/artifacts/room_object_list.success
     - cad/scenes/Pomaria_2_int/artifacts/room_object_list.success
+    - cad/scenes/Rs_garden/artifacts/room_object_list.success
     - cad/scenes/Rs_int/artifacts/room_object_list.success
+    - cad/scenes/Wainscott_0_garden/artifacts/room_object_list.success
     - cad/scenes/Wainscott_0_int/artifacts/room_object_list.success
     - cad/scenes/Wainscott_1_int/artifacts/room_object_list.success
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
     - cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.success
-    - cad/scenes/gates_bedroom/artifacts/room_object_list.success
     - cad/scenes/grocery_store_asian/artifacts/room_object_list.success
     - cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
     - cad/scenes/grocery_store_convenience/artifacts/room_object_list.success
@@ -1141,6 +1177,7 @@ stages:
     - cad/objects/substances-02/artifacts/export_meshes.json
     - cad/objects/task_relavant-ab/artifacts/export_meshes.json
     - cad/objects/task_relevant-xy/artifacts/export_meshes.json
+    - cad/scenes/Beechwood_0_garden/artifacts/export_meshes.json
     - cad/scenes/Beechwood_0_int/artifacts/export_meshes.json
     - cad/scenes/Beechwood_1_int/artifacts/export_meshes.json
     - cad/scenes/Benevolence_0_int/artifacts/export_meshes.json
@@ -1148,18 +1185,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/export_meshes.json
     - cad/scenes/Ihlen_0_int/artifacts/export_meshes.json
     - cad/scenes/Ihlen_1_int/artifacts/export_meshes.json
+    - cad/scenes/Merom_0_garden/artifacts/export_meshes.json
     - cad/scenes/Merom_0_int/artifacts/export_meshes.json
     - cad/scenes/Merom_1_int/artifacts/export_meshes.json
     - cad/scenes/Pomaria_0_garden/artifacts/export_meshes.json
     - cad/scenes/Pomaria_0_int/artifacts/export_meshes.json
     - cad/scenes/Pomaria_1_int/artifacts/export_meshes.json
     - cad/scenes/Pomaria_2_int/artifacts/export_meshes.json
+    - cad/scenes/Rs_garden/artifacts/export_meshes.json
     - cad/scenes/Rs_int/artifacts/export_meshes.json
+    - cad/scenes/Wainscott_0_garden/artifacts/export_meshes.json
     - cad/scenes/Wainscott_0_int/artifacts/export_meshes.json
     - cad/scenes/Wainscott_1_int/artifacts/export_meshes.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/export_meshes.json
     - cad/scenes/commercial_kitchen_pans/artifacts/export_meshes.json
-    - cad/scenes/gates_bedroom/artifacts/export_meshes.json
     - cad/scenes/grocery_store_asian/artifacts/export_meshes.json
     - cad/scenes/grocery_store_cafe/artifacts/export_meshes.json
     - cad/scenes/grocery_store_convenience/artifacts/export_meshes.json
@@ -1233,6 +1272,7 @@ stages:
     - cad/objects/substances-02/artifacts/meshes.zip
     - cad/objects/task_relavant-ab/artifacts/meshes.zip
     - cad/objects/task_relevant-xy/artifacts/meshes.zip
+    - cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/meshes.zip
     - cad/scenes/Beechwood_1_int/artifacts/meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/meshes.zip
@@ -1240,18 +1280,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/meshes.zip
     - cad/scenes/Ihlen_0_int/artifacts/meshes.zip
     - cad/scenes/Ihlen_1_int/artifacts/meshes.zip
+    - cad/scenes/Merom_0_garden/artifacts/meshes.zip
     - cad/scenes/Merom_0_int/artifacts/meshes.zip
     - cad/scenes/Merom_1_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_0_garden/artifacts/meshes.zip
     - cad/scenes/Pomaria_0_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_1_int/artifacts/meshes.zip
     - cad/scenes/Pomaria_2_int/artifacts/meshes.zip
+    - cad/scenes/Rs_garden/artifacts/meshes.zip
     - cad/scenes/Rs_int/artifacts/meshes.zip
+    - cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
     - cad/scenes/Wainscott_0_int/artifacts/meshes.zip
     - cad/scenes/Wainscott_1_int/artifacts/meshes.zip
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
     - cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
-    - cad/scenes/gates_bedroom/artifacts/meshes.zip
     - cad/scenes/grocery_store_asian/artifacts/meshes.zip
     - cad/scenes/grocery_store_cafe/artifacts/meshes.zip
     - cad/scenes/grocery_store_convenience/artifacts/meshes.zip
@@ -1319,6 +1361,7 @@ stages:
     - cad/objects/substances-02/artifacts/collision_meshes.zip
     - cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
     - cad/objects/task_relevant-xy/artifacts/collision_meshes.zip
+    - cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Benevolence_0_int/artifacts/collision_meshes.zip
@@ -1326,18 +1369,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/collision_meshes.zip
     - cad/scenes/Ihlen_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Ihlen_1_int/artifacts/collision_meshes.zip
+    - cad/scenes/Merom_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Merom_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Merom_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_1_int/artifacts/collision_meshes.zip
     - cad/scenes/Pomaria_2_int/artifacts/collision_meshes.zip
+    - cad/scenes/Rs_garden/artifacts/collision_meshes.zip
     - cad/scenes/Rs_int/artifacts/collision_meshes.zip
+    - cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Wainscott_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Wainscott_1_int/artifacts/collision_meshes.zip
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
     - cad/scenes/commercial_kitchen_pans/artifacts/collision_meshes.zip
-    - cad/scenes/gates_bedroom/artifacts/collision_meshes.zip
     - cad/scenes/grocery_store_asian/artifacts/collision_meshes.zip
     - cad/scenes/grocery_store_cafe/artifacts/collision_meshes.zip
     - cad/scenes/grocery_store_convenience/artifacts/collision_meshes.zip
@@ -1405,6 +1450,7 @@ stages:
     - cad/objects/substances-02/artifacts/collision_selection.json
     - cad/objects/task_relavant-ab/artifacts/collision_selection.json
     - cad/objects/task_relevant-xy/artifacts/collision_selection.json
+    - cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
     - cad/scenes/Beechwood_1_int/artifacts/collision_selection.json
     - cad/scenes/Benevolence_0_int/artifacts/collision_selection.json
@@ -1412,18 +1458,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/collision_selection.json
     - cad/scenes/Ihlen_0_int/artifacts/collision_selection.json
     - cad/scenes/Ihlen_1_int/artifacts/collision_selection.json
+    - cad/scenes/Merom_0_garden/artifacts/collision_selection.json
     - cad/scenes/Merom_0_int/artifacts/collision_selection.json
     - cad/scenes/Merom_1_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_0_garden/artifacts/collision_selection.json
     - cad/scenes/Pomaria_0_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_1_int/artifacts/collision_selection.json
     - cad/scenes/Pomaria_2_int/artifacts/collision_selection.json
+    - cad/scenes/Rs_garden/artifacts/collision_selection.json
     - cad/scenes/Rs_int/artifacts/collision_selection.json
+    - cad/scenes/Wainscott_0_garden/artifacts/collision_selection.json
     - cad/scenes/Wainscott_0_int/artifacts/collision_selection.json
     - cad/scenes/Wainscott_1_int/artifacts/collision_selection.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
     - cad/scenes/commercial_kitchen_pans/artifacts/collision_selection.json
-    - cad/scenes/gates_bedroom/artifacts/collision_selection.json
     - cad/scenes/grocery_store_asian/artifacts/collision_selection.json
     - cad/scenes/grocery_store_cafe/artifacts/collision_selection.json
     - cad/scenes/grocery_store_convenience/artifacts/collision_selection.json
@@ -1491,6 +1539,7 @@ stages:
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
+    - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
@@ -1498,18 +1547,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
+    - cad/scenes/Merom_0_garden/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
     - cad/scenes/Merom_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/object_list.json
+    - cad/scenes/Rs_garden/artifacts/object_list.json
     - cad/scenes/Rs_int/artifacts/object_list.json
+    - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-    - cad/scenes/gates_bedroom/artifacts/object_list.json
     - cad/scenes/grocery_store_asian/artifacts/object_list.json
     - cad/scenes/grocery_store_cafe/artifacts/object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/object_list.json
@@ -1621,6 +1672,7 @@ stages:
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
+    - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
@@ -1628,18 +1680,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
+    - cad/scenes/Merom_0_garden/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
     - cad/scenes/Merom_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/object_list.json
+    - cad/scenes/Rs_garden/artifacts/object_list.json
     - cad/scenes/Rs_int/artifacts/object_list.json
+    - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-    - cad/scenes/gates_bedroom/artifacts/object_list.json
     - cad/scenes/grocery_store_asian/artifacts/object_list.json
     - cad/scenes/grocery_store_cafe/artifacts/object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/object_list.json
@@ -1831,6 +1885,7 @@ stages:
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
+    - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
@@ -1838,18 +1893,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
+    - cad/scenes/Merom_0_garden/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
     - cad/scenes/Merom_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/object_list.json
+    - cad/scenes/Rs_garden/artifacts/object_list.json
     - cad/scenes/Rs_int/artifacts/object_list.json
+    - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-    - cad/scenes/gates_bedroom/artifacts/object_list.json
     - cad/scenes/grocery_store_asian/artifacts/object_list.json
     - cad/scenes/grocery_store_cafe/artifacts/object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/object_list.json
@@ -1958,6 +2015,7 @@ stages:
     - cad/objects/substances-02/artifacts/sanitycheck.json
     - cad/objects/task_relavant-ab/artifacts/sanitycheck.json
     - cad/objects/task_relevant-xy/artifacts/sanitycheck.json
+    - cad/scenes/Beechwood_0_garden/artifacts/sanitycheck.json
     - cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
     - cad/scenes/Beechwood_1_int/artifacts/sanitycheck.json
     - cad/scenes/Benevolence_0_int/artifacts/sanitycheck.json
@@ -1965,18 +2023,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/sanitycheck.json
     - cad/scenes/Ihlen_0_int/artifacts/sanitycheck.json
     - cad/scenes/Ihlen_1_int/artifacts/sanitycheck.json
+    - cad/scenes/Merom_0_garden/artifacts/sanitycheck.json
     - cad/scenes/Merom_0_int/artifacts/sanitycheck.json
     - cad/scenes/Merom_1_int/artifacts/sanitycheck.json
     - cad/scenes/Pomaria_0_garden/artifacts/sanitycheck.json
     - cad/scenes/Pomaria_0_int/artifacts/sanitycheck.json
     - cad/scenes/Pomaria_1_int/artifacts/sanitycheck.json
     - cad/scenes/Pomaria_2_int/artifacts/sanitycheck.json
+    - cad/scenes/Rs_garden/artifacts/sanitycheck.json
     - cad/scenes/Rs_int/artifacts/sanitycheck.json
+    - cad/scenes/Wainscott_0_garden/artifacts/sanitycheck.json
     - cad/scenes/Wainscott_0_int/artifacts/sanitycheck.json
     - cad/scenes/Wainscott_1_int/artifacts/sanitycheck.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/sanitycheck.json
     - cad/scenes/commercial_kitchen_pans/artifacts/sanitycheck.json
-    - cad/scenes/gates_bedroom/artifacts/sanitycheck.json
     - cad/scenes/grocery_store_asian/artifacts/sanitycheck.json
     - cad/scenes/grocery_store_cafe/artifacts/sanitycheck.json
     - cad/scenes/grocery_store_convenience/artifacts/sanitycheck.json
@@ -2086,6 +2146,7 @@ stages:
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
     - cad/objects/task_relevant-xy/artifacts/object_list.json
+    - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Beechwood_1_int/artifacts/object_list.json
     - cad/scenes/Benevolence_0_int/artifacts/object_list.json
@@ -2093,18 +2154,20 @@ stages:
     - cad/scenes/Benevolence_2_int/artifacts/object_list.json
     - cad/scenes/Ihlen_0_int/artifacts/object_list.json
     - cad/scenes/Ihlen_1_int/artifacts/object_list.json
+    - cad/scenes/Merom_0_garden/artifacts/object_list.json
     - cad/scenes/Merom_0_int/artifacts/object_list.json
     - cad/scenes/Merom_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
     - cad/scenes/Pomaria_0_int/artifacts/object_list.json
     - cad/scenes/Pomaria_1_int/artifacts/object_list.json
     - cad/scenes/Pomaria_2_int/artifacts/object_list.json
+    - cad/scenes/Rs_garden/artifacts/object_list.json
     - cad/scenes/Rs_int/artifacts/object_list.json
+    - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
     - cad/scenes/Wainscott_0_int/artifacts/object_list.json
     - cad/scenes/Wainscott_1_int/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
     - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-    - cad/scenes/gates_bedroom/artifacts/object_list.json
     - cad/scenes/grocery_store_asian/artifacts/object_list.json
     - cad/scenes/grocery_store_cafe/artifacts/object_list.json
     - cad/scenes/grocery_store_convenience/artifacts/object_list.json
