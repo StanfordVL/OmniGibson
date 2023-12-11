@@ -1,10 +1,11 @@
 import carb
 import numpy as np
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Optional, Tuple, Union
 
 import omnigibson as og
 import omnigibson.utils.transform_utils as T
 from omnigibson.robots.robot_base import BaseRobot
+from omnigibson.utils.data_collection_utils import DataCollectionSystem
 
 # enable xr extension
 from omni.isaac.core.utils.extensions import enable_extension
@@ -12,11 +13,11 @@ enable_extension("omni.kit.xr.profile.vr")
 from omni.kit.xr.core import XRCore, XRDeviceClass, XRCoreEventType
 from omni.kit.xr.ui.stage.common import XRAvatarManager
 
-class VRSys():
+class OVXRSystem(DataCollectionSystem):
     def __init__(
         self, 
+        robot: Union[BaseRobot, Iterable[BaseRobot]],
         system: str="OpenXR",
-        vr_robot: Optional[BaseRobot]=None,
         show_controller: bool=False,
         disable_display_output: bool=False,
         enable_touchpad_movement: bool=False,
@@ -26,7 +27,7 @@ class VRSys():
         """
         Initializes the VR system
         Args:
-            vr_robot (None of BaseRobot): the robot that VR will control.
+            robot (Union[BaseRobot, Iterable[BaseRobot]]): the robot to be controlled by the VR system.
             system (str): the VR system to use, one of ["OpenXR", "SteamVR"], default is "OpenXR".
             show_controller (bool): whether to show the controller model in the scene, default is False.
             disable_display_output (bool): whether we will not display output to the VR headset (only use controller tracking), default is False.
@@ -37,6 +38,7 @@ class VRSys():
         NOTE: enable_touchpad_movement and align_anchor_to_robot_base cannot be enabled at the same time. 
             The former is to enable free movement of the VR system (i.e. the user), while the latter is constraining the VR system to the robot pose.
         """
+        super().__init__(robot)
         # get xr core and profile
         self.xr_core = XRCore.get_singleton()
         self.vr_profile = self.xr_core.get_profile("vr")
@@ -45,7 +47,6 @@ class VRSys():
         self.align_anchor_to_robot_base = align_anchor_to_robot_base
         assert not (self.enable_touchpad_movement and self.align_anchor_to_robot_base), "enable_touchpad_movement and align_anchor_to_robot_base cannot be True at the same time!"
         # robot info
-        self.vr_robot = vr_robot
         self.robot_attached = False
         self.reset_button_pressed = False
         # set avatar
