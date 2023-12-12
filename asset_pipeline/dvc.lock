@@ -120,8 +120,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: d2adb35369badf54536ede425594f267
-      size: 103331418
+      md5: bb7222a97f712b8c82a4b69f48840c9f
+      size: 103352818
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
       md5: f255e0827e1b10b29ca0ccff62a4a143
@@ -244,11 +244,11 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Wainscott_0_garden/processed.max
-      md5: 1a067b6af674e6c2b49fe13ec8920fc0
-      size: 191229984
+      md5: 3708eaee4342e43f9e71d3270a939ded
+      size: 191266848
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-      md5: 77559d4a53f4e42538ea84d0b69215d4
+      md5: cf1dfd75ee18fec85e8f6e350b49a2bb
       size: 147973
   object_list@scenes/Wainscott_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_int/processed.max
@@ -964,7 +964,7 @@ stages:
       md5: ba387a277a62217576b1542a4b88d40f
       size: 35708
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-      md5: 77559d4a53f4e42538ea84d0b69215d4
+      md5: cf1dfd75ee18fec85e8f6e350b49a2bb
       size: 147973
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       md5: 11797ef4f1185b63890cff128f6f06bf
@@ -1247,7 +1247,7 @@ stages:
       md5: ba387a277a62217576b1542a4b88d40f
       size: 35708
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-      md5: 77559d4a53f4e42538ea84d0b69215d4
+      md5: cf1dfd75ee18fec85e8f6e350b49a2bb
       size: 147973
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       md5: 11797ef4f1185b63890cff128f6f06bf
@@ -1530,7 +1530,7 @@ stages:
       md5: ba387a277a62217576b1542a4b88d40f
       size: 35708
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-      md5: 77559d4a53f4e42538ea84d0b69215d4
+      md5: cf1dfd75ee18fec85e8f6e350b49a2bb
       size: 147973
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       md5: 11797ef4f1185b63890cff128f6f06bf
@@ -2565,8 +2565,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.json
-      md5: 8c265acf51fb3e599bcbcc68ae37ba12
-      size: 8158
+      md5: 078ff5106d580b506a07796d1031134a
+      size: 7738
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2812,8 +2812,8 @@ stages:
       size: 11910
     outs:
     - path: artifacts/pipeline/combined_room_object_list.json
-      md5: 4e07e58781ee5a101d0c90482067562f
-      size: 295897
+      md5: 4d404246c43ae14c556180d8e4c2f14a
+      size: 295441
   room_object_list@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -2839,8 +2839,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: d2adb35369badf54536ede425594f267
-      size: 103331418
+      md5: bb7222a97f712b8c82a4b69f48840c9f
+      size: 103352818
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.json
       md5: 01e013f29e8d2beda5a6a5aec81ba493
@@ -2889,12 +2889,12 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Wainscott_0_garden/processed.max
-      md5: 1a067b6af674e6c2b49fe13ec8920fc0
-      size: 191229984
+      md5: 3708eaee4342e43f9e71d3270a939ded
+      size: 191266848
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.json
-      md5: 8c265acf51fb3e599bcbcc68ae37ba12
-      size: 8158
+      md5: 078ff5106d580b506a07796d1031134a
+      size: 7738
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3109,8 +3109,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.json
-      md5: 8c265acf51fb3e599bcbcc68ae37ba12
-      size: 8158
+      md5: 078ff5106d580b506a07796d1031134a
+      size: 7738
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3362,8 +3362,8 @@ stages:
       size: 11910
     outs:
     - path: artifacts/pipeline/combined_room_object_list_future.json
-      md5: d8b921b9076239974ec15a073b28d834
-      size: 296595
+      md5: f99b276299ddfcfdf6a2cbea66573420
+      size: 296139
   sanitycheck@scenes/public_restroom_blue:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_blue/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -3918,12 +3918,12 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Wainscott_0_garden/processed.max
-      md5: 1a067b6af674e6c2b49fe13ec8920fc0
-      size: 191229984
+      md5: 3708eaee4342e43f9e71d3270a939ded
+      size: 191266848
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/sanitycheck.json
-      md5: 55822555bcc1888b5327f624f263325d
-      size: 2548
+      md5: 0641d818d32838c09da0fd0ce707720f
+      size: 1354
   sanitycheck@scenes/school_gym:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_gym/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
@@ -3946,12 +3946,12 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: d2adb35369badf54536ede425594f267
-      size: 103331418
+      md5: bb7222a97f712b8c82a4b69f48840c9f
+      size: 103352818
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/sanitycheck.json
-      md5: 8008491da0b421ffaf94b555cae1dfe7
-      size: 135
+      md5: d43f5c742c8056071450ffc514e3ace8
+      size: 65
   sanitycheck@scenes/hotel_gym_spa:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hotel_gym_spa/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -4279,6 +4279,9 @@ stages:
     - path: cad/objects/task_relevant-xy/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
+    - path: cad/scenes/Beechwood_0_garden/artifacts/sanitycheck.json
+      md5: 18014a83021e0a06fb578be9219f5e94
+      size: 196
     - path: cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
@@ -4300,6 +4303,9 @@ stages:
     - path: cad/scenes/Ihlen_1_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
+    - path: cad/scenes/Merom_0_garden/artifacts/sanitycheck.json
+      md5: d43f5c742c8056071450ffc514e3ace8
+      size: 65
     - path: cad/scenes/Merom_0_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
@@ -4318,9 +4324,15 @@ stages:
     - path: cad/scenes/Pomaria_2_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
+    - path: cad/scenes/Rs_garden/artifacts/sanitycheck.json
+      md5: d43f5c742c8056071450ffc514e3ace8
+      size: 65
     - path: cad/scenes/Rs_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
+    - path: cad/scenes/Wainscott_0_garden/artifacts/sanitycheck.json
+      md5: 0641d818d32838c09da0fd0ce707720f
+      size: 1354
     - path: cad/scenes/Wainscott_0_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
@@ -4331,9 +4343,6 @@ stages:
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
     - path: cad/scenes/commercial_kitchen_pans/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/gates_bedroom/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
     - path: cad/scenes/grocery_store_asian/artifacts/sanitycheck.json
@@ -4442,8 +4451,8 @@ stages:
       md5: 50380e7647a34c18af72965e5ec76a1f
       size: 137
     - path: params.yaml
-      md5: d6f39cf15326b1897bb8e83232b563b4
-      size: 11672
+      md5: 426f338824ca0abaa26e55ba0454ad0a
+      size: 11910
     outs:
     - path: artifacts/pipeline/sanitycheck.success
       md5: d41d8cd98f00b204e9800998ecf8427e
