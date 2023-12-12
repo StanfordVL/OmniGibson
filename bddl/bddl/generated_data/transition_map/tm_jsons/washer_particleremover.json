@@ -230,6 +230,16 @@
         }
     },
     {
+        "rule_name": "broom.n.01-washer-saturate-cover",
+        "input_objects": {},
+        "washed_item": {
+            "broom.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "cap.n.01-washer-saturate-cover",
         "input_objects": {},
         "washed_item": {
