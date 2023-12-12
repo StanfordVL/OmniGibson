@@ -19,7 +19,7 @@
         },
         "deformable": {},                       # <synset> is a deformable (a softBody, cloth, or rope)
         "diceable": {                           # if a slicer is applied to <synset>, it will disappear and be replaced by uncooked_diceable_derivative_synset
-            "uncooked_diceable_derivative_synset": {}   # synset that will be created if slicer is applied to <synset>
+            "uncooked_diceable_derivative_synset": <str>   # synset that will be created if slicer is applied to <synset>
         },
         "drapeable": {},                        # <synset> can be in a draped(<synset>, <other object>) statement
         "flammable": {                          # <synset> can be in on_fire/not on_fire states
@@ -42,6 +42,9 @@
         "liquid": {},                           # <synset> is a liquid
         "microPhysicalSubstance": {},           # <synset> is a microPhysicalSubstance (a physicalSubstance with minute particles, like flour)
         "macroPhysicalSubstance": {},           # <synset> is a macroPhysicalSubstance (a physicalSubstance with larger particles, like a blueberry)
+        "meltable": {
+            "meltable_derivative_synset": <str> # synset that will be created if <synset> is heated past its melting point at any time. <synset> will disappear, i.e. real(<synset>) will become False, and real(<meltable_derivative_synset>) will become True. 
+        },
         "nonSubstance": {},                     # <synset> is not a substance
         "particleApplier": {                    # <synset> can release a substance if insource(<particleApplier>, <substance>) is True and given conditions are met
             "method": <int>,                    # method with which particles are release and apply onto a nonSubstance - 1 means projection, like a spray from a spray bottle
