@@ -142,9 +142,9 @@ class TrivialSimulator(object):
     def set_cooked(self, objs, is_cooked):
         assert len(objs) == 1, f"`objs` has len other than 1: {objs}"
         if is_cooked: 
-            self.cooked.add(obj.name)
+            self.cooked.add(objs)
         else: 
-            self.cooked.discard(obj.name)
+            self.cooked.discard(objs)
     
     def get_cooked(self, objs):
         return tuple(obj.name for obj in objs) in self.cooked
