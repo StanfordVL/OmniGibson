@@ -38,12 +38,13 @@ PREDICATE_MAPPING = {
     "function": ParticleModifyCondition.FUNCTION,
 }
 
-def parse_predicate(predicate):
-    pred_type = PREDICATE_MAPPING[predicate.split(" ")[0]]
+def parse_predicate(condition):
+    predicate = condition.split(" ")[0]
+    pred_type = PREDICATE_MAPPING[predicate]
     if pred_type == ParticleModifyCondition.SATURATED:
-        cond = (pred_type, predicate.split(" ")[1].split(".")[0])
+        cond = (predicate, condition.split(" ")[1])
     elif pred_type == ParticleModifyCondition.TOGGLEDON:
-        cond = (pred_type, True)
+        cond = (predicate, True)
     elif pred_type == ParticleModifyCondition.FUNCTION:
         raise ValueError("Not supported")
     else:
@@ -57,7 +58,7 @@ def parse_conditions_entry(unparsed_conditions):
         always_true = bool(int(unparsed_conditions))
         conditions = [] if always_true else None
     else:
-        conditions = [parse_predicate(predicate=pred) for pred in unparsed_conditions.lower().split(" or ")]
+        conditions = [parse_predicate(condition=cond) for cond in unparsed_conditions.lower().split(" or ")]
     return conditions
 
 
@@ -100,8 +101,7 @@ def get_synsets_to_particle_remover_params():
         for dirtiness_substance_synset in [key for key in record if re.match(OBJECT_CAT_AND_INST_RE, key) is not None]:
             conditions = parse_conditions_entry(record[dirtiness_substance_synset])
             if conditions is not None: 
-                og_cat = dirtiness_substance_synset.split(".")[0]
-                remover_kwargs["conditions"][og_cat] = conditions
+                remover_kwargs["conditions"][dirtiness_substance_synset] = conditions
         
         synset_cleaning_mapping[synset] = remover_kwargs
     

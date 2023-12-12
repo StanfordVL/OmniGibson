@@ -4160,16 +4160,6 @@
         }
     },
     {
-        "rule_name": "broom.n.01-washer-cover",
-        "input_objects": {},
-        "washed_item": {
-            "broom.n.01": 1
-        },
-        "output_objects": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "brown_rice__sack.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
@@ -10260,6 +10250,16 @@
         }
     },
     {
+        "rule_name": "half__baguette.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__baguette.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__bamboo.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
@@ -10530,6 +10530,16 @@
         }
     },
     {
+        "rule_name": "half__candied_yam.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__candied_yam.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__cantaloup.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
@@ -10544,6 +10554,16 @@
         "input_objects": {},
         "washed_item": {
             "half__card.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__cardstock.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__cardstock.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -10614,6 +10634,16 @@
         "input_objects": {},
         "washed_item": {
             "half__cheddar.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__cheese_danish.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__cheese_danish.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -10860,10 +10890,30 @@
         }
     },
     {
+        "rule_name": "half__cookie_dough.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__cookie_dough.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__crab.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
             "half__crab.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__crawfish.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__crawfish.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -10884,6 +10934,16 @@
         "input_objects": {},
         "washed_item": {
             "half__crescent_roll.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__croissant.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__croissant.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -11120,10 +11180,30 @@
         }
     },
     {
+        "rule_name": "half__garlic.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__garlic.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__garlic_bread.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
             "half__garlic_bread.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__garlic_clove.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__garlic_clove.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -11144,6 +11224,16 @@
         "input_objects": {},
         "washed_item": {
             "half__ginger.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__ginger_root.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__ginger_root.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -11330,6 +11420,26 @@
         }
     },
     {
+        "rule_name": "half__hotdog_bun.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__hotdog_bun.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__hotdog_frank.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__hotdog_frank.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__huitre.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
@@ -11394,6 +11504,16 @@
         "input_objects": {},
         "washed_item": {
             "half__lamb.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__leaf.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__leaf.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -11580,6 +11700,16 @@
         }
     },
     {
+        "rule_name": "half__mustard_leaf.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__mustard_leaf.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__nectarine.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
@@ -11624,6 +11754,16 @@
         "input_objects": {},
         "washed_item": {
             "half__oxtail.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__oyster.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__oyster.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -11694,6 +11834,16 @@
         "input_objects": {},
         "washed_item": {
             "half__peppermint.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__peppermint_candy.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__peppermint_candy.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -11820,6 +11970,26 @@
         }
     },
     {
+        "rule_name": "half__pork_chop.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__pork_chop.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__pork_rib.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__pork_rib.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__porkchop.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
@@ -11900,6 +12070,16 @@
         }
     },
     {
+        "rule_name": "half__quail_breast.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__quail_breast.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__quiche.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
@@ -11930,6 +12110,16 @@
         }
     },
     {
+        "rule_name": "half__rhubarb.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__rhubarb.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__rib.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
@@ -11940,10 +12130,30 @@
         }
     },
     {
+        "rule_name": "half__roll_dough.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__roll_dough.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__rope.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
             "half__rope.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__rosehip.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__rosehip.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -12000,6 +12210,16 @@
         }
     },
     {
+        "rule_name": "half__shrimp.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__shrimp.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "half__sirloin.n.01-washer-cover",
         "input_objects": {},
         "washed_item": {
@@ -12024,6 +12244,16 @@
         "input_objects": {},
         "washed_item": {
             "half__sour_bread.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__sourdough.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__sourdough.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1
@@ -12294,6 +12524,16 @@
         "input_objects": {},
         "washed_item": {
             "half__vanilla.n.01": 1
+        },
+        "output_objects": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "half__vanilla_flower.n.01-washer-cover",
+        "input_objects": {},
+        "washed_item": {
+            "half__vanilla_flower.n.01": 1
         },
         "output_objects": {
             "water.n.06": 1

@@ -1215,6 +1215,15 @@
         }
     },
     {
+        "rule_name": "diced__cookie_dough.n.01-cooking",
+        "input_objects": {
+            "diced__cookie_dough.n.01": 1
+        },
+        "output_objects": {
+            "cooked__diced__cookie_dough.n.01": 1
+        }
+    },
+    {
         "rule_name": "diced__crab.n.01-cooking",
         "input_objects": {
             "diced__crab.n.01": 1
@@ -2133,6 +2142,15 @@
         }
     },
     {
+        "rule_name": "diced__roll_dough.n.01-cooking",
+        "input_objects": {
+            "diced__roll_dough.n.01": 1
+        },
+        "output_objects": {
+            "cooked__diced__roll_dough.n.01": 1
+        }
+    },
+    {
         "rule_name": "diced__rutabaga.n.01-cooking",
         "input_objects": {
             "diced__rutabaga.n.01": 1
@@ -2202,6 +2220,15 @@
         },
         "output_objects": {
             "cooked__diced__sour_bread.n.01": 1
+        }
+    },
+    {
+        "rule_name": "diced__sourdough.n.01-cooking",
+        "input_objects": {
+            "diced__sourdough.n.01": 1
+        },
+        "output_objects": {
+            "cooked__diced__sourdough.n.01": 1
         }
     },
     {
