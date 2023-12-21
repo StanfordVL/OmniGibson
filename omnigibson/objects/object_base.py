@@ -218,24 +218,24 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
                 "emissive_intensity": material.emissive_intensity,
             }
 
-    @property
-    def articulation_root_path(self):
-        has_articulated_joints, has_fixed_joints = self.n_joints > 0, self.n_fixed_joints > 0
-        if self.kinematic_only or ((not has_articulated_joints) and (not has_fixed_joints)):
-            # Kinematic only, or non-jointed single body objects
-            return None
-        elif not self.fixed_base and has_articulated_joints:
-            # This is all remaining non-fixed objects
-            # This is a bit hacky because omniverse is buggy
-            # Articulation roots mess up the joint order if it's on a non-fixed base robot, e.g. a
-            # mobile manipulator. So if we have to move it to the actual root link of the robot instead.
-            # See https://forums.developer.nvidia.com/t/inconsistent-values-from-isaacsims-dc-get-joint-parent-child-body/201452/2
-            # for more info
-            return f"{self._prim_path}/{self.root_link_name}"
-        else:
-            # Fixed objects that are not kinematic only, or non-fixed objects that have no articulated joints but do
-            # have fixed joints
-            return self._prim_path
+    # @property
+    # def articulation_root_path(self):
+    #     has_articulated_joints, has_fixed_joints = self.n_joints > 0, self.n_fixed_joints > 0
+    #     if self.kinematic_only or ((not has_articulated_joints) and (not has_fixed_joints)):
+    #         # Kinematic only, or non-jointed single body objects
+    #         return None
+    #     elif not self.fixed_base and has_articulated_joints:
+    #         # This is all remaining non-fixed objects
+    #         # This is a bit hacky because omniverse is buggy
+    #         # Articulation roots mess up the joint order if it's on a non-fixed base robot, e.g. a
+    #         # mobile manipulator. So if we have to move it to the actual root link of the robot instead.
+    #         # See https://forums.developer.nvidia.com/t/inconsistent-values-from-isaacsims-dc-get-joint-parent-child-body/201452/2
+    #         # for more info
+    #         return f"{self._prim_path}/{self.root_link_name}"
+    #     else:
+    #         # Fixed objects that are not kinematic only, or non-fixed objects that have no articulated joints but do
+    #         # have fixed joints
+    #         return self._prim_path
 
     @property
     def mass(self):
