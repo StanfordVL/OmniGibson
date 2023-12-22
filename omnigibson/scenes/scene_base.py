@@ -143,7 +143,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         Returns:
             list of str: Keys with which to index into the object registry. These should be valid public attributes of
-                prims that we can use as unique IDs to reference prims, e.g., prim.prim_path, prim.name, prim.handle, etc.
+                prims that we can use as unique IDs to reference prims, e.g., prim.prim_path, prim.name, etc.
         """
         return ["name", "prim_path", "uuid"]
 
@@ -599,11 +599,15 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             name=plane.name,
         )
 
-    def update_initial_state(self):
+    def update_initial_state(self, state=None):
         """
         Updates the initial state for this scene (which the scene will get reset to upon calling reset())
+
+        Args:
+            state (None or dict): If specified, the state to set internally. Otherwise, will set the initial state to
+                be the current state
         """
-        self._initial_state = self.dump_state(serialized=False)
+        self._initial_state = self.dump_state(serialized=False) if state is None else state
 
     def update_objects_info(self):
         """

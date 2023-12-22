@@ -381,12 +381,35 @@ class Simulator(SimulationContext, Serializable):
         self._scene.remove_object(obj)
         self.app.update()
 
-        # Re-initialize the physics view if we're playing because the number of objects has changed
-        if og.sim.is_playing():
-            RigidContactAPI.initialize_view()
+        # Update all handles that are now broken because objects have changed
+        self.update_handles()
 
         # Refresh all current rules
         TransitionRuleAPI.prune_active_rules()
+
+    def _reset_variables(self):
+        """
+        Reset internal variables when a new stage is loaded
+        """
+
+    def update_handles(self):
+        # Handles are only relevant when physx is running
+        if not self.is_playing():
+            return
+
+        # First, refresh the physics sim view
+        self._physics_sim_view = omni.physics.tensors.create_simulation_view(self.backend)
+        self._physics_sim_view.set_subspace_roots("/")
+
+        # Then update the handles for all objects
+        if self.scene is not None and self.scene.initialized:
+            for obj in self.scene.objects:
+                # Only need to update if object is already initialized as well
+                if obj.initialized:
+                    obj.update_handles()
+
+        # Finally update any unified views
+        RigidContactAPI.initialize_view()
 
     def _non_physics_step(self):
         """
@@ -421,7 +444,7 @@ class Simulator(SimulationContext, Serializable):
                 self._objects_to_initialize = self._objects_to_initialize[n_objects_to_initialize:]
 
                 # Re-initialize the physics view because the number of objects has changed
-                RigidContactAPI.initialize_view()
+                self.update_handles()
 
                 # Also refresh the transition rules that are currently active
                 TransitionRuleAPI.refresh_all_rules()
@@ -477,16 +500,17 @@ class Simulator(SimulationContext, Serializable):
             with suppress_omni_log(channels=channels):
                 super().play()
 
+            # If we're stopped, take a physics step and update the physics sim view. This must happen BEFORE the
+            # handles are updated, since updating the physics view makes the per-object physics view invalid
+            self.step_physics()
+
             # Take a render step -- this is needed so that certain (unknown, maybe omni internal state?) is populated
             # correctly.
             self.render()
 
-            # Update all object handles
-            if self.scene is not None and self.scene.initialized:
-                for obj in self.scene.objects:
-                    # Only need to update if object is already initialized as well
-                    if obj.initialized:
-                        obj.update_handles()
+            # Update all object handles, unless this is a play during initialization
+            if og.sim is not None:
+                self.update_handles()
 
             if was_stopped:
                 # We need to update controller mode because kp and kd were set to the original (incorrect) values when
@@ -498,12 +522,6 @@ class Simulator(SimulationContext, Serializable):
                     for robot in self.scene.robots:
                         if robot.initialized:
                             robot.update_controller_mode()
-
-                self.step_physics()
-
-                # Initialize physics view and RigidContactAPI
-                self._physics_sim_view = omni.physics.tensors.create_simulation_view(self.backend)
-                self._physics_sim_view.set_subspace_roots("/")
 
             # Additionally run non physics things
             self._non_physics_step()
@@ -786,14 +804,6 @@ class Simulator(SimulationContext, Serializable):
         return
 
     @property
-    def dc(self):
-        """
-        Returns:
-            _dynamic_control.DynamicControl: Dynamic control (dc) interface
-        """
-        return self._dynamic_control
-
-    @property
     def pi(self):
         """
         Returns:
@@ -1007,6 +1017,11 @@ class Simulator(SimulationContext, Serializable):
         # Open new stage -- suppressing warning that we're opening a new stage
         with suppress_omni_log(None):
             create_new_stage()
+
+        # Clear physics context
+        self._physics_context = None
+        if meets_minimum_isaac_version("2023.0.0"):
+            self._physx_fabric_interface = None
 
         # Create world prim
         self.stage.DefinePrim("/World", "Xform")

@@ -94,7 +94,7 @@ def primitive_tester(load_object_categories, objects, primitives, primitives_arg
     gm.USE_GPU_DYNAMICS = False
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+    env = og.Environment(configs=cfg)
     robot = env.robots[0]
     env.reset()
 

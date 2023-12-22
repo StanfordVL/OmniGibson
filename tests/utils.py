@@ -87,7 +87,7 @@ def assert_test_scene():
         gm.USE_GPU_DYNAMICS = True
 
         # Create the environment
-        env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+        env = og.Environment(configs=cfg)
 
 
 def get_random_pose(pos_low=10.0, pos_hi=20.0):

@@ -33,7 +33,7 @@ def task_tester(task_type):
     gm.USE_GPU_DYNAMICS = True
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+    env = og.Environment(configs=cfg)
 
     env.reset()
     for _ in range(5):
