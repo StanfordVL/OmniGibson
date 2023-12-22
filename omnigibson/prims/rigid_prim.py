@@ -249,7 +249,7 @@ class RigidPrim(XFormPrim):
         Returns:
             np.ndarray: current linear velocity of the the rigid prim. Shape (3,).
         """
-        return self._rigid_prim_view.get_linear_velocities()[0]
+        return self._rigid_prim_view.get_linear_velocities().cpu().numpy()[0]
 
     def set_angular_velocity(self, velocity):
         """
@@ -265,7 +265,7 @@ class RigidPrim(XFormPrim):
         Returns:
             np.ndarray: current angular velocity of the the rigid prim. Shape (3,).
         """
-        return self._rigid_prim_view.get_angular_velocities()[0]
+        return self._rigid_prim_view.get_angular_velocities().cpu().numpy()[0]
 
     def set_position_orientation(self, position=None, orientation=None):
         if position is not None:
@@ -279,7 +279,8 @@ class RigidPrim(XFormPrim):
 
     def get_position_orientation(self):
         pos, ori = self._rigid_prim_view.get_world_poses()
-
+        pos = pos.cpu().numpy()
+        ori = ori.cpu().numpy()
         assert np.isclose(np.linalg.norm(ori), 1, atol=1e-3), \
             f"{self.prim_path} orientation {ori} is not a unit quaternion."
         return pos[0], ori[0][[1, 2, 3, 0]]
@@ -293,8 +294,12 @@ class RigidPrim(XFormPrim):
         BoundingBoxAPI.clear()
 
     def get_local_pose(self):
-        positions, orientations = self._rigid_prim_view.get_local_poses()
-        return positions[0], orientations[0][[1, 2, 3, 0]]
+        pos, ori = self._rigid_prim_view.get_local_poses()
+        pos = pos.cpu().numpy()
+        ori = ori.cpu().numpy()
+        assert np.isclose(np.linalg.norm(ori), 1, atol=1e-3), \
+            f"{self.prim_path} orientation {ori} is not a unit quaternion."
+        return pos[0], ori[0][[1, 2, 3, 0]]
 
     @property
     def _rigid_prim_view(self):
@@ -399,7 +404,7 @@ class RigidPrim(XFormPrim):
         Returns:
             float: mass of the rigid body in kg.
         """
-        mass = self._rigid_prim_view.get_masses()[0]
+        mass = self._rigid_prim_view.get_masses().cpu().numpy()[0]
 
         # Fallback to analytical computation of volume * density
         if mass == 0:
@@ -421,7 +426,7 @@ class RigidPrim(XFormPrim):
         Returns:
             float: density of the rigid body in kg / m^3.
         """
-        raw_usd_mass = self._rigid_prim_view.get_masses()[0]
+        raw_usd_mass = self._rigid_prim_view.get_masses().cpu().numpy()[0]
         # We first check if the raw usd mass is specified, since mass overrides density
         # If it's specified, we infer density based on that value divided by volume
         # Otherwise, we try to directly grab the raw usd density value, and if that value
@@ -429,7 +434,7 @@ class RigidPrim(XFormPrim):
         if raw_usd_mass != 0:
             density = raw_usd_mass / self.volume
         else:
-            density = self._rigid_prim_view.get_densities()[0]
+            density = self._rigid_prim_view.get_densities().cpu().numpy()[0]
             if density == 0:
                 density = 1000.0
 

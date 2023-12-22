@@ -1179,7 +1179,7 @@ class MacroPhysicalParticleSystem(PhysicalParticleSystem, MacroParticleSystem):
     def get_particles_position_orientation(cls):
         # Note: This gets the center of the sphere approximation of the particles, NOT the actual particle frames!
         if cls.n_particles > 0:
-            tfs = cls.particles_view.get_transforms()
+            tfs = cls.particles_view.get_transforms().cpu().numpy()
             pos, ori = tfs[:, :3], tfs[:, 3:]
             pos = pos + T.quat2mat(ori) @ cls._particle_offset
         else:
@@ -1242,7 +1242,7 @@ class MacroPhysicalParticleSystem(PhysicalParticleSystem, MacroParticleSystem):
                 - (n, 3)-array: per-particle (ax, ay, az) angular velocities in the world frame
         """
         if cls.n_particles > 0:
-            vels = cls.particles_view.get_velocities()
+            vels = cls.particles_view.get_velocities().cpu().numpy()
             lin_vel, ang_vel = vels[:, :3], vels[:, 3:]
         else:
             lin_vel, ang_vel = np.array([]).reshape(0, 3), np.array([]).reshape(0, 3)

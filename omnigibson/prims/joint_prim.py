@@ -148,7 +148,7 @@ class JointPrim(BasePrim):
         if self.articulated:
             control_types = []
             stiffnesses, dampings = self._articulation_view.get_gains(joint_indices=self.dof_indices)
-            for i, (kp, kd) in enumerate(zip(stiffnesses[0], dampings[0])):
+            for i, (kp, kd) in enumerate(zip(stiffnesses[0].cpu().numpy(), dampings[0].cpu().numpy())):
                 # Infer control type based on whether kp and kd are 0 or not, as well as whether this joint is driven or not
                 # TODO: Maybe assert mutual exclusiveness here?
                 if not self._driven:
@@ -335,7 +335,7 @@ class JointPrim(BasePrim):
         # Only support revolute and prismatic joints for now
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         # We either return the raw value or a default value if there is no max specified
-        raw_vel = self._articulation_view.get_max_velocities(joint_indices=self.dof_indices)[0][0]
+        raw_vel = self._articulation_view.get_max_velocities(joint_indices=self.dof_indices).cpu().numpy()[0][0]
         default_max_vel = m.DEFAULT_MAX_REVOLUTE_VEL if self.joint_type == JointType.JOINT_REVOLUTE else m.DEFAULT_MAX_PRISMATIC_VEL
         return default_max_vel if raw_vel is None or np.abs(raw_vel) > m.INF_VEL_THRESHOLD else raw_vel
 
@@ -362,7 +362,7 @@ class JointPrim(BasePrim):
         # Only support revolute and prismatic joints for now
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         # We either return the raw value or a default value if there is no max specified
-        raw_effort = self._articulation_view.get_max_efforts(joint_indices=self.dof_indices)[0][0]
+        raw_effort = self._articulation_view.get_max_efforts(joint_indices=self.dof_indices).cpu().numpy()[0][0]
         return m.DEFAULT_MAX_EFFORT if raw_effort is None or np.abs(raw_effort) > m.INF_EFFORT_THRESHOLD else raw_effort
 
     @max_effort.setter
@@ -388,7 +388,7 @@ class JointPrim(BasePrim):
         # Only support revolute and prismatic joints for now
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         stiffnesses, _ = self._articulation_view.get_gains(joint_indices=self.dof_indices)[0]
-        return stiffnesses[0][0]
+        return stiffnesses.cpu().numpy()[0][0]
 
     @stiffness.setter
     def stiffness(self, stiffness):
@@ -413,7 +413,7 @@ class JointPrim(BasePrim):
         # Only support revolute and prismatic joints for now
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         _, dampings = self._articulation_view.get_gains(joint_indices=self.dof_indices)[0]
-        return dampings[0][0]
+        return dampings.cpu().numpy()[0][0]
 
     @damping.setter
     def damping(self, damping):
@@ -435,7 +435,7 @@ class JointPrim(BasePrim):
         Returns:
             float: friction for this joint
         """
-        return self._articulation_view.get_friction_coefficients(joint_indices=self.dof_indices)[0][0]
+        return self._articulation_view.get_friction_coefficients(joint_indices=self.dof_indices).cpu().numpy()[0][0]
 
     @friction.setter
     def friction(self, friction):
@@ -459,7 +459,7 @@ class JointPrim(BasePrim):
         # Only support revolute and prismatic joints for now
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         # We either return the raw value or a default value if there is no max specified
-        raw_pos_lower, raw_pos_upper = self._articulation_view.get_joint_limits(joint_indices=self.dof_indices).flatten()
+        raw_pos_lower, raw_pos_upper = self._articulation_view.get_joint_limits(joint_indices=self.dof_indices).cpu().numpy().flatten()
         return -m.DEFAULT_MAX_POS \
             if raw_pos_lower is None or raw_pos_lower == raw_pos_upper or np.abs(raw_pos_lower) > m.INF_POS_THRESHOLD \
             else raw_pos_lower
@@ -487,7 +487,7 @@ class JointPrim(BasePrim):
         # Only support revolute and prismatic joints for now
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
         # We either return the raw value or a default value if there is no max specified
-        raw_pos_lower, raw_pos_upper = self._articulation_view.get_joint_limits(joint_indices=self.dof_indices).flatten()
+        raw_pos_lower, raw_pos_upper = self._articulation_view.get_joint_limits(joint_indices=self.dof_indices).cpu().numpy().flatten()
         return m.DEFAULT_MAX_POS \
             if raw_pos_upper is None or raw_pos_lower == raw_pos_upper or np.abs(raw_pos_upper) > m.INF_POS_THRESHOLD \
             else raw_pos_upper
@@ -512,7 +512,7 @@ class JointPrim(BasePrim):
         """
         # Only support revolute and prismatic joints for now
         assert self.is_single_dof, "Joint properties only supported for a single DOF currently!"
-        return np.all(np.abs(self._articulation_view.get_joint_limits(joint_indices=self.dof_indices)) < m.INF_POS_THRESHOLD)
+        return np.all(np.abs(self._articulation_view.get_joint_limits(joint_indices=self.dof_indices).cpu().numpy()) < m.INF_POS_THRESHOLD)
 
     @property
     def axis(self):
@@ -598,9 +598,9 @@ class JointPrim(BasePrim):
         assert self.articulated, "Can only get state for articulated joints!"
 
         # Grab raw states
-        pos = self._articulation_view.get_joint_positions(joint_indices=self.dof_indices)[0]
-        vel = self._articulation_view.get_joint_velocities(joint_indices=self.dof_indices)[0]
-        effort = self._articulation_view.get_applied_joint_efforts(joint_indices=self.dof_indices)[0]
+        pos = self._articulation_view.get_joint_positions(joint_indices=self.dof_indices).cpu().numpy()[0]
+        vel = self._articulation_view.get_joint_velocities(joint_indices=self.dof_indices).cpu().numpy()[0]
+        effort = self._articulation_view.get_applied_joint_efforts(joint_indices=self.dof_indices).cpu().numpy()[0]
 
         # Potentially normalize if requested
         if normalized:
@@ -624,7 +624,7 @@ class JointPrim(BasePrim):
         assert self.articulated, "Can only get targets for articulated joints!"
 
         # Grab raw states
-        targets = self._articulation_view.get_applied_actions()
+        targets = self._articulation_view.get_applied_actions().cpu().numpy()
         pos = targets.joint_positions[0][self.dof_indices]
         vel = targets.joint_velocities[0][self.dof_indices]
 
