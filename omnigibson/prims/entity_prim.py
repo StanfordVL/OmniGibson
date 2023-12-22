@@ -796,7 +796,7 @@ class EntityPrim(XFormPrim):
         # Run sanity checks -- make sure we are articulated
         assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
-        joint_positions = self._articulation_view.get_joint_positions().cpu().numpy().reshape(self.n_dof)
+        joint_positions = self._articulation_view.get_joint_positions().reshape(self.n_dof)
 
         # Possibly normalize values when returning
         return self._normalize_positions(positions=joint_positions) if normalized else joint_positions
@@ -814,7 +814,7 @@ class EntityPrim(XFormPrim):
         # Run sanity checks -- make sure we are articulated
         assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
-        joint_velocities = self._articulation_view.get_joint_velocities().cpu().numpy().reshape(self.n_dof)
+        joint_velocities = self._articulation_view.get_joint_velocities().reshape(self.n_dof)
 
         # Possibly normalize values when returning
         return self._normalize_velocities(velocities=joint_velocities) if normalized else joint_velocities
@@ -832,7 +832,7 @@ class EntityPrim(XFormPrim):
         # Run sanity checks -- make sure we are articulated
         assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
-        joint_efforts = self._articulation_view.get_applied_joint_efforts().cpu().numpy().reshape(self.n_dof)
+        joint_efforts = self._articulation_view.get_applied_joint_efforts().reshape(self.n_dof)
 
         # Possibly normalize values when returning
         return self._normalize_efforts(efforts=joint_efforts) if normalized else joint_efforts
@@ -889,12 +889,8 @@ class EntityPrim(XFormPrim):
         if self._articulation_view is None:
             return self.root_link.get_position_orientation()
 
-        pos, ori = self._articulation_view.get_world_poses()
-        pos = pos.cpu().numpy()
-        ori = ori.cpu().numpy()
-        assert np.isclose(np.linalg.norm(ori), 1, atol=1e-3), \
-            f"{self.prim_path} orientation {ori} is not a unit quaternion."
-        return pos[0], ori[0][[1, 2, 3, 0]]
+        positions, orientations = self._articulation_view.get_world_poses()
+        return positions[0], orientations[0][[1, 2, 3, 0]]
 
     def set_local_pose(self, position=None, orientation=None):
         # Delegate to RigidPrim if we are not articulated
@@ -913,12 +909,8 @@ class EntityPrim(XFormPrim):
         if self._articulation_view is None:
             return self.root_link.get_local_pose()
         
-        pos, ori = self._articulation_view.get_local_poses()
-        pos = pos.cpu().numpy()
-        ori = ori.cpu().numpy()
-        assert np.isclose(np.linalg.norm(ori), 1, atol=1e-3), \
-            f"{self.prim_path} orientation {ori} is not a unit quaternion."
-        return pos[0], ori[0][[1, 2, 3, 0]]
+        positions, orientations = self._articulation_view.get_local_poses()
+        return positions[0], orientations[0][[1, 2, 3, 0]]
 
     # TODO: Is the omni joint damping (used for driving motors) same as dissipative joint damping (what we had in pb)?
     @property
@@ -1192,7 +1184,7 @@ class EntityPrim(XFormPrim):
             n-array: (N,) shaped per-DOF coriolis and centrifugal forces experienced by the entity, if articulated
         """
         assert self.articulated, "Cannot get coriolis and centrifugal forces for non-articulated entity!"
-        return self._articulation_view.get_coriolis_and_centrifugal_forces().cpu().numpy().reshape(self.n_dof)
+        return self._articulation_view.get_coriolis_and_centrifugal_forces().reshape(self.n_dof)
 
     def get_generalized_gravity_forces(self):
         """
@@ -1200,7 +1192,7 @@ class EntityPrim(XFormPrim):
             n-array: (N, N) shaped per-DOF gravity forces, if articulated
         """
         assert self.articulated, "Cannot get generalized gravity forces for non-articulated entity!"
-        return self._articulation_view.get_generalized_gravity_forces().cpu().numpy().reshape(self.n_dof)
+        return self._articulation_view.get_generalized_gravity_forces().reshape(self.n_dof)
 
     def get_mass_matrix(self):
         """
@@ -1208,7 +1200,7 @@ class EntityPrim(XFormPrim):
             n-array: (N, N) shaped per-DOF mass matrix, if articulated
         """
         assert self.articulated, "Cannot get mass matrix for non-articulated entity!"
-        return self._articulation_view.get_mass_matrices().cpu().numpy().reshape(self.n_dof, self.n_dof)
+        return self._articulation_view.get_mass_matrices().reshape(self.n_dof, self.n_dof)
 
     def get_jacobian(self):
         """
@@ -1218,7 +1210,7 @@ class EntityPrim(XFormPrim):
                 (i.e.: there is an additional "floating" joint tying the robot to the world frame)
         """
         assert self.articulated, "Cannot get jacobian for non-articulated entity!"
-        return self._articulation_view.get_jacobians().cpu().numpy().squeeze(axis=0)
+        return self._articulation_view.get_jacobians().squeeze(axis=0)
 
     def get_relative_jacobian(self):
         """

@@ -183,7 +183,7 @@ class ClothPrim(GeomPrim):
             f"Got mismatch in particle setting size: {len(positions)}, vs. number of expected particles {n_expected}!"
         
         # First, get the particle positions.
-        cur_pos = self._cloth_prim_view.get_world_positions().cpu().numpy()
+        cur_pos = self._cloth_prim_view.get_world_positions()
 
         # Then apply the new positions at the appropriate indices
         cur_pos[0, idxs] = torch.Tensor(positions, device=cur_pos.device)
