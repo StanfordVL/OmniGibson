@@ -10,7 +10,7 @@ from omnigibson.macros import gm, create_module_macros
 from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.prims.geom_prim import CollisionGeomPrim, VisualGeomPrim
 from omnigibson.utils.constants import GEOM_TYPES
-from omnigibson.utils.deprecated_utils import RigidPrimView
+from omnigibson.utils.deprecated_utils import RetensorRigidPrimView
 from omnigibson.utils.sim_utils import CsRawData
 from omnigibson.utils.usd_utils import BoundingBoxAPI, get_mesh_volume_and_com
 import omnigibson.utils.transform_utils as T
@@ -79,7 +79,7 @@ class RigidPrim(XFormPrim):
 
     def _post_load(self):
         # Create the view
-        self._rigid_prim_view_direct = RigidPrimView(self._prim_path)
+        self._rigid_prim_view_direct = RetensorRigidPrimView(self._prim_path)
 
         # Set it to be kinematic if necessary
         kinematic_only = "kinematic_only" in self._load_config and self._load_config["kinematic_only"]

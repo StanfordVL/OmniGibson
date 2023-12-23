@@ -18,7 +18,9 @@ import torch
 import warp as wp
 import math
 from omni.isaac.core.articulations import ArticulationView as _ArticulationView
+from omni.isaac.core.simulation_context import SimulationContext
 from omni.isaac.core.prims import RigidPrimView as _RigidPrimView
+from omni.isaac.core.prims import ClothPrimView
 
 DEG2RAD = math.pi / 180.0
 
@@ -476,3 +478,57 @@ class RigidPrimView(_RigidPrimView):
                     self._physx_rigid_body_apis[i] = rigid_api
                 self._physx_rigid_body_apis[i].GetDisableGravityAttr().Set(True)
             return
+
+def to_tensor(a, device):
+    if isinstance(a, np.ndarray):
+        a = torch.from_numpy(a)
+        # For floats, make them all float64s
+        if a.dtype == torch.float64:
+            a = a.type(torch.FloatTensor)
+        if device is not None:
+            a = a.to(device)
+        return a
+    return a
+
+def retensor(fn, device):
+    def wrapper(*args, **kwargs):
+        # Convert any arrays in the input into tensors
+        args = list(args)
+        for i in range(len(args)):
+            args[i] = to_tensor(args[i], device)
+        for k in list(kwargs.keys()):
+            kwargs[k] = to_tensor(kwargs[k], device)
+        results = fn(*args, **kwargs)
+        if isinstance(results, torch.Tensor):
+            results = results.cpu().numpy()
+        elif isinstance(results, tuple):
+            results = tuple([r.cpu().numpy() if isinstance(r, torch.Tensor) else r for r in results])
+        return results
+    return wrapper
+
+
+class Retensored:
+    def __init__(self, sub) -> None:
+        self.sub = sub
+
+    def __getattribute__(self, item: str):
+        sub = super().__getattribute__("sub")
+
+        val = sub.__getattribute__(item)
+        
+        if callable(val):
+            return retensor(val, "cuda:0")
+        return val
+
+
+def retensored_constructor(cls):
+    def wrapper(*args, **kwargs):
+        assert SimulationContext.instance() is not None, "SimulationContext must be initialized before using this function"
+        assert "cuda" in SimulationContext.instance().device, "This function only works with CUDA devices"
+        return Retensored(cls(*args, **kwargs))
+    return wrapper
+
+
+RetensorArticulationView = retensored_constructor(ArticulationView)
+RetensorRigidPrimView = retensored_constructor(RigidPrimView)
+RetensorClothPrimView = retensored_constructor(ClothPrimView)

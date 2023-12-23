@@ -15,7 +15,7 @@ from omnigibson.prims.cloth_prim import ClothPrim
 from omnigibson.prims.joint_prim import JointPrim
 from omnigibson.prims.rigid_prim import RigidPrim
 from omnigibson.prims.xform_prim import XFormPrim
-from omnigibson.utils.deprecated_utils import ArticulationView
+from omnigibson.utils.deprecated_utils import RetensorArticulationView
 from omnigibson.utils.constants import PrimType, GEOM_TYPES, JointType, JointAxis
 from omnigibson.utils.ui_utils import suppress_omni_log
 from omnigibson.utils.usd_utils import BoundingBoxAPI
@@ -121,7 +121,7 @@ class EntityPrim(XFormPrim):
 
         # Prepare the articulation view.
         if self.n_joints > 0:
-            self._articulation_view_direct = ArticulationView(f"{self._prim_path}/{self.root_link_name}")
+            self._articulation_view_direct = RetensorArticulationView(f"{self._prim_path}/{self.root_link_name}")
 
         # Set visual only flag
         # This automatically handles setting collisions / gravity appropriately per-link

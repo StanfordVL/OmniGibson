@@ -86,7 +86,7 @@ class Simulator(SimulationContext, Serializable):
             physics_dt=physics_dt,
             rendering_dt=rendering_dt,
             stage_units_in_meters=stage_units_in_meters,
-            device="cuda" if gm.USE_GPU_DYNAMICS else "cpu",
+            device="cuda:0" if gm.USE_GPU_DYNAMICS else "cpu",
             backend="torch" if gm.USE_GPU_DYNAMICS else "numpy"
         )
 
@@ -1136,19 +1136,6 @@ class Simulator(SimulationContext, Serializable):
             device (None or str): Device used in simulation backend
         """
         return self._device
-
-    @device.setter
-    def device(self, device):
-        """
-        Sets the device used for sim backend
-
-        Args:
-            device (None or str): Device to set for the simulation backend
-        """
-        self._device = device
-        if self._device is not None and "cuda" in self._device:
-            device_id = self._settings.get_as_int("/physics/cudaDevice")
-            self._device = f"cuda:{device_id}"
 
     @property
     def state_size(self):

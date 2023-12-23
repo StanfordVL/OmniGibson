@@ -309,7 +309,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         for arm in self.arm_names:
             for joint in self.finger_joints[arm]:
                 if joint.joint_type != JointType.JOINT_FIXED:
-                    joint.friction = 500
+                    joint.friction = 500.
 
     # Name of the actual root link that we are interested in. Note that this is different from self.root_link_name,
     # which is "base_footprint_x", corresponding to the first of the 6 1DoF joints to control the base.

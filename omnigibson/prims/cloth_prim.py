@@ -10,11 +10,10 @@ from omnigibson.utils.geometry_utils import get_particle_positions_from_frame, g
 from pxr import UsdPhysics, Gf, Vt, PhysxSchema
 from pxr.Sdf import ValueTypeNames as VT
 
-from omni.isaac.core.prims import ClothPrimView
-
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.prims.geom_prim import GeomPrim
 from omnigibson.systems import get_system
+from omnigibson.utils.deprecated_utils import RetensorClothPrimView
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.sim_utils import CsRawData
 from omnigibson.utils.usd_utils import array_to_vtarray, mesh_prim_to_trimesh_mesh, sample_mesh_keypoints
@@ -95,7 +94,7 @@ class ClothPrim(GeomPrim):
         self._n_particles = len(self._prim.GetAttribute("points").Get())
 
         # Load the cloth prim view
-        self._cloth_prim_view = ClothPrimView(self._prim_path)
+        self._cloth_prim_view = RetensorClothPrimView(self._prim_path)
 
         # positions = self.get_particle_positions()
 
@@ -166,7 +165,7 @@ class ClothPrim(GeomPrim):
             np.array: (N, 3) numpy array, where each of the N particles' positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
-        all_particle_positions = self._cloth_prim_view.get_world_positions(clone=False)[0, :, :].cpu().numpy()
+        all_particle_positions = self._cloth_prim_view.get_world_positions(clone=False)[0, :, :]
         return all_particle_positions[:self._n_particles] if idxs is None else all_particle_positions[idxs]
 
     def set_particle_positions(self, positions, idxs=None):
