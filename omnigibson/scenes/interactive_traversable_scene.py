@@ -180,8 +180,19 @@ class InteractiveTraversableScene(TraversableScene):
         # Check whether this is an agent and we allow agents
         agent_ok = self.include_robots or category != robot_macros.ROBOT_CATEGORY
 
+        # (Hacky) these models in house_single_floor cause physx error
+        black_list_models = [
+            "gjrero",  # bottom_cabinet_no_top
+            "tfdrhh",  # door
+            "eduavq",  # door
+            "jpubcg",  # door
+            "dszchb",  # fridge
+        ]
+        model = obj_info["args"].get("model", None)
+        model_ok = model not in black_list_models
+
         # We only load this model if all the above conditions are met
-        return not_blacklisted and whitelisted and valid_room and agent_ok
+        return not_blacklisted and whitelisted and valid_room and agent_ok and model_ok
 
     @property
     def seg_map(self):
