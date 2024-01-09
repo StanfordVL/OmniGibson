@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        fish.n.02_1 - fish.n.02
+        trout.n.01_1 - trout.n.01
         sand.n.04_1 - sand.n.04
         chopping_board.n.01_1 - chopping_board.n.01
         carving_knife.n.01_1 - carving_knife.n.01
@@ -14,8 +14,8 @@
     )
     
     (:init 
-        (ontop fish.n.02_1 chopping_board.n.01_1) 
-        (covered fish.n.02_1 sand.n.04_1)
+        (ontop trout.n.01_1 chopping_board.n.01_1) 
+        (covered trout.n.01_1 sand.n.04_1)
         (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
@@ -28,7 +28,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?fish.n.02_1 ?sand.n.04_1)
+                (covered ?trout.n.01_1 ?sand.n.04_1)
             )
         )
     )

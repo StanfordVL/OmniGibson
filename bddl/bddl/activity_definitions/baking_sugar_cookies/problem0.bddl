@@ -21,6 +21,8 @@
         mason_jar.n.01_1 - mason_jar.n.01
         countertop.n.01_1 countertop.n.01_2 - countertop.n.01
         vanilla__bottle.n.01_1 - vanilla__bottle.n.01
+        salt.n.02_1 - salt.n.02
+        salt__shaker.n.01_1 - salt__shaker.n.01
         bowl.n.01_1 - bowl.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         tablespoon.n.02_1 - tablespoon.n.02
@@ -31,6 +33,8 @@
     (:init 
         (filled flour__sack.n.01_1 flour.n.01_1)
         (ontop flour__sack.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1)
+        (ontop salt__shaker.n.01_1 countertop.n.01_1)
         (ontop tablespoon.n.02_1 countertop.n.01_1)
         (filled sugar__sack.n.01_1 granulated_sugar.n.01_1)
         (ontop sugar__sack.n.01_1 countertop.n.01_1)

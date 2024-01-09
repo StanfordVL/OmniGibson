@@ -1,6 +1,6 @@
 [
     {
-        "rule_name": "sugar cookies",
+        "rule_name": "sugar_cookies",
         "input_objects": {
             "sugar_cookie_dough.n.01": 1
         },
@@ -32,7 +32,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "salt water",
+        "rule_name": "salt_water",
         "input_objects": {
             "water.n.06": 1,
             "salt.n.02": 1
@@ -51,7 +51,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "cheese tarts",
+        "rule_name": "cheese_tarts",
         "input_objects": {
             "pastry.n.01": 1,
             "cheese_pastry_filling.n.01": 1
@@ -90,7 +90,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "red meat sauce",
+        "rule_name": "red_meat_sauce",
         "input_objects": {
             "tomato_sauce.n.01": 1,
             "olive_oil.n.01": 1,
@@ -275,7 +275,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "blueberry compote",
+        "rule_name": "blueberry_compote",
         "input_objects": {
             "lemon_juice.n.01": 1,
             "granulated_sugar.n.01": 1,
@@ -295,7 +295,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "chicken curry",
+        "rule_name": "chicken_curry",
         "input_objects": {
             "diced__chicken_breast.n.01": 1,
             "diced__beefsteak_tomato.n.01": 1,
@@ -317,7 +317,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "chocolate syrup",
+        "rule_name": "chocolate_syrup",
         "input_objects": {
             "granulated_sugar.n.01": 1,
             "seawater.n.01": 1,
@@ -338,7 +338,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "spice cookies",
+        "rule_name": "spice_cookies",
         "input_objects": {
             "spice_cookie_dough.n.01": 1
         },
@@ -445,7 +445,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "ice cubes",
+        "rule_name": "ice_cubes",
         "input_objects": {
             "water.n.06": 1
         },
@@ -463,7 +463,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "cheese sauce",
+        "rule_name": "cheese_sauce",
         "input_objects": {
             "cream_cheese.n.01": 1,
             "butter.n.01": 1,
@@ -486,7 +486,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "macaroni and cheese",
+        "rule_name": "macaroni_and_cheese",
         "input_objects": {
             "cooked__noodle.n.01": 1,
             "breadcrumb.n.01": 1,
@@ -746,7 +746,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "fish stew",
+        "rule_name": "fish_stew",
         "input_objects": {
             "diced__bell_pepper.n.01": 1,
             "diced__clove.n.01": 1,
@@ -793,7 +793,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "chicken soup",
+        "rule_name": "chicken_soup",
         "input_objects": {
             "chicken_broth.n.01": 1,
             "diced__carrot.n.01": 1,
@@ -823,7 +823,7 @@
         "timesteps": null
     },
     {
-        "rule_name": "beef stew",
+        "rule_name": "beef_stew",
         "input_objects": {
             "diced__carrot.n.01": 1,
             "pea.n.01": 1,
@@ -842,6 +842,63 @@
             "beef_stew.n.01": 1
         },
         "output_states": null,
+        "timesteps": null
+    },
+    {
+        "rule_name": "brownie",
+        "input_objects": {
+            "brownie_batter.n.01": 1
+        },
+        "input_states": null,
+        "container": {
+            "cookie_sheet.n.01": 1
+        },
+        "heat_source": {
+            "oven.n.01": 1
+        },
+        "output_objects": {
+            "brownie.n.03": 6
+        },
+        "output_states": {
+            "brownie.n.03": [
+                [
+                    "cooked",
+                    true
+                ]
+            ]
+        },
+        "timesteps": null
+    },
+    {
+        "rule_name": "chocolate_biscuit",
+        "input_objects": {
+            "chocolate_cookie_dough.n.01": 1
+        },
+        "input_states": {
+            "chocolate_cookie_dough.n.01": [
+                [
+                    "cooked",
+                    false
+                ]
+            ]
+        },
+        "container": {
+            "cookie_sheet.n.01": 1
+        },
+        "heat_source": {
+            "oven.n.01": 1
+        },
+        "output_objects": {
+            "chocolate_biscuit.n.01": 6
+        },
+        "output_states": {
+            "chocolate_biscuit.n.01": [
+                [
+                    "cooked",
+                    true
+                ]
+            ]
+        },
         "timesteps": null
     }
 ]

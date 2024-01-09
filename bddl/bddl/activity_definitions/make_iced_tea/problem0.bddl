@@ -4,10 +4,9 @@
     (:objects
         tea_bag.n.01_1 - tea_bag.n.01
         water.n.06_1 - water.n.06
-        kettle.n.01_1 - kettle.n.01
+        electric_kettle.n.01_1 - electric_kettle.n.01
         mug.n.04_1 - mug.n.04
         ice_cube.n.01_1 ice_cube.n.01_2 - ice_cube.n.01
-        tea.n.01_1 - tea.n.01
         water_glass.n.02_1 - water_glass.n.02
         countertop.n.01_1 - countertop.n.01
         cup.n.01_1 - cup.n.01
@@ -23,7 +22,7 @@
     (:init 
         (ontop tea_bag.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
-        (ontop kettle.n.01_1 countertop.n.01_1) 
+        (ontop electric_kettle.n.01_1 countertop.n.01_1) 
         (inside mug.n.04_1 cabinet.n.01_1)
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (inside ice_cube.n.01_1 cup.n.01_1) 
@@ -34,7 +33,6 @@
         (inroom cabinet.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
-        (future tea.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -42,8 +40,8 @@
     
     (:goal 
         (and 
-            (real ?tea.n.01_1) 
-            (contains ?water_glass.n.02_1 ?tea.n.01_1) 
+            (contains ?water_glass.n.02_1 ?water.n.06_1) 
+            (inside ?tea_bag.n.01_1 ?water_glass.n.02_1)
             (forall 
                 (?ice_cube.n.01 - ice_cube.n.01) 
                 (inside ?ice_cube.n.01 ?water_glass.n.02_1)

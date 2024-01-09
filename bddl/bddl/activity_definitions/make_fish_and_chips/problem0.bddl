@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        fish.n.02_1 - fish.n.02
+        trout.n.01_1 - trout.n.01
         countertop.n.01_1 - countertop.n.01
         cooking_oil__bottle.n.01_1 - cooking_oil__bottle.n.01
         cooking_oil.n.01_1 - cooking_oil.n.01
@@ -17,12 +17,12 @@
     )
     
     (:init 
-        (ontop fish.n.02_1 countertop.n.01_1) 
+        (ontop trout.n.01_1 countertop.n.01_1) 
         (not 
-            (cooked fish.n.02_1)
+            (cooked trout.n.01_1)
         )
-        (frozen fish.n.02_1)
-        (inside fish.n.02_1 electric_refrigerator.n.01_1)
+        (frozen trout.n.01_1)
+        (inside trout.n.01_1 electric_refrigerator.n.01_1)
         (not 
             (cooked french_fries.n.02_1)
         )
@@ -104,10 +104,10 @@
                     (cooked ?french_fries.n.02)
                 )
             )
-            (cooked ?fish.n.02_1)
+            (cooked ?trout.n.01_1)
             (or 
-                (covered ?fish.n.02_1 ?cooking_oil.n.01_1)
-                (covered ?fish.n.02_1 ?cooked__cooking_oil.n.01_1)
+                (covered ?trout.n.01_1 ?cooking_oil.n.01_1)
+                (covered ?trout.n.01_1 ?cooked__cooking_oil.n.01_1)
             )
         )
     )

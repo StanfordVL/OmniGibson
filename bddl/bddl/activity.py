@@ -183,3 +183,16 @@ def get_instance_count(act):
     ids = set(int(x.group(1)) for x in problem_files if x is not None)
     assert ids == set(range(len(ids))), f"Non-contiguous instance IDs found for problem {act}"
     return len(ids)
+
+
+def get_reward(ground_goal_state_options): 
+    """Return reward given ground goal state options.
+       Reward formulated as max(<percent literals that are satisfied in the option> for option in ground_goal_state_options)
+
+    Args: 
+        ground_goal_state_options (list<list<HEAD>>): list of compiled ground goal state options
+
+    Returns: 
+        float: reward
+    """
+    return max(len(evaluate_state(option)[-1]["satisfied"]) / float(len(option)) for option in ground_goal_state_options)

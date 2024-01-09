@@ -4,7 +4,7 @@
     (:objects
         napkin.n.01_1 - napkin.n.01
         console_table.n.01_1 - console_table.n.01
-        pastry.n.02_1 pastry.n.02_2 - pastry.n.02
+        danish.n.02_1 danish.n.02_2 - danish.n.02
         diced__virginia_ham.n.01_1 - diced__virginia_ham.n.01
         place_mat.n.01_1 - place_mat.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
@@ -29,8 +29,8 @@
         (ontop napkin.n.01_1 console_table.n.01_1) 
         (ontop place_mat.n.01_1 breakfast_table.n.01_1) 
         (unfolded place_mat.n.01_1)
-        (ontop pastry.n.02_1 tray.n.01_1) 
-        (ontop pastry.n.02_2 tray.n.01_1) 
+        (ontop danish.n.02_1 tray.n.01_1) 
+        (ontop danish.n.02_2 tray.n.01_1) 
         (ontop scone.n.01_1 tray.n.01_1) 
         (ontop sugar_cookie.n.01_1 tray.n.01_1) 
         (ontop tray.n.01_1 console_table.n.01_1) 
@@ -57,8 +57,8 @@
         (and 
             (ontop ?place_mat.n.01_1 ?breakfast_table.n.01_1) 
             (forall 
-                (?pastry.n.02 - pastry.n.02)
-                (ontop ?pastry.n.02 ?tray.n.01_1)
+                (?danish.n.02 - danish.n.02)
+                (ontop ?danish.n.02 ?tray.n.01_1)
             )
             (ontop ?scone.n.01_1 ?tray.n.01_1) 
             (ontop ?sugar_cookie.n.01_1 ?tray.n.01_1) 

@@ -4,7 +4,7 @@
     (:objects
         stain.n.01_1 - stain.n.01
      	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-    	seafood.n.01_1 seafood.n.01_2 seafood.n.01_3 - seafood.n.01
+    	prawn.n.01_1 prawn.n.01_2 prawn.n.01_3 - prawn.n.01
     	detergent.n.02_1 - detergent.n.02
         detergent__bottle.n.01_1 - detergent__bottle.n.01
     	table.n.02_1 - table.n.02
@@ -16,9 +16,9 @@
     
     (:init 
         (covered electric_refrigerator.n.01_1 stain.n.01_1) 
-        (inside seafood.n.01_1 electric_refrigerator.n.01_1) 
-        (inside seafood.n.01_2 electric_refrigerator.n.01_1) 
-        (inside seafood.n.01_3 electric_refrigerator.n.01_1) 
+        (inside prawn.n.01_1 electric_refrigerator.n.01_1) 
+        (inside prawn.n.01_2 electric_refrigerator.n.01_1) 
+        (inside prawn.n.01_3 electric_refrigerator.n.01_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1)
         (ontop detergent__bottle.n.01_1 table.n.02_1)
         (ontop towel.n.01_1 table.n.02_1) 
@@ -35,9 +35,9 @@
                 (covered ?electric_refrigerator.n.01_1 stain.n.01_1)
             ) 
             (forall 
-                (?seafood.n.01 - seafood.n.01) 
+                (?prawn.n.01 - prawn.n.01) 
                 (not 
-                    (inside ?seafood.n.01 ?electric_refrigerator.n.01_1)
+                    (inside ?prawn.n.01 ?electric_refrigerator.n.01_1)
                 )
             )
         )

@@ -7,7 +7,7 @@
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	tray.n.01_1 - tray.n.01
     	parsley.n.02_1 parsley.n.02_2 parsley.n.02_3 parsley.n.02_4 - parsley.n.02
-    	cracker.n.01_1 cracker.n.01_2 cracker.n.01_3 cracker.n.01_4 - cracker.n.01
+    	pretzel.n.01_1 pretzel.n.01_2 pretzel.n.01_3 pretzel.n.01_4 - pretzel.n.01
     	table.n.02_1 - table.n.02
     	cheddar.n.02_1 cheddar.n.02_2 cheddar.n.02_3 cheddar.n.02_4 - cheddar.n.02
     	floor.n.01_1 - floor.n.01
@@ -24,10 +24,10 @@
         (inside parsley.n.02_3 electric_refrigerator.n.01_1) 
         (inside parsley.n.02_4 electric_refrigerator.n.01_1) 
         (ontop tray.n.01_1 floor.n.01_1) 
-        (ontop cracker.n.01_1 table.n.02_1) 
-        (ontop cracker.n.01_2 table.n.02_1) 
-        (ontop cracker.n.01_3 table.n.02_1) 
-        (ontop cracker.n.01_4 table.n.02_1) 
+        (ontop pretzel.n.01_1 table.n.02_1) 
+        (ontop pretzel.n.01_2 table.n.02_1) 
+        (ontop pretzel.n.01_3 table.n.02_1) 
+        (ontop pretzel.n.01_4 table.n.02_1) 
         (inside cheddar.n.02_1 electric_refrigerator.n.01_1) 
         (inside cheddar.n.02_2 electric_refrigerator.n.01_1) 
         (inside cheddar.n.02_3 electric_refrigerator.n.01_1) 
@@ -43,13 +43,13 @@
         (and 
             (ontop ?tray.n.01_1 ?table.n.02_1) 
             (forall 
-                (?cracker.n.01 - cracker.n.01) 
-                (ontop ?cracker.n.01 ?table.n.02_1)
+                (?pretzel.n.01 - pretzel.n.01) 
+                (ontop ?pretzel.n.01 ?table.n.02_1)
             ) 
             (forpairs 
                 (?salad.n.01 - salad.n.01)
-                (?cracker.n.01 - cracker.n.01)
-                (nextto ?salad.n.01 ?cracker.n.01)
+                (?pretzel.n.01 - pretzel.n.01)
+                (nextto ?salad.n.01 ?pretzel.n.01)
             )
             (forpairs 
                 (?cheddar.n.02 - cheddar.n.02) 

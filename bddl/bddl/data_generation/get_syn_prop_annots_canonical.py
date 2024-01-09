@@ -129,7 +129,6 @@ def add_programmatic_properties(synset_content): # runs programmatic addition ov
         if "nonSubstance" in synset_content[synset]: # non-substances are both wetable and mixable
                 synset_content[synset].update({
                     "wetable": {},
-                    "mixable": {},
                     "stickyable": {},
                     "dustyable": {},
                     "grassyable": {},
@@ -175,21 +174,27 @@ def get_synset_descriptors(synsets_to_filtered_properties): # take in canonical 
 # API - only these should be used outside these script, and these should only be used outside this script
 
 def create_get_save_annots_canonical(syn_prop_dict):
+    print("Creating canonical annots file...")
     canonical = get_annots_canonical(syn_prop_dict)
     with open(CANONICAL_FN, "w") as f:
         json.dump(canonical, f, indent=4)
+    print("Created and saved canonical annots file.")
     return canonical
 
 def create_get_save_properties_to_synsets(propagated_canonical):
+    print("Creating properties to synsets...")
     props_to_syns = make_properties_to_synsets(propagated_canonical)
     with open(PROP_TO_SYN_FILE, "w") as f:
         json.dump(props_to_syns, f, indent=4)
+    print("Created and saved properties to synsets file.")
     return props_to_syns
 
 def create_get_save_synsets_to_descriptors(propagated_canonical):
+    print("Creating synsets to descriptors...")
     syn_to_desc = get_synset_descriptors(propagated_canonical)
     with open(SYN_TO_DESC_FILE, "w") as f:
         json.dump(syn_to_desc, f, indent=4)
+    print("Created and saved synset to descriptor file.")
     return syn_to_desc
 
 

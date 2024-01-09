@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        fish.n.02_1 - fish.n.02
+        trout.n.01_1 - trout.n.01
         sink.n.01_1 - sink.n.01
         fishing_rod.n.01_1 - fishing_rod.n.01
         plate.n.04_1 - plate.n.04
@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (attached fish.n.02_1 fishing_rod.n.01_1) 
+        (attached trout.n.01_1 fishing_rod.n.01_1) 
         (ontop fishing_rod.n.01_1 floor.n.01_1)
         (inside plate.n.04_1 cabinet.n.01_1)
         (inroom sink.n.01_1 kitchen) 
@@ -24,9 +24,9 @@
     (:goal 
         (and 
             (not 
-                (attached ?fish.n.02_1 ?fishing_rod.n.01_1)
+                (attached ?trout.n.01_1 ?fishing_rod.n.01_1)
             ) 
-            (ontop ?fish.n.02_1 ?plate.n.04_1)
+            (ontop ?trout.n.01_1 ?plate.n.04_1)
         )
     )
 )

@@ -7,7 +7,7 @@
         water_bottle.n.01_1 water_bottle.n.01_2 - water_bottle.n.01
         shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 shelf.n.01_4 - shelf.n.01
         bottle__of__soda.n.01_1 bottle__of__soda.n.01_2 - bottle__of__soda.n.01
-        cookie.n.01_1 cookie.n.01_2 - cookie.n.01
+        chocolate_chip_cookie.n.01_1 chocolate_chip_cookie.n.01_2 - chocolate_chip_cookie.n.01
         hotdog.n.02_1 hotdog.n.02_2 - hotdog.n.02
         canned_food.n.01_1 - canned_food.n.01
         money.n.01_1 money.n.01_2 money.n.01_3 money.n.01_4 - money.n.01
@@ -21,8 +21,8 @@
         (ontop water_bottle.n.01_2 shelf.n.01_1) 
         (ontop bottle__of__soda.n.01_1 shelf.n.01_1) 
         (ontop bottle__of__soda.n.01_2 shelf.n.01_1) 
-        (ontop cookie.n.01_1 shelf.n.01_2) 
-        (ontop cookie.n.01_2 shelf.n.01_2) 
+        (ontop chocolate_chip_cookie.n.01_1 shelf.n.01_2) 
+        (ontop chocolate_chip_cookie.n.01_2 shelf.n.01_2) 
         (ontop hotdog.n.02_1 shelf.n.01_3) 
         (ontop hotdog.n.02_2 shelf.n.01_3) 
         (ontop canned_food.n.01_1 shelf.n.01_4) 
@@ -53,8 +53,8 @@
     
             ) 
             (forall 
-                (?cookie.n.01 - cookie.n.01) 
-                (ontop ?cookie.n.01 ?checkout.n.03_1)
+                (?chocolate_chip_cookie.n.01 - chocolate_chip_cookie.n.01) 
+                (ontop ?chocolate_chip_cookie.n.01 ?checkout.n.03_1)
     
             ) 
             (forall 

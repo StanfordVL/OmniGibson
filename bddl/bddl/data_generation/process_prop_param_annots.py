@@ -1,172 +1,229 @@
+import csv
+from enum import IntEnum
 import json
-import pathlib
-from nltk.corpus import wordnet as wn
+import os
+import re
 import pandas as pd
-import copy
+import pathlib
 
-PARAMS_OUTFILE_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_params.json"
-UNRESOLVED_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "unresolved"
-PROP_PARAM_ANNOTS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "prop_param_annots"
+
+OBJECT_INSTANCE_RE = r"[A-Za-z-_]+\.n\.[0-9]+_[0-9]+"
+OBJECT_CAT_RE = r"[A-Za-z-_]+\.n\.[0-9]+$"
+OBJECT_CAT_AND_INST_RE = r"[A-Za-z-_]+\.n\.[0-9]+"
+
 SYNS_TO_PROPS = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_canonical.json"
-PROPS_TO_SYNS = pathlib.Path(__file__).parents[1] / "generated_data" / "properties_to_synsets.json"
-SYNSET_LIST = pathlib.Path(__file__).parents[1] / "generated_data" / "synsets.csv"
-leaf_synsets = set(pd.read_csv(SYNSET_LIST)["synset"])
+PROP_PARAM_ANNOTS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "prop_param_annots"
+PARAMS_OUTFILE_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_params.json"
+REMOVER_SYNSET_MAPPING = pathlib.Path(__file__).parents[1] / "generated_data" / "remover_synset_mapping.json"
+LEAF_SYNSETS_FILE = pathlib.Path(__file__).parents[1] / "generated_data" / "synsets.csv"
 
-def add_cookable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
-    # Cooking
-    cooking_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "cooking.csv")
-    cooking_params = cooking_params[cooking_params["require_cookable/overcookable_temperature"] == True][["synset", "value_cook(C)", "value_overcook(C)"]]
-    for i, [synset, cook_temp, overcook_temp] in cooking_params.iterrows():
-        if synset not in leaf_synsets: continue
-        try:
-            float(cook_temp)
-        except ValueError:
-            prop_but_no_param["cookable"].append(synset)
-            continue
-        if pd.isna(float(cook_temp)):
-            prop_but_no_param["cookable"].append(synset)
-            continue
-        if synset not in propagated_canonical:
-            synset_nonexistent["cookable"].append(synset)
-            continue
-        if "cookable" not in propagated_canonical[synset]:
-            param_but_no_prop["cookable"].append(synset)
-            continue
-        propagated_canonical[synset]["cookable"]["cook_temperature"] = float(cook_temp)
-        propagated_canonical[synset]["cookable"]["burn_temperature"] = 200.
+# Helpers
+LEAF_SYNSETS_SET = set(pd.read_csv(LEAF_SYNSETS_FILE)["synset"])
 
-    for cookable_synset in props_to_syns["cookable"]:
-        if synset not in leaf_synsets: continue
-        try: 
-            wn_syn = wn.synset(cookable_synset)
-        except:
-            continue
-        if "cook_temperature" not in propagated_canonical[cookable_synset]["cookable"] and \
-                        all(syn.name in propagated_canonical for syn in wn.synset(cookable_synset).hyponyms()):
-            prop_but_no_param["cookable"].append(cookable_synset)
+# Specific methods for applying / removing particles
+class ParticleModifyMethod(IntEnum):
+    ADJACENCY = 0
+    PROJECTION = 1
 
+# Specific condition types for applying / removing particles
+class ParticleModifyCondition(IntEnum):
+    FUNCTION = 0
+    SATURATED = 1
+    TOGGLEDON = 2
+    GRAVITY = 3
 
-def add_coldsource_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
-    # coldSource
-    coldSource_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "coldSource.csv")
-    coldSource_params = coldSource_params[coldSource_params["require_coldsource_temperature"] == True][["synset", "value(C)", "requires_toggled_on", "requires_closed", "requires_inside"]]
-    for i, [synset, temp, requires_toggled_on, requires_closed, requires_inside] in coldSource_params.iterrows():
-        if synset not in leaf_synsets: continue
-        try:
-            float(temp)
-            int(requires_toggled_on)
-            int(requires_closed)
-            int(requires_inside)
-        except ValueError:
-            prop_but_no_param["coldSource"].append(synset)
-            continue
-        if pd.isna(float(temp)):
-            prop_but_no_param["coldSource"].append(synset)
-            continue
-        if synset not in propagated_canonical:
-            synset_nonexistent["coldSource"].append(synset)
-            continue
-        if "coldSource" not in propagated_canonical[synset]:
-            param_but_no_prop["coldSource"].append(synset)
-            continue
-        propagated_canonical[synset]["coldSource"]["temperature"] = float(temp)
-        propagated_canonical[synset]["coldSource"]["heating_rate"] = 0.01
-        propagated_canonical[synset]["coldSource"]["requires_toggled_on"] = int(requires_toggled_on)
-        propagated_canonical[synset]["coldSource"]["requires_closed"] = int(requires_closed)
-        propagated_canonical[synset]["coldSource"]["requires_inside"] = int(requires_inside)
+PREDICATE_MAPPING = {
+    "saturated": ParticleModifyCondition.SATURATED,
+    "toggled_on": ParticleModifyCondition.TOGGLEDON,
+    "function": ParticleModifyCondition.FUNCTION,
+}
 
-    for coldSource_synset in props_to_syns["coldSource"]:
-        if synset not in leaf_synsets: continue
-        try: 
-            wn_syn = wn.synset(coldSource_synset)
-        except:
-            continue
-        if "temperature" not in propagated_canonical[coldSource_synset]["coldSource"] and \
-                        all(syn.name in propagated_canonical for syn in wn.synset(coldSource_synset).hyponyms()):
-            prop_but_no_param["coldSource"].append(coldSource_synset)
+def parse_predicate(condition):
+    predicate = condition.split(" ")[0]
+    pred_type = PREDICATE_MAPPING[predicate]
+    if pred_type == ParticleModifyCondition.SATURATED:
+        cond = (predicate, condition.split(" ")[1])
+    elif pred_type == ParticleModifyCondition.TOGGLEDON:
+        cond = (predicate, True)
+    elif pred_type == ParticleModifyCondition.FUNCTION:
+        raise ValueError("Not supported")
+    else:
+        raise ValueError(f"Unsupported condition type: {pred_type}")
+    return cond
 
 
-def add_heatsource_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
-    # heatSource
-    heatSource_params = pd.read_csv(PROP_PARAM_ANNOTS_DIR / "heatSource.csv")
-
-    heatSource_params = heatSource_params[heatSource_params["require_heatsource_temperature"] == True][["synset", "value(C)", "requires_toggled_on", "requires_closed", "requires_inside"]]
-    for i, [synset, temp, requires_toggled_on, requires_closed, requires_inside] in heatSource_params.iterrows():
-        if synset not in leaf_synsets: continue
-        try:
-            float(temp)
-            int(requires_toggled_on)
-            int(requires_closed)
-            int(requires_inside)
-        except ValueError:
-            prop_but_no_param["heatSource"].append(synset)
-            continue
-        if pd.isna(float(temp)):
-            prop_but_no_param["heatSource"].append(synset)
-            continue
-        if synset not in propagated_canonical:
-            synset_nonexistent["heatSource"].append(synset)
-            continue
-        if "heatSource" not in propagated_canonical[synset]:
-            param_but_no_prop["heatSource"].append(synset)
-            continue
-        propagated_canonical[synset]["heatSource"]["temperature"] = float(temp)
-        propagated_canonical[synset]["heatSource"]["heating_rate"] = 0.01
-        propagated_canonical[synset]["heatSource"]["requires_toggled_on"] = int(requires_toggled_on)
-        propagated_canonical[synset]["heatSource"]["requires_closed"] = int(requires_closed)
-        propagated_canonical[synset]["heatSource"]["requires_inside"] = int(requires_inside)
-
-    for heatSource_synset in props_to_syns["heatSource"]:
-        if synset not in leaf_synsets: continue
-        try: 
-            wn_syn = wn.synset(heatSource_synset)
-        except:
-            continue
-        if "temperature" not in propagated_canonical[heatSource_synset]["heatSource"] and \
-                        all(syn.name in propagated_canonical for syn in wn.synset(heatSource_synset).hyponyms()):        
-            prop_but_no_param["heatSource"].append(heatSource_synset)
+def parse_conditions_entry(unparsed_conditions):
+    # print(f"Parsing: {unparsed_conditions}")
+    if unparsed_conditions.isnumeric():
+        always_true = bool(int(unparsed_conditions))
+        conditions = [] if always_true else None
+    else:
+        conditions = [parse_predicate(condition=cond) for cond in unparsed_conditions.lower().split(" or ")]
+    return conditions
 
 
-def add_heatable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
-    # TODO will need to change when there are heating params
-    for heatable_syn in props_to_syns["heatable"]:
-        propagated_canonical[heatable_syn]["heatable"]["heat_temperature"] = 40.
+
+# particleRemovers
+
+def get_synsets_to_particle_remover_params():
+    synset_cleaning_mapping = {}
+    records = []
+    with open(os.path.join(PROP_PARAM_ANNOTS_DIR, "particleRemover.csv"), "r") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            records.append(row)
+
+    for record in records: 
+        synset = re.match(OBJECT_CAT_AND_INST_RE, record["synset"])
+        assert synset is not None, "prop_param_annots/particleRemover.csv has line without properly formed synset"
+        synset = synset.group()
+
+        # Skip washer and dryer
+        if "not particleremover" in record["synset"].lower(): continue
+        
+        default_visual_conditions = parse_conditions_entry(record["other visualSubstances"])
+        default_physical_conditions = parse_conditions_entry(record["other physicalSubstances"])
+        if record["method"] == "projection": 
+            method = ParticleModifyMethod.PROJECTION
+        elif record["method"] == "adjacency":
+            method = ParticleModifyMethod.ADJACENCY
+        else:
+            raise ValueError(f"Synset {record['synset']} prop particleRemover has invalid method {record['method']}")
+        
+        remover_kwargs = {
+            "conditions": {},
+            "default_visual_conditions": default_visual_conditions,
+            "default_physical_conditions": default_physical_conditions,
+            "method": method
+        }
+
+        # Iterate through all the columns headed by a substance, in no particular order since their ultimate location is a dict
+        for dirtiness_substance_synset in [key for key in record if re.match(OBJECT_CAT_AND_INST_RE, key) is not None]:
+            conditions = parse_conditions_entry(record[dirtiness_substance_synset])
+            if conditions is not None: 
+                remover_kwargs["conditions"][dirtiness_substance_synset] = conditions
+        
+        synset_cleaning_mapping[synset] = remover_kwargs
+    
+    return synset_cleaning_mapping
 
 
-def add_flammable_params(propagated_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param):
-    for flammable_syn in props_to_syns["flammable"]:
-        propagated_canonical[flammable_syn]["flammable"]["ignition_temperature"] = 250.
-        propagated_canonical[flammable_syn]["flammable"]["fire_temperature"] = 1000.
-        propagated_canonical[flammable_syn]["flammable"]["heating_rate"] = 0.04
-        propagated_canonical[flammable_syn]["flammable"]["distance_threshold"] = 0.2
+# Main parameter method
 
+def create_get_save_propagated_annots_params(syns_to_props):
+    print("Processing param annots...")
+    
+    synsets_to_particleremover_params = get_synsets_to_particle_remover_params()
+    for particleremover_syn, particleremover_params in synsets_to_particleremover_params.items():
+        assert "particleRemover" in syns_to_props[particleremover_syn], f"Synset {particleremover_syn} has particleRemover params but is not annotated as a particleRemover"
+        syns_to_props[particleremover_syn]["particleRemover"] = particleremover_params
 
-# TODO check if that everything that SHOULD have a certain parameter annotation DOES have it 
+    for prop_fn in os.listdir(PROP_PARAM_ANNOTS_DIR):
+        prop = prop_fn.split(".")[0]
 
-def create_get_save_propagated_annots_params(propagated_canonical, props_to_syns):
-    propagated_params_canonical = copy.deepcopy(propagated_canonical)
-    synset_nonexistent, param_but_no_prop, prop_but_no_param = [{"cookable": [], "coldSource": [], "heatSource": []} for __ in range(3)]
+        if prop == "particleRemover": continue
+        else:        
+            param_annots = pd.read_csv(os.path.join(PROP_PARAM_ANNOTS_DIR, prop_fn)).to_dict(orient="records")
+            for param_record in param_annots: 
+                for param_name, param_value in param_record.items():
 
-    add_cookable_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
-    add_coldsource_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
-    add_heatsource_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
-    add_heatable_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
-    add_flammable_params(propagated_params_canonical, props_to_syns, synset_nonexistent, param_but_no_prop, prop_but_no_param)
+                    if param_name == "synset": continue
+
+                    # Params that can have NaN values
+                    if param_name in [
+                        "substance_cooking_derivative_synset", 
+                        "sliceable_derivative_synset", 
+                        "uncooked_diceable_derivative_synset",
+                        "cooked_diceable_derivative_synset"
+                    ]:
+                        if not pd.isna(param_value):
+                            formatted_param_value = param_value
+                            syns_to_props[param_record["synset"]][prop][param_name] = formatted_param_value
+                        continue
+
+                    # Params that should not have NaN values
+
+                    # NaN values
+                    elif pd.isna(param_value):
+                        if prop == "coldSource":
+                            raise ValueError(f"synset {param_record['synset']} coldSource annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
+                        elif prop == "cookable":
+                            raise ValueError(f"synset {param_record['synset']} cookable annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
+                        elif prop == "flammable":
+                            raise ValueError(f"synset {param_record['synset']} flammable annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
+                        elif prop == "heatable":
+                            raise ValueError(f"synset {param_record['synset']} heatable annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
+                        elif prop == "heatSource":
+                            raise ValueError(f"synset {param_record['synset']} heatSource annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
+                        elif prop == "particleApplier":
+                            raise ValueError(f"synset {param_record['synset']} particleApplier annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
+                        elif prop == "particleSink":
+                            if param_name == "conditions": 
+                                formatted_param_value = {}
+                            elif param_name == "default_physical_conditions": 
+                                formatted_param_value = []
+                            elif param_name == "default_visual_conditions":
+                                formatted_param_value = None
+                            else:
+                                raise ValueError(f"synset {param_record['synset']} particleSink annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
+                        elif prop == "particleSource":
+                            raise ValueError(f"synset {param_record['synset']} particleSource annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
+                        elif prop == "meltable": 
+                            raise ValueError(f"synset {param_record['synset']} meltable annotation has NaN value for parameter {param_name}. Either handle NaN or annotate param value.")
+                    
+                    
+                    # `conditions` values - format is keyword1:bool_value1;keyword2:bool_value2;...;keywordN:bool_valueN
+                    elif param_name == "conditions": 
+                        if (prop == "particleApplier") or (prop == "particleSource"):
+                            # NOTE assumes that there may be multiple conditions
+                            conditions = param_value.split(";")
+                            formatted_conditions = []
+                            for condition in conditions: 
+                                if condition == "gravity:True":
+                                    formatted_conditions.append((ParticleModifyCondition.GRAVITY, True))
+                                elif condition == "toggled_on:True":
+                                    formatted_conditions.append((ParticleModifyCondition.TOGGLEDON, True))
+                                else:
+                                    raise ValueError(f"Synset {param_record['synset']} prop {prop} has unhandled condition {condition}")
+                            formatted_param_value = {
+                                param_record["system"]: formatted_conditions
+                            }
+
+                        else:
+                            raise ValueError(f"prop {prop} not handled for parameter name `conditions`")
+                
+                    # Can skip system since it's just part of handling `conditions`
+                    elif param_name == "system": continue
+                    
+                    # `method` values
+                    elif param_name == "method": 
+                        if (prop == "particleApplier") or (prop == "particleSource"):
+                            formatted_param_value = ParticleModifyMethod.PROJECTION
+                        else:
+                            raise ValueError(f"prop {prop} not handled for parameter name `method`")
+                    
+                    # Required derivative synsets
+                    elif param_name == "meltable_derivative_synset":
+                        formatted_param_value = param_value
+                    
+                    # Float values
+                    else:
+                        try: 
+                            formatted_param_value = float(param_value)
+                        except ValueError:
+                            raise ValueError(f"Synset {param_record['synset']} property {prop} has param {param_name} that is not named `method`, `conditions`, or `system` and is not a NaN or a float. This is unhandled - please check.")
+
+                    syns_to_props[param_record["synset"]][prop][param_name] = formatted_param_value
+    
 
     with open(PARAMS_OUTFILE_FN, "w") as f:
-        json.dump(propagated_params_canonical, f, indent=4)
-
-    with open(UNRESOLVED_DIR / "synset_nonexistent.json", "w") as f:
-        json.dump(synset_nonexistent, f, indent=4)
-    with open(UNRESOLVED_DIR / "param_but_no_prop.json", "w") as f:
-        json.dump(param_but_no_prop, f, indent=4)
-    with open(UNRESOLVED_DIR / "prop_but_no_param_or_malformed_param.json", "w") as f:
-        json.dump(prop_but_no_param, f, indent=4)
+        json.dump(syns_to_props, f, indent=4)
+    
+    print("Params parsed and added to flat and hierarchical files, saved.")
+    return syns_to_props
+    
 
 
 if __name__ == "__main__":
-    with open(SYNS_TO_PROPS, "r") as f:
-        syns_to_props = json.load(f)
-    with open(PROPS_TO_SYNS, "r") as f:
-        props_to_syns = json.load(f)
-    create_get_save_propagated_annots_params(syns_to_props, props_to_syns)
+    create_get_save_propagated_annots_params()
+

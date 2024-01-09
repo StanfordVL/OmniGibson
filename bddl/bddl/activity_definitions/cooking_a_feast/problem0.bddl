@@ -7,7 +7,7 @@
         stockpot.n.01_1 - stockpot.n.01
         bowl.n.01_1 - bowl.n.01
         brownie.n.03_1 brownie.n.03_2 - brownie.n.03
-        white_bread.n.01_1 - white_bread.n.01
+        baguet.n.01_1 - baguet.n.01
         platter.n.01_1 platter.n.01_2 - platter.n.01
         plate.n.04_1 - plate.n.04
         orzo.n.01_1 - orzo.n.01
@@ -17,7 +17,7 @@
         salt__shaker.n.01_1 - salt__shaker.n.01
         seawater.n.01_1 - seawater.n.01
         water.n.06_1 - water.n.06
-        fish.n.02_1 - fish.n.02
+        salmon.n.03_1 - salmon.n.03
         cabinet.n.01_1 - cabinet.n.01
         countertop.n.01_1 - countertop.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -35,13 +35,13 @@
         (ontop platter.n.01_2 cabinet.n.01_1)
         (ontop brownie.n.03_1 countertop.n.01_1) 
         (ontop brownie.n.03_2 countertop.n.01_1) 
-        (ontop white_bread.n.01_1 countertop.n.01_1) 
+        (ontop baguet.n.01_1 countertop.n.01_1) 
         (filled pasta__box.n.01_1 orzo.n.01_1) 
         (ontop pasta__box.n.01_1 countertop.n.01_1)
         (not 
-            (cooked fish.n.02_1)
+            (cooked salmon.n.03_1)
         ) 
-        (inside fish.n.02_1 electric_refrigerator.n.01_1) 
+        (inside salmon.n.03_1 electric_refrigerator.n.01_1) 
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
         (future seawater.n.01_1)
@@ -65,22 +65,22 @@
                 (?brownie.n.03 - brownie.n.03)
                 (ontop ?brownie.n.03 ?plate.n.04_1)
             )
-            (cooked ?fish.n.02_1)
+            (cooked ?salmon.n.03_1)
             (exists 
                 (?platter.n.01 - platter.n.01)
                 (and 
-                    (ontop ?fish.n.02_1 ?platter.n.01)     
+                    (ontop ?salmon.n.03_1 ?platter.n.01)     
                     (not 
-                        (ontop ?white_bread.n.01_1 ?platter.n.01)
+                        (ontop ?baguet.n.01_1 ?platter.n.01)
                     )           
                 )
             )
             (exists 
                 (?platter.n.01 - platter.n.01)
                 (and 
-                    (ontop ?white_bread.n.01_1 ?platter.n.01)     
+                    (ontop ?baguet.n.01_1 ?platter.n.01)     
                     (not 
-                        (ontop ?fish.n.02_1 ?platter.n.01)
+                        (ontop ?salmon.n.03_1 ?platter.n.01)
                     )           
                 )
             )

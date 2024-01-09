@@ -7,7 +7,7 @@
         plastic_bag.n.01_1 plastic_bag.n.01_2 - plastic_bag.n.01
         bacon.n.01_1 - bacon.n.01
         beefsteak_tomato.n.01_1 - beefsteak_tomato.n.01
-        white_bread.n.01_1 - white_bread.n.01
+        pack__of__bread.n.01_1 - pack__of__bread.n.01
         carton__of__milk.n.01_1 - carton__of__milk.n.01
         countertop.n.01_1 - countertop.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -21,7 +21,7 @@
         (inside plastic_bag.n.01_2 car.n.01_1) 
         (inside bacon.n.01_1 plastic_bag.n.01_1) 
         (inside beefsteak_tomato.n.01_1 plastic_bag.n.01_1) 
-        (inside white_bread.n.01_1 plastic_bag.n.01_1) 
+        (inside pack__of__bread.n.01_1 plastic_bag.n.01_1) 
         (inside carton__of__milk.n.01_1 plastic_bag.n.01_2) 
         (inroom driveway.n.01_1 garden) 
         (inroom countertop.n.01_1 kitchen) 
@@ -34,7 +34,7 @@
         (and 
             (inside ?bacon.n.01_1 ?electric_refrigerator.n.01_1) 
             (inside ?beefsteak_tomato.n.01_1 ?electric_refrigerator.n.01_1) 
-            (ontop ?white_bread.n.01_1 ?countertop.n.01_1) 
+            (ontop ?pack__of__bread.n.01_1 ?countertop.n.01_1) 
             (inside ?carton__of__milk.n.01_1 ?electric_refrigerator.n.01_1) 
         )
     )

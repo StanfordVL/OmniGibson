@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-     	fish.n.02_1 fish.n.02_2 fish.n.02_3 - fish.n.02
+     	salmon.n.03_1 salmon.n.03_2 salmon.n.03_3 - salmon.n.03
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	shopping_cart.n.01_1 - shopping_cart.n.01
     	floor.n.01_1 - floor.n.01
@@ -10,12 +10,12 @@
     )
     
     (:init 
-        (inside fish.n.02_1 electric_refrigerator.n.01_1) 
-        (frozen fish.n.02_1)
-        (inside fish.n.02_2 electric_refrigerator.n.01_1) 
-        (frozen fish.n.02_2)
-        (inside fish.n.02_3 electric_refrigerator.n.01_1) 
-        (frozen fish.n.02_3)
+        (inside salmon.n.03_1 electric_refrigerator.n.01_1) 
+        (frozen salmon.n.03_1)
+        (inside salmon.n.03_2 electric_refrigerator.n.01_1) 
+        (frozen salmon.n.03_2)
+        (inside salmon.n.03_3 electric_refrigerator.n.01_1) 
+        (frozen salmon.n.03_3)
         (inroom shopping_cart.n.01_1 grocery_store) 
         (inroom electric_refrigerator.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
@@ -25,8 +25,8 @@
     (:goal 
         (and 
             (forall 
-                (?fish.n.02 - fish.n.02)
-                (inside ?fish.n.02 ?shopping_cart.n.01_1)
+                (?salmon.n.03 - salmon.n.03)
+                (inside ?salmon.n.03 ?shopping_cart.n.01_1)
             )
         )
     )
