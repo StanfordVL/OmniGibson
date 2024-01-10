@@ -15,9 +15,6 @@
     
     (:init 
         (filled sunflower_seed__bag.n.01_1 sunflower_seed.n.01_1)
-        (not 
-            (cooked sunflower_seed.n.01_1)
-        )
         (inside sunflower_seed__bag.n.01_1 cabinet.n.01_1) 
         (inside tray.n.01_1 cabinet.n.01_1)
         (inside cookie_sheet.n.01_1 cabinet.n.01_1)
