@@ -35867,17 +35867,6 @@
         },
         "moldyable": {},
         "nonSubstance": {},
-        "particleApplier": {
-            "method": 1,
-            "conditions": {
-                "deodorant": [
-                    [
-                        2,
-                        true
-                    ]
-                ]
-            }
-        },
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
@@ -98715,42 +98704,6 @@
     "sausage.n.01": {
         "freezable": {},
         "heatable": {}
-    },
-    "savory_spice__shaker.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "needsOrientation": {},
-        "nonSubstance": {},
-        "particleApplier": {
-            "method": 1,
-            "conditions": {
-                "savory_spice": [
-                    [
-                        2,
-                        true
-                    ],
-                    [
-                        3,
-                        true
-                    ]
-                ]
-            }
-        },
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "toggleable": {},
-        "wetable": {},
-        "wrinkleable": {}
     },
     "saw.n.02": {
         "disinfectable": {},

@@ -2391,13 +2391,6 @@
                               ]
                             },
                             {
-                              "name": "savory_spice__shaker.n.01",
-                              "hasModel": true,
-                              "categories": [
-                                "savory_spice_shaker"
-                              ]
-                            },
-                            {
                               "name": "package.n.02",
                               "hasModel": true,
                               "categories": [
@@ -17354,7 +17347,10 @@
                           "children": [
                             {
                               "name": "isopropyl_alcohol.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "isopropanol"
+                              ]
                             }
                           ]
                         },
@@ -21145,7 +21141,10 @@
                                       "children": [
                                         {
                                           "name": "jam.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "jam"
+                                          ]
                                         },
                                         {
                                           "name": "jelly.n.02",
@@ -29646,7 +29645,10 @@
                               "children": [
                                 {
                                   "name": "isopropyl_alcohol.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "isopropanol"
+                                  ]
                                 }
                               ]
                             },

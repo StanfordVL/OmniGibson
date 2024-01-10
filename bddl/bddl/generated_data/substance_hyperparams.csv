@@ -542,6 +542,8 @@ incision,"{""type"": ""macro_visual_particle"", ""relative_particle_scaling"": t
 ink,"{""type"": ""fluid"", ""particle_contact_offset"": 0.012, ""particle_density"": 1000.0, ""is_viscous"": false, ""material_mtl_name"": ""WholeMilk"", ""customize_material_kwargs"": {""diffuse_reflection_color"": [0.0, 0.0, 0.0], ""enable_diffuse_transmission"": false}}"
 insectifuge,"{""type"": ""macro_visual_particle"", ""relative_particle_scaling"": true}"
 instant_coffee,"{""type"": ""granular"", ""particle_density"": 308.0}"
+isopropanol,"{""type"": ""fluid"", ""particle_contact_offset"": 0.012, ""particle_density"": 786.0, ""is_viscous"": false, ""material_mtl_name"": ""DeepWater"", ""customize_material_kwargs"": {""specular_transmission_color"": [1.0, 1.0, 1.0], ""specular_transmission_scattering_color"": [1.0, 1.0, 1.0]}}"
+jam,"{""type"": ""fluid"", ""particle_contact_offset"": 0.017, ""particle_density"": 1296.4, ""is_viscous"": true, ""material_mtl_name"": ""Jade"", ""customize_material_kwargs"": {""specular_transmission_weight"": 0.07, ""specular_transmission_color"": [0.8, 0.06, 0.06], ""diffuse_reflection_color"": [0.8, 0.06, 0.06]}}"
 jelly,"{""type"": ""fluid"", ""particle_contact_offset"": 0.017, ""particle_density"": 1352.0, ""is_viscous"": true, ""material_mtl_name"": ""DeepWater"", ""customize_material_kwargs"": {""specular_transmission_scattering_depth"": 0.0, ""specular_transmission_weight"": 0.2, ""specular_transmission_color"": [0.44, 0.15, 0.78], ""specular_transmission_scattering_color"": [0.25, 0.0, 0.56]}}"
 jelly_bean,"{""type"": ""macro_physical_particle"", ""particle_density"": 1000.0}"
 jerk_seasoning,"{""type"": ""granular"", ""particle_density"": 1217.0}"
