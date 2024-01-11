@@ -20,11 +20,6 @@ LEAF_SYNSETS_FILE = pathlib.Path(__file__).parents[1] / "generated_data" / "syns
 # Helpers
 LEAF_SYNSETS_SET = set(pd.read_csv(LEAF_SYNSETS_FILE)["synset"])
 
-# Specific methods for applying / removing particles
-class ParticleModifyMethod(IntEnum):
-    ADJACENCY = 0
-    PROJECTION = 1
-
 # Specific condition types for applying / removing particles
 class ParticleModifyCondition(IntEnum):
     FUNCTION = 0
@@ -83,18 +78,14 @@ def get_synsets_to_particle_remover_params():
         
         default_visual_conditions = parse_conditions_entry(record["other visualSubstances"])
         default_physical_conditions = parse_conditions_entry(record["other physicalSubstances"])
-        if record["method"] == "projection": 
-            method = ParticleModifyMethod.PROJECTION
-        elif record["method"] == "adjacency":
-            method = ParticleModifyMethod.ADJACENCY
-        else:
+        if record["method"] not in {"projection", "adjacency"}:
             raise ValueError(f"Synset {record['synset']} prop particleRemover has invalid method {record['method']}")
         
         remover_kwargs = {
             "conditions": {},
             "default_visual_conditions": default_visual_conditions,
             "default_physical_conditions": default_physical_conditions,
-            "method": method
+            "method": record["method"],
         }
 
         # Iterate through all the columns headed by a substance, in no particular order since their ultimate location is a dict
@@ -180,9 +171,9 @@ def create_get_save_propagated_annots_params(syns_to_props):
                             formatted_conditions = []
                             for condition in conditions: 
                                 if condition == "gravity:True":
-                                    formatted_conditions.append((ParticleModifyCondition.GRAVITY, True))
+                                    formatted_conditions.append(("gravity", True))
                                 elif condition == "toggled_on:True":
-                                    formatted_conditions.append((ParticleModifyCondition.TOGGLEDON, True))
+                                    formatted_conditions.append(("toggled_on", True))
                                 else:
                                     raise ValueError(f"Synset {param_record['synset']} prop {prop} has unhandled condition {condition}")
                             formatted_param_value = {
@@ -198,7 +189,7 @@ def create_get_save_propagated_annots_params(syns_to_props):
                     # `method` values
                     elif param_name == "method": 
                         if (prop == "particleApplier") or (prop == "particleSource"):
-                            formatted_param_value = ParticleModifyMethod.PROJECTION
+                            formatted_param_value = "projection"
                         else:
                             raise ValueError(f"prop {prop} not handled for parameter name `method`")
                     
