@@ -5,7 +5,7 @@
         water.n.06_1 - water.n.06
         pool.n.01_1 - pool.n.01
         person.n.01_1 person.n.01_2 - person.n.01
-        floor.n.01_1 - floor.n.01
+        floor.n.01_1 floor.n.01_2 - floor.n.01
         lawn.n.01_1 - lawn.n.01
         tree.n.01_1 tree.n.01_2 - tree.n.01
         bucket.n.01_1 - bucket.n.01
@@ -22,8 +22,8 @@
         (inroom tree.n.01_1 garden) 
         (inroom tree.n.01_2 garden) 
         (inroom pool.n.01_1 garden)
-        (ontop bucket.n.01_1 floor.n.02_1)
-        (inroom floor.n.02_1 bathroom)
+        (ontop bucket.n.01_1 floor.n.01_2)
+        (inroom floor.n.01_2 bathroom)
         (inroom sink.n.01_1 bathroom)
         (ontop agent.n.01_1 floor.n.01_1)
     )
