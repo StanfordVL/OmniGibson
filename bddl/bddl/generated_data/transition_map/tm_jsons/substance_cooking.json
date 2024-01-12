@@ -3699,6 +3699,15 @@
         }
     },
     {
+        "rule_name": "white_wine.n.01-cooking",
+        "input_objects": {
+            "white_wine.n.01": 1
+        },
+        "output_objects": {
+            "cooked__white_wine.n.01": 1
+        }
+    },
+    {
         "rule_name": "whole_milk.n.01-cooking",
         "input_objects": {
             "whole_milk.n.01": 1

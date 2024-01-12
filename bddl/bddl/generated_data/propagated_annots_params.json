@@ -121100,6 +121100,10 @@
     },
     "white_wine.n.01": {
         "boilable": {},
+        "cookable": {
+            "cook_temperature": 100.0,
+            "substance_cooking_derivative_synset": "cooked__white_wine.n.01"
+        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
