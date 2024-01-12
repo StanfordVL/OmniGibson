@@ -138,9 +138,9 @@ def add_programmatic_properties(synset_content): # runs programmatic addition ov
                     "moldyable": {},
                     "rustable": {},
                     "wrinkleable": {},
-                    "disinfectable": {}
+                    "disinfectable": {},
+                    "heatable": {}          # All nonsubstances are heatable. Substances are not heatable.
                 })
-        synset_content[synset]["heatable"] = {} # all synsets are heatable
         synset_content[synset]["freezable"] = {}    # all synsets are freezable
 
         # Hardcode in a place where the synset is seen, since not all scene synsets made it:
