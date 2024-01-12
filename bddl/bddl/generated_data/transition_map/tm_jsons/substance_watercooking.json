@@ -1,0 +1,82 @@
+[
+    {
+        "rule_name": "arborio_rice.n.01-cooking",
+        "input_objects": {
+            "arborio_rice.n.01": 1,
+            "water.n.06": 1
+        },
+        "output_objects": {
+            "cooked__arborio_rice.n.01": 1
+        }
+    },
+    {
+        "rule_name": "black_bean.n.01-cooking",
+        "input_objects": {
+            "black_bean.n.01": 1,
+            "water.n.06": 1
+        },
+        "output_objects": {
+            "cooked__black_bean.n.01": 1
+        }
+    },
+    {
+        "rule_name": "brown_rice.n.01-cooking",
+        "input_objects": {
+            "brown_rice.n.01": 1,
+            "water.n.06": 1
+        },
+        "output_objects": {
+            "cooked__brown_rice.n.01": 1
+        }
+    },
+    {
+        "rule_name": "chickpea.n.03-cooking",
+        "input_objects": {
+            "chickpea.n.03": 1,
+            "water.n.06": 1
+        },
+        "output_objects": {
+            "cooked__chickpea.n.01": 1
+        }
+    },
+    {
+        "rule_name": "kidney_bean.n.01-cooking",
+        "input_objects": {
+            "kidney_bean.n.01": 1,
+            "water.n.06": 1
+        },
+        "output_objects": {
+            "cooked__kidney_bean.n.01": 1
+        }
+    },
+    {
+        "rule_name": "lentil.n.01-cooking",
+        "input_objects": {
+            "lentil.n.01": 1,
+            "water.n.06": 1
+        },
+        "output_objects": {
+            "cooked__lentil.n.01": 1
+        }
+    },
+    {
+        "rule_name": "noodle.n.01-cooking",
+        "input_objects": {
+            "noodle.n.01": 1,
+            "water.n.06": 1
+        },
+        "output_objects": {
+            "cooked__noodle.n.01": 1
+        }
+    },
+    {
+        "rule_name": "orzo.n.01-cooking",
+        "input_objects": {
+            "orzo.n.01": 1,
+            "water.n.06": 1
+        },
+        "output_objects": {
+            "cooked__orzo.n.01": 1
+        }
+    }
+]
