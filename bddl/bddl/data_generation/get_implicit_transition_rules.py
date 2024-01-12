@@ -174,7 +174,7 @@ def generate_substance_watercooking_rules(syns_to_param_props, props_to_syns):
     {
         "rule_name": <non-unique string>,
         "input_objects": {
-            <cookable_substance>: 1,
+            <watercookable_substance>: 1,
             water.n.06_1: 1
         },
         "output_objects": {
