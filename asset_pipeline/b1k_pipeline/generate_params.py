@@ -71,13 +71,15 @@ FINAL_SCENES = [
 ]
 
 APPROVED_OBJS = {
-    ".*"
+    "legacy_*",
 }
 
 REJECTED_OBJS = set()
 
 APPROVED_SCENES = {
-    ".*",
+    ".*_garden",
+    "Beechwood_0_int",
+    "school_geography",
 }
 
 REJECTED_SCENES = {
