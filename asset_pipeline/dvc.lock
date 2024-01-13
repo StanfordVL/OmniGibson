@@ -8,12 +8,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Beechwood_0_garden/processed.max
-      md5: 2922a59d415ca852dbc7cf3dfeed751f
-      size: 198505962
+      md5: 71d463b2b0b1fba7b681863e8f72ccd5
+      size: 198576298
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-      md5: 370ad38f94db66c21906e595976f935e
-      size: 113456
+      md5: aad265c344e25c98006e7448e0fe1632
+      size: 113779
   object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -120,12 +120,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: bb7222a97f712b8c82a4b69f48840c9f
-      size: 103352818
+      md5: 48c1532ca25cc7b58a3a00f69cba7b6f
+      size: 103438834
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
-      md5: f255e0827e1b10b29ca0ccff62a4a143
-      size: 62591
+      md5: 7ed0f0091a6f56313fe425189865f541
+      size: 62555
   object_list@scenes/Merom_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -244,12 +244,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Wainscott_0_garden/processed.max
-      md5: 3708eaee4342e43f9e71d3270a939ded
-      size: 191266848
+      md5: 960282d762ba766ec143e3686455cb7d
+      size: 191232412
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-      md5: cf1dfd75ee18fec85e8f6e350b49a2bb
-      size: 147973
+      md5: f19849137c6f301762ff02c95c37e6bb
+      size: 147112
   object_list@scenes/Wainscott_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -510,8 +510,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/house_single_floor/processed.max
-      md5: e8dcc486486b72c4a90888803564c836
-      size: 507340598
+      md5: dd565358b2047cde6c1dcfb6a5286e28
+      size: 507393714
     outs:
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
       md5: 2839d8b881d98d1afc60a8ed6a0fb5a7
@@ -913,8 +913,8 @@ stages:
       md5: 37c665eb869ba9a7e34df3fbafceb77f
       size: 49136
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-      md5: 370ad38f94db66c21906e595976f935e
-      size: 113456
+      md5: aad265c344e25c98006e7448e0fe1632
+      size: 113779
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       md5: e4fcb092f1eaffa3e34da9014e17182a
       size: 79700
@@ -937,8 +937,8 @@ stages:
       md5: bcf5c028d5c1d9313e0f7e16bb9ac445
       size: 64207
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
-      md5: f255e0827e1b10b29ca0ccff62a4a143
-      size: 62591
+      md5: 7ed0f0091a6f56313fe425189865f541
+      size: 62555
     - path: cad/scenes/Merom_0_int/artifacts/object_list.json
       md5: 4fce3e779a00318a438b251b80a17f15
       size: 39033
@@ -964,8 +964,8 @@ stages:
       md5: ba387a277a62217576b1542a4b88d40f
       size: 35708
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-      md5: cf1dfd75ee18fec85e8f6e350b49a2bb
-      size: 147973
+      md5: f19849137c6f301762ff02c95c37e6bb
+      size: 147112
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       md5: 11797ef4f1185b63890cff128f6f06bf
       size: 81857
@@ -1196,8 +1196,8 @@ stages:
       md5: 37c665eb869ba9a7e34df3fbafceb77f
       size: 49136
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-      md5: 370ad38f94db66c21906e595976f935e
-      size: 113456
+      md5: aad265c344e25c98006e7448e0fe1632
+      size: 113779
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       md5: e4fcb092f1eaffa3e34da9014e17182a
       size: 79700
@@ -1220,8 +1220,8 @@ stages:
       md5: bcf5c028d5c1d9313e0f7e16bb9ac445
       size: 64207
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
-      md5: f255e0827e1b10b29ca0ccff62a4a143
-      size: 62591
+      md5: 7ed0f0091a6f56313fe425189865f541
+      size: 62555
     - path: cad/scenes/Merom_0_int/artifacts/object_list.json
       md5: 4fce3e779a00318a438b251b80a17f15
       size: 39033
@@ -1247,8 +1247,8 @@ stages:
       md5: ba387a277a62217576b1542a4b88d40f
       size: 35708
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-      md5: cf1dfd75ee18fec85e8f6e350b49a2bb
-      size: 147973
+      md5: f19849137c6f301762ff02c95c37e6bb
+      size: 147112
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       md5: 11797ef4f1185b63890cff128f6f06bf
       size: 81857
@@ -1371,8 +1371,8 @@ stages:
       size: 11910
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 0b7a46a1fa38500305fb153bb1355efc
-      size: 1509900
+      md5: 2bfd1ba16570e5b2e2a89def93c061f0
+      size: 1506814
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -1479,8 +1479,8 @@ stages:
       md5: 37c665eb869ba9a7e34df3fbafceb77f
       size: 49136
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-      md5: 370ad38f94db66c21906e595976f935e
-      size: 113456
+      md5: aad265c344e25c98006e7448e0fe1632
+      size: 113779
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       md5: e4fcb092f1eaffa3e34da9014e17182a
       size: 79700
@@ -1503,8 +1503,8 @@ stages:
       md5: bcf5c028d5c1d9313e0f7e16bb9ac445
       size: 64207
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
-      md5: f255e0827e1b10b29ca0ccff62a4a143
-      size: 62591
+      md5: 7ed0f0091a6f56313fe425189865f541
+      size: 62555
     - path: cad/scenes/Merom_0_int/artifacts/object_list.json
       md5: 4fce3e779a00318a438b251b80a17f15
       size: 39033
@@ -1530,8 +1530,8 @@ stages:
       md5: ba387a277a62217576b1542a4b88d40f
       size: 35708
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-      md5: cf1dfd75ee18fec85e8f6e350b49a2bb
-      size: 147973
+      md5: f19849137c6f301762ff02c95c37e6bb
+      size: 147112
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       md5: 11797ef4f1185b63890cff128f6f06bf
       size: 81857
@@ -1657,8 +1657,8 @@ stages:
       size: 11910
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: 2f976b0c0f0b97a76672e86641b42137
-      size: 1513547
+      md5: c0330eba28e71dea5a3607459ee95d84
+      size: 1510461
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -2176,11 +2176,11 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/house_single_floor/processed.max
-      md5: e8dcc486486b72c4a90888803564c836
-      size: 507340598
+      md5: dd565358b2047cde6c1dcfb6a5286e28
+      size: 507393714
     outs:
     - path: cad/scenes/house_single_floor/artifacts/room_object_list.json
-      md5: cf416a1692d135b78151dd0af3c9f741
+      md5: 10f4ac4772a7d855b1fb917dc8b8c55f
       size: 26727
     - path: cad/scenes/house_single_floor/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -2511,7 +2511,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.json
-      md5: 01e013f29e8d2beda5a6a5aec81ba493
+      md5: ba2aa8c1cd27982c429eadccedb75b19
       size: 4905
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -2565,8 +2565,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.json
-      md5: 078ff5106d580b506a07796d1031134a
-      size: 7738
+      md5: f390a4b54aae2c7b3a68b87ac0f62245
+      size: 7699
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2673,7 +2673,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/house_single_floor/artifacts/room_object_list.json
-      md5: cf416a1692d135b78151dd0af3c9f741
+      md5: 10f4ac4772a7d855b1fb917dc8b8c55f
       size: 26727
     - path: cad/scenes/house_single_floor/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -2812,8 +2812,8 @@ stages:
       size: 11910
     outs:
     - path: artifacts/pipeline/combined_room_object_list.json
-      md5: 4d404246c43ae14c556180d8e4c2f14a
-      size: 295441
+      md5: a37a1fc06615e7efd500be05ba84933d
+      size: 295272
   room_object_list@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -2822,8 +2822,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Beechwood_0_garden/processed.max
-      md5: 2922a59d415ca852dbc7cf3dfeed751f
-      size: 198505962
+      md5: 71d463b2b0b1fba7b681863e8f72ccd5
+      size: 198576298
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/room_object_list.json
       md5: ac379322b2779fa479bab2a372370fdf
@@ -2839,11 +2839,11 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: bb7222a97f712b8c82a4b69f48840c9f
-      size: 103352818
+      md5: 48c1532ca25cc7b58a3a00f69cba7b6f
+      size: 103438834
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.json
-      md5: 01e013f29e8d2beda5a6a5aec81ba493
+      md5: ba2aa8c1cd27982c429eadccedb75b19
       size: 4905
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -2889,12 +2889,12 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Wainscott_0_garden/processed.max
-      md5: 3708eaee4342e43f9e71d3270a939ded
-      size: 191266848
+      md5: 960282d762ba766ec143e3686455cb7d
+      size: 191232412
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.json
-      md5: 078ff5106d580b506a07796d1031134a
-      size: 7738
+      md5: f390a4b54aae2c7b3a68b87ac0f62245
+      size: 7699
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3055,7 +3055,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.json
-      md5: 01e013f29e8d2beda5a6a5aec81ba493
+      md5: ba2aa8c1cd27982c429eadccedb75b19
       size: 4905
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -3109,8 +3109,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.json
-      md5: 078ff5106d580b506a07796d1031134a
-      size: 7738
+      md5: f390a4b54aae2c7b3a68b87ac0f62245
+      size: 7699
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3223,7 +3223,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/house_single_floor/artifacts/room_object_list.json
-      md5: cf416a1692d135b78151dd0af3c9f741
+      md5: 10f4ac4772a7d855b1fb917dc8b8c55f
       size: 26727
     - path: cad/scenes/house_single_floor/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -3362,8 +3362,8 @@ stages:
       size: 11910
     outs:
     - path: artifacts/pipeline/combined_room_object_list_future.json
-      md5: f99b276299ddfcfdf6a2cbea66573420
-      size: 296139
+      md5: 7c6802e60b33d20d5baad4a0ab69326e
+      size: 295970
   sanitycheck@scenes/public_restroom_blue:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_blue/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -3722,8 +3722,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/house_single_floor/processed.max
-      md5: e8dcc486486b72c4a90888803564c836
-      size: 507340598
+      md5: dd565358b2047cde6c1dcfb6a5286e28
+      size: 507393714
     outs:
     - path: cad/scenes/house_single_floor/artifacts/sanitycheck.json
       md5: c4d6432943a5144ab2237b38bf466a99
@@ -3918,8 +3918,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Wainscott_0_garden/processed.max
-      md5: 3708eaee4342e43f9e71d3270a939ded
-      size: 191266848
+      md5: 960282d762ba766ec143e3686455cb7d
+      size: 191232412
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/sanitycheck.json
       md5: 0641d818d32838c09da0fd0ce707720f
@@ -3946,8 +3946,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: bb7222a97f712b8c82a4b69f48840c9f
-      size: 103352818
+      md5: 48c1532ca25cc7b58a3a00f69cba7b6f
+      size: 103438834
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -4030,8 +4030,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Beechwood_0_garden/processed.max
-      md5: 2922a59d415ca852dbc7cf3dfeed751f
-      size: 198505962
+      md5: 71d463b2b0b1fba7b681863e8f72ccd5
+      size: 198576298
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/sanitycheck.json
       md5: 18014a83021e0a06fb578be9219f5e94
@@ -6358,18 +6358,18 @@ stages:
       md5: 8f67c8a3cae22b0303e1082e4d76f9c9
       size: 23730
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
-      md5: bc64fc4977dad6f0fd53f93587922ed0
-      size: 79607
+      md5: e4fcb092f1eaffa3e34da9014e17182a
+      size: 79700
     - path: cad/scenes/Beechwood_0_int/processed.max
-      md5: b395c1d1bee978330dbb366e06ef4dd2
-      size: 95173952
+      md5: 1d41c2e8f99a8531d90d221c231c5810
+      size: 95299830
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/export_meshes.json
-      md5: 0f278277a1a21a08c3b9aa5e6dc071ee
-      size: 23676
+      md5: 95687825c262ad91d7c1167bc27a1220
+      size: 23798
     - path: cad/scenes/Beechwood_0_int/artifacts/meshes.zip
-      md5: bcc61f7c9f995bf513b7bcbbb5f3c9b7
-      size: 313128836
+      md5: 99dae4323848981409641cfbbaee892b
+      size: 317282425
   export_meshes@objects/batch-06:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-06/processed.max b1k_pipeline/max/export_meshes.py
     deps:
@@ -9328,18 +9328,18 @@ stages:
       md5: 8f67c8a3cae22b0303e1082e4d76f9c9
       size: 23730
     - path: cad/scenes/Pomaria_0_garden/artifacts/object_list.json
-      md5: 95110c749ed6f1cab4445d617a591542
-      size: 82783
+      md5: 48b0a05344272b8fbf33c583140595a4
+      size: 82976
     - path: cad/scenes/Pomaria_0_garden/processed.max
-      md5: 52e972c326575c541330583e117cfafa
-      size: 140764404
+      md5: 7997a0f3069c4c03868a8f653c95737f
+      size: 140946318
     outs:
     - path: cad/scenes/Pomaria_0_garden/artifacts/export_meshes.json
-      md5: d7bca2206a8e9e8dfb297c060c89c090
-      size: 28903
+      md5: f1d0df20444d58f8e92826ee2af830e5
+      size: 29148
     - path: cad/scenes/Pomaria_0_garden/artifacts/meshes.zip
-      md5: cd88c3a53f2eb6de3bc0c20a045207ab
-      size: 637195999
+      md5: e5b3ca9a46279e9265606b9fbef24786
+      size: 637872919
   export_scene@scenes/restaurant_brunch:
     cmd: python -m b1k_pipeline.export_scene scenes/restaurant_brunch
     deps:
@@ -11778,15 +11778,15 @@ stages:
       md5: 2839d8b881d98d1afc60a8ed6a0fb5a7
       size: 289525
     - path: cad/scenes/house_single_floor/processed.max
-      md5: e8dcc486486b72c4a90888803564c836
-      size: 507340598
+      md5: dd565358b2047cde6c1dcfb6a5286e28
+      size: 507393714
     outs:
     - path: cad/scenes/house_single_floor/artifacts/export_meshes.json
-      md5: 40d644fafd64ad10b7dd678ad8446332
-      size: 121975
+      md5: 81f134ea7244d9cd7461fb5cd7d85c79
+      size: 122034
     - path: cad/scenes/house_single_floor/artifacts/meshes.zip
-      md5: cdfe1da4add63d848c236beb1873f31b
-      size: 1492210489
+      md5: 2968ab2a489830682aa487ffc7620271
+      size: 1485679958
   export_scene@scenes/house_single_floor:
     cmd: python -m b1k_pipeline.export_scene scenes/house_single_floor
     deps:
@@ -13096,3 +13096,94 @@ stages:
     - path: cad/scenes/school_geography/artifacts/scene.urdf
       md5: 309d340735f7d4277c39bd98c6d0789d
       size: 292971
+  export_meshes@scenes/Beechwood_0_garden:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
+      b1k_pipeline/max/export_meshes.py
+    deps:
+    - path: artifacts/pipeline/sanitycheck.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: b1k_pipeline/max/export_meshes.py
+      md5: 8f67c8a3cae22b0303e1082e4d76f9c9
+      size: 23730
+    - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
+      md5: aad265c344e25c98006e7448e0fe1632
+      size: 113779
+    - path: cad/scenes/Beechwood_0_garden/processed.max
+      md5: 71d463b2b0b1fba7b681863e8f72ccd5
+      size: 198576298
+    outs:
+    - path: cad/scenes/Beechwood_0_garden/artifacts/export_meshes.json
+      md5: d62f1e0841188562f46b4e5293a67bb8
+      size: 35740
+    - path: cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
+      md5: 05a82b08aa4731a4bc5a50ae26f682cb
+      size: 237021271
+  export_meshes@scenes/Rs_garden:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Rs_garden/processed.max b1k_pipeline/max/export_meshes.py
+    deps:
+    - path: artifacts/pipeline/sanitycheck.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: b1k_pipeline/max/export_meshes.py
+      md5: 8f67c8a3cae22b0303e1082e4d76f9c9
+      size: 23730
+    - path: cad/scenes/Rs_garden/artifacts/object_list.json
+      md5: 5b0c72aef0887f94b9a172c9f86ff3fa
+      size: 53853
+    - path: cad/scenes/Rs_garden/processed.max
+      md5: 2cf9c3fdfa2ab193363fbcec7104e421
+      size: 87366342
+    outs:
+    - path: cad/scenes/Rs_garden/artifacts/export_meshes.json
+      md5: f736a9ab3adea832887924919e3816ed
+      size: 17441
+    - path: cad/scenes/Rs_garden/artifacts/meshes.zip
+      md5: 7d93bef9bbf2325755b97134d9de5267
+      size: 165813878
+  export_meshes@scenes/Wainscott_0_garden:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_garden/processed.max
+      b1k_pipeline/max/export_meshes.py
+    deps:
+    - path: artifacts/pipeline/sanitycheck.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: b1k_pipeline/max/export_meshes.py
+      md5: 8f67c8a3cae22b0303e1082e4d76f9c9
+      size: 23730
+    - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
+      md5: f19849137c6f301762ff02c95c37e6bb
+      size: 147112
+    - path: cad/scenes/Wainscott_0_garden/processed.max
+      md5: 960282d762ba766ec143e3686455cb7d
+      size: 191232412
+    outs:
+    - path: cad/scenes/Wainscott_0_garden/artifacts/export_meshes.json
+      md5: 55bc55f6063f6b4c406dc631b5d2b70f
+      size: 1121
+    - path: cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
+      md5: 7697e8e47623e505bce1f81c89e4d0f5
+      size: 486644241
+  export_meshes@scenes/Merom_0_garden:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_garden/processed.max
+      b1k_pipeline/max/export_meshes.py
+    deps:
+    - path: artifacts/pipeline/sanitycheck.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: b1k_pipeline/max/export_meshes.py
+      md5: 8f67c8a3cae22b0303e1082e4d76f9c9
+      size: 23730
+    - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
+      md5: 7ed0f0091a6f56313fe425189865f541
+      size: 62555
+    - path: cad/scenes/Merom_0_garden/processed.max
+      md5: 48c1532ca25cc7b58a3a00f69cba7b6f
+      size: 103438834
+    outs:
+    - path: cad/scenes/Merom_0_garden/artifacts/export_meshes.json
+      md5: 0276085ec8a562af801e34c8774b7117
+      size: 20811
+    - path: cad/scenes/Merom_0_garden/artifacts/meshes.zip
+      md5: 5f4ed633fe6e8a512c210b07ecd7d644
+      size: 279940722
