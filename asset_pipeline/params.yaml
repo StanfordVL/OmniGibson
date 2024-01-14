@@ -1,4 +1,6 @@
 combined:
+- objects/batch-00
+- objects/batch-12
 - scenes/Beechwood_0_garden
 - scenes/Beechwood_0_int
 - scenes/Merom_0_garden
@@ -105,7 +107,9 @@ final_scenes:
 - scenes/Rs_garden
 - scenes/Wainscott_0_garden
 - scenes/school_geography
-objects: []
+objects:
+- objects/batch-00
+- objects/batch-12
 objects_unfiltered:
 - objects/batch-00
 - objects/batch-01

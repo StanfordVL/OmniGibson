@@ -816,6 +816,12 @@ stages:
     - path: b1k_pipeline/check_success_aggregate.py
       md5: 9f14dbc83e44b6840101c1edf8ac4728
       size: 1252
+    - path: cad/objects/batch-00/artifacts/object_list.json
+      md5: 3a65f8df847ce3c4652f6b607681de62
+      size: 38594
+    - path: cad/objects/batch-12/artifacts/object_list.json
+      md5: 8a598ffa9b6ad0ce345dab62616f5a24
+      size: 38531
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       md5: aad265c344e25c98006e7448e0fe1632
       size: 113779
@@ -838,8 +844,8 @@ stages:
       md5: 7550bb6d8148303615e7cfca015d402b
       size: 327785
     - path: params.yaml
-      md5: 8f102331092af53e6cb857316bb08ccb
-      size: 5356
+      md5: b903bb76f4781f52f08e60d1e28111fc
+      size: 5403
     outs:
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -3693,101 +3699,11 @@ stages:
     deps:
     - path: b1k_pipeline/check_success_aggregate.py
       md5: 9f14dbc83e44b6840101c1edf8ac4728
-      size: 1287
+      size: 1252
     - path: cad/objects/batch-00/artifacts/sanitycheck.json
       md5: 3a7464b1010e11fc97e8163350000cc3
       size: 141
-    - path: cad/objects/batch-01/artifacts/sanitycheck.json
-      md5: 4c2ccf50653f3ae2a3f019cb52e6795a
-      size: 140
-    - path: cad/objects/batch-02/artifacts/sanitycheck.json
-      md5: c86172a44e95f9418a71910a245c7663
-      size: 136
-    - path: cad/objects/batch-03/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/batch-04/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/batch-05/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/batch-06/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/batch-07/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/batch-08/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/batch-09/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/batch-10/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/batch-11/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
     - path: cad/objects/batch-12/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/batch-13/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/legacy_batch-00/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/legacy_batch-01/artifacts/sanitycheck.json
-      md5: 0f50e1cc21f55849a76e9c073c98df9e
-      size: 475
-    - path: cad/objects/legacy_batch-02/artifacts/sanitycheck.json
-      md5: 88dd33fc98ca02bf9b41ac2081788049
-      size: 588
-    - path: cad/objects/legacy_batch-03/artifacts/sanitycheck.json
-      md5: 5836f48ef9fea12d5dc9aba962d07865
-      size: 988
-    - path: cad/objects/legacy_batch-04/artifacts/sanitycheck.json
-      md5: d95d0f5e94e0e3e90f19195744ad8f9f
-      size: 151
-    - path: cad/objects/legacy_batch-05/artifacts/sanitycheck.json
-      md5: b45ec0e6ddd1fb13174e58ecc7b6a52e
-      size: 144
-    - path: cad/objects/legacy_batch-06/artifacts/sanitycheck.json
-      md5: 31ccd1d9cad33551f2e4c730203e7481
-      size: 817
-    - path: cad/objects/legacy_batch-07/artifacts/sanitycheck.json
-      md5: 4f63a50c5120ed81611f5ee79c081179
-      size: 220
-    - path: cad/objects/legacy_batch-08/artifacts/sanitycheck.json
-      md5: 9bc26d5a42c98e10e90a1bc9cc917dc6
-      size: 318
-    - path: cad/objects/legacy_batch-09/artifacts/sanitycheck.json
-      md5: de25d5f0c97dbc6f46d1aaf96fa4f2e4
-      size: 152
-    - path: cad/objects/legacy_batch-10/artifacts/sanitycheck.json
-      md5: 58e084260b947c7c07a14c09b01519c2
-      size: 322
-    - path: cad/objects/legacy_batch-11/artifacts/sanitycheck.json
-      md5: 088f731ec5e77118c0bdb7953ca8aa24
-      size: 144
-    - path: cad/objects/legacy_batch-12/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/procedural-aa/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/substances-01/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/substances-02/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/objects/task_relavant-ab/artifacts/sanitycheck.json
-      md5: 428261197306401871d711aac4cd8dff
-      size: 370
-    - path: cad/objects/task_relevant-xy/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
     - path: cad/scenes/Beechwood_0_garden/artifacts/sanitycheck.json
@@ -3796,174 +3712,24 @@ stages:
     - path: cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
-    - path: cad/scenes/Beechwood_1_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Benevolence_0_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Benevolence_1_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Benevolence_2_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Ihlen_0_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Ihlen_1_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
     - path: cad/scenes/Merom_0_garden/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Merom_0_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Merom_1_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
     - path: cad/scenes/Pomaria_0_garden/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
-    - path: cad/scenes/Pomaria_0_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Pomaria_1_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Pomaria_2_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
     - path: cad/scenes/Rs_garden/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Rs_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
     - path: cad/scenes/Wainscott_0_garden/artifacts/sanitycheck.json
       md5: 0641d818d32838c09da0fd0ce707720f
       size: 1354
-    - path: cad/scenes/Wainscott_0_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/Wainscott_1_int/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/commercial_kitchen_pans/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/grocery_store_asian/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/grocery_store_cafe/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/grocery_store_convenience/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/grocery_store_half_stocked/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/hall_arch_wood/artifacts/sanitycheck.json
-      md5: 9a860268173b551a09fef3665a8882c2
-      size: 137
-    - path: cad/scenes/hall_conference_large/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/hall_glass_ceiling/artifacts/sanitycheck.json
-      md5: c648134f63f14582e27591baf5011309
-      size: 136
-    - path: cad/scenes/hall_train_station/artifacts/sanitycheck.json
-      md5: bb8db976d3b340b41806a48de91955fd
-      size: 137
-    - path: cad/scenes/hotel_gym_spa/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/hotel_suite_large/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/hotel_suite_small/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/house_single_floor/artifacts/sanitycheck.json
-      md5: c4d6432943a5144ab2237b38bf466a99
-      size: 135
-    - path: cad/scenes/office_bike/artifacts/sanitycheck.json
-      md5: 315fc993406b6da34721064b649dd6a6
-      size: 1691
-    - path: cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/office_cubicles_right/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/office_large/artifacts/sanitycheck.json
-      md5: 6801102d623b5466ca56cfa501ca0725
-      size: 137
-    - path: cad/scenes/office_vendor_machine/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/public_restroom_blue/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/public_restroom_brown/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/public_restroom_marble/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/public_restroom_white/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/restaurant_asian/artifacts/sanitycheck.json
-      md5: b74a1b2ec12e691c38a2da0138a82da7
-      size: 212
-    - path: cad/scenes/restaurant_brunch/artifacts/sanitycheck.json
-      md5: 0df659710442119b7cdcf7602b1535d7
-      size: 146
-    - path: cad/scenes/restaurant_cafeteria/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/restaurant_diner/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/restaurant_hotel/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/restaurant_urban/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/school_biology/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/school_chemistry/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
-    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
     - path: cad/scenes/school_geography/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
       size: 65
-    - path: cad/scenes/school_gym/artifacts/sanitycheck.json
-      md5: 50380e7647a34c18af72965e5ec76a1f
-      size: 137
     - path: params.yaml
-      md5: 426f338824ca0abaa26e55ba0454ad0a
-      size: 11910
+      md5: b903bb76f4781f52f08e60d1e28111fc
+      size: 5403
     outs:
     - path: artifacts/pipeline/sanitycheck.success
       md5: d41d8cd98f00b204e9800998ecf8427e

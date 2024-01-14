@@ -46,6 +46,8 @@ stages:
     cmd: python -m b1k_pipeline.collision_average_volumes
     deps:
     - b1k_pipeline/collision_average_volumes.py
+    - cad/objects/batch-00/artifacts/meshes.zip
+    - cad/objects/batch-12/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/meshes.zip
     - cad/scenes/Merom_0_garden/artifacts/meshes.zip
@@ -53,6 +55,8 @@ stages:
     - cad/scenes/Rs_garden/artifacts/meshes.zip
     - cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
     - cad/scenes/school_geography/artifacts/meshes.zip
+    - cad/objects/batch-00/artifacts/object_list.json
+    - cad/objects/batch-12/artifacts/object_list.json
     - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Merom_0_garden/artifacts/object_list.json
@@ -60,6 +64,8 @@ stages:
     - cad/scenes/Rs_garden/artifacts/object_list.json
     - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
     - cad/scenes/school_geography/artifacts/object_list.json
+    - cad/objects/batch-00/artifacts/collision_meshes.zip
+    - cad/objects/batch-12/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Merom_0_garden/artifacts/collision_meshes.zip
@@ -67,6 +73,8 @@ stages:
     - cad/scenes/Rs_garden/artifacts/collision_meshes.zip
     - cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/school_geography/artifacts/collision_meshes.zip
+    - cad/objects/batch-00/artifacts/collision_selection.json
+    - cad/objects/batch-12/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
     - cad/scenes/Merom_0_garden/artifacts/collision_selection.json
@@ -89,6 +97,8 @@ stages:
     cmd: python -m b1k_pipeline.collision_selection_validation
     deps:
     - b1k_pipeline/collision_selection_validation.py
+    - cad/objects/batch-00/artifacts/meshes.zip
+    - cad/objects/batch-12/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/meshes.zip
     - cad/scenes/Merom_0_garden/artifacts/meshes.zip
@@ -96,6 +106,8 @@ stages:
     - cad/scenes/Rs_garden/artifacts/meshes.zip
     - cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
     - cad/scenes/school_geography/artifacts/meshes.zip
+    - cad/objects/batch-00/artifacts/object_list.json
+    - cad/objects/batch-12/artifacts/object_list.json
     - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Merom_0_garden/artifacts/object_list.json
@@ -103,6 +115,8 @@ stages:
     - cad/scenes/Rs_garden/artifacts/object_list.json
     - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
     - cad/scenes/school_geography/artifacts/object_list.json
+    - cad/objects/batch-00/artifacts/collision_meshes.zip
+    - cad/objects/batch-12/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Merom_0_garden/artifacts/collision_meshes.zip
@@ -110,6 +124,8 @@ stages:
     - cad/scenes/Rs_garden/artifacts/collision_meshes.zip
     - cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/school_geography/artifacts/collision_meshes.zip
+    - cad/objects/batch-00/artifacts/collision_selection.json
+    - cad/objects/batch-12/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
     - cad/scenes/Merom_0_garden/artifacts/collision_selection.json
@@ -289,6 +305,8 @@ stages:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/export_meshes.json
       artifacts/pipeline/export_meshes.success
     deps:
+    - cad/objects/batch-00/artifacts/export_meshes.json
+    - cad/objects/batch-12/artifacts/export_meshes.json
     - cad/scenes/Beechwood_0_garden/artifacts/export_meshes.json
     - cad/scenes/Beechwood_0_int/artifacts/export_meshes.json
     - cad/scenes/Merom_0_garden/artifacts/export_meshes.json
@@ -302,6 +320,8 @@ stages:
   export_objs_global:
     cmd: python -m b1k_pipeline.export_objs_global
     deps:
+    - cad/objects/batch-00/artifacts/meshes.zip
+    - cad/objects/batch-12/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/meshes.zip
     - cad/scenes/Merom_0_garden/artifacts/meshes.zip
@@ -309,6 +329,8 @@ stages:
     - cad/scenes/Rs_garden/artifacts/meshes.zip
     - cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
     - cad/scenes/school_geography/artifacts/meshes.zip
+    - cad/objects/batch-00/artifacts/collision_meshes.zip
+    - cad/objects/batch-12/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
     - cad/scenes/Merom_0_garden/artifacts/collision_meshes.zip
@@ -316,6 +338,8 @@ stages:
     - cad/scenes/Rs_garden/artifacts/collision_meshes.zip
     - cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
     - cad/scenes/school_geography/artifacts/collision_meshes.zip
+    - cad/objects/batch-00/artifacts/collision_selection.json
+    - cad/objects/batch-12/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
     - cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
     - cad/scenes/Merom_0_garden/artifacts/collision_selection.json
@@ -323,6 +347,8 @@ stages:
     - cad/scenes/Rs_garden/artifacts/collision_selection.json
     - cad/scenes/Wainscott_0_garden/artifacts/collision_selection.json
     - cad/scenes/school_geography/artifacts/collision_selection.json
+    - cad/objects/batch-00/artifacts/object_list.json
+    - cad/objects/batch-12/artifacts/object_list.json
     - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Merom_0_garden/artifacts/object_list.json
@@ -374,6 +400,8 @@ stages:
   object_inventory:
     cmd: python -m b1k_pipeline.object_inventory
     deps:
+    - cad/objects/batch-00/artifacts/object_list.json
+    - cad/objects/batch-12/artifacts/object_list.json
     - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Merom_0_garden/artifacts/object_list.json
@@ -505,6 +533,8 @@ stages:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/object_list.json
       artifacts/pipeline/object_list.success
     deps:
+    - cad/objects/batch-00/artifacts/object_list.json
+    - cad/objects/batch-12/artifacts/object_list.json
     - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Merom_0_garden/artifacts/object_list.json
@@ -553,6 +583,8 @@ stages:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/sanitycheck.json
       artifacts/pipeline/sanitycheck.success
     deps:
+    - cad/objects/batch-00/artifacts/sanitycheck.json
+    - cad/objects/batch-12/artifacts/sanitycheck.json
     - cad/scenes/Beechwood_0_garden/artifacts/sanitycheck.json
     - cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
     - cad/scenes/Merom_0_garden/artifacts/sanitycheck.json
@@ -602,6 +634,8 @@ stages:
   validate_meta_links:
     cmd: python -m b1k_pipeline.validate_meta_links
     deps:
+    - cad/objects/batch-00/artifacts/object_list.json
+    - cad/objects/batch-12/artifacts/object_list.json
     - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
     - cad/scenes/Beechwood_0_int/artifacts/object_list.json
     - cad/scenes/Merom_0_garden/artifacts/object_list.json

@@ -72,6 +72,8 @@ FINAL_SCENES = [
 
 APPROVED_OBJS = {
     "legacy_*",
+    "batch-00",
+    "batch-12",
 }
 
 REJECTED_OBJS = set()
