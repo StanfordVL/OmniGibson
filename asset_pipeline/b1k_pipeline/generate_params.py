@@ -82,6 +82,7 @@ APPROVED_SCENES = {
     ".*_garden",
     "Beechwood_0_int",
     "school_geography",
+    "public_restroom_blue",
 }
 
 REJECTED_SCENES = {
