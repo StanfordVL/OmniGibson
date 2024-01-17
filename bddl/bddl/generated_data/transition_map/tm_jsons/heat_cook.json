@@ -1,7 +1,7 @@
 [
     {
         "rule_name": "sugar_cookies",
-        "input_objects": {
+        "input_synsets": {
             "sugar_cookie_dough.n.01": 1
         },
         "input_states": {
@@ -18,7 +18,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "sugar_cookie.n.01": 6
         },
         "output_states": {
@@ -33,7 +33,7 @@
     },
     {
         "rule_name": "salt_water",
-        "input_objects": {
+        "input_synsets": {
             "water.n.06": 1,
             "salt.n.02": 1
         },
@@ -44,7 +44,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "seawater.n.01": 1
         },
         "output_states": null,
@@ -52,7 +52,7 @@
     },
     {
         "rule_name": "cheese_tarts",
-        "input_objects": {
+        "input_synsets": {
             "pastry.n.01": 1,
             "cheese_pastry_filling.n.01": 1
         },
@@ -76,7 +76,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "cheese_tart.n.01": 6
         },
         "output_states": {
@@ -91,7 +91,7 @@
     },
     {
         "rule_name": "red_meat_sauce",
-        "input_objects": {
+        "input_synsets": {
             "tomato_sauce.n.01": 1,
             "olive_oil.n.01": 1,
             "clove.n.03": 3,
@@ -106,7 +106,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "cooked__red_meat_sauce.n.01": 1
         },
         "output_states": null,
@@ -114,7 +114,7 @@
     },
     {
         "rule_name": "schnitzel",
-        "input_objects": {
+        "input_synsets": {
             "cooking_oil.n.01": 1,
             "flour.n.01": 1,
             "raw_egg.n.01": 1,
@@ -142,7 +142,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "schnitzel.n.01": 1
         },
         "output_states": {
@@ -157,7 +157,7 @@
     },
     {
         "rule_name": "applesauce",
-        "input_objects": {
+        "input_synsets": {
             "apple.n.01": 3,
             "water.n.06": 1,
             "lemon_juice.n.01": 1,
@@ -178,7 +178,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "applesauce.n.01": 1
         },
         "output_states": null,
@@ -186,7 +186,7 @@
     },
     {
         "rule_name": "bagels",
-        "input_objects": {
+        "input_synsets": {
             "raw_egg.n.01": 1,
             "bagel_dough.n.01": 1,
             "sesame_seed.n.01": 1
@@ -229,7 +229,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "bagel.n.01": 4
         },
         "output_states": {
@@ -244,7 +244,7 @@
     },
     {
         "rule_name": "biscuits",
-        "input_objects": {
+        "input_synsets": {
             "biscuit_dough.n.01": 1
         },
         "input_states": {
@@ -261,7 +261,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "biscuit.n.01": 4
         },
         "output_states": {
@@ -276,7 +276,7 @@
     },
     {
         "rule_name": "blueberry_compote",
-        "input_objects": {
+        "input_synsets": {
             "lemon_juice.n.01": 1,
             "granulated_sugar.n.01": 1,
             "blueberry.n.02": 1
@@ -288,7 +288,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "blueberry_compote.n.01": 1
         },
         "output_states": null,
@@ -296,7 +296,7 @@
     },
     {
         "rule_name": "chicken_curry",
-        "input_objects": {
+        "input_synsets": {
             "diced__chicken_breast.n.01": 1,
             "diced__beefsteak_tomato.n.01": 1,
             "diced__vidalia_onion.n.01": 1,
@@ -310,7 +310,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "chicken_curry.n.01": 1
         },
         "output_states": null,
@@ -318,7 +318,7 @@
     },
     {
         "rule_name": "chocolate_syrup",
-        "input_objects": {
+        "input_synsets": {
             "granulated_sugar.n.01": 1,
             "seawater.n.01": 1,
             "vanilla.n.02": 1,
@@ -331,7 +331,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "chocolate_sauce.n.01": 1
         },
         "output_states": null,
@@ -339,7 +339,7 @@
     },
     {
         "rule_name": "spice_cookies",
-        "input_objects": {
+        "input_synsets": {
             "spice_cookie_dough.n.01": 1
         },
         "input_states": {
@@ -356,7 +356,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "spice_cookie.n.01": 6
         },
         "output_states": {
@@ -371,7 +371,7 @@
     },
     {
         "rule_name": "baps",
-        "input_objects": {
+        "input_synsets": {
             "roll_dough.n.01": 1
         },
         "input_states": {
@@ -388,7 +388,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "bap.n.01": 4
         },
         "output_states": {
@@ -403,7 +403,7 @@
     },
     {
         "rule_name": "granola",
-        "input_objects": {
+        "input_synsets": {
             "oat.n.02": 1,
             "honey.n.01": 1,
             "cinnamon.n.03": 1,
@@ -417,7 +417,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "granola.n.01": 1
         },
         "output_states": null,
@@ -425,7 +425,7 @@
     },
     {
         "rule_name": "cocoa",
-        "input_objects": {
+        "input_synsets": {
             "cocoa_powder.n.01": 1,
             "whole_milk.n.01": 1,
             "granulated_sugar.n.01": 1,
@@ -438,7 +438,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "cocoa.n.01": 1
         },
         "output_states": null,
@@ -446,7 +446,7 @@
     },
     {
         "rule_name": "ice_cubes",
-        "input_objects": {
+        "input_synsets": {
             "water.n.06": 1
         },
         "input_states": null,
@@ -456,7 +456,7 @@
         "heat_source": {
             "deep-freeze.n.02": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "ice_cube.n.01": 6
         },
         "output_states": null,
@@ -464,7 +464,7 @@
     },
     {
         "rule_name": "cheese_sauce",
-        "input_objects": {
+        "input_synsets": {
             "cream_cheese.n.01": 1,
             "butter.n.01": 1,
             "whole_milk.n.01": 1,
@@ -479,7 +479,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "cheese_sauce.n.01": 1
         },
         "output_states": null,
@@ -487,7 +487,7 @@
     },
     {
         "rule_name": "macaroni_and_cheese",
-        "input_objects": {
+        "input_synsets": {
             "cooked__noodle.n.01": 1,
             "breadcrumb.n.01": 1,
             "cheese_sauce.n.01": 1
@@ -499,7 +499,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "macaroni_and_cheese.n.01": 1
         },
         "output_states": {
@@ -514,7 +514,7 @@
     },
     {
         "rule_name": "meatloaf",
-        "input_objects": {
+        "input_synsets": {
             "ground_beef.n.01": 1,
             "whole_milk.n.01": 1,
             "diced__vidalia_onion.n.01": 1,
@@ -528,7 +528,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "meat_loaf.n.01": 1
         },
         "output_states": {
@@ -543,7 +543,7 @@
     },
     {
         "rule_name": "muffins",
-        "input_objects": {
+        "input_synsets": {
             "muffin_batter.n.01": 1
         },
         "input_states": null,
@@ -553,7 +553,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "muffin.n.01": 6
         },
         "output_states": {
@@ -568,7 +568,7 @@
     },
     {
         "rule_name": "oatmeal",
-        "input_objects": {
+        "input_synsets": {
             "seawater.n.01": 1,
             "cinnamon.n.03": 1,
             "honey.n.01": 1,
@@ -582,7 +582,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "oatmeal.n.01": 1
         },
         "output_states": null,
@@ -590,7 +590,7 @@
     },
     {
         "rule_name": "marinara",
-        "input_objects": {
+        "input_synsets": {
             "half__beefsteak_tomato.n.01": 6,
             "clove.n.03": 5,
             "diced__vidalia_onion.n.01": 1,
@@ -606,7 +606,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "cooked__marinara.n.01": 1
         },
         "output_states": null,
@@ -614,7 +614,7 @@
     },
     {
         "rule_name": "tomato sauce",
-        "input_objects": {
+        "input_synsets": {
             "beefsteak_tomato.n.01": 1,
             "tomato_paste.n.01": 1,
             "marjoram.n.02": 1,
@@ -628,7 +628,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "tomato_sauce.n.01": 1
         },
         "output_states": null,
@@ -636,7 +636,7 @@
     },
     {
         "rule_name": "pizza",
-        "input_objects": {
+        "input_synsets": {
             "pizza_dough.n.01": 1,
             "tomato_sauce.n.01": 1,
             "grated_cheese.n.01": 1,
@@ -707,7 +707,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "pizza.n.01": 1
         },
         "output_states": {
@@ -722,7 +722,7 @@
     },
     {
         "rule_name": "popsicles",
-        "input_objects": {
+        "input_synsets": {
             "smoothie.n.02": 1
         },
         "input_states": null,
@@ -732,7 +732,7 @@
         "heat_source": {
             "deep-freeze.n.02": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "ice_lolly.n.01": 4
         },
         "output_states": {
@@ -747,7 +747,7 @@
     },
     {
         "rule_name": "fish_stew",
-        "input_objects": {
+        "input_synsets": {
             "diced__bell_pepper.n.01": 1,
             "diced__clove.n.01": 1,
             "olive_oil.n.01": 1,
@@ -786,7 +786,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "fish_stew.n.01": 1
         },
         "output_states": null,
@@ -794,7 +794,7 @@
     },
     {
         "rule_name": "chicken_soup",
-        "input_objects": {
+        "input_synsets": {
             "chicken_broth.n.01": 1,
             "diced__carrot.n.01": 1,
             "diced__celery.n.01": 1,
@@ -816,7 +816,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "cooked__chicken_soup.n.01": 1
         },
         "output_states": null,
@@ -824,7 +824,7 @@
     },
     {
         "rule_name": "beef_stew",
-        "input_objects": {
+        "input_synsets": {
             "diced__carrot.n.01": 1,
             "pea.n.01": 1,
             "diced__vidalia_onion.n.01": 1,
@@ -838,7 +838,7 @@
         "heat_source": {
             "stove.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "beef_stew.n.01": 1
         },
         "output_states": null,
@@ -846,7 +846,7 @@
     },
     {
         "rule_name": "brownie",
-        "input_objects": {
+        "input_synsets": {
             "brownie_batter.n.01": 1
         },
         "input_states": null,
@@ -856,7 +856,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "brownie.n.03": 6
         },
         "output_states": {
@@ -871,7 +871,7 @@
     },
     {
         "rule_name": "chocolate_biscuit",
-        "input_objects": {
+        "input_synsets": {
             "chocolate_cookie_dough.n.01": 1
         },
         "input_states": {
@@ -888,7 +888,7 @@
         "heat_source": {
             "oven.n.01": 1
         },
-        "output_objects": {
+        "output_synsets": {
             "chocolate_biscuit.n.01": 6
         },
         "output_states": {
