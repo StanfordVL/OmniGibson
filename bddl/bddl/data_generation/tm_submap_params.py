@@ -1,26 +1,4 @@
 TM_SUBMAPS_TO_PARAMS = {
-    "electric_mixer": {
-        "rule_name": {
-            "required": False,
-            "type": "string"
-        },
-        "input_objects": {
-            "required": True,
-            "type": "synset"
-        },
-        "input_states": {
-            "required": False,
-            "type": "atom"
-        },
-        "output_objects": {
-            "required": True,
-            "type": "synset"
-        },
-        "output_states": {
-            "required": False,
-            "type": "atom"
-        }
-    },
     "heat_cook": {
         "rule_name": {
             "required": False,
