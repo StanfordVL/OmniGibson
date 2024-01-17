@@ -156,6 +156,14 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
             str: prim path in the stage.
         """
         return self._prim_path
+    
+    @property
+    def parent_path(self):
+        return self.prim_path.rsplit("/", 1)[0]
+    
+    @property
+    def parent(self):
+        return og.sim.scene.prim_registry("prim_path", self.parent_path)
 
     @property
     def name(self):

@@ -12,7 +12,7 @@ import omnigibson as og
 from omni.isaac.core.utils.stage import get_current_stage
 from omnigibson.prims.prim_base import BasePrim
 from omnigibson.prims.material_prim import MaterialPrim
-from omnigibson.utils.transform_utils import quat2euler
+from omnigibson.utils.transform_utils import quat2euler, pose_transform
 from omnigibson.utils.usd_utils import BoundingBoxAPI
 from scipy.spatial.transform import Rotation as R
 
@@ -195,12 +195,9 @@ class XFormPrim(BasePrim):
                 - 3-array: (x,y,z) position in the world frame
                 - 4-array: (x,y,z,w) quaternion orientation in the world frame
         """
-        prim_tf = UsdGeom.Xformable(self._prim).ComputeLocalToWorldTransform(Usd.TimeCode.Default())
-        transform = Gf.Transform()
-        transform.SetMatrix(prim_tf)
-        position = transform.GetTranslation()
-        orientation = transform.GetRotation().GetQuat()
-        return np.array(position), gf_quat_to_np_array(orientation)[[1, 2, 3, 0]]
+        local_pos, local_orn = self.get_local_pose()       
+        parent_pos, parent_orn = self.parent.get_position_orientation()
+        return pose_transform(parent_pos, parent_orn, local_pos, local_orn)
 
     def set_position(self, position):
         """

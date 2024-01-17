@@ -8,6 +8,7 @@ import numpy as np
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.robots import REGISTERED_ROBOTS
+from omnigibson.sensors import VisionSensor
 from omnigibson.utils.ui_utils import choose_from_options, KeyboardRobotController
 import carb.input
 
@@ -147,6 +148,8 @@ def main(random_selection=False, headless=False, short_exec=False):
     max_steps = -1 if not short_exec else 100
     step = 0
     while step != max_steps:
+        vs, = [x for x in robot.sensors.values() if isinstance(x, VisionSensor)]
+        print(vs.get_position())
         action = action_generator.get_random_action() if control_mode == "random" else action_generator.get_teleop_action()
         env.step(action=action)
         step += 1
