@@ -71,7 +71,7 @@ FINAL_SCENES = [
 ]
 
 APPROVED_OBJS = {
-    "legacy_*",
+    "legacy_.*",
     "batch-00",
     "batch-12",
 }
