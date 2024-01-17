@@ -15,11 +15,11 @@ for submap_fn in os.listdir("tm_raw_data_old"):
         for rule in rules: 
             updated_rule = {}
             for param, value in rule.items(): 
-                # if param == "input_objects":
+                # if param == "input_synsets":
                 #     print(value)
                     # import sys; sys.exit()
                 if param not in fieldnames: continue
-                if param == "input_objects":
+                if param == "input_synsets":
                     input_objects = []
                     input_states = []
                     atoms = value.split(" and ")
@@ -29,9 +29,9 @@ for submap_fn in os.listdir("tm_raw_data_old"):
                             input_objects.append(atom.split(" ")[-1])
                         else: 
                             input_states.append(atom)
-                    updated_rule["input_objects"] = " and ".join(input_objects)
+                    updated_rule["input_synsets"] = " and ".join(input_objects)
                     updated_rule["input_states"] = " and ".join(input_states)
-                elif param == "output_objects":
+                elif param == "output_synsets":
                     output_objects = []
                     output_states = []
                     atoms = value.split(" and ")
@@ -40,7 +40,7 @@ for submap_fn in os.listdir("tm_raw_data_old"):
                             output_objects.append(atom.split(" ")[-1])
                         else: 
                             output_states.append(atom)
-                    updated_rule["output_objects"] = " and ".join(output_objects) 
+                    updated_rule["output_synsets"] = " and ".join(output_objects)
                     updated_rule["output_states"] = " and ".join(output_states)
                 elif param == "machine": 
                     pass

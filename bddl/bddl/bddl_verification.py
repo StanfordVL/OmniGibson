@@ -331,7 +331,7 @@ def check_clashing_transition_rules():
         for rule in submap: 
             # Get relevant parameters
             rule_name = rule.get("rule_name", "No name")
-            input_objects = rule.get("input_objects", {})
+            input_objects = rule.get("input_synsets", {})
             input_states = rule.get("input_states", {})
             input_states = input_states if input_states is not None else {}
             if submap_name == "heat_cook": 
@@ -340,7 +340,7 @@ def check_clashing_transition_rules():
                 equipment = set([list(rule["machine"].keys())[0]])
             else:
                 equipment = set()       # Equivalence will pass trivially when checked, because this rule already clashes
-            output_objects = rule.get("output_objects", {})
+            output_objects = rule.get("output_synsets", {})
             output_states = rule.get("output_states", {})
             output_states = output_states if output_states is not None else {}
 

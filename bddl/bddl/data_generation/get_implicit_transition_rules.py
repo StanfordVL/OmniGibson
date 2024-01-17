@@ -13,10 +13,10 @@ def generate_slicing_rules(syns_to_param_props, props_to_syns):
     Form: 
     {
         "rule_name": <non-unique string>,
-        "input_objects": {
+        "input_synsets": {
             <sliceable>: 1 
         },
-        "output_objects": {
+        "output_synsets": {
             <sliceable_derivative_synset>: 2
         }
     }
@@ -33,10 +33,10 @@ def generate_slicing_rules(syns_to_param_props, props_to_syns):
 
         rule = {
             "rule_name": f"{sliceable}-slicing",
-            "input_objects": {
+            "input_synsets": {
                 sliceable: 1
             },
-            "output_objects": {
+            "output_synsets": {
                 sliceable_derivative_synset: 2
             }
         }
@@ -53,7 +53,7 @@ def generate_dicing_rules(syns_to_param_props, props_to_syns):
     Form: 
     {
         "rule_name": <unique string name>,
-        "input_objects": {
+        "input_synsets": {
             <diceable>: 1 
         },
         "input_states": {
@@ -64,7 +64,7 @@ def generate_dicing_rules(syns_to_param_props, props_to_syns):
                 ]
             ]
         }
-        "output_objects": {
+        "output_synsets": {
             <cooked_diceable_derivative_synset> if cooked else <uncooked_diceable_derivative_synset>: 1
         }
     }
@@ -82,7 +82,7 @@ def generate_dicing_rules(syns_to_param_props, props_to_syns):
 
         uncooked_rule = {
             "rule_name": f"uncooked-{diceable}-dicing",
-            "input_objects": {
+            "input_synsets": {
                 diceable: 1
             },
             "input_states": {
@@ -93,7 +93,7 @@ def generate_dicing_rules(syns_to_param_props, props_to_syns):
                     ]
                 ]
             },
-            "output_objects": {
+            "output_synsets": {
                 uncooked_diceable_derivative_synset: 1
             }
         }
@@ -106,7 +106,7 @@ def generate_dicing_rules(syns_to_param_props, props_to_syns):
 
             cooked_rule = {
                 "rule_name": f"cooked-{diceable}-dicing",
-                "input_objects": {
+                "input_synsets": {
                     diceable: 1
                 },
                 "input_states": {
@@ -117,7 +117,7 @@ def generate_dicing_rules(syns_to_param_props, props_to_syns):
                         ]
                     ]
                 },
-                "output_objects": {
+                "output_synsets": {
                     cooked_diceable_derivative_synset: 1
                 }
             }
@@ -133,10 +133,10 @@ def generate_substance_cooking_rules(syns_to_param_props, props_to_syns):
     Form: 
     {
         "rule_name": <non-unique string>,
-        "input_objects": {
+        "input_synsets": {
             <cookable_substance>: 1
         },
-        "output_objects": {
+        "output_synsets": {
             <substance_cooking_derivative_synset>: 1
         }
     }
@@ -154,10 +154,10 @@ def generate_substance_cooking_rules(syns_to_param_props, props_to_syns):
 
         rule = {
             "rule_name": f"{cookable_substance}-cooking",
-            "input_objects": {
+            "input_synsets": {
                 cookable_substance: 1
             },
-            "output_objects": {
+            "output_synsets": {
                 substance_cooking_derivative_synset: 1
             }
         }
@@ -173,11 +173,11 @@ def generate_substance_watercooking_rules(syns_to_param_props, props_to_syns):
     Form: 
     {
         "rule_name": <non-unique string>,
-        "input_objects": {
+        "input_synsets": {
             <watercookable_substance>: 1,
             water.n.06_1: 1
         },
-        "output_objects": {
+        "output_synsets": {
             <substance_cooking_derivative_synset>: 1
         }
     }
@@ -196,11 +196,11 @@ def generate_substance_watercooking_rules(syns_to_param_props, props_to_syns):
 
         rule = {
             "rule_name": f"{watercookable_substance}-cooking",
-            "input_objects": {
+            "input_synsets": {
                 watercookable_substance: 1,
                 "water.n.06": 1
             },
-            "output_objects": {
+            "output_synsets": {
                 substance_cooking_derivative_synset: 1
             }
         }
@@ -216,10 +216,10 @@ def generate_melting_rules(syns_to_param_props, props_to_syns):
     Form: 
     {
         "rule_name": <unique string name>,
-        "input_objects": {
+        "input_synsets": {
             <meltable>: 1
         },
-        "output_objects": {
+        "output_synsets": {
             <meltable_derivative_synset>: 1
         }
     }
@@ -233,10 +233,10 @@ def generate_melting_rules(syns_to_param_props, props_to_syns):
 
         rule = {
             "rule_name": f"{meltable}-melting",
-            "input_objects": {
+            "input_synsets": {
                 meltable: 1
             },
-            "output_objects": {
+            "output_synsets": {
                 meltable_derivative_synset: 1
             }
         }
@@ -253,11 +253,11 @@ def generate_washer_particleremover_rules(props_to_syns):
     Form: 
     {
         "rule_name": <particleRemover>-washer-saturate-cover,
-        "input_objects": {},
+        "input_synsets": {},
         "washed_item": {
             <particleRemover>: 1,
         },
-        "output_objects": {
+        "output_synsets": {
             "water.n.06": 1
         }
     }
@@ -270,11 +270,11 @@ def generate_washer_particleremover_rules(props_to_syns):
     for particleRemover in particleRemovers: 
         rule = {
             "rule_name": f"{particleRemover}-washer-saturate-cover",
-            "input_objects": {},
+            "input_synsets": {},
             "washed_item": {
                 particleRemover: 1
             },
-            "output_objects": {
+            "output_synsets": {
                 "water.n.06": 1
             }
         }
@@ -290,11 +290,11 @@ def generate_washer_nonparticleremover_rules(props_to_syns):
     Form: 
     {
         "rule_name": <nonSubstance,non-particleRemover>-washer-cover,
-        "input_objects": {},
+        "input_synsets": {},
         "washed_item": {
             <non-particleRemover,nonSubstance>: 1
         },
-        "output_objects": {
+        "output_synsets": {
             "water.n.06": 1
         }
     }
@@ -310,11 +310,11 @@ def generate_washer_nonparticleremover_rules(props_to_syns):
     for syn in nonparticleremover_nonsubstances: 
         rule = {
             "rule_name": f"{syn}-washer-cover",
-            "input_objects": {},
+            "input_synsets": {},
             "washed_item": {
                 syn: 1
             },
-            "output_objects": {
+            "output_synsets": {
                 "water.n.06": 1
             }
         }

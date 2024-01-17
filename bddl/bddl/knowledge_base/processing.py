@@ -318,9 +318,9 @@ class KnowledgeBaseProcessor():
         for transition_data in self.tqdm(transitions):
             rule_name = transition_data["rule_name"]
             transition = TransitionRule.create(name=rule_name)
-            inputs = set(transition_data["input_objects"].keys())
+            inputs = set(transition_data["input_synsets"].keys())
             assert inputs, f"Transition {transition.name} has no inputs!"
-            outputs = set(transition_data["output_objects"].keys())
+            outputs = set(transition_data["output_synsets"].keys())
             assert outputs, f"Transition {transition.name} has no outputs!"
             assert inputs & outputs == set(), f"Inputs and outputs of {transition.name} overlap!"
             for synset_name in inputs:

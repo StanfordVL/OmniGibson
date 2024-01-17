@@ -4,7 +4,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "required": False,
             "type": "string"
         },
-        "input_objects": {
+        "input_synsets": {
             "required": True,
             "type": "synset"
         },
@@ -23,7 +23,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "required": False,
             "type": "synset"
         },
-        "output_objects": {
+        "output_synsets": {
             "required": True,
             "type": "synset"
         },
@@ -44,7 +44,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "required": False,
             "type": "string"
         },
-        "input_objects": {
+        "input_synsets": {
             "required": True,
             "type": "synset"
         },
@@ -52,7 +52,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "required": False,
             "type": "atom"
         },
-        "output_objects": {
+        "output_synsets": {
             "required": True,
             "type": "synset"
         },
@@ -67,7 +67,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "required": False,
             "type": "string"
         },
-        "input_objects": {
+        "input_synsets": {
             "required": True,
             "type": "synset"
         },
@@ -80,7 +80,7 @@ TM_SUBMAPS_TO_PARAMS = {
             "type": "synset"
 
         },
-        "output_objects": {
+        "output_synsets": {
             "required": True,
             "type": "synset"
         },
