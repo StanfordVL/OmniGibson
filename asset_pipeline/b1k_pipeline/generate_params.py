@@ -85,28 +85,7 @@ REJECTED_SCENES = {
 }
 
 VERIFIED_SCENES = {
-    "Beechwood_0_int",
-    "Beechwood_1_int",
-    "Benevolence_0_int",
-    "Benevolence_1_int",
-    "Benevolence_2_int",
-    "Ihlen_0_int",
-    "Ihlen_1_int",
-    "Merom_0_int",
-    "Merom_1_int",
-    "Pomaria_0_int",
-    "Pomaria_1_int",
-    "Pomaria_2_int",
-    "Rs_int",
-    "Wainscott_0_int",
-    "Wainscott_1_int",
-    "Pomaria_0_garden",
-    "house_single_floor",
-    "house_double_floor_lower",
-    "house_double_floor_upper",
-    "grocery_store_cafe",
-    "office_large",
-    "restaurant_brunch",
+    ".*",
 }
 
 def main():
