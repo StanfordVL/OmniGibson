@@ -23,6 +23,7 @@ def add_igibson_objects(node, synset_to_cat, synset_to_substance):
   '''
   if node["name"] in synset_to_cat:
     node["categories"] = sorted(synset_to_cat[node["name"]])
+  if node["name"] in synset_to_substance:
     node["substances"] = sorted(synset_to_substance[node["name"]])
 
   if "children" in node:
