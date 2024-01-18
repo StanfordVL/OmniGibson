@@ -37,6 +37,7 @@ class ObjectTaxonomy(object):
                         children_names.add(child['name'])
                 taxonomy.add_node(node['name'],
                                   categories=node.get('categories', []),
+                                  substances=node.get('substances', []),
                                   abilities=node['abilities'])
                 for child_name in children_names:
                     taxonomy.add_edge(node['name'], child_name)
@@ -80,6 +81,16 @@ class ObjectTaxonomy(object):
         """
         return self._get_synset_by_filter(lambda synset: category in self.get_categories(synset))
 
+    def get_synset_from_substance(self, substance):
+        """
+        Get synset name corresponding to object category.
+
+        :param substance: substance to search for.
+        :return: str containing matching synset.
+        :raises ValueError if multiple matching synsets are found.
+        """
+        return self._get_synset_by_filter(lambda synset: substance in self.get_substances(synset))
+
     def get_subtree_categories(self, synset):
         """
         Get the object categories matching the subtree of a given synset (by aggregating categories across all the leaf-level descendants).
@@ -95,6 +106,22 @@ class ObjectTaxonomy(object):
         for synset in synsets:
             all_categories += self.get_categories(synset)
         return all_categories
+    
+    def get_subtree_substances(self, synset):
+        """
+        Get the substances matching the subtree of a given synset (by aggregating substances across all the leaf-level descendants).
+
+        :param synset: synset to search
+        :return: list of str corresponding to substances
+        """
+        if self.is_leaf(synset):
+            synsets = [synset]
+        else:
+            synsets = self.get_leaf_descendants(synset)
+        all_substances = []
+        for synset in synsets:
+            all_substances += self.get_substances(synset)
+        return all_substances
 
     def is_valid_synset(self, synset):
         """
@@ -177,6 +204,16 @@ class ObjectTaxonomy(object):
         """
         assert self.is_valid_synset(synset)
         return list(self.taxonomy.nodes[synset]['categories'])
+    
+    def get_substances(self, synset):
+        """
+        Get the substances matching a given synset.
+
+        :param synset: synset to search.
+        :return: list of str corresponding to substances matching the synset.
+        """
+        assert self.is_valid_synset(synset)
+        return list(self.taxonomy.nodes[synset]['substances'])
 
     def get_children(self, synset):
         """
