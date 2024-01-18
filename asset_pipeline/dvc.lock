@@ -22,8 +22,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Beechwood_0_int/processed.max
-      md5: 1d41c2e8f99a8531d90d221c231c5810
-      size: 95299830
+      md5: 8717a249f20cf47d7906d0848ae62a3e
+      size: 95485298
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       md5: e4fcb092f1eaffa3e34da9014e17182a
@@ -106,8 +106,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Ihlen_1_int/processed.max
-      md5: e68906d4b27cd3d36505d7915119af84
-      size: 69916452
+      md5: 09453c3d9e431d89335a2323e7a07b35
+      size: 70211404
     outs:
     - path: cad/scenes/Ihlen_1_int/artifacts/object_list.json
       md5: bcf5c028d5c1d9313e0f7e16bb9ac445
@@ -120,12 +120,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: 48c1532ca25cc7b58a3a00f69cba7b6f
-      size: 103438834
+      md5: 103ef956ea216f09e15b0f3b5a7f3be3
+      size: 102634574
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
-      md5: 7ed0f0091a6f56313fe425189865f541
-      size: 62555
+      md5: 83e3a8fe18cd2fa259fd6cf87cc11b69
+      size: 62348
   object_list@scenes/Merom_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -162,12 +162,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Pomaria_0_garden/processed.max
-      md5: 7997a0f3069c4c03868a8f653c95737f
-      size: 140946318
+      md5: becca1fc717646f490de83525a51d5fd
+      size: 141148580
     outs:
     - path: cad/scenes/Pomaria_0_garden/artifacts/object_list.json
-      md5: 48b0a05344272b8fbf33c583140595a4
-      size: 82976
+      md5: caf6b6c24e85764684c952d531443161
+      size: 83905
   object_list@scenes/Pomaria_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -176,8 +176,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Pomaria_0_int/processed.max
-      md5: 07154639965cca6f99edb7e9822c4a1d
-      size: 25168510
+      md5: 5ca41212c763a26a92eac5103576fb82
+      size: 25512664
     outs:
     - path: cad/scenes/Pomaria_0_int/artifacts/object_list.json
       md5: 7e6ac5cf90a57aac995f2793e425f607
@@ -190,8 +190,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Pomaria_1_int/processed.max
-      md5: 9ba8a789f3426382127ef81560a6b8da
-      size: 49487362
+      md5: bb77371b3c35924103fe83e97e2eabb6
+      size: 49852006
     outs:
     - path: cad/scenes/Pomaria_1_int/artifacts/object_list.json
       md5: 4d654b118904209117c9244c94733cec
@@ -244,8 +244,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Wainscott_0_garden/processed.max
-      md5: f3ff8113cfbbd242adfbb73cc4ca3310
-      size: 191140368
+      md5: d8185289ab5d2ce0f66325cd54e5b5e0
+      size: 191244700
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
       md5: aad0e0fbeca8a08fbfac80aff57c50e0
@@ -258,8 +258,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Wainscott_0_int/processed.max
-      md5: 8e7b04803b40f6860f2632a22d44a1e5
-      size: 93304320
+      md5: a5323ca08fa88ffd10eff23aa7b4519c
+      size: 93476392
     outs:
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       md5: 11797ef4f1185b63890cff128f6f06bf
@@ -342,8 +342,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/grocery_store_cafe/processed.max
-      md5: 5954975666b652b5ecb24bdb3d07ee42
-      size: 96720690
+      md5: b7360a613a8d32a8bc338cf45b8d17d2
+      size: 96900908
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
       md5: fed3727e1b95069612cb1970d531c8f7
@@ -482,12 +482,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/house_double_floor_lower/processed.max
-      md5: 8d2fa59ac840b13d52f098b79283adbb
-      size: 286393908
+      md5: c86598a5ab98053e6e3527b405cfeeb4
+      size: 286574132
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
-      md5: 913d5ddbb0c354534080f7d652c49356
-      size: 111769
+      md5: 3da5369f3459c1140b78ee3f5572ab7b
+      size: 112147
   object_list@scenes/house_double_floor_upper:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_double_floor_upper/processed.max
       b1k_pipeline/max/object_list.py
@@ -496,12 +496,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/house_double_floor_upper/processed.max
-      md5: a678d3f31a3cf0f942d61d2f9158b9a0
-      size: 158993142
+      md5: 087bff9ca05e2cd8778edd7f4ed836c9
+      size: 159288054
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
-      md5: e60320c9a2287441e1e1855efcc0fd08
-      size: 104615
+      md5: 1ce4a80e1b9da249aa06c55a88447379
+      size: 104734
   object_list@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/object_list.py
@@ -510,11 +510,11 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/house_single_floor/processed.max
-      md5: dd565358b2047cde6c1dcfb6a5286e28
-      size: 507393714
+      md5: f17f6ca2990ef08be5e9174da792e618
+      size: 507594746
     outs:
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
-      md5: 2839d8b881d98d1afc60a8ed6a0fb5a7
+      md5: 7f47efd3e066e90f3f1698b4d2c12772
       size: 289525
   object_list@scenes/office_bike:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_bike/processed.max
@@ -552,12 +552,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/office_cubicles_right/processed.max
-      md5: 178e766ec7301b063e030f86c4bb29a8
-      size: 47751168
+      md5: 3e657cce8b580378dfb5c0c34e0256da
+      size: 47943680
     outs:
     - path: cad/scenes/office_cubicles_right/artifacts/object_list.json
-      md5: 59b208cc9aeb2f4040ab26898551091d
-      size: 113213
+      md5: 918b1dd06fafe3a5a9b168dfb2647ccf
+      size: 113679
   object_list@scenes/office_large:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_large/processed.max
       b1k_pipeline/max/object_list.py
@@ -566,12 +566,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/office_large/processed.max
-      md5: edee406b76dbd6abd99401f5d4f16092
-      size: 83865942
+      md5: 203c0b1523796210ece35f7870e3cc41
+      size: 83661362
     outs:
     - path: cad/scenes/office_large/artifacts/object_list.json
-      md5: c4c996225a26a5cc77f8741c37ed6292
-      size: 258451
+      md5: 7c446a0c30af1fc645645a3107ee7e22
+      size: 254047
   object_list@scenes/office_vendor_machine:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_vendor_machine/processed.max
       b1k_pipeline/max/object_list.py
@@ -678,8 +678,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/restaurant_brunch/processed.max
-      md5: 84d005e03b6f91eea643824aceba2114
-      size: 125115282
+      md5: f59728438ca82b4ec4ac36b9028395cd
+      size: 125291490
     outs:
     - path: cad/scenes/restaurant_brunch/artifacts/object_list.json
       md5: ba72a11a4b2e2540f5d54c1544102022
@@ -937,8 +937,8 @@ stages:
       md5: bcf5c028d5c1d9313e0f7e16bb9ac445
       size: 64207
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
-      md5: 7ed0f0091a6f56313fe425189865f541
-      size: 62555
+      md5: 83e3a8fe18cd2fa259fd6cf87cc11b69
+      size: 62348
     - path: cad/scenes/Merom_0_int/artifacts/object_list.json
       md5: 4fce3e779a00318a438b251b80a17f15
       size: 39033
@@ -946,8 +946,8 @@ stages:
       md5: a1a07a82bb3e000b0dc30ed856ec5d81
       size: 60483
     - path: cad/scenes/Pomaria_0_garden/artifacts/object_list.json
-      md5: 48b0a05344272b8fbf33c583140595a4
-      size: 82976
+      md5: caf6b6c24e85764684c952d531443161
+      size: 83905
     - path: cad/scenes/Pomaria_0_int/artifacts/object_list.json
       md5: 7e6ac5cf90a57aac995f2793e425f607
       size: 38972
@@ -1012,13 +1012,13 @@ stages:
       md5: e30d14323409dfe50be03da97f27f19a
       size: 18165
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
-      md5: 913d5ddbb0c354534080f7d652c49356
-      size: 111769
+      md5: 3da5369f3459c1140b78ee3f5572ab7b
+      size: 112147
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
-      md5: e60320c9a2287441e1e1855efcc0fd08
-      size: 104615
+      md5: 1ce4a80e1b9da249aa06c55a88447379
+      size: 104734
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
-      md5: 2839d8b881d98d1afc60a8ed6a0fb5a7
+      md5: 7f47efd3e066e90f3f1698b4d2c12772
       size: 289525
     - path: cad/scenes/office_bike/artifacts/object_list.json
       md5: 2106399f98422496f1bed5d0609867e7
@@ -1027,11 +1027,11 @@ stages:
       md5: f909da11d20af72b02777c73a22c6849
       size: 171182
     - path: cad/scenes/office_cubicles_right/artifacts/object_list.json
-      md5: 59b208cc9aeb2f4040ab26898551091d
-      size: 113213
+      md5: 918b1dd06fafe3a5a9b168dfb2647ccf
+      size: 113679
     - path: cad/scenes/office_large/artifacts/object_list.json
-      md5: c4c996225a26a5cc77f8741c37ed6292
-      size: 258451
+      md5: 7c446a0c30af1fc645645a3107ee7e22
+      size: 254047
     - path: cad/scenes/office_vendor_machine/artifacts/object_list.json
       md5: d2ed9176f15aac63e5daa3cc0820aa06
       size: 54209
@@ -1220,8 +1220,8 @@ stages:
       md5: bcf5c028d5c1d9313e0f7e16bb9ac445
       size: 64207
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
-      md5: 7ed0f0091a6f56313fe425189865f541
-      size: 62555
+      md5: 83e3a8fe18cd2fa259fd6cf87cc11b69
+      size: 62348
     - path: cad/scenes/Merom_0_int/artifacts/object_list.json
       md5: 4fce3e779a00318a438b251b80a17f15
       size: 39033
@@ -1229,8 +1229,8 @@ stages:
       md5: a1a07a82bb3e000b0dc30ed856ec5d81
       size: 60483
     - path: cad/scenes/Pomaria_0_garden/artifacts/object_list.json
-      md5: 48b0a05344272b8fbf33c583140595a4
-      size: 82976
+      md5: caf6b6c24e85764684c952d531443161
+      size: 83905
     - path: cad/scenes/Pomaria_0_int/artifacts/object_list.json
       md5: 7e6ac5cf90a57aac995f2793e425f607
       size: 38972
@@ -1295,13 +1295,13 @@ stages:
       md5: e30d14323409dfe50be03da97f27f19a
       size: 18165
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
-      md5: 913d5ddbb0c354534080f7d652c49356
-      size: 111769
+      md5: 3da5369f3459c1140b78ee3f5572ab7b
+      size: 112147
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
-      md5: e60320c9a2287441e1e1855efcc0fd08
-      size: 104615
+      md5: 1ce4a80e1b9da249aa06c55a88447379
+      size: 104734
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
-      md5: 2839d8b881d98d1afc60a8ed6a0fb5a7
+      md5: 7f47efd3e066e90f3f1698b4d2c12772
       size: 289525
     - path: cad/scenes/office_bike/artifacts/object_list.json
       md5: 2106399f98422496f1bed5d0609867e7
@@ -1310,11 +1310,11 @@ stages:
       md5: f909da11d20af72b02777c73a22c6849
       size: 171182
     - path: cad/scenes/office_cubicles_right/artifacts/object_list.json
-      md5: 59b208cc9aeb2f4040ab26898551091d
-      size: 113213
+      md5: 918b1dd06fafe3a5a9b168dfb2647ccf
+      size: 113679
     - path: cad/scenes/office_large/artifacts/object_list.json
-      md5: c4c996225a26a5cc77f8741c37ed6292
-      size: 258451
+      md5: 7c446a0c30af1fc645645a3107ee7e22
+      size: 254047
     - path: cad/scenes/office_vendor_machine/artifacts/object_list.json
       md5: d2ed9176f15aac63e5daa3cc0820aa06
       size: 54209
@@ -1371,8 +1371,8 @@ stages:
       size: 12957
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: cfafee2160bc75550ec3ac609d159858
-      size: 1507993
+      md5: cbae99c74051a71c2fa87eea7988b801
+      size: 1505681
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -1503,8 +1503,8 @@ stages:
       md5: bcf5c028d5c1d9313e0f7e16bb9ac445
       size: 64207
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
-      md5: 7ed0f0091a6f56313fe425189865f541
-      size: 62555
+      md5: 83e3a8fe18cd2fa259fd6cf87cc11b69
+      size: 62348
     - path: cad/scenes/Merom_0_int/artifacts/object_list.json
       md5: 4fce3e779a00318a438b251b80a17f15
       size: 39033
@@ -1512,8 +1512,8 @@ stages:
       md5: a1a07a82bb3e000b0dc30ed856ec5d81
       size: 60483
     - path: cad/scenes/Pomaria_0_garden/artifacts/object_list.json
-      md5: 48b0a05344272b8fbf33c583140595a4
-      size: 82976
+      md5: caf6b6c24e85764684c952d531443161
+      size: 83905
     - path: cad/scenes/Pomaria_0_int/artifacts/object_list.json
       md5: 7e6ac5cf90a57aac995f2793e425f607
       size: 38972
@@ -1581,13 +1581,13 @@ stages:
       md5: e30d14323409dfe50be03da97f27f19a
       size: 18165
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
-      md5: 913d5ddbb0c354534080f7d652c49356
-      size: 111769
+      md5: 3da5369f3459c1140b78ee3f5572ab7b
+      size: 112147
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
-      md5: e60320c9a2287441e1e1855efcc0fd08
-      size: 104615
+      md5: 1ce4a80e1b9da249aa06c55a88447379
+      size: 104734
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
-      md5: 2839d8b881d98d1afc60a8ed6a0fb5a7
+      md5: 7f47efd3e066e90f3f1698b4d2c12772
       size: 289525
     - path: cad/scenes/office_bike/artifacts/object_list.json
       md5: 2106399f98422496f1bed5d0609867e7
@@ -1596,11 +1596,11 @@ stages:
       md5: f909da11d20af72b02777c73a22c6849
       size: 171182
     - path: cad/scenes/office_cubicles_right/artifacts/object_list.json
-      md5: 59b208cc9aeb2f4040ab26898551091d
-      size: 113213
+      md5: 918b1dd06fafe3a5a9b168dfb2647ccf
+      size: 113679
     - path: cad/scenes/office_large/artifacts/object_list.json
-      md5: c4c996225a26a5cc77f8741c37ed6292
-      size: 258451
+      md5: 7c446a0c30af1fc645645a3107ee7e22
+      size: 254047
     - path: cad/scenes/office_vendor_machine/artifacts/object_list.json
       md5: d2ed9176f15aac63e5daa3cc0820aa06
       size: 54209
@@ -1657,8 +1657,8 @@ stages:
       size: 12957
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: 6f0e85db77386158996edd9e976c25ad
-      size: 1511516
+      md5: d1eb3e04a58dbe761eea05e5da1419ea
+      size: 1509204
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -1667,8 +1667,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Beechwood_0_int/processed.max
-      md5: 1d41c2e8f99a8531d90d221c231c5810
-      size: 95299830
+      md5: 8717a249f20cf47d7906d0848ae62a3e
+      size: 95485298
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/room_object_list.json
       md5: 8f88adb99c0e854d7ca1a6026bac6553
@@ -1769,8 +1769,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Ihlen_1_int/processed.max
-      md5: e68906d4b27cd3d36505d7915119af84
-      size: 69916452
+      md5: 09453c3d9e431d89335a2323e7a07b35
+      size: 70211404
     outs:
     - path: cad/scenes/Ihlen_1_int/artifacts/room_object_list.json
       md5: 6c38842b736070c35d6a2200e57dba9f
@@ -1820,8 +1820,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Pomaria_0_int/processed.max
-      md5: 07154639965cca6f99edb7e9822c4a1d
-      size: 25168510
+      md5: 5ca41212c763a26a92eac5103576fb82
+      size: 25512664
     outs:
     - path: cad/scenes/Pomaria_0_int/artifacts/room_object_list.json
       md5: ae48b88d0d38d1b4424660d71c63ac46
@@ -1837,8 +1837,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Pomaria_1_int/processed.max
-      md5: 9ba8a789f3426382127ef81560a6b8da
-      size: 49487362
+      md5: bb77371b3c35924103fe83e97e2eabb6
+      size: 49852006
     outs:
     - path: cad/scenes/Pomaria_1_int/artifacts/room_object_list.json
       md5: 9febc35d9a75b606ffafb23060a150cb
@@ -1887,8 +1887,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Wainscott_0_int/processed.max
-      md5: 8e7b04803b40f6860f2632a22d44a1e5
-      size: 93304320
+      md5: a5323ca08fa88ffd10eff23aa7b4519c
+      size: 93476392
     outs:
     - path: cad/scenes/Wainscott_0_int/artifacts/room_object_list.json
       md5: b48888fa155018cd433c591217bbd89d
@@ -1989,11 +1989,11 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/grocery_store_cafe/processed.max
-      md5: 5954975666b652b5ecb24bdb3d07ee42
-      size: 96720690
+      md5: b7360a613a8d32a8bc338cf45b8d17d2
+      size: 96900908
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
-      md5: 6a01bbca3d8d4d011055705ec0d808d7
+      md5: 134b812f2999abbe2706358d6a1b1a0d
       size: 5551
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -2159,8 +2159,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/house_double_floor_upper/processed.max
-      md5: a678d3f31a3cf0f942d61d2f9158b9a0
-      size: 158993142
+      md5: 087bff9ca05e2cd8778edd7f4ed836c9
+      size: 159288054
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/room_object_list.json
       md5: 6febda264c99c677b4839c4afe1532fb
@@ -2176,8 +2176,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/house_single_floor/processed.max
-      md5: dd565358b2047cde6c1dcfb6a5286e28
-      size: 507393714
+      md5: f17f6ca2990ef08be5e9174da792e618
+      size: 507594746
     outs:
     - path: cad/scenes/house_single_floor/artifacts/room_object_list.json
       md5: 10f4ac4772a7d855b1fb917dc8b8c55f
@@ -2227,8 +2227,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/office_large/processed.max
-      md5: edee406b76dbd6abd99401f5d4f16092
-      size: 83865942
+      md5: 203c0b1523796210ece35f7870e3cc41
+      size: 83661362
     outs:
     - path: cad/scenes/office_large/artifacts/room_object_list.json
       md5: 7ef927e80b21a54ff9b2512f27eeda5d
@@ -2363,12 +2363,12 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/restaurant_brunch/processed.max
-      md5: 84d005e03b6f91eea643824aceba2114
-      size: 125115282
+      md5: f59728438ca82b4ec4ac36b9028395cd
+      size: 125291490
     outs:
     - path: cad/scenes/restaurant_brunch/artifacts/room_object_list.json
-      md5: 183e0c34d9b056f09a526fe4c489e009
-      size: 5594
+      md5: a1bc2c38216ff72f4a8516e1aea48ab6
+      size: 5593
     - path: cad/scenes/restaurant_brunch/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2511,8 +2511,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.json
-      md5: ba2aa8c1cd27982c429eadccedb75b19
-      size: 4905
+      md5: ae3fd2293f94266755a3d0a69fd1ed2c
+      size: 4840
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2601,7 +2601,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
-      md5: 6a01bbca3d8d4d011055705ec0d808d7
+      md5: 134b812f2999abbe2706358d6a1b1a0d
       size: 5551
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -2661,8 +2661,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/house_double_floor_lower/artifacts/room_object_list.json
-      md5: ecacbf23f6704387bf67b0becb206a94
-      size: 7171
+      md5: a15f5fe9853e6bf754da67b3465f6f69
+      size: 7140
     - path: cad/scenes/house_double_floor_lower/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2691,7 +2691,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/office_cubicles_right/artifacts/room_object_list.json
-      md5: 811934937ede1f495b277eb89453119e
+      md5: 8b2783c9806a06eff08715272c2f370b
       size: 4680
     - path: cad/scenes/office_cubicles_right/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -2745,8 +2745,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/restaurant_brunch/artifacts/room_object_list.json
-      md5: 183e0c34d9b056f09a526fe4c489e009
-      size: 5594
+      md5: a1bc2c38216ff72f4a8516e1aea48ab6
+      size: 5593
     - path: cad/scenes/restaurant_brunch/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2812,8 +2812,8 @@ stages:
       size: 12957
     outs:
     - path: artifacts/pipeline/combined_room_object_list.json
-      md5: ab196b5255ed221b07aa496fc4f230d8
-      size: 294351
+      md5: 03e022291c4a0dfc1f281e98519ca3ba
+      size: 294246
   room_object_list@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -2839,12 +2839,12 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: 48c1532ca25cc7b58a3a00f69cba7b6f
-      size: 103438834
+      md5: 103ef956ea216f09e15b0f3b5a7f3be3
+      size: 102634574
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.json
-      md5: ba2aa8c1cd27982c429eadccedb75b19
-      size: 4905
+      md5: ae3fd2293f94266755a3d0a69fd1ed2c
+      size: 4840
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2856,8 +2856,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Pomaria_0_garden/processed.max
-      md5: 7997a0f3069c4c03868a8f653c95737f
-      size: 140946318
+      md5: becca1fc717646f490de83525a51d5fd
+      size: 141148580
     outs:
     - path: cad/scenes/Pomaria_0_garden/artifacts/room_object_list.json
       md5: c6fc915a2db268c81a89fe5c5cc485b1
@@ -2889,8 +2889,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Wainscott_0_garden/processed.max
-      md5: f3ff8113cfbbd242adfbb73cc4ca3310
-      size: 191140368
+      md5: d8185289ab5d2ce0f66325cd54e5b5e0
+      size: 191244700
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/room_object_list.json
       md5: 4b9c3ceafb3d0d0a3323a21daec58ae0
@@ -2906,12 +2906,12 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/house_double_floor_lower/processed.max
-      md5: 8d2fa59ac840b13d52f098b79283adbb
-      size: 286393908
+      md5: c86598a5ab98053e6e3527b405cfeeb4
+      size: 286574132
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/room_object_list.json
-      md5: ecacbf23f6704387bf67b0becb206a94
-      size: 7171
+      md5: a15f5fe9853e6bf754da67b3465f6f69
+      size: 7140
     - path: cad/scenes/house_double_floor_lower/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2923,11 +2923,11 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/office_cubicles_right/processed.max
-      md5: 178e766ec7301b063e030f86c4bb29a8
-      size: 47751168
+      md5: 3e657cce8b580378dfb5c0c34e0256da
+      size: 47943680
     outs:
     - path: cad/scenes/office_cubicles_right/artifacts/room_object_list.json
-      md5: 811934937ede1f495b277eb89453119e
+      md5: 8b2783c9806a06eff08715272c2f370b
       size: 4680
     - path: cad/scenes/office_cubicles_right/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -3055,8 +3055,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.json
-      md5: ba2aa8c1cd27982c429eadccedb75b19
-      size: 4905
+      md5: ae3fd2293f94266755a3d0a69fd1ed2c
+      size: 4840
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3151,7 +3151,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
-      md5: 6a01bbca3d8d4d011055705ec0d808d7
+      md5: 134b812f2999abbe2706358d6a1b1a0d
       size: 5551
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -3211,8 +3211,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/house_double_floor_lower/artifacts/room_object_list.json
-      md5: ecacbf23f6704387bf67b0becb206a94
-      size: 7171
+      md5: a15f5fe9853e6bf754da67b3465f6f69
+      size: 7140
     - path: cad/scenes/house_double_floor_lower/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3241,7 +3241,7 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/office_cubicles_right/artifacts/room_object_list.json
-      md5: 811934937ede1f495b277eb89453119e
+      md5: 8b2783c9806a06eff08715272c2f370b
       size: 4680
     - path: cad/scenes/office_cubicles_right/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -3295,8 +3295,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/restaurant_brunch/artifacts/room_object_list.json
-      md5: 183e0c34d9b056f09a526fe4c489e009
-      size: 5594
+      md5: a1bc2c38216ff72f4a8516e1aea48ab6
+      size: 5593
     - path: cad/scenes/restaurant_brunch/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3362,8 +3362,8 @@ stages:
       size: 12957
     outs:
     - path: artifacts/pipeline/combined_room_object_list_future.json
-      md5: 53c938c313af32edc7471cf19d2e33d8
-      size: 295298
+      md5: 4d4af191cff412f7e4296bc777d1ffda
+      size: 295193
   sanitycheck@scenes/public_restroom_blue:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_blue/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -3428,8 +3428,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/house_double_floor_upper/processed.max
-      md5: a678d3f31a3cf0f942d61d2f9158b9a0
-      size: 158993142
+      md5: 087bff9ca05e2cd8778edd7f4ed836c9
+      size: 159288054
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3512,8 +3512,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Beechwood_0_int/processed.max
-      md5: 1d41c2e8f99a8531d90d221c231c5810
-      size: 95299830
+      md5: 8717a249f20cf47d7906d0848ae62a3e
+      size: 95485298
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3568,8 +3568,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Pomaria_0_int/processed.max
-      md5: 07154639965cca6f99edb7e9822c4a1d
-      size: 25168510
+      md5: 5ca41212c763a26a92eac5103576fb82
+      size: 25512664
     outs:
     - path: cad/scenes/Pomaria_0_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3582,8 +3582,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/grocery_store_cafe/processed.max
-      md5: 5954975666b652b5ecb24bdb3d07ee42
-      size: 96720690
+      md5: b7360a613a8d32a8bc338cf45b8d17d2
+      size: 96900908
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3596,8 +3596,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/house_double_floor_lower/processed.max
-      md5: 8d2fa59ac840b13d52f098b79283adbb
-      size: 286393908
+      md5: c86598a5ab98053e6e3527b405cfeeb4
+      size: 286574132
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3624,8 +3624,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/office_large/processed.max
-      md5: edee406b76dbd6abd99401f5d4f16092
-      size: 83865942
+      md5: 203c0b1523796210ece35f7870e3cc41
+      size: 83661362
     outs:
     - path: cad/scenes/office_large/artifacts/sanitycheck.json
       md5: 6801102d623b5466ca56cfa501ca0725
@@ -3666,8 +3666,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/restaurant_brunch/processed.max
-      md5: 84d005e03b6f91eea643824aceba2114
-      size: 125115282
+      md5: f59728438ca82b4ec4ac36b9028395cd
+      size: 125291490
     outs:
     - path: cad/scenes/restaurant_brunch/artifacts/sanitycheck.json
       md5: 0df659710442119b7cdcf7602b1535d7
@@ -3722,8 +3722,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/house_single_floor/processed.max
-      md5: dd565358b2047cde6c1dcfb6a5286e28
-      size: 507393714
+      md5: f17f6ca2990ef08be5e9174da792e618
+      size: 507594746
     outs:
     - path: cad/scenes/house_single_floor/artifacts/sanitycheck.json
       md5: c4d6432943a5144ab2237b38bf466a99
@@ -3904,8 +3904,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Ihlen_1_int/processed.max
-      md5: e68906d4b27cd3d36505d7915119af84
-      size: 69916452
+      md5: 09453c3d9e431d89335a2323e7a07b35
+      size: 70211404
     outs:
     - path: cad/scenes/Ihlen_1_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3918,8 +3918,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Wainscott_0_garden/processed.max
-      md5: f3ff8113cfbbd242adfbb73cc4ca3310
-      size: 191140368
+      md5: d8185289ab5d2ce0f66325cd54e5b5e0
+      size: 191244700
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/sanitycheck.json
       md5: 0641d818d32838c09da0fd0ce707720f
@@ -3946,8 +3946,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: 48c1532ca25cc7b58a3a00f69cba7b6f
-      size: 103438834
+      md5: 103ef956ea216f09e15b0f3b5a7f3be3
+      size: 102634574
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3988,8 +3988,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/office_cubicles_right/processed.max
-      md5: 178e766ec7301b063e030f86c4bb29a8
-      size: 47751168
+      md5: 3e657cce8b580378dfb5c0c34e0256da
+      size: 47943680
     outs:
     - path: cad/scenes/office_cubicles_right/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -4002,8 +4002,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Pomaria_0_garden/processed.max
-      md5: 7997a0f3069c4c03868a8f653c95737f
-      size: 140946318
+      md5: becca1fc717646f490de83525a51d5fd
+      size: 141148580
     outs:
     - path: cad/scenes/Pomaria_0_garden/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -4016,8 +4016,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Wainscott_0_int/processed.max
-      md5: 8e7b04803b40f6860f2632a22d44a1e5
-      size: 93304320
+      md5: a5323ca08fa88ffd10eff23aa7b4519c
+      size: 93476392
     outs:
     - path: cad/scenes/Wainscott_0_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -4170,8 +4170,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Pomaria_1_int/processed.max
-      md5: 9ba8a789f3426382127ef81560a6b8da
-      size: 49487362
+      md5: bb77371b3c35924103fe83e97e2eabb6
+      size: 49852006
     outs:
     - path: cad/scenes/Pomaria_1_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
