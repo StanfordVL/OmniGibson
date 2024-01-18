@@ -14256,7 +14256,6 @@
     "substance": {}
   },
   "cooked__diced__carrot.n.01": {
-    "flammable": {},
     "freezable": {},
     "macroPhysicalSubstance": {},
     "physicalSubstance": {},
@@ -15937,7 +15936,7 @@
   "cooked__orzo.n.01": {
     "flammable": {},
     "freezable": {},
-    "microPhysicalSubstance": {},
+    "macroPhysicalSubstance": {},
     "physicalSubstance": {},
     "substance": {}
   },
@@ -18748,7 +18747,6 @@
   },
   "diced__carrot.n.01": {
     "cookable": {},
-    "flammable": {},
     "freezable": {},
     "macroPhysicalSubstance": {},
     "physicalSubstance": {},
@@ -27372,6 +27370,7 @@
   },
   "half__doughnut.n.01": {
     "cookable": {},
+    "deformable": {},
     "diceable": {},
     "disinfectable": {},
     "dustyable": {},
@@ -27381,9 +27380,9 @@
     "heatable": {},
     "moldyable": {},
     "nonSubstance": {},
-    "rigidBody": {},
     "rustable": {},
     "scratchable": {},
+    "softBody": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -32567,11 +32566,9 @@
     "wrinkleable": {}
   },
   "insectifuge.n.01": {
-    "boilable": {},
     "freezable": {},
-    "liquid": {},
-    "physicalSubstance": {},
-    "substance": {}
+    "substance": {},
+    "visualSubstance": {}
   },
   "insectifuge__atomizer.n.01": {
     "disinfectable": {},
@@ -44203,11 +44200,9 @@
     "freezable": {}
   },
   "repellent.n.02": {
-    "boilable": {},
     "freezable": {},
-    "liquid": {},
-    "physicalSubstance": {},
-    "substance": {}
+    "substance": {},
+    "visualSubstance": {}
   },
   "report.n.03": {
     "disinfectable": {},
@@ -46059,9 +46054,11 @@
     "visualSubstance": {}
   },
   "sealant.n.01": {
+    "boilable": {},
     "freezable": {},
-    "substance": {},
-    "visualSubstance": {}
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
   },
   "sealant__atomizer.n.01": {
     "disinfectable": {},
@@ -46102,9 +46099,11 @@
     "wrinkleable": {}
   },
   "sealing_material.n.01": {
+    "boilable": {},
     "freezable": {},
-    "substance": {},
-    "visualSubstance": {}
+    "liquid": {},
+    "physicalSubstance": {},
+    "substance": {}
   },
   "seashell.n.01": {
     "breakable": {},

@@ -7829,14 +7829,12 @@
         "freezable": {}
     },
     "cooked__diced__carrot.n.01": {
-        "flammable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
         "freezable": {}
     },
     "diced__carrot.n.01": {
-        "flammable": {},
         "cookable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -9879,21 +9877,6 @@
         "heatable": {},
         "freezable": {}
     },
-    "cooked__diced__clove.n.01": {
-        "flammable": {},
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "diced__clove.n.01": {
-        "flammable": {},
-        "cookable": {},
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "half__clove.n.01": {
         "cookable": {},
         "diceable": {},
@@ -10761,6 +10744,13 @@
         "physicalSubstance": {},
         "freezable": {}
     },
+    "cooked__diced__clove.n.01": {
+        "flammable": {},
+        "macroPhysicalSubstance": {},
+        "substance": {},
+        "physicalSubstance": {},
+        "freezable": {}
+    },
     "cooked__diced__green_onion.n.01": {
         "flammable": {},
         "macroPhysicalSubstance": {},
@@ -10905,7 +10895,7 @@
     },
     "cooked__orzo.n.01": {
         "flammable": {},
-        "microPhysicalSubstance": {},
+        "macroPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
         "freezable": {}
@@ -12501,6 +12491,14 @@
         "freezable": {}
     },
     "diced__chili.n.01": {
+        "flammable": {},
+        "cookable": {},
+        "macroPhysicalSubstance": {},
+        "substance": {},
+        "physicalSubstance": {},
+        "freezable": {}
+    },
+    "diced__clove.n.01": {
         "flammable": {},
         "cookable": {},
         "macroPhysicalSubstance": {},
@@ -17854,10 +17852,8 @@
         "freezable": {}
     },
     "insectifuge.n.01": {
-        "liquid": {},
-        "boilable": {},
+        "visualSubstance": {},
         "substance": {},
-        "physicalSubstance": {},
         "freezable": {}
     },
     "instant_coffee__jar.n.01": {
@@ -27114,8 +27110,10 @@
         "freezable": {}
     },
     "sealant.n.01": {
-        "visualSubstance": {},
+        "liquid": {},
+        "boilable": {},
         "substance": {},
+        "physicalSubstance": {},
         "freezable": {}
     },
     "seashell.n.01": {
@@ -35280,8 +35278,9 @@
         "flammable": {},
         "cookable": {},
         "diceable": {},
-        "rigidBody": {},
+        "softBody": {},
         "nonSubstance": {},
+        "deformable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},

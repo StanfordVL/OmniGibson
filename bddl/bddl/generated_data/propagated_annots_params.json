@@ -26827,12 +26827,6 @@
         "substance": {}
     },
     "cooked__diced__carrot.n.01": {
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
         "freezable": {},
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
@@ -28813,7 +28807,7 @@
             "distance_threshold": 0.2
         },
         "freezable": {},
-        "microPhysicalSubstance": {},
+        "macroPhysicalSubstance": {},
         "physicalSubstance": {},
         "substance": {}
     },
@@ -35583,12 +35577,6 @@
         "cookable": {
             "cook_temperature": 91.0,
             "substance_cooking_derivative_synset": "cooked__diced__carrot.n.01"
-        },
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
         },
         "freezable": {},
         "macroPhysicalSubstance": {},
@@ -52593,6 +52581,7 @@
         "cookable": {
             "cook_temperature": 180.0
         },
+        "deformable": {},
         "diceable": {
             "uncooked_diceable_derivative_synset": "diced__doughnut.n.01",
             "cooked_diceable_derivative_synset": "cooked__diced__doughnut.n.01"
@@ -52612,9 +52601,9 @@
         },
         "moldyable": {},
         "nonSubstance": {},
-        "rigidBody": {},
         "rustable": {},
         "scratchable": {},
+        "softBody": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -60322,11 +60311,9 @@
         "wrinkleable": {}
     },
     "insectifuge.n.01": {
-        "boilable": {},
         "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
+        "substance": {},
+        "visualSubstance": {}
     },
     "insectifuge__atomizer.n.01": {
         "disinfectable": {},
@@ -92232,11 +92219,9 @@
         "freezable": {}
     },
     "repellent.n.02": {
-        "boilable": {},
         "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
+        "substance": {},
+        "visualSubstance": {}
     },
     "report.n.03": {
         "disinfectable": {},
@@ -97757,9 +97742,11 @@
         "visualSubstance": {}
     },
     "sealant.n.01": {
+        "boilable": {},
         "freezable": {},
-        "substance": {},
-        "visualSubstance": {}
+        "liquid": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "sealant__atomizer.n.01": {
         "disinfectable": {},
@@ -97814,9 +97801,11 @@
         "wrinkleable": {}
     },
     "sealing_material.n.01": {
+        "boilable": {},
         "freezable": {},
-        "substance": {},
-        "visualSubstance": {}
+        "liquid": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "seashell.n.01": {
         "breakable": {},
