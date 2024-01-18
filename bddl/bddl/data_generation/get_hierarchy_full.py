@@ -4,6 +4,7 @@ Strict multi-way tree (without no count)
 We consider each unique path to a synset "different", with the obvious
 problem that each synset can have multiple hypernyms
 '''
+import collections
 import json
 import pandas as pd
 import pathlib
@@ -12,19 +13,21 @@ from nltk.corpus import wordnet as wn
 HIERARCHY_OUTPUT_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "output_hierarchy.json"
 HIERARCHY_PROPERTIES_OUTPUT_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "output_hierarchy_properties.json"
 CATEGORY_MAPPING_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "category_mapping.csv"
+SUBSTANCE_MAPPING_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "substance_hyperparams.csv"
 SYN_PROP_PARAM_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "propagated_annots_params.json"
 
 
-def add_igibson_objects(node, synset_to_cat):
+def add_igibson_objects(node, synset_to_cat, synset_to_substance):
   '''
   Go through the hierarchy and add the words associated with the synsets as attributes.
   '''
   if node["name"] in synset_to_cat:
     node["categories"] = sorted(synset_to_cat[node["name"]])
+    node["substances"] = sorted(synset_to_substance[node["name"]])
 
   if "children" in node:
     for child_node in node["children"]:
-      add_igibson_objects(child_node, synset_to_cat)
+      add_igibson_objects(child_node, synset_to_cat, synset_to_substance)
 
 
 def add_path(path, hierarchy):
@@ -79,14 +82,16 @@ def get_hierarchy(syn_prop_dict):
       add_path(path[:-1], hierarchy)
 
   synset_to_cat_raw = pd.read_csv(CATEGORY_MAPPING_FN)[["category", "synset"]].to_dict(orient="records")
-  synset_to_cat = {}
+  synset_to_cat = collections.defaultdict(list)
   for rec in synset_to_cat_raw: 
-    syn, cat = rec["synset"], rec["category"]
-    if syn in synset_to_cat: 
-      synset_to_cat[syn].append(cat)
-    else:
-      synset_to_cat[syn] = [cat]
-  add_igibson_objects(hierarchy, synset_to_cat)
+    synset_to_cat[rec["synset"]].append(rec["category"])
+
+  synset_to_substance_raw = pd.read_csv(SUBSTANCE_MAPPING_FN)[["substance", "synset"]].to_dict(orient="records")
+  synset_to_substance = collections.defaultdict(list)
+  for rec in synset_to_substance_raw: 
+    synset_to_substance[rec["synset"]].append(rec["substance"])
+
+  add_igibson_objects(hierarchy, synset_to_cat, synset_to_substance)
 
   with open(HIERARCHY_OUTPUT_FN, "w") as f:
     json.dump(hierarchy, f, indent=2)
