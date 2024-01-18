@@ -1598,6 +1598,7 @@ stages:
     - cad/scenes/school_gym/artifacts/object_list.json
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/collision_selection_validation.success
+    - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success
     - artifacts/pipeline/export_meshes.success
     - b1k_pipeline/export_objs_global.py
@@ -2080,6 +2081,7 @@ stages:
     deps:
     - artifacts/parallels/objects.zip
     - artifacts/parallels/metadata.zip
+    - artifacts/pipeline/export_objs.success
     - artifacts/pipeline/aggregate_metadata.success
     - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
     - b1k_pipeline/usd_conversion/import_metadata.py
