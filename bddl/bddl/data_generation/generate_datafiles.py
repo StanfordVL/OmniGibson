@@ -5,6 +5,7 @@ from bddl.data_generation.propagate_by_intersection import create_get_save_propa
 from bddl.data_generation.process_prop_param_annots import create_get_save_propagated_annots_params
 from bddl.data_generation.get_implicit_transition_rules import create_get_save_implicit_transition_rules
 from bddl.data_generation.get_explicit_transition_rules import create_save_explicit_transition_rules
+from bddl.data_generation.sanity_check import sanity_check
 import pandas as pd
 import csv
 import nltk
@@ -51,6 +52,9 @@ def main():
 
     # Create and save explicit transition jsons
     create_save_explicit_transition_rules()
+
+    # Sanity check object taxonomy and transition rules
+    sanity_check()
 
     # # Create and save activity-specific hierarchies (no getting because that will get complicated)
     # create_save_activity_specific_hierarchies()

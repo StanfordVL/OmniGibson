@@ -3,6 +3,8 @@ import os
 import pandas as pd
 import pathlib
 
+from bddl.data_generation.process_prop_param_annots import LEAF_SYNSETS_SET
+
 
 TRANSITION_MAP_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "transition_map" / "tm_jsons"
 
@@ -325,6 +327,9 @@ def generate_washer_nonparticleremover_rules(props_to_syns):
 
 def create_get_save_implicit_transition_rules(syns_to_param_props, props_to_syns):
     print("Creating implicit transition rule jsons...")
+    # Constrain to leaf synsets
+    for prop in props_to_syns:
+        props_to_syns[prop] = set(props_to_syns[prop]) & LEAF_SYNSETS_SET
     slicing_rules = generate_slicing_rules(syns_to_param_props, props_to_syns)
     dicing_rules = generate_dicing_rules(syns_to_param_props, props_to_syns)
     substance_cooking_rules = generate_substance_cooking_rules(syns_to_param_props, props_to_syns)
