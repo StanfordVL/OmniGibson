@@ -9,6 +9,7 @@ import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.robots import REGISTERED_ROBOTS
 from omnigibson.utils.ui_utils import choose_from_options, KeyboardRobotController
+import carb.input
 
 
 CONTROL_MODES = dict(
@@ -72,6 +73,10 @@ def main(random_selection=False, headless=False, short_exec=False):
     )
 
     # Create the config for generating the environment we want
+    env_cfg = dict()
+    env_cfg["action_frequency"] = 10
+    env_cfg["physics_frequency"] = 60
+
     scene_cfg = dict()
     if scene_model == "empty":
         scene_cfg["type"] = "Scene"
@@ -87,10 +92,10 @@ def main(random_selection=False, headless=False, short_exec=False):
     robot0_cfg["action_normalize"] = True
 
     # Compile config
-    cfg = dict(scene=scene_cfg, robots=[robot0_cfg])
+    cfg = dict(env=env_cfg, scene=scene_cfg, robots=[robot0_cfg])
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
 
     # Choose robot controller to use
     robot = env.robots[0]
@@ -106,17 +111,29 @@ def main(random_selection=False, headless=False, short_exec=False):
     controller_config = {component: {"name": name} for component, name in controller_choices.items()}
     robot.reload_controllers(controller_config=controller_config)
 
+    # Because the controllers have been updated, we need to update the initial state so the correct controller state
+    # is preserved
+    env.scene.update_initial_state()
+
     # Update the simulator's viewer camera's pose so it points towards the robot
     og.sim.viewer_camera.set_position_orientation(
         position=np.array([1.46949, -3.97358, 2.21529]),
         orientation=np.array([0.56829048, 0.09569975, 0.13571846, 0.80589577]),
     )
 
-    # Reset environment
+    # Reset environment and robot
     env.reset()
+    robot.reset()
 
     # Create teleop controller
     action_generator = KeyboardRobotController(robot=robot)
+
+    # Register custom binding to reset the environment
+    action_generator.register_custom_keymapping(
+        key=carb.input.KeyboardInput.R,
+        description="Reset the robot",
+        callback_fn=lambda: env.reset(),
+    )
 
     # Print out relevant keyboard info if using keyboard teleop
     if control_mode == "teleop":
@@ -131,9 +148,8 @@ def main(random_selection=False, headless=False, short_exec=False):
     step = 0
     while step != max_steps:
         action = action_generator.get_random_action() if control_mode == "random" else action_generator.get_teleop_action()
-        for _ in range(10):
-            env.step(action=action)
-            step += 1
+        env.step(action=action)
+        step += 1
 
     # Always shut down the environment cleanly at the end
     env.close()

@@ -11,10 +11,9 @@ from omnigibson.utils.python_utils import classproperty, Serializable, Registera
 from omnigibson.utils.registry_utils import SerializableRegistry
 from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.objects.object_base import BaseObject
-from omnigibson.systems import SYSTEM_REGISTRY
+from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system
 from omnigibson.objects.light_object import LightObject
 from omnigibson.robots.robot_base import m as robot_macros
-from pxr import Sdf, Gf
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -32,7 +31,7 @@ REGISTERED_SCENES = dict()
 class Scene(Serializable, Registerable, Recreatable, ABC):
     """
     Base class for all Scene objects.
-    Contains the base functionalities for an arbitary scene with an arbitrary set of added objects
+    Contains the base functionalities for an arbitrary scene with an arbitrary set of added objects
     """
     def __init__(
             self,
@@ -86,6 +85,14 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         return self._skybox
 
     @property
+    def floor_plane(self):
+        """
+        Returns:
+            None or XFormPrim: Generated floor plane prim, if it is used
+        """
+        return self._floor_plane
+
+    @property
     def object_registry(self):
         """
         Returns:
@@ -136,7 +143,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         Returns:
             list of str: Keys with which to index into the object registry. These should be valid public attributes of
-                prims that we can use as unique IDs to reference prims, e.g., prim.prim_path, prim.name, prim.handle, etc.
+                prims that we can use as unique IDs to reference prims, e.g., prim.prim_path, prim.name, etc.
         """
         return ["name", "prim_path", "uuid"]
 
@@ -173,11 +180,11 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
                 name="skybox",
                 light_type="Dome",
                 intensity=1500,
+                fixed_base=True,
             )
             og.sim.import_object(self._skybox, register=False)
-            light_prim = self._skybox.light_link.prim
-            light_prim.GetAttribute("color").Set(Gf.Vec3f(1.07, 0.85, 0.61))
-            light_prim.GetAttribute("texture:file").Set(Sdf.AssetPath(m.DEFAULT_SKYBOX_TEXTURE))
+            self._skybox.color = (1.07, 0.85, 0.61)
+            self._skybox.texture_file_path = m.DEFAULT_SKYBOX_TEXTURE
 
     def _load_objects_from_scene_file(self):
         """
@@ -189,12 +196,22 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             scene_info = json.load(f)
         init_info = scene_info["objects_info"]["init_info"]
         init_state = scene_info["state"]["object_registry"]
+        init_systems = scene_info["state"]["system_registry"].keys()
+        task_metadata = {}
+        try:
+            task_metadata = scene_info["metadata"]["task"]
+        except:
+            pass
+
+        # Create desired systems
+        for system_name in init_systems:
+            get_system(system_name)
 
         # Iterate over all scene info, and instantiate object classes linked to the objects found on the stage
         # accordingly
         for obj_name, obj_info in init_info.items():
             # Check whether we should load the object or not
-            if not self._should_load_object(obj_info=obj_info):
+            if not self._should_load_object(obj_info=obj_info, task_metadata=task_metadata):
                 continue
             # Create object class instance
             obj = create_object_from_init_info(obj_info)
@@ -206,7 +223,18 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
                 orientation=init_state[obj_name]["root_link"]["ori"],
             )
 
-    def _should_load_object(self, obj_info):
+    def _load_metadata_from_scene_file(self):
+        """
+        Loads metadata from self.scene_file and stores it within the world prim's CustomData
+        """
+        with open(self.scene_file, "r") as f:
+            scene_info = json.load(f)
+
+        # Write the metadata
+        for key, data in scene_info.get("metadata", dict()).items():
+            og.sim.write_metadata(key=key, data=data)
+
+    def _should_load_object(self, obj_info, task_metadata):
         """
         Helper function to check whether we should load an object given its init_info. Useful for potentially filtering
         objects based on, e.g., their category, size, etc.
@@ -241,8 +269,10 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         self._load()
 
         # If we have any scene file specified, use it to load the objects within it and also update the initial state
+        # and metadata
         if self.scene_file is not None:
             self._load_objects_from_scene_file()
+            self._load_metadata_from_scene_file()
 
         # We're now loaded
         self._loaded = True
@@ -251,17 +281,12 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         if not og.sim.is_stopped():
             og.sim.stop()
 
-    def clear_systems(self):
-        # Clears systems so they can be re-initialized
-        for system in self.systems:
-            system.clear()
-
     def clear(self):
         """
         Clears any internal state before the scene is destroyed
         """
-        # Must clear all systems
-        self.clear_systems()
+        # Clears systems so they can be re-initialized
+        clear_all_systems()
 
     def _initialize(self):
         """
@@ -398,8 +423,9 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         # let scene._load() load the object when called later on.
         prim = obj.load()
 
-        # If this object is fixed, disable collisions between the fixed links of the fixed objects
-        if obj.fixed_base:
+        # If this object is fixed and is NOT an agent, disable collisions between the fixed links of the fixed objects
+        # This is to account for cases such as Tiago, which has a fixed base which is needed for its global base joints
+        if obj.fixed_base and obj.category != robot_macros.ROBOT_CATEGORY:
             # TODO: Remove building hotfix once asset collision meshes are fixed!!
             building_categories = {"walls", "floors", "ceilings"}
             for fixed_obj in self.fixed_objects.values():
@@ -446,7 +472,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         # Reset the states of all objects (including robots), including (non-)kinematic states and internal variables.
         assert self._initial_state is not None
         self.load_state(self._initial_state)
-        og.sim.step()
+        og.sim.step_physics()
 
     @property
     def n_floors(self):
@@ -469,10 +495,10 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
     def fixed_objects(self):
         """
         Returns:
-            dict: Keyword-mapped objects that are fixed in the scene. Maps object name to their object class instances
-                (DatasetObject)
+            dict: Keyword-mapped objects that are fixed in the scene, IGNORING any robots.
+                Maps object name to their object class instances (DatasetObject)
         """
-        return {obj.name: obj for obj in self.object_registry("fixed_base", True, default_val=[])}
+        return {obj.name: obj for obj in self.object_registry("fixed_base", True, default_val=[]) if obj.category != robot_macros.ROBOT_CATEGORY}
 
     def get_random_floor(self):
         """
@@ -484,13 +510,16 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         return np.random.randint(0, self.n_floors)
 
-    def get_random_point(self, floor=None):
+    def get_random_point(self, floor=None, reference_point=None, robot=None):
         """
         Sample a random point on the given floor number. If not given, sample a random floor number.
-        Should be implemented by subclass.
+        If @reference_point is given, sample a point in the same connected component as the previous point.
 
         Args:
             floor (None or int): floor number. None means the floor is randomly sampled
+                                 Warning: if @reference_point is given, @floor must be given; 
+                                          otherwise, this would lead to undefined behavior
+            reference_point (3-array): (x,y,z) if given, sample a point in the same connected component as this point
 
         Returns:
             2-tuple:
@@ -499,7 +528,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         raise NotImplementedError()
 
-    def get_shortest_path(self, floor, source_world, target_world, entire_path=False):
+    def get_shortest_path(self, floor, source_world, target_world, entire_path=False, robot=None):
         """
         Get the shortest path from one point to another point.
 
@@ -508,6 +537,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             source_world (2-array): (x,y) 2D source location in world reference frame (metric)
             target_world (2-array): (x,y) 2D target location in world reference frame (metric)
             entire_path (bool): whether to return the entire path
+            robot (None or BaseRobot): if given, erode the traversability map to account for the robot's size
 
         Returns:
             2-tuple:
@@ -573,11 +603,15 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             name=plane.name,
         )
 
-    def update_initial_state(self):
+    def update_initial_state(self, state=None):
         """
         Updates the initial state for this scene (which the scene will get reset to upon calling reset())
+
+        Args:
+            state (None or dict): If specified, the state to set internally. Otherwise, will set the initial state to
+                be the current state
         """
-        self._initial_state = self.dump_state(serialized=False)
+        self._initial_state = self.dump_state(serialized=False) if state is None else state
 
     def update_objects_info(self):
         """

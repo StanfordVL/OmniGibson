@@ -1,8 +1,10 @@
 import os
+from omnigibson.robots.robot_base import REGISTERED_ROBOTS
 from omnigibson.robots.robot_base import m as robot_macros
 from omnigibson.scenes.traversable_scene import TraversableScene
 from omnigibson.maps.segmentation_map import SegmentationMap
 from omnigibson.utils.asset_utils import get_og_scene_path
+from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
@@ -21,15 +23,15 @@ class InteractiveTraversableScene(TraversableScene):
         scene_instance=None,
         scene_file=None,
         trav_map_resolution=0.1,
-        trav_map_erosion=2,
+        default_erosion_radius=0.0,
         trav_map_with_objects=True,
-        build_graph=True,
         num_waypoints=10,
         waypoint_resolution=0.2,
         load_object_categories=None,
         not_load_object_categories=None,
         load_room_types=None,
         load_room_instances=None,
+        load_task_relevant_only=False,
         seg_map_resolution=0.1,
         include_robots=True,
     ):
@@ -41,15 +43,15 @@ class InteractiveTraversableScene(TraversableScene):
             scene_file (None or str): If specified, full path of JSON file to load (with .json).
                 This will override scene_instance and scene_model!
             trav_map_resolution (float): traversability map resolution
-            trav_map_erosion (float): erosion radius of traversability areas, should be robot footprint radius
+            default_erosion_radius (float): default map erosion radius in meters
             trav_map_with_objects (bool): whether to use objects or not when constructing graph
-            build_graph (bool): build connectivity graph
             num_waypoints (int): number of way points returned
             waypoint_resolution (float): resolution of adjacent way points
             load_object_categories (None or list): if specified, only load these object categories into the scene
             not_load_object_categories (None or list): if specified, do not load these object categories into the scene
             load_room_types (None or list): only load objects in these room types into the scene
             load_room_instances (None or list): if specified, only load objects in these room instances into the scene
+            load_task_relevant_only (bool): Whether only task relevant objects (and building structure) should be loaded
             seg_map_resolution (float): room segmentation map resolution
             include_robots (bool): whether to also include the robot(s) defined in the scene
         """
@@ -64,6 +66,7 @@ class InteractiveTraversableScene(TraversableScene):
         self.load_object_categories = None
         self.not_load_object_categories = None
         self.load_room_instances = None
+        self.load_task_relevant_only = load_task_relevant_only
 
         # Get scene information
         if scene_file is None:
@@ -85,9 +88,8 @@ class InteractiveTraversableScene(TraversableScene):
             scene_model=scene_model,
             scene_file=scene_file,
             trav_map_resolution=trav_map_resolution,
-            trav_map_erosion=trav_map_erosion,
+            default_erosion_radius=default_erosion_radius,
             trav_map_with_objects=trav_map_with_objects,
-            build_graph=build_graph,
             num_waypoints=num_waypoints,
             waypoint_resolution=waypoint_resolution,
             use_floor_plane=False,
@@ -157,24 +159,37 @@ class InteractiveTraversableScene(TraversableScene):
 
         # Load the traversability map if we have the connectivity graph
         maps_path = os.path.join(self.scene_dir, "layout")
-        if self.has_connectivity_graph:
-            self._trav_map.load_map(maps_path)
+        self._trav_map.load_map(maps_path)
 
-    def _should_load_object(self, obj_info):
+    def _should_load_object(self, obj_info, task_metadata):
+        name = obj_info["args"]["name"]
         category = obj_info["args"].get("category", "object")
-        in_rooms = obj_info["args"].get("in_rooms", [])
+        in_rooms = obj_info["args"].get("in_rooms", None)
+
+        if isinstance(in_rooms, str):
+            assert "," not in in_rooms
+        in_rooms = [in_rooms] if isinstance(in_rooms, str) else in_rooms
 
         # Do not load these object categories (can blacklist building structures as well)
         not_blacklisted = self.not_load_object_categories is None or category not in self.not_load_object_categories
 
         # Only load these object categories (no need to white list building structures)
-        whitelisted = self.load_object_categories is None or category in self.load_object_categories
+        task_relevant_names = set(task_metadata["inst_to_name"].values()) if "inst_to_name" in task_metadata else set()
+        is_task_relevant = name in task_relevant_names or category in STRUCTURE_CATEGORIES
+        whitelisted = (
+            # Either no whitelisting-only mode is on
+            (self.load_object_categories is None and not self.load_task_relevant_only) or
+            # Or the object is in the whitelist
+            (self.load_object_categories is not None and category in self.load_object_categories) or
+            # Or it's in the task relevant list
+            (self.load_task_relevant_only and is_task_relevant)
+        )
 
         # This object is not located in one of the selected rooms, skip
-        valid_room = self.load_room_instances is None or len(set(self.load_room_instances) & set(in_rooms)) >= 0
+        valid_room = self.load_room_instances is None or len(set(self.load_room_instances) & set(in_rooms)) > 0
 
         # Check whether this is an agent and we allow agents
-        agent_ok = self.include_robots or category != robot_macros.ROBOT_CATEGORY
+        agent_ok = self.include_robots or obj_info["class_name"] not in REGISTERED_ROBOTS
 
         # We only load this model if all the above conditions are met
         return not_blacklisted and whitelisted and valid_room and agent_ok

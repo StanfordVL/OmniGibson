@@ -371,7 +371,6 @@ def mat2pose(hmat):
 
     Returns:
         2-tuple:
-
             - (np.array) (x,y,z) position array in cartesian coordinates
             - (np.array) (x,y,z,w) orientation array in quaternion form
     """
@@ -468,10 +467,10 @@ def quat2mat(quaternion):
     Converts given quaternion to matrix.
 
     Args:
-        quaternion (np.array): (x,y,z,w) vec4 float angles
+        quaternion (np.array): (..., 4) (x,y,z,w) float quaternion angles
 
     Returns:
-        np.array: 3x3 rotation matrix
+        np.array: (..., 3, 3) rotation matrix
     """
     return R.from_quat(quaternion).as_matrix()
 
@@ -500,14 +499,6 @@ def axisangle2quat(vec):
     Returns:
         np.array: (x,y,z,w) vec4 float angles
     """
-    # Grab angle
-    angle = np.linalg.norm(vec)
-
-    # handle zero-rotation case
-    if math.isclose(angle, 0.0):
-        return np.array([0.0, 0.0, 0.0, 1.0])
-
-    # otherwise convert like normal
     return R.from_rotvec(vec).as_quat()
 
 
@@ -541,7 +532,6 @@ def quat2euler(quat):
         AssertionError: [Invalid input shape]
     """
     return R.from_quat(quat).as_euler("xyz")
-
 
 def pose_in_A_to_pose_in_B(pose_A, pose_A_in_B):
     """
@@ -604,6 +594,11 @@ def pose_transform(pos1, quat1, pos0, quat0):
         quat1: (x,y,z,w) orientation to transform
         pos0: (x,y,z) initial position
         quat0: (x,y,z,w) initial orientation
+
+    Returns:
+        2-tuple:
+            - (np.array) (x,y,z) position array in cartesian coordinates
+            - (np.array) (x,y,z,w) orientation array in quaternion form
     """
     # Get poses
     mat0 = pose2mat((pos0, quat0))
@@ -611,6 +606,25 @@ def pose_transform(pos1, quat1, pos0, quat0):
 
     # Multiply and convert back to pos, quat
     return mat2pose(mat1 @ mat0)
+
+def invert_pose_transform(pos, quat):
+    """
+    Inverts a pose transform
+
+    Args:
+        pos: (x,y,z) position to transform
+        quat: (x,y,z,w) orientation to transform
+
+    Returns:
+        2-tuple:
+            - (np.array) (x,y,z) position array in cartesian coordinates
+            - (np.array) (x,y,z,w) orientation array in quaternion form
+    """
+    # Get pose
+    mat = pose2mat((pos, quat))
+
+    # Invert pose and convert back to pos, quat
+    return mat2pose(pose_inv(mat))
 
 
 def relative_pose_transform(pos1, quat1, pos0, quat0):
@@ -624,6 +638,11 @@ def relative_pose_transform(pos1, quat1, pos0, quat0):
         quat1: (x,y,z,w) orientation to transform
         pos0: (x,y,z) initial position
         quat0: (x,y,z,w) initial orientation
+
+    Returns:
+        2-tuple:
+            - (np.array) (x,y,z) position array in cartesian coordinates
+            - (np.array) (x,y,z,w) orientation array in quaternion form
     """
     # Get poses
     mat0 = pose2mat((pos0, quat0))
@@ -996,15 +1015,36 @@ def vecs2axisangle(vec0, vec1):
     Converts the angle from unnormalized 3D vectors @vec0 to @vec1 into an axis-angle representation of the angle
 
     Args:
-        vec0 (3-array): (x,y,z) 3D vector, possibly unnormalized
-        vec1 (3-array): (x,y,z) 3D vector, possibly unnormalized
+        vec0 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
+        vec1 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
     """
     # Normalize vectors
-    vec0 = normalize(vec0)
-    vec1 = normalize(vec1)
+    vec0 = normalize(vec0, axis=-1)
+    vec1 = normalize(vec1, axis=-1)
 
     # Get cross product for direction of angle, and multiply by arcos of the dot product which is the angle
-    return np.cross(vec0, vec1) * np.arccos(np.dot(vec0, vec1))
+    return np.cross(vec0, vec1) * np.arccos((vec0 * vec1).sum(-1, keepdims=True))
+
+
+def vecs2quat(vec0, vec1, normalized=False):
+    """
+    Converts the angle from unnormalized 3D vectors @vec0 to @vec1 into a quaternion representation of the angle
+
+    Args:
+        vec0 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
+        vec1 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
+        normalized (bool): If True, @vec0 and @vec1 are assumed to already be normalized and we will skip the
+            normalization step (more efficient)
+    """
+    # Normalize vectors if requested
+    if not normalized:
+        vec0 = normalize(vec0, axis=-1)
+        vec1 = normalize(vec1, axis=-1)
+
+    # Half-way Quaternion Solution -- see https://stackoverflow.com/a/11741520
+    cos_theta = np.sum(vec0 * vec1, axis=-1, keepdims=True)
+    quat_unnormalized = np.where(cos_theta == -1, np.array([1.0, 0, 0, 0]), np.concatenate([np.cross(vec0, vec1), 1 + cos_theta], axis=-1))
+    return quat_unnormalized / np.linalg.norm(quat_unnormalized, axis=-1, keepdims=True)
 
 
 def l2_distance(v1, v2):
@@ -1064,7 +1104,8 @@ def anorm(x, axis=None, keepdims=False):
 
 def normalize(v, axis=None, eps=1e-10):
     """L2 Normalize along specified axes."""
-    return v / max(anorm(v, axis=axis, keepdims=True), eps)
+    norm = anorm(v, axis=axis, keepdims=True)
+    return v / np.where(norm < eps, eps, norm)
 
 
 def cartesian_to_polar(x, y):
@@ -1081,3 +1122,30 @@ def deg2rad(deg):
 def rad2deg(rad):
     return rad * 180. / np.pi
 
+
+def check_quat_right_angle(quat, atol=5e-2):
+    """
+    Check by making sure the quaternion is some permutation of +/- (1, 0, 0, 0),
+    +/- (0.707, 0.707, 0, 0), or +/- (0.5, 0.5, 0.5, 0.5)
+    Because orientations are all normalized (same L2-norm), every orientation should have a unique L1-norm
+    So we check the L1-norm of the absolute value of the orientation as a proxy for verifying these values
+
+    Args:
+        quat (4-array): (x,y,z,w) quaternion orientation to check
+        atol (float): Absolute tolerance permitted
+
+    Returns:
+        bool: Whether the quaternion is a right angle or not
+    """
+    return np.any(np.isclose(np.abs(quat).sum(), np.array([1.0, 1.414, 2.0]), atol=atol))
+
+
+def z_angle_from_quat(quat):
+    """Get the angle around the Z axis produced by the quaternion."""
+    rotated_X_axis = R.from_quat(quat).apply([1, 0, 0])
+    return np.arctan2(rotated_X_axis[1], rotated_X_axis[0])
+
+
+def z_rotation_from_quat(quat):
+    """Get the quaternion for the rotation around the Z axis produced by the quaternion."""
+    return R.from_euler("z", z_angle_from_quat(quat)).as_quat()

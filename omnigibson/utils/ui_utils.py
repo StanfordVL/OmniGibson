@@ -15,9 +15,14 @@ import omnigibson.utils.transform_utils as T
 from scipy.spatial.transform import Rotation as R
 from scipy.interpolate import CubicSpline
 from scipy.integrate import quad
-import omni
-import omni.log
-import carb
+
+# Attempt to import omni, it may not always be necessary here (e.g: when we download datasets) so we catch the import failure explicitly
+try:
+    import omni
+    import omni.log
+    import carb
+except ModuleNotFoundError:
+    print("Could not find omni or carb, skipping import")
 import random
 import imageio
 from IPython import embed
@@ -265,6 +270,12 @@ class CameraMover:
         self._input = carb.input.acquire_input_interface()
         self._keyboard = self._appwindow.get_keyboard()
         self._sub_keyboard = self._input.subscribe_to_keyboard_events(self._keyboard, self._sub_keyboard_event)
+
+    def clear(self):
+        """
+        Clears this camera mover. After this is called, the camera mover cannot be used.
+        """
+        self._input.unsubscribe_to_keyboard_events(self._keyboard, self._sub_keyboard)
 
     def set_save_dir(self, save_dir):
         """
@@ -546,6 +557,7 @@ class KeyboardRobotController:
         self.current_keypress = None    # Current key that is being pressed
         self.active_action = None       # Current action information based on the current keypress
         self.toggling_gripper = False   # Whether we should toggle the gripper during the next action
+        self.custom_keymapping = None   # Dictionary mapping custom keys to custom callback functions / info
 
         # Populate the keypress mapping dictionary
         self.populate_keypress_mapping()
@@ -562,6 +574,20 @@ class KeyboardRobotController:
         keyboard = appwindow.get_keyboard()
         sub_keyboard = input_interface.subscribe_to_keyboard_events(keyboard, self.keyboard_event_handler)
 
+    def register_custom_keymapping(self, key, description, callback_fn):
+        """
+        Register a custom keymapping with corresponding callback function for this keyboard controller.
+        Note that this will automatically override any pre-existing callback that existed for that key.
+
+        Args:
+            key (carb.input.KeyboardInput): Key to map to callback function
+            description (str): Description for the callback function
+            callback_fn (function): Callback function, should have signature:
+
+                callback_fn() -> None
+        """
+        self.custom_keymapping[key] = {"description": description, "callback": callback_fn}
+
     def generate_ik_keypress_mapping(self, controller_info):
         """
         Generates a dictionary for keypress mappings for IK control, based on the inputted @controller_info
@@ -569,6 +595,34 @@ class KeyboardRobotController:
         Args:
             controller_info (dict): Dictionary of controller information for the specific robot arm to control
                 with IK
+
+        Returns:
+            dict: Populated keypress mappings for IK to control the specified controller
+        """
+        mapping = {}
+
+        mapping[carb.input.KeyboardInput.UP] = {"idx": controller_info["start_idx"] + 0, "val": 0.5}
+        mapping[carb.input.KeyboardInput.DOWN] = {"idx": controller_info["start_idx"] + 0, "val": -0.5}
+        mapping[carb.input.KeyboardInput.RIGHT] = {"idx": controller_info["start_idx"] + 1, "val": -0.5}
+        mapping[carb.input.KeyboardInput.LEFT] = {"idx": controller_info["start_idx"] + 1, "val": 0.5}
+        mapping[carb.input.KeyboardInput.P] = {"idx": controller_info["start_idx"] + 2, "val": 0.5}
+        mapping[carb.input.KeyboardInput.SEMICOLON] = {"idx": controller_info["start_idx"] + 2, "val": -0.5}
+        mapping[carb.input.KeyboardInput.N] = {"idx": controller_info["start_idx"] + 3, "val": 0.5}
+        mapping[carb.input.KeyboardInput.B] = {"idx": controller_info["start_idx"] + 3, "val": -0.5}
+        mapping[carb.input.KeyboardInput.O] = {"idx": controller_info["start_idx"] + 4, "val": 0.5}
+        mapping[carb.input.KeyboardInput.U] = {"idx": controller_info["start_idx"] + 4, "val": -0.5}
+        mapping[carb.input.KeyboardInput.V] = {"idx": controller_info["start_idx"] + 5, "val": 0.5}
+        mapping[carb.input.KeyboardInput.C] = {"idx": controller_info["start_idx"] + 5, "val": -0.5}
+
+        return mapping
+
+    def generate_osc_keypress_mapping(self, controller_info):
+        """
+        Generates a dictionary for keypress mappings for OSC control, based on the inputted @controller_info
+
+        Args:
+            controller_info (dict): Dictionary of controller information for the specific robot arm to control
+                with OSC
 
         Returns:
             dict: Populated keypress mappings for IK to control the specified controller
@@ -603,6 +657,7 @@ class KeyboardRobotController:
         self.joint_control_idx = []
         self.gripper_direction = {}
         self.persistent_gripper_action = {}
+        self.custom_keymapping = {}
 
         # Add mapping for joint control directions (no index because these are inferred at runtime)
         self.keypress_mapping[carb.input.KeyboardInput.RIGHT_BRACKET] = {"idx": None, "val": 0.1}
@@ -623,6 +678,9 @@ class KeyboardRobotController:
             elif info["name"] == "InverseKinematicsController":
                 self.ik_arms.append(component)
                 self.keypress_mapping.update(self.generate_ik_keypress_mapping(controller_info=info))
+            elif info["name"] == "OperationalSpaceController":
+                self.ik_arms.append(component)
+                self.keypress_mapping.update(self.generate_osc_keypress_mapping(controller_info=info))
             elif info["name"] == "MultiFingerGripperController":
                 if info["command_dim"] > 1:
                     for i in range(info["command_dim"]):
@@ -669,9 +727,13 @@ class KeyboardRobotController:
                     else min(len(self.binary_grippers) - 1, self.active_gripper_idx + 1)
                 print(f"Now controlling gripper {self.binary_grippers[self.active_gripper_idx]} with binary toggling")
 
-            elif event.input == carb.input.KeyboardInput.R:
-                # Render the sensors from the robot's camera and lidar
+            elif event.input == carb.input.KeyboardInput.M:
+                # Render the sensor modalities from the robot's camera and lidar
                 self.robot.visualize_sensors()
+
+            elif event.input in self.custom_keymapping:
+                # Run custom press
+                self.custom_keymapping[event.input]["callback"]()
 
             elif event.input == carb.input.KeyboardInput.ESCAPE:
                 # Terminate immediately
@@ -752,8 +814,7 @@ class KeyboardRobotController:
         # Return action
         return action
 
-    @staticmethod
-    def print_keyboard_teleop_info():
+    def print_keyboard_teleop_info(self):
         """
         Prints out relevant information for teleop controlling a robot
         """
@@ -789,7 +850,13 @@ class KeyboardRobotController:
         print_command("t", "toggle gripper (open/close)")
         print()
         print("Sensor Rendering")
-        print_command("r", "render the onboard sensors (RGB, Depth, Normals, Instance Segmentation, Occupancy Map")
+        print_command("m", "render the onboard sensor modalities (RGB, Depth, Normals, Instance Segmentation, Occupancy Map)")
         print()
+        if len(self.custom_keymapping) > 0:
+            print("Custom Keymappings")
+            for key, info in self.custom_keymapping.items():
+                key_str = key.__str__().split(".")[-1].lower()
+                print_command(key_str, info["description"])
+            print()
         print("*" * 30)
         print()

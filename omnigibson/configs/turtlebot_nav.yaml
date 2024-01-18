@@ -1,5 +1,13 @@
 env:
+  action_frequency: 60                  # (int): environment executes action at the action_frequency rate
+  physics_frequency: 60                 # (int): physics frequency (1 / physics_timestep for physx)
+  device: null                          # (None or str): specifies the device to be used if running on the gpu with torch backend
+  automatic_reset: false                # (bool): whether to automatic reset after an episode finishes
+  flatten_action_space: false           # (bool): whether to flatten the action space as a sinle 1D-array
+  flatten_obs_space: false              # (bool): whether the observation space should be flattened when generated
+  use_external_obs: false               # (bool): Whether to use external observations or not
   initial_pos_z_offset: 0.1
+  external_sensors: null                # (None or list): If specified, list of sensor configurations for external sensors to add. Should specify sensor "type" and any additional kwargs to instantiate the sensor. Each entry should be the kwargs passed to @create_sensor, in addition to position, orientation
 
 render:
   viewer_width: 1280
@@ -9,9 +17,8 @@ scene:
   type: InteractiveTraversableScene
   scene_model: Rs_int
   trav_map_resolution: 0.1
-  trav_map_erosion: 2
+  default_erosion_radius: 0.0
   trav_map_with_objects: true
-  build_graph: true
   num_waypoints: 1
   waypoint_resolution: 0.2
   load_object_categories: null
@@ -29,6 +36,15 @@ robots:
     self_collision: false
     action_normalize: true
     action_type: continuous
+    sensor_config:
+      VisionSensor:
+        sensor_kwargs:
+          image_height: 128
+          image_width: 128
+      ScanSensor:
+          sensor_kwargs:
+            min_range: 0.05
+            max_range: 10.0
     controller_config:
       base:
         name: DifferentialDriveController

@@ -2,15 +2,14 @@ from abc import abstractmethod
 from copy import deepcopy
 import numpy as np
 import matplotlib.pyplot as plt
-from omnigibson.macros import gm, create_module_macros
+from omnigibson.macros import create_module_macros
 from omnigibson.sensors import create_sensor, SENSOR_PRIMS_TO_SENSOR_CLS, ALL_SENSOR_MODALITIES, VisionSensor, ScanSensor
 from omnigibson.objects.usd_object import USDObject
 from omnigibson.objects.controllable_object import ControllableObject
 from omnigibson.utils.gym_utils import GymObservable
-from omnigibson.utils.python_utils import classproperty
+from omnigibson.utils.python_utils import classproperty, merge_nested_dicts
 from omnigibson.utils.vision_utils import segmentation_to_rgb
 from omnigibson.utils.constants import PrimType
-from pxr import PhysxSchema
 
 # Global dicts that will contain mappings
 REGISTERED_ROBOTS = dict()
@@ -59,6 +58,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         # Unique to this class
         obs_modalities="all",
         proprio_obs="default",
+        sensor_config=None,
 
         **kwargs,
     ):
@@ -84,7 +84,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                 a dict in the form of {ability: {param: value}} containing object abilities and parameters to pass to
                 the object state instance constructor.
             control_freq (float): control frequency (in Hz) at which to control the object. If set to be None,
-                simulator.import_object will automatically set the control frequency to be 1 / render_timestep by default.
+                simulator.import_object will automatically set the control frequency to be at the render frequency by default.
             controller_config (None or dict): nested dictionary mapping controller name(s) to specific controller
                 configurations for this object. This will override any default values specified by this class.
             action_type (str): one of {discrete, continuous} - what type of action space to use
@@ -95,10 +95,14 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             obs_modalities (str or list of str): Observation modalities to use for this robot. Default is "all", which
                 corresponds to all modalities being used.
                 Otherwise, valid options should be part of omnigibson.sensors.ALL_SENSOR_MODALITIES.
+                Note: If @sensor_config explicitly specifies `modalities` for a given sensor class, it will
+                    override any values specified from @obs_modalities!
             proprio_obs (str or list of str): proprioception observation key(s) to use for generating proprioceptive
                 observations. If str, should be exactly "default" -- this results in the default proprioception
                 observations being used, as defined by self.default_proprio_obs. See self._get_proprioception_dict
                 for valid key choices
+            sensor_config (None or dict): nested dictionary mapping sensor class name(s) to specific sensor
+                configurations for this object. This will override any default values specified by this class.
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
@@ -106,6 +110,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         self._obs_modalities = obs_modalities if obs_modalities == "all" else \
             {obs_modalities} if isinstance(obs_modalities, str) else set(obs_modalities)              # this will get updated later when we fill in our sensors
         self._proprio_obs = self.default_proprio_obs if proprio_obs == "default" else list(proprio_obs)
+        self._sensor_config = sensor_config
 
         # Process abilities
         robot_abilities = {"robot": {}}
@@ -148,34 +153,8 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         # Run super post load first
         super()._post_load()
 
-        # Search for any sensors this robot might have attached to any of its links
-        self._sensors = dict()
-        obs_modalities = set()
-        for link_name, link in self._links.items():
-            # Search through all children prims and see if we find any sensor
-            for prim in link.prim.GetChildren():
-                prim_type = prim.GetPrimTypeInfo().GetTypeName()
-                if prim_type in SENSOR_PRIMS_TO_SENSOR_CLS:
-                    # Infer what obs modalities to use for this sensor
-                    sensor_cls = SENSOR_PRIMS_TO_SENSOR_CLS[prim_type]
-                    modalities = sensor_cls.all_modalities if self._obs_modalities == "all" else \
-                        sensor_cls.all_modalities.intersection(self._obs_modalities)
-                    obs_modalities = obs_modalities.union(modalities)
-                    # Create the sensor and store it internally
-                    sensor = create_sensor(
-                        sensor_type=prim_type,
-                        prim_path=str(prim.GetPrimPath()),
-                        name=f"{self.name}:{link_name}_{prim_type}_sensor",
-                        modalities=modalities,
-                    )
-                    self._sensors[sensor.name] = sensor
-
-        # Since proprioception isn't an actual sensor, we need to possibly manually add it here as well
-        if self._obs_modalities == "all":
-            obs_modalities.add("proprio")
-
-        # Update our overall obs modalities
-        self._obs_modalities = obs_modalities
+        # Load the sensors
+        self._load_sensors()
 
     def _initialize(self):
         # Run super first
@@ -191,28 +170,76 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         # Validate this robot configuration
         self._validate_configuration()
 
+        self._reset_joint_pos_aabb_extent = self.aabb_extent
+
+    def _load_sensors(self):
+        """
+        Loads sensor(s) to retrieve observations from this object.
+        Stores created sensors as dictionary mapping sensor names to specific sensor
+        instances used by this object.
+        """
+        # Populate sensor config
+        self._sensor_config = self._generate_sensor_config(custom_config=self._sensor_config)
+
+        # Search for any sensors this robot might have attached to any of its links
+        self._sensors = dict()
+        obs_modalities = set()
+        for link_name, link in self._links.items():
+            # Search through all children prims and see if we find any sensor
+            for prim in link.prim.GetChildren():
+                prim_type = prim.GetPrimTypeInfo().GetTypeName()
+                if prim_type in SENSOR_PRIMS_TO_SENSOR_CLS:
+                    # Infer what obs modalities to use for this sensor
+                    sensor_cls = SENSOR_PRIMS_TO_SENSOR_CLS[prim_type]
+                    sensor_kwargs = self._sensor_config[sensor_cls.__name__]
+                    if "modalities" not in sensor_kwargs:
+                        sensor_kwargs["modalities"] = sensor_cls.all_modalities if self._obs_modalities == "all" else \
+                            sensor_cls.all_modalities.intersection(self._obs_modalities)
+                    obs_modalities = obs_modalities.union(sensor_kwargs["modalities"])
+                    # Create the sensor and store it internally
+                    sensor = create_sensor(
+                        sensor_type=prim_type,
+                        prim_path=str(prim.GetPrimPath()),
+                        name=f"{self.name}:{link_name}_{prim_type}_sensor",
+                        **sensor_kwargs,
+                    )
+                    self._sensors[sensor.name] = sensor
+
+        # Since proprioception isn't an actual sensor, we need to possibly manually add it here as well
+        if self._obs_modalities == "all" or "proprio" in self._obs_modalities:
+            obs_modalities.add("proprio")
+
+        # Update our overall obs modalities
+        self._obs_modalities = obs_modalities
+
+    def _generate_sensor_config(self, custom_config=None):
+        """
+        Generates a fully-populated sensor config, overriding any default values with the corresponding values
+        specified in @custom_config
+
+        Args:
+            custom_config (None or Dict[str, ...]): nested dictionary mapping sensor class name(s) to specific custom
+                sensor configurations for this object. This will override any default values specified by this class
+
+        Returns:
+            dict: Fully-populated nested dictionary mapping sensor class name(s) to specific sensor configurations
+                for this object
+        """
+        sensor_config = {} if custom_config is None else deepcopy(custom_config)
+
+        # Merge the sensor dictionaries
+        sensor_config = merge_nested_dicts(
+            base_dict=self._default_sensor_config,
+            extra_dict=sensor_config,
+        )
+
+        return sensor_config
+
     def _validate_configuration(self):
         """
         Run any needed sanity checks to make sure this robot was created correctly.
         """
         pass
-
-    def can_toggle(self, toggle_position, toggle_distance_threshold):
-        """
-        Returns True if the part of the robot that can toggle a toggleable is within the given range of a
-        point corresponding to a toggle marker
-        by default, we assume robot cannot toggle toggle markers
-
-        Args:
-            toggle_position (3-array): (x,y,z) cartesian position values as a reference point for evaluating
-                whether a toggle can occur
-            toggle_distance_threshold (float): distance value below which a toggle is allowed
-
-        Returns:
-            bool: True if the part of the robot that can toggle a toggleable is within the given range of a
-                point corresponding to a toggle marker. By default, we assume robot cannot toggle toggle markers
-        """
-        return False
 
     def get_obs(self):
         """
@@ -227,9 +254,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         # and grab their observations, processing them into a flat dict
         obs_dict = dict()
         for sensor_name, sensor in self._sensors.items():
-            sensor_obs = sensor.get_obs()
-            for obs_modality, obs in sensor_obs.items():
-                obs_dict[f"{sensor_name}_{obs_modality}"] = obs
+            obs_dict[sensor_name] = sensor.get_obs()
 
         # Have to handle proprio separately since it's not an actual sensor
         if "proprio" in self._obs_modalities:
@@ -255,6 +280,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         joint_velocities = self.get_joint_velocities(normalized=False)
         joint_efforts = self.get_joint_efforts(normalized=False)
         pos, ori = self.get_position(), self.get_rpy()
+        ori_2d = self.get_2d_orientation()
         return dict(
             joint_qpos=joint_positions,
             joint_qpos_sin=np.sin(joint_positions),
@@ -264,6 +290,9 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             robot_pos=pos,
             robot_ori_cos=np.cos(ori),
             robot_ori_sin=np.sin(ori),
+            robot_2d_ori=ori_2d,
+            robot_2d_ori_cos=np.cos(ori_2d),
+            robot_2d_ori_sin=np.sin(ori_2d),
             robot_lin_vel=self.get_linear_velocity(),
             robot_ang_vel=self.get_angular_velocity(),
         )
@@ -274,13 +303,11 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
 
         for sensor_name, sensor in self._sensors.items():
             # Load the sensor observation space
-            sensor_obs_space = sensor.load_observation_space()
-            for obs_modality, obs_modality_space in sensor_obs_space.items():
-                obs_space[f"{sensor_name}_{obs_modality}"] = obs_modality_space
+            obs_space[sensor_name] = sensor.load_observation_space()
 
         # Have to handle proprio separately since it's not an actual sensor
         if "proprio" in self._obs_modalities:
-            obs_space["proprio"] = self._build_obs_box_space(shape=(self.proprioception_dim,), low=-np.inf, high=np.inf)
+            obs_space["proprio"] = self._build_obs_box_space(shape=(self.proprioception_dim,), low=-np.inf, high=np.inf, dtype=np.float64)
 
         return obs_space
 
@@ -377,12 +404,34 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         plt.show()
 
     def remove(self):
+        """
+        Do NOT call this function directly to remove a prim - call og.sim.remove_prim(prim) for proper cleanup
+        """
         # Remove all sensors
         for sensor in self._sensors.values():
             sensor.remove()
 
         # Run super
         super().remove()
+    
+    @property
+    def reset_joint_pos_aabb_extent(self):
+        """
+        This is the aabb extent of the robot in the robot frame after resetting the joints.
+        Returns:
+            3-array: Axis-aligned bounding box extent of the robot base
+        """
+        return self._reset_joint_pos_aabb_extent
+
+    def teleop_data_to_action(self, teleop_data):
+        """
+        Generate action data from teleoperation data
+        Args:
+            teleop_data (TeleopData): teleoperation data
+        Returns:
+            np.ndarray: array of action data filled with update value
+        """
+        return np.zeros(self.action_dim)
 
     @property
     def sensors(self):
@@ -408,6 +457,70 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             int: Size of self.get_proprioception() vector
         """
         return len(self.get_proprioception())
+
+    @property
+    def _default_sensor_config(self):
+        """
+        Returns:
+            dict: default nested dictionary mapping sensor class name(s) to specific sensor
+                configurations for this object. See kwargs from omnigibson/sensors/__init__/create_sensor for more
+                details
+
+                Expected structure is as follows:
+                    SensorClassName1:
+                        modalities: ...
+                        enabled: ...
+                        noise_type: ...
+                        noise_kwargs:
+                            ...
+                        sensor_kwargs:
+                            ...
+                    SensorClassName2:
+                        modalities: ...
+                        enabled: ...
+                        noise_type: ...
+                        noise_kwargs:
+                            ...
+                        sensor_kwargs:
+                            ...
+                    ...
+        """
+        return {
+            "VisionSensor": {
+                "enabled": True,
+                "noise_type": None,
+                "noise_kwargs": None,
+                "sensor_kwargs": {
+                    "image_height": 128,
+                    "image_width": 128,
+                },
+            },
+            "ScanSensor": {
+                "enabled": True,
+                "noise_type": None,
+                "noise_kwargs": None,
+                "sensor_kwargs": {
+
+                    # Basic LIDAR kwargs
+                    "min_range": 0.05,
+                    "max_range": 10.0,
+                    "horizontal_fov": 360.0,
+                    "vertical_fov": 1.0,
+                    "yaw_offset": 0.0,
+                    "horizontal_resolution": 1.0,
+                    "vertical_resolution": 1.0,
+                    "rotation_rate": 0.0,
+                    "draw_points": False,
+                    "draw_lines": False,
+
+                    # Occupancy Grid kwargs
+                    "occupancy_grid_resolution": 128,
+                    "occupancy_grid_range": 5.0,
+                    "occupancy_grid_inner_radius": 0.5,
+                    "occupancy_grid_local_link": None,
+                },
+            },
+        }
 
     @property
     def default_proprio_obs(self):

@@ -28,12 +28,13 @@ def task_tester(task_type):
     # Make sure sim is stopped
     og.sim.stop()
 
-    # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth)
+    # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth) and no flatcache
     gm.ENABLE_OBJECT_STATES = True
     gm.USE_GPU_DYNAMICS = True
+    gm.ENABLE_FLATCACHE = False
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+    env = og.Environment(configs=cfg)
 
     env.reset()
     for _ in range(5):

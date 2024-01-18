@@ -5,13 +5,15 @@ import numpy as np
 from pxr.Sdf import ValueTypeNames as VT
 from pxr import Sdf, Gf
 
+from bddl.object_taxonomy import ObjectTaxonomy
+
 import omnigibson as og
-from omnigibson.macros import create_module_macros
+from omnigibson.macros import create_module_macros, gm
 from omnigibson.object_states.factory import (
     get_default_states,
-    get_object_state_instance,
     get_state_name,
     get_states_for_ability,
+    get_states_by_dependency_order,
     get_texture_change_states,
     get_fire_states,
     get_steam_states,
@@ -25,24 +27,14 @@ from omnigibson.object_states.particle_modifier import ParticleRemover
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.renderer_settings.renderer_settings import RendererSettings
 from omnigibson.utils.constants import PrimType, EmitterType
-from omnigibson.utils.usd_utils import BoundingBoxAPI
-from omnigibson.utils.python_utils import classproperty
+from omnigibson.utils.python_utils import classproperty, extract_class_init_kwargs_from_dict
 from omnigibson.object_states import Saturated
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
 
-
-# Optionally import bddl for object taxonomy.
-try:
-    from bddl.object_taxonomy import ObjectTaxonomy
-
-    OBJECT_TAXONOMY = ObjectTaxonomy()
-except ImportError:
-    print("BDDL could not be imported - object taxonomy / abilities will be unavailable.", file=sys.stderr)
-    OBJECT_TAXONOMY = None
-
+OBJECT_TAXONOMY = ObjectTaxonomy()
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -67,6 +59,7 @@ class StatefulObject(BaseObject):
             visible=True,
             fixed_base=False,
             visual_only=False,
+            kinematic_only=None,
             self_collisions=False,
             prim_type=PrimType.RIGID,
             load_config=None,
@@ -90,6 +83,9 @@ class StatefulObject(BaseObject):
             visible (bool): whether to render this object or not in the stage
             fixed_base (bool): whether to fix the base of this object or not
             visual_only (bool): Whether this object should be visual only (and not collide with any other objects)
+            kinematic_only (None or bool): Whether this object should be kinematic only (and not get affected by any
+                collisions). If None, then this value will be set to True if @fixed_base is True and some other criteria
+                are satisfied (see object_base.py post_load function), else False.
             self_collisions (bool): Whether to enable self collisions for this object
             prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
             load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
@@ -106,19 +102,16 @@ class StatefulObject(BaseObject):
         self._emitters = dict()
         self._visual_states = None
         self._current_texture_state = None
+        self._include_default_states = include_default_states
 
         # Load abilities from taxonomy if needed & possible
         if abilities is None:
             abilities = {}
-            if OBJECT_TAXONOMY is not None:
-                # TODO! Update!!
-                taxonomy_class = OBJECT_TAXONOMY.get_class_name_from_igibson_category(category)
-                if taxonomy_class is not None:
-                    abilities = OBJECT_TAXONOMY.get_abilities(taxonomy_class)
+            taxonomy_class = OBJECT_TAXONOMY.get_synset_from_category(category)
+            if taxonomy_class is not None:
+                abilities = OBJECT_TAXONOMY.get_abilities(taxonomy_class)
         assert isinstance(abilities, dict), "Object abilities must be in dictionary form."
-
         self._abilities = abilities
-        self.prepare_object_states(abilities=abilities, include_default_states=include_default_states)
 
         # Run super init
         super().__init__(
@@ -131,11 +124,20 @@ class StatefulObject(BaseObject):
             visible=visible,
             fixed_base=fixed_base,
             visual_only=visual_only,
+            kinematic_only=kinematic_only,
             self_collisions=self_collisions,
             prim_type=prim_type,
             load_config=load_config,
             **kwargs,
         )
+
+    def _post_load(self):
+        # Run super first
+        super()._post_load()
+
+        # Prepare the object states
+        self._states = {}
+        self.prepare_object_states()
 
     def _initialize(self):
         # Run super first
@@ -187,39 +189,52 @@ class StatefulObject(BaseObject):
         """
         return self._abilities
 
-    def prepare_object_states(self, abilities=None, include_default_states=True):
+    def prepare_object_states(self):
         """
         Prepare the state dictionary for an object by generating the appropriate
         object state instances.
 
         This uses the abilities of the object and the state dependency graph to
         find & instantiate all relevant states.
-
-        Args:
-            abilities (None or dict): If specified, dict in the form of {ability: {param: value}} containing
-                object abilities and parameters.
-            include_default_states (bool): whether to include the default object states from @get_default_states
         """
-        if abilities is None:
-            abilities = {}
+        states_info = {state_type: {"ability": None, "params": dict()} for state_type in get_default_states()} if \
+            self._include_default_states else dict()
 
-        state_types_and_params = [(state, {}) for state in get_default_states()] if include_default_states else []
+        # Map the state type (class) to ability name and params
+        if gm.ENABLE_OBJECT_STATES:
+            for ability, params in self._abilities.items():
+                for state_type in get_states_for_ability(ability):
+                    states_info[state_type] = {"ability": ability, "params": state_type.postprocess_ability_params(params)}
 
-        # Map the ability params to the states immediately imported by the abilities
-        for ability, params in abilities.items():
-            state_types_and_params.extend((state_name, params) for state_name in get_states_for_ability(ability))
-
-        # Add the dependencies into the list, too.
-        for state_type, _ in state_types_and_params:
-            # Add each state's dependencies, too. Note that only required dependencies are added.
+        # Add the dependencies into the list, too, and sort based on the dependency chain
+        # Must iterate over explicit tuple since dictionary changes size mid-iteration
+        for state_type in tuple(states_info.keys()):
+            # Add each state's dependencies, too. Note that only required dependencies are explicitly added, but both
+            # required AND optional dependencies are checked / sorted
             for dependency in state_type.get_dependencies():
-                if all(other_state != dependency for other_state, _ in state_types_and_params):
-                    state_types_and_params.append((dependency, {}))
+                if dependency not in states_info:
+                    states_info[dependency] = {"ability": None, "params": dict()}
 
-        # Now generate the states in topological order.
+        # Iterate over all sorted state types, generating the states in topological order.
         self._states = dict()
-        for state_type, params in reversed(state_types_and_params):
-            self._states[state_type] = get_object_state_instance(state_type, self, params)
+        for state_type in get_states_by_dependency_order(states=states_info):
+            # Skip over any types that are not in our info dict -- these correspond to optional dependencies
+            if state_type not in states_info:
+                continue
+
+            relevant_params = extract_class_init_kwargs_from_dict(cls=state_type, dic=states_info[state_type]["params"], copy=False)
+            compatible, reason = state_type.is_compatible(obj=self, **relevant_params)
+            if compatible:
+                self._states[state_type] = state_type(obj=self, **relevant_params)
+            else:
+                log.warning(f"State {state_type.__name__} is incompatible with obj {self.name}. Reason: {reason}")
+                # Remove the ability if it exists
+                # Note that the object may still have some of the states related to the desired ability. In this way,
+                # we guarantee that the existence of a certain ability in self.abilities means at ALL corresponding
+                # object state dependencies are met by the underlying object asset
+                ability = states_info[state_type]["ability"]
+                if ability in self._abilities:
+                    self._abilities.pop(ability)
 
     def _create_emitter_apis(self, emitter_type):
         """
@@ -402,7 +417,7 @@ class StatefulObject(BaseObject):
         the current albedo map by adding and scaling the values. See @self._update_albedo_value for details.
 
         Args:
-            object_state (BooleanState or None): the object state that the diffuse color should match to
+            object_state (BooleanStateMixin or None): the object state that the diffuse color should match to
         """
         for material in self.materials:
             self._update_albedo_value(object_state, material)
@@ -414,7 +429,7 @@ class StatefulObject(BaseObject):
         albedo_value = diffuse_tint * (albedo_value + albedo_add)
 
         Args:
-            object_state (BooleanState or None): the object state that the diffuse color should match to
+            object_state (BooleanStateMixin or None): the object state that the diffuse color should match to
             material (MaterialPrim): the material to use to update the albedo value
         """
         if object_state is None:
@@ -425,15 +440,21 @@ class StatefulObject(BaseObject):
             # Query the object state for the parameters
             albedo_add, diffuse_tint = object_state.get_texture_change_params()
 
-        if material.albedo_add != albedo_add:
-            material.albedo_add = albedo_add
+        if material.is_glass:
+            if not np.allclose(material.glass_color, diffuse_tint):
+                material.glass_color = diffuse_tint
 
-        if not np.allclose(material.diffuse_tint, diffuse_tint):
-            material.diffuse_tint = diffuse_tint
+        else:
+            if material.albedo_add != albedo_add:
+                material.albedo_add = albedo_add
+
+            if not np.allclose(material.diffuse_tint, diffuse_tint):
+                material.diffuse_tint = diffuse_tint
 
     def remove(self):
         """
-        Removes this prim from omniverse stage
+        Removes this prim from omniverse stage.
+        Do NOT call this function directly to remove a prim - call og.sim.remove_prim(prim) for proper cleanup
         """
         # Iterate over all states and run their remove call
         for state_instance in self._states.values():
@@ -467,7 +488,7 @@ class StatefulObject(BaseObject):
                 if state_name in state["non_kin"]:
                     state_instance.load_state(state=state["non_kin"][state_name], serialized=False)
                 else:
-                    log.warning("Missing object state [{}] in the state dump".format(state_name))
+                    log.warning(f"Missing object state [{state_name}] in the state dump for obj {self.name}")
 
         # Clear cache after loading state
         self.clear_states_cache()
@@ -509,7 +530,6 @@ class StatefulObject(BaseObject):
             return
         for _, obj_state in self._states.items():
             obj_state.clear_cache()
-        BoundingBoxAPI.clear()
 
     def set_position_orientation(self, position=None, orientation=None):
         super().set_position_orientation(position=position, orientation=orientation)

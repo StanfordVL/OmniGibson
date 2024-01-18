@@ -45,7 +45,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
     ):
         self._prim_path = prim_path
         self._name = name
-        self._load_config = {} if load_config is None else load_config
+        self._load_config = dict() if load_config is None else load_config
 
         # Other values that will be filled in at runtime
         self._applied_visual_material = None
@@ -55,6 +55,9 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         self._state_size = None
         self._n_duplicates = 0                              # Simple counter for keeping track of duplicates for unique name indexing
 
+        # Run super init
+        super().__init__()
+
         # Run some post-loading steps if this prim has already been loaded
         if is_prim_path_valid(prim_path=self._prim_path):
             log.debug(f"prim {name} already exists, skipping load")
@@ -62,9 +65,6 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
             self._loaded = True
             # Run post load.
             self._post_load()
-
-        # Run super init
-        super().__init__()
 
     def _initialize(self):
         """
@@ -95,7 +95,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
             Usd.Prim: Prim object loaded into the simulator
         """
         if self._loaded:
-            raise ValueError("Cannot load a single prim multiple times.")
+            raise ValueError(f"Cannot load prim {self.name} multiple times.")
 
         # Load prim
         self._prim = self._load()
@@ -116,7 +116,8 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
 
     def remove(self):
         """
-        Removes this prim from omniverse stage
+        Removes this prim from omniverse stage.
+        Do NOT call this function directly to remove a prim - call og.sim.remove_prim(prim) for proper cleanup.
         """
         if not self._loaded:
             raise ValueError("Cannot remove a prim that was never loaded.")
@@ -126,7 +127,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
             delete_prim(self.prim_path)
 
         # Also clear the name so we can reuse this later
-        self.remove_names(include_all_owned=True)
+        self.remove_names()
 
     @abstractmethod
     def _load(self):
@@ -308,7 +309,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
             name=f"{self.name}_copy{self._n_duplicates}",
             load_config=self._load_config,
         )
-        og.sim.import_object(new_prim, register=False, auto_initialize=True)
+        og.sim.import_object(new_prim, register=False)
 
         # Increment duplicate count
         self._n_duplicates += 1

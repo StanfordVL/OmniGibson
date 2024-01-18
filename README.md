@@ -6,7 +6,14 @@
 
 -------
 
+## Need support? Join our Discord!
+<a href="https://discord.gg/bccR5vGFEx"><img src="https://discordapp.com/api/guilds/1166422812160966707/widget.png?style=banner3"></a>
+
+-------
+
 ## Latest Updates
+- [08/04/23] **v0.2.0**: More assets! 600 pre-sampled tasks, 7 new scenes, and many new objects 📈 [[release notes]](https://github.com/StanfordVL/OmniGibson/releases/tag/v0.2.0)
+
 - [04/10/22] **v0.1.0**: Significantly improved stability, performance, and ease of installation :wrench: [[release notes]](https://github.com/StanfordVL/OmniGibson/releases/tag/v0.1.0)
 
 -------

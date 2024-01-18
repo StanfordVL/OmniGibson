@@ -1,5 +1,6 @@
 import logging
 import os
+import socket
 import shutil
 import tempfile
 import atexit
@@ -24,7 +25,7 @@ builtins.ISAAC_LAUNCHED_FROM_JUPYTER = (
 import nest_asyncio
 nest_asyncio.apply()
 
-__version__ = "0.1.0"
+__version__ = "0.2.1"
 
 log.setLevel(logging.DEBUG if gm.DEBUG else logging.INFO)
 
@@ -74,15 +75,62 @@ def create_app():
     from omni.isaac.kit import SimulationApp
     # If multi_gpu is used, og.sim.render() will cause a segfault when called during on_contact callbacks,
     # e.g. when an attachment joint is being created due to contacts (create_joint calls og.sim.render() internally).
-    app = SimulationApp({"headless": gm.HEADLESS, "multi_gpu": False})
+    gpu_id = None if gm.GPU_ID is None else int(gm.GPU_ID)
+    config_kwargs = {"headless":  gm.HEADLESS or bool(gm.REMOTE_STREAMING), "multi_gpu": False}
+    if gpu_id is not None:
+        config_kwargs["active_gpu"] = gpu_id
+        config_kwargs["physics_gpu"] = gpu_id
+    app = SimulationApp(config_kwargs)
+
+    # Omni overrides the global logger to be DEBUG, which is very annoying, so we re-override it to the default WARN
+    # TODO: Remove this once omniverse fixes it
+    logging.getLogger().setLevel(logging.WARNING)
+
     import omni
 
     # Enable additional extensions we need
     from omni.isaac.core.utils.extensions import enable_extension
     enable_extension("omni.flowusd")
     enable_extension("omni.particle.system.bundle")
-    enable_extension("omni.kit.window.viewport")    # This is needed for windows
 
+    # Additional import for windows
+    if os.name == "nt":
+        enable_extension("omni.kit.window.viewport")
+
+    # Default Livestream settings
+    if gm.REMOTE_STREAMING:
+        app.set_setting("/app/window/drawMouse", True)
+        app.set_setting("/app/livestream/proto", "ws")
+        app.set_setting("/app/livestream/websocket/framerate_limit", 120)
+        app.set_setting("/ngx/enabled", False)
+
+        # Find our IP address
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+
+        # Note: Only one livestream extension can be enabled at a time
+        if gm.REMOTE_STREAMING == "native":
+            # Enable Native Livestream extension
+            # Default App: Streaming Client from the Omniverse Launcher
+            enable_extension("omni.kit.livestream.native")
+            print(f"Now streaming on {ip} via Omniverse Streaming Client")
+        elif gm.REMOTE_STREAMING == "webrtc":
+            # Enable WebRTC Livestream extension
+            app.set_setting("/exts/omni.services.transport.server.http/port", gm.HTTP_PORT)
+            app.set_setting("/app/livestream/port", gm.WEBRTC_PORT)
+            enable_extension("omni.services.streamclient.webrtc")
+            print(f"Now streaming on: http://{ip}:{gm.HTTP_PORT}/streaming/webrtc-client?server={ip}")
+        else:
+            raise ValueError(f"Invalid REMOTE_STREAMING option {gm.REMOTE_STREAMING}. Must be one of None, native, webrtc.")
+
+    # If we're headless, suppress all warnings about GLFW
+    if gm.HEADLESS:
+        import omni.log
+        log = omni.log.get_log()
+        log.set_channel_enabled("carb.windowing-glfw.plugin", False, omni.log.SettingBehavior.OVERRIDE)
+        
     # Globally suppress certain logging modules (unless we're in debug mode) since they produce spurious warnings
     if not gm.DEBUG:
         import omni.log

@@ -2,7 +2,7 @@ from abc import abstractmethod
 from copy import deepcopy
 import numpy as np
 import gym
-from collections import Iterable
+from collections.abc import Iterable
 import omnigibson as og
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.controllers import create_controller
@@ -63,7 +63,7 @@ class ControllableObject(BaseObject):
             load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
                 loading this prim at runtime.
             control_freq (float): control frequency (in Hz) at which to control the object. If set to be None,
-                simulator.import_object will automatically set the control frequency to be 1 / render_timestep by default.
+                simulator.import_object will automatically set the control frequency to be at the render frequency by default.
             controller_config (None or dict): nested dictionary mapping controller name(s) to specific controller
                 configurations for this object. This will override any default values specified by this class.
             action_type (str): one of {discrete, continuous} - what type of action space to use
@@ -141,7 +141,7 @@ class ControllableObject(BaseObject):
         expected_control_freq = 1.0 / og.sim.get_rendering_dt()
         if self._control_freq is None:
             log.info(
-                "Control frequency is None - being set to default of 1 / render_timestep: %.4f", expected_control_freq
+                "Control frequency is None - being set to default of render_frequency: %.4f", expected_control_freq
             )
             self._control_freq = expected_control_freq
         else:
@@ -172,13 +172,13 @@ class ControllableObject(BaseObject):
             # If we're using normalized action space, override the inputs for all controllers
             if self._action_normalize:
                 cfg["command_input_limits"] = "default"  # default is normalized (-1, 1)
+
             # Create the controller
-            self._controllers[name] = create_controller(**cfg)
             controller = create_controller(**cfg)
             # Verify the controller's DOFs can all be driven
             for idx in controller.dof_idx:
                 assert self._joints[self.dof_names_ordered[idx]].driven, "Controllers should only control driveable joints!"
-
+            self._controllers[name] = controller
         self.update_controller_mode()
 
     def update_controller_mode(self):
@@ -242,7 +242,7 @@ class ControllableObject(BaseObject):
             else self._create_continuous_action_space()
 
     def reset(self):
-        # Make sure simulation is playing, otherwise, we cannot reset because DC requires active running
+        # Make sure simulation is playing, otherwise, we cannot reset because physx requires active running
         # simulation in order to set joints
         assert og.sim.is_playing(), "Simulator must be playing in order to reset controllable object's joints!"
 
@@ -286,11 +286,12 @@ class ControllableObject(BaseObject):
 
     def apply_action(self, action):
         """
+        Converts inputted actions into low-level control signals
 
-        Converts inputted actions into low-level control signals and deploys them on the object
+        NOTE: This does NOT deploy control on the object. Use self.step() instead.
 
         Args:
-            n_array: n-DOF length array of actions to convert and deploy on the object
+            action (n-array): n-DOF length array of actions to apply to this object's internal controllers
         """
         # Store last action as the current action being applied
         self._last_action = action
@@ -304,25 +305,26 @@ class ControllableObject(BaseObject):
             self.action_dim, len(action)
         )
 
-        # Run convert actions to controls
-        control, control_type = self._actions_to_control(action=action)
+        # First, loop over all controllers, and update the desired command
+        idx = 0
 
-        # Deploy control signals
-        self.deploy_control(control=control, control_type=control_type, indices=None, normalized=False)
+        for name, controller in self._controllers.items():
+            # Set command, then take a controller step
+            controller.update_command(command=action[idx : idx + controller.command_dim])
+            # Update idx
+            idx += controller.command_dim
 
-    def _actions_to_control(self, action):
+        # If we haven't already created a physics callback, do so now so control gets updated every sim step
+        callback_name = f"{self.name}_controller_callback"
+        if not og.sim.physics_callback_exists(callback_name=callback_name):
+            og.sim.add_physics_callback(
+                callback_name=callback_name,
+                callback_fn=lambda x: self.step(),
+            )
+
+    def step(self):
         """
-        Converts inputted @action into low level control signals to deploy directly on the object.
-        This returns two arrays: the converted low level control signals and an array corresponding
-        to the specific ControlType for each signal.
-
-        Args:
-            action (n-array): n-DOF length array of actions to convert and deploy on the object
-
-        Returns:
-            2-tuple:
-                - n-array: raw control signals to send to the object's joints
-                - list: control types for each joint
+        Takes a controller step across all controllers and deploys the computed control signals onto the object.
         """
         # First, loop over all controllers, and calculate the computed control
         control = dict()
@@ -332,8 +334,6 @@ class ControllableObject(BaseObject):
         control_dict = self.get_control_dict()
 
         for name, controller in self._controllers.items():
-            # Set command, then take a controller step
-            controller.update_command(command=action[idx : idx + controller.command_dim])
             control[name] = {
                 "value": controller.step(control_dict=control_dict),
                 "type": controller.control_type,
@@ -350,8 +350,8 @@ class ControllableObject(BaseObject):
             u_vec[idx] = ctrl["value"]
             u_type_vec[idx] = ctrl["type"]
 
-        # Return control
-        return u_vec, u_type_vec
+        # Deploy control signals
+        self.deploy_control(control=u_vec, control_type=u_type_vec, indices=None, normalized=False)
 
     def deploy_control(self, control, control_type, indices=None, normalized=False):
         """
@@ -376,9 +376,8 @@ class ControllableObject(BaseObject):
                  indices are being set. In this case, the length of @control must be the same length as @indices!
             indices (None or k-array): If specified, should be k (k < n) length array of specific DOF controls to deploy.
                 Default is None, which assumes that all joints are being set.
-            normalized (bool or array of bool): Whether the inputted joint controls should be interpreted as normalized
-                values. A single bool can be specified for the entire @control, or an array can be specified for
-                individual values. Default is False, corresponding to all @control assumed to be not normalized
+            normalized (bool): Whether the inputted joint controls should be interpreted as normalized
+                values. Expects a single bool for the entire @control. Default is False.
         """
         # Run sanity check
         if indices is None:
@@ -396,11 +395,13 @@ class ControllableObject(BaseObject):
 
         # Standardize normalized input
         n_indices = len(indices)
-        normalized = normalized if isinstance(normalized, Iterable) else [normalized] * n_indices
 
         # Loop through controls and deploy
         # We have to use delicate logic to account for the edge cases where a single joint may contain > 1 DOF
         # (e.g.: spherical joint)
+        pos_vec, pos_idxs, using_pos = [], [], False
+        vel_vec, vel_idxs, using_vel = [], [], False
+        eff_vec, eff_idxs, using_eff = [], [], False
         cur_indices_idx = 0
         while cur_indices_idx != n_indices:
             # Grab the current DOF index we're controlling and find the corresponding joint
@@ -428,21 +429,36 @@ class ControllableObject(BaseObject):
                 ctrl = control[cur_ctrl_idx]
 
             # Deploy control based on type
-            ctrl_type, norm = control_type[cur_ctrl_idx], normalized[cur_ctrl_idx]       # In multi-DOF joint case all values were already checked to be the same
+            ctrl_type = control_type[cur_ctrl_idx]       # In multi-DOF joint case all values were already checked to be the same
             if ctrl_type == ControlType.EFFORT:
-                joint.set_effort(ctrl, normalized=norm)
+                eff_vec.append(ctrl)
+                eff_idxs.append(cur_ctrl_idx)
+                using_eff = True
             elif ctrl_type == ControlType.VELOCITY:
-                joint.set_vel(ctrl, normalized=norm, drive=True)
+                vel_vec.append(ctrl)
+                vel_idxs.append(cur_ctrl_idx)
+                using_vel = True
             elif ctrl_type == ControlType.POSITION:
-                joint.set_pos(ctrl, normalized=norm, drive=True)
+                pos_vec.append(ctrl)
+                pos_idxs.append(cur_ctrl_idx)
+                using_pos = True
             elif ctrl_type == ControlType.NONE:
-                # Do nothing
-                pass
+                # Set zero efforts
+                eff_vec.append(0)
+                eff_idxs.append(cur_ctrl_idx)
+                using_eff = True
             else:
                 raise ValueError("Invalid control type specified: {}".format(ctrl_type))
-
             # Finally, increment the current index based on how many DOFs were just controlled
             cur_indices_idx += joint_dof
+            
+        # set the targets for joints
+        if using_pos:
+            self.set_joint_positions(positions=np.array(pos_vec), indices=np.array(pos_idxs), drive=True, normalized=normalized)
+        if using_vel:
+            self.set_joint_velocities(velocities=np.array(vel_vec), indices=np.array(vel_idxs), drive=True, normalized=normalized)
+        if using_eff:
+            self.set_joint_efforts(efforts=np.array(eff_vec), indices=np.array(eff_idxs), normalized=normalized)
 
     def get_control_dict(self):
         """
@@ -457,6 +473,9 @@ class ControllableObject(BaseObject):
                 - joint_effort: (n_dof,) joint efforts
                 - root_pos: (3,) (x,y,z) global cartesian position of the object's root link
                 - root_quat: (4,) (x,y,z,w) global cartesian orientation of ths object's root link
+                - mass_matrix: (n_dof, n_dof) mass matrix
+                - gravity_force: (n_dof,) per-joint generalized gravity forces
+                - cc_force: (n_dof,) per-joint centripetal and centrifugal forces
         """
         pos, ori = self.get_position_orientation()
         return dict(
@@ -465,6 +484,9 @@ class ControllableObject(BaseObject):
             joint_effort=self.get_joint_efforts(normalized=False),
             root_pos=pos,
             root_quat=ori,
+            mass_matrix=self.get_mass_matrix(),
+            gravity_force=self.get_generalized_gravity_forces(),
+            cc_force=self.get_coriolis_and_centrifugal_forces(),
         )
 
     def dump_action(self):

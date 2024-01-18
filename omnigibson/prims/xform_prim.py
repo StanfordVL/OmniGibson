@@ -1,4 +1,4 @@
-from collections import Iterable
+from collections.abc import Iterable
 from pxr import Gf, Usd, UsdGeom, UsdShade, UsdPhysics
 from omni.isaac.core.utils.rotations import gf_quat_to_np_array
 from omni.isaac.core.utils.prims import (
@@ -83,6 +83,14 @@ class XFormPrim(BasePrim):
         if "scale" in self._load_config and self._load_config["scale"] is not None:
             self.scale = self._load_config["scale"]
 
+    def remove(self):
+        # Remove the material prim if one exists
+        if self._material is not None:
+            self._material.remove()
+
+        # Remove the prim
+        super().remove()
+
     def _set_xform_properties(self):
         current_position, current_orientation = self.get_position_orientation()
         properties_to_remove = [
@@ -154,6 +162,8 @@ class XFormPrim(BasePrim):
         position = current_position if position is None else np.array(position, dtype=float)
         orientation = current_orientation if orientation is None else np.array(orientation, dtype=float)
         orientation = orientation[[3, 0, 1, 2]]     # Flip from x,y,z,w to w,x,y,z
+        assert np.isclose(np.linalg.norm(orientation), 1, atol=1e-3), \
+            f"{self.prim_path} desired orientation {orientation} is not a unit quaternion."
 
         mat = Gf.Transform()
         mat.SetRotation(Gf.Rotation(Gf.Quatd(*orientation)))
@@ -173,7 +183,7 @@ class XFormPrim(BasePrim):
         calculated_translation = transform.GetTranslation()
         calculated_orientation = transform.GetRotation().GetQuat()
         self.set_local_pose(
-            translation=np.array(calculated_translation), orientation=gf_quat_to_np_array(calculated_orientation)[[1, 2, 3, 0]]     # Flip from w,x,y,z to x,y,z,w
+            position=np.array(calculated_translation), orientation=gf_quat_to_np_array(calculated_orientation)[[1, 2, 3, 0]]     # Flip from w,x,y,z to x,y,z,w
         )
 
     def get_position_orientation(self):
@@ -236,10 +246,26 @@ class XFormPrim(BasePrim):
             3-array: (roll, pitch, yaw) global euler orientation of this prim
         """
         return quat2euler(self.get_orientation())
+    
+    def get_2d_orientation(self):
+        """
+        Get this prim's orientation on the XY plane of the world frame. This is obtained by
+        projecting the forward vector onto the XY plane and then computing the angle.
+        """
+        fwd = R.from_quat(self.get_orientation()).apply([1, 0, 0])
+        fwd[2] = 0.
+
+        # If the object is facing close to straight up, then we can't compute a 2D orientation
+        # in that case, we return zero.
+        if np.linalg.norm(fwd) < 1e-4:
+            return 0.
+
+        fwd /= np.linalg.norm(fwd)
+        return np.arctan2(fwd[1], fwd[0])
 
     def get_local_pose(self):
         """
-        Gets prim's pose with respect to the prim's local frame (it's parent frame)
+        Gets prim's pose with respect to the prim's local frame (its parent frame)
 
         Returns:
             2-tuple:
@@ -250,24 +276,24 @@ class XFormPrim(BasePrim):
         xform_orient_op = self.get_attribute("xformOp:orient")
         return np.array(xform_translate_op), gf_quat_to_np_array(xform_orient_op)[[1, 2, 3, 0]]
 
-    def set_local_pose(self, translation=None, orientation=None):
+    def set_local_pose(self, position=None, orientation=None):
         """
         Sets prim's pose with respect to the local frame (the prim's parent frame).
 
         Args:
-            translation (None or 3-array): if specified, (x,y,z) translation in the local frame of the prim
+            position (None or 3-array): if specified, (x,y,z) position in the local frame of the prim
                 (with respect to its parent prim). Default is None, which means left unchanged.
             orientation (None or 4-array): if specified, (x,y,z,w) quaternion orientation in the local frame of the prim
                 (with respect to its parent prim). Default is None, which means left unchanged.
         """
         properties = self.prim.GetPropertyNames()
-        if translation is not None:
-            translation = Gf.Vec3d(*np.array(translation, dtype=float))
+        if position is not None:
+            position = Gf.Vec3d(*np.array(position, dtype=float))
             if "xformOp:translate" not in properties:
                 carb.log_error(
                     "Translate property needs to be set for {} before setting its position".format(self.name)
                 )
-            self.set_attribute("xformOp:translate", translation)
+            self.set_attribute("xformOp:translate", position)
         if orientation is not None:
             orientation = np.array(orientation, dtype=float)[[3, 0, 1, 2]]
             if "xformOp:orient" not in properties:
@@ -280,6 +306,7 @@ class XFormPrim(BasePrim):
             else:
                 rotq = Gf.Quatd(*orientation)
             xform_op.Set(rotq)
+        BoundingBoxAPI.clear()
         return
 
     def get_world_scale(self):

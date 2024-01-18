@@ -19,6 +19,7 @@ def main():
                 "name": "stove",
                 "category": "stove",
                 "model": "qbjiva",
+                "bounding_box": [1.611, 0.769, 1.147],
                 "abilities": {
                     "heatSource": {"requires_toggled_on": True},
                     "toggleable": {},
@@ -29,7 +30,7 @@ def main():
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
 
     # Get reference to stove object
     stove = env.scene.object_registry("name", "stove")

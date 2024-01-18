@@ -1,5 +1,6 @@
 from abc import ABCMeta
 import numpy as np
+from collections.abc import Iterable
 
 import omnigibson as og
 from omnigibson.macros import create_module_macros, gm
@@ -46,6 +47,7 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
             visible=True,
             fixed_base=False,
             visual_only=False,
+            kinematic_only=None,
             self_collisions=False,
             prim_type=PrimType.RIGID,
             load_config=None,
@@ -67,6 +69,9 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
             visible (bool): whether to render this object or not in the stage
             fixed_base (bool): whether to fix the base of this object or not
             visual_only (bool): Whether this object should be visual only (and not collide with any other objects)
+            kinematic_only (None or bool): Whether this object should be kinematic only (and not get affected by any
+                collisions). If None, then this value will be set to True if @fixed_base is True and some other criteria
+                are satisfied (see object_base.py post_load function), else False.
             self_collisions (bool): Whether to enable self collisions for this object
             prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
             load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
@@ -100,9 +105,10 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
 
         # Create load config from inputs
         load_config = dict() if load_config is None else load_config
-        load_config["scale"] = scale
+        load_config["scale"] = np.array(scale) if isinstance(scale, Iterable) else scale
         load_config["visible"] = visible
         load_config["visual_only"] = visual_only
+        load_config["kinematic_only"] = kinematic_only
         load_config["self_collisions"] = self_collisions
         load_config["prim_type"] = prim_type
 
@@ -128,6 +134,9 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         return prim
 
     def remove(self):
+        """
+        Do NOT call this function directly to remove a prim - call og.sim.remove_prim(prim) for proper cleanup
+        """
         # Run super first
         super().remove()
 
@@ -135,8 +144,36 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         log.info(f"Removed {self.name} from {self.prim_path}")
 
     def _post_load(self):
+        # Add fixed joint or make object kinematic only if we're fixing the base
+        kinematic_only = False
+        if self.fixed_base:
+            # For optimization purposes, if we only have a single rigid body that has either
+            # (no custom scaling OR no fixed joints), we assume this is not an articulated object so we
+            # merely set this to be a static collider, i.e.: kinematic-only
+            # The custom scaling / fixed joints requirement is needed because omniverse complains about scaling that
+            # occurs with respect to fixed joints, as omni will "snap" bodies together otherwise
+            scale = np.ones(3) if self._load_config["scale"] is None else np.array(self._load_config["scale"])
+            if self.n_joints == 0 and (np.all(np.isclose(scale, 1.0, atol=1e-3)) or self.n_fixed_joints == 0) and (self._load_config["kinematic_only"] != False):
+                kinematic_only = True
+        
+        # Validate that we didn't make a kinematic-only decision that does not match
+        assert self._load_config["kinematic_only"] is None or kinematic_only == self._load_config["kinematic_only"], \
+            f"Kinematic only decision does not match! Got: {kinematic_only}, expected: {self._load_config['kinematic_only']}"
+        
+        # Actually apply the kinematic-only decision
+        self._load_config["kinematic_only"] = kinematic_only
+
         # Run super first
         super()._post_load()
+
+        # If the object is fixed_base but kinematic only is false, create the joint
+        if self.fixed_base and not self.kinematic_only:
+            # Create fixed joint, and set Body0 to be this object's root prim
+            create_joint(
+                prim_path=f"{self._prim_path}/rootJoint",
+                joint_type="FixedJoint",
+                body1=f"{self._prim_path}/{self._root_link_name}",
+            )
 
         # Set visibility
         if "visible" in self._load_config and self._load_config["visible"] is not None:
@@ -146,23 +183,6 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         if self._prim.HasAPI(UsdPhysics.ArticulationRootAPI):
             self._prim.RemoveAPI(UsdPhysics.ArticulationRootAPI)
             self._prim.RemoveAPI(PhysxSchema.PhysxArticulationAPI)
-
-        # Add fixed joint if we're fixing the base
-        if self.fixed_base:
-            # For optimization purposes, if we only have a single rigid body that has either
-            # (no custom scaling OR no fixed joints), we assume this is not an articulated object so we
-            # merely set this to be a static collider, i.e.: kinematic-only
-            # The custom scaling / fixed joints requirement is needed because omniverse complains about scaling that
-            # occurs with respect to fixed joints, as omni will "snap" bodies together otherwise
-            if self.n_joints == 0 and (np.all(np.isclose(self.scale, 1.0, atol=1e-3)) or self.n_fixed_joints == 0):
-                self.kinematic_only = True
-            else:
-                # Create fixed joint, and set Body0 to be this object's root prim
-                create_joint(
-                    prim_path=f"{self._prim_path}/rootJoint",
-                    joint_type="FixedJoint",
-                    body1=f"{self._prim_path}/{self._root_link_name}",
-                )
 
         # Potentially add articulation root APIs and also set self collisions
         root_prim = None if self.articulation_root_path is None else get_prim_at_path(self.articulation_root_path)
@@ -207,7 +227,7 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         if self.kinematic_only or ((not has_articulated_joints) and (not has_fixed_joints)):
             # Kinematic only, or non-jointed single body objects
             return None
-        elif not self.fixed_base:
+        elif not self.fixed_base and has_articulated_joints:
             # This is all remaining non-fixed objects
             # This is a bit hacky because omniverse is buggy
             # Articulation roots mess up the joint order if it's on a non-fixed base robot, e.g. a
@@ -251,6 +271,20 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
     @volume.setter
     def volume(self, volume):
         raise NotImplementedError("Cannot set volume directly for an object!")
+
+    @property
+    def scale(self):
+        # Just super call
+        return super().scale
+
+    @scale.setter
+    def scale(self, scale):
+        # call super first
+        # A bit esoteric -- see https://gist.github.com/Susensio/979259559e2bebcd0273f1a95d7c1e79
+        super(BaseObject, type(self)).scale.fset(self, scale)
+
+        # Update init info for scale
+        self._init_info["args"]["scale"] = scale
 
     @property
     def link_prim_paths(self):

@@ -102,6 +102,9 @@ class MultiFingerGripperController(GripperController):
         )
 
     def reset(self):
+        # Call super first
+        super().reset()
+
         # reset grasping state
         self._is_grasping = IsGraspingState.FALSE
 
@@ -128,7 +131,6 @@ class MultiFingerGripperController(GripperController):
 
         Args:
             command (Array[float]): desired (already preprocessed) command to convert into control signals.
-                This should always be 2D command for each gripper joint
             control_dict (Dict[str, Any]): dictionary that should include any relevant keyword-mapped
                 states necessary for controller computation. Must include the following keys:
                     joint_position: Array of current joint positions
@@ -250,6 +252,10 @@ class MultiFingerGripperController(GripperController):
     def is_grasping(self):
         # Return cached value
         return self._is_grasping
+
+    def compute_no_op_command(self, control_dict):
+        # Just use a zero vector
+        return np.zeros(self.command_dim)
 
     @property
     def control_type(self):

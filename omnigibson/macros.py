@@ -13,14 +13,25 @@ from addict import Dict
 macros = Dict()
 gm = macros.globals
 
-# Paths (either relative to this directory or global absolute paths) for assets
+# Path (either relative to OmniGibson/omnigibson directory or global absolute path) for data
 # Assets correspond to non-objects / scenes (e.g.: robots), and dataset incliudes objects + scene
 gm.ASSET_PATH = "data/assets"
 gm.DATASET_PATH = "data/og_dataset"
 gm.KEY_PATH = "data/omnigibson.key"
 
+# Which GPU to use -- None will result in omni automatically using an appropriate GPU. Otherwise, set with either
+# integer or string-form integer
+gm.GPU_ID = os.getenv("OMNIGIBSON_GPU_ID", None)
+
 # Whether to generate a headless or non-headless application upon OmniGibson startup
 gm.HEADLESS = (os.getenv("OMNIGIBSON_HEADLESS", 'False').lower() in ('true', '1', 't'))
+
+# Whether to enable remote streaming. None disables it, other valid options are "native", "webrtc".
+gm.REMOTE_STREAMING = os.getenv("OMNIGIBSON_REMOTE_STREAMING", None)
+
+# What port the webrtc and http servers should run on. This is only used if REMOTE_STREAMING is set to "webrtc"
+gm.HTTP_PORT = os.getenv("OMNIGIBSON_HTTP_PORT", 8211)
+gm.WEBRTC_PORT = os.getenv("OMNIGIBSON_WEBRTC_PORT", 49100)
 
 # Whether only the viewport should be shown in the GUI or not (if not, other peripherals are additionally shown)
 # CANNOT be set at runtime
@@ -29,7 +40,7 @@ gm.GUI_VIEWPORT_ONLY = False
 # Do not suppress known omni warnings / errors, and also put omnigibson in a debug state
 # This includes extra information for things such as object sampling, and also any debug
 # logging messages
-gm.DEBUG = False
+gm.DEBUG = (os.getenv("OMNIGIBSON_DEBUG", 'False').lower() in ('true', '1', 't'))
 
 # Whether to print out disclaimers (i.e.: known failure cases resulting from Omniverse's current bugs / limitations)
 gm.SHOW_DISCLAIMERS = False
@@ -65,9 +76,6 @@ gm.ENABLE_TRANSITION_RULES = True
 # Default settings for the omni UI viewer
 gm.DEFAULT_VIEWER_WIDTH = 1280
 gm.DEFAULT_VIEWER_HEIGHT = 720
-
-# Whether to use encrypted assets
-gm.USE_ENCRYPTED_ASSETS = True
 
 # (Demo-purpose) Whether to activate Assistive Grasping mode for Cloth (it's handled differently from RigidBody)
 gm.AG_CLOTH = False

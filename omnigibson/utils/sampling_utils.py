@@ -11,12 +11,17 @@ from scipy.stats import truncnorm
 import omnigibson as og
 from omnigibson.macros import create_module_macros, gm
 import omnigibson.utils.transform_utils as T
+from omnigibson.utils.ui_utils import create_module_logger
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
 
-m.DEFAULT_AABB_OFFSET = 0.01
+m.DEBUG_SAMPLING = False
+m.DEFAULT_AABB_OFFSET_FRACTION = 0.02
 m.DEFAULT_PARALLEL_RAY_NORMAL_ANGLE_TOLERANCE = 1.0  # Around 60 degrees
 m.DEFAULT_HIT_TO_PLANE_THRESHOLD = 0.05
 m.DEFAULT_MAX_ANGLE_WITH_Z_AXIS = 3 * np.pi / 4
@@ -42,7 +47,7 @@ def fit_plane(points, refusal_log):
             - 3-array: (x,y,z) normal of the fitted plane
     """
     if points.shape[0] < points.shape[1]:
-        if gm.DEBUG:
+        if m.DEBUG_SAMPLING:
             refusal_log.append(f"insufficient points to fit a 3D plane: needs 3, has {points.shape[0]}.")
         return None, None
 
@@ -70,7 +75,7 @@ def check_distance_to_plane(points, plane_centroid, plane_normal, hit_to_plane_t
     """
     distances = get_distance_to_plane(points, plane_centroid, plane_normal)
     if np.any(distances > hit_to_plane_threshold):
-        if gm.DEBUG:
+        if m.DEBUG_SAMPLING:
             refusal_log.append("distances to plane: %r" % distances)
         return False
     return True
@@ -378,7 +383,8 @@ def sample_raytest_start_end_symmetric_bimodal_distribution(
     bimodal_mean_fraction,
     bimodal_stdev_fraction,
     axis_probabilities,
-    aabb_offset=m.DEFAULT_AABB_OFFSET,
+    aabb_offset=None,
+    aabb_offset_fraction=m.DEFAULT_AABB_OFFSET_FRACTION,
     max_sampling_attempts=m.DEFAULT_MAX_SAMPLING_ATTEMPTS,
 ):
     """
@@ -391,7 +397,9 @@ def sample_raytest_start_end_symmetric_bimodal_distribution(
     bimodal_stdev_fraction (float): the standard deviation of one side of the symmetric bimodal distribution as a
         fraction of the min-max range.
     axis_probabilities (3-array): probability of ray casting along each axis.
-    aabb_offset (float or 3-array): padding for AABB to initiate ray-testing.
+    aabb_offset (None or float or 3-array): padding for AABB to initiate ray-testing, in absolute units. If specified,
+        will override @aabb_offset_fraction
+    aabb_offset_fraction (float or 3-array): padding for AABB to initiate ray-testing, as a fraction of overall AABB.
     max_sampling_attempts (int): how many times sampling will be attempted for each requested point.
 
     Returns:
@@ -401,7 +409,8 @@ def sample_raytest_start_end_symmetric_bimodal_distribution(
             - (n, s, 3)-array: (num_samples, max_sampling_attempts, 3) shaped array representing the end points for
                 raycasting defined in the world frame
     """
-    bbox_center, bbox_orn, bbox_bf_extent, _ = obj.get_base_aligned_bbox(xy_aligned=True, fallback_to_aabb=True)
+    bbox_center, bbox_orn, bbox_bf_extent, _ = obj.get_base_aligned_bbox(xy_aligned=True)
+    aabb_offset = aabb_offset_fraction * bbox_bf_extent if aabb_offset is None else aabb_offset
     half_extent_with_offset = (bbox_bf_extent / 2) + aabb_offset
 
     start_points = np.zeros((num_samples, max_sampling_attempts, 3))
@@ -440,7 +449,8 @@ def sample_raytest_start_end_symmetric_bimodal_distribution(
 def sample_raytest_start_end_full_grid_topdown(
     obj,
     ray_spacing,
-    aabb_offset=m.DEFAULT_AABB_OFFSET,
+    aabb_offset=None,
+    aabb_offset_fraction=m.DEFAULT_AABB_OFFSET_FRACTION,
 ):
     """
     Sample the start points and end points around a given object by a dense grid from top down.
@@ -448,7 +458,9 @@ def sample_raytest_start_end_full_grid_topdown(
     Args:
         obj (DatasetObject): The object to sample points on.
         ray_spacing (float): spacing between the rays, or equivalently, size of the grid cell
-        aabb_offset (float or numpy array): padding for AABB to initiate ray-testing.
+        aabb_offset (None or float or 3-array): padding for AABB to initiate ray-testing, in absolute units. If specified,
+            will override @aabb_offset_fraction
+        aabb_offset_fraction (float or 3-array): padding for AABB to initiate ray-testing, as a fraction of overall AABB.
 
     Returns:
         2-tuple:
@@ -457,11 +469,12 @@ def sample_raytest_start_end_full_grid_topdown(
             - (n, s, 3)-array: (num_samples, max_sampling_attempts, 3) shaped array representing the end points for
                 raycasting defined in the world frame
     """
-    bbox_center, bbox_orn, bbox_bf_extent, _ = obj.get_base_aligned_bbox(xy_aligned=True, fallback_to_aabb=True)
+    bbox_center, bbox_orn, bbox_bf_extent, _ = obj.get_base_aligned_bbox(xy_aligned=True)
+    aabb_offset = aabb_offset_fraction * bbox_bf_extent if aabb_offset is None else aabb_offset
 
     half_extent_with_offset = (bbox_bf_extent / 2) + aabb_offset
-    x = np.linspace(-half_extent_with_offset[0], half_extent_with_offset[0], int(half_extent_with_offset[0] * 2 / ray_spacing))
-    y = np.linspace(-half_extent_with_offset[1], half_extent_with_offset[1], int(half_extent_with_offset[1] * 2 / ray_spacing))
+    x = np.linspace(-half_extent_with_offset[0], half_extent_with_offset[0], int(half_extent_with_offset[0] * 2 / ray_spacing) + 1)
+    y = np.linspace(-half_extent_with_offset[1], half_extent_with_offset[1], int(half_extent_with_offset[1] * 2 / ray_spacing) + 1)
     n_rays = len(x) * len(y)
 
     start_points = np.stack([
@@ -493,7 +506,8 @@ def sample_cuboid_on_object_symmetric_bimodal_distribution(
     axis_probabilities,
     new_ray_per_horizontal_distance=m.DEFAULT_NEW_RAY_PER_HORIZONTAL_DISTANCE,
     hit_proportion=m.DEFAULT_HIT_PROPORTION,
-    aabb_offset=m.DEFAULT_AABB_OFFSET,
+    aabb_offset=None,
+    aabb_offset_fraction=m.DEFAULT_AABB_OFFSET_FRACTION,
     max_sampling_attempts=m.DEFAULT_MAX_SAMPLING_ATTEMPTS,
     max_angle_with_z_axis=m.DEFAULT_MAX_ANGLE_WITH_Z_AXIS,
     parallel_ray_normal_angle_tolerance=m.DEFAULT_PARALLEL_RAY_NORMAL_ANGLE_TOLERANCE,
@@ -524,7 +538,9 @@ def sample_cuboid_on_object_symmetric_bimodal_distribution(
             the parallel ray-testing by 1. This controls how fine-grained the grid ray-casting should be with respect to
             the size of the sampled cuboid.
         hit_proportion (float): the minimum percentage of the hits required across the grid.
-        aabb_offset (float or 3-array): padding for AABB to initiate ray-testing.
+        aabb_offset (None or float or 3-array): padding for AABB to initiate ray-testing, in absolute units. If specified,
+            will override @aabb_offset_fraction
+        aabb_offset_fraction (float or 3-array): padding for AABB to initiate ray-testing, as a fraction of overall AABB.
         max_sampling_attempts (int): how many times sampling will be attempted for each requested point.
         max_angle_with_z_axis (float): maximum angle between hit normal and positive Z axis allowed. Can be used to
             disallow downward-facing hits when refuse_downwards=True.
@@ -548,7 +564,7 @@ def sample_cuboid_on_object_symmetric_bimodal_distribution(
         list of tuple: list of length num_samples elements where each element is a tuple in the form of
             (cuboid_centroid, cuboid_up_vector, cuboid_rotation, {refusal_reason: [refusal_details...]}). Cuboid positions
             are set to None when no successful sampling happens within the max number of attempts. Refusal details are only
-            filled if the gm.DEBUG flag is globally set to True.
+            filled if the m.DEBUG_SAMPLING flag is globally set to True.
     """
     start_points, end_points = sample_raytest_start_end_symmetric_bimodal_distribution(
         obj,
@@ -557,8 +573,10 @@ def sample_cuboid_on_object_symmetric_bimodal_distribution(
         bimodal_stdev_fraction,
         axis_probabilities,
         aabb_offset=aabb_offset,
+        aabb_offset_fraction=aabb_offset_fraction,
         max_sampling_attempts=max_sampling_attempts,
     )
+
     return sample_cuboid_on_object(
         obj,
         start_points,
@@ -582,7 +600,8 @@ def sample_cuboid_on_object_full_grid_topdown(
     cuboid_dimensions,
     new_ray_per_horizontal_distance=m.DEFAULT_NEW_RAY_PER_HORIZONTAL_DISTANCE,
     hit_proportion=m.DEFAULT_HIT_PROPORTION,
-    aabb_offset=m.DEFAULT_AABB_OFFSET,
+    aabb_offset=None,
+    aabb_offset_fraction=m.DEFAULT_AABB_OFFSET_FRACTION,
     max_angle_with_z_axis=m.DEFAULT_MAX_ANGLE_WITH_Z_AXIS,
     parallel_ray_normal_angle_tolerance=m.DEFAULT_PARALLEL_RAY_NORMAL_ANGLE_TOLERANCE,
     hit_to_plane_threshold=m.DEFAULT_HIT_TO_PLANE_THRESHOLD,
@@ -608,7 +627,9 @@ def sample_cuboid_on_object_full_grid_topdown(
             the parallel ray-testing by 1. This controls how fine-grained the grid ray-casting should be with respect to
             the size of the sampled cuboid.
         hit_proportion (float): the minimum percentage of the hits required across the grid.
-        aabb_offset (float or 3-array): padding for AABB to initiate ray-testing.
+        aabb_offset (None or float or 3-array): padding for AABB to initiate ray-testing, in absolute units. If specified,
+            will override @aabb_offset_fraction
+        aabb_offset_fraction (float or 3-array): padding for AABB to initiate ray-testing, as a fraction of overall AABB.
         max_angle_with_z_axis (float): maximum angle between hit normal and positive Z axis allowed. Can be used to
             disallow downward-facing hits when refuse_downwards=True.
         parallel_ray_normal_angle_tolerance (float): maximum angle difference between the normal of the center hit
@@ -631,12 +652,13 @@ def sample_cuboid_on_object_full_grid_topdown(
         list of tuple: list of length num_samples elements where each element is a tuple in the form of
             (cuboid_centroid, cuboid_up_vector, cuboid_rotation, {refusal_reason: [refusal_details...]}). Cuboid positions
             are set to None when no successful sampling happens within the max number of attempts. Refusal details are only
-            filled if the gm.DEBUG flag is globally set to True.
+            filled if the m.DEBUG_SAMPLING flag is globally set to True.
     """
     start_points, end_points = sample_raytest_start_end_full_grid_topdown(
         obj,
         ray_spacing,
         aabb_offset=aabb_offset,
+        aabb_offset_fraction=aabb_offset_fraction,
     )
     return sample_cuboid_on_object(
         obj,
@@ -714,7 +736,7 @@ def sample_cuboid_on_object(
         list of tuple: list of length num_samples elements where each element is a tuple in the form of
             (cuboid_centroid, cuboid_up_vector, cuboid_rotation, {refusal_reason: [refusal_details...]}). Cuboid positions
             are set to None when no successful sampling happens within the max number of attempts. Refusal details are only
-            filled if the gm.DEBUG flag is globally set to True.
+            filled if the m.DEBUG_SAMPLING flag is globally set to True.
     """
 
     assert start_points.shape == end_points.shape, \
@@ -723,8 +745,10 @@ def sample_cuboid_on_object(
 
     cuboid_dimensions = np.array(cuboid_dimensions)
     if np.any(cuboid_dimensions > 50.0):
-        print("WARNING: Trying to sample for a very large cuboid (at least one dimensions > 50)."
-              "This will take a prohibitively large amount of time!")
+        log.warning("WARNING: Trying to sample for a very large cuboid (at least one dimensions > 50). "
+              "Terminating immediately, no hits will be registered.")
+        return [(None, None, None, None, defaultdict(list)) for _ in range(num_samples)]
+
     assert cuboid_dimensions.ndim <= 2
     assert cuboid_dimensions.shape[-1] == 3, "Cuboid dimensions need to contain all three dimensions."
     if cuboid_dimensions.ndim == 2:
@@ -881,15 +905,15 @@ def sample_cuboid_on_object(
             results[i] = (cuboid_centroid, plane_normal, rotation.as_quat(), hit_link, refusal_reasons)
             break
 
-    if gm.DEBUG:
-        print("Sampling rejection reasons:")
+    if m.DEBUG_SAMPLING:
+        og.log.debug("Sampling rejection reasons:")
         counter = Counter()
 
         for instance in results:
             for reason, refusals in instance[-1].items():
                 counter[reason] += len(refusals)
 
-        print("\n".join("%s: %d" % pair for pair in counter.items()))
+        og.log.debug("\n".join("%s: %d" % pair for pair in counter.items()))
 
     return results
 
@@ -911,7 +935,7 @@ def compute_rotation_from_grid_sample(two_d_grid, projected_hits, cuboid_centroi
             generated hit plane. Otherwise, returns None
     """
     if np.sum(hits) < 3:
-        if gm.DEBUG:
+        if m.DEBUG_SAMPLING:
             refusal_log.append(f"insufficient hits to compute the rotation of the grid: needs 3, has {np.sum(hits)}")
         return None
 
@@ -953,7 +977,7 @@ def check_normal_similarity(center_hit_normal, hit_normals, tolerance, refusal_l
         parallel_hit_normal_angles_to_hit_normal < tolerance
     )
     if not all_rays_hit_with_similar_normal:
-        if gm.DEBUG:
+        if m.DEBUG_SAMPLING:
             refusal_log.append("angles %r" % (np.rad2deg(parallel_hit_normal_angles_to_hit_normal),))
 
         return False
@@ -983,7 +1007,7 @@ def check_rays_hit_object(cast_results, threshold, refusal_log, body_names=None)
         for ray_res in cast_results
     ]
     if sum(ray_hits) / len(cast_results) < threshold:
-        if gm.DEBUG:
+        if m.DEBUG_SAMPLING:
             refusal_log.append(f"{sum(ray_hits)} / {len(cast_results)} < {threshold} hits: {[ray_res['rigidBody'] for ray_res in cast_results if ray_res['hit']]}")
 
         return None
@@ -1006,7 +1030,7 @@ def check_hit_max_angle_from_z_axis(hit_normal, max_angle_with_z_axis, refusal_l
     """
     hit_angle_with_z = np.arccos(np.clip(np.dot(hit_normal, np.array([0, 0, 1])), -1.0, 1.0))
     if hit_angle_with_z > max_angle_with_z_axis:
-        if gm.DEBUG:
+        if m.DEBUG_SAMPLING:
             refusal_log.append("normal %r" % hit_normal)
 
         return False
@@ -1074,7 +1098,7 @@ def check_cuboid_empty(hit_normal, bottom_corner_positions, this_cuboid_dimensio
     Returns:
         bool: True if the cuboid is empty, else False
     """
-    if gm.DEBUG:
+    if m.DEBUG_SAMPLING:
         draw_debug_markers(bottom_corner_positions)
 
     # Compute top corners.
@@ -1096,7 +1120,7 @@ def check_cuboid_empty(hit_normal, bottom_corner_positions, this_cuboid_dimensio
     all_pairs = np.array(top_to_bottom_pairs + bottom_pairs + top_pairs)
     check_cast_results = raytest_batch(start_points=all_pairs[:, 0, :], end_points=all_pairs[:, 1, :])
     if any(ray["hit"] for ray in check_cast_results):
-        if gm.DEBUG:
+        if m.DEBUG_SAMPLING:
             refusal_log.append("check ray info: %r" % (check_cast_results))
 
         return False
