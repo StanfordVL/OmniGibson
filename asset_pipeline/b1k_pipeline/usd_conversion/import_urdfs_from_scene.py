@@ -1,18 +1,6 @@
-import xml.etree.ElementTree as ET
-from copy import deepcopy
 from os.path import exists
 
-import omni
-import omni.client
-import omni.kit.commands
-import omnigibson
-from omni.client._omniclient import Result
-from omni.isaac.urdf import URDFCreateImportConfig, URDFParseAndImportFile
-from omni.physx.scripts import utils
-from omnigibson import app
-from omnigibson.simulator import Simulator
-from pxr import Gf, PhysicsSchemaTools, Sdf, Usd, UsdLux, UsdPhysics
-from pxr.Sdf import ValueTypeNames as VT
+import omnigibson.lazy as lazy
 
 from b1k_pipeline.usd_conversion.expand_collision_obj_and_urdf import split_objs_in_urdf
 from b1k_pipeline.usd_conversion.preprocess_urdf_for_metalinks import (
@@ -23,7 +11,7 @@ SPLIT_COLLISION_MESHES = False
 
 def create_import_config():
     # Set up import configuration
-    import_config = URDFCreateImportConfig().do()
+    import_config = lazy.omni.isaac.urdf.URDFCreateImportConfig().do()
     drive_mode = (
         import_config.default_drive_type.__class__
     )  # Hacky way to get class for default drive type, options are JOINT_DRIVE_{NONE / POSITION / VELOCITY}
@@ -59,7 +47,7 @@ def import_obj_urdf(obj_category, obj_model, dataset_root, skip_if_exist=False):
             urdf_path = split_objs_in_urdf(urdf_fpath=urdf_path, name_suffix="split")
         print(f"Importing {obj_category}, {obj_model}...")
         # Only import if it doesn't exist
-        omni.kit.commands.execute(
+        lazy.omni.kit.commands.execute(
             "URDFParseAndImportFile",
             urdf_path=urdf_path,
             import_config=cfg,

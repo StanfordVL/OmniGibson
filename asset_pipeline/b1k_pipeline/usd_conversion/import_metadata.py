@@ -3,24 +3,13 @@ import os
 import shutil
 import xml.etree.ElementTree as ET
 from collections import OrderedDict
-from copy import deepcopy
 from os.path import exists
 from pathlib import Path
 
 import numpy as np
-import omni
+import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
-from omnigibson.utils.render_utils import make_glass
-import pxr.Vt
-from omni.isaac.core.prims.xform_prim import XFormPrim
-from omni.isaac.core.utils.prims import get_prim_at_path
-from omni.isaac.core.utils.stage import close_stage, get_current_stage, open_stage
-from omni.usd import create_material_input, get_shader_from_material
-from omnigibson.macros import gm
 from omnigibson.utils.usd_utils import BoundingBoxAPI, create_primitive_mesh
-from pxr import Gf, PhysxSchema, Usd, UsdGeom, UsdLux, UsdPhysics, UsdShade
-from pxr.Sdf import ValueTypeNames as VT
-from pxr.UsdGeom import Tokens
 
 from b1k_pipeline.usd_conversion.preprocess_urdf_for_metalinks import ALLOWED_META_TYPES
 
@@ -40,65 +29,65 @@ OBJECT_STATE_TEXTURES = {
 
 def set_mtl_albedo(mtl_prim, texture):
     mtl = "diffuse_texture"
-    create_material_input(mtl_prim, mtl, texture, VT.Asset)
+    lazy.omni.usd.create_material_input(mtl_prim, mtl, texture, lazy.pxr.Sdf.ValueTypeNames.Asset)
     # Verify it was set
-    shade = get_shader_from_material(mtl_prim)
+    shade = lazy.omni.usd.get_shader_from_material(mtl_prim)
     print(f"mtl {mtl}: {shade.GetInput(mtl).Get()}")
 
 
 def set_mtl_normal(mtl_prim, texture):
     mtl = "normalmap_texture"
-    create_material_input(mtl_prim, mtl, texture, VT.Asset)
+    lazy.omni.usd.create_material_input(mtl_prim, mtl, texture, lazy.pxr.Sdf.ValueTypeNames.Asset)
     # Verify it was set
-    shade = get_shader_from_material(mtl_prim)
+    shade = lazy.omni.usd.get_shader_from_material(mtl_prim)
     print(f"mtl {mtl}: {shade.GetInput(mtl).Get()}")
 
 
 def set_mtl_ao(mtl_prim, texture):
     mtl = "ao_texture"
-    create_material_input(mtl_prim, mtl, texture, VT.Asset)
+    lazy.omni.usd.create_material_input(mtl_prim, mtl, texture, lazy.pxr.Sdf.ValueTypeNames.Asset)
     # Verify it was set
-    shade = get_shader_from_material(mtl_prim)
+    shade = lazy.omni.usd.get_shader_from_material(mtl_prim)
     print(f"mtl {mtl}: {shade.GetInput(mtl).Get()}")
 
 
 def set_mtl_roughness(mtl_prim, texture):
     mtl = "reflectionroughness_texture"
-    create_material_input(mtl_prim, mtl, texture, VT.Asset)
-    create_material_input(
-        mtl_prim, "reflection_roughness_texture_influence", 1.0, VT.Float
+    lazy.omni.usd.create_material_input(mtl_prim, mtl, texture, lazy.pxr.Sdf.ValueTypeNames.Asset)
+    lazy.omni.usd.create_material_input(
+        mtl_prim, "reflection_roughness_texture_influence", 1.0, lazy.pxr.Sdf.ValueTypeNames.Float
     )
     # Verify it was set
-    shade = get_shader_from_material(mtl_prim)
+    shade = lazy.omni.usd.get_shader_from_material(mtl_prim)
     print(f"mtl {mtl}: {shade.GetInput(mtl).Get()}")
 
 
 def set_mtl_metalness(mtl_prim, texture):
     mtl = "metallic_texture"
-    create_material_input(mtl_prim, mtl, texture, VT.Asset)
-    create_material_input(mtl_prim, "metallic_texture_influence", 1.0, VT.Float)
+    lazy.omni.usd.create_material_input(mtl_prim, mtl, texture, lazy.pxr.Sdf.ValueTypeNames.Asset)
+    lazy.omni.usd.create_material_input(mtl_prim, "metallic_texture_influence", 1.0, lazy.pxr.Sdf.ValueTypeNames.Float)
     # Verify it was set
-    shade = get_shader_from_material(mtl_prim)
+    shade = lazy.omni.usd.get_shader_from_material(mtl_prim)
     print(f"mtl {mtl}: {shade.GetInput(mtl).Get()}")
 
 
 def set_mtl_opacity(mtl_prim, texture):
     return
     mtl = "opacity_texture"
-    create_material_input(mtl_prim, mtl, texture, VT.Asset)
-    create_material_input(mtl_prim, "enable_opacity", True, VT.Bool)
-    create_material_input(mtl_prim, "enable_opacity_texture", True, VT.Bool)
+    lazy.omni.usd.create_material_input(mtl_prim, mtl, texture, lazy.pxr.Sdf.ValueTypeNames.Asset)
+    lazy.omni.usd.create_material_input(mtl_prim, "enable_opacity", True, lazy.pxr.Sdf.ValueTypeNames.Bool)
+    lazy.omni.usd.create_material_input(mtl_prim, "enable_opacity_texture", True, lazy.pxr.Sdf.ValueTypeNames.Bool)
     # Verify it was set
-    shade = get_shader_from_material(mtl_prim)
+    shade = lazy.omni.usd.get_shader_from_material(mtl_prim)
     print(f"mtl {mtl}: {shade.GetInput(mtl).Get()}")
 
 
 def set_mtl_emission(mtl_prim, texture):
     mtl = "emissive_color_texture"
-    create_material_input(mtl_prim, mtl, texture, VT.Asset)
-    create_material_input(mtl_prim, "enable_emission", True, VT.Bool)
+    lazy.omni.usd.create_material_input(mtl_prim, mtl, texture, lazy.pxr.Sdf.ValueTypeNames.Asset)
+    lazy.omni.usd.create_material_input(mtl_prim, "enable_emission", True, lazy.pxr.Sdf.ValueTypeNames.Bool)
     # Verify it was set
-    shade = get_shader_from_material(mtl_prim)
+    shade = lazy.omni.usd.get_shader_from_material(mtl_prim)
     print(f"mtl {mtl}: {shade.GetInput(mtl).Get()}")
 
 
@@ -154,8 +143,8 @@ def get_joint_info(joint_element):
 def rename_prim(prim, name):
     path_from = prim.GetPrimPath().pathString
     path_to = f"{'/'.join(path_from.split('/')[:-1])}/{name}"
-    omni.kit.commands.execute("MovePrim", path_from=path_from, path_to=path_to)
-    return get_prim_at_path(path_to)
+    lazy.omni.kit.commands.execute("MovePrim", path_from=path_from, path_to=path_to)
+    return lazy.omni.isaac.core.utils.prims.get_prim_at_path(path_to)
 
 
 def get_visual_objs_from_urdf(urdf_path):
@@ -220,7 +209,7 @@ def import_rendering_channels(
             looks_prim = prim
         elif prim.GetPrimTypeInfo().GetTypeName() == "Xform":
             looks_prim_path = f"{str(prim.GetPrimPath())}/Looks"
-            looks_prim = get_prim_at_path(looks_prim_path)
+            looks_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(looks_prim_path)
         if not looks_prim:
             continue
         for subprim in looks_prim.GetChildren():
@@ -239,7 +228,7 @@ def import_rendering_channels(
     #     mtl_name="OmniPBR",
     #     mtl_created_list=mtl_created_list,
     # )
-    # default_mat = get_prim_at_path(mtl_created_list[0])
+    # default_mat = lazy.omni.isaac.core.utils.prims.get_prim_at_path(mtl_created_list[0])
     # default_mat = rename_prim(prim=default_mat, name=f"default_material")
     # print("Created default material:", default_mat.GetPath())
     #
@@ -328,7 +317,7 @@ def import_rendering_channels(
             mtl_name="OmniPBR",
             mtl_created_list=mtl_created_list,
         )
-        mat = get_prim_at_path(mtl_created_list[0])
+        mat = lazy.omni.isaac.core.utils.prims.get_prim_at_path(mtl_created_list[0])
 
         # Apply all rendering channels for this material
         for mat_type, mat_file in mtl_info.items():
@@ -343,7 +332,7 @@ def import_rendering_channels(
 
         # Rename material
         mat = rename_prim(prim=mat, name=mtl_name)
-        shade = UsdShade.Material(mat)
+        shade = lazy.pxr.UsdShade.Material(mat)
         shaders[mtl_name] = shade
         print(f"Created material {mtl_name}:", mtl_created_list[0])
 
@@ -373,7 +362,7 @@ def import_rendering_channels(
                     (f"{root_prim_path}/{link_name}/visuals/{mesh_name}", mtl_name)
                 )
         for mesh_prim_path, mtl_name in mesh_mtl_infos:
-            visual_prim = get_prim_at_path(mesh_prim_path)
+            visual_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(mesh_prim_path)
             assert (
                 visual_prim
             ), f"Error: Did not find valid visual prim at {mesh_prim_path}!"
@@ -381,8 +370,8 @@ def import_rendering_channels(
             print(
                 f"Binding material {mtl_name}, shader {shaders[mtl_name]}, to prim {mesh_prim_path}..."
             )
-            UsdShade.MaterialBindingAPI(visual_prim).Bind(
-                shaders[mtl_name], UsdShade.Tokens.strongerThanDescendants
+            lazy.pxr.UsdShade.MaterialBindingAPI(visual_prim).Bind(
+                shaders[mtl_name], lazy.pxr.UsdShade.Tokens.strongerThanDescendants
             )
 
     # Lastly, we copy object_state texture maps that are state-conditioned; e.g.: cooked, soaked, etc.
@@ -397,7 +386,7 @@ def import_rendering_channels(
     #     if prim.GetPrimTypeInfo().GetTypeName() == "Xform":
     #         # This could be a link, check if it owns a visual subprim
     #         link_name = prim.GetName()
-    #         visual_prim = get_prim_at_path(f"{prim.GetPrimPath().pathString}/visuals")
+    #         visual_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(f"{prim.GetPrimPath().pathString}/visuals")
     #         print(f"path: {prim.GetPrimPath().pathString}/visuals")
     #         print(f"visual prim: {visual_prim}")
     #
@@ -413,8 +402,8 @@ def import_rendering_channels(
     #             print("link_mat_files:", link_mat_files)
     #             if not link_mat_files:
     #                 # Bind default material to the visual prim
-    #                 shade = UsdShade.Material(default_mat)
-    #                 UsdShade.MaterialBindingAPI(visual_prim).Bind(shade, UsdShade.Tokens.strongerThanDescendants)
+    #                 shade = lazy.pxr.UsdShade.Material(default_mat)
+    #                 lazy.pxr.UsdShade.MaterialBindingAPI(visual_prim).Bind(shade, lazy.pxr.UsdShade.Tokens.strongerThanDescendants)
     #                 default_mat_is_used = True
     #             else:
     #                 # Create new material for this link
@@ -426,11 +415,11 @@ def import_rendering_channels(
     #                     mtl_created_list=mtl_created_list,
     #                 )
     #                 print(f"Created material for link {link_name}:", mtl_created_list[0])
-    #                 mat = get_prim_at_path(mtl_created_list[0])
+    #                 mat = lazy.omni.isaac.core.utils.prims.get_prim_at_path(mtl_created_list[0])
     #
-    #                 shade = UsdShade.Material(mat)
+    #                 shade = lazy.pxr.UsdShade.Material(mat)
     #                 # Bind the created link material to the visual prim
-    #                 UsdShade.MaterialBindingAPI(visual_prim).Bind(shade, UsdShade.Tokens.strongerThanDescendants)
+    #                 lazy.pxr.UsdShade.MaterialBindingAPI(visual_prim).Bind(shade, lazy.pxr.UsdShade.Tokens.strongerThanDescendants)
     #
     #                 # Iterate over all material channels and write them to the material
     #                 for link_mat_file in link_mat_files:
@@ -451,8 +440,8 @@ def import_rendering_channels(
     #                 mat = rename_prim(prim=mat, name=f"material_{link_name}")
     #
     # # For any remaining materials, we write them to the default material
-    # # default_mat = get_prim_at_path(f"{obj_prim.GetPrimPath().pathString}/Looks/material_material_0")
-    # # default_mat = get_prim_at_path(f"{obj_prim.GetPrimPath().pathString}/Looks/material_default")
+    # # default_mat = lazy.omni.isaac.core.utils.prims.get_prim_at_path(f"{obj_prim.GetPrimPath().pathString}/Looks/material_material_0")
+    # # default_mat = lazy.omni.isaac.core.utils.prims.get_prim_at_path(f"{obj_prim.GetPrimPath().pathString}/Looks/material_default")
     # print(f"default mat: {default_mat}, obj: {obj_category}, {prim.GetPrimPath().pathString}")
     # for mat_file in mat_files:
     #     # Copy this file into the materials folder
@@ -488,7 +477,7 @@ def add_xform_properties(prim):
         "xformOp:transform",
     ]
     prop_names = prim.GetPropertyNames()
-    xformable = UsdGeom.Xformable(prim)
+    xformable = lazy.pxr.UsdGeom.Xformable(prim)
     xformable.ClearXformOpOrder()
     # TODO: wont be able to delete props for non root links on articulated objects
     for prop_name in prop_names:
@@ -496,25 +485,25 @@ def add_xform_properties(prim):
             prim.RemoveProperty(prop_name)
     if "xformOp:scale" not in prop_names:
         xform_op_scale = xformable.AddXformOp(
-            UsdGeom.XformOp.TypeScale, UsdGeom.XformOp.PrecisionDouble, ""
+            lazy.pxr.UsdGeom.XformOp.TypeScale, lazy.pxr.UsdGeom.XformOp.PrecisionDouble, ""
         )
-        xform_op_scale.Set(Gf.Vec3d([1.0, 1.0, 1.0]))
+        xform_op_scale.Set(lazy.pxr.Gf.Vec3d([1.0, 1.0, 1.0]))
     else:
-        xform_op_scale = UsdGeom.XformOp(prim.GetAttribute("xformOp:scale"))
+        xform_op_scale = lazy.pxr.UsdGeom.XformOp(prim.GetAttribute("xformOp:scale"))
 
     if "xformOp:translate" not in prop_names:
         xform_op_translate = xformable.AddXformOp(
-            UsdGeom.XformOp.TypeTranslate, UsdGeom.XformOp.PrecisionDouble, ""
+            lazy.pxr.UsdGeom.XformOp.TypeTranslate, lazy.pxr.UsdGeom.XformOp.PrecisionDouble, ""
         )
     else:
-        xform_op_translate = UsdGeom.XformOp(prim.GetAttribute("xformOp:translate"))
+        xform_op_translate = lazy.pxr.UsdGeom.XformOp(prim.GetAttribute("xformOp:translate"))
 
     if "xformOp:orient" not in prop_names:
         xform_op_rot = xformable.AddXformOp(
-            UsdGeom.XformOp.TypeOrient, UsdGeom.XformOp.PrecisionDouble, ""
+            lazy.pxr.UsdGeom.XformOp.TypeOrient, lazy.pxr.UsdGeom.XformOp.PrecisionDouble, ""
         )
     else:
-        xform_op_rot = UsdGeom.XformOp(prim.GetAttribute("xformOp:orient"))
+        xform_op_rot = lazy.pxr.UsdGeom.XformOp(prim.GetAttribute("xformOp:orient"))
     xformable.SetXformOpOrder([xform_op_translate, xform_op_rot, xform_op_scale])
 
 def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
@@ -550,11 +539,11 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                 light_type = LIGHT_MAPPING[mesh_info["type"]]
                 prim_path = f"/{obj_model}/lights_{link_id}_0_link/light_{i}"
                 prim = (
-                    UsdLux.__dict__[f"{light_type}Light"]
+                    lazy.pxr.UsdLux.__dict__[f"{light_type}Light"]
                     .Define(stage, prim_path)
                     .GetPrim()
                 )
-                UsdLux.ShapingAPI.Apply(prim).GetShapingConeAngleAttr().Set(180.0)
+                lazy.pxr.UsdLux.ShapingAPI.Apply(prim).GetShapingConeAngleAttr().Set(180.0)
             else:
                 if meta_link_type == "particlesource":
                     mesh_type = "Cylinder"
@@ -562,18 +551,18 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                     # Create a primitive shape
                     mesh_type = mesh_info["type"].capitalize() if mesh_info["type"] != "box" else "Cube"
                 prim_path = f"/{obj_model}/{meta_link_type}_{link_id}_0_link/mesh_{i}"
-                assert mesh_type in UsdGeom.__dict__
+                assert mesh_type in lazy.pxr.UsdGeom.__dict__
                 # togglebutton has to be a sphere
                 if meta_link_type in ["togglebutton"]:
                     is_mesh = True
                 # particle applier has to be a cone or cylinder because of the visualization of the particle flow
                 elif meta_link_type in ["particleapplier"]:
                     assert mesh_type in ["Cone", "Cylinder"], f"Invalid mesh type for particleapplier: {mesh_type}"
-                prim = create_primitive_mesh(prim_path, mesh_type, stage=stage).GetPrim() if is_mesh else UsdGeom.__dict__[mesh_type].Define(stage, prim_path).GetPrim()
+                prim = create_primitive_mesh(prim_path, mesh_type, stage=stage).GetPrim() if is_mesh else lazy.pxr.UsdGeom.__dict__[mesh_type].Define(stage, prim_path).GetPrim()
 
             add_xform_properties(prim=prim)
             # Make sure mesh_prim has XForm properties
-            xform_prim = XFormPrim(prim_path=prim_path)
+            xform_prim = lazy.omni.isaac.core.prims.xform_prim.XFormPrim(prim_path=prim_path)
 
             # Get the mesh/light pose in the parent link frame
             mesh_in_parent_link_pos, mesh_in_parent_link_orn = np.array(mesh_info["position"]), np.array(
@@ -586,7 +575,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
 
             if is_light:
                 xform_prim.prim.GetAttribute("color").Set(
-                    Gf.Vec3f(*np.array(mesh_info["color"]) / 255.0)
+                    lazy.pxr.Gf.Vec3f(*np.array(mesh_info["color"]) / 255.0)
                 )
                 xform_prim.prim.GetAttribute("intensity").Set(mesh_info["intensity"])
                 if light_type == "Rect":
@@ -611,7 +600,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                         desired_radius = mesh_info["size"][0]
                         desired_height = mesh_info["size"][2]
                         height_offset = desired_height / 2.0
-                    xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_height))
+                    xform_prim.prim.GetAttribute("xformOp:scale").Set(lazy.pxr.Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_height))
                     # Offset the position by half the height because in 3dsmax the origin of the cylinder is at the center of the base
                     mesh_in_meta_link_pos += T.quat2mat(mesh_in_meta_link_orn) @ np.array(
                         [0.0, 0.0, height_offset])
@@ -622,7 +611,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                     desired_radius = mesh_info["size"][0]
                     desired_height = mesh_info["size"][2]
                     height_offset = -desired_height / 2.0
-                    xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_height))
+                    xform_prim.prim.GetAttribute("xformOp:scale").Set(lazy.pxr.Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_height))
                     # Flip the orientation of the z-axis because in 3dsmax the cone is pointing in the opposite direction
                     mesh_in_meta_link_orn = T.quat_multiply(mesh_in_meta_link_orn, T.axisangle2quat([np.pi, 0.0, 0.0]))
                     # Offset the position by half the height because in 3dsmax the origin of the cone is at the center of the base
@@ -631,17 +620,17 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                 elif mesh_type == "Cube":
                     if not is_mesh:
                         xform_prim.prim.GetAttribute("size").Set(1.0)
-                    xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(*mesh_info["size"]))
+                    xform_prim.prim.GetAttribute("xformOp:scale").Set(lazy.pxr.Gf.Vec3f(*mesh_info["size"]))
                 elif mesh_type == "Sphere":
                     if not is_mesh:
                         xform_prim.prim.GetAttribute("radius").Set(0.5)
                     desired_radius = mesh_info["size"][0]
-                    xform_prim.prim.GetAttribute("xformOp:scale").Set(Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_radius * 2))
+                    xform_prim.prim.GetAttribute("xformOp:scale").Set(lazy.pxr.Gf.Vec3f(desired_radius * 2, desired_radius * 2, desired_radius * 2))
                 else:
                     raise ValueError(f"Invalid mesh type: {mesh_type}")
 
                 # Make invisible
-                UsdGeom.Imageable(xform_prim.prim).MakeInvisible()
+                lazy.pxr.UsdGeom.Imageable(xform_prim.prim).MakeInvisible()
 
             xform_prim.set_local_pose(
                 translation=mesh_in_meta_link_pos,
@@ -654,22 +643,22 @@ def process_glass_link(prim):
     for gchild in prim.GetChildren():
         if gchild.GetTypeName() == "Mesh":
             # check if has col api, if not, this is visual
-            if not gchild.HasAPI(UsdPhysics.CollisionAPI):
+            if not gchild.HasAPI(lazy.pxr.UsdPhysics.CollisionAPI):
                 glass_prim_paths.append(gchild.GetPath().pathString)
         elif gchild.GetTypeName() == "Scope":
             # contains multiple additional prims, check those
             for ggchild in gchild.GetChildren():
                 if ggchild.GetTypeName() == "Mesh":
                     # check if has col api, if not, this is visual
-                    if not ggchild.HasAPI(UsdPhysics.CollisionAPI):
+                    if not ggchild.HasAPI(lazy.pxr.UsdPhysics.CollisionAPI):
                         glass_prim_paths.append(ggchild.GetPath().pathString)
 
     assert glass_prim_paths
 
-    stage = get_current_stage()
+    stage = lazy.omni.isaac.core.utils.stage.get_current_stage()
     root_path = stage.GetDefaultPrim().GetPath().pathString
     glass_mtl_prim_path = f"{root_path}/Looks/OmniGlass"
-    if not get_prim_at_path(glass_mtl_prim_path):
+    if not lazy.omni.isaac.core.utils.prims.get_prim_at_path(glass_mtl_prim_path):
         mtl_created = []
         omni.kit.commands.execute(
             "CreateAndBindMdlMaterialFromLibrary",
@@ -694,8 +683,8 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
     usd_path = f"{model_root_path}/usd/{obj_model}.usd"
 
     # Load model
-    open_stage(usd_path)
-    stage = get_current_stage()
+    lazy.omni.isaac.core.utils.stage.open_stage(usd_path)
+    stage = lazy.omni.isaac.core.utils.stage.get_current_stage()
     prim = stage.GetDefaultPrim()
 
     data = dict()
@@ -751,35 +740,35 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
     #                     ml_prim_path = (
     #                         f"{prim.GetPath()}/{meta_link_name}_{ml_id}_{i}_link"
     #                     )
-    #                     link_prim = get_prim_at_path(ml_prim_path)
+    #                     link_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(ml_prim_path)
     #                     assert (
     #                         link_prim
     #                     ), f"Should have found valid metalink prim at prim path: {ml_prim_path}"
     #
-    #                     link_prim.CreateAttribute("ig:is_metalink", VT.Bool)
+    #                     link_prim.CreateAttribute("ig:is_metalink", lazy.pxr.Sdf.ValueTypeNames.Bool)
     #                     link_prim.GetAttribute("ig:is_metalink").Set(True)
     #
     #                     # TODO! Validate that this works
     #                     # test on water sink 02: water sink location is 0.1, 0.048, 0.32
     #                     # water source location is -0.03724, 0.008, 0.43223
     #                     add_xform_properties(prim=link_prim)
-    #                     link_prim.GetAttribute("xformOp:translate").Set(Gf.Vec3f(*atrr["xyz"]))
+    #                     link_prim.GetAttribute("xformOp:translate").Set(lazy.pxr.Gf.Vec3f(*atrr["xyz"]))
     #                     if atrr["rpy"] is not None:
-    #                         link_prim.GetAttribute("xformOp:orient").Set(Gf.Quatf(*(T.euler2quat(atrr["rpy"])[[3, 0, 1, 2]])))
+    #                         link_prim.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatf(*(T.euler2quat(atrr["rpy"])[[3, 0, 1, 2]])))
     #
-    #                     link_prim.CreateAttribute("ig:orientation", VT.Quatf)
-    #                     link_prim.GetAttribute("ig:orientation").Set(Gf.Quatf(*atrr["rpy"]))
+    #                     link_prim.CreateAttribute("ig:orientation", lazy.pxr.Sdf.ValueTypeNames.Quatf)
+    #                     link_prim.GetAttribute("ig:orientation").Set(lazy.pxr.Gf.Quatf(*atrr["rpy"]))
 
     # Iterate over dict and replace any lists of dicts as dicts of dicts (with each dict being indexed by an integer)
     data = recursively_replace_list_of_dict(data)
 
     # Create attributes for bb, offset, category, model and store values
-    prim.CreateAttribute("ig:nativeBB", VT.Vector3f)
-    prim.CreateAttribute("ig:offsetBaseLink", VT.Vector3f)
-    prim.CreateAttribute("ig:category", VT.String)
-    prim.CreateAttribute("ig:model", VT.String)
-    prim.GetAttribute("ig:nativeBB").Set(Gf.Vec3f(*default_bb))
-    prim.GetAttribute("ig:offsetBaseLink").Set(Gf.Vec3f(*base_link_offset))
+    prim.CreateAttribute("ig:nativeBB", lazy.pxr.Sdf.ValueTypeNames.Vector3f)
+    prim.CreateAttribute("ig:offsetBaseLink", lazy.pxr.Sdf.ValueTypeNames.Vector3f)
+    prim.CreateAttribute("ig:category", lazy.pxr.Sdf.ValueTypeNames.String)
+    prim.CreateAttribute("ig:model", lazy.pxr.Sdf.ValueTypeNames.String)
+    prim.GetAttribute("ig:nativeBB").Set(lazy.pxr.Gf.Vec3f(*default_bb))
+    prim.GetAttribute("ig:offsetBaseLink").Set(lazy.pxr.Gf.Vec3f(*base_link_offset))
     prim.GetAttribute("ig:category").Set(obj_category)
     prim.GetAttribute("ig:model").Set(obj_model)
 
@@ -803,9 +792,9 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
     # Add material channels
     # print(f"prim children: {prim.GetChildren()}")
     # looks_prim_path = f"{str(prim.GetPrimPath())}/Looks"
-    # looks_prim = prim.GetChildren()[0] #get_prim_at_path(looks_prim_path)
+    # looks_prim = prim.GetChildren()[0] #lazy.omni.isaac.core.utils.prims.get_prim_at_path(looks_prim_path)
     # mat_prim_path = f"{str(prim.GetPrimPath())}/Looks/material_material_0"
-    # mat_prim = looks_prim.GetChildren()[0] #get_prim_at_path(mat_prim_path)
+    # mat_prim = looks_prim.GetChildren()[0] #lazy.omni.isaac.core.utils.prims.get_prim_at_path(mat_prim_path)
     # print(f"looks children: {looks_prim.GetChildren()}")
     # print(f"mat prim: {mat_prim}")
     if import_render_channels:
@@ -834,10 +823,10 @@ def recursively_replace_list_of_dict(dic):
         print(f"k: {k}")
         if v is None:
             # Replace None
-            dic[k] = Tokens.none
+            dic[k] = lazy.pxr.lazy.pxr.UsdGeom.Tokens.none
         elif isinstance(v, list) or isinstance(v, tuple):
             if len(v) == 0:
-                dic[k] = pxr.Vt.Vec3fArray()
+                dic[k] = lazy.pxr.Vt.Vec3fArray()
             elif isinstance(v[0], dict):
                 # Replace with dict in place
                 v = {str(i): vv for i, vv in enumerate(v)}
@@ -852,11 +841,11 @@ def recursively_replace_list_of_dict(dic):
                     # Do nothing
                     pass
                 if len(v[0]) == 2:
-                    dic[k] = pxr.Vt.Vec2fArray(v)
+                    dic[k] = lazy.pxr.Vt.Vec2fArray(v)
                 elif len(v[0]) == 3:
-                    dic[k] = pxr.Vt.Vec3fArray(v)
+                    dic[k] = lazy.pxr.Vt.Vec3fArray(v)
                 elif len(v[0]) == 4:
-                    dic[k] = pxr.Vt.Vec4fArray(v)
+                    dic[k] = lazy.pxr.Vt.Vec4fArray(v)
                 else:
                     raise ValueError(
                         f"No support for storing matrices of length {len(v[0])}!"
@@ -866,32 +855,32 @@ def recursively_replace_list_of_dict(dic):
                 #     # Do nothing
                 #     pass
                 # elif len(v) == 2:
-                #     dic[k] = Gf.Vec2i(v)
+                #     dic[k] = lazy.pxr.Gf.Vec2i(v)
                 # elif len(v) == 3:
-                #     dic[k] = Gf.Vec3i(v)
+                #     dic[k] = lazy.pxr.Gf.Vec3i(v)
                 # elif len(v) == 4:
-                #     dic[k] = Gf.Vec4i(v)
+                #     dic[k] = lazy.pxr.Gf.Vec4i(v)
                 # else:
-                dic[k] = pxr.Vt.IntArray(v)
+                dic[k] = lazy.pxr.Vt.IntArray(v)
                 # raise ValueError(f"No support for storing numeric arrays of length {len(v)}! Array: {v}")
             elif isinstance(v[0], float):
                 # if len(v) == 1:
                 #     # Do nothing
                 #     pass
                 # elif len(v) == 2:
-                #     dic[k] = Gf.Vec2f(v)
+                #     dic[k] = lazy.pxr.Gf.Vec2f(v)
                 # elif len(v) == 3:
-                #     dic[k] = Gf.Vec3f(v)
+                #     dic[k] = lazy.pxr.Gf.Vec3f(v)
                 # elif len(v) == 4:
-                #     dic[k] = Gf.Vec4f(v)
+                #     dic[k] = lazy.pxr.Gf.Vec4f(v)
                 # else:
-                dic[k] = pxr.Vt.FloatArray(v)
+                dic[k] = lazy.pxr.Vt.FloatArray(v)
                 # raise ValueError(f"No support for storing numeric arrays of length {len(v)}! Array: {v}")
             else:
                 # Replace any Nones
                 for i, ele in enumerate(v):
                     if ele is None:
-                        v[i] = Tokens.none
+                        v[i] = lazy.pxr.lazy.pxr.UsdGeom.Tokens.none
         if isinstance(v, dict):
             # Iterate through nested dictionaries
             dic[k] = recursively_replace_list_of_dict(v)

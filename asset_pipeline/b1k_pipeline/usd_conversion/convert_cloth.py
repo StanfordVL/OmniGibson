@@ -1,10 +1,5 @@
-import os
 import shutil
-import numpy as np
-from omni.isaac.core.utils.stage import open_stage, get_current_stage
-from omni.isaac.core.utils.prims import get_prim_at_path, is_prim_path_valid
-from omni.kit.commands import execute
-from omnigibson.macros import gm
+import omnigibson.lazy as lazy
 
 def postprocess_cloth(usd_file):
     # Copy to new path
@@ -12,8 +7,8 @@ def postprocess_cloth(usd_file):
     shutil.copy2(usd_file, cloth_usd_file)
 
     # Open the new file
-    assert open_stage(cloth_usd_file)
-    stage = get_current_stage()
+    assert lazy.omni.isaac.core.utils.stage.open_stage(cloth_usd_file)
+    stage = lazy.omni.isaac.core.utils.stage.get_current_stage()
     prim = stage.GetDefaultPrim()
 
     # Collapse the typical structure to a single visual mesh
@@ -22,19 +17,20 @@ def postprocess_cloth(usd_file):
     link = links[0]
 
     tmp_base_link_path = prim.GetPrimPath().AppendPath("base_link_backup")
-    execute("MovePrim", path_from=link.GetPrimPath(), path_to=tmp_base_link_path)
+    lazy.omni.kit.commands.execute("MovePrim", path_from=link.GetPrimPath(), path_to=tmp_base_link_path)
 
-    link = get_prim_at_path(tmp_base_link_path)
+    link = lazy.omni.isaac.core.utils.prims.get_prim_at_path(tmp_base_link_path)
 
     visual_mesh_path = tmp_base_link_path.AppendPath("visuals")
-    assert is_prim_path_valid(visual_mesh_path), f"WARNING: visual mesh path [{visual_mesh_path}] does not exist"
+    assert lazy.omni.isaac.core.utils.prims.is_prim_path_valid(visual_mesh_path), \
+        f"WARNING: visual mesh path [{visual_mesh_path}] does not exist"
 
-    visual_mesh = get_prim_at_path(visual_mesh_path)
+    visual_mesh = lazy.omni.isaac.core.utils.prims.get_prim_at_path(visual_mesh_path)
     assert visual_mesh.GetTypeName() == "Mesh", \
         f"WARNING: visual mesh path [{visual_mesh_path}] does not have type Mesh " \
         f"(likely because there are multiple visual meshes)."
 
-    execute("MovePrim", path_from=visual_mesh.GetPrimPath(), path_to=prim.GetPrimPath().AppendPath("base_link"))
+    lazy.omni.kit.commands.execute("MovePrim", path_from=visual_mesh.GetPrimPath(), path_to=prim.GetPrimPath().AppendPath("base_link"))
 
     stage.RemovePrim(tmp_base_link_path)
     stage.Save()
