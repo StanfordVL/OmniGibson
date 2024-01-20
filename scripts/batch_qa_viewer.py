@@ -15,6 +15,7 @@ from omnigibson.objects.dataset_object import DatasetObject
 import omnigibson.utils.transform_utils as T
 import omnigibson.lazy as lazy
 from omnigibson.utils.ui_utils import KeyboardEventHandler
+from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 
 
 def load_objects(object_path):
@@ -95,6 +96,8 @@ def main():
     
     # Loop through each category
     for cat, models in remaining_objs_by_cat.items():
+        if cat in STRUCTURE_CATEGORIES:
+            continue
         print(f"Processing category {cat}...")
         
         for batch_start in range(0, len(models), 10):
