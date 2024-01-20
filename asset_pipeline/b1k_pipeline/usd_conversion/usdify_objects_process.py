@@ -14,7 +14,8 @@ gm.ENABLE_FLATCACHE = False
 gm.USE_GPU_DYNAMICS = False
 gm.USE_ENCRYPTED_ASSETS = True
 
-from omnigibson import app
+import omnigibson as og
+from omnigibson.simulator import launch_simulator
 from omnigibson.utils.asset_utils import encrypt_file
 
 from b1k_pipeline.usd_conversion.import_metadata import import_obj_metadata
@@ -26,6 +27,8 @@ CLOTH_CATEGORIES = ["t_shirt", "dishtowel", "carpet"]
 
 
 if __name__ == "__main__":
+    launch_simulator()
+
     dataset_root = str(pathlib.Path(sys.argv[1]))
     batch = sys.argv[2:]
     for path in batch:
@@ -53,4 +56,4 @@ if __name__ == "__main__":
             encrypt_file(usd_path, encrypted_filename=encrypted_usd_path)
             os.remove(usd_path)
 
-    app.close()
+    og.shutdown()

@@ -1,11 +1,6 @@
-FROM stanfordvl/omnigibson:latest
+FROM stanfordvl/omnigibson:og-develop
 
 ADD environment.yml /tmp/environment.yml
-
-# TODO: Remove this
-# Temporarily install updated BDDL
-RUN micromamba run -n omnigibson pip uninstall -y bddl
-RUN micromamba run -n omnigibson pip install https://github.com/StanfordVL/bddl/archive/develop.zip
 
 # Create the ig_pipeline environment
 RUN micromamba env create --file /tmp/environment.yml
