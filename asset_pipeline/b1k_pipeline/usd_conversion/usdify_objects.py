@@ -11,16 +11,19 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
-BATCH_SIZE = 64
+BATCH_SIZE = 1
 WORKER_COUNT = 8
 
 def run_on_batch(dataset_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
-    return subprocess.run(cmd, capture_output=True, check=True, cwd="/scr/ig_pipeline")
+    obj = batch[0][:-1].split("/")[-1]
+    with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f:
+        return subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT, check=True, cwd="/scr/ig_pipeline")
 
 
 def main():
+    failed_objects = set()
     with PipelineFS() as pipeline_fs, \
          ParallelZipFS("objects.zip") as objects_fs, \
          ParallelZipFS("metadata.zip") as metadata_fs, \
@@ -66,11 +69,11 @@ def main():
                     batch = futures[future]
                     if future.exception():
                         e = future.exception()
-                        logs.append({"stdout": e.stdout.decode("utf-8"), "stderr": e.stderr.decode("utf-8")})
+                        # logs.append({"stdout": e.stdout.decode("utf-8"), "stderr": e.stderr.decode("utf-8")})
                         print(e)
                     else:
                         out = future.result()
-                        logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
+                        # logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
 
                     # Remove everything that failed and make a new batch from them.
                     new_batch = []
@@ -90,6 +93,7 @@ def main():
                     # Otherwise, decide if we are going to requeue or just skip.
                     if len(batch) == 1:
                         print(f"Failed on a single item {batch[0]}. Skipping.")
+                        failed_objects.add(batch[0])
                     else:
                         print(f"Subdividing batch of length {len(batch)}")
                         batch_size = len(batch) // 2
@@ -119,10 +123,11 @@ def main():
 
         # Save the logs
         with pipeline_fs.pipeline_output().open("usdify_objects.json", "w") as f:
-            json.dump(logs, f)
-
-        # At this point, out_temp_fs's contents will be zipped. Save the success file.
-        pipeline_fs.pipeline_output().touch("usdify_objects.success")
+            json.dump({
+                "success": len(failed_objects) == 0,
+                "failed_objects": sorted(failed_objects),
+                "logs": logs,
+            }, f)
 
 if __name__ == "__main__":
     main()

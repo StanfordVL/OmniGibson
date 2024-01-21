@@ -11,7 +11,7 @@ SPLIT_COLLISION_MESHES = False
 
 def create_import_config():
     # Set up import configuration
-    import_config = lazy.omni.isaac.urdf.URDFCreateImportConfig().do()
+    _, import_config = lazy.omni.kit.commands.execute("URDFCreateImportConfig")
     drive_mode = (
         import_config.default_drive_type.__class__
     )  # Hacky way to get class for default drive type, options are JOINT_DRIVE_{NONE / POSITION / VELOCITY}
