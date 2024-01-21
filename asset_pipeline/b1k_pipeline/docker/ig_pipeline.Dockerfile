@@ -2,6 +2,8 @@ FROM stanfordvl/omnigibson:og-develop
 
 ADD environment.yml /tmp/environment.yml
 
+SHELL ["/bin/bash", "-c"]
+
 # Create the ig_pipeline environment
 RUN micromamba env create --file /tmp/environment.yml
 
