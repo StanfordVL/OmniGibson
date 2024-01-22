@@ -58,7 +58,7 @@ def generate_option_coacd(threshold, prep_resolution, max_convex_hull):
             coacd_worker,
             input_stream.getvalue(),
             threshold, prep_resolution, max_convex_hull,
-            retries=2)
+            retries=3)
         result = coacd_future.result()
         if not result:
             raise ValueError("coacd failed")
