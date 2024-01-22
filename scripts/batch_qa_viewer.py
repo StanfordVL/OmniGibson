@@ -5,6 +5,7 @@ Helper script to perform batch QA on OmniGibson objects.
 import os
 import sys
 import json
+import numpy as np
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.utils.asset_utils import (
@@ -18,56 +19,101 @@ from omnigibson.utils.ui_utils import KeyboardEventHandler
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 
 
-def load_objects(object_path):
-    pass
+def evaluate_batch(batch, category, record_path, env):
 
-def evaluate_batch(batch, category):
-        done = False
-        def set_done():
-            nonlocal done
-            done = True
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.C,
-            callback_fn=set_done,
+    done = False
+    
+    skip = False
+    
+    def set_skip():
+        nonlocal skip
+        skip = True
+        nonlocal done
+        done = True
+    
+    def set_done():
+        nonlocal done
+        done = True
+   
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.C,
+        callback_fn=set_done,
+    )
+    
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.V,
+        callback_fn=lambda: set_skip(),
+    )
+
+    # Load the category's objects
+    og.sim.stop()
+
+    fixed_x_spacing = 0.5
+
+    all_objects = []
+    all_objects_x_coordinates = []
+
+    for index, obj_model in enumerate(batch):
+        # Initialize x_coordinate
+        if index == 0:
+            x_coordinate = 0
+        else:
+            previous_object_width = all_objects[-1].aabb_extent[0]
+            x_coordinate = all_objects_x_coordinates[-1] + previous_object_width + fixed_x_spacing
+
+        obj = DatasetObject(
+            name=obj_model,
+            category=category,
+            model=obj_model,
+            position=[x_coordinate, 0, 0],
         )
+        all_objects.append(obj)
+        og.sim.import_object(obj)
+        [link.disable_gravity() for link in obj.links.values()]
+        all_objects_x_coordinates.append(x_coordinate)
 
-        # Load the category's objects
-        og.sim.stop()
+    for index, obj in enumerate(all_objects):
+        offset = obj.get_position()[2] - obj.aabb_center[2]
+        z_coordinate = obj.aabb_extent[2]/2 + offset + 0.5
+        obj.set_position_orientation(position=[all_objects_x_coordinates[index], 0, z_coordinate])
 
-        x_spacing = 2  # TODO: determine spacing between objects, this can be half of max aabb_extent + fixed spacing
+    og.sim.play()
+    
+    print("Press 'V' skip current batch.")
+    print("Press 'C' to continue to next batch and save current configurations.")
 
-        for index, obj_model in enumerate(batch):
-            x_coordinate = index * x_spacing  # Calculate x-coordinate based on index
-            obj = DatasetObject(
-                name=obj_model,
-                category=category,
-                model=obj_model,
-                position=[x_coordinate, 0, 10.0],
-                fixed_base=True,
-            )
-            og.sim.import_object(obj)
+    while not done:
+        env.step([])
 
-        og.sim.play()
-
-        while not done:
-            og.sim.render()
-        
-        # TODO: Save each object in a separate file
-
-        # Reset keyboard callbacks
-        KeyboardEventHandler.reset()
+    if not skip:
+        for obj in all_objects:
+            orientation = obj.get_orientation()
+            scale = obj.scale
+            if not os.path.exists(os.path.join(record_path, category)):
+                os.makedirs(os.path.join(record_path, category))
+            with open(os.path.join(record_path, category, obj.model + ".json"), "w") as f:
+                orientation_list = orientation.tolist()
+                scale_list = scale.tolist()
+                # dump both orientation and scale into the same json file
+                json.dump([orientation_list, scale_list], f)
+    
+    # remove all objects
+    for obj in all_objects:
+        og.sim.remove_object(obj)
     
     
 def main():
     # ask for user input for record path
     record_path = input("Enter record path: ")
-    
+
     processed_objs = set()
     if os.path.exists(record_path):
-        # Load the processed objects from the pass record file
-        with open(record_path) as f:
-            processed_objs = {tuple(obj) for obj in json.load(f)}
-    
+        for _, _, files in os.walk(record_path):
+            for file in files:
+                if file.endswith(".json"):
+                    processed_objs.add(file[:-5])
+    print(f"{len(processed_objs)} objects have been processed.")
+
     # Get all the objects in the dataset
     all_objs = {
         (cat, model) for cat in get_all_object_categories()
@@ -75,13 +121,17 @@ def main():
     }
     
     # Compute the remaining objects to be processed
-    remaining_objs = all_objs - processed_objs
+    processed_models = {obj for obj in processed_objs}
+    remaining_objs = {(cat, model) for cat, model in all_objs if model not in processed_models}
     print(f"{len(remaining_objs)} objects remaining out of {len(all_objs)}.")
     
     cfg = {"scene": {"type": "Scene"}}
 
     # Create the environment
     env = og.Environment(configs=cfg)
+    
+    # Allow user to teleoperate the camera
+    # cam_mover = og.sim.enable_viewer_camera_teleoperation()
 
     # Make it brighter
     dome_light = og.sim.scene.skybox
@@ -94,16 +144,19 @@ def main():
             remaining_objs_by_cat[cat] = []
         remaining_objs_by_cat[cat].append(model)
     
+    KeyboardEventHandler.initialize()
+    
     # Loop through each category
     for cat, models in remaining_objs_by_cat.items():
         if cat in STRUCTURE_CATEGORIES:
             continue
         print(f"Processing category {cat}...")
+        print(f"Processing {len(models)} objects in category {cat}...")
         
         for batch_start in range(0, len(models), 10):
             batch_end = min(batch_start + 10, len(models))
             batch = models[batch_start:batch_end]
-            evaluate_batch(batch, cat)
+            evaluate_batch(batch, cat, record_path, env)
 
 
 if __name__ == "__main__":
