@@ -26,6 +26,7 @@ PARALLELS = [
     "objects_usd.zip",
     "metadata.zip",
     "scenes_json.zip",
+    "systems.zip",
 ]
 
 def main():
@@ -63,6 +64,15 @@ def main():
                 json_dir = scenes_dir.opendir(renamed_dir).opendir("json")
                 for json_file in list(json_dir.listdir("/")):
                     json_dir.move(json_file, "WIP_" + json_file)
+
+            # Nuke any systems' directories in the objects directory
+            print("Removing object dirs of systems")
+            objects_dir = out_fs.opendir("objects")
+            systems_dir = out_fs.opendir("systems")
+            for system_dir in list(systems_dir.listdir("/")):
+                if objects_dir.exists(system_dir):
+                    print("Removing", system_dir)
+                    objects_dir.removetree(system_dir)
 
     except Exception as e:
         success = False
