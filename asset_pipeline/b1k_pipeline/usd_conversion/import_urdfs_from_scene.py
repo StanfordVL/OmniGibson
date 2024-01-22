@@ -45,7 +45,7 @@ def import_obj_urdf(obj_category, obj_model, dataset_root, skip_if_exist=False):
         if SPLIT_COLLISION_MESHES:
             print(f"Converting collision meshes from {obj_category}, {obj_model}...")
             urdf_path = split_objs_in_urdf(urdf_fpath=urdf_path, name_suffix="split")
-        print(f"Importing {obj_category}, {obj_model}...")
+        print(f"Importing {obj_category}, {obj_model} into path {usd_path}...")
         # Only import if it doesn't exist
         lazy.omni.kit.commands.execute(
             "URDFParseAndImportFile",
@@ -53,3 +53,4 @@ def import_obj_urdf(obj_category, obj_model, dataset_root, skip_if_exist=False):
             import_config=cfg,
             dest_path=usd_path,
         )
+        print(f"Imported {obj_category}, {obj_model}")

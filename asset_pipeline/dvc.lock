@@ -6669,27 +6669,27 @@ stages:
       md5: 3a697ffec67cfa78eebde7eda87edd9a
       size: 4038
     - path: b1k_pipeline/usd_conversion/import_metadata.py
-      md5: cb5c63d1a6e4a9945f2e116a87ecc5b6
-      size: 41703
+      md5: c3b1caa40c81c4f5704aadd834e73733
+      size: 41800
     - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
-      md5: 18fe6c1cc399b555b0c8339988d22042
-      size: 2236
+      md5: 3415e42a56e2179997faa8e7af512ecc
+      size: 2312
     - path: b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
-      md5: 34bda2403ce5837ea9d00b3c4142aa9e
-      size: 11887
+      md5: a4a31f1ff8f7b8233fadc4220705ca25
+      size: 11935
     - path: b1k_pipeline/usd_conversion/usdify_objects.py
-      md5: 5ab938df9f86d1d80ceea2b615796f68
-      size: 6136
+      md5: d38c65677da0acf51e41759b62106e22
+      size: 6461
     - path: b1k_pipeline/usd_conversion/usdify_objects_process.py
       md5: 615640b6553d34cc867f00b4482d9573
       size: 2198
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: 76cdb2bad9582d23c1f6f4d868218d6c
-      size: 22
+      md5: 690f148bd28686b246dd1a264d93af76
+      size: 110773039
     - path: artifacts/pipeline/usdify_objects.json
-      md5: 8a1c129d298c0e5ba012af508802279f
-      size: 1012
+      md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
+      size: 51
   export_scene@scenes/Beechwood_1_int:
     cmd: python -m b1k_pipeline.export_scene scenes/Beechwood_1_int
     deps:
@@ -7116,61 +7116,25 @@ stages:
     - path: b1k_pipeline/aggregate_scenes.py
       md5: c48ef36be3ab8b6c4b9a61e2dae6cf00
       size: 1558
-    - path: cad/scenes/Beechwood_0_garden/artifacts/export_scene.success
+    - path: cad/scenes/hall_arch_wood/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
-    - path: cad/scenes/Beechwood_0_garden/artifacts/scene.urdf
-      md5: d9604ca44053fd6d385f9e218544ba49
-      size: 131018
-    - path: cad/scenes/Beechwood_0_int/artifacts/export_scene.success
+    - path: cad/scenes/hall_arch_wood/artifacts/scene.urdf
+      md5: e4062adf5919c7100679b1fbd701e12e
+      size: 35016
+    - path: cad/scenes/public_restroom_marble/artifacts/export_scene.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
-    - path: cad/scenes/Beechwood_0_int/artifacts/scene.urdf
-      md5: 12a6fb30b4c55888353b99463c9f4978
-      size: 67089
-    - path: cad/scenes/Merom_0_garden/artifacts/export_scene.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
-    - path: cad/scenes/Merom_0_garden/artifacts/scene.urdf
-      md5: 0883f9e741ab448e21c1cfb585c36e99
-      size: 74478
-    - path: cad/scenes/Pomaria_0_garden/artifacts/export_scene.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
-    - path: cad/scenes/Pomaria_0_garden/artifacts/scene.urdf
-      md5: bffccf8e9513b9d6ef24c24409b742b0
-      size: 98658
-    - path: cad/scenes/Rs_garden/artifacts/export_scene.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
-    - path: cad/scenes/Rs_garden/artifacts/scene.urdf
-      md5: 126dd3cdcae8c016059cfbe69742e44a
-      size: 63934
-    - path: cad/scenes/Wainscott_0_garden/artifacts/export_scene.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
-    - path: cad/scenes/Wainscott_0_garden/artifacts/scene.urdf
-      md5: 342d0fae05b3192d28f1d52015a4db66
-      size: 186343
-    - path: cad/scenes/public_restroom_blue/artifacts/export_scene.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
-    - path: cad/scenes/public_restroom_blue/artifacts/scene.urdf
-      md5: 572c85101bb3d50a839c7a006b660abb
-      size: 19542
-    - path: cad/scenes/school_geography/artifacts/export_scene.success
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
-    - path: cad/scenes/school_geography/artifacts/scene.urdf
-      md5: 309d340735f7d4277c39bd98c6d0789d
-      size: 292971
+    - path: cad/scenes/public_restroom_marble/artifacts/scene.urdf
+      md5: fda525fae82998bfe55e1c32024db8fa
+      size: 17109
     - path: params.yaml
-      md5: 90e22b7412b274273c765fd8eb929684
-      size: 6169
+      md5: 8453710644a1443ab1ccb83cceda351d
+      size: 5001
     outs:
     - path: artifacts/parallels/scenes.zip
-      md5: 80c72ecc83e771ae0a3329800b1de92b
-      size: 130574
+      md5: 19f152f349cf8eb5a8495a5d0e32d0ab
+      size: 8482
     - path: artifacts/pipeline/aggregate_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -7502,14 +7466,14 @@ stages:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_scenes
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: 1f032a611c4364caf9913311f0717983
-      size: 23579
+      md5: 31293a432ed1e937e5922fbcbfd3ebd2
+      size: 1779
     - path: artifacts/parallels/objects_usd.zip
-      md5: cb58c3702e901c2ae15f2d486de73a55
-      size: 6390589170
+      md5: 690f148bd28686b246dd1a264d93af76
+      size: 110773039
     - path: artifacts/parallels/scenes.zip
-      md5: 80c72ecc83e771ae0a3329800b1de92b
-      size: 130574
+      md5: 19f152f349cf8eb5a8495a5d0e32d0ab
+      size: 8482
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -7520,30 +7484,30 @@ stages:
       md5: 3a697ffec67cfa78eebde7eda87edd9a
       size: 4038
     - path: b1k_pipeline/usd_conversion/import_metadata.py
-      md5: bd7368a885e736eca1b8c97e213918af
-      size: 40201
+      md5: c3b1caa40c81c4f5704aadd834e73733
+      size: 41800
     - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
-      md5: b372316a3b444fdf34c1a88b28308cef
-      size: 2640
+      md5: 3415e42a56e2179997faa8e7af512ecc
+      size: 2312
     - path: b1k_pipeline/usd_conversion/make_maps.py
       md5: b233b921a162ab66a07b5032f38ae3a4
       size: 8433
     - path: b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
-      md5: 34bda2403ce5837ea9d00b3c4142aa9e
-      size: 11887
+      md5: a4a31f1ff8f7b8233fadc4220705ca25
+      size: 11935
     - path: b1k_pipeline/usd_conversion/usdify_scenes.py
       md5: 01e10d22f3c5620e61599c849770892a
       size: 3571
     - path: b1k_pipeline/usd_conversion/usdify_scenes_process.py
-      md5: 0516ac6ac656699dafbacce8adaf93d6
-      size: 1890
+      md5: d79d250ca2e94cd4742ff0cbbc20df54
+      size: 1937
     outs:
     - path: artifacts/parallels/scenes_json.zip
-      md5: 6d49de8930bc01d56c393fbcae1b13cf
-      size: 1159678
+      md5: 76cdb2bad9582d23c1f6f4d868218d6c
+      size: 22
     - path: artifacts/pipeline/usdify_scenes.json
-      md5: 74a5f267ca29f46ac7a76c2aca7dc4ff
-      size: 707167
+      md5: 45452be64035f99b92158b1174ae4527
+      size: 276290
     - path: artifacts/pipeline/usdify_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8182,8 +8146,8 @@ stages:
       md5: a856e91a721fcf479971b8aaade67162
       size: 6288
     - path: cad/scenes/hall_arch_wood/artifacts/meshes.zip
-      md5: 226ebde626f8ec65a52f5389b98a83c8
-      size: 79607460
+      md5: e1786745ffc1353b07781197e6375683
+      size: 78149825
     - path: cad/scenes/hall_arch_wood/artifacts/room_object_list.json
       md5: d4f51c58ccad92c227f745ec7df4ec82
       size: 1266
@@ -8195,8 +8159,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/hall_arch_wood/artifacts/scene.urdf
-      md5: b4a631218377342c715edb4be587c942
-      size: 35021
+      md5: e4062adf5919c7100679b1fbd701e12e
+      size: 35016
   export_scene@scenes/hall_conference_large:
     cmd: python -m b1k_pipeline.export_scene scenes/hall_conference_large
     deps:
@@ -8546,8 +8510,8 @@ stages:
       md5: a856e91a721fcf479971b8aaade67162
       size: 6288
     - path: cad/scenes/public_restroom_marble/artifacts/meshes.zip
-      md5: ce774a8bad015517e84226d5a92ae94c
-      size: 37259957
+      md5: 23e2e50f1cf22bd7e8c132d9e8e81338
+      size: 37292458
     - path: cad/scenes/public_restroom_marble/artifacts/room_object_list.json
       md5: e7807630cbb982f93bd15ae1d01eb656
       size: 1065

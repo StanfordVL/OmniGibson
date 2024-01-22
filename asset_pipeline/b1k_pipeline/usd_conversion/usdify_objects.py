@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import random
 import subprocess
@@ -11,15 +12,15 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
-BATCH_SIZE = 1
 WORKER_COUNT = 8
+BATCH_SIZE = 64
 
 def run_on_batch(dataset_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
     obj = batch[0][:-1].split("/")[-1]
-    with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f:
-        return subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT, check=True, cwd="/scr/ig_pipeline")
+    with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{obj}.err", "w") as ferr:
+        return subprocess.run(cmd, stdout=f, stderr=ferr, check=True, cwd="/scr/ig_pipeline")
 
 
 def main():
@@ -49,9 +50,13 @@ def main():
             object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
             print("Queueing batches.")
             print("Total count: ", len(object_glob))
+
+            # Make sure workers don't idle by reducing batch size when possible.
+            batch_size = min(BATCH_SIZE, math.ceil(len(object_glob) / WORKER_COUNT))
+
             futures = {}
-            for start in range(0, len(object_glob), BATCH_SIZE):
-                end = start + BATCH_SIZE
+            for start in range(0, len(object_glob), batch_size):
+                end = start + batch_size
                 batch = object_glob[start:end]
                 worker_future = dask_client.submit(
                     run_on_batch,
@@ -95,10 +100,12 @@ def main():
                         print(f"Failed on a single item {batch[0]}. Skipping.")
                         failed_objects.add(batch[0])
                     else:
-                        print(f"Subdividing batch of length {len(batch)}")
-                        batch_size = len(batch) // 2
-                        subbatches = [batch[:batch_size], batch[batch_size:]]
+                        print(f"Subdividing batch of length {len(new_batch)}")
+                        batch_size = len(new_batch) // 2
+                        subbatches = [new_batch[:batch_size], new_batch[batch_size:]]
                         for subbatch in subbatches:
+                            if not subbatch:
+                                continue
                             worker_future = dask_client.submit(
                                 run_on_batch,
                                 dataset_fs.getsyspath("/"),

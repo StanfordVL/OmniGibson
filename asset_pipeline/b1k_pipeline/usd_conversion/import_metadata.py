@@ -574,17 +574,17 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                                           meta_link_in_parent_link_pos, meta_link_in_parent_link_orn)
 
             if is_light:
-                xform_prim.prim.GetAttribute("color").Set(
+                xform_prim.prim.GetAttribute("inputs:color").Set(
                     lazy.pxr.Gf.Vec3f(*np.array(mesh_info["color"]) / 255.0)
                 )
-                xform_prim.prim.GetAttribute("intensity").Set(mesh_info["intensity"])
+                xform_prim.prim.GetAttribute("inputs:intensity").Set(mesh_info["intensity"])
                 if light_type == "Rect":
-                    xform_prim.prim.GetAttribute("height").Set(mesh_info["length"])
-                    xform_prim.prim.GetAttribute("width").Set(mesh_info["width"])
+                    xform_prim.prim.GetAttribute("inputs:height").Set(mesh_info["length"])
+                    xform_prim.prim.GetAttribute("inputs:width").Set(mesh_info["width"])
                 elif light_type == "Disk":
-                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["length"])
+                    xform_prim.prim.GetAttribute("inputs:radius").Set(mesh_info["length"])
                 elif light_type == "Sphere":
-                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["length"])
+                    xform_prim.prim.GetAttribute("inputs:radius").Set(mesh_info["length"])
                 else:
                     raise ValueError(f"Invalid light type: {light_type}")
             else:
@@ -681,6 +681,7 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
     # Check if filepath exists
     model_root_path = f"{dataset_root}/objects/{obj_category}/{obj_model}"
     usd_path = f"{model_root_path}/usd/{obj_model}.usd"
+    print("Loading", usd_path, "for metadata import.")
 
     print("Start metadata import")
 
