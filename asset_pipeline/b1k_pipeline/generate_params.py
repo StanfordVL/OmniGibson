@@ -70,13 +70,14 @@ FINAL_SCENES = [
     "gates_bedroom",
 ]
 
-APPROVED_OBJS = set()
+APPROVED_OBJS = {
+    ".*",
+}
 
 REJECTED_OBJS = set()
 
 APPROVED_SCENES = {
-    "hall_arch_wood",
-    "public_restroom_marble",
+    ".*",
 }
 
 REJECTED_SCENES = {
