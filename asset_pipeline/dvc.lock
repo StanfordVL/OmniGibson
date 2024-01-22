@@ -9590,27 +9590,36 @@ stages:
     cmd: python -m b1k_pipeline.pack_dataset
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: 1f032a611c4364caf9913311f0717983
-      size: 23579
+      md5: daebd59aa5260268199b8423965e18d8
+      size: 67766
     - path: artifacts/parallels/objects_usd.zip
-      md5: cb58c3702e901c2ae15f2d486de73a55
-      size: 6390589170
+      md5: 0f3657ff3c5bc751b668d89719a3c90f
+      size: 21874226187
     - path: artifacts/parallels/scenes_json.zip
-      md5: 6d49de8930bc01d56c393fbcae1b13cf
-      size: 1159678
+      md5: d829eeae5580be2e82b50fc42e229d2c
+      size: 5405810
+    - path: artifacts/parallels/systems.zip
+      md5: b677c811fc85f5bb3460e9454adac6c7
+      size: 362878596
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
-    - path: artifacts/pipeline/aggregate_scenes.success
+    - path: artifacts/pipeline/generate_systems.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: artifacts/pipeline/usdify_objects.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: artifacts/pipeline/usdify_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/pack_dataset.py
-      md5: c74ce2c4234e7957d49d95ffc3cc95b0
-      size: 2910
+      md5: eb2a88e63712a098ccad5905b40ff182
+      size: 3374
     outs:
     - path: artifacts/og_dataset.zip
-      md5: 9839459bf55f1296df7242a1dd9d1994
-      size: 6391773110
+      md5: 9bc3b11a29750839c217264467d34504
+      size: 21880059759
     - path: artifacts/pipeline/pack_dataset.json
       md5: 2ad066aadc9c024dff5e8d3c6587590d
       size: 44
@@ -13453,5 +13462,38 @@ stages:
       size: 707
     outs:
     - path: artifacts/pipeline/usdify_objects.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+  generate_systems:
+    cmd: python -m b1k_pipeline.generate_systems
+    deps:
+    - path: artifacts/parallels/objects_usd.zip
+      md5: 0f3657ff3c5bc751b668d89719a3c90f
+      size: 21874226187
+    - path: artifacts/pipeline/usdify_objects.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: metadata/substance_hyperparams.csv
+      md5: 346637df5a52bd1dce799cd947d1e2e2
+      size: 195203
+    outs:
+    - path: artifacts/parallels/systems.zip
+      md5: b677c811fc85f5bb3460e9454adac6c7
+      size: 362878596
+    - path: artifacts/pipeline/generate_systems.json
+      md5: 5b64e8b89092b2e3dfd448b10700627f
+      size: 17
+  generate_systems_success:
+    cmd: python -m b1k_pipeline.check_success artifacts/pipeline/generate_systems.json
+      artifacts/pipeline/generate_systems.success
+    deps:
+    - path: artifacts/pipeline/generate_systems.json
+      md5: 5b64e8b89092b2e3dfd448b10700627f
+      size: 17
+    - path: b1k_pipeline/check_success.py
+      md5: bc3fa689bd7cc8819016ea480a7d9ef3
+      size: 707
+    outs:
+    - path: artifacts/pipeline/generate_systems.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0

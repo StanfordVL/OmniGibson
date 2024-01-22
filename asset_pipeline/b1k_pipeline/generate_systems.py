@@ -25,7 +25,7 @@ def main():
                 system_dir = system_root_dir.makedir(system_name)
 
                 # Copy over asset files if they exist
-                if objects_root_dir(system_name):
+                if objects_root_dir.exists(system_name):
                     fs.copy.copy_fs(objects_root_dir.opendir(system_name), system_dir)
 
                 # Dump the metadata
