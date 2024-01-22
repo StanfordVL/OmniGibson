@@ -124,5 +124,11 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "unconnected hulls",
         "processed": false
+    },
+    {
+        "object": "sink-pbmwrv",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "object has 3 sinks, no option approximates all 3 well",
+        "processed": false
     }
 ]
