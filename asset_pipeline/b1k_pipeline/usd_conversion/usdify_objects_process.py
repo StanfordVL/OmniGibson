@@ -38,22 +38,25 @@ if __name__ == "__main__":
         import_obj_urdf(
             obj_category=obj_category, obj_model=obj_model, dataset_root=dataset_root, skip_if_exist=False
         )
+        print("Importing metadata")
         import_obj_metadata(
             obj_category=obj_category,
             obj_model=obj_model,
             dataset_root=dataset_root,
             import_render_channels=IMPORT_RENDER_CHANNELS,
         )
-
+        print("Done importing metadata")
         # # Apply cloth conversions if necessary.
         # if obj_category in CLOTH_CATEGORIES:
         #     rigid_usd_path = os.path.join(dataset_root, "objects", obj_category, obj_model, "usd", f"{obj_model}.usd")
         #     postprocess_cloth(rigid_usd_path)
 
         # Encrypt the output files.
+        print("Encrypting")
         for usd_path in glob.glob(os.path.join(dataset_root, "objects", obj_category, obj_model, "usd", "*.usd")):
             encrypted_usd_path = usd_path.replace(".usd", ".encrypted.usd")
             encrypt_file(usd_path, encrypted_filename=encrypted_usd_path)
             os.remove(usd_path)
+        print("Done encrypting")
 
     og.shutdown()

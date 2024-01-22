@@ -251,7 +251,8 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model, dataset_root):
     if "meta_links" in metadata:
         # Rename meta links, e.g. from "fillable" to "container"
         for link, meta_link in metadata["meta_links"].items():
-            for meta_link_name, meta_link_attrs in meta_link.items():
+            for meta_link_name in list(meta_link.keys()):
+                meta_link_attrs = meta_link[meta_link_name]
                 if meta_link_name in META_LINK_RENAME_MAPPING:
                     metadata["meta_links"][link][META_LINK_RENAME_MAPPING[meta_link_name]] = meta_link_attrs
                     del metadata["meta_links"][link][meta_link_name]

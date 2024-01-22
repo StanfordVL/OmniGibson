@@ -202,7 +202,7 @@ def import_rendering_channels(
     # Remove the material prims as we will create them explictly later.
     # TODO: Be a bit more smart about this. a material procedurally generated will lose its material without it having
     # be regenerated
-    stage = omni.usd.get_context().get_stage()
+    stage = lazy.omni.usd.get_context().get_stage()
     for prim in obj_prim.GetChildren():
         looks_prim = None
         if prim.GetName() == "Looks":
@@ -222,7 +222,7 @@ def import_rendering_channels(
 
     # # Create new default material for this object.
     # mtl_created_list = []
-    # omni.kit.commands.execute(
+    # lazy.omni.kit.commands.execute(
     #     "CreateAndBindMdlMaterialFromLibrary",
     #     mdl_name="OmniPBR.mdl",
     #     mtl_name="OmniPBR",
@@ -311,7 +311,7 @@ def import_rendering_channels(
 
         # Create the new material
         mtl_created_list = []
-        omni.kit.commands.execute(
+        lazy.omni.kit.commands.execute(
             "CreateAndBindMdlMaterialFromLibrary",
             mdl_name="OmniPBR.mdl",
             mtl_name="OmniPBR",
@@ -408,7 +408,7 @@ def import_rendering_channels(
     #             else:
     #                 # Create new material for this link
     #                 mtl_created_list = []
-    #                 omni.kit.commands.execute(
+    #                 lazy.omni.kit.commands.execute(
     #                     "CreateAndBindMdlMaterialFromLibrary",
     #                     mdl_name="OmniPBR.mdl",
     #                     mtl_name="OmniPBR",
@@ -539,7 +539,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                 light_type = LIGHT_MAPPING[mesh_info["type"]]
                 prim_path = f"/{obj_model}/lights_{link_id}_0_link/light_{i}"
                 prim = (
-                    lazy.pxr.UsdLux.__dict__[f"{light_type}Light"]
+                    getattr(lazy.pxr.UsdLux, f"{light_type}Light")
                     .Define(stage, prim_path)
                     .GetPrim()
                 )
@@ -551,14 +551,14 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                     # Create a primitive shape
                     mesh_type = mesh_info["type"].capitalize() if mesh_info["type"] != "box" else "Cube"
                 prim_path = f"/{obj_model}/{meta_link_type}_{link_id}_0_link/mesh_{i}"
-                assert mesh_type in lazy.pxr.UsdGeom.__dict__
+                assert hasattr(lazy.pxr.UsdGeom, mesh_type)
                 # togglebutton has to be a sphere
                 if meta_link_type in ["togglebutton"]:
                     is_mesh = True
                 # particle applier has to be a cone or cylinder because of the visualization of the particle flow
                 elif meta_link_type in ["particleapplier"]:
                     assert mesh_type in ["Cone", "Cylinder"], f"Invalid mesh type for particleapplier: {mesh_type}"
-                prim = create_primitive_mesh(prim_path, mesh_type, stage=stage).GetPrim() if is_mesh else lazy.pxr.UsdGeom.__dict__[mesh_type].Define(stage, prim_path).GetPrim()
+                prim = create_primitive_mesh(prim_path, mesh_type, stage=stage).GetPrim() if is_mesh else getattr(lazy.pxr.UsdGeom, mesh_type).Define(stage, prim_path).GetPrim()
 
             add_xform_properties(prim=prim)
             # Make sure mesh_prim has XForm properties
@@ -574,17 +574,17 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                                           meta_link_in_parent_link_pos, meta_link_in_parent_link_orn)
 
             if is_light:
-                xform_prim.prim.GetAttribute("color").Set(
+                xform_prim.prim.GetAttribute("inputs:color").Set(
                     lazy.pxr.Gf.Vec3f(*np.array(mesh_info["color"]) / 255.0)
                 )
-                xform_prim.prim.GetAttribute("intensity").Set(mesh_info["intensity"])
+                xform_prim.prim.GetAttribute("inputs:intensity").Set(mesh_info["intensity"])
                 if light_type == "Rect":
-                    xform_prim.prim.GetAttribute("height").Set(mesh_info["length"])
-                    xform_prim.prim.GetAttribute("width").Set(mesh_info["width"])
+                    xform_prim.prim.GetAttribute("inputs:height").Set(mesh_info["length"])
+                    xform_prim.prim.GetAttribute("inputs:width").Set(mesh_info["width"])
                 elif light_type == "Disk":
-                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["length"])
+                    xform_prim.prim.GetAttribute("inputs:radius").Set(mesh_info["length"])
                 elif light_type == "Sphere":
-                    xform_prim.prim.GetAttribute("radius").Set(mesh_info["length"])
+                    xform_prim.prim.GetAttribute("inputs:radius").Set(mesh_info["length"])
                 else:
                     raise ValueError(f"Invalid light type: {light_type}")
             else:
@@ -660,7 +660,7 @@ def process_glass_link(prim):
     glass_mtl_prim_path = f"{root_path}/Looks/OmniGlass"
     if not lazy.omni.isaac.core.utils.prims.get_prim_at_path(glass_mtl_prim_path):
         mtl_created = []
-        omni.kit.commands.execute(
+        lazy.omni.kit.commands.execute(
             "CreateAndBindMdlMaterialFromLibrary",
             mdl_name="OmniGlass.mdl",
             mtl_name="OmniGlass",
@@ -668,7 +668,7 @@ def process_glass_link(prim):
         )
 
     for glass_prim_path in glass_prim_paths:
-        omni.kit.commands.execute(
+        lazy.omni.kit.commands.execute(
             "BindMaterialCommand",
             prim_path=glass_prim_path,
             material_path=glass_mtl_prim_path,
@@ -681,6 +681,9 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
     # Check if filepath exists
     model_root_path = f"{dataset_root}/objects/{obj_category}/{obj_model}"
     usd_path = f"{model_root_path}/usd/{obj_model}.usd"
+    print("Loading", usd_path, "for metadata import.")
+
+    print("Start metadata import")
 
     # Load model
     lazy.omni.isaac.core.utils.stage.open_stage(usd_path)
@@ -722,10 +725,14 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
     # Grab light info if any
     meta_links = data["metadata"].get("meta_links", dict())
 
+    print("Process meta links")
+
     # TODO: Use parent link name
     for link_name, link_metadata in meta_links.items():
         for meta_link_type, meta_link_infos in link_metadata.items():
             process_meta_link(stage, obj_model, meta_link_type, meta_link_infos)
+
+    print("Done processing meta links")
 
     # # Update metalink info
     # if "meta_links" in data["metadata"]:
@@ -762,6 +769,8 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
     # Iterate over dict and replace any lists of dicts as dicts of dicts (with each dict being indexed by an integer)
     data = recursively_replace_list_of_dict(data)
 
+    print("Done recursively replacing")
+
     # Create attributes for bb, offset, category, model and store values
     prim.CreateAttribute("ig:nativeBB", lazy.pxr.Sdf.ValueTypeNames.Vector3f)
     prim.CreateAttribute("ig:offsetBaseLink", lazy.pxr.Sdf.ValueTypeNames.Vector3f)
@@ -797,6 +806,7 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
     # mat_prim = looks_prim.GetChildren()[0] #lazy.omni.isaac.core.utils.prims.get_prim_at_path(mat_prim_path)
     # print(f"looks children: {looks_prim.GetChildren()}")
     # print(f"mat prim: {mat_prim}")
+    print("irc")
     if import_render_channels:
         import_rendering_channels(
             obj_prim=prim,
@@ -806,13 +816,16 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
             usd_path=usd_path,
             dataset_root=dataset_root,
         )
-
+    print("done irc")
     for link, link_tags in data["metadata"]["link_tags"].items():
         if "glass" in link_tags:
             process_glass_link(prim.GetChild(link))
 
+    print("done glass")
     # Save stage
     stage.Save()
+
+    print("done save")
 
     # Delete stage reference and clear the sim stage variable, opening the dummy stage along the way
     del stage

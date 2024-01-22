@@ -343,8 +343,15 @@ stages:
     - b1k_pipeline/usd_conversion/usdify_objects_process.py
     outs:
     - artifacts/parallels/objects_usd.zip
-    - artifacts/pipeline/usdify_objects.success
     - artifacts/pipeline/usdify_objects.json
+
+  usdify_objects_success:
+    cmd: 'python -m b1k_pipeline.check_success artifacts/pipeline/usdify_objects.json artifacts/pipeline/usdify_objects.success'
+    deps:
+    - artifacts/pipeline/usdify_objects.json
+    - b1k_pipeline/check_success.py
+    outs:
+    - artifacts/pipeline/usdify_objects.success
 
   usdify_scenes:
     cmd: 'python -m b1k_pipeline.usd_conversion.usdify_scenes'
