@@ -11,9 +11,10 @@ def main():
         with ParallelZipFS("systems.zip", write=True) as out_fs:
             substances = {}
             with pipeline_fs.open("metadata/substance_hyperparams.csv") as csvfile:
-                reader = csv.DictReader(csvfile)
+                reader = csv.DictReader(csvfile, delimiter=",", quotechar='"')
                 for row in reader:
                     name = row["substance"]
+                    print(name)
                     assert name not in substances, f"Duplicate substance {name}"
                     params = json.loads(row["hyperparams"])
                     substances[name] = params
