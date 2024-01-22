@@ -2,6 +2,7 @@
 Helper script to perform batch QA on OmniGibson objects.
 """
 
+import hashlib
 import os
 import sys
 import json
@@ -103,8 +104,18 @@ def evaluate_batch(batch, category, record_path, env):
     
     
 def main():
-    # ask for user input for record path
+    total_ids = 5
+    # ask user for record path
     record_path = input("Enter record path: ")
+    
+    # ask user for id, valid range: 0 ~ total_ids - 1
+    your_id = int(input("Enter id: "))
+    if your_id < 0 or your_id >= total_ids:
+        print("Invalid id!")
+        sys.exit(1)
+        
+    salt = "round_one"  # for hashing
+    
 
     processed_objs = set()
     if os.path.exists(record_path):
@@ -120,10 +131,16 @@ def main():
         for model in get_all_object_category_models(cat)
     }
     
+    # Filter all_objs using hashing
+    filtered_objs = {
+        (cat, model) for cat, model in all_objs 
+        if int(hashlib.md5((cat + salt).encode()).hexdigest(), 16) % total_ids == your_id
+    }
+
     # Compute the remaining objects to be processed
     processed_models = {obj for obj in processed_objs}
-    remaining_objs = {(cat, model) for cat, model in all_objs if model not in processed_models}
-    print(f"{len(remaining_objs)} objects remaining out of {len(all_objs)}.")
+    remaining_objs = {(cat, model) for cat, model in filtered_objs if model not in processed_models}
+    print(f"{len(remaining_objs)} objects remaining out of {len(filtered_objs)}.")
     
     cfg = {"scene": {"type": "Scene"}}
 
