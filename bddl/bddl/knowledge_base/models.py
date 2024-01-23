@@ -198,6 +198,10 @@ class Object(Model):
     
     def fully_supports_synset(self, synset) -> bool:       
         return synset.required_meta_links.issubset({x.name for x in self.meta_links})
+    
+    @cached_property
+    def missing_meta_links(self) -> List[str]:
+        return sorted(self.category.synset.required_meta_links - {x.name for x in self.meta_links})
 
 @dataclass(eq=False, order=False)
 class Synset(Model):
