@@ -62,6 +62,7 @@
         <th>Category</th>
         <th>Synset</th>
         <th>Task Relevant</th>
+        <th>Missing Meta Links</th>
         <th>Used Rooms</th>
         <th>Ready?</th>
       </tr>
@@ -73,6 +74,7 @@
         <td>{{ object.category.name }}</td>
         <td>{{ object.category.synset.name }}</td>
         <td>{{ object.category.synset.task_relevant }}</td>
+        <td>{% for ml in object.missing_meta_links %} {{ ml }}, {% endfor %}</td>
         <td>{{ object.roomobjects|length }}</td>
         <td class="{% if object.ready %}bg-success{% else %}bg-warning{% endif %}">{{ object.ready }}</td>
       </tr>

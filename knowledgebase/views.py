@@ -87,6 +87,16 @@ class SubstanceMappedObjectListView(ObjectListView):
         return [x for x in super().get_queryset() if x.category.synset.state == STATE_SUBSTANCE]
 
 
+class UnsupportedPropertyObjectListView(ObjectListView):
+    page_title = "Objects with Unsupported Properties"
+
+    def get_queryset(self):
+        return [
+            o for o in super().get_queryset()
+            if not o.fully_supports_synset(o.category.synset)
+        ]
+
+
 class SceneListView(ListView):
     model = Scene
     context_object_name = "scene_list"
@@ -139,12 +149,12 @@ class FillableSynsetListView(SynsetListView):
 
 
 class UnsupportedPropertySynsetListView(SynsetListView):
-    page_title = "Task-Relevant Synsets with Object-Unsupported Properties"
+    page_title = "Leaf Synsets with Object-Unsupported Properties"
 
     def get_queryset(self):
         return [
             s for s in super().get_queryset()
-            if not s.has_fully_supporting_object
+            if len(s.matching_objects) > 0 and len(s.children) == 0 and not s.has_fully_supporting_object
         ]
 
 

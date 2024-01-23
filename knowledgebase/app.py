@@ -9,6 +9,7 @@ urlpatterns = [
   ("transitionfailuretasks/", TransitionFailureTaskListView.as_view("transition_failure_task_list")),
   ("objects/", ObjectListView.as_view("object_list")),
   ("substancemappedobjects/", SubstanceMappedObjectListView.as_view("substance_mapped_object_list")),
+  ("unsupportedpropertyobjects/", UnsupportedPropertyObjectListView.as_view("unsupported_property_object_list")),
   ("scenes/", SceneListView.as_view("scene_list")),
   ("synsets/", SynsetListView.as_view("synset_list")),
   ("categories/", CategoryListView.as_view("category_list")),
