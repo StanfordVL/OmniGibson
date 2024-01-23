@@ -266,45 +266,44 @@ class Synset(Model):
     @cached_property
     def required_meta_links(self) -> Set[str]:
         properties = {prop.name: json.loads(prop.parameters) for prop in self.properties}
-        predicates = {pred.name.lower() for pred in self.used_in_predicates}
 
         if 'substance' in properties:
             return set()  # substances don't need any meta links
         
         # TODO: Remove this
         # If we are not task relevant, we don't need any meta links
-        if not self.n_task_required:
-            return set()
+        # if not self.n_task_required:
+        #     return set()
 
         required_links = set()
 
         # If we are a heatSource or togglesource, we need to have certain links
         for property in ['heatSource', 'coldSource']:
             if property in properties:
-                if 'requires_toggled_on' in properties[property] and properties[property]['requires_toggled_on']:
-                    required_links.add('togglebutton')
+                if 'requires_inside' in properties[property] and properties[property]['requires_inside']:
+                    continue
+                required_links.add('heatSource')
 
-                if 'requires_inside' not in properties[property] or not properties[property]['requires_inside']:
-                    required_links.add('heatSource')
-
-        if self.is_used_as_fillable and 'fillable' in properties:
+        if 'fillable' in properties:
             required_links.add('fillable')
 
-        if 'toggledon' in predicates and 'toggleable' in properties:
+        if 'toggleable' in properties:
             required_links.add('togglebutton')
 
-        # TODO: Enable this.
-        # if 'particleSink' in properties:
-        #     required_links.add('fluidSink')
-
         particle_pairs = [
+            ('particleSink', 'fluidsink'),
             ('particleSource', 'fluidsource'),
             ('particleApplier', 'particleapplier'),
             ('particleRemover', 'particleremover'),
         ]
         for property, meta_link in particle_pairs:
-            if property in properties and 'method' in properties[property] and properties[property]['method'] == 1:  # only the projection method (1) needs this
+            if property in properties:
+                if 'method' in properties[property] and properties[property]['method'] != 1: # not projection
+                    continue
                 required_links.add(meta_link)
+
+        if 'slicer' in properties:
+            required_links.add('slicer')
 
         return required_links
     
