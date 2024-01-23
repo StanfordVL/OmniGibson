@@ -1097,8 +1097,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/object_inventory.py
-      md5: 34cd39a2e0a3f42168b0b6902340ba2c
-      size: 3318
+      md5: 0057c28eaa787ffdef5d5d7453ae5ae4
+      size: 5073
     - path: cad/objects/batch-00/artifacts/object_list.json
       md5: 3a65f8df847ce3c4652f6b607681de62
       size: 38594
@@ -1371,8 +1371,8 @@ stages:
       size: 12478
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 3a59f8182f5ec9359ba3b8029fd49aae
-      size: 1505561
+      md5: a319e0116aaabd4fb42b56455c061850
+      size: 1524604
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -8443,8 +8443,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: artifacts/pipeline/object_inventory.json
-      md5: 3a59f8182f5ec9359ba3b8029fd49aae
-      size: 1505561
+      md5: a319e0116aaabd4fb42b56455c061850
+      size: 1524604
     - path: b1k_pipeline/aggregate_metadata.py
       md5: 85cc7ee37eb73b55ffa25d157c6fdd13
       size: 5874

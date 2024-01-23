@@ -7,6 +7,12 @@ import os
 import yaml
 import b1k_pipeline.utils
 
+ALLOWED_PART_TAGS = {
+    "subpart",
+    "extrapart",
+    "connectedpart",
+}
+
 
 def main(use_future=False):
     needed = set()
@@ -37,7 +43,42 @@ def main(use_future=False):
                 for provided in object_list["provided_objects"]:
                     providers[provided].append(target)
                 for obj, links in object_list["meta_links"].items():
-                    meta_links[obj] |= set(links)
+                    meta_links[obj].update(links)
+                
+                # Manually generate pseudo-metalinks for parts
+                for name, _, parent in object_list["max_tree"]:
+                    if not parent:
+                        continue
+
+                    # Check parseable name
+                    parsed_name = b1k_pipeline.utils.parse_name(name)
+                    if parsed_name is None:
+                        continue
+
+                    # Get the tags that are on the parent
+                    tags_str = parsed_name.group("tag")
+                    tags = set()
+                    if tags_str:
+                        tags = {x[1:] for x in tags_str.split("-") if x}
+
+                    part_tags = tags & ALLOWED_PART_TAGS
+                    if not part_tags:
+                        continue
+
+                    # If we have part tags, we need to add them to the parent's meta links.
+                    # For that, get the parent's name.
+                    parsed_parent_name = b1k_pipeline.utils.parse_name(parent)
+                    assert parsed_parent_name, f"Parent {parent} of {name} is not parseable"
+                    parent_category = parsed_parent_name.group("category")
+                    parent_model = parsed_parent_name.group("model_id")
+                    parent_name = f"{parent_category}-{parent_model}"
+
+                    # Check that the parent shows up in the inventory
+                    assert parent_name in needed_by, f"Parent {parent_name} of {name} is not in the inventory"
+                    
+                    # Add the part tags as meta links to the parent
+                    meta_links[parent_name].update(part_tags)
+                    
 
         # Check the multiple-provided copies.
         multiple_provided = {k: v for k, v in providers.items() if len(v) > 1}
