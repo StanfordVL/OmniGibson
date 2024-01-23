@@ -8,7 +8,6 @@ import sys
 import json
 import numpy as np
 import omnigibson as og
-from omnigibson.macros import gm
 from omnigibson.utils.asset_utils import (
     get_all_object_categories,
     get_all_object_category_models,
@@ -20,47 +19,37 @@ from omnigibson.utils.ui_utils import KeyboardEventHandler
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 
 
-def evaluate_batch(batch, category, record_path, env):
+def load_processed_objects(record_path):
+    processed_objs = set()
+    if os.path.exists(record_path):
+        for _, _, files in os.walk(record_path):
+            for file in files:
+                if file.endswith(".json"):
+                    processed_objs.add(file[:-5])
+    return processed_objs
 
-    done = False
-    
-    skip = False
-    
-    def set_skip():
-        nonlocal skip
-        skip = True
-        nonlocal done
-        done = True
-    
-    def set_done():
-        nonlocal done
-        done = True
-   
-    KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.C,
-        callback_fn=set_done,
-    )
-    
-    KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.V,
-        callback_fn=lambda: set_skip(),
-    )
 
-    # Load the category's objects
-    og.sim.stop()
+def hash_filter_objects(all_objs, salt, total_ids, your_id):
+    return {
+        (cat, model) for cat, model in all_objs 
+        if int(hashlib.md5((cat + salt).encode()).hexdigest(), 16) % total_ids == your_id
+    }
 
-    fixed_x_spacing = 0.5
 
+def group_objects_by_category(objects):
+    grouped_objs = {}
+    for cat, model in objects:
+        if cat not in grouped_objs:
+            grouped_objs[cat] = []
+        grouped_objs[cat].append(model)
+    return grouped_objs
+
+def position_objects(category, batch, fixed_x_spacing):
     all_objects = []
     all_objects_x_coordinates = []
 
     for index, obj_model in enumerate(batch):
-        # Initialize x_coordinate
-        if index == 0:
-            x_coordinate = 0
-        else:
-            previous_object_width = all_objects[-1].aabb_extent[0]
-            x_coordinate = all_objects_x_coordinates[-1] + previous_object_width + fixed_x_spacing
+        x_coordinate = 0 if index == 0 else all_objects_x_coordinates[-1] + all_objects[-1].aabb_extent[0] + fixed_x_spacing
 
         obj = DatasetObject(
             name=obj_model,
@@ -73,19 +62,17 @@ def evaluate_batch(batch, category, record_path, env):
         [link.disable_gravity() for link in obj.links.values()]
         all_objects_x_coordinates.append(x_coordinate)
 
+    return all_objects, all_objects_x_coordinates
+
+
+def adjust_object_positions(all_objects, all_objects_x_coordinates):
     for index, obj in enumerate(all_objects):
         offset = obj.get_position()[2] - obj.aabb_center[2]
         z_coordinate = obj.aabb_extent[2]/2 + offset + 0.5
         obj.set_position_orientation(position=[all_objects_x_coordinates[index], 0, z_coordinate])
 
-    og.sim.play()
-    
-    print("Press 'V' skip current batch.")
-    print("Press 'C' to continue to next batch and save current configurations.")
 
-    while not done:
-        env.step([])
-
+def save_object_config(all_objects, record_path, category, skip):
     if not skip:
         for obj in all_objects:
             orientation = obj.get_orientation()
@@ -93,86 +80,88 @@ def evaluate_batch(batch, category, record_path, env):
             if not os.path.exists(os.path.join(record_path, category)):
                 os.makedirs(os.path.join(record_path, category))
             with open(os.path.join(record_path, category, obj.model + ".json"), "w") as f:
-                orientation_list = orientation.tolist()
-                scale_list = scale.tolist()
-                # dump both orientation and scale into the same json file
-                json.dump([orientation_list, scale_list], f)
-    
+                json.dump([orientation.tolist(), scale.tolist()], f)
+
+
+def evaluate_batch(batch, category, record_path, env):
+    done, skip = False, False
+
+    def set_done():
+        nonlocal done
+        done = True
+
+    def set_skip():
+        nonlocal skip
+        skip = True
+        nonlocal done
+        done = True
+
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.C,
+        callback_fn=set_done,
+    )
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.V,
+        callback_fn=lambda: set_skip(),
+    )
+
+    og.sim.stop()
+
+    fixed_x_spacing = 0.5
+    all_objects, all_objects_x_coordinates = position_objects(category, batch, fixed_x_spacing)
+    adjust_object_positions(all_objects, all_objects_x_coordinates)
+
+    og.sim.play()
+    print("Press 'V' skip current batch.")
+    print("Press 'C' to continue to next batch and save current configurations.")
+
+    while not done:
+        env.step([])
+
+    save_object_config(all_objects, record_path, category, skip)
+
     # remove all objects
     for obj in all_objects:
         og.sim.remove_object(obj)
-    
-    
+
+
 def main():
     total_ids = 5
-    # ask user for record path
-    record_path = input("Enter record path: ")
-    
-    # ask user for id, valid range: 0 ~ total_ids - 1
-    your_id = int(input("Enter id: "))
+    # record_path = input("Enter path to save recorded orientations: ")
+    record_path = "/scr/home/yinhang/recorded_orientation"
+    # your_id = int(input("Enter your id: "))
+    your_id = 0
+
     if your_id < 0 or your_id >= total_ids:
         print("Invalid id!")
         sys.exit(1)
-        
-    salt = "round_one"  # for hashing
-    
 
-    processed_objs = set()
-    if os.path.exists(record_path):
-        for _, _, files in os.walk(record_path):
-            for file in files:
-                if file.endswith(".json"):
-                    processed_objs.add(file[:-5])
-    print(f"{len(processed_objs)} objects have been processed.")
-
-    # Get all the objects in the dataset
+    salt = "round_one"
+    processed_objs = load_processed_objects(record_path)
     all_objs = {
         (cat, model) for cat in get_all_object_categories()
         for model in get_all_object_category_models(cat)
     }
-    
-    # Filter all_objs using hashing
-    filtered_objs = {
-        (cat, model) for cat, model in all_objs 
-        if int(hashlib.md5((cat + salt).encode()).hexdigest(), 16) % total_ids == your_id
-    }
 
-    # Compute the remaining objects to be processed
-    processed_models = {obj for obj in processed_objs}
-    remaining_objs = {(cat, model) for cat, model in filtered_objs if model not in processed_models}
+    filtered_objs = hash_filter_objects(all_objs, salt, total_ids, your_id)
+    remaining_objs = {(cat, model) for cat, model in filtered_objs if model not in processed_objs}
+    print(f"{len(processed_objs)} objects have been processed.")
     print(f"{len(remaining_objs)} objects remaining out of {len(filtered_objs)}.")
-    
+
     cfg = {"scene": {"type": "Scene"}}
-
-    # Create the environment
     env = og.Environment(configs=cfg)
-    
-    # Allow user to teleoperate the camera
-    # cam_mover = og.sim.enable_viewer_camera_teleoperation()
-
-    # Make it brighter
     dome_light = og.sim.scene.skybox
     dome_light.intensity = 0.5e4
-    
-    # Group remaining objects by category
-    remaining_objs_by_cat = {}
-    for cat, model in remaining_objs:
-        if cat not in remaining_objs_by_cat:
-            remaining_objs_by_cat[cat] = []
-        remaining_objs_by_cat[cat].append(model)
-    
+
+    remaining_objs_by_cat = group_objects_by_category(remaining_objs)
     KeyboardEventHandler.initialize()
-    
-    # Loop through each category
+
     for cat, models in remaining_objs_by_cat.items():
         if cat in STRUCTURE_CATEGORIES:
             continue
         print(f"Processing category {cat}...")
-        print(f"Processing {len(models)} objects in category {cat}...")
-        
         for batch_start in range(0, len(models), 10):
-            batch_end = min(batch_start + 10, len(models))
-            batch = models[batch_start:batch_end]
+            batch = models[batch_start:min(batch_start + 10, len(models))]
             evaluate_batch(batch, cat, record_path, env)
 
 
