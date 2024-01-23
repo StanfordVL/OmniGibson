@@ -124,7 +124,7 @@ def smallest_surrounding_rectangle(points):
     return min_rect
 
 def evaluate_batch(batch, category, record_path, env):
-    done, skip = False, False
+    done, skip, gravity = False, False, False
 
     def set_done():
         nonlocal done
@@ -135,6 +135,16 @@ def evaluate_batch(batch, category, record_path, env):
         skip = True
         nonlocal done
         done = True
+    
+    def toggle_gravity():
+        obj = get_selected_object()
+        nonlocal gravity
+        if gravity:
+            gravity = False
+            [link.disable_gravity() for link in obj.links.values()]
+        else:
+            gravity = True
+            [link.enable_gravity() for link in obj.links.values()]
     
     """
     def align_to_bb():
@@ -247,6 +257,11 @@ def evaluate_batch(batch, category, record_path, env):
         
         # visualize_2d_points(points)
     
+    def visualize_2d_points(points):
+        import matplotlib.pyplot as plt
+        plt.scatter(points[:, 0], points[:, 1])
+        plt.show()
+    
     def rotate_object(angle):
         import trimesh
         from scipy.spatial.transform import Rotation as R
@@ -258,11 +273,6 @@ def evaluate_batch(batch, category, record_path, env):
         obj.set_orientation(new_rot.as_quat())
 
         og.sim.step()
-    
-    def visualize_2d_points(points):
-        import matplotlib.pyplot as plt
-        plt.scatter(points[:, 0], points[:, 1])
-        plt.show()
 
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.C,
@@ -288,6 +298,10 @@ def evaluate_batch(batch, category, record_path, env):
         key=lazy.carb.input.KeyboardInput.K,
         callback_fn=lambda: rotate_object(-np.pi/4),
     )
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.D,
+        callback_fn=toggle_gravity,
+    )
 
     og.sim.stop()
 
@@ -300,6 +314,7 @@ def evaluate_batch(batch, category, record_path, env):
     print("Press 'S' to align object to its second principal component.")
     print("Press 'J' to rotate object by 45 degrees counter-clockwise around z-axis.")
     print("Press 'K' to rotate object by 45 degrees clockwise around z-axis.")
+    print("Press 'D' to toggle gravity for selected object.")
     print("Press 'V' to skip current batch without saving.")
     print("Press 'C' to continue to next batch and save current configurations.")
 
