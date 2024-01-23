@@ -7,6 +7,9 @@ import os
 import sys
 import json
 import numpy as np
+from scipy.spatial import ConvexHull
+from scipy.spatial.transform import Rotation as R
+import trimesh
 import omnigibson as og
 from omnigibson.utils.asset_utils import (
     get_all_object_categories,
@@ -81,7 +84,44 @@ def save_object_config(all_objects, record_path, category, skip):
                 os.makedirs(os.path.join(record_path, category))
             with open(os.path.join(record_path, category, obj.model + ".json"), "w") as f:
                 json.dump([orientation.tolist(), scale.tolist()], f)
+                
+def smallest_surrounding_rectangle(points):
+    hull = ConvexHull(points)
+    hull_points = points[hull.vertices]
 
+    min_area = float('inf')
+    min_rect = None
+
+    for i in range(len(hull_points)):
+        p1 = hull_points[i]
+        p2 = hull_points[(i + 1) % len(hull_points)]
+
+        edge_vec = p2 - p1
+        edge_vec /= np.linalg.norm(edge_vec)
+
+        edge_angle = np.arctan2(edge_vec[1], edge_vec[0])
+        rot_matrix = np.array([
+            [np.cos(edge_angle), -np.sin(edge_angle)],
+            [np.sin(edge_angle), np.cos(edge_angle)],
+        ])
+        hull_points_rotated = np.dot(hull_points, rot_matrix)
+        # normal_vec = np.array([-edge_vec[1], edge_vec[0]])
+        min_x, max_x, min_y, max_y = np.min(hull_points_rotated[:, 0]), np.max(hull_points_rotated[:, 0]), np.min(hull_points_rotated[:, 1]), np.max(hull_points_rotated[:, 1])
+
+        area = (max_x - min_x) * (max_y - min_y)
+        if area < min_area:
+            min_area = area
+            # rotate points back
+            min_rect = np.array([
+                [min_x, min_y],
+                [max_x, min_y],
+                [max_x, max_y],
+                [min_x, max_y],
+            ])
+            min_rect = np.dot(min_rect, rot_matrix.T)
+            # min_rect = (min_x, max_x, min_y, max_y)
+
+    return min_rect
 
 def evaluate_batch(batch, category, record_path, env):
     done, skip = False, False
@@ -95,6 +135,105 @@ def evaluate_batch(batch, category, record_path, env):
         skip = True
         nonlocal done
         done = True
+    
+    """
+    def align_to_bb():
+        import matplotlib.pyplot as plt
+
+        obj = list(og.sim.scene.objects)[0]
+        normals = []
+        for link in obj.links.values():
+            for mesh in link.visual_meshes.values():
+                mesh_normals = mesh.prim.GetAttribute("normals").Get()
+                pos, ori = mesh.get_position_orientation()
+                transform = T.pose2mat((pos, ori))
+                normals.append(trimesh.transformations.transform_points(mesh_normals, transform))
+        normals = np.concatenate(normals, axis=0)
+        normals_2d = normals[:, :2]
+        # normalize each row
+        normals_2d = normals_2d/np.linalg.norm(normals_2d, axis=1, keepdims=True)
+        plt.scatter(normals_2d[:, 0], normals_2d[:, 1])
+        plt.show()
+        
+        # Compute the PCA of the normals_2d data
+        from sklearn.decomposition import PCA
+        pca = PCA(n_components=2)
+        pca.fit(normals_2d)
+
+        # The first principal component is the direction of maximum variance
+        first_pc = pca.components_[0]
+
+        # Compute the angle between the first principal component and the x-axis
+        angle = np.arctan2(first_pc[1], first_pc[0])
+
+        # Create a rotation matrix from this angle
+        rot = R.from_euler('z', angle)
+        inv_rot = rot.inv()
+        
+        current_rot = R.from_quat(obj.get_orientation())
+        new_rot = inv_rot * current_rot
+        obj.set_orientation(new_rot.as_quat())
+        
+        og.sim.step()
+        
+        normals = []
+        for link in obj.links.values():
+            for mesh in link.visual_meshes.values():
+                mesh_normals = mesh.prim.GetAttribute("points").Get()
+                pos, ori = mesh.get_position_orientation()
+                transform = T.pose2mat((pos, ori))
+                normals.append(trimesh.transformations.transform_points(mesh_normals, transform))
+        normals = np.concatenate(normals, axis=0)
+        normals_2d = normals[:, :2]
+        plt.scatter(normals_2d[:, 0], normals_2d[:, 1])
+        plt.show()
+    """
+    
+    def align_to_bb():
+        import trimesh
+        from scipy.spatial.transform import Rotation as R
+
+        obj = list(og.sim.scene.objects)[0]
+
+        # Collecting points from the object
+        points = []
+        for link in obj.links.values():
+            for mesh in link.visual_meshes.values():
+                mesh_points = mesh.prim.GetAttribute("points").Get()
+                pos, ori = mesh.get_position_orientation()
+                transform = T.pose2mat((pos, ori))
+                points.append(trimesh.transformations.transform_points(mesh_points, transform))
+        points = np.concatenate(points, axis=0)
+
+        visualize_2d_points(points)
+
+        # Apply PCA to 3D points
+        from sklearn.decomposition import PCA
+        pca = PCA(n_components=3)
+        pca.fit(points)
+
+        # The first principal component
+        first_pc = pca.components_[0]
+
+        # Compute the angle between the first principal component and the x-axis
+        angle = np.arctan2(first_pc[1], first_pc[0])
+
+        # Create a rotation matrix from this angle
+        rot = R.from_euler('z', angle)
+        inv_rot = rot.inv()
+
+        current_rot = R.from_quat(obj.get_orientation())
+        new_rot = inv_rot * current_rot
+        obj.set_orientation(new_rot.as_quat())
+
+        og.sim.step()
+        
+        visualize_2d_points(points)
+    
+    def visualize_2d_points(points):
+        import matplotlib.pyplot as plt
+        plt.scatter(points[:, 0], points[:, 1])
+        plt.show()
 
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.C,
@@ -103,6 +242,10 @@ def evaluate_batch(batch, category, record_path, env):
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.V,
         callback_fn=lambda: set_skip(),
+    )
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.A,
+        callback_fn=align_to_bb,
     )
 
     og.sim.stop()
@@ -113,6 +256,7 @@ def evaluate_batch(batch, category, record_path, env):
 
     og.sim.play()
     print("Press 'V' skip current batch.")
+    print("Press 'A' to align object to its first principal component.")
     print("Press 'C' to continue to next batch and save current configurations.")
 
     while not done:
