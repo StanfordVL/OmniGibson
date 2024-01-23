@@ -1380,8 +1380,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/object_inventory.py
-      md5: 34cd39a2e0a3f42168b0b6902340ba2c
-      size: 3394
+      md5: 0057c28eaa787ffdef5d5d7453ae5ae4
+      size: 5073
     - path: cad/objects/batch-00/artifacts/object_list.json
       md5: 3a65f8df847ce3c4652f6b607681de62
       size: 38594
@@ -1654,11 +1654,11 @@ stages:
       size: 336325
     - path: params.yaml
       md5: 831b6226c34facc0ff4a8b47c6ca1d65
-      size: 12959
+      size: 12478
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: 48b564346f09ad08c3d857b1c05b490e
-      size: 1509084
+      md5: 5f214c34f6782b056fdb423cbc84ea74
+      size: 1528127
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
