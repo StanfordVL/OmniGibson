@@ -189,14 +189,14 @@ def evaluate_batch(batch, category, record_path, env):
         plt.show()
     """
     
-    def align_to_bb():
+    def align_to_bb(pca_axis):
         import trimesh
         from scipy.spatial.transform import Rotation as R
 
         usd_context = lazy.omni.usd.get_context()
         # returns a list of prim path strings
         selection = usd_context.get_selection().get_selected_prim_paths()
-        assert len(selection) == 1, "Please only select one object at a time."
+        assert len(selection) == 1, "Please select one object at a time."
         selected_prim_path = selection[0]
         tokens = selected_prim_path.split("/")
         obj_prim_path = "/".join(tokens[:-1])
@@ -209,6 +209,8 @@ def evaluate_batch(batch, category, record_path, env):
                 mesh_points = mesh.prim.GetAttribute("points").Get()
                 pos, ori = mesh.get_position_orientation()
                 transform = T.pose2mat((pos, ori))
+                if len(mesh_points)==0:
+                    continue
                 points.append(trimesh.transformations.transform_points(mesh_points, transform))
         points = np.concatenate(points, axis=0)
 
@@ -219,11 +221,15 @@ def evaluate_batch(batch, category, record_path, env):
         pca = PCA(n_components=3)
         pca.fit(points)
 
-        # The first principal component
-        first_pc = pca.components_[0]
+        if pca_axis == 1:
+            # The first principal component
+            pc = pca.components_[0]
+        else:
+            # The second principal component
+            pc = pca.components_[1]
 
         # Compute the angle between the first principal component and the x-axis
-        angle = np.arctan2(first_pc[1], first_pc[0])
+        angle = np.arctan2(pc[1], pc[0])
 
         # Create a rotation matrix from this angle
         rot = R.from_euler('z', angle)
@@ -248,11 +254,15 @@ def evaluate_batch(batch, category, record_path, env):
     )
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.V,
-        callback_fn=lambda: set_skip(),
+        callback_fn=set_skip,
     )
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.A,
-        callback_fn=align_to_bb,
+        callback_fn=lambda: align_to_bb(1),
+    )
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.S,
+        callback_fn=lambda: align_to_bb(2),
     )
 
     og.sim.stop()
@@ -262,9 +272,11 @@ def evaluate_batch(batch, category, record_path, env):
     adjust_object_positions(all_objects, all_objects_x_coordinates)
 
     og.sim.play()
-    print("Press 'V' skip current batch.")
     print("Press 'A' to align object to its first principal component.")
+    print("Press 'S' to align object to its second principal component.")
+    print("Press 'V' to skip current batch without saving.")
     print("Press 'C' to continue to next batch and save current configurations.")
+    # TODO: add fixed rotation key bindings
 
     while not done:
         env.step([])
