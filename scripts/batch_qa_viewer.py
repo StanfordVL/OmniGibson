@@ -189,10 +189,7 @@ def evaluate_batch(batch, category, record_path, env):
         plt.show()
     """
     
-    def align_to_bb(pca_axis):
-        import trimesh
-        from scipy.spatial.transform import Rotation as R
-
+    def get_selected_object():
         usd_context = lazy.omni.usd.get_context()
         # returns a list of prim path strings
         selection = usd_context.get_selection().get_selected_prim_paths()
@@ -201,6 +198,13 @@ def evaluate_batch(batch, category, record_path, env):
         tokens = selected_prim_path.split("/")
         obj_prim_path = "/".join(tokens[:-1])
         obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
+        return obj
+    
+    def align_to_pca(pca_axis):
+        import trimesh
+        from scipy.spatial.transform import Rotation as R
+
+        obj = get_selected_object()
 
         # Collecting points from the object
         points = []
@@ -243,6 +247,18 @@ def evaluate_batch(batch, category, record_path, env):
         
         # visualize_2d_points(points)
     
+    def rotate_object(angle):
+        import trimesh
+        from scipy.spatial.transform import Rotation as R
+
+        obj = get_selected_object()
+
+        current_rot = R.from_quat(obj.get_orientation())
+        new_rot = R.from_euler('z', angle) * current_rot
+        obj.set_orientation(new_rot.as_quat())
+
+        og.sim.step()
+    
     def visualize_2d_points(points):
         import matplotlib.pyplot as plt
         plt.scatter(points[:, 0], points[:, 1])
@@ -258,11 +274,19 @@ def evaluate_batch(batch, category, record_path, env):
     )
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.A,
-        callback_fn=lambda: align_to_bb(1),
+        callback_fn=lambda: align_to_pca(1),
     )
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.S,
-        callback_fn=lambda: align_to_bb(2),
+        callback_fn=lambda: align_to_pca(2),
+    )
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.J,
+        callback_fn=lambda: rotate_object(np.pi/4),
+    )
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.K,
+        callback_fn=lambda: rotate_object(-np.pi/4),
     )
 
     og.sim.stop()
@@ -274,9 +298,10 @@ def evaluate_batch(batch, category, record_path, env):
     og.sim.play()
     print("Press 'A' to align object to its first principal component.")
     print("Press 'S' to align object to its second principal component.")
+    print("Press 'J' to rotate object by 45 degrees counter-clockwise around z-axis.")
+    print("Press 'K' to rotate object by 45 degrees clockwise around z-axis.")
     print("Press 'V' to skip current batch without saving.")
     print("Press 'C' to continue to next batch and save current configurations.")
-    # TODO: add fixed rotation key bindings
 
     while not done:
         env.step([])
