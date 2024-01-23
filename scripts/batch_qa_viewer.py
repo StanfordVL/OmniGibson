@@ -193,7 +193,14 @@ def evaluate_batch(batch, category, record_path, env):
         import trimesh
         from scipy.spatial.transform import Rotation as R
 
-        obj = list(og.sim.scene.objects)[0]
+        usd_context = lazy.omni.usd.get_context()
+        # returns a list of prim path strings
+        selection = usd_context.get_selection().get_selected_prim_paths()
+        assert len(selection) == 1, "Please only select one object at a time."
+        selected_prim_path = selection[0]
+        tokens = selected_prim_path.split("/")
+        obj_prim_path = "/".join(tokens[:-1])
+        obj = og.sim.scene.object_registry("prim_path", obj_prim_path)
 
         # Collecting points from the object
         points = []
@@ -205,7 +212,7 @@ def evaluate_batch(batch, category, record_path, env):
                 points.append(trimesh.transformations.transform_points(mesh_points, transform))
         points = np.concatenate(points, axis=0)
 
-        visualize_2d_points(points)
+        # visualize_2d_points(points)
 
         # Apply PCA to 3D points
         from sklearn.decomposition import PCA
@@ -228,7 +235,7 @@ def evaluate_batch(batch, category, record_path, env):
 
         og.sim.step()
         
-        visualize_2d_points(points)
+        # visualize_2d_points(points)
     
     def visualize_2d_points(points):
         import matplotlib.pyplot as plt
