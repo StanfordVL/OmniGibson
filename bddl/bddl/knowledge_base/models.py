@@ -270,11 +270,6 @@ class Synset(Model):
         if 'substance' in properties:
             return set()  # substances don't need any meta links
         
-        # TODO: Remove this
-        # If we are not task relevant, we don't need any meta links
-        # if not self.n_task_required:
-        #     return set()
-
         required_links = set()
 
         # If we are a heatSource or togglesource, we need to have certain links
@@ -304,6 +299,9 @@ class Synset(Model):
 
         if 'slicer' in properties:
             required_links.add('slicer')
+
+        if 'sliceable' in properties:
+            required_links.add('subpart')
 
         return required_links
     
