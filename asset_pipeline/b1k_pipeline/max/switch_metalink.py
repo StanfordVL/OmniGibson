@@ -18,7 +18,9 @@ def switch_metalink():
         current_metatype = n.group("meta_type")
 
         if current_metatype == "togglebutton":
-           new_metatype = "fillable"
+           new_metatype = "slicer"
+        elif current_metatype == "slicer":
+            new_metatype = "fillable"
         elif current_metatype == "fillable":
             new_metatype = "fluidsink"
         elif current_metatype == "fluidsink":
