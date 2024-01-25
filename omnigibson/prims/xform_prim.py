@@ -187,7 +187,9 @@ class XFormPrim(BasePrim):
                 - 3-array: (x,y,z) position in the world frame
                 - 4-array: (x,y,z,w) quaternion orientation in the world frame
         """
-        local_pos, local_orn = self.get_local_pose()       
+        local_pos, local_orn = self.get_local_pose()    
+        if self.parent_path == "/World":
+            return local_pos, local_orn   
         parent_pos, parent_orn = self.parent.get_position_orientation()
         return pose_transform(parent_pos, parent_orn, local_pos, local_orn)
 
@@ -263,6 +265,9 @@ class XFormPrim(BasePrim):
         """
         xform_translate_op = self.get_attribute("xformOp:translate")
         xform_orient_op = self.get_attribute("xformOp:orient")
+        if xform_translate_op is None or xform_orient_op is None:
+            return np.zeros(3), np.array([0, 0, 0, 1])
+
         return np.array(xform_translate_op), lazy.omni.isaac.core.utils.rotations.gf_quat_to_np_array(xform_orient_op)[[1, 2, 3, 0]]
 
     def set_local_pose(self, position=None, orientation=None):

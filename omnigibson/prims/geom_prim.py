@@ -34,6 +34,11 @@ class GeomPrim(XFormPrim):
             load_config=load_config,
         )
 
+    @property
+    def parent_path(self):
+        # Geom prims are nested under a collision directory
+        return self.prim_path.rsplit("/", 2)[0]
+
     def _load(self):
         # This should not be called, because this prim cannot be instantiated from scratch!
         raise NotImplementedError("By default, a geom prim cannot be created from scratch.")

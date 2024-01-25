@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.utils.python_utils import Serializable, UniquelyNamed, Recreatable
+from omnigibson.utils.registry_utils import SerializableRegistry
 from omnigibson.utils.sim_utils import check_deletable_prim
 from omnigibson.utils.ui_utils import create_module_logger
 
@@ -48,6 +49,8 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
 
         # Run super init
         super().__init__()
+
+        PRIM_REGISTRY.add(self)
 
         # Run some post-loading steps if this prim has already been loaded
         if lazy.omni.isaac.core.utils.prims.is_prim_path_valid(prim_path=self._prim_path):
@@ -154,7 +157,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
     
     @property
     def parent(self):
-        return og.sim.scene.prim_registry("prim_path", self.parent_path)
+        return PRIM_REGISTRY("prim_path", self.parent_path)
 
     @property
     def name(self):
@@ -317,3 +320,12 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         new_prim.visible = self.visible
 
         return new_prim
+
+
+# Serializable registry of prims that are active globally (initialized)
+PRIM_REGISTRY = SerializableRegistry(
+    name="prim_registry",
+    class_types=BasePrim,
+    default_key="prim_path",
+    unique_keys=["prim_path"]
+)

@@ -12,7 +12,8 @@ from omnigibson.utils.python_utils import classproperty, Serializable, Registera
 from omnigibson.utils.registry_utils import SerializableRegistry
 from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.objects.object_base import BaseObject
-from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system, PRIM_REGISTRY
+from omnigibson.prims.prim_base import PRIM_REGISTRY
+from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system
 from omnigibson.objects.light_object import LightObject
 from omnigibson.robots.robot_base import m as robot_macros
 
@@ -695,7 +696,3 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         # Default is pass
         pass
-
-    
-    def get_prim_registry("prim_path", self.parent_path):
-        
