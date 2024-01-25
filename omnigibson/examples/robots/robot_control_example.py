@@ -6,11 +6,11 @@ Options for random actions, as well as selection of robot action space
 import numpy as np
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import gm
 from omnigibson.robots import REGISTERED_ROBOTS
 from omnigibson.sensors import VisionSensor
 from omnigibson.utils.ui_utils import choose_from_options, KeyboardRobotController
-import carb.input
 
 
 CONTROL_MODES = dict(
@@ -75,8 +75,8 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Create the config for generating the environment we want
     env_cfg = dict()
-    env_cfg["action_timestep"] = 1 / 10.
-    env_cfg["physics_timestep"] = 1 / 60.
+    env_cfg["action_frequency"] = 10
+    env_cfg["physics_frequency"] = 60
 
     scene_cfg = dict()
     if scene_model == "empty":
@@ -131,7 +131,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Register custom binding to reset the environment
     action_generator.register_custom_keymapping(
-        key=carb.input.KeyboardInput.R,
+        key=lazy.carb.input.KeyboardInput.R,
         description="Reset the robot",
         callback_fn=lambda: env.reset(),
     )
