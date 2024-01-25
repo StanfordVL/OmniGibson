@@ -173,6 +173,7 @@ def create_get_save_propagated_annots_params(syns_to_props):
                                 if condition == "gravity:True":
                                     formatted_conditions.append(("gravity", True))
                                 elif condition == "toggled_on:True":
+                                    assert "toggleable" in syns_to_props[param_record["synset"]], f"Synset {param_record['synset']} has particleApplier or particleSource with condition `toggled_on:True` but is not annotated as toggleable"
                                     formatted_conditions.append(("toggled_on", True))
                                 else:
                                     raise ValueError(f"Synset {param_record['synset']} prop {prop} has unhandled condition {condition}")
