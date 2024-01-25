@@ -87,6 +87,7 @@ class BatchQAViewer:
             all_objects.append(obj)
             og.sim.import_object(obj)
             obj.disable_gravity()
+            obj.visual_only = True # we set visual only to True to avoid collision between objects
             obj.set_position_orientation(position=[x_coordinate, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 10])
             og.sim.step()
             offset = obj.get_position()[2] - obj.aabb_center[2]
@@ -130,8 +131,15 @@ class BatchQAViewer:
                 obj.disable_gravity()
                 obj_gravity_enabled_set.remove(obj)
             else:
+                # If object is visual only, we need to enable physics first
+                obj.visual_only = False
                 obj.enable_gravity()
                 obj_gravity_enabled_set.add(obj)
+        
+        def toggle_visual_only():
+            obj = get_selected_object()
+            obj.visual_only = not obj.visual_only
+            print(f"Visual only property for {obj.model} is set to {obj.visual_only}.")
         
         def get_selected_object():
             usd_context = lazy.omni.usd.get_context()
@@ -228,12 +236,17 @@ class BatchQAViewer:
             key=lazy.carb.input.KeyboardInput.D,
             callback_fn=toggle_gravity,
         )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.F,
+            callback_fn=toggle_visual_only,
+        )
         
         print("Press 'A' to align object to its first principal component.")
         print("Press 'S' to align object to its second principal component.")
         print("Press 'J' to rotate object by 45 degrees counter-clockwise around z-axis.")
         print("Press 'K' to rotate object by 45 degrees clockwise around z-axis.")
         print("Press 'D' to toggle gravity for selected object.")
+        print("Press 'F' to toggle visaul only property for selected object.")
         print("Press 'V' to skip current batch without saving.")
         print("Press 'C' to continue to next batch and save current configurations.")
 
@@ -270,6 +283,7 @@ class BatchQAViewer:
             if cat in STRUCTURE_CATEGORIES:
                 continue
             print(f"Processing category {cat}...")
+            if (cat!="bed"): continue # TODO: remove this line
             for batch_start in range(0, len(models), 10):
                 batch = models[batch_start:min(batch_start + 10, len(models))]
                 self.evaluate_batch(batch, cat)
