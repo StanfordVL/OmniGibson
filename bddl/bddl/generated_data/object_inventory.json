@@ -181,6 +181,8 @@
         "half_chard-shmety": "objects/batch-01",
         "half_green_bean-exrkaw": "objects/batch-01",
         "half_green_bean-qqucst": "objects/batch-01",
+        "half_kabob-eormcp": "objects/batch-01",
+        "half_kabob-oeeitd": "objects/batch-01",
         "half_lobster-mdxjdk": "objects/batch-01",
         "half_lobster-nazfrs": "objects/batch-01",
         "half_parsley-zfzedo": "objects/batch-01",
@@ -1736,6 +1738,7 @@
         "half_log-bbieuz": "objects/batch-13",
         "half_log-rvtvqc": "objects/batch-13",
         "half_papaya-gbrakc": "objects/batch-13",
+        "half_papaya-hgjdxq": "objects/batch-13",
         "half_parsnip-quszcu": "objects/batch-13",
         "half_parsnip-rkbfvr": "objects/batch-13",
         "half_sunflower-shnumy": "objects/batch-13",
@@ -2696,6 +2699,8 @@
         "half_pomegranate-vqybii": "objects/legacy_batch-08",
         "half_vidalia_onion-tnmqrt": "objects/legacy_batch-08",
         "half_vidalia_onion-yxwjgn": "objects/legacy_batch-08",
+        "half_zucchini-career": "objects/legacy_batch-08",
+        "half_zucchini-uzezze": "objects/legacy_batch-08",
         "loudspeaker-lgkhqt": "objects/legacy_batch-08",
         "loudspeaker-snbvop": "objects/legacy_batch-08",
         "loudspeaker-suzqfe": "objects/legacy_batch-08",
@@ -2774,6 +2779,8 @@
         "half_radish-kyujnh": "objects/legacy_batch-09",
         "half_radish-zjeukz": "objects/legacy_batch-09",
         "half_strawberry-pgguhi": "objects/legacy_batch-09",
+        "half_watermelon-iiugii": "objects/legacy_batch-09",
+        "half_watermelon-qnciwe": "objects/legacy_batch-09",
         "half_watermelon-zgmaqe": "objects/legacy_batch-09",
         "hard_drive-ijibkm": "objects/legacy_batch-09",
         "hard_drive-ubjbsm": "objects/legacy_batch-09",
@@ -3000,6 +3007,8 @@
         "cup-wbqjbt": "objects/legacy_batch-11",
         "half_head_cabbage-dwdrej": "objects/legacy_batch-11",
         "half_head_cabbage-wpebpb": "objects/legacy_batch-11",
+        "half_lime-iwjqqq": "objects/legacy_batch-11",
+        "half_lime-mxmmcp": "objects/legacy_batch-11",
         "half_pork-plzhze": "objects/legacy_batch-11",
         "half_pork-zkyxzt": "objects/legacy_batch-11",
         "half_pretzel-qlajrx": "objects/legacy_batch-11",
@@ -9828,6 +9837,12 @@
         "half_green_bean-qqucst": [
             "objects/batch-01"
         ],
+        "half_kabob-eormcp": [
+            "objects/batch-01"
+        ],
+        "half_kabob-oeeitd": [
+            "objects/batch-01"
+        ],
         "half_lobster-mdxjdk": [
             "objects/batch-01"
         ],
@@ -14606,6 +14621,9 @@
         "half_papaya-gbrakc": [
             "objects/batch-13"
         ],
+        "half_papaya-hgjdxq": [
+            "objects/batch-13"
+        ],
         "half_parsnip-quszcu": [
             "objects/batch-13"
         ],
@@ -18219,6 +18237,12 @@
         "half_vidalia_onion-yxwjgn": [
             "objects/legacy_batch-08"
         ],
+        "half_zucchini-career": [
+            "objects/legacy_batch-08"
+        ],
+        "half_zucchini-uzezze": [
+            "objects/legacy_batch-08"
+        ],
         "loudspeaker-lgkhqt": [
             "objects/legacy_batch-08"
         ],
@@ -18478,6 +18502,12 @@
             "objects/legacy_batch-09"
         ],
         "half_strawberry-pgguhi": [
+            "objects/legacy_batch-09"
+        ],
+        "half_watermelon-iiugii": [
+            "objects/legacy_batch-09"
+        ],
+        "half_watermelon-qnciwe": [
             "objects/legacy_batch-09"
         ],
         "half_watermelon-zgmaqe": [
@@ -19200,6 +19230,12 @@
             "objects/legacy_batch-11"
         ],
         "half_head_cabbage-wpebpb": [
+            "objects/legacy_batch-11"
+        ],
+        "half_lime-iwjqqq": [
+            "objects/legacy_batch-11"
+        ],
+        "half_lime-mxmmcp": [
             "objects/legacy_batch-11"
         ],
         "half_pork-plzhze": [
@@ -38422,9 +38458,15 @@
         "charcoal_grill-crdaeu": [
             "togglebutton"
         ],
+        "chisel-tuqmpz": [
+            "slicer"
+        ],
         "fountain-udfxuu": [
             "fluidsink",
             "fluidsource"
+        ],
+        "icicle_lights-lbwpka": [
+            "togglebutton"
         ],
         "instant_pot-wengzf": [
             "fillable",
@@ -38476,6 +38518,9 @@
         "water_bottle-lkpaas": [
             "fillable"
         ],
+        "kabob-khdosp": [
+            "subpart"
+        ],
         "parsley-acotgf": [
             "subpart"
         ],
@@ -38506,6 +38551,10 @@
         "salmon-glrmfn": [
             "subpart"
         ],
+        "chainsaw-xfihoe": [
+            "slicer",
+            "togglebutton"
+        ],
         "decanter-ofasfw": [
             "fillable"
         ],
@@ -38513,12 +38562,30 @@
             "fillable",
             "togglebutton"
         ],
+        "loudspeaker-fsyioq": [
+            "togglebutton"
+        ],
+        "monitor-fabztm": [
+            "togglebutton"
+        ],
+        "monitor-qvpbge": [
+            "togglebutton"
+        ],
+        "power_washer-pkhrip": [
+            "togglebutton"
+        ],
         "pressure_cooker-otyngn": [
             "connectedpart",
             "fillable",
             "togglebutton"
         ],
+        "pruner-lucqrs": [
+            "slicer"
+        ],
         "radio-vgioak": [
+            "togglebutton"
+        ],
+        "table_lamp-ajrzlq": [
             "togglebutton"
         ],
         "cupcake-mbhweg": [
@@ -38563,6 +38630,22 @@
         "chocolate_chip_cookie-xprsse": [
             "subpart"
         ],
+        "air_freshener_atomizer-vxtgpy": [
+            "togglebutton"
+        ],
+        "hair_dryer-ylutzy": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "parer-lwpdhi": [
+            "slicer"
+        ],
+        "putty_knife-qmdkub": [
+            "slicer"
+        ],
+        "waffle_maker-yjmnej": [
+            "togglebutton"
+        ],
         "chicken_breast-lpqpbn": [
             "subpart"
         ],
@@ -38584,6 +38667,13 @@
         "rhubarb-njgkah": [
             "subpart"
         ],
+        "dehumidifier-ppadfd": [
+            "togglebutton"
+        ],
+        "digital_camera-wbzzjl": [
+            "connectedpart",
+            "togglebutton"
+        ],
         "ink_bottle-gcyvrx": [
             "fillable"
         ],
@@ -38597,6 +38687,9 @@
         ],
         "juicer-mvrllt": [
             "togglebutton"
+        ],
+        "utility_knife-kridpz": [
+            "slicer"
         ],
         "turkey-ppaslw": [
             "subpart"
@@ -38612,9 +38705,6 @@
         ],
         "club_sandwich-ablfyd": [
             "subpart"
-        ],
-        "digital_camera-wbzzjl": [
-            "connectedpart"
         ],
         "sweet_corn-qtesku": [
             "subpart"
@@ -38644,6 +38734,9 @@
         ],
         "stockpot-azoiaq": [
             "fillable"
+        ],
+        "table_lamp-fhsorf": [
+            "togglebutton"
         ],
         "branch-ijgexf": [
             "subpart"
@@ -38679,6 +38772,9 @@
             "collision",
             "togglebutton"
         ],
+        "flashlight-jtrbkc": [
+            "togglebutton"
+        ],
         "leaf_blower-omfuej": [
             "particleremover",
             "togglebutton"
@@ -38686,6 +38782,9 @@
         "lighter-zsxfjz": [
             "heatsource",
             "togglebutton"
+        ],
+        "parer-zpkhwi": [
+            "slicer"
         ],
         "pump-wqbseg": [
             "togglebutton"
@@ -38738,12 +38837,23 @@
         "chocolate_cookie_dough-csnixa": [
             "subpart"
         ],
+        "air_conditioner-pekain": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "axe-plqyos": [
+            "slicer"
+        ],
         "bottle_of_bug_repellent-qqztry": [
             "particleapplier",
             "togglebutton"
         ],
+        "cell_phone-dbhfuh": [
+            "togglebutton"
+        ],
         "digital_camera-zcnxuz": [
-            "attachment"
+            "attachment",
+            "togglebutton"
         ],
         "pitcher-mbrlge": [
             "fillable"
@@ -38838,6 +38948,12 @@
         "allspice_shaker-cibgje": [
             "particleapplier"
         ],
+        "loudspeaker-wsghki": [
+            "togglebutton"
+        ],
+        "meat_thermometer-idugwc": [
+            "togglebutton"
+        ],
         "parsley_shaker-tgcwtr": [
             "particleapplier"
         ],
@@ -38848,7 +38964,8 @@
             "particleapplier"
         ],
         "smoker-uihgsf": [
-            "heatsource"
+            "heatsource",
+            "togglebutton"
         ],
         "dried_apricot-fasedf": [
             "subpart"
@@ -38890,8 +39007,46 @@
             "fluidsource",
             "togglebutton"
         ],
+        "digital_thermometer-bpnigg": [
+            "togglebutton"
+        ],
         "heatgun-vvndqp": [
             "heatsource",
+            "togglebutton"
+        ],
+        "radiator-cbjgea": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "radiator-jgqckb": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "radiator-jlhyiq": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "radiator-jxrlul": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "radiator-lnvush": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "radiator-talsmj": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "radiator-zgjthd": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "radiator-znmvtw": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "thermostat-jophec": [
             "togglebutton"
         ],
         "chorizo-kfeuep": [
@@ -38979,9 +39134,21 @@
         "camera_tripod-hnpofr": [
             "attachment"
         ],
+        "electric_switch-hpowgy": [
+            "togglebutton"
+        ],
+        "electric_switch-hrwnhp": [
+            "togglebutton"
+        ],
+        "electric_switch-wseglt": [
+            "togglebutton"
+        ],
         "jar-gejwoi": [
             "connectedpart",
             "fillable"
+        ],
+        "projector-spedyw": [
+            "togglebutton"
         ],
         "tupperware-mkstwr": [
             "connectedpart",
@@ -39011,6 +39178,9 @@
         "hotdog_frank-dvoeyy": [
             "subpart"
         ],
+        "microphone-eyleyk": [
+            "togglebutton"
+        ],
         "tank-bsdexp": [
             "fillable"
         ],
@@ -39024,6 +39194,9 @@
             "subpart"
         ],
         "log-pepele": [
+            "subpart"
+        ],
+        "papaya-izjnbc": [
             "subpart"
         ],
         "tuna-xkjged": [
@@ -39732,14 +39905,59 @@
         "carving_knife-mzhpkm": [
             "slicer"
         ],
+        "loudspeaker-lgkhqt": [
+            "togglebutton"
+        ],
+        "loudspeaker-snbvop": [
+            "togglebutton"
+        ],
+        "loudspeaker-suzqfe": [
+            "togglebutton"
+        ],
+        "radiator-arfdpk": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "radiator-dwmloz": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "radiator-wntwxx": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "range_hood-duqgcu": [
+            "togglebutton"
+        ],
+        "range_hood-iqbpie": [
+            "togglebutton"
+        ],
+        "range_hood-lejkwg": [
+            "togglebutton"
+        ],
+        "range_hood-ylsdmp": [
+            "togglebutton"
+        ],
         "vacuum-amnmmq": [
-            "particleremover"
+            "particleremover",
+            "togglebutton"
         ],
         "vacuum-bdmsbr": [
-            "particleremover"
+            "particleremover",
+            "togglebutton"
         ],
         "vacuum-wikhik": [
-            "particleremover"
+            "particleremover",
+            "togglebutton"
+        ],
+        "wall_mounted_tv-gffrzl": [
+            "togglebutton"
+        ],
+        "wall_mounted_tv-ggfznh": [
+            "togglebutton"
+        ],
+        "wall_mounted_tv-ylvjhb": [
+            "togglebutton"
         ],
         "apricot-qmwmwm": [
             "subpart"
@@ -39768,6 +39986,24 @@
         "vidalia_onion-ldeuli": [
             "subpart"
         ],
+        "zucchini-udvfaz": [
+            "subpart"
+        ],
+        "loudspeaker-avtlcj": [
+            "togglebutton"
+        ],
+        "loudspeaker-bmpdyv": [
+            "togglebutton"
+        ],
+        "monitor-huvcgu": [
+            "togglebutton"
+        ],
+        "monitor-rbqanz": [
+            "togglebutton"
+        ],
+        "shears-hqfure": [
+            "slicer"
+        ],
         "shears-iizidc": [
             "slicer"
         ],
@@ -39786,6 +40022,12 @@
         ],
         "toothbrush-vkrjps": [
             "particleremover"
+        ],
+        "treadmill-ackppx": [
+            "togglebutton"
+        ],
+        "treadmill-ahwnhu": [
+            "togglebutton"
         ],
         "bagel-zlxkry": [
             "subpart"
@@ -39826,6 +40068,9 @@
         "beefsteak_tomato-altlfz": [
             "subpart"
         ],
+        "watermelon-slucoe": [
+            "subpart"
+        ],
         "chili-xhbpqh": [
             "subpart"
         ],
@@ -39835,6 +40080,9 @@
         ],
         "broom-tpyvbt": [
             "particleremover"
+        ],
+        "calculator-kwmmty": [
+            "togglebutton"
         ],
         "carafe-ocjcgp": [
             "fillable"
@@ -39854,6 +40102,9 @@
         "coffee_cup-skamgp": [
             "fillable"
         ],
+        "coffee_maker-pyttso": [
+            "togglebutton"
+        ],
         "crib-oimydv": [
             "collision"
         ],
@@ -39861,6 +40112,9 @@
             "fillable"
         ],
         "facsimile-mcqqhy": [
+            "togglebutton"
+        ],
+        "grill-ddlqye": [
             "togglebutton"
         ],
         "pitcher-ompiss": [
@@ -39926,6 +40180,13 @@
         "cup-wbqjbt": [
             "fillable"
         ],
+        "iron-fzbvce": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "laptop-nvulcs": [
+            "togglebutton"
+        ],
         "lawn_mower-bterwo": [
             "particleremover",
             "togglebutton"
@@ -39943,6 +40204,9 @@
         "printer-oyqbtq": [
             "togglebutton"
         ],
+        "ripsaw-laysom": [
+            "slicer"
+        ],
         "salt_shaker-iomwtn": [
             "particleapplier",
             "togglebutton"
@@ -39959,7 +40223,13 @@
         "teapot-foaehs": [
             "fillable"
         ],
+        "toaster-kjwqav": [
+            "togglebutton"
+        ],
         "head_cabbage-tqohvs": [
+            "subpart"
+        ],
+        "lime-iwjcjp": [
             "subpart"
         ],
         "pool_table-atjfhn": [
@@ -40721,6 +40991,9 @@
         "yeast-yzhnqh": [
             "collision"
         ],
+        "carving_knife-ghhbgo": [
+            "slicer"
+        ],
         "liquid_carton-rsvypp": [
             "connectedpart",
             "fillable"
@@ -40842,7 +41115,11 @@
         "plant_pot-ihnfbi": [
             "fillable"
         ],
+        "router-tokdic": [
+            "togglebutton"
+        ],
         "space_heater-kxzqpr": [
+            "heatsource",
             "particleremover",
             "togglebutton"
         ],
@@ -40942,6 +41219,9 @@
         "driveway-ywqsrg": [
             "collision"
         ],
+        "fairy_light-waitum": [
+            "togglebutton"
+        ],
         "floors-ciodcg": [
             "collision"
         ],
@@ -40974,6 +41254,21 @@
         ],
         "floors-yrwwan": [
             "collision"
+        ],
+        "gate-izmteu": [
+            "togglebutton"
+        ],
+        "gate-vqjuvg": [
+            "togglebutton"
+        ],
+        "lantern-engbrg": [
+            "togglebutton"
+        ],
+        "lantern-onfjnh": [
+            "togglebutton"
+        ],
+        "lantern-zjuwnf": [
+            "togglebutton"
         ],
         "walls-amfsqq": [
             "collision"
@@ -41986,6 +42281,9 @@
         "driveway-ulegfe": [
             "collision"
         ],
+        "floor_lamp-smfygn": [
+            "togglebutton"
+        ],
         "floors-cdzqdq": [
             "collision"
         ],
@@ -42007,8 +42305,32 @@
         "floors-vyfrfo": [
             "collision"
         ],
+        "garden_light-xqmqmi": [
+            "togglebutton"
+        ],
+        "gate-bzotkq": [
+            "togglebutton"
+        ],
+        "gate-jnzgyw": [
+            "togglebutton"
+        ],
+        "grill-tusmtd": [
+            "togglebutton"
+        ],
         "lawn-mgxskp": [
             "collision"
+        ],
+        "shower-lpocnm": [
+            "fluidsink"
+        ],
+        "showerhead-psscka": [
+            "togglebutton"
+        ],
+        "showerhead-vzzosk": [
+            "togglebutton"
+        ],
+        "wall_mounted_light-trxlgu": [
+            "togglebutton"
         ],
         "walls-dfktez": [
             "collision"
@@ -42847,8 +43169,17 @@
         "floors-zugbdc": [
             "collision"
         ],
+        "gate-wvbxij": [
+            "togglebutton"
+        ],
+        "grill-dtfail": [
+            "togglebutton"
+        ],
         "lawn-zijpqt": [
             "collision"
+        ],
+        "spotlight-odrdjb": [
+            "togglebutton"
         ],
         "walls-nbdeaz": [
             "collision"
@@ -43017,6 +43348,9 @@
         ],
         "lawn-qaedpx": [
             "collision"
+        ],
+        "room_light-fxtqtn": [
+            "togglebutton"
         ],
         "walls-aquxtu": [
             "collision"
@@ -43518,8 +43852,20 @@
         "cart-revrxw": [
             "collision"
         ],
+        "carving_knife-fqqbop": [
+            "slicer"
+        ],
+        "carving_knife-gixmnd": [
+            "slicer"
+        ],
+        "carving_knife-zaihmr": [
+            "slicer"
+        ],
         "ceilings-cntgrr": [
             "collision"
+        ],
+        "cleaver-vpmydv": [
+            "slicer"
         ],
         "commercial_kitchen_sink-nmxgbm": [
             "fluidsink",
@@ -44894,6 +45240,9 @@
         "soap_dispenser-zwudcz": [
             "fluidsource"
         ],
+        "table_knife-eebpap": [
+            "slicer"
+        ],
         "table_lamp-uzrovn": [
             "collision",
             "togglebutton"
@@ -45084,6 +45433,15 @@
         "carafe-hdbsog": [
             "fillable"
         ],
+        "carving_knife-icxnkd": [
+            "slicer"
+        ],
+        "carving_knife-oxvnsa": [
+            "slicer"
+        ],
+        "carving_knife-xsjhji": [
+            "slicer"
+        ],
         "casserole-ncbsee": [
             "fillable"
         ],
@@ -45198,6 +45556,9 @@
         "stove-mdanhg": [
             "heatsource",
             "togglebutton"
+        ],
+        "table_knife-nvwmkx": [
+            "slicer"
         ],
         "toilet-essgie": [
             "fluidsink"
@@ -45766,11 +46127,45 @@
             "fluidsource",
             "togglebutton"
         ],
+        "camera-yptdmt": [
+            "togglebutton"
+        ],
+        "carving_knife-usqmjc": [
+            "slicer"
+        ],
+        "chandelier-knunaz": [
+            "togglebutton"
+        ],
+        "chandelier-obxeem": [
+            "togglebutton"
+        ],
+        "coal_heater-etqusf": [
+            "heatsource",
+            "togglebutton"
+        ],
         "coatrack-gypwkr": [
             "collision"
         ],
         "door-fstpos": [
             "collision"
+        ],
+        "downlight-fisfbn": [
+            "togglebutton"
+        ],
+        "downlight-nlhffs": [
+            "togglebutton"
+        ],
+        "downlight-zojpvs": [
+            "togglebutton"
+        ],
+        "dryer-jasnzj": [
+            "togglebutton"
+        ],
+        "electric_switch-gashan": [
+            "togglebutton"
+        ],
+        "floor_lamp-disyzd": [
+            "togglebutton"
         ],
         "floors-fpnxmg": [
             "collision"
@@ -45827,7 +46222,42 @@
         "floors-yrqspn": [
             "collision"
         ],
+        "garden_light-umyzpg": [
+            "togglebutton"
+        ],
+        "heater-lwgvaq": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "iron-vlvslm": [
+            "heatsource",
+            "togglebutton"
+        ],
+        "laptop-izydvb": [
+            "togglebutton"
+        ],
+        "laptop-vhbsgv": [
+            "togglebutton"
+        ],
         "oven-ffitak": [
+            "togglebutton"
+        ],
+        "range_hood-beanpv": [
+            "togglebutton"
+        ],
+        "range_hood-uokzpw": [
+            "togglebutton"
+        ],
+        "room_light-dddvjo": [
+            "togglebutton"
+        ],
+        "room_light-dnrcpt": [
+            "togglebutton"
+        ],
+        "room_light-hqxyvs": [
+            "togglebutton"
+        ],
+        "room_light-podyre": [
             "togglebutton"
         ],
         "shower-qkgvsz": [
@@ -45869,8 +46299,50 @@
             "fluidsource",
             "togglebutton"
         ],
+        "soap_dispenser-jmulpc": [
+            "fluidsource"
+        ],
+        "speaker_system-xpoajn": [
+            "togglebutton"
+        ],
+        "spotlight-qhvhzq": [
+            "togglebutton"
+        ],
         "stove-mjvqii": [
             "heatsource",
+            "togglebutton"
+        ],
+        "table_lamp-btdcou": [
+            "togglebutton"
+        ],
+        "table_lamp-jbjckk": [
+            "togglebutton"
+        ],
+        "table_lamp-qgdwbh": [
+            "togglebutton"
+        ],
+        "table_lamp-uupwiq": [
+            "togglebutton"
+        ],
+        "wall_mounted_light-bkaivt": [
+            "togglebutton"
+        ],
+        "wall_mounted_light-cstgzt": [
+            "togglebutton"
+        ],
+        "wall_mounted_light-jhpygl": [
+            "togglebutton"
+        ],
+        "wall_mounted_light-urhftt": [
+            "togglebutton"
+        ],
+        "wall_mounted_light-yylrlu": [
+            "togglebutton"
+        ],
+        "wall_mounted_tv-leeqgt": [
+            "togglebutton"
+        ],
+        "wall_mounted_tv-ovzajm": [
             "togglebutton"
         ],
         "walls-aescmv": [
@@ -46296,6 +46768,9 @@
         "walls-zxyurx": [
             "collision"
         ],
+        "washer-ynwamu": [
+            "togglebutton"
+        ],
         "water_bottle-lojipo": [
             "connectedpart"
         ],
@@ -46456,6 +46931,12 @@
             "togglebutton"
         ],
         "printer-kqmlho": [
+            "togglebutton"
+        ],
+        "projection_screen-dyhmgd": [
+            "togglebutton"
+        ],
+        "projection_screen-zsquya": [
             "togglebutton"
         ],
         "room_light-jnnhzm": [
@@ -46798,6 +47279,9 @@
             "togglebutton"
         ],
         "printer-kqzshp": [
+            "togglebutton"
+        ],
+        "projection_screen-ubdmvn": [
             "togglebutton"
         ],
         "table_lamp-ehjsdz": [
@@ -48627,6 +49111,9 @@
         "room_light-xyvxhs": [
             "togglebutton"
         ],
+        "table_knife-oceyno": [
+            "slicer"
+        ],
         "vase-ipbgrw": [
             "fillable"
         ],
@@ -48758,6 +49245,9 @@
         ],
         "room_light-qqihah": [
             "togglebutton"
+        ],
+        "table_knife-jxdfyy": [
+            "slicer"
         ],
         "table_lamp-ykhxso": [
             "togglebutton"
