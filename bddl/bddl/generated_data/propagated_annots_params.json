@@ -6666,23 +6666,12 @@
         "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
-        "particleSource": {
-            "conditions": {
-                "water.n.06": [
-                    [
-                        "toggled_on",
-                        true
-                    ]
-                ]
-            }
-        },
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -7938,16 +7927,6 @@
         },
         "moldyable": {},
         "nonSubstance": {},
-        "particleSource": {
-            "conditions": {
-                "water.n.06": [
-                    [
-                        "toggled_on",
-                        true
-                    ]
-                ]
-            }
-        },
         "rigidBody": {},
         "rustable": {},
         "sceneObject": {},
@@ -9213,23 +9192,12 @@
         },
         "moldyable": {},
         "nonSubstance": {},
-        "particleSource": {
-            "conditions": {
-                "water.n.06": [
-                    [
-                        "toggled_on",
-                        true
-                    ]
-                ]
-            }
-        },
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -25249,7 +25217,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -25591,6 +25558,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -29132,7 +29100,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -33817,7 +33784,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -33891,7 +33857,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -38856,7 +38821,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -38876,7 +38840,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -41602,11 +41565,9 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -41644,6 +41605,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -43100,7 +43062,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -49250,7 +49211,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -49434,7 +49394,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -49462,7 +49421,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -58802,7 +58760,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -59247,7 +59204,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -59842,6 +59798,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -60560,6 +60517,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -64779,7 +64737,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -82532,6 +82489,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -83702,7 +83660,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -86232,7 +86189,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -90729,7 +90685,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -90876,7 +90831,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -91075,7 +91029,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -94513,6 +94466,7 @@
         "nonSubstance": {},
         "rigidBody": {},
         "rustable": {},
+        "sceneObject": {},
         "scratchable": {},
         "stainable": {},
         "stickyable": {},
@@ -97224,6 +97178,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -100159,7 +100114,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -100188,7 +100142,6 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -100204,6 +100157,7 @@
         "nonSubstance": {},
         "rigidBody": {},
         "rustable": {},
+        "sceneObject": {},
         "scratchable": {},
         "stainable": {},
         "stickyable": {},
@@ -102249,7 +102203,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -102489,6 +102442,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -105203,11 +105157,9 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
-        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -105324,6 +105276,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -105598,7 +105551,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -113175,7 +113127,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -119173,6 +119124,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
@@ -119291,6 +119243,10 @@
         "particleSource": {
             "conditions": {
                 "water.n.06": [
+                    [
+                        "toggled_on",
+                        true
+                    ],
                     [
                         "gravity",
                         true
@@ -119669,7 +119625,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "slicer": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},

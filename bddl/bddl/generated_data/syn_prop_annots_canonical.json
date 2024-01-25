@@ -1903,7 +1903,6 @@
         "freezable": {}
     },
     "bathtub.n.01": {
-        "particleSource": {},
         "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -2373,8 +2372,6 @@
         "freezable": {}
     },
     "bidet.n.01": {
-        "toggleable": {},
-        "particleSource": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -10500,6 +10497,7 @@
         "freezable": {}
     },
     "conditioner__dispenser.n.01": {
+        "toggleable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -11010,7 +11008,6 @@
         "freezable": {}
     },
     "cookie_cutter.n.01": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12082,7 +12079,6 @@
     },
     "deep-freeze.n.02": {
         "openable": {},
-        "toggleable": {},
         "coldSource": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -12119,7 +12115,6 @@
         "freezable": {}
     },
     "dental_floss.n.01": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -12829,7 +12824,6 @@
         "freezable": {}
     },
     "display_panel.n.01": {
-        "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -13121,8 +13115,6 @@
         "freezable": {}
     },
     "drill.n.01": {
-        "toggleable": {},
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -13140,6 +13132,7 @@
         "freezable": {}
     },
     "drink__dispenser.n.01": {
+        "toggleable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -13632,7 +13625,6 @@
     "electric_mixer.n.01": {
         "fillable": {},
         "toggleable": {},
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15661,7 +15653,6 @@
         "freezable": {}
     },
     "grater.n.01": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15805,7 +15796,6 @@
         "freezable": {}
     },
     "griddle.n.01": {
-        "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -15825,7 +15815,6 @@
     "grill.n.02": {
         "flammable": {},
         "openable": {},
-        "toggleable": {},
         "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -17310,7 +17299,6 @@
         "freezable": {}
     },
     "hose.n.03": {
-        "toggleable": {},
         "rope": {},
         "nonSubstance": {},
         "deformable": {},
@@ -17562,7 +17550,6 @@
     },
     "ice_cube.n.01": {
         "breakable": {},
-        "slicer": {},
         "meltable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -17912,6 +17899,7 @@
         "freezable": {}
     },
     "isopropanol__dispenser.n.01": {
+        "toggleable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -18048,6 +18036,7 @@
         "freezable": {}
     },
     "jam__dispenser.n.01": {
+        "toggleable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -18988,7 +18977,6 @@
         "freezable": {}
     },
     "lantern.n.01": {
-        "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -23188,6 +23176,7 @@
         "freezable": {}
     },
     "pepper_mill.n.01": {
+        "toggleable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -23604,7 +23593,6 @@
         "freezable": {}
     },
     "pickup.n.01": {
-        "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -24150,7 +24138,6 @@
         "freezable": {}
     },
     "pliers.n.01": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -25460,7 +25447,6 @@
         "freezable": {}
     },
     "rake.n.03": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -25579,7 +25565,6 @@
         "freezable": {}
     },
     "razor.n.01": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -25634,7 +25619,6 @@
     },
     "recreational_vehicle.n.01": {
         "openable": {},
-        "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -26675,6 +26659,7 @@
     "sauna_heater.n.01": {
         "toggleable": {},
         "heatSource": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27309,6 +27294,7 @@
         "freezable": {}
     },
     "shampoo__dispenser.n.01": {
+        "toggleable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -27762,7 +27748,6 @@
         "freezable": {}
     },
     "shovel.n.01": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27780,6 +27765,7 @@
         "freezable": {}
     },
     "shower_stall.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -27797,7 +27783,6 @@
         "freezable": {}
     },
     "shower.n.01": {
-        "toggleable": {},
         "particleSink": {},
         "sceneObject": {},
         "rigidBody": {},
@@ -28352,7 +28337,6 @@
         "freezable": {}
     },
     "slicer.n.02": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -28510,6 +28494,7 @@
     },
     "soap_dispenser.n.01": {
         "breakable": {},
+        "toggleable": {},
         "particleSource": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -29118,8 +29103,6 @@
         "freezable": {}
     },
     "sprinkler.n.01": {
-        "toggleable": {},
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -29319,7 +29302,6 @@
         "freezable": {}
     },
     "stapler.n.01": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -30820,7 +30802,6 @@
         "freezable": {}
     },
     "ticket.n.01": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -32900,6 +32881,7 @@
         "freezable": {}
     },
     "water__dispenser.n.01": {
+        "toggleable": {},
         "particleApplier": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -33164,7 +33146,6 @@
         "freezable": {}
     },
     "whisk.n.01": {
-        "slicer": {},
         "mixingTool": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -34142,6 +34123,7 @@
     },
     "squeeze_bottle.n.01": {
         "breakable": {},
+        "toggleable": {},
         "particleSource": {},
         "rigidBody": {},
         "nonSubstance": {},
