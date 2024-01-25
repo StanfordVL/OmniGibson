@@ -139,7 +139,7 @@ def evaluate_batch(batch, category, record_path):
                 mesh_points = mesh.prim.GetAttribute("points").Get()
                 pos, ori = mesh.get_position_orientation()
                 transform = T.pose2mat((pos, ori))
-                if len(mesh_points)==0:
+                if mesh_points is None or len(mesh_points)==0:
                     continue
                 points.append(trimesh.transformations.transform_points(mesh_points, transform))
         points = np.concatenate(points, axis=0)
@@ -159,18 +159,11 @@ def evaluate_batch(batch, category, record_path):
         # Compute the angle between the first principal component and the x-axis
         angle = np.arctan2(pc[1], pc[0])
 
-        # Create a rotation matrix from this angle
+        # Create a quaternion from this angle
         rot = R.from_euler('z', angle)
-        inv_rot = rot.inv()
 
-        current_rot = R.from_quat(obj.get_orientation())
-        new_rot = inv_rot * current_rot
-        obj.set_orientation(new_rot.as_quat())
-    
-    def visualize_2d_points(points):
-        import matplotlib.pyplot as plt
-        plt.scatter(points[:, 0], points[:, 1])
-        plt.show()
+        # Apply the rotation to the object
+        obj.set_orientation(rot.as_quat())
     
     queued_rotations = []
     def rotate_object(angle):
@@ -236,10 +229,10 @@ def evaluate_batch(batch, category, record_path):
 
 def main():
     total_ids = 5
-    # record_path = input("Enter path to save recorded orientations: ")
-    record_path = "/scr/home/yinhang/recorded_orientation"
-    # your_id = int(input("Enter your id (0-4): "))
-    your_id = 0
+    record_path = input("Enter path to save recorded orientations: ")
+    # record_path = "/scr/home/yinhang/recorded_orientation"
+    your_id = int(input("Enter your id (0-4): "))
+    # your_id = 0
 
     if your_id < 0 or your_id >= total_ids:
         print("Invalid id!")
