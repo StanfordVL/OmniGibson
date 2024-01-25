@@ -7,7 +7,6 @@ import os
 import sys
 import json
 import numpy as np
-from scipy.spatial import ConvexHull
 from scipy.spatial.transform import Rotation as R
 import trimesh
 import omnigibson as og
@@ -22,7 +21,12 @@ from omnigibson.utils.ui_utils import KeyboardEventHandler
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 
 from omnigibson.macros import gm
-gm.ENABLE_FLATCACHE = True
+gm.ENABLE_FLATCACHE = False
+
+CAMERA_X = 0.0
+CAMERA_Y = 0.0
+CAMERA_OBJECT_DISTANCE = 2.0
+FIXED_X_SPACING = 0.5
 
 
 def load_processed_objects(record_path):
@@ -55,33 +59,24 @@ def position_objects(category, batch, fixed_x_spacing):
     all_objects_x_coordinates = []
 
     for index, obj_model in enumerate(batch):
-        x_coordinate = 10 if index == 0 else all_objects_x_coordinates[-1] + max(all_objects[-1].aabb_extent[:2]) + fixed_x_spacing
+        x_coordinate = CAMERA_X if index == 0 else all_objects_x_coordinates[-1] + all_objects[-1].aabb_extent[0] + fixed_x_spacing
 
         obj = DatasetObject(
             name=obj_model,
             category=category,
             model=obj_model,
-            position=[x_coordinate, 0, 0],
         )
         all_objects.append(obj)
         og.sim.import_object(obj)
         obj.disable_gravity()
-        obj.set_position_orientation(position=[x_coordinate, 0, 10])
+        obj.set_position_orientation(position=[x_coordinate, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 10])
         og.sim.step()
         offset = obj.get_position()[2] - obj.aabb_center[2]
-        z_coordinate = obj.aabb_extent[2]/2 + offset + 0.5
-        obj.set_position_orientation(position=[x_coordinate, 0, z_coordinate])
+        z_coordinate = obj.aabb_extent[2]/2 + offset + 0.05
+        obj.set_position_orientation(position=[x_coordinate, CAMERA_Y+CAMERA_OBJECT_DISTANCE, z_coordinate])
         all_objects_x_coordinates.append(x_coordinate)
 
     return all_objects
-
-
-def adjust_object_positions(all_objects, all_objects_x_coordinates):
-    for index, obj in enumerate(all_objects):
-        offset = obj.get_position()[2] - obj.aabb_center[2]
-        z_coordinate = obj.aabb_extent[2]/2 + offset + 0.5
-        obj.set_position_orientation(position=[all_objects_x_coordinates[index], 0, z_coordinate])
-
 
 def save_object_config(all_objects, record_path, category, skip):
     if not skip:
@@ -96,6 +91,9 @@ def save_object_config(all_objects, record_path, category, skip):
 def evaluate_batch(batch, category, record_path):
     done, skip = False, False
     obj_gravity_enabled_set = set()
+    obj_first_pca_angle_map = {}
+    obj_second_pca_angle_map = {}
+    queued_rotations = []
 
     def set_done():
         nonlocal done
@@ -132,33 +130,43 @@ def evaluate_batch(batch, category, record_path):
     
     def align_to_pca(pca_axis):
         obj = get_selected_object()
-
-        # Collecting points from the object
-        points = []
-        for link in obj.links.values():
-            for mesh in link.visual_meshes.values():
-                mesh_points = mesh.prim.GetAttribute("points").Get()
-                pos, ori = mesh.get_position_orientation()
-                transform = T.pose2mat((pos, ori))
-                if mesh_points is None or len(mesh_points)==0:
-                    continue
-                points.append(trimesh.transformations.transform_points(mesh_points, transform))
-        points = np.concatenate(points, axis=0)
-
-        # Apply PCA to 3D points
-        from sklearn.decomposition import PCA
-        pca = PCA(n_components=3)
-        pca.fit(points)
-
-        if pca_axis == 1:
-            # The first principal component
-            pc = pca.components_[0]
+        
+        if pca_axis == 1 and obj in obj_first_pca_angle_map:
+            angle = obj_first_pca_angle_map[obj]
+        elif pca_axis == 2 and obj in obj_second_pca_angle_map:
+            angle = obj_second_pca_angle_map[obj]
         else:
-            # The second principal component
-            pc = pca.components_[1]
+            # Collecting points from the object
+            points = []
+            for link in obj.links.values():
+                for mesh in link.visual_meshes.values():
+                    mesh_points = mesh.prim.GetAttribute("points").Get()
+                    pos, ori = mesh.get_position_orientation()
+                    transform = T.pose2mat((pos, ori))
+                    if mesh_points is None or len(mesh_points)==0:
+                        continue
+                    points.append(trimesh.transformations.transform_points(mesh_points, transform))
+            points = np.concatenate(points, axis=0)
 
-        # Compute the angle between the first principal component and the x-axis
-        angle = np.arctan2(pc[1], pc[0])
+            # Apply PCA to 3D points
+            from sklearn.decomposition import PCA
+            pca = PCA(n_components=3)
+            pca.fit(points)
+
+            if pca_axis == 1:
+                # The first principal component
+                pc = pca.components_[0]
+            else:
+                # The second principal component
+                pc = pca.components_[1]
+
+            # Compute the angle between the first principal component and the x-axis
+            angle = np.arctan2(pc[1], pc[0])
+            
+            if pca_axis == 1:
+                obj_first_pca_angle_map[obj] = angle
+            else:
+                obj_second_pca_angle_map[obj] = angle
 
         # Create a quaternion from this angle
         rot = R.from_euler('z', angle)
@@ -166,12 +174,13 @@ def evaluate_batch(batch, category, record_path):
         # Apply the rotation to the object
         obj.set_orientation(rot.as_quat())
     
-    queued_rotations = []
     def rotate_object(angle):
         obj = get_selected_object()
         current_rot = R.from_quat(obj.get_orientation())
         new_rot = R.from_euler('z', angle) * current_rot
         queued_rotations.append((obj, new_rot.as_quat()))
+
+    all_objects = position_objects(category, batch, FIXED_X_SPACING)
 
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.C,
@@ -201,11 +210,7 @@ def evaluate_batch(batch, category, record_path):
         key=lazy.carb.input.KeyboardInput.D,
         callback_fn=toggle_gravity,
     )
-
-    fixed_x_spacing = 0.5
-    all_objects = position_objects(category, batch, fixed_x_spacing)
-    # adjust_object_positions(all_objects, all_objects_x_coordinates)
-
+    
     print("Press 'A' to align object to its first principal component.")
     print("Press 'S' to align object to its second principal component.")
     print("Press 'J' to rotate object by 45 degrees counter-clockwise around z-axis.")
@@ -255,9 +260,6 @@ def main():
     env = og.Environment(configs=cfg)
     dome_light = og.sim.scene.skybox
     dome_light.intensity = 0.5e4
-    og.sim.viewer_camera.set_position_orientation(
-        position=np.array([10.0, -9.0, 1.5])
-    )
 
     remaining_objs_by_cat = group_objects_by_category(remaining_objs)
     KeyboardEventHandler.initialize()
