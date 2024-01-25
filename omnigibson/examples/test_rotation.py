@@ -7,12 +7,13 @@ def main():
   env = og.Environment(configs={"scene": {"type": "Scene"}})
 
   obj = DatasetObject(
-      name="causya",
-      category="carton",
-      model="causya",
-      position=[0, 0, 0],
+      name="bed",
+      category="bed",
+      model="wfxgbb",
   )
   og.sim.import_object(obj)
+
+  og.sim.step()
 
   offset = obj.get_position()[2] - obj.aabb_center[2]
   z_coordinate = obj.aabb_extent[2]/2 + offset + 0.5
@@ -22,8 +23,6 @@ def main():
   while True:
     og.sim.step()
     step += 1
-
-    obj.sleep()
 
     if step % 100 == 0:
       current_rot = R.from_quat(obj.get_orientation())
