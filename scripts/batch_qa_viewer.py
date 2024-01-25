@@ -283,7 +283,6 @@ class BatchQAViewer:
             if cat in STRUCTURE_CATEGORIES:
                 continue
             print(f"Processing category {cat}...")
-            if (cat!="bed"): continue # TODO: remove this line
             for batch_start in range(0, len(models), 10):
                 batch = models[batch_start:min(batch_start + 10, len(models))]
                 self.evaluate_batch(batch, cat)
