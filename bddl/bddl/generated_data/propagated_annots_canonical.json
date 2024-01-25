@@ -1182,7 +1182,21 @@
     "wrinkleable": {}
   },
   "arrangement.n.02": {
-    "freezable": {}
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "moldyable": {},
+    "nonSubstance": {},
+    "rigidBody": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
   },
   "arrangement.n.03": {
     "disinfectable": {},
@@ -6807,7 +6821,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -8921,7 +8934,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -11926,7 +11938,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -14235,12 +14246,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "cooked__diced__cactus.n.01": {
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "cooked__diced__cantaloup.n.01": {
     "flammable": {},
     "freezable": {},
@@ -14412,12 +14417,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "cooked__diced__clam.n.01": {
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "cooked__diced__clove.n.01": {
     "flammable": {},
     "freezable": {},
@@ -14562,13 +14561,6 @@
     "freezable": {},
     "macroPhysicalSubstance": {},
     "physicalSubstance": {},
-    "substance": {}
-  },
-  "cooked__diced__flower.n.01": {
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "sceneObject": {},
     "substance": {}
   },
   "cooked__diced__frank.n.01": {
@@ -14859,12 +14851,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "cooked__diced__mussel.n.01": {
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "cooked__diced__mustard.n.01": {
     "freezable": {},
     "macroPhysicalSubstance": {},
@@ -15108,12 +15094,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "cooked__diced__scallop.n.01": {
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "cooked__diced__scone.n.01": {
     "freezable": {},
     "macroPhysicalSubstance": {},
@@ -15324,14 +15304,6 @@
     "substance": {}
   },
   "cooked__diced__virginia_ham.n.01": {
-    "flammable": {},
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
-  "cooked__diced__wafer.n.01": {
-    "breakable": {},
     "flammable": {},
     "freezable": {},
     "macroPhysicalSubstance": {},
@@ -18620,13 +18592,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "diced__bouquet.n.01": {
-    "flammable": {},
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "diced__branch.n.01": {
     "flammable": {},
     "freezable": {},
@@ -18717,13 +18682,6 @@
     "substance": {}
   },
   "diced__butternut_squash.n.01": {
-    "cookable": {},
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
-  "diced__cactus.n.01": {
     "cookable": {},
     "freezable": {},
     "macroPhysicalSubstance": {},
@@ -18924,13 +18882,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "diced__clam.n.01": {
-    "cookable": {},
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "diced__clove.n.01": {
     "cookable": {},
     "flammable": {},
@@ -19113,14 +19064,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "diced__flower.n.01": {
-    "cookable": {},
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "sceneObject": {},
-    "substance": {}
-  },
   "diced__frank.n.01": {
     "cookable": {},
     "freezable": {},
@@ -19155,12 +19098,6 @@
   "diced__fruitcake.n.01": {
     "cookable": {},
     "flammable": {},
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
-  "diced__garden_plant.n.01": {
     "freezable": {},
     "macroPhysicalSubstance": {},
     "physicalSubstance": {},
@@ -19423,12 +19360,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "diced__marigold.n.01": {
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "diced__marshmallow.n.01": {
     "cookable": {},
     "freezable": {},
@@ -19475,13 +19406,6 @@
   "diced__mushroom.n.01": {
     "cookable": {},
     "flammable": {},
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
-  "diced__mussel.n.01": {
-    "cookable": {},
     "freezable": {},
     "macroPhysicalSubstance": {},
     "physicalSubstance": {},
@@ -19781,13 +19705,6 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "diced__scallop.n.01": {
-    "cookable": {},
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "diced__scone.n.01": {
     "cookable": {},
     "freezable": {},
@@ -20055,15 +19972,6 @@
     "substance": {}
   },
   "diced__virginia_ham.n.01": {
-    "cookable": {},
-    "flammable": {},
-    "freezable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
-  "diced__wafer.n.01": {
-    "breakable": {},
     "cookable": {},
     "flammable": {},
     "freezable": {},
@@ -23338,7 +23246,6 @@
     "rustable": {},
     "sceneObject": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -23346,7 +23253,21 @@
     "wrinkleable": {}
   },
   "flower_arrangement.n.01": {
-    "freezable": {}
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "moldyable": {},
+    "nonSubstance": {},
+    "rigidBody": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
   },
   "fluid.n.01": {
     "freezable": {},
@@ -24121,7 +24042,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -26194,25 +26114,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "half__bouquet.n.01": {
-    "diceable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "flammable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "half__branch.n.01": {
     "diceable": {},
     "disinfectable": {},
@@ -26446,25 +26347,6 @@
     "wrinkleable": {}
   },
   "half__butternut_squash.n.01": {
-    "cookable": {},
-    "diceable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
-  "half__cactus.n.01": {
     "cookable": {},
     "diceable": {},
     "disinfectable": {},
@@ -27062,25 +26944,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "half__clam.n.01": {
-    "cookable": {},
-    "diceable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "half__clove.n.01": {
     "cookable": {},
     "diceable": {},
@@ -27604,26 +27467,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "half__flower.n.01": {
-    "cookable": {},
-    "diceable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "sceneObject": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "half__frank.n.01": {
     "cookable": {},
     "diceable": {},
@@ -27719,24 +27562,6 @@
     "rustable": {},
     "scratchable": {},
     "softBody": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
-  "half__garden_plant.n.01": {
-    "diceable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -28559,24 +28384,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "half__marigold.n.01": {
-    "diceable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "half__marshmallow.n.01": {
     "cookable": {},
     "deformable": {},
@@ -28682,25 +28489,6 @@
     "disinfectable": {},
     "dustyable": {},
     "flammable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
-  "half__mussel.n.01": {
-    "cookable": {},
-    "diceable": {},
-    "disinfectable": {},
-    "dustyable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -29642,25 +29430,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "half__scallop.n.01": {
-    "cookable": {},
-    "diceable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "half__scone.n.01": {
     "cookable": {},
     "deformable": {},
@@ -30394,27 +30163,6 @@
     "wrinkleable": {}
   },
   "half__virginia_ham.n.01": {
-    "cookable": {},
-    "diceable": {},
-    "disinfectable": {},
-    "dustyable": {},
-    "flammable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
-  "half__wafer.n.01": {
-    "breakable": {},
     "cookable": {},
     "diceable": {},
     "disinfectable": {},
@@ -36052,7 +35800,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -37765,7 +37512,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -45628,7 +45374,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},
@@ -50143,7 +49888,21 @@
     "freezable": {}
   },
   "succulent.n.01": {
-    "freezable": {}
+    "disinfectable": {},
+    "dustyable": {},
+    "freezable": {},
+    "grassyable": {},
+    "heatable": {},
+    "moldyable": {},
+    "nonSubstance": {},
+    "rigidBody": {},
+    "rustable": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
   },
   "sugar.n.01": {
     "freezable": {}
@@ -54176,7 +53935,6 @@
     "rigidBody": {},
     "rustable": {},
     "scratchable": {},
-    "sliceable": {},
     "stainable": {},
     "stickyable": {},
     "tarnishable": {},

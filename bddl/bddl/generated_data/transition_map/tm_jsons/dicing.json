@@ -612,23 +612,6 @@
         }
     },
     {
-        "rule_name": "cooked-half__cactus.n.01-dicing",
-        "input_synsets": {
-            "half__cactus.n.01": 1
-        },
-        "input_states": {
-            "half__cactus.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__cactus.n.01": 1
-        }
-    },
-    {
         "rule_name": "cooked-half__cantaloup.n.01-dicing",
         "input_synsets": {
             "half__cantaloup.n.01": 1
@@ -1071,23 +1054,6 @@
         }
     },
     {
-        "rule_name": "cooked-half__clam.n.01-dicing",
-        "input_synsets": {
-            "half__clam.n.01": 1
-        },
-        "input_states": {
-            "half__clam.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__clam.n.01": 1
-        }
-    },
-    {
         "rule_name": "cooked-half__clove.n.01-dicing",
         "input_synsets": {
             "half__clove.n.01": 1
@@ -1476,23 +1442,6 @@
         },
         "output_synsets": {
             "cooked__diced__fillet.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked-half__flower.n.01-dicing",
-        "input_synsets": {
-            "half__flower.n.01": 1
-        },
-        "input_states": {
-            "half__flower.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__flower.n.01": 1
         }
     },
     {
@@ -2261,23 +2210,6 @@
         }
     },
     {
-        "rule_name": "cooked-half__mussel.n.01-dicing",
-        "input_synsets": {
-            "half__mussel.n.01": 1
-        },
-        "input_states": {
-            "half__mussel.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__mussel.n.01": 1
-        }
-    },
-    {
         "rule_name": "cooked-half__mustard.n.01-dicing",
         "input_synsets": {
             "half__mustard.n.01": 1
@@ -2924,23 +2856,6 @@
         }
     },
     {
-        "rule_name": "cooked-half__scallop.n.01-dicing",
-        "input_synsets": {
-            "half__scallop.n.01": 1
-        },
-        "input_states": {
-            "half__scallop.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__scallop.n.01": 1
-        }
-    },
-    {
         "rule_name": "cooked-half__scone.n.01-dicing",
         "input_synsets": {
             "half__scone.n.01": 1
@@ -3499,23 +3414,6 @@
         },
         "output_synsets": {
             "cooked__diced__virginia_ham.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked-half__wafer.n.01-dicing",
-        "input_synsets": {
-            "half__wafer.n.01": 1
-        },
-        "input_states": {
-            "half__wafer.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__wafer.n.01": 1
         }
     },
     {
@@ -4250,23 +4148,6 @@
         }
     },
     {
-        "rule_name": "uncooked-half__bouquet.n.01-dicing",
-        "input_synsets": {
-            "half__bouquet.n.01": 1
-        },
-        "input_states": {
-            "half__bouquet.n.01": [
-                [
-                    "cooked",
-                    false
-                ]
-            ]
-        },
-        "output_synsets": {
-            "diced__bouquet.n.01": 1
-        }
-    },
-    {
         "rule_name": "uncooked-half__branch.n.01-dicing",
         "input_synsets": {
             "half__branch.n.01": 1
@@ -4485,23 +4366,6 @@
         },
         "output_synsets": {
             "diced__butternut_squash.n.01": 1
-        }
-    },
-    {
-        "rule_name": "uncooked-half__cactus.n.01-dicing",
-        "input_synsets": {
-            "half__cactus.n.01": 1
-        },
-        "input_states": {
-            "half__cactus.n.01": [
-                [
-                    "cooked",
-                    false
-                ]
-            ]
-        },
-        "output_synsets": {
-            "diced__cactus.n.01": 1
         }
     },
     {
@@ -4947,23 +4811,6 @@
         }
     },
     {
-        "rule_name": "uncooked-half__clam.n.01-dicing",
-        "input_synsets": {
-            "half__clam.n.01": 1
-        },
-        "input_states": {
-            "half__clam.n.01": [
-                [
-                    "cooked",
-                    false
-                ]
-            ]
-        },
-        "output_synsets": {
-            "diced__clam.n.01": 1
-        }
-    },
-    {
         "rule_name": "uncooked-half__clove.n.01-dicing",
         "input_synsets": {
             "half__clove.n.01": 1
@@ -5389,23 +5236,6 @@
         }
     },
     {
-        "rule_name": "uncooked-half__flower.n.01-dicing",
-        "input_synsets": {
-            "half__flower.n.01": 1
-        },
-        "input_states": {
-            "half__flower.n.01": [
-                [
-                    "cooked",
-                    false
-                ]
-            ]
-        },
-        "output_synsets": {
-            "diced__flower.n.01": 1
-        }
-    },
-    {
         "rule_name": "uncooked-half__frank.n.01-dicing",
         "input_synsets": {
             "half__frank.n.01": 1
@@ -5488,23 +5318,6 @@
         },
         "output_synsets": {
             "diced__fruitcake.n.01": 1
-        }
-    },
-    {
-        "rule_name": "uncooked-half__garden_plant.n.01-dicing",
-        "input_synsets": {
-            "half__garden_plant.n.01": 1
-        },
-        "input_states": {
-            "half__garden_plant.n.01": [
-                [
-                    "cooked",
-                    false
-                ]
-            ]
-        },
-        "output_synsets": {
-            "diced__garden_plant.n.01": 1
         }
     },
     {
@@ -6120,23 +5933,6 @@
         }
     },
     {
-        "rule_name": "uncooked-half__marigold.n.01-dicing",
-        "input_synsets": {
-            "half__marigold.n.01": 1
-        },
-        "input_states": {
-            "half__marigold.n.01": [
-                [
-                    "cooked",
-                    false
-                ]
-            ]
-        },
-        "output_synsets": {
-            "diced__marigold.n.01": 1
-        }
-    },
-    {
         "rule_name": "uncooked-half__marshmallow.n.01-dicing",
         "input_synsets": {
             "half__marshmallow.n.01": 1
@@ -6236,23 +6032,6 @@
         },
         "output_synsets": {
             "diced__mushroom.n.01": 1
-        }
-    },
-    {
-        "rule_name": "uncooked-half__mussel.n.01-dicing",
-        "input_synsets": {
-            "half__mussel.n.01": 1
-        },
-        "input_states": {
-            "half__mussel.n.01": [
-                [
-                    "cooked",
-                    false
-                ]
-            ]
-        },
-        "output_synsets": {
-            "diced__mussel.n.01": 1
         }
     },
     {
@@ -6936,23 +6715,6 @@
         }
     },
     {
-        "rule_name": "uncooked-half__scallop.n.01-dicing",
-        "input_synsets": {
-            "half__scallop.n.01": 1
-        },
-        "input_states": {
-            "half__scallop.n.01": [
-                [
-                    "cooked",
-                    false
-                ]
-            ]
-        },
-        "output_synsets": {
-            "diced__scallop.n.01": 1
-        }
-    },
-    {
         "rule_name": "uncooked-half__scone.n.01-dicing",
         "input_synsets": {
             "half__scone.n.01": 1
@@ -7579,23 +7341,6 @@
         },
         "output_synsets": {
             "diced__virginia_ham.n.01": 1
-        }
-    },
-    {
-        "rule_name": "uncooked-half__wafer.n.01-dicing",
-        "input_synsets": {
-            "half__wafer.n.01": 1
-        },
-        "input_states": {
-            "half__wafer.n.01": [
-                [
-                    "cooked",
-                    false
-                ]
-            ]
-        },
-        "output_synsets": {
-            "diced__wafer.n.01": 1
         }
     },
     {

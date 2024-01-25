@@ -3439,8 +3439,56 @@
     ],
     "arrangement.n.02": [
         [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
             "frozen",
             "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
         ]
     ],
     "arrangement.n.03": [
@@ -20797,10 +20845,6 @@
             "scratched"
         ],
         [
-            "sliced",
-            "sliced"
-        ],
-        [
             "stained",
             "stained"
         ],
@@ -27279,10 +27323,6 @@
         [
             "scratched",
             "scratched"
-        ],
-        [
-            "sliced",
-            "sliced"
         ],
         [
             "stained",
@@ -36205,10 +36245,6 @@
             "scratched"
         ],
         [
-            "sliced",
-            "sliced"
-        ],
-        [
             "stained",
             "stained"
         ],
@@ -41851,12 +41887,6 @@
             "frozen"
         ]
     ],
-    "cooked__diced__cactus.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "cooked__diced__cantaloup.n.01": [
         [
             "on_fire",
@@ -42073,12 +42103,6 @@
             "frozen"
         ]
     ],
-    "cooked__diced__clam.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "cooked__diced__clove.n.01": [
         [
             "on_fire",
@@ -42244,12 +42268,6 @@
         ]
     ],
     "cooked__diced__fillet.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__diced__flower.n.01": [
         [
             "frozen",
             "frozen"
@@ -42579,12 +42597,6 @@
             "frozen"
         ]
     ],
-    "cooked__diced__mussel.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "cooked__diced__mustard.n.01": [
         [
             "frozen",
@@ -42837,12 +42849,6 @@
             "frozen"
         ]
     ],
-    "cooked__diced__scallop.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "cooked__diced__scone.n.01": [
         [
             "frozen",
@@ -43086,20 +43092,6 @@
         ]
     ],
     "cooked__diced__virginia_ham.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__diced__wafer.n.01": [
-        [
-            "broken",
-            "broken"
-        ],
         [
             "on_fire",
             "on_fire"
@@ -50879,16 +50871,6 @@
             "frozen"
         ]
     ],
-    "diced__bouquet.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "diced__branch.n.01": [
         [
             "on_fire",
@@ -51030,16 +51012,6 @@
         ]
     ],
     "diced__butternut_squash.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "diced__cactus.n.01": [
         [
             "cooked",
             "cooked"
@@ -51357,16 +51329,6 @@
             "frozen"
         ]
     ],
-    "diced__clam.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "diced__clove.n.01": [
         [
             "cooked",
@@ -51645,16 +51607,6 @@
             "frozen"
         ]
     ],
-    "diced__flower.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "diced__frank.n.01": [
         [
             "cooked",
@@ -51716,12 +51668,6 @@
             "on_fire",
             "on_fire"
         ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "diced__garden_plant.n.01": [
         [
             "frozen",
             "frozen"
@@ -52107,12 +52053,6 @@
             "frozen"
         ]
     ],
-    "diced__marigold.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "diced__marshmallow.n.01": [
         [
             "cooked",
@@ -52185,16 +52125,6 @@
         [
             "on_fire",
             "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "diced__mussel.n.01": [
-        [
-            "cooked",
-            "cooked"
         ],
         [
             "frozen",
@@ -52621,16 +52551,6 @@
             "frozen"
         ]
     ],
-    "diced__scallop.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "diced__scone.n.01": [
         [
             "cooked",
@@ -53030,24 +52950,6 @@
         ]
     ],
     "diced__virginia_ham.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "diced__wafer.n.01": [
-        [
-            "broken",
-            "broken"
-        ],
         [
             "cooked",
             "cooked"
@@ -62595,10 +62497,6 @@
             "scratched"
         ],
         [
-            "sliced",
-            "sliced"
-        ],
-        [
             "stained",
             "stained"
         ],
@@ -62621,8 +62519,56 @@
     ],
     "flower_arrangement.n.01": [
         [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
             "frozen",
             "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
         ]
     ],
     "fluid.n.01": [
@@ -64879,10 +64825,6 @@
         [
             "scratched",
             "scratched"
-        ],
-        [
-            "sliced",
-            "sliced"
         ],
         [
             "stained",
@@ -71049,68 +70991,6 @@
             "wrinkly"
         ]
     ],
-    "half__bouquet.n.01": [
-        [
-            "diced",
-            "diced"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "half__branch.n.01": [
         [
             "diced",
@@ -71868,68 +71748,6 @@
         ]
     ],
     "half__butternut_squash.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "diced",
-            "diced"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "half__cactus.n.01": [
         [
             "cooked",
             "cooked"
@@ -73867,68 +73685,6 @@
             "wrinkly"
         ]
     ],
-    "half__clam.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "diced",
-            "diced"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "half__clove.n.01": [
         [
             "cooked",
@@ -75615,68 +75371,6 @@
             "wrinkly"
         ]
     ],
-    "half__flower.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "diced",
-            "diced"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "half__frank.n.01": [
         [
             "cooked",
@@ -75957,64 +75651,6 @@
         [
             "on_fire",
             "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "half__garden_plant.n.01": [
-        [
-            "diced",
-            "diced"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
         ],
         [
             "frozen",
@@ -78703,64 +78339,6 @@
             "wrinkly"
         ]
     ],
-    "half__marigold.n.01": [
-        [
-            "diced",
-            "diced"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "half__marshmallow.n.01": [
         [
             "cooked",
@@ -79095,68 +78673,6 @@
         [
             "on_fire",
             "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "half__mussel.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "diced",
-            "diced"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
         ],
         [
             "frozen",
@@ -82205,68 +81721,6 @@
             "wrinkly"
         ]
     ],
-    "half__scallop.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "diced",
-            "diced"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
     "half__scone.n.01": [
         [
             "cooked",
@@ -84632,76 +84086,6 @@
         ]
     ],
     "half__virginia_ham.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
-        [
-            "diced",
-            "diced"
-        ],
-        [
-            "disinfected",
-            "disinfected"
-        ],
-        [
-            "dusty",
-            "dusty"
-        ],
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "grassy",
-            "grassy"
-        ],
-        [
-            "hot",
-            "hot"
-        ],
-        [
-            "moldy",
-            "moldy"
-        ],
-        [
-            "rusty",
-            "rusty"
-        ],
-        [
-            "scratched",
-            "scratched"
-        ],
-        [
-            "stained",
-            "stained"
-        ],
-        [
-            "sticky",
-            "sticky"
-        ],
-        [
-            "tarnished",
-            "tarnished"
-        ],
-        [
-            "wet",
-            "wet"
-        ],
-        [
-            "wrinkly",
-            "wrinkly"
-        ]
-    ],
-    "half__wafer.n.01": [
-        [
-            "broken",
-            "broken"
-        ],
         [
             "cooked",
             "cooked"
@@ -101609,10 +100993,6 @@
             "scratched"
         ],
         [
-            "sliced",
-            "sliced"
-        ],
-        [
             "stained",
             "stained"
         ],
@@ -106477,10 +105857,6 @@
         [
             "scratched",
             "scratched"
-        ],
-        [
-            "sliced",
-            "sliced"
         ],
         [
             "stained",
@@ -129599,10 +128975,6 @@
             "scratched"
         ],
         [
-            "sliced",
-            "sliced"
-        ],
-        [
             "stained",
             "stained"
         ],
@@ -143155,8 +142527,56 @@
     ],
     "succulent.n.01": [
         [
+            "disinfected",
+            "disinfected"
+        ],
+        [
+            "dusty",
+            "dusty"
+        ],
+        [
             "frozen",
             "frozen"
+        ],
+        [
+            "grassy",
+            "grassy"
+        ],
+        [
+            "hot",
+            "hot"
+        ],
+        [
+            "moldy",
+            "moldy"
+        ],
+        [
+            "rusty",
+            "rusty"
+        ],
+        [
+            "scratched",
+            "scratched"
+        ],
+        [
+            "stained",
+            "stained"
+        ],
+        [
+            "sticky",
+            "sticky"
+        ],
+        [
+            "tarnished",
+            "tarnished"
+        ],
+        [
+            "wet",
+            "wet"
+        ],
+        [
+            "wrinkly",
+            "wrinkly"
         ]
     ],
     "sugar.n.01": [
@@ -155175,10 +154595,6 @@
         [
             "scratched",
             "scratched"
-        ],
-        [
-            "sliced",
-            "sliced"
         ],
         [
             "stained",

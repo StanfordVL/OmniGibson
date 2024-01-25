@@ -1887,7 +1887,21 @@
         "wrinkleable": {}
     },
     "arrangement.n.02": {
-        "freezable": {}
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
     },
     "arrangement.n.03": {
         "disinfectable": {},
@@ -13891,9 +13905,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__bouquet.n.01"
-        },
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -18208,9 +18219,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__cactus.n.01"
-        },
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -23466,9 +23474,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__clam.n.01"
-        },
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -26652,12 +26657,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cooked__diced__cactus.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "cooked__diced__cantaloup.n.01": {
         "flammable": {
             "ignition_temperature": 250.0,
@@ -26901,12 +26900,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cooked__diced__clam.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "cooked__diced__clove.n.01": {
         "flammable": {
             "ignition_temperature": 250.0,
@@ -27088,13 +27081,6 @@
         "freezable": {},
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__diced__flower.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "sceneObject": {},
         "substance": {}
     },
     "cooked__diced__frank.n.01": {
@@ -27442,12 +27428,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cooked__diced__mussel.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "cooked__diced__mustard.n.01": {
         "freezable": {},
         "macroPhysicalSubstance": {},
@@ -27701,12 +27681,6 @@
         "substance": {}
     },
     "cooked__diced__salmon.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__diced__scallop.n.01": {
         "freezable": {},
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
@@ -27974,19 +27948,6 @@
         "substance": {}
     },
     "cooked__diced__virginia_ham.n.01": {
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__diced__wafer.n.01": {
-        "breakable": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -35174,18 +35135,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "diced__bouquet.n.01": {
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "diced__branch.n.01": {
         "flammable": {
             "ignition_temperature": 250.0,
@@ -35339,16 +35288,6 @@
         "cookable": {
             "cook_temperature": 58.0,
             "substance_cooking_derivative_synset": "cooked__diced__butternut_squash.n.01"
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "diced__cactus.n.01": {
-        "cookable": {
-            "cook_temperature": 58.0,
-            "substance_cooking_derivative_synset": "cooked__diced__cactus.n.01"
         },
         "freezable": {},
         "macroPhysicalSubstance": {},
@@ -35684,16 +35623,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "diced__clam.n.01": {
-        "cookable": {
-            "cook_temperature": 74.0,
-            "substance_cooking_derivative_synset": "cooked__diced__clam.n.01"
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "diced__clove.n.01": {
         "cookable": {
             "cook_temperature": 91.0,
@@ -35987,17 +35916,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "diced__flower.n.01": {
-        "cookable": {
-            "cook_temperature": 58.0,
-            "substance_cooking_derivative_synset": "cooked__diced__flower.n.01"
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "sceneObject": {},
-        "substance": {}
-    },
     "diced__frank.n.01": {
         "cookable": {
             "cook_temperature": 74.0,
@@ -36067,12 +35985,6 @@
             "heating_rate": 0.04,
             "distance_threshold": 0.2
         },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "diced__garden_plant.n.01": {
         "freezable": {},
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
@@ -36472,12 +36384,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "diced__marigold.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "diced__marshmallow.n.01": {
         "cookable": {
             "cook_temperature": 110.0,
@@ -36551,16 +36457,6 @@
             "fire_temperature": 1000.0,
             "heating_rate": 0.04,
             "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "diced__mussel.n.01": {
-        "cookable": {
-            "cook_temperature": 63.0,
-            "substance_cooking_derivative_synset": "cooked__diced__mussel.n.01"
         },
         "freezable": {},
         "macroPhysicalSubstance": {},
@@ -36991,16 +36887,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "diced__scallop.n.01": {
-        "cookable": {
-            "cook_temperature": 63.0,
-            "substance_cooking_derivative_synset": "cooked__diced__scallop.n.01"
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "diced__scone.n.01": {
         "cookable": {
             "cook_temperature": 93.0,
@@ -37422,23 +37308,6 @@
         "cookable": {
             "cook_temperature": 74.0,
             "substance_cooking_derivative_synset": "cooked__diced__virginia_ham.n.01"
-        },
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "diced__wafer.n.01": {
-        "breakable": {},
-        "cookable": {
-            "cook_temperature": 180.0,
-            "substance_cooking_derivative_synset": "cooked__diced__wafer.n.01"
         },
         "flammable": {
             "ignition_temperature": 250.0,
@@ -45569,9 +45438,6 @@
         "rustable": {},
         "sceneObject": {},
         "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__flower.n.01"
-        },
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -45579,7 +45445,21 @@
         "wrinkleable": {}
     },
     "flower_arrangement.n.01": {
-        "freezable": {}
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
     },
     "fluid.n.01": {
         "freezable": {},
@@ -47004,9 +46884,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__garden_plant.n.01"
-        },
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -50672,34 +50549,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "half__bouquet.n.01": {
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__bouquet.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "half__branch.n.01": {
         "diceable": {
             "uncooked_diceable_derivative_synset": "diced__branch.n.01"
@@ -51037,32 +50886,6 @@
         "diceable": {
             "uncooked_diceable_derivative_synset": "diced__butternut_squash.n.01",
             "cooked_diceable_derivative_synset": "cooked__diced__butternut_squash.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "half__cactus.n.01": {
-        "cookable": {
-            "cook_temperature": 58.0
-        },
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__cactus.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__cactus.n.01"
         },
         "disinfectable": {},
         "dustyable": {},
@@ -51890,32 +51713,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "half__clam.n.01": {
-        "cookable": {
-            "cook_temperature": 74.0
-        },
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__clam.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__clam.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "half__clove.n.01": {
         "cookable": {
             "cook_temperature": 91.0
@@ -52636,33 +52433,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "half__flower.n.01": {
-        "cookable": {
-            "cook_temperature": 58.0
-        },
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__flower.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__flower.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "sceneObject": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "half__frank.n.01": {
         "cookable": {
             "cook_temperature": 74.0
@@ -52813,28 +52583,6 @@
         "rustable": {},
         "scratchable": {},
         "softBody": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "half__garden_plant.n.01": {
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__garden_plant.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -53930,28 +53678,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "half__marigold.n.01": {
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__marigold.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "half__marshmallow.n.01": {
         "cookable": {
             "cook_temperature": 110.0
@@ -54104,32 +53830,6 @@
             "heating_rate": 0.04,
             "distance_threshold": 0.2
         },
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "half__mussel.n.01": {
-        "cookable": {
-            "cook_temperature": 63.0
-        },
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__mussel.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__mussel.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
         "freezable": {},
         "grassyable": {},
         "heatable": {
@@ -55362,32 +55062,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "half__scallop.n.01": {
-        "cookable": {
-            "cook_temperature": 63.0
-        },
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__scallop.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__scallop.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "half__scone.n.01": {
         "cookable": {
             "cook_temperature": 93.0
@@ -56407,39 +56081,6 @@
         "diceable": {
             "uncooked_diceable_derivative_synset": "diced__virginia_ham.n.01",
             "cooked_diceable_derivative_synset": "cooked__diced__virginia_ham.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {
-            "heat_temperature": 40.0
-        },
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
-    "half__wafer.n.01": {
-        "breakable": {},
-        "cookable": {
-            "cook_temperature": 180.0
-        },
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__wafer.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__wafer.n.01"
         },
         "disinfectable": {},
         "dustyable": {},
@@ -71780,9 +71421,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__marigold.n.01"
-        },
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -75934,9 +75572,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__mussel.n.01"
-        },
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -94996,9 +94631,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__scallop.n.01"
-        },
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -107346,7 +106978,21 @@
         "freezable": {}
     },
     "succulent.n.01": {
-        "freezable": {}
+        "disinfectable": {},
+        "dustyable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
     },
     "sugar.n.01": {
         "freezable": {}
@@ -119104,9 +118750,6 @@
         "rigidBody": {},
         "rustable": {},
         "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__wafer.n.01"
-        },
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
