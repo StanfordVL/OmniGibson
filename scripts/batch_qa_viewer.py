@@ -55,7 +55,7 @@ def position_objects(category, batch, fixed_x_spacing):
     all_objects_x_coordinates = []
 
     for index, obj_model in enumerate(batch):
-        x_coordinate = 5 if index == 0 else all_objects_x_coordinates[-1] + max(all_objects[-1].aabb_extent[:2]) + fixed_x_spacing
+        x_coordinate = 10 if index == 0 else all_objects_x_coordinates[-1] + max(all_objects[-1].aabb_extent[:2]) + fixed_x_spacing
 
         obj = DatasetObject(
             name=obj_model,
@@ -66,6 +66,7 @@ def position_objects(category, batch, fixed_x_spacing):
         all_objects.append(obj)
         og.sim.import_object(obj)
         obj.disable_gravity()
+        obj.set_position_orientation(position=[x_coordinate, 0, 10])
         og.sim.step()
         offset = obj.get_position()[2] - obj.aabb_center[2]
         z_coordinate = obj.aabb_extent[2]/2 + offset + 0.5
@@ -255,7 +256,7 @@ def main():
     dome_light = og.sim.scene.skybox
     dome_light.intensity = 0.5e4
     og.sim.viewer_camera.set_position_orientation(
-        position=np.array([5.0, -9.0, 1.5])
+        position=np.array([10.0, -9.0, 1.5])
     )
 
     remaining_objs_by_cat = group_objects_by_category(remaining_objs)
