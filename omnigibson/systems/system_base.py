@@ -139,6 +139,8 @@ class BaseSystem(SerializableNonInstance, UniquelyNamedNonInstance):
 
         # Add to registry
         SYSTEM_REGISTRY.add(obj=cls)
+        PRIM_REGISTRY.add(obj=cls)
+
         # Make sure to refresh any transition rules that require this system
         # Import now to avoid circular imports
         from omnigibson.transition_rules import TransitionRuleAPI, RULES_REGISTRY
@@ -218,6 +220,7 @@ class BaseSystem(SerializableNonInstance, UniquelyNamedNonInstance):
 
             # Remove from active registry
             SYSTEM_REGISTRY.remove(obj=cls)
+            PRIM_REGISTRY.remove(obj=cls)
             # Make sure to refresh any transition rules that require this system
             # Import now to avoid circular imports
             from omnigibson.transition_rules import TransitionRuleAPI, RULES_REGISTRY
@@ -468,6 +471,14 @@ SYSTEM_REGISTRY = SerializableRegistry(
     class_types=BaseSystem,
     default_key="name",
     unique_keys=["name", "prim_path", "uuid"],
+)
+
+# Serializable registry of prims that are active globally (initialized)
+PRIM_REGISTRY = SerializableRegistry(
+    name="prim_registry",
+    class_types=BaseSystem,
+    default_key="name",
+    unique_keys=["name", "prim_path", "uuid"]
 )
 
 
@@ -1248,6 +1259,10 @@ def clear_all_systems():
     for system in SYSTEM_REGISTRY.objects:
         system.clear()
 
+    ## Can you clear the objects in te prim registry like this
+    for prim in PRIM_REGISTRY.objects:
+        prim.remove()
+    
 
 def add_callback_on_system_init(name, callback):
     global _CALLBACKS_ON_SYSTEM_INIT

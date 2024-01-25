@@ -11,7 +11,7 @@ from omnigibson.utils.python_utils import classproperty, Serializable, Registera
 from omnigibson.utils.registry_utils import SerializableRegistry
 from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.objects.object_base import BaseObject
-from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system
+from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system, PRIM_REGISTRY
 from omnigibson.objects.light_object import LightObject
 from omnigibson.robots.robot_base import m as robot_macros
 
@@ -107,6 +107,14 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             SerializableRegistry: System registry containing all systems in the scene (e.g.: water, dust, etc.)
         """
         return self._registry(key="name", value="system_registry")
+    
+    @property
+    def prim_registry(self):
+        """
+        Returns:
+            SerializableRegistry: Prim registry containing all prims in the scene
+        """
+        return self._registry(key="name", value="prim_registry")
 
     @property
     def objects(self):
@@ -336,6 +344,10 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
 
         # Add registry for systems -- this is already created externally, so we just update it and pull it directly
         registry.add(obj=SYSTEM_REGISTRY)
+
+        
+        # I think the PRIM_REGISTRY is also created externally and is global, so just pull it as well
+        registry.add(obj=PRIM_REGISTRY)
 
         # Add registry for objects
         registry.add(obj=SerializableRegistry(
@@ -678,3 +690,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         # Default is pass
         pass
+
+    
+    def get_prim_registry("prim_path", self.parent_path):
+        
