@@ -13,9 +13,7 @@ m.ORIENTATION_VALIDATION_EPSILON = 0.003        # ~5 degrees error tolerance
 class Pose(AbsoluteObjectState):
 
     def _get_value(self):
-        pos = self.obj.get_position()
-        orn = self.obj.get_orientation()
-        return np.array(pos), np.array(orn)
+        return self.obj.get_position_orientation()
 
     def _has_changed(self, get_value_args, value, info):
         # Only changed if the squared distance between old position and current position has

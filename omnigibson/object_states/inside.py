@@ -4,6 +4,7 @@ from omnigibson.object_states.adjacency import HorizontalAdjacency, VerticalAdja
 from omnigibson.object_states.kinematics_mixin import KinematicsMixin
 from omnigibson.object_states.object_state_base import BooleanStateMixin, RelativeObjectState
 from omnigibson.utils.object_state_utils import sample_kinematics
+from omnigibson.utils.transform_utils import l2_distance
 from omnigibson.utils.usd_utils import BoundingBoxAPI
 from omnigibson.utils.object_state_utils import m as os_m
 
@@ -32,11 +33,10 @@ class Inside(RelativeObjectState, KinematicsMixin, BooleanStateMixin):
     def _get_value(self, other):
         # First check that the inner object's position is inside the outer's AABB.
         # Since we usually check for a small set of outer objects, this is cheap
-        aabb_lower, aabb_upper = self.obj.states[AABB].get_value()
-        inner_object_pos = (aabb_lower + aabb_upper) / 2.0
-        outer_object_aabb = other.states[AABB].get_value()
+        inner_object_pos = self.obj.get_position()
+        outer_object_pos = other.get_position()
 
-        if not BoundingBoxAPI.aabb_contains_point(inner_object_pos, outer_object_aabb):
+        if l2_distance(inner_object_pos, outer_object_pos) > 2:
             return False
 
         # Our definition of inside: an object A is inside an object B if there
