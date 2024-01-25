@@ -276,7 +276,7 @@ class Synset(Model):
         
         required_links = set()
 
-        # If we are a heatSource or togglesource, we need to have certain links
+        # If we are a heatSource or coldSource, we need to have certain links
         for property in ['heatSource', 'coldSource']:
             if property in properties:
                 if 'requires_inside' in properties[property] and properties[property]['requires_inside']:

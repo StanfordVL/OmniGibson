@@ -103,7 +103,6 @@ def get_synsets_to_particle_remover_params():
 
 def create_get_save_propagated_annots_params(syns_to_props):
     print("Processing param annots...")
-    
     synsets_to_particleremover_params = get_synsets_to_particle_remover_params()
     for particleremover_syn, particleremover_params in synsets_to_particleremover_params.items():
         assert "particleRemover" in syns_to_props[particleremover_syn], f"Synset {particleremover_syn} has particleRemover params but is not annotated as a particleRemover"
@@ -113,12 +112,17 @@ def create_get_save_propagated_annots_params(syns_to_props):
         prop = prop_fn.split(".")[0]
 
         if prop == "particleRemover": continue
-        else:        
+        else:
             param_annots = pd.read_csv(os.path.join(PROP_PARAM_ANNOTS_DIR, prop_fn)).to_dict(orient="records")
             for param_record in param_annots: 
                 for param_name, param_value in param_record.items():
 
                     if param_name == "synset": continue
+
+                    if param_name == "requires_toggled_on" and param_value == 1:
+                        assert "toggleable" in syns_to_props[param_record["synset"]], f"Synset {param_record['synset']} has requires_toggled_on param but is not annotated as toggleable"
+                    if param_name == "requires_closed" and param_value == 1:
+                        assert "openable" in syns_to_props[param_record["synset"]], f"Synset {param_record['synset']} has requires_closed param but is not annotated as openable"
 
                     # Params that can have NaN values
                     if param_name in [
