@@ -55,7 +55,7 @@ def position_objects(category, batch, fixed_x_spacing):
     all_objects_x_coordinates = []
 
     for index, obj_model in enumerate(batch):
-        x_coordinate = 0 if index == 0 else all_objects_x_coordinates[-1] + all_objects[-1].aabb_extent[0] + fixed_x_spacing
+        x_coordinate = 5 if index == 0 else all_objects_x_coordinates[-1] + max(all_objects[-1].aabb_extent[:2]) + fixed_x_spacing
 
         obj = DatasetObject(
             name=obj_model,
@@ -65,10 +65,14 @@ def position_objects(category, batch, fixed_x_spacing):
         )
         all_objects.append(obj)
         og.sim.import_object(obj)
-        # obj.disable_gravity()
+        obj.disable_gravity()
+        og.sim.step()
+        offset = obj.get_position()[2] - obj.aabb_center[2]
+        z_coordinate = obj.aabb_extent[2]/2 + offset + 0.5
+        obj.set_position_orientation(position=[x_coordinate, 0, z_coordinate])
         all_objects_x_coordinates.append(x_coordinate)
 
-    return all_objects, all_objects_x_coordinates
+    return all_objects
 
 
 def adjust_object_positions(all_objects, all_objects_x_coordinates):
@@ -205,8 +209,8 @@ def evaluate_batch(batch, category, record_path):
     )
 
     fixed_x_spacing = 0.5
-    all_objects, all_objects_x_coordinates = position_objects(category, batch, fixed_x_spacing)
-    adjust_object_positions(all_objects, all_objects_x_coordinates)
+    all_objects = position_objects(category, batch, fixed_x_spacing)
+    # adjust_object_positions(all_objects, all_objects_x_coordinates)
 
     print("Press 'A' to align object to its first principal component.")
     print("Press 'S' to align object to its second principal component.")
@@ -232,10 +236,10 @@ def evaluate_batch(batch, category, record_path):
 
 def main():
     total_ids = 5
-    record_path = input("Enter path to save recorded orientations: ")
-    # record_path = "/scr/home/yinhang/recorded_orientation"
-    your_id = int(input("Enter your id (0-4): "))
-    # your_id = 0
+    # record_path = input("Enter path to save recorded orientations: ")
+    record_path = "/scr/home/yinhang/recorded_orientation"
+    # your_id = int(input("Enter your id (0-4): "))
+    your_id = 0
 
     if your_id < 0 or your_id >= total_ids:
         print("Invalid id!")
@@ -257,6 +261,9 @@ def main():
     env = og.Environment(configs=cfg)
     dome_light = og.sim.scene.skybox
     dome_light.intensity = 0.5e4
+    og.sim.viewer_camera.set_position_orientation(
+        position=np.array([5.0, -9.0, 1.5])
+    )
 
     remaining_objs_by_cat = group_objects_by_category(remaining_objs)
     KeyboardEventHandler.initialize()
