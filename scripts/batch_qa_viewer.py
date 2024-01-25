@@ -6,6 +6,7 @@ import hashlib
 import os
 import sys
 import json
+import argparse
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 import trimesh
@@ -23,6 +24,7 @@ from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.macros import gm
 gm.ENABLE_FLATCACHE = False
 
+TOTAL_IDS = 5
 CAMERA_X = 0.0
 CAMERA_Y = 0.0
 CAMERA_OBJECT_DISTANCE = 2.0
@@ -234,13 +236,14 @@ def evaluate_batch(batch, category, record_path):
 
 
 def main():
-    total_ids = 5
-    record_path = input("Enter path to save recorded orientations: ")
-    # record_path = "/scr/home/yinhang/recorded_orientation"
-    your_id = int(input("Enter your id (0-4): "))
-    # your_id = 0
+    parser = argparse.ArgumentParser(description="Process some integers.")
+    parser.add_argument('--record_path', type=str, required=True, help='The path to save recorded orientations and scales.')
+    parser.add_argument('--id', type=int, required=True, help='Your assigned id (0-4).')
+    args = parser.parse_args()
+    record_path = args.record_path
+    your_id = args.id
 
-    if your_id < 0 or your_id >= total_ids:
+    if your_id < 0 or your_id >= TOTAL_IDS:
         print("Invalid id!")
         sys.exit(1)
 
@@ -251,7 +254,7 @@ def main():
         for model in get_all_object_category_models(cat)
     }
 
-    filtered_objs = hash_filter_objects(all_objs, salt, total_ids, your_id)
+    filtered_objs = hash_filter_objects(all_objs, salt, TOTAL_IDS, your_id)
     remaining_objs = {(cat, model) for cat, model in filtered_objs if model not in processed_objs}
     print(f"{len(processed_objs)} objects have been processed.")
     print(f"{len(remaining_objs)} objects remaining out of {len(filtered_objs)}.")
