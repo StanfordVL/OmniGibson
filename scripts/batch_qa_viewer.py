@@ -22,6 +22,11 @@ from omnigibson.utils.ui_utils import KeyboardEventHandler
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.macros import gm
 
+import multiprocessing
+import csv
+import nltk
+# from b1k_pipeline.utils import PIPELINE_ROOT
+
 
 gm.ENABLE_FLATCACHE = False
 
@@ -33,7 +38,7 @@ FIXED_X_SPACING = 0.5
 
 
 class BatchQAViewer:
-    def __init__(self, record_path, your_id, pass_num):
+    def __init__(self, record_path, your_id, pass_num, pipeline_root):
         self.record_path = record_path
         self.your_id = your_id
         self.pass_num = pass_num
@@ -41,6 +46,8 @@ class BatchQAViewer:
         self.all_objs = self.get_all_objects()
         self.filtered_objs = self.filter_objects()
         self.remaining_objs = self.get_remaining_objects()
+        
+        self.complaint_handler = ObjectComplaintHandler(pipeline_root)
 
     def load_processed_objects(self):
         processed_objs = set()
@@ -110,7 +117,6 @@ class BatchQAViewer:
 
     def evaluate_batch(self, batch, category):
         done, skip = False, False
-        obj_gravity_enabled_set = set()
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
         queued_rotations = []
@@ -232,9 +238,18 @@ class BatchQAViewer:
         print("Press 'D' to toggle gravity for selected object.")
         print("Press 'V' to skip current batch without saving.")
         print("Press 'C' to continue to next batch and save current configurations.")
-
+        
+        questions = self.complaint_handler.get_questions(obj)
+        
+        # Launch the complaint thread
+        complaint_process = multiprocessing.Process(
+            target=self.complaint_handler.process_complaints,
+            args=[obj.category, obj.name, questions, self.record_path, sys.stdin.fileno()],
+            daemon=True)
+        complaint_process.start()
+        
         step = 0
-        while not done:
+        while not done and complaint_process.is_alive():
             if len(queued_rotations) > 0:
                 assert len(queued_rotations) == 1
                 obj, new_rot = queued_rotations.pop(0)
@@ -244,12 +259,24 @@ class BatchQAViewer:
             
             if step % 100 == 0:
                 print("Bounding box extent: " + str(all_objects[0].aabb_extent) + "              ", end="\r")
+        
+        # Join the finished thread
+        complaint_process.join()
+        assert complaint_process.exitcode == 0, "Complaint process exited."
 
         self.save_object_config(all_objects, self.record_path, category, skip)
 
         # remove all objects
         for obj in all_objects:
             og.sim.remove_object(obj)
+
+    def add_reference_objects(self):
+        # Add a human and an iphone into the scene
+        human_usd_path = "/scr/home/yinhang/Downloads/UsdSkelExamples/HumanFemale/HumanFemale.usd"
+        human_prim_path = "/World/human"
+        human_prim = lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=human_usd_path, prim_path=human_prim_path, prim_type="Xform")
+        scale = lazy.pxr.Gf.Vec3d(*np.array([0.1, 0.1, 0.1], dtype=float))
+        human_prim.GetAttribute("xformOp:scale").Set(scale)
     
     def run(self):
         if self.your_id < 0 or self.your_id >= TOTAL_IDS:
@@ -269,6 +296,7 @@ class BatchQAViewer:
         
         if self.pass_num == 1:
             batch_size = 1
+            # self.add_reference_objects()
         elif self.pass_num == 2:
             batch_size = 10
         else:
@@ -281,6 +309,177 @@ class BatchQAViewer:
             for batch_start in range(0, len(models), batch_size):
                 batch = models[batch_start:min(batch_start + batch_size, len(models))]
                 self.evaluate_batch(batch, cat)
+
+
+class ObjectComplaintHandler:
+    def __init__(self, pipeline_root):
+        self.pipeline_root = pipeline_root
+        self.inventory_dict = self._load_inventory()
+        self.category_to_synset = self._load_category_to_synset()
+        self.synset_to_property = self._load_synset_to_property()
+
+    def _load_inventory(self):
+        inventory_path = self.pipeline_root / "artifacts/pipeline/object_inventory.json"
+        with open(inventory_path, "r") as file:
+            return json.load(file)["providers"]
+
+    def _load_category_to_synset(self):
+        category_synset_mapping = {}
+        path = self.pipeline_root / "metadata/category_mapping.csv"
+        with open(path, "r") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                category_synset_mapping[row["category"].strip()] = row["synset"].strip()
+        return category_synset_mapping
+
+    def _load_synset_to_property(self):
+        synset_property_mapping = {}
+        path = self.pipeline_root / "metadata/synset_property.csv"
+        with open(path, "r") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                synset_property_mapping[row["synset"].strip()] = row
+        return synset_property_mapping
+    
+    def _get_existing_complaints(self, category, model):
+        obj_key = f"{category}-{model}"
+        target_name = self.inventory_dict[obj_key]
+        complaints_file = self.pipeline_root / "cad" / target_name / "complaints.json"
+        all_complaints = self._load_complaints(complaints_file)
+        return [complaint for complaint in all_complaints if not complaint["processed"]]
+
+    def process_complaints(self, category, model, messages, stdin_fileno):
+        sys.stdin = os.fdopen(stdin_fileno)
+        
+        existing_complaints = self._get_existing_complaints(category, model)
+        if len(existing_complaints) > 0:
+            print(f"Found {len(existing_complaints)} existing complaints.")
+            for complaint in existing_complaints:
+                print(complaint["message"])
+                print(f"Complaint: {complaint['complaint']}")
+                print(f"Processed: {complaint['processed']}")
+                print() 
+
+        for message in messages:
+            self._process_single_complaint(message, category, model)
+
+    def _process_single_complaint(self, message, category, model):
+        print(message)
+        while True:
+            response = input("Enter a complaint (or hit enter if all's good): ")
+            if response:
+                self._record_complaint(category, model, message, response)
+            break
+
+    def _record_complaint(self, category, model, message, response):
+        obj_key = f"{category}-{model}"
+        target_name = self.inventory_dict[obj_key]
+        complaints_file = self.pipeline_root / "cad" / target_name / "complaints.json"
+        complaints = self._load_complaints(complaints_file)
+        complaint = {
+            "object": obj_key,
+            "message": message,
+            "complaint": response,
+            "processed": False
+        }
+        complaints.append(complaint)
+        self._save_complaints(complaints, complaints_file)
+
+    def _load_complaints(self, filepath):
+        if os.path.exists(filepath):
+            with open(filepath, "r") as file:
+                return json.load(file)
+        return []
+
+    def _save_complaints(self, complaints, filepath):
+        with open(filepath, "w") as file:
+            json.dump(complaints, file, indent=4)
+    
+    def get_questions(self, obj):
+        messages = [
+            self._user_complained_synset(obj),
+            self._user_complained_bbox(obj),
+            self._user_complained_appearance(obj),
+            self._user_complained_collision(obj),
+            self._user_complained_articulation(obj),
+        ]
+
+        _, properties = self._get_synset_and_properties(obj.category)
+        if properties["objectType"] in ["rope", "cloth"]:
+            messages.append(self._user_complained_cloth(obj))
+
+        messages.append(self._user_complained_metas(obj))
+        return messages
+
+    def _user_complained_synset(self, obj):
+        synset, definition = self._get_synset_and_definition(obj.category)
+        message = (
+            "Confirm object synset assignment.\n"
+            f"Object assigned to category: {obj.category}\n"
+            f"Object assigned to synset: {synset}\n"
+            f"Definition: {definition}\n"
+            "Reminder: synset should match the object and not its contents.\n"
+            "(e.g., orange juice bottle needs to match orange_juice__bottle.n.01\n"
+            "and not orange_juice.n.01)\n"
+            "If the object category is wrong, please add this object to the Object Rename tab.\n"
+            "If the object synset is empty or wrong, please modify the Object Category Mapping tab."
+        )
+        return message
+
+    def _user_complained_bbox(self, obj):
+        original_bounding_box = obj.aabb_extent / obj.scale
+        message = (
+            "Confirm reasonable bounding box size (in meters):\n"
+            f"{', '.join([str(item) for item in original_bounding_box])}\n"
+            "Make sure these sizes are within the same order of magnitude you expect from this object in real life.\n"
+            "Press Enter if the size is good. Otherwise, enter the scaling factor you want to apply to the object.\n"
+            "2 means the object should be scaled 2x larger and 0.5 means the object should be shrunk to half."
+        )
+        return message
+
+    def _user_complained_appearance(self, obj):
+        message = (
+            "Confirm object visual appearance.\n"
+            "Requirements:\n"
+            "- make sure there is only one rigid body (e.g., one shoe instead of a pair of shoes).\n"
+            "- make sure the object has a valid texture or appearance (e.g., texture not black, transparency rendered correctly, etc).\n"
+            "- make sure the object has all parts necessary."
+        )
+        return message
+
+    def _user_complained_collision(self, obj):
+        message = (
+            "Confirm object collision meshes.\n"
+            "Requirements:\n"
+            "- make sure the collision meshes well approximate the original visual meshes\n"
+            "- make sure the collision meshes don't lose any affordance (e.g., holes and handles are preserved)."
+        )
+        return message
+
+    def _user_complained_articulation(self, obj):
+        message = "Confirm articulation:\n"
+        message += "This object has the below movable links annotated:\n"
+        for j_name, j in obj.joints.items():
+            message += f"- {j_name}, {j.joint_type}\n"
+        message += "Verify that these are all the moving parts you expect from this object\n"
+        message += "and that the joint limits look reasonable."
+        return message
+
+    def _user_complained_cloth(self, obj):
+        message = "Confirm the default state of the rope/cloth object is unfolded."
+        return message
+
+    def _user_complained_metas(self, obj):
+        meta_links = sorted({
+            meta_name
+            for link_metas in obj.metadata["meta_links"].values()
+            for meta_name in link_metas})
+        message = "Confirm object meta links listed below:\n"
+        for meta_link in meta_links:
+            message += f"- {meta_link}\n"
+        message += "\nMake sure these match mechanisms you expect from this object."
+        return message
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process some integers.")
