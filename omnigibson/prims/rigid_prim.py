@@ -3,6 +3,7 @@ import numpy as np
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.macros import gm, create_module_macros
+from omnigibson.prims.material_prim import MaterialPrim
 from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.prims.geom_prim import CollisionGeomPrim, VisualGeomPrim
 from omnigibson.utils.constants import GEOM_TYPES
@@ -120,6 +121,21 @@ class RigidPrim(XFormPrim):
         # Create contact sensor
         self._cs = lazy.omni.isaac.sensor._sensor.acquire_contact_sensor_interface()
         # self._create_contact_sensor()
+
+        # Add physical material to this prim
+        if self.has_material():
+            self._material.add_physical_material()
+        else:
+            self._material = MaterialPrim(
+                prim_path=f"{self._prim_path}/physical_mat",
+                name=f"{self.name}:material",
+                load_config={
+                    "visual": False,
+                    "physical": True,
+                },
+            )
+            self._material.load()
+            self._material.bind(self._prim_path)
 
     def _initialize(self):
         # Run super method first
@@ -337,6 +353,14 @@ class RigidPrim(XFormPrim):
         return self._body_name
 
     @property
+    def has_collision_meshes(self):
+        """
+        Returns:
+            bool: Whether this link has any collision mesh
+        """
+        return len(self._collision_meshes) > 0
+
+    @property
     def collision_meshes(self):
         """
         Returns:
@@ -361,14 +385,6 @@ class RigidPrim(XFormPrim):
             bool: Whether this link is a visual-only link (i.e.: no gravity or collisions applied)
         """
         return self._visual_only
-
-    @property
-    def has_collision_meshes(self):
-        """
-        Returns:
-            bool: Whether this link has any collision mesh
-        """
-        return len(self._collision_meshes) > 0
 
     @visual_only.setter
     def visual_only(self, val):
@@ -458,6 +474,54 @@ class RigidPrim(XFormPrim):
             density (float): density of the rigid body in kg / m^3.
         """
         self._rigid_prim_view.set_densities([density])
+
+    @property
+    def static_friction(self):
+        """
+        Returns:
+            float: static friction of this rigid body
+        """
+        return self.material.static_friction
+
+    @static_friction.setter
+    def static_friction(self, friction):
+        """
+        Args:
+            friction (float): static friction of this rigid body
+        """
+        self.material.static_friction = friction
+
+    @property
+    def dynamic_friction(self):
+        """
+        Returns:
+            float: dynamic friction of this rigid body
+        """
+        return self.material.dynamic_friction
+
+    @dynamic_friction.setter
+    def dynamic_friction(self, friction):
+        """
+        Args:
+            friction (float): dynamic friction of this rigid body
+        """
+        self.material.dynamic_friction = friction
+
+    @property
+    def restitution(self):
+        """
+        Returns:
+            float: restitution of this rigid body
+        """
+        return self.material.restitution
+
+    @restitution.setter
+    def restitution(self, val):
+        """
+        Args:
+            val (float): restitution of this rigid body
+        """
+        self.material.restitution = val
 
     @property
     def kinematic_only(self):

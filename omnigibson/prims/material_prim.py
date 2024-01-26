@@ -3,9 +3,18 @@ import asyncio
 import os
 
 import omnigibson as og
+from omnigibson.macros import create_module_macros
 import omnigibson.lazy as lazy
 from omnigibson.utils.physx_utils import bind_material
 from omnigibson.prims.prim_base import BasePrim
+
+
+# Create settings for this module
+m = create_module_macros(module_path=__file__)
+
+m.DEFAULT_STATIC_FRICTION = 0.5
+m.DEFAULT_DYNAMIC_FRICTION = 0.5
+m.DEFAULT_RESTITUTION = 0.8
 
 
 class MaterialPrim(BasePrim):
@@ -23,10 +32,20 @@ class MaterialPrim(BasePrim):
             @prim_path -- it will be ignored if it already exists. Subclasses should define the exact keys expected
             for their class. For this material prim, the below values can be specified:
 
+            visual (bool): Whether the generated material should include visual params or not. Default is True
+            physical (bool): Whether the generated material should include physical params or not. Default is False
             mdl_name (None or str): If specified, should be the name of the mdl preset to load (including .mdl).
-                None results in default, "OmniPBR.mdl"
+                None results in default, "OmniPBR.mdl". Only relevant if @physical=False
             mtl_name (None or str): If specified, should be the name of the mtl preset to load.
-                None results in default, "OmniPBR"
+                None results in default, "OmniPBR". Only relevant if @physical=False
+            density (float): If specified, should be the density for the generated material. Only relevant
+                if @physical=True. Default is 0.0, which means it is ignored
+            static_friction (float): If specified, should be the static friction for the generated material.
+                Only relevant if @physical=True. Default is m.DEFAULT_STATIC_FRICTION
+            dynamic_friction (None or float): If specified, should be the dynamic friction for the generated material.
+                Only relevant if @physical=True. Default is m.DEFAULT_DYNAMIC_FRICTION
+            restitution (None or float): If specified, should be the restitution for the generated material.
+                Only relevant if @physical=True. Default is m.DEFAULT_RESTITUTION
     """
     def __init__(
         self,
@@ -36,6 +55,8 @@ class MaterialPrim(BasePrim):
     ):
         # Other values that will be filled in at runtime
         self._shader = None
+        self._visual = None
+        self._physical = None
 
         # Run super init
         super().__init__(
@@ -45,18 +66,28 @@ class MaterialPrim(BasePrim):
         )
 
     def _load(self):
-        # We create a new material at the specified path
-        mtl_created = []
-        lazy.omni.kit.commands.execute(
-            "CreateAndBindMdlMaterialFromLibrary",
-            mdl_name="OmniPBR.mdl" if self._load_config.get("mdl_name", None) is None else self._load_config["mdl_name"],
-            mtl_name="OmniPBR" if self._load_config.get("mtl_name", None) is None else self._load_config["mtl_name"],
-            mtl_created_list=mtl_created,
-        )
-        material_path = mtl_created[0]
+        self._visual = self._load_config.get("visual", True)
+        if self._visual:
+            # We create a new material at the specified path
+            mtl_created = []
+            lazy.omni.kit.commands.execute(
+                "CreateAndBindMdlMaterialFromLibrary",
+                mdl_name="OmniPBR.mdl" if self._load_config.get("mdl_name", None) is None else self._load_config["mdl_name"],
+                mtl_name="OmniPBR" if self._load_config.get("mtl_name", None) is None else self._load_config["mtl_name"],
+                mtl_created_list=mtl_created,
+            )
+            material_path = mtl_created[0]
 
-        # Move prim to desired location
-        lazy.omni.kit.commands.execute("MovePrim", path_from=material_path, path_to=self._prim_path)
+            # Move prim to desired location
+            lazy.omni.kit.commands.execute("MovePrim", path_from=material_path, path_to=self._prim_path)
+
+        # Optionally add physical material
+        if self._load_config.get("physical", False):
+            self.add_physical_material(
+                static_friction=self._load_config.get("static_friction", m.DEFAULT_STATIC_FRICTION),
+                dynamic_friction=self._load_config.get("dynamic_friction", m.DEFAULT_DYNAMIC_FRICTION),
+                restitution=self._load_config.get("restitution", m.DEFAULT_RESTITUTION),
+            )
 
         # Return generated material
         return lazy.omni.isaac.core.utils.prims.get_prim_at_path(self._prim_path)
@@ -66,7 +97,32 @@ class MaterialPrim(BasePrim):
         super()._post_load()
 
         # Generate shader reference
-        self._shader = lazy.omni.usd.get_shader_from_material(self._prim)
+        if self._visual:
+            self._shader = lazy.omni.usd.get_shader_from_material(self._prim)
+
+    def add_physical_material(
+        self,
+        static_friction=m.DEFAULT_STATIC_FRICTION,
+        dynamic_friction=m.DEFAULT_DYNAMIC_FRICTION,
+        restitution=m.DEFAULT_RESTITUTION,
+    ):
+        """
+        Adds a physical material to this material prim
+
+        Args:
+            static_friction (None or float): If specified, should be the static friction for the generated material
+            dynamic_friction (None or float): If specified, should be the dynamic friction for the generated material
+            restitution (None or float): If specified, should be the restitution for the generated material
+        """
+        lazy.omni.kit.commands.execute(
+            "AddRigidBodyMaterialCommand",
+            stage=og.sim.stage,
+            path=self._prim_path,
+            staticFriction=static_friction,
+            dynamicFriction=dynamic_friction,
+            restitution=restitution,
+        )
+        self._physical = True
 
     def bind(self, target_prim_path):
         """
@@ -86,6 +142,7 @@ class MaterialPrim(BasePrim):
                 Note that a rendering step is necessary to load these parameters, though if a step has already
                 occurred externally, no additional rendering step is needed
         """
+        assert self._visual, "Can only load mdl parameters if this material is visual!"
         if render:
             og.sim.render()
         await lazy.omni.usd.get_context().load_mdl_parameters_for_prim_async(self._shader)
@@ -109,7 +166,6 @@ class MaterialPrim(BasePrim):
         Args:
             root_path (str): root to be pre-appended to the original asset paths
         """
-
         for inp_name in self.shader_input_names_by_type("SdfAssetPath"):
             inp = self.get_input(inp_name)
             # If the input doesn't have any path, skip
@@ -148,6 +204,22 @@ class MaterialPrim(BasePrim):
         assert inp in self.shader_input_names, \
             f"Got invalid shader input to set! Current inputs are: {self.shader_input_names}. Got: {inp}"
         self._shader.GetInput(inp).Set(val)
+
+    @property
+    def visual(self):
+        """
+        Returns:
+            bool: Whether this material is visual or not
+        """
+        return self._visual
+
+    @property
+    def physical(self):
+        """
+        Returns:
+            bool: Whether this material is physical or not
+        """
+        return self._physical
 
     @property
     def is_glass(self):
@@ -1068,3 +1140,57 @@ class MaterialPrim(BasePrim):
         assert self.is_glass, f"Tried to set glass_color shader input, " \
                               f"but material at {self.prim_path} is not an OmniGlass material!"
         self.set_input(inp="glass_color", val=lazy.pxr.Gf.Vec3f(*np.array(color, dtype=float)))
+
+    @property
+    def static_friction(self):
+        """
+        Returns:
+            float: static friction of this rigid body
+        """
+        assert self.physical
+        return self.get_attribute(attr="physics:staticFriction")
+
+    @static_friction.setter
+    def static_friction(self, friction):
+        """
+        Args:
+            friction (float): static friction of this rigid body
+        """
+        assert self.physical
+        self.set_attribute(attr="physics:staticFriction", val=friction)
+
+    @property
+    def dynamic_friction(self):
+        """
+        Returns:
+            float: dynamic friction of this rigid body
+        """
+        assert self.physical
+        return self.get_attribute(attr="physics:dynamicFriction")
+
+    @dynamic_friction.setter
+    def dynamic_friction(self, friction):
+        """
+        Args:
+            friction (float): dynamic friction of this rigid body
+        """
+        assert self.physical
+        self.set_attribute(attr="physics:dynamicFriction", val=friction)
+
+    @property
+    def restitution(self):
+        """
+        Returns:
+            float: restitution of this rigid body
+        """
+        assert self.physical
+        return self.get_attribute(attr="physics:restitution")
+
+    @restitution.setter
+    def restitution(self, val):
+        """
+        Args:
+            val (float): restitution of this rigid body
+        """
+        assert self.physical
+        self.set_attribute(attr="physics:restitution", val=val)

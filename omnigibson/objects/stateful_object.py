@@ -372,7 +372,7 @@ class StatefulObject(BaseObject):
         Returns:
             list of str: List of texture file paths
         """
-        return [material.diffuse_texture for material in self.materials if material.diffuse_texture is not None]
+        return [material.diffuse_texture for material in self.visual_materials if material.diffuse_texture is not None]
 
     def update_visuals(self):
         """
@@ -418,7 +418,7 @@ class StatefulObject(BaseObject):
         Args:
             object_state (BooleanStateMixin or None): the object state that the diffuse color should match to
         """
-        for material in self.materials:
+        for material in self.visual_materials:
             self._update_albedo_value(object_state, material)
 
     @staticmethod

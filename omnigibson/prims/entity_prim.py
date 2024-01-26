@@ -46,6 +46,8 @@ class EntityPrim(XFormPrim):
         self._links = None
         self._joints = None
         self._materials = None
+        self._visual_materials = None
+        self._physical_materials = None
         self._visual_only = None
         self._articulation_tree = None
         self._articulation_view_direct = None
@@ -66,11 +68,8 @@ class EntityPrim(XFormPrim):
         super()._initialize()
 
         # Force populate inputs and outputs of the shaders of all materials
-        # We suppress errors from omni.usd if we're using encrypted assets, because we're loading from tmp location,
-        # not the original location
-        with suppress_omni_log(channels=["omni.usd"]):
-            for material in self.materials:
-                material.shader_force_populate(render=False)
+        for material in self.visual_materials:
+            material.shader_force_populate(render=False)
 
         # Initialize all the links
         for link in self._links.values():
@@ -154,6 +153,8 @@ class EntityPrim(XFormPrim):
                         material_paths.add(mat_path)
 
         self._materials = materials
+        self._visual_materials = {mat for mat in self._materials if mat.visual}
+        self._physical_materials = {mat for mat in self._materials if mat.physical}
 
     def remove(self):
         # First remove all joints
@@ -525,12 +526,28 @@ class EntityPrim(XFormPrim):
     @property
     def materials(self):
         """
-        Loop through each link and their visual meshes to gather all the materials that belong to this object
-
         Returns:
             set of MaterialPrim: a set of MaterialPrim that belongs to this object
         """
         return self._materials
+
+    @property
+    def visual_materials(self):
+        """
+        Returns:
+            set of MaterialPrim: a set of visual MaterialPrim that belongs to this object
+        """
+        return self._visual_materials
+
+    @property
+    def physical_materials(self):
+        """
+        Loop through each link and their visual meshes to gather all the materials that belong to this object
+
+        Returns:
+            set of MaterialPrim: a set of physical MaterialPrim that belongs to this object
+        """
+        return self._visual_materials
 
     @property
     def visual_only(self):

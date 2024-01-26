@@ -210,7 +210,7 @@ class DatasetObject(USDObject):
             recursive_light_update(self._prim)
 
         # Apply any forced roughness updates
-        for material in self.materials:
+        for material in self.visual_materials:
             if ("reflection_roughness_texture_influence" in material.shader_input_names and
                 "reflection_roughness_constant" in material.shader_input_names):
                 material.reflection_roughness_texture_influence = 0.0
@@ -255,7 +255,7 @@ class DatasetObject(USDObject):
         # We explicitly provide the root_path to update all the asset paths: the asset paths are relative to the
         # original USD folder, i.e. <category>/<model>/usd.
         root_path = os.path.dirname(self._usd_path)
-        for material in self.materials:
+        for material in self.visual_materials:
             material.shader_update_asset_paths_with_root_path(root_path)
 
         # Assign realistic density and mass based on average object category spec
@@ -289,7 +289,7 @@ class DatasetObject(USDObject):
         # TODO: uncomment these once our dataset has the object state-conditioned texture maps
         # DEFAULT_ALBEDO_MAP_SUFFIX = frozenset({"DIFFUSE", "COMBINED", "albedo"})
         # state_name = object_state.__class__.__name__ if object_state is not None else None
-        for material in self.materials:
+        for material in self.visual_materials:
             # texture_path = material.diffuse_texture
             # assert texture_path is not None, f"DatasetObject [{self.prim_path}] has invalid diffuse texture map."
             #
