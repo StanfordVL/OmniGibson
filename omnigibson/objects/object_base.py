@@ -182,6 +182,12 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
             self._prim.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
             self._prim.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
 
+        # base_link_path = f"{self._prim_path}/{self.root_link_name}"
+        # tmp_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(base_link_path)
+        # if tmp_prim.HasAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI):
+        #     tmp_prim.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
+        #     tmp_prim.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
+
         # Potentially add articulation root APIs and also set self collisions
         root_prim = None if self.articulation_root_path is None else lazy.omni.isaac.core.utils.prims.get_prim_at_path(self.articulation_root_path)
         if root_prim is not None:
