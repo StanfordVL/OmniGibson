@@ -8,6 +8,7 @@ import sys
 import json
 import argparse
 import numpy as np
+from omnigibson.prims.xform_prim import XFormPrim
 from scipy.spatial.transform import Rotation as R
 import trimesh
 import omnigibson as og
@@ -25,7 +26,11 @@ from omnigibson.macros import gm
 import multiprocessing
 import csv
 import nltk
+from pathlib import Path
 # from b1k_pipeline.utils import PIPELINE_ROOT
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+from nltk.corpus import wordnet as wn
 
 
 gm.ENABLE_FLATCACHE = False
@@ -33,7 +38,7 @@ gm.ENABLE_FLATCACHE = False
 TOTAL_IDS = 5
 CAMERA_X = 0.0
 CAMERA_Y = 0.0
-CAMERA_OBJECT_DISTANCE = 2.0
+CAMERA_OBJECT_DISTANCE = 1.0
 FIXED_X_SPACING = 0.5
 
 
@@ -115,11 +120,10 @@ class BatchQAViewer:
                 with open(os.path.join(record_path, category, obj.model + ".json"), "w") as f:
                     json.dump([orientation.tolist(), scale.tolist()], f)
 
-    def evaluate_batch(self, batch, category):
+    def evaluate_batch(self, batch, category, human_ref, phone_ref):
         done, skip = False, False
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
-        queued_rotations = []
 
         def set_done():
             nonlocal done
@@ -198,17 +202,18 @@ class BatchQAViewer:
             obj = get_selected_object()
             current_rot = R.from_quat(obj.get_orientation())
             new_rot = R.from_euler('z', angle) * current_rot
-            queued_rotations.append((obj, new_rot.as_quat()))
+            obj.set_orientation(new_rot.as_quat())
 
         all_objects = self.position_objects(category, batch, FIXED_X_SPACING)
 
+        if self.pass_num == 2:
+            KeyboardEventHandler.add_keyboard_callback(
+                key=lazy.carb.input.KeyboardInput.V,
+                callback_fn=set_skip,
+            )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.C,
             callback_fn=set_done,
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.V,
-            callback_fn=set_skip,
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.A,
@@ -231,38 +236,64 @@ class BatchQAViewer:
             callback_fn=toggle_gravity,
         )
         
+        print("-"*80)
         print("Press 'A' to align object to its first principal component.")
         print("Press 'S' to align object to its second principal component.")
         print("Press 'J' to rotate object by 45 degrees counter-clockwise around z-axis.")
         print("Press 'K' to rotate object by 45 degrees clockwise around z-axis.")
         print("Press 'D' to toggle gravity for selected object.")
-        print("Press 'V' to skip current batch without saving.")
-        print("Press 'C' to continue to next batch and save current configurations.")
+        if self.pass_num == 1:
+            print("Press 'C' to continue to complaint process.")
+        elif self.pass_num == 2:
+            print("Press 'V' to skip current batch without saving.")
+            print("Press 'C' to continue to next batch and save current configurations.")
+        print("-"*80)
         
-        questions = self.complaint_handler.get_questions(obj)
+        multiprocess_queue = multiprocessing.Queue()
+        inspected_object = all_objects[0]
+
+        if self.pass_num == 1:
+            # position reference objects to be next to the inspected object
+            phone_ref.set_position_orientation(position=[inspected_object.get_position()[0]+np.linalg.norm(inspected_object.aabb_extent[:2])/2+np.linalg.norm(phone_ref.aabb_extent[:2])/2+0.05, 
+                                                    inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2, 
+                                                    inspected_object.get_position()[2]+0.05])
+            human_ref.set_position_orientation(position=[inspected_object.get_position()[0]-np.linalg.norm(inspected_object.aabb_extent[:2])/2-np.linalg.norm(human_ref.aabb_extent[:2])/2-0.05, 
+                                                    inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2, 
+                                                    0.0])
+            
+        step = 0               
+        while not done:
+            step += 1
+            og.sim.step()
+            if step % 100 == 0:
+                print("Bounding box extent: " + str(inspected_object.aabb_extent) + "              ", end="\r")
+        print("-"*80)
         
+        # Now we're done with bbox and scale and orientation. Start complaint process
         # Launch the complaint thread
+        questions = self.complaint_handler.get_questions(inspected_object)
         complaint_process = multiprocessing.Process(
             target=self.complaint_handler.process_complaints,
-            args=[obj.category, obj.name, questions, self.record_path, sys.stdin.fileno()],
+            args=[multiprocess_queue, inspected_object.category, inspected_object.name, questions, sys.stdin.fileno()],
             daemon=True)
         complaint_process.start()
         
-        step = 0
-        while not done and complaint_process.is_alive():
-            if len(queued_rotations) > 0:
-                assert len(queued_rotations) == 1
-                obj, new_rot = queued_rotations.pop(0)
-                obj.set_orientation(new_rot)
-            og.sim.step()
-            step += 1
-            
-            if step % 100 == 0:
-                print("Bounding box extent: " + str(all_objects[0].aabb_extent) + "              ", end="\r")
+        done = False
         
-        # Join the finished thread
-        complaint_process.join()
-        assert complaint_process.exitcode == 0, "Complaint process exited."
+        while not done:
+            og.sim.step()
+    
+            if not multiprocess_queue.empty():
+                message = multiprocess_queue.get()
+                if message == "done":
+                    set_done()
+                else:
+                    print(message)
+        
+        if self.pass_num == 1 and complaint_process.is_alive():
+            # Join the finished thread
+            complaint_process.join()
+            assert complaint_process.exitcode == 0, "Complaint process exited."
 
         self.save_object_config(all_objects, self.record_path, category, skip)
 
@@ -271,12 +302,30 @@ class BatchQAViewer:
             og.sim.remove_object(obj)
 
     def add_reference_objects(self):
-        # Add a human and an iphone into the scene
+        # Add a human into the scene
         human_usd_path = "/scr/home/yinhang/Downloads/UsdSkelExamples/HumanFemale/HumanFemale.usd"
         human_prim_path = "/World/human"
-        human_prim = lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=human_usd_path, prim_path=human_prim_path, prim_type="Xform")
-        scale = lazy.pxr.Gf.Vec3d(*np.array([0.1, 0.1, 0.1], dtype=float))
-        human_prim.GetAttribute("xformOp:scale").Set(scale)
+        lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=human_usd_path, prim_path=human_prim_path, prim_type="Xform")
+        human_prim = XFormPrim(human_prim_path, "human")
+        human_prim.set_position_orientation(position=[CAMERA_X+0.1, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 20.0])
+        human_prim.scale = [0.012, 0.012, 0.012]
+        print("Human aabb extent: " + str(human_prim.aabb_extent))
+        
+        # Add a cellphone into the scene
+        phone = DatasetObject(
+            name="dbhfuh",
+            category="cell_phone",
+            model="dbhfuh",
+            visual_only=True,
+        )
+        og.sim.import_object(phone)
+        og.sim.step()
+        og.sim.step()
+        phone.links["togglebutton_0_0_link"].visible = False
+        quat_orientation = R.from_euler('x', np.pi/2).as_quat()
+        # TODO: line up with current object
+        phone.set_position_orientation(position=[CAMERA_X+0.1, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 20.0], orientation=quat_orientation)
+        return human_prim, phone
     
     def run(self):
         if self.your_id < 0 or self.your_id >= TOTAL_IDS:
@@ -296,7 +345,7 @@ class BatchQAViewer:
         
         if self.pass_num == 1:
             batch_size = 1
-            # self.add_reference_objects()
+            human_ref, phone_ref = self.add_reference_objects()
         elif self.pass_num == 2:
             batch_size = 10
         else:
@@ -308,12 +357,12 @@ class BatchQAViewer:
             print(f"Processing category {cat}...")
             for batch_start in range(0, len(models), batch_size):
                 batch = models[batch_start:min(batch_start + batch_size, len(models))]
-                self.evaluate_batch(batch, cat)
+                self.evaluate_batch(batch, cat, human_ref, phone_ref)
 
 
 class ObjectComplaintHandler:
     def __init__(self, pipeline_root):
-        self.pipeline_root = pipeline_root
+        self.pipeline_root = Path(pipeline_root)
         self.inventory_dict = self._load_inventory()
         self.category_to_synset = self._load_category_to_synset()
         self.synset_to_property = self._load_synset_to_property()
@@ -343,25 +392,68 @@ class ObjectComplaintHandler:
     
     def _get_existing_complaints(self, category, model):
         obj_key = f"{category}-{model}"
-        target_name = self.inventory_dict[obj_key]
+        try:
+            target_name = self.inventory_dict[obj_key]
+        except KeyError:
+            return []
         complaints_file = self.pipeline_root / "cad" / target_name / "complaints.json"
         all_complaints = self._load_complaints(complaints_file)
-        return [complaint for complaint in all_complaints if not complaint["processed"]]
+        filtered_complaints = {}
+        for complaint in all_complaints:
+            message = complaint["message"]
+            complaint_text = complaint["complaint"]
+            key = message + complaint_text
+            if complaint["object"] != obj_key: continue
+            if "meta link" in message.lower(): continue
+            if key not in filtered_complaints:
+                filtered_complaints[key] = complaint
+        return [complaint for complaint in filtered_complaints.values() if not complaint["processed"]]
 
-    def process_complaints(self, category, model, messages, stdin_fileno):
+    def process_complaints(self, queue, category, model, messages, stdin_fileno):
         sys.stdin = os.fdopen(stdin_fileno)
         
         existing_complaints = self._get_existing_complaints(category, model)
         if len(existing_complaints) > 0:
             print(f"Found {len(existing_complaints)} existing complaints.")
-            for complaint in existing_complaints:
+            for idx, complaint in enumerate(existing_complaints, start=1):
+                print(f"Complaint {idx}:")
                 print(complaint["message"])
                 print(f"Complaint: {complaint['complaint']}")
                 print(f"Processed: {complaint['processed']}")
-                print() 
+                print()
+            while True:
+                response = input("Enter complaint numbers to mark as processed (e.g., 1,2,3): ")
+                if response:
+                    response = response.split(",")
+                    for idx in response:
+                        existing_complaints[int(idx)-1]["processed"] = True
+                    break
+        else:
+            print("No existing complaints found.")
+
+        print("-"*80)
 
         for message in messages:
             self._process_single_complaint(message, category, model)
+            print("-"*80)
+        
+        self._backpropogate_processed_complaints(category, model, existing_complaints)
+        queue.put("done")
+    
+    def _backpropogate_processed_complaints(self, category, model, existing_complaints):
+        obj_key = f"{category}-{model}"
+        target_name = self.inventory_dict[obj_key]
+        complaints_file = self.pipeline_root / "cad" / target_name / "complaints.json"
+        complaints = self._load_complaints(complaints_file)
+        for complaint in complaints:
+            message = complaint["message"]
+            complaint_text = complaint["complaint"]
+            key = message + complaint_text
+            if complaint["object"] != obj_key: continue
+            if "meta link" in message.lower(): continue
+            if key in existing_complaints:
+                complaint["processed"] = True
+        self._save_complaints(complaints, complaints_file)
 
     def _process_single_complaint(self, message, category, model):
         print(message)
@@ -380,7 +472,8 @@ class ObjectComplaintHandler:
             "object": obj_key,
             "message": message,
             "complaint": response,
-            "processed": False
+            "processed": False,
+            "new": True,
         }
         complaints.append(complaint)
         self._save_complaints(complaints, complaints_file)
@@ -410,6 +503,21 @@ class ObjectComplaintHandler:
 
         messages.append(self._user_complained_metas(obj))
         return messages
+    
+    def _get_synset_and_properties(self, category):
+        assert category in self.category_to_synset
+        synset = self.category_to_synset[category]
+        assert synset in self.synset_to_property
+        return synset, self.synset_to_property[synset]
+
+    def _get_synset_and_definition(self, category):
+        synset, properties = self._get_synset_and_properties(category)
+        if bool(int(properties["is_custom"])):
+            s = wn.synset(properties["hypernyms"])
+            return f"{synset} (custom synset)", f"(hypernyms: {s.name()}): {s.definition()}"
+        else:
+            s = wn.synset(synset)
+            return s.name(), s.definition()
 
     def _user_complained_synset(self, obj):
         synset, definition = self._get_synset_and_definition(obj.category)
@@ -475,9 +583,12 @@ class ObjectComplaintHandler:
             for link_metas in obj.metadata["meta_links"].values()
             for meta_name in link_metas})
         message = "Confirm object meta links listed below:\n"
-        for meta_link in meta_links:
-            message += f"- {meta_link}\n"
-        message += "\nMake sure these match mechanisms you expect from this object."
+        if len(meta_links) == 0:
+            message += "- None\n"
+        else:
+            for meta_link in meta_links:
+                message += f"- {meta_link}\n"
+        message += "Make sure these match mechanisms you expect from this object."
         return message
 
 
@@ -492,5 +603,5 @@ if __name__ == "__main__":
     parser.add_argument('--pass_num', type=int, required=False, default=1, help='The pass number (1 or 2).')
     args = parser.parse_args()
 
-    viewer = BatchQAViewer(args.record_path, args.id, args.pass_num)
+    viewer = BatchQAViewer(args.record_path, args.id, args.pass_num, pipeline_root="/scr/ig_pipeline")
     viewer.run()
