@@ -3149,7 +3149,6 @@
         "brown_sugar_sack-uftzyo": "objects/procedural-aa",
         "burlap_bag-endfho": "objects/procedural-aa",
         "butter_package-qixpto": "objects/procedural-aa",
-        "cap-bmpgle": "objects/procedural-aa",
         "cap-fomiem": "objects/procedural-aa",
         "cap-mgirzi": "objects/procedural-aa",
         "cap-xxqyrt": "objects/procedural-aa",
@@ -8143,7 +8142,6 @@
         "ceilings-sctusv": "scenes/public_restroom_brown",
         "countertop-zkhelh": "scenes/public_restroom_brown",
         "door-lztyfn": "scenes/public_restroom_brown",
-        "faucet-lqfzkv": "scenes/public_restroom_brown",
         "floors-mlogeo": "scenes/public_restroom_brown",
         "hand_dryer-jblykn": "scenes/public_restroom_brown",
         "handle-apdvez": "scenes/public_restroom_brown",
@@ -19699,9 +19697,6 @@
             "objects/procedural-aa"
         ],
         "butter_package-qixpto": [
-            "objects/procedural-aa"
-        ],
-        "cap-bmpgle": [
             "objects/procedural-aa"
         ],
         "cap-fomiem": [
@@ -34793,9 +34788,6 @@
         "door-lztyfn": [
             "scenes/public_restroom_brown"
         ],
-        "faucet-lqfzkv": [
-            "scenes/public_restroom_brown"
-        ],
         "floors-mlogeo": [
             "scenes/public_restroom_brown"
         ],
@@ -38884,6 +38876,10 @@
         "tray-hjxczh": [
             "collision"
         ],
+        "watering_can-pewtns": [
+            "fluidsource",
+            "togglebutton"
+        ],
         "cookie_dough-pewqae": [
             "subpart"
         ],
@@ -38936,6 +38932,9 @@
         "axe-plqyos": [
             "slicer"
         ],
+        "bottle-bgalkx": [
+            "togglebutton"
+        ],
         "bottle_of_bug_repellent-qqztry": [
             "particleapplier",
             "togglebutton"
@@ -38957,6 +38956,9 @@
             "fillable"
         ],
         "toaster-ctrngh": [
+            "togglebutton"
+        ],
+        "water_dispenser-rwmotb": [
             "togglebutton"
         ],
         "shrimp-mnpgev": [
@@ -39038,7 +39040,8 @@
             "subpart"
         ],
         "allspice_shaker-cibgje": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "loudspeaker-wsghki": [
             "togglebutton"
@@ -39047,13 +39050,16 @@
             "togglebutton"
         ],
         "parsley_shaker-tgcwtr": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "rosemary_shaker-iayqxs": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "savory_spice_shaker-ykujyn": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "smoker-uihgsf": [
             "heatsource",
@@ -40369,8 +40375,8 @@
             "fillable"
         ],
         "barbecue_sauce_bottle-gfxrnj": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "basil_jar-swytaw": [
             "fillable"
@@ -40392,7 +40398,8 @@
         ],
         "bottle-ovjhuf": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "bottle-yoxfyu": [
             "connectedpart",
@@ -40411,11 +40418,12 @@
             "fillable"
         ],
         "catsup_bottle-qfvqfm": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "cayenne_shaker-ueytzu": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "chia_seed_bag-xkixrg": [
             "fillable"
@@ -40433,14 +40441,16 @@
         ],
         "chlorine_bottle-uzkxtz": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "chocolate_sauce_bottle-yegrkf": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "cinnamon_shaker-oqacyi": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "clove_jar-cqdioi": [
             "fillable"
@@ -40466,7 +40476,8 @@
             "fillable"
         ],
         "coriander_shaker-sqkgqg": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "cornstarch_jar-dhseui": [
             "fillable"
@@ -40478,13 +40489,16 @@
             "fillable"
         ],
         "cream_of_tartar_shaker-busceb": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "cumin_shaker-qmaqnw": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "curry_powder_shaker-jmrugz": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "deodorant_atomizer-utjfug": [
             "particleapplier",
@@ -40496,15 +40510,18 @@
         ],
         "detergent_bottle-yufawg": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "disinfectant_bottle-ifqdxn": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "fabric_softener_bottle-uyixwc": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "fertilizer_atomizer-lhbpcq": [
             "particleapplier",
@@ -40515,7 +40532,8 @@
         ],
         "floor_wax_bottle-fzhcdb": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "flour_sack-zhsjcs": [
             "fillable"
@@ -40527,11 +40545,12 @@
             "fillable"
         ],
         "ginger_shaker-adciyu": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "glaze_bottle-zdxagk": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "granola_box-yzeuqo": [
             "fillable"
@@ -40550,21 +40569,23 @@
         ],
         "herbicide_bottle-aeslmf": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "honey_jar-dhgtvg": [
             "fillable"
         ],
         "hot_sauce_bottle-qvpthd": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "hummus_box-jvnqly": [
             "fillable"
         ],
         "hydrogen_peroxide_bottle-luhnej": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "ice_cream_carton-lulzdz": [
             "fillable"
@@ -40597,7 +40618,8 @@
             "fillable"
         ],
         "lemon_pepper_seasoning_shaker-ucwqcy": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "lemonade_bottle-yprkek": [
             "connectedpart",
@@ -40609,11 +40631,13 @@
         ],
         "liquid_soap_bottle-hazvbh": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "lubricant_bottle-omknho": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "maple_syrup_jar-wigtue": [
             "fillable"
@@ -40625,7 +40649,8 @@
             "fillable"
         ],
         "marjoram_shaker-xlspnl": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "milk_carton-icvmix": [
             "connectedpart",
@@ -40635,17 +40660,19 @@
             "fillable"
         ],
         "mustard_bottle-lgxfyv": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "mustard_seed_shaker-apuolt": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "noodle_jar-tmjxno": [
             "fillable"
         ],
         "nutmeg_shaker-truuld": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "oat_box-xdhysb": [
             "fillable"
@@ -40655,17 +40682,20 @@
             "fillable"
         ],
         "onion_powder_shaker-rrlopw": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "orange_juice_carton-jjlfla": [
             "connectedpart",
             "fillable"
         ],
         "paprika_shaker-nvpttt": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "parmesan_shaker-kppzim": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "pasta_box-jaypjo": [
             "fillable"
@@ -40689,7 +40719,8 @@
         ],
         "polish_bottle-hldhxl": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "popcorn_bag-hdcpqg": [
             "fillable"
@@ -40709,21 +40740,25 @@
         ],
         "saddle_soap_bottle-ugqdao": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "saffron_shaker-xrlamf": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "sage_shaker-eerlcy": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "salsa_bottle-kydilb": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "salt_bottle-wdpcmk": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "sealant_atomizer-wwpgax": [
             "particleapplier",
@@ -40734,14 +40769,17 @@
             "fillable"
         ],
         "sesame_seed_shaker-txxyce": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "shaker-nbjgci": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "shampoo_bottle-tukaoq": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "shortening_carton-gswpdr": [
             "connectedpart",
@@ -40749,7 +40787,8 @@
         ],
         "soap_bottle-hamffy": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "soda_can-xbkwbi": [
             "fillable"
@@ -40766,11 +40805,12 @@
         ],
         "solvent_bottle-nbctrk": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "soy_sauce_bottle-saujjl": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "spray_bottle-asztxi": [
             "particleapplier",
@@ -40785,25 +40825,27 @@
             "togglebutton"
         ],
         "squeeze_bottle-uzmhdn": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "sugar_sack-xixblr": [
             "fillable"
         ],
         "sugar_syrup_bottle-kdlbbq": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "sunflower_seed_bag-dhwlaw": [
             "fillable"
         ],
         "thyme_shaker-kuuwti": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "toilet_soap_bottle-iyrrna": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "tomato_paste_can-krarex": [
             "connectedpart",
@@ -40813,8 +40855,8 @@
             "fillable"
         ],
         "vanilla_bottle-drevku": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "vinegar_atomizer-kwcahz": [
             "particleapplier",
@@ -40826,7 +40868,8 @@
         ],
         "vodka_bottle-bojwlu": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "water_atomizer-lfarai": [
             "particleapplier",
@@ -40838,24 +40881,26 @@
         ],
         "whiskey_bottle-jpduev": [
             "connectedpart",
-            "fillable"
+            "fillable",
+            "togglebutton"
         ],
         "white_rice_sack-xiwkwz": [
             "fillable"
         ],
         "white_sauce_bottle-gtwngf": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "wine_sauce_bottle-vqtevv": [
-            "connectedpart",
-            "fillable"
+            "fluidsource",
+            "togglebutton"
         ],
         "yeast_jar-vmajcm": [
             "fillable"
         ],
         "yeast_shaker-kdbnge": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "yogurt_carton-ahbhsd": [
             "connectedpart",
@@ -41101,16 +41146,20 @@
             "fillable"
         ],
         "squeeze_bottle-cuvgtq": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "squeeze_bottle-exfkfw": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "squeeze_bottle-ikiwps": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "squeeze_bottle-snyiat": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "wine_bottle-hlzfxw": [
             "fillable"
@@ -44590,10 +44639,12 @@
             "collision"
         ],
         "drink_dispenser-midfat": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "drink_dispenser-zgvhru": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "fire_extinguisher-xqtkxb": [
             "togglebutton"
@@ -44922,14 +44973,17 @@
             "collision"
         ],
         "conditioner-elofnb": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "conditioner-udeflt": [
             "collision",
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "conditioner-uncljo": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "cup-fxrsyi": [
             "fillable"
@@ -45009,17 +45063,21 @@
             "togglebutton"
         ],
         "shampoo-eblcnw": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "shampoo-ndrvvm": [
             "collision",
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "shampoo-tnfhlf": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "shampoo-vnyzbu": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "shower_stall-vcwkma": [
             "collision"
@@ -45041,19 +45099,24 @@
             "togglebutton"
         ],
         "soap_dispenser-cgxrwd": [
-            "fluidsource"
+            "fluidsource",
+            "togglebutton"
         ],
         "soap_dispenser-eywylh": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "soap_dispenser-nrthyl": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "soap_dispenser-thurmw": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "soap_dispenser-zoyyia": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "spotlight-gbvzvy": [
             "togglebutton"
@@ -45360,7 +45423,8 @@
             "togglebutton"
         ],
         "soap_dispenser-zwudcz": [
-            "fluidsource"
+            "fluidsource",
+            "togglebutton"
         ],
         "table_knife-eebpap": [
             "slicer"
@@ -45512,7 +45576,8 @@
             "togglebutton"
         ],
         "wall_mounted_soap_dispenser-byjkkn": [
-            "fluidsource"
+            "fluidsource",
+            "togglebutton"
         ],
         "walls-apfnfp": [
             "collision"
@@ -45661,7 +45726,8 @@
             "togglebutton"
         ],
         "soap_dispenser-ycvrcg": [
-            "fluidsource"
+            "fluidsource",
+            "togglebutton"
         ],
         "storage_box-aqdbdu": [
             "connectedpart",
@@ -46382,6 +46448,15 @@
         "room_light-podyre": [
             "togglebutton"
         ],
+        "salt_shaker-fztfsi": [
+            "togglebutton"
+        ],
+        "salt_shaker-zkpgkl": [
+            "togglebutton"
+        ],
+        "scissors-glbxff": [
+            "slicer"
+        ],
         "shower-qkgvsz": [
             "fluidsink"
         ],
@@ -46422,7 +46497,8 @@
             "togglebutton"
         ],
         "soap_dispenser-jmulpc": [
-            "fluidsource"
+            "fluidsource",
+            "togglebutton"
         ],
         "speaker_system-xpoajn": [
             "togglebutton"
@@ -48403,10 +48479,6 @@
         "door-lztyfn": [
             "collision"
         ],
-        "faucet-lqfzkv": [
-            "fluidsource",
-            "togglebutton"
-        ],
         "floors-mlogeo": [
             "collision"
         ],
@@ -48420,7 +48492,9 @@
             "collision"
         ],
         "sink-kqnonf": [
-            "fluidsink"
+            "fluidsink",
+            "fluidsource",
+            "togglebutton"
         ],
         "urinal-lowprn": [
             "fluidsink"
@@ -48472,7 +48546,8 @@
             "togglebutton"
         ],
         "soap_dispenser-sinntg": [
-            "fluidsource"
+            "fluidsource",
+            "togglebutton"
         ],
         "toilet-prpnvd": [
             "fluidsink"
@@ -49342,10 +49417,12 @@
             "collision"
         ],
         "jam_dispenser-gnpgeh": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "jam_dispenser-kerjkh": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "painting-ejhanr": [
             "collision"
@@ -49633,7 +49710,8 @@
             "fillable"
         ],
         "isopropanol-mjcbfc": [
-            "particleapplier"
+            "particleapplier",
+            "togglebutton"
         ],
         "lab_exhaust_hood-sdlkyk": [
             "togglebutton"
