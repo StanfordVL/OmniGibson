@@ -7,12 +7,52 @@ import numpy as np
 import torch
 import warp as wp
 import math
+import trimesh
 
 DEG2RAD = math.pi / 180.0
 
 
+def get_trimesh_evaluator(mesh):
+    class TrimeshEvaluator:  # pragma: no cover
+        def __init__(self, attributes: dict):
+            self._attributes = attributes
+
+        def eval(self, **kwargs) -> Tuple[
+            List[lazy.pxr.Gf.Vec3f], List[lazy.pxr.Gf.Vec3f],
+            List[lazy.pxr.Gf.Vec2f], List[int], List[int]
+        ]:
+            """It must be implemented to return tuple
+            [points, normals, uvs, face_indices, face_vertex_counts], where:
+            * points and normals are array of Gf.Vec3f.
+            * uvs are array of Gf.Vec2f that represents uv coordinates.
+            * face_indexes are array of int that represents face indices.
+            * face_vertex_counts are array of int that represents vertex count per face.
+            * Normals and uvs must be face varying.
+            """
+            points = lazy.pxr.Vt.Vec3fArray.FromNumpy(mesh.vertices)
+            normals = lazy.pxr.Vt.Vec3fArray.FromNumpy(mesh.vertex_normals)
+            uvs = lazy.pxr.Vt.Vec2fArray.FromNumpy(np.zeros((len(mesh.vertices), 2)))
+            face_indices = mesh.faces.flatten().tolist()
+            face_vertex_counts = np.ones(len(mesh.faces), dtype=int) * 3
+            return points, normals, uvs, face_indices, face_vertex_counts
+
+        @staticmethod
+        def build_setting_ui():
+            pass
+
+        @staticmethod
+        def reset_setting():
+            pass
+
+        @staticmethod
+        def get_default_half_scale():
+            return 50
+
+    return TrimeshEvaluator
+
+
 class CreateMeshPrimWithDefaultXformCommand(lazy.omni.kit.primitive.mesh.command.CreateMeshPrimWithDefaultXformCommand):
-    def __init__(self, prim_type: str, **kwargs):
+    def __init__(self, prim_type: str, trimesh_mesh: trimesh.Trimesh, **kwargs):
         """
         Creates primitive.
 
@@ -59,7 +99,11 @@ class CreateMeshPrimWithDefaultXformCommand(lazy.omni.kit.primitive.mesh.command
 
         self._attributes = {**kwargs}
         # Supported mesh types should have an associated evaluator class
-        self._evaluator_class = lazy.omni.kit.primitive.mesh.command._get_all_evaluators()[prim_type]
+        if prim_type == "Mesh":
+            assert trimesh_mesh is not None, "Mesh prim requires a trimesh mesh"
+            self._evaluator_class = get_trimesh_evaluator(trimesh_mesh)
+        else:
+            self._evaluator_class = lazy.omni.kit.primitive.mesh.command._get_all_evaluators()[prim_type]
         assert isinstance(self._evaluator_class, type)
 
 

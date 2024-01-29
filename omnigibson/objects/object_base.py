@@ -143,16 +143,16 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
 
     def _post_load(self):
         # Add fixed joint or make object kinematic only if we're fixing the base
-        kinematic_only = False
-        if self.fixed_base:
-            # For optimization purposes, if we only have a single rigid body that has either
-            # (no custom scaling OR no fixed joints), we assume this is not an articulated object so we
-            # merely set this to be a static collider, i.e.: kinematic-only
-            # The custom scaling / fixed joints requirement is needed because omniverse complains about scaling that
-            # occurs with respect to fixed joints, as omni will "snap" bodies together otherwise
-            scale = np.ones(3) if self._load_config["scale"] is None else np.array(self._load_config["scale"])
-            if self.n_joints == 0 and (np.all(np.isclose(scale, 1.0, atol=1e-3)) or self.n_fixed_joints == 0) and (self._load_config["kinematic_only"] != False):
-                kinematic_only = True
+        kinematic_only = bool(self._load_config["kinematic_only"])
+        # if self.fixed_base:
+        #     # For optimization purposes, if we only have a single rigid body that has either
+        #     # (no custom scaling OR no fixed joints), we assume this is not an articulated object so we
+        #     # merely set this to be a static collider, i.e.: kinematic-only
+        #     # The custom scaling / fixed joints requirement is needed because omniverse complains about scaling that
+        #     # occurs with respect to fixed joints, as omni will "snap" bodies together otherwise
+        #     scale = np.ones(3) if self._load_config["scale"] is None else np.array(self._load_config["scale"])
+        #     if self.n_joints == 0 and (np.all(np.isclose(scale, 1.0, atol=1e-3)) or self.n_fixed_joints == 0) and (self._load_config["kinematic_only"] != False):
+        #         kinematic_only = True
         
         # Validate that we didn't make a kinematic-only decision that does not match
         assert self._load_config["kinematic_only"] is None or kinematic_only == self._load_config["kinematic_only"], \
@@ -184,6 +184,11 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         if self._prim.HasAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI):
             self._prim.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
             self._prim.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
+
+        base_link_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(f"{self._prim_path}/{self.root_link_name}")
+        if base_link_prim.HasAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI):
+            base_link_prim.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
+            base_link_prim.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
 
         # Potentially add articulation root APIs and also set self collisions
         root_prim = None if self.articulation_root_path is None else lazy.omni.isaac.core.utils.prims.get_prim_at_path(self.articulation_root_path)
