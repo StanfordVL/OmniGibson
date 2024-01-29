@@ -281,7 +281,7 @@ class Synset(Model):
             if property in properties:
                 if 'requires_inside' in properties[property] and properties[property]['requires_inside']:
                     continue
-                required_links.add('heatSource')
+                required_links.add('heatsource')
 
         if 'fillable' in properties:
             required_links.add('fillable')
