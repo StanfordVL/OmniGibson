@@ -19576,7 +19576,10 @@
                                   "children": [
                                     {
                                       "name": "half__clove.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_garlic_clove"
+                                      ]
                                     },
                                     {
                                       "name": "clove.n.03",
@@ -19635,13 +19638,6 @@
                                       "hasModel": true,
                                       "categories": [
                                         "half_garlic"
-                                      ]
-                                    },
-                                    {
-                                      "name": "half__garlic_clove.n.01",
-                                      "hasModel": true,
-                                      "categories": [
-                                        "half_garlic_clove"
                                       ]
                                     }
                                   ]
