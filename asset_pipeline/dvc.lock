@@ -566,12 +566,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/office_large/processed.max
-      md5: 203c0b1523796210ece35f7870e3cc41
-      size: 83661362
+      md5: a8115eb725edb04b6ba61fabee252d85
+      size: 83525974
     outs:
     - path: cad/scenes/office_large/artifacts/object_list.json
-      md5: 7c446a0c30af1fc645645a3107ee7e22
-      size: 254047
+      md5: 3a8852311655f2b88a9beb1f3a3b2a6b
+      size: 253602
   object_list@scenes/office_vendor_machine:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_vendor_machine/processed.max
       b1k_pipeline/max/object_list.py
@@ -1030,8 +1030,8 @@ stages:
       md5: e96e42eb0571f4e91a7697bf81952ec1
       size: 113903
     - path: cad/scenes/office_large/artifacts/object_list.json
-      md5: 7c446a0c30af1fc645645a3107ee7e22
-      size: 254047
+      md5: 3a8852311655f2b88a9beb1f3a3b2a6b
+      size: 253602
     - path: cad/scenes/office_vendor_machine/artifacts/object_list.json
       md5: d2ed9176f15aac63e5daa3cc0820aa06
       size: 54209
@@ -1313,8 +1313,8 @@ stages:
       md5: e96e42eb0571f4e91a7697bf81952ec1
       size: 113903
     - path: cad/scenes/office_large/artifacts/object_list.json
-      md5: 7c446a0c30af1fc645645a3107ee7e22
-      size: 254047
+      md5: 3a8852311655f2b88a9beb1f3a3b2a6b
+      size: 253602
     - path: cad/scenes/office_vendor_machine/artifacts/object_list.json
       md5: d2ed9176f15aac63e5daa3cc0820aa06
       size: 54209
@@ -1371,8 +1371,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 74e28c11c7eebfbc6d9566369db7a228
-      size: 1538274
+      md5: 20075d3f66333a042413776d154f6691
+      size: 1538078
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -1599,8 +1599,8 @@ stages:
       md5: e96e42eb0571f4e91a7697bf81952ec1
       size: 113903
     - path: cad/scenes/office_large/artifacts/object_list.json
-      md5: 7c446a0c30af1fc645645a3107ee7e22
-      size: 254047
+      md5: 3a8852311655f2b88a9beb1f3a3b2a6b
+      size: 253602
     - path: cad/scenes/office_vendor_machine/artifacts/object_list.json
       md5: d2ed9176f15aac63e5daa3cc0820aa06
       size: 54209
@@ -1657,8 +1657,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: b00a219f3269be0d842d4bb513971295
-      size: 1541797
+      md5: e63c3fff5dd51e942de2c01d0aaed910
+      size: 1541601
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -2227,12 +2227,12 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/office_large/processed.max
-      md5: 203c0b1523796210ece35f7870e3cc41
-      size: 83661362
+      md5: a8115eb725edb04b6ba61fabee252d85
+      size: 83525974
     outs:
     - path: cad/scenes/office_large/artifacts/room_object_list.json
-      md5: 7ef927e80b21a54ff9b2512f27eeda5d
-      size: 11358
+      md5: 897101af0a0e161af7de83ca7a9cba9c
+      size: 11320
     - path: cad/scenes/office_large/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2697,8 +2697,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/office_large/artifacts/room_object_list.json
-      md5: 7ef927e80b21a54ff9b2512f27eeda5d
-      size: 11358
+      md5: 897101af0a0e161af7de83ca7a9cba9c
+      size: 11320
     - path: cad/scenes/office_large/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2812,8 +2812,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/combined_room_object_list.json
-      md5: 82adae3466c3c9cb51c4256247b444ad
-      size: 293883
+      md5: 5a8f04bbcf0e93b38992e247e4cc02bc
+      size: 293842
   room_object_list@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -3247,8 +3247,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/office_large/artifacts/room_object_list.json
-      md5: 7ef927e80b21a54ff9b2512f27eeda5d
-      size: 11358
+      md5: 897101af0a0e161af7de83ca7a9cba9c
+      size: 11320
     - path: cad/scenes/office_large/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3362,8 +3362,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/combined_room_object_list_future.json
-      md5: 9138970393765cfbbd1dd5029f5e4771
-      size: 294830
+      md5: a16836bb797be45ac81fd310d8a3573f
+      size: 294789
   sanitycheck@scenes/public_restroom_blue:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_blue/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -3624,8 +3624,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/office_large/processed.max
-      md5: 203c0b1523796210ece35f7870e3cc41
-      size: 83661362
+      md5: a8115eb725edb04b6ba61fabee252d85
+      size: 83525974
     outs:
     - path: cad/scenes/office_large/artifacts/sanitycheck.json
       md5: 6801102d623b5466ca56cfa501ca0725
@@ -13091,8 +13091,8 @@ stages:
       artifacts/pipeline/object_inventory.success
     deps:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 74e28c11c7eebfbc6d9566369db7a228
-      size: 1538274
+      md5: 20075d3f66333a042413776d154f6691
+      size: 1538078
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 729
