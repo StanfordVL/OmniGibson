@@ -14203,6 +14203,23 @@
         "heatable": {},
         "freezable": {}
     },
+    "fire_sprinkler.n.01": {
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {},
+        "heatable": {},
+        "freezable": {}
+    },
     "fireplace.n.01": {
         "sceneObject": {},
         "rigidBody": {},
@@ -29103,6 +29120,7 @@
         "freezable": {}
     },
     "sprinkler.n.01": {
+        "toggleable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},

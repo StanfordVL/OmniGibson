@@ -6790,6 +6790,16 @@
         }
     },
     {
+        "rule_name": "fire_sprinkler.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "fire_sprinkler.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "fireplace.n.01-washer-cover",
         "input_synsets": {},
         "washed_item": {
