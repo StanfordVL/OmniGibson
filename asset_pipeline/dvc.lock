@@ -907,8 +907,8 @@ stages:
       md5: 49637931a9dd991b8907babb518b91f6
       size: 33383
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
-      md5: dfe45527c44461b95ea044800b541239
-      size: 64694
+      md5: 137752fde99163b81bb872469ece2a6f
+      size: 64650
     - path: cad/objects/task_relevant-xy/artifacts/object_list.json
       md5: 83fa49a9165d0229ec92c4dbf12f8727
       size: 49486
@@ -1190,8 +1190,8 @@ stages:
       md5: 49637931a9dd991b8907babb518b91f6
       size: 33383
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
-      md5: dfe45527c44461b95ea044800b541239
-      size: 64694
+      md5: 137752fde99163b81bb872469ece2a6f
+      size: 64650
     - path: cad/objects/task_relevant-xy/artifacts/object_list.json
       md5: 83fa49a9165d0229ec92c4dbf12f8727
       size: 49486
@@ -1371,8 +1371,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 4c7f40b3c62fe4508b9b4b0d5d6b53e4
-      size: 1538290
+      md5: 74e28c11c7eebfbc6d9566369db7a228
+      size: 1538274
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -1473,8 +1473,8 @@ stages:
       md5: 49637931a9dd991b8907babb518b91f6
       size: 33383
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
-      md5: dfe45527c44461b95ea044800b541239
-      size: 64694
+      md5: 137752fde99163b81bb872469ece2a6f
+      size: 64650
     - path: cad/objects/task_relevant-xy/artifacts/object_list.json
       md5: 83fa49a9165d0229ec92c4dbf12f8727
       size: 49486
@@ -1657,8 +1657,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: 4bb9ef9c9cb24d85d9d92d4804cebdde
-      size: 1541813
+      md5: b00a219f3269be0d842d4bb513971295
+      size: 1541797
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -7167,8 +7167,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/objects/task_relavant-ab/processed.max
-      md5: 8667ce01ad42c81e3d254986f53f90cd
-      size: 126386232
+      md5: 2994f56561027490f8d0dc8e84bf9b69
+      size: 126410808
     outs:
     - path: cad/objects/task_relavant-ab/artifacts/sanitycheck.json
       md5: 428261197306401871d711aac4cd8dff
@@ -7218,12 +7218,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/objects/task_relavant-ab/processed.max
-      md5: 8667ce01ad42c81e3d254986f53f90cd
-      size: 126386232
+      md5: 2994f56561027490f8d0dc8e84bf9b69
+      size: 126410808
     outs:
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
-      md5: dfe45527c44461b95ea044800b541239
-      size: 64694
+      md5: 137752fde99163b81bb872469ece2a6f
+      size: 64650
   export_meshes@objects/task_relavant-ab:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/task_relavant-ab/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -13091,8 +13091,8 @@ stages:
       artifacts/pipeline/object_inventory.success
     deps:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 4c7f40b3c62fe4508b9b4b0d5d6b53e4
-      size: 1538290
+      md5: 74e28c11c7eebfbc6d9566369db7a228
+      size: 1538274
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 729
