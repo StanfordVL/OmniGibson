@@ -1,3 +1,4 @@
+import inspect
 import re
 from flask.views import View
 from flask import render_template
@@ -62,17 +63,17 @@ class TaskListView(ListView):
 
 
 class TransitionFailureTaskListView(TaskListView):
-    page_title = "Transition Failure Tasks"
+    page_title = inspect.getdoc(Task.view_transition_failure)
 
     def get_queryset(self):
-        return [x for x in super().get_queryset() if not x.goal_is_reachable]
+        return Task.view_transition_failure()
     
 
 class NonSceneMatchedTaskListView(TaskListView):
-    page_title = "Non-Scene-Matched Tasks"
+    page_title = inspect.getdoc(Task.view_non_scene_matched)
 
     def get_queryset(self):
-        return [x for x in super().get_queryset() if x.scene_state == STATE_UNMATCHED]
+        return Task.view_non_scene_matched()
 
 
 class ObjectListView(ListView):
@@ -81,25 +82,41 @@ class ObjectListView(ListView):
 
 
 class SubstanceMappedObjectListView(ObjectListView):
-    page_title = "Objects Incorrectly Mapped to Substance Synsets"
+    page_title = inspect.getdoc(Object.view_mapped_to_substance_synset)
 
     def get_queryset(self):
-        return [x for x in super().get_queryset() if x.category.synset.state == STATE_SUBSTANCE]
+        return Object.view_mapped_to_substance_synset()
 
 
-class UnsupportedPropertyObjectListView(ObjectListView):
-    page_title = "Objects with Unsupported Properties"
+class MissingMetaLinkObjectListView(ObjectListView):
+    page_title = inspect.getdoc(Object.view_objects_with_missing_meta_links)
 
     def get_queryset(self):
-        return [
-            o for o in super().get_queryset()
-            if not o.fully_supports_synset(o.category.synset)
-        ]
+        return Object.view_objects_with_missing_meta_links()
 
 
 class SceneListView(ListView):
     model = Scene
     context_object_name = "scene_list"
+
+
+class CategoryListView(ListView):
+    model = Category
+    context_object_name = "category_list"
+
+
+class CategoryMappedToSubstanceListView(CategoryListView):
+    page_title = inspect.getdoc(Category.view_mapped_to_substance_synset)
+
+    def get_queryset(self):
+        return Category.view_mapped_to_substance_synset()
+
+
+class NonLeafCategoryListView(CategoryListView):
+    page_title = inspect.getdoc(Category.view_mapped_to_non_leaf_synsets)
+
+    def get_queryset(self):
+        return Category.view_mapped_to_non_leaf_synsets()
 
 
 class SynsetListView(ListView):
@@ -113,49 +130,39 @@ class SynsetListView(ListView):
         return context
 
 
-class CategoryListView(ListView):
-    model = Category
-    context_object_name = "category_list"
-
-
-class NonLeafSynsetListView(SynsetListView):
-    page_title = "Non-Leaf Object-Assigned Synsets"
+class SubstanceMismatchSynsetListView(SynsetListView):
+    page_title = inspect.getdoc(Synset.view_substance_mismatch)
 
     def get_queryset(self):
-        return [
-            s for s in super().get_queryset()
-            if sum([len(c.objects) for c in s.categories]) > 0 and len(s.children) > 0
-        ]
+        return Synset.view_substance_mismatch()
     
-
-class SubstanceErrorSynsetListView(SynsetListView):
-    page_title = "Synsets Used in Wrong (Substance/Rigid) Predicates"
-
-    def get_queryset(self):
-        return [
-            s for s in super().get_queryset()
-            if (
-                (s.state == STATE_SUBSTANCE and s.is_used_as_non_substance) or 
-                (not s.state == STATE_SUBSTANCE and s.is_used_as_substance) or 
-                (s.is_used_as_substance and s.is_used_as_non_substance)
-            )]
-    
-
-class FillableSynsetListView(SynsetListView):
-    page_title = "Synsets Used as Fillables"
-
-    def get_queryset(self):
-        return [s for s in super().get_queryset() if s.is_used_as_fillable]
-
 
 class UnsupportedPropertySynsetListView(SynsetListView):
-    page_title = "Leaf Synsets with Object-Unsupported Properties"
+    page_title = inspect.getdoc(Synset.view_object_unsupported_properties)
 
     def get_queryset(self):
-        return [
-            s for s in super().get_queryset()
-            if len(s.matching_objects) > 0 and len(s.children) == 0 and not s.has_fully_supporting_object
-        ]
+        return Synset.view_object_unsupported_properties()
+
+
+class UnnecessarySynsetListView(SynsetListView):
+    page_title = inspect.getdoc(Synset.view_unnecessary)
+
+    def get_queryset(self):
+        return Synset.view_unnecessary()
+
+
+class BadDerivativeSynsetView(SynsetListView):
+    page_title = inspect.getdoc(Synset.view_bad_derivative)
+
+    def get_queryset(self):
+        return Synset.view_bad_derivative()
+
+
+class MissingDerivativeSynsetView(SynsetListView):
+    page_title = inspect.getdoc(Synset.view_missing_derivative)
+
+    def get_queryset(self):
+        return Synset.view_missing_derivative()
 
 
 class TransitionListView(ListView):
@@ -208,6 +215,10 @@ class TransitionDetailView(DetailView):
 class IndexView(TemplateView):
     template_name = "index.html"
 
+    def __init__(self, error_url_patterns, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.error_url_patterns = error_url_patterns
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # task metadata
@@ -238,5 +249,9 @@ class IndexView(TemplateView):
         num_ready_scenes = sum([scene.any_ready for scene in Scene.all_objects()])
         num_planned_scenes = sum(1 for scene in Scene.all_objects()) - num_ready_scenes
         context["scene_metadata"] = [num_ready_scenes, num_planned_scenes]
+        context["error_views"] = [
+            (pattern[0], pattern[1].page_title, len(pattern[1].get_queryset()))
+            for pattern in self.error_url_patterns
+        ]
         return context
     

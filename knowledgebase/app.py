@@ -2,21 +2,26 @@ import unicodedata, re
 from flask import Flask, redirect
 from knowledgebase.views import *
 
-urlpatterns = [
-  ("", IndexView.as_view("index")),
-  ("tasks/", TaskListView.as_view("task_list")),
-  ("nonscenematchedtasks/", NonSceneMatchedTaskListView.as_view("non-scene-matched_task_list")),
+error_url_patterns = [
   ("transitionfailuretasks/", TransitionFailureTaskListView.as_view("transition_failure_task_list")),
-  ("objects/", ObjectListView.as_view("object_list")),
+  ("nonscenematchedtasks/", NonSceneMatchedTaskListView.as_view("non_scene_matched_task_list")),
   ("substancemappedobjects/", SubstanceMappedObjectListView.as_view("substance_mapped_object_list")),
-  ("unsupportedpropertyobjects/", UnsupportedPropertyObjectListView.as_view("unsupported_property_object_list")),
+  ("missingmetalinkobjects/", MissingMetaLinkObjectListView.as_view("missing_meta_link_object_list")),
+  ("substancemismatchsynsets/", SubstanceMismatchSynsetListView.as_view("substance_mismatch_synset_list")),
+  ("unsupportedpropertysynsets/", UnsupportedPropertySynsetListView.as_view("unsupported_property_synset_list")),
+  ("unnecessarysynsets/", UnnecessarySynsetListView.as_view("unnecessary_synset_list")),
+  ("badderivativesynsets/", UnnecessarySynsetListView.as_view("bad_derivative_synset_list")),
+  ("missingderivativesynsets/", UnnecessarySynsetListView.as_view("missing_derivative_synset_list")),
+  ("nonleafcategories/", NonLeafCategoryListView.as_view("non_leaf_category_list")),
+]
+
+urlpatterns = [
+  ("", IndexView.as_view("index", error_url_patterns=error_url_patterns)),
+  ("tasks/", TaskListView.as_view("task_list")),
+  ("objects/", ObjectListView.as_view("object_list")),
   ("scenes/", SceneListView.as_view("scene_list")),
   ("synsets/", SynsetListView.as_view("synset_list")),
   ("categories/", CategoryListView.as_view("category_list")),
-  ("nonleafsynsets/", NonLeafSynsetListView.as_view("non-leaf_synset_list")),
-  ("substanceerrorsynsets/", SubstanceErrorSynsetListView.as_view("substance_error_synset_list")),
-  ("fillablesynsets/", FillableSynsetListView.as_view("fillable_synset_list")),
-  ("unsupportedpropertysynsets/", UnsupportedPropertySynsetListView.as_view("unsupported_property_synset_list")),
   ("transitions/", TransitionListView.as_view("transition_list")),
   ("tasks/<name>/", TaskDetailView.as_view("task_detail")),
   ("synsets/<name>/", SynsetDetailView.as_view("synset_detail")),
