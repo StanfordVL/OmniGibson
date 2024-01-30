@@ -73,6 +73,8 @@
     startTimeCode = 0
     timeCodesPerSecond = 60
     upAxis = "Z"
+    defaultPrim = "World"
+
 )
 
 def Xform "World"
