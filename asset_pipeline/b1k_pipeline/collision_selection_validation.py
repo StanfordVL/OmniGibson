@@ -8,7 +8,7 @@ import json
 from b1k_pipeline import mesh_tree
 from b1k_pipeline.utils import PipelineFS, get_targets, parse_name
 
-NUKE_SELECTIONS = False
+NUKE_SELECTIONS = True
 
 
 def get_aabb_corners(mesh):
@@ -140,8 +140,8 @@ def main():
                 # Get model-link pairs that have errors
                 error_keys = {
                     (model, link)
-                    for (_, model, _, link), error in errors[target].items()
-                    if "Manual" not in error
+                    for (_, model, _, link), error_list in errors[target].items()
+                    if not all("Manual" in error for error in error_list)
                     # if error in (
                     #     "Collision selection was not in the available options.",
                     # )
