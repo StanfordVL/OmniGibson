@@ -7088,8 +7088,8 @@ stages:
       md5: 818e2bfea4a7e1b6ea931caa90c8cd09
       size: 33428
     - path: cad/scenes/office_large/artifacts/export_meshes.json
-      md5: 2fd9aa0e0a0c41f5524bbd5e7b259283
-      size: 74811
+      md5: a83183c562ea3daaa2ec9b54e62572e0
+      size: 74641
     - path: cad/scenes/office_vendor_machine/artifacts/export_meshes.json
       md5: d76e9e605bb944810c77334e0c6d3c7a
       size: 20146
@@ -7304,18 +7304,18 @@ stages:
       md5: 8f67c8a3cae22b0303e1082e4d76f9c9
       size: 23730
     - path: cad/scenes/office_large/artifacts/object_list.json
-      md5: 7c446a0c30af1fc645645a3107ee7e22
-      size: 254047
+      md5: 3a8852311655f2b88a9beb1f3a3b2a6b
+      size: 253602
     - path: cad/scenes/office_large/processed.max
-      md5: 203c0b1523796210ece35f7870e3cc41
-      size: 83661362
+      md5: a8115eb725edb04b6ba61fabee252d85
+      size: 83525974
     outs:
     - path: cad/scenes/office_large/artifacts/export_meshes.json
-      md5: 2fd9aa0e0a0c41f5524bbd5e7b259283
-      size: 74811
+      md5: a83183c562ea3daaa2ec9b54e62572e0
+      size: 74641
     - path: cad/scenes/office_large/artifacts/meshes.zip
-      md5: dec1db1ce0f9dbfd41b28e649f782da3
-      size: 801038371
+      md5: e98b738dd8e4bf0b84584a547824f326
+      size: 800686712
   object_list@objects/procedural-aa:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/procedural-aa/processed.max
       b1k_pipeline/max/object_list.py
