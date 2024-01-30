@@ -255,11 +255,11 @@ class BatchQAViewer:
         if self.pass_num == 1:
             # position reference objects to be next to the inspected object
             phone_ref.set_position_orientation(position=[inspected_object.get_position()[0]+np.linalg.norm(inspected_object.aabb_extent[:2])/2+np.linalg.norm(phone_ref.aabb_extent[:2])/2+0.05, 
-                                                    inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2, 
+                                                    inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2 + phone_ref.aabb_extent[1]/2 + 0.05, 
                                                     inspected_object.get_position()[2]+0.05])
             human_ref.set_position_orientation(position=[inspected_object.get_position()[0]-np.linalg.norm(inspected_object.aabb_extent[:2])/2-np.linalg.norm(human_ref.aabb_extent[:2])/2-0.05, 
-                                                    inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2, 
-                                                    0.0])
+                                                    inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2 + human_ref.aabb_extent[1]/2 + 0.05, 
+                                                    0.05])
             
         step = 0               
         while not done:
@@ -303,7 +303,10 @@ class BatchQAViewer:
 
     def add_reference_objects(self):
         # Add a human into the scene
-        human_usd_path = "/scr/home/yinhang/Downloads/UsdSkelExamples/HumanFemale/HumanFemale.usd"
+        # get current directory
+        curr_dir = os.path.dirname(os.path.realpath(__file__))
+        human_usd_path = os.path.join(curr_dir, "HumanFemale/HumanFemale.walk.usd")
+        print("Human usd path: " + human_usd_path)
         human_prim_path = "/World/human"
         lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=human_usd_path, prim_path=human_prim_path, prim_type="Xform")
         human_prim = XFormPrim(human_prim_path, "human")
@@ -321,9 +324,8 @@ class BatchQAViewer:
         og.sim.import_object(phone)
         og.sim.step()
         og.sim.step()
-        phone.links["togglebutton_0_0_link"].visible = False
+        # phone.links["togglebutton_0_0_link"].visible = False
         quat_orientation = R.from_euler('x', np.pi/2).as_quat()
-        # TODO: line up with current object
         phone.set_position_orientation(position=[CAMERA_X+0.1, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 20.0], orientation=quat_orientation)
         return human_prim, phone
     
