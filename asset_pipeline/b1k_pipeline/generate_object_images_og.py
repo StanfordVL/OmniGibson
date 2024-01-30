@@ -6,10 +6,6 @@ import os
 
 import omnigibson as og
 from omnigibson.macros import gm
-from omnigibson.utils.asset_utils import (
-    get_all_object_categories,
-    get_object_models_of_category,
-)
 import omnigibson.utils.transform_utils as T
 from omnigibson.objects.dataset_object import DatasetObject
 

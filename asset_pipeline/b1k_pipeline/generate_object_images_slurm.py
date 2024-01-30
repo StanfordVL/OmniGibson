@@ -9,11 +9,16 @@ from b1k_pipeline.utils import PipelineFS, ParallelZipFS, TMP_DIR, launch_cluste
 
 import tqdm
 
-from IPython import embed
 
 BATCH_SIZE = 32
 assert(BATCH_SIZE % 2 == 0)
-WORKER_COUNT = 8
+WORKER_COUNT = 6
+
+
+def run_on_batch(dataset_path, out_path, batch):
+    python_cmd = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_path, out_path] + batch
+    cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
+    return subprocess.run(cmd, capture_output=True, check=True, cwd="/scr/ig_pipeline")
 
 
 def main():
@@ -41,11 +46,11 @@ def main():
             for start in range(0, len(object_glob), BATCH_SIZE):
                 end = start + BATCH_SIZE
                 batch = object_glob[start:end]
-                command = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_fs.getsyspath("/"), out_temp_fs.getsyspath("/")] + batch
                 worker_future = dask_client.submit(
-                    run_in_env,
-                    python_cmd=command,
-                    omnigibson_env=True,
+                    run_on_batch,
+                    dataset_fs.getsyspath("/"),
+                    out_temp_fs.getsyspath("/"),
+                    batch,
                     pure=False)
                 futures[worker_future] = batch
 
@@ -56,10 +61,10 @@ def main():
                     batch = futures[future]
                     try:
                         future.result()
-                    except subprocess.CalledProcessError as e:
-                        print(str(e))
-                        print(e.stdout.decode("utf-8"))
-                        print(e.stderr.decode("utf-8"))
+                    except Exception as e:
+                        # print(str(e))
+                        # print(e.stdout.decode("utf-8"))
+                        # print(e.stderr.decode("utf-8"))
                         if len(batch) == 1:
                             print("Failed on a single item {batch[0]}. Skipping.")
                         else:
