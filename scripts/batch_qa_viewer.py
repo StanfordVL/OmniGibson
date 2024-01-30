@@ -305,7 +305,7 @@ class BatchQAViewer:
         # Add a human into the scene
         # get current directory
         curr_dir = os.path.dirname(os.path.realpath(__file__))
-        human_usd_path = os.path.join(curr_dir, "HumanFemale/HumanFemale.walk.usd")
+        human_usd_path = os.path.join(curr_dir, "HumanFemale/HumanFemale.usd")
         print("Human usd path: " + human_usd_path)
         human_prim_path = "/World/human"
         lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=human_usd_path, prim_path=human_prim_path, prim_type="Xform")
