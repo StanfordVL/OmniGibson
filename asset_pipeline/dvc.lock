@@ -9710,11 +9710,11 @@ stages:
     cmd: python -m b1k_pipeline.collision_selection_validation
     deps:
     - path: b1k_pipeline/collision_selection_validation.py
-      md5: 9e79fdfa9014d5c27aef8964d580f3fc
-      size: 7810
+      md5: ea3661e8833d9fb19d1e9ed9953263e9
+      size: 7844
     - path: cad/objects/batch-00/artifacts/collision_meshes.zip
-      md5: cd1aa0c9c917ea2d677209a7269c81c9
-      size: 1927988
+      md5: 05659e28e5311eb871f962281154b229
+      size: 1366161
     - path: cad/objects/batch-00/artifacts/collision_selection.json
       md5: 67afc9d87df4e0c654e6cd87b005c23a
       size: 8070
@@ -9725,11 +9725,11 @@ stages:
       md5: 4d1bdbd53b77b38b1e57a0edb2bf7fcf
       size: 38982
     - path: cad/objects/batch-01/artifacts/collision_meshes.zip
-      md5: 169dc0ac66ef8dce86673f6d772ec59e
-      size: 2809834
+      md5: 10dda3409506b8d796dc94e2383d6fb5
+      size: 1964325
     - path: cad/objects/batch-01/artifacts/collision_selection.json
-      md5: 09491a6dbb2ea61e348e478627f9ed91
-      size: 7456
+      md5: 74c35c3dd6b1eca64340d7d4079bbe3a
+      size: 7642
     - path: cad/objects/batch-01/artifacts/meshes.zip
       md5: bceda67817f6969713f990c7cb78570e
       size: 196928437
@@ -9737,8 +9737,8 @@ stages:
       md5: 5774c5023249ce7dc45d08f37c6fa054
       size: 34142
     - path: cad/objects/batch-02/artifacts/collision_meshes.zip
-      md5: f8b4395968dbe43e256c6c556e5c4003
-      size: 3442890
+      md5: d31a2922e6af681c74bfb0129bc7b287
+      size: 1838694
     - path: cad/objects/batch-02/artifacts/collision_selection.json
       md5: 81c76a285132fd706e4464042d2f44d5
       size: 11196
@@ -9749,8 +9749,8 @@ stages:
       md5: ff3057688aa73fb990daf33faeb937ef
       size: 55595
     - path: cad/objects/batch-03/artifacts/collision_meshes.zip
-      md5: bcd4954449c173c9be64402657cbb361
-      size: 2096983
+      md5: 894817dd8b05f7e99dbf7bd9d78fd8a1
+      size: 996749
     - path: cad/objects/batch-03/artifacts/collision_selection.json
       md5: ead3a865863f24a60ef8a30a3d171241
       size: 5411
@@ -9761,8 +9761,8 @@ stages:
       md5: c9bdd8068fd624f058c4947c80038c0e
       size: 25436
     - path: cad/objects/batch-04/artifacts/collision_meshes.zip
-      md5: 8e83551f63ba7da9ede8e75de77fbd05
-      size: 1991857
+      md5: 627cf40e914dfb89c16756c13905c456
+      size: 1284350
     - path: cad/objects/batch-04/artifacts/collision_selection.json
       md5: d31ec0812328df4f6ac296f436696e55
       size: 7165
@@ -9773,8 +9773,8 @@ stages:
       md5: aff599a8b798c002e8b7bf688f4445db
       size: 33704
     - path: cad/objects/batch-05/artifacts/collision_meshes.zip
-      md5: a1aa7e40b2d258e681d3c1219631becb
-      size: 2012858
+      md5: 0636d2cbe897d2ab76e23a42f509e01b
+      size: 1338439
     - path: cad/objects/batch-05/artifacts/collision_selection.json
       md5: 0267a1c751143ab9eed7933e219ea48d
       size: 7773
@@ -9785,8 +9785,8 @@ stages:
       md5: b9fc5d36c7d53a5645583197b3d2045d
       size: 36888
     - path: cad/objects/batch-06/artifacts/collision_meshes.zip
-      md5: 99e62580b95f07fcb11568234dfbeed4
-      size: 2139502
+      md5: 80497c217ed825bf6eaa5ced8d6a6256
+      size: 812093
     - path: cad/objects/batch-06/artifacts/collision_selection.json
       md5: 1e00e75399322dfe3686594fd9e1ae49
       size: 7420
@@ -9797,8 +9797,8 @@ stages:
       md5: 280e40bc1b49f1e9934278b6f9eab900
       size: 34518
     - path: cad/objects/batch-07/artifacts/collision_meshes.zip
-      md5: 8f388e53750b12af4780c38ba588812d
-      size: 2519644
+      md5: 209c9eb231ee43f11b9fa5197813c3a8
+      size: 1235056
     - path: cad/objects/batch-07/artifacts/collision_selection.json
       md5: e9a4d975fe751dce5d033fd5c40c4129
       size: 8577
@@ -9821,8 +9821,8 @@ stages:
       md5: bd2b0a77323cb039ff94d64782df7733
       size: 34887
     - path: cad/objects/batch-09/artifacts/collision_meshes.zip
-      md5: 779ca73f8b35f48f7b155a271c0f0064
-      size: 2735516
+      md5: ad3c14fd481b1e0d48c5b1b6782513df
+      size: 1048628
     - path: cad/objects/batch-09/artifacts/collision_selection.json
       md5: 06507c56acd49347721af11c581c7fb1
       size: 8308
@@ -9833,8 +9833,8 @@ stages:
       md5: df436496d678097bbd8ebabd4272df0a
       size: 40673
     - path: cad/objects/batch-10/artifacts/collision_meshes.zip
-      md5: 99837d821f2e541261371c1d309d7000
-      size: 2025730
+      md5: dbeec5b42282c27194eb4b877405dcd1
+      size: 1074476
     - path: cad/objects/batch-10/artifacts/collision_selection.json
       md5: fe7cc021fe4ee541e2f1c8987b8a7cc5
       size: 6851
@@ -9857,8 +9857,8 @@ stages:
       md5: 0e6bf4944133deceb3b59da829482c9b
       size: 33966
     - path: cad/objects/batch-12/artifacts/collision_meshes.zip
-      md5: 1e50c121a6bb4445dff4c3d3baae9cd6
-      size: 1728691
+      md5: 4bdb627f94288730c59f5beb3fe29760
+      size: 1227128
     - path: cad/objects/batch-12/artifacts/collision_selection.json
       md5: 4f7a37ec872c3b95e33f97368062b667
       size: 7793
@@ -9869,11 +9869,11 @@ stages:
       md5: c0d4aab1c3351975a555ae4641521427
       size: 39389
     - path: cad/objects/batch-13/artifacts/collision_meshes.zip
-      md5: 978be15ceb419769f969099039461ffc
-      size: 1145176
+      md5: 338d366075798afbf9026107f15b70fa
+      size: 775861
     - path: cad/objects/batch-13/artifacts/collision_selection.json
-      md5: 71c050bee96f4b91cab8c8138a7bf280
-      size: 5158
+      md5: 40c1177a6ce773de1ce52afa78b24418
+      size: 5266
     - path: cad/objects/batch-13/artifacts/meshes.zip
       md5: 9e52ce34ee14f5318eb812df66bbde04
       size: 171010557
@@ -9977,11 +9977,11 @@ stages:
       md5: 3cd67347da883a61925003c224493f1a
       size: 42559
     - path: cad/objects/legacy_batch-08/artifacts/collision_meshes.zip
-      md5: 3e9a0b956f97f722155776471411cd5b
-      size: 2092248
+      md5: aabf2a9ca98cb96016a0ba0db4fa6ea4
+      size: 3060738
     - path: cad/objects/legacy_batch-08/artifacts/collision_selection.json
-      md5: d68933fb728487905f82bf8ebceca383
-      size: 8404
+      md5: 684ced2aa260497b46381e9591f63a75
+      size: 8689
     - path: cad/objects/legacy_batch-08/artifacts/meshes.zip
       md5: 345f61384759b6faaad60450aab2fa3b
       size: 221727559
@@ -9989,11 +9989,11 @@ stages:
       md5: 90ceeebf0562f843c1ef8b9575d4a5c0
       size: 43806
     - path: cad/objects/legacy_batch-09/artifacts/collision_meshes.zip
-      md5: 8e70528548aaa484dda5a366395fe514
-      size: 1629307
+      md5: 9efad00a1040af0387b7248d52e98416
+      size: 1347538
     - path: cad/objects/legacy_batch-09/artifacts/collision_selection.json
-      md5: 3fbf1ebd8befb641765f6900d0a12ad6
-      size: 7580
+      md5: 152de81b5f8b4b95e6d28c2f54b7aa13
+      size: 7765
     - path: cad/objects/legacy_batch-09/artifacts/meshes.zip
       md5: f8b3fde83130df1a2ae3ea2c043bdf54
       size: 163360525
@@ -10001,8 +10001,8 @@ stages:
       md5: a8b5243910896650fcaed04af32e010f
       size: 37635
     - path: cad/objects/legacy_batch-10/artifacts/collision_meshes.zip
-      md5: 21177a2b7421b1861944fe270e7e1018
-      size: 3458666
+      md5: caa1f6a2b7ffb573ecade8324aa5975c
+      size: 1396415
     - path: cad/objects/legacy_batch-10/artifacts/collision_selection.json
       md5: 9f450df465c4845aff253994d25bc9d5
       size: 10933
@@ -10013,11 +10013,11 @@ stages:
       md5: 00d4435dde1bf280e169ef8a9b0e6397
       size: 46892
     - path: cad/objects/legacy_batch-11/artifacts/collision_meshes.zip
-      md5: 5b6cb6ebd58897d0f5f83b4e565b26b7
-      size: 2355838
+      md5: 85b7575ad4d5a714cd8118a0a98e08b8
+      size: 1034780
     - path: cad/objects/legacy_batch-11/artifacts/collision_selection.json
-      md5: 0eb54cecb31a8f72cd287cb6834009f8
-      size: 8026
+      md5: 5acd1b2cc070da3ab13eacec3fd2accf
+      size: 8134
     - path: cad/objects/legacy_batch-11/artifacts/meshes.zip
       md5: 754365ba8a3ec8de744f0b45cd0e6dde
       size: 182695806
@@ -10037,8 +10037,8 @@ stages:
       md5: f172a906ad610b2b250b2fda9e34db06
       size: 4603
     - path: cad/objects/procedural-aa/artifacts/collision_meshes.zip
-      md5: 59e22b76a1ce53482c0ace91e15bb7fb
-      size: 8422093
+      md5: 1e1ef66ab8bc869d2a4224e68a72cad8
+      size: 7947009
     - path: cad/objects/procedural-aa/artifacts/collision_selection.json
       md5: 273cbe50bf21d26a8bca23095750858d
       size: 28390
@@ -10073,8 +10073,8 @@ stages:
       md5: 49637931a9dd991b8907babb518b91f6
       size: 33383
     - path: cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
-      md5: f3e29223d655aff87468e84ffcb225e6
-      size: 1772072
+      md5: 3566f9125a769539d476bae45562f349
+      size: 1473017
     - path: cad/objects/task_relavant-ab/artifacts/collision_selection.json
       md5: 9275b6767a050523584021b37bef31f2
       size: 13980
@@ -10085,8 +10085,8 @@ stages:
       md5: 137752fde99163b81bb872469ece2a6f
       size: 64650
     - path: cad/objects/task_relevant-xy/artifacts/collision_meshes.zip
-      md5: 665d68fee89b062466b95d5841885e3e
-      size: 3836383
+      md5: df801f2e60effcd2fc05ad8b118c012d
+      size: 2456970
     - path: cad/objects/task_relevant-xy/artifacts/collision_selection.json
       md5: 5b685f3b8159a7c82cb342fe7cef3e19
       size: 11872
@@ -10277,11 +10277,11 @@ stages:
       md5: f7822087652f51cca084c6bce49317d8
       size: 30069
     - path: cad/scenes/Rs_garden/artifacts/collision_meshes.zip
-      md5: ae0cca08a429e06b1fd8a64317259776
-      size: 577046
+      md5: c47215b8b66cc75a766ccaf344ae5b8d
+      size: 702565
     - path: cad/scenes/Rs_garden/artifacts/collision_selection.json
-      md5: 71592b8edeea8fa35181b6b45c9675cc
-      size: 1634
+      md5: d30106777be10510163751a6dca58065
+      size: 1616
     - path: cad/scenes/Rs_garden/artifacts/meshes.zip
       md5: 148b60a68d360e65f7722fbace7806f1
       size: 165822004
@@ -10783,8 +10783,8 @@ stages:
       size: 336325
     outs:
     - path: artifacts/pipeline/collision_selection_validation.json
-      md5: 874719004dea26246beb8fa0c4629bc8
-      size: 4930
+      md5: e3e88d905e11f6aea52983d48920ed83
+      size: 1089
   collision_selection_validation_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_selection_validation.json
       artifacts/pipeline/collision_selection_validation.success
