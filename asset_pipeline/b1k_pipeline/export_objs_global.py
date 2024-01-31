@@ -221,7 +221,7 @@ def compute_link_aligned_bounding_boxes(G, root_node):
 def compute_object_bounding_box(root_node_data):
     combined_mesh = root_node_data["combined_mesh"]
     lower_mesh_center = get_mesh_center(root_node_data["lower_mesh"])
-    mesh_orientation = root_node_data["metadata"]["orientation"]
+    mesh_orientation = root_node_data["canonical_orientation"]
     canonical_combined_mesh = transform_mesh(combined_mesh, lower_mesh_center, mesh_orientation)
     base_link_offset = canonical_combined_mesh.bounding_box.centroid
     bbox_size = canonical_combined_mesh.bounding_box.extents
@@ -497,8 +497,7 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
             tree_root.attrib = {"name": obj_model}
 
             # Extract base link orientation and position
-            base_link_metadata = G.nodes[root_node]["metadata"]
-            canonical_orientation = np.array(base_link_metadata["orientation"])
+            canonical_orientation = np.array(G.nodes[root_node]["canonical_orientation"])
             base_link_mesh = G.nodes[root_node]["lower_mesh"]
             base_link_center = get_mesh_center(base_link_mesh)
 

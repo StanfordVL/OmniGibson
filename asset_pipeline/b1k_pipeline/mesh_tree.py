@@ -6,6 +6,7 @@ import networkx as nx
 import numpy as np
 import tqdm
 import trimesh
+import fs.path
 from fs.zipfs import ZipFS
 from scipy.spatial.transform import Rotation as R
 
@@ -40,6 +41,17 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
             collision_selections = {(k.group("model_id"), k.group("link_name") if k.group("link_name") else "base_link"): v for k, v in match_to_collision.items() if k is not None}
     else:
         print("Warning: No collision selection file found. Collision meshes will not be loaded.")
+
+    # Load the rotation updates
+    orientation_edits = {}
+    with PipelineFS().open("metadata/orientation_edits.zip", "rb") as f:
+        with ZipFS(f) as orientation_zip_fs:
+            for item in orientation_zip_fs.glob("recorded_orientation/*/*.json"):
+                model = fs.path.splitext(fs.path.basename(item.path))[0]
+                orientation = json.loads(orientation_zip_fs.readtext(item.path))[0]
+                if np.allclose(orientation, [0, 0, 0, 1], atol=1e-3):
+                    continue
+                orientation_edits[model] = orientation
 
     # Open the mesh filesystems
     mesh_fs = ZipFS(target_output_fs.open("meshes.zip", "rb"))
@@ -105,9 +117,16 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
             renamed_parts.append(part_name_renamed)
         metadata["parts"] = renamed_parts
 
-        meta_links = metadata["meta_links"]
+        # Grab orientation from metadata, apply rotation edit, and delete original to avoid confusion
+        # TODO: Remove this once rotation changes are backpropped to the max files.
+        canonical_orientation = metadata["orientation"]
+        if obj_model in orientation_edits:
+            canonical_orientation = (R.from_quat(canonical_orientation) * R.from_quat(orientation_edits[obj_model]).inv()).as_quat()
+        del metadata["orientation"]
 
-        # Delete meta links from metadata to avoid confusion
+
+        # Grab meta links from metadata and delete original to avoid confusion
+        meta_links = metadata["meta_links"]
         del metadata["meta_links"]
 
         # Apply the scaling factor.
@@ -144,6 +163,7 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
         else:
             G.nodes[node_key]["metadata"] = metadata
             G.nodes[node_key]["meta_links"] = meta_links
+            G.nodes[node_key]["canonical_orientation"] = canonical_orientation
             G.nodes[node_key]["material_dir"] = mesh_dir.opendir("material") if mesh_dir.exists("material") else None
 
             if load_meshes:
