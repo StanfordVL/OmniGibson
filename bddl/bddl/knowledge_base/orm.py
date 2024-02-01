@@ -45,10 +45,10 @@ class Model:
             key = kwargs[cls.Meta.pk]
             if key is None:
                 return None
-            return cls._OBJECT_REGISTRY[cls.__name__][key]
+            return cls._OBJECT_REGISTRY[cls.__name__][key] if key in cls._OBJECT_REGISTRY[cls.__name__] else None
         objs = [x for x in cls.all_objects() if all(getattr(x, attr) == value for attr, value in kwargs.items())]
         if not objs:
-            raise KeyError(f"No object matching {kwargs}")
+            return None
         assert len(objs) == 1, f"Expected exactly one object matching {kwargs} but found {objs}"
         return objs[0]
     

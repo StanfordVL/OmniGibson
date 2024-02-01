@@ -332,7 +332,7 @@ class KnowledgeBaseProcessor():
 
     def generate_synset_state(self):
         synsets = []
-        substances = {s.name for s in Synset.all_objects() for prop in s.properties if prop.name == "substance"}
+        substances = {s.name for s in Synset.all_objects() if "substance" in s.property_names}
         for synset in self.tqdm(Synset.all_objects()):
             if synset.name == "entity.n.01": synset.state = STATE_MATCHED   # root synset is always legal
             elif synset.name in substances:
