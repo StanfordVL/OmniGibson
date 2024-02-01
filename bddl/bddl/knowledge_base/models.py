@@ -414,7 +414,7 @@ class Synset(Model):
         # Check if the synset is a derivative
         if not self.is_derivative:
             return None
-        
+
         # Get the parent name
         parent_name = self.name.split(".n.")[0].split("__", 1)[-1]
         if self.name.startswith("diced__"):
@@ -423,15 +423,17 @@ class Synset(Model):
         # Otherwise make a set of candidates
         parent_should_be_substance = self.name.startswith("cooked__")
         parent_should_have_properties = set()
+
         if self.name.startswith("diced__") or self.name.startswith("half__"):
             parent_should_have_properties.add("sliceable")
         elif self.name.startswith("cooked__"):
             parent_should_have_properties.add("cookable")
+
         parent_candidates = [
             s for s in Synset.all_objects()
             if (s.state == STATE_SUBSTANCE) == parent_should_be_substance and
             s.name.split(".n.")[0] == parent_name and
-            not parent_should_have_properties - self.property_names
+            len(parent_should_have_properties - s.property_names) == 0
         ]
 
         assert len(parent_candidates) <= 1, f"Multiple candidates for parent of {self.name}: {parent_candidates}"
@@ -499,7 +501,8 @@ class Synset(Model):
             if all(
                 not sp.task_relevant and
                 sp not in transition_relevant_synsets and
-                len(sp.matching_objects) == 0
+                len(sp.matching_objects) == 0 and
+                len(sp.children) == 0
                 for sp in s.derivative_ancestors
             )
         ]
