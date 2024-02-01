@@ -81,13 +81,6 @@ class ObjectListView(ListView):
     context_object_name = "object_list"
 
 
-class SubstanceMappedObjectListView(ObjectListView):
-    page_title = inspect.getdoc(Object.view_mapped_to_substance_synset)
-
-    def get_queryset(self):
-        return Object.view_mapped_to_substance_synset()
-
-
 class MissingMetaLinkObjectListView(ObjectListView):
     page_title = inspect.getdoc(Object.view_objects_with_missing_meta_links)
 
@@ -250,8 +243,8 @@ class IndexView(TemplateView):
         num_planned_scenes = sum(1 for scene in Scene.all_objects()) - num_ready_scenes
         context["scene_metadata"] = [num_ready_scenes, num_planned_scenes]
         context["error_views"] = [
-            (pattern[0], pattern[1].page_title, len(pattern[1].get_queryset()))
-            for pattern in self.error_url_patterns
+            (view_name, view_class.page_title, len(view_class().get_queryset()))
+            for url, view_class, view_name in self.error_url_patterns
         ]
         return context
     

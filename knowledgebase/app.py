@@ -3,35 +3,35 @@ from flask import Flask, redirect
 from knowledgebase.views import *
 
 error_url_patterns = [
-  ("transitionfailuretasks/", TransitionFailureTaskListView.as_view("transition_failure_task_list")),
-  ("nonscenematchedtasks/", NonSceneMatchedTaskListView.as_view("non_scene_matched_task_list")),
-  ("substancemappedobjects/", SubstanceMappedObjectListView.as_view("substance_mapped_object_list")),
-  ("missingmetalinkobjects/", MissingMetaLinkObjectListView.as_view("missing_meta_link_object_list")),
-  ("substancemismatchsynsets/", SubstanceMismatchSynsetListView.as_view("substance_mismatch_synset_list")),
-  ("unsupportedpropertysynsets/", UnsupportedPropertySynsetListView.as_view("unsupported_property_synset_list")),
-  ("unnecessarysynsets/", UnnecessarySynsetListView.as_view("unnecessary_synset_list")),
-  ("badderivativesynsets/", UnnecessarySynsetListView.as_view("bad_derivative_synset_list")),
-  ("missingderivativesynsets/", UnnecessarySynsetListView.as_view("missing_derivative_synset_list")),
-  ("nonleafcategories/", NonLeafCategoryListView.as_view("non_leaf_category_list")),
+  ("transitionfailuretasks/", TransitionFailureTaskListView, "transition_failure_task_list"),
+  ("nonscenematchedtasks/", NonSceneMatchedTaskListView, "non_scene_matched_task_list"),
+  ("missingmetalinkobjects/", MissingMetaLinkObjectListView, "missing_meta_link_object_list"),
+  ("substancemismatchsynsets/", SubstanceMismatchSynsetListView, "substance_mismatch_synset_list"),
+  ("unsupportedpropertysynsets/", UnsupportedPropertySynsetListView, "unsupported_property_synset_list"),
+  ("unnecessarysynsets/", UnnecessarySynsetListView, "unnecessary_synset_list"),
+  ("badderivativesynsets/", BadDerivativeSynsetView, "bad_derivative_synset_list"),
+  ("missingderivativesynsets/", MissingDerivativeSynsetView, "missing_derivative_synset_list"),
+  ("nonleafcategories/", NonLeafCategoryListView, "non_leaf_category_list"),
 ]
 
 urlpatterns = [
-  ("", IndexView.as_view("index", error_url_patterns=error_url_patterns)),
-  ("tasks/", TaskListView.as_view("task_list")),
-  ("objects/", ObjectListView.as_view("object_list")),
-  ("scenes/", SceneListView.as_view("scene_list")),
-  ("synsets/", SynsetListView.as_view("synset_list")),
-  ("categories/", CategoryListView.as_view("category_list")),
-  ("transitions/", TransitionListView.as_view("transition_list")),
-  ("tasks/<name>/", TaskDetailView.as_view("task_detail")),
-  ("synsets/<name>/", SynsetDetailView.as_view("synset_detail")),
-  ("categories/<name>/", CategoryDetailView.as_view("category_detail")),
-  ("scenes/<name>/", SceneDetailView.as_view("scene_detail")),
-  ("objects/<name>/", ObjectDetailView.as_view("object_detail")),
-  ("transitions/<name>/", TransitionDetailView.as_view("transition_detail")),
+  ("", IndexView, "index", dict(error_url_patterns=error_url_patterns)),
+  ("tasks/", TaskListView, "task_list"),
+  ("objects/", ObjectListView, "object_list"),
+  ("scenes/", SceneListView, "scene_list"),
+  ("synsets/", SynsetListView, "synset_list"),
+  ("categories/", CategoryListView, "category_list"),
+  ("transitions/", TransitionListView, "transition_list"),
+  ("tasks/<name>/", TaskDetailView, "task_detail"),
+  ("synsets/<name>/", SynsetDetailView, "synset_detail"),
+  ("categories/<name>/", CategoryDetailView, "category_detail"),
+  ("scenes/<name>/", SceneDetailView, "scene_detail"),
+  ("objects/<name>/", ObjectDetailView, "object_detail"),
+  ("transitions/<name>/", TransitionDetailView, "transition_detail"),
 ]
 
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 @app.template_filter('slugify')
 def slugify_filter(value):
@@ -48,5 +48,8 @@ def slugify_filter(value):
 def redirect_index():
   return redirect("/knowledgebase", code=302)
 
-for urlpattern, view in urlpatterns:
+for view_info in urlpatterns + error_url_patterns:
+  urlpattern, view_class, view_arg = view_info[:3]
+  view_kwargs = view_info[3] if len(view_info) > 3 else {}
+  view = view_class.as_view(view_arg, **view_kwargs)
   app.add_url_rule("/knowledgebase/" + urlpattern, view_func=view)
