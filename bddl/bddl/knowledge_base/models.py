@@ -507,34 +507,7 @@ class Synset(Model):
     @classmethod
     def view_bad_derivative(cls):
         """Derivative synsets that exist even though the original synset is missing the expected property"""
-        # First build a list of parent candidates for half and diced objects
-        # TODO: reimplement using new derivative fields
-        half_and_diced_parent_candidates = {
-            s.name.split(".n.")[0] for s in cls.all_objects()
-            if "sliceable" in s.property_names and s.state != STATE_SUBSTANCE
-        }
-        bad_half = [
-            s for s in cls.all_objects()
-            if "half__" in s.name and s.name.split(".n.")[0].split("half__")[-1] not in half_and_diced_parent_candidates
-        ]
-        bad_diced = [
-            s for s in cls.all_objects()
-            if "diced__" in s.name and s.name.split(".n.")[0].split("diced__")[-1] not in half_and_diced_parent_candidates
-        ]
-
-        # Now check all the cooked stuff
-        cooked_parent_candidates = {
-            s.name.split(".n.")[0] for s in cls.all_objects()
-            if "cookable" in s.property_names and s.state == STATE_SUBSTANCE
-        }
-        bad_cooked = [
-            s for s in cls.all_objects()
-            if (
-                "cooked__" in s.name and
-                s.name.replace("cooked__", "").split(".n.")[0] not in cooked_parent_candidates
-            )
-        ]
-        return sorted(bad_half + bad_diced + bad_cooked)
+        return [s for s in cls.all_objects() if s.is_derivative and not s.derivative_parent]
     
     @classmethod
     def view_missing_derivative(cls):
