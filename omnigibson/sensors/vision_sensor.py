@@ -3,6 +3,7 @@ import time
 import gym
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.sensors.sensor_base import BaseSensor
 from omnigibson.utils.constants import MAX_CLASS_COUNT, MAX_INSTANCE_COUNT, MAX_VIEWER_SIZE, VALID_OMNI_CHARS
 from omnigibson.utils.python_utils import assert_valid_key, classproperty
@@ -10,21 +11,6 @@ from omnigibson.utils.sim_utils import set_carb_setting
 from omnigibson.utils.ui_utils import dock_window, suppress_omni_log
 from omnigibson.utils.usd_utils import get_camera_params
 from omnigibson.utils.transform_utils import euler2quat, quat2euler
-
-import omni.ui
-from omni.isaac.core.utils.stage import get_current_stage
-from pxr import Gf, UsdGeom
-from omni.kit.viewport.window import get_viewport_window_instances
-from omni.kit.viewport.utility import create_viewport_window
-
-# Make sure synthetic data extension is enabled
-ext_manager = og.app.app.get_extension_manager()
-ext_manager.set_extension_enabled("omni.syntheticdata", True)
-
-# Continue with omni synethic data imports afterwards
-from omni.syntheticdata import sensors as sensors_util
-import omni.syntheticdata._syntheticdata as sd
-sensor_types = sd.SensorType
 
 
 # Duplicate of simulator's render method, used so that this can be done before simulator is created!
@@ -64,35 +50,24 @@ class VisionSensor(BaseSensor):
             loading this sensor's prim at runtime.
         image_height (int): Height of generated images, in pixels
         image_width (int): Width of generated images, in pixels
+        focal_length (float): Focal length to set
+        clipping_range (2-tuple): (min, max) viewing range of this vision sensor
         viewport_name (None or str): If specified, will link this camera to the specified viewport, overriding its
             current camera. Otherwise, creates a new viewport
     """
-    _SENSOR_HELPERS = dict(
-        rgb=sensors_util.get_rgb,
-        depth=sensors_util.get_depth,
-        depth_linear=sensors_util.get_depth_linear,
-        normal=sensors_util.get_normals,
-        seg_semantic=sensors_util.get_semantic_segmentation,
-        seg_instance=sensors_util.get_instance_segmentation,
-        flow=sensors_util.get_motion_vector,
-        bbox_2d_tight=sensors_util.get_bounding_box_2d_tight,
-        bbox_2d_loose=sensors_util.get_bounding_box_2d_loose,
-        bbox_3d=sensors_util.get_bounding_box_3d,
-        camera=get_camera_params,
-    )
 
-    # Define raw sensor types
-    _RAW_SENSOR_TYPES = dict(
-        rgb=sensor_types.Rgb,
-        depth=sensor_types.Depth,
-        depth_linear=sensor_types.DepthLinear,
-        normal=sensor_types.Normal,
-        seg_semantic=sensor_types.SemanticSegmentation,
-        seg_instance=sensor_types.InstanceSegmentation,
-        flow=sensor_types.MotionVector,
-        bbox_2d_tight=sensor_types.BoundingBox2DTight,
-        bbox_2d_loose=sensor_types.BoundingBox2DLoose,
-        bbox_3d=sensor_types.BoundingBox3D,
+    ALL_MODALITIES = (
+        "rgb",
+        "depth",
+        "depth_linear",
+        "normal",
+        "seg_semantic",
+        "seg_instance",
+        "flow",
+        "bbox_2d_tight",
+        "bbox_2d_loose",
+        "bbox_3d",
+        "camera",
     )
 
     # Persistent dictionary of sensors, mapped from prim_path to sensor
@@ -108,17 +83,51 @@ class VisionSensor(BaseSensor):
         load_config=None,
         image_height=128,
         image_width=128,
+        focal_length=17.0,                          # Default 17.0 since this is roughly the human eye focal length
+        clipping_range=(0.001, 10000000.0),
         viewport_name=None,
     ):
         # Create load config from inputs
         load_config = dict() if load_config is None else load_config
         load_config["image_height"] = image_height
         load_config["image_width"] = image_width
+        load_config["focal_length"] = focal_length
+        load_config["clipping_range"] = clipping_range
         load_config["viewport_name"] = viewport_name
 
         # Create variables that will be filled in later at runtime
         self._sd = None             # synthetic data interface
         self._viewport = None       # Viewport from which to grab data
+
+        self._SENSOR_HELPERS = dict(
+            rgb=lazy.omni.syntheticdata.sensors.get_rgb,
+            depth=lazy.omni.syntheticdata.sensors.get_depth,
+            depth_linear=lazy.omni.syntheticdata.sensors.get_depth_linear,
+            normal=lazy.omni.syntheticdata.sensors.get_normals,
+            seg_semantic=lazy.omni.syntheticdata.sensors.get_semantic_segmentation,
+            seg_instance=lazy.omni.syntheticdata.sensors.get_instance_segmentation,
+            flow=lazy.omni.syntheticdata.sensors.get_motion_vector,
+            bbox_2d_tight=lazy.omni.syntheticdata.sensors.get_bounding_box_2d_tight,
+            bbox_2d_loose=lazy.omni.syntheticdata.sensors.get_bounding_box_2d_loose,
+            bbox_3d=lazy.omni.syntheticdata.sensors.get_bounding_box_3d,
+            camera=get_camera_params,
+        )
+        assert set(self._SENSOR_HELPERS.keys()) == set(self.all_modalities), \
+            "VisionSensor._SENSOR_HELPERS must have the same keys as VisionSensor.all_modalities!"
+        
+        # Define raw sensor types
+        self._RAW_SENSOR_TYPES = dict(
+            rgb=lazy.omni.syntheticdata._syntheticdata.SensorType.Rgb,
+            depth=lazy.omni.syntheticdata._syntheticdata.SensorType.Depth,
+            depth_linear=lazy.omni.syntheticdata._syntheticdata.SensorType.DepthLinear,
+            normal=lazy.omni.syntheticdata._syntheticdata.SensorType.Normal,
+            seg_semantic=lazy.omni.syntheticdata._syntheticdata.SensorType.SemanticSegmentation,
+            seg_instance=lazy.omni.syntheticdata._syntheticdata.SensorType.InstanceSegmentation,
+            flow=lazy.omni.syntheticdata._syntheticdata.SensorType.MotionVector,
+            bbox_2d_tight=lazy.omni.syntheticdata._syntheticdata.SensorType.BoundingBox2DTight,
+            bbox_2d_loose=lazy.omni.syntheticdata._syntheticdata.SensorType.BoundingBox2DLoose,
+            bbox_3d=lazy.omni.syntheticdata._syntheticdata.SensorType.BoundingBox3D,
+        )
 
         # Run super method
         super().__init__(
@@ -133,7 +142,7 @@ class VisionSensor(BaseSensor):
     def _load(self):
         # Define a new camera prim at the current stage
         # Note that we can't use og.sim.stage here because the vision sensors get loaded first
-        return UsdGeom.Camera.Define(get_current_stage(), self._prim_path).GetPrim()
+        return lazy.pxr.UsdGeom.Camera.Define(lazy.omni.isaac.core.utils.stage.get_current_stage(), self._prim_path).GetPrim()
 
     def _post_load(self):
         # run super first
@@ -143,16 +152,16 @@ class VisionSensor(BaseSensor):
         self.SENSORS[self._prim_path] = self
 
         # Get synthetic data interface
-        self._sd = sd.acquire_syntheticdata_interface()
+        self._sd = lazy.omni.syntheticdata._syntheticdata.acquire_syntheticdata_interface()
 
         # Create a new viewport to link to this camera or link to a pre-existing one
         viewport_name = self._load_config["viewport_name"]
         if viewport_name is not None:
-            vp_names_to_handles = {vp.name: vp for vp in get_viewport_window_instances()}
+            vp_names_to_handles = {vp.name: vp for vp in lazy.omni.kit.viewport.window.get_viewport_window_instances()}
             assert_valid_key(key=viewport_name, valid_keys=vp_names_to_handles, name="viewport name")
             viewport = vp_names_to_handles[viewport_name]
         else:
-            viewport = create_viewport_window()
+            viewport = lazy.omni.kit.viewport.utility.create_viewport_window()
             # Take a render step to make sure the viewport is generated before docking it
             render()
             # Grab the newly created viewport and dock it to the GUI
@@ -163,14 +172,14 @@ class VisionSensor(BaseSensor):
             n_auxiliary_sensors = len(self.SENSORS) - 1
             if n_auxiliary_sensors == 1:
                 # This is the first auxiliary viewport, dock to the left of the main dockspace
-                dock_window(space=omni.ui.Workspace.get_window("DockSpace"), name=viewport.name,
-                            location=omni.ui.DockPosition.LEFT, ratio=0.25)
+                dock_window(space=lazy.omni.ui.Workspace.get_window("DockSpace"), name=viewport.name,
+                            location=lazy.omni.ui.DockPosition.LEFT, ratio=0.25)
             elif n_auxiliary_sensors > 1:
                 # This is any additional auxiliary viewports, dock equally-spaced in the auxiliary column
                 # We also need to re-dock any prior viewports!
                 for i in range(2, n_auxiliary_sensors + 1):
-                    dock_window(space=omni.ui.Workspace.get_window(f"Viewport {i - 1}"), name=f"Viewport {i}",
-                                location=omni.ui.DockPosition.BOTTOM, ratio=(1 + n_auxiliary_sensors - i) / (2 + n_auxiliary_sensors - i))
+                    dock_window(space=lazy.omni.ui.Workspace.get_window(f"Viewport {i - 1}"), name=f"Viewport {i}",
+                                location=lazy.omni.ui.DockPosition.BOTTOM, ratio=(1 + n_auxiliary_sensors - i) / (2 + n_auxiliary_sensors - i))
 
         self._viewport = viewport
 
@@ -183,6 +192,10 @@ class VisionSensor(BaseSensor):
 
         # Set the viewer size (requires taking one render step afterwards)
         self._viewport.viewport_api.set_texture_resolution((self._load_config["image_width"], self._load_config["image_height"]))
+
+        # Also update focal length and clipping range
+        self.focal_length = self._load_config["focal_length"]
+        self.clipping_range = self._load_config["clipping_range"]
 
         # Requires 3 render updates to propagate changes
         for i in range(3):
@@ -209,7 +222,7 @@ class VisionSensor(BaseSensor):
         # Initialize sensors
         sensors = []
         for name in names:
-            sensors.append(sensors_util.create_or_retrieve_sensor(self._viewport.viewport_api, self._RAW_SENSOR_TYPES[name]))
+            sensors.append(lazy.omni.syntheticdata.sensors.create_or_retrieve_sensor(self._viewport.viewport_api, self._RAW_SENSOR_TYPES[name]))
 
         # Suppress syntheticdata warning here because we know the first render is invalid
         with suppress_omni_log(channels=["omni.syntheticdata.plugin"]):
@@ -246,13 +259,10 @@ class VisionSensor(BaseSensor):
         if should_initialize:
             self.initialize_sensors(names=modality)
 
-    def get_local_pose(self):
-        # We have to overwrite this because camera prims can't set their quat for some reason ):
-        xform_translate_op = self.get_attribute("xformOp:translate")
-        xform_orient_op = self.get_attribute("xformOp:rotateXYZ")
-        return np.array(xform_translate_op), euler2quat(np.array(xform_orient_op))
-
     def remove(self):
+        """
+        Do NOT call this function directly to remove a prim - call og.sim.remove_prim(prim) for proper cleanup
+        """
         # Remove from global sensors dictionary
         self.SENSORS.pop(self._prim_path)
 
@@ -342,7 +352,7 @@ class VisionSensor(BaseSensor):
         Args:
             limits (2-tuple): [min, max] value of the sensor's clipping range, in meters
         """
-        self.set_attribute(attr="clippingRange", val=Gf.Vec2f(*limits))
+        self.set_attribute(attr="clippingRange", val=lazy.pxr.Gf.Vec2f(*limits))
         # In order for sensor changes to propagate, we must toggle its visibility
         self.visible = False
         # A single update step has to happen here before we toggle visibility for changes to propagate
@@ -350,10 +360,28 @@ class VisionSensor(BaseSensor):
         self.visible = True
 
     @property
+    def horizontal_aperture(self):
+        """
+        Returns:
+            float: horizontal aperture of this sensor, in mm
+        """
+        return self.get_attribute("horizontalAperture")
+
+    @horizontal_aperture.setter
+    def horizontal_aperture(self, length):
+        """
+        Sets the focal length @length for this sensor
+
+        Args:
+            length (float): horizontal aperture of this sensor, in meters
+        """
+        self.set_attribute("horizontalAperture", length)
+
+    @property
     def focal_length(self):
         """
         Returns:
-            float: focal length of this sensor, in meters
+            float: focal length of this sensor, in mm
         """
         return self.get_attribute("focalLength")
 
@@ -363,9 +391,32 @@ class VisionSensor(BaseSensor):
         Sets the focal length @length for this sensor
 
         Args:
-            length (float): focal length of this sensor, in meters
+            length (float): focal length of this sensor, in mm
         """
         self.set_attribute("focalLength", length)
+
+    @property
+    def intrinsic_matrix(self):
+        """
+        Returns:
+            n-array: (3, 3) camera intrinsic matrix. Transforming point p (x,y,z) in the camera frame via K * p will
+                produce p' (x', y', w) - the point in the image plane. To get pixel coordiantes, divide x' and y' by w
+        """
+        params = get_camera_params(viewport=self._viewport.viewport_api)
+        h, w = self.image_height, self.image_width
+        horizontal_fov = params["fov"]
+        vertical_fov = horizontal_fov * h / w
+
+        f_x = (w / 2.0) / np.tan(horizontal_fov / 2.0)
+        f_y = (h / 2.0) / np.tan(vertical_fov / 2.0)
+
+        K = np.array([
+            [f_x, 0.0, w / 2.0],
+            [0.0, f_y, h / 2.0],
+            [0.0, 0.0, 1.0]
+        ])
+
+        return K
 
     @property
     def horizontal_aperture(self):
@@ -397,33 +448,33 @@ class VisionSensor(BaseSensor):
         # Generate the complex space types for special modalities:
         # {"bbox_2d_tight", "bbox_2d_loose", "bbox_3d", "camera"}
         bbox_3d_space = gym.spaces.Sequence(space=gym.spaces.Tuple((
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=int),  # uniqueId
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=np.int32),  # uniqueId
             gym.spaces.Text(min_length=1, max_length=50, charset=VALID_OMNI_CHARS),  # name
             gym.spaces.Text(min_length=1, max_length=50, charset=VALID_OMNI_CHARS),  # semanticLabel
             gym.spaces.Text(min_length=0, max_length=50, charset=VALID_OMNI_CHARS),  # metadata
             gym.spaces.Sequence(space=gym.spaces.Box(low=0, high=MAX_INSTANCE_COUNT, shape=(), dtype=np.uint)),   # instanceIds
-            gym.spaces.Box(low=0, high=MAX_CLASS_COUNT, shape=(), dtype=np.uint),  # semanticId
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # x_min
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # y_min
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # z_min
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # x_max
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # y_max
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=float), # z_max
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(4, 4), dtype=float), # transform
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(8, 3), dtype=float), # corners
+            gym.spaces.Box(low=0, high=MAX_CLASS_COUNT, shape=(), dtype=np.uint32),  # semanticId
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=np.int32), # x_min
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=np.int32), # y_min
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=np.int32), # z_min
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=np.int32), # x_max
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=np.int32), # y_max
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=np.int32), # z_max
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(4, 4), dtype=np.float32), # transform
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(8, 3), dtype=np.float32), # corners
         )))
 
         bbox_2d_space = gym.spaces.Sequence(space=gym.spaces.Tuple((
-            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=int),  # uniqueId
+            gym.spaces.Box(low=-np.inf, high=np.inf, shape=(), dtype=np.int32),  # uniqueId
             gym.spaces.Text(min_length=1, max_length=50, charset=VALID_OMNI_CHARS),  # name
             gym.spaces.Text(min_length=1, max_length=50, charset=VALID_OMNI_CHARS),  # semanticLabel
             gym.spaces.Text(min_length=0, max_length=50, charset=VALID_OMNI_CHARS),  # metadata
             gym.spaces.Sequence(space=gym.spaces.Box(low=0, high=MAX_INSTANCE_COUNT, shape=(), dtype=np.uint)), # instanceIds
-            gym.spaces.Box(low=0, high=MAX_CLASS_COUNT, shape=(), dtype=np.uint),  # semanticId
-            gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=int),  # x_min
-            gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=int),  # y_min
-            gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=int),  # x_max
-            gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=int),  # y_max
+            gym.spaces.Box(low=0, high=MAX_CLASS_COUNT, shape=(), dtype=np.uint32),  # semanticId
+            gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=np.int32),  # x_min
+            gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=np.int32),  # y_min
+            gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=np.int32),  # x_max
+            gym.spaces.Box(low=0, high=MAX_VIEWER_SIZE, shape=(), dtype=np.int32),  # y_max
         )))
 
         camera_space = gym.spaces.Dict(dict(
@@ -446,7 +497,7 @@ class VisionSensor(BaseSensor):
             normal=((self.image_height, self.image_width, 3), -1.0, 1.0, np.float32),
             seg_semantic=((self.image_height, self.image_width), 0, MAX_CLASS_COUNT, np.uint32),
             seg_instance=((self.image_height, self.image_width), 0, MAX_INSTANCE_COUNT, np.uint32),
-            flow=((self.image_height, self.image_width, 3), -np.inf, np.inf, np.float32),
+            flow=((self.image_height, self.image_width, 4), -np.inf, np.inf, np.float32),
             bbox_2d_tight=bbox_2d_space,
             bbox_2d_loose=bbox_2d_space,
             bbox_3d=bbox_3d_space,
@@ -473,7 +524,7 @@ class VisionSensor(BaseSensor):
 
     @classproperty
     def all_modalities(cls):
-        return {k for k in cls._SENSOR_HELPERS.keys()}
+        return set(cls.ALL_MODALITIES)
 
     @classproperty
     def no_noise_modalities(cls):

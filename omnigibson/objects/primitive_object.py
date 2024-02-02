@@ -2,8 +2,8 @@ import numpy as np
 from omnigibson.objects.stateful_object import StatefulObject
 from omnigibson.utils.python_utils import assert_valid_key
 
-from pxr import Gf, Vt, UsdPhysics, PhysxSchema
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.utils.constants import PrimType, PRIMITIVE_MESH_TYPES
 from omnigibson.utils.usd_utils import create_primitive_mesh
 from omnigibson.utils.render_utils import create_pbr_material
@@ -37,6 +37,7 @@ class PrimitiveObject(StatefulObject):
         visible=True,
         fixed_base=False,
         visual_only=False,
+        kinematic_only=None,
         self_collisions=False,
         prim_type=PrimType.RIGID,
         load_config=None,
@@ -66,6 +67,9 @@ class PrimitiveObject(StatefulObject):
             visible (bool): whether to render this object or not in the stage
             fixed_base (bool): whether to fix the base of this object or not
             visual_only (bool): Whether this object should be visual only (and not collide with any other objects)
+            kinematic_only (None or bool): Whether this object should be kinematic only (and not get affected by any
+                collisions). If None, then this value will be set to True if @fixed_base is True and some other criteria
+                are satisfied (see object_base.py post_load function), else False.
             self_collisions (bool): Whether to enable self collisions for this object
             prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
             load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
@@ -110,6 +114,7 @@ class PrimitiveObject(StatefulObject):
             visible=visible,
             fixed_base=fixed_base,
             visual_only=visual_only,
+            kinematic_only=kinematic_only,
             self_collisions=self_collisions,
             prim_type=prim_type,
             include_default_states=include_default_states,
@@ -128,9 +133,9 @@ class PrimitiveObject(StatefulObject):
         self._col_geom = create_primitive_mesh(prim_path=f"{self._prim_path}/base_link/collisions", primitive_type=self._primitive_type)
 
         # Add collision API to collision geom
-        UsdPhysics.CollisionAPI.Apply(self._col_geom.GetPrim())
-        UsdPhysics.MeshCollisionAPI.Apply(self._col_geom.GetPrim())
-        PhysxSchema.PhysxCollisionAPI.Apply(self._col_geom.GetPrim())
+        lazy.pxr.UsdPhysics.CollisionAPI.Apply(self._col_geom.GetPrim())
+        lazy.pxr.UsdPhysics.MeshCollisionAPI.Apply(self._col_geom.GetPrim())
+        lazy.pxr.PhysxSchema.PhysxCollisionAPI.Apply(self._col_geom.GetPrim())
 
         # Create a material for this object for the base link
         og.sim.stage.DefinePrim(f"{self._prim_path}/Looks", "Scope")
@@ -213,7 +218,7 @@ class PrimitiveObject(StatefulObject):
                 for attr in (geom.GetPointsAttr(), geom.GetNormalsAttr()):
                     vals = np.array(attr.Get()).astype(np.float64)
                     attr_pairs.append([attr, vals])
-                geom.GetExtentAttr().Set(Vt.Vec3fArray([Gf.Vec3f(*(-self._extents / 2.0)), Gf.Vec3f(*(self._extents / 2.0))]))
+                geom.GetExtentAttr().Set(lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*(-self._extents / 2.0)), lazy.pxr.Gf.Vec3f(*(self._extents / 2.0))]))
 
         # Calculate how much to scale extents by and then modify the points / normals accordingly
         scaling_factor = 2.0 * radius / original_extent[0]
@@ -225,7 +230,7 @@ class PrimitiveObject(StatefulObject):
             else:
                 vals[:, :2] = vals[:, :2] * scaling_factor
             # Set the value
-            attr.Set(Vt.Vec3fArray([Gf.Vec3f(*v) for v in vals]))
+            attr.Set(lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*v) for v in vals]))
 
     @property
     def height(self):
@@ -263,8 +268,8 @@ class PrimitiveObject(StatefulObject):
                     vals = np.array(attr.Get()).astype(np.float64)
                     # Scale the z axis by the scaling factor
                     vals[:, 2] = vals[:, 2] * scaling_factor
-                    attr.Set(Vt.Vec3fArray([Gf.Vec3f(*v) for v in vals]))
-                geom.GetExtentAttr().Set(Vt.Vec3fArray([Gf.Vec3f(*(-self._extents / 2.0)), Gf.Vec3f(*(self._extents / 2.0))]))
+                    attr.Set(lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*v) for v in vals]))
+                geom.GetExtentAttr().Set(lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*(-self._extents / 2.0)), lazy.pxr.Gf.Vec3f(*(self._extents / 2.0))]))
 
     @property
     def size(self):
@@ -302,11 +307,11 @@ class PrimitiveObject(StatefulObject):
                 for attr in (geom.GetPointsAttr(), geom.GetNormalsAttr()):
                     # Scale all three axes by the scaling factor
                     vals = np.array(attr.Get()).astype(np.float64) * scaling_factor
-                    attr.Set(Vt.Vec3fArray([Gf.Vec3f(*v) for v in vals]))
-                geom.GetExtentAttr().Set(Vt.Vec3fArray([Gf.Vec3f(*(-self._extents / 2.0)), Gf.Vec3f(*(self._extents / 2.0))]))
+                    attr.Set(lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*v) for v in vals]))
+                geom.GetExtentAttr().Set(lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*(-self._extents / 2.0)), lazy.pxr.Gf.Vec3f(*(self._extents / 2.0))]))
 
     def _create_prim_with_same_kwargs(self, prim_path, name, load_config):
-        # Add additional kwargs (fit_avg_dim_volume and bounding_box are already captured in load_config)
+        # Add additional kwargs (bounding_box is already captured in load_config)
         return self.__class__(
             prim_path=prim_path,
             primitive_type=self._primitive_type,

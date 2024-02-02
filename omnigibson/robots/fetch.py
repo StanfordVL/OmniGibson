@@ -7,7 +7,11 @@ from omnigibson.robots.active_camera_robot import ActiveCameraRobot
 from omnigibson.robots.manipulation_robot import GraspingPoint, ManipulationRobot
 from omnigibson.robots.two_wheel_robot import TwoWheelRobot
 from omnigibson.utils.python_utils import assert_valid_key
+from omnigibson.utils.ui_utils import create_module_logger
+from omnigibson.utils.transform_utils import euler2quat
 from omnigibson.utils.usd_utils import JointType
+
+log = create_module_logger(module_name=__name__)
 
 DEFAULT_ARM_POSES = {
     "vertical",
@@ -60,12 +64,13 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
 
         # Unique to ManipulationRobot
         grasping_mode="physical",
+        disable_grasp_handling=False,
 
         # Unique to Fetch
         rigid_trunk=False,
         default_trunk_offset=0.365,
-        default_arm_pose="diagonal30",
-
+        default_reset_mode="untuck",
+        default_arm_pose="vertical",
         **kwargs,
     ):
         """
@@ -89,14 +94,16 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
                 a dict in the form of {ability: {param: value}} containing object abilities and parameters to pass to
                 the object state instance constructor.
             control_freq (float): control frequency (in Hz) at which to control the object. If set to be None,
-                simulator.import_object will automatically set the control frequency to be 1 / render_timestep by default.
+                simulator.import_object will automatically set the control frequency to be at the render frequency by default.
             controller_config (None or dict): nested dictionary mapping controller name(s) to specific controller
                 configurations for this object. This will override any default values specified by this class.
             action_type (str): one of {discrete, continuous} - what type of action space to use
             action_normalize (bool): whether to normalize inputted actions. This will override any default values
                 specified by this class.
             reset_joint_pos (None or n-array): if specified, should be the joint positions that the object should
-                be set to during a reset. If None (default), self.default_joint_pos will be used instead.
+                be set to during a reset. If None (default), self._default_joint_pos will be used instead.
+                Note that _default_joint_pos are hardcoded & precomputed, and thus should not be modified by the user.
+                Set this value instead if you want to initialize the robot with a different rese joint position.
             obs_modalities (str or list of str): Observation modalities to use for this robot. Default is "all", which
                 corresponds to all modalities being used.
                 Otherwise, valid options should be part of omnigibson.sensors.ALL_SENSOR_MODALITIES.
@@ -112,27 +119,26 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
                 If "physical", no assistive grasping will be applied (relies on contact friction + finger force).
                 If "assisted", will magnetize any object touching and within the gripper's fingers.
                 If "sticky", will magnetize any object touching the gripper's fingers.
+            disable_grasp_handling (bool): If True, will disable all grasp handling for this object. This means that
+                sticky and assisted grasp modes will not work unless the connection/release methodsare manually called.
             rigid_trunk (bool) if True, will prevent the trunk from moving during execution.
             default_trunk_offset (float): sets the default height of the robot's trunk
+            default_reset_mode (str): Default reset mode for the robot. Should be one of: {"tuck", "untuck"}
+            If reset_joint_pos is not None, this will be ignored (since _default_joint_pos won't be used during initialization).
             default_arm_pose (str): Default pose for the robot arm. Should be one of:
                 {"vertical", "diagonal15", "diagonal30", "diagonal45", "horizontal"}
+                If either reset_joint_pos is not None or default_reset_mode is "tuck", this will be ignored. 
+                Otherwise the reset_joint_pos will be initialized to the precomputed joint positions that represents default_arm_pose.
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
         # Store args
         self.rigid_trunk = rigid_trunk
         self.default_trunk_offset = default_trunk_offset
+        assert_valid_key(key=default_reset_mode, valid_keys=RESET_JOINT_OPTIONS, name="default_reset_mode")
+        self.default_reset_mode = default_reset_mode
         assert_valid_key(key=default_arm_pose, valid_keys=DEFAULT_ARM_POSES, name="default_arm_pose")
         self.default_arm_pose = default_arm_pose
-
-        # Parse reset joint pos if specifying special string
-        if isinstance(reset_joint_pos, str):
-            assert (
-                reset_joint_pos in RESET_JOINT_OPTIONS
-            ), "reset_joint_pos should be one of {} if using a string!".format(RESET_JOINT_OPTIONS)
-            reset_joint_pos = (
-                self.tucked_default_joint_pos if reset_joint_pos == "tuck" else self.untucked_default_joint_pos
-            )
 
         # Run super init
         super().__init__(
@@ -156,6 +162,7 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
             proprio_obs=proprio_obs,
             sensor_config=sensor_config,
             grasping_mode=grasping_mode,
+            disable_grasp_handling=disable_grasp_handling,
             **kwargs,
         )
 
@@ -216,7 +223,24 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         else:
             raise ValueError("Unknown default arm pose: {}".format(self.default_arm_pose))
         return pos
+    
+    def _post_load(self):
+        super()._post_load()
 
+        # Set the wheels back to using sphere approximations
+        for wheel_name in ["l_wheel_link", "r_wheel_link"]:
+            log.warning(
+                "Fetch wheel links are post-processed to use sphere approximation collision meshes."
+                "Please ignore any previous errors about these collision meshes.")
+            wheel_link = self.links[wheel_name]
+            assert set(wheel_link.collision_meshes) == {"collisions"}, "Wheel link should only have 1 collision!"
+            wheel_link.collision_meshes["collisions"].set_collision_approximation("boundingSphere")
+
+        # Also apply a convex decomposition to the torso lift link
+        torso_lift_link = self.links["torso_lift_link"]
+        assert set(torso_lift_link.collision_meshes) == {"collisions"}, "Wheel link should only have 1 collision!"
+        torso_lift_link.collision_meshes["collisions"].set_collision_approximation("convexDecomposition")
+        
     @property
     def discrete_action_list(self):
         # Not supported for this robot
@@ -248,9 +272,9 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
                 if joint.joint_type != JointType.JOINT_FIXED:
                     joint.friction = 500
 
-    def _actions_to_control(self, action):
+    def _postprocess_control(self, control, control_type):
         # Run super method first
-        u_vec, u_type_vec = super()._actions_to_control(action=action)
+        u_vec, u_type_vec = super()._postprocess_control(control=control, control_type=control_type)
 
         # Override trunk value if we're keeping the trunk rigid
         if self.rigid_trunk:
@@ -301,7 +325,12 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
 
         # Need to override joint idx being controlled to include trunk in default arm controller configs
         for arm_cfg in cfg[f"arm_{self.default_arm}"].values():
-            arm_cfg["dof_idx"] = np.concatenate([self.trunk_control_idx, self.arm_control_idx[self.default_arm]])
+            arm_control_idx = np.concatenate([self.trunk_control_idx, self.arm_control_idx[self.default_arm]])
+            arm_cfg["dof_idx"] = arm_control_idx
+
+            # Need to modify the default joint positions also if this is a null joint controller
+            if arm_cfg["name"] == "NullJointController":
+                arm_cfg["default_command"] = self.reset_joint_pos[arm_control_idx]
 
             # If using rigid trunk, we also clamp its limits
             if self.rigid_trunk:
@@ -313,8 +342,8 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         return cfg
 
     @property
-    def default_joint_pos(self):
-        return self.untucked_default_joint_pos
+    def _default_joint_pos(self):
+        return self.tucked_default_joint_pos if self.default_reset_mode == "tuck" else self.untucked_default_joint_pos
 
     @property
     def wheel_radius(self):
@@ -332,10 +361,8 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
     def assisted_grasp_start_points(self):
         return {
             self.default_arm: [
-                GraspingPoint(link_name="r_gripper_finger_link", position=[0.04, -0.012, 0.014]),
-                GraspingPoint(link_name="r_gripper_finger_link", position=[0.04, -0.012, -0.014]),
-                GraspingPoint(link_name="r_gripper_finger_link", position=[-0.04, -0.012, 0.014]),
-                GraspingPoint(link_name="r_gripper_finger_link", position=[-0.04, -0.012, -0.014]),
+                GraspingPoint(link_name="r_gripper_finger_link", position=[0.025, -0.012, 0.0]),
+                GraspingPoint(link_name="r_gripper_finger_link", position=[-0.025, -0.012, 0.0]),
             ]
         }
 
@@ -343,10 +370,8 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
     def assisted_grasp_end_points(self):
         return {
             self.default_arm: [
-                GraspingPoint(link_name="l_gripper_finger_link", position=[0.04, 0.012, 0.014]),
-                GraspingPoint(link_name="l_gripper_finger_link", position=[0.04, 0.012, -0.014]),
-                GraspingPoint(link_name="l_gripper_finger_link", position=[-0.04, 0.012, 0.014]),
-                GraspingPoint(link_name="l_gripper_finger_link", position=[-0.04, 0.012, -0.014]),
+                GraspingPoint(link_name="l_gripper_finger_link", position=[0.025, 0.012, 0.0]),
+                GraspingPoint(link_name="l_gripper_finger_link", position=[-0.025, 0.012, 0.0]),
             ]
         }
 
@@ -387,6 +412,40 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
         return [
             ["torso_lift_link", "shoulder_lift_link"],
             ["torso_lift_link", "torso_fixed_link"],
+            ["torso_lift_link", "estop_link"],
+            ["base_link", "laser_link"],
+            ["base_link", "torso_fixed_link"],
+            ["base_link", "l_wheel_link"],
+            ["base_link", "r_wheel_link"],
+            ["base_link", "estop_link"],
+            ["torso_lift_link", "shoulder_pan_link"],
+            ["torso_lift_link", "head_pan_link"],
+            ["head_pan_link", "head_tilt_link"],
+            ["shoulder_pan_link", "shoulder_lift_link"],
+            ["shoulder_lift_link", "upperarm_roll_link"],
+            ["upperarm_roll_link", "elbow_flex_link"],
+            ["elbow_flex_link", "forearm_roll_link"],
+            ["forearm_roll_link", "wrist_flex_link"],
+            ["wrist_flex_link", "wrist_roll_link"],
+            ["wrist_roll_link", "gripper_link"],
+        ]
+
+    @property
+    def manipulation_link_names(self):
+        return [
+            "torso_lift_link", 
+            "head_pan_link", 
+            "head_tilt_link",  
+            "shoulder_pan_link", 
+            "shoulder_lift_link", 
+            "upperarm_roll_link", 
+            "elbow_flex_link", 
+            "forearm_roll_link", 
+            "wrist_flex_link", 
+            "wrist_roll_link", 
+            "gripper_link", 
+            "l_gripper_finger_link", 
+            "r_gripper_finger_link",
         ]
 
     @property
@@ -437,3 +496,17 @@ class Fetch(ManipulationRobot, TwoWheelRobot, ActiveCameraRobot):
     @property
     def urdf_path(self):
         return os.path.join(gm.ASSET_PATH, "models/fetch/fetch.urdf")
+
+    @property
+    def arm_workspace_range(self):
+        return {
+            self.default_arm : [np.deg2rad(-45), np.deg2rad(45)]
+        }
+    
+    @property
+    def eef_usd_path(self):
+        return {self.default_arm: os.path.join(gm.ASSET_PATH, "models/fetch/fetch/fetch_eef.usd")}
+
+    @property
+    def teleop_rotation_offset(self):
+        return {self.default_arm: euler2quat([0, np.pi / 2, np.pi])}

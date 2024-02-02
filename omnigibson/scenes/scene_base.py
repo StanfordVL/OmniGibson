@@ -1,9 +1,10 @@
 import json
 from abc import ABC
 from itertools import combinations
-from omni.isaac.core.objects.ground_plane import GroundPlane
 import numpy as np
+
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.utils.python_utils import classproperty, Serializable, Registerable, Recreatable, \
@@ -31,7 +32,7 @@ REGISTERED_SCENES = dict()
 class Scene(Serializable, Registerable, Recreatable, ABC):
     """
     Base class for all Scene objects.
-    Contains the base functionalities for an arbitary scene with an arbitrary set of added objects
+    Contains the base functionalities for an arbitrary scene with an arbitrary set of added objects
     """
     def __init__(
             self,
@@ -143,7 +144,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         Returns:
             list of str: Keys with which to index into the object registry. These should be valid public attributes of
-                prims that we can use as unique IDs to reference prims, e.g., prim.prim_path, prim.name, prim.handle, etc.
+                prims that we can use as unique IDs to reference prims, e.g., prim.prim_path, prim.name, etc.
         """
         return ["name", "prim_path", "uuid"]
 
@@ -197,6 +198,11 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         init_info = scene_info["objects_info"]["init_info"]
         init_state = scene_info["state"]["object_registry"]
         init_systems = scene_info["state"]["system_registry"].keys()
+        task_metadata = {}
+        try:
+            task_metadata = scene_info["metadata"]["task"]
+        except:
+            pass
 
         # Create desired systems
         for system_name in init_systems:
@@ -206,7 +212,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         # accordingly
         for obj_name, obj_info in init_info.items():
             # Check whether we should load the object or not
-            if not self._should_load_object(obj_info=obj_info):
+            if not self._should_load_object(obj_info=obj_info, task_metadata=task_metadata):
                 continue
             # Create object class instance
             obj = create_object_from_init_info(obj_info)
@@ -229,7 +235,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         for key, data in scene_info.get("metadata", dict()).items():
             og.sim.write_metadata(key=key, data=data)
 
-    def _should_load_object(self, obj_info):
+    def _should_load_object(self, obj_info, task_metadata):
         """
         Helper function to check whether we should load an object given its init_info. Useful for potentially filtering
         objects based on, e.g., their category, size, etc.
@@ -467,7 +473,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         # Reset the states of all objects (including robots), including (non-)kinematic states and internal variables.
         assert self._initial_state is not None
         self.load_state(self._initial_state)
-        og.sim.step()
+        og.sim.step_physics()
 
     @property
     def n_floors(self):
@@ -505,13 +511,16 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         return np.random.randint(0, self.n_floors)
 
-    def get_random_point(self, floor=None):
+    def get_random_point(self, floor=None, reference_point=None, robot=None):
         """
         Sample a random point on the given floor number. If not given, sample a random floor number.
-        Should be implemented by subclass.
+        If @reference_point is given, sample a point in the same connected component as the previous point.
 
         Args:
             floor (None or int): floor number. None means the floor is randomly sampled
+                                 Warning: if @reference_point is given, @floor must be given; 
+                                          otherwise, this would lead to undefined behavior
+            reference_point (3-array): (x,y,z) if given, sample a point in the same connected component as this point
 
         Returns:
             2-tuple:
@@ -520,7 +529,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         raise NotImplementedError()
 
-    def get_shortest_path(self, floor, source_world, target_world, entire_path=False):
+    def get_shortest_path(self, floor, source_world, target_world, entire_path=False, robot=None):
         """
         Get the shortest path from one point to another point.
 
@@ -529,6 +538,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             source_world (2-array): (x,y) 2D source location in world reference frame (metric)
             target_world (2-array): (x,y) 2D target location in world reference frame (metric)
             entire_path (bool): whether to return the entire path
+            robot (None or BaseRobot): if given, erode the traversability map to account for the robot's size
 
         Returns:
             2-tuple:
@@ -575,7 +585,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             color (None or 3-array): If specified, sets the (R,G,B) color of the generated plane
             visible (bool): Whether the plane should be visible or not
         """
-        plane = GroundPlane(
+        plane = lazy.omni.isaac.core.objects.ground_plane.GroundPlane(
             prim_path=prim_path,
             name=name,
             z_position=z_position,
@@ -594,11 +604,15 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             name=plane.name,
         )
 
-    def update_initial_state(self):
+    def update_initial_state(self, state=None):
         """
         Updates the initial state for this scene (which the scene will get reset to upon calling reset())
+
+        Args:
+            state (None or dict): If specified, the state to set internally. Otherwise, will set the initial state to
+                be the current state
         """
-        self._initial_state = self.dump_state(serialized=False)
+        self._initial_state = self.dump_state(serialized=False) if state is None else state
 
     def update_objects_info(self):
         """

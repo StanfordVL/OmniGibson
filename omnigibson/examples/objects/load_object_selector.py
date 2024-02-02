@@ -40,7 +40,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         category=obj_category,
         model=obj_model,
         bounding_box=avg_category_spec.get(obj_category),
-        fit_avg_dim_volume=True,
         position=[0, 0, 50.0],
     )
 
@@ -54,7 +53,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         cfg["scene"]["scene_model"] = "Rs_int"
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+    env = og.Environment(configs=cfg)
 
     # Place the object so it rests on the floor
     obj = env.scene.object_registry("name", "obj")
