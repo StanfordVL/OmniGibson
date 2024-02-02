@@ -1179,10 +1179,13 @@ def _create_system_from_metadata(system_name):
                     setattr(mat, attr, np.array(val) if isinstance(val, list) else val)
             return customize_mat
 
+        if system_type == "micro_physical_particle":
+            system_type = "granular"
+            
         if system_type == "macro_visual_particle":
             system_kwargs["create_particle_template"] = generate_particle_template_fcn()
             system_kwargs["scale_relative_to_parent"] = metadata["relative_particle_scaling"]
-        elif system_type == "micro_physical_particle" or system_type == "macro_physical_particle":
+        elif system_type == "granular" or system_type == "macro_physical_particle":
             system_kwargs["create_particle_template"] = generate_particle_template_fcn()
             system_kwargs["particle_density"] = metadata["particle_density"]
         elif system_type == "fluid":
@@ -1196,8 +1199,7 @@ def _create_system_from_metadata(system_name):
             raise ValueError(f"{system_name} system's type {system_type} is invalid! Must be one of "
                              f"{{ 'macro_visual_particle', 'macro_physical_particle', 'granular', or 'fluid' }}")
 
-        if system_type == "micro_physical_particle":
-            system_type = "granular"
+
 
         # Generate the requested system
         system_cls = "".join([st.capitalize() for st in system_type.split("_")])

@@ -74,7 +74,7 @@ class InteractiveTraversableScene(TraversableScene):
             )
 
         # Load room semantic and instance segmentation map (must occur AFTER inferring scene directory)
-        self._seg_map = SegmentationMap(scene_dir=self.scene_dir, map_resolution=seg_map_resolution)
+        #self._seg_map = SegmentationMap(scene_dir=self.scene_dir, map_resolution=seg_map_resolution)
 
         # Decide which room(s) and object categories to load
         self.filter_rooms_and_object_categories(
@@ -158,8 +158,8 @@ class InteractiveTraversableScene(TraversableScene):
 
         # Load the traversability map if we have the connectivity graph
         maps_path = os.path.join(self.scene_dir, "layout")
-        if self.has_connectivity_graph:
-            self._trav_map.load_map(maps_path)
+        # if self.has_connectivity_graph:
+        #     self._trav_map.load_map(maps_path)
 
     def _should_load_object(self, obj_info):
         category = obj_info["args"].get("category", "object")

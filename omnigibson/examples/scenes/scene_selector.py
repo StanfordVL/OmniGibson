@@ -34,25 +34,7 @@ def main(random_selection=False, headless=False, short_exec=False):
             "type": scene_type,
             "scene_model": scene_model,
         },
-        "robots": [
-            {
-                "type": "Turtlebot",
-                "obs_modalities": ["scan", "rgb", "depth"],
-                "action_type": "continuous",
-                "action_normalize": True,
-            },
-        ],
     }
-
-    # If the scene type is interactive, also check if we want to quick load or full load the scene
-    if scene_type == "InteractiveTraversableScene":
-        load_options = {
-            "Quick": "Only load the building assets (i.e.: the floors, walls, ceilings)",
-            "Full": "Load all interactive objects in the scene",
-        }
-        load_mode = choose_from_options(options=load_options, name="load mode", random_selection=random_selection)
-        if load_mode == "Quick":
-            cfg["scene"]["load_object_categories"] = ["floors", "walls", "ceilings"]
 
     # Load the environment
     env = og.Environment(configs=cfg)
@@ -62,16 +44,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         og.sim.enable_viewer_camera_teleoperation()
 
     # Run a simple loop and reset periodically
-    max_iterations = 10 if not short_exec else 1
-    for j in range(max_iterations):
-        og.log.info("Resetting environment")
-        env.reset()
-        for i in range(100):
-            action = env.action_space.sample()
-            state, reward, done, info = env.step(action)
-            if done:
-                og.log.info("Episode finished after {} timesteps".format(i + 1))
-                break
+    while True:
+        og.sim.render()
 
     # Always close the environment at the end
     env.close()

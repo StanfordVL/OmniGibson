@@ -368,6 +368,31 @@ class VisionSensor(BaseSensor):
         self.set_attribute("focalLength", length)
 
     @property
+    def horizontal_aperture(self):
+        """
+        Returns:
+            float: horizontal aperture of this sensor
+        """
+        return self.get_attribute("horizontalAperture")
+
+    @property
+    def camera_params(self):
+        """
+        Get active camera intrinsic and extrinsic parameters.
+
+        Returns:
+            dict: Keyword-mapped values of the active camera's parameters:
+                pose (numpy.ndarray): camera position in world coordinates,
+                fov (float): horizontal field of view in radians
+                focal_length (float)
+                horizontal_aperture (float)
+                view_projection_matrix (numpy.ndarray(dtype=float64, shape=(4, 4)))
+                resolution (dict): resolution as a dict with 'width' and 'height'.
+                clipping_range (tuple(float, float)): Near and Far clipping values.
+        """
+        return get_camera_params(self._viewport.viewport_api)
+
+    @property
     def _obs_space_mapping(self):
         # Generate the complex space types for special modalities:
         # {"bbox_2d_tight", "bbox_2d_loose", "bbox_3d", "camera"}
@@ -454,3 +479,37 @@ class VisionSensor(BaseSensor):
     def no_noise_modalities(cls):
         # bounding boxes and camera state should not have noise
         return {"bbox_2d_tight", "bbox_2d_loose", "bbox_3d", "camera"}
+
+    @property
+    def intrinsic_matrix(self) -> np.ndarray:
+        """Compute camera's matrix of intrinsic parameters.
+
+        Also called calibration matrix. This matrix works for linear depth images. We assume square pixels.
+
+        Note:
+            The calibration matrix projects points in the 3D scene onto an imaginary screen of the camera.
+            The coordinates of points on the image plane are in the homogeneous representation.
+
+        Returns:
+            np.ndarray: A 3 x 3 numpy array containing the intrinsic parameters for the camera.
+
+        Raises:
+            RuntimeError: If the camera prim is not set. Need to call :meth:`initialize` first.
+        """
+        # check camera prim exists
+        assert self.initialized, "Cannot compute intrinsic matrix without first initializing this VisionSensor!"
+
+        # get camera parameters
+        focal_length = self.focal_length
+        horiz_aperture = self.horizontal_aperture
+        # calculate the field of view
+        fov = 2 * np.arctan(horiz_aperture / (2 * focal_length))
+        # calculate the focal length in pixels
+        focal_px = self.image_width * 0.5 / np.tan(fov / 2)
+        # create intrinsic matrix for depth linear
+        a = focal_px
+        b = self.image_width * 0.5
+        c = focal_px
+        d = self.image_height * 0.5
+        # return the matrix
+        return np.array([[a, 0, b], [0, c, d], [0, 0, 1]], dtype=float)
