@@ -1,4 +1,6 @@
+import uuid
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import gm, create_module_macros
 from omnigibson.prims.prim_base import BasePrim
 from omnigibson.prims.geom_prim import VisualGeomPrim
@@ -17,22 +19,8 @@ import tempfile
 import datetime
 import trimesh
 import pymeshlab
-import omni
-from omni.isaac.core.utils.prims import get_prim_at_path, is_prim_path_valid
-from omni.physx.scripts import particleUtils
 import numpy as np
-from pxr import Gf, Vt, UsdShade, UsdGeom, PhysxSchema
 from collections import defaultdict
-
-
-# physics settins
-from omni.physx.bindings._physx import (
-    SETTING_UPDATE_TO_USD,
-    SETTING_UPDATE_VELOCITIES_TO_USD,
-    SETTING_NUM_THREADS,
-    SETTING_UPDATE_PARTICLES_TO_USD,
-)
-import carb
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -43,6 +31,7 @@ m = create_module_macros(module_path=__file__)
 
 # TODO: Tune these default values!
 # TODO (eric): figure out whether one offset can fit all
+m.MAX_CLOTH_PARTICLES = 20000  # Comes from a limitation in physx - do not increase
 m.CLOTH_PARTICLE_CONTACT_OFFSET = 0.0075
 m.CLOTH_REMESHING_ERROR_THRESHOLD = 0.05
 m.CLOTH_STRETCH_STIFFNESS = 10000.0
@@ -59,15 +48,15 @@ def set_carb_settings_for_fluid_isosurface():
     Sets relevant rendering settings in the carb settings in order to use isosurface effectively
     """
     # Settings for Isosurface
-    isregistry = carb.settings.acquire_settings_interface()
+    isregistry = lazy.carb.settings.acquire_settings_interface()
     # disable grid and lights
     dOptions = isregistry.get_as_int("persistent/app/viewport/displayOptions")
     dOptions &= ~(1 << 6 | 1 << 8)
     isregistry.set_int("persistent/app/viewport/displayOptions", dOptions)
-    isregistry.set_bool(SETTING_UPDATE_TO_USD, True)
-    isregistry.set_int(SETTING_NUM_THREADS, 8)
-    isregistry.set_bool(SETTING_UPDATE_VELOCITIES_TO_USD, True)
-    isregistry.set_bool(SETTING_UPDATE_PARTICLES_TO_USD, True)     # TODO: Why does setting this value --> True result in no isosurface being rendered?
+    isregistry.set_bool(lazy.omni.physx.bindings._physx.SETTING_UPDATE_TO_USD, True)
+    isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_NUM_THREADS, 8)
+    isregistry.set_bool(lazy.omni.physx.bindings._physx.SETTING_UPDATE_VELOCITIES_TO_USD, True)
+    isregistry.set_bool(lazy.omni.physx.bindings._physx.SETTING_UPDATE_PARTICLES_TO_USD, True)     # TODO: Why does setting this value --> True result in no isosurface being rendered?
     isregistry.set_int("persistent/simulation/minFrameRate", 60)
     isregistry.set_bool("rtx-defaults/pathtracing/lightcache/cached/enabled", False)
     isregistry.set_bool("rtx-defaults/pathtracing/cached/enabled", False)
@@ -226,7 +215,7 @@ class PhysxParticleInstancer(BasePrim):
         """
         assert pos.shape[0] == self._n_particles, \
             f"Got mismatch in particle setting size: {pos.shape[0]}, vs. number of particles {self._n_particles}!"
-        self.set_attribute(attr="positions", val=Vt.Vec3fArray.FromNumpy(pos.astype(float)))
+        self.set_attribute(attr="positions", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(pos.astype(float)))
 
     @property
     def particle_orientations(self):
@@ -254,7 +243,7 @@ class PhysxParticleInstancer(BasePrim):
         quat = quat.astype(float)
         if self._n_particles > 0:
             quat = quat[:, [3, 0, 1, 2]]
-        self.set_attribute(attr="orientations", val=Vt.QuathArray.FromNumpy(quat))
+        self.set_attribute(attr="orientations", val=lazy.pxr.Vt.QuathArray.FromNumpy(quat))
 
     @property
     def particle_velocities(self):
@@ -277,7 +266,7 @@ class PhysxParticleInstancer(BasePrim):
         assert vel.shape[0] == self._n_particles, \
             f"Got mismatch in particle setting size: {vel.shape[0]}, vs. number of particles {self._n_particles}!"
         vel = vel.astype(float)
-        self.set_attribute(attr="velocities", val=Vt.Vec3fArray.FromNumpy(vel))
+        self.set_attribute(attr="velocities", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(vel))
 
     @property
     def particle_scales(self):
@@ -301,7 +290,7 @@ class PhysxParticleInstancer(BasePrim):
         assert scales.shape[0] == self._n_particles, \
             f"Got mismatch in particle setting size: {scales.shape[0]}, vs. number of particles {self._n_particles}!"
         scales = scales.astype(float)
-        self.set_attribute(attr="scales", val=Vt.Vec3fArray.FromNumpy(scales))
+        self.set_attribute(attr="scales", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(scales))
 
     @property
     def particle_prototype_ids(self):
@@ -438,7 +427,7 @@ class MicroParticleSystem(BaseSystem):
         # Bind the material to the particle system (for isosurface) and the prototypes (for non-isosurface)
         cls._material.bind(cls.system_prim_path)
         # Also apply physics to this material
-        particleUtils.add_pbd_particle_material(og.sim.stage, cls.mat_path, **cls._pbd_material_kwargs)
+        lazy.omni.physx.scripts.particleUtils.add_pbd_particle_material(og.sim.stage, cls.mat_path, **cls._pbd_material_kwargs)
         # Force populate inputs and outputs of the shader
         cls._material.shader_force_populate()
         # Potentially modify the material
@@ -1246,7 +1235,7 @@ class FluidSystem(MicroPhysicalParticleSystem):
         for prototype in cls.particle_prototypes:
             cls._material.bind(prototype.prim_path)
         # Apply the physical material preset based on whether or not this fluid is viscous
-        apply_mat_physics = particleUtils.AddPBDMaterialViscous if cls.is_viscous else particleUtils.AddPBDMaterialWater
+        apply_mat_physics = lazy.omni.physx.scripts.particleUtils.AddPBDMaterialViscous if cls.is_viscous else lazy.omni.physx.scripts.particleUtils.AddPBDMaterialWater
         apply_mat_physics(p=cls._material.prim)
 
         # Compute the overall color of the fluid system
@@ -1306,7 +1295,7 @@ class FluidSystem(MicroPhysicalParticleSystem):
     @classmethod
     def _create_particle_prototypes(cls):
         # Simulate particles with simple spheres
-        prototype = UsdGeom.Sphere.Define(og.sim.stage, f"{cls.prim_path}/prototype0")
+        prototype = lazy.pxr.UsdGeom.Sphere.Define(og.sim.stage, f"{cls.prim_path}/prototype0")
         prototype.CreateRadiusAttr().Set(cls.particle_radius)
         prototype = VisualGeomPrim(prim_path=prototype.GetPath().pathString, name=prototype.GetPath().pathString)
         prototype.visible = False
@@ -1430,7 +1419,7 @@ class GranularSystem(MicroPhysicalParticleSystem):
 
         # Copy it to the standardized prim path
         prototype_path = f"{cls.prim_path}/prototype0"
-        omni.kit.commands.execute("CopyPrim", path_from=visual_geom.prim_path, path_to=prototype_path)
+        lazy.omni.kit.commands.execute("CopyPrim", path_from=visual_geom.prim_path, path_to=prototype_path)
 
         # Wrap it with VisualGeomPrim with the correct scale
         prototype = VisualGeomPrim(prim_path=prototype_path, name=prototype_path)
@@ -1540,49 +1529,64 @@ class Cloth(MicroParticleSystem):
             # we convert our mesh into a trimesh mesh, then export it to a temp file, then load it into pymeshlab
             tm = mesh_prim_to_trimesh_mesh(mesh_prim=mesh_prim, include_normals=True, include_texcoord=True)
             # Tmp file written to: {tmp_dir}/{tmp_fname}/{tmp_fname}.obj
-            tmp_name = f"{mesh_prim.GetName()}_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
+            tmp_name = str(uuid.uuid4())
             tmp_dir = os.path.join(tempfile.gettempdir(), tmp_name)
             tmp_fpath = os.path.join(tmp_dir, f"{tmp_name}.obj")
             Path(tmp_dir).mkdir(parents=True, exist_ok=True)
             tm.export(tmp_fpath)
-            ms = pymeshlab.MeshSet()
-            ms.load_new_mesh(tmp_fpath)
 
-            # Re-mesh based on @particle_distance - distance chosen such that at rest particles should be just touching
-            # each other. The 1.5 magic number comes from the particle cloth demo from omni
-            # Note that this means that the particles will overlap with each other, since at dist = 2 * contact_offset
-            # the particles are just touching each other at rest
+            # Start with the default particle distance
             particle_distance = cls.particle_contact_offset * 2 / (1.5 * np.mean(mesh_prim.GetAttribute("xformOp:scale").Get())) \
                 if particle_distance is None else particle_distance
-            avg_edge_percentage_mismatch = 1.0
-            iters = 0
-            # Loop re-meshing until average edge percentage is within error threshold or we reach the max number of tries
-            while avg_edge_percentage_mismatch > m.CLOTH_REMESHING_ERROR_THRESHOLD:
-                ms.meshing_isotropic_explicit_remeshing(iterations=5, targetlen=pymeshlab.AbsoluteValue(particle_distance))
-                avg_edge_percentage_mismatch = abs(1.0 - particle_distance / ms.get_geometric_measures()["avg_edge_length"])
-                iters += 1
-                if iters > 5:
+
+            # Repetitively re-mesh at lower resolution until we have a mesh that has less than MAX_CLOTH_PARTICLES vertices
+            for _ in range(3):
+                ms = pymeshlab.MeshSet()
+                ms.load_new_mesh(tmp_fpath)
+
+                # Re-mesh based on @particle_distance - distance chosen such that at rest particles should be just touching
+                # each other. The 1.5 magic number comes from the particle cloth demo from omni
+                # Note that this means that the particles will overlap with each other, since at dist = 2 * contact_offset
+                # the particles are just touching each other at rest
+
+                avg_edge_percentage_mismatch = 1.0
+                # Loop re-meshing until average edge percentage is within error threshold or we reach the max number of tries
+                for _ in range(5):
+                    if avg_edge_percentage_mismatch <= m.CLOTH_REMESHING_ERROR_THRESHOLD:
+                        break
+
+                    ms.meshing_isotropic_explicit_remeshing(iterations=5, adaptive=True, targetlen=pymeshlab.AbsoluteValue(particle_distance))
+                    avg_edge_percentage_mismatch = abs(1.0 - particle_distance / ms.get_geometric_measures()["avg_edge_length"])
+                else:
                     # Terminate anyways, but don't fail
                     log.warn("The generated cloth may not have evenly distributed particles.")
+
+                # Check if we have too many vertices
+                cm = ms.current_mesh()
+                if cm.vertex_number() > m.MAX_CLOTH_PARTICLES:
+                    # We have too many vertices, so we will re-mesh again
+                    particle_distance *= np.sqrt(2)  # halve the number of vertices
+                    log.warn(f"Too many vertices ({cm.vertex_number()})! Re-meshing with particle distance {particle_distance}...")
+                else:
                     break
+            else:
+                raise ValueError(f"Could not remesh with less than MAX_CLOTH_PARTICLES ({m.MAX_CLOTH_PARTICLES}) vertices!")
 
             # Re-write data to @mesh_prim
-            cm = ms.current_mesh()
             new_face_vertex_ids = cm.face_matrix().flatten()
             new_texcoord = cm.wedge_tex_coord_matrix()
-            new_vertices = cm.vertex_matrix()[new_face_vertex_ids]
-            new_normals = cm.vertex_normal_matrix()[new_face_vertex_ids]
-            n_vertices = len(new_vertices)
+            new_vertices = cm.vertex_matrix()
+            new_normals = cm.vertex_normal_matrix()
             n_faces = len(cm.face_matrix())
 
             mesh_prim.GetAttribute("faceVertexCounts").Set(np.ones(n_faces, dtype=int) * 3)
-            mesh_prim.GetAttribute("points").Set(Vt.Vec3fArray.FromNumpy(new_vertices))
-            mesh_prim.GetAttribute("faceVertexIndices").Set(np.arange(n_vertices))
-            mesh_prim.GetAttribute("normals").Set(Vt.Vec3fArray.FromNumpy(new_normals))
-            mesh_prim.GetAttribute("primvars:st").Set(Vt.Vec2fArray.FromNumpy(new_texcoord))
+            mesh_prim.GetAttribute("points").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(new_vertices))
+            mesh_prim.GetAttribute("faceVertexIndices").Set(new_face_vertex_ids)
+            mesh_prim.GetAttribute("normals").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(new_normals))
+            mesh_prim.GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(new_texcoord))
 
         # Convert into particle cloth
-        particleUtils.add_physx_particle_cloth(
+        lazy.omni.physx.scripts.particleUtils.add_physx_particle_cloth(
             stage=og.sim.stage,
             path=mesh_prim.GetPath(),
             dynamic_mesh_path=None,
@@ -1594,6 +1598,10 @@ class Cloth(MicroParticleSystem):
             self_collision=True,
             self_collision_filter=True,
         )
+
+        # Disable welding because it can potentially make thin objects non-manifold
+        auto_particle_cloth_api = lazy.pxr.PhysxSchema.PhysxAutoParticleClothAPI(mesh_prim)
+        auto_particle_cloth_api.GetDisableMeshWeldingAttr().Set(True)
 
     @classproperty
     def _pbd_material_kwargs(cls):

@@ -7,9 +7,9 @@ import numpy as np
 
 import trimesh
 from scipy.spatial.transform import Rotation
-from omni.isaac.core.utils.rotations import gf_quat_to_np_array
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import gm
 from omnigibson.objects.usd_object import USDObject
 from omnigibson.utils.constants import AVERAGE_CATEGORY_SPECS, DEFAULT_JOINT_FRICTION, SPECIAL_JOINT_FRICTIONS, JointType
@@ -50,13 +50,13 @@ class DatasetObject(USDObject):
         visible=True,
         fixed_base=False,
         visual_only=False,
+        kinematic_only=None,
         self_collisions=False,
         prim_type=PrimType.RIGID,
         load_config=None,
         abilities=None,
         include_default_states=True,
         bounding_box=None,
-        fit_avg_dim_volume=False,
         in_rooms=None,
         **kwargs,
     ):
@@ -83,6 +83,9 @@ class DatasetObject(USDObject):
             visible (bool): whether to render this object or not in the stage
             fixed_base (bool): whether to fix the base of this object or not
             visual_only (bool): Whether this object should be visual only (and not collide with any other objects)
+            kinematic_only (None or bool): Whether this object should be kinematic only (and not get affected by any
+                collisions). If None, then this value will be set to True if @fixed_base is True and some other criteria
+                are satisfied (see object_base.py post_load function), else False.
             self_collisions (bool): Whether to enable self collisions for this object
             prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
             load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
@@ -94,8 +97,6 @@ class DatasetObject(USDObject):
             bounding_box (None or 3-array): If specified, will scale this object such that it fits in the desired
                 (x,y,z) object-aligned bounding box. Note that EITHER @bounding_box or @scale may be specified
                 -- not both!
-            fit_avg_dim_volume (bool): whether to fit the object to have the same volume as the average dimension
-                while keeping the aspect ratio. Note that if this is set, it will override both @scale and @bounding_box
             in_rooms (None or str or list): If specified, sets the room(s) that this object should belong to. Either
                 a list of room type(s) or a single room type
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
@@ -113,7 +114,6 @@ class DatasetObject(USDObject):
         # Add info to load config
         load_config = dict() if load_config is None else load_config
         load_config["bounding_box"] = bounding_box
-        load_config["fit_avg_dim_volume"] = fit_avg_dim_volume
 
         # Infer the correct usd path to use
         if model is None:
@@ -136,6 +136,7 @@ class DatasetObject(USDObject):
             visible=visible,
             fixed_base=fixed_base,
             visual_only=visual_only,
+            kinematic_only=kinematic_only,
             self_collisions=self_collisions,
             prim_type=prim_type,
             include_default_states=include_default_states,
@@ -197,7 +198,7 @@ class DatasetObject(USDObject):
         if gm.FORCE_LIGHT_INTENSITY is not None:
             def recursive_light_update(child_prim):
                 if "Light" in child_prim.GetPrimTypeInfo().GetTypeName():
-                    child_prim.GetAttribute("intensity").Set(gm.FORCE_LIGHT_INTENSITY)
+                    child_prim.GetAttribute("inputs:intensity").Set(gm.FORCE_LIGHT_INTENSITY)
 
                 for child_child_prim in child_prim.GetChildren():
                     recursive_light_update(child_child_prim)
@@ -218,24 +219,13 @@ class DatasetObject(USDObject):
                 joint.friction = friction
 
     def _post_load(self):
-        # We run this post loading first before any others because we're modifying the load config that will be used
-        # downstream
-        # Set the scale of this prim according to its bounding box
-        if self._load_config["fit_avg_dim_volume"]:
-            # By default, we assume scale does not change if no avg obj specs are given, otherwise, scale accordingly
-            scale = np.ones(3)
-            if self.avg_obj_dims is not None and self.avg_obj_dims["size"] is not None:
-                # Find the average volume, and scale accordingly relative to the native volume based on the bbox
-                volume_ratio = np.product(self.avg_obj_dims["size"]) / np.product(self.native_bbox)
-                size_ratio = np.cbrt(volume_ratio)
-                scale *= size_ratio
-        # Otherwise, if manual bounding box is specified, scale based on ratio between that and the native bbox
-        elif self._load_config["bounding_box"] is not None:
+        # If manual bounding box is specified, scale based on ratio between that and the native bbox
+        if self._load_config["bounding_box"] is not None:
             scale = np.ones(3)
             valid_idxes = self.native_bbox > 1e-4
             scale[valid_idxes] = np.array(self._load_config["bounding_box"])[valid_idxes] / self.native_bbox[valid_idxes]
         else:
-            scale = np.ones(3) if self._load_config["scale"] is None else self._load_config["scale"]
+            scale = np.ones(3) if self._load_config["scale"] is None else np.array(self._load_config["scale"])
 
         # Assert that the scale does not have too small dimensions
         assert np.all(scale > 1e-4), f"Scale of {self.name} is too small: {scale}"
@@ -254,22 +244,16 @@ class DatasetObject(USDObject):
             material.shader_update_asset_paths_with_root_path(root_path)
 
         # Assign realistic density and mass based on average object category spec
-        if self.avg_obj_dims is not None and self.avg_obj_dims["size"] is not None and self.avg_obj_dims["mass"] is not None:
-            # Assume each link has the same density
-            v_ratio = (np.product(self.native_bbox) * np.product(self.scale)) / np.product(self.avg_obj_dims["size"])
-            mass = self.avg_obj_dims["mass"] * v_ratio
+        if self.avg_obj_dims is not None and self.avg_obj_dims["density"] is not None:
             if self._prim_type == PrimType.RIGID:
-                density = mass / self.volume
                 for link in self._links.values():
                     # If not a meta (virtual) link, set the density based on avg_obj_dims and a zero mass (ignored)
                     if link.has_collision_meshes:
                         link.mass = 0.0
-                        link.density = density
+                        link.density = self.avg_obj_dims["density"]
 
             elif self._prim_type == PrimType.CLOTH:
-                # Cloth cannot set density. Internally omni evenly distributes the mass to each particle
-                mass = self.avg_obj_dims["mass"] * v_ratio
-                self.root_link.mass = mass
+                self.root_link.mass = self.avg_obj_dims["density"] * self.root_link.volume
 
     def _update_texture_change(self, object_state):
         """
@@ -452,8 +436,8 @@ class DatasetObject(USDObject):
                     if parent_name in scales and child_name not in scales:
                         scale_in_parent_lf = scales[parent_name]
                         # The location of the joint frame is scaled using the scale in the parent frame
-                        quat0 = gf_quat_to_np_array(prim.GetAttribute("physics:localRot0").Get())[[1, 2, 3, 0]]
-                        quat1 = gf_quat_to_np_array(prim.GetAttribute("physics:localRot1").Get())[[1, 2, 3, 0]]
+                        quat0 = lazy.omni.isaac.core.utils.rotations.gf_quat_to_np_array(prim.GetAttribute("physics:localRot0").Get())[[1, 2, 3, 0]]
+                        quat1 = lazy.omni.isaac.core.utils.rotations.gf_quat_to_np_array(prim.GetAttribute("physics:localRot1").Get())[[1, 2, 3, 0]]
                         # Invert the child link relationship, and multiply the two rotations together to get the final rotation
                         local_ori = T.quat_multiply(quaternion1=T.quat_inverse(quat1), quaternion0=quat0)
                         jnt_frame_rot = T.quat2mat(local_ori)
@@ -483,7 +467,6 @@ class DatasetObject(USDObject):
                 - 3-array: (x,y,z) bbox extent in desired frame
                 - 3-array: (x,y,z) bbox center in desired frame
         """
-        assert self.prim_type == PrimType.RIGID, "get_base_aligned_bbox is only supported for rigid objects."
         bbox_type = "visual" if visual else "collision"
 
         # Get the base position transform.
@@ -497,61 +480,70 @@ class DatasetObject(USDObject):
         # this set of points to get our final, base-frame bounding box.
         points = []
 
-        links = {link_name: self._links[link_name]} if link_name is not None else self._links
-        for link_name, link in links.items():
-            # If the link has no visual or collision meshes, we skip over it (based on the @visual flag)
-            meshes = link.visual_meshes if visual else link.collision_meshes
-            if len(meshes) == 0:
-                continue
-
-            # If the link has a bounding box annotation.
-            if self.native_link_bboxes is not None and link_name in self.native_link_bboxes:
-                # Check if the annotation is still missing.
-                if bbox_type not in self.native_link_bboxes[link_name]:
-                    raise ValueError(f"Could not find {bbox_type} bounding box for object {self.name} link {link_name}")
-
-                # Get the extent and transform.
-                bb_data = self.native_link_bboxes[link_name][bbox_type][link_bbox_type]
-                extent_in_bbox_frame = np.array(bb_data["extent"])
-                bbox_to_link_origin = np.array(bb_data["transform"])
-
-                # # Get the link's pose in the base frame.
-                link_frame_to_world = T.pose2mat(link.get_position_orientation())
-                link_frame_to_base_frame = world_to_base_frame @ link_frame_to_world
-
-                # Scale the bounding box in link origin frame. Here we create a transform that first puts the bounding
-                # box's vertices into the link frame, and then scales them to match the scale applied to this object.
-                # Note that once scaled, the vertices of the bounding box do not necessarily form a cuboid anymore but
-                # instead a parallelepiped. This is not a problem because we later fit a bounding box to the points,
-                # this time in the object's base link frame.
-                scale_in_link_frame = np.diag(np.concatenate([self.scales_in_link_frame[link_name], [1]]))
-                bbox_to_scaled_link_origin = np.dot(scale_in_link_frame, bbox_to_link_origin)
-
-                # Compute the bounding box vertices in the base frame.
-                # bbox_to_link_com = np.dot(link_origin_to_link_com, bbox_to_scaled_link_origin)
-                bbox_center_in_base_frame = np.dot(link_frame_to_base_frame, bbox_to_scaled_link_origin)
-                vertices_in_base_frame = np.array(list(itertools.product((1, -1), repeat=3))) * (extent_in_bbox_frame / 2)
-
-                # Add the points to our collection of points.
-                points.extend(trimesh.transformations.transform_points(vertices_in_base_frame, bbox_center_in_base_frame))
-            elif fallback_to_aabb:
-                # If we're visual and the mesh is not visible, there is no fallback so continue
-                if bbox_type == "visual" and not np.all(tuple(mesh.visible for mesh in meshes.values())):
+        if self.prim_type == PrimType.CLOTH:
+            particle_contact_offset = self.root_link.cloth_system.particle_contact_offset
+            particle_positions = self.root_link.compute_particle_positions()
+            particles_in_world_frame = np.concatenate([
+                particle_positions - particle_contact_offset,
+                particle_positions + particle_contact_offset
+            ], axis=0)
+            points.extend(trimesh.transformations.transform_points(particles_in_world_frame, world_to_base_frame))
+        else:
+            links = {link_name: self._links[link_name]} if link_name is not None else self._links
+            for link_name, link in links.items():
+                # If the link has no visual or collision meshes, we skip over it (based on the @visual flag)
+                meshes = link.visual_meshes if visual else link.collision_meshes
+                if len(meshes) == 0:
                     continue
-                # If no BB annotation is available, get the AABB for this link.
-                aabb_center, aabb_extent = BoundingBoxAPI.compute_center_extent(prim=link)
-                aabb_vertices_in_world = aabb_center + np.array(list(itertools.product((1, -1), repeat=3))) * (
-                        aabb_extent / 2
-                )
-                aabb_vertices_in_base_frame = trimesh.transformations.transform_points(
-                    aabb_vertices_in_world, world_to_base_frame
-                )
-                points.extend(aabb_vertices_in_base_frame)
-            else:
-                raise ValueError(
-                    "Bounding box annotation missing for link: %s. Use fallback_to_aabb=True if you're okay with using "
-                    "AABB as fallback." % link_name
-                )
+
+                # If the link has a bounding box annotation.
+                if self.native_link_bboxes is not None and link_name in self.native_link_bboxes:
+                    # Check if the annotation is still missing.
+                    if bbox_type not in self.native_link_bboxes[link_name]:
+                        raise ValueError(f"Could not find {bbox_type} bounding box for object {self.name} link {link_name}")
+
+                    # Get the extent and transform.
+                    bb_data = self.native_link_bboxes[link_name][bbox_type][link_bbox_type]
+                    extent_in_bbox_frame = np.array(bb_data["extent"])
+                    bbox_to_link_origin = np.array(bb_data["transform"])
+
+                    # # Get the link's pose in the base frame.
+                    link_frame_to_world = T.pose2mat(link.get_position_orientation())
+                    link_frame_to_base_frame = world_to_base_frame @ link_frame_to_world
+
+                    # Scale the bounding box in link origin frame. Here we create a transform that first puts the bounding
+                    # box's vertices into the link frame, and then scales them to match the scale applied to this object.
+                    # Note that once scaled, the vertices of the bounding box do not necessarily form a cuboid anymore but
+                    # instead a parallelepiped. This is not a problem because we later fit a bounding box to the points,
+                    # this time in the object's base link frame.
+                    scale_in_link_frame = np.diag(np.concatenate([self.scales_in_link_frame[link_name], [1]]))
+                    bbox_to_scaled_link_origin = np.dot(scale_in_link_frame, bbox_to_link_origin)
+
+                    # Compute the bounding box vertices in the base frame.
+                    # bbox_to_link_com = np.dot(link_origin_to_link_com, bbox_to_scaled_link_origin)
+                    bbox_center_in_base_frame = np.dot(link_frame_to_base_frame, bbox_to_scaled_link_origin)
+                    vertices_in_base_frame = np.array(list(itertools.product((1, -1), repeat=3))) * (extent_in_bbox_frame / 2)
+
+                    # Add the points to our collection of points.
+                    points.extend(trimesh.transformations.transform_points(vertices_in_base_frame, bbox_center_in_base_frame))
+                elif fallback_to_aabb:  # always default to AABB for cloth
+                    # If we're visual and the mesh is not visible, there is no fallback so continue
+                    if bbox_type == "visual" and not np.all(tuple(mesh.visible for mesh in meshes.values())):
+                        continue
+                    # If no BB annotation is available, get the AABB for this link.
+                    aabb_center, aabb_extent = BoundingBoxAPI.compute_center_extent(prim=link)
+                    aabb_vertices_in_world = aabb_center + np.array(list(itertools.product((1, -1), repeat=3))) * (
+                            aabb_extent / 2
+                    )
+                    aabb_vertices_in_base_frame = trimesh.transformations.transform_points(
+                        aabb_vertices_in_world, world_to_base_frame
+                    )
+                    points.extend(aabb_vertices_in_base_frame)
+                else:
+                    raise ValueError(
+                        "Bounding box annotation missing for link: %s. Use fallback_to_aabb=True if you're okay with using "
+                        "AABB as fallback." % link_name
+                    )
 
         if xy_aligned:
             # If the user requested an XY-plane aligned bbox, convert everything to that frame.
@@ -604,7 +596,7 @@ class DatasetObject(USDObject):
         return AVERAGE_CATEGORY_SPECS.get(self.category, None)
 
     def _create_prim_with_same_kwargs(self, prim_path, name, load_config):
-        # Add additional kwargs (fit_avg_dim_volume and bounding_box are already captured in load_config)
+        # Add additional kwargs (bounding_box is already captured in load_config)
         return self.__class__(
             prim_path=prim_path,
             name=name,

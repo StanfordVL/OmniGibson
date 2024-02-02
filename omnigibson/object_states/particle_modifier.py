@@ -1,7 +1,9 @@
 from abc import abstractmethod
 from collections import defaultdict
 import numpy as np
+
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros, macros, gm
 from omnigibson.prims.geom_prim import VisualGeomPrim
 from omnigibson.object_states.aabb import AABB
@@ -19,13 +21,10 @@ from omnigibson.utils.constants import ParticleModifyMethod, ParticleModifyCondi
 from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_function, \
     get_particle_positions_in_frame, get_particle_positions_from_frame
 from omnigibson.utils.python_utils import classproperty
-from omnigibson.utils.deprecated_utils import Core
 from omnigibson.utils.ui_utils import suppress_omni_log
 from omnigibson.utils.usd_utils import create_primitive_mesh, FlatcacheAPI
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.sampling_utils import sample_cuboid_on_object
-from omni.isaac.core.utils.prims import get_prim_at_path, delete_prim, is_prim_path_valid
-from pxr import PhysicsSchemaTools, UsdGeom, Gf, Sdf
 
 
 # Create settings for this module
@@ -98,7 +97,7 @@ def create_projection_visualization(
             - UsdPrim: Generated Emitter (ComputeGraph) prim generated
     """
     # Create the desired shape which will be used as the source input prim into the generated projection visualization
-    source = UsdGeom.Sphere.Define(og.sim.stage, Sdf.Path(prim_path))
+    source = lazy.pxr.UsdGeom.Sphere.Define(og.sim.stage, lazy.pxr.Sdf.Path(prim_path))
 
     # Modify the radius according to the desired @shape (and also infer the desired spread values)
     if shape == "Cylinder":
@@ -114,8 +113,11 @@ def create_projection_visualization(
     # Set the radius
     source.GetRadiusAttr().Set(source_radius)
     # Also make the prim invisible
-    UsdGeom.Imageable(source.GetPrim()).MakeInvisible()
+    lazy.pxr.UsdGeom.Imageable(source.GetPrim()).MakeInvisible()
+
     # Generate the ComputeGraph nodes to render the projection
+    # Import now to avoid too-eager load of Omni classes due to inheritance
+    from omnigibson.utils.deprecated_utils import Core
     core = Core(lambda val: None, particle_system_name=projection_name)
 
     # Scale radius and height by the parent scale -- projection always points in the negative-z direction of the
@@ -142,21 +144,21 @@ def create_projection_visualization(
     if material is not None:
         prototype.material = material
     # Override the prototype used by the instancer
-    instancer_prim = get_prim_at_path(instancer_path)
+    instancer_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(instancer_path)
     instancer_prim.GetProperty("inputs:prototypes").SetTargets([prototype_path])
 
     # Destroy the old mat path since we don't use the sprites
-    delete_prim(mat_path)
+    lazy.omni.isaac.core.utils.prims.delete_prim(mat_path)
 
     # Modify the settings of the emitter to match the desired shape from inputs
-    emitter_prim = get_prim_at_path(emitter_path)
+    emitter_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(emitter_path)
     emitter_prim.GetProperty("inputs:active").Set(True)
     emitter_prim.GetProperty("inputs:rate").Set(m.PROJECTION_VISUALIZATION_RATE)
     emitter_prim.GetProperty("inputs:lifespan").Set(projection_height / m.PROJECTION_VISUALIZATION_SPEED)
     emitter_prim.GetProperty("inputs:speed").Set(m.PROJECTION_VISUALIZATION_SPEED)
     emitter_prim.GetProperty("inputs:alongAxis").Set(m.PROJECTION_VISUALIZATION_ORIENTATION_BIAS)
-    emitter_prim.GetProperty("inputs:scale").Set(Gf.Vec3f(1.0, 1.0, 1.0))
-    emitter_prim.GetProperty("inputs:directionRandom").Set(Gf.Vec3f(*spread))
+    emitter_prim.GetProperty("inputs:scale").Set(lazy.pxr.Gf.Vec3f(1.0, 1.0, 1.0))
+    emitter_prim.GetProperty("inputs:directionRandom").Set(lazy.pxr.Gf.Vec3f(*spread))
     emitter_prim.GetProperty("inputs:addSourceVelocity").Set(1.0)
 
     # Make sure we render 4 times to fully propagate changes (validated empirically)
@@ -166,7 +168,7 @@ def create_projection_visualization(
             og.sim.render()
 
     # Return the particle system prim which "owns" everything
-    return get_prim_at_path(system_path), emitter_prim
+    return lazy.omni.isaac.core.utils.prims.get_prim_at_path(system_path), emitter_prim
 
 
 class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMixin):
@@ -255,6 +257,24 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
 
         return True, None
 
+    @classmethod
+    def postprocess_ability_params(cls, params):
+        """
+        Post-processes ability parameters to ensure the system names (rather than synsets) are used for conditions.
+        """
+        # Import here to avoid circular imports
+        from omnigibson.utils.bddl_utils import get_system_name_by_synset
+
+        for sys in list(params["conditions"].keys()):
+            # The original key can be either a system name or a system synset. If it's a synset, we need to convert it.
+            system_name = sys if sys in REGISTERED_SYSTEMS.keys() else get_system_name_by_synset(sys)
+            params["conditions"][system_name] = params["conditions"].pop(sys)
+            for cond in params["conditions"][system_name]:
+                cond_type, cond_sys = cond
+                if cond_type == ParticleModifyCondition.SATURATED:
+                    cond[1] = cond_sys if cond_sys in REGISTERED_SYSTEMS.keys() else get_system_name_by_synset(cond_sys)
+        return params
+
     def _initialize(self):
         super()._initialize()
 
@@ -295,13 +315,13 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
             mesh_prim_path = f"{self.link.prim_path}/mesh_0"
 
             # Create a primitive shape if it doesn't already exist
-            pre_existing_mesh = get_prim_at_path(mesh_prim_path)
+            pre_existing_mesh = lazy.omni.isaac.core.utils.prims.get_prim_at_path(mesh_prim_path)
             if not pre_existing_mesh:
                 # Projection mesh params must be specified in order to determine scalings
                 assert self._projection_mesh_params is not None, \
                     f"Must specify projection_mesh_params for {self.obj.name}'s {self.__class__.__name__} " \
                     f"since it has no pre-existing projection mesh!"
-                mesh = UsdGeom.__dict__[self._projection_mesh_params["type"]].Define(og.sim.stage, mesh_prim_path).GetPrim()
+                mesh = getattr(lazy.pxr.UsdGeom, self._projection_mesh_params["type"]).Define(og.sim.stage, mesh_prim_path).GetPrim()
                 property_names = set(mesh.GetPropertyNames())
                 for shape_attr, default_val in shape_defaults.items():
                     if shape_attr in property_names:
@@ -347,7 +367,7 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
             z_offset = 0.0 if self._projection_mesh_params["type"] == "Sphere" else self._projection_mesh_params["extents"][2] / 2
 
             self.projection_mesh.set_local_pose(
-                translation=np.array([0, 0, -z_offset]),
+                position=np.array([0, 0, -z_offset]),
                 orientation=T.euler2quat([0, 0, 0]),
             )
 
@@ -355,7 +375,7 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
             self._check_in_mesh, _ = generate_points_in_volume_checker_function(obj=self.obj, volume_link=self.link)
 
             # Store the projection mesh's IDs
-            projection_mesh_ids = PhysicsSchemaTools.encodeSdfPath(self.projection_mesh.prim_path)
+            projection_mesh_ids = lazy.pxr.PhysicsSchemaTools.encodeSdfPath(self.projection_mesh.prim_path)
 
             # We also generate the function for checking overlaps at runtime
             def check_overlap():
@@ -509,6 +529,36 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
 
         return condition
 
+    def supports_system(self, system_name):
+        """
+        Checks whether this particle modifier supports adding/removing a particle from the specified
+        system, e.g. whether there exists any configuration (toggled on, etc.) in which this modifier
+        can be used to interact with any particles of this system.
+
+        Args:
+            system_name (str): Name of the particle system to check
+
+        Returns:
+            bool: Whether this particle modifier can add or remove a particle from the specified system
+        """
+        return system_name in self.conditions
+
+    def check_conditions_for_system(self, system_name):
+        """
+        Checks whether this particle modifier can add or remove a particle from the specified system
+        in its current configuration, e.g. all of the conditions for addition/removal other than
+        physical position are met.
+
+        Args:
+            system_name (str): Name of the particle system to check
+
+        Returns:
+            bool: Whether this particle modifier can add or remove a particle from the specified system
+        """
+        if not self.supports_system(system_name):
+            return False
+        return all(condition(self.obj) for condition in self.conditions[system_name])
+
     def _update(self):
         # If we're using projection method and flatcache, we need to manually update this object's transforms on the USD
         # so the corresponding visualization and overlap meshes are updated properly
@@ -518,11 +568,11 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
         # Check if there's any overlap and if we're at the correct step
         if self._current_step == 0 and (not self.requires_overlap or self._check_overlap()):
             # Iterate over all owned systems for this particle modifier
-            for system_name, conditions in self.conditions.items():
+            for system_name in self.conditions.keys():
                 # Check if the system is active (for ParticleApplier, the system is always active)
                 if is_system_active(system_name):
                     # Check if all conditions are met
-                    if np.all([condition(self.obj) for condition in conditions]):
+                    if self.check_conditions_for_system(system_name):
                         system = get_system(system_name)
                         # Update saturation limit if it's not specified yet
                         limit = self.visual_particle_modification_limit \
@@ -847,9 +897,9 @@ class ParticleApplier(ParticleModifier):
             projection_name = f"{name_prefix}_projection_visualization"
             projection_path = f"/OmniGraph/{projection_name}"
             projection_visualization_path = f"{self.link.prim_path}/projection_visualization"
-            if is_prim_path_valid(projection_path):
-                self.projection_system = get_prim_at_path(projection_path)
-                self.projection_emitter = get_prim_at_path(f"{projection_path}/emitter")
+            if lazy.omni.isaac.core.utils.prims.is_prim_path_valid(projection_path):
+                self.projection_system = lazy.omni.isaac.core.utils.prims.get_prim_at_path(projection_path)
+                self.projection_emitter = lazy.omni.isaac.core.utils.prims.get_prim_at_path(f"{projection_path}/emitter")
             else:
                 self.projection_system, self.projection_emitter = create_projection_visualization(
                     prim_path=projection_visualization_path,
@@ -912,8 +962,8 @@ class ParticleApplier(ParticleModifier):
         n_particles_per_axis = ((high - low) / sampling_distance).astype(int)
         assert np.all(n_particles_per_axis), f"link {self.link.name} is too small to sample any particle of radius {system.particle_radius}."
         # 1e-10 is added because the extent might be an exact multiple of particle radius
-        arrs = [np.arange(lo + system.particle_radius, hi - system.particle_radius + 1e-10, system.particle_radius * 2)
-                for lo, hi, n in zip(low, high, n_particles_per_axis)]
+        arrs = [np.arange(l + system.particle_radius, h - system.particle_radius + 1e-10, system.particle_radius * 2)
+                for l, h, n in zip(low, high, n_particles_per_axis)]
         # Generate 3D-rectangular grid of points, and only keep the ones inside the mesh
         points = np.stack([arr.flatten() for arr in np.meshgrid(*arrs)]).T
         pos, quat = self.link.get_position_orientation()
@@ -957,7 +1007,7 @@ class ParticleApplier(ParticleModifier):
     def remove(self):
         # We need to remove the projection visualization if it exists
         if self.projection_system is not None:
-            delete_prim(self.projection_system.GetPrimPath().pathString)
+            lazy.omni.isaac.core.utils.prims.delete_prim(self.projection_system.GetPrimPath().pathString)
 
     def _modify_particles(self, system):
         if self._sample_with_raycast:

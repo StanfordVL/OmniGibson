@@ -99,6 +99,8 @@ class LocomotionRobot(BaseRobot):
             "motor_type": "velocity",
             "control_limits": self.control_limits,
             "dof_idx": self.base_control_idx,
+            "default_command": np.zeros(len(self.base_control_idx)),
+            "use_impedances": False,
         }
 
     @property
@@ -181,6 +183,12 @@ class LocomotionRobot(BaseRobot):
         quat = self.get_orientation()
         quat = qmult((euler2quat(delta, 0, 0)), quat)
         self.set_orientation(quat)
+
+    @property
+    def base_action_idx(self):
+        controller_idx = self.controller_order.index("base")
+        action_start_idx = sum([self.controllers[self.controller_order[i]].command_dim for i in range(controller_idx)])
+        return np.arange(action_start_idx, action_start_idx + self.controllers["base"].command_dim)
 
     @property
     @abstractmethod

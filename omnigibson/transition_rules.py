@@ -153,6 +153,16 @@ class TransitionRuleAPI:
                 added_obj_attrs += output.add
                 removed_objs += output.remove
 
+        cls.execute_transition(added_obj_attrs=added_obj_attrs, removed_objs=removed_objs)
+
+    @classmethod
+    def execute_transition(cls, added_obj_attrs, removed_objs):
+        """
+        Executes the transition for the given added and removed objects.
+
+        :param added_obj_attrs: List of ObjectAttrs instances to add to the scene
+        :param removed_objs: List of BaseObject instances to remove from the scene
+        """
         # Process all transition results
         if len(removed_objs) > 0:
             disclaimer(
@@ -362,9 +372,9 @@ class TouchingAnyCondition(RuleCondition):
 
         if self._optimized:
             # Register idx mappings
-            self._filter_1_idxs = {obj: [RigidContactAPI.get_body_idx(link.prim_path) for link in obj.links.values()]
+            self._filter_1_idxs = {obj: [RigidContactAPI.get_body_row_idx(link.prim_path) for link in obj.links.values()]
                                 for obj in object_candidates[self._filter_1_name]}
-            self._filter_2_idxs = {obj: [RigidContactAPI.get_body_idx(link.prim_path) for link in obj.links.values()]
+            self._filter_2_idxs = {obj: [RigidContactAPI.get_body_col_idx(link.prim_path) for link in obj.links.values()]
                                 for obj in object_candidates[self._filter_2_name]}
         else:
             # Register body mappings
@@ -713,7 +723,8 @@ class SlicingRule(BaseTransitionRule):
     @classmethod
     def _generate_conditions(cls):
         # sliceables should be touching any slicer
-        return [TouchingAnyCondition(filter_1_name="sliceable", filter_2_name="slicer")]
+        return [TouchingAnyCondition(filter_1_name="sliceable", filter_2_name="slicer"),
+                StateCondition(filter_name="slicer", state=SlicerActive, val=True, op=operator.eq)]
 
     @classmethod
     def transition(cls, object_candidates):
@@ -721,6 +732,10 @@ class SlicingRule(BaseTransitionRule):
         for sliceable_obj in object_candidates["sliceable"]:
             # Object parts offset annotation are w.r.t the base link of the whole object.
             pos, orn = sliceable_obj.get_position_orientation()
+
+            # If it has no parts, silently fail
+            if not sliceable_obj.metadata["object_parts"]:
+                continue
 
             # Load object parts
             for i, part in enumerate(sliceable_obj.metadata["object_parts"].values()):
@@ -778,7 +793,8 @@ class DicingRule(BaseTransitionRule):
     @classmethod
     def _generate_conditions(cls):
         # sliceables should be touching any slicer
-        return [TouchingAnyCondition(filter_1_name="diceable", filter_2_name="slicer")]
+        return [TouchingAnyCondition(filter_1_name="diceable", filter_2_name="slicer"),
+                StateCondition(filter_name="slicer", state=SlicerActive, val=True, op=operator.eq)]
 
     @classmethod
     def transition(cls, object_candidates):
@@ -946,7 +962,7 @@ class RecipeRule(BaseTransitionRule):
         """
         for system_name in recipe["input_systems"]:
             system = get_system(system_name=system_name)
-            if not container.states[Contains].get_value(system=get_system(system_name=system_name)):
+            if not container.states[Contains].get_value(system=system):
                 return False
         return True
 
@@ -1266,10 +1282,13 @@ class RecipeRule(BaseTransitionRule):
                 system.remove_all_group_particles(group=group_name)
 
         # Remove either all objects or only the recipe-relevant objects inside the container
-        objs_to_remove.extend(np.concatenate([
-            cls._OBJECTS[np.where(in_volume[cls._CATEGORY_IDXS[obj_category]])[0]]
-            for obj_category in recipe["input_objects"].keys()
-        ]) if cls.ignore_nonrecipe_objects else cls._OBJECTS[np.where(in_volume)[0]])
+        object_mask = in_volume.copy()
+        if cls.ignore_nonrecipe_objects:
+            object_category_mask = np.zeros_like(object_mask, dtype=bool)
+            for obj_category in recipe["input_objects"].keys():
+                object_category_mask[cls._CATEGORY_IDXS[obj_category]] = True
+            object_mask &= object_category_mask
+        objs_to_remove.extend(cls._OBJECTS[object_mask])
         volume += sum(obj.volume for obj in objs_to_remove)
 
         # Define callback for spawning new objects inside container

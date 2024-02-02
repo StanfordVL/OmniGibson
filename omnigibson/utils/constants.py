@@ -50,21 +50,24 @@ class SemanticClass(IntEnum):
 
 
 # Specific methods for applying / removing particles
-class ParticleModifyMethod(IntEnum):
-    ADJACENCY = 0
-    PROJECTION = 1
+class ParticleModifyMethod(str, Enum):
+    ADJACENCY = "adjacency"
+    PROJECTION = "projection"
 
 
 # Specific condition types for applying / removing particles
-class ParticleModifyCondition(IntEnum):
-    FUNCTION = 0
-    SATURATED = 1
-    TOGGLEDON = 2
-    GRAVITY = 3
+class ParticleModifyCondition(str, Enum):
+    FUNCTION = "function"
+    SATURATED = "saturated"
+    TOGGLEDON = "toggled_on"
+    GRAVITY = "gravity"
 
 
 # Valid omni characters for specifying strings, e.g. prim paths
 VALID_OMNI_CHARS = frozenset({'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '_', '/'})
+
+# Structure categories that need to always be loaded for stability purposes
+STRUCTURE_CATEGORIES = frozenset({"floors", "walls", "ceilings", "lawn", "driveway", "fence"})
 
 # Note that we are starting this from bit 6 since bullet seems to be giving special meaning to groups 0-5.
 # Collision groups for objects. For special logic, different categories can be assigned different collision groups.

@@ -4,6 +4,7 @@ from omnigibson.object_states.kinematics_mixin import KinematicsMixin
 from omnigibson.object_states import *
 
 _ABILITY_TO_STATE_MAPPING = {
+    "robot": [IsGrasping],
     "attachable": [AttachedTo],
     "blender": [],
     "particleApplier": [ParticleApplier],
@@ -22,7 +23,7 @@ _ABILITY_TO_STATE_MAPPING = {
     "flammable": [OnFire],
     "saturable": [Saturated],
     "sliceable": [],
-    "slicer": [],
+    "slicer": [SlicerActive],
     "toggleable": [ToggledOn],
     "cloth": [Folded, Unfolded, Overlaid, Draped],
     "fillable": [Filled, Contains],
