@@ -1180,9 +1180,6 @@ def _create_system_from_metadata(system_name):
                 for attr, val in mat_kwargs.items():
                     setattr(mat, attr, np.array(val) if isinstance(val, list) else val)
             return customize_mat
-
-        if system_type == "micro_physical_particle":
-            system_type = "granular"
             
         if system_type == "macro_visual_particle":
             system_kwargs["create_particle_template"] = generate_particle_template_fcn()
