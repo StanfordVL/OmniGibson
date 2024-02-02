@@ -30,11 +30,22 @@ def get_trimesh_evaluator(mesh):
             * Normals and uvs must be face varying.
             """
             points = lazy.pxr.Vt.Vec3fArray.FromNumpy(mesh.vertices)
-            normals = lazy.pxr.Vt.Vec3fArray.FromNumpy(mesh.vertex_normals)
-            uvs = lazy.pxr.Vt.Vec2fArray.FromNumpy(np.zeros((len(mesh.vertices), 2)))
-            face_indices = mesh.faces.flatten().tolist()
-            face_vertex_counts = np.ones(len(mesh.faces), dtype=int) * 3
-            return points, normals, uvs, face_indices, face_vertex_counts
+
+            face_indices = []
+            face_vertex_counts = []
+            normals = []
+            uvs = []
+            for face_idx, face_vertices in enumerate(mesh.faces):
+                face_indices.extend(face_vertices)
+                face_vertex_counts.append(len(face_vertices))
+                for _ in face_vertices:
+                    normals.append(mesh.face_normals[face_idx])
+                    uvs.append([0, 0])
+
+
+            normals = lazy.pxr.Vt.Vec3fArray.FromNumpy(np.array(normals))
+            uvs = lazy.pxr.Vt.Vec2fArray.FromNumpy(np.array(uvs))
+            return points, normals, uvs, np.array(face_indices).tolist(), face_vertex_counts
 
         @staticmethod
         def build_setting_ui():

@@ -1,3 +1,5 @@
+import traceback
+import json
 import numpy as np
 import omnigibson as og
 from omnigibson.macros import gm
@@ -7,6 +9,7 @@ from omnigibson.systems.system_base import get_system
 from scipy.spatial.transform import Rotation as R
 import omnigibson.lazy as lazy
 import trimesh
+import tqdm
 
 gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_FLATCACHE = False
@@ -701,7 +704,20 @@ def generate_particles_in_box(box_half_extent):
 
     return water
 
+def draw_mesh(mesh, parent_pos):
+    draw = lazy.omni.isaac.debug_draw._debug_draw.acquire_debug_draw_interface()
+    edge_vert_idxes = mesh.edges_unique
+    N = len(edge_vert_idxes)
+    colors = [(1., 0., 0., 1.) for _ in range(N)]
+    sizes = [1. for _ in range(N)]
+    points1 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 0]] + parent_pos).tolist()]
+    points2 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 1]] + parent_pos).tolist()]
+    draw.draw_lines(points1, points2, colors, sizes)
+
 def process_object(cat, mdl):
+    if og.sim:
+        og.sim.clear()
+
     cfg = {
         "scene": {
             "type": "Scene",
@@ -737,7 +753,7 @@ def process_object(cat, mdl):
         og.sim.step()
 
     # Move the object down into the box slowly
-    lin_vel = 0.02
+    lin_vel = 0.05
     while True:
         delta_z = -lin_vel * og.sim.get_rendering_dt()
         cur_pos = fillable.get_position()
@@ -762,18 +778,30 @@ def process_object(cat, mdl):
             break
 
     # Gentle side-by-side shakeoff
-    directions = np.array([
-        [1, 0, 0],
-        [0, 1, 0],
-        [-1, 0, 0],
-        [0, -1, 0],
-    ])
-    for d in directions:
-        for _ in range(60):
-            delta_pos = lin_vel * og.sim.get_rendering_dt() * d
-            cur_pos = fillable.get_position()
-            new_pos = cur_pos + delta_pos
-            fillable.set_position(new_pos)
+    spill_fraction = 0.1
+    extents = aabb_extent[:2]
+    # formula for how much to rotate for total spill to be spill_fraction of the volume
+    angles = np.arctan(0.5 * spill_fraction * extents / aabb_extent[2])
+    angles = np.flip(angles)
+
+    print("Rotation amounts (degrees): ", np.rad2deg(angles))
+
+    rotations = np.array([np.eye(3)[i] * angle * side for i, angle in enumerate(angles) for side in [-1, 1]])
+    for r in rotations:
+        total_steps = 60
+        for _ in range(total_steps):
+            delta_orn = R.from_euler("xyz", r / total_steps)
+            cur_rot = R.from_quat(fillable.get_orientation())
+            new_rot = delta_orn * cur_rot
+            fillable.set_orientation(new_rot.as_quat())
+            og.sim.step()
+        for _ in range(30):
+            og.sim.step()
+        for _ in range(total_steps):
+            delta_orn = R.from_euler("xyz", -r / total_steps)
+            cur_rot = R.from_quat(fillable.get_orientation())
+            new_rot = delta_orn * cur_rot
+            fillable.set_orientation(new_rot.as_quat())
             og.sim.step()
 
     # Let the particles settle
@@ -783,33 +811,43 @@ def process_object(cat, mdl):
     # Get the particles whose center is within the object's AABB
     aabb_min, aabb_max = fillable.aabb
     particles = water.get_particles_position_orientation()[0]
-    particles = particles[np.all(particles <= aabb_max, axis=1)]
-    particles = particles[np.all(particles >= aabb_min, axis=1)]
-    assert len(particles) > 0, "No particles found in the AABB of the object."
+    particle_point_offsets = np.array([e * side * water.particle_radius for e in np.eye(3) for side in [-1, 1]] + [np.zeros(3)])
+    points = np.repeat(particles, len(particle_point_offsets), axis=0) + np.tile(particle_point_offsets, (len(particles), 1))
+    points = points[np.all(points <= aabb_max, axis=1)]
+    points = points[np.all(points >= aabb_min, axis=1)]
+    assert len(points) > 0, "No points found in the AABB of the object."
 
     # Get the particles in the frame of the object
-    particles -= fillable.get_position()
+    points -= fillable.get_position()
 
     # Get the convex hull of the particles
-    hull = trimesh.convex.convex_hull(particles)
+    hull = trimesh.convex.convex_hull(points)
 
-    from omnigibson.utils.deprecated_utils import CreateMeshPrimWithDefaultXformCommand
-    container_prim_path = fillable.root_link.prim_path + "/container"
-    CreateMeshPrimWithDefaultXformCommand(prim_path=container_prim_path, prim_type="Mesh", trimesh_mesh=hull).do()
-    mesh_prim = XFormPrim(name="container", prim_path=container_prim_path)
+    # Save it somewhere
+    hull.export(f"fillable/{mdl}.obj", file_type="obj", include_normals=False, include_color=False, include_texture=False
 
-    # Now wait for observation
-    while True:
-        og.sim.render()
+    # draw_mesh(hull, fillable.get_position())
 
-    og.sim.clear()
+    # from omnigibson.utils.deprecated_utils import CreateMeshPrimWithDefaultXformCommand
+    # container_prim_path = fillable.root_link.prim_path + "/container"
+    # CreateMeshPrimWithDefaultXformCommand(prim_path=container_prim_path, prim_type="Mesh", trimesh_mesh=hull).do()
+    # mesh_prim = XFormPrim(name="container", prim_path=container_prim_path)
 
 # Create an environment and fill it with balls
 def main():
-    for obj_name in OBJECTS:
+    errors = {}
+    for obj_name in tqdm.tqdm(OBJECTS):
         cat, mdl = obj_name.split("-")
         print(f"Processing {obj_name}")
-        process_object(cat, mdl)
+        try:
+            process_object(cat, mdl)
+        except Exception as e:
+            print(f"Failed to process {obj_name}: {e}")
+            errors[obj_name] = traceback.format_exc()
+
+    print("Finished")
+    with open("fillable_export.json", "w") as f:
+        json.dump({"success": len(errors) == 0, "errors": errors}, f, indent=4)
 
 
 if __name__ == "__main__":
