@@ -63,7 +63,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         self._floor_plane_visible = floor_plane_visible
         self._floor_plane_color = floor_plane_color
         self._floor_plane = None
-        self._use_skybox = use_skybox
+        self._use_skybox = False
         self._skybox = None
 
         # Call super init
