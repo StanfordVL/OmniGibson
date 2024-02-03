@@ -5,6 +5,8 @@ from collections.abc import Iterable
 
 TRANSITION_RULE_FOLDER = pathlib.Path(__file__).parents[1] / "generated_data" / "transition_map" / "tm_jsons"
 SYNSET_KEYS = ["machine", "container", "washed_item", "heat_source", "input_synsets", "output_synsets"]
+MACHINE_KEY = ["machine"]
+CONTAINER_KEY = ["container", "machine"]
 
 def sanity_check_object_hierarchy(object_taxonomy):
     leaf_synsets = object_taxonomy.get_leaf_descendants("entity.n.01")
@@ -34,10 +36,19 @@ def sanity_check_transition_rules(object_taxonomy):
                 for key in rule:
                     if key in SYNSET_KEYS:
                         val = rule[key]
-                        if not isinstance(val, Iterable):
-                            val = [val]
                         for s in val:
                             assert s in leaf_synsets, f"In transition rule file {json_file}, rule {rule}, {s} is not a leaf synset."
+
+                    if key in MACHINE_KEY:
+                        val = rule[key]
+                        for s in val:
+                            assert object_taxonomy.has_ability(s, "toggleable"), f"In transition rule file {json_file}, rule {rule}, {val} is not a toggleable machine."
+                            assert object_taxonomy.has_ability(s, "fillable"), f"In transition rule file {json_file}, rule {rule}, {val} is not a fillable machine."
+
+                    if key in CONTAINER_KEY:
+                        val = rule[key]
+                        for s in val:
+                            assert object_taxonomy.has_ability(s, "fillable"), f"In transition rule file {json_file}, rule {rule}, {val} is not a fillable container."
 
 def sanity_check():
     # Lazy import so that it can use the latest version of output_hierarchy_properties.json
