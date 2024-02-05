@@ -18,6 +18,7 @@ from omnigibson.utils.registry_utils import Registry
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.ui_utils import disclaimer, create_module_logger
 from omnigibson.utils.usd_utils import RigidContactAPI
+from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_function
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -411,6 +412,49 @@ class TouchingAnyCondition(RuleCondition):
         return {self._filter_1_name}
 
 
+class TouchingVolumeCheckCondition(TouchingAnyCondition):
+    def __init__(self, filter_1_name, filter_2_name):
+        '''
+        Checks if filter_2_bodies have a contact point within the collision volume generated from each obj in filter_1
+        '''
+        # super().__init__(filter_2_name, filter_1_name)
+        super().__init__(filter_1_name, filter_2_name)
+
+    def __call__(self, object_candidates):
+        # Keep any object that has non-zero impulses between itself and any of the @filter_2_name's objects
+        objs = []
+
+        # Manually check contact
+        filter_2_bodies = set.union(*(self._filter_2_bodies[obj] for obj in object_candidates[self._filter_2_name]))
+        for obj in object_candidates[self._filter_1_name]:
+            slicer_volume = None
+            for name, link in self.obj.links.items():
+                if 'slicer' in name:
+                    slicer_volume = link
+                    break
+            
+            if slicer_volume is None:
+                continue
+
+            check_in_volume, _ = generate_points_in_volume_checker_function(
+                obj=obj,
+                volume_link=slicer_volume  
+            )
+
+            # Check if the contact point is within the check_in_volume function
+            for contact in obj.contact_list():
+                # Get the collision point from contact bodies and check if it happens
+                # within the slicer volume
+                if contact.body1 in filter_2_bodies and check_in_volume(contact.position):
+                    objs.append(obj)
+
+        # Update candidates
+        object_candidates[self._filter_1_name] = objs
+
+        # If objs is empty, return False, otherwise, True
+        return len(objs) > 0
+
+
 class StateCondition(RuleCondition):
     """
     Rule condition that checks all objects from @filter_name whether a state condition is equal to @val for
@@ -723,7 +767,10 @@ class SlicingRule(BaseTransitionRule):
     @classmethod
     def _generate_conditions(cls):
         # sliceables should be touching any slicer
-        return [TouchingAnyCondition(filter_1_name="sliceable", filter_2_name="slicer"),
+        # return [TouchingAnyCondition(filter_1_name="sliceable", filter_2_name="slicer"),
+        #         StateCondition(filter_name="slicer", state=SlicerActive, val=True, op=operator.eq)]
+
+        return [TouchingVolumeCheckCondition(filter_1_name="slicer", filter_2_name="sliceable"),
                 StateCondition(filter_name="slicer", state=SlicerActive, val=True, op=operator.eq)]
 
     @classmethod
