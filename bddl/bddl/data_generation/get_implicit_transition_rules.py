@@ -200,7 +200,7 @@ def generate_substance_watercooking_rules(syns_to_param_props, props_to_syns):
             "rule_name": f"{watercookable_substance}-cooking",
             "input_synsets": {
                 watercookable_substance: 1,
-                "water.n.06": 1
+                "cooked__water.n.01": 1
             },
             "output_synsets": {
                 substance_cooking_derivative_synset: 1
