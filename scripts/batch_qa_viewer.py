@@ -43,16 +43,19 @@ FIXED_X_SPACING = 0.5
 
 
 class BatchQAViewer:
-    def __init__(self, record_path, your_id, pass_num, pipeline_root):
+    def __init__(self, record_path, your_id, pipeline_root):
         self.record_path = record_path
         self.your_id = your_id
-        self.pass_num = pass_num
         self.processed_objs = self.load_processed_objects()
         self.all_objs = self.get_all_objects()
         self.filtered_objs = self.filter_objects()
         self.remaining_objs = self.get_remaining_objects()
-        
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
+
+        self.current_ref_obj = None
+        self.current_ref_obj_category = None
+        self.current_ref_obj_pose = None
+        self.first_obj_flag = False
 
     def load_processed_objects(self):
         processed_objs = set()
@@ -102,6 +105,8 @@ class BatchQAViewer:
             all_objects.append(obj)
             og.sim.import_object(obj)
             obj.set_position_orientation(position=[x_coordinate, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 10])
+            og.sim.step()
+            og.sim.step()
             og.sim.step()
             offset = obj.get_position()[2] - obj.aabb_center[2]
             z_coordinate = obj.aabb_extent[2]/2 + offset + 0.05
@@ -204,13 +209,19 @@ class BatchQAViewer:
             new_rot = R.from_euler('z', angle) * current_rot
             obj.set_orientation(new_rot.as_quat())
 
+        og.sim.step()
+        og.sim.step()
+        og.sim.step()
+        
         all_objects = self.position_objects(category, batch, FIXED_X_SPACING)
 
-        if self.pass_num == 2:
-            KeyboardEventHandler.add_keyboard_callback(
-                key=lazy.carb.input.KeyboardInput.V,
-                callback_fn=set_skip,
-            )
+
+        """
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.V,
+            callback_fn=set_skip,
+        )
+        """
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.C,
             callback_fn=set_done,
@@ -242,25 +253,43 @@ class BatchQAViewer:
         print("Press 'J' to rotate object by 45 degrees counter-clockwise around z-axis.")
         print("Press 'K' to rotate object by 45 degrees clockwise around z-axis.")
         print("Press 'D' to toggle gravity for selected object.")
-        if self.pass_num == 1:
-            print("Press 'C' to continue to complaint process.")
-        elif self.pass_num == 2:
-            print("Press 'V' to skip current batch without saving.")
-            print("Press 'C' to continue to next batch and save current configurations.")
+        print("Press 'C' to continue to complaint process.")
         print("-"*80)
         
         multiprocess_queue = multiprocessing.Queue()
         inspected_object = all_objects[0]
+        
+        # When current ref obj is None, this is the first object in this category
+        if self.current_ref_obj is None:
+            self.current_ref_obj = inspected_object
+            self.current_ref_obj_category = category
+            self.first_obj_flag = True
+        # When current ref obj is not None, there are cases: 1) this curr obj is of the same category 2) not same
+        else:
+            if self.current_ref_obj_category != category:
+                og.sim.remove_object(self.current_ref_obj)
+                self.current_ref_obj = inspected_object
+                self.current_ref_obj_category = category
+                self.first_obj_flag = True
+            else:
+                self.first_obj_flag = False
 
-        if self.pass_num == 1:
-            # position reference objects to be next to the inspected object
-            phone_ref.set_position_orientation(position=[inspected_object.get_position()[0]+np.linalg.norm(inspected_object.aabb_extent[:2])/2+np.linalg.norm(phone_ref.aabb_extent[:2])/2+0.05, 
-                                                    inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2 + phone_ref.aabb_extent[1]/2 + 0.05, 
-                                                    inspected_object.get_position()[2]+0.05])
-            human_ref.set_position_orientation(position=[inspected_object.get_position()[0]-np.linalg.norm(inspected_object.aabb_extent[:2])/2-np.linalg.norm(human_ref.aabb_extent[:2])/2-0.05, 
-                                                    inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2 + human_ref.aabb_extent[1]/2 + 0.05, 
-                                                    0.05])
+        # position reference objects to be next to the inspected object
+        phone_ref.set_position_orientation(position=[inspected_object.get_position()[0]+np.linalg.norm(inspected_object.aabb_extent[:2])/2+np.linalg.norm(phone_ref.aabb_extent[:2])/2+0.05, 
+                                                inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2 + phone_ref.aabb_extent[1]/2 + 0.05, 
+                                                inspected_object.get_position()[2]+0.05])
+        human_ref.set_position_orientation(position=[inspected_object.get_position()[0]-np.linalg.norm(inspected_object.aabb_extent[:2])/2-np.linalg.norm(human_ref.aabb_extent[:2])/2-0.05, 
+                                                inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2 + human_ref.aabb_extent[1]/2 + 0.05, 
+                                                0.05])
+        
+        if not self.first_obj_flag and self.current_ref_obj_pose is not None:
+            # set current object pose
+            self.current_ref_obj.set_position_orientation(position=[phone_ref.get_position()[0]+np.linalg.norm(self.current_ref_obj.aabb_extent[:2])/2+np.linalg.norm(phone_ref.aabb_extent[:2])/2+0.05,
+                                                                    phone_ref.get_position()[1],
+                                                                    phone_ref.get_position()[2]+self.current_ref_obj.aabb_extent[2]/2.0], orientation=self.current_ref_obj_pose[0][1])
+            self.current_ref_obj.scale = self.current_ref_obj_pose[1]
             
+        
         step = 0               
         while not done:
             step += 1
@@ -290,16 +319,20 @@ class BatchQAViewer:
                 else:
                     print(message)
         
-        if self.pass_num == 1 and complaint_process.is_alive():
+        if complaint_process.is_alive():
             # Join the finished thread
             complaint_process.join()
             assert complaint_process.exitcode == 0, "Complaint process exited."
 
         self.save_object_config(all_objects, self.record_path, category, skip)
 
-        # remove all objects
-        for obj in all_objects:
-            og.sim.remove_object(obj)
+        if self.first_obj_flag:
+            self.current_ref_obj_pose = [inspected_object.get_position_orientation(), inspected_object.scale]
+            self.first_obj_flag = False
+        else:
+            # remove all objects
+            for obj in all_objects:
+                og.sim.remove_object(obj)
 
     def add_reference_objects(self):
         # Add a human into the scene
@@ -345,13 +378,8 @@ class BatchQAViewer:
         remaining_objs_by_cat = self.group_objects_by_category(self.remaining_objs)
         KeyboardEventHandler.initialize()
         
-        if self.pass_num == 1:
-            batch_size = 1
-            human_ref, phone_ref = self.add_reference_objects()
-        elif self.pass_num == 2:
-            batch_size = 10
-        else:
-            ValueError("Invalid pass number!")
+        batch_size = 1
+        human_ref, phone_ref = self.add_reference_objects()
 
         for cat, models in remaining_objs_by_cat.items():
             if cat in STRUCTURE_CATEGORIES:
@@ -598,12 +626,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process some integers.")
     parser.add_argument('--record_path', type=str, required=True, help='The path to save recorded orientations and scales.')
     parser.add_argument('--id', type=int, required=True, help=f'Your assigned id (0-{TOTAL_IDS-1}).')
-    """
-    Pass 1: fix scale and general orientation
-    Pass 2: fix canonical orientation within category
-    """
-    parser.add_argument('--pass_num', type=int, required=False, default=1, help='The pass number (1 or 2).')
     args = parser.parse_args()
 
-    viewer = BatchQAViewer(args.record_path, args.id, args.pass_num, pipeline_root="/scr/ig_pipeline")
+    viewer = BatchQAViewer(args.record_path, args.id, pipeline_root="/scr/ig_pipeline")
     viewer.run()
