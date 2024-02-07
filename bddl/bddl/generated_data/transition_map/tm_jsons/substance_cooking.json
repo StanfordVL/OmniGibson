@@ -3285,6 +3285,15 @@
         }
     },
     {
+        "rule_name": "popcorn.n.02-cooking",
+        "input_synsets": {
+            "popcorn.n.02": 1
+        },
+        "output_synsets": {
+            "cooked__popcorn.n.01": 1
+        }
+    },
+    {
         "rule_name": "poultry_seasoning.n.01-cooking",
         "input_synsets": {
             "poultry_seasoning.n.01": 1

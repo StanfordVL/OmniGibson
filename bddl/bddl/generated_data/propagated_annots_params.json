@@ -87231,6 +87231,10 @@
         "wrinkleable": {}
     },
     "popcorn.n.02": {
+        "cookable": {
+            "cook_temperature": 93.0,
+            "substance_cooking_derivative_synset": "cooked__popcorn.n.01"
+        },
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
