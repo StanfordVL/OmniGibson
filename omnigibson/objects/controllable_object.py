@@ -9,6 +9,7 @@ from omnigibson.controllers.controller_base import ControlType
 from omnigibson.utils.python_utils import assert_valid_key, merge_nested_dicts, CachedFunctions
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.ui_utils import create_module_logger
+from functools import cached_property
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -667,7 +668,7 @@ class ControllableObject(BaseObject):
 
         return dic
 
-    @property
+    @cached_property
     def control_limits(self):
         """
         Returns:

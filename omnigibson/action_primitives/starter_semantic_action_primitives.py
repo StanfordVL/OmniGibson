@@ -5,7 +5,7 @@ It currently only works with Fetch and Tiago with their JointControllers set to 
 See provided tiago_primitives.yaml config file for an example. See examples/action_primitives for
 runnable examples.
 """
-from functools import cached_property
+# from functools import cached_property
 import inspect
 import logging
 import random
@@ -14,7 +14,7 @@ from math import ceil
 import cv2
 from matplotlib import pyplot as plt
 
-import gym
+import gymnasium as gym
 import numpy as np
 from scipy.spatial.transform import Rotation, Slerp
 
@@ -51,7 +51,7 @@ from omnigibson.objects.usd_object import USDObject
 
 m = create_module_macros(module_path=__file__)
 
-m.DEFAULT_BODY_OFFSET_FROM_FLOOR = 0.05
+m.DEFAULT_BODY_OFFSET_FROM_FLOOR = 0.01
 
 m.KP_LIN_VEL = 0.3
 m.KP_ANGLE_VEL = 0.2
@@ -253,12 +253,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             "StarterSemanticActionPrimitives only works with a JointController or DifferentialDriveController at the robot base."
         self._base_controller_is_joint = isinstance(self.robot.controllers["base"], JointController)
         if self._base_controller_is_joint:
-            assert self.robot.controllers["base"].control_type == ControlType.VELOCITY, \
-                "StarterSemanticActionPrimitives only works with a base JointController with velocity mode."
+            # assert self.robot.controllers["base"].control_type == ControlType.VELOCITY, \
+            #     "StarterSemanticActionPrimitives only works with a base JointController with velocity mode."
             assert not self.robot.controllers["base"].use_delta_commands, \
                 "StarterSemanticActionPrimitives only works with a base JointController with absolute mode."
-            assert self.robot.controllers["base"].command_dim == 3, \
-                "StarterSemanticActionPrimitives only works with a base JointController with 3 dof (x, y, theta)."
+            # assert self.robot.controllers["base"].command_dim == 3, \
+            #     "StarterSemanticActionPrimitives only works with a base JointController with 3 dof (x, y, theta)."
 
         self.arm = self.robot.default_arm
         self.robot_model = self.robot.model_name
@@ -826,7 +826,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         """
         return self._ik_solver_cartesian_to_joint_space(relative_target_pose) is not None
 
-    @cached_property
+    @property
     def _manipulation_control_idx(self):
         """The appropriate manipulation control idx for the current settings."""           
         if isinstance(self.robot, Tiago):
@@ -836,10 +836,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             else:
                 return np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
             
+        if isinstance(self.robot, Fetch):
+            return np.concatenate([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
+        
         # Otherwise just return the default arm control idx
         return self.robot.arm_control_idx[self.arm]
     
-    @cached_property
+    @property
     def _manipulation_descriptor_path(self):
         """The appropriate manipulation descriptor for the current settings."""           
         if isinstance(self.robot, Tiago) and m.TIAGO_TORSO_FIXED:
