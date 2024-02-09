@@ -78,14 +78,14 @@ def get_synsets_to_particle_remover_params():
 
         default_fluid_conditions = parse_conditions_entry(record["other liquids"])
         default_visual_conditions = parse_conditions_entry(record["other visualSubstances"])
-        default_physical_conditions = parse_conditions_entry(record["other physicalSubstances"])
+        default_non_fluid_conditions = parse_conditions_entry(record["other physicalSubstances"])
         if record["method"] not in {"projection", "adjacency"}:
             raise ValueError(f"Synset {record['synset']} prop particleRemover has invalid method {record['method']}")
         
         remover_kwargs = {
             "conditions": {},
             "default_visual_conditions": default_visual_conditions,
-            "default_physical_conditions": default_physical_conditions,
+            "default_non_fluid_conditions": default_non_fluid_conditions,
             "default_fluid_conditions": default_fluid_conditions,
             "method": record["method"],
         }
@@ -158,7 +158,7 @@ def create_get_save_propagated_annots_params(syns_to_props):
                                 formatted_param_value = {}
                             elif param_name == "default_fluid_conditions":
                                 formatted_param_value = []
-                            elif param_name == "default_physical_conditions": 
+                            elif param_name == "default_non_fluid_conditions":
                                 formatted_param_value = []
                             elif param_name == "default_visual_conditions":
                                 formatted_param_value = None
