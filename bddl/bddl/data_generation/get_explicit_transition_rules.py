@@ -14,6 +14,16 @@ JSONS_DIR = pathlib.Path(__file__).parents[1] / "generated_data" / "transition_m
 OBJECT_CAT_AND_INST_RE = r"[A-Za-z-_]+\.n\.[0-9]+"
 
 
+def parse_conditions_entry(unparsed_conditions):
+    # print(f"Parsing: {unparsed_conditions}")
+    if unparsed_conditions.isnumeric():
+        always_true = bool(int(unparsed_conditions))
+        conditions = [] if always_true else None
+    else:
+        conditions = unparsed_conditions.lower().split(" or ")
+    return conditions
+
+
 def sheet_to_json(submap):
     params = TM_SUBMAPS_TO_PARAMS[submap]
     raw_data = pd.read_csv(os.path.join(SHEETS_DIR, submap + ".csv"))[params].to_json(orient="records")
@@ -68,10 +78,31 @@ def sheet_to_json(submap):
         json.dump(reformatted_data, f, indent=4)
 
 
+def sheet_to_json_washer():
+    records = []
+    with open(os.path.join(SHEETS_DIR, "washer.csv")) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            records.append(row)
+    assert len(records) == 1
+    record = records[0]
+
+    remover_kwargs = dict()
+
+    # Iterate through all the columns headed by a substance, in no particular order since their ultimate location is a dict
+    for dirtiness_substance_synset in [key for key in record if re.match(OBJECT_CAT_AND_INST_RE, key) is not None]:
+        conditions = parse_conditions_entry(record[dirtiness_substance_synset])
+        remover_kwargs[dirtiness_substance_synset] = conditions
+
+    with open(os.path.join(JSONS_DIR, "washer.json"), "w") as f:
+        json.dump(remover_kwargs, f, indent=4)
+
 def create_save_explicit_transition_rules():
     print("Creating explicit transition rule jsons...")
     for submap in TM_SUBMAPS_TO_PARAMS:
         sheet_to_json(submap)
+
+    sheet_to_json_washer()
     print("Created and saved explicit transition rule jsons.")
 
 

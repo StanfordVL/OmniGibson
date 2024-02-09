@@ -22,9 +22,11 @@ def sanity_check_object_hierarchy(object_taxonomy):
                 ability_params = abilities[ability]
                 for substance_synset in ability_params["conditions"]:
                     assert substance_synset in leaf_substance_synsets, f"In ParticleModifier annotation, {substance_synset} is not a leaf substance synset."
-                    for condition in ability_params["conditions"][substance_synset]:
-                        if condition[0] == "saturated":
-                            assert condition[1] in leaf_substance_synsets, f"In ParticleModifier annotation, {condition[1]} is not a leaf substance synset."
+                    conditions = ability_params["conditions"][substance_synset]
+                    if conditions is not None:
+                        for condition in conditions:
+                            if condition[0] == "saturated":
+                                assert condition[1] in leaf_substance_synsets, f"In ParticleModifier annotation, {condition[1]} is not a leaf substance synset."
 
 def sanity_check_transition_rules(object_taxonomy):
     leaf_synsets = object_taxonomy.get_leaf_descendants("entity.n.01")
@@ -50,12 +52,23 @@ def sanity_check_transition_rules(object_taxonomy):
                         for s in val:
                             assert object_taxonomy.has_ability(s, "fillable"), f"In transition rule file {json_file}, rule {rule}, {val} is not a fillable container."
 
+def sanity_check_transition_rules_washer(object_taxonomy):
+    leaf_synsets = object_taxonomy.get_leaf_descendants("entity.n.01")
+    with open(TRANSITION_RULE_FOLDER / "washer.json", "r") as f:
+        transition_rule = json.load(f)
+    for system_synset, conditions in transition_rule.items():
+        assert system_synset in leaf_synsets, f"In washer transition rule, {system_synset} is not a leaf synset."
+        if conditions is not None:
+            for cleanser_synset in conditions:
+                assert cleanser_synset in leaf_synsets, f"In washer transition rule, {cleanser_synset} is not a leaf synset."
+
 def sanity_check():
     # Lazy import so that it can use the latest version of output_hierarchy_properties.json
     from bddl.object_taxonomy import ObjectTaxonomy
     object_taxonomy = ObjectTaxonomy()
     sanity_check_object_hierarchy(object_taxonomy)
     sanity_check_transition_rules(object_taxonomy)
+    sanity_check_transition_rules_washer(object_taxonomy)
 
 if __name__ == '__main__':
     sanity_check()

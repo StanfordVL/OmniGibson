@@ -75,25 +75,26 @@ def get_synsets_to_particle_remover_params():
 
         # Skip washer and dryer
         if "not particleremover" in record["synset"].lower(): continue
-        
+
+        default_fluid_conditions = parse_conditions_entry(record["other liquids"])
         default_visual_conditions = parse_conditions_entry(record["other visualSubstances"])
-        default_physical_conditions = parse_conditions_entry(record["other physicalSubstances"])
+        default_non_fluid_conditions = parse_conditions_entry(record["other physicalSubstances"])
         if record["method"] not in {"projection", "adjacency"}:
             raise ValueError(f"Synset {record['synset']} prop particleRemover has invalid method {record['method']}")
         
         remover_kwargs = {
             "conditions": {},
             "default_visual_conditions": default_visual_conditions,
-            "default_physical_conditions": default_physical_conditions,
+            "default_non_fluid_conditions": default_non_fluid_conditions,
+            "default_fluid_conditions": default_fluid_conditions,
             "method": record["method"],
         }
 
         # Iterate through all the columns headed by a substance, in no particular order since their ultimate location is a dict
         for dirtiness_substance_synset in [key for key in record if re.match(OBJECT_CAT_AND_INST_RE, key) is not None]:
             conditions = parse_conditions_entry(record[dirtiness_substance_synset])
-            if conditions is not None: 
-                remover_kwargs["conditions"][dirtiness_substance_synset] = conditions
-        
+            remover_kwargs["conditions"][dirtiness_substance_synset] = conditions
+
         synset_cleaning_mapping[synset] = remover_kwargs
     
     return synset_cleaning_mapping
@@ -155,7 +156,9 @@ def create_get_save_propagated_annots_params(syns_to_props):
                         elif prop == "particleSink":
                             if param_name == "conditions": 
                                 formatted_param_value = {}
-                            elif param_name == "default_physical_conditions": 
+                            elif param_name == "default_fluid_conditions":
+                                formatted_param_value = []
+                            elif param_name == "default_non_fluid_conditions":
                                 formatted_param_value = []
                             elif param_name == "default_visual_conditions":
                                 formatted_param_value = None
