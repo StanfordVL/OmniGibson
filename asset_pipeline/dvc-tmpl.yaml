@@ -393,6 +393,19 @@ stages:
     outs:
     - artifacts/pipeline/generate_systems.success
 
+  generate_fillable_volumes:
+    cmd: 'python -m b1k_pipeline.usd_conversion.generate_fillable_volumes'
+    deps:
+    - artifacts/parallels/objects_usd.zip
+    - artifacts/parallels/metadata.zip
+    - artifacts/parallels/systems.zip
+    - artifacts/pipeline/aggregate_metadata.success
+    - b1k_pipeline/usd_conversion/generate_fillable_volumes.py
+    - b1k_pipeline/usd_conversion/generate_fillable_volumes_process.py
+    outs:
+    - artifacts/parallels/fillable_volumes.zip
+    - artifacts/pipeline/generate_fillable_volumes.json
+
   collision_average_volumes:
     cmd: 'python -m b1k_pipeline.collision_average_volumes'
     deps:

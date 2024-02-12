@@ -1628,6 +1628,17 @@ stages:
       - cad/${item}/artifacts/scene.urdf
       - cad/${item}/artifacts/export_scene.success
     foreach: ${final_scenes}
+  generate_fillable_volumes:
+    cmd: python -m b1k_pipeline.usd_conversion.generate_fillable_volumes
+    deps:
+    - artifacts/parallels/objects_usd.zip
+    - artifacts/parallels/metadata.zip
+    - artifacts/pipeline/aggregate_metadata.success
+    - b1k_pipeline/usd_conversion/generate_fillable_volumes.py
+    - b1k_pipeline/usd_conversion/generate_fillable_volumes_process.py
+    outs:
+    - artifacts/parallels/fillable_volumes.zip
+    - artifacts/pipeline/generate_fillable_volumes.json
   generate_object_images:
     cmd: python -m b1k_pipeline.generate_object_images_slurm
     deps:
