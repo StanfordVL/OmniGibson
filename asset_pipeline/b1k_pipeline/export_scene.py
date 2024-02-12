@@ -117,7 +117,7 @@ def main(target):
             }
             joint_origin = ET.SubElement(joint, "origin")
             joint_origin_xyz = corrected_bbox_center.tolist()
-            joint_origin_rpy = [0, 0, corrected_bbox_rot.as_rotvec()[2]]
+            joint_origin_rpy = corrected_bbox_rot.as_euler("xyz").tolist()
             joint_origin.attrib = {
                 "xyz": " ".join([str(item) for item in joint_origin_xyz]),
                 "rpy": " ".join([str(item) for item in joint_origin_rpy]),
