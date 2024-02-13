@@ -171,8 +171,15 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         Load the scene into simulator
         The elements to load may include: floor, building, objects, etc.
         """
-        # Add collision group for fixed objects
-        CollisionAPI.create_collision_group(col_group="fixed_base", filter_self_collisions=True)
+        # Add collision group for fixed objects, fixed object root links, and structures
+        CollisionAPI.create_collision_group(col_group="fixed_base_nonroot_links", filter_self_collisions=False)
+        CollisionAPI.create_collision_group(col_group="fixed_base_root_links", filter_self_collisions=True)
+        CollisionAPI.create_collision_group(col_group="structures", filter_self_collisions=True)
+
+        # Additionally filter between fixed_base_objects and structures
+        CollisionAPI.add_group_filter(col_group="structures", filter_group="fixed_base_nonroot_links")
+        CollisionAPI.add_group_filter(col_group="structures", filter_group="fixed_base_root_links")
+
         # We just add a ground plane if requested
         if self._use_floor_plane:
             self.add_ground_plane(color=self._floor_plane_color, visible=self._floor_plane_visible)
@@ -426,6 +433,22 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         # If the scene is already loaded, we need to load this object separately. Otherwise, don't do anything now,
         # let scene._load() load the object when called later on.
         prim = obj.load()
+
+        # If this object is fixed and is NOT an agent, disable collisions between the fixed links of the fixed objects
+        # This is to account for cases such as Tiago, which has a fixed base which is needed for its global base joints
+
+        # We do this by adding the object to our tracked collision groups
+        structure_categories = {"walls", "floors", "ceilings"}
+        if obj.fixed_base and obj.category != robot_macros.ROBOT_CATEGORY:
+            # TODO: Remove structure hotfix once asset collision meshes are fixed!!
+            if obj.category in structure_categories:
+                CollisionAPI.add_to_collision_group(col_group="structures", prim_path=obj.prim_path)
+            else:
+                for link in obj.links.values():
+                    CollisionAPI.add_to_collision_group(
+                        col_group="fixed_base_root_links" if link == obj.root_link else "fixed_base_nonroot_links",
+                        prim_path=link.prim_path,
+                    )
 
         # Add this object to our registry based on its type, if we want to register it
         if register:
