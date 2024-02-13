@@ -13497,3 +13497,28 @@ stages:
     - path: artifacts/pipeline/generate_systems.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
+  generate_fillable_volumes:
+    cmd: python -m b1k_pipeline.usd_conversion.generate_fillable_volumes
+    deps:
+    - path: artifacts/parallels/metadata.zip
+      md5: eb533497f1fe194c3108b7f7b9fb7a3f
+      size: 67698
+    - path: artifacts/parallels/objects_usd.zip
+      md5: 176cb431d4b9df6662b8187ce9ba2eef
+      size: 21982604658
+    - path: artifacts/pipeline/aggregate_metadata.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: b1k_pipeline/usd_conversion/generate_fillable_volumes.py
+      md5: d1cad6a158b4ecb6e6a30c5d80db2808
+      size: 15241
+    - path: b1k_pipeline/usd_conversion/generate_fillable_volumes_process.py
+      md5: 55f3123da24ac90be485ba0d83b3f60c
+      size: 9019
+    outs:
+    - path: artifacts/parallels/fillable_volumes.zip
+      md5: 76cdb2bad9582d23c1f6f4d868218d6c
+      size: 22
+    - path: artifacts/pipeline/generate_fillable_volumes.json
+      md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
+      size: 51

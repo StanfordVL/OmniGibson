@@ -13,6 +13,7 @@ gm.HEADLESS = True
 gm.ENABLE_FLATCACHE = False
 gm.USE_GPU_DYNAMICS = False
 gm.USE_ENCRYPTED_ASSETS = True
+gm.FORCE_LIGHT_INTENSITY = None
 
 import omnigibson as og
 from omnigibson.simulator import launch_simulator

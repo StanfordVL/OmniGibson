@@ -12,8 +12,6 @@ from b1k_pipeline.mesh_tree import build_mesh_tree
 from b1k_pipeline.export_objs_global import compute_object_bounding_box
 import b1k_pipeline.utils
 
-SKIP_CATEGORIES = {}
-SKIP_MODELS = {"pluwfl"}
 NEVER_CLUTTER_CATEGORIES = {"shopping_cart"}
 
 def main(target):
@@ -73,11 +71,6 @@ def main(target):
 
         for root_node in roots:
             obj_cat, obj_model, obj_inst_id, _ = root_node
-            if obj_cat in SKIP_CATEGORIES:
-                continue
-
-            if obj_model in SKIP_MODELS:
-                continue
 
             # For now, skip loose objects
             if G.nodes[root_node]["is_loose"] == "C-" and obj_cat not in NEVER_CLUTTER_CATEGORIES:
@@ -117,7 +110,7 @@ def main(target):
             }
             joint_origin = ET.SubElement(joint, "origin")
             joint_origin_xyz = corrected_bbox_center.tolist()
-            joint_origin_rpy = [0, 0, corrected_bbox_rot.as_rotvec()[2]]
+            joint_origin_rpy = corrected_bbox_rot.as_euler("xyz").tolist()
             joint_origin.attrib = {
                 "xyz": " ".join([str(item) for item in joint_origin_xyz]),
                 "rpy": " ".join([str(item) for item in joint_origin_rpy]),

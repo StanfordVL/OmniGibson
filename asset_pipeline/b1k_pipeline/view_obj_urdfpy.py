@@ -42,7 +42,7 @@ def get_cube(limits=None):
 def main(model_dir):
     # Load the URDF file into urdfpy
     model_id = os.path.basename(model_dir)
-    urdf_filename = "{model_id}.urdf"
+    urdf_filename = f"{model_id}.urdf"
     urdf_path = os.path.join(model_dir, urdf_filename)
     robot = URDF.load(urdf_path)
 
