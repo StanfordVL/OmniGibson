@@ -9,9 +9,9 @@ import fs.path
 from fs.tempfs import TempFS
 import tqdm
 
-from b1k_pipeline.utils import ParallelZipFS, TMP_DIR
+from b1k_pipeline.utils import ParallelZipFS, TMP_DIR, launch_cluster
 
-WORKER_COUNT = 1
+WORKER_COUNT = 2
 
 
 def run_on_batch(dataset_path, path):
@@ -34,8 +34,7 @@ def main():
         fs.copy.copy_fs(objects_fs, dataset_fs)
 
         print("Launching cluster...")
-        dask_client = Client(n_workers=0, host="", scheduler_port=8786)
-        # subprocess.run(f'cd /scr/ig_pipeline/b1k_pipeline/docker; ./run_worker_local.sh {WORKER_COUNT} cgokmen-lambda.stanford.edu:8786', shell=True, check=True)
+        dask_client = launch_cluster(WORKER_COUNT)
         print("Waiting for workers")
         dask_client.wait_for_workers(WORKER_COUNT)
 
