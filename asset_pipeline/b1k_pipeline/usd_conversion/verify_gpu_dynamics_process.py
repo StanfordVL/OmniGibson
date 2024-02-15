@@ -11,15 +11,20 @@ def process_object(cat, mdl):
     cfg = {
         "scene": {
             "type": "Scene",
-        }
+        },
+        "objects": [
+            {
+                "type": "DatasetObject",
+                "name": "obj",
+                "category": cat,
+                "model": mdl,
+                "kinematic_only": False,
+                "fixed_base": True,
+            },
+        ]
     }
 
     env = og.Environment(configs=cfg)
-
-    # First import the fillable
-    fillable = DatasetObject("object", category=cat, model=mdl, kinematic_only=False, fixed_base=True, abilities={})
-    og.sim.import_object(fillable)
-    og.sim.step()
 
     for _ in range(100):
         og.sim.step()
