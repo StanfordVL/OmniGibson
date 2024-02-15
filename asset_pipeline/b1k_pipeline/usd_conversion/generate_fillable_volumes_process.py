@@ -10,6 +10,7 @@ from scipy.spatial.transform import Rotation as R
 import omnigibson.lazy as lazy
 import trimesh
 import tqdm
+from omnigibson.systems import import_og_systems
 
 gm.HEADLESS = True
 gm.USE_ENCRYPTED_ASSETS = True
@@ -97,15 +98,23 @@ def process_object(cat, mdl, out_path):
     cfg = {
         "scene": {
             "type": "Scene",
-        }
+        },
+        "objects": [
+            {
+                "type": "DatasetObject",
+                "name": "fillable",
+                "category": cat,
+                "model": mdl,
+                "kinematic_only": False,
+                "fixed_base": True,
+            },
+        ]
     }
 
     env = og.Environment(configs=cfg)
-
-    # First import the fillable
-    fillable = DatasetObject("fillable", category=cat, model=mdl, kinematic_only=False, fixed_base=True, abilities={})
-    og.sim.import_object(fillable)
     og.sim.step()
+
+    fillable = env.scene.object_registry("name", "fillable")
 
     # Fix all joints to upper position
     for joint in fillable.joints.values():
@@ -222,6 +231,10 @@ def main():
 
     dataset_root = str(pathlib.Path(sys.argv[1]))
     gm.DATASET_PATH = str(dataset_root)
+
+    # This is a hacky fix for systems not being loaded because of the dataset
+    # path being changed later.
+    import_og_systems()
 
     batch = sys.argv[2:]
     for path in batch:
