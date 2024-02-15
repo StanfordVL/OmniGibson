@@ -12,9 +12,9 @@
     )
     
     (:init 
-        (ontop silver.n.02_1 hand_towel.n.01_1) 
-        (ontop silver.n.02_1 hand_towel.n.01_1) 
-        (ontop silver.n.02_3 hand_towel.n.01_1) 
+        (ontop silver.n.02_1 breakfast_table.n.01_1)
+        (ontop silver.n.02_1 breakfast_table.n.01_1)
+        (ontop silver.n.02_3 breakfast_table.n.01_1)
         (ontop hand_towel.n.01_1 breakfast_table.n.01_1) 
         (ontop cup.n.01_1 breakfast_table.n.01_1) 
         (inroom cabinet.n.01_1 private_office) 

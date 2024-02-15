@@ -4,7 +4,6 @@
     (:objects
      	firewood.n.01_1 firewood.n.01_2 firewood.n.01_3 - firewood.n.01
     	lawn.n.01_1 - lawn.n.01
-    	plastic_bag.n.01_1 - plastic_bag.n.01
     	disinfectant.n.01_1 - disinfectant.n.01
     	coffee_table.n.01_1 - coffee_table.n.01
     	fireplace.n.01_1 - fireplace.n.01
@@ -13,11 +12,10 @@
     )
     
     (:init 
-        (ontop firewood.n.01_1 plastic_bag.n.01_1) 
-        (ontop firewood.n.01_2 plastic_bag.n.01_1) 
-        (ontop firewood.n.01_3 plastic_bag.n.01_1) 
-        (ontop plastic_bag.n.01_1 lawn.n.01_1) 
-        (covered coffee_table.n.01_1 disinfectant.n.01_1) 
+        (ontop firewood.n.01_1 lawn.n.01_1)
+        (ontop firewood.n.01_2 lawn.n.01_1)
+        (ontop firewood.n.01_3 lawn.n.01_1)
+        (covered coffee_table.n.01_1 disinfectant.n.01_1)
         (inroom lawn.n.01_1 garden) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom floor.n.01_1 garden) 

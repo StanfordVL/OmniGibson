@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-     	plastic_bag.n.01_1 plastic_bag.n.01_2 - plastic_bag.n.01
+     	sack.n.01_1 sack.n.01_2 - sack.n.01
     	checkout.n.03_1 - checkout.n.03
     	canned_food.n.01_1 - canned_food.n.01
     	egg.n.02_1 - egg.n.02
@@ -13,8 +13,8 @@
     )
     
     (:init 
-        (ontop plastic_bag.n.01_1 checkout.n.03_1) 
-        (ontop plastic_bag.n.01_2 checkout.n.03_1) 
+        (ontop sack.n.01_1 checkout.n.03_1)
+        (ontop sack.n.01_2 checkout.n.03_1)
         (ontop canned_food.n.01_1 checkout.n.03_1) 
         (ontop egg.n.02_1 checkout.n.03_1) 
         (ontop apple.n.01_1 checkout.n.03_1) 
@@ -27,20 +27,20 @@
     (:goal 
         (and 
             (exists 
-                (?plastic_bag.n.01 - plastic_bag.n.01)
-                (inside ?canned_food.n.01_1 ?plastic_bag.n.01)
+                (?sack.n.01 - sack.n.01)
+                (inside ?canned_food.n.01_1 ?sack.n.01)
             )
             (exists 
-                (?plastic_bag.n.01 - plastic_bag.n.01)
-                (inside ?egg.n.02_1 ?plastic_bag.n.01)
+                (?sack.n.01 - sack.n.01)
+                (inside ?egg.n.02_1 ?sack.n.01)
             )
             (exists 
-                (?plastic_bag.n.01 - plastic_bag.n.01)
-                (inside ?bottle__of__orange_juice.n.01_1 ?plastic_bag.n.01)
+                (?sack.n.01 - sack.n.01)
+                (inside ?bottle__of__orange_juice.n.01_1 ?sack.n.01)
             )
             (exists 
-                (?plastic_bag.n.01 - plastic_bag.n.01)
-                (inside ?apple.n.01_1 ?plastic_bag.n.01)
+                (?sack.n.01 - sack.n.01)
+                (inside ?apple.n.01_1 ?sack.n.01)
             )
         )
     )

@@ -43,15 +43,13 @@
                 (?hamburger.n.01 - hamburger.n.01) 
                 (ontop ?hamburger.n.01 ?plate.n.04_1)
             ) 
-            (forpairs 
+            (forall
                 (?plate.n.04 - plate.n.04) 
-                (?place_mat.n.01 - place_mat.n.01) 
-                (ontop ?plate.n.04 ?place_mat.n.01_1)
+                (ontop ?plate.n.04 ?breakfast_table.n.01_1)
             ) 
-            (forpairs 
+            (forall
                 (?tablefork.n.01 - tablefork.n.01) 
-                (?place_mat.n.01 - place_mat.n.01) 
-                (ontop ?tablefork.n.01 ?place_mat.n.01_1)
+                (ontop ?tablefork.n.01 ?breakfast_table.n.01_1)
             ) 
         )
     )

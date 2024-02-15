@@ -18,12 +18,12 @@
     )
     
     (:init 
-        (ontop vacuum.n.04_1 rug.n.01_1) 
+        (ontop vacuum.n.04_1 floor.n.01_1)
         (covered rug.n.01_1 lint.n.01_1)
         (covered rug.n.01_1 dust.n.01_1)
         (covered window.n.01_1 dust.n.01_1)
-        (ontop pillow.n.01_1 rug.n.01_1) 
-        (ontop pillow.n.01_2 rug.n.01_1) 
+        (ontop pillow.n.01_1 floor.n.01_1)
+        (ontop pillow.n.01_2 floor.n.01_1)
         (ontop rug.n.01_1 floor.n.01_1)
         (ontop mug.n.04_1 coffee_table.n.01_1)
         (ontop mug.n.04_2 coffee_table.n.01_1)

@@ -5,7 +5,7 @@
         car.n.01_1 - car.n.01
         driveway.n.01_1 - driveway.n.01
         pineapple.n.02_1 pineapple.n.02_2 pineapple.n.02_3 - pineapple.n.02
-        plastic_bag.n.01_1 plastic_bag.n.01_2 - plastic_bag.n.01
+        sack.n.01_1 sack.n.01_2 - sack.n.01
         chicken.n.01_1 - chicken.n.01
         wine_bottle.n.01_1 wine_bottle.n.01_2 - wine_bottle.n.01
         egg.n.02_1 - egg.n.02
@@ -16,17 +16,17 @@
     
     (:init 
         (ontop car.n.01_1 driveway.n.01_1) 
-        (inside pineapple.n.02_1 plastic_bag.n.01_1) 
-        (inside pineapple.n.02_2 plastic_bag.n.01_1) 
-        (inside pineapple.n.02_3 plastic_bag.n.01_1) 
-        (inside egg.n.02_1 plastic_bag.n.01_2) 
-        (inside bag__of__jerky.n.01_1 plastic_bag.n.01_2)
-        (inside chicken.n.01_1 plastic_bag.n.01_2)
+        (inside pineapple.n.02_1 sack.n.01_1) 
+        (inside pineapple.n.02_2 sack.n.01_1) 
+        (inside pineapple.n.02_3 sack.n.01_1) 
+        (inside egg.n.02_1 sack.n.01_2) 
+        (inside bag__of__jerky.n.01_1 sack.n.01_2)
+        (inside chicken.n.01_1 sack.n.01_2)
         (frozen chicken.n.01_1)
         (ontop wine_bottle.n.01_1 driveway.n.01_1)
         (ontop wine_bottle.n.01_2 driveway.n.01_1)
-        (ontop plastic_bag.n.01_1 driveway.n.01_1) 
-        (ontop plastic_bag.n.01_2 driveway.n.01_1) 
+        (ontop sack.n.01_1 driveway.n.01_1) 
+        (ontop sack.n.01_2 driveway.n.01_1) 
         (inroom driveway.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -39,8 +39,8 @@
                 (inside ?wine_bottle.n.01 ?car.n.01_1)
             )
             (forall 
-                (?plastic_bag.n.01 - plastic_bag.n.01)
-                (inside ?plastic_bag.n.01 ?car.n.01_1)
+                (?sack.n.01 - sack.n.01)
+                (inside ?sack.n.01 ?car.n.01_1)
             )
         )
     )

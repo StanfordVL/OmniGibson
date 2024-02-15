@@ -4,7 +4,7 @@
     (:objects
         cash_register.n.01_1 - cash_register.n.01
         checkout.n.03_1 - checkout.n.03
-        plastic_bag.n.01_1 plastic_bag.n.01_2 - plastic_bag.n.01
+        sack.n.01_1 sack.n.01_2 - sack.n.01
         prawn.n.01_1 - prawn.n.01
         shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 shelf.n.01_4 - shelf.n.01
         bottle__of__apple_juice.n.01_1 - bottle__of__apple_juice.n.01
@@ -20,8 +20,8 @@
     
     (:init 
         (ontop cash_register.n.01_1 checkout.n.03_1)
-        (ontop plastic_bag.n.01_1 checkout.n.03_1) 
-        (ontop plastic_bag.n.01_2 checkout.n.03_1) 
+        (ontop sack.n.01_1 checkout.n.03_1)
+        (ontop sack.n.01_2 checkout.n.03_1)
         (inside prawn.n.01_1 shelf.n.01_4)
         (inside bottle__of__apple_juice.n.01_1 shelf.n.01_1) 
         (inside carton__of__milk.n.01_1 shelf.n.01_1) 
@@ -46,19 +46,19 @@
     (:goal 
         (and 
             (exists 
-                (?plastic_bag.n.01 - plastic_bag.n.01) 
+                (?sack.n.01 - sack.n.01)
                 (and 
-                    (inside ?carton__of__milk.n.01_1 ?plastic_bag.n.01) 
-                    (inside ?bottle__of__apple_juice.n.01_1 ?plastic_bag.n.01) 
-                    (inside ?prawn.n.01_1 ?plastic_bag.n.01)
+                    (inside ?carton__of__milk.n.01_1 ?sack.n.01)
+                    (inside ?bottle__of__apple_juice.n.01_1 ?sack.n.01)
+                    (inside ?prawn.n.01_1 ?sack.n.01)
                 )
             ) 
             (exists 
-                (?plastic_bag.n.01 - plastic_bag.n.01) 
+                (?sack.n.01 - sack.n.01)
                 (and 
-                    (inside ?bottle__of__peanut_butter.n.01_1 ?plastic_bag.n.01) 
-                    (inside ?bag__of__brown_rice.n.01_1 ?plastic_bag.n.01) 
-                    (inside ?banana.n.02_1 ?plastic_bag.n.01)
+                    (inside ?bottle__of__peanut_butter.n.01_1 ?sack.n.01)
+                    (inside ?bag__of__brown_rice.n.01_1 ?sack.n.01)
+                    (inside ?banana.n.02_1 ?sack.n.01)
                 )
             ) 
             (forall
@@ -66,11 +66,11 @@
                 (inside ?money.n.01 ?cash_register.n.01_1)
             ) 
             (forall
-                (?plastic_bag.n.01 - plastic_bag.n.01)
+                (?sack.n.01 - sack.n.01)
                 (imply 
-                    (inside ?carton__of__milk.n.01_1 ?plastic_bag.n.01_1) 
+                    (inside ?carton__of__milk.n.01_1 ?sack.n.01_1)
                     (not 
-                        (inside ?banana.n.02_1 ?plastic_bag.n.01)
+                        (inside ?banana.n.02_1 ?sack.n.01)
                     )
                 ) 
             )

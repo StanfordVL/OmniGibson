@@ -8,7 +8,7 @@
         wall.n.01_1 - wall.n.01
         driveway.n.01_1 - driveway.n.01
         lawn.n.01_1 - lawn.n.01
-        plastic_bag.n.01_1 - plastic_bag.n.01
+        sack.n.01_1 - sack.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -30,7 +30,7 @@
         (ontop entire_leaf.n.01_15 lawn.n.01_1) 
         (ontop entire_leaf.n.01_16 lawn.n.01_1) 
         (ontop rake.n.03_1 driveway.n.01_1) 
-        (ontop plastic_bag.n.01_1 driveway.n.01_1) 
+        (ontop sack.n.01_1 driveway.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
         (inroom lawn.n.01_1 garden) 
@@ -42,7 +42,7 @@
         (and 
             (forall 
                 (?entire_leaf.n.01 - entire_leaf.n.01)
-                (inside ?entire_leaf.n.01 ?plastic_bag.n.01_1)
+                (inside ?entire_leaf.n.01 ?sack.n.01_1)
             )
         )
     )

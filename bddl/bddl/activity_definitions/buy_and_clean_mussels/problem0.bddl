@@ -43,8 +43,7 @@
                 (?mussel.n.01 - mussel.n.01)
                 (and
                     (covered ?mussel.n.01 ?water.n.06_1)
-                    (ontop ?mussel.n.01 ?paper_towel.n.01_1)
-                    (not 
+                    (not
                         (covered ?mussel.n.01 ?sand.n.04_1)
                     )
                 )

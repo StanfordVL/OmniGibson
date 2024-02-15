@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        rug.n.01_1 - rug.n.01
         floor.n.01_1 - floor.n.01
         doll.n.01_1 doll.n.01_2 doll.n.01_3 - doll.n.01
         shelf.n.01_1 - shelf.n.01
@@ -13,7 +12,6 @@
     )
     
     (:init 
-        (ontop rug.n.01_1 floor.n.01_1) 
         (inside doll.n.01_1 shelf.n.01_1) 
         (inside doll.n.01_2 shelf.n.01_1) 
         (inside doll.n.01_3 shelf.n.01_1) 
@@ -33,7 +31,7 @@
         (and 
             (forall 
                 (?sack.n.01 - sack.n.01) 
-                (ontop ?sack.n.01 ?rug.n.01_1)
+                (ontop ?sack.n.01 ?floor.n.01_1)
             ) 
             (forpairs 
                 (?doll.n.01 - doll.n.01) 

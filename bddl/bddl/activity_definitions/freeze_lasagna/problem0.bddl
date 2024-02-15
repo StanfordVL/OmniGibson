@@ -46,7 +46,7 @@
             (forpairs 
                 (?aluminum_foil.n.01 - aluminum_foil.n.01) 
                 (?lasagna.n.01 - lasagna.n.01) 
-                (ontop ?lasagna.n.01 ?aluminum_foil.n.01)
+                (overlaid ?aluminum_foil.n.01 ?lasagna.n.01)
             ) 
             (forpairs
                 (?lasagna.n.01 - lasagna.n.01)

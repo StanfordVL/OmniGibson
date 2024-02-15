@@ -38,7 +38,7 @@
     (:goal 
         (and 
             (attached ?wreath.n.01_1 ?wall.n.01_1)
-            (draped ?fairy_light.n.01_1 ?pot_plant.n.01_1) 
+            (ontop ?fairy_light.n.01_1 ?pot_plant.n.01_1)
             (toggled_on ?fairy_light.n.01_1) 
             (ontop ?rose.n.01_1 ?lawn.n.01_1)
             (ontop ?pot_plant.n.01_1 ?lawn.n.01_1)

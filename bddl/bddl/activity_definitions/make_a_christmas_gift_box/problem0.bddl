@@ -22,7 +22,7 @@
     (:goal 
         (and 
             (overlaid ?wrapping_paper.n.01_1 ?packing_box.n.02_1)
-            (ontop ?bell.n.01_1 ?wrapping_paper.n.01_1)
+            (inside ?bell.n.01_1 ?packing_box.n.02_1)
         )
     )
 )

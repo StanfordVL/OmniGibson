@@ -77,7 +77,7 @@
             ) 
             (forall 
                 (?plate.n.04 - plate.n.04)
-                (ontop ?plate.n.04 ?tablecloth.n.01_1)
+                (ontop ?plate.n.04 ?coffee_table.n.01_1)
             )
             (forpairs 
                 (?tongs.n.01 - tongs.n.01)
@@ -85,10 +85,10 @@
                 (ontop ?tongs.n.01 ?plate.n.04)
             )
             (overlaid ?tablecloth.n.01_1 ?coffee_table.n.01_1) 
-            (ontop ?bottle__of__catsup.n.01_1 ?tablecloth.n.01_1)
-            (ontop ?bottle__of__mustard.n.01_1 ?tablecloth.n.01_1)
+            (ontop ?bottle__of__catsup.n.01_1 ?coffee_table.n.01_1)
+            (ontop ?bottle__of__mustard.n.01_1 ?coffee_table.n.01_1)
             (filled ?bowl.n.01_1 ?diced__vidalia_onion.n.01_1)
-            (ontop ?bowl.n.01_1 ?tablecloth.n.01_1)
+            (ontop ?bowl.n.01_1 ?coffee_table.n.01_1)
         )
     )
 )

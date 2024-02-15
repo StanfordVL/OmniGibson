@@ -6,7 +6,6 @@
         floor.n.01_1 - floor.n.01
         pizza.n.01_1 pizza.n.01_2 - pizza.n.01
         white_rice.n.01_1 - white_rice.n.01
-        aluminum_foil.n.01_1 aluminum_foil.n.01_2 - aluminum_foil.n.01
         bowl.n.01_1 - bowl.n.01
         ashcan.n.01_1 - ashcan.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
@@ -23,8 +22,6 @@
         (ontop pizza.n.01_1 plate.n.04_1) 
         (ontop pizza.n.01_2 plate.n.04_2) 
         (covered plate.n.04_3 white_rice.n.01_1)
-        (inside aluminum_foil.n.01_1 cabinet.n.01_1) 
-        (inside aluminum_foil.n.01_2 cabinet.n.01_1) 
         (inside bowl.n.01_1 cabinet.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (ontop ashcan.n.01_1 floor.n.01_1)
@@ -37,14 +34,10 @@
     
     (:goal 
         (and 
-            (forpairs 
+            (forall
                 (?pizza.n.01 - pizza.n.01) 
-                (?aluminum_foil.n.01 - aluminum_foil.n.01) 
-                (and 
-                    (ontop ?pizza.n.01 ?aluminum_foil.n.01)
-                    (inside ?pizza.n.01 ?electric_refrigerator.n.01_1)
-                )
-            ) 
+                (inside ?pizza.n.01 ?electric_refrigerator.n.01_1)
+            )
             (contains ?bowl.n.01_1 ?white_rice.n.01_1)
             (inside ?bowl.n.01_1 ?electric_refrigerator.n.01_1)
             (forall 
