@@ -121,16 +121,16 @@ def create_docker_container(cl: docker.DockerClient, hostname:str, i: int):
         gpu = i % 2
         ctr = cl.containers.create(
             name=name,
-            image="stanfordvl/ig_pipeline:latest",
+            image="stanfordvl/ig_pipeline",
             command=f"{hostname}:8786",
             environment={
                 "OMNIGIBSON_HEADLESS": "1",
                 "DISPLAY": "",
             },
             mounts=[
-                docker.types.Mount("/scr", "/scr"),
-                docker.types.Mount("/scr/ig_pipeline/b1k_pipeline/docker/data", "/data", read_only=True),
-                docker.types.Mount("/scr/OmniGibson", "/omnigibson-src", read_only=True),
+                docker.types.Mount(source="/scr", target="/scr", type="bind"),
+                docker.types.Mount(source="/scr/ig_pipeline/b1k_pipeline/docker/data", target="/data", type="bind", read_only=True),
+                docker.types.Mount(source="/scr/OmniGibson", target="/omnigibson-src", type="bind", read_only=True),
             ],
             device_requests=[
                 docker.types.DeviceRequest(device_ids=[str(gpu)], capabilities=[['gpu']])
@@ -151,7 +151,7 @@ def launch_cluster(worker_count):
     elif CLUSTER_MODE == "docker":
         rtdir = os.environ["XDG_RUNTIME_DIR"]
         client = docker.DockerClient(base_url=f"unix://{rtdir}/docker.sock")
-
+        client.images.pull("stanfordvl/ig_pipeline")
         ctrs = [create_docker_container(client, hostname, i)
                 for i in range(worker_count)]
         for ctr in ctrs:
@@ -159,7 +159,7 @@ def launch_cluster(worker_count):
     else:
         raise ValueError(f"Unknown cluster mode {CLUSTER_MODE}")
     print("Waiting for workers")
-    dask_client.wait_for_workers(worker_count, timeout=120)
+    dask_client.wait_for_workers(worker_count, timeout=30)
     return dask_client
 
 def run_in_env(python_cmd, omnigibson_env=False):
