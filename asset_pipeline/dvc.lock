@@ -22,8 +22,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Beechwood_0_int/processed.max
-      md5: 8717a249f20cf47d7906d0848ae62a3e
-      size: 95485298
+      md5: 84ed5241ee682145c8c445b77f763395
+      size: 95501682
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       md5: e4fcb092f1eaffa3e34da9014e17182a
@@ -120,8 +120,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: 34bb322525a75a9b2160b7fbd5e3bc82
-      size: 102564942
+      md5: e948b4ccc52f89d1d81ff8f027a035d3
+      size: 102659150
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
       md5: c828837f3d1e0fdc8a918077ff2141ff
@@ -342,12 +342,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/grocery_store_cafe/processed.max
-      md5: b7360a613a8d32a8bc338cf45b8d17d2
-      size: 96900908
+      md5: e7509edda7a5fcbe0fcf91132a3c349a
+      size: 96941868
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
-      md5: fed3727e1b95069612cb1970d531c8f7
-      size: 1043396
+      md5: 0fe0db35de49b89946e81fe8caa52d50
+      size: 1043803
   object_list@scenes/grocery_store_convenience:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_convenience/processed.max
       b1k_pipeline/max/object_list.py
@@ -356,12 +356,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/grocery_store_convenience/processed.max
-      md5: 9f2090aa1d84d8489b9bcbf17e3f589b
-      size: 15416870
+      md5: e808709673e020e20fe2ce45426ce993
+      size: 15420966
     outs:
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
-      md5: 66cbe1211781a926c0e6075dc211fc08
-      size: 294246
+      md5: 729c24ad0bf09291f1f89face18b7b29
+      size: 294570
   object_list@scenes/grocery_store_half_stocked:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_half_stocked/processed.max
       b1k_pipeline/max/object_list.py
@@ -538,12 +538,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/office_cubicles_left/processed.max
-      md5: d1f5b2d572e509bf474ae8bf85b51f55
-      size: 58435338
+      md5: 1be2b3f201515803e6d841f2d2722617
+      size: 58439434
     outs:
     - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
-      md5: 15c0f5536503527e09e8ac054b15239d
-      size: 171630
+      md5: 4036bdfbd9fd3e141cc96e7f5ea975f1
+      size: 171170
   object_list@scenes/office_cubicles_right:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_cubicles_right/processed.max
       b1k_pipeline/max/object_list.py
@@ -608,8 +608,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/public_restroom_brown/processed.max
-      md5: 2bc7cc69b80b78f564b238aff4ad6f81
-      size: 4296704
+      md5: cbd56d0bda5eb9aa4f22b8622bb602ff
+      size: 4530176
     outs:
     - path: cad/scenes/public_restroom_brown/artifacts/object_list.json
       md5: 8e7915bd4e7d865724aa0deb5d66d4ad
@@ -622,8 +622,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/public_restroom_futuristic/processed.max
-      md5: 8ae07bc4a7c3238750f11743483e0af9
-      size: 8310784
+      md5: b020f6adc11ec4ba9cc9687c541b7fb6
+      size: 8417280
     outs:
     - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.json
       md5: c2d5100d1f24aa8353d3bbbabda734a1
@@ -636,8 +636,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/public_restroom_marble/processed.max
-      md5: dc9edf384385b5b8d4d93fc24ba8fae2
-      size: 7491584
+      md5: 46f5b312aea6e6f11d1d57993fc852d6
+      size: 7651328
     outs:
     - path: cad/scenes/public_restroom_marble/artifacts/object_list.json
       md5: 6a6586997220ad6cd03185a0a09d5272
@@ -650,8 +650,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/public_restroom_white/processed.max
-      md5: 4ab1e05661163e7ee251b4d9d8c2fb63
-      size: 13926400
+      md5: 3597e58bcea3bd5d4a8fcde912cfd809
+      size: 14086144
     outs:
     - path: cad/scenes/public_restroom_white/artifacts/object_list.json
       md5: b82bc3e3402adfef36d44ca8f77865e8
@@ -982,11 +982,11 @@ stages:
       md5: 59eb8e164063af4d170e139df9750cff
       size: 519879
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
-      md5: fed3727e1b95069612cb1970d531c8f7
-      size: 1043396
+      md5: 0fe0db35de49b89946e81fe8caa52d50
+      size: 1043803
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
-      md5: 66cbe1211781a926c0e6075dc211fc08
-      size: 294246
+      md5: 729c24ad0bf09291f1f89face18b7b29
+      size: 294570
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
       md5: f6ce6049bdc8ff4439124375db40ff6f
       size: 493909
@@ -1024,8 +1024,8 @@ stages:
       md5: 2106399f98422496f1bed5d0609867e7
       size: 74603
     - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
-      md5: 15c0f5536503527e09e8ac054b15239d
-      size: 171630
+      md5: 4036bdfbd9fd3e141cc96e7f5ea975f1
+      size: 171170
     - path: cad/scenes/office_cubicles_right/artifacts/object_list.json
       md5: e96e42eb0571f4e91a7697bf81952ec1
       size: 113903
@@ -1265,11 +1265,11 @@ stages:
       md5: 59eb8e164063af4d170e139df9750cff
       size: 519879
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
-      md5: fed3727e1b95069612cb1970d531c8f7
-      size: 1043396
+      md5: 0fe0db35de49b89946e81fe8caa52d50
+      size: 1043803
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
-      md5: 66cbe1211781a926c0e6075dc211fc08
-      size: 294246
+      md5: 729c24ad0bf09291f1f89face18b7b29
+      size: 294570
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
       md5: f6ce6049bdc8ff4439124375db40ff6f
       size: 493909
@@ -1307,8 +1307,8 @@ stages:
       md5: 2106399f98422496f1bed5d0609867e7
       size: 74603
     - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
-      md5: 15c0f5536503527e09e8ac054b15239d
-      size: 171630
+      md5: 4036bdfbd9fd3e141cc96e7f5ea975f1
+      size: 171170
     - path: cad/scenes/office_cubicles_right/artifacts/object_list.json
       md5: e96e42eb0571f4e91a7697bf81952ec1
       size: 113903
@@ -1371,8 +1371,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 20075d3f66333a042413776d154f6691
-      size: 1538078
+      md5: 422c034cfd89625e034aeca5681f644b
+      size: 1536248
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -1551,11 +1551,11 @@ stages:
       md5: 59eb8e164063af4d170e139df9750cff
       size: 519879
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
-      md5: fed3727e1b95069612cb1970d531c8f7
-      size: 1043396
+      md5: 0fe0db35de49b89946e81fe8caa52d50
+      size: 1043803
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
-      md5: 66cbe1211781a926c0e6075dc211fc08
-      size: 294246
+      md5: 729c24ad0bf09291f1f89face18b7b29
+      size: 294570
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
       md5: f6ce6049bdc8ff4439124375db40ff6f
       size: 493909
@@ -1593,8 +1593,8 @@ stages:
       md5: 2106399f98422496f1bed5d0609867e7
       size: 74603
     - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
-      md5: 15c0f5536503527e09e8ac054b15239d
-      size: 171630
+      md5: 4036bdfbd9fd3e141cc96e7f5ea975f1
+      size: 171170
     - path: cad/scenes/office_cubicles_right/artifacts/object_list.json
       md5: e96e42eb0571f4e91a7697bf81952ec1
       size: 113903
@@ -1657,8 +1657,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: e63c3fff5dd51e942de2c01d0aaed910
-      size: 1541601
+      md5: 65e29ebdeb7be18874a61bfc5197e0ee
+      size: 1539771
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -1667,8 +1667,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Beechwood_0_int/processed.max
-      md5: 8717a249f20cf47d7906d0848ae62a3e
-      size: 95485298
+      md5: 84ed5241ee682145c8c445b77f763395
+      size: 95501682
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/room_object_list.json
       md5: 8f88adb99c0e854d7ca1a6026bac6553
@@ -1927,8 +1927,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: b2424eca0e3dee6a651097c1810bdc1e
       size: 4444
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
   room_object_list@scenes/commercial_kitchen_pans:
@@ -1990,12 +1989,12 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/grocery_store_cafe/processed.max
-      md5: b7360a613a8d32a8bc338cf45b8d17d2
-      size: 96900908
+      md5: e7509edda7a5fcbe0fcf91132a3c349a
+      size: 96941868
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
-      md5: 134b812f2999abbe2706358d6a1b1a0d
-      size: 5551
+      md5: 7e0ddf071d3c8a3751af7c228f74cea2
+      size: 5586
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2007,8 +2006,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/grocery_store_convenience/processed.max
-      md5: 9f2090aa1d84d8489b9bcbf17e3f589b
-      size: 15416870
+      md5: e808709673e020e20fe2ce45426ce993
+      size: 15420966
     outs:
     - path: cad/scenes/grocery_store_convenience/artifacts/room_object_list.json
       md5: e663cbb9eebfc1e65e3ea426761e31a9
@@ -2211,8 +2210,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/office_cubicles_left/processed.max
-      md5: d1f5b2d572e509bf474ae8bf85b51f55
-      size: 58435338
+      md5: 1be2b3f201515803e6d841f2d2722617
+      size: 58439434
     outs:
     - path: cad/scenes/office_cubicles_left/artifacts/room_object_list.json
       md5: be0cb71c2f868cbccf1a781c237e5d45
@@ -2279,12 +2278,12 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/public_restroom_brown/processed.max
-      md5: 2bc7cc69b80b78f564b238aff4ad6f81
-      size: 4296704
+      md5: cbd56d0bda5eb9aa4f22b8622bb602ff
+      size: 4530176
     outs:
     - path: cad/scenes/public_restroom_brown/artifacts/room_object_list.json
-      md5: e7fe22c604c185a38a3a07a39cd7cea3
-      size: 1366
+      md5: 7d7eca0c59d1fbf35ee7e9f9167ca811
+      size: 1364
     - path: cad/scenes/public_restroom_brown/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2296,8 +2295,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/public_restroom_futuristic/processed.max
-      md5: 8ae07bc4a7c3238750f11743483e0af9
-      size: 8310784
+      md5: b020f6adc11ec4ba9cc9687c541b7fb6
+      size: 8417280
     outs:
     - path: cad/scenes/public_restroom_futuristic/artifacts/room_object_list.json
       md5: e21d1d21f1c12e93b27c621d566ef96a
@@ -2313,8 +2312,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/public_restroom_marble/processed.max
-      md5: dc9edf384385b5b8d4d93fc24ba8fae2
-      size: 7491584
+      md5: 46f5b312aea6e6f11d1d57993fc852d6
+      size: 7651328
     outs:
     - path: cad/scenes/public_restroom_marble/artifacts/room_object_list.json
       md5: e7807630cbb982f93bd15ae1d01eb656
@@ -2330,8 +2329,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/public_restroom_white/processed.max
-      md5: 4ab1e05661163e7ee251b4d9d8c2fb63
-      size: 13926400
+      md5: 3597e58bcea3bd5d4a8fcde912cfd809
+      size: 14086144
     outs:
     - path: cad/scenes/public_restroom_white/artifacts/room_object_list.json
       md5: 1410943b8847783e3dfa7de9435b9809
@@ -2586,8 +2585,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: b2424eca0e3dee6a651097c1810bdc1e
       size: 4444
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.json
@@ -2603,8 +2601,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
-      md5: 134b812f2999abbe2706358d6a1b1a0d
-      size: 5551
+      md5: 7e0ddf071d3c8a3751af7c228f74cea2
+      size: 5586
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2717,8 +2715,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/public_restroom_brown/artifacts/room_object_list.json
-      md5: e7fe22c604c185a38a3a07a39cd7cea3
-      size: 1366
+      md5: 7d7eca0c59d1fbf35ee7e9f9167ca811
+      size: 1364
     - path: cad/scenes/public_restroom_brown/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -2814,8 +2812,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/combined_room_object_list.json
-      md5: 5a8f04bbcf0e93b38992e247e4cc02bc
-      size: 293842
+      md5: 5c8179b11bd83a5dc7beb7555fc5f713
+      size: 293880
   room_object_list@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -2841,8 +2839,8 @@ stages:
       md5: a98659ef225a81a33dabf738ad8671ba
       size: 2979
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: 34bb322525a75a9b2160b7fbd5e3bc82
-      size: 102564942
+      md5: e948b4ccc52f89d1d81ff8f027a035d3
+      size: 102659150
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/room_object_list.json
       md5: 0812878ba437d41c4d7f94b70960bf32
@@ -3131,8 +3129,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: b2424eca0e3dee6a651097c1810bdc1e
       size: 4444
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/commercial_kitchen_pans/artifacts/room_object_list.json
@@ -3154,8 +3151,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.json
-      md5: 134b812f2999abbe2706358d6a1b1a0d
-      size: 5551
+      md5: 7e0ddf071d3c8a3751af7c228f74cea2
+      size: 5586
     - path: cad/scenes/grocery_store_cafe/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3268,8 +3265,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/public_restroom_brown/artifacts/room_object_list.json
-      md5: e7fe22c604c185a38a3a07a39cd7cea3
-      size: 1366
+      md5: 7d7eca0c59d1fbf35ee7e9f9167ca811
+      size: 1364
     - path: cad/scenes/public_restroom_brown/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3365,8 +3362,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/combined_room_object_list_future.json
-      md5: a16836bb797be45ac81fd310d8a3573f
-      size: 294789
+      md5: e63c76a15ad9ec3d79bfc641a0ad39e0
+      size: 294827
   sanitycheck@scenes/public_restroom_blue:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_blue/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -3515,8 +3512,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Beechwood_0_int/processed.max
-      md5: 8717a249f20cf47d7906d0848ae62a3e
-      size: 95485298
+      md5: 84ed5241ee682145c8c445b77f763395
+      size: 95501682
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3529,8 +3526,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/office_cubicles_left/processed.max
-      md5: d1f5b2d572e509bf474ae8bf85b51f55
-      size: 58435338
+      md5: 1be2b3f201515803e6d841f2d2722617
+      size: 58439434
     outs:
     - path: cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3585,8 +3582,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/grocery_store_cafe/processed.max
-      md5: b7360a613a8d32a8bc338cf45b8d17d2
-      size: 96900908
+      md5: e7509edda7a5fcbe0fcf91132a3c349a
+      size: 96941868
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3711,8 +3708,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/public_restroom_white/processed.max
-      md5: 4ab1e05661163e7ee251b4d9d8c2fb63
-      size: 13926400
+      md5: 3597e58bcea3bd5d4a8fcde912cfd809
+      size: 14086144
     outs:
     - path: cad/scenes/public_restroom_white/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3753,8 +3750,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/public_restroom_futuristic/processed.max
-      md5: 8ae07bc4a7c3238750f11743483e0af9
-      size: 8310784
+      md5: b020f6adc11ec4ba9cc9687c541b7fb6
+      size: 8417280
     outs:
     - path: cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3795,8 +3792,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/public_restroom_marble/processed.max
-      md5: dc9edf384385b5b8d4d93fc24ba8fae2
-      size: 7491584
+      md5: 46f5b312aea6e6f11d1d57993fc852d6
+      size: 7651328
     outs:
     - path: cad/scenes/public_restroom_marble/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3837,8 +3834,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/grocery_store_convenience/processed.max
-      md5: 9f2090aa1d84d8489b9bcbf17e3f589b
-      size: 15416870
+      md5: e808709673e020e20fe2ce45426ce993
+      size: 15420966
     outs:
     - path: cad/scenes/grocery_store_convenience/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -3949,8 +3946,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: 34bb322525a75a9b2160b7fbd5e3bc82
-      size: 102564942
+      md5: e948b4ccc52f89d1d81ff8f027a035d3
+      size: 102659150
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -4131,8 +4128,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/public_restroom_brown/processed.max
-      md5: 2bc7cc69b80b78f564b238aff4ad6f81
-      size: 4296704
+      md5: cbd56d0bda5eb9aa4f22b8622bb602ff
+      size: 4530176
     outs:
     - path: cad/scenes/public_restroom_brown/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -6364,15 +6361,15 @@ stages:
       md5: e4fcb092f1eaffa3e34da9014e17182a
       size: 79700
     - path: cad/scenes/Beechwood_0_int/processed.max
-      md5: 8717a249f20cf47d7906d0848ae62a3e
-      size: 95485298
+      md5: 84ed5241ee682145c8c445b77f763395
+      size: 95501682
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/export_meshes.json
-      md5: 39be0ace52c33bda4c442306bd6a1463
-      size: 23796
+      md5: 9f9aecf7cefcb1d6757cf430c6d63c3a
+      size: 23772
     - path: cad/scenes/Beechwood_0_int/artifacts/meshes.zip
-      md5: 83da54fe5b90986f7505df745fa304ad
-      size: 317315088
+      md5: 40c063d7335289fd1c49ec4f9a104c34
+      size: 315772861
   export_meshes@objects/batch-06:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-06/processed.max b1k_pipeline/max/export_meshes.py
     deps:
@@ -7261,18 +7258,18 @@ stages:
       md5: 8f67c8a3cae22b0303e1082e4d76f9c9
       size: 23730
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
-      md5: fed3727e1b95069612cb1970d531c8f7
-      size: 1043396
+      md5: 0fe0db35de49b89946e81fe8caa52d50
+      size: 1043803
     - path: cad/scenes/grocery_store_cafe/processed.max
-      md5: b7360a613a8d32a8bc338cf45b8d17d2
-      size: 96900908
+      md5: e7509edda7a5fcbe0fcf91132a3c349a
+      size: 96941868
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/export_meshes.json
-      md5: 55d81d7673f68ff9f5426d9e9f6075ce
-      size: 334732
+      md5: 3404aaa80c2c727a27f5ec47d30414a4
+      size: 334975
     - path: cad/scenes/grocery_store_cafe/artifacts/meshes.zip
-      md5: 7d6128f125f6697be60b285519cbba32
-      size: 1076089024
+      md5: c3ecaffafb28c29eb24e004d080bfdce
+      size: 1077013861
   export_meshes@scenes/house_double_floor_lower:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_double_floor_lower/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -7984,8 +7981,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: aa1ab833d60c4b62c3d21d2529bcacc2
       size: 2716320
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 3091c85bf44efc10504187361c8d7fb1
       size: 8670
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -10339,8 +10335,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: aa1ab833d60c4b62c3d21d2529bcacc2
       size: 2716320
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 3091c85bf44efc10504187361c8d7fb1
       size: 8670
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -11435,8 +11430,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: aa1ab833d60c4b62c3d21d2529bcacc2
       size: 2716320
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 3091c85bf44efc10504187361c8d7fb1
       size: 8670
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -12239,8 +12233,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: b2424eca0e3dee6a651097c1810bdc1e
       size: 4444
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     outs:
@@ -13098,8 +13091,8 @@ stages:
       artifacts/pipeline/object_inventory.success
     deps:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 20075d3f66333a042413776d154f6691
-      size: 1538078
+      md5: 422c034cfd89625e034aeca5681f644b
+      size: 1536248
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 729
@@ -13329,15 +13322,15 @@ stages:
       md5: c828837f3d1e0fdc8a918077ff2141ff
       size: 64181
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: 34bb322525a75a9b2160b7fbd5e3bc82
-      size: 102564942
+      md5: e948b4ccc52f89d1d81ff8f027a035d3
+      size: 102659150
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/export_meshes.json
-      md5: b4a11d7ae7a763d9400f13b1ea2cd46b
+      md5: 9b6e47cede0dcf4909cdcd4acaa53293
       size: 20690
     - path: cad/scenes/Merom_0_garden/artifacts/meshes.zip
-      md5: 81b4cfb6a8f551ae8b936624712c39f8
-      size: 279772088
+      md5: bdd1b83dfca6ced74ba5eac4f70c6d6b
+      size: 279390351
   export_scene@scenes/Beechwood_0_garden:
     cmd: python -m b1k_pipeline.export_scene scenes/Beechwood_0_garden
     deps:
