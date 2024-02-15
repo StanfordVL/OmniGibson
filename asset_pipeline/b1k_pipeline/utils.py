@@ -1,6 +1,8 @@
+import os
 import pathlib
 import re
 
+import docker
 import fs.path
 from fs.osfs import OSFS
 from fs.tempfs import TempFS
@@ -17,7 +19,7 @@ NAME_PATTERN = re.compile(r"^(?P<mesh_basename>(?P<link_basename>(?P<obj_basenam
 PORTAL_PATTERN = re.compile(r"^portal(-(?P<partial_scene>[A-Za-z0-9_]+)(-(?P<portal_id>\d+))?)?$")
 CLOTH_CATEGORIES = ["t_shirt", "dishtowel", "carpet"]
 SUBDIVIDE_CLOTH_CATEGORIES = ["carpet"]
-CLUSTER_LOCAL = True
+CLUSTER_MODE = "docker"   # one of "docker", "slurm", "enroot"
 
 params = yaml.load(open(PARAMS_FILE, "r"), Loader=yaml.SafeLoader)
 
@@ -111,16 +113,53 @@ def save_mesh(mesh, fs, name, **kwargs):
     with fs.open(name, "wb") as f:
         return mesh.export(f, resolver=FSResolver(fs), file_type="obj", **kwargs)
 
+def create_docker_container(cl: docker.DockerClient, hostname:str, i: int):
+    name = f"ig_pipeline_{i}"
+    try:
+        ctr = cl.containers.get(name)
+    except docker.errors.NotFound:
+        gpu = i % 2
+        ctr = cl.containers.create(
+            name=name,
+            image="stanfordvl/ig_pipeline",
+            command=f"{hostname}:8786",
+            environment={
+                "OMNIGIBSON_HEADLESS": "1",
+                "DISPLAY": "",
+            },
+            mounts=[
+                docker.types.Mount(source="/scr", target="/scr", type="bind"),
+                docker.types.Mount(source="/scr/ig_pipeline/b1k_pipeline/docker/data", target="/data", type="bind", read_only=True),
+                docker.types.Mount(source="/scr/OmniGibson", target="/omnigibson-src", type="bind", read_only=True),
+            ],
+            device_requests=[
+                docker.types.DeviceRequest(device_ids=[str(gpu)], capabilities=[['gpu']])
+            ],
+        )
+        
+    assert ctr.status != "running", f"Container {name} is already running"
+    return ctr
+
 def launch_cluster(worker_count):
     from dask.distributed import Client
     dask_client = Client(n_workers=0, host="", scheduler_port=8786)
     hostname = subprocess.run('hostname', shell=True, check=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
-    if CLUSTER_LOCAL:
+    if CLUSTER_MODE == "enroot":
         subprocess.run(f'cd /scr/ig_pipeline/b1k_pipeline/docker; ./run_worker_local.sh {worker_count} {hostname}:8786', shell=True, check=True)
-    else:
+    elif CLUSTER_MODE == "slurm":
         subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh {hostname}:8786"', shell=True, check=True)
+    elif CLUSTER_MODE == "docker":
+        rtdir = os.environ["XDG_RUNTIME_DIR"]
+        client = docker.DockerClient(base_url=f"unix://{rtdir}/docker.sock")
+        client.images.pull("stanfordvl/ig_pipeline")
+        ctrs = [create_docker_container(client, hostname, i)
+                for i in range(worker_count)]
+        for ctr in ctrs:
+            ctr.start()
+    else:
+        raise ValueError(f"Unknown cluster mode {CLUSTER_MODE}")
     print("Waiting for workers")
-    dask_client.wait_for_workers(worker_count, timeout=120)
+    dask_client.wait_for_workers(worker_count, timeout=30)
     return dask_client
 
 def run_in_env(python_cmd, omnigibson_env=False):

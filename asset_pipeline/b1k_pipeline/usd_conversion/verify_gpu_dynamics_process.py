@@ -1,6 +1,7 @@
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.objects.dataset_object import DatasetObject
+from omnigibson.systems import import_og_systems
 
 gm.HEADLESS = True
 gm.USE_ENCRYPTED_ASSETS = True
@@ -11,20 +12,25 @@ def process_object(cat, mdl):
     cfg = {
         "scene": {
             "type": "Scene",
-        }
+        },
+        "objects": [
+            {
+                "type": "DatasetObject",
+                "name": "obj",
+                "category": cat,
+                "model": mdl,
+                "kinematic_only": False,
+                "fixed_base": True,
+            },
+        ]
     }
 
     env = og.Environment(configs=cfg)
 
-    # First import the fillable
-    fillable = DatasetObject("object", category=cat, model=mdl, kinematic_only=False, fixed_base=True, abilities={})
-    og.sim.import_object(fillable)
-    og.sim.step()
-
     for _ in range(100):
         og.sim.step()
 
-    print(f"{mdl} finished successfully.")
+    print(f"{mdl} finished successfully.", flush=True)
 
 
 def main():
@@ -32,6 +38,10 @@ def main():
 
     dataset_root = str(pathlib.Path(sys.argv[1]))
     gm.DATASET_PATH = str(dataset_root)
+
+    # This is a hacky fix for systems not being loaded because of the dataset
+    # path being changed later.
+    import_og_systems()
 
     path = sys.argv[2]
     obj_category, obj_model = pathlib.Path(path).parts[-2:]

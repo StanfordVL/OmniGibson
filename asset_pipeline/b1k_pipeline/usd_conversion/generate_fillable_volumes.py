@@ -12,7 +12,7 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
-WORKER_COUNT = 1
+WORKER_COUNT = 4
 BATCH_SIZE = 1
 RETRY = False
 
