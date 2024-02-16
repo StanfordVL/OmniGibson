@@ -32,7 +32,7 @@ import gspread
 
 SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
 CREDENTIALS = "/home/jdw/.config/gcloud/key.json"
-WORKSHEET = "GTC2024"
+WORKSHEET = "GTC2024 - 7f82ab"
 USER = "cremebrule"
 
 client = gspread.service_account(filename=CREDENTIALS)
@@ -40,7 +40,8 @@ worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
 
 ACTIVITY_TO_ROW = {activity: i + 2 for i, activity in enumerate(worksheet.col_values(1)[1:])}
 
-SCENE_MAPPING_FPATH = "/home/jdw/Downloads/BEHAVIOR-1K Tasks.csv"
+SCENE_INFO_FPATH =  "/home/jdw/Downloads/BEHAVIOR-1K Scenes.csv"
+TASK_INFO_FPATH = "/home/jdw/Downloads/BEHAVIOR-1K Tasks.csv"
 SYNSET_INFO_FPATH = "/home/jdw/Downloads/BEHAVIOR-1K Synsets.csv"
 
 UNSUPPORTED_PREDICATES = {"broken", "assembled", "attached"}
@@ -55,6 +56,7 @@ parser.add_argument("--start_at", type=str, default=None,
 parser.add_argument("--overwrite_existing", action="store_true",
                     help="If set, will overwrite any existing tasks that are found. Otherwise, will skip.")
 
+gm.HEADLESS = True
 gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_FLATCACHE = False
 gm.ENABLE_OBJECT_STATES = True
@@ -69,6 +71,41 @@ def write_activities_to_spreadsheet():
     for cell, task in zip(cell_list, valid_tasks_sorted):
         cell.value = task
     worksheet.update_cells(cell_list)
+
+
+# CAREFUL!! Only run this ONCE before starting sampling!!!
+def write_scenes_to_spreadsheet():
+    # Get scenes
+    scenes_sorted = get_scenes()
+    n_scenes = len(scenes_sorted)
+    cell_list = worksheet.range(f"R{2}:R{2 + n_scenes - 1}")
+    for cell, scene in zip(cell_list, scenes_sorted):
+        cell.value = scene
+    worksheet.update_cells(cell_list)
+
+
+def validate_scene_can_be_sampled(scene):
+    scenes_sorted = get_scenes()
+    n_scenes = len(scenes_sorted)
+    # Sanity check scene -- only scenes are allowed that whose user field is either:
+    # (a) blank or (b) filled with USER
+    # scene_user_list = worksheet.range(f"R{2}:S{2 + n_scenes - 1}")
+    def get_user(val):
+        return None if (len(val) == 1 or val[1] == "") else val[1]
+
+    scene_user_mapping = {val[0]: get_user(val) for val in worksheet.get(f"R{2}:S{2 + n_scenes - 1}")}
+
+    # Make sure scene is valid
+    assert scene in scene_user_mapping, f"Got invalid scene name to sample: {scene}"
+
+    # Assert user is None or is USER, else False
+    scene_user = scene_user_mapping[scene]
+    assert scene_user is None or scene_user == USER, \
+        f"Cannot sample scene {scene} with user {USER}! Scene already has user: {scene_user}."
+
+    # Fill in this value to reserve it
+    idx = scenes_sorted.index(scene)
+    worksheet.update_acell(f"S{2 + idx}", USER)
 
 
 def get_predicates(conds):
@@ -111,6 +148,19 @@ def get_rooms(conds):
     elif conds[0] == "inroom":
         rooms.append(conds[2])
     return rooms
+
+
+def get_scenes():
+    scenes = set()
+    with open(SCENE_INFO_FPATH) as csvfile:
+        reader = csv.reader(csvfile, delimiter=",", quotechar='"')
+        for i, row in enumerate(reader):
+            # Skip first row since it's the header
+            if i == 0:
+                continue
+            scenes.add(row[0])
+
+    return tuple(sorted(scenes))
 
 
 def get_valid_tasks():
@@ -167,6 +217,10 @@ def get_scene_compatible_activities(scene_model, mapping):
 
 def main(random_selection=False, headless=False, short_exec=False):
     args = parser.parse_args()
+
+    # Make sure scene can be sampled by current user
+    validate_scene_can_be_sampled(scene=args.scene_model)
+
     # Define the configuration to load -- we'll use a Fetch
     cfg = {
         "scene": {
@@ -185,7 +239,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     }
 
     valid_tasks = get_valid_tasks()
-    mapping = parse_task_mapping(fpath=SCENE_MAPPING_FPATH)
+    mapping = parse_task_mapping(fpath=TASK_INFO_FPATH)
     activities = get_scene_compatible_activities(scene_model=args.scene_model, mapping=mapping) \
         if args.activities is None else args.activities.split(",")
 
