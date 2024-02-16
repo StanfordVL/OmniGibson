@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        silver.n.02_1 silver.n.02_3 - silver.n.02
+        silver.n.02_1 silver.n.02_2 - silver.n.02
         hand_towel.n.01_1 - hand_towel.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
         cup.n.01_1 - cup.n.01
@@ -13,9 +13,8 @@
     
     (:init 
         (ontop silver.n.02_1 breakfast_table.n.01_1)
-        (ontop silver.n.02_1 breakfast_table.n.01_1)
-        (ontop silver.n.02_3 breakfast_table.n.01_1)
-        (ontop hand_towel.n.01_1 breakfast_table.n.01_1) 
+        (ontop silver.n.02_2 breakfast_table.n.01_1)
+        (ontop hand_towel.n.01_1 breakfast_table.n.01_1)
         (ontop cup.n.01_1 breakfast_table.n.01_1) 
         (inroom cabinet.n.01_1 private_office) 
         (inroom breakfast_table.n.01_1 private_office) 

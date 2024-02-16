@@ -28,8 +28,7 @@
     (:init 
         (ontop cheddar.n.02_1 plate.n.04_1)
         (ontop feta.n.01_1 plate.n.04_1)
-        (inside plate.n.04_1 electric_refrigerator.n.01_1)
-        (filled wine_bottle.n.01_1 white_wine.n.01_1) 
+        (filled wine_bottle.n.01_1 white_wine.n.01_1)
         (filled wine_bottle.n.01_2 champagne.n.01_1) 
         (inside wine_bottle.n.01_1 electric_refrigerator.n.01_1)
         (inside wine_bottle.n.01_2 electric_refrigerator.n.01_1)
