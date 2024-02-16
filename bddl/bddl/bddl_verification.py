@@ -116,21 +116,13 @@ ROOMS = set([
     "lobby"
 ])
 PLACEMENTS = set([
-    # "connected",
-    "ontop", 
+    "ontop",
     "inside", 
     "under", 
-    "filled", 
-    "covered", 
-    "overlaid", 
-    "saturated", 
-    "inroom", 
-    "insource", 
-    # "hung", 
+    "overlaid",
     "future",
     "attached",
     "draped",
-    "contains"
 ])
 SUBSTANCE_PLACEMENTS = set(["saturated", "filled", "covered", "insource", "contains"])
 FUTURE_PREDICATE = "future"
@@ -482,24 +474,52 @@ def all_objects_placed(init):
     insts = _get_instances_in_init(init)
     insts = set([inst for inst in insts if ["future", inst] not in init])
 
-    # Make sure everything not set to `future` is placed relative to a ROOM
-    placed_insts = set()
-    old_placed_insts = set()
-    saturated = False 
-    while not saturated:
-        for inst in insts:                 
-            if inst in placed_insts:
+    in_room_check = True
+    last_placed = None
+    while True:
+        newly_placed = set()
+        for literal in init:
+            # Skip not literals
+            if literal[0] == "not":
                 continue
-            for literal in init: 
-                formula = literal[1] if literal[0] == "not" else literal 
-                # NOTE only uncomment below line suffix when dealing with situations where substance and object have been flipped
-                if (formula[0] == FUTURE_PREDICATE and formula[1] == inst) or ((formula[0] in PLACEMENTS) and (formula[1] == inst) and ((formula[2] in ROOMS) or (formula[2] in placed_insts))) or ((formula[0] in SUBSTANCE_PLACEMENTS) and (formula[1] in placed_insts) and (formula[2] == inst)):
-                    placed_insts.add(inst)
-        saturated = old_placed_insts == placed_insts 
-        old_placed_insts = copy.deepcopy(placed_insts)
-    assert not placed_insts.difference(insts), "There are somehow placed insts that are not in the overall set of insts."
-    assert placed_insts == insts, f"Unplaced object instances: {insts.difference(placed_insts)}"
+            formula = literal
+            # Skip future literals
+            if formula[0] == "future":
+                continue
+            inst = None
+            substance_placement = False
+            if in_room_check:
+                # For the first round, check for inroom
+                if (formula[0] == "inroom") and (formula[2] in ROOMS):
+                    inst = formula[1]
+            else:
+                # For the following rounds, check for placements w.r.t last placed objects
+                if (formula[0] in PLACEMENTS) and (formula[2] in last_placed):
+                    inst = formula[1]
+                # Or substasnce placements w.r.t last placed objects
+                elif (formula[0] in SUBSTANCE_PLACEMENTS) and (formula[1] in last_placed):
+                    inst = formula[2]
+                    substance_placement = True
 
+            if inst is not None:
+                # If it's not a substance placement, we make sure it's only placed once (e.g. we should not place the
+                # same eapple on table1 and on table2). If it's a substance placement, it's fine (e.g. we can do stain
+                # covering table1 and table2)
+                if not substance_placement:
+                    assert inst not in newly_placed, f"Object {inst} is placed twice"
+                newly_placed.add(inst)
+
+        # If no new objects were placed, we're done
+        if len(newly_placed) == 0:
+            break
+
+        # Otherwise, we remove the newly placed objects from the list of objects to place and continue
+        insts -= newly_placed
+        last_placed = newly_placed
+        in_room_check = False
+
+    # If there are any objects left, they are unplaced
+    assert len(insts) == 0, f"Unplaced object instances: {insts}"
 
 def no_invalid_synsets(objects, init, goal, syns_to_props):
     instances, categories = _get_objects_from_object_list(objects)

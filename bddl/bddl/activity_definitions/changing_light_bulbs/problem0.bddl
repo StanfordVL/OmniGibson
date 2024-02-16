@@ -13,8 +13,8 @@
     (:init 
         (ontop table_lamp.n.01_2 floor.n.01_2) 
         (ontop light_bulb.n.01_1 breakfast_table.n.01_1) 
-        (ontop light_bulb.n.01_2 breakfast_table.n.01_1) 
-        (not 
+        (ontop light_bulb.n.01_2 breakfast_table.n.01_1)
+        (not
             (toggled_on table_lamp.n.01_1)
         ) 
         (not 

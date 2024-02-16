@@ -18,11 +18,9 @@
     (:init 
         (filled beer_bottle.n.01_1 beer.n.01_1)
         (inside beer_bottle.n.01_1 cabinet.n.01_1)
-        (inside beer_bottle.n.01_1 cabinet.n.01_1) 
         (inside bottle__of__champagne.n.01_1 cabinet.n.01_1)
         (filled pitcher.n.02_1 martini.n.01_1) 
         (inside pitcher.n.02_1 cabinet.n.01_1)
-        (inside wineglass.n.01_1 cabinet.n.01_1) 
         (inside wineglass.n.01_1 cabinet.n.01_1) 
         (inside beer_glass.n.01_1 cabinet.n.01_1)
         (inroom floor.n.01_1 dining_room) 

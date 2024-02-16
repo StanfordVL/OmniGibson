@@ -17,8 +17,7 @@
     )
     
     (:init 
-        (ontop trout.n.01_1 countertop.n.01_1) 
-        (not 
+        (not
             (cooked trout.n.01_1)
         )
         (frozen trout.n.01_1)

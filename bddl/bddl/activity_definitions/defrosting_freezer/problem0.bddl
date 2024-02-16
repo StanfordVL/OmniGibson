@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        stain.n.01_1 - stain.n.01
      	floor.n.01_1 - floor.n.01
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	sink.n.01_1 - sink.n.01
@@ -16,17 +15,11 @@
     	agent.n.01_1 - agent.n.01
     )
     
-    (:init 
-        (not 
-            (covered sink.n.01_1 stain.n.01_1)
-        ) 
+    (:init
         (ontop dustpan.n.02_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (ontop scraper.n.01_1 countertop.n.01_1) 
-        (ontop towel.n.01_1 countertop.n.01_1) 
-        (not 
-            (covered towel.n.01_1 stain.n.01_1)
-        ) 
+        (ontop towel.n.01_1 countertop.n.01_1)
         (ontop rag.n.01_1 countertop.n.01_1) 
         (inside crayfish.n.02_1 electric_refrigerator.n.01_1) 
         (inside crayfish.n.02_2 electric_refrigerator.n.01_1) 
