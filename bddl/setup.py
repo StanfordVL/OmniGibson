@@ -7,7 +7,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='bddl',
-    version='3.4.0b3',
+    version='3.4.0b4',
     author='Stanford University',
     long_description_content_type='text/markdown',
     long_description=long_description,
