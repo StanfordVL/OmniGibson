@@ -20,7 +20,7 @@
     
     (:goal 
         (and 
-            (ontop ?doily.n.01_1 ?doily.n.01_2) 
+            (ontop ?doily.n.01_1 ?shelf.n.01_1)
             (ontop ?doily.n.01_2 ?shelf.n.01_1) 
             (folded ?doily.n.01_1) 
             (folded ?doily.n.01_2)

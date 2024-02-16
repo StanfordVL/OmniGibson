@@ -11,9 +11,9 @@
     )
     
     (:init 
-        (ontop ironing_board.n.01_1 floor.n.01_1) 
+        (ontop ironing_board.n.01_1 floor.n.01_1)
         (ontop sheet.n.03_1 ironing_board.n.01_1) 
-        (ontop iron.n.04_1 sheet.n.03_1) 
+        (ontop iron.n.04_1 ironing_board.n.01_1)
         (covered sheet.n.03_1 wrinkle.n.01_1) 
         (inroom floor.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)

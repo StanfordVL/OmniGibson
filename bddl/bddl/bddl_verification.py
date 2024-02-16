@@ -273,45 +273,53 @@ def check_synset_predicate_alignment(atom, syns_to_props):
     assert (pred in UNARIES) or (pred in BINARIES), f"Invalid predicate: {pred}"
     assert ((pred in UNARIES) and (len(objects) == 1)) or ((pred in BINARIES) and (len(objects) == 2)), f"Atom has wrong arity: {atom}"
 
-    # Unaries
-    if pred == "cooked": 
+    if pred == "cooked":
+        assert "nonSubstance" in syns_to_props[objects[0]], f"Inapplicable cooked: {atom}"
         assert "cookable" in syns_to_props[objects[0]], f"Inapplicable cooked: {atom}"
-    if pred == "frozen": 
+    if pred == "frozen":
+        assert "nonSubstance" in syns_to_props[objects[0]], f"Inapplicable frozen: {atom}"
         assert "freezable" in syns_to_props[objects[0]], f"Inapplicable frozen: {atom}"
     if pred == "closed" or pred == "open":
+        assert "rigidBody" in syns_to_props[objects[0]], f"Inapplicable closed/open: {atom}"
         assert "openable" in syns_to_props[objects[0]], f"Inapplicable closed/open: {atom}"
     if pred == "folded" or pred == "unfolded":
+        # cloth or rope is drapeable
         assert "drapeable" in syns_to_props[objects[0]], f"Inapplicable folded/unfolded: {atom}"
     if pred == "toggled_on":
+        assert "rigidBody" in syns_to_props[objects[0]], f"Inapplicable toggled_on: {atom}"
         assert "toggleable" in syns_to_props[objects[0]], f"Inapplicable toggled_on: {atom}"
-    if pred == "hot": 
+    if pred == "hot":
+        assert "nonSubstance" in syns_to_props[objects[0]], f"Inapplicable hot: {atom}"
         assert "heatable" in syns_to_props[objects[0]], f"Inapplicable hot: {atom}"
-    if pred == "on_fire": 
+    if pred == "on_fire":
+        assert "nonSubstance" in syns_to_props[objects[0]], f"Inapplicable on_fire: {atom}"
         assert "flammable" in syns_to_props[objects[0]], f"Inapplicable on_fire: {atom}"
-    if pred == "assembled": 
+    if pred == "assembled":
+        assert "rigidBody" in syns_to_props[objects[0]], f"Inapplicable assembled: {atom}"
         assert "assembleable" in syns_to_props[objects[0]], f"Inapplicable assembled: {atom}"
-    if pred == "broken": 
+    if pred == "broken":
+        assert "rigidBody" in syns_to_props[objects[0]], f"Inapplicable broken: {atom}"
         assert "breakable" in syns_to_props[objects[0]], f"Inapplicable broken: {atom}"
-    
+
     # Binaries
     if pred == "saturated":
-        assert ("particleRemover" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable saturated: {atom}"
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("particleRemover" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable saturated: {atom}"
     if pred == "covered":
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable covered: {atom}"
     if pred == "filled":
-        assert ("fillable" in syns_to_props[objects[0]]) and ("physicalSubstance" in syns_to_props[objects[1]]), f"Inapplicable filled/empty: {atom}"
+        assert ("rigidBody" in syns_to_props[objects[0]]) and ("fillable" in syns_to_props[objects[0]]) and ("physicalSubstance" in syns_to_props[objects[1]]), f"Inapplicable filled/empty: {atom}"
     if pred == "contains" or pred == "empty":
-        assert ("fillable" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable contains: {atom}"
+        assert ("rigidBody" in syns_to_props[objects[0]]) and ("fillable" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable contains: {atom}"
     if pred == "ontop":
-        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable ontop: {atom}"
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]] or "softBody" in syns_to_props[objects[1]]), f"Inapplicable ontop: {atom}"
     if pred == "nextto":
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable nextto: {atom}"
     if pred == "under":
-        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable under: {atom}"
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]] or "softBody" in syns_to_props[objects[1]]), f"Inapplicable under: {atom}"
     if pred == "touching": 
         assert ("rigidBody" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable touching: {atom}"
     if pred == "inside": 
-        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("nonSubstance" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
+        assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]] or "softBody" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
     if pred == "overlaid": 
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "attached":

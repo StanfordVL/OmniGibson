@@ -55,7 +55,7 @@
                 (?scrub.n.01 - scrub.n.01)
                 (exists 
                     (?fairy_light.n.01 - fairy_light.n.01)
-                    (draped ?fairy_light.n.01 ?scrub.n.01)
+                    (ontop ?fairy_light.n.01 ?scrub.n.01)
                 )
             )
             (forall 

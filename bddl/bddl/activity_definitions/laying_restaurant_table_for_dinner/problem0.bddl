@@ -89,7 +89,7 @@
             (forpairs
                 (?dinner_napkin.n.01 - dinner_napkin.n.01)
                 (?tablefork.n.01 - tablefork.n.01)
-                (ontop ?tablefork.n.01 ?dinner_napkin.n.01)
+                (nextto ?tablefork.n.01 ?dinner_napkin.n.01)
             )
             (forpairs
                 (?tablespoon.n.02 - tablespoon.n.02)
