@@ -46,9 +46,6 @@
                         (covered ?lingerie.n.01 ?stain.n.01_1)
                     )
                     (not
-                        (covered ?lingerie.n.01 ?water.n.06_1)
-                    )
-                    (not
                         (saturated ?lingerie.n.01 ?water.n.06_1)
                     )
                     (folded ?lingerie.n.01)
@@ -60,9 +57,6 @@
                 (and
                     (not
                         (covered ?blouse.n.01 ?stain.n.01_1)
-                    )
-                    (not
-                        (covered ?blouse.n.01 ?water.n.06_1)
                     )
                     (not
                         (saturated ?blouse.n.01 ?water.n.06_1)

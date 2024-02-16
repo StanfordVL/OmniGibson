@@ -28,8 +28,7 @@
     (:init 
         (ontop napkin.n.01_1 console_table.n.01_1) 
         (ontop place_mat.n.01_1 breakfast_table.n.01_1) 
-        (unfolded place_mat.n.01_1)
-        (ontop danish.n.02_1 tray.n.01_1) 
+        (ontop danish.n.02_1 tray.n.01_1)
         (ontop danish.n.02_2 tray.n.01_1) 
         (ontop scone.n.01_1 tray.n.01_1) 
         (ontop sugar_cookie.n.01_1 tray.n.01_1) 
@@ -80,7 +79,7 @@
 
             (nextto ?teacup.n.02_1 ?plate.n.04_1) 
             (ontop ?teapot.n.01_1 ?breakfast_table.n.01_1) 
-            (ontop ?plate.n.04_1 ?breakfast_table.n.01_1)
+            (ontop ?plate.n.04_1 ?place_mat.n.01_1)
             (nextto ?tablefork.n.01_1 ?plate.n.04_1) 
             (overlaid ?napkin.n.01_1 ?plate.n.04_1) 
             (nextto ?teaspoon.n.02_1 ?tablefork.n.01_1) 

@@ -37,12 +37,6 @@
                 (covered ?sheet.n.03_1 ?stain.n.01_1)
             )
             (not 
-                (covered ?case.n.19_1 ?water.n.06_1)
-            )
-            (not 
-                (covered ?sheet.n.03_1 ?water.n.06_1)
-            )
-            (not 
                 (saturated ?case.n.19_1 ?water.n.06_1)
             )
             (not 

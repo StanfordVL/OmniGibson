@@ -7,7 +7,7 @@
         sock.n.01_1 sock.n.01_2 sock.n.01_3 sock.n.01_4 - sock.n.01
         sheet.n.03_1 sheet.n.03_2 - sheet.n.03
         jersey.n.03_1 jersey.n.03_2 jersey.n.03_3 - jersey.n.03
-        table_linen.n.01_1 table_linen.n.01_2 - table_linen.n.01
+        tablecloth.n.01_1 tablecloth.n.01_2 - tablecloth.n.01
         jean.n.01_1 jean.n.01_2 jean.n.01_3 jean.n.01_4 - jean.n.01
         floor.n.01_1 - floor.n.01
         cabinet.n.01_1 cabinet.n.01_2 - cabinet.n.01
@@ -32,8 +32,8 @@
         (inside jersey.n.03_1 hamper.n.02_1) 
         (inside jersey.n.03_2 hamper.n.02_1) 
         (inside jersey.n.03_3 hamper.n.02_1) 
-        (inside table_linen.n.01_1 hamper.n.02_1) 
-        (inside table_linen.n.01_2 hamper.n.02_1) 
+        (inside tablecloth.n.01_1 hamper.n.02_1) 
+        (inside tablecloth.n.01_2 hamper.n.02_1) 
         (ontop hamper.n.02_1 floor.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom cabinet.n.01_1 utility_room) 
@@ -137,20 +137,20 @@
             (exists 
                 (?cabinet.n.01 - cabinet.n.01)
                 (exists 
-                    (?table_linen.n.01 - table_linen.n.01)
-                    (inside ?table_linen.n.01 ?cabinet.n.01)
+                    (?tablecloth.n.01 - tablecloth.n.01)
+                    (inside ?tablecloth.n.01 ?cabinet.n.01)
                 )
             )
             (exists
-                (?table_linen.n.01 - table_linen.n.01)
+                (?tablecloth.n.01 - tablecloth.n.01)
                 (or 
-                    (nextto ?table_linen.n.01 ?table_linen.n.01_1)
-                    (nextto ?table_linen.n.01 ?table_linen.n.01_2)
+                    (nextto ?tablecloth.n.01 ?tablecloth.n.01_1)
+                    (nextto ?tablecloth.n.01 ?tablecloth.n.01_2)
                 )
             )
             (forall 
-                (?table_linen.n.01 - table_linen.n.01)
-                (folded ?table_linen.n.01)
+                (?tablecloth.n.01 - tablecloth.n.01)
+                (folded ?tablecloth.n.01)
             )
         )
     )

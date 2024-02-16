@@ -40,8 +40,8 @@
             (not 
                 (covered ?polo_shirt.n.01_1 ?wrinkle.n.01_1)
             )
-            (covered ?jean.n.01_1 ?detergent.n.02_1)
-            (covered ?polo_shirt.n.01_1 ?detergent.n.02_1)
+            (saturated ?jean.n.01_1 ?detergent.n.02_1)
+            (saturated ?polo_shirt.n.01_1 ?detergent.n.02_1)
         )
     )
 )

@@ -43,8 +43,7 @@
                 (?tortilla.n.01 - tortilla.n.01) 
                 (and
                     (hot ?tortilla.n.01)
-                    (folded ?tortilla.n.01)
-                    (or 
+                    (or
                         (ontop ?tortilla.n.01 ?plate.n.04_1)
                         (ontop ?tortilla.n.01 ?plate.n.04_2)
                         (ontop ?tortilla.n.01 ?plate.n.04_3)

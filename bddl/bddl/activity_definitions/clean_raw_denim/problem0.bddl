@@ -37,9 +37,6 @@
                 (covered ?jean.n.01_1 ?dirt.n.02_1)
             )
             (not 
-                (covered ?jean.n.01_1 ?water.n.06_1)
-            )
-            (not 
                 (saturated ?jean.n.01_1 ?water.n.06_1)
             )
         )

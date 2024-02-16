@@ -4,7 +4,6 @@
     (:objects
         vacuum.n.04_1 - vacuum.n.04
         rug.n.01_1 - rug.n.01
-        crumb.n.03_1 - crumb.n.03
         stain.n.01_1 - stain.n.01
         floor.n.01_1 - floor.n.01
         bucket.n.01_1 - bucket.n.01
@@ -21,8 +20,7 @@
     
     (:init 
         (ontop vacuum.n.04_1 floor.n.01_1)
-        (covered rug.n.01_1 crumb.n.03_1) 
-        (covered rug.n.01_1 stain.n.01_1) 
+        (covered rug.n.01_1 stain.n.01_1)
         (ontop rug.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (filled shampoo__bottle.n.01_1 shampoo.n.01_1)
@@ -38,10 +36,7 @@
     )
     
     (:goal 
-        (and 
-            (not 
-                (covered ?rug.n.01_1 ?crumb.n.03_1)
-            )
+        (and
             (not 
                 (covered ?rug.n.01_1 ?stain.n.01_1)
             )

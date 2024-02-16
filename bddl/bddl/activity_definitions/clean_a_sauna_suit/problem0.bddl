@@ -31,10 +31,7 @@
         (and 
             (not 
                 (covered ?sweat_suit.n.01_1 ?stain.n.01_1)
-            ) 
-            (not 
-                (covered ?sweat_suit.n.01_1 ?water.n.06_1)
-            ) 
+            )
             (not 
                 (saturated ?sweat_suit.n.01_1 ?water.n.06_1)
             ) 

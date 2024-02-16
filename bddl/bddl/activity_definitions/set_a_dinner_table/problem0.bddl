@@ -19,7 +19,7 @@
     (:init 
         (ontop table_knife.n.01_1 console_table.n.01_1) 
         (ontop tablefork.n.01_1 console_table.n.01_1) 
-        (ontop plate.n.04_1 console_table.n.01_1)
+        (ontop plate.n.04_1 place_mat.n.01_1)
         (ontop plate.n.04_2 console_table.n.01_1)
         (ontop napkin.n.01_1 console_table.n.01_1) 
         (ontop wineglass.n.01_1 console_table.n.01_1) 
@@ -35,8 +35,7 @@
     (:goal 
         (and 
             (ontop ?place_mat.n.01_1 ?breakfast_table.n.01_1)
-            (unfolded ?place_mat.n.01_1)
-            (ontop ?plate.n.04_1 ?breakfast_table.n.01_1)
+            (ontop ?plate.n.04_1 ?place_mat.n.01_1)
             (ontop ?plate.n.04_2 ?plate.n.04_1)
             (nextto ?table_knife.n.01_1 ?plate.n.04_1)
             (nextto ?napkin.n.01_1 ?plate.n.04_2)

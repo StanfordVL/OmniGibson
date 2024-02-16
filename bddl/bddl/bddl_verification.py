@@ -306,6 +306,8 @@ def check_synset_predicate_alignment(atom, syns_to_props):
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("particleRemover" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable saturated: {atom}"
     if pred == "covered":
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable covered: {atom}"
+        if "drapeable" in syns_to_props[objects[0]]:
+            assert "visualSubstance" in syns_to_props[objects[1]], f"Inapplicable covered: {atom}"
     if pred == "filled":
         assert ("rigidBody" in syns_to_props[objects[0]]) and ("fillable" in syns_to_props[objects[0]]) and ("physicalSubstance" in syns_to_props[objects[1]]), f"Inapplicable filled/empty: {atom}"
     if pred == "contains" or pred == "empty":
