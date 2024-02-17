@@ -393,8 +393,11 @@ def main(random_selection=False, headless=False, short_exec=False):
             og.log.error(f"\n\nCaught exception sampling activity {activity} in scene {args.scene_model}:\n\n{e}\n\n")
 
             # Clear the in_progress reservation and note the exception
-            worksheet.update_acell(f"B{row}", "")
-            worksheet.update_acell(f"H{row}", f"{e}")
+            cell_list = worksheet.range(f"B{row}:H{row}")
+            for cell, val in zip(cell_list,
+                                 ("", 0, 0, args.scene_model, USER, "" if reason is None else reason, f"{e}")):
+                cell.value = val
+            worksheet.update_cells(cell_list)
 
             try:
                 # Stop sim, clear simulator, and re-create environment
