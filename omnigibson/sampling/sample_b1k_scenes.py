@@ -389,12 +389,13 @@ def main(random_selection=False, headless=False, short_exec=False):
             og.sim.stop()
 
         except Exception as e:
-            og.log.error(traceback.format_exc())
+            traceback_str = f"{traceback.format_exc()}"
+            og.log.error(traceback_str)
             og.log.error(f"\n\nCaught exception sampling activity {activity} in scene {args.scene_model}:\n\n{e}\n\n")
 
             # Clear the in_progress reservation and note the exception
             worksheet.update_acell(f"B{row}", "")
-            worksheet.update_acell(f"H{row}", f"{e}")
+            worksheet.update_acell(f"H{row}", traceback_str)
 
             try:
                 # Stop sim, clear simulator, and re-create environment
