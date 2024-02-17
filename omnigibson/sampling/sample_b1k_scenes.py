@@ -421,6 +421,7 @@ def main(random_selection=False, headless=False, short_exec=False):
             env.task_config["type"] = "BehaviorTask"
             env.task_config["online_object_sampling"] = True
 
+    print("Successful shutdown!")
     # Shutdown at the end
     og.shutdown()
 
