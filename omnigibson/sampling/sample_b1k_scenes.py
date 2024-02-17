@@ -310,15 +310,6 @@ def main(random_selection=False, headless=False, short_exec=False):
             should_sample = False
             reason = f"Unsupported predicate(s): {unsupported_predicates}"
 
-        # check for cloth covered
-        for cond in conditions.parsed_initial_conditions:
-            pred, subj = cond[0], cond[1]
-            if pred == "covered" and "cloth" in OBJECT_TAXONOMY.get_abilities("_".join(subj.split("_")[:-1])):
-                should_sample = False
-                reason = f"Requires cloth covered support"
-                break
-        # init_subjects = set("_".join(subj.split("_")[:-1]) for subj in get_subjects(conditions.parsed_initial_conditions))
-
         env.task_config["activity_name"] = activity
         scene_instance = BehaviorTask.get_cached_activity_scene_filename(
             scene_model=args.scene_model,
