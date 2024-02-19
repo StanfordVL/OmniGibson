@@ -98,6 +98,11 @@ class ContainedParticles(RelativeObjectState, LinkBasedStateMixin):
         """
         return self._volume
 
+    @classmethod
+    def is_compatible_asset(cls, prim, **kwargs):
+        # TODO HACKY SAMPLING FIX: Override this method -- it will be reverted once the assets are updated to include fillables properly
+        return True, None
+
 
 class Contains(RelativeObjectState, BooleanStateMixin):
     def _get_value(self, system):

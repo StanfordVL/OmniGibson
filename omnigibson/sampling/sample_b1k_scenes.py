@@ -358,9 +358,9 @@ def main(random_selection=False, headless=False, short_exec=False):
                 og.log.error(f"\n\nSampling failed: {activity}.\n\nFeedback: {reason}\n\n")
 
             # Write to google sheets
-            cell_list = worksheet.range(f"B{row}:G{row}")
+            cell_list = worksheet.range(f"B{row}:H{row}")
             for cell, val in zip(cell_list,
-                                 ("", int(success), 0, args.scene_model, USER, "" if reason is None else reason)):
+                                 ("", int(success), 0, args.scene_model, USER, "" if reason is None else reason, "")):
                 cell.value = val
             worksheet.update_cells(cell_list)
 
