@@ -404,7 +404,7 @@ class ManipulationRobot(BaseRobot):
         # not have a fixed base (i.e.: the 6DOF --> "floating" joint)
         # see self.get_relative_jacobian() for more info
         eef_link_idx = self._articulation_view.get_body_index(self.eef_links[arm].body_name)
-        fcns[f"eef_{arm}_jacobian_relative"] = lambda: self.get_relative_jacobian()[eef_link_idx, :, -self.n_joints:]
+        fcns[f"eef_{arm}_jacobian_relative"] = lambda: self.get_relative_jacobian(clone=False)[eef_link_idx, :, -self.n_joints:]
 
     def _get_proprioception_dict(self):
         dic = super()._get_proprioception_dict()
@@ -1239,7 +1239,7 @@ class ManipulationRobot(BaseRobot):
             # a zero action will actually keep the AG setting where it already is.
             controller = self._controllers[f"gripper_{arm}"]
             controlled_joints = controller.dof_idx
-            threshold = np.mean(np.array(self.control_limits["position"])[:, controlled_joints], axis=0)
+            threshold = np.mean([self.joint_lower_limits[controlled_joints], self.joint_upper_limits[controlled_joints]], axis=0)
             if controller.control is None:
                 applying_grasp = False
             elif self._grasping_direction == "lower":

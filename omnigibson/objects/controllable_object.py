@@ -512,9 +512,9 @@ class ControllableObject(BaseObject):
         fcns["joint_position"] = lambda: self.get_joint_positions(normalized=False)
         fcns["joint_velocity"] = lambda: self.get_joint_velocities(normalized=False)
         fcns["joint_effort"] = lambda: self.get_joint_efforts(normalized=False)
-        fcns["mass_matrix"] = self.get_mass_matrix
-        fcns["gravity_force"] = self.get_generalized_gravity_forces
-        fcns["cc_force"] = self.get_coriolis_and_centrifugal_forces
+        fcns["mass_matrix"] = lambda: self.get_mass_matrix(clone=False)
+        fcns["gravity_force"] = lambda: self.get_generalized_gravity_forces(clone=False)
+        fcns["cc_force"] = lambda: self.get_coriolis_and_centrifugal_forces(clone=False)
 
         return fcns
 
@@ -532,13 +532,6 @@ class ControllableObject(BaseObject):
         if not drive:
             for controller in self._controllers.values():
                 controller.reset()
-
-    @property
-    def state_size(self):
-        # Grab size from super and add in controller state sizes
-        size = super().state_size
-
-        return size + sum([c.state_size for c in self._controllers.values()])
 
     def _dump_state(self):
         # Grab super state

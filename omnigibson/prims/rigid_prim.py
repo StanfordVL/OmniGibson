@@ -7,7 +7,7 @@ from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.prims.geom_prim import CollisionGeomPrim, VisualGeomPrim
 from omnigibson.utils.constants import GEOM_TYPES
 from omnigibson.utils.sim_utils import CsRawData
-from omnigibson.utils.usd_utils import BoundingBoxAPI, get_mesh_volume_and_com
+from omnigibson.utils.usd_utils import BoundingBoxAPI, get_mesh_volume_and_com, check_extent_radius_ratio
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.ui_utils import create_module_logger
 
@@ -61,6 +61,11 @@ class RigidPrim(XFormPrim):
         self._visual_only = None
         self._collision_meshes = None
         self._visual_meshes = None
+        
+        # Caches for kinematic-only objects
+        # This exists because RigidPrimView uses USD pose read, which is very slow
+        self._kinematic_world_pose_cache = None
+        self._kinematic_local_pose_cache = None
 
         # Run super init
         super().__init__(
@@ -193,9 +198,10 @@ class RigidPrim(XFormPrim):
                     # We need to translate the center of mass from the mesh's local frame to the link's local frame
                     local_pos, local_orn = mesh.get_local_pose()
                     coms.append(T.quat2mat(local_orn) @ (com * mesh.scale) + local_pos)
-                    # If we're not a valid volume, use bounding box approximation for the underlying collision approximation
-                    if not is_volume:
-                        log.warning(f"Got invalid (non-volume) collision mesh: {mesh.name}")
+                    # If the ratio between the max extent and min radius is too large (i.e. shape too oblong), use
+                    # boundingCube approximation for the underlying collision approximation for GPU compatibility
+                    if not check_extent_radius_ratio(mesh_prim):
+                        log.warning(f"Got overly oblong collision mesh: {mesh.name}; use boundingCube approximation")
                         mesh.set_collision_approximation("boundingCube")
                 else:
                     self._visual_meshes[mesh_name] = VisualGeomPrim(**mesh_kwargs)
@@ -284,6 +290,9 @@ class RigidPrim(XFormPrim):
         return self._rigid_prim_view.get_angular_velocities()[0]
 
     def set_position_orientation(self, position=None, orientation=None):
+        # Invalidate kinematic-only object pose caches when new pose is set
+        if self.kinematic_only:
+            self.clear_kinematic_only_cache()
         if position is not None:
             position = np.asarray(position)[None, :]
         if orientation is not None:
@@ -294,13 +303,25 @@ class RigidPrim(XFormPrim):
         BoundingBoxAPI.clear()
 
     def get_position_orientation(self):
+        # Return cached pose if we're kinematic-only
+        if self.kinematic_only and self._kinematic_world_pose_cache is not None:
+            return self._kinematic_world_pose_cache
+        
         pos, ori = self._rigid_prim_view.get_world_poses()
 
         assert np.isclose(np.linalg.norm(ori), 1, atol=1e-3), \
             f"{self.prim_path} orientation {ori} is not a unit quaternion."
-        return pos[0], ori[0][[1, 2, 3, 0]]
+        
+        pos = pos[0]
+        ori = ori[0][[1, 2, 3, 0]]
+        if self.kinematic_only:
+            self._kinematic_world_pose_cache = (pos, ori)
+        return pos, ori
 
     def set_local_pose(self, position=None, orientation=None):
+        # Invalidate kinematic-only object pose caches when new pose is set
+        if self.kinematic_only:
+            self.clear_kinematic_only_cache()
         if position is not None:
             position = np.asarray(position)[None, :]
         if orientation is not None:
@@ -309,8 +330,16 @@ class RigidPrim(XFormPrim):
         BoundingBoxAPI.clear()
 
     def get_local_pose(self):
+        # Return cached pose if we're kinematic-only
+        if self.kinematic_only and self._kinematic_local_pose_cache is not None:
+            return self._kinematic_local_pose_cache
+        
         positions, orientations = self._rigid_prim_view.get_local_poses()
-        return positions[0], orientations[0][[1, 2, 3, 0]]
+        positions = positions[0]
+        orientations = orientations[0][[1, 2, 3, 0]]
+        if self.kinematic_only:
+            self._kinematic_local_pose_cache = (positions, orientations)
+        return positions, orientations
 
     @property
     def _rigid_prim_view(self):
@@ -525,6 +554,16 @@ class RigidPrim(XFormPrim):
         self.set_attribute("physxRigidBody:stabilizationThreshold", threshold)
 
     @property
+    def is_asleep(self):
+        """
+        Returns:
+            bool: whether this rigid prim is asleep or not
+        """
+        # If we're kinematic only, immediately return False since it doesn't follow the sleep / wake paradigm
+        return False if self.kinematic_only \
+            else og.sim.psi.is_sleeping(og.sim.stage_id, lazy.pxr.PhysicsSchemaTools.sdfPathToInt(self.prim_path))
+
+    @property
     def sleep_threshold(self):
         """
         Returns:
@@ -591,6 +630,15 @@ class RigidPrim(XFormPrim):
         """
         prim_id = lazy.pxr.PhysicsSchemaTools.sdfPathToInt(self.prim_path)
         og.sim.psi.put_to_sleep(og.sim.stage_id, prim_id)
+
+    def clear_kinematic_only_cache(self):
+        """
+        Clears the internal kinematic only cached pose. Useful if the parent prim's pose
+        changes without explicitly calling this prim's pose setter
+        """
+        assert self.kinematic_only
+        self._kinematic_local_pose_cache = None
+        self._kinematic_world_pose_cache = None
 
     def _dump_state(self):
         # Grab pose from super class

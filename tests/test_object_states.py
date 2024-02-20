@@ -1,13 +1,13 @@
 from omnigibson.macros import macros as m
 from omnigibson.object_states import *
-from omnigibson.systems import get_system, is_physical_particle_system, is_visual_particle_system
+from omnigibson.systems import get_system, is_physical_particle_system, is_visual_particle_system, VisualParticleSystem
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.physx_utils import apply_force_at_pos, apply_torque
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import BoundingBoxAPI
 import omnigibson as og
 
-from utils import og_test, get_random_pose, place_objA_on_objB_bbox, place_obj_on_floor_plane
+from utils import og_test, get_random_pose, place_objA_on_objB_bbox, place_obj_on_floor_plane, SYSTEM_EXAMPLES
 
 import pytest
 import numpy as np
@@ -764,6 +764,8 @@ def test_particle_source():
     with pytest.raises(NotImplementedError):
         sink.states[ParticleSource].set_value(True)
 
+    water_system.remove_all_particles()
+
 
 @og_test
 def test_particle_sink():
@@ -790,6 +792,8 @@ def test_particle_sink():
     # Cannot set this state
     with pytest.raises(NotImplementedError):
         sink.states[ParticleSink].set_value(True)
+
+    water_system.remove_all_particles()
 
 
 @og_test
@@ -850,6 +854,7 @@ def test_particle_applier():
     with pytest.raises(NotImplementedError):
         spray_bottle.states[ParticleApplier].set_value(True)
 
+    water_system.remove_all_particles()
 
 @og_test
 def test_particle_remover():
@@ -909,6 +914,8 @@ def test_particle_remover():
     with pytest.raises(NotImplementedError):
         vacuum.states[ParticleRemover].set_value(True)
 
+    water_system.remove_all_particles()
+
 
 @og_test
 def test_saturated():
@@ -937,6 +944,8 @@ def test_saturated():
     # Make sure we can toggle saturated to be true and false
     assert remover_dishtowel.states[Saturated].set_value(water_system, False)
     assert remover_dishtowel.states[Saturated].set_value(water_system, True)
+
+    water_system.remove_all_particles()
 
 
 @og_test
@@ -1057,12 +1066,7 @@ def test_draped():
 @og_test
 def test_filled():
     stockpot = og.sim.scene.object_registry("name", "stockpot")
-
-    systems = (
-        get_system("water"),
-        get_system("raspberry"),
-        get_system("diced_apple"),
-    )
+    systems = [get_system(system_name) for system_name, system_class in SYSTEM_EXAMPLES.items() if not issubclass(system_class, VisualParticleSystem)]
     for system in systems:
         stockpot.set_position_orientation(position=np.ones(3) * 50.0, orientation=[0, 0, 0, 1.0])
         place_obj_on_floor_plane(stockpot)
@@ -1079,25 +1083,18 @@ def test_filled():
         # Cannot set Filled state False
         with pytest.raises(NotImplementedError):
             stockpot.states[Filled].set_value(system, False)
+
         system.remove_all_particles()
 
         for _ in range(5):
             og.sim.step()
+
         assert not stockpot.states[Filled].get_value(system)
-
-        system.remove_all_particles()
-
 
 @og_test
 def test_contains():
     stockpot = og.sim.scene.object_registry("name", "stockpot")
-
-    systems = (
-        get_system("water"),
-        get_system("stain"),
-        get_system("raspberry"),
-        get_system("diced__apple"),
-    )
+    systems = [get_system(system_name) for system_name, system_class in SYSTEM_EXAMPLES.items()]
     for system in systems:
         stockpot.set_position_orientation(position=np.ones(3) * 50.0, orientation=[0, 0, 0, 1.0])
         place_obj_on_floor_plane(stockpot)
@@ -1131,44 +1128,41 @@ def test_contains():
         with pytest.raises(NotImplementedError):
             stockpot.states[Contains].set_value(system, True)
 
+        system.remove_all_particles()
 
 @og_test
 def test_covered():
     bracelet = og.sim.scene.object_registry("name", "bracelet")
     oyster = og.sim.scene.object_registry("name", "oyster")
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-
-    systems = (
-        get_system("water"),
-        get_system("stain"),
-        get_system("raspberry"),
-        get_system("diced__apple"),
-    )
-    for obj in (bracelet, oyster, breakfast_table):
+    microwave = og.sim.scene.object_registry("name", "microwave")
+    systems = [get_system(system_name) for system_name, system_class in SYSTEM_EXAMPLES.items()]
+    for obj in (bracelet, oyster, microwave):
         for system in systems:
-            sampleable = is_visual_particle_system(system.name) or np.all(obj.aabb_extent > (2 * system.particle_radius))
-            obj.set_position_orientation(position=np.ones(3) * 50.0, orientation=[0, 0, 0, 1.0])
-            place_obj_on_floor_plane(obj)
+            # bracelet is too small to sample physical particles on it
+            sampleable = is_visual_particle_system(system.name) or obj != bracelet
+            if sampleable:
+                print(f"Testing Covered {obj.name} with {system.name}")
+                obj.set_position_orientation(position=np.ones(3) * 50.0, orientation=[0, 0, 0, 1.0])
+                place_obj_on_floor_plane(obj)
+                for _ in range(5):
+                    og.sim.step()
 
-            for _ in range(5):
-                og.sim.step()
+                assert obj.states[Covered].set_value(system, True)
+                for _ in range(10):
+                    og.sim.step()
+                assert obj.states[Covered].get_value(system)
 
-            assert obj.states[Covered].set_value(system, True) == sampleable
+                assert obj.states[Covered].set_value(system, False)
 
-            for _ in range(5):
-                og.sim.step()
+                # We don't call og.sim.step() here because it's possible for the "second" layer of particles to fall down
+                # and make Covered to be True again. Instead, we clear the caches and check that Covered is False.
+                obj.states[Covered].clear_cache()
+                obj.states[ContactParticles].clear_cache()
+                assert not obj.states[Covered].get_value(system)
 
-            assert obj.states[Covered].get_value(system) == sampleable
-            obj.states[Covered].set_value(system, False)
-
-            for _ in range(5):
-                og.sim.step()
-            assert not obj.states[Covered].get_value(system)
-
-            system.remove_all_particles()
+                system.remove_all_particles()
 
         obj.set_position_orientation(position=np.ones(3) * 75.0, orientation=[0, 0, 0, 1.0])
-
 
 def test_clear_sim():
     og.sim.clear()

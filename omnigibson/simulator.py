@@ -5,9 +5,9 @@ import logging
 import os
 import socket
 from pathlib import Path
-from termcolor import colored
 import atexit
 import signal
+from contextlib import nullcontext
 
 import numpy as np
 import json
@@ -20,15 +20,18 @@ from omnigibson.utils.config_utils import NumpyEncoder
 from omnigibson.utils.python_utils import clear as clear_pu, create_object_from_init_info, Serializable
 from omnigibson.utils.sim_utils import meets_minimum_isaac_version
 from omnigibson.utils.usd_utils import clear as clear_uu, BoundingBoxAPI, FlatcacheAPI, RigidContactAPI
-from omnigibson.utils.ui_utils import CameraMover, disclaimer, create_module_logger, suppress_omni_log
+from omnigibson.utils.ui_utils import (CameraMover, disclaimer, create_module_logger, suppress_omni_log,
+                                       print_icon, print_logo, logo_small)
 from omnigibson.scenes import Scene
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.objects.stateful_object import StatefulObject
 from omnigibson.object_states.contact_subscribed_state_mixin import ContactSubscribedStateMixin
 from omnigibson.object_states.joint_break_subscribed_state_mixin import JointBreakSubscribedStateMixin
 from omnigibson.object_states.factory import get_states_by_dependency_order
-from omnigibson.object_states.update_state_mixin import UpdateStateMixin
+from omnigibson.object_states.update_state_mixin import UpdateStateMixin, GlobalUpdateStateMixin
+from omnigibson.prims.material_prim import MaterialPrim
 from omnigibson.sensors.vision_sensor import VisionSensor
+from omnigibson.systems.macro_particle_system import MacroPhysicalParticleSystem
 from omnigibson.transition_rules import TransitionRuleAPI
 
 # Create module logger
@@ -40,53 +43,11 @@ m = create_module_macros(module_path=__file__)
 m.DEFAULT_VIEWER_CAMERA_POS = (-0.201028, -2.72566 ,  1.0654)
 m.DEFAULT_VIEWER_CAMERA_QUAT = (0.68196617, -0.00155408, -0.00166678,  0.73138017)
 
+m.OBJECT_GRAVEYARD_POS = (100.0, 100.0, 100.0)
+
 # Helper functions for starting omnigibson
 def print_save_usd_warning(_):
     log.warning("Exporting individual USDs has been disabled in OG due to copyrights.")
-
-
-def print_icon():
-    raw_texts = [
-        # Lgrey, grey, lgrey, grey, red, lgrey, red
-        ("                   ___________", "", "", "", "", "", "_"),
-        ("                  /          ", "", "", "", "", "", "/ \\"),
-        ("                 /          ", "", "", "", "/ /", "__", ""),
-        ("                /          ", "", "", "", "", "", "/ /  /\\"),
-        ("               /", "__________", "", "", "/ /", "__", "/  \\"),
-        ("               ", "\\   _____  ", "", "", "\\ \\", "__", "\\  /"),
-        ("                ", "\\  \\  ", "/ ", "\\  ", "", "", "\\ \\_/ /"),
-        ("                 ", "\\  \\", "/", "___\\  ", "", "", "\\   /"),
-        ("                  ", "\\__________", "", "", "", "", "\\_/  "),
-    ]
-    for (lgrey_text0, grey_text0, lgrey_text1, grey_text1, red_text0, lgrey_text2, red_text1) in raw_texts:
-        lgrey_text0 = colored(lgrey_text0, "light_grey", attrs=["bold"])
-        grey_text0 = colored(grey_text0, "light_grey", attrs=["bold", "dark"])
-        lgrey_text1 = colored(lgrey_text1, "light_grey", attrs=["bold"])
-        grey_text1 = colored(grey_text1, "light_grey", attrs=["bold", "dark"])
-        red_text0 = colored(red_text0, "light_red", attrs=["bold"])
-        lgrey_text2 = colored(lgrey_text2, "light_grey", attrs=["bold"])
-        red_text1 = colored(red_text1, "light_red", attrs=["bold"])
-        print(lgrey_text0 + grey_text0 + lgrey_text1 + grey_text1 + red_text0 + lgrey_text2 + red_text1)
-
-
-def print_logo():
-    raw_texts = [
-        ("       ___                  _", "  ____ _ _                     "),
-        ("      / _ \ _ __ ___  _ __ (_)", "/ ___(_) |__  ___  ___  _ __  "),
-        ("     | | | | '_ ` _ \| '_ \| |", " |  _| | '_ \/ __|/ _ \| '_ \ "),
-        ("     | |_| | | | | | | | | | |", " |_| | | |_) \__ \ (_) | | | |"),
-        ("      \___/|_| |_| |_|_| |_|_|", "\____|_|_.__/|___/\___/|_| |_|"),
-    ]
-    for (grey_text, red_text) in raw_texts:
-        grey_text = colored(grey_text, "light_grey", attrs=["bold", "dark"])
-        red_text = colored(red_text, "light_red", attrs=["bold"])
-        print(grey_text + red_text)
-
-
-def logo_small():
-    grey_text = colored("Omni", "light_grey", attrs=["bold", "dark"])
-    red_text = colored("Gibson", "light_red", attrs=["bold"])
-    return grey_text + red_text
 
 
 def _launch_app():
@@ -99,7 +60,21 @@ def _launch_app():
     if gpu_id is not None:
         config_kwargs["active_gpu"] = gpu_id
         config_kwargs["physics_gpu"] = gpu_id
-    app = lazy.omni.isaac.kit.SimulationApp(config_kwargs)
+
+    # Omni's logging is super annoying and overly verbose, so suppress it by modifying the logging levels
+    if not gm.DEBUG:
+        import sys
+        from numba.core.errors import NumbaPerformanceWarning
+        import warnings
+        # TODO: Find a more elegant way to prune omni logging
+        # sys.argv.append("--/log/level=warning")
+        # sys.argv.append("--/log/fileLogLevel=warning")
+        # sys.argv.append("--/log/outputStreamLevel=error")
+        warnings.simplefilter("ignore", category=NumbaPerformanceWarning)
+
+    launch_context = nullcontext if gm.DEBUG else suppress_omni_log
+    with launch_context(None):
+        app = lazy.omni.isaac.kit.SimulationApp(config_kwargs)
 
     # Omni overrides the global logger to be DEBUG, which is very annoying, so we re-override it to the default WARN
     # TODO: Remove this once omniverse fixes it
@@ -251,7 +226,7 @@ def launch_simulator(*args, **kwargs):
             # Set of categories that can be grasped by assisted grasping
             self.object_state_types = get_states_by_dependency_order()
             self.object_state_types_requiring_update = \
-                [state for state in self.object_state_types if issubclass(state, UpdateStateMixin)]
+                [state for state in self.object_state_types if (issubclass(state, UpdateStateMixin) or issubclass(state, GlobalUpdateStateMixin))]
             self.object_state_types_on_contact = \
                 {state for state in self.object_state_types if issubclass(state, ContactSubscribedStateMixin)}
             self.object_state_types_on_joint_break = \
@@ -332,9 +307,9 @@ def launch_simulator(*args, **kwargs):
             """
             assert self.is_stopped(), f"Cannot set simulator physics settings while simulation is playing!"
             self._physics_context.set_gravity(value=-self.gravity)
-            # Also make sure we invert the collision group filter settings so that different collision groups cannot
-            # collide with each other, and modify settings for speed optimization
-            self._physics_context.set_invert_collision_group_filter(True)
+            # Also make sure we don't invert the collision group filter settings so that different collision groups by
+            # default collide with each other, and modify settings for speed optimization
+            self._physics_context.set_invert_collision_group_filter(False)
             self._physics_context.enable_ccd(gm.ENABLE_CCD)
 
             if meets_minimum_isaac_version("2023.0.0"):
@@ -452,6 +427,11 @@ def launch_simulator(*args, **kwargs):
             # Clear the existing scene if any
             self.clear()
 
+            # Initialize all global updatable object states
+            for state in self.object_state_types_requiring_update:
+                if issubclass(state, GlobalUpdateStateMixin):
+                    state.global_initialize()
+
             self._scene = scene
             self._scene.load()
 
@@ -505,7 +485,43 @@ def launch_simulator(*args, **kwargs):
 
         def remove_object(self, obj):
             """
-            Remove a non-robot object from the simulator.
+            Remove one or a list of non-robot object from the simulator.
+
+            Args:
+                obj (BaseObject or Iterable[BaseObject]): one or a list of non-robot objects to remove
+            """
+            objs = [obj] if isinstance(obj, BaseObject) else obj
+
+            if self.is_playing():
+                state = self.dump_state()
+
+                # Omniverse has a strange bug where if GPU dynamics is on and the object to remove is in contact with
+                # with another object (in some specific configuration only, not always), the simulator crashes. Therefore,
+                # we first move the object to a safe location, then remove it.
+                pos = list(m.OBJECT_GRAVEYARD_POS)
+                for ob in objs:
+                    ob.set_position_orientation(pos, [0, 0, 0, 1])
+                    pos[0] += max(ob.aabb_extent)
+
+                # One physics timestep will elapse
+                self.step_physics()
+
+            for ob in objs:
+                self._remove_object(ob)
+
+            if self.is_playing():
+                # Update all handles that are now broken because objects have changed
+                self.update_handles()
+
+                # Load the state back
+                self.load_state(state)
+
+            # Refresh all current rules
+            TransitionRuleAPI.prune_active_rules()
+
+        def _remove_object(self, obj):
+            """
+            Remove a non-robot object from the simulator. Should not be called directly by the user.
 
             Args:
                 obj (BaseObject): a non-robot object to remove
@@ -523,15 +539,7 @@ def launch_simulator(*args, **kwargs):
                 if obj.name == initialize_obj.name:
                     self._objects_to_initialize.pop(i)
                     break
-
             self._scene.remove_object(obj)
-            self.app.update()
-
-            # Update all handles that are now broken because objects have changed
-            self.update_handles()
-
-            # Refresh all current rules
-            TransitionRuleAPI.prune_active_rules()
 
         def remove_prim(self, prim):
             """
@@ -540,8 +548,11 @@ def launch_simulator(*args, **kwargs):
             Args:
                 prim (BasePrim): a prim to remove
             """
-            # Remove prim
-            prim.remove()
+            # [omni.physx.tensors.plugin] prim '[prim_path]' was deleted while being used by a shape in a tensor view
+            # class. The physics.tensors simulationView was invalidated.
+            with suppress_omni_log(channels=["omni.physx.tensors.plugin"]):
+                # Remove prim
+                prim.remove()
 
             # Update all handles that are now broken because prims have changed
             self.update_handles()
@@ -566,6 +577,9 @@ def launch_simulator(*args, **kwargs):
                     # Only need to update if object is already initialized as well
                     if obj.initialized:
                         obj.update_handles()
+                for system in self.scene.systems:
+                    if issubclass(system, MacroPhysicalParticleSystem):
+                        system.refresh_particles_view()
 
             # Finally update any unified views
             RigidContactAPI.initialize_view()
@@ -616,9 +630,13 @@ def launch_simulator(*args, **kwargs):
                 if gm.ENABLE_OBJECT_STATES:
                     # Step the object states in global topological order (if the scene exists)
                     for state_type in self.object_state_types_requiring_update:
-                        for obj in self.scene.get_objects_with_state(state_type):
-                            # Only update objects that have been initialized so far
-                            if obj.initialized:
+                        if issubclass(state_type, GlobalUpdateStateMixin):
+                            state_type.global_update()
+                        if issubclass(state_type, UpdateStateMixin):
+                            for obj in self.scene.get_objects_with_state(state_type):
+                                # Update the state (object should already be initialized since
+                                # this step will only occur after objects are initialized and sim
+                                # is playing
                                 obj.states[state_type].update()
 
                     for obj in self.scene.objects:
@@ -681,6 +699,9 @@ def launch_simulator(*args, **kwargs):
                         for robot in self.scene.robots:
                             if robot.initialized:
                                 robot.update_controller_mode()
+
+                        # Also refresh any transition rules that became stale while sim was stopped
+                        TransitionRuleAPI.refresh_all_rules()
 
                 # Additionally run non physics things
                 self._non_physics_step()
@@ -1038,6 +1059,14 @@ def launch_simulator(*args, **kwargs):
                 self._camera_mover.clear()
                 self._camera_mover = None
 
+            # Clear all global update states
+            for state in self.object_state_types_requiring_update:
+                if issubclass(state, GlobalUpdateStateMixin):
+                    state.global_clear()
+
+            # Clear all materials
+            MaterialPrim.clear()
+
             # Clear all transition rules if being used
             if gm.ENABLE_TRANSITION_RULES:
                 TransitionRuleAPI.clear()
@@ -1265,6 +1294,7 @@ def launch_simulator(*args, **kwargs):
                 position=np.array(m.DEFAULT_VIEWER_CAMERA_POS),
                 orientation=np.array(m.DEFAULT_VIEWER_CAMERA_QUAT),
             )
+            self.viewer_visibility = gm.RENDER_VIEWER_CAMERA
 
         def close(self):
             """
