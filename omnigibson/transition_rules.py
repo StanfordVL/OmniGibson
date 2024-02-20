@@ -7,7 +7,6 @@ from copy import copy
 import itertools
 import os
 import omnigibson as og
-import omnigibson.lazy as lazy
 from omnigibson.macros import gm, create_module_macros
 from omnigibson.systems import get_system, is_system_active, PhysicalParticleSystem, VisualParticleSystem, REGISTERED_SYSTEMS
 from omnigibson.objects.dataset_object import DatasetObject
@@ -422,29 +421,7 @@ class TouchingSlicerVolumeCondition(TouchingAnyCondition):
         '''
         super().__init__(filter_1_name, filter_2_name, allow_optimized=False)
 
-    def _touching_volume(self, obj_paths, volume):
-        volume_mesh_ids = lazy.pxr.PhysicsSchemaTools.encodeSdfPath(volume.prim_path)
 
-        # Define function for checking overlap
-        valid_hit = False
-
-        def overlap_callback(hit):
-            nonlocal valid_hit
-            valid_hit = hit.rigid_body in obj_paths
-            # Continue traversal only if we don't have a valid hit yet
-            return not valid_hit
-
-        def check_overlap():
-            nonlocal valid_hit
-            valid_hit = False
-            if volume.prim.GetTypeName() == "Mesh":
-                og.sim.psqi.overlap_mesh(*volume_mesh_ids, reportFn=overlap_callback)
-            else:
-                og.sim.psqi.overlap_shape(*volume_mesh_ids, reportFn=overlap_callback)
-            return valid_hit
-        
-        return check_overlap()
-        
     def __call__(self, object_candidates):
         # Keep any object that has non-zero impulses between itself and any of the @filter_2_name's objects
         objs = []
@@ -454,11 +431,13 @@ class TouchingSlicerVolumeCondition(TouchingAnyCondition):
 
         for obj in object_candidates[self._filter_1_name]:
             # Find contact points with eligible objects
+            contact_points = []
             for contact in obj.contact_list():
                 if contact.body1 in filter_2_bodies:
-                    # contact_points.append(contact.position.tolist())
-                    break
-            else:
+                    contact_points.append(contact.position.tolist())
+
+            # Skip non-contacted objects
+            if not contact_points:
                 continue
 
             # Find slicer volume
@@ -472,8 +451,14 @@ class TouchingSlicerVolumeCondition(TouchingAnyCondition):
             if slicer_volume is None:
                 continue
 
+            # TODO: Consider moving this to the SlicerActive state for performance.
+            check_in_volume, _ = generate_points_in_volume_checker_function(
+                obj=obj,
+                volume_link=slicer_volume  
+            )
+
             # Check if the contact point is within the check_in_volume function
-            if not any(self._touching_volume(filter_2_bodies, v) for v in slicer_volume.visual_meshes.values()):
+            if not np.any(check_in_volume(contact_points)):
                 continue
 
             # If we make it here, this is a legit slicer contact.

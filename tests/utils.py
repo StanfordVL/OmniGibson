@@ -2,6 +2,7 @@ import omnigibson as og
 
 from omnigibson.macros import gm
 from omnigibson.object_states import *
+from omnigibson.simulator import launch_simulator
 from omnigibson.utils.constants import PrimType, ParticleModifyCondition, ParticleModifyMethod
 import omnigibson.utils.transform_utils as T
 import numpy as np
@@ -12,10 +13,11 @@ TEMP_RELATED_ABILITIES = {"cookable": {}, "freezable": {}, "burnable": {}, "heat
 def og_test(func):
     def wrapper():
         assert_test_scene()
-        try:
-            func()
-        finally:
-            og.sim.scene.reset()
+        func()
+        # try:
+        #     func()
+        # finally:
+        #     og.sim.scene.reset()
     return wrapper
 
 num_objs = 0
@@ -38,36 +40,40 @@ def get_obj_cfg(name, category, model, prim_type=PrimType.RIGID, scale=None, bou
     }
 
 def assert_test_scene():
+    if og.sim is None:
+        launch_simulator()
     if og.sim.scene is None:
         cfg = {
             "scene": {
                 "type": "Scene",
             },
             "objects": [
-                get_obj_cfg("breakfast_table", "breakfast_table", "skczfi"),
-                get_obj_cfg("bottom_cabinet", "bottom_cabinet", "immwzb"),
-                get_obj_cfg("dishtowel", "dishtowel", "dtfspn", prim_type=PrimType.CLOTH, abilities={"cloth": {}}),
-                get_obj_cfg("carpet", "carpet", "ctclvd", prim_type=PrimType.CLOTH, abilities={"cloth": {}}),
-                get_obj_cfg("bowl", "bowl", "ajzltc"),
-                get_obj_cfg("bagel", "bagel", "zlxkry", abilities=TEMP_RELATED_ABILITIES),
-                get_obj_cfg("cookable_dishtowel", "dishtowel", "dtfspn", prim_type=PrimType.CLOTH, abilities={**TEMP_RELATED_ABILITIES, **{"cloth": {}}}),
-                get_obj_cfg("microwave", "microwave", "hjjxmi"),
-                get_obj_cfg("stove", "stove", "yhjzwg"),
-                get_obj_cfg("fridge", "fridge", "dszchb"),
-                get_obj_cfg("plywood", "plywood", "fkmkqa", abilities={"flammable": {}}),
-                get_obj_cfg("shelf_back_panel", "shelf_back_panel", "gjsnrt", abilities={"attachable": {}}),
-                get_obj_cfg("shelf_shelf", "shelf_shelf", "ymtnqa", abilities={"attachable": {}}),
-                get_obj_cfg("shelf_baseboard", "shelf_baseboard", "hlhneo", abilities={"attachable": {}}),
-                get_obj_cfg("bracelet", "bracelet", "thqqmo"),
-                get_obj_cfg("oyster", "oyster", "enzocs"),
-                get_obj_cfg("sink", "sink", "egwapq", scale=np.ones(3)),
-                get_obj_cfg("stockpot", "stockpot", "dcleem", abilities={"fillable": {}}),
-                get_obj_cfg("applier_dishtowel", "dishtowel", "dtfspn", abilities={"particleApplier": {"method": ParticleModifyMethod.ADJACENCY, "conditions": {"water": []}}}),
-                get_obj_cfg("remover_dishtowel", "dishtowel", "dtfspn", abilities={"particleRemover": {"method": ParticleModifyMethod.ADJACENCY, "conditions": {"water": []}}}),
-                get_obj_cfg("spray_bottle", "spray_bottle", "asztxi", visual_only=True, abilities={"toggleable": {}, "particleApplier": {"method": ParticleModifyMethod.PROJECTION, "conditions": {"water": [(ParticleModifyCondition.TOGGLEDON, True)]}}}),
-                get_obj_cfg("vacuum", "vacuum", "bdmsbr", visual_only=True, abilities={"toggleable": {}, "particleRemover": {"method": ParticleModifyMethod.PROJECTION, "conditions": {"water": [(ParticleModifyCondition.TOGGLEDON, True)]}}}),
-                get_obj_cfg("blender", "blender", "cwkvib", bounding_box=[0.316, 0.318, 0.649], abilities={"fillable": {}, "blender": {}, "toggleable": {}}),
-                get_obj_cfg("oven", "oven", "cgtaer", bounding_box=[0.943, 0.837, 1.297]),
+                # get_obj_cfg("breakfast_table", "breakfast_table", "skczfi"),
+                # get_obj_cfg("bottom_cabinet", "bottom_cabinet", "immwzb"),
+                # get_obj_cfg("dishtowel", "dishtowel", "dtfspn", prim_type=PrimType.CLOTH, abilities={"cloth": {}}),
+                # get_obj_cfg("carpet", "carpet", "ctclvd", prim_type=PrimType.CLOTH, abilities={"cloth": {}}),
+                # get_obj_cfg("bowl", "bowl", "ajzltc"),
+                # get_obj_cfg("bagel", "bagel", "zlxkry", abilities=TEMP_RELATED_ABILITIES),
+                # get_obj_cfg("cookable_dishtowel", "dishtowel", "dtfspn", prim_type=PrimType.CLOTH, abilities={**TEMP_RELATED_ABILITIES, **{"cloth": {}}}),
+                # get_obj_cfg("microwave", "microwave", "hjjxmi"),
+                # get_obj_cfg("stove", "stove", "yhjzwg"),
+                # get_obj_cfg("fridge", "fridge", "dszchb"),
+                # get_obj_cfg("plywood", "plywood", "fkmkqa", abilities={"flammable": {}}),
+                # get_obj_cfg("shelf_back_panel", "shelf_back_panel", "gjsnrt", abilities={"attachable": {}}),
+                # get_obj_cfg("shelf_shelf", "shelf_shelf", "ymtnqa", abilities={"attachable": {}}),
+                # get_obj_cfg("shelf_baseboard", "shelf_baseboard", "hlhneo", abilities={"attachable": {}}),
+                # get_obj_cfg("bracelet", "bracelet", "thqqmo"),
+                # get_obj_cfg("oyster", "oyster", "enzocs"),
+                # get_obj_cfg("sink", "sink", "egwapq", scale=np.ones(3)),
+                # get_obj_cfg("stockpot", "stockpot", "dcleem", abilities={"fillable": {}}),
+                # get_obj_cfg("applier_dishtowel", "dishtowel", "dtfspn", abilities={"particleApplier": {"method": ParticleModifyMethod.ADJACENCY, "conditions": {"water": []}}}),
+                # get_obj_cfg("remover_dishtowel", "dishtowel", "dtfspn", abilities={"particleRemover": {"method": ParticleModifyMethod.ADJACENCY, "conditions": {"water": []}}}),
+                # get_obj_cfg("spray_bottle", "spray_bottle", "asztxi", visual_only=True, abilities={"toggleable": {}, "particleApplier": {"method": ParticleModifyMethod.PROJECTION, "conditions": {"water": [(ParticleModifyCondition.TOGGLEDON, True)]}}}),
+                # get_obj_cfg("vacuum", "vacuum", "bdmsbr", visual_only=True, abilities={"toggleable": {}, "particleRemover": {"method": ParticleModifyMethod.PROJECTION, "conditions": {"water": [(ParticleModifyCondition.TOGGLEDON, True)]}}}),
+                # get_obj_cfg("blender", "blender", "cwkvib", bounding_box=[0.316, 0.318, 0.649], abilities={"fillable": {}, "blender": {}, "toggleable": {}}),
+                # get_obj_cfg("oven", "oven", "cgtaer", bounding_box=[0.943, 0.837, 1.297]),
+                get_obj_cfg("knife", "carving_knife", "usqmjc"),
+                get_obj_cfg("apple", "apple", "agveuv", bounding_box=[0.098, 0.098, 0.115]),
             ],
             "robots": [
                 {

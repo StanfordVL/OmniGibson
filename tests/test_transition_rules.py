@@ -102,3 +102,80 @@ def test_cooking_rule():
     if dough_exists:
         og.sim.remove_object(dough)
     og.sim.remove_object(sheet)
+
+@og_test
+def test_slicer_volume_sharp_end():
+    """
+    Demo of slicing an apple into two apple slices
+    """
+
+    # Create the scene config to load -- empty scene with knife and apple
+
+    # Grab reference to apple and knife
+    apple = og.sim.scene.object_registry("name", "apple")
+    knife = og.sim.scene.object_registry("name", "knife")
+    place_obj_on_floor_plane(apple)
+    place_obj_on_floor_plane(knife)
+
+
+    # Let apple settle
+    for _ in range(50):
+        og.sim.step()
+
+    # knife.keep_still()
+    knife.set_position_orientation(
+        position=apple.get_position() + np.array([-0.15, 0.0, 0.2]),
+        orientation=T.euler2quat([-np.pi / 4, 0, 0]),
+    )
+
+    # Step simulation for a bit so that apple is sliced
+    for i in range(10000):
+        og.sim.step()
+
+    # Check if apple is sliced
+    is_empty = len(og.sim.scene.object_registry("category", "half_apple", default_val=[])) == 0 
+    assert not is_empty
+
+    # Remove objects
+    og.sim.remove_object(apple)
+    og.sim.remove_object(knife)
+
+@og_test
+def test_slicer_volume_blunt_end():
+    """
+    Demo of slicing an apple into two apple slices
+    """
+
+    # Create the scene config to load -- empty scene with knife and apple
+
+    # Grab reference to apple and knife
+    apple = og.sim.scene.object_registry("name", "apple")
+    knife = og.sim.scene.object_registry("name", "knife")
+    place_obj_on_floor_plane(apple)
+    place_obj_on_floor_plane(knife)
+
+    # Let apple settle
+    for _ in range(50):
+        og.sim.step()
+
+    knife.keep_still()
+    knife.set_position_orientation(
+        position=apple.get_position() + np.array([-0.15, 0.0, 0.15]),
+        orientation=T.euler2quat([np.pi / 2, 0, 0]),
+    )
+
+    # Step simulation for a bit so that apple is sliced
+    for i in range(100):
+        og.sim.step()
+
+
+    # Check if apple is not sliced
+    is_sliced = og.sim.scene.object_registry("name", "apple") is None
+    assert not is_sliced
+
+    # Remove objects
+    og.sim.remove_object(apple)
+    og.sim.remove_object(knife)
+
+if __name__ == "__main__":
+    test_slicer_volume_sharp_end()

@@ -525,7 +525,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
             self._current_step += 1
 
             return obs, reward, done, info
-        except:
+        except KeyError:
             raise ValueError(f"Failed to execute environment step {self._current_step} in episode {self._current_episode}")
 
     def _reset_variables(self):
