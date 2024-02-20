@@ -2,7 +2,6 @@ import os
 import pathlib
 import re
 
-import docker
 import fs.path
 from fs.osfs import OSFS
 from fs.tempfs import TempFS
@@ -113,7 +112,9 @@ def save_mesh(mesh, fs, name, **kwargs):
     with fs.open(name, "wb") as f:
         return mesh.export(f, resolver=FSResolver(fs), file_type="obj", **kwargs)
 
-def create_docker_container(cl: docker.DockerClient, hostname:str, i: int):
+def create_docker_container(cl, hostname:str, i: int):
+    import docker
+
     name = f"ig_pipeline_{i}"
     try:
         ctr = cl.containers.get(name)
@@ -149,6 +150,7 @@ def launch_cluster(worker_count):
     elif CLUSTER_MODE == "slurm":
         subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh {hostname}:8786"', shell=True, check=True)
     elif CLUSTER_MODE == "docker":
+        import docker
         rtdir = os.environ["XDG_RUNTIME_DIR"]
         client = docker.DockerClient(base_url=f"unix://{rtdir}/docker.sock")
         client.images.pull("stanfordvl/ig_pipeline")
