@@ -165,7 +165,7 @@ blanket.n.01,bedclothes.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 bleaching_agent__atomizer.n.01,dispenser.n.01,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,rigidBody
 bleaching_agent.n.01,agent.n.03,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 blender.n.01,mixer.n.04,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-bleu.n.01,cheese.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,softBody
+bleu.n.01,cheese.n.01,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,softBody
 blouse.n.01,top.n.10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 blueberry_compote.n.01,compote.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 blueberry_mousse.n.01,mousse.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
@@ -412,7 +412,7 @@ bust.n.03,sculpture.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 butane.n.01,"fuel.n.01,gas.n.02,methane_series.n.01",0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 butter__package.n.01,container.n.01,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 butter_cookie.n.01,cookie.n.01,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-butter.n.01,"dairy_product.n.01,food.n.02",0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
+butter.n.01,"dairy_product.n.01,food.n.02",0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
 buttermilk_pancake.n.01,pancake.n.01,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 buttermilk.n.01,milk.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 butternut_squash.n.01,winter_squash.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -444,7 +444,7 @@ can.n.01,container.n.01,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 candlestick.n.01,holder.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 candy_cane.n.01,candy.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 candy_dispenser_shelf.n.01,dispenser.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-cane_sugar.n.02,sugar.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,microPhysicalSubstance
+cane_sugar.n.02,sugar.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,microPhysicalSubstance
 canister.n.02,container.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 canned_food.n.01,foodstuff.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 canola_oil.n.01,vegetable_oil.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
@@ -522,7 +522,7 @@ charcoal.n.02,writing_implement.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,
 chard.n.02,greens.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 charger.n.02,device.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 checkout.n.03,counter.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
-cheddar.n.02,cheese.n.01,0,0,0,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,softBody
+cheddar.n.02,cheese.n.01,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,softBody
 cheese_sauce.n.01,white_sauce.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 cheese_tart.n.01,tart.n.02,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 cheesecake.n.01,cake.n.03,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,softBody
@@ -558,12 +558,12 @@ chisel.n.01,edge_tool.n.01,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,rigidBody
 chives.n.01,alliaceous_plant.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 chlorine__bottle.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 chlorine.n.01,"chemical_element.n.01,gas.n.02,halogen.n.01",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
-chocolate_bar.n.01,chocolate_candy.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
+chocolate_bar.n.01,chocolate_candy.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
 chocolate_biscuit.n.01,cookie.n.01,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 chocolate_cake.n.01,cake.n.03,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,softBody
 chocolate_chip_cookie.n.01,cookie.n.01,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 chocolate_cookie_dough.n.01,dough.n.01,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,softBody
-chocolate_kiss.n.01,"chocolate_candy.n.01,kiss.n.03",0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+chocolate_kiss.n.01,"chocolate_candy.n.01,kiss.n.03",0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 chocolate_milk.n.01,milk.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 chocolate_sauce__bottle.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 chocolate_sauce.n.01,sauce.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
@@ -797,13 +797,13 @@ diced__broccoli.n.01,cruciferous_vegetable.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,
 diced__head_cabbage.n.01,cabbage.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__celery.n.01,vegetable.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__chard.n.01,greens.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-diced__cheddar.n.01,cheese.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__cheddar.n.01,cheese.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__chicken_breast.n.01,breast.n.03,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__chicken.n.01,poultry.n.02,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__chili.n.01,hot_pepper.n.02,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__clove.n.01,garlic.n.02,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__cucumber.n.01,vegetable.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-diced__feta.n.01,cheese.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__feta.n.01,cheese.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__green_onion.n.01,onion.n.03,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__kiwi.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__lemon.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
@@ -1000,12 +1000,12 @@ granola.n.01,cold_cereal.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroP
 granulated_salt.n.01,flavorer.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,microPhysicalSubstance
 granulated_sugar__jar.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 granulated_sugar__sack.n.01,bag.n.01,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-granulated_sugar.n.01,sugar.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,microPhysicalSubstance
+granulated_sugar.n.01,sugar.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,microPhysicalSubstance
 grape.n.01,edible_fruit.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 grapefruit.n.02,citrus.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 grate.n.01,framework.n.03,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 grated_cheese__sack.n.01,bag.n.01,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-grated_cheese.n.01,cheese.n.01,0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+grated_cheese.n.01,cheese.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 grater.n.01,kitchen_utensil.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 gravel.n.01,rock.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 gravestone.n.01,"memorial.n.03,stone.n.02",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1043,7 +1043,7 @@ half__bell_pepper.n.01,sweet_pepper.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0
 half__chestnut.n.01,edible_nut.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__coconut.n.01,edible_nut.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__eggplant.n.01,solanaceous_vegetable.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__feta.n.01,cheese.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,softBody
+half__feta.n.01,cheese.n.01,1,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,softBody
 half__hard-boiled_egg.n.01,boiled_egg.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__lemon.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__lime.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1277,7 +1277,7 @@ low-fat_milk.n.01,milk.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 lubricant__bottle.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 lubricant.n.01,substance.n.07,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 luggage_compartment.n.01,compartment.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-lump_sugar.n.01,sugar.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
+lump_sugar.n.01,sugar.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
 lunch_box.n.01,container.n.01,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 macaroni.n.02,pasta.n.02,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 macaroni_and_cheese.n.01,pasta.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1358,7 +1358,7 @@ mouse.n.04,electronic_device.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,ri
 mousepad.n.01,mat.n.07,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 mousetrap.n.01,trap.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 mouthpiece.n.06,aperture.n.03,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-mozzarella.n.01,cheese.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,softBody
+mozzarella.n.01,cheese.n.01,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,softBody
 mud.n.03,earth.n.02,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,visualSubstance
 muffin.n.01,quick_bread.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,softBody
 mug.n.04,drinking_vessel.n.01,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1904,7 +1904,7 @@ sweatshirt.n.01,pullover.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 sweet_corn.n.02,corn.n.03,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 swimming_pool.n.01,"athletic_facility.n.01,pool.n.01",0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 swing.n.02,"mechanical_device.n.01,plaything.n.01",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-swiss_cheese.n.01,cheese.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
+swiss_cheese.n.01,cheese.n.01,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
 switch.n.01,control.n.09,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 swivel_chair.n.01,chair.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 syringe.n.01,medical_instrument.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2091,7 +2091,7 @@ whisk.n.01,mixer.n.04,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,rigidBody
 whiskey__bottle.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 whiskey_stone.n.01,rock.n.01,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 whistle.n.04,"acoustic_device.n.01,signaling_device.n.01",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-white_chocolate.n.01,chocolate.n.02,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
+white_chocolate.n.01,chocolate.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,rigidBody
 white_rice__sack.n.01,bag.n.01,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 white_rice.n.01,rice.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,microPhysicalSubstance
 white_sauce__bottle.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2216,7 +2216,7 @@ half__doughnut.n.01,friedcake.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,s
 half__olive.n.01,"drupe.n.01,relish.n.02",1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__pumpkin.n.01,vegetable.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__potato_pancake.n.01,pancake.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__buttermilk_pancake.n.01,pancake.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+half__buttermilk_pancake.n.01,pancake.n.01,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__squid.n.01,seafood.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__hotdog.n.01,sandwich.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__ham_hock.n.01,leg.n.05,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2246,7 +2246,7 @@ half__meatball.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidB
 half__parsley.n.01,herb.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__taco.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__cauliflower.n.01,cruciferous_vegetable.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__cheddar.n.01,cheese.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,softBody
+half__cheddar.n.01,cheese.n.01,1,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,softBody
 half__bacon.n.01,cut_of_pork.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__rutabaga.n.01,turnip.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__fruitcake.n.01,cake.n.03,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,softBody
@@ -2278,8 +2278,8 @@ half__duck.n.01,poultry.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBo
 half__omelet.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__trout.n.01,fish.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__french_fries.n.01,starches.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__swiss_cheese.n.01,cheese.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,rigidBody
-half__bleu.n.01,cheese.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,softBody
+half__swiss_cheese.n.01,cheese.n.01,1,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,rigidBody
+half__bleu.n.01,cheese.n.01,1,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,softBody
 half__rope.n.01,line.n.18,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rope
 half__entire_leaf.n.01,leaf.n.01,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__sirloin.n.01,cut.n.06,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2319,7 +2319,7 @@ half__ramen.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__sugar_cookie.n.01,cookie.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__bamboo.n.01,wood.n.01,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__pastry.n.01,dough.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,softBody
-half__butter_cookie.n.01,cookie.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+half__butter_cookie.n.01,cookie.n.01,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__porkchop.n.01,chop.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__prosciutto.n.01,ham.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__steak.n.01,cut.n.06,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2348,7 +2348,7 @@ half__fillet.n.01,piece.n.08,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBo
 half__granola_bar.n.01,cookie.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__tuna.n.01,saltwater_fish.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__grapefruit.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-half__mozzarella.n.01,cheese.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,softBody
+half__mozzarella.n.01,cheese.n.01,1,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,softBody
 half__bagel_dough.n.01,dough.n.01,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,softBody
 half__kabob.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 half__bratwurst.n.01,pork_sausage.n.01,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2406,7 +2406,7 @@ diced__gingerbread.n.01,cake.n.03,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,ma
 diced__peppermint.n.01,mint.n.05,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__hemp.n.01,plant_fiber.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__biscuit_dough.n.01,dough.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-diced__swiss_cheese.n.01,cheese.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__swiss_cheese.n.01,cheese.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__carne_asada.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__cheese_tart.n.01,tart.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__coconut.n.01,edible_nut.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
@@ -2418,7 +2418,7 @@ diced__hamburger.n.01,sandwich.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 diced__pizza.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__halibut.n.01,flatfish.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__chives.n.01,alliaceous_plant.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-diced__bleu.n.01,cheese.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__bleu.n.01,cheese.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__danish.n.01,sweet_roll.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__auricularia.n.01,fungus_genus.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__burrito.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
@@ -2442,7 +2442,7 @@ diced__date.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,m
 diced__pomegranate.n.01,edible_fruit.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__arepa.n.01,sandwich.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__hard-boiled_egg.n.01,boiled_egg.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-diced__butter.n.01,"dairy_product.n.01,food.n.02",1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__butter.n.01,"dairy_product.n.01,food.n.02",1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__ginger.n.01,flavorer.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__butternut_squash.n.01,winter_squash.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__sushi.n.01,dish.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
@@ -2546,7 +2546,7 @@ diced__fennel.n.01,vegetable.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,ma
 diced__lime.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__pita.n.01,flatbread.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__grapefruit.n.01,citrus.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
-diced__mozzarella.n.01,cheese.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
+diced__mozzarella.n.01,cheese.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__ham_hock.n.01,leg.n.05,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__durian.n.01,edible_fruit.n.01,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
 diced__tenderloin.n.01,cut.n.06,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,macroPhysicalSubstance
