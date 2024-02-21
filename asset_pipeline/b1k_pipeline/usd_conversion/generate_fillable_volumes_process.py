@@ -93,8 +93,8 @@ def generate_particles_in_box(box_half_extent):
     # Grab the link's AABB (or fallback to obj AABB if link does not have a valid AABB),
     # and generate a grid of points based on the sampling distance
     low = np.array([-1, -1, 0]) * box_half_extent
-    high = np.array([1, 1, 2]) * box_half_extent
-    extent = np.ones(3) * box_half_extent * 2
+    high = np.array([1, 1, 2]) * box_half_extent + np.array([0, 0, 0.05])
+    extent = high - low
     # We sample the range of each extent minus
     sampling_distance = 2 * particle_radius
     n_particles_per_axis = (extent / sampling_distance).astype(int)
@@ -110,8 +110,6 @@ def generate_particles_in_box(box_half_extent):
         positions=particle_positions,
     )
 
-    return water
-
 def draw_mesh(mesh, parent_pos):
     draw = lazy.omni.isaac.debug_draw._debug_draw.acquire_debug_draw_interface()
     edge_vert_idxes = mesh.edges_unique
@@ -121,6 +119,21 @@ def draw_mesh(mesh, parent_pos):
     points1 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 0]] + parent_pos).tolist()]
     points2 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 1]] + parent_pos).tolist()]
     draw.draw_lines(points1, points2, colors, sizes)
+
+def check_in_contact(system, positions):
+    """
+    Checks whether each particle specified by @particle_positions are in contact with any rigid body.
+
+    Args:
+        positions (np.array): (n_particles, 3) shaped array specifying per-particle (x,y,z) positions
+
+    Returns:
+        n-array: (n_particles,) boolean array, True if in contact, otherwise False
+    """
+    in_contact = np.zeros(len(positions), dtype=bool)
+    for idx, pos in enumerate(positions):
+        in_contact[idx] = og.sim.psqi.overlap_sphere_any(system.particle_contact_radius * 0.8, pos)
+    return in_contact
 
 def process_object(cat, mdl, out_path):
     if og.sim:
@@ -188,11 +201,12 @@ def process_object(cat, mdl, out_path):
     og.sim.step()
 
     # Now generate the box and the particles
+    water = get_system("water")
     box_half_extent = aabb_extent * 0.55  # 1.5 times the space
-    box_half_extent[2] = np.maximum(box_half_extent[2], 0.1)  # at least 10cm water
+    box_half_extent = np.maximum(box_half_extent, aabb_extent / 2 + 2.1 * water.particle_radius)
     generate_box(box_half_extent)
     og.sim.step()
-    water = generate_particles_in_box(box_half_extent)
+    generate_particles_in_box(box_half_extent)
     for _ in range(100):
         og.sim.step()
 
@@ -235,12 +249,14 @@ def process_object(cat, mdl, out_path):
         if fillable.get_position()[2] > obj_free_pos[2]:
             break
 
+    # Temporarily use a fixed shakeoff. TODO: Fix the math below.
     # Gentle side-by-side shakeoff
-    spill_fraction = 0.1
-    extents = aabb_extent[:2]
-    # formula for how much to rotate for total spill to be spill_fraction of the volume
-    angles = np.arctan(0.5 * spill_fraction * extents / aabb_extent[2])
-    angles = np.flip(angles)
+    # spill_fraction = 0.05
+    # extents = aabb_extent[:2]
+    # # formula for how much to rotate for total spill to be spill_fraction of the volume
+    # angles = np.arctan(extents / (2 * aabb_extent[2] * spill_fraction))
+    # angles = np.flip(angles)
+    angles = np.full((2,), np.deg2rad(10))
 
     print("Rotation amounts (degrees): ", np.rad2deg(angles))
 
@@ -269,13 +285,14 @@ def process_object(cat, mdl, out_path):
     # Get the particles whose center is within the object's AABB
     aabb_min, aabb_max = fillable.aabb
     particles = water.get_particles_position_orientation()[0]
+    particles = particles[np.where(check_in_contact(water, particles) == 0)[0]]
     particle_point_offsets = np.array([e * side * water.particle_radius for e in np.eye(3) for side in [-1, 1]] + [np.zeros(3)])
     points = np.repeat(particles, len(particle_point_offsets), axis=0) + np.tile(particle_point_offsets, (len(particles), 1))
     points = points[np.all(points <= aabb_max, axis=1)]
     points = points[np.all(points >= aabb_min, axis=1)]
     assert len(points) > 0, "No points found in the AABB of the object."
 
-    # Get the objects that belong to the largest connected component
+    # Get the points that belong to the largest connected component
     points = find_largest_connected_component(points, 2 * water.particle_radius)
 
     # Get the particles in the frame of the object
@@ -288,6 +305,8 @@ def process_object(cat, mdl, out_path):
     hull.export(out_path, file_type="obj", include_normals=False, include_color=False, include_texture=False)
 
     # draw_mesh(hull, fillable.get_position())
+    # while True:
+    #     og.sim.render()
 
     # from omnigibson.utils.deprecated_utils import CreateMeshPrimWithDefaultXformCommand
     # container_prim_path = fillable.root_link.prim_path + "/container"
