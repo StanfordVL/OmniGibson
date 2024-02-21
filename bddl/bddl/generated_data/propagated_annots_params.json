@@ -10247,9 +10247,6 @@
         "wrinkleable": {}
     },
     "bleu.n.01": {
-        "cookable": {
-            "cook_temperature": 82.0
-        },
         "deformable": {},
         "disinfectable": {},
         "dustyable": {},
@@ -18020,9 +18017,6 @@
         "substance": {}
     },
     "butter.n.01": {
-        "cookable": {
-            "cook_temperature": 38.0
-        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -18792,10 +18786,6 @@
         "wrinkleable": {}
     },
     "cane_sugar.n.02": {
-        "cookable": {
-            "cook_temperature": 130.0,
-            "substance_cooking_derivative_synset": "cooked__cane_sugar.n.01"
-        },
         "freezable": {},
         "meltable": {
             "meltable_derivative_synset": "melted__cane_sugar.n.01"
@@ -21621,9 +21611,6 @@
         "wrinkleable": {}
     },
     "cheddar.n.02": {
-        "cookable": {
-            "cook_temperature": 90.0
-        },
         "deformable": {},
         "disinfectable": {},
         "dustyable": {},
@@ -22983,9 +22970,6 @@
         "freezable": {}
     },
     "chocolate_bar.n.01": {
-        "cookable": {
-            "cook_temperature": 30.0
-        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -23131,10 +23115,6 @@
         "wrinkleable": {}
     },
     "chocolate_kiss.n.01": {
-        "cookable": {
-            "cook_temperature": 46.0,
-            "substance_cooking_derivative_synset": "cooked__chocolate_kiss.n.01"
-        },
         "freezable": {},
         "macroPhysicalSubstance": {},
         "meltable": {
@@ -26138,15 +26118,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cooked__cane_sugar.n.01": {
-        "freezable": {},
-        "meltable": {
-            "meltable_derivative_synset": "melted__cane_sugar.n.01"
-        },
-        "microPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "cooked__canola_oil.n.01": {
         "boilable": {},
         "freezable": {},
@@ -26255,15 +26226,6 @@
     "cooked__chili_powder.n.01": {
         "freezable": {},
         "microPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__chocolate_kiss.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "meltable": {
-            "meltable_derivative_synset": "melted__chocolate.n.01"
-        },
         "physicalSubstance": {},
         "substance": {}
     },
@@ -26644,15 +26606,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cooked__diced__bleu.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "meltable": {
-            "meltable_derivative_synset": "melted__bleu.n.01"
-        },
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "cooked__diced__bok_choy.n.01": {
         "freezable": {},
         "macroPhysicalSubstance": {},
@@ -26716,15 +26669,6 @@
     "cooked__diced__burrito.n.01": {
         "freezable": {},
         "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__diced__butter.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "meltable": {
-            "meltable_derivative_synset": "cooked__melted__butter.n.01"
-        },
         "physicalSubstance": {},
         "substance": {}
     },
@@ -26815,21 +26759,6 @@
         },
         "freezable": {},
         "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__diced__cheddar.n.01": {
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "meltable": {
-            "meltable_derivative_synset": "melted__cheddar.n.01"
-        },
         "physicalSubstance": {},
         "substance": {}
     },
@@ -27163,21 +27092,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cooked__diced__feta.n.01": {
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "meltable": {
-            "meltable_derivative_synset": "melted__feta.n.01"
-        },
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "cooked__diced__fillet.n.01": {
         "freezable": {},
         "macroPhysicalSubstance": {},
@@ -27499,15 +27413,6 @@
     "cooked__diced__melon.n.01": {
         "freezable": {},
         "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__diced__mozzarella.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "meltable": {
-            "meltable_derivative_synset": "melted__mozzarella.n.01"
-        },
         "physicalSubstance": {},
         "substance": {}
     },
@@ -27925,15 +27830,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cooked__diced__swiss_cheese.n.01": {
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "meltable": {
-            "meltable_derivative_synset": "melted__swiss_cheese.n.01"
-        },
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "cooked__diced__taco.n.01": {
         "freezable": {},
         "macroPhysicalSubstance": {},
@@ -28203,33 +28099,6 @@
     "cooked__granulated_salt.n.01": {
         "freezable": {},
         "microPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__granulated_sugar.n.01": {
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "microPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__grated_cheese.n.01": {
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "macroPhysicalSubstance": {},
-        "meltable": {
-            "meltable_derivative_synset": "cooked__melted__grated_cheese.n.01"
-        },
         "physicalSubstance": {},
         "substance": {}
     },
@@ -28509,90 +28378,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cooked__melted__bleu.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__butter.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__cane_sugar.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__cheddar.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__chocolate.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__feta.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__granulated_sugar.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__grated_cheese.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__mozzarella.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__parmesan.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__swiss_cheese.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__melted__white_chocolate.n.01": {
-        "boilable": {},
-        "freezable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "cooked__meringue.n.01": {
         "boilable": {},
         "freezable": {},
@@ -28743,12 +28528,6 @@
             "heating_rate": 0.04,
             "distance_threshold": 0.2
         },
-        "freezable": {},
-        "microPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "cooked__parmesan.n.01": {
         "freezable": {},
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
@@ -35250,10 +35029,6 @@
         "substance": {}
     },
     "diced__bleu.n.01": {
-        "cookable": {
-            "cook_temperature": 82.0,
-            "substance_cooking_derivative_synset": "cooked__diced__bleu.n.01"
-        },
         "freezable": {},
         "macroPhysicalSubstance": {},
         "meltable": {
@@ -35377,10 +35152,6 @@
         "substance": {}
     },
     "diced__butter.n.01": {
-        "cookable": {
-            "cook_temperature": 38.0,
-            "substance_cooking_derivative_synset": "cooked__diced__butter.n.01"
-        },
         "freezable": {},
         "macroPhysicalSubstance": {},
         "meltable": {
@@ -35508,10 +35279,6 @@
         "substance": {}
     },
     "diced__cheddar.n.01": {
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__diced__cheddar.n.01"
-        },
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -36025,10 +35792,6 @@
         "substance": {}
     },
     "diced__feta.n.01": {
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__diced__feta.n.01"
-        },
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -36562,10 +36325,6 @@
         "substance": {}
     },
     "diced__mozzarella.n.01": {
-        "cookable": {
-            "cook_temperature": 71.0,
-            "substance_cooking_derivative_synset": "cooked__diced__mozzarella.n.01"
-        },
         "freezable": {},
         "macroPhysicalSubstance": {},
         "meltable": {
@@ -37237,10 +36996,6 @@
         "substance": {}
     },
     "diced__swiss_cheese.n.01": {
-        "cookable": {
-            "cook_temperature": 176.0,
-            "substance_cooking_derivative_synset": "cooked__diced__swiss_cheese.n.01"
-        },
         "freezable": {},
         "macroPhysicalSubstance": {},
         "meltable": {
@@ -49276,10 +49031,6 @@
         "substance": {}
     },
     "granulated_sugar.n.01": {
-        "cookable": {
-            "cook_temperature": 180.0,
-            "substance_cooking_derivative_synset": "cooked__granulated_sugar.n.01"
-        },
         "freezable": {},
         "meltable": {
             "meltable_derivative_synset": "melted__granulated_sugar.n.01"
@@ -49425,10 +49176,6 @@
         "wrinkleable": {}
     },
     "grated_cheese.n.01": {
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__grated_cheese.n.01"
-        },
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
@@ -50720,13 +50467,9 @@
         "wrinkleable": {}
     },
     "half__bleu.n.01": {
-        "cookable": {
-            "cook_temperature": 82.0
-        },
         "deformable": {},
         "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__bleu.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__bleu.n.01"
+            "uncooked_diceable_derivative_synset": "diced__bleu.n.01"
         },
         "disinfectable": {},
         "dustyable": {},
@@ -51013,12 +50756,8 @@
         "wrinkleable": {}
     },
     "half__butter.n.01": {
-        "cookable": {
-            "cook_temperature": 38.0
-        },
         "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__butter.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__butter.n.01"
+            "uncooked_diceable_derivative_synset": "diced__butter.n.01"
         },
         "disinfectable": {},
         "dustyable": {},
@@ -51042,9 +50781,6 @@
         "wrinkleable": {}
     },
     "half__butter_cookie.n.01": {
-        "cookable": {
-            "cook_temperature": 180.0
-        },
         "diceable": {
             "uncooked_diceable_derivative_synset": "diced__butter_cookie.n.01",
             "cooked_diceable_derivative_synset": "cooked__diced__butter_cookie.n.01"
@@ -51074,9 +50810,7 @@
         "wrinkleable": {}
     },
     "half__buttermilk_pancake.n.01": {
-        "cookable": {
-            "cook_temperature": 180.0
-        },
+        "cookable": {},
         "diceable": {
             "uncooked_diceable_derivative_synset": "diced__buttermilk_pancake.n.01",
             "cooked_diceable_derivative_synset": "cooked__diced__buttermilk_pancake.n.01"
@@ -51373,13 +51107,9 @@
         "wrinkleable": {}
     },
     "half__cheddar.n.01": {
-        "cookable": {
-            "cook_temperature": 90.0
-        },
         "deformable": {},
         "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__cheddar.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__cheddar.n.01"
+            "uncooked_diceable_derivative_synset": "diced__cheddar.n.01"
         },
         "disinfectable": {},
         "dustyable": {},
@@ -52604,13 +52334,9 @@
         "wrinkleable": {}
     },
     "half__feta.n.01": {
-        "cookable": {
-            "cook_temperature": 90.0
-        },
         "deformable": {},
         "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__feta.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__feta.n.01"
+            "uncooked_diceable_derivative_synset": "diced__feta.n.01"
         },
         "disinfectable": {},
         "dustyable": {},
@@ -53966,13 +53692,9 @@
         "wrinkleable": {}
     },
     "half__mozzarella.n.01": {
-        "cookable": {
-            "cook_temperature": 71.0
-        },
         "deformable": {},
         "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__mozzarella.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__mozzarella.n.01"
+            "uncooked_diceable_derivative_synset": "diced__mozzarella.n.01"
         },
         "disinfectable": {},
         "dustyable": {},
@@ -55779,12 +55501,8 @@
         "wrinkleable": {}
     },
     "half__swiss_cheese.n.01": {
-        "cookable": {
-            "cook_temperature": 176.0
-        },
         "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__swiss_cheese.n.01",
-            "cooked_diceable_derivative_synset": "cooked__diced__swiss_cheese.n.01"
+            "uncooked_diceable_derivative_synset": "diced__swiss_cheese.n.01"
         },
         "disinfectable": {},
         "dustyable": {},
@@ -70675,9 +70393,6 @@
         "wrinkleable": {}
     },
     "lump_sugar.n.01": {
-        "cookable": {
-            "cook_temperature": 180.0
-        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -74765,10 +74480,6 @@
     },
     "melted__bleu.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__melted__bleu.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74776,10 +74487,6 @@
     },
     "melted__butter.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 170.0,
-            "substance_cooking_derivative_synset": "cooked__melted__butter.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74787,10 +74494,6 @@
     },
     "melted__cane_sugar.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 130.0,
-            "substance_cooking_derivative_synset": "cooked__melted__cane_sugar.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74798,10 +74501,6 @@
     },
     "melted__cheddar.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__melted__cheddar.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74809,10 +74508,6 @@
     },
     "melted__chocolate.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 58.0,
-            "substance_cooking_derivative_synset": "cooked__melted__chocolate.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74820,10 +74515,6 @@
     },
     "melted__feta.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__melted__feta.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74831,10 +74522,6 @@
     },
     "melted__granulated_sugar.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 130.0,
-            "substance_cooking_derivative_synset": "cooked__melted__granulated_sugar.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74842,10 +74529,6 @@
     },
     "melted__grated_cheese.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__melted__grated_cheese.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74853,10 +74536,6 @@
     },
     "melted__mozzarella.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__melted__mozzarella.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74864,10 +74543,6 @@
     },
     "melted__parmesan.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__melted__parmesan.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74875,10 +74550,6 @@
     },
     "melted__swiss_cheese.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 90.0,
-            "substance_cooking_derivative_synset": "cooked__melted__swiss_cheese.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -74886,10 +74557,6 @@
     },
     "melted__white_chocolate.n.01": {
         "boilable": {},
-        "cookable": {
-            "cook_temperature": 45.0,
-            "substance_cooking_derivative_synset": "cooked__melted__white_chocolate.n.01"
-        },
         "freezable": {},
         "liquid": {},
         "physicalSubstance": {},
@@ -75743,9 +75410,6 @@
         "wrinkleable": {}
     },
     "mozzarella.n.01": {
-        "cookable": {
-            "cook_temperature": 71.0
-        },
         "deformable": {},
         "disinfectable": {},
         "dustyable": {},
@@ -81518,11 +81182,10 @@
         "wrinkleable": {}
     },
     "parmesan.n.01": {
-        "cookable": {
-            "cook_temperature": 71.0,
-            "substance_cooking_derivative_synset": "cooked__parmesan.n.01"
-        },
         "freezable": {},
+        "meltable": {
+            "meltable_derivative_synset": "melted__parmesan.n.01"
+        },
         "microPhysicalSubstance": {},
         "physicalSubstance": {},
         "substance": {}
@@ -110329,9 +109992,6 @@
         "wrinkleable": {}
     },
     "swiss_cheese.n.01": {
-        "cookable": {
-            "cook_temperature": 176.0
-        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -120981,9 +120641,6 @@
         "freezable": {}
     },
     "white_chocolate.n.01": {
-        "cookable": {
-            "cook_temperature": 46.0
-        },
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},

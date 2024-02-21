@@ -18151,6 +18151,13 @@
                               ]
                             },
                             {
+                              "name": "cooked__iced_chocolate.n.01",
+                              "hasModel": true,
+                              "substances": [
+                                "cooked__iced_chocolate"
+                              ]
+                            },
+                            {
                               "name": "iced_chocolate.n.01",
                               "hasModel": true,
                               "categories": [
@@ -18253,13 +18260,6 @@
                               "hasModel": true,
                               "substances": [
                                 "cooked__cocoa"
-                              ]
-                            },
-                            {
-                              "name": "cooked__iced_chocolate.n.01",
-                              "hasModel": true,
-                              "substances": [
-                                "cooked__iced_chocolate"
                               ]
                             },
                             {
@@ -18795,10 +18795,24 @@
                                           ]
                                         },
                                         {
+                                          "name": "cooked__nut_butter.n.01",
+                                          "hasModel": true,
+                                          "substances": [
+                                            "cooked__nut_butter"
+                                          ]
+                                        },
+                                        {
                                           "name": "nut_butter.n.01",
                                           "hasModel": true,
                                           "substances": [
                                             "nut_butter"
+                                          ]
+                                        },
+                                        {
+                                          "name": "cooked__peanut_butter.n.01",
+                                          "hasModel": true,
+                                          "substances": [
+                                            "cooked__peanut_butter"
                                           ]
                                         },
                                         {
@@ -18809,13 +18823,6 @@
                                           ],
                                           "substances": [
                                             "peanut_butter"
-                                          ]
-                                        },
-                                        {
-                                          "name": "cooked__peanut_butter.n.01",
-                                          "hasModel": true,
-                                          "substances": [
-                                            "cooked__peanut_butter"
                                           ]
                                         },
                                         {
@@ -18837,13 +18844,6 @@
                                           "hasModel": true,
                                           "substances": [
                                             "cooked__margarine"
-                                          ]
-                                        },
-                                        {
-                                          "name": "cooked__nut_butter.n.01",
-                                          "hasModel": true,
-                                          "substances": [
-                                            "cooked__nut_butter"
                                           ]
                                         }
                                       ]
@@ -19378,16 +19378,6 @@
                                           ]
                                         },
                                         {
-                                          "name": "cooked__granulated_sugar.n.01",
-                                          "hasModel": true,
-                                          "categories": [
-                                            "cooked__granulated_sugar"
-                                          ],
-                                          "substances": [
-                                            "cooked__granulated_sugar"
-                                          ]
-                                        },
-                                        {
                                           "name": "granulated_sugar.n.01",
                                           "hasModel": true,
                                           "categories": [
@@ -19402,13 +19392,6 @@
                                           "hasModel": true,
                                           "categories": [
                                             "sugar_cube"
-                                          ]
-                                        },
-                                        {
-                                          "name": "cooked__cane_sugar.n.01",
-                                          "hasModel": true,
-                                          "substances": [
-                                            "cooked__cane_sugar"
                                           ]
                                         },
                                         {
@@ -19433,24 +19416,10 @@
                                           ]
                                         },
                                         {
-                                          "name": "cooked__melted__cane_sugar.n.01",
-                                          "hasModel": true,
-                                          "substances": [
-                                            "cooked__melted__cane_sugar"
-                                          ]
-                                        },
-                                        {
                                           "name": "melted__granulated_sugar.n.01",
                                           "hasModel": true,
                                           "substances": [
                                             "melted__granulated_sugar"
-                                          ]
-                                        },
-                                        {
-                                          "name": "cooked__melted__granulated_sugar.n.01",
-                                          "hasModel": true,
-                                          "substances": [
-                                            "cooked__melted__granulated_sugar"
                                           ]
                                         }
                                       ]
@@ -21687,55 +21656,6 @@
                                   ]
                                 },
                                 {
-                                  "name": "cooked__diced__feta.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__diced__feta"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__diced__mozzarella.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__diced__mozzarella"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__diced__bleu.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__diced__bleu"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__diced__swiss_cheese.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__diced__swiss_cheese"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__diced__cheddar.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__diced__cheddar"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__grated_cheese.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__grated_cheese"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__melted__grated_cheese.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__melted__grated_cheese"
-                                  ]
-                                },
-                                {
                                   "name": "cooked__ricotta.n.01",
                                   "hasModel": true,
                                   "substances": [
@@ -21747,27 +21667,6 @@
                                   "hasModel": true,
                                   "substances": [
                                     "cooked__cream_cheese"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__melted__cheddar.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__melted__cheddar"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__melted__parmesan.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__melted__parmesan"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__parmesan.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__parmesan"
                                   ]
                                 },
                                 {
@@ -21785,24 +21684,10 @@
                                   ]
                                 },
                                 {
-                                  "name": "cooked__melted__feta.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__melted__feta"
-                                  ]
-                                },
-                                {
                                   "name": "melted__mozzarella.n.01",
                                   "hasModel": true,
                                   "substances": [
                                     "melted__mozzarella"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__melted__mozzarella.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__melted__mozzarella"
                                   ]
                                 },
                                 {
@@ -21813,24 +21698,10 @@
                                   ]
                                 },
                                 {
-                                  "name": "cooked__melted__swiss_cheese.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__melted__swiss_cheese"
-                                  ]
-                                },
-                                {
                                   "name": "melted__bleu.n.01",
                                   "hasModel": true,
                                   "substances": [
                                     "melted__bleu"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__melted__bleu.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__melted__bleu"
                                   ]
                                 }
                               ]
@@ -21890,16 +21761,6 @@
                                     "cooked__whole_milk"
                                   ]
                                 }
-                              ]
-                            },
-                            {
-                              "name": "cooked__melted__butter.n.01",
-                              "hasModel": true,
-                              "categories": [
-                                "cooked__melted__butter"
-                              ],
-                              "substances": [
-                                "cooked__melted__butter"
                               ]
                             },
                             {
@@ -21971,13 +21832,6 @@
                               "hasModel": true,
                               "substances": [
                                 "diced__butter"
-                              ]
-                            },
-                            {
-                              "name": "cooked__diced__butter.n.01",
-                              "hasModel": true,
-                              "substances": [
-                                "cooked__diced__butter"
                               ]
                             },
                             {
@@ -23255,13 +23109,6 @@
                                           "substances": [
                                             "chocolate_kiss"
                                           ]
-                                        },
-                                        {
-                                          "name": "cooked__chocolate_kiss.n.01",
-                                          "hasModel": true,
-                                          "substances": [
-                                            "cooked__chocolate_kiss"
-                                          ]
                                         }
                                       ]
                                     },
@@ -24034,6 +23881,13 @@
                           ]
                         },
                         {
+                          "name": "cooked__iced_chocolate.n.01",
+                          "hasModel": true,
+                          "substances": [
+                            "cooked__iced_chocolate"
+                          ]
+                        },
+                        {
                           "name": "iced_chocolate.n.01",
                           "hasModel": true,
                           "categories": [
@@ -24136,13 +23990,6 @@
                           "hasModel": true,
                           "substances": [
                             "cooked__cocoa"
-                          ]
-                        },
-                        {
-                          "name": "cooked__iced_chocolate.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__iced_chocolate"
                           ]
                         },
                         {
@@ -29688,55 +29535,6 @@
                           ]
                         },
                         {
-                          "name": "cooked__diced__feta.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__diced__feta"
-                          ]
-                        },
-                        {
-                          "name": "cooked__diced__mozzarella.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__diced__mozzarella"
-                          ]
-                        },
-                        {
-                          "name": "cooked__diced__bleu.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__diced__bleu"
-                          ]
-                        },
-                        {
-                          "name": "cooked__diced__swiss_cheese.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__diced__swiss_cheese"
-                          ]
-                        },
-                        {
-                          "name": "cooked__diced__cheddar.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__diced__cheddar"
-                          ]
-                        },
-                        {
-                          "name": "cooked__grated_cheese.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__grated_cheese"
-                          ]
-                        },
-                        {
-                          "name": "cooked__melted__grated_cheese.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__melted__grated_cheese"
-                          ]
-                        },
-                        {
                           "name": "cooked__ricotta.n.01",
                           "hasModel": true,
                           "substances": [
@@ -29748,27 +29546,6 @@
                           "hasModel": true,
                           "substances": [
                             "cooked__cream_cheese"
-                          ]
-                        },
-                        {
-                          "name": "cooked__melted__cheddar.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__melted__cheddar"
-                          ]
-                        },
-                        {
-                          "name": "cooked__melted__parmesan.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__melted__parmesan"
-                          ]
-                        },
-                        {
-                          "name": "cooked__parmesan.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__parmesan"
                           ]
                         },
                         {
@@ -29786,24 +29563,10 @@
                           ]
                         },
                         {
-                          "name": "cooked__melted__feta.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__melted__feta"
-                          ]
-                        },
-                        {
                           "name": "melted__mozzarella.n.01",
                           "hasModel": true,
                           "substances": [
                             "melted__mozzarella"
-                          ]
-                        },
-                        {
-                          "name": "cooked__melted__mozzarella.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__melted__mozzarella"
                           ]
                         },
                         {
@@ -29814,24 +29577,10 @@
                           ]
                         },
                         {
-                          "name": "cooked__melted__swiss_cheese.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__melted__swiss_cheese"
-                          ]
-                        },
-                        {
                           "name": "melted__bleu.n.01",
                           "hasModel": true,
                           "substances": [
                             "melted__bleu"
-                          ]
-                        },
-                        {
-                          "name": "cooked__melted__bleu.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__melted__bleu"
                           ]
                         }
                       ]
@@ -29908,13 +29657,6 @@
                               ]
                             },
                             {
-                              "name": "cooked__chocolate_kiss.n.01",
-                              "hasModel": true,
-                              "substances": [
-                                "cooked__chocolate_kiss"
-                              ]
-                            },
-                            {
                               "name": "cooked__jimmies.n.01",
                               "hasModel": true,
                               "substances": [
@@ -29926,13 +29668,6 @@
                               "hasModel": true,
                               "substances": [
                                 "melted__chocolate"
-                              ]
-                            },
-                            {
-                              "name": "cooked__melted__chocolate.n.01",
-                              "hasModel": true,
-                              "substances": [
-                                "cooked__melted__chocolate"
                               ]
                             }
                           ]
@@ -29969,13 +29704,6 @@
                           "hasModel": true,
                           "substances": [
                             "cooked__cocoa_powder"
-                          ]
-                        },
-                        {
-                          "name": "cooked__melted__white_chocolate.n.01",
-                          "hasModel": true,
-                          "substances": [
-                            "cooked__melted__white_chocolate"
                           ]
                         }
                       ]
@@ -30594,13 +30322,6 @@
                       "hasModel": true,
                       "substances": [
                         "diced__butter"
-                      ]
-                    },
-                    {
-                      "name": "cooked__diced__butter.n.01",
-                      "hasModel": true,
-                      "substances": [
-                        "cooked__diced__butter"
                       ]
                     },
                     {
@@ -33927,6 +33648,13 @@
                                   ]
                                 },
                                 {
+                                  "name": "cooked__iced_chocolate.n.01",
+                                  "hasModel": true,
+                                  "substances": [
+                                    "cooked__iced_chocolate"
+                                  ]
+                                },
+                                {
                                   "name": "iced_chocolate.n.01",
                                   "hasModel": true,
                                   "categories": [
@@ -34029,13 +33757,6 @@
                                   "hasModel": true,
                                   "substances": [
                                     "cooked__cocoa"
-                                  ]
-                                },
-                                {
-                                  "name": "cooked__iced_chocolate.n.01",
-                                  "hasModel": true,
-                                  "substances": [
-                                    "cooked__iced_chocolate"
                                   ]
                                 },
                                 {
