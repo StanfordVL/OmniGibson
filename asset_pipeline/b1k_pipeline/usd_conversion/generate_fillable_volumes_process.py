@@ -140,6 +140,10 @@ def process_object(cat, mdl, out_path):
     # MAX_BBOX cube.
     scale = MAX_BBOX / np.max(bounding_box)
 
+    if scale > 1:
+        print("The object won't be scaled because it's smaller than the requested bounding box.")
+        scale = 1
+
     cfg = {
         "scene": {
             "type": "Scene",
