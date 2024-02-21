@@ -1,12 +1,17 @@
 import traceback
 import json
 import numpy as np
+from scipy.spatial import KDTree
+from scipy.spatial.transform import Rotation as R
+from scipy.sparse.csgraph import connected_components
+from scipy.sparse import csr_matrix
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.prims.xform_prim import XFormPrim
+from omnigibson.simulator import launch_simulator
 from omnigibson.systems.system_base import get_system
-from scipy.spatial.transform import Rotation as R
+from omnigibson.utils.asset_utils import decrypted
 import omnigibson.lazy as lazy
 import trimesh
 import tqdm
@@ -16,6 +21,32 @@ gm.HEADLESS = True
 gm.USE_ENCRYPTED_ASSETS = True
 gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_FLATCACHE = False
+
+MAX_BBOX = 0.3
+
+def find_largest_connected_component(points, d):
+    # Create a KDTree for efficient nearest neighbor search
+    tree = KDTree(points)
+    
+    # Find pairs of points within distance d
+    pairs = tree.query_pairs(r=d, output_type='ndarray')
+    
+    # Create an adjacency matrix for the graph
+    n_points = points.shape[0]
+    adjacency_matrix = csr_matrix((np.ones(pairs.shape[0]), (pairs[:, 0], pairs[:, 1])), shape=(n_points, n_points))
+    
+    # Make the matrix symmetric since the graph is undirected
+    adjacency_matrix = adjacency_matrix + adjacency_matrix.T
+    
+    # Find connected components
+    _, labels = connected_components(csgraph=adjacency_matrix, directed=False, return_labels=True)
+    
+    # Find the largest connected component
+    largest_component_label = np.argmax(np.bincount(labels))
+    largest_component_indices = np.where(labels == largest_component_label)[0]
+    
+    # Return the points belonging to the largest connected component
+    return points[largest_component_indices]
 
 def generate_box(box_half_extent):
     # The floor plane already exists
@@ -94,6 +125,20 @@ def draw_mesh(mesh, parent_pos):
 def process_object(cat, mdl, out_path):
     if og.sim:
         og.sim.clear()
+    else:
+        launch_simulator()
+
+    # First get the native bounding box of the object
+    usd_path = DatasetObject.get_usd_path(category=cat, model=mdl)
+    usd_path = usd_path.replace(".usd", ".encrypted.usd")
+    with decrypted(usd_path) as fpath:
+        stage = lazy.pxr.Usd.Stage.Open(fpath)
+        prim = stage.GetDefaultPrim()
+        bounding_box = np.array(prim.GetAttribute("ig:nativeBB").Get())
+
+    # Then get the appropriate bounding box such that the object fits in a
+    # MAX_BBOX cube.
+    scale = MAX_BBOX / np.max(bounding_box)
 
     cfg = {
         "scene": {
@@ -107,7 +152,7 @@ def process_object(cat, mdl, out_path):
                 "model": mdl,
                 "kinematic_only": False,
                 "fixed_base": True,
-                "bounding_box": [0.3, 0.3, 0.3],
+                "scale": [scale, scale, scale],
             },
         ]
     }
@@ -225,6 +270,9 @@ def process_object(cat, mdl, out_path):
     points = points[np.all(points <= aabb_max, axis=1)]
     points = points[np.all(points >= aabb_min, axis=1)]
     assert len(points) > 0, "No points found in the AABB of the object."
+
+    # Get the objects that belong to the largest connected component
+    points = find_largest_connected_component(points, 2 * water.particle_radius)
 
     # Get the particles in the frame of the object
     points -= fillable.get_position()
