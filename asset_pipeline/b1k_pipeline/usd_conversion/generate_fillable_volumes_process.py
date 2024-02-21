@@ -107,6 +107,7 @@ def process_object(cat, mdl, out_path):
                 "model": mdl,
                 "kinematic_only": False,
                 "fixed_base": True,
+                "bounding_box": [0.3, 0.3, 0.3],
             },
         ]
     }
@@ -117,8 +118,10 @@ def process_object(cat, mdl, out_path):
     fillable = env.scene.object_registry("name", "fillable")
 
     # Fix all joints to upper position
-    for joint in fillable.joints.values():
+    joint_limits = {}
+    for joint_name, joint in fillable.joints.items():
         if joint.has_limit:
+            joint_limits[joint_name] = (joint.lower_limit, joint.upper_limit)
             joint.set_pos(joint.upper_limit)
             joint.lower_limit = joint.upper_limit - 0.001
     og.sim.update_handles()
@@ -136,7 +139,7 @@ def process_object(cat, mdl, out_path):
     og.sim.step()
 
     # Now generate the box and the particles
-    box_half_extent = aabb_extent * 1.5  # 1.5 times the space
+    box_half_extent = aabb_extent * 0.55  # 1.5 times the space
     box_half_extent[2] = np.maximum(box_half_extent[2], 0.1)  # at least 10cm water
     generate_box(box_half_extent)
     og.sim.step()
@@ -156,8 +159,22 @@ def process_object(cat, mdl, out_path):
             break
 
     # Let the particles settle
-    for _ in range(100):
+    for _ in range(30):
         og.sim.step()
+
+    # Slowly close the doors linearly
+    n_steps_for_close = 100
+    for i in range(n_steps_for_close):
+        for joint_name, joint in fillable.joints.items():
+            openness_ratio = i / n_steps_for_close
+            if joint_name in joint_limits:
+                lower, upper = joint_limits[joint_name]
+                interpolated_pos = upper - openness_ratio * (upper - lower)
+                joint.lower_limit = interpolated_pos - 0.001
+                joint.upper_limit = interpolated_pos
+                joint.set_pos(interpolated_pos)
+        og.sim.step()
+
 
     # Now move the object out of the water
     while True:

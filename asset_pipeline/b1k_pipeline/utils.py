@@ -18,7 +18,7 @@ NAME_PATTERN = re.compile(r"^(?P<mesh_basename>(?P<link_basename>(?P<obj_basenam
 PORTAL_PATTERN = re.compile(r"^portal(-(?P<partial_scene>[A-Za-z0-9_]+)(-(?P<portal_id>\d+))?)?$")
 CLOTH_CATEGORIES = ["t_shirt", "dishtowel", "carpet"]
 SUBDIVIDE_CLOTH_CATEGORIES = ["carpet"]
-CLUSTER_MODE = "docker"   # one of "docker", "slurm", "enroot"
+CLUSTER_MODE = "enroot"   # one of "docker", "slurm", "enroot"
 
 params = yaml.load(open(PARAMS_FILE, "r"), Loader=yaml.SafeLoader)
 
