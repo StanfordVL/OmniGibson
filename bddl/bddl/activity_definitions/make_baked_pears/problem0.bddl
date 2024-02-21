@@ -7,7 +7,6 @@
         cooked__red_wine.n.01_1 - cooked__red_wine.n.01
         granulated_sugar.n.01_1 - granulated_sugar.n.01
         granulated_sugar__sack.n.01_1 - granulated_sugar__sack.n.01
-        cooked__granulated_sugar.n.01_1 - cooked__granulated_sugar.n.01
         wooden_spoon.n.02_1 - wooden_spoon.n.02
         wine_bottle.n.01_1 - wine_bottle.n.01
     	oven.n.01_1 - oven.n.01
@@ -48,7 +47,6 @@
         (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (future cooked__red_wine.n.01_1)
-        (future cooked__granulated_sugar.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -58,18 +56,12 @@
                 (real ?cooked__red_wine.n.01_1)
                 (real ?red_wine.n.01_1)
             )
-            (or
-                (real ?cooked__granulated_sugar.n.01_1)
-                (real ?granulated_sugar.n.01_1)
-            )
+            (real ?granulated_sugar.n.01_1)
             (forall 
                 (?pear.n.01 - pear.n.01)
                 (and
                     (cooked ?pear.n.01)
-                    (or 
-                        (covered ?pear.n.01 ?cooked__granulated_sugar.n.01_1)
-                        (covered ?pear.n.01 ?granulated_sugar.n.01_1)
-                    )
+                    (covered ?pear.n.01 ?granulated_sugar.n.01_1)
                     (or 
                         (covered ?pear.n.01 ?cooked__red_wine.n.01_1)
                         (covered ?pear.n.01 ?red_wine.n.01_1)

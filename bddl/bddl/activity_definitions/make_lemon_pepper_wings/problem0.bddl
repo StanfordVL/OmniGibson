@@ -3,7 +3,6 @@
 
     (:objects
         melted__butter.n.01_1 - melted__butter.n.01
-        cooked__melted__butter.n.01_1 - cooked__melted__butter.n.01
         lemon-pepper_seasoning.n.01_1 - lemon-pepper_seasoning.n.01
         cooked__lemon-pepper_seasoning.n.01_1 - cooked__lemon-pepper_seasoning.n.01
         chicken_wing.n.01_1 chicken_wing.n.01_2 chicken_wing.n.01_3 chicken_wing.n.01_4 chicken_wing.n.01_5 chicken_wing.n.01_6 chicken_wing.n.01_7 chicken_wing.n.01_8 - chicken_wing.n.01
@@ -74,7 +73,6 @@
         (ontop frying_pan.n.01_1 countertop.n.01_2) 
         (future cooked__lemon-pepper_seasoning.n.01_1) 
         (future cooked__olive_oil.n.01_1) 
-        (future cooked__melted__butter.n.01_1) 
         (future cooked__salt.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -94,10 +92,7 @@
                 (real ?olive_oil.n.01_1) 
                 (real ?cooked__olive_oil.n.01_1)
             ) 
-            (or 
-                (real ?melted__butter.n.01_1) 
-                (real ?cooked__melted__butter.n.01_1)
-            ) 
+            (real ?melted__butter.n.01_1) 
             (or 
                 (real ?salt.n.02_1) 
                 (real ?cooked__salt.n.01_1)
@@ -114,10 +109,7 @@
                         (covered ?chicken_wing.n.01 ?olive_oil.n.01_1) 
                         (covered ?chicken_wing.n.01 ?cooked__olive_oil.n.01_1)
                     ) 
-                    (or 
-                        (covered ?chicken_wing.n.01 ?melted__butter.n.01_1) 
-                        (covered ?chicken_wing.n.01 ?cooked__melted__butter.n.01_1)
-                    ) 
+                    (covered ?chicken_wing.n.01 ?melted__butter.n.01_1) 
                     (or 
                         (covered ?chicken_wing.n.01 ?salt.n.02_1) 
                         (covered ?chicken_wing.n.01 ?cooked__salt.n.01_1)
