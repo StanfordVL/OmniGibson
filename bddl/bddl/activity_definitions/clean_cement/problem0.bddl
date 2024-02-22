@@ -17,8 +17,7 @@
     (:init 
         (ontop cement.n.01_1 floor.n.01_1)
         (covered cement.n.01_1 dirt.n.02_1)
-        (ontop rail_fence.n.01_1 floor.n.01_1) 
-        (ontop watering_can.n.01_1 floor.n.01_1) 
+        (ontop watering_can.n.01_1 floor.n.01_1)
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (insource watering_can.n.01_1 water.n.06_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 

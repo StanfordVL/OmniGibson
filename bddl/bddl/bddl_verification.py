@@ -323,7 +323,8 @@ def check_synset_predicate_alignment(atom, syns_to_props):
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "insource": 
         assert (("particleSource" in syns_to_props[objects[0]]) or ("particleApplier" in syns_to_props[objects[0]])) and ("substance" in syns_to_props[objects[1]]), f"Inapplicable insource: {atom}"
-
+    if pred == "inroom":
+        assert "sceneObject" in syns_to_props[objects[0]], f"Inapplicable inroom: {atom}"
 
 def check_clashing_transition_rules():
     # Check within each submap
@@ -477,6 +478,7 @@ def all_objects_placed(init):
 
     in_room_check = True
     last_placed = None
+    in_room_placed = set()
     while True:
         newly_placed = set()
         for literal in init:
@@ -493,10 +495,12 @@ def all_objects_placed(init):
                 # For the first round, check for inroom
                 if (formula[0] == "inroom") and (formula[2] in ROOMS):
                     inst = formula[1]
+                    in_room_placed.add(inst)
             else:
                 # For the following rounds, check for placements w.r.t last placed objects
                 if (formula[0] in PLACEMENTS) and (formula[2] in last_placed):
                     inst = formula[1]
+                    assert inst not in in_room_placed, f"Object {inst} is placed twice"
                 # Or substasnce placements w.r.t last placed objects
                 elif (formula[0] in SUBSTANCE_PLACEMENTS) and (formula[1] in last_placed):
                     inst = formula[2]

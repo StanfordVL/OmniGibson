@@ -11,6 +11,7 @@
         stain.n.01_1 - stain.n.01
         water.n.06_1 - water.n.06
         floor.n.01_1 - floor.n.01
+        table.n.02_1 - table.n.02
         agent.n.01_1 - agent.n.01
     )
     
@@ -21,8 +22,9 @@
         (covered monitor.n.04_1 dust.n.01_1)
         (covered monitor.n.04_1 stain.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
-        (inroom sink.n.01_1 bathroom) 
-        (inroom monitor.n.04_1 shared_office) 
+        (inroom sink.n.01_1 bathroom)
+        (ontop monitor.n.04_1 table.n.02_1)
+        (inroom table.n.02_1 shared_office)
         (inroom floor.n.01_1 shared_office) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
