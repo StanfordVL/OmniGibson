@@ -40,8 +40,8 @@
         (inside tupperware.n.01_2 carton.n.02_2)
         (ontop carton.n.02_1 floor.n.01_1) 
         (ontop carton.n.02_2 floor.n.01_1) 
-        (inroom booth.n.01_1 corridor)
-        (inroom floor.n.01_1 corridor)
+        (ontop booth.n.01_1 floor.n.01_1)
+        (inroom floor.n.01_1 empty_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

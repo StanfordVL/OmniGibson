@@ -14,11 +14,10 @@
         packing_box.n.02_1 packing_box.n.02_2 - packing_box.n.02
         mat.n.03_1 - mat.n.03
         blackboard.n.01_1 - blackboard.n.01
-        desk.n.01_1 desk.n.01_10 desk.n.01_2 desk.n.01_3 desk.n.01_4 desk.n.01_5 desk.n.01_6 desk.n.01_7 desk.n.01_8 desk.n.01_9 - desk.n.01
+        table.n.02_1 table.n.02_10 table.n.02_2 table.n.02_3 table.n.02_4 table.n.02_5 table.n.02_6 table.n.02_7 table.n.02_8 table.n.02_9 - table.n.02
         wall_clock.n.01_1 - wall_clock.n.01
-        wall.n.01_1 - wall.n.01
         map.n.01_1 - map.n.01
-        straight_chair.n.01_1 straight_chair.n.01_10 straight_chair.n.01_2 straight_chair.n.01_3 straight_chair.n.01_4 straight_chair.n.01_5 straight_chair.n.01_6 straight_chair.n.01_7 straight_chair.n.01_8 straight_chair.n.01_9 - straight_chair.n.01
+        chair.n.01_1 chair.n.01_10 chair.n.01_2 chair.n.01_3 chair.n.01_4 chair.n.01_5 chair.n.01_6 chair.n.01_7 chair.n.01_8 chair.n.01_9 - chair.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -48,30 +47,29 @@
         (ontop backpack.n.01_4 floor.n.01_1) 
         (ontop mat.n.03_1 floor.n.01_1) 
         (inroom blackboard.n.01_1 classroom) 
-        (inroom desk.n.01_1 classroom) 
-        (inroom desk.n.01_2 classroom) 
-        (inroom desk.n.01_3 classroom) 
-        (inroom desk.n.01_4 classroom) 
-        (inroom desk.n.01_5 classroom) 
-        (inroom desk.n.01_6 classroom) 
-        (inroom desk.n.01_7 classroom) 
-        (inroom desk.n.01_8 classroom) 
-        (inroom desk.n.01_9 classroom) 
-        (inroom desk.n.01_10 classroom) 
+        (inroom table.n.02_1 classroom) 
+        (inroom table.n.02_2 classroom) 
+        (inroom table.n.02_3 classroom) 
+        (inroom table.n.02_4 classroom) 
+        (inroom table.n.02_5 classroom) 
+        (inroom table.n.02_6 classroom) 
+        (inroom table.n.02_7 classroom) 
+        (inroom table.n.02_8 classroom) 
+        (inroom table.n.02_9 classroom) 
+        (inroom table.n.02_10 classroom) 
         (inroom wall_clock.n.01_1 classroom) 
         (inroom map.n.01_1 classroom) 
-        (inroom straight_chair.n.01_1 classroom)
-        (inroom straight_chair.n.01_2 classroom)
-        (inroom straight_chair.n.01_3 classroom)
-        (inroom straight_chair.n.01_4 classroom)
-        (inroom straight_chair.n.01_5 classroom)
-        (inroom straight_chair.n.01_6 classroom)
-        (inroom straight_chair.n.01_7 classroom)
-        (inroom straight_chair.n.01_8 classroom)
-        (inroom straight_chair.n.01_9 classroom)
-        (inroom straight_chair.n.01_10 classroom)
+        (inroom chair.n.01_1 classroom)
+        (inroom chair.n.01_2 classroom)
+        (inroom chair.n.01_3 classroom)
+        (inroom chair.n.01_4 classroom)
+        (inroom chair.n.01_5 classroom)
+        (inroom chair.n.01_6 classroom)
+        (inroom chair.n.01_7 classroom)
+        (inroom chair.n.01_8 classroom)
+        (inroom chair.n.01_9 classroom)
+        (inroom chair.n.01_10 classroom)
         (inroom floor.n.01_1 classroom) 
-        (inroom wall.n.01_1 classroom)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -79,30 +77,29 @@
         (and 
             (forpairs 
                 (?notebook.n.01 - notebook.n.01) 
-                (?desk.n.01 - desk.n.01)
-                (ontop ?notebook.n.01 ?desk.n.01)
+                (?table.n.02 - table.n.02)
+                (ontop ?notebook.n.01 ?table.n.02)
             ) 
             (touching ?blackboard_eraser.n.01_1 ?blackboard.n.01_1) 
             (forpairs 
                 (?pencil.n.01 - pencil.n.01) 
-                (?desk.n.01 - desk.n.01)
-                (ontop ?pencil.n.01 ?desk.n.01)
+                (?table.n.02 - table.n.02)
+                (ontop ?pencil.n.01 ?table.n.02)
             ) 
             (forpairs 
                 (?pen.n.01 - pen.n.01) 
-                (?desk.n.01 - desk.n.01)
-                (ontop ?pen.n.01 ?desk.n.01_4)
+                (?table.n.02 - table.n.02)
+                (ontop ?pen.n.01 ?table.n.02_4)
             ) 
             (exists 
-                (?desk.n.01 - desk.n.01)
-                (ontop ?globe.n.03_1 ?desk.n.01) 
+                (?table.n.02 - table.n.02)
+                (ontop ?globe.n.03_1 ?table.n.02) 
             )
             (forall 
                 (?backpack.n.01 - backpack.n.01) 
                 (and
                     (ontop ?backpack.n.01 ?floor.n.01_1)
-                    (touching ?wall.n.01_1 ?backpack.n.01)
-                    (or 
+                    (or
                         (nextto ?backpack.n.01 ?backpack.n.01_1)
                         (nextto ?backpack.n.01 ?backpack.n.01_2)
                         (nextto ?backpack.n.01 ?backpack.n.01_3)
@@ -111,8 +108,8 @@
                 )
             ) 
             (exists 
-                (?desk.n.01 - desk.n.01)
-                (ontop ?computer.n.01_1 ?desk.n.01) 
+                (?table.n.02 - table.n.02)
+                (ontop ?computer.n.01_1 ?table.n.02) 
             )
             (forall 
                 (?teddy.n.01 - teddy.n.01) 

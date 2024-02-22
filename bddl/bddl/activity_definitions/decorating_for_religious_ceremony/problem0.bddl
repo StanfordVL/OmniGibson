@@ -8,7 +8,6 @@
         sign.n.02_1 - sign.n.02
         floor.n.01_1 - floor.n.01
         candlestick.n.01_1 - candlestick.n.01
-        straight_chair.n.01_1 - straight_chair.n.01
         wall.n.01_1 - wall.n.01
         shelf.n.01_1 - shelf.n.01
         agent.n.01_1 - agent.n.01
@@ -28,11 +27,10 @@
         (not 
             (attached wreath.n.01_1 wall.n.01_1)
         )
-        (inroom floor.n.01_1 playroom) 
-        (inroom straight_chair.n.01_1 playroom)
-        (inroom wall.n.01_1 playroom) 
-        (inroom cabinet.n.01_1 playroom) 
-        (inroom shelf.n.01_1 playroom) 
+        (inroom floor.n.01_1 living_room)
+        (inroom wall.n.01_1 living_room)
+        (inroom cabinet.n.01_1 living_room)
+        (inroom shelf.n.01_1 living_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
