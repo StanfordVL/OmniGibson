@@ -12,9 +12,8 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR, launch_cluster
 
-WORKER_COUNT = 2
+WORKER_COUNT = 4
 BATCH_SIZE = 1
-RETRY = False
 
 ids = {
     "dhkkfo",
@@ -698,64 +697,26 @@ def main():
             # Wait for all the workers to finish
             print("Queued all batches. Waiting for them to finish...")
             logs = []
-            while True:
-                for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
-                    # Check the batch results.
-                    batch = futures[future]
-                    if future.exception():
-                        e = future.exception()
-                        # logs.append({"stdout": e.stdout.decode("utf-8"), "stderr": e.stderr.decode("utf-8")})
-                        print(e)
-                    else:
-                        out = future.result()
-                        # logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
-
-                    # Remove everything that failed and make a new batch from them.
-                    if RETRY:
-                      new_batch = []
-                      for item in batch:
-                          item_dir = dataset_fs.opendir(item)
-                          if not item_dir.exists("fillable.obj"):
-                              print("Could not find", item)
-                              new_batch.append(item)
-
-                      # If there's nothing to requeue, we are good!
-                      if not new_batch:
-                          continue
-
-                      # Otherwise, decide if we are going to requeue or just skip.
-                      if len(batch) == 1:
-                          print(f"Failed on a single item {batch[0]}. Skipping.")
-                          failed_objects.add(batch[0])
-                      else:
-                          print(f"Subdividing batch of length {len(new_batch)}")
-                          batch_size = len(new_batch) // 2
-                          subbatches = [new_batch[:batch_size], new_batch[batch_size:]]
-                          for subbatch in subbatches:
-                              if not subbatch:
-                                  continue
-                              worker_future = dask_client.submit(
-                                  run_on_batch,
-                                  dataset_fs.getsyspath("/"),
-                                  subbatch,
-                                  pure=False)
-                              futures[worker_future] = subbatch
-                          del futures[future]
-
-                          # Restart the for loop so that the counter can update
-                          break
+            for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
+                # Check the batch results.
+                batch = futures[future]
+                if future.exception():
+                    e = future.exception()
+                    # logs.append({"stdout": e.stdout.decode("utf-8"), "stderr": e.stderr.decode("utf-8")})
+                    print(e)
                 else:
-                    # Completed successfully - break out of the while loop.
-                    break
+                    out = future.result()
+                    # logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
 
-            # Move the OBJs to the output FS
-            print("Copying OBJs to output FS...")
+                # Copy the object to the output fs
+                for item in batch:
+                    objdir = dataset_fs.opendir(item)
+                    if objdir.exists("fillable_obj"):
+                        fs.copy.copy_file(objdir, "fillable_obj", out_fs.makedirs(item), "fillable.obj")
+
+            # Finish up.
             usd_glob = [x.path for x in dataset_fs.glob("objects/*/*/fillable.obj")]
-            for item in tqdm.tqdm(usd_glob):
-                out_fs.makedirs(fs.path.dirname(item))
-                fs.copy.copy_file(dataset_fs, item, out_fs, item)
-
-            print("Done processing. Archiving things now.")
+            print(f"Done processing. Added {len(usd_glob)} objects. Archiving things now.")
 
         # Save the logs
         with pipeline_fs.pipeline_output().open("generate_fillable_volumes_flat.json", "w") as f:
