@@ -1,8 +1,11 @@
 import inspect
+import io
 import re
 from flask.views import View
-from flask import render_template
+from flask import render_template, send_file
 from bddl.knowledge_base import *
+
+from . import profile_utils
 
 
 def camel_to_snake(name: str) -> str:
@@ -248,3 +251,16 @@ class IndexView(TemplateView):
         ]
         return context
     
+def profile_plot_view():
+    plot_img = profile_utils.plot_profile("Realtime Performance", 10, ignore_series=["Empty scene"])
+    stream = io.BytesIO()
+    plot_img.save(stream, format="png")
+    stream.seek(0)
+    return send_file(stream, mimetype="image/png")
+
+def profile_badge_view():
+    badge_text = profile_utils.make_realtime_badge("Rs_int")
+    stream = io.BytesIO()
+    stream.write(badge_text.encode("utf-8"))
+    stream.seek(0)
+    return send_file(stream, mimetype='image/svg+xml')

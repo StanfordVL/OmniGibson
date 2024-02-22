@@ -53,3 +53,7 @@ for view_info in urlpatterns + error_url_patterns:
   view_kwargs = view_info[3] if len(view_info) > 3 else {}
   view = view_class.as_view(view_arg, **view_kwargs)
   app.add_url_rule("/knowledgebase/" + urlpattern, view_func=view)
+
+# Add the profile views
+app.add_url_rule("/knowledgebase/profile/badge.svg", view_func=profile_badge_view)
+app.add_url_rule("/knowledgebase/profile/plot.png", view_func=profile_plot_view)
