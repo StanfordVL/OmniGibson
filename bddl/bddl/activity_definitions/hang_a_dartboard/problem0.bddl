@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        coffee_table.n.01_1 - coffee_table.n.01
+        table.n.02_1 - table.n.02
         dartboard.n.01_1 - dartboard.n.01
         wall.n.01_1 - wall.n.01
         dart.n.01_1 dart.n.01_2 dart.n.01_3 - dart.n.01
@@ -10,19 +10,19 @@
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
-    
-    (:init 
-        (ontop dartboard.n.01_1 coffee_table.n.01_1) 
-        (ontop dart.n.01_1 dartboard.n.01_1) 
-        (ontop dart.n.01_3 dartboard.n.01_1) 
-        (ontop dart.n.01_2 dartboard.n.01_1) 
-        (not 
+
+    (:init
+        (ontop dartboard.n.01_1 table.n.02_1)
+        (ontop dart.n.01_1 dartboard.n.01_1)
+        (ontop dart.n.01_3 dartboard.n.01_1)
+        (ontop dart.n.01_2 dartboard.n.01_1)
+        (not
             (attached dartboard.n.01_1 wall.n.01_1)
         )
-        (ontop packing_box.n.02_1 coffee_table.n.01_1)
-        (inroom floor.n.01_1 living_room) 
-        (inroom wall.n.01_1 living_room) 
-        (inroom coffee_table.n.01_1 living_room) 
+        (ontop packing_box.n.02_1 table.n.02_1)
+        (inroom floor.n.01_1 living_room)
+        (inroom wall.n.01_1 living_room)
+        (inroom table.n.02_1 living_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

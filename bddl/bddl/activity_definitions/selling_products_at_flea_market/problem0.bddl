@@ -31,7 +31,7 @@
         (inside price_tag.n.01_3 carton.n.02_2) 
         (inside price_tag.n.01_4 carton.n.02_2) 
         (inroom floor.n.01_1 empty_room)
-        (inroom booth.n.01_1 empty_room)
+        (ontop booth.n.01_1 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

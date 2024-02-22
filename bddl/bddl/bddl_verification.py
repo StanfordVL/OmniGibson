@@ -113,7 +113,8 @@ ROOMS = set([
     "staircase",
     "spa",
     "television_room",
-    "lobby"
+    "lobby",
+    "break_room",
 ])
 PLACEMENTS = set([
     "ontop",

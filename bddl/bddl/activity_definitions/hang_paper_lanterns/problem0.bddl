@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        pedestal_table.n.01_1 - pedestal_table.n.01
+        table.n.02_1 - table.n.02
         lantern.n.01_1 lantern.n.01_2 - lantern.n.01
         floor.n.01_1 - floor.n.01
         wall.n.01_1 - wall.n.01
@@ -10,8 +10,8 @@
     )
     
     (:init 
-        (ontop lantern.n.01_1 pedestal_table.n.01_1) 
-        (ontop lantern.n.01_2 pedestal_table.n.01_1) 
+        (ontop lantern.n.01_1 table.n.02_1) 
+        (ontop lantern.n.01_2 table.n.02_1) 
         (not 
             (attached lantern.n.01_1 wall.n.01_1)
         )
@@ -20,7 +20,7 @@
         )
         (inroom floor.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
-        (inroom pedestal_table.n.01_1 garden) 
+        (inroom table.n.02_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
