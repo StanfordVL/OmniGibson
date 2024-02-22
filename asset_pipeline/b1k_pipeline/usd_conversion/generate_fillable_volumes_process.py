@@ -135,10 +135,6 @@ def check_in_contact(system, positions):
         in_contact[idx] = og.sim.psqi.overlap_sphere_any(system.particle_contact_radius * 0.8, pos)
     return in_contact
 
-def old_method(fillable):
-    
-
-
 def process_object(cat, mdl, out_path):
     if og.sim:
         og.sim.clear()
