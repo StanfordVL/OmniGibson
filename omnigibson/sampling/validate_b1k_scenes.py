@@ -59,7 +59,7 @@ parser.add_argument("--overwrite_existing", action="store_true",
 parser.add_argument("--create_stable_scene", action="store_true",
                     help="If set, will create a stable scene json to compare against and terminate early. Will not validate tasks.")
 
-gm.HEADLESS = False
+gm.HEADLESS = True
 gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_FLATCACHE = False
 gm.ENABLE_OBJECT_STATES = True

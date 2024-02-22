@@ -17,7 +17,8 @@ from omnigibson.systems import remove_callback_on_system_init, remove_callback_o
 from omnigibson.systems.system_base import clear_all_systems
 from omnigibson.utils.python_utils import clear as clear_pu
 from omnigibson.utils.bddl_utils import OBJECT_TAXONOMY
-from bddl.activity import Conditions
+from omnigibson.utils.constants import PrimType
+from bddl.activity import Conditions, evaluate_state
 import numpy as np
 import gspread
 
@@ -106,6 +107,16 @@ def validate_scene_can_be_sampled(scene):
     # Fill in this value to reserve it
     idx = scenes_sorted.index(scene)
     worksheet.update_acell(f"S{2 + idx}", USER)
+
+
+def prune_unevaluatable_predicates(init_conditions):
+    pruned_conditions = []
+    for condition in init_conditions:
+        if condition.body[0] in {"insource", "future", "real"}:
+            continue
+        pruned_conditions.append(condition)
+
+    return pruned_conditions
 
 
 def get_predicates(conds):
@@ -223,6 +234,10 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Define the configuration to load -- we'll use a Fetch
     cfg = {
+        "env": {
+            "action_frequency": 50,
+            "physics_frequency": 100,
+        },
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": args.scene_model,
@@ -246,6 +261,15 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Create the environment
     # Attempt to sample the activity
     env = og.Environment(configs=copy.deepcopy(cfg))
+
+    # Take a few steps to let objects settle, then update the scene initial state
+    # This is to prevent nonzero velocities from causing objects to fall through the floor when we disable them
+    # if they're not relevant for a given task
+    for _ in range(10):
+        og.sim.step()
+    for obj in env.scene.objects:
+        obj.keep_still()
+    env.scene.update_initial_state()
 
     # Store the initial state -- this is the safeguard to reset to!
     scene_initial_state = copy.deepcopy(env.scene._initial_state)
@@ -329,7 +353,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 for obj in og.sim.scene.objects:
                     if isinstance(obj, DatasetObject):
                         obj_rooms = {"_".join(room.split("_")[:-1]) for room in obj.in_rooms}
-                        active = len(relevant_rooms.intersection(obj_rooms)) > 0
+                        active = len(relevant_rooms.intersection(obj_rooms)) > 0 or obj.category in {"floors", "walls"}
                         obj.visual_only = not active
                         obj.visible = active
 
@@ -337,13 +361,31 @@ def main(random_selection=False, headless=False, short_exec=False):
                 env._load_task()
                 assert og.sim.is_stopped()
 
-                success = env.task.feedback is None
+                success, feedback = env.task.feedback is None, env.task.feedback
+
                 if success:
+                    # Set masses of all task-relevant objects to be very high
+                    # This is to avoid particles from causing instabilities
+                    # Don't use this on cloth since these may be unstable at high masses
+                    for obj in env.scene.objects[n_scene_objects:]:
+                        if obj.prim_type != PrimType.CLOTH:
+                            obj.root_link.mass = 100.0
+
                     # Sampling success
                     og.sim.play()
                     # This will actually reset the objects to their sample poses
                     env.task.reset(env)
 
+                    for i in range(50):
+                        og.sim.step()
+
+                    # Make sure init conditions are still true
+                    valid_init_state, results = evaluate_state(prune_unevaluatable_predicates(env.task.activity_initial_conditions))
+                    if not valid_init_state:
+                        success = False
+                        feedback = f"BDDL Task init conditions were invalid. Results: {results}"
+
+                if success:
                     # TODO: figure out whether we also should update in_room for newly imported objects
                     env.task.save_task(override=args.overwrite_existing)
 
@@ -351,7 +393,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                     og.log.info(f"\n\nSampling success: {activity}\n\n")
                     reason = ""
                 else:
-                    og.log.error(f"\n\nSampling failed: {activity}.\n\nFeedback: {env.task.feedback}\n\n")
+                    og.log.error(f"\n\nSampling failed: {activity}.\n\nFeedback: {feedback}\n\n")
                     reason = env.task.feedback
 
             else:
@@ -360,7 +402,7 @@ def main(random_selection=False, headless=False, short_exec=False):
             # Write to google sheets
             cell_list = worksheet.range(f"B{row}:H{row}")
             for cell, val in zip(cell_list,
-                                 ("", int(success), 0, args.scene_model, USER, "" if reason is None else reason, "")):
+                                 ("", int(success), "", args.scene_model, USER, "" if reason is None else reason, "")):
                 cell.value = val
             worksheet.update_cells(cell_list)
 
@@ -396,7 +438,7 @@ def main(random_selection=False, headless=False, short_exec=False):
             # Clear the in_progress reservation and note the exception
             cell_list = worksheet.range(f"B{row}:H{row}")
             for cell, val in zip(cell_list,
-                                 ("", 0, 0, args.scene_model, USER, "" if reason is None else reason, traceback_str)):
+                                 ("", 0, "", args.scene_model, USER, "" if reason is None else reason, traceback_str)):
                 cell.value = val
             worksheet.update_cells(cell_list)
 
