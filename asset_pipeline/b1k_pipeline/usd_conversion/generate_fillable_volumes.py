@@ -10,9 +10,9 @@ import fs.path
 from fs.tempfs import TempFS
 import tqdm
 
-from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
+from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR, launch_cluster
 
-WORKER_COUNT = 4
+WORKER_COUNT = 2
 BATCH_SIZE = 1
 RETRY = False
 
@@ -645,7 +645,7 @@ ids = {
 
 def run_on_batch(dataset_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.generate_fillable_volumes_process", dataset_path] + batch
-    cmd = ["conda", "run", "-n", "omnigibson"] + python_cmd
+    cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
     obj = batch[0][:-1].split("/")[-1]
     with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{obj}.err", "w") as ferr:
         return subprocess.run(cmd, stdout=f, stderr=ferr, check=True, cwd="/scr/ig_pipeline")
@@ -658,7 +658,8 @@ def main():
          ParallelZipFS("metadata.zip") as metadata_fs, \
          ParallelZipFS("systems.zip") as systems_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as dataset_fs:
-        with ParallelZipFS("fillable_volumes.zip", write=True) as out_fs:
+        # with ParallelZipFS("fillable_volumes.zip", write=True) as out_fs:
+        with pipeline_fs.makedirs("artifacts/parallels/fillable_volumes", recreate=True) as out_fs:
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
             fs.copy.copy_fs(metadata_fs, dataset_fs)
@@ -667,14 +668,13 @@ def main():
             for item in tqdm.tqdm(objdir_glob):
                 if fs.path.parts(item.path)[-1] not in ids:
                     continue
+                # Skip the object if we've already done it.
+                if out_fs.exists(fs.path.join(item.path, "fillable.obj")):
+                    continue
                 fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path))
 
             print("Launching cluster...")
-            dask_client = Client(n_workers=0, host="", scheduler_port=8786)
-            # subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh capri32.stanford.edu:8786"', shell=True, check=True)
-            # subprocess.run(f'cd /scr/ig_pipeline/b1k_pipeline/docker; ./run_worker_local.sh {WORKER_COUNT} cgokmen-lambda.stanford.edu:8786', shell=True, check=True)
-            print("Waiting for workers")
-            dask_client.wait_for_workers(WORKER_COUNT)
+            dask_client = launch_cluster(WORKER_COUNT)
 
             # Start the batched run
             object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
@@ -758,7 +758,7 @@ def main():
             print("Done processing. Archiving things now.")
 
         # Save the logs
-        with pipeline_fs.pipeline_output().open("generate_fillable_volumes.json", "w") as f:
+        with pipeline_fs.pipeline_output().open("generate_fillable_volumes_flat.json", "w") as f:
             json.dump({
                 "success": len(failed_objects) == 0,
                 "failed_objects": sorted(failed_objects),
