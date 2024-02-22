@@ -93,7 +93,7 @@ def generate_particles_in_box(box_half_extent):
     # Grab the link's AABB (or fallback to obj AABB if link does not have a valid AABB),
     # and generate a grid of points based on the sampling distance
     low = np.array([-1, -1, 0]) * box_half_extent
-    high = np.array([1, 1, 2]) * box_half_extent + np.array([0, 0, 0.05])
+    high = np.array([1, 1, 4]) * box_half_extent + np.array([0, 0, 0.05])
     extent = high - low
     # We sample the range of each extent minus
     sampling_distance = 2 * particle_radius
@@ -134,6 +134,10 @@ def check_in_contact(system, positions):
     for idx, pos in enumerate(positions):
         in_contact[idx] = og.sim.psqi.overlap_sphere_any(system.particle_contact_radius * 0.8, pos)
     return in_contact
+
+def old_method(fillable):
+    
+
 
 def process_object(cat, mdl, out_path):
     if og.sim:
@@ -211,18 +215,19 @@ def process_object(cat, mdl, out_path):
         og.sim.step()
 
     # Move the object down into the box slowly
-    lin_vel = 0.05
-    while True:
-        delta_z = -lin_vel * og.sim.get_rendering_dt()
-        cur_pos = fillable.get_position()
-        new_pos = cur_pos + np.array([0, 0, delta_z])
-        fillable.set_position(new_pos)
-        og.sim.step()
-        if fillable.get_position()[2] < obj_dipped_pos[2]:
-            break
+    # lin_vel = 0.2
+    # while True:
+    #     delta_z = -lin_vel * og.sim.get_rendering_dt()
+    #     cur_pos = fillable.get_position()
+    #     new_pos = cur_pos + np.array([0, 0, delta_z])
+    #     fillable.set_position(new_pos)
+    #     og.sim.step()
+    #     if fillable.get_position()[2] < obj_dipped_pos[2]:
+    #         break
+    fillable.set_position(obj_dipped_pos)
 
     # Let the particles settle
-    for _ in range(30):
+    for _ in range(100):
         og.sim.step()
 
     # Slowly close the doors linearly
@@ -238,8 +243,12 @@ def process_object(cat, mdl, out_path):
                 joint.set_pos(interpolated_pos)
         og.sim.step()
 
+    # Wait here a bit
+    for _ in range(100):
+        og.sim.step()
 
     # Now move the object out of the water
+    lin_vel = 0.01
     while True:
         delta_z = lin_vel * og.sim.get_rendering_dt()
         cur_pos = fillable.get_position()
@@ -251,11 +260,11 @@ def process_object(cat, mdl, out_path):
 
     # Temporarily use a fixed shakeoff. TODO: Fix the math below.
     # Gentle side-by-side shakeoff
-    # spill_fraction = 0.05
-    # extents = aabb_extent[:2]
-    # # formula for how much to rotate for total spill to be spill_fraction of the volume
-    # angles = np.arctan(extents / (2 * aabb_extent[2] * spill_fraction))
-    # angles = np.flip(angles)
+    spill_fraction = 0.05
+    extents = aabb_extent[:2]
+    # formula for how much to rotate for total spill to be spill_fraction of the volume
+    angles = np.arctan(extents / (2 * aabb_extent[2] * spill_fraction))
+    angles = np.flip(angles)
     angles = np.full((2,), np.deg2rad(10))
 
     print("Rotation amounts (degrees): ", np.rad2deg(angles))
@@ -269,7 +278,7 @@ def process_object(cat, mdl, out_path):
             new_rot = delta_orn * cur_rot
             fillable.set_orientation(new_rot.as_quat())
             og.sim.step()
-        for _ in range(30):
+        for _ in range(90):
             og.sim.step()
         for _ in range(total_steps):
             delta_orn = R.from_euler("xyz", -r / total_steps)
@@ -277,10 +286,8 @@ def process_object(cat, mdl, out_path):
             new_rot = delta_orn * cur_rot
             fillable.set_orientation(new_rot.as_quat())
             og.sim.step()
-
-    # Let the particles settle
-    for _ in range(30):
-        og.sim.step()
+        for _ in range(90):
+            og.sim.step()
 
     # Get the particles whose center is within the object's AABB
     aabb_min, aabb_max = fillable.aabb
