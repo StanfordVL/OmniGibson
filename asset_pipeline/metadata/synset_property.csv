@@ -159,7 +159,7 @@ black_bean.n.01,common_bean.n.02,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,mac
 black_pepper.n.02,pepper.n.03,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,microPhysicalSubstance
 blackberry.n.01,"berry.n.01,drupelet.n.01",0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 blackboard_eraser.n.01,eraser.n.01,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-blackboard.n.01,sheet.n.06,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+blackboard.n.01,sheet.n.06,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 blade.n.09,cutting_implement.n.01,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,rigidBody
 blanket.n.01,bedclothes.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 bleaching_agent__atomizer.n.01,dispenser.n.01,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,rigidBody
@@ -1095,7 +1095,7 @@ hemp.n.01,plant_fiber.n.01,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 herb__jar.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 herbicide__bottle.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 herbicide.n.01,chemical.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
-highchair.n.01,chair.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+highchair.n.01,chair.n.01,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 hiking_boot.n.01,boot.n.01,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 hinge.n.01,joint.n.05,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 hip.n.05,fruit.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1110,7 +1110,7 @@ hose.n.03,tube.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rope
 hospital_bed.n.02,furniture.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 hot_sauce__bottle.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 hot_sauce.n.01,sauce.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
-hot_tub.n.02,vessel.n.03,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+hot_tub.n.02,vessel.n.03,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 hotdog.n.02,sandwich.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 house_paint__can.n.01,container.n.01,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 house_paint.n.01,paint.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,visualSubstance
@@ -1213,7 +1213,7 @@ lantern.n.01,lamp.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 laptop.n.01,portable_computer.n.01,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 lasagna.n.01,pasta.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 lavender.n.01,shrub.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-lawn_chair.n.01,chair.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+lawn_chair.n.01,chair.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 lawn_mower.n.01,garden_tool.n.01,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 lawn.n.01,field.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 leaf_blower.n.01,home_appliance.n.01,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
