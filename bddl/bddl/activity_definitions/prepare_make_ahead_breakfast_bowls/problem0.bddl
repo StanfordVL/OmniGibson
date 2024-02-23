@@ -91,10 +91,7 @@
             (forpairs 
                 (?half__feta.n.01 - half__feta.n.01)
                 (?bowl.n.01 - bowl.n.01)
-                (and
-                    (cooked ?half__feta.n.01)
-                    (inside ?half__feta.n.01 ?bowl.n.01)
-                )
+                (inside ?half__feta.n.01 ?bowl.n.01)
             )
         )
     )
