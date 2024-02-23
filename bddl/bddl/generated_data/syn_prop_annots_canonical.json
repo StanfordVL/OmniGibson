@@ -2698,7 +2698,6 @@
         "freezable": {}
     },
     "bleu.n.01": {
-        "cookable": {},
         "sliceable": {},
         "meltable": {},
         "softBody": {},
@@ -6938,7 +6937,6 @@
         "freezable": {}
     },
     "butter.n.01": {
-        "cookable": {},
         "sliceable": {},
         "meltable": {},
         "rigidBody": {},
@@ -7465,7 +7463,6 @@
         "freezable": {}
     },
     "cane_sugar.n.02": {
-        "cookable": {},
         "meltable": {},
         "microPhysicalSubstance": {},
         "substance": {},
@@ -8689,7 +8686,6 @@
     },
     "cheddar.n.02": {
         "flammable": {},
-        "cookable": {},
         "sliceable": {},
         "meltable": {},
         "softBody": {},
@@ -9267,7 +9263,6 @@
         "freezable": {}
     },
     "chocolate_bar.n.01": {
-        "cookable": {},
         "meltable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -9367,7 +9362,6 @@
         "freezable": {}
     },
     "chocolate_kiss.n.01": {
-        "cookable": {},
         "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -10811,13 +10805,6 @@
         "physicalSubstance": {},
         "freezable": {}
     },
-    "cooked__granulated_sugar.n.01": {
-        "flammable": {},
-        "microPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "cooked__ground_beef.n.01": {
         "flammable": {},
         "microPhysicalSubstance": {},
@@ -10857,13 +10844,6 @@
     "cooked__marjoram.n.01": {
         "flammable": {},
         "microPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__butter.n.01": {
-        "liquid": {},
-        "boilable": {},
         "substance": {},
         "physicalSubstance": {},
         "freezable": {}
@@ -12463,7 +12443,6 @@
     },
     "diced__cheddar.n.01": {
         "flammable": {},
-        "cookable": {},
         "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -12511,7 +12490,6 @@
     },
     "diced__feta.n.01": {
         "flammable": {},
-        "cookable": {},
         "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -15586,7 +15564,6 @@
         "freezable": {}
     },
     "granulated_sugar.n.01": {
-        "cookable": {},
         "meltable": {},
         "microPhysicalSubstance": {},
         "substance": {},
@@ -15668,7 +15645,6 @@
     },
     "grated_cheese.n.01": {
         "flammable": {},
-        "cookable": {},
         "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -16206,7 +16182,6 @@
         "freezable": {}
     },
     "half__feta.n.01": {
-        "cookable": {},
         "diceable": {},
         "meltable": {},
         "softBody": {},
@@ -17683,6 +17658,14 @@
     },
     "iced_cappuccino.n.01": {
         "cookable": {},
+        "liquid": {},
+        "boilable": {},
+        "substance": {},
+        "physicalSubstance": {},
+        "freezable": {}
+    },
+    "cooked__iced_chocolate.n.01": {
+        "breakable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -20071,7 +20054,6 @@
         "freezable": {}
     },
     "lump_sugar.n.01": {
-        "cookable": {},
         "meltable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -20811,7 +20793,6 @@
         "freezable": {}
     },
     "melted__butter.n.01": {
-        "cookable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -20819,7 +20800,6 @@
         "freezable": {}
     },
     "melted__cheddar.n.01": {
-        "cookable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -20827,7 +20807,6 @@
         "freezable": {}
     },
     "melted__grated_cheese.n.01": {
-        "cookable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -20835,7 +20814,6 @@
         "freezable": {}
     },
     "melted__parmesan.n.01": {
-        "cookable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -20843,7 +20821,6 @@
         "freezable": {}
     },
     "melted__white_chocolate.n.01": {
-        "cookable": {},
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -21282,7 +21259,6 @@
         "freezable": {}
     },
     "mozzarella.n.01": {
-        "cookable": {},
         "sliceable": {},
         "meltable": {},
         "softBody": {},
@@ -21767,6 +21743,13 @@
         "wrinkleable": {},
         "disinfectable": {},
         "heatable": {},
+        "freezable": {}
+    },
+    "cooked__nut_butter.n.01": {
+        "liquid": {},
+        "boilable": {},
+        "substance": {},
+        "physicalSubstance": {},
         "freezable": {}
     },
     "nut_butter.n.01": {
@@ -22626,7 +22609,7 @@
         "freezable": {}
     },
     "parmesan.n.01": {
-        "cookable": {},
+        "meltable": {},
         "microPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
@@ -22880,6 +22863,13 @@
         "wrinkleable": {},
         "disinfectable": {},
         "heatable": {},
+        "freezable": {}
+    },
+    "cooked__peanut_butter.n.01": {
+        "liquid": {},
+        "boilable": {},
+        "substance": {},
+        "physicalSubstance": {},
         "freezable": {}
     },
     "peanut_butter.n.01": {
@@ -30097,7 +30087,6 @@
         "freezable": {}
     },
     "swiss_cheese.n.01": {
-        "cookable": {},
         "sliceable": {},
         "meltable": {},
         "rigidBody": {},
@@ -33243,7 +33232,6 @@
         "freezable": {}
     },
     "white_chocolate.n.01": {
-        "cookable": {},
         "meltable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -35904,7 +35892,6 @@
     },
     "half__cheddar.n.01": {
         "flammable": {},
-        "cookable": {},
         "diceable": {},
         "meltable": {},
         "softBody": {},
@@ -36524,7 +36511,6 @@
         "freezable": {}
     },
     "half__swiss_cheese.n.01": {
-        "cookable": {},
         "diceable": {},
         "meltable": {},
         "rigidBody": {},
@@ -36544,7 +36530,6 @@
         "freezable": {}
     },
     "half__bleu.n.01": {
-        "cookable": {},
         "diceable": {},
         "meltable": {},
         "softBody": {},
@@ -37322,7 +37307,6 @@
     },
     "half__butter_cookie.n.01": {
         "flammable": {},
-        "cookable": {},
         "diceable": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -37763,7 +37747,6 @@
         "freezable": {}
     },
     "half__butter.n.01": {
-        "cookable": {},
         "diceable": {},
         "meltable": {},
         "rigidBody": {},
@@ -37879,7 +37862,6 @@
         "freezable": {}
     },
     "half__mozzarella.n.01": {
-        "cookable": {},
         "diceable": {},
         "meltable": {},
         "softBody": {},
@@ -38638,7 +38620,6 @@
         "freezable": {}
     },
     "diced__swiss_cheese.n.01": {
-        "cookable": {},
         "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -38723,7 +38704,6 @@
         "freezable": {}
     },
     "diced__bleu.n.01": {
-        "cookable": {},
         "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -38896,7 +38876,6 @@
         "freezable": {}
     },
     "diced__butter.n.01": {
-        "cookable": {},
         "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -39641,7 +39620,6 @@
         "freezable": {}
     },
     "diced__mozzarella.n.01": {
-        "cookable": {},
         "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -39864,14 +39842,6 @@
         "physicalSubstance": {},
         "freezable": {}
     },
-    "cooked__diced__feta.n.01": {
-        "flammable": {},
-        "meltable": {},
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "cooked__diced__walnut.n.01": {
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -39893,13 +39863,6 @@
         "freezable": {}
     },
     "cooked__diced__bay_leaf.n.01": {
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__diced__mozzarella.n.01": {
-        "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
@@ -40090,13 +40053,6 @@
         "freezable": {}
     },
     "cooked__diced__sugar_cookie_dough.n.01": {
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__diced__bleu.n.01": {
-        "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
@@ -40463,13 +40419,6 @@
         "physicalSubstance": {},
         "freezable": {}
     },
-    "cooked__diced__swiss_cheese.n.01": {
-        "meltable": {},
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "cooked__diced__avocado.n.01": {
         "macroPhysicalSubstance": {},
         "substance": {},
@@ -40600,14 +40549,6 @@
     },
     "cooked__diced__fruitcake.n.01": {
         "flammable": {},
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__diced__cheddar.n.01": {
-        "flammable": {},
-        "meltable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
@@ -40807,20 +40748,6 @@
         "physicalSubstance": {},
         "freezable": {}
     },
-    "cooked__diced__butter_cookie.n.01": {
-        "flammable": {},
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__diced__butter.n.01": {
-        "meltable": {},
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "cooked__diced__chicken_breast.n.01": {
         "flammable": {},
         "macroPhysicalSubstance": {},
@@ -40964,14 +40891,6 @@
         "physicalSubstance": {},
         "freezable": {}
     },
-    "cooked__grated_cheese.n.01": {
-        "flammable": {},
-        "meltable": {},
-        "macroPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "cooked__whole_milk.n.01": {
         "liquid": {},
         "boilable": {},
@@ -40994,13 +40913,6 @@
         "freezable": {}
     },
     "cooked__jelly.n.01": {
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__grated_cheese.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -41078,13 +40990,6 @@
         "freezable": {}
     },
     "cooked__mayonnaise.n.01": {
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__peanut_butter.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -41278,13 +41183,6 @@
         "physicalSubstance": {},
         "freezable": {}
     },
-    "cooked__cane_sugar.n.01": {
-        "meltable": {},
-        "microPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "cooked__ravioli.n.01": {
         "flammable": {},
         "macroPhysicalSubstance": {},
@@ -41307,13 +41205,6 @@
         "freezable": {}
     },
     "cooked__lime_juice.n.01": {
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__cheddar.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -41387,13 +41278,6 @@
     "cooked__beef_broth.n.01": {
         "liquid": {},
         "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__chocolate_kiss.n.01": {
-        "meltable": {},
-        "macroPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
         "freezable": {}
@@ -41478,13 +41362,6 @@
         "physicalSubstance": {},
         "freezable": {}
     },
-    "cooked__melted__parmesan.n.01": {
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "cooked__nutmeg.n.01": {
         "microPhysicalSubstance": {},
         "substance": {},
@@ -41518,12 +41395,6 @@
         "freezable": {}
     },
     "cooked__ground_coffee.n.01": {
-        "microPhysicalSubstance": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__parmesan.n.01": {
         "microPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},
@@ -41801,14 +41672,6 @@
         "physicalSubstance": {},
         "freezable": {}
     },
-    "cooked__iced_chocolate.n.01": {
-        "breakable": {},
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "cooked__tomato_paste.n.01": {
         "liquid": {},
         "boilable": {},
@@ -41979,20 +41842,6 @@
         "physicalSubstance": {},
         "freezable": {}
     },
-    "cooked__melted__white_chocolate.n.01": {
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__nut_butter.n.01": {
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
     "cooked__drip_coffee.n.01": {
         "liquid": {},
         "boilable": {},
@@ -42104,14 +41953,6 @@
         "freezable": {}
     },
     "melted__chocolate.n.01": {
-        "cookable": {},
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__chocolate.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -42119,14 +41960,6 @@
         "freezable": {}
     },
     "melted__cane_sugar.n.01": {
-        "cookable": {},
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__cane_sugar.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -42134,14 +41967,6 @@
         "freezable": {}
     },
     "melted__feta.n.01": {
-        "cookable": {},
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__feta.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -42149,14 +41974,6 @@
         "freezable": {}
     },
     "melted__granulated_sugar.n.01": {
-        "cookable": {},
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__granulated_sugar.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -42164,14 +41981,6 @@
         "freezable": {}
     },
     "melted__mozzarella.n.01": {
-        "cookable": {},
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__mozzarella.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -42179,14 +41988,6 @@
         "freezable": {}
     },
     "melted__swiss_cheese.n.01": {
-        "cookable": {},
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__swiss_cheese.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -42194,14 +41995,6 @@
         "freezable": {}
     },
     "melted__bleu.n.01": {
-        "cookable": {},
-        "liquid": {},
-        "boilable": {},
-        "substance": {},
-        "physicalSubstance": {},
-        "freezable": {}
-    },
-    "cooked__melted__bleu.n.01": {
         "liquid": {},
         "boilable": {},
         "substance": {},
@@ -42674,6 +42467,13 @@
         "freezable": {}
     },
     "cooked__diced__sourdough.n.01": {
+        "macroPhysicalSubstance": {},
+        "substance": {},
+        "physicalSubstance": {},
+        "freezable": {}
+    },
+    "cooked__diced__butter_cookie.n.01": {
+        "flammable": {},
         "macroPhysicalSubstance": {},
         "substance": {},
         "physicalSubstance": {},

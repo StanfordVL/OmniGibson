@@ -374,23 +374,6 @@
         }
     },
     {
-        "rule_name": "cooked-half__bleu.n.01-dicing",
-        "input_synsets": {
-            "half__bleu.n.01": 1
-        },
-        "input_states": {
-            "half__bleu.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__bleu.n.01": 1
-        }
-    },
-    {
         "rule_name": "cooked-half__bok_choy.n.01-dicing",
         "input_synsets": {
             "half__bok_choy.n.01": 1
@@ -544,40 +527,6 @@
         }
     },
     {
-        "rule_name": "cooked-half__butter.n.01-dicing",
-        "input_synsets": {
-            "half__butter.n.01": 1
-        },
-        "input_states": {
-            "half__butter.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__butter.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked-half__butter_cookie.n.01-dicing",
-        "input_synsets": {
-            "half__butter_cookie.n.01": 1
-        },
-        "input_states": {
-            "half__butter_cookie.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__butter_cookie.n.01": 1
-        }
-    },
-    {
         "rule_name": "cooked-half__buttermilk_pancake.n.01-dicing",
         "input_synsets": {
             "half__buttermilk_pancake.n.01": 1
@@ -728,23 +677,6 @@
         },
         "output_synsets": {
             "cooked__diced__chard.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked-half__cheddar.n.01-dicing",
-        "input_synsets": {
-            "half__cheddar.n.01": 1
-        },
-        "input_states": {
-            "half__cheddar.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__cheddar.n.01": 1
         }
     },
     {
@@ -1408,23 +1340,6 @@
         },
         "output_synsets": {
             "cooked__diced__fennel.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked-half__feta.n.01-dicing",
-        "input_synsets": {
-            "half__feta.n.01": 1
-        },
-        "input_states": {
-            "half__feta.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__feta.n.01": 1
         }
     },
     {
@@ -2156,23 +2071,6 @@
         },
         "output_synsets": {
             "cooked__diced__meatball.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked-half__mozzarella.n.01-dicing",
-        "input_synsets": {
-            "half__mozzarella.n.01": 1
-        },
-        "input_states": {
-            "half__mozzarella.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__mozzarella.n.01": 1
         }
     },
     {
@@ -3142,23 +3040,6 @@
         },
         "output_synsets": {
             "cooked__diced__sweet_corn.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked-half__swiss_cheese.n.01-dicing",
-        "input_synsets": {
-            "half__swiss_cheese.n.01": 1
-        },
-        "input_states": {
-            "half__swiss_cheese.n.01": [
-                [
-                    "cooked",
-                    true
-                ]
-            ]
-        },
-        "output_synsets": {
-            "cooked__diced__swiss_cheese.n.01": 1
         }
     },
     {

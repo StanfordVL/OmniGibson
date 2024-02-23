@@ -54,87 +54,6 @@
         }
     },
     {
-        "rule_name": "cooked__cane_sugar.n.01-melting",
-        "input_synsets": {
-            "cooked__cane_sugar.n.01": 1
-        },
-        "output_synsets": {
-            "melted__cane_sugar.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked__chocolate_kiss.n.01-melting",
-        "input_synsets": {
-            "cooked__chocolate_kiss.n.01": 1
-        },
-        "output_synsets": {
-            "melted__chocolate.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked__diced__bleu.n.01-melting",
-        "input_synsets": {
-            "cooked__diced__bleu.n.01": 1
-        },
-        "output_synsets": {
-            "melted__bleu.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked__diced__butter.n.01-melting",
-        "input_synsets": {
-            "cooked__diced__butter.n.01": 1
-        },
-        "output_synsets": {
-            "cooked__melted__butter.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked__diced__cheddar.n.01-melting",
-        "input_synsets": {
-            "cooked__diced__cheddar.n.01": 1
-        },
-        "output_synsets": {
-            "melted__cheddar.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked__diced__feta.n.01-melting",
-        "input_synsets": {
-            "cooked__diced__feta.n.01": 1
-        },
-        "output_synsets": {
-            "melted__feta.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked__diced__mozzarella.n.01-melting",
-        "input_synsets": {
-            "cooked__diced__mozzarella.n.01": 1
-        },
-        "output_synsets": {
-            "melted__mozzarella.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked__diced__swiss_cheese.n.01-melting",
-        "input_synsets": {
-            "cooked__diced__swiss_cheese.n.01": 1
-        },
-        "output_synsets": {
-            "melted__swiss_cheese.n.01": 1
-        }
-    },
-    {
-        "rule_name": "cooked__grated_cheese.n.01-melting",
-        "input_synsets": {
-            "cooked__grated_cheese.n.01": 1
-        },
-        "output_synsets": {
-            "cooked__melted__grated_cheese.n.01": 1
-        }
-    },
-    {
         "rule_name": "diced__bleu.n.01-melting",
         "input_synsets": {
             "diced__bleu.n.01": 1
@@ -285,6 +204,15 @@
         },
         "output_synsets": {
             "melted__mozzarella.n.01": 1
+        }
+    },
+    {
+        "rule_name": "parmesan.n.01-melting",
+        "input_synsets": {
+            "parmesan.n.01": 1
+        },
+        "output_synsets": {
+            "melted__parmesan.n.01": 1
         }
     },
     {

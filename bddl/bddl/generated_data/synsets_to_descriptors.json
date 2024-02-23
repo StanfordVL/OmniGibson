@@ -11971,10 +11971,6 @@
     ],
     "bleu.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "disinfected",
             "disinfected"
         ],
@@ -26707,10 +26703,6 @@
     ],
     "butter.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "disinfected",
             "disinfected"
         ],
@@ -28752,10 +28744,6 @@
         ]
     ],
     "cane_sugar.n.02": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "frozen",
             "frozen"
@@ -33049,10 +33037,6 @@
     ],
     "cheddar.n.02": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "disinfected",
             "disinfected"
         ],
@@ -34917,10 +34901,6 @@
     ],
     "chocolate_bar.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "disinfected",
             "disinfected"
         ],
@@ -35244,10 +35224,6 @@
         ]
     ],
     "chocolate_kiss.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "frozen",
             "frozen"
@@ -41239,16 +41215,6 @@
             "frozen"
         ]
     ],
-    "cooked__cane_sugar.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "melted",
-            "melted"
-        ]
-    ],
     "cooked__canola_oil.n.01": [
         [
             "boiling",
@@ -41377,16 +41343,6 @@
         [
             "frozen",
             "frozen"
-        ]
-    ],
-    "cooked__chocolate_kiss.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "melted",
-            "melted"
         ]
     ],
     "cooked__chocolate_sauce.n.01": [
@@ -41779,16 +41735,6 @@
             "frozen"
         ]
     ],
-    "cooked__diced__bleu.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "melted",
-            "melted"
-        ]
-    ],
     "cooked__diced__bok_choy.n.01": [
         [
             "frozen",
@@ -41849,16 +41795,6 @@
         [
             "frozen",
             "frozen"
-        ]
-    ],
-    "cooked__diced__butter.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "melted",
-            "melted"
         ]
     ],
     "cooked__diced__butter_cookie.n.01": [
@@ -41939,20 +41875,6 @@
         [
             "frozen",
             "frozen"
-        ]
-    ],
-    "cooked__diced__cheddar.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "melted",
-            "melted"
         ]
     ],
     "cooked__diced__cheese_tart.n.01": [
@@ -42251,20 +42173,6 @@
         [
             "frozen",
             "frozen"
-        ]
-    ],
-    "cooked__diced__feta.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "melted",
-            "melted"
         ]
     ],
     "cooked__diced__fillet.n.01": [
@@ -42569,16 +42477,6 @@
         [
             "frozen",
             "frozen"
-        ]
-    ],
-    "cooked__diced__mozzarella.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "melted",
-            "melted"
         ]
     ],
     "cooked__diced__muffin.n.01": [
@@ -42975,16 +42873,6 @@
             "frozen"
         ]
     ],
-    "cooked__diced__swiss_cheese.n.01": [
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "melted",
-            "melted"
-        ]
-    ],
     "cooked__diced__taco.n.01": [
         [
             "frozen",
@@ -43265,30 +43153,6 @@
         [
             "frozen",
             "frozen"
-        ]
-    ],
-    "cooked__granulated_sugar.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__grated_cheese.n.01": [
-        [
-            "on_fire",
-            "on_fire"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ],
-        [
-            "melted",
-            "melted"
         ]
     ],
     "cooked__gravy.n.01": [
@@ -43629,126 +43493,6 @@
             "frozen"
         ]
     ],
-    "cooked__melted__bleu.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__butter.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__cane_sugar.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__cheddar.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__chocolate.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__feta.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__granulated_sugar.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__grated_cheese.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__mozzarella.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__parmesan.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__swiss_cheese.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__melted__white_chocolate.n.01": [
-        [
-            "boiling",
-            "boiling"
-        ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
     "cooked__meringue.n.01": [
         [
             "boiling",
@@ -43922,12 +43666,6 @@
             "on_fire",
             "on_fire"
         ],
-        [
-            "frozen",
-            "frozen"
-        ]
-    ],
-    "cooked__parmesan.n.01": [
         [
             "frozen",
             "frozen"
@@ -50853,10 +50591,6 @@
     ],
     "diced__bleu.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "frozen",
             "frozen"
         ],
@@ -50974,10 +50708,6 @@
         ]
     ],
     "diced__butter.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "frozen",
             "frozen"
@@ -51100,10 +50830,6 @@
         ]
     ],
     "diced__cheddar.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "on_fire",
             "on_fire"
@@ -51584,10 +51310,6 @@
         ]
     ],
     "diced__feta.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "on_fire",
             "on_fire"
@@ -52098,10 +51820,6 @@
         ]
     ],
     "diced__mozzarella.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "frozen",
             "frozen"
@@ -52756,10 +52474,6 @@
         ]
     ],
     "diced__swiss_cheese.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "frozen",
             "frozen"
@@ -67561,10 +67275,6 @@
     ],
     "granulated_sugar.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "frozen",
             "frozen"
         ],
@@ -67924,10 +67634,6 @@
         ]
     ],
     "grated_cheese.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "on_fire",
             "on_fire"
@@ -70907,10 +70613,6 @@
     ],
     "half__bleu.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "diced",
             "diced"
         ],
@@ -71593,10 +71295,6 @@
     ],
     "half__butter.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "diced",
             "diced"
         ],
@@ -71658,10 +71356,6 @@
         ]
     ],
     "half__butter_cookie.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "diced",
             "diced"
@@ -72456,10 +72150,6 @@
         ]
     ],
     "half__cheddar.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "diced",
             "diced"
@@ -75286,10 +74976,6 @@
         ]
     ],
     "half__feta.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "diced",
             "diced"
@@ -78510,10 +78196,6 @@
         ]
     ],
     "half__mozzarella.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "diced",
             "diced"
@@ -82892,10 +82574,6 @@
         ]
     ],
     "half__swiss_cheese.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "diced",
             "diced"
@@ -99655,10 +99333,6 @@
     ],
     "lump_sugar.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "disinfected",
             "disinfected"
         ],
@@ -102937,10 +102611,6 @@
             "boiling"
         ],
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "frozen",
             "frozen"
         ]
@@ -102949,10 +102619,6 @@
         [
             "boiling",
             "boiling"
-        ],
-        [
-            "cooked",
-            "cooked"
         ],
         [
             "frozen",
@@ -102965,10 +102631,6 @@
             "boiling"
         ],
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "frozen",
             "frozen"
         ]
@@ -102977,10 +102639,6 @@
         [
             "boiling",
             "boiling"
-        ],
-        [
-            "cooked",
-            "cooked"
         ],
         [
             "frozen",
@@ -102993,10 +102651,6 @@
             "boiling"
         ],
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "frozen",
             "frozen"
         ]
@@ -103005,10 +102659,6 @@
         [
             "boiling",
             "boiling"
-        ],
-        [
-            "cooked",
-            "cooked"
         ],
         [
             "frozen",
@@ -103021,10 +102671,6 @@
             "boiling"
         ],
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "frozen",
             "frozen"
         ]
@@ -103033,10 +102679,6 @@
         [
             "boiling",
             "boiling"
-        ],
-        [
-            "cooked",
-            "cooked"
         ],
         [
             "frozen",
@@ -103049,10 +102691,6 @@
             "boiling"
         ],
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "frozen",
             "frozen"
         ]
@@ -103061,10 +102699,6 @@
         [
             "boiling",
             "boiling"
-        ],
-        [
-            "cooked",
-            "cooked"
         ],
         [
             "frozen",
@@ -103077,10 +102711,6 @@
             "boiling"
         ],
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "frozen",
             "frozen"
         ]
@@ -103089,10 +102719,6 @@
         [
             "boiling",
             "boiling"
-        ],
-        [
-            "cooked",
-            "cooked"
         ],
         [
             "frozen",
@@ -105350,10 +104976,6 @@
         ]
     ],
     "mozzarella.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "disinfected",
             "disinfected"
@@ -111427,12 +111049,12 @@
     ],
     "parmesan.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "frozen",
             "frozen"
+        ],
+        [
+            "melted",
+            "melted"
         ]
     ],
     "parmesan__shaker.n.01": [
@@ -143905,10 +143527,6 @@
     ],
     "swiss_cheese.n.01": [
         [
-            "cooked",
-            "cooked"
-        ],
-        [
             "disinfected",
             "disinfected"
         ],
@@ -157142,10 +156760,6 @@
         ]
     ],
     "white_chocolate.n.01": [
-        [
-            "cooked",
-            "cooked"
-        ],
         [
             "disinfected",
             "disinfected"
