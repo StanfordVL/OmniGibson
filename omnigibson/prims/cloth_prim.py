@@ -12,7 +12,6 @@ import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.prims.geom_prim import GeomPrim
 from omnigibson.systems import get_system
-from omnigibson.utils.deprecated_utils import RetensorClothPrimView
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.geometry_utils import get_particle_positions_from_frame, get_particle_positions_in_frame
 from omnigibson.utils.sim_utils import CsRawData
@@ -94,6 +93,7 @@ class ClothPrim(GeomPrim):
         self._n_particles = len(self._prim.GetAttribute("points").Get())
 
         # Load the cloth prim view
+        from omnigibson.utils.deprecated_utils import RetensorClothPrimView
         self._cloth_prim_view = RetensorClothPrimView(self._prim_path)
 
         # positions = self.get_particle_positions()
