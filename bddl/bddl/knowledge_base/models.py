@@ -303,8 +303,10 @@ class Synset(Model):
                     continue
                 required_links.add('heatsource')
 
-        if 'fillable' in properties:
-            required_links.add('fillable')
+        # This is left out because the fillable annotations are currently automatically generated
+        # TODO: Re-enable this after the fillable annotations have been backported.
+        # if 'fillable' in properties:
+        #     required_links.add('fillable')
 
         if 'toggleable' in properties:
             required_links.add('togglebutton')

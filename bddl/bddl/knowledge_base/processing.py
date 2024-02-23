@@ -309,7 +309,7 @@ class KnowledgeBaseProcessor():
         json_paths = glob.glob(str(GENERATED_DATA_DIR / "transition_map/tm_jsons/*.json"))
         transitions = []
         for jp in json_paths:
-            if "washer_" in jp:
+            if "washer" in jp:
                 continue
             with open(jp) as f:
                 transitions.extend(json.load(f))

@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        desk.n.01_1 - desk.n.01
+        table.n.02_1 - table.n.02
         incision.n.01_1 - incision.n.01
         emery_paper.n.01_1 - emery_paper.n.01
         floor.n.01_1 - floor.n.01
@@ -10,17 +10,17 @@
     )
     
     (:init 
-        (covered desk.n.01_1 incision.n.01_1) 
-        (ontop emery_paper.n.01_1 desk.n.01_1)
+        (covered table.n.02_1 incision.n.01_1) 
+        (ontop emery_paper.n.01_1 table.n.02_1)
         (inroom floor.n.01_1 garage) 
-        (inroom desk.n.01_1 garage) 
+        (ontop table.n.02_1 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
             (not 
-                (covered ?desk.n.01_1 ?incision.n.01_1)
+                (covered ?table.n.02_1 ?incision.n.01_1)
             )
         )
     )

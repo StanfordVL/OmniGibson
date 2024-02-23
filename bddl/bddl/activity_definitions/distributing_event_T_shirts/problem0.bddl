@@ -19,8 +19,8 @@
         (inside jersey.n.03_6 carton.n.02_1) 
         (inside jersey.n.03_7 carton.n.02_1) 
         (inside jersey.n.03_8 carton.n.02_1) 
-        (inroom floor.n.01_1 corridor) 
-        (inroom booth.n.01_1 corridor) 
+        (inroom floor.n.01_1 empty_room)
+        (ontop booth.n.01_1 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

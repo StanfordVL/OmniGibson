@@ -5,7 +5,7 @@
         stain.n.01_1 - stain.n.01
         dust.n.01_1 - dust.n.01
      	grill.n.02_1 - grill.n.02
-    	floor.n.01_1 - floor.n.01
+    	floor.n.01_1 floor.n.01_2 - floor.n.01
     	rag.n.01_1 - rag.n.01
     	bucket.n.01_1 - bucket.n.01
         countertop.n.01_1 - countertop.n.01
@@ -13,15 +13,16 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init 
-        (inroom grill.n.02_1 garden)
+    (:init
+        (inroom floor.n.01_2 garden)
+        (ontop grill.n.02_1 floor.n.01_2)
         (covered grill.n.02_1 stain.n.01_1) 
         (covered grill.n.02_1 dust.n.01_1) 
         (ontop bucket.n.01_1 countertop.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (inroom floor.n.01_1 garage) 
-        (inroom countertop.n.01_1 utility_room) 
-        (inroom sink.n.01_1 utility_room)
+        (inroom countertop.n.01_1 kitchen)
+        (inroom sink.n.01_1 kitchen)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

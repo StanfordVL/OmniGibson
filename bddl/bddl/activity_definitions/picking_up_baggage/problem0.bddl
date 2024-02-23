@@ -3,7 +3,7 @@
 
     (:objects
         backpack.n.01_1 - backpack.n.01
-        desk.n.01_1 - desk.n.01
+        table.n.02_1 - table.n.02
         bag.n.06_1 - bag.n.06
         car.n.01_1 - car.n.01
         floor.n.01_1 floor.n.01_2 - floor.n.01
@@ -12,10 +12,10 @@
     
     (:init
         (ontop car.n.01_1 floor.n.01_2) 
-        (ontop backpack.n.01_1 desk.n.01_1) 
+        (ontop backpack.n.01_1 table.n.02_1) 
         (ontop bag.n.06_1 floor.n.01_1) 
         (inroom floor.n.01_1 bedroom) 
-        (inroom desk.n.01_1 bedroom) 
+        (inroom table.n.02_1 bedroom) 
         (inroom floor.n.01_2 garage)
         (ontop agent.n.01_1 floor.n.01_1)
     )
