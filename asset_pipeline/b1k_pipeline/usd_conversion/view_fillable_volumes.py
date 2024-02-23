@@ -113,7 +113,7 @@ def view_object(cat, mdl):
     # Create the water resetter
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.R,
-        callback_fn=lambda: xwater.remove_all_particles(),
+        callback_fn=lambda: water.remove_all_particles(),
     )
     print("Press R to remove all water")
 
@@ -207,7 +207,7 @@ def main():
 
     # Get all models that have a fillable file.
     fillable_ids = glob.glob(os.path.join(gm.DATASET_PATH, "objects/*/*/fillable_*.obj"))
-    fillables = sorted({pathlib.Path(fillable_id).parts[-3:-1] for fillable_id in fillable_ids})
+    fillables = sorted({tuple(pathlib.Path(fillable_id).parts[-3:-1]) for fillable_id in fillable_ids})
 
     # Get the ones that don't have a fillable assignment
     assignments = get_assignments()
@@ -217,7 +217,8 @@ def main():
     fillables = [
         (cat, mdl)
         for cat, mdl in fillables
-        if int(hashlib.md5(mdl.encode()).hexdigest(), 16) % idxes != idx]
+        if int(hashlib.md5(mdl.encode()).hexdigest(), 16) % idxes == idx
+    ]
 
     for cat, mdl in tqdm.tqdm(fillables):
         view_object(cat, mdl)
