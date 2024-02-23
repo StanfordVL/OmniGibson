@@ -1,25 +1,45 @@
+import hashlib
+import os
+import sys
+import glob
 import pathlib
 import numpy as np
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.systems.system_base import get_system
-from omnigibson.utils.asset_utils import get_all_object_categories, get_all_object_category_models
 from omnigibson.utils.ui_utils import KeyboardEventHandler
 import omnigibson.lazy as lazy
 import trimesh
+import json
+import tqdm
 
 gm.HEADLESS = False
 gm.USE_ENCRYPTED_ASSETS = True
 gm.USE_GPU_DYNAMICS = True
-gm.ENABLE_FLATCACHE = False
+gm.ENABLE_FLATCACHE = True
+
+ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments.json")
 
 MAX_BBOX = 0.3
 
-def draw_mesh(mesh, parent_pos):
+def get_assignments():
+    if not os.path.exists(ASSIGNMENT_FILE):
+        return {}
+
+    with open(ASSIGNMENT_FILE, "r") as f:
+        return json.load(f)
+    
+def add_assignment(mdl, assignment):
+    assignments = get_assignments()
+    assignments[mdl] = assignment
+    with open(ASSIGNMENT_FILE, "w") as f:
+        json.dump(assignments, f)
+
+def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.)):
     draw = lazy.omni.isaac.debug_draw._debug_draw.acquire_debug_draw_interface()
     edge_vert_idxes = mesh.edges_unique
     N = len(edge_vert_idxes)
-    colors = [(1., 0., 0., 1.) for _ in range(N)]
+    colors = [color for _ in range(N)]
     sizes = [1. for _ in range(N)]
     points1 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 0]] + parent_pos).tolist()]
     points2 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 1]] + parent_pos).tolist()]
@@ -61,6 +81,8 @@ def view_object(cat, mdl):
     if og.sim:
         og.sim.clear()
 
+    print("\n\nNow processing:", cat, mdl)
+
     cfg = {
         "scene": {
             "type": "Scene",
@@ -84,687 +106,120 @@ def view_object(cat, mdl):
     fillable.set_position([0, 0, fillable.aabb_extent[2]])
     og.sim.step()
 
-    # Find the scale the mesh was generated at
-    scale = np.minimum(1, MAX_BBOX / np.max(fillable.native_bbox))
+    # Reset keyboard bindings
+    KeyboardEventHandler.reset()
 
-    # Load the mesh and unscale it
-    fillable_path = pathlib.Path(__file__).parents[2] / "artifacts/parallels/fillable_volumes/objects" / cat / mdl / "fillable.obj"
-    if not fillable_path.exists():
-        print("Skipping non-existent file", fillable_path)
-        return
-    mesh = trimesh.load(fillable_path, force="mesh")
-    inv_scale = 1 / scale
-    transform = np.diag([inv_scale, inv_scale, inv_scale, 1])
-    mesh.apply_transform(transform)
-
-    draw_mesh(mesh, fillable.get_position())
-
-    def fill_object():
-        generate_particles_in_mesh(mesh, fillable.get_position())
+    # Create the water resetter
+    water = get_system("water")
     KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.X,
-        callback_fn=fill_object,
+        key=lazy.carb.input.KeyboardInput.R,
+        callback_fn=lambda: water.remove_all_particles(),
     )
+    print("Press R to remove all water")
 
+    # Create the stopper function
     keep_rendering = True
     def stop_rendering():
         nonlocal keep_rendering
         keep_rendering = False
+    def save_assignment_and_stop(assignment):
+        print(f"Chose option {assignment} for {cat}/{mdl}")
+        add_assignment(mdl, assignment)
+        stop_rendering()
+    
+    # Skip without any assignment
     KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.Z,
+        key=lazy.carb.input.KeyboardInput.J,
         callback_fn=stop_rendering,
     )
+    print("Press J to skip")
+
+    # Skip with assignment that says Benjamin should fix
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.K,
+        callback_fn=lambda: save_assignment_and_stop("fix"),
+    )
+    print("Press K to indicate object needs fixing to make fillable.")
+
+    # Skip with assignment that says we should hand-annotate
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.L,
+        callback_fn=lambda: save_assignment_and_stop("manual"),
+    )
+    print("Press L to indicate neither option works despite object being fillable (hand-annotate).")
+
+    dip_path = pathlib.Path(__file__).parents[2] / "artifacts/parallels/fillable_volumes/objects" / cat / mdl / "fillable_dip.obj"
+    if dip_path.exists():
+        # Find the scale the mesh was generated at
+        scale = np.minimum(1, MAX_BBOX / np.max(fillable.native_bbox))
+
+        dip_mesh = trimesh.load(dip_path, force="mesh")
+        inv_scale = 1 / scale
+        transform = np.diag([inv_scale, inv_scale, inv_scale, 1])
+        dip_mesh.apply_transform(transform)
+
+        # Draw the mesh
+        draw_mesh(dip_mesh, fillable.get_position(), color=(1., 0., 0., 1.))
+
+        # Add the dip option filler
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.Z,
+            callback_fn=lambda: generate_particles_in_mesh(dip_mesh, fillable.get_position()),
+        )
+        print("Press Z to fill dip (red) with water")
+
+        # Add the dip option chooser
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.X,
+            callback_fn=lambda: save_assignment_and_stop("dip"),
+        )
+        print("Press X to choose the dip (red) option.")
+
+    ray_path = pathlib.Path(__file__).parents[2] / "artifacts/parallels/fillable_volumes/objects" / cat / mdl / "fillable_ray.obj"
+    if ray_path.exists():
+        ray_mesh = trimesh.load(ray_path, force="mesh")
+
+        # Draw the mesh
+        draw_mesh(ray_mesh, fillable.get_position(), color=(0., 0., 1., 1.))
+
+        # Add the ray option filler
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.A,
+            callback_fn=lambda: generate_particles_in_mesh(ray_mesh, fillable.get_position()),
+        )
+        print("Press A to fill ray (blue) with water")
+
+        # Add the ray option chooser
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.S,
+            callback_fn=lambda: save_assignment_and_stop("ray"),
+        )
+        print("Press S to choose the ray (blue) option.")
+
 
     while keep_rendering:
         og.sim.step()
 
-    # from omnigibson.utils.deprecated_utils import CreateMeshPrimWithDefaultXformCommand
-    # container_prim_path = fillable.root_link.prim_path + "/container"
-    # CreateMeshPrimWithDefaultXformCommand(prim_path=container_prim_path, prim_type="Mesh", trimesh_mesh=hull).do()
-    # mesh_prim = XFormPrim(name="container", prim_path=container_prim_path)
-
 
 def main():
-    import sys
+    idx = int(sys.argv[1])
+    idxes = int(sys.argv[2])
 
-    fillable_ids = {
-        "dhkkfo",
-        "nfuxzd",
-        "lgopij",
-        "yhurut",
-        "gfxrnj",
-        "swytaw",
-        "dtjmai",
-        "effbnc",
-        "exzsal",
-        "fxrsyi",
-        "fyrkzs",
-        "jdijek",
-        "qwoqqr",
-        "rhohgs",
-        "sfvswx",
-        "sstojv",
-        "uobdoq",
-        "uzgibd",
-        "zycgen",
-        "ecqxgd",
-        "nigfha",
-        "lymciz",
-        "mxsliu",
-        "rxscji",
-        "xtqbuf",
-        "dpxnlc",
-        "hvlkjx",
-        "cwkvib",
-        "dhfqid",
-        "eyedvd",
-        "xnjqix",
-        "adciys",
-        "ajzltc",
-        "aspeds",
-        "belcml",
-        "bexgtn",
-        "bnobdx",
-        "byzaxy",
-        "ckxwea",
-        "cypjlv",
-        "dalyim",
-        "eawgwj",
-        "eipwho",
-        "fedafr",
-        "feuaak",
-        "fiarri",
-        "fwdfeg",
-        "hitnkv",
-        "hpqjug",
-        "hynhgz",
-        "jblalf",
-        "jfvjep",
-        "jhtxxh",
-        "jpvcjv",
-        "kasebx",
-        "kdkrov",
-        "kthvrl",
-        "lgaxzt",
-        "mspdar",
-        "nkkhbn",
-        "npuuir",
-        "oyidja",
-        "pihjqa",
-        "qzodht",
-        "rbnyxi",
-        "rlwpcd",
-        "sqqahm",
-        "szgdpc",
-        "tvtive",
-        "tyczoo",
-        "vccsrl",
-        "wryghu",
-        "wtepsx",
-        "xplzbo",
-        "xpnlup",
-        "pbvpua",
-        "uftzyo",
-        "bdhvnt",
-        "lsmlzi",
-        "wlilma",
-        "qixpto",
-        "gqwnfv",
-        "xcppkc",
-        "ouhqnw",
-        "ttxunv",
-        "hdbsog",
-        "mdtkkv",
-        "ocjcgp",
-        "causya",
-        "cdmmwy",
-        "hhlmbi",
-        "libote",
-        "msfzpz",
-        "sxlklf",
-        "uartvl",
-        "ylrxhe",
-        "mmbavt",
-        "ncbsee",
-        "heuzgu",
-        "rclizj",
-        "qfvqfm",
-        "lbcxwi",
-        "zndohl",
-        "sfkezf",
-        "xkixrg",
-        "ztripg",
-        "ooyqcr",
-        "jeqtzg",
-        "cvdbum",
-        "gklybu",
-        "hacehh",
-        "jwxbpa",
-        "qhnpmc",
-        "qlxhhh",
-        "uzkxtz",
-        "yegrkf",
-        "nsxhvs",
-        "ovjhuf",
-        "cqdioi",
-        "xevdnl",
-        "kxwgoo",
-        "cjmtvq",
-        "phimqa",
-        "loduxu",
-        "ckkwmj",
-        "dkxddg",
-        "fgizgn",
-        "ibhhfj",
-        "nbhcgu",
-        "nhzrei",
-        "rixzrk",
-        "rypdvd",
-        "siksnl",
-        "skamgp",
-        "xjdyon",
-        "ykuftq",
-        "oyqdtz",
-        "fvkdos",
-        "cfdond",
-        "gqemcq",
-        "dhseui",
-        "lfjmos",
-        "hfclfn",
-        "lspxjq",
-        "xdahvv",
-        "ofasfw",
-        "yufawg",
-        "ifqdxn",
-        "vxxcvg",
-        "xmxvml",
-        "qmdgct",
-        "hkdsla",
-        "ceaeqf",
-        "qornxa",
-        "bpwjxr",
-        "iwwpsf",
-        "uyixwc",
-        "qxnzpx",
-        "fzhcdb",
-        "zhsjcs",
-        "gamkbo",
-        "ngcvaw",
-        "ztyxyi",
-        "aewpzn",
-        "cprjvq",
-        "hzspwg",
-        "jpzusm",
-        "mhndon",
-        "sfbdjn",
-        "snvhlz",
-        "vycozd",
-        "bfaqfe",
-        "oxknkz",
-        "zdxagk",
-        "nawrfs",
-        "egpkea",
-        "yzeuqo",
-        "qwthua",
-        "oywwzz",
-        "fxnjfr",
-        "arryyl",
-        "krgqwl",
-        "lwsgzd",
-        "aeslmf",
-        "dhgtvg",
-        "qvpthd",
-        "nuzkuf",
-        "wbnkfk",
-        "jvnqly",
-        "luhnej",
-        "vlurir",
-        "lulzdz",
-        "gcyvrx",
-        "ycgxwb",
-        "lkbvad",
-        "wengzf",
-        "acsllv",
-        "bnrvcs",
-        "bpxhso",
-        "bqpmsv",
-        "busiti",
-        "crlhmi",
-        "dlvall",
-        "gejwoi",
-        "gkakwk",
-        "gqtsam",
-        "hjrnct",
-        "ifgcmr",
-        "iuydyz",
-        "jdwvyt",
-        "jnjtrl",
-        "kfzxah",
-        "kijnrj",
-        "lvuvbf",
-        "mefezc",
-        "miivhi",
-        "mlnuza",
-        "mxhrcl",
-        "ociqav",
-        "pjaljg",
-        "qdnmwg",
-        "sjwgfn",
-        "vxqpnm",
-        "vyfehw",
-        "waousd",
-        "wcqjew",
-        "zdeyzf",
-        "nftsal",
-        "lrjoro",
-        "aysfhf",
-        "oqyoos",
-        "gjgwvi",
-        "hjjeeh",
-        "llexze",
-        "pvxfot",
-        "quzmfw",
-        "bzisss",
-        "vjbldp",
-        "qsdqik",
-        "yprkek",
-        "bnekjp",
-        "rsvypp",
-        "ykfkyq",
-        "hazvbh",
-        "rwnakn",
-        "omknho",
-        "adxzhe",
-        "wigtue",
-        "owqbsb",
-        "cydfkt",
-        "ahtzhp",
-        "icvmix",
-        "bsgybx",
-        "deudkt",
-        "xifive",
-        "xjzyfc",
-        "dhnxww",
-        "ehnmxj",
-        "fapsrj",
-        "jgethp",
-        "kewbyf",
-        "kitxam",
-        "lgxhsc",
-        "ntgftr",
-        "ppdqbj",
-        "ppzttc",
-        "waqrdy",
-        "yiamah",
-        "yxaapv",
-        "zsrpiu",
-        "lgxfyv",
-        "tmjxno",
-        "xdhysb",
-        "fjpams",
-        "gcixra",
-        "yoxfyu",
-        "zfvhus",
-        "jjlfla",
-        "bzsxgw",
-        "ruryqd",
-        "wvhmww",
-        "guobeq",
-        "jaypjo",
-        "xdxqxj",
-        "jgyqpd",
-        "fhfqys",
-        "vbiqcq",
-        "xfqatj",
-        "csvdbe",
-        "wsasmm",
-        "barzwx",
-        "ankfvi",
-        "bbewjo",
-        "mbrlge",
-        "ompiss",
-        "tsyims",
-        "tzbnmh",
-        "wmkwhg",
-        "ihnfbi",
-        "skbcqq",
-        "vhglly",
-        "ygrtaz",
-        "aewthq",
-        "akfjxx",
-        "amhlqh",
-        "aynjhg",
-        "bgxzec",
-        "dbprwc",
-        "dnqekb",
-        "efkgcw",
-        "eixyyn",
-        "eozsdg",
-        "fhdyrj",
-        "fkpaie",
-        "haewxp",
-        "iawoof",
-        "ihrjrb",
-        "itoeew",
-        "ivbrtz",
-        "ivuveo",
-        "iwfvwf",
-        "kkjiko",
-        "kkmkbd",
-        "ksgizx",
-        "lixwwc",
-        "lkomhp",
-        "luhkiz",
-        "molqhs",
-        "mtetqm",
-        "nbuspz",
-        "nhodax",
-        "nikfgd",
-        "nmhxfz",
-        "nrjump",
-        "ntedfx",
-        "odmjdd",
-        "pjinwe",
-        "pkkgzc",
-        "pyilfa",
-        "qbxfmv",
-        "qtfzeq",
-        "qyuyjr",
-        "spppps",
-        "tgrsui",
-        "uakqei",
-        "ujodgo",
-        "uumkbl",
-        "vitdwc",
-        "vjqzwa",
-        "vtjwof",
-        "wgcgia",
-        "wqgndf",
-        "xfjmld",
-        "xtdcau",
-        "ypdfrp",
-        "zpddxu",
-        "csanbr",
-        "ekjpdj",
-        "hnlivs",
-        "iadlti",
-        "ieoasd",
-        "kiiamx",
-        "hldhxl",
-        "hdcpqg",
-        "otyngn",
-        "wyojnz",
-        "svkdji",
-        "yowyst",
-        "tnjpsf",
-        "trtrsl",
-        "uaijua",
-        "ukayce",
-        "xstykf",
-        "duugbb",
-        "nuoypc",
-        "dafdgk",
-        "fjytro",
-        "hmzafz",
-        "injdmj",
-        "tqyiso",
-        "ueagnt",
-        "ugqdao",
-        "dhdhul",
-        "kydilb",
-        "wdpcmk",
-        "fsinsu",
-        "chjetk",
-        "fbfmwt",
-        "kvgaar",
-        "obuxbe",
-        "ozrwwk",
-        "pkfydm",
-        "sthkfz",
-        "tfzijn",
-        "urqzec",
-        "uvzmss",
-        "vqtkwq",
-        "wfryvm",
-        "cjsbft",
-        "mgbeah",
-        "oxivmf",
-        "szzjzd",
-        "vghfkh",
-        "bupgpj",
-        "tukaoq",
-        "nedrsh",
-        "vsxhsv",
-        "gswpdr",
-        "hamffy",
-        "xbkwbi",
-        "fsfsas",
-        "gnzegv",
-        "lpanoc",
-        "vicaqs",
-        "upfssc",
-        "vxtjjn",
-        "gzcqwx",
-        "nbctrk",
-        "saujjl",
-        "vlplhs",
-        "azoiaq",
-        "dcleem",
-        "fuzmdd",
-        "grrcna",
-        "gxiqbw",
-        "lfnbhc",
-        "oshwps",
-        "yvhmex",
-        "xixblr",
-        "kdlbbq",
-        "dhwlaw",
-        "kohria",
-        "qjhauf",
-        "sbvksi",
-        "vnvmkx",
-        "bsdexp",
-        "cpozxi",
-        "kccqwj",
-        "oxfzfe",
-        "tfzfam",
-        "vckahe",
-        "wopjex",
-        "zdvgol",
-        "foaehs",
-        "jlalfc",
-        "mvrhya",
-        "apybok",
-        "iejmzf",
-        "qwtyqj",
-        "tgodzn",
-        "vnmcfg",
-        "ykvekt",
-        "iyrrna",
-        "krarex",
-        "krfzqk",
-        "aefcem",
-        "cdzyew",
-        "cjmezk",
-        "djgllo",
-        "dnvpag",
-        "eahqyq",
-        "fkosow",
-        "gilsji",
-        "glzckq",
-        "gsgutn",
-        "gvnfgj",
-        "gxajos",
-        "hqdnjz",
-        "hxsyxo",
-        "ifzxzj",
-        "jlawet",
-        "leazin",
-        "mcukuh",
-        "mdojox",
-        "pdmzhv",
-        "rbqckd",
-        "rteihy",
-        "uknjdm",
-        "vasiit",
-        "wklill",
-        "wkxtxh",
-        "xkqkbf",
-        "zotrbg",
-        "avotsj",
-        "coqeme",
-        "glwebh",
-        "gsxbym",
-        "hbjdlb",
-        "hjxczh",
-        "huwhjg",
-        "hvlfig",
-        "iaaiyi",
-        "incirm",
-        "jpcflq",
-        "mhhoga",
-        "mkdcha",
-        "mmegts",
-        "spopfj",
-        "thkphg",
-        "tkgsho",
-        "txcjux",
-        "uekqey",
-        "vxbtax",
-        "wbwmcs",
-        "xzcnjq",
-        "yqtlhy",
-        "zcmnji",
-        "zsddtq",
-        "mkstwr",
-        "drevku",
-        "aegxpb",
-        "atgnsc",
-        "bbduix",
-        "bedkqu",
-        "cvyops",
-        "dfjcsi",
-        "dwspgo",
-        "dxnzuk",
-        "eqhgiy",
-        "euqzpy",
-        "gopbrh",
-        "hkwtnf",
-        "hliauj",
-        "htyvuz",
-        "icpews",
-        "ipbgrw",
-        "jdddsr",
-        "jpwsrp",
-        "kjeudr",
-        "mawxva",
-        "mdmwcs",
-        "meetii",
-        "nodcpg",
-        "nuqzjs",
-        "pqsamn",
-        "qebiei",
-        "rfegnv",
-        "rfigof",
-        "rusmlm",
-        "rwotxo",
-        "saenda",
-        "sakwru",
-        "stqkvx",
-        "szsudo",
-        "tjrbxv",
-        "toreid",
-        "twknia",
-        "uuypot",
-        "vmbzmm",
-        "wltgjn",
-        "wmuysk",
-        "xfduug",
-        "ysdoep",
-        "zaziny",
-        "zwekzu",
-        "hbsbwt",
-        "ykysuc",
-        "bojwlu",
-        "xixlzr",
-        "yjmnej",
-        "dobgmu",
-        "jgyzhv",
-        "mrgspe",
-        "omeuop",
-        "xusefg",
-        "ynwamu",
-        "zgzvcv",
-        "ziomqg",
-        "ackxiy",
-        "lzdzkk",
-        "bbpraa",
-        "cdteyb",
-        "edfzlt",
-        "elwfms",
-        "evaida",
-        "ewgotr",
-        "ggpnlr",
-        "gypzlg",
-        "igyuko",
-        "imsnkt",
-        "kttdbu",
-        "ktuvuo",
-        "kuiiai",
-        "lvqgvn",
-        "nfoydb",
-        "onbiqg",
-        "ptciim",
-        "qbejli",
-        "slscza",
-        "szjfpb",
-        "uwtdng",
-        "vcwsbm",
-        "wvztiw",
-        "ybhepe",
-        "zbridw",
-        "msaevo",
-        "jpduev",
-        "xiwkwz",
-        "gtwngf",
-        "hlzfxw",
-        "vjdkci",
-        "zuctnl",
-        "vqtevv",
-        "aakcyj",
-        "adiwil",
-        "akusda",
-        "bnored",
-        "bovcqx",
-        "cmdagy",
-        "euzudc",
-        "exasdr",
-        "ezsdil",
-        "ggbdlq",
-        "hxccge",
-        "jzmrdd",
-        "kxovsj",
-        "oadvet",
-        "ovoceo",
-        "vxmzmq",
-        "yfzibn",
-        "pobfpe",
-        "vmajcm",
-        "ahbhsd",
-    }
+    # Get all models that have a fillable file.
+    fillable_ids = glob.glob(os.path.join(gm.DATASET_PATH, "objects/*/*/fillable_*.obj"))
+    fillables = sorted({pathlib.Path(fillable_id).parts[-3:-1] for fillable_id in fillable_ids})
 
-    input_id = sys.argv[1] if len(sys.argv) > 1 else None
+    # Get the ones that don't have a fillable assignment
+    assignments = get_assignments()
+    fillables = [(cat, mdl) for cat, mdl in fillables if mdl not in assignments]
 
+    # Get the ones whose model hash match our ID
     fillables = [
         (cat, mdl)
-        for cat in get_all_object_categories()
-        for mdl in get_all_object_category_models(cat)
-        if mdl in fillable_ids and (input_id is None or mdl == input_id)
-    ]
-    import random
-    random.shuffle(fillables)
+        for cat, mdl in fillables
+        if int(hashlib.md5(mdl.encode()).hexdigest(), 16) % idxes != idx]
 
-    for cat, mdl in fillables:
+    for cat, mdl in tqdm.tqdm(fillables):
         view_object(cat, mdl)
 
 

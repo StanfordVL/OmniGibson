@@ -80,7 +80,7 @@ do
         --root \
         --rw \
         ${ENV_KWARGS} \
-        --env OMNIGIBSON_GPU=${GPU} \
+        --env OMNIGIBSON_GPU_ID=${GPU} \
         ${MOUNT_KWARGS} \
         ${CONTAINER_NAME} $@ &> /dev/null &
 done

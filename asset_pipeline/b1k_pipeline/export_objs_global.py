@@ -83,6 +83,27 @@ def timeout(timelimit):
     return decorator
 
 
+def save_mesh_unit_bbox(mesh, *args, **kwargs):
+    mesh_copy = mesh.copy()
+
+    # Find how much the mesh would need to be scaled to fit into a unit cube
+    bounding_box = mesh_copy.bounding_box.extents
+    scale = np.ones(3)
+    valid_idxes = bounding_box > 1e-4
+    scale[valid_idxes] = 1 / bounding_box[valid_idxes]
+
+    # Scale the mesh
+    scale_matrix = np.eye(4)
+    scale_matrix[:3, :3] = np.diag(scale)
+    mesh_copy.apply_transform(scale_matrix)
+
+    # Save the scaled mesh
+    save_mesh(mesh_copy, *args, **kwargs)
+
+    # Return the inverse scale that needs to be applied for the mesh
+    return 1 / scale
+
+
 def transform_mesh(orig_mesh, translation, rotation):
     mesh = orig_mesh.copy()
 
@@ -259,7 +280,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     # Save the mesh
     with TempFS() as tfs:      
         obj_relative_path = f"{obj_name}-{link_name}.obj"
-        save_mesh(canonical_mesh, tfs, obj_relative_path)
+        visual_scale = save_mesh_unit_bbox(canonical_mesh, tfs, obj_relative_path)
 
         # Check that a material got exported.
         material_files = [x for x in tfs.listdir("/") if x.endswith(".mtl")]
@@ -300,13 +321,13 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         
         # Save and merge precomputed collision mesh
         canonical_collision_meshes = []
-        collision_filenames = []
+        collision_filenames_and_scales = []
         for i, collision_mesh in enumerate(G.nodes[link_node]["collision_mesh"]):
             canonical_collision_mesh = transform_mesh(collision_mesh, mesh_center, canonical_orientation)
             canonical_collision_mesh._cache.cache["vertex_normals"] = canonical_collision_mesh.vertex_normals
             collision_filename = obj_relative_path.replace(".obj", f"-{i}.obj")
-            save_mesh(canonical_collision_mesh, obj_link_collision_mesh_folder_fs, collision_filename)
-            collision_filenames.append(collision_filename)
+            collision_scale = save_mesh_unit_bbox(canonical_collision_mesh, obj_link_collision_mesh_folder_fs, collision_filename)
+            collision_filenames_and_scales.append((collision_filename, collision_scale))
             canonical_collision_meshes.append(canonical_collision_mesh)
 
         # Store the final meshes
@@ -348,17 +369,23 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     visual_origin_xml.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
     visual_geometry_xml = ET.SubElement(visual_xml, "geometry")
     visual_mesh_xml = ET.SubElement(visual_geometry_xml, "mesh")
-    visual_mesh_xml.attrib = {"filename": os.path.join("shape", "visual", obj_relative_path).replace("\\", "/")}
+    visual_mesh_xml.attrib = {
+        "filename": os.path.join("shape", "visual", obj_relative_path).replace("\\", "/"),
+        "scale": " ".join([str(item) for item in visual_scale])
+    }
 
     collision_origin_xmls = []
-    for collision_filename in collision_filenames:
+    for collision_filename, collision_scale in collision_filenames_and_scales:
         collision_xml = ET.SubElement(link_xml, "collision")
         collision_xml.attrib = {"name": collision_filename.replace(".obj", "")}
         collision_origin_xml = ET.SubElement(collision_xml, "origin")
         collision_origin_xml.attrib = {"xyz": " ".join([str(item) for item in [0.0] * 3])}
         collision_geometry_xml = ET.SubElement(collision_xml, "geometry")
         collision_mesh_xml = ET.SubElement(collision_geometry_xml, "mesh")
-        collision_mesh_xml.attrib = {"filename": os.path.join("shape", "collision", collision_filename).replace("\\", "/")}
+        collision_mesh_xml.attrib = {
+            "filename": os.path.join("shape", "collision", collision_filename).replace("\\", "/"),
+            "scale": " ".join([str(item) for item in collision_scale])
+        }
         collision_origin_xmls.append(collision_origin_xml)
 
     # This object might be a base link and thus without an in-edge. Nothing to do then.
