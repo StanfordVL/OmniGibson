@@ -19,7 +19,7 @@ from omnigibson.utils.constants import LightingMode
 from omnigibson.utils.config_utils import NumpyEncoder
 from omnigibson.utils.python_utils import clear as clear_pu, create_object_from_init_info, Serializable
 from omnigibson.utils.sim_utils import meets_minimum_isaac_version
-from omnigibson.utils.usd_utils import clear as clear_uu, FlatcacheAPI, RigidContactAPI
+from omnigibson.utils.usd_utils import clear as clear_uu, RigidContactAPI
 from omnigibson.utils.ui_utils import (CameraMover, disclaimer, create_module_logger, suppress_omni_log,
                                        print_icon, print_logo, logo_small)
 from omnigibson.scenes import Scene
@@ -195,8 +195,8 @@ def launch_simulator(*args, **kwargs):
                 physics_dt=physics_dt,
                 rendering_dt=rendering_dt,
                 stage_units_in_meters=stage_units_in_meters,
-                device="cuda:0" if gm.USE_GPU_DYNAMICS else "cpu",
-            backend="torch" if gm.USE_GPU_DYNAMICS else "numpy"
+                device="cuda:0",
+                backend="torch"
             )
 
             if self._world_initialized:
@@ -318,13 +318,9 @@ def launch_simulator(*args, **kwargs):
             else:
                 self._physics_context.enable_flatcache(True)
 
-            # Enable GPU dynamics based on whether we need omni particles feature
-            if gm.USE_GPU_DYNAMICS:
-                self._physics_context.enable_gpu_dynamics(True)
-                self._physics_context.set_broadphase_type("GPU")
-            else:
-                self._physics_context.enable_gpu_dynamics(False)
-                self._physics_context.set_broadphase_type("MBP")
+            # Enable GPU dynamics
+            self._physics_context.enable_gpu_dynamics(True)
+            self._physics_context.set_broadphase_type("GPU")
 
             # Set GPU Pairs capacity and other GPU settings
             self._physics_context.set_gpu_found_lost_pairs_capacity(gm.GPU_PAIRS_CAPACITY)
@@ -671,9 +667,7 @@ def launch_simulator(*args, **kwargs):
                 #   ignore this if the scale is close to uniform.
                 # We also need to suppress the following error when flat cache is used:
                 # [omni.physx.plugin] Transformation change on non-root links is not supported.
-                channels = ["omni.usd", "omni.physicsschema.plugin"]
-                if gm.ENABLE_FLATCACHE:
-                    channels.append("omni.physx.plugin")
+                channels = ["omni.usd", "omni.physicsschema.plugin", "omni.physx.plugin"]
                 with suppress_omni_log(channels=channels):
                     super().play()
 
@@ -717,9 +711,6 @@ def launch_simulator(*args, **kwargs):
         def stop(self):
             if not self.is_stopped():
                 super().stop()
-
-            # Reset the FlatCache sync API
-                FlatcacheAPI.reset()
 
             # Run all callbacks
             for callback in self._callbacks_on_stop.values():

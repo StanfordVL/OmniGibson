@@ -4,10 +4,6 @@ import omnigibson as og
 from omnigibson.macros import gm
 import omnigibson.utils.transform_utils as T
 
-# Make sure object states and transition rules are enabled
-gm.ENABLE_OBJECT_STATES = True
-gm.ENABLE_TRANSITION_RULES = True
-
 
 def main(random_selection=False, headless=False, short_exec=False):
     """

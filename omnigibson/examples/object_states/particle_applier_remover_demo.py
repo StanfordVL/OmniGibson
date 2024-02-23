@@ -15,9 +15,7 @@ macros.object_states.particle_modifier.MAX_VISUAL_PARTICLES_APPLIED_PER_STEP = 4
 macros.object_states.particle_modifier.MAX_PHYSICAL_PARTICLES_APPLIED_PER_STEP = 40
 macros.object_states.covered.MAX_VISUAL_PARTICLES = 300
 
-# Make sure object states and GPU dynamics are enabled (GPU dynamics needed for fluids)
-gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
+# Enable HQ rendering for better visual fidelity
 gm.ENABLE_HQ_RENDERING = True
 
 

@@ -14,9 +14,6 @@ GRASPING_MODES = dict(
     physical="Physical Grasping - No additional grasping assistance applied",
 )
 
-# Don't use GPU dynamics
-gm.USE_GPU_DYNAMICS = False
-
 
 def main(random_selection=False, headless=False, short_exec=False):
     """

@@ -90,10 +90,6 @@ def primitive_tester(load_object_categories, objects, primitives, primitives_arg
     # Make sure sim is stopped
     og.sim.stop()
 
-    # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth)
-    gm.ENABLE_OBJECT_STATES = True
-    gm.USE_GPU_DYNAMICS = False
-
     # Create the environment
     env = og.Environment(configs=cfg)
     robot = env.robots[0]

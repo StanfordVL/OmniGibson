@@ -126,10 +126,6 @@ def assert_test_scene():
         if og.sim is not None:
             og.sim.stop()
 
-        # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth)
-        gm.ENABLE_OBJECT_STATES = True
-        gm.USE_GPU_DYNAMICS = True
-
         # Create the environment
         env = og.Environment(configs=cfg)
 

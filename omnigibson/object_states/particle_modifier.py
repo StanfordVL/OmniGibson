@@ -1374,10 +1374,6 @@ class ParticleApplier(ParticleModifier):
         if not compatible:
             return compatible, reason
 
-        # Check whether GPU dynamics are enabled (necessary for this object state)
-        if not gm.USE_GPU_DYNAMICS:
-            return False, f"gm.USE_GPU_DYNAMICS must be True in order to use object state {cls.__name__}."
-
         return True, None
 
     @property

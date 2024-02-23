@@ -22,9 +22,6 @@ SCENES = dict(
     empty="Empty environment with no objects",
 )
 
-# Don't use GPU dynamics
-gm.USE_GPU_DYNAMICS = False
-
 
 def choose_controllers(robot, random_selection=False):
     """

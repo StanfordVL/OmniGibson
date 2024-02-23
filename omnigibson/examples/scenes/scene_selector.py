@@ -4,7 +4,6 @@ from omnigibson.utils.asset_utils import get_available_g_scenes, get_available_o
 from omnigibson.utils.ui_utils import choose_from_options
 
 # Configure macros for maximum performance
-gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_OBJECT_STATES = False
 gm.ENABLE_TRANSITION_RULES = False
 

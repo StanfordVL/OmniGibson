@@ -3,7 +3,6 @@ import pytest
 import yaml
 
 from omnigibson.macros import gm
-gm.USE_GPU_DYNAMICS = True
 
 import omnigibson as og
 from omnigibson import object_states

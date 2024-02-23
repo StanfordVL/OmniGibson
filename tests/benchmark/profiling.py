@@ -39,10 +39,6 @@ def main():
     args = parser.parse_args()
     # Modify macros settings
     gm.ENABLE_HQ_RENDERING = args.fluids
-    gm.ENABLE_OBJECT_STATES = True
-    gm.ENABLE_TRANSITION_RULES = True
-    gm.ENABLE_FLATCACHE = not args.cloth
-    gm.USE_GPU_DYNAMICS = args.gpu_denamics
 
     cfg = {
         "env": {

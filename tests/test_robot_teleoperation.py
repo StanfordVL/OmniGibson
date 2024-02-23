@@ -28,11 +28,6 @@ def test_teleop():
     # Make sure sim is stopped
     og.sim.stop()
 
-    # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth) and no flatcache
-    gm.ENABLE_OBJECT_STATES = True
-    gm.USE_GPU_DYNAMICS = True
-    gm.ENABLE_FLATCACHE = False
-
     # Create the environment
     env = og.Environment(configs=cfg)
     robot = env.robots[0]

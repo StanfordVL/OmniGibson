@@ -9,9 +9,6 @@ import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives, StarterSemanticActionPrimitiveSet
 
-# Don't use GPU dynamics and use flatcache for performance boost
-# gm.USE_GPU_DYNAMICS = True
-# gm.ENABLE_FLATCACHE = True
 
 def execute_controller(ctrl_gen, env):
     for action in ctrl_gen:

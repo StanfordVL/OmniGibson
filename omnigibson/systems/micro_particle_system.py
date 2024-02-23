@@ -414,10 +414,6 @@ class MicroParticleSystem(BaseSystem):
         # Run super first
         super().initialize()
 
-        # Run sanity checks
-        if not gm.USE_GPU_DYNAMICS:
-            raise ValueError(f"Failed to initialize {cls.name} system. Please set gm.USE_GPU_DYNAMICS to be True.")
-
         cls.system_prim = cls._create_particle_system()
         # Get material
         material = cls._get_particle_material_template()
