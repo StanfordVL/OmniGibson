@@ -6,6 +6,7 @@ banana.n.02,58,
 beet.n.02,58,
 bell_pepper.n.02,58,
 broccoli.n.02,58,
+butter.n.01,38,
 carrot.n.03,91,
 casserole.n.02,74,
 catsup.n.01,74,cooked__catsup.n.01
@@ -99,6 +100,7 @@ pizza.n.01,246,
 mint.n.04,50,
 ginger.n.03,58,
 mustard.n.02,58,cooked__mustard.n.01
+cane_sugar.n.02,130,cooked__cane_sugar.n.01
 soy_sauce.n.01,37,cooked__soy_sauce.n.01
 vanilla.n.02,37,cooked__vanilla.n.01
 maple_syrup.n.01,37,cooked__maple_syrup.n.01
@@ -120,6 +122,7 @@ cranberry_juice.n.01,100,cooked__cranberry_juice.n.01
 curry_powder.n.01,50,cooked__curry_powder.n.01
 cold_cuts.n.01,82,
 cider.n.01,100,cooked__cider.n.01
+bleu.n.01,82,
 nut_butter.n.01,72,cooked__nut_butter.n.01
 salsa.n.01,100,cooked__salsa.n.01
 pita.n.01,176,
@@ -168,6 +171,7 @@ snapper.n.02,63,
 soy.n.04,100,cooked__soy.n.01
 hot_sauce.n.01,100,cooked__hot_sauce.n.01
 almond_oil.n.01,190,cooked__almond_oil.n.01
+swiss_cheese.n.01,176,
 petite_marmite.n.01,40,cooked__petite_marmite.n.01
 venison.n.01,63,
 yam.n.03,96,
@@ -214,6 +218,7 @@ coconut_oil.n.01,190,cooked__coconut_oil.n.01
 granola.n.01,148,cooked__granola.n.01
 cocoa.n.01,100,cooked__cocoa.n.01
 marinara.n.01,58,cooked__marinara.n.01
+mozzarella.n.01,71,
 orange_juice.n.01,100,cooked__orange_juice.n.01
 sesame_oil.n.01,190,cooked__sesame_oil.n.01
 jimmies.n.01,120,cooked__jimmies.n.01
@@ -234,6 +239,7 @@ coconut.n.02,58,
 cornmeal.n.01,148,cooked__cornmeal.n.01
 espresso.n.01,100,cooked__espresso.n.01
 mussel.n.01,63,
+parmesan.n.01,71,cooked__parmesan.n.01
 peanut.n.01,72,
 tomato_paste.n.01,58,cooked__tomato_paste.n.01
 brownie.n.03,180,
@@ -262,6 +268,7 @@ quail.n.01,74,
 quiche.n.02,180,
 schnitzel.n.01,74,
 chinese_anise.n.02,50,
+white_chocolate.n.01,46,
 wine_sauce.n.01,100,cooked__wine_sauce.n.01
 allspice.n.03,50,cooked__allspice.n.01
 antipasto.n.01,58,
@@ -290,6 +297,7 @@ diced__watermelon.n.01,58,cooked__diced__watermelon.n.01
 chia_seed.n.01,50,cooked__chia_seed.n.01
 wafer.n.02,180,
 bouillon_cube.n.01,100,
+chocolate_kiss.n.01,46,cooked__chocolate_kiss.n.01
 heavy_cream.n.01,100,cooked__heavy_cream.n.01
 diced__orange.n.01,58,cooked__diced__orange.n.01
 cinnamon_bark.n.01,72,
@@ -338,6 +346,7 @@ kielbasa.n.01,74,
 half__pomegranate.n.01,58,
 lamb.n.05,74,
 sliced__chocolate_cake.n.01,180,
+grated_cheese.n.01,90,cooked__grated_cheese.n.01
 diced__pineapple.n.01,58,cooked__diced__pineapple.n.01
 coffee_bean.n.01,100,cooked__coffee_bean.n.01
 sliced__tomato.n.01,58,
@@ -378,6 +387,7 @@ cheese_sauce.n.01,90,cooked__cheese_sauce.n.01
 cornbread_batter.n.01,180,cooked__cornbread_batter.n.01
 pancake_batter.n.01,180,cooked__pancake_batter.n.01
 chicken.n.01,74,
+melted__parmesan.n.01,90,cooked__melted__parmesan.n.01
 sliced__onion.n.01,58,
 huitre.n.01,74,
 hard-boiled_egg.n.01,74,
@@ -408,6 +418,8 @@ half__apple.n.01,58,
 diced__potato.n.01,58,cooked__diced__potato.n.01
 spice_cookie_dough.n.01,180,
 granulated_salt.n.01,100,cooked__granulated_salt.n.01
+melted__cheddar.n.01,90,cooked__melted__cheddar.n.01
+chocolate_bar.n.01,30,
 spice_cookie.n.01,180,
 diced__lemon.n.01,58,cooked__diced__lemon.n.01
 heap__of__granola.n.01,180,
@@ -415,11 +427,15 @@ buttermilk_pancake.n.01,180,
 instant_coffee.n.01,100,cooked__instant_coffee.n.01
 diced__chili.n.01,100,cooked__diced__chili.n.01
 bagel_dough.n.01,180,
+cheddar.n.02,90,
+granulated_sugar.n.01,180,cooked__granulated_sugar.n.01
 sugar_cookie.n.01,180,
 diced__spinach.n.01,58,cooked__diced__spinach.n.01
 patty.n.01,74,
 raw_egg.n.01,90,
 tofu.n.02,150,
+melted__grated_cheese.n.01,90,cooked__melted__grated_cheese.n.01
+half__feta.n.01,90,
 diced__beefsteak_tomato.n.01,58,cooked__diced__beefsteak_tomato.n.01
 macaroni_and_cheese.n.01,90,
 bread_slice.n.01,180,
@@ -435,9 +451,11 @@ soft_roll.n.01,180,
 orzo.n.01,100,cooked__orzo.n.01
 vanilla.n.01,100,
 white_rice.n.01,100,cooked__white_rice.n.01
+lump_sugar.n.01,180,
 cookie_stick.n.01,180,
 half__apricot.n.01,58,
 fruitcake.n.02,180,
+melted__butter.n.01,170,cooked__melted__butter.n.01
 arborio_rice.n.01,100,cooked__arborio_rice.n.01
 beaten_egg.n.01,74,cooked__beaten_egg.n.01
 diced__mango.n.01,58,cooked__diced__mango.n.01
@@ -463,6 +481,7 @@ chard.n.02,58,
 cauliflower.n.02,58,
 half__beefsteak_tomato.n.01,58,
 pumpkin_pie_spice.n.01,50,cooked__pumpkin_pie_spice.n.01
+melted__white_chocolate.n.01,45,cooked__melted__white_chocolate.n.01
 chickpea.n.03,100,cooked__chickpea.n.01
 dumpling.n.01,100,
 salmon.n.03,74,
@@ -472,6 +491,7 @@ ground_coffee.n.01,100,cooked__ground_coffee.n.01
 bap.n.01,180,
 scrambled_eggs.n.01,74,cooked__scrambled_eggs.n.01
 sugar_syrup.n.01,180,cooked__sugar_syrup.n.01
+diced__cheddar.n.01,90,cooked__diced__cheddar.n.01
 sliced__brisket.n.01,74,
 diced__clove.n.01,58,cooked__diced__clove.n.01
 half__bell_pepper.n.01,58,
@@ -491,6 +511,7 @@ diced__virginia_ham.n.01,74,cooked__diced__virginia_ham.n.01
 papaya.n.02,58,
 chopped__lettuce.n.01,58,
 lemon-pepper_seasoning.n.01,50,cooked__lemon-pepper_seasoning.n.01
+diced__feta.n.01,90,cooked__diced__feta.n.01
 peppermint.n.01,50,
 biscuit_dough.n.01,180,
 chocolate_cake.n.01,180,
@@ -517,6 +538,7 @@ diced__bay_leaf.n.01,58,cooked__diced__bay_leaf.n.01
 diced__bean_curd.n.01,58,cooked__diced__bean_curd.n.01
 diced__biscuit_dough.n.01,180,cooked__diced__biscuit_dough.n.01
 diced__blackberry.n.01,58,cooked__diced__blackberry.n.01
+diced__bleu.n.01,82,cooked__diced__bleu.n.01
 diced__bok_choy.n.01,58,cooked__diced__bok_choy.n.01
 diced__brisket.n.01,63,cooked__diced__brisket.n.01
 diced__broccoli_rabe.n.01,58,cooked__diced__broccoli_rabe.n.01
@@ -524,6 +546,7 @@ diced__broccolini.n.01,58,cooked__diced__broccolini.n.01
 diced__brownie.n.01,180,cooked__diced__brownie.n.01
 diced__brussels_sprouts.n.01,58,cooked__diced__brussels_sprouts.n.01
 diced__burrito.n.01,140,cooked__diced__burrito.n.01
+diced__butter.n.01,38,cooked__diced__butter.n.01
 diced__butter_cookie.n.01,180,cooked__diced__butter_cookie.n.01
 diced__buttermilk_pancake.n.01,180,cooked__diced__buttermilk_pancake.n.01
 diced__butternut_squash.n.01,58,cooked__diced__butternut_squash.n.01
@@ -601,6 +624,7 @@ diced__macaroon.n.01,180,cooked__diced__macaroon.n.01
 diced__marshmallow.n.01,110,cooked__diced__marshmallow.n.01
 diced__meat_loaf.n.01,74,cooked__diced__meat_loaf.n.01
 diced__meatball.n.01,63,cooked__diced__meatball.n.01
+diced__mozzarella.n.01,71,cooked__diced__mozzarella.n.01
 diced__muffin.n.01,93,cooked__diced__muffin.n.01
 diced__mushroom.n.01,58,cooked__diced__mushroom.n.01
 diced__mustard.n.01,50,cooked__diced__mustard.n.01
@@ -647,6 +671,7 @@ diced__sugar_cookie.n.01,180,cooked__diced__sugar_cookie.n.01
 diced__sugar_cookie_dough.n.01,180,cooked__diced__sugar_cookie_dough.n.01
 diced__sushi.n.01,71,cooked__diced__sushi.n.01
 diced__sweet_corn.n.01,58,cooked__diced__sweet_corn.n.01
+diced__swiss_cheese.n.01,176,cooked__diced__swiss_cheese.n.01
 diced__taco.n.01,176,cooked__diced__taco.n.01
 diced__tenderloin.n.01,63,cooked__diced__tenderloin.n.01
 diced__toast.n.01,177,cooked__diced__toast.n.01
@@ -683,6 +708,7 @@ half__bean_curd.n.01,58,
 half__beet.n.01,58,
 half__biscuit_dough.n.01,180,
 half__blackberry.n.01,58,
+half__bleu.n.01,82,
 half__bok_choy.n.01,58,
 half__bratwurst.n.01,72,
 half__brisket.n.01,63,
@@ -692,6 +718,9 @@ half__broccolini.n.01,58,
 half__brownie.n.01,180,
 half__brussels_sprouts.n.01,58,
 half__burrito.n.01,140,
+half__butter.n.01,38,
+half__butter_cookie.n.01,180,
+half__buttermilk_pancake.n.01,180,
 half__butternut_squash.n.01,58,
 half__cantaloup.n.01,58,
 half__carne_asada.n.01,74,
@@ -699,6 +728,7 @@ half__cauliflower.n.01,58,
 half__celery.n.01,58,
 half__chanterelle.n.01,204,
 half__chard.n.01,58,
+half__cheddar.n.01,90,
 half__cheese_tart.n.01,180,
 half__cheesecake.n.01,82,
 half__cherry.n.01,58,
@@ -771,6 +801,7 @@ half__macaroon.n.01,180,
 half__marshmallow.n.01,110,
 half__meat_loaf.n.01,74,
 half__meatball.n.01,63,
+half__mozzarella.n.01,71,
 half__muffin.n.01,93,
 half__mustard.n.01,50,
 half__nectarine.n.01,58,
@@ -815,6 +846,7 @@ half__sugar_cookie.n.01,180,
 half__sugar_cookie_dough.n.01,180,
 half__sushi.n.01,71,
 half__sweet_corn.n.01,58,
+half__swiss_cheese.n.01,176,
 half__taco.n.01,176,
 half__tenderloin.n.01,63,
 half__toast.n.01,177,
@@ -842,6 +874,13 @@ diced__roast_beef.n.01,74,cooked__diced__roast_beef.n.01
 diced__tomato.n.01,58,cooked__diced__tomato.n.01
 half__papaya.n.01,58,
 diced__papaya.n.01,58,cooked__diced__papaya.n.01
+melted__chocolate.n.01,58,cooked__melted__chocolate.n.01
+melted__cane_sugar.n.01,130,cooked__melted__cane_sugar.n.01
+melted__feta.n.01,90,cooked__melted__feta.n.01
+melted__granulated_sugar.n.01,130,cooked__melted__granulated_sugar.n.01
+melted__mozzarella.n.01,90,cooked__melted__mozzarella.n.01
+melted__swiss_cheese.n.01,90,cooked__melted__swiss_cheese.n.01
+melted__bleu.n.01,90,cooked__melted__bleu.n.01
 half__carrot.n.01,91,
 diced__carrot.n.01,91,cooked__diced__carrot.n.01
 half__clove.n.01,91,
