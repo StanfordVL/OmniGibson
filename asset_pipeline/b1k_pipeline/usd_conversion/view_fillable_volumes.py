@@ -234,7 +234,7 @@ def view_object(cat, mdl):
 def main():
     idx = int(sys.argv[1])
     idxes = int(sys.argv[2])
-    salt = int(sys.argv[3])
+    salt = sys.argv[3]
 
     # Get all models that have a fillable file.
     fillable_ids = glob.glob(os.path.join(gm.DATASET_PATH, "objects/*/*/fillable_*.obj"))
