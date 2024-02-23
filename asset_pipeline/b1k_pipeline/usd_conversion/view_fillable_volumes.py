@@ -12,6 +12,7 @@ import omnigibson.lazy as lazy
 import trimesh
 import json
 import tqdm
+import random
 
 gm.HEADLESS = False
 gm.USE_ENCRYPTED_ASSETS = True
@@ -62,14 +63,18 @@ def generate_particles_in_mesh(mesh, parent_pos):
     # 1e-10 is added because the extent might be an exact multiple of particle radius
     arrs = [np.arange(l + particle_radius, h - particle_radius + 1e-10, particle_radius * 2)
             for l, h, n in zip(low, high, n_particles_per_axis)]
-    # Generate 3D-rectangular grid of points
-    particle_positions = np.stack([arr.flatten() for arr in np.meshgrid(*arrs)]).T + parent_pos[None, :]
+    
+    # Generate 3D-rectangular grid of points at mesh pos
+    particle_positions = np.stack([arr.flatten() for arr in np.meshgrid(*arrs)]).T
 
     # Remove the particles that are outside
     particle_positions = particle_positions[mesh.contains(particle_positions)]
 
+    # Move the particle positions to the parent position
+    particle_positions += parent_pos[None, :]
+
     # Remove the particles that are colliding with the object
-    # particle_positions = particle_positions[np.where(water.check_in_contact(particle_positions) == 0)[0]]
+    particle_positions = particle_positions[np.where(water.check_in_contact(particle_positions) == 0)[0]]
 
     water.generate_particles(
         positions=particle_positions,
@@ -82,6 +87,9 @@ def view_object(cat, mdl):
         og.sim.clear()
 
     cfg = {
+        "env": {
+            "physics_frequency": 120,
+        },
         "scene": {
             "type": "Scene",
         },
