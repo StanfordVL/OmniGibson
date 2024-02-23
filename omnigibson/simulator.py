@@ -252,22 +252,8 @@ def launch_simulator(*args, **kwargs):
             # and crashes
             self._set_physics_engine_settings()
 
-        def __new__(
-            cls,
-            gravity=9.81,
-            physics_dt=1.0 / 60.0,
-            rendering_dt=1.0 / 60.0,
-            stage_units_in_meters=1.0,
-            viewer_width=gm.DEFAULT_VIEWER_WIDTH,
-            viewer_height=gm.DEFAULT_VIEWER_HEIGHT,
-            device_idx=0,
-        ):
-            # Overwrite since we have different kwargs
-            if Simulator._instance is None:
-                Simulator._instance = object.__new__(cls)
-            else:
-                lazy.carb.log_info("Simulator is defined already, returning the previously defined one")
-            return Simulator._instance
+        def __new__(cls, *args, **kwargs):
+            lazy.omni.isaac.core.simulation_context.SimulationContext.__new__(*args, **kwargs)
 
         def _set_viewer_camera(self, prim_path="/World/viewer_camera", viewport_name="Viewport"):
             """
