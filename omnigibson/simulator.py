@@ -253,7 +253,7 @@ def launch_simulator(*args, **kwargs):
             self._set_physics_engine_settings()
 
         def __new__(cls, *args, **kwargs):
-            lazy.omni.isaac.core.simulation_context.SimulationContext.__new__(*args, **kwargs)
+            return lazy.omni.isaac.core.simulation_context.SimulationContext.__new__(cls, *args, **kwargs)
 
         def _set_viewer_camera(self, prim_path="/World/viewer_camera", viewport_name="Viewport"):
             """

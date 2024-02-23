@@ -319,7 +319,7 @@ class RigidContactAPI:
         """
         # Generate the contact matrix if it doesn't already exist
         if cls._CONTACT_MATRIX is None:
-            cls._CONTACT_MATRIX = cls._CONTACT_VIEW.get_contact_force_matrix(dt=1.0)
+            cls._CONTACT_MATRIX = cls._CONTACT_VIEW.get_contact_force_matrix(dt=1.0).cpu().numpy()
 
         return cls._CONTACT_MATRIX
 
