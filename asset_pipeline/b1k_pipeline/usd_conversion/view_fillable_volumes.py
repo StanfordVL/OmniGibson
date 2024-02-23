@@ -156,7 +156,7 @@ def view_object(cat, mdl):
     )
     print("Press L to indicate neither option works despite object being fillable (hand-annotate).")
 
-    dip_path = pathlib.Path(__file__).parents[2] / "artifacts/parallels/fillable_volumes/objects" / cat / mdl / "fillable_dip.obj"
+    dip_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_dip.obj"
     if dip_path.exists():
         # Find the scale the mesh was generated at
         scale = np.minimum(1, MAX_BBOX / np.max(fillable.native_bbox))
@@ -183,7 +183,7 @@ def view_object(cat, mdl):
         )
         print("Press X to choose the dip (red) option.")
 
-    ray_path = pathlib.Path(__file__).parents[2] / "artifacts/parallels/fillable_volumes/objects" / cat / mdl / "fillable_ray.obj"
+    ray_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_ray.obj"
     if ray_path.exists():
         ray_mesh = trimesh.load(ray_path, force="mesh")
 
