@@ -1,5 +1,4 @@
 import numpy as np
-import omni
 import time
 from dataclasses import dataclass, field
 from importlib import import_module
@@ -679,7 +678,7 @@ class KeyboardSystem(TeleopSystem):
         
     def start(self) -> None:
         # start the keyboard subscriber
-        appwindow = omni.appwindow.get_default_app_window()
+        appwindow = lazy.omni.appwindow.get_default_app_window()
         input_interface = lazy.carb.input.acquire_input_interface()
         keyboard = appwindow.get_keyboard()
         input_interface.subscribe_to_keyboard_events(keyboard, self._update_internal_data)   

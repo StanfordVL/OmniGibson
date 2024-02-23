@@ -956,8 +956,7 @@ def draw_line(start, end, color=(1., 0., 0., 1.), size=1.):
     """
     Draws a single line between two points.
     """
-    from omni.isaac.debug_draw import _debug_draw
-    draw = _debug_draw.acquire_debug_draw_interface()
+    draw = lazy.omni.isaac.debug_draw._debug_draw.acquire_debug_draw_interface()
     draw.draw_lines([start], [end], [color], [size])
 
 def draw_box(center, extents, color=(1., 0., 0., 1.), size=1.):
@@ -980,6 +979,5 @@ def clear_debug_drawing():
     """
     Clears all debug drawings.
     """
-    from omni.isaac.debug_draw import _debug_draw
-    draw = _debug_draw.acquire_debug_draw_interface()
+    draw = lazy.omni.isaac.debug_draw._debug_draw.acquire_debug_draw_interface()
     draw.clear_lines()
