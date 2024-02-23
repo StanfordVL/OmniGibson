@@ -693,8 +693,9 @@ def main():
 
                 # First the logic for the ray method
                 ray_outputs = [fs.path.join(x, "fillable_ray.obj") for x in batch]
-                ray_batch, ray_outputs = zip(*[(x, y) for x, y in zip(batch, ray_outputs) if not out_fs.exists(y)])
-                if ray_batch:
+                ray_remaining = list(zip(*[(x, y) for x, y in zip(batch, ray_outputs) if not out_fs.exists(y)]))
+                if ray_remaining:
+                    ray_batch, ray_outputs = ray_remaining
                     worker_future = dask_client.submit(
                         run_on_batch,
                         dataset_fs.getsyspath("/"),
@@ -705,8 +706,9 @@ def main():
 
                 # Then the dip method.
                 dip_outputs = [fs.path.join(x, "fillable_dip.obj") for x in batch]
-                dip_batch, dip_outputs = zip(*[(x, y) for x, y in zip(batch, dip_outputs) if not out_fs.exists(y)])
-                if dip_batch:
+                dip_remaining = list(zip(*[(x, y) for x, y in zip(batch, dip_outputs) if not out_fs.exists(y)]))
+                if dip_remaining:
+                    dip_batch, dip_outputs = dip_remaining
                     worker_future = dask_client.submit(
                         run_on_batch,
                         dataset_fs.getsyspath("/"),
@@ -735,7 +737,7 @@ def main():
                     basename = fs.path.basename(item)
                     dataset_dir = dataset_fs.opendir(dirpath)
                     if dataset_dir.exists(basename):
-                        fs.copy.copy_file(dataset_dir, basename, out_fs.makedirs(dirpath), basename)
+                        fs.copy.copy_file(dataset_dir, basename, out_fs.makedirs(dirpath, recreate=True), basename)
 
             # Finish up.
             usd_glob = [x.path for x in dataset_fs.glob("objects/*/*/*.obj")]

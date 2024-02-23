@@ -333,7 +333,7 @@ def main():
         obj_dir = pathlib.Path(dataset_root) / "objects" / obj_category / obj_model
         assert obj_dir.exists()
         print(f"Processing {path}")
-        out_path = obj_dir / "fillable.obj"
+        out_path = obj_dir / "fillable_dip.obj"
         try:
             process_object(obj_category, obj_model, out_path)
         except Exception as e:
