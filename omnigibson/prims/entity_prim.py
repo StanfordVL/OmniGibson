@@ -1367,8 +1367,8 @@ class EntityPrim(XFormPrim):
         """
         Zero out all velocities for this prim
         """
-        self.set_linear_velocity(velocity=np.zeros(3))
-        self.set_angular_velocity(velocity=np.zeros(3))
+        self.set_linear_velocity(np.zeros(3))
+        self.set_angular_velocity(np.zeros(3))
         for joint in self._joints.values():
             joint.keep_still()
         # Make sure object is awake
