@@ -1248,14 +1248,14 @@ def launch_simulator(*args, **kwargs):
         ):
             # This below code is copied verbatim from the super class except for the removal of a render
             # call from the original
-            if get_current_stage() is None:
-                create_new_stage()
+            if lazy.omni.isaac.core.utils.stage.get_current_stage() is None:
+                lazy.omni.isaac.core.utils.stage.create_new_stage()
                 self.render()
-            set_stage_up_axis("z")
+            lazy.omni.isaac.core.utils.stage.set_stage_up_axis("z")
             if stage_units_in_meters is not None:
-                set_stage_units(stage_units_in_meters=stage_units_in_meters)
+                lazy.omni.isaac.core.utils.stage.set_stage_units(stage_units_in_meters=stage_units_in_meters)
             # self.render()  # This line causes crashes in Isaac Sim 2023.1.0. We don't need to render here.
-            self._physics_context = PhysicsContext(
+            self._physics_context = lazy.omni.isaac.core.physics_context.PhysicsContext(
                 physics_dt=physics_dt,
                 prim_path=physics_prim_path,
                 sim_params=sim_params,
