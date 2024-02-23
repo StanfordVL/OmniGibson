@@ -6,7 +6,7 @@ import re
 from abc import ABCMeta
 from copy import deepcopy
 from collections.abc import Iterable
-from functools import wraps
+from functools import wraps, cache
 from importlib import import_module
 
 import numpy as np
@@ -354,11 +354,7 @@ class UniquelyNamed:
             f"UniquelyNamed object with name {self.name} already exists!"
         NAMES.add(self.name)
 
-    # def __del__(self):
-    #     # Remove this object name from the registry if it's still there
-    #     self.remove_names(include_all_owned=True)
-
-    def remove_names(self, include_all_owned=True, skip_ids=None):
+    def remove_names(self):
         """
         Checks if self.name exists in the global NAMES registry, and deletes it if so. Possibly also iterates through
         all owned member variables and checks for their corresponding names if @include_all_owned is True.
@@ -370,48 +366,9 @@ class UniquelyNamed:
             skip_ids (None or set of int): If specified, will skip over any ids in the specified set that are matched
                 to any attributes found (this compares id(attr) to @skip_ids).
         """
-        # Make sure skip_ids is a set so we can pass this into the method, and add the dictionary so we don't
-        # get infinite recursive loops
-        skip_ids = set() if skip_ids is None else skip_ids
-        skip_ids.add(id(self))
-
         # Check for this name, possibly remove it if it exists
         if self.name in NAMES:
             NAMES.remove(self.name)
-            
-        # Also possibly iterate through all owned members and check if those are instances of UniquelyNamed
-        if include_all_owned:
-            self._remove_names_recursively_from_dict(dic=self.__dict__, skip_ids=skip_ids)
-
-    def _remove_names_recursively_from_dict(self, dic, skip_ids=None):
-        """
-        Checks if self.name exists in the global NAMES registry, and deletes it if so
-
-        Args:
-            skip_ids (None or set): If specified, will skip over any objects in the specified set that are matched
-                to any attributes found.
-        """
-        # Make sure skip_ids is a set so we can pass this into the method, and add the dictionary so we don't
-        # get infinite recursive loops
-        skip_ids = set() if skip_ids is None else skip_ids
-        skip_ids.add(id(dic))
-
-        # Loop through all values in the inputted dictionary, and check if any of the values are UniquelyNamed
-        for name, val in dic.items():
-            if id(val) not in skip_ids:
-                # No need to explicitly add val to skip objects because the methods below handle adding it
-                if isinstance(val, UniquelyNamed):
-                    val.remove_names(include_all_owned=True, skip_ids=skip_ids)
-                elif isinstance(val, dict):
-                    # Recursively iterate
-                    self._remove_names_recursively_from_dict(dic=val, skip_ids=skip_ids)
-                elif hasattr(val, "__dict__"):
-                    # Add the attribute and recursively iterate
-                    skip_ids.add(id(val))
-                    self._remove_names_recursively_from_dict(dic=val.__dict__, skip_ids=skip_ids)
-                else:
-                    # Otherwise we just add the value to skip_ids so we don't check it again
-                    skip_ids.add(id(val))
 
     @property
     def name(self):
@@ -750,6 +707,76 @@ class SerializableNonInstance:
                                       f"values to be deserialized, only {idx} were."
 
         return state_dict
+
+
+class CachedFunctions:
+    """
+    Thin object which owns a dictionary in which each entry should be a function -- when a key is queried via get()
+    and it exists, it will call the function exactly once, and cache the value so that subsequent calls will refer
+    to the cached value.
+
+    This allows the dictionary to be created with potentially expensive operations, but only queried up to exaclty once
+    as needed.
+    """
+    def __init__(self, **kwargs):
+        # Create internal dict to store functions
+        self._fcns = dict()
+        for kwarg in kwargs:
+            self._fcns[kwarg] = kwargs[kwarg]
+
+    def __getitem__(self, item):
+        return self.get(name=item)
+
+    def __setitem__(self, key, value):
+        self.add_fcn(name=key, fcn=value)
+
+    @cache
+    def get(self, name, *args, **kwargs):
+        """
+        Computes the function referenced by @name with the corresponding @args and @kwargs. Note that for a unique
+        set of arguments, this value will be internally cached
+
+        Args:
+            name (str): The name of the function to call
+            *args (tuple): Positional arguments to pass into the function call
+            **kwargs (tuple): Keyword arguments to pass into the function call
+
+        Returns:
+            any: Output of the function referenced by @name
+        """
+        return self._fcns[name](*args, **kwargs)
+
+    def get_fcn(self, name):
+        """
+        Gets the raw stored function referenced by @name
+
+        Args:
+            name (str): The name of the function to grab
+
+        Returns:
+            function: The stored function
+        """
+        return self._fcns[name]
+
+    def get_fcn_names(self):
+        """
+        Get all stored function names
+
+        Returns:
+            tuple of str: Names of stored functions
+        """
+        return tuple(self._fcns.keys())
+
+    def add_fcn(self, name, fcn):
+        """
+        Adds a function to the internal registry.
+
+        Args:
+            name (str): Name of the function. This is the name that should be queried with self.get()
+            fcn (function): Function to add. Can be an arbitrary signature
+        """
+        assert callable(fcn), "Only functions can be added via add_fcn!"
+        self._fcns[name] = fcn
 
 
 class Wrapper:

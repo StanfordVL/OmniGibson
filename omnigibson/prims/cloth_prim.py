@@ -6,15 +6,15 @@
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 #
-from omnigibson.utils.geometry_utils import get_particle_positions_from_frame, get_particle_positions_in_frame
-from pxr import UsdPhysics, Gf, Vt, PhysxSchema
-from pxr.Sdf import ValueTypeNames as VT
+
+import omnigibson.lazy as lazy
 
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.prims.geom_prim import GeomPrim
 from omnigibson.systems import get_system
 from omnigibson.utils.deprecated_utils import RetensorClothPrimView
 import omnigibson.utils.transform_utils as T
+from omnigibson.utils.geometry_utils import get_particle_positions_from_frame, get_particle_positions_in_frame
 from omnigibson.utils.sim_utils import CsRawData
 from omnigibson.utils.usd_utils import array_to_vtarray, mesh_prim_to_trimesh_mesh, sample_mesh_keypoints
 from omnigibson.utils.constants import GEOM_TYPES
@@ -80,8 +80,8 @@ class ClothPrim(GeomPrim):
         super()._post_load()
 
         # TODO: Do this using the cloth API too!
-        self._mass_api = UsdPhysics.MassAPI(self._prim) if self._prim.HasAPI(UsdPhysics.MassAPI) else \
-            UsdPhysics.MassAPI.Apply(self._prim)
+        self._mass_api = lazy.pxr.UsdPhysics.MassAPI(self._prim) if self._prim.HasAPI(lazy.pxr.UsdPhysics.MassAPI) else \
+            lazy.pxr.UsdPhysics.MassAPI.Apply(self._prim)
 
         # Possibly set the mass / density
         if "mass" in self._load_config and self._load_config["mass"] is not None:
@@ -127,7 +127,7 @@ class ClothPrim(GeomPrim):
         self.update_handles()
 
         # TODO (eric): hacky way to get cloth rendering to work (otherwise, there exist some rendering artifacts).
-        self._prim.CreateAttribute("primvars:isVolume", VT.Bool, False).Set(True)
+        self._prim.CreateAttribute("primvars:isVolume", lazy.pxr.Sdf.ValueTypeNames.Bool, False).Set(True)
         self._prim.GetAttribute("primvars:isVolume").Set(False)
 
         # Store the default position of the points in the local frame
@@ -266,7 +266,7 @@ class ClothPrim(GeomPrim):
             f"Got mismatch in particle setting size: {vel.shape[0]}, vs. number of particles {self._n_particles}!"
 
         # the velocities attribute is w.r.t the world frame already
-        self.set_attribute(attr="velocities", val=Vt.Vec3fArray.FromNumpy(vel))
+        self.set_attribute(attr="velocities", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(vel))
 
     def compute_face_normals(self, face_ids=None):
         """

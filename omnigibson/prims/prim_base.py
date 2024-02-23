@@ -1,16 +1,7 @@
 from abc import ABC, abstractmethod
-from pxr import Gf, Usd, UsdGeom, UsdShade
-from omni.isaac.core.utils.prims import (
-    get_prim_at_path,
-    move_prim,
-    query_parent_path,
-    is_prim_path_valid,
-    define_prim,
-    get_prim_parent,
-    get_prim_object_type,
-)
+
 import omnigibson as og
-from omni.isaac.core.utils.prims import delete_prim
+import omnigibson.lazy as lazy
 from omnigibson.utils.python_utils import Serializable, UniquelyNamed, Recreatable
 from omnigibson.utils.sim_utils import check_deletable_prim
 from omnigibson.utils.ui_utils import create_module_logger
@@ -59,9 +50,9 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         super().__init__()
 
         # Run some post-loading steps if this prim has already been loaded
-        if is_prim_path_valid(prim_path=self._prim_path):
+        if lazy.omni.isaac.core.utils.prims.is_prim_path_valid(prim_path=self._prim_path):
             log.debug(f"prim {name} already exists, skipping load")
-            self._prim = get_prim_at_path(prim_path=self._prim_path)
+            self._prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path=self._prim_path)
             self._loaded = True
             # Run post load.
             self._post_load()
@@ -116,22 +107,18 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
 
     def remove(self):
         """
-        Removes this prim from omniverse stage
+        Removes this prim from omniverse stage.
         """
         if not self._loaded:
             raise ValueError("Cannot remove a prim that was never loaded.")
 
         # Remove prim if it can be deleted
         if check_deletable_prim(self.prim_path):
-            delete_prim(self.prim_path)
+            lazy.omni.isaac.core.utils.prims.delete_prim(self.prim_path)
 
         # Also clear the name so we can reuse this later
-        self.remove_names(include_all_owned=True)
+        self.remove_names()
 
-        # Make the simulator refresh its handles
-        og.sim.update_handles()
-
-    @abstractmethod
     def _load(self):
         """
         Loads the raw prim into the simulator. Any post-processing should be done in @self._post_load()
@@ -189,7 +176,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         Returns:
             bool: true if the prim is visible in stage. false otherwise.
         """
-        return UsdGeom.Imageable(self.prim).ComputeVisibility(Usd.TimeCode.Default()) != UsdGeom.Tokens.invisible
+        return lazy.pxr.UsdGeom.Imageable(self.prim).ComputeVisibility(lazy.pxr.Usd.TimeCode.Default()) != lazy.pxr.UsdGeom.Tokens.invisible
 
     @visible.setter
     def visible(self, visible):
@@ -199,7 +186,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         Args:
             visible (bool): flag to set the visibility of the usd prim in stage.
         """
-        imageable = UsdGeom.Imageable(self.prim)
+        imageable = lazy.pxr.UsdGeom.Imageable(self.prim)
         if visible:
             imageable.MakeVisible()
         else:
@@ -211,7 +198,7 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         Returns:
             bool: True is the current prim path corresponds to a valid prim in stage. False otherwise.
         """
-        return is_prim_path_valid(self.prim_path)
+        return lazy.omni.isaac.core.utils.prims.is_prim_path_valid(self.prim_path)
 
     def change_prim_path(self, new_prim_path):
         """
@@ -220,9 +207,9 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         Args:
             new_prim_path (str): new path of the prim to be moved to.
         """
-        move_prim(path_from=self.prim_path, path_to=new_prim_path)
+        lazy.omni.isaac.core.utils.prims.move_prim(path_from=self.prim_path, path_to=new_prim_path)
         self._prim_path = new_prim_path
-        self._prim = get_prim_at_path(self._prim_path)
+        self._prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(self._prim_path)
         return
 
     def get_attribute(self, attr):

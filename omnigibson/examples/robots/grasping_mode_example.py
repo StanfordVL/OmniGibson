@@ -10,6 +10,7 @@ from omnigibson.utils.ui_utils import choose_from_options, KeyboardRobotControll
 
 GRASPING_MODES = dict(
     sticky="Sticky Mitten - Objects are magnetized when they touch the fingers and a CLOSE command is given",
+    assisted="Assisted Grasping - Objects are magnetized when they touch the fingers, are within the hand, and a CLOSE command is given",
     physical="Physical Grasping - No additional grasping assistance applied",
 )
 
@@ -44,7 +45,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         category="breakfast_table",
         model="lcsizg",
         bounding_box=[0.5, 0.5, 0.8],
-        fit_avg_dim_volume=False,
         fixed_base=True,
         position=[0.7, -0.1, 0.6],
         orientation=[0, 0, 0.707, 0.707],
@@ -56,7 +56,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         category="straight_chair",
         model="amgwaw",
         bounding_box=None,
-        fit_avg_dim_volume=True,
         fixed_base=False,
         position=[0.45, 0.65, 0.425],
         orientation=[0, 0, -0.9990215, -0.0442276],

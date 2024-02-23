@@ -3,21 +3,15 @@ import numpy as np
 from collections.abc import Iterable
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros, gm
-from omnigibson.utils.constants import (
-    DEFAULT_COLLISION_GROUP,
-    SPECIAL_COLLISION_GROUPS,
-    SemanticClass,
-)
-from pxr import UsdPhysics, PhysxSchema
+from omnigibson.utils.constants import SemanticClass
 from omnigibson.utils.usd_utils import create_joint, CollisionAPI
 from omnigibson.prims.entity_prim import EntityPrim
 from omnigibson.utils.python_utils import Registerable, classproperty, get_uuid
 from omnigibson.utils.constants import PrimType, CLASS_NAME_TO_CLASS_ID
 from omnigibson.utils.ui_utils import create_module_logger, suppress_omni_log
 
-from omni.isaac.core.utils.prims import get_prim_at_path
-from omni.isaac.core.utils.semantics import add_update_semantics
 
 # Global dicts that will contain mappings
 REGISTERED_OBJECTS = dict()
@@ -89,10 +83,6 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         assert len(str(self.uuid)) <= 8, f"UUID for this object must be at max 8-digits, got: {self.uuid}"
         self.category = category
         self.fixed_base = fixed_base
-
-        # This sets the collision group of the object. In omnigibson, objects are only permitted to be part of a single
-        # collision group, e.g. collisions are only enabled within a single group
-        self.collision_group = SPECIAL_COLLISION_GROUPS.get(self.category, DEFAULT_COLLISION_GROUP)
 
         # Infer class ID if not specified
         if class_id is None:
@@ -166,38 +156,43 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         # If the object is fixed_base but kinematic only is false, create the joint
         if self.fixed_base and not self.kinematic_only:
             # Create fixed joint, and set Body0 to be this object's root prim
-            create_joint(
-                prim_path=f"{self._prim_path}/rootJoint",
-                joint_type="FixedJoint",
-                body1=f"{self._prim_path}/{self._root_link_name}",
-            )
+            # This renders, which causes a material lookup error since we're creating a temp file, so we suppress
+            # the error explicitly here
+            with suppress_omni_log(channels=["omni.hydra"]):
+                create_joint(
+                    prim_path=f"{self._prim_path}/rootJoint",
+                    joint_type="FixedJoint",
+                    body1=f"{self._prim_path}/{self._root_link_name}",
+                )
+
+            # Delete n_fixed_joints cached property if it exists since the number of fixed joints has now changed
+            # See https://stackoverflow.com/questions/59899732/python-cached-property-how-to-delete and
+            # https://docs.python.org/3/library/functools.html#functools.cached_property
+            if "n_fixed_joints" in self.__dict__:
+                del self.n_fixed_joints
 
         # Set visibility
         if "visible" in self._load_config and self._load_config["visible"] is not None:
             self.visible = self._load_config["visible"]
 
-        # First, remove any articulation root API that already exists at the object-level prim
-        if self._prim.HasAPI(UsdPhysics.ArticulationRootAPI):
-            self._prim.RemoveAPI(UsdPhysics.ArticulationRootAPI)
-            self._prim.RemoveAPI(PhysxSchema.PhysxArticulationAPI)
+        # First, remove any articulation root API that already exists at the object-level or root link level prim
+        if self._prim.HasAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI):
+            self._prim.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
+            self._prim.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
+
+        if self.root_prim.HasAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI):
+            self.root_prim.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
+            self.root_prim.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
 
         # Potentially add articulation root APIs and also set self collisions
-        root_prim = None if self.articulation_root_path is None else get_prim_at_path(self.articulation_root_path)
+        root_prim = None if self.articulation_root_path is None else lazy.omni.isaac.core.utils.prims.get_prim_at_path(self.articulation_root_path)
         if root_prim is not None:
-            UsdPhysics.ArticulationRootAPI.Apply(root_prim)
-            PhysxSchema.PhysxArticulationAPI.Apply(root_prim)
+            lazy.pxr.UsdPhysics.ArticulationRootAPI.Apply(root_prim)
+            lazy.pxr.PhysxSchema.PhysxArticulationAPI.Apply(root_prim)
             self.self_collisions = self._load_config["self_collisions"]
 
-        # TODO: Do we need to explicitly add all links? or is adding articulation root itself sufficient?
-        # Set the collision group
-        CollisionAPI.add_to_collision_group(
-            col_group=self.collision_group,
-            prim_path=self.prim_path,
-            create_if_not_exist=True,
-        )
-
         # Update semantics
-        add_update_semantics(
+        lazy.omni.isaac.core.utils.semantics.add_update_semantics(
             prim=self._prim,
             semantic_label=self.category,
             type_label="class",

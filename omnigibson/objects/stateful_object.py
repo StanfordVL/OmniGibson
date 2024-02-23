@@ -2,10 +2,11 @@ import sys
 from collections import defaultdict
 
 import numpy as np
-from pxr.Sdf import ValueTypeNames as VT
-from pxr import Sdf, Gf
+
+from bddl.object_taxonomy import ObjectTaxonomy
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.object_states.factory import (
     get_default_states,
@@ -32,16 +33,7 @@ from omnigibson.utils.ui_utils import create_module_logger
 # Create module logger
 log = create_module_logger(module_name=__name__)
 
-
-# Optionally import bddl for object taxonomy.
-try:
-    from bddl.object_taxonomy import ObjectTaxonomy
-
-    OBJECT_TAXONOMY = ObjectTaxonomy()
-except ImportError:
-    print("BDDL could not be imported - object taxonomy / abilities will be unavailable.", file=sys.stderr)
-    OBJECT_TAXONOMY = None
-
+OBJECT_TAXONOMY = ObjectTaxonomy()
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -114,11 +106,9 @@ class StatefulObject(BaseObject):
         # Load abilities from taxonomy if needed & possible
         if abilities is None:
             abilities = {}
-            if OBJECT_TAXONOMY is not None:
-                # TODO! Update!!
-                taxonomy_class = OBJECT_TAXONOMY.get_synset_from_category(category)
-                if taxonomy_class is not None:
-                    abilities = OBJECT_TAXONOMY.get_abilities(taxonomy_class)
+            taxonomy_class = OBJECT_TAXONOMY.get_synset_from_category(category)
+            if taxonomy_class is not None:
+                abilities = OBJECT_TAXONOMY.get_abilities(taxonomy_class)
         assert isinstance(abilities, dict), "Object abilities must be in dictionary form."
         self._abilities = abilities
 
@@ -213,7 +203,7 @@ class StatefulObject(BaseObject):
         if gm.ENABLE_OBJECT_STATES:
             for ability, params in self._abilities.items():
                 for state_type in get_states_for_ability(ability):
-                    states_info[state_type] = {"ability": ability, "params": params}
+                    states_info[state_type] = {"ability": ability, "params": state_type.postprocess_ability_params(params)}
 
         # Add the dependencies into the list, too, and sort based on the dependency chain
         # Must iterate over explicit tuple since dictionary changes size mid-iteration
@@ -322,17 +312,17 @@ class StatefulObject(BaseObject):
         self._emitters[emitter_type] = emitter
 
         # Update emitter general settings.
-        emitter.CreateAttribute("enabled", VT.Bool, False).Set(False)
-        emitter.CreateAttribute("position", VT.Float3, False).Set(emitter_config["position"])
-        emitter.CreateAttribute("fuel", VT.Float, False).Set(emitter_config["fuel"])
-        emitter.CreateAttribute("coupleRateFuel", VT.Float, False).Set(emitter_config["coupleRateFuel"])
-        emitter.CreateAttribute("coupleRateVelocity", VT.Float, False).Set(2.0)
-        emitter.CreateAttribute("velocity", VT.Float3, False).Set((0, 0, 0))
-        advection.CreateAttribute("buoyancyPerTemp", VT.Float, False).Set(emitter_config["buoyancyPerTemp"])
-        advection.CreateAttribute("burnPerTemp", VT.Float, False).Set(emitter_config["burnPerTemp"])
-        advection.CreateAttribute("gravity", VT.Float3, False).Set(emitter_config["gravity"])
-        vorticity.CreateAttribute("constantMask", VT.Float, False).Set(emitter_config["constantMask"])
-        rayMarch.CreateAttribute("attenuation", VT.Float, False).Set(emitter_config["attenuation"])
+        emitter.CreateAttribute("enabled", lazy.pxr.Sdf.ValueTypeNames.Bool, False).Set(False)
+        emitter.CreateAttribute("position", lazy.pxr.Sdf.ValueTypeNames.Float3, False).Set(emitter_config["position"])
+        emitter.CreateAttribute("fuel", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(emitter_config["fuel"])
+        emitter.CreateAttribute("coupleRateFuel", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(emitter_config["coupleRateFuel"])
+        emitter.CreateAttribute("coupleRateVelocity", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(2.0)
+        emitter.CreateAttribute("velocity", lazy.pxr.Sdf.ValueTypeNames.Float3, False).Set((0, 0, 0))
+        advection.CreateAttribute("buoyancyPerTemp", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(emitter_config["buoyancyPerTemp"])
+        advection.CreateAttribute("burnPerTemp", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(emitter_config["burnPerTemp"])
+        advection.CreateAttribute("gravity", lazy.pxr.Sdf.ValueTypeNames.Float3, False).Set(emitter_config["gravity"])
+        vorticity.CreateAttribute("constantMask", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(emitter_config["constantMask"])
+        rayMarch.CreateAttribute("attenuation", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(emitter_config["attenuation"])
 
         # Update emitter unique settings.
         if emitter_type == EmitterType.FIRE:
@@ -345,22 +335,22 @@ class StatefulObject(BaseObject):
                 bbox_extent_world = self.native_bbox * self.scale if hasattr(self, "native_bbox") else self.aabb_extent
                 # Radius is the average x-y half-extent of the object
                 radius = float(np.mean(bbox_extent_world[:2]) / 2.0)
-            emitter.CreateAttribute("radius", VT.Float, False).Set(radius)
-            simulate.CreateAttribute("densityCellSize", VT.Float, False).Set(radius*0.2)
-            smoke.CreateAttribute("fade", Sdf.ValueTypeNames.Float, False).Set(2.0)
+            emitter.CreateAttribute("radius", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(radius)
+            simulate.CreateAttribute("densityCellSize", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(radius*0.2)
+            smoke.CreateAttribute("fade", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(2.0)
             # Set fire colormap.
             rgbaPoints = []
-            rgbaPoints.append(Gf.Vec4f(0.0154, 0.0177, 0.0154, 0.004902))
-            rgbaPoints.append(Gf.Vec4f(0.03575, 0.03575, 0.03575, 0.504902))
-            rgbaPoints.append(Gf.Vec4f(0.03575, 0.03575, 0.03575, 0.504902))
-            rgbaPoints.append(Gf.Vec4f(1, 0.1594, 0.0134, 0.8))
-            rgbaPoints.append(Gf.Vec4f(13.53, 2.99, 0.12599, 0.8))
-            rgbaPoints.append(Gf.Vec4f(78, 39, 6.1, 0.7))
-            colormap.CreateAttribute("rgbaPoints", Sdf.ValueTypeNames.Float4Array, False).Set(rgbaPoints)
+            rgbaPoints.append(lazy.pxr.Gf.Vec4f(0.0154, 0.0177, 0.0154, 0.004902))
+            rgbaPoints.append(lazy.pxr.Gf.Vec4f(0.03575, 0.03575, 0.03575, 0.504902))
+            rgbaPoints.append(lazy.pxr.Gf.Vec4f(0.03575, 0.03575, 0.03575, 0.504902))
+            rgbaPoints.append(lazy.pxr.Gf.Vec4f(1, 0.1594, 0.0134, 0.8))
+            rgbaPoints.append(lazy.pxr.Gf.Vec4f(13.53, 2.99, 0.12599, 0.8))
+            rgbaPoints.append(lazy.pxr.Gf.Vec4f(78, 39, 6.1, 0.7))
+            colormap.CreateAttribute("rgbaPoints", lazy.pxr.Sdf.ValueTypeNames.Float4Array, False).Set(rgbaPoints)
         elif emitter_type == EmitterType.STEAM:
-            emitter.CreateAttribute("halfSize", VT.Float3, False).Set(
+            emitter.CreateAttribute("halfSize", lazy.pxr.Sdf.ValueTypeNames.Float3, False).Set(
                 tuple(bbox_extent_local * np.array(m.STEAM_EMITTER_SIZE_RATIO) / 2.0))
-            simulate.CreateAttribute("densityCellSize", VT.Float, False).Set(bbox_extent_local[2] * m.STEAM_EMITTER_DENSITY_CELL_RATIO)
+            simulate.CreateAttribute("densityCellSize", lazy.pxr.Sdf.ValueTypeNames.Float, False).Set(bbox_extent_local[2] * m.STEAM_EMITTER_DENSITY_CELL_RATIO)
 
     def set_emitter_enabled(self, emitter_type, value):
         """
@@ -396,7 +386,7 @@ class StatefulObject(BaseObject):
                 state = self.states[state_type]
                 if state_type in get_texture_change_states():
                     if state_type == Saturated:
-                        for particle_system in ParticleRemover.supported_active_systems:
+                        for particle_system in ParticleRemover.supported_active_systems.values():
                             if state.get_value(particle_system):
                                 texture_change_states.append(state)
                                 # Only need to do this once, since soaked handles all fluid systems
@@ -461,15 +451,12 @@ class StatefulObject(BaseObject):
                 material.diffuse_tint = diffuse_tint
 
     def remove(self):
-        """
-        Removes this prim from omniverse stage
-        """
+        # Run super
+        super().remove()
+
         # Iterate over all states and run their remove call
         for state_instance in self._states.values():
             state_instance.remove()
-
-        # Run super
-        super().remove()
 
     def _dump_state(self):
         # Grab state from super class
@@ -489,6 +476,10 @@ class StatefulObject(BaseObject):
         # Call super method first
         super()._load_state(state=state)
 
+        # Load non-kinematic states
+        self.load_non_kin_state(state)
+
+    def load_non_kin_state(self, state):
         # Load all states that are stateful
         for state_type, state_instance in self._states.items():
             state_name = get_state_name(state_type)
