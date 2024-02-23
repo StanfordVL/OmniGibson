@@ -208,7 +208,7 @@ def view_object(cat, mdl):
     if dip_path.exists() and ray_path.exists():
         # Check if either mesh contains the entire other mesh
         combined_mesh = trimesh.convex.convex_hull(np.concatenate([dip_mesh.vertices, ray_mesh.vertices], axis=0))
-        if not np.allclose(combined_mesh.volume, dip_mesh.volume, atol=1e-3) and not np.allclose(combined_mesh.volume, ray_mesh.volume, atol=1e-3):
+        if not np.allclose(combined_mesh.volume, dip_mesh.volume, rtol=1e-3) and not np.allclose(combined_mesh.volume, ray_mesh.volume, rtol=1e-3):
             # Draw the mesh
             draw_mesh(combined_mesh, fillable.get_position(), color=(1., 0., 1., 1.), size=0.5)
 
