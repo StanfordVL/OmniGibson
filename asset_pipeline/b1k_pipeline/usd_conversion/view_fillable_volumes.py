@@ -36,7 +36,7 @@ def add_assignment(mdl, assignment):
     with open(ASSIGNMENT_FILE, "w") as f:
         json.dump(assignments, f)
 
-def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.)):
+def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.), size=1.):
     draw = lazy.omni.isaac.debug_draw._debug_draw.acquire_debug_draw_interface()
     edge_vert_idxes = mesh.edges_unique
     N = len(edge_vert_idxes)
@@ -203,6 +203,27 @@ def view_object(cat, mdl):
             callback_fn=lambda: save_assignment_and_stop("ray"),
         )
         print("Press S to choose the ray (blue) option.")
+
+    # Now the combined version
+    if dip_path.exists() and ray_path.exists():
+        # Check if either mesh contains the entire other mesh
+        if not (dip_mesh.contains(ray_mesh.vertices).all() or ray_mesh.contains(dip_mesh.vertices).all()):
+            combined_mesh = trimesh.convex.convex_hull(np.concatenate([dip_mesh.vertices, ray_mesh.vertices], axis=0))
+            draw_mesh(combined_mesh, fillable.get_position(), color=(1., 0., 1., 1.), size=0.5)
+
+            # Add the combined option filler
+            KeyboardEventHandler.add_keyboard_callback(
+                key=lazy.carb.input.KeyboardInput.Q,
+                callback_fn=lambda: generate_particles_in_mesh(combined_mesh, fillable.get_position()),
+            )
+            print("Press Q to fill combined (purple) with water")
+
+            # Add the combined option chooser
+            KeyboardEventHandler.add_keyboard_callback(
+                key=lazy.carb.input.KeyboardInput.W,
+                callback_fn=lambda: save_assignment_and_stop("combined"),
+            )
+            print("Press W to choose the combined (purple) option.")
 
 
     while keep_rendering:
