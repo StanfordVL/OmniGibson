@@ -6024,8 +6024,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/objects/batch-05/processed.max
-      md5: 645829947e7395a7c42ffc962b4a6236
-      size: 111794412
+      md5: 42649a00ab07571bed55c9dcae0aa0b6
+      size: 111651032
     outs:
     - path: cad/objects/batch-05/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -6214,11 +6214,11 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/objects/batch-05/processed.max
-      md5: 645829947e7395a7c42ffc962b4a6236
-      size: 111794412
+      md5: 42649a00ab07571bed55c9dcae0aa0b6
+      size: 111651032
     outs:
     - path: cad/objects/batch-05/artifacts/object_list.json
-      md5: b9fc5d36c7d53a5645583197b3d2045d
+      md5: 5a2d7cb91b0280037d78eb1270042e58
       size: 36888
   object_list@objects/batch-06:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-06/processed.max b1k_pipeline/max/object_list.py
@@ -6855,18 +6855,18 @@ stages:
       md5: 8f67c8a3cae22b0303e1082e4d76f9c9
       size: 23730
     - path: cad/objects/batch-05/artifacts/object_list.json
-      md5: b9fc5d36c7d53a5645583197b3d2045d
+      md5: 5a2d7cb91b0280037d78eb1270042e58
       size: 36888
     - path: cad/objects/batch-05/processed.max
-      md5: 645829947e7395a7c42ffc962b4a6236
-      size: 111794412
+      md5: 42649a00ab07571bed55c9dcae0aa0b6
+      size: 111651032
     outs:
     - path: cad/objects/batch-05/artifacts/export_meshes.json
-      md5: 76eaf89f15190834990f1975d59d7767
-      size: 20552
+      md5: 786661fcb40abd1c0b2c6fa50b78b48a
+      size: 20541
     - path: cad/objects/batch-05/artifacts/meshes.zip
-      md5: f7b7fb0559d154e3a7dba888b3fc870a
-      size: 192717071
+      md5: aaf43939c98b36acbbb82d328f00a995
+      size: 192831075
   export_meshes_success:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/export_meshes.json
       artifacts/pipeline/export_meshes.success
@@ -6890,8 +6890,8 @@ stages:
       md5: ecb323257fb8054ab33ac902bf1090a8
       size: 18325
     - path: cad/objects/batch-05/artifacts/export_meshes.json
-      md5: 76eaf89f15190834990f1975d59d7767
-      size: 20552
+      md5: 786661fcb40abd1c0b2c6fa50b78b48a
+      size: 20541
     - path: cad/objects/batch-06/artifacts/export_meshes.json
       md5: ca820be62a4c2657b4952246cd026638
       size: 17700
