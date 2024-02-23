@@ -2,10 +2,6 @@ import numpy as np
 
 import omnigibson as og
 from omnigibson import object_states
-from omnigibson.macros import gm
-
-# Make sure object states are enabled
-gm.ENABLE_OBJECT_STATES = True
 
 
 def main(random_selection=False, headless=False, short_exec=False):

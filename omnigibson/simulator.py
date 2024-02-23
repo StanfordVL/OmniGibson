@@ -19,7 +19,7 @@ from omnigibson.utils.constants import LightingMode
 from omnigibson.utils.config_utils import NumpyEncoder
 from omnigibson.utils.python_utils import clear as clear_pu, create_object_from_init_info, Serializable
 from omnigibson.utils.sim_utils import meets_minimum_isaac_version
-from omnigibson.utils.usd_utils import clear as clear_uu, FlatcacheAPI, RigidContactAPI
+from omnigibson.utils.usd_utils import clear as clear_uu, RigidContactAPI
 from omnigibson.utils.ui_utils import (CameraMover, disclaimer, create_module_logger, suppress_omni_log,
                                        print_icon, print_logo, logo_small)
 from omnigibson.scenes import Scene
@@ -195,7 +195,8 @@ def launch_simulator(*args, **kwargs):
                 physics_dt=physics_dt,
                 rendering_dt=rendering_dt,
                 stage_units_in_meters=stage_units_in_meters,
-                device=device,
+                device="cuda:0",
+                backend="torch"
             )
 
             if self._world_initialized:
@@ -251,22 +252,8 @@ def launch_simulator(*args, **kwargs):
             # and crashes
             self._set_physics_engine_settings()
 
-        def __new__(
-            cls,
-            gravity=9.81,
-            physics_dt=1.0 / 60.0,
-            rendering_dt=1.0 / 60.0,
-            stage_units_in_meters=1.0,
-            viewer_width=gm.DEFAULT_VIEWER_WIDTH,
-            viewer_height=gm.DEFAULT_VIEWER_HEIGHT,
-            device_idx=0,
-        ):
-            # Overwrite since we have different kwargs
-            if Simulator._instance is None:
-                Simulator._instance = object.__new__(cls)
-            else:
-                lazy.carb.log_info("Simulator is defined already, returning the previously defined one")
-            return Simulator._instance
+        def __new__(cls, *args, **kwargs):
+            return lazy.omni.isaac.core.simulation_context.SimulationContext.__new__(cls, *args, **kwargs)
 
         def _set_viewer_camera(self, prim_path="/World/viewer_camera", viewport_name="Viewport"):
             """
@@ -313,17 +300,13 @@ def launch_simulator(*args, **kwargs):
             self._physics_context.enable_ccd(gm.ENABLE_CCD)
 
             if meets_minimum_isaac_version("2023.0.0"):
-                self._physics_context.enable_fabric(gm.ENABLE_FLATCACHE)
+                self._physics_context.enable_fabric(True)
             else:
-                self._physics_context.enable_flatcache(gm.ENABLE_FLATCACHE)
+                self._physics_context.enable_flatcache(True)
 
-            # Enable GPU dynamics based on whether we need omni particles feature
-            if gm.USE_GPU_DYNAMICS:
-                self._physics_context.enable_gpu_dynamics(True)
-                self._physics_context.set_broadphase_type("GPU")
-            else:
-                self._physics_context.enable_gpu_dynamics(False)
-                self._physics_context.set_broadphase_type("MBP")
+            # Enable GPU dynamics
+            self._physics_context.enable_gpu_dynamics(True)
+            self._physics_context.set_broadphase_type("GPU")
 
             # Set GPU Pairs capacity and other GPU settings
             self._physics_context.set_gpu_found_lost_pairs_capacity(gm.GPU_PAIRS_CAPACITY)
@@ -670,9 +653,7 @@ def launch_simulator(*args, **kwargs):
                 #   ignore this if the scale is close to uniform.
                 # We also need to suppress the following error when flat cache is used:
                 # [omni.physx.plugin] Transformation change on non-root links is not supported.
-                channels = ["omni.usd", "omni.physicsschema.plugin"]
-                if gm.ENABLE_FLATCACHE:
-                    channels.append("omni.physx.plugin")
+                channels = ["omni.usd", "omni.physicsschema.plugin", "omni.physx.plugin"]
                 with suppress_omni_log(channels=channels):
                     super().play()
 
@@ -716,10 +697,6 @@ def launch_simulator(*args, **kwargs):
         def stop(self):
             if not self.is_stopped():
                 super().stop()
-
-            # If we're using flatcache, we also need to reset its API
-            if gm.ENABLE_FLATCACHE:
-                FlatcacheAPI.reset()
 
             # Run all callbacks
             for callback in self._callbacks_on_stop.values():
@@ -1255,17 +1232,26 @@ def launch_simulator(*args, **kwargs):
             backend="numpy",
             device=None,
         ):
-            # Run super first
-            super()._init_stage(
+            # This below code is copied verbatim from the super class except for the removal of a render
+            # call from the original
+            if lazy.omni.isaac.core.utils.stage.get_current_stage() is None:
+                lazy.omni.isaac.core.utils.stage.create_new_stage()
+                self.render()
+            lazy.omni.isaac.core.utils.stage.set_stage_up_axis("z")
+            if stage_units_in_meters is not None:
+                lazy.omni.isaac.core.utils.stage.set_stage_units(stage_units_in_meters=stage_units_in_meters)
+            # self.render()  # This line causes crashes in Isaac Sim 2023.1.0. We don't need to render here.
+            self._physics_context = lazy.omni.isaac.core.physics_context.PhysicsContext(
                 physics_dt=physics_dt,
-                rendering_dt=rendering_dt,
-                stage_units_in_meters=stage_units_in_meters,
-                physics_prim_path=physics_prim_path,
+                prim_path=physics_prim_path,
                 sim_params=sim_params,
                 set_defaults=set_defaults,
-                backend=backend,
-                device=device,
+                backend=self.backend,
+                device=self.device
             )
+            self.set_simulation_dt(physics_dt=physics_dt, rendering_dt=rendering_dt)
+            self.render()
+            # End of super class code
 
             # Update internal vars
             self._physx_interface = lazy.omni.physx.get_physx_interface()
@@ -1367,6 +1353,22 @@ def launch_simulator(*args, **kwargs):
         def _deserialize(self, state):
             # Default state is from the scene
             return self._scene.deserialize(state=state), self._scene.state_size
+
+        def _stage_open_callback_fn(self, event):
+            # This below is copied from omni.isaac.core.simulation_context.SimulationContext
+            self._physics_callback_functions = dict()
+            self._physics_functions = dict()
+            self._stage_callback_functions = dict()
+            self._timeline_callback_functions = dict()
+            self._render_callback_functions = dict()
+            # This below part causes bugs and as such is removed.
+            # if SimulationContext._instance is not None:
+            #     SimulationContext._instance.clear_instance()
+            #     carb.log_warn(
+            #         "A new stage was opened, World or Simulation Object are invalidated and you would need to initialize them again before using them."
+            #     )
+            self._stage_open_callback = None
+            return
 
     if not og.sim:
         og.sim = Simulator(*args, **kwargs)

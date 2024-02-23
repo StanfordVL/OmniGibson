@@ -13,6 +13,7 @@ from omnigibson.macros import create_module_macros, gm
 from omnigibson.prims.geom_prim import GeomPrim
 from omnigibson.systems import get_system
 import omnigibson.utils.transform_utils as T
+from omnigibson.utils.geometry_utils import get_particle_positions_from_frame, get_particle_positions_in_frame
 from omnigibson.utils.sim_utils import CsRawData
 from omnigibson.utils.usd_utils import array_to_vtarray, mesh_prim_to_trimesh_mesh, sample_mesh_keypoints
 from omnigibson.utils.constants import GEOM_TYPES
@@ -20,6 +21,7 @@ from omnigibson.utils.python_utils import classproperty
 import omnigibson as og
 
 import numpy as np
+import torch
 
 
 # Create settings for this module
@@ -63,6 +65,7 @@ class ClothPrim(GeomPrim):
         # Internal vars stored
         self._keypoint_idx = None
         self._keyface_idx = None
+        self._cloth_prim_view = None
 
         # Run super init
         super().__init__(
@@ -75,10 +78,7 @@ class ClothPrim(GeomPrim):
         # run super first
         super()._post_load()
 
-        # Make sure flatcache is not being used -- if so, raise an error, since we lose most of our needed functionality
-        # (such as R/W to specific particle states) when flatcache is enabled
-        assert not gm.ENABLE_FLATCACHE, "Cannot use flatcache with ClothPrim!"
-
+        # TODO: Do this using the cloth API too!
         self._mass_api = lazy.pxr.UsdPhysics.MassAPI(self._prim) if self._prim.HasAPI(lazy.pxr.UsdPhysics.MassAPI) else \
             lazy.pxr.UsdPhysics.MassAPI.Apply(self._prim)
 
@@ -89,40 +89,50 @@ class ClothPrim(GeomPrim):
         # Clothify this prim, which is assumed to be a mesh
         ClothPrim.cloth_system.clothify_mesh_prim(mesh_prim=self._prim)
 
-        # Track generated particle count
-        positions = self.compute_particle_positions()
-        self._n_particles = len(positions)
+        # Track generated particle count. This is the only time we use the USD API.
+        self._n_particles = len(self._prim.GetAttribute("points").Get())
 
-        # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
-        success = False
-        for i in range(10):
-            self._keypoint_idx, self._keyface_idx = sample_mesh_keypoints(
-                mesh_prim=self._prim,
-                n_keypoints=m.N_CLOTH_KEYPOINTS,
-                n_keyfaces=m.N_CLOTH_KEYFACES,
-                seed=i,
-            )
+        # Load the cloth prim view
+        from omnigibson.utils.deprecated_utils import RetensorClothPrimView
+        self._cloth_prim_view = RetensorClothPrimView(self._prim_path)
 
-            keypoint_positions = positions[self._keypoint_idx]
-            keypoint_aabb = keypoint_positions.min(axis=0), keypoint_positions.max(axis=0)
-            true_aabb = positions.min(axis=0), positions.max(axis=0)
-            overlap_vol = max(min(true_aabb[1][0], keypoint_aabb[1][0]) - max(true_aabb[0][0], keypoint_aabb[0][0]), 0) * \
-                max(min(true_aabb[1][1], keypoint_aabb[1][1]) - max(true_aabb[0][1], keypoint_aabb[0][1]), 0) * \
-                max(min(true_aabb[1][2], keypoint_aabb[1][2]) - max(true_aabb[0][2], keypoint_aabb[0][2]), 0)
-            true_vol = np.product(true_aabb[1] - true_aabb[0])
-            if overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD:
-                success = True
-                break
-        assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
+        # positions = self.get_particle_positions()
+
+        # # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
+        # success = False
+        # for i in range(10):
+        #     self._keypoint_idx, self._keyface_idx = sample_mesh_keypoints(
+        #         mesh_prim=self._prim,
+        #         n_keypoints=m.N_CLOTH_KEYPOINTS,
+        #         n_keyfaces=m.N_CLOTH_KEYFACES,
+        #         seed=i,
+        #     )
+
+        #     keypoint_positions = positions[self._keypoint_idx]
+        #     keypoint_aabb = keypoint_positions.min(axis=0), keypoint_positions.max(axis=0)
+        #     true_aabb = positions.min(axis=0), positions.max(axis=0)
+        #     overlap_vol = max(min(true_aabb[1][0], keypoint_aabb[1][0]) - max(true_aabb[0][0], keypoint_aabb[0][0]), 0) * \
+        #         max(min(true_aabb[1][1], keypoint_aabb[1][1]) - max(true_aabb[0][1], keypoint_aabb[0][1]), 0) * \
+        #         max(min(true_aabb[1][2], keypoint_aabb[1][2]) - max(true_aabb[0][2], keypoint_aabb[0][2]), 0)
+        #     true_vol = np.product(true_aabb[1] - true_aabb[0])
+        #     if overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD:
+        #         success = True
+        #         break
+        # assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
 
     def _initialize(self):
         super()._initialize()
+
+        # Update the handles so that we can access particles
+        self.update_handles()
+
         # TODO (eric): hacky way to get cloth rendering to work (otherwise, there exist some rendering artifacts).
         self._prim.CreateAttribute("primvars:isVolume", lazy.pxr.Sdf.ValueTypeNames.Bool, False).Set(True)
         self._prim.GetAttribute("primvars:isVolume").Set(False)
 
         # Store the default position of the points in the local frame
-        self._default_positions = np.array(self.get_attribute(attr="points"))
+        self._default_positions = get_particle_positions_in_frame(
+            *self.get_position_orientation(), self.scale, self.get_particle_positions())
 
     @classproperty
     def cloth_system(cls):
@@ -144,7 +154,7 @@ class ClothPrim(GeomPrim):
         """
         return False
 
-    def compute_particle_positions(self, idxs=None):
+    def get_particle_positions(self, idxs=None):
         """
         Compute individual particle positions for this cloth prim
 
@@ -155,16 +165,8 @@ class ClothPrim(GeomPrim):
             np.array: (N, 3) numpy array, where each of the N particles' positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
-        t, r = self.get_position_orientation()
-        r = T.quat2mat(r)
-        s = self.scale
-
-        # Don't copy to save compute, since we won't be returning a reference to the underlying object anyways
-        p_local = np.array(self.get_attribute(attr="points"), copy=False)
-        p_local = p_local[idxs] if idxs is not None else p_local
-        p_world = (r @ (p_local * s).T).T + t
-
-        return p_world
+        all_particle_positions = self._cloth_prim_view.get_world_positions(clone=False)[0, :, :]
+        return all_particle_positions[:self._n_particles] if idxs is None else all_particle_positions[idxs]
 
     def set_particle_positions(self, positions, idxs=None):
         """
@@ -178,19 +180,15 @@ class ClothPrim(GeomPrim):
         n_expected = self._n_particles if idxs is None else len(idxs)
         assert len(positions) == n_expected, \
             f"Got mismatch in particle setting size: {len(positions)}, vs. number of expected particles {n_expected}!"
+        
+        # First, get the particle positions.
+        cur_pos = self._cloth_prim_view.get_world_positions()
 
-        r = T.quat2mat(self.get_orientation())
-        t = self.get_position()
-        s = self.scale
-        p_local = (r.T @ (positions - t).T).T / s
+        # Then apply the new positions at the appropriate indices
+        cur_pos[0, idxs] = torch.Tensor(positions, device=cur_pos.device)
 
-        # Fill the idxs if requested
-        if idxs is not None:
-            p_local_old = np.array(self.get_attribute(attr="points"))
-            p_local_old[idxs] = p_local
-            p_local = p_local_old
-
-        self.set_attribute(attr="points", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(p_local))
+        # Then set to that position
+        self._cloth_prim_view.set_world_positions(cur_pos)
 
     @property
     def keypoint_idx(self):
@@ -241,7 +239,7 @@ class ClothPrim(GeomPrim):
             np.array: (N, 3) numpy array, where each of the N keypoint particles' positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
-        return self.compute_particle_positions(idxs=self._keypoint_idx)
+        return self.get_particle_positions(idxs=self._keypoint_idx)
 
     @property
     def particle_velocities(self):
@@ -283,7 +281,7 @@ class ClothPrim(GeomPrim):
                 cartesian coordinates with respect to the world frame.
         """
         faces = self.faces if face_ids is None else self.faces[face_ids]
-        points = self.compute_particle_positions(idxs=faces.flatten()).reshape(-1, 3, 3)
+        points = self.get_particle_positions(idxs=faces.flatten()).reshape(-1, 3, 3)
         return self.compute_face_normals_from_particle_positions(positions=points)
 
     def compute_face_normals_from_particle_positions(self, positions):
@@ -326,15 +324,18 @@ class ClothPrim(GeomPrim):
             ))
             return True
 
-        positions = self.keypoint_particle_positions if keypoints_only else self.compute_particle_positions()
+        positions = self.keypoint_particle_positions if keypoints_only else self.get_particle_positions()
         for pos in positions:
             og.sim.psqi.overlap_sphere(ClothPrim.cloth_system.particle_contact_offset, pos, report_hit, False)
 
         return contacts
 
     def update_handles(self):
-        # no handles to update
-        pass
+        assert og.sim._physics_sim_view._backend is not None, "Physics sim backend not initialized!"
+        self._cloth_prim_view.initialize(og.sim.physics_sim_view)
+        assert self._n_particles <= self._cloth_prim_view.max_particles_per_cloth, \
+            f"Got more particles than the maximum allowed for this cloth! Got {self._n_particles}, max is " \
+            f"{self._cloth_prim_view.max_particles_per_cloth}!"
 
     @property
     def volume(self):
@@ -521,7 +522,7 @@ class ClothPrim(GeomPrim):
         state = super()._dump_state()
         state["particle_group"] = self.particle_group
         state["n_particles"] = self.n_particles
-        state["particle_positions"] = self.compute_particle_positions()
+        state["particle_positions"] = self.get_particle_positions()
         state["particle_velocities"] = self.particle_velocities
         return state
 
@@ -584,5 +585,6 @@ class ClothPrim(GeomPrim):
         Reset the points to their default positions in the local frame, and also zeroes out velocities
         """
         if self.initialized:
-            self.set_attribute(attr="points", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(self._default_positions))
+            self.set_particle_positions(get_particle_positions_from_frame(
+                *self.get_position_orientation(), self.scale, self._default_positions))
             self.particle_velocities = np.zeros((self._n_particles, 3))

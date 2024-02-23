@@ -79,8 +79,8 @@ class RigidPrim(XFormPrim):
     def _post_load(self):
         # Create the view
         # Import now to avoid too-eager load of Omni classes due to inheritance
-        from omnigibson.utils.deprecated_utils import RigidPrimView
-        self._rigid_prim_view_direct = RigidPrimView(self._prim_path)
+        from omnigibson.utils.deprecated_utils import RetensorRigidPrimView
+        self._rigid_prim_view_direct = RetensorRigidPrimView(self._prim_path)
 
         # Set it to be kinematic if necessary
         kinematic_only = "kinematic_only" in self._load_config and self._load_config["kinematic_only"]
@@ -259,14 +259,26 @@ class RigidPrim(XFormPrim):
                 contacts.append(CsRawData(*c))
         return contacts
 
-    def set_linear_velocity(self, velocity):
+    def set_velocity(self, velocity):
+        """
+        Sets the linear and angular velocity of the prim in stage.
+
+        Args:
+            velocity (np.ndarray): linear and angular velocity to set the rigid prim to. Shape (6,).
+        """
+        assert velocity.shape == (6,), f"Velocity must be a 6-array, got {velocity.shape}"
+        self._rigid_prim_view.set_velocities(velocity[None, :])
+
+    def set_linear_velocity(self, linear_velocity):
         """
         Sets the linear velocity of the prim in stage.
 
         Args:
-            velocity (np.ndarray): linear velocity to set the rigid prim to. Shape (3,).
+            linear_velocity (np.ndarray): linear velocity to set the rigid prim to. Shape (3,).
         """
-        self._rigid_prim_view.set_linear_velocities(velocity[None, :])
+        ang_vel = self.get_angular_velocity()
+        vel = np.concatenate([linear_velocity, ang_vel])
+        self.set_velocity(vel)
 
     def get_linear_velocity(self):
         """
@@ -275,14 +287,16 @@ class RigidPrim(XFormPrim):
         """
         return self._rigid_prim_view.get_linear_velocities()[0]
 
-    def set_angular_velocity(self, velocity):
+    def set_angular_velocity(self, angular_velocity):
         """
         Sets the angular velocity of the prim in stage.
 
         Args:
-            velocity (np.ndarray): angular velocity to set the rigid prim to. Shape (3,).
+            angular_velocity (np.ndarray): angular velocity to set the rigid prim to. Shape (3,).
         """
-        self._rigid_prim_view.set_angular_velocities(velocity[None, :])
+        lin_vel = self.get_linear_velocity()
+        vel = np.concatenate([lin_vel, angular_velocity])
+        self.set_velocity(vel)
 
     def get_angular_velocity(self):
         """

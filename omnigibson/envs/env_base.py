@@ -64,7 +64,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._flatten_obs_space = self.env_config["flatten_obs_space"]
         self.physics_frequency = self.env_config["physics_frequency"]
         self.action_frequency = self.env_config["action_frequency"]
-        self.device = self.env_config["device"]
         self._initial_pos_z_offset = self.env_config["initial_pos_z_offset"]    # how high to offset object placement to account for one action step of dropping
 
         # Create the scene graph builder
@@ -204,7 +203,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # Set the rendering settings
         og.sim.viewer_width = self.render_config["viewer_width"]
         og.sim.viewer_height = self.render_config["viewer_height"]
-        og.sim.device = self.device
 
         assert og.sim.is_stopped(), "Simulator must be stopped after loading scene!"
 

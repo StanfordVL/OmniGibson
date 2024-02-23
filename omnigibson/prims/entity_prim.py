@@ -125,8 +125,8 @@ class EntityPrim(XFormPrim):
         # Prepare the articulation view.
         if self.n_joints > 0:
             # Import now to avoid too-eager load of Omni classes due to inheritance
-            from omnigibson.utils.deprecated_utils import ArticulationView
-            self._articulation_view_direct = ArticulationView(f"{self._prim_path}/{self.root_link_name}")
+            from omnigibson.utils.deprecated_utils import RetensorArticulationView
+            self._articulation_view_direct = RetensorArticulationView(f"{self._prim_path}/{self.root_link_name}")
 
         # Set visual only flag
         # This automatically handles setting collisions / gravity appropriately per-link
@@ -1233,7 +1233,7 @@ class EntityPrim(XFormPrim):
         # normal method for computing bounding box
         if self._prim_type == PrimType.CLOTH:
             particle_contact_offset = self.root_link.cloth_system.particle_contact_offset
-            particle_positions = self.root_link.compute_particle_positions()
+            particle_positions = self.root_link.get_particle_positions()
             aabb_lo, aabb_hi = np.min(particle_positions, axis=0) - particle_contact_offset, \
                                np.max(particle_positions, axis=0) + particle_contact_offset
         else:
@@ -1367,8 +1367,8 @@ class EntityPrim(XFormPrim):
         """
         Zero out all velocities for this prim
         """
-        self.set_linear_velocity(velocity=np.zeros(3))
-        self.set_angular_velocity(velocity=np.zeros(3))
+        self.set_linear_velocity(np.zeros(3))
+        self.set_angular_velocity(np.zeros(3))
         for joint in self._joints.values():
             joint.keep_still()
         # Make sure object is awake

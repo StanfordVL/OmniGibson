@@ -1,14 +1,8 @@
 import numpy as np
 
 import omnigibson as og
-from omnigibson.macros import gm
 from omnigibson.utils.constants import PrimType
 from omnigibson.object_states import Overlaid
-
-
-# Make sure object states and GPU dynamics are enabled (GPU dynamics needed for cloth)
-gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -67,7 +61,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     print("\nTry dragging cloth around with CTRL + Left-Click to see the Overlaid state change:\n")
 
     while steps != max_steps:
-        print(f"Overlaid {carpet.states[Overlaid].get_value(breakfast_table)}    ", end="\r")
+        print(f"Overlaid {carpet.states[Overlaid].get_value(breakfast_table)}. Avg keypoint pos {np.mean(carpet.root_link.keypoint_particle_positions, axis=0)}    ", end="\r")
         env.step(np.array([]))
 
     # Shut down env at the end

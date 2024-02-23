@@ -5,9 +5,7 @@ from omnigibson import object_states
 from omnigibson.macros import gm
 from omnigibson.utils.constants import ParticleModifyCondition
 
-# Make sure object states are enabled and GPU dynamics are used
-gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
+# Enable HQ rendering for better visual fidelity
 gm.ENABLE_HQ_RENDERING = True
 
 
