@@ -81,8 +81,6 @@ def view_object(cat, mdl):
     if og.sim:
         og.sim.clear()
 
-    print("\n\nNow processing:", cat, mdl)
-
     cfg = {
         "scene": {
             "type": "Scene",
@@ -102,18 +100,20 @@ def view_object(cat, mdl):
     env = og.Environment(configs=cfg)
     og.sim.step()
 
+    water = get_system("water")
     fillable = env.scene.object_registry("name", "fillable")
     fillable.set_position([0, 0, fillable.aabb_extent[2]])
     og.sim.step()
 
     # Reset keyboard bindings
-    KeyboardEventHandler.reset()
+    KeyboardEventHandler.KEYBOARD_CALLBACKS = {}
+
+    print("\n\nNow processing:", cat, mdl)
 
     # Create the water resetter
-    water = get_system("water")
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.R,
-        callback_fn=lambda: water.remove_all_particles(),
+        callback_fn=lambda: xwater.remove_all_particles(),
     )
     print("Press R to remove all water")
 
