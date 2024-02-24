@@ -5,6 +5,7 @@ import glob
 import pathlib
 import numpy as np
 import omnigibson as og
+from omnigibson.objects import DatasetObject
 from omnigibson.macros import gm
 from omnigibson.systems.system_base import get_system
 from omnigibson.utils.ui_utils import KeyboardEventHandler
@@ -280,6 +281,9 @@ def main():
     ]
 
     for cat, mdl in tqdm.tqdm(fillables):
+        if not os.path.exists(DatasetObject.get_usd_path(cat, mdl)):
+            print(f"Skipping {cat}/{mdl} because it does not exist")
+            continue
         view_object(cat, mdl)
 
 
