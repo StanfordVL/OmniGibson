@@ -156,6 +156,27 @@ def view_object(cat, mdl):
     )
     print("Press L to indicate neither option works despite object being fillable (hand-annotate).")
 
+    # Skip with assignment that says we should fix object orientation and retry
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.I,
+        callback_fn=lambda: save_assignment_and_stop("fixorn"),
+    )
+    print("Press I to indicate we should retry after fixing object orientation.")
+
+    # Skip with assignment that says we should remove the fillable annotation from the object
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.O,
+        callback_fn=lambda: save_assignment_and_stop("notfillable"),
+    )
+    print("Press O to indicate we should remove the fillable annotation from the object.")
+
+    # Skip with assignment that says we should use the human-annotated volume.
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.P,
+        callback_fn=lambda: save_assignment_and_stop("human"),
+    )
+    print("Press P to indicate we should use the human-annotated volume because generation will fail.")
+
     dip_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_dip.obj"
     if dip_path.exists():
         # Find the scale the mesh was generated at
@@ -236,9 +257,9 @@ def main():
     idxes = int(sys.argv[2])
     salt = sys.argv[3]
 
-    # Get all models that have a fillable file.
-    fillable_ids = glob.glob(os.path.join(gm.DATASET_PATH, "objects/*/*/fillable_*.obj"))
-    fillables = sorted({tuple(pathlib.Path(fillable_id).parts[-3:-1]) for fillable_id in fillable_ids})
+    # Get all the models that are fillable-annotated
+    from bddl.knowledge_base import Object
+    fillables = sorted(o.name.split("-") for o in Object.all_objects() if any(p.name == "fillable" for p in o.category.synset.properties))
 
     # Get the ones that don't have a fillable assignment
     assignments = get_assignments()
