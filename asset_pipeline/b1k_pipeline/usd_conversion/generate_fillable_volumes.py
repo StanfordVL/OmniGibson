@@ -12,9 +12,8 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR, launch_cluster
 
-WORKER_COUNT = 2
+WORKER_COUNT = 4
 BATCH_SIZE = 1
-RETRY = False
 
 ids = {
     "dhkkfo",
@@ -643,8 +642,14 @@ ids = {
 }
 
 
-def run_on_batch(dataset_path, batch):
-    python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.generate_fillable_volumes_process", dataset_path] + batch
+def run_on_batch(dataset_path, batch, mode):
+    if mode == "ray":
+        script = "b1k_pipeline.usd_conversion.generate_fillable_volumes_process_ray"
+    elif mode == "dip":
+        script = "b1k_pipeline.usd_conversion.generate_fillable_volumes_process_dip"
+    else:
+        raise ValueError(f"Unknown mode: {mode}. Choose either ray or dip.")
+    python_cmd = ["python", "-m", script, dataset_path] + batch
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
     obj = batch[0][:-1].split("/")[-1]
     with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{obj}.err", "w") as ferr:
@@ -668,9 +673,6 @@ def main():
             for item in tqdm.tqdm(objdir_glob):
                 if fs.path.parts(item.path)[-1] not in ids:
                     continue
-                # Skip the object if we've already done it.
-                if out_fs.exists(fs.path.join(item.path, "fillable.obj")):
-                    continue
                 fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path))
 
             print("Launching cluster...")
@@ -688,74 +690,58 @@ def main():
             for start in range(0, len(object_glob), batch_size):
                 end = start + batch_size
                 batch = object_glob[start:end]
-                worker_future = dask_client.submit(
-                    run_on_batch,
-                    dataset_fs.getsyspath("/"),
-                    batch,
-                    pure=False)
-                futures[worker_future] = batch
+
+                # First the logic for the ray method
+                ray_outputs = [fs.path.join(x, "fillable_ray.obj") for x in batch]
+                ray_remaining = list(zip(*[(x, y) for x, y in zip(batch, ray_outputs) if not out_fs.exists(y)]))
+                if ray_remaining:
+                    ray_batch, ray_outputs = ray_remaining
+                    worker_future = dask_client.submit(
+                        run_on_batch,
+                        dataset_fs.getsyspath("/"),
+                        list(ray_batch),
+                        "ray",
+                        pure=False)
+                    futures[worker_future] = list(ray_outputs)
+
+                # Then the dip method.
+                dip_outputs = [fs.path.join(x, "fillable_dip.obj") for x in batch]
+                dip_remaining = list(zip(*[(x, y) for x, y in zip(batch, dip_outputs) if not out_fs.exists(y)]))
+                if dip_remaining:
+                    dip_batch, dip_outputs = dip_remaining
+                    worker_future = dask_client.submit(
+                        run_on_batch,
+                        dataset_fs.getsyspath("/"),
+                        list(dip_batch),
+                        "dip",
+                        pure=False)
+                    futures[worker_future] = list(dip_outputs)
 
             # Wait for all the workers to finish
             print("Queued all batches. Waiting for them to finish...")
             logs = []
-            while True:
-                for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
-                    # Check the batch results.
-                    batch = futures[future]
-                    if future.exception():
-                        e = future.exception()
-                        # logs.append({"stdout": e.stdout.decode("utf-8"), "stderr": e.stderr.decode("utf-8")})
-                        print(e)
-                    else:
-                        out = future.result()
-                        # logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
-
-                    # Remove everything that failed and make a new batch from them.
-                    if RETRY:
-                      new_batch = []
-                      for item in batch:
-                          item_dir = dataset_fs.opendir(item)
-                          if not item_dir.exists("fillable.obj"):
-                              print("Could not find", item)
-                              new_batch.append(item)
-
-                      # If there's nothing to requeue, we are good!
-                      if not new_batch:
-                          continue
-
-                      # Otherwise, decide if we are going to requeue or just skip.
-                      if len(batch) == 1:
-                          print(f"Failed on a single item {batch[0]}. Skipping.")
-                          failed_objects.add(batch[0])
-                      else:
-                          print(f"Subdividing batch of length {len(new_batch)}")
-                          batch_size = len(new_batch) // 2
-                          subbatches = [new_batch[:batch_size], new_batch[batch_size:]]
-                          for subbatch in subbatches:
-                              if not subbatch:
-                                  continue
-                              worker_future = dask_client.submit(
-                                  run_on_batch,
-                                  dataset_fs.getsyspath("/"),
-                                  subbatch,
-                                  pure=False)
-                              futures[worker_future] = subbatch
-                          del futures[future]
-
-                          # Restart the for loop so that the counter can update
-                          break
+            for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
+                # Check the batch results.
+                batch = futures[future]
+                if future.exception():
+                    e = future.exception()
+                    # logs.append({"stdout": e.stdout.decode("utf-8"), "stderr": e.stderr.decode("utf-8")})
+                    print(e)
                 else:
-                    # Completed successfully - break out of the while loop.
-                    break
+                    out = future.result()
+                    # logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
 
-            # Move the OBJs to the output FS
-            print("Copying OBJs to output FS...")
-            usd_glob = [x.path for x in dataset_fs.glob("objects/*/*/fillable.obj")]
-            for item in tqdm.tqdm(usd_glob):
-                out_fs.makedirs(fs.path.dirname(item))
-                fs.copy.copy_file(dataset_fs, item, out_fs, item)
+                # Copy the object to the output fs
+                for item in batch:
+                    dirpath = fs.path.dirname(item)
+                    basename = fs.path.basename(item)
+                    dataset_dir = dataset_fs.opendir(dirpath)
+                    if dataset_dir.exists(basename):
+                        fs.copy.copy_file(dataset_dir, basename, out_fs.makedirs(dirpath, recreate=True), basename)
 
-            print("Done processing. Archiving things now.")
+            # Finish up.
+            usd_glob = [x.path for x in dataset_fs.glob("objects/*/*/*.obj")]
+            print(f"Done processing. Added {len(usd_glob)} objects. Archiving things now.")
 
         # Save the logs
         with pipeline_fs.pipeline_output().open("generate_fillable_volumes_flat.json", "w") as f:

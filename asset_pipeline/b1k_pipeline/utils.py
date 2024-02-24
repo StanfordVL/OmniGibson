@@ -11,6 +11,11 @@ import trimesh.resolvers
 import yaml
 import subprocess
 
+try:
+    import docker
+except ImportError:
+    pass
+
 PIPELINE_ROOT = pathlib.Path(__file__).resolve().parents[1]
 TMP_DIR = PIPELINE_ROOT / "tmp"
 PARAMS_FILE = PIPELINE_ROOT / "params.yaml"
@@ -113,12 +118,10 @@ def save_mesh(mesh, fs, name, **kwargs):
         return mesh.export(f, resolver=FSResolver(fs), file_type="obj", **kwargs)
 
 def create_docker_container(cl, hostname:str, i: int):
-    import docker
-
     name = f"ig_pipeline_{i}"
     try:
         ctr = cl.containers.get(name)
-    except docker.errors.NotFound:
+    except:
         gpu = i % 2
         ctr = cl.containers.create(
             name=name,
@@ -150,7 +153,6 @@ def launch_cluster(worker_count):
     elif CLUSTER_MODE == "slurm":
         subprocess.run('ssh sc.stanford.edu "cd /cvgl2/u/cgokmen/ig_pipeline/b1k_pipeline/docker; sbatch --parsable run_worker_slurm.sh {hostname}:8786"', shell=True, check=True)
     elif CLUSTER_MODE == "docker":
-        import docker
         rtdir = os.environ["XDG_RUNTIME_DIR"]
         client = docker.DockerClient(base_url=f"unix://{rtdir}/docker.sock")
         client.images.pull("stanfordvl/ig_pipeline")
