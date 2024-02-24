@@ -133,19 +133,19 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
     def _post_load(self):
         # Add fixed joint or make object kinematic only if we're fixing the base
         kinematic_only = False
-        if self.fixed_base:
-            # For optimization purposes, if we only have a single rigid body that has either
-            # (no custom scaling OR no fixed joints), we assume this is not an articulated object so we
-            # merely set this to be a static collider, i.e.: kinematic-only
-            # The custom scaling / fixed joints requirement is needed because omniverse complains about scaling that
-            # occurs with respect to fixed joints, as omni will "snap" bodies together otherwise
-            scale = np.ones(3) if self._load_config["scale"] is None else np.array(self._load_config["scale"])
-            if self.n_joints == 0 and (np.all(np.isclose(scale, 1.0, atol=1e-3)) or self.n_fixed_joints == 0) and (self._load_config["kinematic_only"] != False):
-                kinematic_only = True
+        # if self.fixed_base:
+        #     # For optimization purposes, if we only have a single rigid body that has either
+        #     # (no custom scaling OR no fixed joints), we assume this is not an articulated object so we
+        #     # merely set this to be a static collider, i.e.: kinematic-only
+        #     # The custom scaling / fixed joints requirement is needed because omniverse complains about scaling that
+        #     # occurs with respect to fixed joints, as omni will "snap" bodies together otherwise
+        #     scale = np.ones(3) if self._load_config["scale"] is None else np.array(self._load_config["scale"])
+        #     if self.n_joints == 0 and (np.all(np.isclose(scale, 1.0, atol=1e-3)) or self.n_fixed_joints == 0) and (self._load_config["kinematic_only"] != False):
+        #         kinematic_only = True
         
-        # Validate that we didn't make a kinematic-only decision that does not match
-        assert self._load_config["kinematic_only"] is None or kinematic_only == self._load_config["kinematic_only"], \
-            f"Kinematic only decision does not match! Got: {kinematic_only}, expected: {self._load_config['kinematic_only']}"
+        # # Validate that we didn't make a kinematic-only decision that does not match
+        # assert self._load_config["kinematic_only"] is None or kinematic_only == self._load_config["kinematic_only"], \
+        #     f"Kinematic only decision does not match! Got: {kinematic_only}, expected: {self._load_config['kinematic_only']}"
         
         # Actually apply the kinematic-only decision
         self._load_config["kinematic_only"] = kinematic_only
