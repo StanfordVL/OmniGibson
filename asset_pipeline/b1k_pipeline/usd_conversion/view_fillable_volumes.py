@@ -158,6 +158,13 @@ def view_object(cat, mdl):
 
     # Skip with assignment that says we should fix object orientation and retry
     KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.U,
+        callback_fn=lambda: save_assignment_and_stop("changecollision"),
+    )
+    print("Press U to indicate we should change the collision mesh to another automated option.")
+
+    # Skip with assignment that says we should fix object orientation and retry
+    KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.I,
         callback_fn=lambda: save_assignment_and_stop("fixorn"),
     )
