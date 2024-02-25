@@ -5,6 +5,7 @@ import glob
 import pathlib
 import numpy as np
 import omnigibson as og
+from omnigibson.objects import DatasetObject
 from omnigibson.macros import gm
 from omnigibson.systems.system_base import get_system
 from omnigibson.utils.ui_utils import KeyboardEventHandler
@@ -12,6 +13,7 @@ import omnigibson.lazy as lazy
 import trimesh
 import json
 import tqdm
+import random
 
 gm.HEADLESS = False
 gm.USE_ENCRYPTED_ASSETS = True
@@ -35,7 +37,7 @@ def add_assignment(mdl, assignment):
     with open(ASSIGNMENT_FILE, "w") as f:
         json.dump(assignments, f)
 
-def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.)):
+def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.), size=1.):
     draw = lazy.omni.isaac.debug_draw._debug_draw.acquire_debug_draw_interface()
     edge_vert_idxes = mesh.edges_unique
     N = len(edge_vert_idxes)
@@ -62,14 +64,18 @@ def generate_particles_in_mesh(mesh, parent_pos):
     # 1e-10 is added because the extent might be an exact multiple of particle radius
     arrs = [np.arange(l + particle_radius, h - particle_radius + 1e-10, particle_radius * 2)
             for l, h, n in zip(low, high, n_particles_per_axis)]
-    # Generate 3D-rectangular grid of points
-    particle_positions = np.stack([arr.flatten() for arr in np.meshgrid(*arrs)]).T + parent_pos[None, :]
+    
+    # Generate 3D-rectangular grid of points at mesh pos
+    particle_positions = np.stack([arr.flatten() for arr in np.meshgrid(*arrs)]).T
 
     # Remove the particles that are outside
     particle_positions = particle_positions[mesh.contains(particle_positions)]
 
+    # Move the particle positions to the parent position
+    particle_positions += parent_pos[None, :]
+
     # Remove the particles that are colliding with the object
-    # particle_positions = particle_positions[np.where(water.check_in_contact(particle_positions) == 0)[0]]
+    particle_positions = particle_positions[np.where(water.check_in_contact(particle_positions) == 0)[0]]
 
     water.generate_particles(
         positions=particle_positions,
@@ -81,9 +87,10 @@ def view_object(cat, mdl):
     if og.sim:
         og.sim.clear()
 
-    print("\n\nNow processing:", cat, mdl)
-
     cfg = {
+        "env": {
+            "physics_frequency": 120,
+        },
         "scene": {
             "type": "Scene",
         },
@@ -102,15 +109,17 @@ def view_object(cat, mdl):
     env = og.Environment(configs=cfg)
     og.sim.step()
 
+    water = get_system("water")
     fillable = env.scene.object_registry("name", "fillable")
     fillable.set_position([0, 0, fillable.aabb_extent[2]])
     og.sim.step()
 
     # Reset keyboard bindings
-    KeyboardEventHandler.reset()
+    KeyboardEventHandler.KEYBOARD_CALLBACKS = {}
+
+    print("\n\nNow processing:", cat, mdl)
 
     # Create the water resetter
-    water = get_system("water")
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.R,
         callback_fn=lambda: water.remove_all_particles(),
@@ -148,7 +157,35 @@ def view_object(cat, mdl):
     )
     print("Press L to indicate neither option works despite object being fillable (hand-annotate).")
 
-    dip_path = pathlib.Path(__file__).parents[2] / "artifacts/parallels/fillable_volumes/objects" / cat / mdl / "fillable_dip.obj"
+    # Skip with assignment that says we should fix object orientation and retry
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.U,
+        callback_fn=lambda: save_assignment_and_stop("changecollision"),
+    )
+    print("Press U to indicate we should change the collision mesh to another automated option.")
+
+    # Skip with assignment that says we should fix object orientation and retry
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.I,
+        callback_fn=lambda: save_assignment_and_stop("fixorn"),
+    )
+    print("Press I to indicate we should retry after fixing object orientation.")
+
+    # Skip with assignment that says we should remove the fillable annotation from the object
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.O,
+        callback_fn=lambda: save_assignment_and_stop("notfillable"),
+    )
+    print("Press O to indicate we should remove the fillable annotation from the object.")
+
+    # Skip with assignment that says we should use the human-annotated volume.
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.P,
+        callback_fn=lambda: save_assignment_and_stop("human"),
+    )
+    print("Press P to indicate we should use the human-annotated volume because generation will fail.")
+
+    dip_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_dip.obj"
     if dip_path.exists():
         # Find the scale the mesh was generated at
         scale = np.minimum(1, MAX_BBOX / np.max(fillable.native_bbox))
@@ -175,7 +212,7 @@ def view_object(cat, mdl):
         )
         print("Press X to choose the dip (red) option.")
 
-    ray_path = pathlib.Path(__file__).parents[2] / "artifacts/parallels/fillable_volumes/objects" / cat / mdl / "fillable_ray.obj"
+    ray_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_ray.obj"
     if ray_path.exists():
         ray_mesh = trimesh.load(ray_path, force="mesh")
 
@@ -196,6 +233,28 @@ def view_object(cat, mdl):
         )
         print("Press S to choose the ray (blue) option.")
 
+    # Now the combined version
+    if dip_path.exists() and ray_path.exists():
+        # Check if either mesh contains the entire other mesh
+        combined_mesh = trimesh.convex.convex_hull(np.concatenate([dip_mesh.vertices, ray_mesh.vertices], axis=0))
+        if not np.allclose(combined_mesh.volume, dip_mesh.volume, rtol=1e-3) and not np.allclose(combined_mesh.volume, ray_mesh.volume, rtol=1e-3):
+            # Draw the mesh
+            draw_mesh(combined_mesh, fillable.get_position(), color=(1., 0., 1., 1.), size=0.5)
+
+            # Add the combined option filler
+            KeyboardEventHandler.add_keyboard_callback(
+                key=lazy.carb.input.KeyboardInput.Q,
+                callback_fn=lambda: generate_particles_in_mesh(combined_mesh, fillable.get_position()),
+            )
+            print("Press Q to fill combined (purple) with water")
+
+            # Add the combined option chooser
+            KeyboardEventHandler.add_keyboard_callback(
+                key=lazy.carb.input.KeyboardInput.W,
+                callback_fn=lambda: save_assignment_and_stop("combined"),
+            )
+            print("Press W to choose the combined (purple) option.")
+
 
     while keep_rendering:
         og.sim.step()
@@ -204,10 +263,11 @@ def view_object(cat, mdl):
 def main():
     idx = int(sys.argv[1])
     idxes = int(sys.argv[2])
+    salt = sys.argv[3]
 
-    # Get all models that have a fillable file.
-    fillable_ids = glob.glob(os.path.join(gm.DATASET_PATH, "objects/*/*/fillable_*.obj"))
-    fillables = sorted({pathlib.Path(fillable_id).parts[-3:-1] for fillable_id in fillable_ids})
+    # Get all the models that are fillable-annotated
+    from bddl.knowledge_base import Object
+    fillables = sorted(o.name.split("-") for o in Object.all_objects() if any(p.name == "fillable" for p in o.category.synset.properties))
 
     # Get the ones that don't have a fillable assignment
     assignments = get_assignments()
@@ -217,9 +277,13 @@ def main():
     fillables = [
         (cat, mdl)
         for cat, mdl in fillables
-        if int(hashlib.md5(mdl.encode()).hexdigest(), 16) % idxes != idx]
+        if int(hashlib.md5((mdl + salt).encode()).hexdigest(), 16) % idxes == idx
+    ]
 
     for cat, mdl in tqdm.tqdm(fillables):
+        if not os.path.exists(DatasetObject.get_usd_path(cat, mdl).replace(".usd", ".encrypted.usd")):
+            print(f"Skipping {cat}/{mdl} because it does not exist")
+            continue
         view_object(cat, mdl)
 
 
