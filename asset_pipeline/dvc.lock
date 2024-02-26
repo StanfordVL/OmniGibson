@@ -6630,18 +6630,18 @@ stages:
       md5: 8f67c8a3cae22b0303e1082e4d76f9c9
       size: 23730
     - path: cad/objects/batch-09/artifacts/object_list.json
-      md5: df436496d678097bbd8ebabd4272df0a
-      size: 40673
+      md5: a20a2f40de76ee4f7709c6f6ffd9a491
+      size: 41035
     - path: cad/objects/batch-09/processed.max
-      md5: a5d83cd7a2895f6786e928fc277424e4
-      size: 129970750
+      md5: 9c6d4ee3013bc06f565ecb9ecefff27f
+      size: 129995326
     outs:
     - path: cad/objects/batch-09/artifacts/export_meshes.json
-      md5: ead315b0865fdf5e09679896bf01a241
-      size: 22443
+      md5: 588301c48e1409ea65816d68fcd353ac
+      size: 22696
     - path: cad/objects/batch-09/artifacts/meshes.zip
-      md5: 202c9a3025043c10fee46597d0fc1789
-      size: 197750765
+      md5: cf41c227f1c2b91f817ac20c5d1894d7
+      size: 197870388
   export_meshes@objects/batch-02:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-02/processed.max b1k_pipeline/max/export_meshes.py
     deps:
