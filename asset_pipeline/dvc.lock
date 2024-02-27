@@ -162,8 +162,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/scenes/Pomaria_0_garden/processed.max
-      md5: 403a550fc56b583b971d942239087478
-      size: 140927396
+      md5: d66724054b8b4235ddba885fa5a0fdb6
+      size: 140476716
     outs:
     - path: cad/scenes/Pomaria_0_garden/artifacts/object_list.json
       md5: ffea5c1806005f81dd30a1eef57a0177
@@ -4002,8 +4002,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/scenes/Pomaria_0_garden/processed.max
-      md5: 403a550fc56b583b971d942239087478
-      size: 140927396
+      md5: d66724054b8b4235ddba885fa5a0fdb6
+      size: 140476716
     outs:
     - path: cad/scenes/Pomaria_0_garden/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -7004,8 +7004,8 @@ stages:
       md5: 6bcb50d56fc03f16bdcb731d4da4d014
       size: 17692
     - path: cad/scenes/Pomaria_0_garden/artifacts/export_meshes.json
-      md5: 0a59a19733c11bce0f4641a0d3d84a2a
-      size: 30160
+      md5: 64c3492669e7dc8b12b11b824fa7305b
+      size: 30255
     - path: cad/scenes/Pomaria_0_int/artifacts/export_meshes.json
       md5: e1b6f59c709eee2d9477f52d44775737
       size: 10933
@@ -9391,15 +9391,15 @@ stages:
       md5: ffea5c1806005f81dd30a1eef57a0177
       size: 83926
     - path: cad/scenes/Pomaria_0_garden/processed.max
-      md5: 403a550fc56b583b971d942239087478
-      size: 140927396
+      md5: d66724054b8b4235ddba885fa5a0fdb6
+      size: 140476716
     outs:
     - path: cad/scenes/Pomaria_0_garden/artifacts/export_meshes.json
-      md5: 0a59a19733c11bce0f4641a0d3d84a2a
-      size: 30160
+      md5: 64c3492669e7dc8b12b11b824fa7305b
+      size: 30255
     - path: cad/scenes/Pomaria_0_garden/artifacts/meshes.zip
-      md5: 345c7f0da126048445ed115fd911bd80
-      size: 638027924
+      md5: cc0a3a45d6d0beff0d168d76ca0185ab
+      size: 637651000
   export_scene@scenes/restaurant_brunch:
     cmd: python -m b1k_pipeline.export_scene scenes/restaurant_brunch
     deps:
