@@ -102,8 +102,7 @@ def load_mesh(mesh_fs, mesh_fns, basename, index, offset=None, scale=None):
 
 
 def select_mesh(target_output_fs, mesh_name):
-    with suppress_stdout():
-        p.connect(p.GUI)
+    p.resetSimulation()
     
     try:
         p.addUserDebugText(
@@ -159,9 +158,8 @@ def select_mesh(target_output_fs, mesh_name):
         complaint = complaint if complaint else None
 
         return mesh_opt, complaint
-    finally:
-        with suppress_stdout():
-            p.disconnect()
+    except:
+        pass
 
 
 def main():
@@ -235,6 +233,7 @@ def main():
         print("Total objects (including completed) in your batch:", total_in_batch)
 
         # Start iterating.
+        p.connect(p.GUI)
         for i, (mesh_name, target) in enumerate(candidates):
             print("\n--------------------------------------------------------------------------")
             print(f"{i + 1} / {len(candidates)}: {mesh_name} (from {target})\n")
@@ -272,6 +271,7 @@ def main():
                     complaints.append(complaint)
                     with target_fs.open(complaints_file, "w") as f:
                         json.dump(complaints, f, indent=4)
+        p.disconnect()
 
 
 if __name__ == "__main__":
