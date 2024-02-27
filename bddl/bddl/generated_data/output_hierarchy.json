@@ -313,8 +313,7 @@
                                       "hasModel": true,
                                       "categories": [
                                         "carafe",
-                                        "decanter",
-                                        "fragrance_decanter"
+                                        "decanter"
                                       ]
                                     },
                                     {
@@ -903,13 +902,6 @@
                                   "hasModel": true,
                                   "categories": [
                                     "saddle_soap_bottle"
-                                  ]
-                                },
-                                {
-                                  "name": "salad__bowl.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "salad_bowl"
                                   ]
                                 },
                                 {
@@ -5064,8 +5056,7 @@
                                               "hasModel": true,
                                               "categories": [
                                                 "crock_pot",
-                                                "instant_pot",
-                                                "oden_cooker"
+                                                "instant_pot"
                                               ]
                                             },
                                             {
@@ -5080,6 +5071,13 @@
                                               "hasModel": true,
                                               "categories": [
                                                 "rice_cooker"
+                                              ]
+                                            },
+                                            {
+                                              "name": "oden_cooker.n.01",
+                                              "hasModel": true,
+                                              "categories": [
+                                                "oden_cooker"
                                               ]
                                             }
                                           ]
@@ -9185,6 +9183,90 @@
                                   "categories": [
                                     "cup_of_ranch"
                                   ]
+                                },
+                                {
+                                  "name": "jar__of__sesame_seed.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_sesame_seed"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__clove.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_clove"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__coffee.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_coffee"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__strawberry_jam.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_strawberry_jam"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__peppercorns.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_peppercorns"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__orange_jam.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_orange_jam"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__pepper_seasoning.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_pepper_seasoning"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__kidney_beans.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_kidney_beans"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__tumeric.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_tumeric"
+                                  ]
+                                },
+                                {
+                                  "name": "bottle__of__strawberry_juice.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bottle_of_strawberry_juice"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__chilli_powder.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_chilli_powder"
+                                  ]
+                                },
+                                {
+                                  "name": "jar__of__cocoa.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "jar_of_cocoa"
+                                  ]
                                 }
                               ]
                             },
@@ -9385,6 +9467,13 @@
                                               "hasModel": true,
                                               "categories": [
                                                 "french_press"
+                                              ]
+                                            },
+                                            {
+                                              "name": "espresso_machine.n.01",
+                                              "hasModel": true,
+                                              "categories": [
+                                                "espresso_machine"
                                               ]
                                             }
                                           ]
@@ -11817,6 +11906,20 @@
                           "hasModel": true,
                           "categories": [
                             "hanging"
+                          ]
+                        },
+                        {
+                          "name": "reed_diffuser.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "reed_diffuser"
+                          ]
+                        },
+                        {
+                          "name": "outline_vase.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "outline_vase"
                           ]
                         }
                       ]
