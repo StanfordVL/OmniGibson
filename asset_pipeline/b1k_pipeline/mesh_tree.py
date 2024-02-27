@@ -17,20 +17,28 @@ SCALE_MATRIX = trimesh.transformations.scale_matrix(0.001)
 
 PARTICLE_APPLIER_CONE_LENGTH = 0.3
 
+# Load the rename file
+RENAMES = {}
+with PipelineFS().open("metadata/object_renames.csv") as f:
+    for row in csv.DictReader(f):
+        key = (row["Original category (auto)"], row["ID (auto)"])
+        RENAMES[key] = row["New Category"]
+
+# Load the deletion file
+DELETION_QUEUE = set()
+with PipelineFS().open("metadata/deletion_queue.csv", "r") as f:
+    for row in csv.DictReader(f):
+        DELETION_QUEUE.add(row["Object"].strip().split("-")[1])
+
+
+def maybe_rename_category(cat, model):
+    if (cat, model) in RENAMES:
+        return RENAMES[(cat, model)]
+    return cat
+
+
 def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True, load_nonzero=True, load_meshes=True, filter_nodes=None, show_progress=False):
     G = nx.DiGraph()
-
-    # Load the rename file
-    renames = {}
-    with PipelineFS().open("metadata/object_renames.csv") as f:
-        for row in csv.DictReader(f):
-            key = (row["Original category (auto)"], row["ID (auto)"])
-            renames[key] = row["New Category"]
-
-    def maybe_rename_category(cat, model):
-        if (cat, model) in renames:
-            return renames[(cat, model)]
-        return cat
 
     # Load the collision selections
     collision_selections = {}
@@ -73,6 +81,9 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
         joint_type = match.group("joint_type")
         joint_side = match.group("joint_side")
         tags_str = match.group("tag")
+
+        if obj_model in DELETION_QUEUE:
+            continue
 
         if joint_side == "upper" and not load_upper:
             continue
