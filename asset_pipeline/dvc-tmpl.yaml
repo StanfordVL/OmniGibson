@@ -398,7 +398,7 @@ stages:
     deps:
     - artifacts/parallels/objects.zip
     - artifacts/parallels/fillable_volumes
-    - metadata/fillable_assignment.csv
+    - metadata/fillable_assignments.json
     - b1k_pipeline/aggregate_fillable_volumes.py
     outs:
     - artifacts/parallels/fillable_volumes.zip
