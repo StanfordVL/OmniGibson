@@ -67,22 +67,6 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-def timeout(timelimit):
-    def decorator(func):
-        def decorated(*args, **kwargs):
-            with futures.ThreadPoolExecutor(max_workers=1) as executor:
-                future = executor.submit(func, *args, **kwargs)
-                try:
-                    result = future.result(timelimit)
-                except futures.TimeoutError:
-                    raise TimeoutError from None
-                executor._threads.clear()
-                futures.thread._threads_queues.clear()
-                return result
-        return decorated
-    return decorator
-
-
 def save_mesh_unit_bbox(mesh, *args, **kwargs):
     mesh_copy = mesh.copy()
 
@@ -179,35 +163,6 @@ def get_part_nodes(G, root_node):
     return part_nodes
 
 
-@timeout(10)
-def compute_mesh_stable_poses(mesh):
-    return trimesh.poses.compute_stable_poses(mesh, n_samples=5, threshold=0.03)
-
-def compute_stable_poses(G, root_node):
-    return []
-
-    # First assemble a complete collision mesh
-    all_link_meshes = []
-    for link_node in nx.dfs_preorder_nodes(G, root_node):
-        collision_mesh = G.nodes[link_node]["canonical_collision_mesh"].copy()
-        mesh_pose_in_base_frame = G.nodes[link_node]["link_frame_in_base"] +  G.nodes[link_node]["mesh_in_link_frame"]
-        transform = trimesh.transformations.translation_matrix(mesh_pose_in_base_frame)
-        collision_mesh.apply_transform(transform)
-        all_link_meshes.append(collision_mesh)
-    combined_collision_mesh = trimesh.util.concatenate(all_link_meshes)
-
-    # Then run trimesh's stable pose computation.
-    poses = []
-    probs = []
-    try:
-        poses, probs = compute_mesh_stable_poses(combined_collision_mesh)
-    except:
-        print("Could not compute stable poses.")
-        pass
-
-    # Return the obtained poses.
-    return list({"prob": prob, "rotation": trimesh.transformations.quaternion_from_matrix(pose)} for pose, prob in zip(poses, probs))
-
 def get_bbox_data_for_mesh(mesh):
     axis_aligned_bbox = mesh.bounding_box
     axis_aligned_bbox_dict = {
@@ -222,6 +177,7 @@ def get_bbox_data_for_mesh(mesh):
     }
 
     return {"axis_aligned": axis_aligned_bbox_dict, "oriented": oriented_bbox_dict}
+
 
 def compute_link_aligned_bounding_boxes(G, root_node):
     link_bounding_boxes = collections.defaultdict(dict)
@@ -238,6 +194,7 @@ def compute_link_aligned_bounding_boxes(G, root_node):
                 print(f"Problem with {obj_cat}-{obj_model} link {link_name}: {str(e)}")
 
     return link_bounding_boxes
+
 
 def compute_object_bounding_box(root_node_data):
     combined_mesh = root_node_data["combined_mesh"]
@@ -589,7 +546,7 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
             out_metadata.update({
                 "base_link_offset": base_link_offset.tolist(),
                 "bbox_size": bbox_size.tolist(),
-                "orientations": compute_stable_poses(G, root_node),
+                "orientations": [],
                 "link_bounding_boxes": compute_link_aligned_bounding_boxes(G, root_node),
             })
             if openable_joint_ids:
@@ -626,8 +583,8 @@ def process_target(target, objects_path, dask_client):
             output_dirname = f"{obj_cat}/{obj_model}"
             object_futures[dask_client.submit(process_object, root_node, target, mesh_list, relevant_nodes, objects_fs.makedirs(output_dirname).getsyspath("/"), pure=False)] = str(root_node)
 
-            # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
-            wait(object_futures.keys())
+        # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
+        wait(object_futures.keys())
 
         # Accumulate the errors
         error_msg = ""
