@@ -10,7 +10,7 @@ import numpy as np
 import trimesh
 import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
-from omnigibson.utils.usd_utils import BoundingBoxAPI, create_primitive_mesh
+from omnigibson.utils.usd_utils import create_primitive_mesh
 
 from b1k_pipeline.usd_conversion.preprocess_urdf_for_metalinks import ALLOWED_META_TYPES
 
@@ -708,8 +708,7 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
     if "base_link_offset" not in data["metadata"]:
         data["metadata"]["base_link_offset"] = [0, 0, 0]
     if "bbox_size" not in data["metadata"]:
-        low_bb, high_bb = BoundingBoxAPI.compute_aabb(prim.GetPrimPath().pathString)
-        data["metadata"]["bbox_size"] = (high_bb - low_bb).tolist()
+        raise ValueError("We cannot work without a bbox size.")
 
     # Pop bb and base link offset and meta links info
     base_link_offset = data["metadata"].pop("base_link_offset")

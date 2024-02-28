@@ -35,6 +35,8 @@ def main():
             fs.copy.copy_fs(metadata_fs, dataset_fs)
             objdir_glob = list(objects_fs.glob("objects/*/*/"))
             for item in tqdm.tqdm(objdir_glob):
+                if fs.path.parts(item.path)[-1] != "xevdnl":
+                    continue
                 if objects_fs.opendir(item.path).glob("*.urdf").count().files == 0:
                     continue
                 fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path))
