@@ -478,6 +478,7 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
         link_prim_paths = [None] * n_particles if is_cloth else link_prim_paths
 
         scales = cls.sample_scales_by_group(group=group, n=n_particles) if scales is None else scales
+
         bbox_extents_local = [(cls.particle_object.aabb_extent * scale).tolist() for scale in scales]
 
         # If we're using flatcache, we need to update the object's pose on the USD manually
@@ -533,6 +534,7 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
         # For sampling particle positions, we need the global bbox extents, NOT the local extents
         # which is what we would get naively if we directly use @scales
         avg_scale = np.cbrt(np.product(obj.scale))
+
         bbox_extents_global = scales * cls.particle_object.aabb_extent.reshape(1, 3) * avg_scale
 
         if obj.prim_type == PrimType.CLOTH:
