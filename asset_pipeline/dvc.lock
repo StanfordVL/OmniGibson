@@ -13468,18 +13468,18 @@ stages:
     cmd: python -m b1k_pipeline.generate_systems
     deps:
     - path: artifacts/parallels/objects_usd.zip
-      md5: adc24f73c6499d592d019e7d0465d029
-      size: 21880213460
+      md5: 39c5c396e10ef8b5389a4d0c7c8ce9d4
+      size: 21960974863
     - path: artifacts/pipeline/usdify_objects.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: metadata/substance_hyperparams.csv
-      md5: ade1825e32fbbde9befe9c75a6b9da4e
-      size: 195205
+      md5: 50dba7450f9e61ce8733a62cd3d8131e
+      size: 187321
     outs:
     - path: artifacts/parallels/systems.zip
-      md5: 57801833b99774f2c51445bb092be8e0
-      size: 360513759
+      md5: 34e394462b0d730c8ae44d387855da51
+      size: 360454260
     - path: artifacts/pipeline/generate_systems.json
       md5: 5b64e8b89092b2e3dfd448b10700627f
       size: 17
