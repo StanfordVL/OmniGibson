@@ -40,7 +40,6 @@ def main():
                     continue
                 fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path, recreate=True))
                 fillable_path = fs.path.join(item.path, "fillable.obj")
-                assert fillable_fs.exists(fillable_path)
                 if fillable_fs.exists(fillable_path):
                     fs.copy.copy_file(fillable_fs, fillable_path, dataset_fs, fillable_path)
 
