@@ -515,11 +515,6 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
     if ALLOWED_META_TYPES[meta_link_type] not in ["primitive", "light"] and meta_link_type != "particlesource":
         return
     
-    # TODO: Reenable after fillable meshes are backported into 3ds Max.
-    # Temporarily disable importing of fillable meshes.
-    if meta_link_type in ["container"]:
-        return
-
     is_light = ALLOWED_META_TYPES[meta_link_type] == "light"
 
     for link_id, mesh_info_list in meta_link_infos.items():

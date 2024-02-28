@@ -266,6 +266,11 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model, dataset_root):
             for meta_link_name, ml_attrs in child_link_attrs.items():
                 assert meta_link_name in ALLOWED_META_TYPES, f"meta_link_name {meta_link_name} not in {ALLOWED_META_TYPES}"
 
+                # TODO: Reenable after fillable meshes are backported into 3ds Max.
+                # Temporarily disable importing of fillable meshes.
+                if meta_link_name in ["container"]:
+                    continue
+
                 for ml_id, attrs_list in ml_attrs.items():
                     if len(attrs_list) > 0:
                         if ALLOWED_META_TYPES[meta_link_name] != "dimensionless":
