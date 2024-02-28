@@ -49506,6 +49506,13 @@
         },
         "freezable": {},
         "grassyable": {},
+        "heatSource": {
+            "requires_toggled_on": 1.0,
+            "requires_closed": 0.0,
+            "requires_inside": 0.0,
+            "temperature": 260.0,
+            "heating_rate": 0.01
+        },
         "heatable": {
             "heat_temperature": 40.0
         },
@@ -49519,6 +49526,7 @@
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
+        "toggleable": {},
         "wetable": {},
         "wrinkleable": {}
     },
