@@ -7,6 +7,7 @@ from os.path import exists
 from pathlib import Path
 
 import numpy as np
+import trimesh
 import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import BoundingBoxAPI, create_primitive_mesh
@@ -513,6 +514,11 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
     assert meta_link_type in ALLOWED_META_TYPES
     if ALLOWED_META_TYPES[meta_link_type] not in ["primitive", "light"] and meta_link_type != "particlesource":
         return
+    
+    # TODO: Reenable after fillable meshes are backported into 3ds Max.
+    # Temporarily disable importing of fillable meshes.
+    if meta_link_type in ["container"]:
+        return
 
     is_light = ALLOWED_META_TYPES[meta_link_type] == "light"
 
@@ -732,6 +738,13 @@ def import_obj_metadata(obj_category, obj_model, dataset_root, import_render_cha
         for meta_link_type, meta_link_infos in link_metadata.items():
             process_meta_link(stage, obj_model, meta_link_type, meta_link_infos)
 
+    # Apply temporary fillable meshes.
+    # TODo: Disable after fillable meshes are backported into 3ds Max.
+    fillable_path = f"{model_root_path}/fillable.obj"
+    if exists(fillable_path):
+        mesh = trimesh.load(fillable_path, force="mesh")
+        import_fillable_mesh(stage, obj_model, mesh)
+
     print("Done processing meta links")
 
     # # Update metalink info
@@ -899,3 +912,57 @@ def recursively_replace_list_of_dict(dic):
             dic[k] = recursively_replace_list_of_dict(v)
 
     return dic
+
+def import_fillable_mesh(stage, obj_model, mesh):
+    def _create_mesh(prim_path):
+        stage.DefinePrim(prim_path, "Mesh")
+        mesh = lazy.pxr.UsdGeom.Mesh.Define(stage, prim_path)
+        return mesh
+
+    def _create_fixed_joint(prim_path, body0, body1):
+        # Create the joint
+        joint = lazy.pxr.UsdPhysics.FixedJoint.Define(stage, prim_path)
+
+        # Possibly add body0, body1 targets
+        if body0 is not None:
+            assert stage.GetPrimAtPath(body0).IsValid(), f"Invalid body0 path specified: {body0}"
+            joint.GetBody0Rel().SetTargets([lazy.pxr.Sdf.Path(body0)])
+        if body1 is not None:
+            assert stage.GetPrimAtPath(body1).IsValid(), f"Invalid body1 path specified: {body1}"
+            joint.GetBody1Rel().SetTargets([lazy.pxr.Sdf.Path(body1)])
+
+        # Get the prim pointed to at this path
+        joint_prim = stage.GetPrimAtPath(prim_path)
+
+        # Apply joint API interface
+        lazy.pxr.PhysxSchema.PhysxJointAPI.Apply(joint_prim)
+
+        # Possibly (un-/)enable this joint
+        joint_prim.GetAttribute("physics:jointEnabled").Set(True)
+
+        # Return this joint
+        return joint_prim
+
+    container_link_path = f"/{obj_model}/container_0_0_link"
+    container_link = stage.DefinePrim(container_link_path, "Xform")
+
+    for i, submesh in enumerate(mesh.split()):
+        mesh_prim = _create_mesh(prim_path=f"{container_link_path}/mesh_{i}").GetPrim()
+
+        # Write mesh data
+        mesh_prim.GetAttribute("faceVertexCounts").Set(np.ones(len(submesh.faces), dtype=int) * 3)
+        mesh_prim.GetAttribute("points").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(submesh.vertices))
+        mesh_prim.GetAttribute("faceVertexIndices").Set(np.arange(len(submesh.vertices)))
+        mesh_prim.GetAttribute("normals").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(submesh.vertex_normals))
+        # mesh_prim.GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(np.zeros((len(submesh.vertices), 2))))
+
+        # Make invisible
+        lazy.pxr.UsdGeom.Imageable(mesh_prim).MakeInvisible()
+
+        # Create fixed joint
+        obj_root_path = f"/{obj_model}/base_link"
+        _create_fixed_joint(
+            prim_path=f"{obj_root_path}/container_0_{i}_joint",
+            body0=f"{obj_root_path}",
+            body1=f"{container_link_path}",
+        )
