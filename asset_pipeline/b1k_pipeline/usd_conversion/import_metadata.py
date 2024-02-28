@@ -944,10 +944,15 @@ def import_fillable_mesh(stage, obj_model, mesh):
         mesh_prim = _create_mesh(prim_path=f"{container_link_path}/mesh_{i}").GetPrim()
 
         # Write mesh data
-        mesh_prim.GetAttribute("faceVertexCounts").Set(np.ones(len(submesh.faces), dtype=int) * 3)
         mesh_prim.GetAttribute("points").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(submesh.vertices))
-        mesh_prim.GetAttribute("faceVertexIndices").Set(np.arange(len(submesh.vertices)))
         mesh_prim.GetAttribute("normals").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(submesh.vertex_normals))
+        face_indices = []
+        face_vertex_counts = []
+        for face_idx, face_vertices in enumerate(submesh.faces):
+            face_indices.extend(face_vertices)
+            face_vertex_counts.append(len(face_vertices))
+        mesh_prim.GetAttribute("faceVertexCounts").Set(np.array(face_vertex_counts, dtype=int))
+        mesh_prim.GetAttribute("faceVertexIndices").Set(np.array(face_indices, dtype=int))
         # mesh_prim.GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(np.zeros((len(submesh.vertices), 2))))
 
         # Make invisible
