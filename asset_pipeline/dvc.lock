@@ -8497,8 +8497,8 @@ stages:
       md5: 3a697ffec67cfa78eebde7eda87edd9a
       size: 4038
     - path: b1k_pipeline/usd_conversion/import_metadata.py
-      md5: d859e3ac32d0de9356d93b7acd26f938
-      size: 44574
+      md5: e12f6f59e46f07b4d8b9ce01542ade22
+      size: 44758
     - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
       md5: 3415e42a56e2179997faa8e7af512ecc
       size: 2312
@@ -8513,8 +8513,8 @@ stages:
       size: 2230
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: 9785c537b3e242f45281f443f876caac
-      size: 1022621
+      md5: 32a048c88b8aba80fed367733336ca08
+      size: 1022378
     - path: artifacts/pipeline/usdify_objects.json
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
       size: 51

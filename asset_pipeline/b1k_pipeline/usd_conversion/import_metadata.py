@@ -511,6 +511,11 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
     """
     Process a meta link by creating visual meshes or lights below it
     """
+    # TODO: Reenable after fillable meshes are backported into 3ds Max.
+    # Temporarily disable importing of fillable meshes.
+    if meta_link_type in ["container"]:
+        return
+
     assert meta_link_type in ALLOWED_META_TYPES
     if ALLOWED_META_TYPES[meta_link_type] not in ["primitive", "light"] and meta_link_type != "particlesource":
         return
