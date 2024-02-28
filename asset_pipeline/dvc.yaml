@@ -8,7 +8,6 @@ stages:
     - b1k_pipeline/aggregate_fillable_volumes.py
     outs:
     - artifacts/parallels/fillable_volumes.zip
-    - artifacts/pipeline/aggregate_fillable_volumes.json
   aggregate_metadata:
     cmd: python -m b1k_pipeline.aggregate_metadata
     deps:

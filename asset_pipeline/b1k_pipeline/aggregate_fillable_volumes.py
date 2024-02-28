@@ -31,7 +31,7 @@ def get_fillable_mesh(option, combined_object_and_volume_fs):
         ray_mesh = b1k_pipeline.utils.load_mesh(combined_object_and_volume_fs, ray_path, force="mesh")
         options["ray"] = ray_mesh
 
-    if dip_path.exists() and ray_path.exists():
+    if "dip" in options and "ray" in options:
         # Check if either mesh contains the entire other mesh
         combined_mesh = trimesh.convex.convex_hull(np.concatenate([dip_mesh.vertices, ray_mesh.vertices], axis=0))
         options["combined"] = combined_mesh
@@ -50,7 +50,7 @@ def aggregate_fillable_volumes():
         input_fs = MultiFS()
         input_fs.add_fs("objects", objects_fs)
         input_fs.add_fs("fillables", fillables_fs)
-        objdir_glob = list(input_fs.glob("objects/*/*/"))
+        objdir_glob = list(objects_fs.glob("objects/*/*/"))
         for item in tqdm.tqdm(objdir_glob):
             # If it doesnt have an annotation, nothing to do.
             model_id = fs.path.parts(item.path)[-1]

@@ -13522,3 +13522,23 @@ stages:
     - path: artifacts/pipeline/generate_fillable_volumes.json
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
       size: 51
+  aggregate_fillable_volumes:
+    cmd: python -m b1k_pipeline.aggregate_fillable_volumes
+    deps:
+    - path: artifacts/parallels/fillable_volumes
+      md5: 46678db4494ea07b642c1cfac847326b.dir
+      size: 5044820
+      nfiles: 1064
+    - path: artifacts/parallels/objects.zip
+      md5: 633b047341ae12f63fef9cf1c32d74af
+      size: 17473336070
+    - path: b1k_pipeline/aggregate_fillable_volumes.py
+      md5: 3feec050093d9e499b525b93baa7c3fa
+      size: 2730
+    - path: metadata/fillable_assignments.json
+      md5: 8095b083d7e7900174424b572eac077f
+      size: 14363
+    outs:
+    - path: artifacts/parallels/fillable_volumes.zip
+      md5: 52d7809c65a367844bb23b4ee61bf8d3
+      size: 1020174
