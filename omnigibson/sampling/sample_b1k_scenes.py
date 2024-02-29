@@ -21,6 +21,7 @@ from omnigibson.utils.constants import PrimType
 from bddl.activity import Conditions, evaluate_state
 import numpy as np
 import gspread
+import getpass
 
 """
 1. gcloud auth login
@@ -32,18 +33,18 @@ import gspread
 """
 
 SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
-CREDENTIALS = "/home/jdw/.config/gcloud/key.json"
-WORKSHEET = "GTC2024 - 7f82ab"
-USER = "cremebrule"
+CREDENTIALS = "key.json"
+WORKSHEET = "GTC2024 - 5a2d64"
+USER = getpass.getuser()
 
 client = gspread.service_account(filename=CREDENTIALS)
 worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
 
 ACTIVITY_TO_ROW = {activity: i + 2 for i, activity in enumerate(worksheet.col_values(1)[1:])}
 
-SCENE_INFO_FPATH =  "/home/jdw/Downloads/BEHAVIOR-1K Scenes.csv"
-TASK_INFO_FPATH = "/home/jdw/Downloads/BEHAVIOR-1K Tasks.csv"
-SYNSET_INFO_FPATH = "/home/jdw/Downloads/BEHAVIOR-1K Synsets.csv"
+SCENE_INFO_FPATH =  "BEHAVIOR-1K Scenes.csv"
+TASK_INFO_FPATH = "BEHAVIOR-1K Tasks.csv"
+SYNSET_INFO_FPATH = "BEHAVIOR-1K Synsets.csv"
 
 UNSUPPORTED_PREDICATES = {"broken", "assembled", "attached"}
 
@@ -94,7 +95,7 @@ def validate_scene_can_be_sampled(scene):
     def get_user(val):
         return None if (len(val) == 1 or val[1] == "") else val[1]
 
-    scene_user_mapping = {val[0]: get_user(val) for val in worksheet.get(f"R{2}:S{2 + n_scenes - 1}")}
+    scene_user_mapping = {val[0]: get_user(val) for val in worksheet.get(f"T{2}:U{2 + n_scenes - 1}")}
 
     # Make sure scene is valid
     assert scene in scene_user_mapping, f"Got invalid scene name to sample: {scene}"
