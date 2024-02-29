@@ -2,7 +2,8 @@ import os
 import numpy as np
 
 from omnigibson.macros import gm
-from omnigibson.robots.manipulation_robot import ManipulationRobot
+from omnigibson.robots.manipulation_robot import ManipulationRobot, GraspingPoint
+from omnigibson.utils.transform_utils import euler2quat
 
 
 class FrankaPanda(ManipulationRobot):
@@ -65,14 +66,16 @@ class FrankaPanda(ManipulationRobot):
                 a dict in the form of {ability: {param: value}} containing object abilities and parameters to pass to
                 the object state instance constructor.
             control_freq (float): control frequency (in Hz) at which to control the object. If set to be None,
-                simulator.import_object will automatically set the control frequency to be 1 / render_timestep by default.
+                simulator.import_object will automatically set the control frequency to be at the render frequency by default.
             controller_config (None or dict): nested dictionary mapping controller name(s) to specific controller
                 configurations for this object. This will override any default values specified by this class.
             action_type (str): one of {discrete, continuous} - what type of action space to use
             action_normalize (bool): whether to normalize inputted actions. This will override any default values
                 specified by this class.
             reset_joint_pos (None or n-array): if specified, should be the joint positions that the object should
-                be set to during a reset. If None (default), self.default_joint_pos will be used instead.
+                be set to during a reset. If None (default), self._default_joint_pos will be used instead.
+                Note that _default_joint_pos are hardcoded & precomputed, and thus should not be modified by the user.
+                Set this value instead if you want to initialize the robot with a different rese joint position.
             obs_modalities (str or list of str): Observation modalities to use for this robot. Default is "all", which
                 corresponds to all modalities being used.
                 Otherwise, valid options should be part of omnigibson.sensors.ALL_SENSOR_MODALITIES.
@@ -129,18 +132,6 @@ class FrankaPanda(ManipulationRobot):
         # Fetch does not support discrete actions
         raise ValueError("Franka does not support discrete actions!")
 
-    def tuck(self):
-        """
-        Immediately set this robot's configuration to be in tucked mode
-        """
-        self.set_joint_positions(self.tucked_default_joint_pos)
-
-    def untuck(self):
-        """
-        Immediately set this robot's configuration to be in untucked mode
-        """
-        self.set_joint_positions(self.untucked_default_joint_pos)
-
     def update_controller_mode(self):
         super().update_controller_mode()
         # overwrite joint params (e.g. damping, stiffess, max_effort) here
@@ -157,7 +148,7 @@ class FrankaPanda(ManipulationRobot):
         return controllers
     
     @property
-    def default_joint_pos(self):
+    def _default_joint_pos(self):
         return np.array([0.00, -1.3, 0.00, -2.87, 0.00, 2.00, 0.75, 0.00, 0.00])
 
     @property
@@ -204,3 +195,22 @@ class FrankaPanda(ManipulationRobot):
     def urdf_path(self):
         return os.path.join(gm.ASSET_PATH, "models/franka/franka_panda.urdf")
     
+    @property
+    def eef_usd_path(self):
+        return {self.default_arm: os.path.join(gm.ASSET_PATH, "models/franka/franka_panda_eef.usd")}
+    
+    @property
+    def teleop_rotation_offset(self):
+        return {self.default_arm: euler2quat([-np.pi, 0, 0])}
+    
+    @property
+    def assisted_grasp_start_points(self):
+        return {self.default_arm: [
+            GraspingPoint(link_name="panda_rightfinger", position=[0.0, 0.001, 0.045]),
+        ]}
+
+    @property
+    def assisted_grasp_end_points(self):
+        return {self.default_arm: [
+            GraspingPoint(link_name="panda_leftfinger", position=[0.0, 0.001, 0.045]),
+        ]}

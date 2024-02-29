@@ -1,13 +1,7 @@
 import numpy as np
 
 import omnigibson as og
-from omnigibson.macros import gm
 import omnigibson.utils.transform_utils as T
-
-# Make sure object states, GPU dynamics, and transition rules are enabled
-gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
-gm.ENABLE_TRANSITION_RULES = True
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -71,7 +65,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
 
     # Grab reference to apple and knife
     apple = env.scene.object_registry("name", "apple")

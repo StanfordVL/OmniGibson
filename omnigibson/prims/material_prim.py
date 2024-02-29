@@ -1,13 +1,9 @@
-from pxr import Gf, Usd, Sdf, UsdGeom, UsdShade
 import numpy as np
 import asyncio
 import os
 
-import omni
-from omni.isaac.core.utils.prims import get_prim_at_path
-from omni.usd import get_shader_from_material
-
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.utils.physx_utils import bind_material
 from omnigibson.prims.prim_base import BasePrim
 
@@ -32,6 +28,32 @@ class MaterialPrim(BasePrim):
             mtl_name (None or str): If specified, should be the name of the mtl preset to load.
                 None results in default, "OmniPBR"
     """
+    # Persistent dictionary of materials, mapped from prim_path to MaterialPrim
+    MATERIALS = dict()
+
+    @classmethod
+    def get_material(cls, name, prim_path, load_config=None):
+        """
+        Get a material prim from the persistent dictionary of materials, or create a new one if it doesn't exist.
+
+        Args:
+            name (str): Name for the object.
+            prim_path (str): prim path of the MaterialPrim.
+            load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
+                loading this prim at runtime. Note that this is only needed if the prim does not already exist at
+                @prim_path -- it will be ignored if it already exists.
+        Returns:
+            MaterialPrim: Material prim at the specified path
+        """
+        # If the material already exists, return it
+        if prim_path in cls.MATERIALS:
+            return cls.MATERIALS[prim_path]
+
+        # Otherwise, create a new one and return it
+        new_material = cls(prim_path=prim_path, name=name, load_config=load_config)
+        cls.MATERIALS[prim_path] = new_material
+        return new_material
+
     def __init__(
         self,
         prim_path,
@@ -40,6 +62,9 @@ class MaterialPrim(BasePrim):
     ):
         # Other values that will be filled in at runtime
         self._shader = None
+
+        # Users of this material: should be a set of BaseObject and BaseSystem
+        self._users = set()
 
         # Run super init
         super().__init__(
@@ -51,7 +76,7 @@ class MaterialPrim(BasePrim):
     def _load(self):
         # We create a new material at the specified path
         mtl_created = []
-        omni.kit.commands.execute(
+        lazy.omni.kit.commands.execute(
             "CreateAndBindMdlMaterialFromLibrary",
             mdl_name="OmniPBR.mdl" if self._load_config.get("mdl_name", None) is None else self._load_config["mdl_name"],
             mtl_name="OmniPBR" if self._load_config.get("mtl_name", None) is None else self._load_config["mtl_name"],
@@ -60,17 +85,59 @@ class MaterialPrim(BasePrim):
         material_path = mtl_created[0]
 
         # Move prim to desired location
-        omni.kit.commands.execute("MovePrim", path_from=material_path, path_to=self._prim_path)
+        lazy.omni.kit.commands.execute("MovePrim", path_from=material_path, path_to=self._prim_path)
 
         # Return generated material
-        return get_prim_at_path(self._prim_path)
+        return lazy.omni.isaac.core.utils.prims.get_prim_at_path(self._prim_path)
+
+    @classmethod
+    def clear(cls):
+        cls.MATERIALS = dict()
+
+    @property
+    def users(self):
+        """
+        Users of this material: should be a list of BaseObject and BaseSystem
+        """
+        return self._users
+
+    def add_user(self, user):
+        """
+        Adds a user to the material. This can be a BaseObject or BaseSystem.
+
+        Args:
+            user (BaseObject or BaseSystem): User to add to the material
+        """
+        self._users.add(user)
+
+    def remove_user(self, user):
+        """
+        Removes a user from the material. This can be a BaseObject or BaseSystem.
+        If there are no users left, the material will be removed.
+
+        Args:
+            user (BaseObject or BaseSystem): User to remove from the material
+        """
+        self._users.remove(user)
+        if len(self._users) == 0:
+            self.remove()
+
+    def remove(self):
+        # Remove from global sensors dictionary
+        self.MATERIALS.pop(self._prim_path)
+
+        # Run super
+        super().remove()
 
     def _post_load(self):
         # run super first
         super()._post_load()
 
+        # Add this material to the list of global materials
+        self.MATERIALS[self._prim_path] = self
+
         # Generate shader reference
-        self._shader = get_shader_from_material(self._prim)
+        self._shader = lazy.omni.usd.get_shader_from_material(self._prim)
 
     def bind(self, target_prim_path):
         """
@@ -92,7 +159,7 @@ class MaterialPrim(BasePrim):
         """
         if render:
             og.sim.render()
-        await omni.usd.get_context().load_mdl_parameters_for_prim_async(self._shader)
+        await lazy.omni.usd.get_context().load_mdl_parameters_for_prim_async(self._shader)
 
     def shader_force_populate(self, render=True):
         """
@@ -201,7 +268,7 @@ class MaterialPrim(BasePrim):
         Args:
              color (3-array): this material's applied (R,G,B) color
         """
-        self.set_input(inp="diffuse_color_constant", val=Gf.Vec3f(*np.array(color, dtype=float)))
+        self.set_input(inp="diffuse_color_constant", val=lazy.pxr.Gf.Vec3f(*np.array(color, dtype=float)))
 
     @property
     def diffuse_texture(self):
@@ -217,7 +284,7 @@ class MaterialPrim(BasePrim):
         Args:
             str: this material's applied diffuse_texture filepath
         """
-        self.set_input(inp="diffuse_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="diffuse_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def albedo_desaturation(self):
@@ -281,7 +348,7 @@ class MaterialPrim(BasePrim):
         Args:
              color (3-array): this material's applied (R,G,B) diffuse_tint
         """
-        self.set_input(inp="diffuse_tint", val=Gf.Vec3f(*np.array(color, dtype=float)))
+        self.set_input(inp="diffuse_tint", val=lazy.pxr.Gf.Vec3f(*np.array(color, dtype=float)))
 
     @property
     def reflection_roughness_constant(self):
@@ -331,7 +398,7 @@ class MaterialPrim(BasePrim):
         Args:
              fpath (str): this material's applied reflectionroughness_texture fpath
         """
-        self.set_input(inp="reflectionroughness_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="reflectionroughness_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def metallic_constant(self):
@@ -381,7 +448,7 @@ class MaterialPrim(BasePrim):
         Args:
              fpath (str): this material's applied metallic_texture fpath
         """
-        self.set_input(inp="metallic_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="metallic_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def specular_level(self):
@@ -431,7 +498,7 @@ class MaterialPrim(BasePrim):
         Args:
              fpath (str): this material's applied ORM_texture fpath
         """
-        self.set_input(inp="ORM_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="ORM_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def ao_to_diffuse(self):
@@ -465,7 +532,7 @@ class MaterialPrim(BasePrim):
         Args:
              fpath (str): this material's applied ao_texture fpath
         """
-        self.set_input(inp="ao_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="ao_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def enable_emission(self):
@@ -497,7 +564,7 @@ class MaterialPrim(BasePrim):
         Args:
              color (3-array): this material's applied emissive_color
         """
-        self.set_input(inp="emissive_color", val=Gf.Vec3f(*np.array(color, dtype=float)))
+        self.set_input(inp="emissive_color", val=lazy.pxr.Gf.Vec3f(*np.array(color, dtype=float)))
 
     @property
     def emissive_color_texture(self):
@@ -515,7 +582,7 @@ class MaterialPrim(BasePrim):
         Args:
              fpath (str): this material's applied emissive_color_texture fpath
         """
-        self.set_input(inp="emissive_color_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="emissive_color_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def emissive_mask_texture(self):
@@ -533,7 +600,7 @@ class MaterialPrim(BasePrim):
         Args:
              fpath (str): this material's applied emissive_mask_texture fpath
         """
-        self.set_input(inp="emissive_mask_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="emissive_mask_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def emissive_intensity(self):
@@ -615,7 +682,7 @@ class MaterialPrim(BasePrim):
         Args:
              fpath (str): this material's applied opacity_texture fpath
         """
-        self.set_input(inp="opacity_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="opacity_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def opacity_mode(self):
@@ -681,7 +748,7 @@ class MaterialPrim(BasePrim):
         Args:
              fpath (str): this material's applied normalmap_texture fpath
         """
-        self.set_input(inp="normalmap_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="normalmap_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def detail_bump_factor(self):
@@ -715,7 +782,7 @@ class MaterialPrim(BasePrim):
         Args:
              fpath (str): this material's applied detail_normalmap_texture fpath
         """
-        self.set_input(inp="detail_normalmap_texture", val=Sdf.AssetPath(fpath))
+        self.set_input(inp="detail_normalmap_texture", val=lazy.pxr.Sdf.AssetPath(fpath))
 
     @property
     def flip_tangent_u(self):
@@ -811,7 +878,7 @@ class MaterialPrim(BasePrim):
         Args:
              translate (2-array): this material's applied (x,y) texture_translate
         """
-        self.set_input(inp="texture_translate", val=Gf.Vec2f(*np.array(translate, dtype=float)))
+        self.set_input(inp="texture_translate", val=lazy.pxr.Gf.Vec2f(*np.array(translate, dtype=float)))
 
     @property
     def texture_rotate(self):
@@ -843,7 +910,7 @@ class MaterialPrim(BasePrim):
         Args:
              scale (2-array): this material's applied (x,y) texture_scale
         """
-        self.set_input(inp="texture_scale", val=Gf.Vec2f(*np.array(scale, dtype=float)))
+        self.set_input(inp="texture_scale", val=lazy.pxr.Gf.Vec2f(*np.array(scale, dtype=float)))
 
     @property
     def detail_texture_translate(self):
@@ -859,7 +926,7 @@ class MaterialPrim(BasePrim):
         Args:
              translate (2-array): this material's applied detail_texture_translate
         """
-        self.set_input(inp="detail_texture_translate", val=Gf.Vec2f(*np.array(translate, dtype=float)))
+        self.set_input(inp="detail_texture_translate", val=lazy.pxr.Gf.Vec2f(*np.array(translate, dtype=float)))
 
     @property
     def detail_texture_rotate(self):
@@ -891,7 +958,7 @@ class MaterialPrim(BasePrim):
         Args:
              scale (2-array): this material's applied detail_texture_scale
         """
-        self.set_input(inp="detail_texture_scale", val=Gf.Vec2f(*np.array(scale, dtype=float)))
+        self.set_input(inp="detail_texture_scale", val=lazy.pxr.Gf.Vec2f(*np.array(scale, dtype=float)))
 
     @property
     def exclude_from_white_mode(self):
@@ -971,7 +1038,7 @@ class MaterialPrim(BasePrim):
         Args:
              color (3-array): this material's diffuse_reflection_color in (R,G,B)
         """
-        self.set_input(inp="diffuse_reflection_color", val=Gf.Vec3f(*np.array(color, dtype=float)))
+        self.set_input(inp="diffuse_reflection_color", val=lazy.pxr.Gf.Vec3f(*np.array(color, dtype=float)))
 
     @property
     def specular_reflection_color(self):
@@ -987,7 +1054,7 @@ class MaterialPrim(BasePrim):
         Args:
              color (3-array): this material's specular_reflection_color in (R,G,B)
         """
-        self.set_input(inp="specular_reflection_color", val=Gf.Vec3f(*np.array(color, dtype=float)))
+        self.set_input(inp="specular_reflection_color", val=lazy.pxr.Gf.Vec3f(*np.array(color, dtype=float)))
 
     @property
     def specular_transmission_color(self):
@@ -1003,7 +1070,7 @@ class MaterialPrim(BasePrim):
         Args:
              color (3-array): this material's specular_transmission_color in (R,G,B)
         """
-        self.set_input(inp="specular_transmission_color", val=Gf.Vec3f(*np.array(color, dtype=float)))
+        self.set_input(inp="specular_transmission_color", val=lazy.pxr.Gf.Vec3f(*np.array(color, dtype=float)))
 
     @property
     def specular_transmission_scattering_color(self):
@@ -1019,7 +1086,7 @@ class MaterialPrim(BasePrim):
         Args:
              color (3-array): this material's specular_transmission_scattering_color in (R,G,B)
         """
-        self.set_input(inp="specular_transmission_scattering_color", val=Gf.Vec3f(*np.array(color, dtype=float)))
+        self.set_input(inp="specular_transmission_scattering_color", val=lazy.pxr.Gf.Vec3f(*np.array(color, dtype=float)))
 
     @property
     def specular_reflection_ior_preset(self):
@@ -1071,4 +1138,4 @@ class MaterialPrim(BasePrim):
         """
         assert self.is_glass, f"Tried to set glass_color shader input, " \
                               f"but material at {self.prim_path} is not an OmniGlass material!"
-        self.set_input(inp="glass_color", val=Gf.Vec3f(*np.array(color, dtype=float)))
+        self.set_input(inp="glass_color", val=lazy.pxr.Gf.Vec3f(*np.array(color, dtype=float)))

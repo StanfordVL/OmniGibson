@@ -7,7 +7,6 @@ from omnigibson.systems import get_system
 from omnigibson.utils.usd_utils import create_joint
 from omnigibson.utils.ui_utils import choose_from_options
 from omnigibson.utils.constants import ParticleModifyMethod
-from pxr import Gf
 
 # Set macros for this example
 macros.object_states.particle_modifier.VISUAL_PARTICLES_REMOVAL_LIMIT = 1000
@@ -16,9 +15,7 @@ macros.object_states.particle_modifier.MAX_VISUAL_PARTICLES_APPLIED_PER_STEP = 4
 macros.object_states.particle_modifier.MAX_PHYSICAL_PARTICLES_APPLIED_PER_STEP = 40
 macros.object_states.covered.MAX_VISUAL_PARTICLES = 300
 
-# Make sure object states and GPU dynamics are enabled (GPU dynamics needed for fluids)
-gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
+# Enable HQ rendering for better visual fidelity
 gm.ENABLE_HQ_RENDERING = True
 
 
@@ -132,7 +129,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     # object, so contacts will not be triggered with this object
 
     # Load the environment, then immediately stop the simulator since we need to add in the modifier object
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
     og.sim.stop()
 
     # Grab references to table

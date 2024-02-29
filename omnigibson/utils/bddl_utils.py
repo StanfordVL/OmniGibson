@@ -22,8 +22,10 @@ from omnigibson.utils.python_utils import Wrapper
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.robots import BaseRobot
 from omnigibson import object_states
-from omnigibson.object_states.factory import _KINEMATIC_STATE_SET
+from omnigibson.object_states.object_state_base import AbsoluteObjectState, RelativeObjectState
+from omnigibson.object_states.factory import _KINEMATIC_STATE_SET, get_system_states
 from omnigibson.systems.system_base import is_system_active, get_system
+from omnigibson.scenes.interactive_traversable_scene import InteractiveTraversableScene
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -102,6 +104,10 @@ def get_binary_predicate_for_state(state_class, state_name):
 def is_substance_synset(synset):
     return "substance" in OBJECT_TAXONOMY.get_abilities(synset)
 
+def get_system_name_by_synset(synset):
+    system_names = OBJECT_TAXONOMY.get_subtree_substances(synset)
+    assert len(system_names) == 1, f"Got zero or multiple systems for {synset}: {system_names}"
+    return system_names[0]
 
 def process_single_condition(condition):
     """
@@ -161,10 +167,180 @@ KINEMATIC_STATES_BDDL = frozenset([state.__name__.lower() for state in _KINEMATI
 
 # BEHAVIOR-related
 OBJECT_TAXONOMY = ObjectTaxonomy()
-# TODO (Josiah): Remove floor synset once we have new bddl release
-FLOOR_SYNSET = "floor.n.01"
 BEHAVIOR_ACTIVITIES = sorted(os.listdir(os.path.join(os.path.dirname(bddl.__file__), "activity_definitions")))
 
+def _populate_input_output_objects_systems(og_recipe, input_synsets, output_synsets):
+    # Map input/output synsets into input/output objects and systems.
+    for synsets, obj_key, system_key in zip((input_synsets, output_synsets), ("input_objects", "output_objects"), ("input_systems", "output_systems")):
+        for synset, count in synsets.items():
+            assert OBJECT_TAXONOMY.is_leaf(synset), f"Synset {synset} must be a leaf node in the taxonomy!"
+            if is_substance_synset(synset):
+                og_recipe[system_key].append(get_system_name_by_synset(synset))
+            else:
+                obj_categories = OBJECT_TAXONOMY.get_categories(synset)
+                assert len(obj_categories) == 1, f"Object synset {synset} must map to exactly one object category! Now: {obj_categories}."
+                og_recipe[obj_key][obj_categories[0]] = count
+
+    # Assert only one of output_objects or output_systems is not None
+    assert len(og_recipe["output_objects"]) == 0 or len(og_recipe["output_systems"]) == 0, \
+        "Recipe can only generate output objects or output systems, but not both!"
+
+def _populate_input_output_states(og_recipe, input_states, output_states):
+    # Apply post-processing for input/output states if specified
+    for synsets_to_states, states_key in zip((input_states, output_states), ("input_states", "output_states")):
+        if synsets_to_states is None:
+            continue
+        for synsets, states in synsets_to_states.items():
+            # For unary/binary states, synsets is a single synset or a comma-separated pair of synsets, respectively
+            synset_split = synsets.split(",")
+            if len(synset_split) == 1:
+                first_synset = synset_split[0]
+                second_synset = None
+            else:
+                first_synset, second_synset = synset_split
+
+            # Assert the first synset is an object because the systems don't have any states.
+            assert OBJECT_TAXONOMY.is_leaf(first_synset), f"Input/output state synset {first_synset} must be a leaf node in the taxonomy!"
+            assert not is_substance_synset(first_synset), f"Input/output state synset {first_synset} must be applied to an object, not a substance!"
+            obj_categories = OBJECT_TAXONOMY.get_categories(first_synset)
+            assert len(obj_categories) == 1, f"Input/output state synset {first_synset} must map to exactly one object category! Now: {obj_categories}."
+            first_obj_category = obj_categories[0]
+
+            if second_synset is None:
+                # Unary states for the first synset
+                for state_type, state_value in states:
+                    state_class = SUPPORTED_PREDICATES[state_type].STATE_CLASS
+                    assert issubclass(state_class, AbsoluteObjectState), f"Input/output state type {state_type} must be a unary state!"
+                    # Example: (Cooked, True)
+                    og_recipe[states_key][first_obj_category]["unary"].append((state_class, state_value))
+            else:
+                assert OBJECT_TAXONOMY.is_leaf(second_synset), f"Input/output state synset {second_synset} must be a leaf node in the taxonomy!"
+                obj_categories = OBJECT_TAXONOMY.get_categories(second_synset)
+                if is_substance_synset(second_synset):
+                    second_obj_category = get_system_name_by_synset(second_synset)
+                    is_substance = True
+                else:
+                    obj_categories = OBJECT_TAXONOMY.get_categories(second_synset)
+                    assert len(obj_categories) == 1, f"Input/output state synset {second_synset} must map to exactly one object category! Now: {obj_categories}."
+                    second_obj_category = obj_categories[0]
+                    is_substance = False
+
+                for state_type, state_value in states:
+                    state_class = SUPPORTED_PREDICATES[state_type].STATE_CLASS
+                    assert issubclass(state_class, RelativeObjectState), f"Input/output state type {state_type} must be a binary state!"
+                    assert is_substance == (state_class in get_system_states()), f"Input/output state type {state_type} system state inconsistency found!"
+                    if is_substance:
+                        # Non-kinematic binary states, e.g. Covered, Saturated, Filled, Contains.
+                        # Example: (Covered, "sesame_seed", True)
+                        og_recipe[states_key][first_obj_category]["binary_system"].append(
+                            (state_class, second_obj_category, state_value))
+                    else:
+                        # Kinematic binary states w.r.t. the second object.
+                        # Example: (OnTop, "raw_egg", True)
+                        assert states_key != "output_states", f"Output state type {state_type} can only be used in input states!"
+                        og_recipe[states_key][first_obj_category]["binary_object"].append(
+                            (state_class, second_obj_category, state_value))
+
+def _populate_filter_categories(og_recipe, filter_name, synsets):
+    # Map synsets to categories.
+    if synsets is not None:
+        og_recipe[f"{filter_name}_categories"] = set()
+        for synset in synsets:
+            assert OBJECT_TAXONOMY.is_leaf(synset), f"Synset {synset} must be a leaf node in the taxonomy!"
+            assert not is_substance_synset(synset), f"Synset {synset} must be applied to an object, not a substance!"
+            for category in OBJECT_TAXONOMY.get_categories(synset):
+                og_recipe[f"{filter_name}_categories"].add(category)
+
+def translate_bddl_recipe_to_og_recipe(
+    name,
+    input_synsets,
+    output_synsets,
+    input_states=None,
+    output_states=None,
+    fillable_synsets=None,
+    heatsource_synsets=None,
+    timesteps=None,
+):
+    """
+    Translate a BDDL recipe to an OG recipe.
+    Args:
+        name (str): Name of the recipe
+        input_synsets (dict): Maps synsets to number of instances required for the recipe
+        output_synsets (dict): Maps synsets to number of instances to be spawned in the container when the recipe executes
+        input_states (dict or None): Maps input synsets to states that must be satisfied for the recipe to execute,
+            or None if no states are required
+        otuput_states (dict or None): Map output synsets to states that should be set when spawned when the recipe executes,
+            or None if no states are required
+        fillable_synsets (None or set of str): If specified, set of fillable synsets which are allowed for this recipe.
+            If None, any fillable is allowed
+        heatsource_synsets (None or set of str): If specified, set of heatsource synsets which are allowed for this recipe.
+            If None, any heatsource is allowed
+        timesteps (None or int): Number of subsequent heating steps required for the recipe to execute. If None,
+            it will be set to be 1, i.e.: instantaneous execution
+    """
+    og_recipe = {
+        "name": name,
+        # Maps object categories to number of instances required for the recipe
+        "input_objects": dict(),
+        # List of system names required for the recipe
+        "input_systems": list(),
+        # Maps object categories to number of instances to be spawned in the container when the recipe executes
+        "output_objects": dict(),
+        # List of system names to be spawned in the container when the recipe executes. Currently the length is 1.
+        "output_systems": list(),
+        # Maps object categories to ["unary", "bianry_system", "binary_object"] to a list of states that must be satisfied for the recipe to execute
+        "input_states": defaultdict(lambda: defaultdict(list)),
+        # Maps object categories to ["unary", "bianry_system"] to a list of states that should be set after the output objects are spawned
+        "output_states": defaultdict(lambda: defaultdict(list)),
+        # Set of fillable categories which are allowed for this recipe
+        "fillable_categories": None,
+        # Set of heatsource categories which are allowed for this recipe
+        "heatsource_categories": None,
+        # Number of subsequent heating steps required for the recipe to execute
+        "timesteps": timesteps if timesteps is not None else 1,
+    }
+
+    _populate_input_output_objects_systems(og_recipe=og_recipe, input_synsets=input_synsets, output_synsets=output_synsets)
+    _populate_input_output_states(og_recipe=og_recipe, input_states=input_states, output_states=output_states)
+    _populate_filter_categories(og_recipe=og_recipe, filter_name="fillable", synsets=fillable_synsets)
+    _populate_filter_categories(og_recipe=og_recipe, filter_name="heatsource", synsets=heatsource_synsets)
+
+    return og_recipe
+
+def translate_bddl_washer_rule_to_og_washer_rule(conditions):
+    """
+    Translate BDDL washer rule to OG washer rule.
+
+    Args:
+        conditions (dict): Dictionary mapping the synset of ParticleSystem (str) to None or list of synsets of
+            ParticleSystem (str). None represents "never", empty list represents "always", or non-empty list represents
+            at least one of the systems in the list needs to be present in the washer for the key system to be removed.
+            E.g. "rust.n.01" -> None: "never remove rust.n.01 from the washer"
+            E.g. "dust.n.01" -> []: "always remove dust.n.01 from the washer"
+            E.g. "cooking_oil.n.01" -> ["sodium_carbonate.n.01", "vinegar.n.01"]: "remove cooking_oil.n.01 from the
+            washer if either sodium_carbonate.n.01 or vinegar.n.01 is present"
+            For keys not present in the dictionary, the default is []: "always remove"
+    Returns:
+        dict: Dictionary mapping the system name (str) to None or list of system names (str). None represents "never",
+            empty list represents "always", or non-empty list represents at least one of the systems in the list needs
+            to be present in the washer for the key system to be removed.
+    """
+    og_washer_rule = dict()
+    for solute, solvents in conditions.items():
+        assert OBJECT_TAXONOMY.is_leaf(solute), f"Synset {solute} must be a leaf node in the taxonomy!"
+        assert is_substance_synset(solute), f"Synset {solute} must be a substance synset!"
+        solute_name = get_system_name_by_synset(solute)
+        if solvents is None:
+            og_washer_rule[solute_name] = None
+        else:
+            solvent_names = []
+            for solvent in solvents:
+                assert OBJECT_TAXONOMY.is_leaf(solvent), f"Synset {solvent} must be a leaf node in the taxonomy!"
+                assert is_substance_synset(solvent), f"Synset {solvent} must be a substance synset!"
+                solvent_name = get_system_name_by_synset(solvent)
+                solvent_names.append(solvent_name)
+            og_washer_rule[solute_name] = solvent_names
+    return og_washer_rule
 
 class OmniGibsonBDDLBackend(BDDLBackend):
     def get_predicate_class(self, predicate_name):
@@ -194,7 +370,8 @@ class BDDLEntity(Wrapper):
         self.is_system = is_substance_synset(self.synset)
 
         # Infer the correct category to assign
-        self.og_categories = OBJECT_TAXONOMY.get_subtree_categories(self.synset)
+        self.og_categories = OBJECT_TAXONOMY.get_subtree_substances(self.synset) \
+            if self.is_system else OBJECT_TAXONOMY.get_subtree_categories(self.synset)
 
         super().__init__(obj=entity)
 
@@ -276,7 +453,7 @@ class BDDLSampler:
     ):
         # Store internal variables from inputs
         self._env = env
-        self._scene_model = self._env.scene.scene_model
+        self._scene_model = self._env.scene.scene_model if isinstance(self._env.scene, InteractiveTraversableScene) else None
         self._agent = self._env.robots[0]
         if debug:
             gm.DEBUG = True
@@ -411,9 +588,9 @@ class BDDLSampler:
                     # Invalid room assignment
                     return f"You have assigned room type for [{obj_synset}], but [{obj_synset}] is sampleable. " \
                            f"Only non-sampleable (scene) objects can have room assignment."
-                if room_type not in og.sim.scene.seg_map.room_sem_name_to_ins_name:
+                if self._scene_model is not None and room_type not in og.sim.scene.seg_map.room_sem_name_to_ins_name:
                     # Missing room type
-                    return f"Room type [{room_type}] missing in scene [{og.sim.scene.scene_model}]."
+                    return f"Room type [{room_type}] missing in scene [{self._scene_model}]."
                 if room_type not in self._room_type_to_object_instance:
                     self._room_type_to_object_instance[room_type] = []
                 self._room_type_to_object_instance[room_type].append(obj_inst)
@@ -423,15 +600,6 @@ class BDDLSampler:
                     return f"Object [{obj_inst}] has more than one room assignment"
 
                 self._inroom_object_instances.add(obj_inst)
-
-        for obj_synset in self._activity_conditions.parsed_objects:
-            abilities = OBJECT_TAXONOMY.get_abilities(obj_synset)
-            if "sceneObject" not in abilities:
-                continue
-            for obj_inst in self._activity_conditions.parsed_objects[obj_synset]:
-                if obj_inst not in self._inroom_object_instances:
-                    # Missing room assignment
-                    return f"All non-sampleable (scene) objects should have room assignment. [{obj_inst}] does not have one."
 
     def _build_sampling_order(self):
         """
@@ -521,6 +689,12 @@ class BDDLSampler:
         # Sanity check kinematic objects -- any non-system must be kinematically sampled
         remaining_kinematic_entities = nonparticle_entities - unsampleable_obj_instances - \
             self._inroom_object_instances - set.union(*(self._object_sampling_orders["kinematic"] + [set()]))
+
+        # Possibly remove the agent entity if we're in an empty scene -- i.e.: no kinematic sampling needed for the
+        # agent
+        if self._scene_model is None:
+            remaining_kinematic_entities -= {"agent.n.01_1"}
+
         if len(remaining_kinematic_entities) != 0:
             return f"Some objects do not have any kinematic condition defined for them in the initial conditions: " \
                    f"{', '.join(remaining_kinematic_entities)}"
@@ -559,6 +733,7 @@ class BDDLSampler:
                 obj_synset = self._object_instance_to_synset[obj_inst]
 
                 # We allow burners to be used as if they are stoves
+                # No need to safeguard check for subtree_substances because inroom objects will never be substances
                 categories = OBJECT_TAXONOMY.get_subtree_categories(obj_synset)
                 abilities = OBJECT_TAXONOMY.get_abilities(obj_synset)
 
@@ -566,7 +741,8 @@ class BDDLSampler:
                 valid_models = {cat: set(get_all_object_category_models_with_abilities(cat, abilities))
                                 for cat in categories}
 
-                for room_inst in og.sim.scene.seg_map.room_sem_name_to_ins_name[room_type]:
+                room_insts = [None] if self._scene_model is None else og.sim.scene.seg_map.room_sem_name_to_ins_name[room_type]
+                for room_inst in room_insts:
                     # A list of scene objects that satisfy the requested categories
                     room_objs = og.sim.scene.object_registry("in_rooms", room_inst, default_val=[])
                     scene_objs = [obj for obj in room_objs if obj.category in categories and obj.model in valid_models[obj.category]]
@@ -660,11 +836,15 @@ class BDDLSampler:
                         filtered_object_scope[room_type][scene_obj][room_inst].append(obj)
 
         # Compute most problematic objects
-        problematic_objs_by_proportion = defaultdict(list)
-        for child_scope_name, parent_obj_names in problematic_objs.items():
-            problematic_objs_by_proportion[np.mean(list(parent_obj_names.values()))].append(child_scope_name)
+        if len(problematic_objs) == 0:
+            max_problematic_objs = []
+        else:
+            problematic_objs_by_proportion = defaultdict(list)
+            for child_scope_name, parent_obj_names in problematic_objs.items():
+                problematic_objs_by_proportion[np.mean(list(parent_obj_names.values()))].append(child_scope_name)
+            max_problematic_objs = problematic_objs_by_proportion[min(problematic_objs_by_proportion.keys())]
 
-        return filtered_object_scope, problematic_objs_by_proportion[min(problematic_objs_by_proportion.keys())]
+        return filtered_object_scope, max_problematic_objs
 
     def _consolidate_room_instance(self, filtered_object_scope, condition_type):
         """
@@ -725,16 +905,12 @@ class BDDLSampler:
             # Don't populate agent
             if obj_synset == "agent.n.01":
                 continue
-            # Don't populate synsets that can't be sampled
-            abilities = OBJECT_TAXONOMY.get_abilities(obj_synset)
-            if "sceneObject" in abilities:
-                continue
 
             # Populate based on whether it's a substance or not
             if is_substance_synset(obj_synset):
                 assert len(self._activity_conditions.parsed_objects[obj_synset]) == 1, "Systems are singletons"
                 obj_inst = self._activity_conditions.parsed_objects[obj_synset][0]
-                system_name = OBJECT_TAXONOMY.get_subtree_categories(obj_synset)[0]
+                system_name = OBJECT_TAXONOMY.get_subtree_substances(obj_synset)[0]
                 self._object_scope[obj_inst] = BDDLEntity(
                     bddl_inst=obj_inst,
                     entity=None if obj_inst in self._future_obj_instances else get_system(system_name),
@@ -750,6 +926,9 @@ class BDDLSampler:
                     # Don't explicitly sample if future
                     if obj_inst in self._future_obj_instances:
                         self._object_scope[obj_inst] = BDDLEntity(bddl_inst=obj_inst)
+                        continue
+                    # Don't sample if already in room
+                    if obj_inst in self._inroom_object_instances:
                         continue
 
                     category = np.random.choice(categories)
@@ -770,7 +949,6 @@ class BDDLSampler:
                         name=f"{category}_{len(og.sim.scene.objects)}",
                         category=category,
                         model=model,
-                        fit_avg_dim_volume=True,
                         prim_type=PrimType.CLOTH if "cloth" in OBJECT_TAXONOMY.get_abilities(obj_synset) else PrimType.RIGID,
                     )
                     num_new_obj += 1

@@ -4,7 +4,6 @@ from omnigibson.utils.asset_utils import get_available_g_scenes, get_available_o
 from omnigibson.utils.ui_utils import choose_from_options
 
 # Configure macros for maximum performance
-gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_OBJECT_STATES = False
 gm.ENABLE_TRANSITION_RULES = False
 
@@ -33,14 +32,6 @@ def main(random_selection=False, headless=False, short_exec=False):
             "type": scene_type,
             "scene_model": scene_model,
         },
-        "robots": [
-            {
-                "type": "Turtlebot",
-                "obs_modalities": ["scan", "rgb", "depth"],
-                "action_type": "continuous",
-                "action_normalize": True,
-            },
-        ],
     }
 
     # If the scene type is interactive, also check if we want to quick load or full load the scene
@@ -61,16 +52,9 @@ def main(random_selection=False, headless=False, short_exec=False):
         og.sim.enable_viewer_camera_teleoperation()
 
     # Run a simple loop and reset periodically
-    max_iterations = 10 if not short_exec else 1
-    for j in range(max_iterations):
-        og.log.info("Resetting environment")
-        env.reset()
-        for i in range(100):
-            action = env.action_space.sample()
-            state, reward, done, info = env.step(action)
-            if done:
-                og.log.info("Episode finished after {} timesteps".format(i + 1))
-                break
+    while True:
+        action = env.action_space.sample()
+        state, reward, done, info = env.step(action)
 
     # Always close the environment at the end
     env.close()

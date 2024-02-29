@@ -2,56 +2,18 @@ import math
 from collections.abc import Iterable
 import os
 
-import omni.usd
-from omni.isaac.core.utils.prims import get_prim_at_path, get_prim_path, is_prim_path_valid, get_prim_children
-from omni.isaac.core.utils.stage import get_current_stage, get_stage_units, traverse_stage, add_reference_to_stage
-from omni.isaac.core.utils.bounds import compute_aabb, create_bbox_cache, compute_combined_aabb
-from omni.syntheticdata import helpers
-from omni.kit.primitive.mesh.evaluators.sphere import SphereEvaluator
-from omni.kit.primitive.mesh.evaluators.disk import DiskEvaluator
-from omni.kit.primitive.mesh.evaluators.plane import PlaneEvaluator
-from omni.kit.primitive.mesh.evaluators.cylinder import CylinderEvaluator
-from omni.kit.primitive.mesh.evaluators.torus import TorusEvaluator
-from omni.kit.primitive.mesh.evaluators.cone import ConeEvaluator
-from omni.kit.primitive.mesh.evaluators.cube import CubeEvaluator
+import omnigibson.lazy as lazy
 
-from pxr import Gf, Vt, Usd, Sdf, UsdGeom, UsdShade, UsdPhysics, PhysxSchema
-import carb
 import numpy as np
 import trimesh
 
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.utils.constants import JointType, PRIMITIVE_MESH_TYPES, PrimType, GEOM_TYPES
-from omnigibson.utils.deprecated_utils import CreateMeshPrimWithDefaultXformCommand
 from omnigibson.utils.python_utils import assert_valid_key
 from omnigibson.utils.ui_utils import suppress_omni_log
 
 import omnigibson.utils.transform_utils as T
-
-GF_TO_VT_MAPPING = {
-    Gf.Vec3d: Vt.Vec3dArray,
-    Gf.Vec3f: Vt.Vec3fArray,
-    Gf.Vec3h: Vt.Vec3hArray,
-    Gf.Quatd: Vt.QuatdArray,
-    Gf.Quatf: Vt.QuatfArray,
-    Gf.Quath: Vt.QuathArray,
-    int: Vt.IntArray,
-    float: Vt.FloatArray,
-    bool: Vt.BoolArray,
-    str: Vt.StringArray,
-    chr: Vt.CharArray,
-}
-
-MESH_PRIM_TYPE_TO_EVALUATOR_MAPPING = {
-    "Sphere": SphereEvaluator,
-    "Disk": DiskEvaluator,
-    "Plane": PlaneEvaluator,
-    "Cylinder": CylinderEvaluator,
-    "Torus": TorusEvaluator,
-    "Cone": ConeEvaluator,
-    "Cube": CubeEvaluator,
-}
 
 
 def array_to_vtarray(arr, element_type):
@@ -66,6 +28,20 @@ def array_to_vtarray(arr, element_type):
     Returns:
         Vt.Array: Vt-typed array, of specified type corresponding to @element_type
     """
+    GF_TO_VT_MAPPING = {
+        lazy.pxr.Gf.Vec3d: lazy.pxr.Vt.Vec3dArray,
+        lazy.pxr.Gf.Vec3f: lazy.pxr.Vt.Vec3fArray,
+        lazy.pxr.Gf.Vec3h: lazy.pxr.Vt.Vec3hArray,
+        lazy.pxr.Gf.Quatd: lazy.pxr.Vt.QuatdArray,
+        lazy.pxr.Gf.Quatf: lazy.pxr.Vt.QuatfArray,
+        lazy.pxr.Gf.Quath: lazy.pxr.Vt.QuathArray,
+        int: lazy.pxr.Vt.IntArray,
+        float: lazy.pxr.Vt.FloatArray,
+        bool: lazy.pxr.Vt.BoolArray,
+        str: lazy.pxr.Vt.StringArray,
+        chr: lazy.pxr.Vt.CharArray,
+    }
+
     # Make sure array type is valid
     assert_valid_key(key=element_type, valid_keys=GF_TO_VT_MAPPING, name="array element type")
 
@@ -94,7 +70,7 @@ def get_prim_nested_children(prim):
         list of Usd.Prim: nested prims
     """
     prims = []
-    for child in get_prim_children(prim):
+    for child in lazy.omni.isaac.core.utils.prims.get_prim_children(prim):
         prims.append(child)
         prims += get_prim_nested_children(prim=child)
 
@@ -116,21 +92,21 @@ def get_camera_params(viewport):
             resolution (dict): resolution as a dict with 'width' and 'height'.
             clipping_range (tuple(float, float)): Near and Far clipping values.
     """
-    stage = omni.usd.get_context().get_stage()
+    stage = lazy.omni.usd.get_context().get_stage()
     prim = stage.GetPrimAtPath(viewport.get_active_camera())
-    prim_tf = omni.usd.get_world_transform_matrix(prim)
-    view_params = helpers.get_view_params(viewport)
+    prim_tf = lazy.omni.usd.get_world_transform_matrix(prim)
+    view_params = lazy.omni.syntheticdata.helpers.get_view_params(viewport)
     fov = 2 * math.atan(view_params["horizontal_aperture"] / (2 * view_params["focal_length"]))
-    view_proj_mat = helpers.get_view_proj_mat(view_params)
+    view_proj_mat = lazy.omni.syntheticdata.helpers.get_view_proj_mat(view_params)
 
     return {
-        "pose": np.array(prim_tf),
+        "pose": np.array(prim_tf).T,        # omni natively gives transposed pose so we have to "un"-transpose it
         "fov": fov,
         "focal_length": view_params["focal_length"],
         "horizontal_aperture": view_params["horizontal_aperture"],
         "view_projection_matrix": view_proj_mat,
         "resolution": {"width": view_params["width"], "height": view_params["height"]},
-        "clipping_range": view_params["clipping_range"],
+        "clipping_range": np.array(view_params["clipping_range"]),
     }
 
 
@@ -138,13 +114,13 @@ def get_semantic_objects_pose():
     """
     Get pose of all objects with a semantic label.
     """
-    stage = omni.usd.get_context().get_stage()
-    mappings = helpers.get_instance_mappings()
+    stage = lazy.omni.usd.get_context().get_stage()
+    mappings = lazy.omni.syntheticdata.helpers.get_instance_mappings()
     pose = []
     for m in mappings:
         prim_path = m[1]
         prim = stage.GetPrimAtPath(prim_path)
-        prim_tf = omni.usd.get_world_transform_matrix(prim)
+        prim_tf = lazy.omni.usd.get_world_transform_matrix(prim)
         pose.append((str(prim_path), m[2], str(m[3]), np.array(prim_tf)))
     return pose
 
@@ -183,21 +159,21 @@ def create_joint(prim_path, joint_type, body0=None, body1=None, enabled=True,
         f"At least either body0 or body1 must be specified when creating a joint!"
 
     # Create the joint
-    joint = UsdPhysics.__dict__[joint_type].Define(og.sim.stage, prim_path)
+    joint = getattr(lazy.pxr.UsdPhysics, joint_type).Define(og.sim.stage, prim_path)
 
     # Possibly add body0, body1 targets
     if body0 is not None:
-        assert is_prim_path_valid(body0), f"Invalid body0 path specified: {body0}"
-        joint.GetBody0Rel().SetTargets([Sdf.Path(body0)])
+        assert lazy.omni.isaac.core.utils.prims.is_prim_path_valid(body0), f"Invalid body0 path specified: {body0}"
+        joint.GetBody0Rel().SetTargets([lazy.pxr.Sdf.Path(body0)])
     if body1 is not None:
-        assert is_prim_path_valid(body1), f"Invalid body1 path specified: {body1}"
-        joint.GetBody1Rel().SetTargets([Sdf.Path(body1)])
+        assert lazy.omni.isaac.core.utils.prims.is_prim_path_valid(body1), f"Invalid body1 path specified: {body1}"
+        joint.GetBody1Rel().SetTargets([lazy.pxr.Sdf.Path(body1)])
 
     # Get the prim pointed to at this path
-    joint_prim = get_prim_at_path(prim_path)
+    joint_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path)
 
     # Apply joint API interface
-    PhysxSchema.PhysxJointAPI.Apply(joint_prim)
+    lazy.pxr.PhysxSchema.PhysxJointAPI.Apply(joint_prim)
 
     # We need to step rendering once to auto-fill the local pose before overwriting it.
     # Note that for some reason, if multi_gpu is used, this line will crash if create_joint is called during on_contact
@@ -205,13 +181,13 @@ def create_joint(prim_path, joint_type, body0=None, body1=None, enabled=True,
     og.sim.render()
 
     if joint_frame_in_parent_frame_pos is not None:
-        joint_prim.GetAttribute("physics:localPos0").Set(Gf.Vec3f(*joint_frame_in_parent_frame_pos))
+        joint_prim.GetAttribute("physics:localPos0").Set(lazy.pxr.Gf.Vec3f(*joint_frame_in_parent_frame_pos))
     if joint_frame_in_parent_frame_quat is not None:
-        joint_prim.GetAttribute("physics:localRot0").Set(Gf.Quatf(*joint_frame_in_parent_frame_quat[[3, 0, 1, 2]]))
+        joint_prim.GetAttribute("physics:localRot0").Set(lazy.pxr.Gf.Quatf(*joint_frame_in_parent_frame_quat[[3, 0, 1, 2]]))
     if joint_frame_in_child_frame_pos is not None:
-        joint_prim.GetAttribute("physics:localPos1").Set(Gf.Vec3f(*joint_frame_in_child_frame_pos))
+        joint_prim.GetAttribute("physics:localPos1").Set(lazy.pxr.Gf.Vec3f(*joint_frame_in_child_frame_pos))
     if joint_frame_in_child_frame_quat is not None:
-        joint_prim.GetAttribute("physics:localRot1").Set(Gf.Quatf(*joint_frame_in_child_frame_quat[[3, 0, 1, 2]]))
+        joint_prim.GetAttribute("physics:localRot1").Set(lazy.pxr.Gf.Quatf(*joint_frame_in_child_frame_quat[[3, 0, 1, 2]]))
 
     if break_force is not None:
         joint_prim.GetAttribute("physics:breakForce").Set(break_force)
@@ -235,7 +211,13 @@ class RigidContactAPI:
     Class containing class methods to aggregate rigid body contacts across all rigid bodies in the simulator
     """
     # Dictionary mapping rigid body prim path to corresponding index in the contact view matrix
-    _PATH_TO_IDX = None
+    _PATH_TO_ROW_IDX = None
+    _PATH_TO_COL_IDX = None
+
+    # Numpy array of rigid body prim paths where its array index directly corresponds to the corresponding
+    # index in the contact view matrix
+    _ROW_IDX_TO_PATH = None
+    _COL_IDX_TO_PATH = None
 
     # Contact view for generating contact matrices at each timestep
     _CONTACT_VIEW = None
@@ -258,12 +240,12 @@ class RigidContactAPI:
         # matches the same ordering we store objects in our registry. So the mapping we generate from our registry
         # mapping aligns with omni's ordering!
         i = 0
-        cls._PATH_TO_IDX = dict()
+        cls._PATH_TO_COL_IDX = dict()
         for obj in og.sim.scene.objects:
             if obj.prim_type == PrimType.RIGID:
                 for link in obj.links.values():
                     if not link.kinematic_only:
-                        cls._PATH_TO_IDX[link.prim_path] = i
+                        cls._PATH_TO_COL_IDX[link.prim_path] = i
                         i += 1
 
         # If there are no valid objects, clear the view and terminate early
@@ -278,23 +260,53 @@ class RigidContactAPI:
         with suppress_omni_log(channels=["omni.physx.tensors.plugin"]):
             cls._CONTACT_VIEW = og.sim.physics_sim_view.create_rigid_contact_view(
                 pattern="/World/*/*",
-                filter_patterns=list(cls._PATH_TO_IDX.keys()),
+                filter_patterns=list(cls._PATH_TO_COL_IDX.keys()),
             )
 
+        # Create deterministic mapping from path to row index
+        cls._PATH_TO_ROW_IDX = {path: i for i, path in enumerate(cls._CONTACT_VIEW.sensor_paths)}
+
+        # Store the reverse mappings as well. This can just be a numpy array since the mapping uses integer indices
+        cls._ROW_IDX_TO_PATH = np.array(list(cls._PATH_TO_ROW_IDX.keys()))
+        cls._COL_IDX_TO_PATH = np.array(list(cls._PATH_TO_COL_IDX.keys()))
+
         # Sanity check generated view -- this should generate square matrices of shape (N, N, 3)
-        n_bodies = len(cls._PATH_TO_IDX)
-        # from IPython import embed; embed()
-        assert cls._CONTACT_VIEW.sensor_count == n_bodies and cls._CONTACT_VIEW.filter_count == n_bodies, \
-            f"Got unexpected contact view shape. Expected: ({n_bodies}, {n_bodies}); " \
-            f"got: ({cls._CONTACT_VIEW.sensor_count}, {cls._CONTACT_VIEW.filter_count})"
+        n_bodies = len(cls._PATH_TO_COL_IDX)
+        assert cls._CONTACT_VIEW.filter_count == n_bodies, \
+            f"Got unexpected contact view shape. Expected: (N, {n_bodies}); " \
+            f"got: (N, {cls._CONTACT_VIEW.filter_count})"
 
     @classmethod
-    def get_body_idx(cls, prim_path):
+    def get_body_row_idx(cls, prim_path):
         """
         Returns:
-            int: idx assigned to the rigid body defined by @prim_path
+            int: row idx assigned to the rigid body defined by @prim_path
         """
-        return cls._PATH_TO_IDX[prim_path]
+        return cls._PATH_TO_ROW_IDX[prim_path]
+
+    @classmethod
+    def get_body_col_idx(cls, prim_path):
+        """
+        Returns:
+            int: col idx assigned to the rigid body defined by @prim_path
+        """
+        return cls._PATH_TO_COL_IDX[prim_path]
+
+    @classmethod
+    def get_row_idx_prim_path(cls, idx):
+        """
+        Returns:
+            str: @prim_path corresponding to the row idx @idx in the contact matrix
+        """
+        return cls._ROW_IDX_TO_PATH[idx]
+
+    @classmethod
+    def get_col_idx_prim_path(cls, idx):
+        """
+        Returns:
+            str: @prim_path corresponding to the column idx @idx in the contact matrix
+        """
+        return cls._COL_IDX_TO_PATH[idx]
 
     @classmethod
     def get_all_impulses(cls):
@@ -302,12 +314,12 @@ class RigidContactAPI:
         Grab all impulses at the current timestep
 
         Returns:
-            n-array: (N, N, 3) impulse array defining current impulses between all N contact-sensor enabled rigid bodies
-                in the simulator
+            n-array: (N, M, 3) impulse array defining current impulses between all N contact-sensor enabled rigid bodies
+                in the simulator and M tracked rigid bodies
         """
         # Generate the contact matrix if it doesn't already exist
         if cls._CONTACT_MATRIX is None:
-            cls._CONTACT_MATRIX = cls._CONTACT_VIEW.get_contact_force_matrix(dt=1.0)
+            cls._CONTACT_MATRIX = cls._CONTACT_VIEW.get_contact_force_matrix(dt=1.0).cpu().numpy()
 
         return cls._CONTACT_MATRIX
 
@@ -328,8 +340,8 @@ class RigidContactAPI:
                 from @prim_paths_b
         """
         # Compute subset of matrix and return
-        idxs_a = [cls._PATH_TO_IDX[path] for path in prim_paths_a]
-        idxs_b = [cls._PATH_TO_IDX[path] for path in prim_paths_b]
+        idxs_a = [cls._PATH_TO_ROW_IDX[path] for path in prim_paths_a]
+        idxs_b = [cls._PATH_TO_COL_IDX[path] for path in prim_paths_b]
         return cls.get_all_impulses()[idxs_a][:, idxs_b]
 
     @classmethod
@@ -366,35 +378,66 @@ class CollisionAPI:
     """
     Class containing class methods to facilitate collision handling, e.g. collision groups
     """
-    ACTIVE_COLLISION_GROUPS = {}
+    ACTIVE_COLLISION_GROUPS = dict()
 
     @classmethod
-    def add_to_collision_group(cls, col_group, prim_path, create_if_not_exist=False):
+    def create_collision_group(cls, col_group, filter_self_collisions=False):
+        """
+        Creates a new collision group with name @col_group
+
+        Args:
+            col_group (str): Name of the collision group to create
+            filter_self_collisions (bool): Whether to ignore self-collisions within the group. Default is False
+        """
+        # Can only be done when sim is stopped
+        assert og.sim.is_stopped(), "Cannot create a collision group unless og.sim is stopped!"
+
+        # Make sure the group doesn't already exist
+        assert col_group not in cls.ACTIVE_COLLISION_GROUPS, \
+            f"Cannot create collision group {col_group} because it already exists!"
+
+        # Create the group
+        col_group_prim_path = f"/World/collision_groups/{col_group}"
+        group = lazy.pxr.UsdPhysics.CollisionGroup.Define(og.sim.stage, col_group_prim_path)
+        if filter_self_collisions:
+            # Do not collide with self
+            group.GetFilteredGroupsRel().AddTarget(col_group_prim_path)
+        cls.ACTIVE_COLLISION_GROUPS[col_group] = group
+
+    @classmethod
+    def add_to_collision_group(cls, col_group, prim_path):
         """
         Adds the prim and all nested prims specified by @prim_path to the global collision group @col_group. If @col_group
         does not exist, then it will either be created if @create_if_not_exist is True, otherwise will raise an Error.
         Args:
             col_group (str): Name of the collision group to assign the prim at @prim_path to
             prim_path (str): Prim (and all nested prims) to assign to this @col_group
-            create_if_not_exist (bool): True if @col_group should be created if it does not already exist, otherwise an
-                error will be raised
         """
-        # TODO: This slows things down and / or crashes the sim with large number of objects. Skipping this for now, look into this later
-        pass
-        # # Check if collision group exists or not
-        # if col_group not in cls.ACTIVE_COLLISION_GROUPS:
-        #     # Raise error if we don't explicitly want to create a new group
-        #     if not create_if_not_exist:
-        #         raise ValueError(f"Collision group {col_group} not found in current registry, and create_if_not_exist"
-        #                          f"was set to False!")
-        #     # Otherwise, create the new group
-        #     col_group_name = f"/World/collisionGroup_{col_group}"
-        #     group = UsdPhysics.CollisionGroup.Define(get_current_stage(), col_group_name)
-        #     group.GetFilteredGroupsRel().AddTarget(col_group_name)  # Make sure that we can collide within our own group
-        #     cls.ACTIVE_COLLISION_GROUPS[col_group] = group
-        #
-        # # Add this prim to the collision group
-        # cls.ACTIVE_COLLISION_GROUPS[col_group].GetCollidersCollectionAPI().GetIncludesRel().AddTarget(prim_path)
+        # Make sure collision group exists
+        assert col_group in cls.ACTIVE_COLLISION_GROUPS, \
+            f"Cannot add to collision group {col_group} because it does not exist!"
+
+        # Add this prim to the collision group
+        cls.ACTIVE_COLLISION_GROUPS[col_group].GetCollidersCollectionAPI().GetIncludesRel().AddTarget(prim_path)
+
+    @classmethod
+    def add_group_filter(cls, col_group, filter_group):
+        """
+        Adds a new group filter for group @col_group, filtering all collision with group @filter_group
+        Args:
+            col_group (str): Name of the collision group which will have a new filter group added
+            filter_group (str): Name of the group that should be filtered
+        """
+        # Make sure the group doesn't already exist
+        for group_name in (col_group, filter_group):
+            assert group_name in cls.ACTIVE_COLLISION_GROUPS, \
+                (f"Cannot add group filter {filter_group} to collision group {col_group} because at least one group "
+                 f"does not exist!")
+
+        # Grab the group, and add the filter
+        filter_group_prim_path = f"/World/collision_groups/{filter_group}"
+        group = cls.ACTIVE_COLLISION_GROUPS[col_group]
+        group.GetFilteredGroupsRel().AddTarget(filter_group_prim_path)
 
     @classmethod
     def clear(cls):
@@ -404,261 +447,11 @@ class CollisionAPI:
         cls.ACTIVE_COLLISION_GROUPS = {}
 
 
-class BoundingBoxAPI:
-    """
-    Class containing class methods to facilitate bounding box handling
-    """
-    # Non-flatcache-compatible cache -- this is a direct omni API-based object
-    CACHE_NON_FLATCACHE = None
-
-    # Flatcache-compatible cache -- this is a dictionary mapping prim paths to corresponding AABBs
-    CACHE_FLATCACHE = dict()
-
-    @classmethod
-    def compute_aabb(cls, prim):
-        """
-        Computes the AABB (world-frame oriented) for @prim.
-
-        NOTE: If @prim is an EntityPrim (i.e.: owns multiple links), then the computed bounding box will be
-        the subsequent aggregate over all the links.
-
-        Args:
-            prim (XFormPrim): Prim to calculate AABB for
-
-        Returns:
-            2-tuple:
-                - 3-array: start (x,y,z) corner of world-coordinate frame aligned bounding box
-                - 3-array: end (x,y,z) corner of world-coordinate frame aligned bounding box
-        """
-        # Use the correct API to calculate AABB based on whether flatcache is enabled or not
-        return cls._compute_flatcache_aabb(prim=prim)
-
-    @classmethod
-    def _compute_flatcache_aabb(cls, prim):
-        """
-        Computes the AABB (world-frame oriented) for @prim. This an API compatible with flatcache, which manually
-        updates the @prim's transforms on the USD stage before computing its AABB
-
-        Args:
-            prim (XFormPrim): Prim to calculate AABB for
-
-        Returns:
-            2-tuple:
-                - 3-array: start (x,y,z) corner of world-coordinate frame aligned bounding box
-                - 3-array: end (x,y,z) corner of world-coordinate frame aligned bounding box
-        """
-        # Run imports here to avoid circular imports
-        from omnigibson.prims import EntityPrim, RigidPrim, XFormPrim
-
-        # Simply grab the AABB if it's already been cached
-        if prim in cls.CACHE_FLATCACHE:
-            return cls.CACHE_FLATCACHE[prim]
-
-        # Next, process the AABB depending on the type of prim it is
-        if isinstance(prim, EntityPrim):
-            obj = prim
-        elif isinstance(prim, RigidPrim):
-            # Find the obj owning this link
-            obj = og.sim.scene.object_registry("prim_path", "/".join(prim.prim_path.split("/")[:-1]))
-        elif isinstance(prim, XFormPrim):
-            # See if this XForm belongs to any object
-            obj = og.sim.scene.object_registry("prim_path", "/".join(prim.prim_path.split("/")[:2]), None)
-        else:
-            raise ValueError(f"Inputted prim must be an instance of EntityPrim, RigidPrim, or XFormPrim "
-                             f"in order to calculate AABB!")
-
-        # Update tfs for the object that owns this prim
-        if obj is not None:
-            FlatcacheAPI.sync_raw_object_transforms_in_usd(prim=obj)
-
-        # Compute the AABB and cache it internally
-        val = cls._compute_non_flatcache_aabb(prim_path=prim.prim_path)
-        cls.CACHE_FLATCACHE[prim] = val
-
-        return val
-
-    @classmethod
-    def _compute_non_flatcache_aabb(cls, prim_path):
-        """
-        Computes the AABB (world-frame oriented) for the prim specified at @prim_path using the underlying omniverse
-        API.
-
-        NOTE: This is NOT compatible with flatcache and will result in incorrect values if flatcache is enabled!! See:
-        https://docs.omniverse.nvidia.com/app_code/prod_extensions/ext_physics.html#physx-short-flatcache-also-known-as-fabric-rename-in-next-release
-
-        Args:
-            prim_path (str): Path to the prim to calculate AABB for
-
-        Returns:
-            2-tuple:
-                - 3-array: start (x,y,z) corner of world-coordinate frame aligned bounding box
-                - 3-array: end (x,y,z) corner of world-coordinate frame aligned bounding box
-        """
-        # Create cache if it doesn't already exist
-        if cls.CACHE_NON_FLATCACHE is None:
-            og.sim.psi.fetch_results()
-            cls.CACHE_NON_FLATCACHE = create_bbox_cache(use_extents_hint=False)
-
-        # Grab aabb
-        aabb = compute_aabb(bbox_cache=cls.CACHE_NON_FLATCACHE, prim_path=prim_path)
-
-        # Sanity check values
-        if np.any(aabb[3:] < aabb[:3]):
-            raise ValueError(f"Got invalid aabb values for prim: {prim_path}: low={aabb[:3]}, high={aabb[3:]}")
-
-        return aabb[:3], aabb[3:]
-
-    @classmethod
-    def compute_center_extent(cls, prim):
-        """
-        Computes the AABB (world-frame oriented) for @prim, and convert it into the center and extent values
-
-        Args:
-            prim (XFormPrim): Prim to calculate AABB for
-
-        Returns:
-            2-tuple:
-                - 3-array: center position (x,y,z) of world-coordinate frame aligned bounding box
-                - 3-array: end-to-end extent size (x,y,z) of world-coordinate frame aligned bounding box
-        """
-        low, high = cls.compute_aabb(prim=prim)
-
-        return (low + high) / 2.0, high - low
-
-    @classmethod
-    def clear(cls):
-        """
-        Clears the internal state of this BoundingBoxAPI. This should occur at least once per sim step.
-        """
-        cls.CACHE_NON_FLATCACHE = None
-        cls.CACHE_FLATCACHE = dict()
-
-    @classmethod
-    def aabb_contains_point(cls, point, container):
-        """
-        Returns true if the point is contained in the container AABB
-
-        Args:
-            point (tuple): (x,y,z) position in world-coordinates
-            container (tuple):
-                - 3-array: start (x,y,z) corner of world-coordinate frame aligned bounding box
-                - 3-array: end (x,y,z) corner of world-coordinate frame aligned bounding box
-
-        Returns:
-            bool: True if AABB contains @point, otherwise False
-        """
-        lower, upper = container
-        return np.less_equal(lower, point).all() and np.less_equal(point, upper).all()
-
-
-class FlatcacheAPI:
-    """
-    Monolithic class for leveraging functionality meant to be used EXCLUSIVELY with flatcache.
-    """
-    # Modified prims since transition from sim being stopped to sim being played occurred
-    # This should get cleared every time og.sim.stop() gets called
-    MODIFIED_PRIMS = set()
-
-    @classmethod
-    def sync_raw_object_transforms_in_usd(cls, prim):
-        """
-        Manually synchronizes the per-link local raw transforms per-joint raw states from entity prim @prim using
-        dynamic control interface as the ground truth.
-
-        NOTE: This slightly abuses the dynamic control - usd integration, and should ONLY be used if flatcache
-        is active, since the USD is not R/W at runtime and so we can write directly to child link poses on the USD
-        without breaking the simulation!
-
-        Args:
-            prim (EntityPrim): prim whose owned links and joints should have their raw local states updated to match the
-                "true" values found from the dynamic control interface
-        """
-        # Make sure flatcache is enabled -- this should NEVER be called otherwise!!
-        assert gm.ENABLE_FLATCACHE, "Syncing raw object transforms should only occur if flatcache is being used!"
-
-        # We're somewhat abusing low-level dynamic control - physx - usd integration, but we (supposedly) know
-        # what we're doing so we suppress logging so we don't see any error messages :D
-        with suppress_omni_log(["omni.physx.plugin"]):
-            # Import here to avoid circular imports
-            from omnigibson.prims.xform_prim import XFormPrim
-
-            # 1. For every link, update its xformOp properties based on the delta_tf between object frame and link frame
-            obj_pos, obj_quat = XFormPrim.get_local_pose(prim)
-            for link in prim.links.values():
-                rel_pos, rel_quat = T.relative_pose_transform(*link.get_position_orientation(), obj_pos, obj_quat)
-                XFormPrim.set_local_pose(link, rel_pos, rel_quat)
-            # 2. For every joint, update its linear / angular joint state
-            if prim.n_joints > 0:
-                joints_pos = prim.get_joint_positions()
-                for joint, joint_pos in zip(prim.joints.values(), joints_pos):
-                    state_name = "linear" if joint.joint_type == JointType.JOINT_PRISMATIC else "angular"
-                    joint_pos = joint_pos if joint.joint_type == JointType.JOINT_PRISMATIC else joint_pos * 180.0 / np.pi
-                    joint.set_attribute(f"state:{state_name}:physics:position", float(joint_pos))
-
-            # Update the simulation without taking any time
-            # This is needed because physx complains that we're manually writing to child links' poses, and will
-            # subsequently not respect any additional writes to the object pose before an additional step is taken.
-            # So we take a "zero" length step so that any additional writes to the object's pose at the current
-            # timestep are respected
-            og.sim.pi.update_simulation(elapsedStep=0, currentTime=og.sim.current_time)
-
-        # Add this prim to the set of modified prims
-        cls.MODIFIED_PRIMS.add(prim)
-
-    @classmethod
-    def reset_raw_object_transforms_in_usd(cls, prim):
-        """
-        Manually resets the per-link local raw transforms and per-joint raw states from entity prim @prim to be zero.
-
-        NOTE: This slightly abuses the dynamic control - usd integration, and should ONLY be used if flatcache
-        is active, since the USD is not R/W at runtime and so we can write directly to child link poses on the USD
-        without breaking the simulation!
-
-        Args:
-            prim (EntityPrim): prim whose owned links and joints should have their local values reset to be zero
-        """
-        # Make sure flatcache is enabled -- this should NEVER be called otherwise!!
-        assert gm.ENABLE_FLATCACHE, "Resetting raw object transforms should only occur if flatcache is being used!"
-
-        # We're somewhat abusing low-level dynamic control - physx - usd integration, but we (supposedly) know
-        # what we're doing so we suppress logging so we don't see any error messages :D
-        with suppress_omni_log(["omni.physx.plugin"]):
-            # Import here to avoid circular imports
-            from omnigibson.prims.xform_prim import XFormPrim
-
-            # 1. For every link, update its xformOp properties to be 0
-            for link in prim.links.values():
-                XFormPrim.set_local_pose(link, np.zeros(3), np.array([0, 0, 0, 1.0]))
-            # 2. For every joint, update its linear / angular joint state to be 0
-            if prim.n_joints > 0:
-                for joint in prim.joints.values():
-                    state_name = "linear" if joint.joint_type == JointType.JOINT_PRISMATIC else "angular"
-                    joint.set_attribute(f"state:{state_name}:physics:position", 0.0)
-
-            # Update the simulation without taking any time
-            # This is needed because physx complains that we're manually writing to child links' poses, and will
-            # subsequently not respect any additional writes to the object pose before an additional step is taken.
-            # So we take a "zero" length step so that any additional writes to the object's pose at the current
-            # timestep are respected
-            og.sim.pi.update_simulation(elapsedStep=0, currentTime=og.sim.current_time)
-
-    @classmethod
-    def reset(cls):
-        """
-        Resets the internal state of this FlatcacheAPI.This should only occur when the simulator is stopped
-        """
-        # For any prim transforms that were manually updated, we need to restore their original transforms
-        for prim in cls.MODIFIED_PRIMS:
-            cls.reset_raw_object_transforms_in_usd(prim)
-        cls.MODIFIED_PRIMS = set()
-
-
 def clear():
     """
     Clear state tied to singleton classes
     """
     CollisionAPI.clear()
-    BoundingBoxAPI.clear()
 
 
 def create_mesh_prim_with_default_xform(primitive_type, prim_path, u_patches=None, v_patches=None, stage=None):
@@ -676,30 +469,41 @@ def create_mesh_prim_with_default_xform(primitive_type, prim_path, u_patches=Non
         stage (None or Usd.Stage): If specified, stage on which the primitive mesh should be generated. If None, will
             use og.sim.stage
     """
+    MESH_PRIM_TYPE_TO_EVALUATOR_MAPPING = {
+        "Sphere": lazy.omni.kit.primitive.mesh.evaluators.sphere.SphereEvaluator,
+        "Disk": lazy.omni.kit.primitive.mesh.evaluators.disk.DiskEvaluator,
+        "Plane": lazy.omni.kit.primitive.mesh.evaluators.plane.PlaneEvaluator,
+        "Cylinder": lazy.omni.kit.primitive.mesh.evaluators.cylinder.CylinderEvaluator,
+        "Torus": lazy.omni.kit.primitive.mesh.evaluators.torus.TorusEvaluator,
+        "Cone": lazy.omni.kit.primitive.mesh.evaluators.cone.ConeEvaluator,
+        "Cube": lazy.omni.kit.primitive.mesh.evaluators.cube.CubeEvaluator,
+    }
 
     assert primitive_type in PRIMITIVE_MESH_TYPES, "Invalid primitive mesh type: {primitive_type}"
     evaluator = MESH_PRIM_TYPE_TO_EVALUATOR_MAPPING[primitive_type]
-    u_backup = carb.settings.get_settings().get(evaluator.SETTING_U_SCALE)
-    v_backup = carb.settings.get_settings().get(evaluator.SETTING_V_SCALE)
-    hs_backup = carb.settings.get_settings().get(evaluator.SETTING_OBJECT_HALF_SCALE)
-    carb.settings.get_settings().set(evaluator.SETTING_U_SCALE, 1)
-    carb.settings.get_settings().set(evaluator.SETTING_V_SCALE, 1)
+    u_backup = lazy.carb.settings.get_settings().get(evaluator.SETTING_U_SCALE)
+    v_backup = lazy.carb.settings.get_settings().get(evaluator.SETTING_V_SCALE)
+    hs_backup = lazy.carb.settings.get_settings().get(evaluator.SETTING_OBJECT_HALF_SCALE)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_U_SCALE, 1)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_V_SCALE, 1)
     stage = og.sim.stage if stage is None else stage
 
     # Default half_scale (i.e. half-extent, half_height, radius) is 1.
     # TODO (eric): change it to 0.5 once the mesh generator API accepts floating-number HALF_SCALE
     #  (currently it only accepts integer-number and floors 0.5 into 0).
-    carb.settings.get_settings().set(evaluator.SETTING_OBJECT_HALF_SCALE, 1)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_OBJECT_HALF_SCALE, 1)
     kwargs = dict(prim_type=primitive_type, prim_path=prim_path, stage=stage)
     if u_patches is not None and v_patches is not None:
         kwargs["u_patches"] = u_patches
         kwargs["v_patches"] = v_patches
 
+    # Import now to avoid too-eager load of Omni classes due to inheritance
+    from omnigibson.utils.deprecated_utils import CreateMeshPrimWithDefaultXformCommand
     CreateMeshPrimWithDefaultXformCommand(**kwargs).do()
 
-    carb.settings.get_settings().set(evaluator.SETTING_U_SCALE, u_backup)
-    carb.settings.get_settings().set(evaluator.SETTING_V_SCALE, v_backup)
-    carb.settings.get_settings().set(evaluator.SETTING_OBJECT_HALF_SCALE, hs_backup)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_U_SCALE, u_backup)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_V_SCALE, v_backup)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_OBJECT_HALF_SCALE, hs_backup)
 
 
 def mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=True, include_texcoord=True):
@@ -826,6 +630,37 @@ def get_mesh_volume_and_com(mesh_prim):
 
     return is_volume, volume, com
 
+def check_extent_radius_ratio(mesh_prim):
+    """
+    Checks if the extent radius ratio of @mesh_prim is within the acceptable range for PhysX GPU acceleration (not too oblong)
+
+    Ref: https://github.com/NVIDIA-Omniverse/PhysX/blob/561a0df858d7e48879cdf7eeb54cfe208f660f18/physx/source/geomutils/src/convex/GuConvexMeshData.h#L183-L190
+
+    Args:
+        mesh_prim (Usd.Prim): Mesh prim to check the extent radius ratio for
+
+    Returns:
+        bool: True if the extent radius ratio is within the acceptable range, False otherwise
+    """
+
+    mesh_type = mesh_prim.GetPrimTypeInfo().GetTypeName()
+    assert mesh_type in GEOM_TYPES, f"Invalid mesh type: {mesh_type}"
+
+    if mesh_type != "Mesh":
+        return True
+
+    is_volume, _, com = get_mesh_volume_and_com(mesh_prim)
+
+    trimesh_mesh = mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=False, include_texcoord=False)
+    if not is_volume:
+        trimesh_mesh = trimesh_mesh.convex_hull
+
+    max_radius = trimesh_mesh.extents.max() / 2.0
+    min_radius = trimesh.proximity.closest_point(trimesh_mesh, np.array([com]))[1][0]
+    ratio = max_radius / min_radius
+
+    # PhysX requires ratio to be < 100.0. We use 95.0 to be safe.
+    return ratio < 95.0
 
 def create_primitive_mesh(prim_path, primitive_type, extents=1.0, u_patches=None, v_patches=None, stage=None):
     """
@@ -852,7 +687,7 @@ def create_primitive_mesh(prim_path, primitive_type, extents=1.0, u_patches=None
     """
     assert_valid_key(key=primitive_type, valid_keys=PRIMITIVE_MESH_TYPES, name="primitive mesh type")
     create_mesh_prim_with_default_xform(primitive_type, prim_path, u_patches=u_patches, v_patches=v_patches, stage=stage)
-    mesh = UsdGeom.Mesh.Define(og.sim.stage if stage is None else stage, prim_path)
+    mesh = lazy.pxr.UsdGeom.Mesh.Define(og.sim.stage if stage is None else stage, prim_path)
 
     # Modify the points and normals attributes so that total extents is the desired
     # This means multiplying omni's default by extents * 50.0, as the native mesh generated has extents [-0.01, 0.01]
@@ -860,8 +695,8 @@ def create_primitive_mesh(prim_path, primitive_type, extents=1.0, u_patches=None
     extents = np.ones(3) * extents if isinstance(extents, float) else np.array(extents)
     for attr in (mesh.GetPointsAttr(), mesh.GetNormalsAttr()):
         vals = np.array(attr.Get()).astype(np.float64)
-        attr.Set(Vt.Vec3fArray([Gf.Vec3f(*(val * extents * 50.0)) for val in vals]))
-    mesh.GetExtentAttr().Set(Vt.Vec3fArray([Gf.Vec3f(*(-extents / 2.0)), Gf.Vec3f(*(extents / 2.0))]))
+        attr.Set(lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*(val * extents * 50.0)) for val in vals]))
+    mesh.GetExtentAttr().Set(lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*(-extents / 2.0)), lazy.pxr.Gf.Vec3f(*(extents / 2.0))]))
 
     return mesh
 
@@ -885,8 +720,8 @@ def add_asset_to_stage(asset_path, prim_path):
     assert os.path.exists(asset_path), f"Cannot load {asset_type.upper()} file {asset_path} because it does not exist!"
 
     # Add reference to stage and grab prim
-    add_reference_to_stage(usd_path=asset_path, prim_path=prim_path)
-    prim = get_prim_at_path(prim_path)
+    lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=asset_path, prim_path=prim_path)
+    prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path)
 
     # Make sure prim was loaded correctly
     assert prim, f"Failed to load {asset_type.upper()} object from path: {asset_path}"
@@ -899,4 +734,4 @@ def get_world_prim():
     Returns:
         Usd.Prim: Active world prim in the current stage
     """
-    return get_prim_at_path("/World")
+    return lazy.omni.isaac.core.utils.prims.get_prim_at_path("/World")

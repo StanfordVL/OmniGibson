@@ -8,7 +8,7 @@ import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.utils.asset_utils import get_og_avg_category_specs
 
-MAX_INSTANCE_COUNT = 1024
+MAX_INSTANCE_COUNT = 16384
 MAX_CLASS_COUNT = 4096
 MAX_VIEWER_SIZE = 2048
 
@@ -50,17 +50,17 @@ class SemanticClass(IntEnum):
 
 
 # Specific methods for applying / removing particles
-class ParticleModifyMethod(IntEnum):
-    ADJACENCY = 0
-    PROJECTION = 1
+class ParticleModifyMethod(str, Enum):
+    ADJACENCY = "adjacency"
+    PROJECTION = "projection"
 
 
 # Specific condition types for applying / removing particles
-class ParticleModifyCondition(IntEnum):
-    FUNCTION = 0
-    SATURATED = 1
-    TOGGLEDON = 2
-    GRAVITY = 3
+class ParticleModifyCondition(str, Enum):
+    FUNCTION = "function"
+    SATURATED = "saturated"
+    TOGGLEDON = "toggled_on"
+    GRAVITY = "gravity"
 
 
 # Valid omni characters for specifying strings, e.g. prim paths
@@ -68,15 +68,6 @@ VALID_OMNI_CHARS = frozenset({'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
 
 # Structure categories that need to always be loaded for stability purposes
 STRUCTURE_CATEGORIES = frozenset({"floors", "walls", "ceilings", "lawn", "driveway", "fence"})
-
-# Note that we are starting this from bit 6 since bullet seems to be giving special meaning to groups 0-5.
-# Collision groups for objects. For special logic, different categories can be assigned different collision groups.
-ALL_COLLISION_GROUPS_MASK = -1
-DEFAULT_COLLISION_GROUP = "default"
-SPECIAL_COLLISION_GROUPS = {
-    "floors": "floors",
-    "carpet": "carpet",
-}
 
 
 # Joint friction magic values to assign to objects based on their category

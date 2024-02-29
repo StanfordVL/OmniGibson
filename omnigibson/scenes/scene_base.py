@@ -1,15 +1,18 @@
 import json
 from abc import ABC
 from itertools import combinations
-from omni.isaac.core.objects.ground_plane import GroundPlane
 import numpy as np
+
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.prims.xform_prim import XFormPrim
+from omnigibson.prims.material_prim import MaterialPrim
 from omnigibson.utils.python_utils import classproperty, Serializable, Registerable, Recreatable, \
     create_object_from_init_info
 from omnigibson.utils.registry_utils import SerializableRegistry
 from omnigibson.utils.ui_utils import create_module_logger
+from omnigibson.utils.usd_utils import CollisionAPI
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system
 from omnigibson.objects.light_object import LightObject
@@ -143,7 +146,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         Returns:
             list of str: Keys with which to index into the object registry. These should be valid public attributes of
-                prims that we can use as unique IDs to reference prims, e.g., prim.prim_path, prim.name, prim.handle, etc.
+                prims that we can use as unique IDs to reference prims, e.g., prim.prim_path, prim.name, etc.
         """
         return ["name", "prim_path", "uuid"]
 
@@ -169,6 +172,17 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         Load the scene into simulator
         The elements to load may include: floor, building, objects, etc.
         """
+        # Create collision group for fixed base objects' non root links, root links, and building structures
+        CollisionAPI.create_collision_group(col_group="fixed_base_nonroot_links", filter_self_collisions=False)
+        # Disable collision between root links of fixed base objects
+        CollisionAPI.create_collision_group(col_group="fixed_base_root_links", filter_self_collisions=True)
+        # Disable collision between building structures
+        CollisionAPI.create_collision_group(col_group="structures", filter_self_collisions=True)
+
+        # Disable collision between building structures and fixed base objects
+        CollisionAPI.add_group_filter(col_group="structures", filter_group="fixed_base_nonroot_links")
+        CollisionAPI.add_group_filter(col_group="structures", filter_group="fixed_base_root_links")
+
         # We just add a ground plane if requested
         if self._use_floor_plane:
             self.add_ground_plane(color=self._floor_plane_color, visible=self._floor_plane_visible)
@@ -425,20 +439,18 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
 
         # If this object is fixed and is NOT an agent, disable collisions between the fixed links of the fixed objects
         # This is to account for cases such as Tiago, which has a fixed base which is needed for its global base joints
+        # We do this by adding the object to our tracked collision groups
+        structure_categories = {"walls", "floors", "ceilings"}
         if obj.fixed_base and obj.category != robot_macros.ROBOT_CATEGORY:
-            # TODO: Remove building hotfix once asset collision meshes are fixed!!
-            building_categories = {"walls", "floors", "ceilings"}
-            for fixed_obj in self.fixed_objects.values():
-                # Filter out collisions between walls / ceilings / floors and ALL links of the other object
-                if obj.category in building_categories:
-                    for link in fixed_obj.links.values():
-                        obj.root_link.add_filtered_collision_pair(link)
-                elif fixed_obj.category in building_categories:
-                    for link in obj.links.values():
-                        fixed_obj.root_link.add_filtered_collision_pair(link)
-                else:
-                    # Only filter out root links
-                    obj.root_link.add_filtered_collision_pair(fixed_obj.root_link)
+            # TODO: Remove structure hotfix once asset collision meshes are fixed!!
+            if obj.category in structure_categories:
+                CollisionAPI.add_to_collision_group(col_group="structures", prim_path=obj.prim_path)
+            else:
+                for link in obj.links.values():
+                    CollisionAPI.add_to_collision_group(
+                        col_group="fixed_base_root_links" if link == obj.root_link else "fixed_base_nonroot_links",
+                        prim_path=link.prim_path,
+                    )
 
         # Add this object to our registry based on its type, if we want to register it
         if register:
@@ -456,8 +468,10 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         Args:
             obj (BaseObject): Object to remove
         """
-        # Remove from the appropriate registry
-        self.object_registry.remove(obj)
+        # Remove from the appropriate registry if registered.
+        # Sometimes we don't register objects to the object registry during import_object (e.g. particle templates)
+        if self.object_registry.object_is_registered(obj):
+            self.object_registry.remove(obj)
 
         # Remove from omni stage
         obj.remove()
@@ -472,7 +486,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         # Reset the states of all objects (including robots), including (non-)kinematic states and internal variables.
         assert self._initial_state is not None
         self.load_state(self._initial_state)
-        og.sim.step()
+        og.sim.step_physics()
 
     @property
     def n_floors(self):
@@ -510,13 +524,16 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         return np.random.randint(0, self.n_floors)
 
-    def get_random_point(self, floor=None):
+    def get_random_point(self, floor=None, reference_point=None, robot=None):
         """
         Sample a random point on the given floor number. If not given, sample a random floor number.
-        Should be implemented by subclass.
+        If @reference_point is given, sample a point in the same connected component as the previous point.
 
         Args:
             floor (None or int): floor number. None means the floor is randomly sampled
+                                 Warning: if @reference_point is given, @floor must be given; 
+                                          otherwise, this would lead to undefined behavior
+            reference_point (3-array): (x,y,z) if given, sample a point in the same connected component as this point
 
         Returns:
             2-tuple:
@@ -525,7 +542,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         """
         raise NotImplementedError()
 
-    def get_shortest_path(self, floor, source_world, target_world, entire_path=False):
+    def get_shortest_path(self, floor, source_world, target_world, entire_path=False, robot=None):
         """
         Get the shortest path from one point to another point.
 
@@ -534,6 +551,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             source_world (2-array): (x,y) 2D source location in world reference frame (metric)
             target_world (2-array): (x,y) 2D target location in world reference frame (metric)
             entire_path (bool): whether to return the entire path
+            robot (None or BaseRobot): if given, erode the traversability map to account for the robot's size
 
         Returns:
             2-tuple:
@@ -580,7 +598,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             color (None or 3-array): If specified, sets the (R,G,B) color of the generated plane
             visible (bool): Whether the plane should be visible or not
         """
-        plane = GroundPlane(
+        plane = lazy.omni.isaac.core.objects.ground_plane.GroundPlane(
             prim_path=prim_path,
             name=name,
             z_position=z_position,
@@ -599,11 +617,15 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             name=plane.name,
         )
 
-    def update_initial_state(self):
+    def update_initial_state(self, state=None):
         """
         Updates the initial state for this scene (which the scene will get reset to upon calling reset())
+
+        Args:
+            state (None or dict): If specified, the state to set internally. Otherwise, will set the initial state to
+                be the current state
         """
-        self._initial_state = self.dump_state(serialized=False)
+        self._initial_state = self.dump_state(serialized=False) if state is None else state
 
     def update_objects_info(self):
         """

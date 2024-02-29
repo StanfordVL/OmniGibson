@@ -5,10 +5,6 @@ import numpy as np
 
 import omnigibson as og
 
-# Make sure object states and GPU dynamics are enabled (GPU dynamics needed for cloth)
-gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
-
 
 def main(random_selection=False, headless=False, short_exec=False):
     """
@@ -57,7 +53,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+    env = og.Environment(configs=cfg)
 
     # Grab object references
     carpet = env.scene.object_registry("name", "carpet")

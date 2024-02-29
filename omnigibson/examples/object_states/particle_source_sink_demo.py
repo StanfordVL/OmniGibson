@@ -5,9 +5,7 @@ from omnigibson import object_states
 from omnigibson.macros import gm
 from omnigibson.utils.constants import ParticleModifyCondition
 
-# Make sure object states are enabled and GPU dynamics are used
-gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
+# Enable HQ rendering for better visual fidelity
 gm.ENABLE_HQ_RENDERING = True
 
 
@@ -63,7 +61,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     cfg["objects"] = [sink_cfg]
 
     # Create the environment!
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
 
     # Set camera to ideal angle for viewing objects
     og.sim.viewer_camera.set_position_orientation(

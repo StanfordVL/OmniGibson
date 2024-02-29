@@ -2,10 +2,6 @@ import numpy as np
 
 import omnigibson as og
 from omnigibson import object_states
-from omnigibson.macros import gm
-
-# Make sure object states are enabled
-gm.ENABLE_OBJECT_STATES = True
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -60,7 +56,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+    env = og.Environment(configs=cfg)
 
     # Get reference to relevant objects
     stove = env.scene.object_registry("name", "stove")
