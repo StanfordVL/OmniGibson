@@ -7352,8 +7352,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/export_objs_global.py
-      md5: 80a44ee69ca7f84c36b9e01e1ae6291f
-      size: 28474
+      md5: bd21f2f9a3d72dc21b8cc54c2534aaa7
+      size: 28458
     - path: b1k_pipeline/mesh_tree.py
       md5: c14fb2ec356d866c90c4fc00c31560f9
       size: 14484
@@ -8428,11 +8428,11 @@ stages:
       size: 339445
     outs:
     - path: artifacts/parallels/objects.zip
-      md5: 633b047341ae12f63fef9cf1c32d74af
-      size: 17473336070
+      md5: 7a04d332caae469aaa266d1f8e5f736c
+      size: 19157722760
     - path: artifacts/pipeline/export_objs.json
-      md5: e1b7b515c58da6ebc7f6500641f24b17
-      size: 4751
+      md5: 7b65a589e056297f258f284566d901be
+      size: 8468
   aggregate_metadata:
     cmd: python -m b1k_pipeline.aggregate_metadata
     deps:
@@ -13533,8 +13533,8 @@ stages:
       size: 5044820
       nfiles: 1064
     - path: artifacts/parallels/objects.zip
-      md5: 633b047341ae12f63fef9cf1c32d74af
-      size: 17473336070
+      md5: 7a04d332caae469aaa266d1f8e5f736c
+      size: 19157722760
     - path: b1k_pipeline/aggregate_fillable_volumes.py
       md5: 3feec050093d9e499b525b93baa7c3fa
       size: 2730
@@ -13543,5 +13543,5 @@ stages:
       size: 14363
     outs:
     - path: artifacts/parallels/fillable_volumes.zip
-      md5: 52d7809c65a367844bb23b4ee61bf8d3
+      md5: a432c0123696a9cb1beff54d1d2c5da1
       size: 1020174

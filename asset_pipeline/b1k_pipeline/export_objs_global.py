@@ -72,9 +72,8 @@ def save_mesh_unit_bbox(mesh, *args, **kwargs):
 
     # Find how much the mesh would need to be scaled to fit into a unit cube
     bounding_box = mesh_copy.bounding_box.extents
-    scale = np.ones(3)
-    valid_idxes = bounding_box > 1e-4
-    scale[valid_idxes] = 1 / bounding_box[valid_idxes]
+    assert np.all(bounding_box > 0), f"Bounding box extents are not all positive: {bounding_box}"
+    scale = 1 / bounding_box
 
     # Scale the mesh
     scale_matrix = np.eye(4)
@@ -237,7 +236,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     # Save the mesh
     with TempFS() as tfs:      
         obj_relative_path = f"{obj_name}-{link_name}.obj"
-        visual_scale = save_mesh_unit_bbox(canonical_mesh, tfs, obj_relative_path)
+        save_mesh(canonical_mesh, tfs, obj_relative_path)
 
         # Check that a material got exported.
         material_files = [x for x in tfs.listdir("/") if x.endswith(".mtl")]
@@ -328,7 +327,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     visual_mesh_xml = ET.SubElement(visual_geometry_xml, "mesh")
     visual_mesh_xml.attrib = {
         "filename": os.path.join("shape", "visual", obj_relative_path).replace("\\", "/"),
-        "scale": " ".join([str(item) for item in visual_scale])
+        "scale": " ".join([str(item) for item in np.ones(3)])
     }
 
     collision_origin_xmls = []
