@@ -43,11 +43,23 @@
     </div>
   </div>
   <br>
+
+  <h2>Directly Mapped Categories</h2>
+  <div class="container">
+    <div class="row justify-content-md-center">
+      {% for category in synset.categories %}
+      <div class="col-md-auto my-1"><a href="{{ url_for('category_detail', name=category.name) }}" class="btn">{{ category.name }}</a></div>
+      {% else %}
+      <p>None</p>
+      {% endfor %}
+    </div>
+  </div>
+  <br>
   
   <h2>Directly Mapped Objects</h2>
   <div class="container">
     <div class="row justify-content-md-center">
-      {% for object in synset.direct_matching_objects%}
+      {% for object in synset.direct_matching_object %}
       <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
       {% else %}
       <p>None</p>
@@ -59,7 +71,7 @@
   <h2>All Descendant Objects (including Direct)</h2>
   <div class="container">
     <div class="row justify-content-md-center">
-      {% for object in synset.matching_objects%}
+      {% for object in synset.matching_objects %}
       <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
       {% else %}
       <p>None</p>
