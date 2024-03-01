@@ -121349,10 +121349,7 @@
         "wrinkleable": {}
     },
     "window_blind.n.01": {
-        "cloth": {},
-        "deformable": {},
         "disinfectable": {},
-        "drapeable": {},
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
@@ -121919,6 +121916,7 @@
             "default_fluid_conditions": [],
             "method": "adjacency"
         },
+        "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
