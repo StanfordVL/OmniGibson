@@ -4,7 +4,6 @@
     (:objects
         window_blind.n.01_1 - window_blind.n.01
         table.n.02_1 - table.n.02
-        curtain_rod.n.01_1 - curtain_rod.n.01
         wall.n.01_1 - wall.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
@@ -12,7 +11,6 @@
     
     (:init 
         (ontop window_blind.n.01_1 table.n.02_1) 
-        (attached curtain_rod.n.01_1 wall.n.01_1) 
         (inroom wall.n.01_1 living_room)
         (inroom floor.n.01_1 living_room)
         (inroom table.n.02_1 living_room) 
@@ -21,7 +19,7 @@
     
     (:goal 
         (and 
-            (draped ?window_blind.n.01_1 ?curtain_rod.n.01_1)
+            (attached ?window_blind.n.01_1 ?wall.n.01_1)
         )
     )
 )

@@ -12,8 +12,8 @@
     (:init 
         (ontop curtain.n.01_1 floor.n.01_1) 
         (attached curtain_rod.n.01_1 wall.n.01_1)
-        (inroom floor.n.01_1 bedroom) 
-        (inroom wall.n.01_1 bedroom) 
+        (inroom floor.n.01_1 living_room)
+        (inroom wall.n.01_1 living_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
