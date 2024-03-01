@@ -19,7 +19,7 @@
     (:init 
         (ontop chopping_board.n.01_1 oven.n.01_1) 
         (inside duck.n.03_1 electric_refrigerator.n.01_1)
-        (filled wine_sauce__bottle.n.01_1 wine_sauce.n.01_1)
+        (insource wine_sauce__bottle.n.01_1 wine_sauce.n.01_1)
         (inside wine_sauce__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (inside clove.n.03_1 bowl.n.01_1) 
         (inside clove.n.03_2 bowl.n.01_1) 

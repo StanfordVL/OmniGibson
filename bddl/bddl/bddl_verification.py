@@ -77,6 +77,7 @@ VALID_ATTACHMENTS = set([
     ("kayak_rack.n.01", "wall.n.01"),
     ("trout.n.01", "fishing_rod.n.01"),
     ("bicycle_rack.n.01", "recreational_vehicle.n.01"),
+    ("window_blind.n.01", "wall.n.01"),
 ])
 
 VALID_ROOMS = set()
@@ -319,6 +320,7 @@ def check_synset_predicate_alignment(atom, syns_to_props):
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "attached":
         assert tuple(objects) in VALID_ATTACHMENTS, f"Inapplicable attached: {atom}"
+        assert ("rigidBody" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable attached: {atom}"
     if pred == "draped": 
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "insource": 
