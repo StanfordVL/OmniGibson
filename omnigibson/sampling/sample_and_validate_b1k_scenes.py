@@ -35,7 +35,7 @@ import getpass
 """
 
 SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
-CREDENTIALS = "/home/jdw/.config/gcloud/key.json"
+CREDENTIALS = "key.json"
 WORKSHEET = "GTC2024 - 5a2d64"
 USER = getpass.getuser()
 
@@ -44,9 +44,9 @@ worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
 
 ACTIVITY_TO_ROW = {activity: i + 2 for i, activity in enumerate(worksheet.col_values(1)[1:])}
 
-SCENE_INFO_FPATH =  "/home/jdw/Downloads/BEHAVIOR-1K Scenes.csv"
-TASK_INFO_FPATH = "/home/jdw/Downloads/BEHAVIOR-1K Tasks.csv"
-SYNSET_INFO_FPATH = "/home/jdw/Downloads/BEHAVIOR-1K Synsets.csv"
+SCENE_INFO_FPATH =  "BEHAVIOR-1K Scenes.csv"
+TASK_INFO_FPATH = "BEHAVIOR-1K Tasks.csv"
+SYNSET_INFO_FPATH = "BEHAVIOR-1K Synsets.csv"
 
 UNSUPPORTED_PREDICATES = {"broken", "assembled", "attached"}
 
@@ -526,18 +526,20 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Define the configuration to load -- we'll use a Fetch
     cfg = {
+        # Use default frequency
         "env": {
-            "action_frequency": 50,
-            "physics_frequency": 100,
+            "action_frequency": 30,
+            "physics_frequency": 120,
         },
         "scene": {
             "type": "InteractiveTraversableScene",
+            "scene_path": default_scene_fpath,
             "scene_model": args.scene_model,
         },
         "robots": [
             {
                 "type": "Fetch",
-                "obs_modalities": ["scan", "rgb", "depth"],
+                "obs_modalities": ["rgb"],
                 "grasping_mode": "physical",
                 "default_arm_pose": "diagonal30",
                 "default_reset_mode": "tuck",
@@ -557,11 +559,11 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Take a few steps to let objects settle, then update the scene initial state
     # This is to prevent nonzero velocities from causing objects to fall through the floor when we disable them
     # if they're not relevant for a given task
-    for _ in range(10):
-        og.sim.step()
-    for obj in env.scene.objects:
-        obj.keep_still()
-    env.scene.update_initial_state()
+    # for _ in range(10):
+    #     og.sim.step()
+    # for obj in env.scene.objects:
+    #     obj.keep_still()
+    # env.scene.update_initial_state()
 
     # Store the initial state -- this is the safeguard to reset to!
     scene_initial_state = copy.deepcopy(env.scene._initial_state)
@@ -676,20 +678,20 @@ def main(random_selection=False, headless=False, short_exec=False):
                     if not valid_init_state:
                         success = False
                         reason = f"BDDL Task init conditions were invalid. Results: {results}"
-
+                        env.task.feedback = reason
                 if success:
                     # TODO: figure out whether we also should update in_room for newly imported objects
                     env.task.save_task(override=args.overwrite_existing)
-
-                    og.sim.stop()
                     og.log.info(f"\n\nSampling success: {activity}\n\n")
                     reason = ""
                 else:
                     og.log.error(f"\n\nSampling failed: {activity}.\n\nFeedback: {reason}\n\n")
                     reason = env.task.feedback
-
+                og.sim.stop()
             else:
                 og.log.error(f"\n\nSampling failed: {activity}.\n\nFeedback: {reason}\n\n")
+
+            assert og.sim.is_stopped()
 
             # Write to google sheets
             cell_list = worksheet.range(f"B{row}:H{row}")
@@ -715,83 +717,82 @@ def main(random_selection=False, headless=False, short_exec=False):
             clear_pu()
 
             og.sim.step()
-            og.sim.play()
+            # og.sim.play()
             # This will clear out the previous attachment group in macro particle systems
-            og.sim.scene.load_state(scene_initial_state)
-            og.sim.step()
-            og.sim.scene.update_initial_state()
-            og.sim.stop()
+            # og.sim.scene.load_state(scene_initial_state)
+            # og.sim.step()
+            # og.sim.scene.update_initial_state()
+            # og.sim.stop()
 
-            if success:
-                try:
-                    # Validate task
-                    with open(f"{gm.DATASET_PATH}/scenes/{args.scene_model}/json/{scene_instance}.json", "r") as f:
-                        task_scene_dict = json.load(f)
-                    validated, loaded_scene, error_msg = validate_task(
-                        env=env,
-                        activity=activity,
-                        default_scene_dict=default_scene_dict,
-                        task_scene_dict=task_scene_dict,
-                    )
-
-                    env.task_config["online_object_sampling"] = True
-
-                    # Make sure sim is stopped
-                    og.sim.stop()
-
-                    # Write to google sheets
-                    cell_list = worksheet.range(f"B{row}:H{row}")
-                    for cell, val in zip(cell_list,
-                                         ("", int(success), int(validated), args.scene_model, USER,
-                                          "" if error_msg is None else error_msg, "")):
-                        cell.value = val
-                    worksheet.update_cells(cell_list)
-
-                    # Clear task callbacks if sampled
-                    if loaded_scene:
-                        callback_name = f"{activity}_refresh"
-                        og.sim.remove_callback_on_import_obj(name=callback_name)
-                        og.sim.remove_callback_on_remove_obj(name=callback_name)
-                        remove_callback_on_system_init(name=callback_name)
-                        remove_callback_on_system_clear(name=callback_name)
-
-                        # Remove all the additionally added objects
-                        for obj in env.scene.objects[n_scene_objects:]:
-                            og.sim.remove_object(obj)
-
-                    # Clear all systems
-                    clear_all_systems()
-                    clear_pu()
-
-                    og.sim.step()
-                    og.sim.play()
-                    # This will clear out the previous attachment group in macro particle systems
-                    og.sim.scene.load_state(scene_initial_state)
-                    og.sim.step()
-                    og.sim.scene.update_initial_state()
-                    og.sim.stop()
-
-                    if validated:
-                        og.log.info(f"\n\nValidation success: {activity}\n\n")
-                        reason = ""
-                    else:
-                        og.log.error(f"\n\nValidation failed: {activity}.\n\nFeedback: {error_msg}\n\n")
-                        reason = error_msg
-
-                except Exception as e:
-                    traceback_str = f"{traceback.format_exc()}"
-                    og.log.error(traceback_str)
-                    og.log.error(f"\n\nCaught exception validating activity {activity} in scene {args.scene_model}:\n\n{e}\n\n")
-
-                    # Clear the in_progress reservation and note the exception
-                    cell_list = worksheet.range(f"B{row}:H{row}")
-                    for cell, val in zip(cell_list,
-                                         ("", int(success), 0, args.scene_model, USER, "" if reason is None else reason, traceback_str)):
-                        cell.value = val
-                    worksheet.update_cells(cell_list)
-
-                    env.task_config["online_object_sampling"] = True
-
+            # if success:
+            #     try:
+            #         # Validate task
+            #         with open(f"{gm.DATASET_PATH}/scenes/{args.scene_model}/json/{scene_instance}.json", "r") as f:
+            #             task_scene_dict = json.load(f)
+            #         validated, loaded_scene, error_msg = validate_task(
+            #             env=env,
+            #             activity=activity,
+            #             default_scene_dict=default_scene_dict,
+            #             task_scene_dict=task_scene_dict,
+            #         )
+            #
+            #         env.task_config["online_object_sampling"] = True
+            #
+            #         # Make sure sim is stopped
+            #         og.sim.stop()
+            #
+            #         # Write to google sheets
+            #         cell_list = worksheet.range(f"B{row}:H{row}")
+            #         for cell, val in zip(cell_list,
+            #                              ("", int(success), int(validated), args.scene_model, USER,
+            #                               "" if error_msg is None else error_msg, "")):
+            #             cell.value = val
+            #         worksheet.update_cells(cell_list)
+            #
+            #         # Clear task callbacks if sampled
+            #         if loaded_scene:
+            #             callback_name = f"{activity}_refresh"
+            #             og.sim.remove_callback_on_import_obj(name=callback_name)
+            #             og.sim.remove_callback_on_remove_obj(name=callback_name)
+            #             remove_callback_on_system_init(name=callback_name)
+            #             remove_callback_on_system_clear(name=callback_name)
+            #
+            #             # Remove all the additionally added objects
+            #             for obj in env.scene.objects[n_scene_objects:]:
+            #                 og.sim.remove_object(obj)
+            #
+            #         # Clear all systems
+            #         clear_all_systems()
+            #         clear_pu()
+            #
+            #         og.sim.step()
+            #         # og.sim.play()
+            #         # This will clear out the previous attachment group in macro particle systems
+            #         # og.sim.scene.load_state(scene_initial_state)
+            #         # og.sim.step()
+            #         # og.sim.scene.update_initial_state()
+            #         # og.sim.stop()
+            #
+            #         if validated:
+            #             og.log.info(f"\n\nValidation success: {activity}\n\n")
+            #             reason = ""
+            #         else:
+            #             og.log.error(f"\n\nValidation failed: {activity}.\n\nFeedback: {error_msg}\n\n")
+            #             reason = error_msg
+            #
+            #     except Exception as e:
+            #         traceback_str = f"{traceback.format_exc()}"
+            #         og.log.error(traceback_str)
+            #         og.log.error(f"\n\nCaught exception validating activity {activity} in scene {args.scene_model}:\n\n{e}\n\n")
+            #
+            #         # Clear the in_progress reservation and note the exception
+            #         cell_list = worksheet.range(f"B{row}:H{row}")
+            #         for cell, val in zip(cell_list,
+            #                              ("", int(success), 0, args.scene_model, USER, "" if reason is None else reason, traceback_str)):
+            #             cell.value = val
+            #         worksheet.update_cells(cell_list)
+            #
+            #         env.task_config["online_object_sampling"] = True
 
         except Exception as e:
             traceback_str = f"{traceback.format_exc()}"
