@@ -734,6 +734,8 @@ def main(random_selection=False, headless=False, short_exec=False):
                         task_scene_dict=task_scene_dict,
                     )
 
+                    env.task_config["online_object_sampling"] = True
+
                     # Make sure sim is stopped
                     og.sim.stop()
 
@@ -741,7 +743,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                     cell_list = worksheet.range(f"B{row}:H{row}")
                     for cell, val in zip(cell_list,
                                          ("", int(success), int(validated), args.scene_model, USER,
-                                          "" if reason is None else reason, "")):
+                                          "" if error_msg is None else error_msg, "")):
                         cell.value = val
                     worksheet.update_cells(cell_list)
 
@@ -787,6 +789,8 @@ def main(random_selection=False, headless=False, short_exec=False):
                                          ("", int(success), 0, args.scene_model, USER, "" if reason is None else reason, traceback_str)):
                         cell.value = val
                     worksheet.update_cells(cell_list)
+
+                    env.task_config["online_object_sampling"] = True
 
 
         except Exception as e:
