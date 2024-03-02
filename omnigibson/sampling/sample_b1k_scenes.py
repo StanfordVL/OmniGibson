@@ -107,7 +107,7 @@ def validate_scene_can_be_sampled(scene):
 
     # Fill in this value to reserve it
     idx = scenes_sorted.index(scene)
-    worksheet.update_acell(f"S{2 + idx}", USER)
+    worksheet.update_acell(f"U{2 + idx}", USER)
 
 
 def prune_unevaluatable_predicates(init_conditions):
@@ -370,7 +370,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                     # Don't use this on cloth since these may be unstable at high masses
                     for obj in env.scene.objects[n_scene_objects:]:
                         if obj.prim_type != PrimType.CLOTH:
-                            obj.root_link.mass = 100.0
+                            obj.root_link.mass = max(1.0, obj.root_link.mass)
 
                     # Sampling success
                     og.sim.play()
