@@ -384,7 +384,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                     valid_init_state, results = evaluate_state(prune_unevaluatable_predicates(env.task.activity_initial_conditions))
                     if not valid_init_state:
                         success = False
-                        feedback = f"BDDL Task init conditions were invalid. Results: {results}"
+                        reason = f"BDDL Task init conditions were invalid. Results: {results}"
 
                 if success:
                     # TODO: figure out whether we also should update in_room for newly imported objects
@@ -394,7 +394,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                     og.log.info(f"\n\nSampling success: {activity}\n\n")
                     reason = ""
                 else:
-                    og.log.error(f"\n\nSampling failed: {activity}.\n\nFeedback: {feedback}\n\n")
+                    og.log.error(f"\n\nSampling failed: {activity}.\n\nFeedback: {reason}\n\n")
                     reason = env.task.feedback
 
             else:
