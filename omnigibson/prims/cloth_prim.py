@@ -131,6 +131,18 @@ class ClothPrim(GeomPrim):
         # Store the default position of the points in the local frame
         self._default_positions = np.array(self.get_attribute(attr="points"))
 
+    @property
+    def visual_aabb(self):
+        return self.aabb
+
+    @property
+    def visual_aabb_extent(self):
+        return self.aabb_extent
+
+    @property
+    def visual_aabb_center(self):
+        return self.aabb_center
+
     @classproperty
     def cloth_system(cls):
         return get_system("cloth")
