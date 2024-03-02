@@ -886,11 +886,11 @@ stages:
       md5: 90ceeebf0562f843c1ef8b9575d4a5c0
       size: 43806
     - path: cad/objects/legacy_batch-09/artifacts/object_list.json
-      md5: 9a2fd163d3ff9d70b94840520f974d1c
-      size: 38351
+      md5: faced5d8ae6e4d31d85bd60ed85a5ce8
+      size: 38182
     - path: cad/objects/legacy_batch-10/artifacts/object_list.json
-      md5: 7f189a0dd91aeddbd93d780cf654a393
-      size: 46892
+      md5: df487351eedafc04ad2b05bc36d98562
+      size: 46533
     - path: cad/objects/legacy_batch-11/artifacts/object_list.json
       md5: d51087e7d039e6e5bee729457dc13c4d
       size: 38835
@@ -1169,11 +1169,11 @@ stages:
       md5: 90ceeebf0562f843c1ef8b9575d4a5c0
       size: 43806
     - path: cad/objects/legacy_batch-09/artifacts/object_list.json
-      md5: 9a2fd163d3ff9d70b94840520f974d1c
-      size: 38351
+      md5: faced5d8ae6e4d31d85bd60ed85a5ce8
+      size: 38182
     - path: cad/objects/legacy_batch-10/artifacts/object_list.json
-      md5: 7f189a0dd91aeddbd93d780cf654a393
-      size: 46892
+      md5: df487351eedafc04ad2b05bc36d98562
+      size: 46533
     - path: cad/objects/legacy_batch-11/artifacts/object_list.json
       md5: d51087e7d039e6e5bee729457dc13c4d
       size: 38835
@@ -1371,8 +1371,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 614a0ce690da50fdef38a5911a639044
-      size: 1542100
+      md5: 737511344cc5f8095c1262a5bd88f5b0
+      size: 1542038
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -1452,11 +1452,11 @@ stages:
       md5: 90ceeebf0562f843c1ef8b9575d4a5c0
       size: 43806
     - path: cad/objects/legacy_batch-09/artifacts/object_list.json
-      md5: 9a2fd163d3ff9d70b94840520f974d1c
-      size: 38351
+      md5: faced5d8ae6e4d31d85bd60ed85a5ce8
+      size: 38182
     - path: cad/objects/legacy_batch-10/artifacts/object_list.json
-      md5: 7f189a0dd91aeddbd93d780cf654a393
-      size: 46892
+      md5: df487351eedafc04ad2b05bc36d98562
+      size: 46533
     - path: cad/objects/legacy_batch-11/artifacts/object_list.json
       md5: d51087e7d039e6e5bee729457dc13c4d
       size: 38835
@@ -1657,8 +1657,8 @@ stages:
       size: 12959
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: ba72dbffecbae1fb5ccf03bb36045ba7
-      size: 1545623
+      md5: 3b9fcbe675dfe4131e82f676823b6d96
+      size: 1545561
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -5302,8 +5302,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/objects/legacy_batch-09/processed.max
-      md5: ec6c1c63a3de342ebbdf85670a15f2c5
-      size: 124851616
+      md5: 9846b90e7418ca5c4cd280bdeae3afe4
+      size: 124517136
     outs:
     - path: cad/objects/legacy_batch-09/artifacts/sanitycheck.json
       md5: de25d5f0c97dbc6f46d1aaf96fa4f2e4
@@ -5316,8 +5316,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/objects/legacy_batch-10/processed.max
-      md5: 8344adea71f85626ad46064366872889
-      size: 237246232
+      md5: 5c66a65e331cb94c2389fd5c20ac3801
+      size: 237119256
     outs:
     - path: cad/objects/legacy_batch-10/artifacts/sanitycheck.json
       md5: 58e084260b947c7c07a14c09b01519c2
@@ -5510,12 +5510,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/objects/legacy_batch-10/processed.max
-      md5: 8344adea71f85626ad46064366872889
-      size: 237246232
+      md5: 5c66a65e331cb94c2389fd5c20ac3801
+      size: 237119256
     outs:
     - path: cad/objects/legacy_batch-10/artifacts/object_list.json
-      md5: 7f189a0dd91aeddbd93d780cf654a393
-      size: 46892
+      md5: df487351eedafc04ad2b05bc36d98562
+      size: 46533
   export_meshes@objects/legacy_batch-10:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-10/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -5621,12 +5621,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/objects/legacy_batch-09/processed.max
-      md5: ec6c1c63a3de342ebbdf85670a15f2c5
-      size: 124851616
+      md5: 9846b90e7418ca5c4cd280bdeae3afe4
+      size: 124517136
     outs:
     - path: cad/objects/legacy_batch-09/artifacts/object_list.json
-      md5: 9a2fd163d3ff9d70b94840520f974d1c
-      size: 38351
+      md5: faced5d8ae6e4d31d85bd60ed85a5ce8
+      size: 38182
   export_meshes@objects/legacy_batch-09:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-09/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -6108,8 +6108,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/objects/batch-11/processed.max
-      md5: 22afb1a7196b57e3e7641f43382702ae
-      size: 131923882
+      md5: b1fea64c1857479b70778e9cad336109
+      size: 131657606
     outs:
     - path: cad/objects/batch-11/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -6292,8 +6292,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/objects/batch-11/processed.max
-      md5: 22afb1a7196b57e3e7641f43382702ae
-      size: 131923882
+      md5: b1fea64c1857479b70778e9cad336109
+      size: 131657606
     outs:
     - path: cad/objects/batch-11/artifacts/object_list.json
       md5: 4b7ca92f6f154b8d3ddf61f5848be615
@@ -7324,8 +7324,8 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/objects/procedural-aa/processed.max
-      md5: 71302fa5b8d83b69ed4bdf85dd460dfc
-      size: 222030390
+      md5: eb6e5e2ea06e00dc1e32360a2a8f5f98
+      size: 221890586
     outs:
     - path: cad/objects/procedural-aa/artifacts/object_list.json
       md5: 6cb4759be37e7f3912c487ea660bd87f
@@ -9314,8 +9314,8 @@ stages:
       md5: 558c46d33cf22595753e2545ef611aba
       size: 23719
     - path: cad/objects/procedural-aa/processed.max
-      md5: 71302fa5b8d83b69ed4bdf85dd460dfc
-      size: 222030390
+      md5: eb6e5e2ea06e00dc1e32360a2a8f5f98
+      size: 221890586
     outs:
     - path: cad/objects/procedural-aa/artifacts/sanitycheck.json
       md5: 19f0a6843a2ae4fd80ed056179f3ac4a
@@ -13094,8 +13094,8 @@ stages:
       artifacts/pipeline/object_inventory.success
     deps:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 614a0ce690da50fdef38a5911a639044
-      size: 1542100
+      md5: 737511344cc5f8095c1262a5bd88f5b0
+      size: 1542038
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 729
