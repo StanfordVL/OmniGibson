@@ -33,7 +33,7 @@ import gspread
 
 SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
 CREDENTIALS = "/home/jdw/.config/gcloud/key.json"
-WORKSHEET = "GTC2024 - 7f82ab"
+WORKSHEET = "GTC2024 - 5a2d64"
 USER = "cremebrule"
 
 client = gspread.service_account(filename=CREDENTIALS)
@@ -81,7 +81,7 @@ def write_scenes_to_spreadsheet():
     # Get scenes
     scenes_sorted = get_scenes()
     n_scenes = len(scenes_sorted)
-    cell_list = worksheet.range(f"R{2}:R{2 + n_scenes - 1}")
+    cell_list = worksheet.range(f"T{2}:T{2 + n_scenes - 1}")
     for cell, scene in zip(cell_list, scenes_sorted):
         cell.value = scene
     worksheet.update_cells(cell_list)
@@ -96,7 +96,7 @@ def validate_scene_can_be_sampled(scene):
     def get_user(val):
         return None if (len(val) == 1 or val[1] == "") else val[1]
 
-    scene_user_mapping = {val[0]: get_user(val) for val in worksheet.get(f"R{2}:S{2 + n_scenes - 1}")}
+    scene_user_mapping = {val[0]: get_user(val) for val in worksheet.get(f"T{2}:U{2 + n_scenes - 1}")}
 
     # Make sure scene is valid
     assert scene in scene_user_mapping, f"Got invalid scene name to sample: {scene}"
@@ -108,7 +108,7 @@ def validate_scene_can_be_sampled(scene):
 
     # Fill in this value to reserve it
     idx = scenes_sorted.index(scene)
-    worksheet.update_acell(f"S{2 + idx}", USER)
+    worksheet.update_acell(f"U{2 + idx}", USER)
 
 
 def prune_unevaluatable_predicates(init_conditions):
