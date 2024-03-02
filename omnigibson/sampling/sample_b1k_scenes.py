@@ -12,9 +12,10 @@ import json
 import csv
 import traceback
 from omnigibson.objects import DatasetObject
+from omnigibson.object_states import Contains
 from omnigibson.tasks import BehaviorTask
 from omnigibson.systems import remove_callback_on_system_init, remove_callback_on_system_clear
-from omnigibson.systems.system_base import clear_all_systems
+from omnigibson.systems.system_base import clear_all_systems, PhysicalParticleSystem
 from omnigibson.utils.python_utils import clear as clear_pu
 from omnigibson.utils.bddl_utils import OBJECT_TAXONOMY
 from omnigibson.utils.constants import PrimType
@@ -369,7 +370,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                     # This is to avoid particles from causing instabilities
                     # Don't use this on cloth since these may be unstable at high masses
                     for obj in env.scene.objects[n_scene_objects:]:
-                        if obj.prim_type != PrimType.CLOTH:
+                        if obj.prim_type != PrimType.CLOTH and Contains in obj.states and any(obj.states[Contains].get_value(system) for system in PhysicalParticleSystem.get_active_systems()):
                             obj.root_link.mass = max(1.0, obj.root_link.mass)
 
                     # Sampling success
