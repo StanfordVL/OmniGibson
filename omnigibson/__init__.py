@@ -53,7 +53,7 @@ def cleanup(*args, **kwargs):
         shutil.rmtree(tempdir)
     except PermissionError:
         log.info("Permission error when removing temp files. Ignoring")
-    from omnigibson.simulator import logo_small
+    from omnigibson.utils.ui_utils import logo_small
     log.info(f"{'-' * 10} Shutting Down {logo_small()} {'-' * 10}")
 
 def shutdown(due_to_signal=False):
