@@ -715,15 +715,10 @@ def main(random_selection=False, headless=False, short_exec=False):
             # Clear all systems
             clear_all_systems()
             clear_pu()
-
             og.sim.step()
-            # og.sim.play()
-            # This will clear out the previous attachment group in macro particle systems
-            # og.sim.scene.load_state(scene_initial_state)
-            # og.sim.step()
-            # og.sim.scene.update_initial_state()
-            # og.sim.stop()
+            og.sim.scene.update_initial_state(scene_initial_state)
 
+            #
             # if success:
             #     try:
             #         # Validate task
