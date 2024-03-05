@@ -99,13 +99,17 @@ def transform_mesh(orig_mesh, translation, rotation):
     inv_transform = trimesh.transformations.inverse_matrix(transform)
     mesh.apply_transform(inv_transform)
 
-    # rotation_matrix = np.eye(4)
-    # rotation_matrix[:3, :3] = R.from_quat(rotation).inv().as_matrix()
-    # mesh.apply_transform(trimesh.transformations.translation_matrix(-translation))
-    # mesh.apply_transform(rotation_matrix)
-    ## mesh.apply_transform(trimesh.transformations.translation_matrix(R.from_quat(rotation).inv().apply(translation)))
-
     return mesh
+
+
+def transform_points(points, translation, rotation):
+    # Rotate the object around the CoM of the base link frame by the transpose of its canonical orientation
+    # so that the object has identity orientation in the end
+    transform = np.eye(4)
+    transform[:3, :3] = R.from_quat(rotation).as_matrix()
+    transform[:3, 3] = translation
+    inv_transform = trimesh.transformations.inverse_matrix(transform)
+    return trimesh.transformations.transform_points(points, inv_transform)
 
 
 def transform_meta_links(orig_meta_links, translation, rotation):
@@ -358,10 +362,10 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         rotated_parent_frame = R.from_quat(canonical_orientation).apply(parent_frame)
 
         # Load the meshes.
-        lower_canonical_mesh = transform_mesh(G.nodes[child_node]["lower_mesh_ordered"], base_link_center + rotated_parent_frame, canonical_orientation)
+        lower_canonical_points = transform_points(G.nodes[child_node]["lower_points"], base_link_center + rotated_parent_frame, canonical_orientation)
 
         # Load the centers.
-        child_center = get_mesh_center(lower_canonical_mesh)
+        child_center = np.mean(lower_canonical_points, axis=0)
 
         # Create the joint in the URDF
         joint_xml = ET.SubElement(tree_root, "joint")
@@ -377,17 +381,17 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
 
         mesh_offset = np.zeros(3)
         if joint_type in ("P", "R"):
-            upper_canonical_mesh = transform_mesh(G.nodes[child_node]["upper_mesh"], base_link_center + rotated_parent_frame, canonical_orientation)
+            upper_canonical_points = transform_points(G.nodes[child_node]["upper_points"], base_link_center + rotated_parent_frame, canonical_orientation)
             
             if joint_type == "R":
                 # Revolute joint
-                num_v_lower = lower_canonical_mesh.vertices.shape[0]
-                num_v_upper = upper_canonical_mesh.vertices.shape[0]
+                num_v_lower = lower_canonical_points.shape[0]
+                num_v_upper = upper_canonical_points.shape[0]
                 assert num_v_lower == num_v_upper, f"{child_node} lower mesh has {num_v_lower} vertices while upper has {num_v_upper}. These should match."
                 num_v = num_v_lower
                 random_index = np.random.choice(num_v, min(num_v, 20), replace=False)
-                from_vertices = lower_canonical_mesh.vertices[random_index]
-                to_vertices = upper_canonical_mesh.vertices[random_index]
+                from_vertices = lower_canonical_points[random_index]
+                to_vertices = upper_canonical_points[random_index]
 
                 # Find joint axis and joint limit
                 r = R.align_vectors(
@@ -429,7 +433,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                 meta_links = normalize_meta_links(meta_links, mesh_offset)
             elif joint_type == "P":
                 # Prismatic joint
-                diff = get_mesh_center(upper_canonical_mesh) - get_mesh_center(lower_canonical_mesh)
+                diff = np.mean(upper_canonical_points, axis=0) - np.mean(lower_canonical_points, axis=0)
 
                 # Find joint axis and joint limit
                 if not np.allclose(diff, 0):

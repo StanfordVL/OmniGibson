@@ -10,7 +10,7 @@ import fs.path
 from fs.zipfs import ZipFS
 from scipy.spatial.transform import Rotation as R
 
-from b1k_pipeline.utils import parse_name, load_mesh, PipelineFS
+from b1k_pipeline.utils import parse_name, load_mesh, load_points, PipelineFS
 
 SCALE_FACTOR = 0.001
 SCALE_MATRIX = trimesh.transformations.scale_matrix(0.001)
@@ -166,11 +166,10 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
 
         # Add the data for the position onto the node.
         if joint_side == "upper":
-            assert "upper_mesh" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
+            assert "upper_points" not in G.nodes[node_key], f"Found two upper meshes for {node_key}"
             if load_meshes:
-                upper_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
-                upper_mesh.apply_transform(SCALE_MATRIX)
-                G.nodes[node_key]["upper_mesh"] = upper_mesh
+                upper_points = load_points(mesh_dir, mesh_fn)
+                G.nodes[node_key]["upper_points"] = trimesh.transformations.transform_points(upper_points, SCALE_MATRIX)
         else:
             G.nodes[node_key]["metadata"] = metadata
             G.nodes[node_key]["meta_links"] = meta_links
@@ -183,9 +182,8 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                 lower_mesh.apply_transform(SCALE_MATRIX)
                 G.nodes[node_key]["lower_mesh"] = lower_mesh
 
-                lower_mesh_ordered = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh", skip_materials=True, maintain_order=True)
-                lower_mesh_ordered.apply_transform(SCALE_MATRIX)
-                G.nodes[node_key]["lower_mesh_ordered"] = lower_mesh_ordered
+                lower_points = load_points(mesh_dir, mesh_fn)
+                G.nodes[node_key]["lower_points"] = trimesh.transformations.transform_points(lower_points, SCALE_MATRIX)
 
                 # Attempt to load the collision mesh
                 collision_fs = None
@@ -267,14 +265,14 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
             (_, _, d), = G.in_edges(node, data=True)
             joint_type = d["joint_type"]
             needs_upper = load_upper and not data["is_broken"] and joint_type != "F"
-        assert not load_meshes or not needs_upper or "upper_mesh" in data, f"{node} does not have upper mesh."
+        assert not load_meshes or not needs_upper or "upper_points" in data, f"{node} does not have upper mesh."
         assert not load_meshes or "lower_mesh" in data, f"{node} does not have lower mesh."
-        assert not load_meshes or "lower_mesh_ordered" in data, f"{node} does not have lower mesh."
+        assert not load_meshes or "lower_points" in data, f"{node} does not have lower mesh."
         assert "metadata" in data, f"{node} does not have metadata."
 
-        if "upper_mesh" in data:
-            lower_vertices = len(data["lower_mesh_ordered"].vertices)
-            upper_vertices = len(data["upper_mesh"].vertices)
+        if "upper_points" in data:
+            lower_vertices = len(data["lower_points"])
+            upper_vertices = len(data["upper_points"])
             assert lower_vertices == upper_vertices, f"{node} lower mesh has {lower_vertices} while upper mesh has {upper_vertices}. They should be equal."
 
         if node[3] == "base_link":
