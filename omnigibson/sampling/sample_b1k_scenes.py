@@ -221,7 +221,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 if success:
                     og.sim.load_state(task_final_state)
                     og.sim.scene.update_initial_state(task_final_state)
-                    env.task.save_task(override=args.overwrite_existing)
+                    env.task.save_task(override=True)
                     og.log.info(f"\n\nSampling success: {activity}\n\n")
                     reason = ""
                 else:
