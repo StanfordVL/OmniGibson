@@ -31,7 +31,7 @@ parser.add_argument("--activities", type=str, default=None,
 parser.add_argument("--start_at", type=str, default=None,
                     help="If specified, activity to start at, ignoring all previous")
 
-gm.HEADLESS = False
+gm.HEADLESS = True
 gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_FLATCACHE = False
 gm.ENABLE_OBJECT_STATES = True
