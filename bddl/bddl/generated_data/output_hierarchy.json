@@ -11921,6 +11921,13 @@
                           "categories": [
                             "outline_vase"
                           ]
+                        },
+                        {
+                          "name": "outline_tray.n.01",
+                          "hasModel": true,
+                          "categories": [
+                            "outline_tray"
+                          ]
                         }
                       ]
                     },
@@ -21277,8 +21284,7 @@
                                   "name": "diced__roll_dough.n.01",
                                   "hasModel": true,
                                   "categories": [
-                                    "diced_roll_dough",
-                                    "half_marshmallow"
+                                    "diced_roll_dough"
                                   ],
                                   "substances": [
                                     "diced__roll_dough"
@@ -23296,7 +23302,10 @@
                                     },
                                     {
                                       "name": "half__marshmallow.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_marshmallow"
+                                      ]
                                     },
                                     {
                                       "name": "diced__marshmallow.n.01",
