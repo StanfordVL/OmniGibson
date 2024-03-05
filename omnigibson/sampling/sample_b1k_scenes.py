@@ -7,47 +7,27 @@ import argparse
 import bddl
 import pkgutil
 import omnigibson as og
-from omnigibson.macros import gm
+from omnigibson.macros import gm, macros
 import json
 import csv
 import traceback
 from omnigibson.objects import DatasetObject
 from omnigibson.object_states import Contains
 from omnigibson.tasks import BehaviorTask
-from omnigibson.systems import remove_callback_on_system_init, remove_callback_on_system_clear
+from omnigibson.systems import remove_callback_on_system_init, remove_callback_on_system_clear, get_system, MicroPhysicalParticleSystem
 from omnigibson.systems.system_base import clear_all_systems, PhysicalParticleSystem
 from omnigibson.utils.python_utils import clear as clear_pu
+from omnigibson.utils.python_utils import create_object_from_init_info
 from omnigibson.utils.bddl_utils import OBJECT_TAXONOMY
 from omnigibson.utils.constants import PrimType
 from bddl.activity import Conditions, evaluate_state
+from utils import *
 import numpy as np
-import gspread
-import getpass
 
-"""
-1. gcloud auth login
-2. gcloud auth application-default login
-3. gcloud config set project lucid-inquiry-205018
-4. gcloud iam service-accounts create cremebrule
-5. gcloud iam service-accounts keys create key.json --iam-account=cremebrule@lucid-inquiry-205018.iam.gserviceaccount.com
-6. mv key.json /home/cremebrule/.config/gcloud/key.json
-"""
 
-SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
-CREDENTIALS = "key.json"
-WORKSHEET = "GTC2024 - 5a2d64"
-USER = getpass.getuser()
-
-client = gspread.service_account(filename=CREDENTIALS)
-worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
-
-ACTIVITY_TO_ROW = {activity: i + 2 for i, activity in enumerate(worksheet.col_values(1)[1:])}
-
-SCENE_INFO_FPATH =  "BEHAVIOR-1K Scenes.csv"
-TASK_INFO_FPATH = "BEHAVIOR-1K Tasks.csv"
-SYNSET_INFO_FPATH = "BEHAVIOR-1K Synsets.csv"
-
-UNSUPPORTED_PREDICATES = {"broken", "assembled", "attached"}
+# TODO:
+# 1. Set boundingCube approximation earlier (maybe right after importing the scene objects). Otherwise after loading the robot, we will elapse one physics step
+# 2. Enable transition rule and refresh all rules before online validation
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--scene_model", type=str, required=True,
@@ -59,174 +39,13 @@ parser.add_argument("--start_at", type=str, default=None,
 parser.add_argument("--overwrite_existing", action="store_true",
                     help="If set, will overwrite any existing tasks that are found. Otherwise, will skip.")
 
-gm.HEADLESS = True
+gm.HEADLESS = False
 gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_FLATCACHE = False
 gm.ENABLE_OBJECT_STATES = True
 gm.ENABLE_TRANSITION_RULES = False
 
-
-# CAREFUL!! Only run this ONCE before starting sampling!!!
-def write_activities_to_spreadsheet():
-    valid_tasks_sorted = sorted(get_valid_tasks())
-    n_tasks = len(valid_tasks_sorted)
-    cell_list = worksheet.range(f"A{2}:A{2 + n_tasks - 1}")
-    for cell, task in zip(cell_list, valid_tasks_sorted):
-        cell.value = task
-    worksheet.update_cells(cell_list)
-
-
-# CAREFUL!! Only run this ONCE before starting sampling!!!
-def write_scenes_to_spreadsheet():
-    # Get scenes
-    scenes_sorted = get_scenes()
-    n_scenes = len(scenes_sorted)
-    cell_list = worksheet.range(f"R{2}:R{2 + n_scenes - 1}")
-    for cell, scene in zip(cell_list, scenes_sorted):
-        cell.value = scene
-    worksheet.update_cells(cell_list)
-
-
-def validate_scene_can_be_sampled(scene):
-    scenes_sorted = get_scenes()
-    n_scenes = len(scenes_sorted)
-    # Sanity check scene -- only scenes are allowed that whose user field is either:
-    # (a) blank or (b) filled with USER
-    # scene_user_list = worksheet.range(f"R{2}:S{2 + n_scenes - 1}")
-    def get_user(val):
-        return None if (len(val) == 1 or val[1] == "") else val[1]
-
-    scene_user_mapping = {val[0]: get_user(val) for val in worksheet.get(f"T{2}:U{2 + n_scenes - 1}")}
-
-    # Make sure scene is valid
-    assert scene in scene_user_mapping, f"Got invalid scene name to sample: {scene}"
-
-    # Assert user is None or is USER, else False
-    scene_user = scene_user_mapping[scene]
-    assert scene_user is None or scene_user == USER, \
-        f"Cannot sample scene {scene} with user {USER}! Scene already has user: {scene_user}."
-
-    # Fill in this value to reserve it
-    idx = scenes_sorted.index(scene)
-    worksheet.update_acell(f"U{2 + idx}", USER)
-
-
-def prune_unevaluatable_predicates(init_conditions):
-    pruned_conditions = []
-    for condition in init_conditions:
-        if condition.body[0] in {"insource", "future", "real"}:
-            continue
-        pruned_conditions.append(condition)
-
-    return pruned_conditions
-
-
-def get_predicates(conds):
-    preds = []
-    if isinstance(conds, str):
-        return preds
-    assert isinstance(conds, list)
-    contains_list = np.any([isinstance(ele, list) for ele in conds])
-    if contains_list:
-        for ele in conds:
-            preds += get_predicates(ele)
-    else:
-        preds.append(conds[0])
-    return preds
-
-
-def get_subjects(conds):
-    subjs = []
-    if isinstance(conds, str):
-        return subjs
-    assert isinstance(conds, list)
-    contains_list = np.any([isinstance(ele, list) for ele in conds])
-    if contains_list:
-        for ele in conds:
-            subjs += get_subjects(ele)
-    else:
-        subjs.append(conds[1])
-    return subjs
-
-
-def get_rooms(conds):
-    rooms = []
-    if isinstance(conds, str):
-        return rooms
-    assert isinstance(conds, list)
-    contains_list = np.any([isinstance(ele, list) for ele in conds])
-    if contains_list:
-        for ele in conds:
-            rooms += get_rooms(ele)
-    elif conds[0] == "inroom":
-        rooms.append(conds[2])
-    return rooms
-
-
-def get_scenes():
-    scenes = set()
-    with open(SCENE_INFO_FPATH) as csvfile:
-        reader = csv.reader(csvfile, delimiter=",", quotechar='"')
-        for i, row in enumerate(reader):
-            # Skip first row since it's the header
-            if i == 0:
-                continue
-            scenes.add(row[0])
-
-    return tuple(sorted(scenes))
-
-
-def get_valid_tasks():
-    return set(activity for activity in os.listdir(os.path.join(bddl.__path__[0], "activity_definitions")))
-
-
-def get_notready_synsets():
-    notready_synsets = set()
-    with open(SYNSET_INFO_FPATH) as csvfile:
-        reader = csv.reader(csvfile, delimiter=",", quotechar='"')
-        for i, row in enumerate(reader):
-            if i == 0:
-                continue
-            synset, status = row[:2]
-            if status == "Not Ready":
-                notready_synsets.add(synset)
-
-    return notready_synsets
-
-
-def parse_task_mapping(fpath):
-    mapping = dict()
-    rows = []
-    with open(fpath) as csvfile:
-        reader = csv.reader(csvfile, delimiter=",", quotechar='"')
-        for row in reader:
-            rows.append(row)
-
-    notready_synsets = get_notready_synsets()
-
-    for row in rows[1:]:
-        activity_name = row[0].split("-")[0]
-
-        # Skip any that is missing a synset
-        required_synsets = set(list(entry.strip() for entry in row[1].split(","))[:-1])
-        if len(notready_synsets.intersection(required_synsets)) > 0:
-            continue
-
-        # Write matched ready scenes
-        ready_scenes = set(list(entry.strip() for entry in row[2].split(","))[:-1])
-
-        # There's always a leading whitespace
-        if len(ready_scenes) == 0:
-            continue
-
-        mapping[activity_name] = ready_scenes
-
-    return mapping
-
-
-def get_scene_compatible_activities(scene_model, mapping):
-    return [activity for activity, scenes in mapping.items() if scene_model in scenes]
-
+# macros.prims.entity_prim.DEFAULT_SLEEP_THRESHOLD = 0.0
 
 def main(random_selection=False, headless=False, short_exec=False):
     args = parser.parse_args()
@@ -234,20 +53,32 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Make sure scene can be sampled by current user
     validate_scene_can_be_sampled(scene=args.scene_model)
 
+    # If we want to create a stable scene config, do that now
+    default_scene_fpath = f"{gm.DATASET_PATH}/scenes/{args.scene_model}/json/{args.scene_model}_stable.json"
+    if not os.path.exists(default_scene_fpath):
+        create_stable_scene_json(args=args)
+
+    # Get the default scene instance
+    assert os.path.exists(default_scene_fpath), "Did not find default stable scene json!"
+    with open(default_scene_fpath, "r") as f:
+        default_scene_dict = json.load(f)
+
     # Define the configuration to load -- we'll use a Fetch
     cfg = {
+        # Use default frequency
         "env": {
-            "action_frequency": 50,
-            "physics_frequency": 100,
+            "action_frequency": 30,
+            "physics_frequency": 120,
         },
         "scene": {
             "type": "InteractiveTraversableScene",
+            "scene_file": default_scene_fpath,
             "scene_model": args.scene_model,
         },
         "robots": [
             {
                 "type": "Fetch",
-                "obs_modalities": ["scan", "rgb", "depth"],
+                "obs_modalities": ["rgb"],
                 "grasping_mode": "physical",
                 "default_arm_pose": "diagonal30",
                 "default_reset_mode": "tuck",
@@ -262,16 +93,14 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Create the environment
     # Attempt to sample the activity
+    # env = create_env_with_stable_objects(cfg)
     env = og.Environment(configs=copy.deepcopy(cfg))
 
-    # Take a few steps to let objects settle, then update the scene initial state
-    # This is to prevent nonzero velocities from causing objects to fall through the floor when we disable them
-    # if they're not relevant for a given task
-    for _ in range(10):
-        og.sim.step()
-    for obj in env.scene.objects:
+    # After we load the robot, we do self.scene.reset() (one physics step) and then self.scene.update_initial_state().
+    # We need to set all velocities to zero after this. Otherwise, the visual only objects will drift.
+    for obj in og.sim.scene.objects:
         obj.keep_still()
-    env.scene.update_initial_state()
+    og.sim.scene.update_initial_state()
 
     # Store the initial state -- this is the safeguard to reset to!
     scene_initial_state = copy.deepcopy(env.scene._initial_state)
@@ -378,33 +207,36 @@ def main(random_selection=False, headless=False, short_exec=False):
                     # This will actually reset the objects to their sample poses
                     env.task.reset(env)
 
-                    for i in range(50):
+                    for i in range(300):
                         og.sim.step()
 
-                    # Make sure init conditions are still true
-                    valid_init_state, results = evaluate_state(prune_unevaluatable_predicates(env.task.activity_initial_conditions))
-                    if not valid_init_state:
+                    task_final_state = og.sim.dump_state()
+                    task_scene_dict = {"state": task_final_state}
+                    # from IPython import embed; print("validate_task"); embed()
+                    validated, error_msg = validate_task(env.task, task_scene_dict, default_scene_dict)
+                    if not validated:
                         success = False
-                        reason = f"BDDL Task init conditions were invalid. Results: {results}"
+                        feedback = error_msg
 
                 if success:
-                    # TODO: figure out whether we also should update in_room for newly imported objects
+                    og.sim.load_state(task_final_state)
+                    og.sim.scene.update_initial_state(task_final_state)
                     env.task.save_task(override=args.overwrite_existing)
-
-                    og.sim.stop()
                     og.log.info(f"\n\nSampling success: {activity}\n\n")
                     reason = ""
                 else:
+                    reason = feedback
                     og.log.error(f"\n\nSampling failed: {activity}.\n\nFeedback: {reason}\n\n")
-                    reason = env.task.feedback
-
+                og.sim.stop()
             else:
                 og.log.error(f"\n\nSampling failed: {activity}.\n\nFeedback: {reason}\n\n")
+
+            assert og.sim.is_stopped()
 
             # Write to google sheets
             cell_list = worksheet.range(f"B{row}:H{row}")
             for cell, val in zip(cell_list,
-                                 ("", int(success), "", args.scene_model, USER, "" if reason is None else reason, "")):
+                                 ("", int(success), "", args.scene_model, USER, reason, "")):
                 cell.value = val
             worksheet.update_cells(cell_list)
 
@@ -420,17 +252,13 @@ def main(random_selection=False, headless=False, short_exec=False):
                 for obj in env.scene.objects[n_scene_objects:]:
                     og.sim.remove_object(obj)
 
-            # Clear all systems
-            clear_all_systems()
-            clear_pu()
+                # Clear all systems
+                clear_all_systems()
+                clear_pu()
+                og.sim.step()
 
-            og.sim.step()
-            og.sim.play()
-            # This will clear out the previous attachment group in macro particle systems
-            og.sim.scene.load_state(scene_initial_state)
-            og.sim.step()
-            og.sim.scene.update_initial_state()
-            og.sim.stop()
+                # Update the scene initial state to the original state
+                og.sim.scene.update_initial_state(scene_initial_state)
 
         except Exception as e:
             traceback_str = f"{traceback.format_exc()}"
@@ -440,19 +268,19 @@ def main(random_selection=False, headless=False, short_exec=False):
             # Clear the in_progress reservation and note the exception
             cell_list = worksheet.range(f"B{row}:H{row}")
             for cell, val in zip(cell_list,
-                                 ("", 0, "", args.scene_model, USER, "" if reason is None else reason, traceback_str)):
+                                 ("", 0, "", args.scene_model, USER, reason, traceback_str)):
                 cell.value = val
             worksheet.update_cells(cell_list)
 
             try:
                 # Stop sim, clear simulator, and re-create environment
-                e_str = f"{e}"
                 og.sim.stop()
                 og.sim.clear()
             except AttributeError as e:
                 # This is the "GetPath" error that happens sporatically. It's benign, so we ignore it
                 pass
 
+            # env = create_env_with_stable_objects(cfg)
             env = og.Environment(configs=copy.deepcopy(cfg))
 
             # Store the initial state -- this is the safeguard to reset to!

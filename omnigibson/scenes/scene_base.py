@@ -17,6 +17,8 @@ from omnigibson.objects.object_base import BaseObject
 from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system
 from omnigibson.objects.light_object import LightObject
 from omnigibson.robots.robot_base import m as robot_macros
+from omnigibson.sampling.utils import BOUNDING_CUBE_OBJECTS
+from omnigibson.objects import DatasetObject
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -232,6 +234,12 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             obj = create_object_from_init_info(obj_info)
             # Import into the simulator
             og.sim.import_object(obj)
+            if isinstance(obj, DatasetObject) and obj.model in BOUNDING_CUBE_OBJECTS:
+                link_names = BOUNDING_CUBE_OBJECTS[obj.model]
+                for link_name in link_names:
+                    link = obj.links[link_name]
+                    for col_mesh in link.collision_meshes.values():
+                        col_mesh.set_collision_approximation("boundingCube")
             # Set the init pose accordingly
             obj.set_position_orientation(
                 position=init_state[obj_name]["root_link"]["pos"],
