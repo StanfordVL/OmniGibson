@@ -8,7 +8,7 @@ SHELL ["/bin/bash", "-c"]
 RUN micromamba env create --file /tmp/environment.yml
 
 # Install CoACD, open3d
-RUN micromamba run -n pipeline pip install coacd open3d
+RUN micromamba run -n pipeline pip install coacd open3d shapely
 
 # Install V-HACD
 RUN apt-get update && \
