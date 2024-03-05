@@ -37,24 +37,6 @@ SYNSET_INFO_FPATH = "BEHAVIOR-1K Synsets.csv"
 
 UNSUPPORTED_PREDICATES = {"broken", "assembled", "attached"}
 
-# BOUNDING_CUBE_OBJECTS = {
-#     "table_lamp": {
-#         "xbfgjc": {"base_link"},
-#     }
-# }
-
-BOUNDING_CUBE_OBJECTS = {
-    "xbfgjc": {"base_link"},
-}
-
-def create_env_with_stable_objects(cfg):
-    env = og.Environment(configs=copy.deepcopy(cfg))
-    og.sim.stop()
-    modify_objects_to_bounding_cubes()
-    og.sim.play()
-    og.sim.scene.reset()
-    return env
-
 def modify_objects_to_bounding_cubes():
     for obj_category, obj_model_info in BOUNDING_CUBE_OBJECTS.items():
         for obj in og.sim.scene.object_registry("category", obj_category, set()):
