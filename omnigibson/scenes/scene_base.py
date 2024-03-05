@@ -17,8 +17,6 @@ from omnigibson.objects.object_base import BaseObject
 from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system
 from omnigibson.objects.light_object import LightObject
 from omnigibson.robots.robot_base import m as robot_macros
-from omnigibson.sampling.utils import BOUNDING_CUBE_OBJECTS
-from omnigibson.objects import DatasetObject
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -32,6 +30,9 @@ m.DEFAULT_SKYBOX_TEXTURE = f"{gm.ASSET_PATH}/models/background/sky.jpg"
 # Global dicts that will contain mappings
 REGISTERED_SCENES = dict()
 
+BOUNDING_CUBE_OBJECTS = {
+    "xbfgjc": {"base_link"},
+}
 
 class Scene(Serializable, Registerable, Recreatable, ABC):
     """
