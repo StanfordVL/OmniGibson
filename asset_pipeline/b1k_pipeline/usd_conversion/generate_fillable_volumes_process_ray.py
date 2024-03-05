@@ -14,8 +14,10 @@ from omnigibson.systems.system_base import get_system
 from omnigibson.utils.asset_utils import decrypted
 from omnigibson.utils.sampling_utils import raytest_batch, raytest
 from omnigibson.utils.usd_utils import mesh_prim_to_trimesh_mesh
+import omnigibson.utils.transform_utils as T
 import omnigibson.lazy as lazy
 import trimesh
+import shapely
 
 gm.HEADLESS = True
 gm.USE_ENCRYPTED_ASSETS = True
@@ -42,10 +44,6 @@ def sample_radial_rays(point, n=40, dist=4.0):
     start_points = np.ones((n, 3)) * point.reshape(1, 3)
     end_points = np.array([x, y, np.zeros(n)]).T * dist + point.reshape(1, 3)
     return raytest_batch(start_points, end_points)
-
-
-def point_inside_aabb(point, aabb_low, aabb_high):
-    return np.all(point >= aabb_low) and np.all(point <= aabb_high)
 
 
 def sample_raytest_start_end_full_grid_topdown(
@@ -260,8 +258,64 @@ def process_object(cat, mdl, out_path):
     tm = trimesh.Trimesh(vertices=np.array(mesh_points))
 
     # 6. Create convex hull
+    hull = tm.convex_hull
+    hull.unmerge_vertices()
+
+    # 7. Take the xy-plane projection of the convex hull, and then sample rays shooting downwards to compensate for the
+    # original z offset
+    # We know the bounding box is [1, 1, 1], so sample points uniformly in XY plane
+    proj = trimesh.path.polygons.projected(hull, normal=[0, 0, 1])
+    n_dim_samples = 10
+    x_range = np.linspace(aabb_low[0], aabb_high[0], n_dim_samples)
+    y_range = np.linspace(aabb_low[1], aabb_high[1], n_dim_samples)
+    ray_grid = np.dstack(np.meshgrid(x_range, y_range, indexing="ij"))
+    ray_grid_flattened = ray_grid.reshape(-1, 2)
+
+    # Check which rays are within the polygon
+    is_within = proj.contains(shapely.points(ray_grid_flattened))
+    xy_ray_positions = ray_grid_flattened[is_within]
+
+    # Shoot these rays downwards and record their poses -- add them to the point set
+    z_range = np.linspace(aabb_low[2], aabb_high[2], n_dim_samples)
+    additional_points = []
+    for xy_ray_pos in xy_ray_positions:
+        # Find a corresponding z value within the convex hull to use as the start raycasting point
+        start_samples = np.zeros((n_dim_samples, 3))
+        start_samples[:, :2] = xy_ray_pos
+        start_samples[:, 2] = z_range
+        is_contained = hull.contains(start_samples)
+        if not np.any(is_contained):
+            # Just skip this sample
+            continue
+        # Use the lowest point (i.e.: the first idx that is True) as the raycasting start point
+        z = z_range[np.where(is_contained)[0][0]]
+
+        # Raycast downwards and record the hit point
+        start = np.array([*xy_ray_pos, z])
+        end = np.array(start)
+        end[2] = aabb_low[2]
+        down_ray = raytest(
+            start_point=start,
+            end_point=end,
+        )
+        # If we have a valid hit with nonzero distance, record this point
+        if down_ray["hit"] and down_ray["distance"] > 0:
+            additional_points.append(down_ray["position"])
+
+    # Append all additional points to our existing set of points
+    mesh_points = np.concatenate([mesh_points, np.array(additional_points)], axis=0)
+
+    # Denormalize the mesh points based on the objects' scale
+    scale = 1.0 / fillable.scale
+    mesh_points = mesh_points * scale.reshape(1, 3)
+
+    # Re-write to trimesh and take the finalized convex hull
+    tm = trimesh.Trimesh(vertices=np.array(mesh_points))
+
+    # 6. Create convex hull
     # c_tms = trimesh.decomposition.convex_decomposition(tm)
     hull = tm.convex_hull
+    hull.unmerge_vertices()
 
     # # Get the collision meshes, subtract them from the hull
     # collision_trimeshes = [
