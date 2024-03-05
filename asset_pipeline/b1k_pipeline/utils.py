@@ -110,7 +110,7 @@ class FSResolver(trimesh.resolvers.Resolver):
             trimesh.util.write_encoded(file_obj=f, stuff=data)
 
 def load_points(fs, name):
-    data = fs.open(name, "rb").readtext()
+    data = fs.open(name, "r").readtext()
     points = []
 
     for line in data.split("\n"):
