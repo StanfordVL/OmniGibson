@@ -13,7 +13,8 @@ from omnigibson.systems import get_system
 
 
 def start_env():
-  og.sim.stop()
+  if og.sim:
+    og.sim.stop()
   config = {
     "env": {
       "initial_pos_z_offset": 0.1
@@ -316,6 +317,7 @@ def main():
   env = start_env()
   prim_gen = SymbolicSemanticActionPrimitives(env)
   apple = next(iter(env.scene.object_registry("category", "apple")))
+  pan = next(iter(env.scene.object_registry("category", "frying_pan")))
   knife = next(iter(env.scene.object_registry("category", "carving_knife")))
   countertop = next(iter(env.scene.object_registry("category", "countertop")))
 
@@ -323,7 +325,7 @@ def main():
   for _ in range(180): env.step(prim_gen._empty_action())
 
   try:
-    test_cut(env, prim_gen, apple, knife, countertop)
+    TestSymbolicPrimitives().test_place_ontop(env, prim_gen, apple, pan)
   except:
     raise
   while True:

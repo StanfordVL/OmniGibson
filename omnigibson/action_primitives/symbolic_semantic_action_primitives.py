@@ -157,7 +157,7 @@ class SymbolicSemanticActionPrimitives(StarterSemanticActionPrimitives):
                 )
             
         # Get close
-        # yield from self._navigate_if_needed(obj)
+        yield from self._navigate_if_needed(obj)
 
         # Perform forced assisted grasp
         obj.set_position(self.robot.get_eef_position(self.arm))
@@ -244,7 +244,7 @@ class SymbolicSemanticActionPrimitives(StarterSemanticActionPrimitives):
         obj_pose = self._sample_pose_with_object_and_predicate(predicate, obj_in_hand, obj, near_poses=near_poses, near_poses_threshold=near_poses_threshold)
 
         # Get close, release the object.
-        # yield from self._navigate_if_needed(obj, pose_on_obj=obj_pose)
+        yield from self._navigate_if_needed(obj, pose_on_obj=obj_pose)
         yield from self._release()
 
         # Actually move the object to the spot and step a bit to settle it.
@@ -485,7 +485,7 @@ class SymbolicSemanticActionPrimitives(StarterSemanticActionPrimitives):
             )
         
         # Get close
-        # yield from self._navigate_if_needed(obj)
+        yield from self._navigate_if_needed(obj)
 
         # TODO: Do some more validation
         added_obj_attrs = []
