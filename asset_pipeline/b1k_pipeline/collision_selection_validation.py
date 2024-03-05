@@ -79,6 +79,8 @@ def process_target(target):
                         errors[node].append("Collision mesh was found but contains non-watertight meshes.")
                     elif any(not split.is_volume or split.volume <= 0 for split in splits):
                         errors[node].append("Collision mesh was found but contains zero volume meshes.")
+                    elif any(np.any(split.bounding_box.extents == 0) for split in splits):
+                        errors[node].append("Collision mesh was found but contains zero bbox dimension meshes.")
                     else:
                         aabb_error = compare_aabbs(G.nodes[node]["lower_mesh"], G.nodes[node]["collision_mesh"])
                         if aabb_error and node[0] not in ["floors", "ceilings", "walls"]:

@@ -109,6 +109,18 @@ class FSResolver(trimesh.resolvers.Resolver):
             # handle encodings correctly for str/bytes
             trimesh.util.write_encoded(file_obj=f, stuff=data)
 
+def load_points(fs, name):
+    data = fs.open(name, "rb").readtext()
+    points = []
+
+    for line in data.split("\n"):
+        if not line.startswith("v "):
+            continue
+        x, y, z = [float(x) for x in line.replace("v ", "").split()]
+        points.append([x, y, z])
+
+    return np.array(points)
+
 def load_mesh(fs, name, **kwargs):
     with fs.open(name, "rb") as f:
         return trimesh.load(f, resolver=FSResolver(fs), file_type="obj", **kwargs)
