@@ -39,7 +39,7 @@ parser.add_argument("--start_at", type=str, default=None,
 parser.add_argument("--overwrite_existing", action="store_true",
                     help="If set, will overwrite any existing tasks that are found. Otherwise, will skip.")
 
-gm.HEADLESS = False
+gm.HEADLESS = True
 gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_FLATCACHE = False
 gm.ENABLE_OBJECT_STATES = True
