@@ -254,7 +254,7 @@ def process_object(cat, mdl, out_path):
         if fillable.get_position()[2] > obj_free_pos[2]:
             break
 
-    for _ in range(90):
+    for _ in range(180):
         og.sim.step()
 
     # # Temporarily use a fixed shakeoff. TODO: Fix the math below.
