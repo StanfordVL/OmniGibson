@@ -254,36 +254,39 @@ def process_object(cat, mdl, out_path):
         if fillable.get_position()[2] > obj_free_pos[2]:
             break
 
-    # Temporarily use a fixed shakeoff. TODO: Fix the math below.
-    # Gentle side-by-side shakeoff
-    spill_fraction = 0.05
-    extents = aabb_extent[:2]
-    # formula for how much to rotate for total spill to be spill_fraction of the volume
-    angles = np.arctan(extents / (2 * aabb_extent[2] * spill_fraction))
-    angles = np.flip(angles)
-    angles = np.full((2,), np.deg2rad(10))
+    for _ in range(90):
+        og.sim.step()
 
-    print("Rotation amounts (degrees): ", np.rad2deg(angles))
+    # # Temporarily use a fixed shakeoff. TODO: Fix the math below.
+    # # Gentle side-by-side shakeoff
+    # spill_fraction = 0.05
+    # extents = aabb_extent[:2]
+    # # formula for how much to rotate for total spill to be spill_fraction of the volume
+    # angles = np.arctan(extents / (2 * aabb_extent[2] * spill_fraction))
+    # angles = np.flip(angles)
+    # angles = np.full((2,), np.deg2rad(10))
 
-    rotations = np.array([np.eye(3)[i] * angle * side for i, angle in enumerate(angles) for side in [-1, 1]])
-    for r in rotations:
-        total_steps = 60
-        for _ in range(total_steps):
-            delta_orn = R.from_euler("xyz", r / total_steps)
-            cur_rot = R.from_quat(fillable.get_orientation())
-            new_rot = delta_orn * cur_rot
-            fillable.set_orientation(new_rot.as_quat())
-            og.sim.step()
-        for _ in range(90):
-            og.sim.step()
-        for _ in range(total_steps):
-            delta_orn = R.from_euler("xyz", -r / total_steps)
-            cur_rot = R.from_quat(fillable.get_orientation())
-            new_rot = delta_orn * cur_rot
-            fillable.set_orientation(new_rot.as_quat())
-            og.sim.step()
-        for _ in range(90):
-            og.sim.step()
+    # print("Rotation amounts (degrees): ", np.rad2deg(angles))
+
+    # rotations = np.array([np.eye(3)[i] * angle * side for i, angle in enumerate(angles) for side in [-1, 1]])
+    # for r in rotations:
+    #     total_steps = 60
+    #     for _ in range(total_steps):
+    #         delta_orn = R.from_euler("xyz", r / total_steps)
+    #         cur_rot = R.from_quat(fillable.get_orientation())
+    #         new_rot = delta_orn * cur_rot
+    #         fillable.set_orientation(new_rot.as_quat())
+    #         og.sim.step()
+    #     for _ in range(90):
+    #         og.sim.step()
+    #     for _ in range(total_steps):
+    #         delta_orn = R.from_euler("xyz", -r / total_steps)
+    #         cur_rot = R.from_quat(fillable.get_orientation())
+    #         new_rot = delta_orn * cur_rot
+    #         fillable.set_orientation(new_rot.as_quat())
+    #         og.sim.step()
+    #     for _ in range(90):
+    #         og.sim.step()
 
     # Get the particles whose center is within the object's AABB
     aabb_min, aabb_max = fillable.aabb
@@ -291,7 +294,7 @@ def process_object(cat, mdl, out_path):
     particles = particles[np.where(check_in_contact(water, particles) == 0)[0]]
     particle_point_offsets = np.array([e * side * water.particle_radius for e in np.eye(3) for side in [-1, 1]] + [np.zeros(3)])
     points = np.repeat(particles, len(particle_point_offsets), axis=0) + np.tile(particle_point_offsets, (len(particles), 1))
-    points = points[np.all(points <= aabb_max, axis=1)]
+    points = points[np.all(points <= (aabb_max + np.array([0, 0, water.particle_radius])) , axis=1)]
     points = points[np.all(points >= aabb_min, axis=1)]
     assert len(points) > 0, "No points found in the AABB of the object."
 
