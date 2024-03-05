@@ -232,7 +232,7 @@ def _validate_object_state_stability(obj_name, obj_dict, strict=False):
     joint_vel_threshold = 0.01 if strict else 1.
     # Check close to zero root link velocity
     for key, atol in zip(("lin_vel", "ang_vel"), (lin_vel_threshold, ang_vel_threshold)):
-        val = obj_dict["root_link"][key]
+        val = obj_dict["root_link"].get(key, 0.0)
         if not np.all(np.isclose(np.array(val), 0.0, atol=atol, rtol=0.0)):
             return False, f"{obj_name} root link {key} is not close to 0: {val}"
 
