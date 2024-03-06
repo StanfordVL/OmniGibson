@@ -693,8 +693,10 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
         Modifies all @particles' positions and orientations with @positions and @orientations
 
         Args:
-            particles (Iterable of str): Names of particles to compute batched position orientation for
-            local (bool): Whether to set particles' poses in local frame or not
+            particles (Iterable of str): Names of particles to modify
+            positions (None or (n, 3)-array): New positions to set for the particles
+            orientations (None or (n, 4)-array): New orientations to set for the particles
+            local (bool): Whether to modify particles' poses in local frame or not
 
         Returns:
             2-tuple:
@@ -712,7 +714,7 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
         lens = np.array([len(particles), len(positions), len(orientations)])
         assert lens.min() == lens.max(), "Got mismatched particles, positions, and orientations!"
 
-        particle_local_poses_batch = np.zeros((cls.n_particles, 4, 4))
+        particle_local_poses_batch = np.zeros((n_particles, 4, 4))
         particle_local_poses_batch[:, -1, -1] = 1.0
         particle_local_poses_batch[:, :3, 3] = positions
         particle_local_poses_batch[:, :3, :3] = T.quat2mat(orientations)
@@ -720,7 +722,7 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
         if not local:
             # Iterate over all particles and compute link tfs programmatically, then batch the matrix transform
             link_tfs = dict()
-            link_tfs_batch = np.zeros((cls.n_particles, 4, 4))
+            link_tfs_batch = np.zeros((n_particles, 4, 4))
             for i, name in enumerate(particles):
                 obj = cls._particles_info[name]["obj"]
                 is_cloth = cls._is_cloth_obj(obj=obj)
