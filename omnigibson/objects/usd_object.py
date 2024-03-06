@@ -98,14 +98,15 @@ class USDObject(StatefulObject):
         if self._encrypted:
             # Create a temporary file to store the decrytped asset, load it, and then delete it
             encrypted_filename = self._usd_path.replace(".usd", ".encrypted.usd")
-            decrypt_file(encrypted_filename, self._usd_path)
+            usd_path = self._usd_path.replace(".usd", f".{self.uuid}.usd")
+            decrypt_file(encrypted_filename, usd_path)
 
         prim = add_asset_to_stage(asset_path=usd_path, prim_path=self._prim_path)
 
         if self._encrypted:
             # On Windows, Isaac Sim won't let go of the file until the prim is removed, so we can't delete it.
             if os.name == "posix":
-                os.remove(self._usd_path)
+                os.remove(usd_path)
 
         return prim
 
