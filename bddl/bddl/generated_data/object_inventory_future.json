@@ -670,6 +670,9 @@
         "sandal-tkfdsk": "objects/batch-04",
         "sandal-txkidl": "objects/batch-04",
         "shaker-hbheag": "objects/batch-04",
+        "skateboard_deck-tgfidu": "objects/batch-04",
+        "skateboard_wheel-acmbvb": "objects/batch-04",
+        "skateboard_wheel-jljqtt": "objects/batch-04",
         "skyrocket-moxhuh": "objects/batch-04",
         "stapler-wheosp": "objects/batch-04",
         "stockpot-oshwps": "objects/batch-04",
@@ -5016,6 +5019,7 @@
         "metal_bottom_cabinet-melxmd": "scenes/commercial_kitchen_fire_extinguisher",
         "metal_bottom_cabinet-mvsgdm": "scenes/commercial_kitchen_fire_extinguisher",
         "metal_bottom_cabinet-yfycfx": "scenes/commercial_kitchen_fire_extinguisher",
+        "mixing_bowl-rgnjdt": "scenes/commercial_kitchen_fire_extinguisher",
         "olive_oil-wztvie": "scenes/commercial_kitchen_fire_extinguisher",
         "oven-cgtaer": "scenes/commercial_kitchen_fire_extinguisher",
         "oven-xspxzg": "scenes/commercial_kitchen_fire_extinguisher",
@@ -11346,6 +11350,15 @@
             "objects/batch-04"
         ],
         "shaker-hbheag": [
+            "objects/batch-04"
+        ],
+        "skateboard_deck-tgfidu": [
+            "objects/batch-04"
+        ],
+        "skateboard_wheel-acmbvb": [
+            "objects/batch-04"
+        ],
+        "skateboard_wheel-jljqtt": [
             "objects/batch-04"
         ],
         "skyrocket-moxhuh": [
@@ -25394,6 +25407,9 @@
         "metal_bottom_cabinet-yfycfx": [
             "scenes/commercial_kitchen_fire_extinguisher"
         ],
+        "mixing_bowl-rgnjdt": [
+            "scenes/commercial_kitchen_fire_extinguisher"
+        ],
         "olive_oil-wztvie": [
             "scenes/commercial_kitchen_fire_extinguisher"
         ],
@@ -38649,6 +38665,9 @@
             "fillable",
             "togglebutton"
         ],
+        "kayak-dkizyc": [
+            "attachment"
+        ],
         "water_glass-ewgotr": [
             "fillable"
         ],
@@ -38739,6 +38758,12 @@
             "fillable",
             "togglebutton"
         ],
+        "license_plate-hjdaqn": [
+            "attachment"
+        ],
+        "license_plate-nuqnlr": [
+            "attachment"
+        ],
         "loudspeaker-fsyioq": [
             "togglebutton"
         ],
@@ -38746,6 +38771,7 @@
             "togglebutton"
         ],
         "monitor-qvpbge": [
+            "attachment",
             "togglebutton"
         ],
         "power_washer-pkhrip": [
@@ -38817,6 +38843,9 @@
         "parer-lwpdhi": [
             "slicer"
         ],
+        "pole-pkzvpk": [
+            "attachment"
+        ],
         "putty_knife-qmdkub": [
             "slicer"
         ],
@@ -38848,6 +38877,7 @@
             "togglebutton"
         ],
         "digital_camera-wbzzjl": [
+            "attachment",
             "connectedpart",
             "togglebutton"
         ],
@@ -38865,8 +38895,27 @@
         "juicer-mvrllt": [
             "togglebutton"
         ],
+        "lens-oeeuic": [
+            "attachment"
+        ],
+        "raspberries-ygrfsn": [
+            "attachment"
+        ],
+        "skateboard_deck-tgfidu": [
+            "attachment",
+            "connectedpart"
+        ],
+        "skateboard_wheel-acmbvb": [
+            "attachment"
+        ],
+        "skateboard_wheel-jljqtt": [
+            "attachment"
+        ],
         "utility_knife-kridpz": [
             "slicer"
+        ],
+        "wind_chime-tghelo": [
+            "attachment"
         ],
         "stockpot-oshwps": [
             "connectedpart"
@@ -38898,9 +38947,15 @@
         "hazelnut-rhfksw": [
             "subpart"
         ],
+        "antlers-nlsanr": [
+            "attachment"
+        ],
         "bottle_of_lubricant-bjfgim": [
             "fluidsource",
             "togglebutton"
+        ],
+        "hanger-sfdekb": [
+            "attachment"
         ],
         "jigger-aysfhf": [
             "fillable"
@@ -38911,6 +38966,9 @@
         "rice_cooker-qatgeb": [
             "connectedpart",
             "togglebutton"
+        ],
+        "sticker-wshged": [
+            "attachment"
         ],
         "stockpot-azoiaq": [
             "fillable"
@@ -38945,12 +39003,18 @@
         "bush-hqlggp": [
             "collision"
         ],
+        "curtain_rod-pburmj": [
+            "attachment"
+        ],
         "drip_pot-xmxvml": [
             "fillable"
         ],
         "electric_hand_mixer-prewfi": [
             "collision",
             "togglebutton"
+        ],
+        "fishing_rod-zhmrtc": [
+            "attachment"
         ],
         "flashlight-jtrbkc": [
             "togglebutton"
@@ -39028,6 +39092,10 @@
         "axe-plqyos": [
             "slicer"
         ],
+        "blackberry-tvpfvb": [
+            "attachment",
+            "subpart"
+        ],
         "bottle-bgalkx": [
             "togglebutton"
         ],
@@ -39070,9 +39138,6 @@
             "subpart"
         ],
         "leek-fyihsq": [
-            "subpart"
-        ],
-        "blackberry-tvpfvb": [
             "subpart"
         ],
         "bratwurst-pqfrrn": [
@@ -39138,6 +39203,9 @@
         "allspice_shaker-cibgje": [
             "particleapplier",
             "togglebutton"
+        ],
+        "holly_decoration-shmkir": [
+            "attachment"
         ],
         "loudspeaker-wsghki": [
             "togglebutton"
@@ -39477,6 +39545,7 @@
             "collision"
         ],
         "fire_alarm-dkwmmf": [
+            "attachment",
             "togglebutton"
         ],
         "table_lamp-awfehr": [
@@ -40281,6 +40350,9 @@
             "fluidsource",
             "togglebutton"
         ],
+        "bow-fhchql": [
+            "attachment"
+        ],
         "broom-tpyvbt": [
             "particleremover"
         ],
@@ -40302,6 +40374,9 @@
         "cauldron-zndohl": [
             "fillable"
         ],
+        "coatrack-qyjssf": [
+            "attachment"
+        ],
         "coffee_cup-skamgp": [
             "fillable"
         ],
@@ -40314,11 +40389,17 @@
         "cruet-njqmqv": [
             "fillable"
         ],
+        "dartboard-zjenlc": [
+            "attachment"
+        ],
         "facsimile-mcqqhy": [
             "togglebutton"
         ],
         "grill-ddlqye": [
             "togglebutton"
+        ],
+        "pitcher-ompiss": [
+            "fillable"
         ],
         "pitcher-wmkwhg": [
             "fillable"
@@ -40391,6 +40472,9 @@
             "particleremover",
             "togglebutton"
         ],
+        "light_bulb-kfmkwd": [
+            "attachment"
+        ],
         "modem-axqxsv": [
             "togglebutton"
         ],
@@ -40455,6 +40539,9 @@
         ],
         "sushi-akpnxn": [
             "subpart"
+        ],
+        "wreath-rkrxno": [
+            "attachment"
         ],
         "white_turnip-nnvlrd": [
             "subpart"
@@ -41332,6 +41419,15 @@
         "snapper-vfncga": [
             "subpart"
         ],
+        "address-pbfbxj": [
+            "attachment"
+        ],
+        "bicycle_rack-mltrbs": [
+            "attachment"
+        ],
+        "broken_light_bulb-cugtye": [
+            "attachment"
+        ],
         "can-gqwnfv": [
             "connectedpart",
             "fillable"
@@ -41351,6 +41447,9 @@
         "dog_food_can-vxxcvg": [
             "connectedpart",
             "fillable"
+        ],
+        "kayak_rack-goewhp": [
+            "attachment"
         ],
         "mold-heuzgu": [
             "fillable"
@@ -42845,6 +42944,9 @@
         "background-zqogsh": [
             "collision"
         ],
+        "bush-waafqw": [
+            "attachment"
+        ],
         "car-supuws": [
             "togglebutton"
         ],
@@ -43499,6 +43601,9 @@
         "background-miopfw": [
             "collision"
         ],
+        "car-xxsgpq": [
+            "attachment"
+        ],
         "ceilings-dqxnks": [
             "collision"
         ],
@@ -44152,7 +44257,8 @@
             "collision"
         ],
         "electric_mixer-ceaeqf": [
-            "fillable",
+            "attachment",
+            "connectedpart",
             "togglebutton"
         ],
         "electric_mixer-qornxa": [
@@ -44236,6 +44342,10 @@
         ],
         "metal_bottom_cabinet-bbjuqu": [
             "collision"
+        ],
+        "mixing_bowl-rgnjdt": [
+            "attachment",
+            "fillable"
         ],
         "oven-cgtaer": [
             "collision",
@@ -45752,6 +45862,12 @@
         "bowl-xplzbo": [
             "fillable"
         ],
+        "candle-poexjo": [
+            "attachment"
+        ],
+        "candle_holder-wiufnv": [
+            "attachment"
+        ],
         "carafe-hdbsog": [
             "fillable"
         ],
@@ -47125,6 +47241,9 @@
         "basket-djgllo": [
             "fillable"
         ],
+        "bicycle-xjumcf": [
+            "attachment"
+        ],
         "ceilings-eiskrn": [
             "collision"
         ],
@@ -47597,6 +47716,7 @@
             "togglebutton"
         ],
         "table_lamp-ehjsdz": [
+            "attachment",
             "togglebutton"
         ],
         "wall_mounted_tv-aoqsbu": [
@@ -49186,6 +49306,9 @@
         ],
         "loudspeaker-eylavt": [
             "togglebutton"
+        ],
+        "menu-keaqlh": [
+            "attachment"
         ],
         "room_ventilator-pbceln": [
             "togglebutton"
