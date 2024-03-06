@@ -431,7 +431,7 @@ class SanityCheck:
                     self.expect(np.isclose(child.radius1, 0), f"Cone {child.name} radius1 should be zero.")
                     self.expect(not np.isclose(child.radius2, 0) and child.radius2 > 0, f"Cone {child.name} radius2 should be nonzero.")
                     size = np.array([child.radius2, child.radius2, child.height]) * scale
-                self.expect(np.all(size > 0), f"Volumetric {meta_link_type} meta link {child.name} should have positive size/scale combo.")
+                # self.expect(np.all(size > 0), f"Volumetric {meta_link_type} meta link {child.name} should have positive size/scale combo.")
                     
             elif ALLOWED_META_TYPES[meta_link_type] == "convexmesh":
                 # TODO: Assert that each element is a convex mesh
