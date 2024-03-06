@@ -271,7 +271,8 @@ def main():
 
     # Get the ones that don't have a fillable assignment
     assignments = get_assignments()
-    fillables = [(cat, mdl) for cat, mdl in fillables if mdl not in assignments]
+    redo_labels = {"fix", "manual", "changecollision", "fixorn"}
+    fillables = [(cat, mdl) for cat, mdl in fillables if mdl not in assignments or assignments[mdl] in redo_labels]
 
     # Get the ones whose model hash match our ID
     fillables = [
