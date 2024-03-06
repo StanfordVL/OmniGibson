@@ -283,6 +283,12 @@ def main(random_selection=False, headless=False, short_exec=False):
             # env = create_env_with_stable_objects(cfg)
             env = og.Environment(configs=copy.deepcopy(cfg))
 
+            # After we load the robot, we do self.scene.reset() (one physics step) and then self.scene.update_initial_state().
+            # We need to set all velocities to zero after this. Otherwise, the visual only objects will drift.
+            for obj in og.sim.scene.objects:
+                obj.keep_still()
+            og.sim.scene.update_initial_state()
+
             # Store the initial state -- this is the safeguard to reset to!
             scene_initial_state = copy.deepcopy(env.scene._initial_state)
             og.sim.stop()
