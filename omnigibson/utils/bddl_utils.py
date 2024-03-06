@@ -37,6 +37,9 @@ m = create_module_macros(module_path=__file__)
 m.MIN_DYNAMIC_SCALE = 0.5
 m.DYNAMIC_SCALE_INCREMENT = 0.1
 
+BAD_MODELS = {
+    "t_shirt": {"kvidcx"}
+}
 
 class UnsampleablePredicate:
     def _sample(self, *args, **kwargs):
@@ -740,7 +743,7 @@ class BDDLSampler:
                 # Grab all models that fully support all abilities for the corresponding category
                 valid_models = {cat: set(get_all_object_category_models_with_abilities(cat, abilities))
                                 for cat in categories}
-
+                valid_models = {cat: models - BAD_MODELS.get(cat, set()) for cat, models in valid_models.items()}
                 room_insts = [None] if self._scene_model is None else og.sim.scene.seg_map.room_sem_name_to_ins_name[room_type]
                 for room_inst in room_insts:
                     # A list of scene objects that satisfy the requested categories
@@ -934,15 +937,16 @@ class BDDLSampler:
                     category = np.random.choice(categories)
 
                     # Get all available models that support all of its synset abilities
-                    model_choices = get_all_object_category_models_with_abilities(
+                    model_choices = set(get_all_object_category_models_with_abilities(
                         category=category,
                         abilities=OBJECT_TAXONOMY.get_abilities(OBJECT_TAXONOMY.get_synset_from_category(category)),
-                    )
+                    ))
+                    model_choices -= BAD_MODELS.get(category, set())
                     if len(model_choices) == 0:
                         return f"Missing valid object models for category: {category}"
 
                     # Randomly select an object model
-                    model = np.random.choice(model_choices)
+                    model = np.random.choice(list(model_choices))
 
                     # create the object
                     simulator_obj = DatasetObject(
