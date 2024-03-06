@@ -365,7 +365,6 @@ def validate_task(task, task_scene_dict, default_scene_dict):
             n_particles_key = "instancer_particle_counts" if is_micro_physical else "n_particles"
             if not np.all(np.isclose(system_state[n_particles_key], current_system_state[n_particles_key])):
                 return False, f"Got inconsistent number of system {system_name} particles: {system_state['n_particles']} vs. {current_system_state['n_particles']}"
-
             # Validate that no particles went flying -- maximum ranges of positions should be roughly close
             n_particles = np.sum(system_state[n_particles_key])
             if n_particles > 0 and check_particle_positions:
@@ -397,13 +396,14 @@ def validate_task(task, task_scene_dict, default_scene_dict):
                 return False, f"task state and current state do not have similar kinematic states: {err_msg}"
 
         # Sanity check consistent particle systems
-        task_systems = {system_name for system_name in task_state["system_registry"].keys()}
-        curr_systems = {system_name for system_name in current_state["system_registry"].keys()}
+        task_systems = {system_name for system_name in task_state["system_registry"].keys() if system_name != "cloth"}
+        curr_systems = {system_name for system_name in current_state["system_registry"].keys() if system_name != "cloth"}
         mismatched_systems = set.union(task_systems, curr_systems) - set.intersection(task_systems, curr_systems)
         if len(mismatched_systems) > 0:
             return False, f"Got mismatch in active systems: {mismatched_systems}"
 
-        for system_name, system_state in task_state["system_registry"].items():
+        for system_name in task_systems:
+            system_state = task_state["system_registry"][system_name]
             curr_system_state = current_state["system_registry"][system_name]
             valid_system, err_msg = _validate_particle_system_consistency(system_name, system_state, curr_system_state, check_particle_positions=check_particle_positions)
             if not valid_system:
