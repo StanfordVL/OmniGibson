@@ -419,10 +419,20 @@ class SanityCheck:
                 }
                 self.expect(classOf(child) in volumetric_allowed_types, f"Volumetric {meta_link_type} meta link {child.name} should be one of {volumetric_allowed_types} instead of {classOf(child)}")
 
-                if classOf(child) == rt.Cone:
+                scale = np.array(list(child.objecttransform.scale))
+                if classOf(child) == rt.Sphere:
+                    size = np.array([child.radius, child.radius, child.radius]) * scale
+                elif classOf(child) == rt.Box:
+                    size = np.array([child.width, child.length, child.height]) * scale
+                elif classOf(child) == rt.Cylinder:
+                    size = np.array([child.radius, child.radius, child.height]) * scale
+                elif classOf(child) == rt.Cone:
                     # Cones should have radius1 as 0 and radius2 nonzero
                     self.expect(np.isclose(child.radius1, 0), f"Cone {child.name} radius1 should be zero.")
-                    self.expect(not np.isclose(child.radius2, 0), f"Cone {child.name} radius2 should be nonzero.")
+                    self.expect(not np.isclose(child.radius2, 0) and child.radius2 > 0, f"Cone {child.name} radius2 should be nonzero.")
+                    size = np.array([child.radius2, child.radius2, child.height]) * scale
+                self.expect(np.all(size > 0), f"Volumetric {meta_link_type} meta link {child.name} should have positive size/scale combo.")
+                    
             elif ALLOWED_META_TYPES[meta_link_type] == "convexmesh":
                 # TODO: Assert that each element is a convex mesh
                 self.expect(classOf(child) == rt.Editable_Poly, f"Convex mesh {meta_link_type} meta link {child.name} should be of Editable Poly instead of {classOf(child)}")
