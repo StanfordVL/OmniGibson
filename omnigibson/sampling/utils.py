@@ -246,7 +246,7 @@ def create_stable_scene_json(args):
     # This is to prevent nonzero velocities from causing objects to fall through the floor when we disable them
     # if they're not relevant for a given task
     for _ in range(300):
-        og.sim.step()
+        og.sim.step(render=False)
 
     # Sanity check for zero velocities for all objects
     stable_state = og.sim.dump_state()
@@ -357,7 +357,7 @@ def validate_task(task, task_scene_dict, default_scene_dict):
     #       taking a physics step, and also make sure init state is True
     print(f"Step 3: Checking BehaviorTask initial conditions and scene stability...")
     # Take a single physics step
-    og.sim.step()
+    og.sim.step(render=False)
     task_state_t1 = og.sim.dump_state()
     def _validate_scene_stability(task, task_state, current_state, check_particle_positions=True):
         def _validate_particle_system_consistency(system_name, system_state, current_system_state, check_particle_positions=True):
@@ -429,7 +429,7 @@ def validate_task(task, task_scene_dict, default_scene_dict):
 
     # Take 10 steps
     for _ in range(10):
-        og.sim.step()
+        og.sim.step(render=False)
 
     # Sanity check scene
     # Don't check particle positions since some particles may be falling

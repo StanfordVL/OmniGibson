@@ -208,7 +208,9 @@ def main(random_selection=False, headless=False, short_exec=False):
                     env.task.reset(env)
 
                     for i in range(300):
-                        og.sim.step()
+                        og.sim.step(render=not gm.HEADLESS)
+
+                    # from IPython import embed; embed()
 
                     task_final_state = og.sim.dump_state()
                     task_scene_dict = {"state": task_final_state}
@@ -255,7 +257,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 # Clear all systems
                 clear_all_systems()
                 clear_pu()
-                og.sim.step()
+                og.sim.step(not gm.HEADLESS)
 
                 # Update the scene initial state to the original state
                 og.sim.scene.update_initial_state(scene_initial_state)
