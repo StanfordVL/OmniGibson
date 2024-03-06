@@ -1427,6 +1427,7 @@ class EntityPrim(XFormPrim):
         link.visible = False
         # Set a very small mass
         link.mass = 1e-6
+        link.density = 0.0
 
         self._links[link_name] = link
 
