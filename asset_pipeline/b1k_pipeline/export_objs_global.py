@@ -356,6 +356,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         # Grab the lone edge to the parent.
         edge, = in_edges
         parent_node, child_node = edge
+        assert child_node == link_node, f"Something's wrong: the child node of the edge is not the link node {link_node}"
         joint_type = G.edges[edge]["joint_type"]
         parent_frame = G.nodes[parent_node]["link_frame_in_base"]
 
@@ -363,9 +364,6 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
 
         # Load the meshes.
         lower_canonical_points = transform_points(G.nodes[child_node]["lower_points"], base_link_center + rotated_parent_frame, canonical_orientation)
-
-        # Load the centers.
-        child_center = np.mean(lower_canonical_points, axis=0)
 
         # Create the joint in the URDF
         joint_xml = ET.SubElement(tree_root, "joint")
@@ -419,12 +417,12 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                 # The joint origin has infinite number of solutions along the joint axis
                 # Find the translation part of the joint origin that is closest to the CoM of the link
                 # by projecting the CoM onto the joint axis
-                arbitrary_point_to_center = child_center - arbitrary_point_on_joint_axis
+                arbitrary_point_to_center = mesh_center - arbitrary_point_on_joint_axis
                 joint_origin = arbitrary_point_on_joint_axis  + (
                      np.dot(arbitrary_point_to_center, joint_axis) * joint_axis)
 
                 # Assign visual and collision mesh origin so that the offset from the joint origin is removed.
-                mesh_offset = child_center - joint_origin
+                mesh_offset = mesh_center - joint_origin
                 visual_origin_xml.attrib = {"xyz": " ".join([str(item) for item in mesh_offset])}
 
                 for collision_origin_xml in collision_origin_xmls:
@@ -444,7 +442,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
                     joint_axis = np.array([0, 0, 1])
 
                 # Assign the joint origin relative to the parent CoM
-                joint_origin = child_center
+                joint_origin = mesh_center
 
             # Save these joints' data
             joint_origin_xml = ET.SubElement(joint_xml, "origin")
@@ -455,7 +453,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
             joint_limit_xml.attrib = {"lower": str(0.0), "upper": str(upper_limit)}
         else:
             # Fixed joints are quite simple.
-            joint_origin = child_center
+            joint_origin = mesh_center
 
             if joint_type == "F":
                 joint_origin_xml = ET.SubElement(joint_xml, "origin")
