@@ -18,7 +18,7 @@
     )
     
     (:init 
-        (filled barbecue_sauce__bottle.n.01_1 barbecue_sauce.n.01_1)
+        (insource barbecue_sauce__bottle.n.01_1 barbecue_sauce.n.01_1)
         (inside barbecue_sauce__bottle.n.01_1 electric_refrigerator.n.01_1)
         (not 
             (cooked rib.n.03_1)
