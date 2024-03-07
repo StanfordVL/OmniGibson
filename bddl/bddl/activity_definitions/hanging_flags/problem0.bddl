@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        flagpole.n.02_1 - flagpole.n.02
+        pole.n.01_1 - pole.n.01
         floor.n.01_1 - floor.n.01
         bag.n.06_1 - bag.n.06
         national_flag.n.01_1 - national_flag.n.01
@@ -11,7 +11,7 @@
     )
     
     (:init 
-        (attached flagpole.n.02_1 wall.n.01_1) 
+        (attached pole.n.01_1 wall.n.01_1) 
         (inside national_flag.n.01_1 bag.n.06_1) 
         (ontop bag.n.06_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
@@ -21,7 +21,7 @@
     
     (:goal 
         (and 
-            (draped ?national_flag.n.01_1 ?flagpole.n.02_1)
+            (draped ?national_flag.n.01_1 ?pole.n.01_1)
         )
     )
 )
