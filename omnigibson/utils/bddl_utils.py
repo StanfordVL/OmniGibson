@@ -38,7 +38,8 @@ m.MIN_DYNAMIC_SCALE = 0.5
 m.DYNAMIC_SCALE_INCREMENT = 0.1
 
 BAD_MODELS = {
-    "t_shirt": {"kvidcx"}
+    "t_shirt": {"kvidcx"},
+    "belt": {"gqwddb"},
 }
 
 class UnsampleablePredicate:
