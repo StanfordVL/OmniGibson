@@ -78,6 +78,9 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Make sure scene can be sampled by current user
     scene_row = validate_scene_can_be_sampled(scene=args.scene_model)
 
+    # Set the thread id for the given scene
+    worksheet.update_acell(f"X{scene_row}", args.thread_id)
+
     # If we want to create a stable scene config, do that now
     default_scene_fpath = f"{gm.DATASET_PATH}/scenes/{args.scene_model}/json/{args.scene_model}_stable.json"
     if not os.path.exists(default_scene_fpath):
