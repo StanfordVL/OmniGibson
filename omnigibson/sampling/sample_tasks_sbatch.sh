@@ -5,6 +5,9 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=30G
 #SBATCH --gres=gpu:1
+#SBATCH --time=0-03:00:00
+#SBATCH --output=%j.out
+#SBATCH --error=%j.err
 
 set -e -o pipefail
 
