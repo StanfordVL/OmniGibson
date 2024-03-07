@@ -52,7 +52,7 @@ done
 
 # Define mounts to create (maps local directory to container directory)
 declare -A MOUNTS=(
-    [/cvgl/group/Gibson/og_dataset]=/data
+    [/cvgl/group/Gibson/og-data-0-3-0]=/data
     [${ISAAC_CACHE_PATH}/isaac-sim/kit/cache/Kit]=/isaac-sim/kit/cache/Kit
     [${ISAAC_CACHE_PATH}/isaac-sim/cache/ov]=/root/.cache/ov
     [${ISAAC_CACHE_PATH}/isaac-sim/cache/pip]=/root/.cache/pip
@@ -63,8 +63,8 @@ declare -A MOUNTS=(
     [${ISAAC_CACHE_PATH}/isaac-sim/data]=/root/.local/share/ov/data
     [${ISAAC_CACHE_PATH}/isaac-sim/documents]=/root/Documents
     # Feel free to include lines like the below to mount a workspace or a custom OG version
-    [/cvgl2/u/jdwong/PAIR/omnigibson-enroot]=/omnigibson-src
-    [/cvgl2]=/cvgl2
+    # [/cvgl2/u/jdwong/PAIR/omnigibson-enroot]=/omnigibson-src
+    [/cvgl]=/cvgl
 )
 
 MOUNT_KWARGS=""
@@ -93,7 +93,7 @@ ENROOT_MOUNT_HOME=no enroot start \
     ${ENV_KWARGS} \
     ${MOUNT_KWARGS} \
     ${CONTAINER_NAME} \
-    micromamba run -n omnigibson /bin/bash --login -c "git fetch; git checkout feat/sampling_2024; source /isaac-sim/setup_conda_env.sh && pip install gspread && python omnigibson/sampling/sample_b1k_scenes.py"
+    micromamba run -n omnigibson /bin/bash --login -c "cd / && mv omnigibson-src omnigibson-src-backup && git clone https://github.com/StanfordVL/OmniGibson.git --branch feat/sampling_2024 --single-branch omnigibson-src && cd /omnigibson-src && source /isaac-sim/setup_conda_env.sh && pip install gspread && python omnigibson/sampling/sample_b1k_scenes.py"
 
 # Clean up the image if possible.
 enroot remove -f ${CONTAINER_NAME}
