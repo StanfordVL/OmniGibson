@@ -30,7 +30,7 @@ import numpy as np
 # 2. Enable transition rule and refresh all rules before online validation
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--scene_model", type=str, required=True,
+parser.add_argument("--scene_model", type=str, default=None,
                     help="Scene model to sample tasks in")
 parser.add_argument("--activities", type=str, default=None,
                     help="Activity/ie(s) to be sampled, if specified. This should be a comma-delimited list of desired activities. Otherwise, will try to sample all tasks in this scene")
@@ -49,6 +49,21 @@ gm.ENABLE_TRANSITION_RULES = False
 
 def main(random_selection=False, headless=False, short_exec=False):
     args = parser.parse_args()
+
+    # Parse arguments based on whether values are specified in os.environ
+    # Priority is:
+    # 1. command-line args
+    # 2. environment level variables
+    if args.scene_model is None:
+        # This MUST be specified
+        assert os.environ.get("SAMPLING_SCENE_MODEL"), "scene model MUST be specified, either as a command-line arg or as an environment variable!"
+        args.scene_model = os.environ["SAMPLING_SCENE_MODEL"]
+    if args.activities is None and os.environ.get("SAMPLING_ACTIVITIES"):
+        args.activities = os.environ["SAMPLING_ACTIVITIES"]
+    if args.start_at is None and os.environ.get("SAMPLING_START_AT"):
+        args.start_at = os.environ["SAMPLING_START_AT"]
+    if not args.overwrite_existing:
+        args.overwrite_existing = os.environ.get("SAMPLING_OVERWRITE_EXISTING") in {"1", "true", "True"}
 
     # Make sure scene can be sampled by current user
     validate_scene_can_be_sampled(scene=args.scene_model)
