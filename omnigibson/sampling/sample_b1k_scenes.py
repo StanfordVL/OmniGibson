@@ -133,8 +133,11 @@ def main(random_selection=False, headless=False, short_exec=False):
     env.task_config["online_object_sampling"] = True
 
     should_start = args.start_at is None
-    ordered_activities = random.shuffle(activities) if args.randomize else sorted(activities)
-    for activity in ordered_activities:
+    if args.randomize:
+        random.shuffle(activities)
+    else:
+        activities = sorted(activities)
+    for activity in activities:
         print(f"Checking activity: {activity}...")
         if not should_start:
             if args.start_at == activity:

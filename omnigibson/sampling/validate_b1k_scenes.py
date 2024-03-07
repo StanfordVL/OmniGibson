@@ -108,7 +108,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Now take pruned list and iterate through to actually validate the scenes
     if args.randomize:
-        rows_to_validate = random.shuffle(rows_to_validate)
+        random.shuffle(rows_to_validate)
     for row in rows_to_validate:
         # sleep to avoid gspread query limits
         time.sleep(1)
