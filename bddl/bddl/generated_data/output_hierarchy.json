@@ -2442,13 +2442,6 @@
                                               "categories": [
                                                 "car_wheel"
                                               ]
-                                            },
-                                            {
-                                              "name": "skateboard_wheel.n.01",
-                                              "hasModel": true,
-                                              "categories": [
-                                                "skateboard_wheel"
-                                              ]
                                             }
                                           ]
                                         },
@@ -3282,13 +3275,6 @@
                                       ]
                                     },
                                     {
-                                      "name": "lantern.n.01",
-                                      "hasModel": true,
-                                      "categories": [
-                                        "lantern"
-                                      ]
-                                    },
-                                    {
                                       "name": "spirit_lamp.n.01",
                                       "hasModel": true,
                                       "categories": [
@@ -3300,6 +3286,23 @@
                                       "hasModel": true,
                                       "categories": [
                                         "spotlight"
+                                      ]
+                                    },
+                                    {
+                                      "name": "lantern.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "glass_lantern.n.01",
+                                          "hasModel": true
+                                        },
+                                        {
+                                          "name": "paper_lantern.n.01",
+                                          "hasModel": true
+                                        }
+                                      ],
+                                      "categories": [
+                                        "lantern"
                                       ]
                                     }
                                   ]
@@ -5843,6 +5846,10 @@
                                     "hall_tree",
                                     "wardrobe"
                                   ]
+                                },
+                                {
+                                  "name": "hallstand.n.01",
+                                  "hasModel": true
                                 }
                               ]
                             },
@@ -6642,6 +6649,10 @@
                                   ]
                                 }
                               ]
+                            },
+                            {
+                              "name": "hitch.n.04",
+                              "hasModel": true
                             }
                           ]
                         },
@@ -15899,6 +15910,13 @@
                       ]
                     },
                     {
+                      "name": "skateboard_wheel.n.01",
+                      "hasModel": true,
+                      "categories": [
+                        "skateboard_wheel"
+                      ]
+                    },
+                    {
                       "name": "accessory.n.02",
                       "hasModel": true,
                       "children": [
@@ -15924,6 +15942,10 @@
                           ]
                         }
                       ]
+                    },
+                    {
+                      "name": "skateboard_deck.n.01",
+                      "hasModel": true
                     }
                   ]
                 },
@@ -34484,6 +34506,22 @@
                               "categories": [
                                 "letter"
                               ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "autograph.n.01",
+                      "hasModel": true,
+                      "children": [
+                        {
+                          "name": "manuscript.n.02",
+                          "hasModel": true,
+                          "children": [
+                            {
+                              "name": "scroll.n.02",
+                              "hasModel": true
                             }
                           ]
                         }
