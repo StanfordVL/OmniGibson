@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        skateboard.n.01_1 - skateboard.n.01
+        skateboard_deck.n.01_1 - skateboard_deck.n.01
         bed.n.01_1 - bed.n.01
         skateboard_wheel.n.01_1 skateboard_wheel.n.01_2 skateboard_wheel.n.01_3 skateboard_wheel.n.01_4 - skateboard_wheel.n.01
         rag.n.01_1 - rag.n.01
@@ -16,11 +16,11 @@
     )
     
     (:init 
-        (ontop skateboard.n.01_1 bed.n.01_1) 
-        (attached skateboard_wheel.n.01_1 skateboard.n.01_1) 
-        (attached skateboard_wheel.n.01_2 skateboard.n.01_1) 
-        (attached skateboard_wheel.n.01_3 skateboard.n.01_1) 
-        (attached skateboard_wheel.n.01_4 skateboard.n.01_1) 
+        (ontop skateboard_deck.n.01_1 bed.n.01_1) 
+        (attached skateboard_wheel.n.01_1 skateboard_deck.n.01_1) 
+        (attached skateboard_wheel.n.01_2 skateboard_deck.n.01_1) 
+        (attached skateboard_wheel.n.01_3 skateboard_deck.n.01_1) 
+        (attached skateboard_wheel.n.01_4 skateboard_deck.n.01_1) 
         (ontop rag.n.01_1 bed.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 

@@ -7,7 +7,7 @@
         pot_plant.n.01_1 - pot_plant.n.01
         carton.n.02_1 - carton.n.02
         wreath.n.01_1 - wreath.n.01
-        fairy_light.n.01_1 - fairy_light.n.01
+        icicle_lights.n.01_1 - icicle_lights.n.01
         lawn.n.01_1 - lawn.n.01
         wall.n.01_1 - wall.n.01
         rose.n.01_1 - rose.n.01
@@ -21,10 +21,10 @@
         (not
             (attached wreath.n.01_1 wall.n.01_1)
         )
-        (inside fairy_light.n.01_1 carton.n.02_1) 
+        (inside icicle_lights.n.01_1 carton.n.02_1) 
         (inside rose.n.01_1 carton.n.02_1) 
         (not 
-            (toggled_on fairy_light.n.01_1)
+            (toggled_on icicle_lights.n.01_1)
         ) 
         (inroom floor.n.01_1 garden) 
         (inroom lawn.n.01_1 garden) 
@@ -37,8 +37,8 @@
     (:goal 
         (and 
             (attached ?wreath.n.01_1 ?wall.n.01_1)
-            (ontop ?fairy_light.n.01_1 ?pot_plant.n.01_1)
-            (toggled_on ?fairy_light.n.01_1) 
+            (ontop ?icicle_lights.n.01_1 ?pot_plant.n.01_1)
+            (toggled_on ?icicle_lights.n.01_1) 
             (ontop ?rose.n.01_1 ?lawn.n.01_1)
             (ontop ?pot_plant.n.01_1 ?lawn.n.01_1)
         )

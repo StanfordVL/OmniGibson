@@ -6,7 +6,7 @@
         floor.n.01_1 - floor.n.01
         carton.n.02_1 - carton.n.02
         wall.n.01_1 - wall.n.01
-        fairy_light.n.01_1 fairy_light.n.01_2 fairy_light.n.01_3 fairy_light.n.01_4 - fairy_light.n.01
+        icicle_lights.n.01_1 icicle_lights.n.01_2 icicle_lights.n.01_3 icicle_lights.n.01_4 - icicle_lights.n.01
         scrub.n.01_1 scrub.n.01_2 - scrub.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -14,33 +14,33 @@
     (:init 
         (ontop rail_fence.n.01_1 floor.n.01_1) 
         (ontop carton.n.02_1 floor.n.01_1) 
-        (inside fairy_light.n.01_1 carton.n.02_1) 
-        (inside fairy_light.n.01_2 carton.n.02_1) 
-        (inside fairy_light.n.01_3 carton.n.02_1) 
-        (inside fairy_light.n.01_4 carton.n.02_1) 
+        (inside icicle_lights.n.01_1 carton.n.02_1) 
+        (inside icicle_lights.n.01_2 carton.n.02_1) 
+        (inside icicle_lights.n.01_3 carton.n.02_1) 
+        (inside icicle_lights.n.01_4 carton.n.02_1) 
         (not 
-            (attached fairy_light.n.01_1 wall.n.01_1)
+            (attached icicle_lights.n.01_1 wall.n.01_1)
         )
         (not 
-            (attached fairy_light.n.01_2 wall.n.01_1)
+            (attached icicle_lights.n.01_2 wall.n.01_1)
         )
         (not 
-            (attached fairy_light.n.01_3 wall.n.01_1)
+            (attached icicle_lights.n.01_3 wall.n.01_1)
         )
         (not 
-            (attached fairy_light.n.01_4 wall.n.01_1)
+            (attached icicle_lights.n.01_4 wall.n.01_1)
         )
         (not 
-            (toggled_on fairy_light.n.01_1)
+            (toggled_on icicle_lights.n.01_1)
         )
         (not 
-            (toggled_on fairy_light.n.01_2)
+            (toggled_on icicle_lights.n.01_2)
         )
         (not 
-            (toggled_on fairy_light.n.01_3)
+            (toggled_on icicle_lights.n.01_3)
         )
         (not 
-            (toggled_on fairy_light.n.01_4)
+            (toggled_on icicle_lights.n.01_4)
         )
         (inroom floor.n.01_1 garden) 
         (inroom scrub.n.01_1 garden)
@@ -54,20 +54,20 @@
             (forall 
                 (?scrub.n.01 - scrub.n.01)
                 (exists 
-                    (?fairy_light.n.01 - fairy_light.n.01)
-                    (ontop ?fairy_light.n.01 ?scrub.n.01)
+                    (?icicle_lights.n.01 - icicle_lights.n.01)
+                    (ontop ?icicle_lights.n.01 ?scrub.n.01)
                 )
             )
             (forall 
                 (?wall.n.01 - wall.n.01)
                 (exists 
-                    (?fairy_light.n.01 - fairy_light.n.01)
-                    (attached ?fairy_light.n.01 ?wall.n.01)
+                    (?icicle_lights.n.01 - icicle_lights.n.01)
+                    (attached ?icicle_lights.n.01 ?wall.n.01)
                 )
             )
             (forall 
-                (?fairy_light.n.01 - fairy_light.n.01) 
-                (toggled_on ?fairy_light.n.01)
+                (?icicle_lights.n.01 - icicle_lights.n.01) 
+                (toggled_on ?icicle_lights.n.01)
             )
         )
     )

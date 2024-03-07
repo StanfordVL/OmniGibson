@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        fairy_light.n.01_1 - fairy_light.n.01
+        icicle_lights.n.01_1 - icicle_lights.n.01
         coffee_table.n.01_1 - coffee_table.n.01
         floor.n.01_1 - floor.n.01
         wall.n.01_1 - wall.n.01
@@ -10,9 +10,9 @@
     )
     
     (:init 
-        (ontop fairy_light.n.01_1 coffee_table.n.01_1) 
+        (ontop icicle_lights.n.01_1 coffee_table.n.01_1) 
         (not 
-            (attached fairy_light.n.01_1 wall.n.01_1)
+            (attached icicle_lights.n.01_1 wall.n.01_1)
         )
         (inroom floor.n.01_1 living_room)
         (inroom wall.n.01_1 living_room)
@@ -22,7 +22,7 @@
     
     (:goal 
         (and 
-            (attached ?fairy_light.n.01_1 ?wall.n.01_1)
+            (attached ?icicle_lights.n.01_1 ?wall.n.01_1)
         )
     )
 )

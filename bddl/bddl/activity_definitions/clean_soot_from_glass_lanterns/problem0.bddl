@@ -3,7 +3,7 @@
 
     (:objects
         wall.n.01_1 - wall.n.01
-        lantern.n.01_1 - lantern.n.01
+        glass_lantern.n.01_1 - glass_lantern.n.01
         stain.n.01_1 - stain.n.01
         vinegar.n.01_1 - vinegar.n.01
         vinegar__atomizer.n.01_1 - vinegar__atomizer.n.01
@@ -17,8 +17,8 @@
     )
     
     (:init 
-        (ontop lantern.n.01_1 floor.n.01_1) 
-        (covered lantern.n.01_1 stain.n.01_1)
+        (ontop glass_lantern.n.01_1 floor.n.01_1) 
+        (covered glass_lantern.n.01_1 stain.n.01_1)
         (insource vinegar__atomizer.n.01_1 vinegar.n.01_1) 
         (insource ammonia_water__atomizer.n.01_1 ammonia_water.n.01_1) 
         (insource water__atomizer.n.01_1 water.n.06_1) 
@@ -34,7 +34,7 @@
     (:goal 
         (and 
             (not
-                (covered ?lantern.n.01_1 ?stain.n.01_1)
+                (covered ?glass_lantern.n.01_1 ?stain.n.01_1)
             )
         )
     )
