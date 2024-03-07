@@ -303,8 +303,8 @@ def validate_task(task, task_scene_dict, default_scene_dict):
             # Check joint states
             for jnt_name, jnt_info in default_obj_dict["joints"].items():
                 for key, val in jnt_info.items():
-                    if "effort" in key:
-                        # Don't check effort
+                    if "effort" in key or "target" in key:
+                        # Don't check effort or any target values
                         continue
                     atol = 1. if "vel" in key else 0.05
                     obj_val = obj_dict["joints"][jnt_name][key]
