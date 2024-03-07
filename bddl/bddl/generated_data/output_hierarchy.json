@@ -3294,15 +3294,18 @@
                                       "children": [
                                         {
                                           "name": "glass_lantern.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "glass_lantern"
+                                          ]
                                         },
                                         {
                                           "name": "paper_lantern.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "paper_lantern"
+                                          ]
                                         }
-                                      ],
-                                      "categories": [
-                                        "lantern"
                                       ]
                                     }
                                   ]
@@ -5843,13 +5846,15 @@
                                   "name": "wardrobe.n.01",
                                   "hasModel": true,
                                   "categories": [
-                                    "hall_tree",
                                     "wardrobe"
                                   ]
                                 },
                                 {
                                   "name": "hallstand.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "hall_tree"
+                                  ]
                                 }
                               ]
                             },
@@ -6652,7 +6657,10 @@
                             },
                             {
                               "name": "hitch.n.04",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "hitch"
+                              ]
                             }
                           ]
                         },
@@ -15913,6 +15921,7 @@
                       "name": "skateboard_wheel.n.01",
                       "hasModel": true,
                       "categories": [
+                        "skateboard_wheel",
                         "skateboard_wheel"
                       ]
                     },
@@ -15945,7 +15954,10 @@
                     },
                     {
                       "name": "skateboard_deck.n.01",
-                      "hasModel": true
+                      "hasModel": true,
+                      "categories": [
+                        "skateboard_deck"
+                      ]
                     }
                   ]
                 },
@@ -34232,6 +34244,13 @@
                   "categories": [
                     "signpost"
                   ]
+                },
+                {
+                  "name": "decorative_sign.n.01",
+                  "hasModel": true,
+                  "categories": [
+                    "decorative_sign"
+                  ]
                 }
               ]
             },
@@ -34521,7 +34540,10 @@
                           "children": [
                             {
                               "name": "scroll.n.02",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "poster_roll"
+                              ]
                             }
                           ]
                         }
