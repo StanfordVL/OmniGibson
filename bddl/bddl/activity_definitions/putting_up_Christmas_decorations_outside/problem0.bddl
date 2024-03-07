@@ -6,7 +6,7 @@
         wall.n.01_1 - wall.n.01
         icicle_lights.n.01_1 - icicle_lights.n.01
         wreath.n.01_1 - wreath.n.01
-        lantern.n.01_1 lantern.n.01_2 - lantern.n.01
+        glass_lantern.n.01_1 glass_lantern.n.01_2 - glass_lantern.n.01
         poinsettia.n.01_1 poinsettia.n.01_2 - poinsettia.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
@@ -15,8 +15,8 @@
     (:init 
         (ontop icicle_lights.n.01_1 lawn.n.01_1) 
         (ontop wreath.n.01_1 lawn.n.01_1) 
-        (ontop lantern.n.01_1 lawn.n.01_1) 
-        (ontop lantern.n.01_2 lawn.n.01_1) 
+        (ontop glass_lantern.n.01_1 lawn.n.01_1) 
+        (ontop glass_lantern.n.01_2 lawn.n.01_1) 
         (ontop poinsettia.n.01_1 lawn.n.01_1) 
         (ontop poinsettia.n.01_2 lawn.n.01_1)
         (not 
@@ -36,10 +36,10 @@
             (attached ?icicle_lights.n.01_1 ?wall.n.01_1)
             (attached ?wreath.n.01_1 ?wall.n.01_1)
             (forall
-                (?lantern.n.01 - lantern.n.01)
+                (?glass_lantern.n.01 - glass_lantern.n.01)
                 (and 
-                    (ontop ?lantern.n.01 ?lawn.n.01_1)           
-                    (nextto ?lantern.n.01 ?wall.n.01_1)     
+                    (ontop ?glass_lantern.n.01 ?lawn.n.01_1)           
+                    (nextto ?glass_lantern.n.01 ?wall.n.01_1)     
                 )
             )
             (forall
