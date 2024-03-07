@@ -55,8 +55,8 @@ VALID_ATTACHMENTS = set([
     ("bicycle_rack.n.01", "wall.n.01"),
     ("dartboard.n.01", "wall.n.01"),
     ("rug.n.01", "wall.n.01"),
-    ("fairy_light.n.01", "wall.n.01"),
-    ("lantern.n.01", "wall.n.01"),
+    ("icicle_lights.n.01", "wall.n.01"),
+    ("paper_lantern.n.01", "pole.n.01"),
     ("address.n.05", "wall.n.01"),
     ("hanger.n.02", "wardrobe.n.01"),
     ("flagpole.n.02", "wall.n.01"),
@@ -78,6 +78,7 @@ VALID_ATTACHMENTS = set([
     ("trout.n.01", "fishing_rod.n.01"),
     ("bicycle_rack.n.01", "recreational_vehicle.n.01"),
     ("window_blind.n.01", "wall.n.01"),
+    ("skateboard_wheel.n.01", "skateboard_deck.n.01"),
 ])
 
 VALID_ROOMS = set()
