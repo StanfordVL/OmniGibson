@@ -63,7 +63,7 @@ VALID_ATTACHMENTS = set([
     ("picture_frame.n.01", "wall.n.01"),
     ("wind_chime.n.01", "pole.n.01"),
     ("pole.n.01", "wall.n.01"),
-    ("hook.n.05", "trailer_truck.n.01"),
+    ("hitch.n.04", "pickup.n.01"),
     ("fire_alarm.n.02", "wall.n.01"),
     ("poster.n.01", "wall.n.01"),
     ("painting.n.01", "wall.n.01"),
