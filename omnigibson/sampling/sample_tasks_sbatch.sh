@@ -8,7 +8,6 @@
 
 set -e -o pipefail
 
-IMAGE_PATH="/svl/u/jdwong/enroot/omnigibson-dev.sqsh"
 GPU_ID=$(nvidia-smi -L | grep -oP '(?<=GPU-)[a-fA-F0-9\-]+' | head -n 1)
 ISAAC_CACHE_PATH="/scr-ssd/${SLURM_JOB_USER}/isaac_cache_${GPU_ID}"
 
@@ -18,10 +17,7 @@ declare -A ENVS=(
     [NVIDIA_VISIBLE_DEVICES]=0
     [DISPLAY]=""
     [OMNIGIBSON_HEADLESS]=1
-    [SCENE_INFO_FPATH]=/data/scenes.csv
-    [TASK_INFO_FPATH]=/data/tasks.csv
-    [SYNSET_INFO_FPATH]=/data/synsets.csv
-    [CREDENTIALS_FPATH]=/cvgl2/u/jdwong/.config/gcloud/key.json
+    [CREDENTIALS_FPATH]=/cvgl/group/Gibson/og-data-0-3-0/key.json
     [SAMPLING_SCENE_MODEL]=""
     [SAMPLING_ACTIVITIES]=""
     [SAMPLING_START_AT]=""
@@ -83,7 +79,7 @@ done
 
 # Create the image if it doesn't already exist
 CONTAINER_NAME=omnigibson_${GPU_ID}
-enroot create --force --name ${CONTAINER_NAME} ${IMAGE_PATH}
+enroot create --force --name ${CONTAINER_NAME} /cvgl/group/Gibson/og-data-0-3-0/omnigibson-dev.sqsh
 
 # Remove leading space in string
 ENV_KWARGS="${ENV_KWARGS:1}"
@@ -97,7 +93,7 @@ ENROOT_MOUNT_HOME=no enroot start \
     ${ENV_KWARGS} \
     ${MOUNT_KWARGS} \
     ${CONTAINER_NAME} \
-    micromamba run -n omnigibson /bin/bash --login -c "source /isaac-sim/setup_conda_env.sh && pip install gspread && python omnigibson/sampling/sample_b1k_scenes.py"
+    micromamba run -n omnigibson /bin/bash --login -c "git fetch; git checkout feat/sampling_2024; source /isaac-sim/setup_conda_env.sh && pip install gspread && python omnigibson/sampling/sample_b1k_scenes.py"
 
 # Clean up the image if possible.
 enroot remove -f ${CONTAINER_NAME}

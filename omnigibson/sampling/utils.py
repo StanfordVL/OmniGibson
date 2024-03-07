@@ -21,8 +21,10 @@ from omnigibson.macros import gm, macros
 6. mv key.json /home/cremebrule/.config/gcloud/key.json
 """
 
+folder_path = os.path.dirname(os.path.abspath(__file__))
+
 SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
-CREDENTIALS = os.environ.get("CREDENTIALS_FPATH", "/home/jdw/.config/gcloud/key.json")
+CREDENTIALS = os.environ.get("CREDENTIALS_FPATH", os.path.join(folder_path, "key.json"))
 WORKSHEET = "GTC2024 - 5a2d64"
 USER = getpass.getuser()
 
@@ -31,9 +33,9 @@ worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
 
 ACTIVITY_TO_ROW = {activity: i + 2 for i, activity in enumerate(worksheet.col_values(1)[1:])}
 
-SCENE_INFO_FPATH = os.environ.get("SCENE_INFO_FPATH", "/home/jdw/Downloads/BEHAVIOR-1K Scenes.csv")
-TASK_INFO_FPATH = os.environ.get("TASK_INFO_FPATH", "/home/jdw/Downloads/BEHAVIOR-1K Tasks.csv")
-SYNSET_INFO_FPATH = os.environ.get("SYNSET_INFO_FPATH", "/home/jdw/Downloads/BEHAVIOR-1K Synsets.csv")
+SCENE_INFO_FPATH = os.path.join(folder_path, "BEHAVIOR-1K Scenes.csv")
+TASK_INFO_FPATH = os.path.join(folder_path, "BEHAVIOR-1K Tasks.csv")
+SYNSET_INFO_FPATH = os.path.join(folder_path, "BEHAVIOR-1K Synsets.csv")
 
 
 UNSUPPORTED_PREDICATES = {"broken", "assembled", "attached"}
