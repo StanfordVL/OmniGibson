@@ -23,6 +23,7 @@ from omnigibson.utils.constants import PrimType
 from bddl.activity import Conditions, evaluate_state
 from utils import *
 import numpy as np
+import random
 
 
 # TODO:
@@ -36,6 +37,8 @@ parser.add_argument("--activities", type=str, default=None,
                     help="Activity/ie(s) to be sampled, if specified. This should be a comma-delimited list of desired activities. Otherwise, will try to sample all tasks in this scene")
 parser.add_argument("--start_at", type=str, default=None,
                     help="If specified, activity to start at, ignoring all previous")
+parser.add_argument("--randomize", action="store_true",
+                    help="If set, will randomize order of activities.")
 parser.add_argument("--overwrite_existing", action="store_true",
                     help="If set, will overwrite any existing tasks that are found. Otherwise, will skip.")
 
@@ -62,6 +65,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         args.activities = os.environ["SAMPLING_ACTIVITIES"]
     if args.start_at is None and os.environ.get("SAMPLING_START_AT"):
         args.start_at = os.environ["SAMPLING_START_AT"]
+    if not args.randomize:
+        args.randomize = os.environ.get("SAMPLING_RANDOMIZE") in {"1", "true", "True"}
     if not args.overwrite_existing:
         args.overwrite_existing = os.environ.get("SAMPLING_OVERWRITE_EXISTING") in {"1", "true", "True"}
 
@@ -128,7 +133,8 @@ def main(random_selection=False, headless=False, short_exec=False):
     env.task_config["online_object_sampling"] = True
 
     should_start = args.start_at is None
-    for activity in sorted(activities):
+    ordered_activities = random.shuffle(activities) if args.randomize else sorted(activities)
+    for activity in ordered_activities:
         print(f"Checking activity: {activity}...")
         if not should_start:
             if args.start_at == activity:

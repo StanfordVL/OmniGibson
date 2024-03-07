@@ -21,6 +21,7 @@ declare -A ENVS=(
     [SAMPLING_SCENE_MODEL]=""
     [SAMPLING_ACTIVITIES]=""
     [SAMPLING_START_AT]=""
+    [SAMPLING_RANDOMIZE]=""
     [SAMPLING_OVERWRITE_EXISTING]=""
 )
 
@@ -28,18 +29,20 @@ declare -A ENVS=(
 # m - scene model
 # a - activities
 # s - start at
+# r - randomize order
 # o - overwrite
 
 print_usage() {
   printf "Usage: ..."
 }
 
-while getopts 'm:aso' flag; do
+while getopts 'm:asro' flag; do
   case "${flag}" in
     m) ENVS[SAMPLING_SCENE_MODEL]="${OPTARG}" ;;
     a) ENVS[SAMPLING_ACTIVITIES]="${OPTARG}" ;;
     s) ENVS[SAMPLING_START_AT]="${OPTARG}" ;;
-    o) ENVS[SAMPLING_OVERWRITE_EXISTING]="${OPTARG}" ;;
+    r) ENVS[SAMPLING_RANDOMIZE]="1" ;;
+    o) ENVS[SAMPLING_OVERWRITE_EXISTING]="1" ;;
     *) print_usage
        exit 1 ;;
   esac

@@ -23,6 +23,7 @@ import numpy as np
 import gspread
 import os
 from utils import *
+import random
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--scene_model", type=str, default=None,
@@ -31,6 +32,8 @@ parser.add_argument("--activities", type=str, default=None,
                     help="Activity/ie(s) to be sampled, if specified. This should be a comma-delimited list of desired activities. Otherwise, will try to sample all tasks in this scene")
 parser.add_argument("--start_at", type=str, default=None,
                     help="If specified, activity to start at, ignoring all previous")
+parser.add_argument("--randomize", action="store_true",
+                    help="If set, will randomize order of activities.")
 
 gm.HEADLESS = True
 gm.USE_GPU_DYNAMICS = True
@@ -56,6 +59,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         args.activities = os.environ["SAMPLING_ACTIVITIES"]
     if args.start_at is None and os.environ.get("SAMPLING_START_AT"):
         args.start_at = os.environ["SAMPLING_START_AT"]
+    if not args.randomize:
+        args.randomize = os.environ.get("SAMPLING_RANDOMIZE") in {"1", "true", "True"}
 
     # Make sure scene can be sampled by current user
     validate_scene_can_be_sampled(scene=args.scene_model)
@@ -102,6 +107,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         rows_to_validate.append(i + 2)
 
     # Now take pruned list and iterate through to actually validate the scenes
+    if args.randomize:
+        rows_to_validate = random.shuffle(rows_to_validate)
     for row in rows_to_validate:
         # sleep to avoid gspread query limits
         time.sleep(1)
