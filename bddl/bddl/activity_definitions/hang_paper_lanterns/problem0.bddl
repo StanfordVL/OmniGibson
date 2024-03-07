@@ -1,22 +1,22 @@
-(define (problem hang_paper_lanterns-0)
+(define (problem hang_paper_paper_lanterns-0)
     (:domain omnigibson)
 
     (:objects
         table.n.02_1 - table.n.02
-        lantern.n.01_1 lantern.n.01_2 - lantern.n.01
+        paper_lantern.n.01_1 paper_lantern.n.01_2 - paper_lantern.n.01
         floor.n.01_1 - floor.n.01
         wall.n.01_1 - wall.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop lantern.n.01_1 table.n.02_1) 
-        (ontop lantern.n.01_2 table.n.02_1) 
+        (ontop paper_lantern.n.01_1 table.n.02_1) 
+        (ontop paper_lantern.n.01_2 table.n.02_1) 
         (not 
-            (attached lantern.n.01_1 wall.n.01_1)
+            (attached paper_lantern.n.01_1 wall.n.01_1)
         )
         (not 
-            (attached lantern.n.01_2 wall.n.01_1)
+            (attached paper_lantern.n.01_2 wall.n.01_1)
         )
         (inroom floor.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
@@ -27,8 +27,8 @@
     (:goal 
         (and 
             (forall 
-                (?lantern.n.01 - lantern.n.01)
-                (attached ?lantern.n.01 ?wall.n.01_1)
+                (?paper_lantern.n.01 - paper_lantern.n.01)
+                (attached ?paper_lantern.n.01 ?wall.n.01_1)
             )
         )
     )
