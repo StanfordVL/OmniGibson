@@ -37,6 +37,8 @@ parser.add_argument("--activities", type=str, default=None,
                     help="Activity/ie(s) to be sampled, if specified. This should be a comma-delimited list of desired activities. Otherwise, will try to sample all tasks in this scene")
 parser.add_argument("--start_at", type=str, default=None,
                     help="If specified, activity to start at, ignoring all previous")
+parser.add_argument("--thread_id", type=str, default=None,
+                    help="If specified, ID to assign to the thread when tracking in_progress")
 parser.add_argument("--randomize", action="store_true",
                     help="If set, will randomize order of activities.")
 parser.add_argument("--overwrite_existing", action="store_true",
@@ -65,13 +67,16 @@ def main(random_selection=False, headless=False, short_exec=False):
         args.activities = os.environ["SAMPLING_ACTIVITIES"]
     if args.start_at is None and os.environ.get("SAMPLING_START_AT"):
         args.start_at = os.environ["SAMPLING_START_AT"]
+    if args.thread_id is None:
+        # This checks for both "" and non-existent key
+        args.thread_id = os.environ["SAMPLING_THREAD_ID"] if os.environ.get("SAMPLING_THREAD_ID") else "1"
     if not args.randomize:
         args.randomize = os.environ.get("SAMPLING_RANDOMIZE") in {"1", "true", "True"}
     if not args.overwrite_existing:
         args.overwrite_existing = os.environ.get("SAMPLING_OVERWRITE_EXISTING") in {"1", "true", "True"}
 
     # Make sure scene can be sampled by current user
-    validate_scene_can_be_sampled(scene=args.scene_model)
+    scene_row = validate_scene_can_be_sampled(scene=args.scene_model)
 
     # If we want to create a stable scene config, do that now
     default_scene_fpath = f"{gm.DATASET_PATH}/scenes/{args.scene_model}/json/{args.scene_model}_stable.json"
@@ -173,11 +178,11 @@ def main(random_selection=False, headless=False, short_exec=False):
             continue
 
         # If another thread is already in the process of sampling, skip
-        if in_progress != "" and int(in_progress) == 1:
+        if in_progress not in {None, ""}:
             continue
 
         # Reserve this task by marking in_progress = 1
-        worksheet.update_acell(f"B{row}", 1)
+        worksheet.update_acell(f"B{row}", args.thread_id)
 
         should_sample, success, reason = True, False, ""
 
@@ -326,6 +331,10 @@ def main(random_selection=False, headless=False, short_exec=False):
             env.task_config["online_object_sampling"] = True
 
     print("Successful shutdown!")
+
+    # Record when we successfully complete all the activities
+    worksheet.update_acell(f"W{scene_row}", 1)
+
     # Shutdown at the end
     og.shutdown()
 

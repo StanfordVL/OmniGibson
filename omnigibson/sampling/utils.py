@@ -82,7 +82,10 @@ def validate_scene_can_be_sampled(scene):
 
     # Fill in this value to reserve it
     idx = scenes_sorted.index(scene)
-    worksheet.update_acell(f"U{2 + idx}", USER)
+    scene_row = 2 + idx
+    worksheet.update_acell(f"U{scene_row}", USER)
+
+    return scene_row
 
 
 def prune_unevaluatable_predicates(init_conditions):

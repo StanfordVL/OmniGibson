@@ -26,6 +26,7 @@ declare -A ENVS=(
     [SAMPLING_START_AT]=""
     [SAMPLING_RANDOMIZE]=""
     [SAMPLING_OVERWRITE_EXISTING]=""
+    [SAMPLING_THREAD_ID]=${SLURM_JOB_ID}
 )
 
 # Parse command-line args
