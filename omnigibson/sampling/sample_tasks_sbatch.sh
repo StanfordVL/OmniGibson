@@ -3,7 +3,7 @@
 #SBATCH --partition=svl --qos=normal
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=30G
+#SBATCH --mem=60G
 #SBATCH --gres=gpu:1
 #SBATCH --time=0-03:00:00
 #SBATCH --output=%j.out
