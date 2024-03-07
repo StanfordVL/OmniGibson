@@ -154,7 +154,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 continue
 
         # sleep to avoid gspread query limits
-        time.sleep(1)
+        time.sleep(np.random.uniform(1.0, 3.0))
 
         # Don't sample any invalid activities
         if activity not in valid_tasks:
