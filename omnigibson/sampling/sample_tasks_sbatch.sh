@@ -40,7 +40,7 @@ print_usage() {
   printf "Usage: ..."
 }
 
-while getopts 'm:asro' flag; do
+while getopts 'm:a:s:ro' flag; do
   case "${flag}" in
     m) ENVS[SAMPLING_SCENE_MODEL]="${OPTARG}" ;;
     a) ENVS[SAMPLING_ACTIVITIES]="${OPTARG}" ;;
