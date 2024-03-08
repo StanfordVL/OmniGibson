@@ -82,6 +82,8 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Current task is either an empty list [] or a filled list [['<ACTIVITY>']]
     current_task = worksheet.get(f"Y{scene_row}")
     if args.start_at is None and current_task:
+        print("-" * 50)
+        print(current_task)
         args.start_at = current_task[0][0]
         # Also clear the in_progress bar in case this is from a failed run
         worksheet.update_acell(f"B{ACTIVITY_TO_ROW[args.start_at]}", "")
