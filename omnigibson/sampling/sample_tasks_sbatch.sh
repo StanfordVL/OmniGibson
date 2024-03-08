@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=60G
 #SBATCH --gres=gpu:titanrtx:1
-#SBATCH --time=0-03:00:00
+#SBATCH --time=0-24:00:00
 #SBATCH --output=%j.out
 #SBATCH --error=%j.err
 
