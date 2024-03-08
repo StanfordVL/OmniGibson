@@ -78,6 +78,14 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Make sure scene can be sampled by current user
     scene_row = validate_scene_can_be_sampled(scene=args.scene_model)
 
+    # Potentially update start_at based on current task observed
+    # Current task is either an empty list [] or a filled list ['<ACTIVITY>']
+    current_task = worksheet.get(f"Y{scene_row}")[0]
+    if args.start_at is None and current_task:
+        args.start_at = current_task[0]
+        # Also clear the in_progress bar in case this is from a failed run
+        worksheet.update_acell(f"B{ACTIVITY_TO_ROW[args.start_at]}", "")
+
     # Set the thread id for the given scene
     worksheet.update_acell(f"X{scene_row}", args.thread_id)
 
@@ -186,6 +194,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
         # Reserve this task by marking in_progress = 1
         worksheet.update_acell(f"B{row}", args.thread_id)
+        worksheet.update_acell(f"Y{scene_row}", activity)
 
         should_sample, success, reason = True, False, ""
 
@@ -337,6 +346,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Record when we successfully complete all the activities
     worksheet.update_acell(f"W{scene_row}", 1)
+    worksheet.update_acell(f"Y{scene_row}", "")
 
     # Shutdown at the end
     og.shutdown()
