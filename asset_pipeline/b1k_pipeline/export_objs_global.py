@@ -572,7 +572,7 @@ def process_target(target, objects_path, dask_client):
         roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
         # Only save the 0th instance.
-        saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"] and (root_node[1] == "dhfqid" or root_node[0] == "carton")]
+        saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
         object_futures = {}
         for root_node in saveable_roots:
             # Start processing the object. We start by creating an object-specific
