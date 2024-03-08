@@ -100,7 +100,7 @@ ENROOT_MOUNT_HOME=no enroot start \
     ${ENV_KWARGS} \
     ${MOUNT_KWARGS} \
     ${CONTAINER_NAME} \
-    micromamba run -n omnigibson /bin/bash --login -c "cd / git clone https://github.com/StanfordVL/bddl.git --branch develop --single-branch bddl-src && cd bddl-src && pip install -e . && cd / && mv omnigibson-src omnigibson-src-backup && git clone https://github.com/StanfordVL/OmniGibson.git --branch feat/sampling_2024 --single-branch omnigibson-src && cd /omnigibson-src && source /isaac-sim/setup_conda_env.sh && pip install gspread && python omnigibson/sampling/sample_b1k_scenes.py"
+    micromamba run -n omnigibson /bin/bash --login -c "cd / && git clone https://github.com/StanfordVL/bddl.git --branch develop --single-branch bddl-src && cd bddl-src && pip install -e . && cd / && mv omnigibson-src omnigibson-src-backup && git clone https://github.com/StanfordVL/OmniGibson.git --branch feat/sampling_2024 --single-branch omnigibson-src && cd /omnigibson-src && source /isaac-sim/setup_conda_env.sh && pip install gspread && python omnigibson/sampling/sample_b1k_scenes.py"
 
 # Clean up the image if possible.
 enroot remove -f ${CONTAINER_NAME}
