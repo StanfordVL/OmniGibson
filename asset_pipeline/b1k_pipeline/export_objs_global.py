@@ -9,7 +9,6 @@ import traceback
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
-from dask.distributed import Client, wait, as_completed
 import fs.copy
 from fs.tempfs import TempFS
 from fs.osfs import OSFS
@@ -560,7 +559,7 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
     except Exception as exc:
         return exc
 
-def process_target(target, objects_path, dask_client):
+def process_target(target, objects_path, executor):
     with b1k_pipeline.utils.PipelineFS() as pipeline_fs, OSFS(objects_path) as objects_fs:
         with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
             mesh_list = json.load(f)["meshes"]
@@ -585,14 +584,14 @@ def process_target(target, objects_path, dask_client):
 
             obj_cat, obj_model, obj_inst_id, _ = root_node
             output_dirname = f"{obj_cat}/{obj_model}"
-            object_futures[dask_client.submit(process_object, root_node, target, mesh_list, relevant_nodes, objects_fs.makedirs(output_dirname).getsyspath("/"), pure=False)] = str(root_node)
+            object_futures[executor.submit(process_object, root_node, target, mesh_list, relevant_nodes, objects_fs.makedirs(output_dirname).getsyspath("/"))] = str(root_node)
 
         # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
-        wait(object_futures.keys())
+        # futures.wait(object_futures.keys())
 
         # Accumulate the errors
         error_msg = ""
-        for future in as_completed(object_futures.keys()):
+        for future in futures.as_completed(object_futures.keys()):
             root_node = object_futures[future]
             exc = future.result()
             if exc:
@@ -607,11 +606,10 @@ def main():
         errors = {}
         target_futures = {}
      
-        dask_client = Client() # silence_logs=True) # , n_workers=30, threads_per_worker=1)
-        with futures.ThreadPoolExecutor(max_workers=3) as target_executor:
+        with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ProcessPoolExecutor(max_workers=16) as obj_executor:
             targets = get_targets("combined")
             for target in tqdm.tqdm(targets):
-                target_futures[target_executor.submit(process_target, target, objects_dir, dask_client)] = target
+                target_futures[target_executor.submit(process_target, target, objects_dir, obj_executor)] = target
             
             with tqdm.tqdm(total=len(target_futures)) as object_pbar:
                 for future in futures.as_completed(target_futures.keys()):
