@@ -192,9 +192,9 @@ def main(random_selection=False, headless=False, short_exec=False):
             if success != "" and int(success) == 1 and not args.overwrite_existing:
                 continue
 
-        # If another thread is already in the process of sampling, skip
-        if in_progress not in {None, ""}:
-            continue
+            # If another thread is already in the process of sampling, skip
+            if in_progress not in {None, ""}:
+                continue
 
             # Reserve this task by marking in_progress = 1
             worksheet.update_acell(f"B{row}", args.thread_id)
