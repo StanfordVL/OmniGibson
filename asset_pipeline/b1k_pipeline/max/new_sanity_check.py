@@ -410,6 +410,15 @@ class SanityCheck:
 
             if ALLOWED_META_TYPES[meta_link_type] == "dimensionless":
                 self.expect(classOf(child) == rt.Point, f"Dimensionless {meta_link_type} meta link {child.name} should be of Point instead of {classOf(child)}")
+
+                # Check that the position and orientation are essentially identical between the transform and the objecttransform
+                transform_pos = child.transform.position
+                transform_rot = Rotation.from_quat(quat2arr(child.transform.rotation))
+                object_transform_pos = child.objecttransform.position
+                object_transform_rot = Rotation.from_quat(quat2arr(child.objecttransform.rotation))
+                self.expect(np.allclose(transform_pos, object_transform_pos, atol=1e-3), f"Dimensionless {meta_link_type} meta link {child.name} has nonzero object offset position.")
+                delta_rot = (transform_rot * object_transform_rot.inv()).magnitude()
+                self.expect(np.isclose(delta_rot, 0, atol=1e-3), f"Dimensionless {meta_link_type} meta link {child.name} has nonzero object offset rotation.")
             elif ALLOWED_META_TYPES[meta_link_type] == "primitive":
                 volumetric_allowed_types = {
                     rt.Box,
