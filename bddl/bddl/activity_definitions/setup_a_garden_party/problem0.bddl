@@ -11,7 +11,6 @@
         carving_knife.n.01_1 - carving_knife.n.01
         platter.n.01_1 - platter.n.01
         coffee_table.n.01_1 - coffee_table.n.01
-        wall.n.01_1 - wall.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -29,7 +28,6 @@
         (inroom coffee_table.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop serving_cart.n.01_1 floor.n.01_1) 
-        (inroom wall.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

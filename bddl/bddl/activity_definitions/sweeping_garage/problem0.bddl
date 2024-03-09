@@ -3,7 +3,6 @@
 
     (:objects
         broom.n.01_1 - broom.n.01
-        wall.n.01_1 - wall.n.01
         pallet.n.02_1 - pallet.n.02
         floor.n.01_1 - floor.n.01
         sand.n.04_1 - sand.n.04
@@ -19,7 +18,6 @@
         (covered floor.n.01_1 dust.n.01_1)
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garage) 
-        (inroom wall.n.01_1 garage) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

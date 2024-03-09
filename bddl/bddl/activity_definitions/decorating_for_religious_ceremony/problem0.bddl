@@ -7,7 +7,7 @@
         wreath.n.01_1 - wreath.n.01
         floor.n.01_1 - floor.n.01
         candlestick.n.01_1 - candlestick.n.01
-        wall.n.01_1 - wall.n.01
+        wall_nail.n.01_1 - wall_nail.n.01
         shelf.n.01_1 - shelf.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -20,10 +20,10 @@
             (attached dip.n.07_1 candlestick.n.01_1)
         )
         (not 
-            (attached wreath.n.01_1 wall.n.01_1)
+            (attached wreath.n.01_1 wall_nail.n.01_1)
         )
         (inroom floor.n.01_1 living_room)
-        (inroom wall.n.01_1 living_room)
+        (inroom wall_nail.n.01_1 living_room)
         (inroom cabinet.n.01_1 living_room)
         (inroom shelf.n.01_1 living_room)
         (ontop agent.n.01_1 floor.n.01_1)
@@ -33,7 +33,7 @@
         (and 
             (attached ?dip.n.07_1 ?candlestick.n.01_1) 
             (ontop ?candlestick.n.01_1 ?shelf.n.01_1) 
-            (attached ?wreath.n.01_1 ?wall.n.01_1)
+            (attached ?wreath.n.01_1 ?wall_nail.n.01_1)
         )
     )
 )
