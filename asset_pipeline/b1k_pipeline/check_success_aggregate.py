@@ -6,7 +6,8 @@ import b1k_pipeline.utils
 def main():
     # Validate file paths.
     failures = []
-    for target in b1k_pipeline.utils.get_targets("combined"):
+    target_type = "combined" if len(sys.argv) < 4 else sys.argv[3]
+    for target in b1k_pipeline.utils.get_targets(target_type):
         target_path = b1k_pipeline.utils.PIPELINE_ROOT / "cad" / target
         json_file = (target_path / sys.argv[1]).absolute()
         assert json_file.exists() and json_file.suffix == ".json", f"Can't find {json_file}."

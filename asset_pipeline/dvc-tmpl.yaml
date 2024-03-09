@@ -245,14 +245,31 @@ stages:
       # - cad/${item}/artifacts/sanitycheck.json
       outs:
       - cad/${item}/artifacts/room_object_list.json
-      - cad/${item}/artifacts/room_object_list.success
+
+  room_object_list_success:
+    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/room_object_list.json artifacts/pipeline/room_object_list.success scenes'
+    deps:
+    - cad/#{scenes}/artifacts/sanitycheck.json
+    - b1k_pipeline/check_success_aggregate.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/room_object_list.success
+
+  room_object_list_future_success:
+    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/room_object_list.json artifacts/pipeline/room_object_list_future.success scenes_unfiltered'
+    deps:
+    - cad/#{scenes_unfiltered}/artifacts/sanitycheck.json
+    - b1k_pipeline/check_success_aggregate.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/room_object_list_future.success
       
   combined_room_object_list:
     # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
     cmd: 'python -m b1k_pipeline.combined_room_object_list'
     deps:
     - cad/#{scenes}/artifacts/room_object_list.json
-    - cad/#{scenes}/artifacts/room_object_list.success
+    - artifacts/pipeline/room_object_list.success
     - b1k_pipeline/combined_room_object_list.py
     - metadata/allowed_room_types.csv
     - params.yaml
@@ -264,7 +281,7 @@ stages:
     cmd: 'python -m b1k_pipeline.combined_room_object_list --future'
     deps:
     - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
-    - cad/#{scenes_unfiltered}/artifacts/room_object_list.success
+    - artifacts/pipeline/room_object_list_future.success
     - b1k_pipeline/combined_room_object_list.py
     - metadata/allowed_room_types.csv
     - params.yaml

@@ -25,7 +25,7 @@ MUST_HAVE_ROOM_ASSIGNMENT_CATEGORIES = {
 def main():
     objects_by_room = defaultdict(Counter)
     nomatch = []
-    missing_room_assignment = {}
+    missing_room_assignment = set()
 
     for obj in rt.objects:
         if rt.classOf(obj) not in [rt.Editable_Poly, rt.Editable_Mesh, rt.VrayProxy]:
@@ -96,10 +96,6 @@ def main():
             f,
             indent=4,
         )
-
-    if success:
-        with open(os.path.join(output_dir, SUCCESS_FILENAME), "w") as f:
-            pass
 
 
 if __name__ == "__main__":
