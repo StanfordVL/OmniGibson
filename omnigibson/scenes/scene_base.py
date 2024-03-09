@@ -8,6 +8,7 @@ import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.prims.material_prim import MaterialPrim
+from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.utils.python_utils import classproperty, Serializable, Registerable, Recreatable, \
     create_object_from_init_info
 from omnigibson.utils.registry_utils import SerializableRegistry
@@ -451,10 +452,9 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         # If this object is fixed and is NOT an agent, disable collisions between the fixed links of the fixed objects
         # This is to account for cases such as Tiago, which has a fixed base which is needed for its global base joints
         # We do this by adding the object to our tracked collision groups
-        structure_categories = {"walls", "floors", "ceilings"}
         if obj.fixed_base and obj.category != robot_macros.ROBOT_CATEGORY and not obj.visual_only:
             # TODO: Remove structure hotfix once asset collision meshes are fixed!!
-            if obj.category in structure_categories:
+            if obj.category in STRUCTURE_CATEGORIES:
                 CollisionAPI.add_to_collision_group(col_group="structures", prim_path=obj.prim_path)
             else:
                 for link in obj.links.values():

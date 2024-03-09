@@ -43,6 +43,8 @@ parser.add_argument("--randomize", action="store_true",
                     help="If set, will randomize order of activities.")
 parser.add_argument("--overwrite_existing", action="store_true",
                     help="If set, will overwrite any existing tasks that are found. Otherwise, will skip.")
+parser.add_argument("--offline", action="store_true",
+                    help="If set, will sample offline, and will not sync / check with google sheets")
 
 gm.HEADLESS = True
 gm.USE_GPU_DYNAMICS = True
@@ -76,18 +78,19 @@ def main(random_selection=False, headless=False, short_exec=False):
         args.overwrite_existing = os.environ.get("SAMPLING_OVERWRITE_EXISTING") in {"1", "true", "True"}
 
     # Make sure scene can be sampled by current user
-    scene_row = validate_scene_can_be_sampled(scene=args.scene_model)
+    scene_row = None if args.offline else validate_scene_can_be_sampled(scene=args.scene_model)
 
-    # Potentially update start_at based on current task observed
-    # Current task is either an empty list [] or a filled list [['<ACTIVITY>']]
-    current_task = worksheet.get(f"Y{scene_row}")
-    if args.start_at is None and current_task and current_task[0]:
-        args.start_at = current_task[0][0]
-        # Also clear the in_progress bar in case this is from a failed run
-        worksheet.update_acell(f"B{ACTIVITY_TO_ROW[args.start_at]}", "")
+    if not args.offline:
+        # Potentially update start_at based on current task observed
+        # Current task is either an empty list [] or a filled list [['<ACTIVITY>']]
+        current_task = worksheet.get(f"Y{scene_row}")
+        if args.start_at is None and current_task and current_task[0]:
+            args.start_at = current_task[0][0]
+            # Also clear the in_progress bar in case this is from a failed run
+            worksheet.update_acell(f"B{ACTIVITY_TO_ROW[args.start_at]}", "")
 
-    # Set the thread id for the given scene
-    worksheet.update_acell(f"X{scene_row}", args.thread_id)
+        # Set the thread id for the given scene
+        worksheet.update_acell(f"X{scene_row}", args.thread_id)
 
     # If we want to create a stable scene config, do that now
     default_scene_fpath = f"{gm.DATASET_PATH}/scenes/{args.scene_model}/json/{args.scene_model}_stable.json"
@@ -171,30 +174,31 @@ def main(random_selection=False, headless=False, short_exec=False):
         if activity not in ACTIVITY_TO_ROW:
             continue
 
-        # Get info from spreadsheet
-        row = ACTIVITY_TO_ROW[activity]
-        in_progress, success, validated, scene_id, user, reason, exception, misc = worksheet.get(f"B{row}:I{row}")[0]
+        if not args.offline:
+            # Get info from spreadsheet
+            row = ACTIVITY_TO_ROW[activity]
+            in_progress, success, validated, scene_id, user, reason, exception, misc = worksheet.get(f"B{row}:I{row}")[0]
 
-        # If we manually do not want to sample the task (DO NOT SAMPLE == "DNS", skip)
-        if success.lower() == "dns":
-            continue
+            # If we manually do not want to sample the task (DO NOT SAMPLE == "DNS", skip)
+            if success.lower() == "dns":
+                continue
 
-        # Only sample stuff which is fixed
-        # if "fixed" not in misc.lower():
-        #     continue
+            # Only sample stuff which is fixed
+            # if "fixed" not in misc.lower():
+            #     continue
 
-        # If we've already sampled successfully (success is populated with a 1) and we don't want to overwrite the
-        # existing sampling result, skip
-        if success != "" and int(success) == 1 and not args.overwrite_existing:
-            continue
+            # If we've already sampled successfully (success is populated with a 1) and we don't want to overwrite the
+            # existing sampling result, skip
+            if success != "" and int(success) == 1 and not args.overwrite_existing:
+                continue
 
         # If another thread is already in the process of sampling, skip
         if in_progress not in {None, ""}:
             continue
 
-        # Reserve this task by marking in_progress = 1
-        worksheet.update_acell(f"B{row}", args.thread_id)
-        worksheet.update_acell(f"Y{scene_row}", activity)
+            # Reserve this task by marking in_progress = 1
+            worksheet.update_acell(f"B{row}", args.thread_id)
+            worksheet.update_acell(f"Y{scene_row}", activity)
 
         should_sample, success, reason = True, False, ""
 
@@ -275,11 +279,12 @@ def main(random_selection=False, headless=False, short_exec=False):
             assert og.sim.is_stopped()
 
             # Write to google sheets
-            cell_list = worksheet.range(f"B{row}:H{row}")
-            for cell, val in zip(cell_list,
-                                 ("", int(success), "", args.scene_model, USER, reason, "")):
-                cell.value = val
-            worksheet.update_cells(cell_list)
+            if not args.offline:
+                cell_list = worksheet.range(f"B{row}:H{row}")
+                for cell, val in zip(cell_list,
+                                     ("", int(success), "", args.scene_model, USER, reason, "")):
+                    cell.value = val
+                worksheet.update_cells(cell_list)
 
             # Clear task callbacks if sampled
             if should_sample:
@@ -306,12 +311,13 @@ def main(random_selection=False, headless=False, short_exec=False):
             og.log.error(traceback_str)
             og.log.error(f"\n\nCaught exception sampling activity {activity} in scene {args.scene_model}:\n\n{e}\n\n")
 
-            # Clear the in_progress reservation and note the exception
-            cell_list = worksheet.range(f"B{row}:H{row}")
-            for cell, val in zip(cell_list,
-                                 ("", 0, "", args.scene_model, USER, reason, traceback_str)):
-                cell.value = val
-            worksheet.update_cells(cell_list)
+            if not args.offline:
+                # Clear the in_progress reservation and note the exception
+                cell_list = worksheet.range(f"B{row}:H{row}")
+                for cell, val in zip(cell_list,
+                                     ("", 0, "", args.scene_model, USER, reason, traceback_str)):
+                    cell.value = val
+                worksheet.update_cells(cell_list)
 
             try:
                 # Stop sim, clear simulator, and re-create environment
@@ -342,9 +348,10 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     print("Successful shutdown!")
 
-    # Record when we successfully complete all the activities
-    worksheet.update_acell(f"W{scene_row}", 1)
-    worksheet.update_acell(f"Y{scene_row}", "")
+    if not args.offline:
+        # Record when we successfully complete all the activities
+        worksheet.update_acell(f"W{scene_row}", 1)
+        worksheet.update_acell(f"Y{scene_row}", "")
 
     # Shutdown at the end
     og.shutdown()

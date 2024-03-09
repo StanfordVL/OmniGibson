@@ -294,6 +294,20 @@ def validate_task(task, task_scene_dict, default_scene_dict):
             atol = 1. if "vel" in key else 0.05
             # # TODO: Update ori value to be larger tolerance
             # tol = 0.15 if "ori" in key else 0.05
+            # If particle positions are being checked, only check the min / max
+            if "particle" in key:
+                # Only check position
+                if "position" in key:
+                    particle_positions = np.array(val)
+                    current_particle_positions = np.array(obj_val)
+                    pos_min, pos_max = np.min(particle_positions, axis=0), np.max(particle_positions, axis=0)
+                    curr_pos_min, curr_pos_max = np.min(current_particle_positions, axis=0), np.max(current_particle_positions, axis=0)
+                    for name, pos, curr_pos in zip(("min", "max"), (pos_min, pos_max), (curr_pos_min, curr_pos_max)):
+                        if not np.all(np.isclose(pos, curr_pos, atol=0.05)):
+                            return False, f"Got mismatch in cloth {obj_name} particle positions range: {name} {pos} vs. {curr_pos}"
+
+                else:
+                    continue
             if not np.all(np.isclose(np.array(val), np.array(obj_val), atol=atol, rtol=0.0)):
                 return False, f"{obj_name} root link mismatch in {key}: default_obj_dict has: {val}, obj_dict has: {obj_val}"
 
