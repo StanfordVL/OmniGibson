@@ -8482,14 +8482,14 @@ stages:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_objects
     deps:
     - path: artifacts/parallels/fillable_volumes.zip
-      md5: 3351fe6bc63423c6982e7eae769011d2
+      md5: 6507d9e0615e3a03e7eb805444a12416
       size: 1157656
     - path: artifacts/parallels/metadata.zip
-      md5: 2c7a4e5bd4c93d70b0d9d4d48778faca
+      md5: cf027ba2aafffa99b7dd9c9af688c916
       size: 67605
     - path: artifacts/parallels/objects.zip
-      md5: 8f5f4fa5e74063aaf09d3b0d224139c4
-      size: 19188136212
+      md5: 3b588e520f2a6b70380c02cfa0f71680
+      size: 19188145387
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8513,8 +8513,8 @@ stages:
       size: 2230
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: 55fc1528c97e2a08ad49e5c0b8033679
-      size: 21994765041
+      md5: a6eda2c000a06fa6338ab04fd2562dde
+      size: 21994766648
     - path: artifacts/pipeline/usdify_objects.json
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
       size: 51
