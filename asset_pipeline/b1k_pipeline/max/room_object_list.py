@@ -17,10 +17,15 @@ rt = pymxs.runtime
 OUTPUT_FILENAME = "room_object_list.json"
 SUCCESS_FILENAME = "room_object_list.success"
 
+MUST_HAVE_ROOM_ASSIGNMENT_CATEGORIES = {
+    "wall_nail"
+}
+
 
 def main():
     objects_by_room = defaultdict(Counter)
     nomatch = []
+    missing_room_assignment = {}
 
     for obj in rt.objects:
         if rt.classOf(obj) not in [rt.Editable_Poly, rt.Editable_Mesh, rt.VrayProxy]:
@@ -37,6 +42,8 @@ def main():
         for room_str in room_strs.split(","):
             room_str = room_str.strip()
             if room_str == "0":
+                if match.group("category") in MUST_HAVE_ROOM_ASSIGNMENT_CATEGORIES:
+                    missing_room_assignment.add(obj.name)
                 continue
             link_name = match.group("link_name")
             if link_name == "base_link" or not link_name:
@@ -70,7 +77,7 @@ def main():
             assert scene_name not in outgoing_portals, f"Duplicate outgoing portal for scene {scene_name}"
             outgoing_portals[scene_name] = portal_info
 
-    success = len(nomatch) == 0
+    success = len(nomatch) == 0 and len(missing_room_assignment) == 0
 
     output_dir = os.path.join(rt.maxFilePath, "artifacts")
     os.makedirs(output_dir, exist_ok=True)
@@ -84,6 +91,7 @@ def main():
                 "incoming_portal": incoming_portal,
                 "outgoing_portals": outgoing_portals,
                 "error_invalid_name": sorted(nomatch),
+                "error_missing_room_assignment": sorted(missing_room_assignment)
             },
             f,
             indent=4,
