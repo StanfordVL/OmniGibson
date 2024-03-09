@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        wall.n.01_1 - wall.n.01
         glass_lantern.n.01_1 - glass_lantern.n.01
         stain.n.01_1 - stain.n.01
         vinegar.n.01_1 - vinegar.n.01
@@ -26,7 +25,6 @@
         (ontop ammonia_water__atomizer.n.01_1 floor.n.01_1) 
         (ontop water__atomizer.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
-        (inroom wall.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

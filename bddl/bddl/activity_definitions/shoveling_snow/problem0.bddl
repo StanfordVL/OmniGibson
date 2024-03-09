@@ -5,7 +5,6 @@
         snow.n.01_1 - snow.n.01
         lawn.n.01_1 - lawn.n.01
         floor.n.01_1 - floor.n.01
-        wall.n.01_1 - wall.n.01
         shovel.n.01_1 - shovel.n.01
         granulated_salt.n.01_1 - granulated_salt.n.01
         bucket.n.01_1 - bucket.n.01
@@ -19,7 +18,6 @@
         (filled bucket.n.01_1 granulated_salt.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
-        (inroom wall.n.01_1 garden) 
         (inroom lawn.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

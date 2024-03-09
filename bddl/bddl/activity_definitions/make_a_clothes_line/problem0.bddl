@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        wall.n.01_1 - wall.n.01
         cabinet.n.01_1 - cabinet.n.01
         clothesline.n.01_1 - clothesline.n.01
         floor.n.01_1 - floor.n.01
@@ -15,7 +14,6 @@
             (assembled clothesline.n.01_1)
         )
         (inroom cabinet.n.01_1 utility_room) 
-        (inroom wall.n.01_1 utility_room) 
         (inroom floor.n.01_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
