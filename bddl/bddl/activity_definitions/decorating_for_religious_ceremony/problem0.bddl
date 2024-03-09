@@ -3,7 +3,7 @@
 
     (:objects
         dip.n.07_1 - dip.n.07
-        cabinet.n.01_1 - cabinet.n.01
+        breakfast_table.n.01_1 - breakfast_table.n.01
         wreath.n.01_1 - wreath.n.01
         floor.n.01_1 - floor.n.01
         candlestick.n.01_1 - candlestick.n.01
@@ -13,9 +13,9 @@
     )
     
     (:init 
-        (inside dip.n.07_1 cabinet.n.01_1) 
-        (inside wreath.n.01_1 cabinet.n.01_1) 
-        (ontop candlestick.n.01_1 cabinet.n.01_1) 
+        (inside dip.n.07_1 shelf.n.01_1) 
+        (inside wreath.n.01_1 shelf.n.01_1) 
+        (inside candlestick.n.01_1 shelf.n.01_1) 
         (not 
             (attached dip.n.07_1 candlestick.n.01_1)
         )
@@ -24,7 +24,7 @@
         )
         (inroom floor.n.01_1 living_room)
         (inroom wall_nail.n.01_1 living_room)
-        (inroom cabinet.n.01_1 living_room)
+        (inroom breakfast_table.n.01_1 living_room)
         (inroom shelf.n.01_1 living_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -32,7 +32,7 @@
     (:goal 
         (and 
             (attached ?dip.n.07_1 ?candlestick.n.01_1) 
-            (ontop ?candlestick.n.01_1 ?shelf.n.01_1) 
+            (ontop ?candlestick.n.01_1 ?breakfast_table.n.01_1) 
             (attached ?wreath.n.01_1 ?wall_nail.n.01_1)
         )
     )
