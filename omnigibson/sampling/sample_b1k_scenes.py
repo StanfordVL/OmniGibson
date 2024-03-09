@@ -240,7 +240,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                     # This is to avoid particles from causing instabilities
                     # Don't use this on cloth since these may be unstable at high masses
                     for obj in env.scene.objects[n_scene_objects:]:
-                        if obj.prim_type != PrimType.CLOTH and Contains in obj.states and any(obj.states[Contains].get_value(system) for system in PhysicalParticleSystem.get_active_systems().values()):
+                        if obj.prim_type != PrimType.CLOTH and Contains in obj.states:
                             obj.root_link.mass = max(1.0, obj.root_link.mass)
 
                     # Sampling success
@@ -250,8 +250,6 @@ def main(random_selection=False, headless=False, short_exec=False):
 
                     for i in range(300):
                         og.sim.step(render=not gm.HEADLESS)
-
-                    # from IPython import embed; embed()
 
                     task_final_state = og.sim.dump_state()
                     task_scene_dict = {"state": task_final_state}
