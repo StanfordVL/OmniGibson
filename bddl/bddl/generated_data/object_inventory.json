@@ -3756,6 +3756,7 @@
         "ham_hock-pjcwba": "objects/task_relevant-xy",
         "hanger-lymqks": "objects/task_relevant-xy",
         "hard_boiled_egg-xzucin": "objects/task_relevant-xy",
+        "hitch-eqwskw": "objects/task_relevant-xy",
         "hose-qxgbfv": "objects/task_relevant-xy",
         "hutch-vsqsuy": "objects/task_relevant-xy",
         "ice-cmjpva": "objects/task_relevant-xy",
@@ -3828,9 +3829,11 @@
         "trailer_truck-dnvcsu": "objects/task_relevant-xy",
         "trampoline-utbouk": "objects/task_relevant-xy",
         "tray-yqtlhy": "objects/task_relevant-xy",
+        "trout-kqpeke": "objects/task_relevant-xy",
         "turkey_leg-bqugmh": "objects/task_relevant-xy",
         "vase-toreid": "objects/task_relevant-xy",
         "veal-vlgemr": "objects/task_relevant-xy",
+        "wall_nail-wlnail": "objects/task_relevant-xy",
         "wax_paper-emhfwr": "objects/task_relevant-xy",
         "windshield-akoadf": "objects/task_relevant-xy",
         "windshield-mdfijk": "objects/task_relevant-xy",
@@ -7121,7 +7124,6 @@
         "pot_plant-xcybvc": "scenes/house_single_floor",
         "pot_plant-yfqgfd": "scenes/house_single_floor",
         "railing-mkhabj": "scenes/house_single_floor",
-        "railing-ozuykd": "scenes/house_single_floor",
         "range_hood-beanpv": "scenes/house_single_floor",
         "range_hood-uokzpw": "scenes/house_single_floor",
         "rock-vxbkjq": "scenes/house_single_floor",
@@ -8374,6 +8376,7 @@
         "coffee_table-zisekv": "scenes/restaurant_brunch",
         "console_table-tzkfqa": "scenes/restaurant_brunch",
         "cork-lseuwf": "scenes/restaurant_brunch",
+        "cork-ncxgpe": "scenes/restaurant_brunch",
         "dessert_stand-xmwxow": "scenes/restaurant_brunch",
         "dress-jmujjo": "scenes/restaurant_brunch",
         "floors-aoaasb": "scenes/restaurant_brunch",
@@ -19408,7 +19411,6 @@
             "scenes/Beechwood_0_garden",
             "scenes/Beechwood_0_int",
             "scenes/Beechwood_1_int",
-            "scenes/Benevolence_0_int",
             "scenes/Benevolence_2_int",
             "scenes/Ihlen_0_int",
             "scenes/Ihlen_1_int",
@@ -21524,6 +21526,9 @@
         "hard_boiled_egg-xzucin": [
             "objects/task_relevant-xy"
         ],
+        "hitch-eqwskw": [
+            "objects/task_relevant-xy"
+        ],
         "hose-qxgbfv": [
             "objects/task_relevant-xy"
         ],
@@ -21740,6 +21745,9 @@
         "tray-yqtlhy": [
             "objects/task_relevant-xy"
         ],
+        "trout-kqpeke": [
+            "objects/task_relevant-xy"
+        ],
         "turkey_leg-bqugmh": [
             "objects/task_relevant-xy"
         ],
@@ -21748,6 +21756,20 @@
         ],
         "veal-vlgemr": [
             "objects/task_relevant-xy"
+        ],
+        "wall_nail-wlnail": [
+            "objects/task_relevant-xy",
+            "scenes/Benevolence_0_int",
+            "scenes/Ihlen_1_int",
+            "scenes/Merom_0_garden",
+            "scenes/Merom_0_int",
+            "scenes/Pomaria_0_garden",
+            "scenes/Rs_garden",
+            "scenes/Wainscott_1_int",
+            "scenes/house_double_floor_lower",
+            "scenes/house_single_floor",
+            "scenes/office_vendor_machine",
+            "scenes/restaurant_diner"
         ],
         "wax_paper-emhfwr": [
             "objects/task_relevant-xy"
@@ -31703,9 +31725,6 @@
         "railing-mkhabj": [
             "scenes/house_single_floor"
         ],
-        "railing-ozuykd": [
-            "scenes/house_single_floor"
-        ],
         "range_hood-beanpv": [
             "scenes/house_single_floor"
         ],
@@ -35490,6 +35509,9 @@
         "cork-lseuwf": [
             "scenes/restaurant_brunch"
         ],
+        "cork-ncxgpe": [
+            "scenes/restaurant_brunch"
+        ],
         "dessert_stand-xmwxow": [
             "scenes/restaurant_brunch"
         ],
@@ -38567,6 +38589,7 @@
             "fluidsource"
         ],
         "icicle_lights-lbwpka": [
+            "attachment",
             "togglebutton"
         ],
         "instant_pot-wengzf": [
@@ -38614,6 +38637,9 @@
         "instant_pot-lkbvad": [
             "fillable",
             "togglebutton"
+        ],
+        "pickup_truck-zppyty": [
+            "attachment"
         ],
         "water_bottle-ackxiy": [
             "connectedpart",
@@ -38676,11 +38702,15 @@
             "togglebutton"
         ],
         "monitor-fabztm": [
+            "attachment",
             "togglebutton"
         ],
         "monitor-qvpbge": [
             "attachment",
             "togglebutton"
+        ],
+        "poster-dsrcyt": [
+            "attachment"
         ],
         "power_washer-pkhrip": [
             "togglebutton"
@@ -38786,7 +38816,6 @@
         ],
         "digital_camera-wbzzjl": [
             "attachment",
-            "connectedpart",
             "togglebutton"
         ],
         "ink_bottle-gcyvrx": [
@@ -38807,16 +38836,6 @@
             "attachment"
         ],
         "raspberries-ygrfsn": [
-            "attachment"
-        ],
-        "skateboard_deck-tgfidu": [
-            "attachment",
-            "connectedpart"
-        ],
-        "skateboard_wheel-acmbvb": [
-            "attachment"
-        ],
-        "skateboard_wheel-jljqtt": [
             "attachment"
         ],
         "utility_knife-kridpz": [
@@ -38854,6 +38873,9 @@
         ],
         "hazelnut-rhfksw": [
             "subpart"
+        ],
+        "skateboard_deck-tgfidu": [
+            "connectedpart"
         ],
         "antlers-nlsanr": [
             "attachment"
@@ -40383,6 +40405,9 @@
         "light_bulb-kfmkwd": [
             "attachment"
         ],
+        "mirror-pevdqu": [
+            "attachment"
+        ],
         "modem-axqxsv": [
             "togglebutton"
         ],
@@ -41356,6 +41381,9 @@
             "connectedpart",
             "fillable"
         ],
+        "hitch-eqwskw": [
+            "attachment"
+        ],
         "kayak_rack-goewhp": [
             "attachment"
         ],
@@ -41365,6 +41393,9 @@
         "plant_pot-ihnfbi": [
             "fillable"
         ],
+        "recreational_vehicle-doiucd": [
+            "attachment"
+        ],
         "router-tokdic": [
             "togglebutton"
         ],
@@ -41373,8 +41404,15 @@
             "particleremover",
             "togglebutton"
         ],
+        "trout-kqpeke": [
+            "attachment"
+        ],
         "vase-toreid": [
             "fillable"
+        ],
+        "wall_nail-wlnail": [
+            "attachment",
+            "collision"
         ],
         "bok_choy-bbvcji": [
             "subpart"
@@ -46556,6 +46594,9 @@
         "oven-ffitak": [
             "togglebutton"
         ],
+        "picture_frame-pblkaf": [
+            "attachment"
+        ],
         "range_hood-beanpv": [
             "togglebutton"
         ],
@@ -47091,6 +47132,12 @@
         ],
         "walls-zxyurx": [
             "collision"
+        ],
+        "wardrobe-ktworp": [
+            "attachment"
+        ],
+        "wardrobe-lrokhl": [
+            "attachment"
         ],
         "washer-ynwamu": [
             "togglebutton"
@@ -48999,6 +49046,9 @@
         "ceilings-wnljyi": [
             "collision"
         ],
+        "cork-ncxgpe": [
+            "attachment"
+        ],
         "dessert_stand-xmwxow": [
             "collision"
         ],
@@ -49116,6 +49166,9 @@
         ],
         "window-ywetvt": [
             "collision"
+        ],
+        "wine_bottle-inkqch": [
+            "attachment"
         ],
         "wineglass-akusda": [
             "fillable"
