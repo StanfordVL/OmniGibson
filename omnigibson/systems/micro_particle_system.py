@@ -1575,6 +1575,7 @@ class Cloth(MicroParticleSystem):
             scaled_world_transform = PoseAPI.get_world_pose_with_scale(mesh_prim.GetPath().pathString)
             # Convert to trimesh mesh (in world frame)
             tm = mesh_prim_to_trimesh_mesh(mesh_prim=mesh_prim, include_normals=True, include_texcoord=True, world_frame=True)
+            has_texture = isinstance(tm.visual, trimesh.visual.texture.TextureVisuals)
             # Tmp file written to: {tmp_dir}/{tmp_fname}/{tmp_fname}.obj
             tmp_name = str(uuid.uuid4())
             tmp_dir = os.path.join(tempfile.gettempdir(), tmp_name)
@@ -1621,7 +1622,6 @@ class Cloth(MicroParticleSystem):
             # Re-write data to @mesh_prim
             new_faces = cm.face_matrix()
             new_face_vertex_ids = new_faces.flatten()
-            new_texcoord = cm.wedge_tex_coord_matrix()
             new_vertices = cm.vertex_matrix()
             new_normals = cm.vertex_normal_matrix()
             n_faces = len(cm.face_matrix())
@@ -1640,7 +1640,10 @@ class Cloth(MicroParticleSystem):
             mesh_prim.GetAttribute("points").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm_new.vertices))
             mesh_prim.GetAttribute("faceVertexIndices").Set(new_face_vertex_ids)
             mesh_prim.GetAttribute("normals").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm_new.vertex_normals))
-            mesh_prim.GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(new_texcoord))
+
+            if has_texture:
+                new_texcoord = cm.wedge_tex_coord_matrix()
+                mesh_prim.GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(new_texcoord))
 
         # Convert into particle cloth
         lazy.omni.physx.scripts.particleUtils.add_physx_particle_cloth(
