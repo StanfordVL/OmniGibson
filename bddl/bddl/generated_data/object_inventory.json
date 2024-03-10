@@ -1236,8 +1236,8 @@
         "cigarette-oklfsv": "objects/batch-09",
         "cigarette-slkbfx": "objects/batch-09",
         "cigarette-vgndiy": "objects/batch-09",
-        "clothesline-gkqoro": "objects/batch-09",
         "clothesline_pole-smrqrw": "objects/batch-09",
+        "clothesline_rope-gkqoro": "objects/batch-09",
         "clove-jwhnfc": "objects/batch-09",
         "clove-wyyhmi": "objects/batch-09",
         "croissant-hnbnap": "objects/batch-09",
@@ -1311,15 +1311,7 @@
         "meat_thermometer-idugwc": "objects/batch-09",
         "mousepad-mfrcto": "objects/batch-09",
         "paper_sheet-afdjfk": "objects/batch-09",
-        "paper_towel-hbnzdv": "objects/batch-09",
-        "paper_towel-jdsryb": "objects/batch-09",
-        "paper_towel-jgfsug": "objects/batch-09",
-        "paper_towel-lhjush": "objects/batch-09",
         "paper_towel-mdcnha": "objects/batch-09",
-        "paper_towel-oysrvt": "objects/batch-09",
-        "paper_towel-taedgk": "objects/batch-09",
-        "paper_towel-wjcyoi": "objects/batch-09",
-        "paper_towel-yedsde": "objects/batch-09",
         "parsley_shaker-tgcwtr": "objects/batch-09",
         "quiche-fvhqcu": "objects/batch-09",
         "receipt-hgnbjj": "objects/batch-09",
@@ -3703,6 +3695,9 @@
         "cutting_board-jfrbuz": "objects/task_relevant-xy",
         "cutting_board-nsvnai": "objects/task_relevant-xy",
         "daffodil_bulb-ieihld": "objects/task_relevant-xy",
+        "desk_bracket-lwqwre": "objects/task_relevant-xy",
+        "desk_leg-qoerre": "objects/task_relevant-xy",
+        "desk_top-eggere": "objects/task_relevant-xy",
         "dog_collar-dnjpms": "objects/task_relevant-xy",
         "dog_food-gqmvyh": "objects/task_relevant-xy",
         "dog_food-prxfhj": "objects/task_relevant-xy",
@@ -3829,6 +3824,8 @@
         "tofu-uecgbv": "objects/task_relevant-xy",
         "trailer_truck-dnvcsu": "objects/task_relevant-xy",
         "trampoline-utbouk": "objects/task_relevant-xy",
+        "trampoline_leg-qkerde": "objects/task_relevant-xy",
+        "trampoline_top-iemeer": "objects/task_relevant-xy",
         "tray-yqtlhy": "objects/task_relevant-xy",
         "trout-kqpeke": "objects/task_relevant-xy",
         "turkey_leg-bqugmh": "objects/task_relevant-xy",
@@ -13033,10 +13030,10 @@
         "cigarette-vgndiy": [
             "objects/batch-09"
         ],
-        "clothesline-gkqoro": [
+        "clothesline_pole-smrqrw": [
             "objects/batch-09"
         ],
-        "clothesline_pole-smrqrw": [
+        "clothesline_rope-gkqoro": [
             "objects/batch-09"
         ],
         "clove-jwhnfc": [
@@ -13258,31 +13255,7 @@
         "paper_sheet-afdjfk": [
             "objects/batch-09"
         ],
-        "paper_towel-hbnzdv": [
-            "objects/batch-09"
-        ],
-        "paper_towel-jdsryb": [
-            "objects/batch-09"
-        ],
-        "paper_towel-jgfsug": [
-            "objects/batch-09"
-        ],
-        "paper_towel-lhjush": [
-            "objects/batch-09"
-        ],
         "paper_towel-mdcnha": [
-            "objects/batch-09"
-        ],
-        "paper_towel-oysrvt": [
-            "objects/batch-09"
-        ],
-        "paper_towel-taedgk": [
-            "objects/batch-09"
-        ],
-        "paper_towel-wjcyoi": [
-            "objects/batch-09"
-        ],
-        "paper_towel-yedsde": [
             "objects/batch-09"
         ],
         "parsley_shaker-tgcwtr": [
@@ -21367,6 +21340,15 @@
         "daffodil_bulb-ieihld": [
             "objects/task_relevant-xy"
         ],
+        "desk_bracket-lwqwre": [
+            "objects/task_relevant-xy"
+        ],
+        "desk_leg-qoerre": [
+            "objects/task_relevant-xy"
+        ],
+        "desk_top-eggere": [
+            "objects/task_relevant-xy"
+        ],
         "dog_collar-dnjpms": [
             "objects/task_relevant-xy"
         ],
@@ -21743,6 +21725,12 @@
             "objects/task_relevant-xy"
         ],
         "trampoline-utbouk": [
+            "objects/task_relevant-xy"
+        ],
+        "trampoline_leg-qkerde": [
+            "objects/task_relevant-xy"
+        ],
+        "trampoline_top-iemeer": [
             "objects/task_relevant-xy"
         ],
         "tray-yqtlhy": [
@@ -39140,6 +39128,12 @@
             "particleapplier",
             "togglebutton"
         ],
+        "clothesline_pole-smrqrw": [
+            "attachment"
+        ],
+        "clothesline_rope-gkqoro": [
+            "attachment"
+        ],
         "holly_decoration-shmkir": [
             "attachment"
         ],
@@ -41383,6 +41377,15 @@
             "connectedpart",
             "fillable"
         ],
+        "desk_bracket-lwqwre": [
+            "attachment"
+        ],
+        "desk_leg-qoerre": [
+            "attachment"
+        ],
+        "desk_top-eggere": [
+            "attachment"
+        ],
         "dog_food_can-vxxcvg": [
             "connectedpart",
             "fillable"
@@ -41409,6 +41412,12 @@
             "heatsource",
             "particleremover",
             "togglebutton"
+        ],
+        "trampoline_leg-qkerde": [
+            "attachment"
+        ],
+        "trampoline_top-iemeer": [
+            "attachment"
         ],
         "trout-kqpeke": [
             "attachment"
