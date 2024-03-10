@@ -5060,6 +5060,16 @@
         }
     },
     {
+        "rule_name": "clothesline_rope.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "clothesline_rope.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "clothespin.n.01-washer-cover",
         "input_synsets": {},
         "washed_item": {
@@ -5990,10 +6000,40 @@
         }
     },
     {
+        "rule_name": "desk_bracket.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "desk_bracket.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "desk_leg.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "desk_leg.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "desk_phone.n.01-washer-cover",
         "input_synsets": {},
         "washed_item": {
             "desk_phone.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "desk_top.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "desk_top.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
@@ -17444,6 +17484,26 @@
         "input_synsets": {},
         "washed_item": {
             "trampoline.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "trampoline_leg.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "trampoline_leg.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "trampoline_top.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "trampoline_top.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1

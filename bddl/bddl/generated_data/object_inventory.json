@@ -6796,6 +6796,7 @@
         "door-hkxqfh": "scenes/house_single_floor",
         "door-iuuykr": "scenes/house_single_floor",
         "door-jpubcg": "scenes/house_single_floor",
+        "door-kwbnhy": "scenes/house_single_floor",
         "door-lrvyvc": "scenes/house_single_floor",
         "door-mqlbnj": "scenes/house_single_floor",
         "door-mtufto": "scenes/house_single_floor",
@@ -6825,17 +6826,18 @@
         "floor_lamp-disyzd": "scenes/house_single_floor",
         "floors-fpnxmg": "scenes/house_single_floor",
         "floors-glwobe": "scenes/house_single_floor",
+        "floors-hkdmte": "scenes/house_single_floor",
         "floors-htolat": "scenes/house_single_floor",
+        "floors-khjmrr": "scenes/house_single_floor",
         "floors-kxcpgy": "scenes/house_single_floor",
         "floors-lltizc": "scenes/house_single_floor",
         "floors-mawnss": "scenes/house_single_floor",
         "floors-mdozod": "scenes/house_single_floor",
+        "floors-pyoemr": "scenes/house_single_floor",
         "floors-qgmjvd": "scenes/house_single_floor",
         "floors-qnvzkr": "scenes/house_single_floor",
-        "floors-sbuods": "scenes/house_single_floor",
         "floors-shuuqu": "scenes/house_single_floor",
         "floors-sirgua": "scenes/house_single_floor",
-        "floors-sxpouu": "scenes/house_single_floor",
         "floors-uftgek": "scenes/house_single_floor",
         "floors-uzsntg": "scenes/house_single_floor",
         "floors-vcsslq": "scenes/house_single_floor",
@@ -6844,7 +6846,6 @@
         "floors-yfyxxu": "scenes/house_single_floor",
         "floors-yibjol": "scenes/house_single_floor",
         "floors-yrqspn": "scenes/house_single_floor",
-        "floors-yztodo": "scenes/house_single_floor",
         "folder-wauyns": "scenes/house_single_floor",
         "garden_light-umyzpg": "scenes/house_single_floor",
         "glass-bbpraa": "scenes/house_single_floor",
@@ -7453,7 +7454,6 @@
         "window-iggzsd": "scenes/house_single_floor",
         "window-ijpvgf": "scenes/house_single_floor",
         "window-jrnfkt": "scenes/house_single_floor",
-        "window-kwbnhy": "scenes/house_single_floor",
         "window-nruots": "scenes/house_single_floor",
         "window-nszybf": "scenes/house_single_floor",
         "window-ovzepp": "scenes/house_single_floor",
@@ -9427,7 +9427,8 @@
             "objects/batch-00"
         ],
         "charcoal_grill-crdaeu": [
-            "objects/batch-00"
+            "objects/batch-00",
+            "scenes/house_single_floor"
         ],
         "cherry_tomato-dqjuub": [
             "objects/batch-00"
@@ -13031,7 +13032,8 @@
             "objects/batch-09"
         ],
         "clothesline_pole-smrqrw": [
-            "objects/batch-09"
+            "objects/batch-09",
+            "scenes/house_single_floor"
         ],
         "clothesline_rope-gkqoro": [
             "objects/batch-09"
@@ -30741,6 +30743,9 @@
         "door-jpubcg": [
             "scenes/house_single_floor"
         ],
+        "door-kwbnhy": [
+            "scenes/house_single_floor"
+        ],
         "door-lrvyvc": [
             "scenes/house_single_floor"
         ],
@@ -30828,7 +30833,13 @@
         "floors-glwobe": [
             "scenes/house_single_floor"
         ],
+        "floors-hkdmte": [
+            "scenes/house_single_floor"
+        ],
         "floors-htolat": [
+            "scenes/house_single_floor"
+        ],
+        "floors-khjmrr": [
             "scenes/house_single_floor"
         ],
         "floors-kxcpgy": [
@@ -30843,22 +30854,19 @@
         "floors-mdozod": [
             "scenes/house_single_floor"
         ],
+        "floors-pyoemr": [
+            "scenes/house_single_floor"
+        ],
         "floors-qgmjvd": [
             "scenes/house_single_floor"
         ],
         "floors-qnvzkr": [
             "scenes/house_single_floor"
         ],
-        "floors-sbuods": [
-            "scenes/house_single_floor"
-        ],
         "floors-shuuqu": [
             "scenes/house_single_floor"
         ],
         "floors-sirgua": [
-            "scenes/house_single_floor"
-        ],
-        "floors-sxpouu": [
             "scenes/house_single_floor"
         ],
         "floors-uftgek": [
@@ -30883,9 +30891,6 @@
             "scenes/house_single_floor"
         ],
         "floors-yrqspn": [
-            "scenes/house_single_floor"
-        ],
-        "floors-yztodo": [
             "scenes/house_single_floor"
         ],
         "folder-wauyns": [
@@ -32707,9 +32712,6 @@
             "scenes/house_single_floor"
         ],
         "window-jrnfkt": [
-            "scenes/house_single_floor"
-        ],
-        "window-kwbnhy": [
             "scenes/house_single_floor"
         ],
         "window-nruots": [
