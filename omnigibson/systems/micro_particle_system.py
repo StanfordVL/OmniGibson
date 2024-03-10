@@ -1587,7 +1587,7 @@ class Cloth(MicroParticleSystem):
             particle_distance = cls.particle_contact_offset * 2 / 1.5 if particle_distance is None else particle_distance
 
             # Repetitively re-mesh at lower resolution until we have a mesh that has less than MAX_CLOTH_PARTICLES vertices
-            for _ in range(3):
+            for _ in range(10):
                 ms = pymeshlab.MeshSet()
                 ms.load_new_mesh(tmp_fpath)
 
