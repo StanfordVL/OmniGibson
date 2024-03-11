@@ -3710,6 +3710,26 @@
         }
     },
     {
+        "rule_name": "cabinet_base.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "cabinet_base.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "cabinet_door.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "cabinet_door.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "cable.n.02-washer-cover",
         "input_synsets": {},
         "washed_item": {
