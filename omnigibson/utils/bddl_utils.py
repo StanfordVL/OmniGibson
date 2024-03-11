@@ -41,6 +41,7 @@ m.DYNAMIC_SCALE_INCREMENT = 0.1
 BAD_MODELS = {
     "belt": {"gqwddb"},
     "curtain": {"ohvomi"},
+    "dishtowel": {"ltydgg"},
     "dress": {"gtghon"},
     "hammock": {'aiftuk', 'fglfga', 'klhkgd', 'lqweda', 'qewdqa'},
     'jacket': {'kiiium', 'nogevo', 'remcyk'},
@@ -56,6 +57,7 @@ BAD_MODELS = {
 
 DO_NOT_REMESH_CLOTHS = {
     "bandana": {"wbhliu"},
+    "cardigan": {"itrkhr"},
     'jeans': {'nmvvil', 'pvzxyp'},
     "onesie": {'pbytey'},
     "pajamas": {"rcgdde"},
