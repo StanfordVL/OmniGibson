@@ -301,7 +301,7 @@ class PhysxParticleInstancer(BasePrim):
 
     @property
     def state_size(self):
-        # idn (1), particle_group (1), and the corresponding states for each particle
+        # idn (1), particle_group (1), n_particles (1), and the corresponding states for each particle
         # N * (pos (3) + vel (3) + orn (4) + scale (3) + prototype_id (1))
         return 3 + self.n_particles * 14
 
@@ -335,7 +335,7 @@ class PhysxParticleInstancer(BasePrim):
     def _serialize(self, state):
         # Compress into a 1D array
          return np.concatenate([
-             [state["idn"], state["particle_group"]],
+             [state["idn"], state["particle_group"], state["n_particles"]],
              state["particle_positions"].reshape(-1),
              state["particle_velocities"].reshape(-1),
              state["particle_orientations"].reshape(-1),
@@ -351,16 +351,18 @@ class PhysxParticleInstancer(BasePrim):
             f"instancer when deserializing state! Should be: {self.particle_group}, got: {state[1]}."
 
         # De-compress from 1D array
+        n_particles = int(state[2])
         state_dict = dict(
             idn=int(state[0]),
             particle_group=int(state[1]),
+            n_particles=n_particles,
         )
 
         # Process remaining keys and reshape automatically
         keys = ("particle_positions", "particle_velocities", "particle_orientations", "particle_scales", "particle_prototype_ids")
         sizes = ((n_particles, 3), (n_particles, 3), (n_particles, 4), (n_particles, 3), (n_particles,))
 
-        idx = 2
+        idx = 3
         for key, size in zip(keys, sizes):
             length = np.product(size)
             state_dict[key] = state[idx: idx + length].reshape(size)
