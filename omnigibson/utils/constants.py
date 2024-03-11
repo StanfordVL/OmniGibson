@@ -54,6 +54,7 @@ class ParticleModifyCondition(str, Enum):
 # Structure categories that need to always be loaded for stability purposes
 STRUCTURE_CATEGORIES = frozenset({"floors", "walls", "ceilings", "lawn", "driveway", "fence", "roof", "background"})
 
+
 # Joint friction magic values to assign to objects based on their category
 DEFAULT_JOINT_FRICTION = 10.0
 SPECIAL_JOINT_FRICTIONS = {
