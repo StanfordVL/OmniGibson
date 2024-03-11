@@ -38,9 +38,32 @@ m.MIN_DYNAMIC_SCALE = 0.5
 m.DYNAMIC_SCALE_INCREMENT = 0.1
 
 BAD_MODELS = {
-    "t_shirt": {"kvidcx"},
     "belt": {"gqwddb"},
+    "curtain": {"ohvomi"},
+    "dress": {"gtghon"},
+    "hammock": {'aiftuk', 'fglfga', 'klhkgd', 'lqweda', 'qewdqa'},
+    'jacket': {'kiiium', 'nogevo', 'remcyk'},
+    "quilt": {"mksdlu", "prhems"},
+    "t_shirt": {"kvidcx"},
+    'paper_towel': {'jdsryb', 'jgfsug', 'lhjush', 'taedgk', 'wjcyoi', 'yedsde'},
+    'pillowcase': {'dtoahb', 'yakvci'},
+    'rubber_glove': {'leuiso'},
+    'scarf': {'kclcrj'},
+    'sock': {'vpafgj'},
+    'tank_top': {'fzldgi'},
 }
+
+DO_NOT_REMESH_CLOTHS = {
+    "bandana": {"wbhliu"},
+    'jeans': {'nmvvil', 'pvzxyp'},
+    "onesie": {'pbytey'},
+    "pajamas": {"rcgdde"},
+    'pennant': {'tfnwti'},
+    'polo_shirt': {'vqbvph'},
+    'sweatshirt': {'nowqqh'},
+    'vest': {'girtqm'},
+}
+DO_NOT_REMESH_CLOTHS.update(BAD_MODELS)
 
 class UnsampleablePredicate:
     def _sample(self, *args, **kwargs):

@@ -27,7 +27,7 @@ m = create_module_macros(module_path=__file__)
 
 # Subsample cloth particle points to boost performance
 m.N_CLOTH_KEYPOINTS = 1000
-m.KEYPOINT_COVERAGE_THRESHOLD = 0.80
+m.KEYPOINT_COVERAGE_THRESHOLD = 0.75
 m.N_CLOTH_KEYFACES = 500
 
 
@@ -88,7 +88,7 @@ class ClothPrim(GeomPrim):
             self.mass = self._load_config["mass"]
 
         # Clothify this prim, which is assumed to be a mesh
-        ClothPrim.cloth_system.clothify_mesh_prim(mesh_prim=self._prim)
+        ClothPrim.cloth_system.clothify_mesh_prim(mesh_prim=self._prim, remesh=self._load_config.get("remesh", True))
 
         # Track generated particle count
         positions = self.compute_particle_positions()
