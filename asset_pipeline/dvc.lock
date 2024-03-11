@@ -11409,18 +11409,18 @@ stages:
       md5: 8f67c8a3cae22b0303e1082e4d76f9c9
       size: 23730
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
-      md5: 0a98d84591d3e939ea73df0169fc8c41
-      size: 309175
+      md5: 886f1cc950075e73466456589df3a2a3
+      size: 314369
     - path: cad/scenes/house_single_floor/processed.max
-      md5: c5241dbc7fc3a6183c96faa85a1a6e6e
-      size: 507455482
+      md5: ae6fd9ffe4496f791d09d9d9da95faf7
+      size: 554635512
     outs:
     - path: cad/scenes/house_single_floor/artifacts/export_meshes.json
-      md5: 0f414b2982253df8fdad15053cbf246a
-      size: 133008
+      md5: add80ef5d9309c6090bb5e05b81ad7cf
+      size: 115635
     - path: cad/scenes/house_single_floor/artifacts/meshes.zip
-      md5: 02eaa014ed9dd7a4e3d96a48f16d5dfa
-      size: 1498978622
+      md5: fee5d8a84ec8069737058b8a173d4a9c
+      size: 1332652515
   export_scene@scenes/house_single_floor:
     cmd: python -m b1k_pipeline.export_scene scenes/house_single_floor
     deps:
