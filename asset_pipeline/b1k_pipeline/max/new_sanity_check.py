@@ -450,6 +450,12 @@ class SanityCheck:
             
             if meta_link_type == "collision":
                 self.validate_collision(child)
+            elif meta_link_type == "attachment":
+                attachment_type = match.group("meta_id")
+                self.expect(len(attachment_type) > 0, f"Missing attachment type on object {row.object_name}")
+                self.expect(attachment_type[-1] in "MF", f"Invalid attachment gender {attachment_type} on object {row.object_name}")
+                attachment_type = attachment_type[:-1]
+                self.expect(len(attachment_type) > 0, f"Missing attachment type on object {row.object_name}")
 
         # Check that the meta links match what's needed
         required_meta_types = get_required_meta_links(row.name_category)
