@@ -22,7 +22,6 @@ ALL_SHEETS = [
   (SYNSET_PARAMS_SHEET_KEY, "coldSource", "prop_param_annots/coldSource.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "cookable", "prop_param_annots/cookable.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "flammable", "prop_param_annots/flammable.csv"),
-  (SYNSET_PARAMS_SHEET_KEY, "heatable", "prop_param_annots/heatable.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "particleApplier", "prop_param_annots/particleApplier.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "particleSource", "prop_param_annots/particleSource.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "particleRemover", "prop_param_annots/particleRemover.csv"),
