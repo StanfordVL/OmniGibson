@@ -303,12 +303,13 @@ class PhysxParticleInstancer(BasePrim):
     def state_size(self):
         # idn (1), particle_group (1), and the corresponding states for each particle
         # N * (pos (3) + vel (3) + orn (4) + scale (3) + prototype_id (1))
-        return 2 + self.n_particles * 14
+        return 3 + self.n_particles * 14
 
     def _dump_state(self):
         return dict(
             idn=self._idn,
             particle_group=self.particle_group,
+            n_particles=self.n_particles,
             particle_positions=self.particle_positions,
             particle_velocities=self.particle_velocities,
             particle_orientations=self.particle_orientations,
@@ -856,10 +857,6 @@ class MicroPhysicalParticleSystem(MicroParticleSystem, PhysicalParticleSystem):
 
         # Generate standardized prim path for this instancer
         name = cls.particle_instancer_idn_to_name(idn=idn)
-
-        # /World/water
-        # /World/water/system
-        # /World/water/instancer_0
         
         # Create the instancer
         instance = create_physx_particleset_pointinstancer(
