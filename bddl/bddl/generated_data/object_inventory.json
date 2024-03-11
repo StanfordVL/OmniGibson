@@ -1610,6 +1610,8 @@
         "bush-pjhpwk": "objects/batch-12",
         "bush-xsqlhv": "objects/batch-12",
         "bush-yhjhta": "objects/batch-12",
+        "cabinet_base-dcmhhh": "objects/batch-12",
+        "cabinet_door-ertkre": "objects/batch-12",
         "camera_tripod-hnpofr": "objects/batch-12",
         "cap-duwera": "objects/batch-12",
         "carrot-nktmff": "objects/batch-12",
@@ -14208,6 +14210,12 @@
             "scenes/Rs_garden",
             "scenes/house_double_floor_lower",
             "scenes/house_single_floor"
+        ],
+        "cabinet_base-dcmhhh": [
+            "objects/batch-12"
+        ],
+        "cabinet_door-ertkre": [
+            "objects/batch-12"
         ],
         "camera_tripod-hnpofr": [
             "objects/batch-12"
@@ -39331,6 +39339,14 @@
             "particleapplier",
             "togglebutton"
         ],
+        "cabinet_base-dcmhhh": [
+            "attachment",
+            "collision"
+        ],
+        "cabinet_door-ertkre": [
+            "attachment",
+            "collision"
+        ],
         "camera_tripod-hnpofr": [
             "attachment"
         ],
@@ -44214,7 +44230,6 @@
             "collision"
         ],
         "electric_mixer-ceaeqf": [
-            "attachment",
             "connectedpart",
             "togglebutton"
         ],
@@ -44299,10 +44314,6 @@
         ],
         "metal_bottom_cabinet-bbjuqu": [
             "collision"
-        ],
-        "mixing_bowl-rgnjdt": [
-            "attachment",
-            "fillable"
         ],
         "oven-cgtaer": [
             "collision",
