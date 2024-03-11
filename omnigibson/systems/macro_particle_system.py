@@ -527,7 +527,9 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
             cls.set_particle_position_orientation(idx=-1, position=position, orientation=orientation)
 
     @classmethod
-    def generate_group_particles_on_object(cls, group, max_samples, min_samples_for_success=1):
+    def generate_group_particles_on_object(cls, group, max_samples=None, min_samples_for_success=1):
+        # This function does not support max_samples=None. Must be explicitly specified
+        assert max_samples is not None, f"max_samples must be specified for {cls.name}'s generate_group_particles_on_object!"
         assert max_samples >= min_samples_for_success, "number of particles to sample should exceed the min for success"
 
         # Make sure the group exists

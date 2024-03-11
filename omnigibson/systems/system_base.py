@@ -755,14 +755,14 @@ class VisualParticleSystem(BaseSystem):
         raise NotImplementedError
 
     @classmethod
-    def generate_group_particles_on_object(cls, group, max_samples, min_samples_for_success=1):
+    def generate_group_particles_on_object(cls, group, max_samples=None, min_samples_for_success=1):
         """
         Generates @max_samples new particle objects and samples their locations on the surface of object @obj. Note
         that if any particles are in the group already, they will be removed
 
         Args:
             group (str): Object on which to sample particle locations
-            max_samples (int): Maximum number of particles to sample
+            max_samples (None or int): If specified, maximum number of particles to sample
             min_samples_for_success (int): Minimum number of particles required to be sampled successfully in order
                 for this generation process to be considered successful
 
@@ -913,7 +913,7 @@ class PhysicalParticleSystem(BaseSystem):
             mesh_name_prefixes=None,
             check_contact=True,
             sampling_distance=None,
-            max_samples=5e5,
+            max_samples=None,
             **kwargs,
     ):
         """
@@ -931,7 +931,7 @@ class PhysicalParticleSystem(BaseSystem):
             check_contact (bool): If True, will only spawn in particles that do not collide with other rigid bodies
             sampling_distance (None or float): If specified, sets the distance between sampled particles. If None,
                 a simulator autocomputed value will be used
-            max_samples (int): Maximum number of particles to sample
+            max_samples (None or int): If specified, maximum number of particles to sample
             **kwargs (dict): Any additional keyword-mapped arguments required by subclass implementation
         """
         # Run sanity checks
@@ -971,7 +971,7 @@ class PhysicalParticleSystem(BaseSystem):
             particle_positions = particle_positions[np.where(cls.check_in_contact(particle_positions) == 0)[0]]
 
         # Also potentially sub-sample if we're past our limit
-        if len(particle_positions) > max_samples:
+        if max_samples is not None and len(particle_positions) > max_samples:
             particle_positions = particle_positions[
                 np.random.choice(len(particle_positions), size=(int(max_samples),), replace=False)]
 
@@ -985,7 +985,7 @@ class PhysicalParticleSystem(BaseSystem):
             cls,
             obj,
             sampling_distance=None,
-            max_samples=5e5,
+            max_samples=None,
             min_samples_for_success=1,
             **kwargs,
     ):
@@ -997,7 +997,7 @@ class PhysicalParticleSystem(BaseSystem):
                 top surface
             sampling_distance (None or float): If specified, sets the distance between sampled particles. If None,
                 a simulator autocomputed value will be used
-            max_samples (int): Maximum number of particles to sample
+            max_samples (None or int): If specified, maximum number of particles to sample
             min_samples_for_success (int): Minimum number of particles required to be sampled successfully in order
                 for this generation process to be considered successful
             **kwargs (dict): Any additional keyword-mapped arguments required by subclass implementation
@@ -1025,7 +1025,7 @@ class PhysicalParticleSystem(BaseSystem):
         )
         particle_positions = np.array([result[0] for result in results if result[0] is not None])
         # Also potentially sub-sample if we're past our limit
-        if len(particle_positions) > max_samples:
+        if max_samples is not None and len(particle_positions) > max_samples:
             particle_positions = particle_positions[
                 np.random.choice(len(particle_positions), size=(max_samples,), replace=False)]
 

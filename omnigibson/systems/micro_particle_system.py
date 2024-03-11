@@ -902,7 +902,7 @@ class MicroPhysicalParticleSystem(MicroParticleSystem, PhysicalParticleSystem):
             instancer_idn=None,
             particle_group=0,
             sampling_distance=None,
-            max_samples=5e5,
+            max_samples=None,
             prototype_indices=None,
     ):
         """
@@ -929,7 +929,7 @@ class MicroPhysicalParticleSystem(MicroParticleSystem, PhysicalParticleSystem):
                 Only used if a new particle instancer is created!
             sampling_distance (None or float): If specified, sets the distance between sampled particles. If None,
                 a simulator autocomputed value will be used
-            max_samples (int): Maximum number of particles to sample
+            max_samples (None or int): If specified, maximum number of particles to sample
             prototype_indices (None or list of int): If specified, should specify which prototype should be used for
                 each particle. If None, will randomly sample from all available prototypes
         """
@@ -953,7 +953,7 @@ class MicroPhysicalParticleSystem(MicroParticleSystem, PhysicalParticleSystem):
             instancer_idn=None,
             particle_group=0,
             sampling_distance=None,
-            max_samples=5e5,
+            max_samples=None,
             min_samples_for_success=1,
             prototype_indices=None,
     ):
@@ -972,7 +972,7 @@ class MicroPhysicalParticleSystem(MicroParticleSystem, PhysicalParticleSystem):
                 Only used if a new particle instancer is created!
             sampling_distance (None or float): If specified, sets the distance between sampled particles. If None,
                 a simulator autocomputed value will be used
-            max_samples (int): Maximum number of particles to sample
+            max_samples (None or int): If specified, maximum number of particles to sample
             min_samples_for_success (int): Minimum number of particles required to be sampled successfully in order
                 for this generation process to be considered successful
             prototype_indices (None or list of int): If specified, should specify which prototype should be used for
