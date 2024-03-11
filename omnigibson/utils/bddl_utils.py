@@ -962,11 +962,9 @@ class BDDLSampler:
                         continue
 
                     # Shuffle categories and sample to find a valid model
-                    random.shuffle(categories)
-
+                    np.random.shuffle(categories)
                     model_choices, category = set(), None
                     for category in categories:
-
                         # Get all available models that support all of its synset abilities
                         model_choices = set(get_all_object_category_models_with_abilities(
                             category=category,
