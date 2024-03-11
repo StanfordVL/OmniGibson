@@ -539,6 +539,50 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
                     "bb_size": part_bb_size,
                 })
 
+                # If it's a connectedpart, we also need to generate the corresponding female attachment point.
+                if part_type == "connectedpart":
+                    base_link_meta_links = out_metadata["meta_links"]["base_link"]
+                    if "attachment" not in base_link_meta_links:
+                        base_link_meta_links["attachment"] = {}
+                    attachment_type = f"{part_node_key[1]}parent".lower() + "F"
+                    if attachment_type not in base_link_meta_links["attachment"]:
+                        base_link_meta_links["attachment"][attachment_type] = {}
+                    next_id = len(base_link_meta_links["attachment"][attachment_type])
+
+                    # pretend that the attachment point is at the center of the part with its transform
+                    part_orn = np.array(G.nodes[part_node_key]["canonical_orientation"])
+                    part_base_link_mesh = G.nodes[part_node_key]["lower_mesh"]
+                    part_pos = get_mesh_center(part_base_link_mesh)
+                    part_transform = np.eye(4)
+                    part_transform[:3, 3] = part_pos
+                    part_transform[:3, :3] = R.from_quat(part_orn).as_matrix()
+                    part_transform_in_our = np.linalg.inv(our_transform) @ part_transform
+                    part_pos_in_our = part_transform_in_our[:3, 3]
+                    part_quat_in_our = R.from_matrix(part_transform_in_our[:3, :3]).as_quat()
+
+                    # actually add the point
+                    base_link_meta_links["attachment"][attachment_type][str(next_id)] = {
+                        "position": part_pos_in_our,
+                        "orientation": part_quat_in_our,                       
+                    }
+
+            # Similarly, if we are a connectedpart, we need to generate the corresponding male attachment point.
+            if "connectedpart" in G.nodes[root_node]["tags"]:
+                base_link_meta_links = out_metadata["meta_links"]["base_link"]
+                if "attachment" not in base_link_meta_links:
+                    base_link_meta_links["attachment"] = {}
+                attachment_type = f"{obj_model}parent".lower() + "M"
+                if attachment_type not in base_link_meta_links["attachment"]:
+                    base_link_meta_links["attachment"][attachment_type] = {}
+                next_id = len(base_link_meta_links["attachment"][attachment_type])
+                
+                # Pretend that the attachment point is at the center of the part with its transform
+                next_id = len(meta_links["attachment"][attachment_type])
+                meta_links["attachment"][attachment_type][str(next_id)] = {
+                    "position": [0., 0., 0.],
+                    "orientation": [0., 0., 0., 1.],                       
+                }
+
             openable_joint_ids = [
                 (i, joint.attrib["name"])
                 for i, joint in enumerate(tree.findall("joint"))
