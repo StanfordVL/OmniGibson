@@ -1,6 +1,7 @@
 import json
 import bddl
 import os
+import random
 import numpy as np
 import networkx as nx
 from collections import defaultdict
@@ -958,16 +959,24 @@ class BDDLSampler:
                     if obj_inst in self._inroom_object_instances:
                         continue
 
-                    category = np.random.choice(categories)
+                    # Shuffle categories and sample to find a valid model
+                    random.shuffle(categories)
 
-                    # Get all available models that support all of its synset abilities
-                    model_choices = set(get_all_object_category_models_with_abilities(
-                        category=category,
-                        abilities=OBJECT_TAXONOMY.get_abilities(OBJECT_TAXONOMY.get_synset_from_category(category)),
-                    ))
-                    model_choices -= BAD_MODELS.get(category, set())
+                    model_choices, category = set(), None
+                    for category in categories:
+
+                        # Get all available models that support all of its synset abilities
+                        model_choices = set(get_all_object_category_models_with_abilities(
+                            category=category,
+                            abilities=OBJECT_TAXONOMY.get_abilities(OBJECT_TAXONOMY.get_synset_from_category(category)),
+                        ))
+                        model_choices -= BAD_MODELS.get(category, set())
+                        if len(model_choices) > 0:
+                            break
+
                     if len(model_choices) == 0:
-                        return f"Missing valid object models for category: {category}"
+                        # We failed to find ANY valid model across ALL valid categories
+                        return f"Missing valid object models for all categories: {categories}"
 
                     # Randomly select an object model
                     model = np.random.choice(list(model_choices))
