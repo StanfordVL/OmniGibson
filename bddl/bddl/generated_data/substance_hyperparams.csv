@@ -856,7 +856,7 @@ mojito,mojito.n.01,gpt,"{""type"": ""fluid"", ""particle_density"": 1000.0, ""pa
 molasses,molasses.n.01,gpt,"{""type"": ""fluid"", ""particle_density"": 1500.0, ""particle_contact_offset"": 0.015, ""is_viscous"": true, ""material_mtl_name"": ""MapleSyrup"", ""customize_material_kwargs"": {""specular_transmission_color"": [0.35, 0.27, 0.13], ""diffuse_reflection_color"": [0.35, 0.27, 0.13], ""specular_transmission_scattering_color"": [0.35, 0.27, 0.13]}}"
 mold,mold.n.05,manual,"{""type"": ""macro_visual_particle"", ""relative_particle_scaling"": true}"
 moss,moss.n.01,gpt,"{""type"": ""macro_visual_particle"", ""relative_particle_scaling"": true}"
-mud,mud.n.03,manual,"{""type"": ""macro_visual_particle"", ""relative_particle_scaling"": false}"
+mud,mud.n.03,manual,"{""type"": ""macro_visual_particle"", ""relative_particle_scaling"": true}"
 muffin_batter,muffin_batter.n.01,manual,"{""type"": ""fluid"", ""particle_contact_offset"": 0.02, ""particle_density"": 1016.0, ""is_viscous"": true, ""material_mtl_name"": ""Jade"", ""customize_material_kwargs"": {""specular_transmission_weight"": 0.0, ""specular_transmission_color"": [0.84, 0.75, 0.66], ""diffuse_reflection_color"": [0.84, 0.75, 0.66]}}"
 mulch,mulch.n.01,manual,"{""type"": ""macro_physical_particle"", ""particle_density"": 380.0}"
 mushroom_sauce,mushroom_sauce.n.01,gpt,"{""type"": ""fluid"", ""particle_density"": 1010.0, ""particle_contact_offset"": 0.015, ""is_viscous"": true, ""material_mtl_name"": ""MapleSyrup"", ""customize_material_kwargs"": {""specular_transmission_color"": [0.65, 0.5, 0.4], ""diffuse_reflection_color"": [0.65, 0.5, 0.4], ""specular_transmission_scattering_color"": [0.65, 0.5, 0.4]}}"
