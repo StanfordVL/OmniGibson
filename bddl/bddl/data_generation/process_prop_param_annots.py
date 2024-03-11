@@ -147,8 +147,6 @@ def create_get_save_propagated_annots_params(syns_to_props):
                             raise ValueError(f"synset {param_record['synset']} cookable annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
                         elif prop == "flammable":
                             raise ValueError(f"synset {param_record['synset']} flammable annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
-                        elif prop == "heatable":
-                            raise ValueError(f"synset {param_record['synset']} heatable annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
                         elif prop == "heatSource":
                             raise ValueError(f"synset {param_record['synset']} heatSource annotation has NaN value for parameter {param_name}. Either handle NaN or annotate parameter value.")
                         elif prop == "particleApplier":

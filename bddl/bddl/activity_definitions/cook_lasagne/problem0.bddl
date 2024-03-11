@@ -9,10 +9,7 @@
     )
     
     (:init 
-        (ontop lasagna.n.01_1 oven.n.01_1) 
-        (not 
-            (hot oven.n.01_1)
-        ) 
+        (ontop lasagna.n.01_1 oven.n.01_1)
         (not 
             (cooked lasagna.n.01_1)
         ) 
@@ -26,11 +23,7 @@
             (exists 
                 (?lasagna.n.01 - lasagna.n.01) 
                 (ontop ?lasagna.n.01 ?oven.n.01_1)
-            ) 
-            (exists 
-                (?oven.n.01 - oven.n.01) 
-                (hot ?oven.n.01)
-            ) 
+            )
             (forall 
                 (?lasagna.n.01 - lasagna.n.01) 
                 (cooked ?lasagna.n.01_1)
