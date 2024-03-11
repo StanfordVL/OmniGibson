@@ -41,6 +41,7 @@ m.CLOTH_DAMPING = 0.2
 m.CLOTH_FRICTION = 0.4
 m.CLOTH_DRAG = 0.001
 m.CLOTH_LIFT = 0.003
+m.MIN_PARTICLE_CONTACT_OFFSET = 0.005   # Minimum particle contact offset for physical micro particles
 
 
 def set_carb_settings_for_fluid_isosurface():
@@ -1471,8 +1472,14 @@ class GranularSystem(MicroPhysicalParticleSystem):
         )
 
         # Store the contact offset based on a minimum sphere
+        # Threshold the lower-bound to avoid super small particles
         vertices = np.array(prototype.get_attribute("points")) * prototype.scale
-        _, cls._particle_contact_offset = trimesh.nsphere.minimum_nsphere(trimesh.Trimesh(vertices=vertices))
+        _, particle_contact_offset = trimesh.nsphere.minimum_nsphere(trimesh.Trimesh(vertices=vertices))
+        if particle_contact_offset < m.MIN_PARTICLE_CONTACT_OFFSET:
+            prototype.scale *= m.MIN_PARTICLE_CONTACT_OFFSET / particle_contact_offset
+            particle_contact_offset = m.MIN_PARTICLE_CONTACT_OFFSET
+
+        cls._particle_contact_offset = particle_contact_offset
 
         return [prototype]
 
@@ -1639,6 +1646,12 @@ class Cloth(MicroParticleSystem):
             vertex_normals=new_normals,
             process=False,
         )
+
+        # import open3d as o3d
+        # om = o3d.geometry.TriangleMesh(vertices=o3d.utility.Vector3dVector(tm_new.vertices),
+        #                                triangles=o3d.utility.Vector3iVector(tm_new.faces))
+        # print(om.is_edge_manifold(), om.is_vertex_manifold())
+        # from IPython import embed; embed()
 
         # Apply the inverse of the world transform to get the mesh back into its local frame
         tm_new.apply_transform(np.linalg.inv(scaled_world_transform))

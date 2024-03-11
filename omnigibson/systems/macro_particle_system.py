@@ -20,6 +20,11 @@ from omnigibson.utils.ui_utils import create_module_logger, suppress_omni_log
 # Create module logger
 log = create_module_logger(module_name=__name__)
 
+# Create settings for this module
+m = create_module_macros(module_path=__file__)
+
+m.MIN_PARTICLE_RADIUS = 0.005   # Minimum particle radius for physical macro particles
+
 
 class MacroParticleSystem(BaseSystem):
     """
@@ -1175,7 +1180,17 @@ class MacroPhysicalParticleSystem(MacroParticleSystem, PhysicalParticleSystem):
 
         # Compute particle radius
         vertices = np.array(cls.particle_object.get_attribute("points")) * cls.particle_object.scale * cls.max_scale.reshape(1, 3)
-        cls._particle_offset, cls._particle_radius = trimesh.nsphere.minimum_nsphere(trimesh.Trimesh(vertices=vertices))
+
+        particle_offset, particle_radius = trimesh.nsphere.minimum_nsphere(trimesh.Trimesh(vertices=vertices))
+
+        if particle_radius < m.MIN_PARTICLE_RADIUS:
+            ratio = m.MIN_PARTICLE_RADIUS / particle_radius
+            cls.particle_object.scale *= ratio
+            particle_offset *= ratio
+            particle_radius = m.MIN_PARTICLE_RADIUS
+
+        cls._particle_offset = particle_offset
+        cls._particle_radius = particle_radius
 
     @classmethod
     def refresh_particles_view(cls):
