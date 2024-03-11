@@ -1759,6 +1759,7 @@ stages:
       deps:
       - b1k_pipeline/max/object_list.py
       - cad/${item}/processed.max
+      - artifacts/pipeline/sanitycheck.success
       outs:
       - cad/${item}/artifacts/object_list.json
     foreach: ${combined_unfiltered}
@@ -1881,6 +1882,7 @@ stages:
       deps:
       - b1k_pipeline/max/room_object_list.py
       - cad/${item}/processed.max
+      - artifacts/pipeline/sanitycheck.success
       outs:
       - cad/${item}/artifacts/room_object_list.json
     foreach: ${scenes_unfiltered}

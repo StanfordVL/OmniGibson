@@ -145,6 +145,11 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
             for meta_link_subid_to_link in meta_link_id_to_subid.values():
                 for meta_link in meta_link_subid_to_link:
                     meta_link["position"] = np.array(meta_link["position"]) * SCALE_FACTOR
+
+                    # TODO: Remove this after it's fixed in export_meshes
+                    # Fix inverted meta link orientations
+                    meta_link["orientation"] = R.from_quat(meta_link["orientation"]).inv().as_quat().tolist()
+
                     if "length" in meta_link:
                         meta_link["length"] *= SCALE_FACTOR
                     if "width" in meta_link:
@@ -152,9 +157,13 @@ def build_mesh_tree(mesh_list, target_output_fs, load_upper=True, load_bad=True,
                     if "size" in meta_link:
                         meta_link["size"] = (np.asarray(meta_link["size"]) * SCALE_FACTOR).tolist()
 
-                    # TODO: Remove this after it's fixed in export_meshes
-                    # Fix inverted meta link orientations
-                    meta_link["orientation"] = R.from_quat(meta_link["orientation"]).inv().as_quat().tolist()
+                        # Fix any negative sizes.
+                        z_negative = meta_link["size"][2] < 0
+                        meta_link["size"] = np.abs(meta_link["size"]).tolist()
+                        if z_negative and meta_link["type"] in ("box", "cylinder", "cone"):
+                            # These objects are not symmetrical around the Z axis & need to be rotated
+                            new_orientation = (R.from_quat(meta_link["orientation"]) * R.from_euler("x", np.pi))
+                            meta_link["orientation"] = new_orientation.as_quat()
 
                     # TODO: Remove this once it is moved to a better place
                     # Apply the meta link scaling rules here

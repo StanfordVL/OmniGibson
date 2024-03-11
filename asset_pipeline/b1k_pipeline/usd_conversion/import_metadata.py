@@ -585,8 +585,8 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                 )
                 xform_prim.prim.GetAttribute("inputs:intensity").Set(mesh_info["intensity"])
                 if light_type == "Rect":
-                    xform_prim.prim.GetAttribute("inputs:height").Set(mesh_info["length"])
-                    xform_prim.prim.GetAttribute("inputs:width").Set(mesh_info["width"])
+                    xform_prim.prim.GetAttribute("inputs:width").Set(mesh_info["length"])
+                    xform_prim.prim.GetAttribute("inputs:height").Set(mesh_info["width"])
                 elif light_type == "Disk":
                     xform_prim.prim.GetAttribute("inputs:radius").Set(mesh_info["length"])
                 elif light_type == "Sphere":
