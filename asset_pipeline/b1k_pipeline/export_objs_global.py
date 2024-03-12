@@ -644,7 +644,7 @@ def process_target(target, objects_path, executor):
             raise ValueError(error_msg)
 
 def main():
-    with OSFS("/scr/ig_pipeline/tmp/export_objs2") as archive_fs:
+    with b1k_pipeline.utils.ParallelZipFS("objects.zip", write=True) as archive_fs:
         objects_dir = archive_fs.makedir("objects").getsyspath("/")
         # Load the mesh list from the object list json.
         errors = {}
