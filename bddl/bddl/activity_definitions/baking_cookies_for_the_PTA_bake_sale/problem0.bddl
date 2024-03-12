@@ -11,7 +11,6 @@
         salt.n.02_1 - salt.n.02
         electric_mixer.n.01_1 - electric_mixer.n.01
         bowl.n.01_1 - bowl.n.01
-        mixing_bowl.n.01_1 - mixing_bowl.n.01
         sugar_cookie.n.01_1 sugar_cookie.n.01_2 sugar_cookie.n.01_3 sugar_cookie.n.01_4 sugar_cookie.n.01_5 sugar_cookie.n.01_6 - sugar_cookie.n.01
         oven.n.01_1 - oven.n.01
         cookie_sheet.n.01_1 - cookie_sheet.n.01
@@ -45,7 +44,6 @@
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
         (ontop electric_mixer.n.01_1 countertop.n.01_1) 
-        (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (inroom oven.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen)
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 

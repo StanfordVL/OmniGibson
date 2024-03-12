@@ -47,7 +47,7 @@ PROP_TO_DESC = { #added by hand from B1K Object States Google Doc found here htt
     "soakable": None,
     "wetable": "wet",
     "flammable": "on_fire",
-    "assembleable": "assembled",
+    "assembleable": None,
     "heatable" : "hot",
     "boilable": "boiling",
     "meltable" : "melted",

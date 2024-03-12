@@ -13,7 +13,6 @@
         whipped_cream.n.01_1 - whipped_cream.n.01
         blueberry_mousse.n.01_1 - blueberry_mousse.n.01
         electric_mixer.n.01_1 - electric_mixer.n.01
-        mixing_bowl.n.01_1 - mixing_bowl.n.01
         bowl.n.01_1 - bowl.n.01
         tupperware.n.01_1 - tupperware.n.01
         sugar__sack.n.01_1 - sugar__sack.n.01
@@ -45,7 +44,6 @@
         (insource whipped_cream__atomizer.n.01_1 whipped_cream.n.01_1) 
         (inside whipped_cream__atomizer.n.01_1 electric_refrigerator.n.01_1) 
         (ontop electric_mixer.n.01_1 countertop.n.01_2) 
-        (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (ontop teaspoon.n.02_1 countertop.n.01_2) 
         (inroom stove.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -59,7 +57,7 @@
     (:goal 
         (and 
             (real ?blueberry_mousse.n.01_1) 
-            (contains ?mixing_bowl.n.01_1 ?blueberry_mousse.n.01_1)
+            (contains ?electric_mixer.n.01_1 ?blueberry_mousse.n.01_1)
         )
     )
 )

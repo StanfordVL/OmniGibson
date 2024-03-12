@@ -37,15 +37,13 @@
         "freezable": {}
     },
     "accessory.n.01": {
-        "cloth": {},
-        "deformable": {},
         "disinfectable": {},
-        "drapeable": {},
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
         "moldyable": {},
         "nonSubstance": {},
+        "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
@@ -8753,15 +8751,13 @@
         "wrinkleable": {}
     },
     "belt.n.02": {
-        "cloth": {},
-        "deformable": {},
         "disinfectable": {},
-        "drapeable": {},
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
         "moldyable": {},
         "nonSubstance": {},
+        "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "stainable": {},
@@ -41548,7 +41544,13 @@
         "dustyable": {},
         "freezable": {},
         "grassyable": {},
-        "heatSource": {},
+        "heatSource": {
+            "requires_toggled_on": 1.0,
+            "requires_closed": 0.0,
+            "requires_inside": 1.0,
+            "temperature": 93.0,
+            "heating_rate": 0.01
+        },
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},

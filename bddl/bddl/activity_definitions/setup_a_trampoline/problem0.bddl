@@ -2,23 +2,28 @@
     (:domain omnigibson)
 
     (:objects
-        trampoline.n.01_1 - trampoline.n.01
+        trampoline_top.n.01_1 - trampoline_top.n.01
+        trampoline_leg.n.01_1 trampoline_leg.n.01_2 trampoline_leg.n.01_3 trampoline_leg.n.01_4 - trampoline_leg.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (not
-            (assembled trampoline.n.01_1) 
-        )
-        (ontop trampoline.n.01_1 floor.n.01_1) 
+        (ontop trampoline_top.n.01_1 floor.n.01_1) 
+        (ontop trampoline_leg.n.01_1 floor.n.01_1) 
+        (ontop trampoline_leg.n.01_2 floor.n.01_1) 
+        (ontop trampoline_leg.n.01_3 floor.n.01_1) 
+        (ontop trampoline_leg.n.01_4 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (assembled ?trampoline.n.01_1)
+            (forall 
+                (?trampoline_leg.n.01 - trampoline_leg.n.01)
+                (attached ?trampoline_leg.n.01 ?trampoline_top.n.01_1)
+            )
         )
     )
 )

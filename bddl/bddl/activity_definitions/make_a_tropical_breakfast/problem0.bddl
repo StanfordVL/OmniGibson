@@ -13,7 +13,6 @@
         raspberry.n.02_1 - raspberry.n.02
         chia_seed.n.01_1 - chia_seed.n.01
         electric_mixer.n.01_1 - electric_mixer.n.01
-        mixing_bowl.n.01_1 - mixing_bowl.n.01
         yogurt__carton.n.01_1 - yogurt__carton.n.01
         maple_syrup__jar.n.01_1 - maple_syrup__jar.n.01
         chia_seed__bag.n.01_1 - chia_seed__bag.n.01
@@ -37,7 +36,6 @@
         (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_2) 
         (ontop electric_mixer.n.01_1 countertop.n.01_2) 
-        (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (future diced__mango.n.01_1) 
         (future diced__kiwi.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
@@ -52,11 +50,11 @@
         (and 
             (real ?diced__mango.n.01_1) 
             (real ?diced__kiwi.n.01_1) 
-            (contains ?mixing_bowl.n.01_1 ?yogurt.n.01_1) 
-            (contains ?mixing_bowl.n.01_1 ?maple_syrup.n.01_1) 
-            (contains ?mixing_bowl.n.01_1 ?diced__mango.n.01_1) 
-            (contains ?mixing_bowl.n.01_1 ?chia_seed.n.01_1) 
-            (ontop ?mixing_bowl.n.01_1 ?raspberry.n.02_1)
+            (contains ?electric_mixer.n.01_1 ?yogurt.n.01_1) 
+            (contains ?electric_mixer.n.01_1 ?maple_syrup.n.01_1) 
+            (contains ?electric_mixer.n.01_1 ?diced__mango.n.01_1) 
+            (contains ?electric_mixer.n.01_1 ?chia_seed.n.01_1) 
+            (ontop ?raspberry.n.02_1 ?electric_mixer.n.01_1)
         )
     )
 )

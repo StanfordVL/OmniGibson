@@ -624,7 +624,7 @@ class Task(Model):
         return any("physicalSubstance" in synset.property_names for synset in self.synsets)
 
     def uses_attachment(self):
-        return any(pred.name in ['assembled', 'attached'] for pred in self.uses_predicates)
+        return any(pred.name == 'attached' for pred in self.uses_predicates)
 
     def uses_cloth(self):
         return any(pred.name in ['folded', 'draped', 'unfolded'] for pred in self.uses_predicates)
