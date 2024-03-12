@@ -526,6 +526,12 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
         if len(mesh_info_list) == 0:
             continue
 
+        # TODO: Remove this after this is fixed.
+        if type(mesh_info_list) == dict:
+            keys = [str(x) for x in range(len(mesh_info_list))]
+            assert set(mesh_info_list.keys()) == set(keys), "Unexpected keys"
+            mesh_info_list = [mesh_info_list[k] for k in keys]
+
         if meta_link_type in ["togglebutton", "particleapplier", "particleremover", "particlesink", "particlesource"]:
             assert len(mesh_info_list) == 1, f"Invalid number of meshes for {meta_link_type}"
 

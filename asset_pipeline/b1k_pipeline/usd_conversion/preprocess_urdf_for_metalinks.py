@@ -283,6 +283,12 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model, dataset_root):
                             if meta_link_name != "attachment":
                                 assert len(attrs_list) == 1, f"Expected only one instance for meta_link {meta_link_name}_{ml_id}, but found {len(attrs_list)}"
 
+                        # TODO: Remove this after this is fixed.
+                        if type(attrs_list) == dict:
+                            keys = [str(x) for x in range(len(attrs_list))]
+                            assert set(attrs_list.keys()) == set(keys), "Unexpected keys"
+                            attrs_list = [attrs_list[k] for k in keys]
+
                         for i, attrs in enumerate(attrs_list):
                             pos = attrs["position"]
                             quat = attrs["orientation"]
