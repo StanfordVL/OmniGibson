@@ -11848,8 +11848,8 @@ stages:
     cmd: python -m b1k_pipeline.validate_scenes
     deps:
     - path: artifacts/og_dataset.zip
-      md5: 04f91cd63a43d60c897fe14dfdf8dd7c
-      size: 22000403828
+      md5: 8dd81c0c20a13150040b98ae9bf6e91c
+      size: 22010448739
     - path: artifacts/pipeline/pack_dataset.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -11861,8 +11861,8 @@ stages:
       size: 3113
     outs:
     - path: artifacts/pipeline/validate_scenes.json
-      md5: c6297269aad2a3564dc033e3039aadbf
-      size: 3561884
+      md5: c45893960820a82dcd3e7ef4d5e9eef4
+      size: 3077693
   export_meshes@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/export_meshes.py
