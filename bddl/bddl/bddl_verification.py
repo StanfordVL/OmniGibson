@@ -298,9 +298,6 @@ def check_synset_predicate_alignment(atom, syns_to_props):
     if pred == "on_fire":
         assert "nonSubstance" in syns_to_props[objects[0]], f"Inapplicable on_fire: {atom}"
         assert "flammable" in syns_to_props[objects[0]], f"Inapplicable on_fire: {atom}"
-    if pred == "assembled":
-        assert "rigidBody" in syns_to_props[objects[0]], f"Inapplicable assembled: {atom}"
-        assert "assembleable" in syns_to_props[objects[0]], f"Inapplicable assembled: {atom}"
     if pred == "broken":
         assert "rigidBody" in syns_to_props[objects[0]], f"Inapplicable broken: {atom}"
         assert "breakable" in syns_to_props[objects[0]], f"Inapplicable broken: {atom}"
