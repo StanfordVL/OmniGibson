@@ -10,9 +10,6 @@
     
     (:init 
         (ontop picture_frame.n.01_1 floor.n.01_1)
-        (not 
-            (attached picture_frame.n.01_1 wall_nail.n.01_1)
-        )
         (inroom floor.n.01_1 corridor) 
         (inroom wall_nail.n.01_1 corridor)
         (ontop agent.n.01_1 floor.n.01_1)

@@ -17,13 +17,7 @@
         (ontop sweater.n.01_1 floor.n.01_1) 
         (ontop sweater.n.01_2 floor.n.01_1) 
         (ontop hanger.n.02_1 floor.n.01_1) 
-        (ontop hanger.n.02_2 floor.n.01_1) 
-        (not 
-            (attached hanger.n.02_1 coatrack.n.01_1)
-        )
-        (not 
-            (attached hanger.n.02_2 coatrack.n.01_1)
-        )
+        (ontop hanger.n.02_2 floor.n.01_1)
         (ontop book.n.02_1 sofa.n.01_1) 
         (ontop book.n.02_2 sofa.n.01_1) 
         (ontop book.n.02_3 sofa.n.01_1) 

@@ -79,6 +79,10 @@ VALID_ATTACHMENTS = set([
     ("bicycle_rack.n.01", "recreational_vehicle.n.01"),
     ("window_blind.n.01", "wall_nail.n.01"),
     ("skateboard_wheel.n.01", "skateboard_deck.n.01"),
+    ("shelf_shelf.n.01", "shelf_back.n.01"),
+    ("shelf_side.n.01", "shelf_back.n.01"),
+    ("shelf_baseboard.n.01", "shelf_back.n.01"),
+    ("shelf_top.n.01", "shelf_back.n.01"),
 ])
 
 VALID_ROOMS = set()
@@ -487,6 +491,7 @@ def all_objects_placed(init):
         for literal in init:
             # Skip not literals
             if literal[0] == "not":
+                assert literal[1][0] not in {'attached', 'draped', 'inside', 'nextto', 'ontop', 'overlaid', 'touching', 'under'}, f"Negative kinematic state in initial states: {literal}"
                 continue
             formula = literal
             # Skip future literals

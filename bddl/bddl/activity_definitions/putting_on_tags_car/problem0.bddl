@@ -10,10 +10,7 @@
     )
     
     (:init 
-        (ontop car.n.01_1 floor.n.01_1) 
-        (not 
-            (attached gummed_label.n.01_1 license_plate.n.01_1)
-        )
+        (ontop car.n.01_1 floor.n.01_1)
         (ontop gummed_label.n.01_1 floor.n.01_1) 
         (ontop license_plate.n.01_1 floor.n.01_1)
         (inroom floor.n.01_1 garden) 

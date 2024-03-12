@@ -16,9 +16,6 @@
         (ontop mouse.n.04_1 desk.n.01_1) 
         (ontop keyboard.n.01_1 desk.n.01_1) 
         (ontop webcam.n.02_1 desk.n.01_1)
-        (not 
-            (attached webcam.n.02_1 desktop_computer.n.01_1)
-        )
         (inroom desk.n.01_1 shared_office) 
         (inroom floor.n.01_1 shared_office) 
         (ontop agent.n.01_1 floor.n.01_1)

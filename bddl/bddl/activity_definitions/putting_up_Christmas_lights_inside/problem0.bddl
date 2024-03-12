@@ -9,10 +9,7 @@
     )
     
     (:init 
-        (ontop icicle_lights.n.01_1 floor.n.01_1) 
-        (not 
-            (attached icicle_lights.n.01_1 wall_nail.n.01_1)
-        )
+        (ontop icicle_lights.n.01_1 floor.n.01_1)
         (inroom floor.n.01_1 living_room) 
         (inroom wall_nail.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)

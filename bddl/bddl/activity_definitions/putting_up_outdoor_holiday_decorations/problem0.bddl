@@ -17,10 +17,7 @@
     (:init 
         (ontop pot_plant.n.01_1 floor.n.01_1) 
         (ontop carton.n.02_1 floor.n.01_2) 
-        (inside wreath.n.01_1 carton.n.02_1) 
-        (not
-            (attached wreath.n.01_1 wall_nail.n.01_1)
-        )
+        (inside wreath.n.01_1 carton.n.02_1)
         (inside icicle_lights.n.01_1 carton.n.02_1) 
         (inside rose.n.01_1 carton.n.02_1) 
         (not 

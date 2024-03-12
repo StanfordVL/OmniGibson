@@ -15,13 +15,7 @@
     (:init 
         (inside dip.n.07_1 shelf.n.01_1) 
         (inside wreath.n.01_1 shelf.n.01_1) 
-        (inside candlestick.n.01_1 shelf.n.01_1) 
-        (not 
-            (attached dip.n.07_1 candlestick.n.01_1)
-        )
-        (not 
-            (attached wreath.n.01_1 wall_nail.n.01_1)
-        )
+        (inside candlestick.n.01_1 shelf.n.01_1)
         (inroom floor.n.01_1 living_room)
         (inroom wall_nail.n.01_1 living_room)
         (inroom breakfast_table.n.01_1 living_room)

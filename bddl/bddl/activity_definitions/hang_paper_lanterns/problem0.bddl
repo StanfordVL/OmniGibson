@@ -12,13 +12,8 @@
     
     (:init 
         (ontop paper_lantern.n.01_1 table.n.02_1) 
-        (ontop pole.n.01_1 table.n.02_1) 
-        (not 
-            (attached paper_lantern.n.01_1 pole.n.01_1)
-        )
-        (not 
-            (attached pole.n.01_1 wall_nail.n.01_1)
-        )
+        (ontop pole.n.01_1 table.n.02_1)
+
         (inroom floor.n.01_1 garden) 
         (inroom wall_nail.n.01_1 garden) 
         (inroom table.n.02_1 garden) 

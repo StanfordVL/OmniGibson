@@ -11,9 +11,6 @@
     
     (:init 
         (ontop bicycle.n.01_1 floor.n.01_1)
-        (not 
-            (attached bicycle.n.01_1 bicycle_rack.n.01_1)
-        )
         (attached bicycle_rack.n.01_1 wall_nail.n.01_1) 
         (inroom floor.n.01_1 garage) 
         (inroom wall_nail.n.01_1 garage) 

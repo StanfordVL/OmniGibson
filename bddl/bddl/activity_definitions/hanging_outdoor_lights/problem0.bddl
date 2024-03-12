@@ -11,10 +11,7 @@
     )
     
     (:init 
-        (ontop icicle_lights.n.01_1 coffee_table.n.01_1) 
-        (not 
-            (attached icicle_lights.n.01_1 wall_nail.n.01_1)
-        )
+        (ontop icicle_lights.n.01_1 coffee_table.n.01_1)
         (inroom floor.n.01_1 garden) 
         (inroom coffee_table.n.01_1 garden) 
         (inroom wall_nail.n.01_1 garden) 

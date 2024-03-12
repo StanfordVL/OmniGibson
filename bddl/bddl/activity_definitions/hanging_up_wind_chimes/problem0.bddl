@@ -10,10 +10,7 @@
     )
     
     (:init 
-        (ontop wind_chime.n.01_1 floor.n.01_1) 
-        (not 
-            (attached wind_chime.n.01_1 pole.n.01_1)
-        )
+        (ontop wind_chime.n.01_1 floor.n.01_1)
         (attached pole.n.01_1 wall_nail.n.01_1)
         (inroom wall_nail.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 

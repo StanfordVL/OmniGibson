@@ -20,14 +20,8 @@
         (not 
             (toggled_on table_lamp.n.01_1)
         ) 
-        (attached broken__light_bulb.n.01_1 table_lamp.n.01_1) 
-        (not 
-            (attached light_bulb.n.01_1 table_lamp.n.01_1)
-        )
-        (attached broken__light_bulb.n.01_2 table_lamp.n.01_2) 
-        (not 
-            (attached light_bulb.n.01_2 table_lamp.n.01_2)
-        )
+        (attached broken__light_bulb.n.01_1 table_lamp.n.01_1)
+        (attached broken__light_bulb.n.01_2 table_lamp.n.01_2)
         (inroom floor.n.01_1 bedroom) 
         (inroom floor.n.01_2 dining_room)
         (ontop table_lamp.n.01_1 breakfast_table.n.01_1)

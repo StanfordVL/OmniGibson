@@ -10,10 +10,7 @@
     
     (:init 
         (ontop pickup.n.01_1 floor.n.01_1) 
-        (ontop hitch.n.04_1 floor.n.01_1) 
-        (not 
-            (attached hitch.n.04_1 pickup.n.01_1)
-        )
+        (ontop hitch.n.04_1 floor.n.01_1)
         (inroom floor.n.01_1 garage) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

@@ -41,16 +41,7 @@
         (ontop candlestick.n.01_1 console_table.n.01_1)
         (ontop dip.n.07_1 console_table.n.01_1) 
         (ontop dip.n.07_2 console_table.n.01_1) 
-        (ontop dip.n.07_3 console_table.n.01_1) 
-        (not 
-            (attached dip.n.07_1 candlestick.n.01_1)
-        )
-        (not 
-            (attached dip.n.07_2 candlestick.n.01_1)
-        )
-        (not 
-            (attached dip.n.07_3 candlestick.n.01_1)
-        )
+        (ontop dip.n.07_3 console_table.n.01_1)
         (inroom breakfast_table.n.01_1 dining_room) 
         (inroom console_table.n.01_1 dining_room) 
         (inroom floor.n.01_1 dining_room) 
