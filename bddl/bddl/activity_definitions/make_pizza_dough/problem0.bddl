@@ -10,7 +10,6 @@
         salt.n.02_1 - salt.n.02
         pizza_dough.n.01_1 - pizza_dough.n.01
         electric_mixer.n.01_1 - electric_mixer.n.01
-        mixing_bowl.n.01_1 - mixing_bowl.n.01
         yeast__shaker.n.01_1 - yeast__shaker.n.01
         sugar__sack.n.01_1 - sugar__sack.n.01
         flour__sack.n.01_1 - flour__sack.n.01
@@ -35,7 +34,6 @@
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
         (ontop electric_mixer.n.01_1 countertop.n.01_1) 
-        (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (future pizza_dough.n.01_1) 
         (inroom sink.n.01_1 kitchen) 
@@ -51,7 +49,7 @@
                 (cooked ?pizza_dough.n.01_1)
             ) 
             (real ?pizza_dough.n.01_1) 
-            (inside ?pizza_dough.n.01_1 ?mixing_bowl.n.01_1)
+            (inside ?pizza_dough.n.01_1 ?electric_mixer.n.01_1)
         )
     )
 )

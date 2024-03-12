@@ -11,7 +11,6 @@
         salt.n.02_1 - salt.n.02
         sugar_cookie_dough.n.01_1 - sugar_cookie_dough.n.01
         electric_mixer.n.01_1 - electric_mixer.n.01
-        mixing_bowl.n.01_1 - mixing_bowl.n.01
         flour__sack.n.01_1 - flour__sack.n.01
         sugar__sack.n.01_1 - sugar__sack.n.01
         bowl.n.01_1 bowl.n.01_2 - bowl.n.01
@@ -43,7 +42,6 @@
         (insource salt__shaker.n.01_1 salt.n.02_1)
         (ontop salt__shaker.n.01_1 countertop.n.01_2)
         (ontop electric_mixer.n.01_1 countertop.n.01_2) 
-        (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -60,7 +58,7 @@
                 (cooked ?sugar_cookie_dough.n.01_1)
             ) 
             (real ?sugar_cookie_dough.n.01_1) 
-            (inside ?sugar_cookie_dough.n.01_1 ?mixing_bowl.n.01_1)
+            (inside ?sugar_cookie_dough.n.01_1 ?electric_mixer.n.01_1)
         )
     )
 )

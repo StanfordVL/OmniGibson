@@ -9,7 +9,6 @@
     	mason_jar.n.01_1 - mason_jar.n.01
     	coconut_oil.n.01_1 - coconut_oil.n.01
     	coconut_oil__jar.n.01_1 - coconut_oil__jar.n.01
-    	mixing_bowl.n.01_1 - mixing_bowl.n.01
         electric_mixer.n.01_1 - electric_mixer.n.01
         sugar_coffee_scrub.n.01_1 - sugar_coffee_scrub.n.01
     	floor.n.01_1 - floor.n.01
@@ -25,7 +24,6 @@
         (ontop mason_jar.n.01_1 countertop.n.01_1) 
         (filled coconut_oil__jar.n.01_1 coconut_oil.n.01_1) 
         (ontop coconut_oil__jar.n.01_1 countertop.n.01_1) 
-        (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (ontop electric_mixer.n.01_1 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -36,7 +34,7 @@
     (:goal 
         (and 
             (real ?sugar_coffee_scrub.n.01_1)
-            (contains ?mixing_bowl.n.01_1 ?sugar_coffee_scrub.n.01_1)
+            (contains ?electric_mixer.n.01_1 ?sugar_coffee_scrub.n.01_1)
         )
     )
 )
