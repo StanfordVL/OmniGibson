@@ -633,6 +633,9 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                     if not is_mesh:
                         xform_prim.prim.GetAttribute("size").Set(1.0)
                     xform_prim.prim.GetAttribute("xformOp:scale").Set(lazy.pxr.Gf.Vec3f(*mesh_info["size"]))
+                    height_offset = mesh_info["size"][2] / 2.0
+                    mesh_in_meta_link_pos += T.quat2mat(mesh_in_meta_link_orn) @ np.array(
+                        [0.0, 0.0, height_offset])
                 elif mesh_type == "Sphere":
                     if not is_mesh:
                         xform_prim.prim.GetAttribute("radius").Set(0.5)
