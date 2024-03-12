@@ -95,7 +95,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     # If we want to create a stable scene config, do that now
     default_scene_fpath = f"{gm.DATASET_PATH}/scenes/{args.scene_model}/json/{args.scene_model}_stable.json"
     if not os.path.exists(default_scene_fpath):
-        create_stable_scene_json(args=args)
+        create_stable_scene_json(scene_model=args.scene_model)
 
     # Get the default scene instance
     assert os.path.exists(default_scene_fpath), "Did not find default stable scene json!"

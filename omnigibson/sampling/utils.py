@@ -232,11 +232,11 @@ def _validate_object_state_stability(obj_name, obj_dict, strict=False):
     # If all passes, return True
     return True, None
 
-def create_stable_scene_json(args):
+def create_stable_scene_json(scene_model):
     cfg = {
         "scene": {
             "type": "InteractiveTraversableScene",
-            "scene_model": args.scene_model,
+            "scene_model": scene_model,
         },
     }
 
@@ -272,7 +272,7 @@ def create_stable_scene_json(args):
     env.scene.update_initial_state()
 
     # Save this as a stable file
-    path = os.path.join(gm.DATASET_PATH, "scenes", og.sim.scene.scene_model, "json", f"{args.scene_model}_stable.json")
+    path = os.path.join(gm.DATASET_PATH, "scenes", og.sim.scene.scene_model, "json", f"{scene_model}_stable.json")
     og.sim.save(json_path=path)
 
     og.sim.stop()
