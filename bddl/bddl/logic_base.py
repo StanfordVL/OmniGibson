@@ -61,9 +61,9 @@ class BinaryAtomicFormula(AtomicFormula):
     def _sample(self, obj1, obj2, binary_state):
         pass
 
-    def sample(self, binary_state):
+    def sample(self, binary_state, **kwargs):
         if (self.scope[self.input1] is not None) and (self.scope[self.input2] is not None):
-            return self._sample(self.scope[self.input1], self.scope[self.input2], binary_state, **self.kwargs)
+            return self._sample(self.scope[self.input1], self.scope[self.input2], binary_state, **kwargs, **self.kwargs)
         else:
             print('%s and/or %s are not mapped to simulator objects in scope' %
                   (self.input1, self.input2))
@@ -105,9 +105,9 @@ class UnaryAtomicFormula(AtomicFormula):
     def _sample(self, obj, binary_state):
         pass
 
-    def sample(self, binary_state):
+    def sample(self, binary_state, **kwargs):
         if self.scope[self.input] is not None:
-            return self._sample(self.scope[self.input], binary_state, **self.kwargs)
+            return self._sample(self.scope[self.input], binary_state, **kwargs, **self.kwargs)
         else:
             print('%s is not mapped to a simulator object in scope' % self.input)
             return False
