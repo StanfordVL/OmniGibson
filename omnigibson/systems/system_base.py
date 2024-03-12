@@ -880,6 +880,14 @@ class PhysicalParticleSystem(BaseSystem):
         """
         raise NotImplementedError()
 
+    @classproperty
+    def particle_particle_rest_distance(cls):
+        """
+        Returns:
+            The minimum distance between individual particles at rest
+        """
+        return cls.particle_radius * 2.0
+
     @classmethod
     def check_in_contact(cls, positions):
         """
@@ -959,7 +967,7 @@ class PhysicalParticleSystem(BaseSystem):
         assert np.all(n_particles_per_axis), f"link {link.name} is too small to sample any particle of radius {cls.particle_radius}."
 
         # 1e-10 is added because the extent might be an exact multiple of particle radius
-        arrs = [np.arange(l + cls.particle_radius, h - cls.particle_radius + 1e-10, cls.particle_radius * 2)
+        arrs = [np.arange(l + cls.particle_radius, h - cls.particle_radius + 1e-10, cls.particle_particle_rest_distance)
                 for l, h, n in zip(low, high, n_particles_per_axis)]
         # Generate 3D-rectangular grid of points
         particle_positions = np.stack([arr.flatten() for arr in np.meshgrid(*arrs)]).T

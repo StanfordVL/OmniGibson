@@ -42,7 +42,7 @@ m.CLOTH_FRICTION = 0.4
 m.CLOTH_DRAG = 0.001
 m.CLOTH_LIFT = 0.003
 m.MIN_PARTICLE_CONTACT_OFFSET = 0.005   # Minimum particle contact offset for physical micro particles
-
+m.FLUID_PARTICE_PARTICLE_DISTANCE_SCALE = 0.75   # How much overlap expected between fluid particles at rest
 
 def set_carb_settings_for_fluid_isosurface():
     """
@@ -1296,6 +1296,11 @@ class FluidSystem(MicroPhysicalParticleSystem):
         # Magic number from omni tutorials
         # See https://docs.omniverse.nvidia.com/prod_extensions/prod_extensions/ext_physics.html#offset-autocomputation
         return 0.99 * 0.6 * cls.particle_contact_offset
+
+    @classproperty
+    def particle_particle_rest_distance(cls):
+        # 0.6 is magic hardcoded number, random guess based on intuition from https://docs.omniverse.nvidia.com/extensions/latest/ext_physics/physics-particles.html#particle-particle-interaction
+        return cls.particle_radius * 2.0 * m.FLUID_PARTICE_PARTICLE_DISTANCE_SCALE
 
     @classproperty
     def _material_mtl_name(cls):
