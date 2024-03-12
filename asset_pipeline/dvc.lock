@@ -14414,3 +14414,22 @@ stages:
     - path: artifacts/pipeline/export_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
+  generate_object_images:
+    cmd: python -m b1k_pipeline.generate_object_images_slurm
+    deps:
+    - path: artifacts/parallels/objects_usd.zip
+      md5: 316124978ffa260c160579b3d5c5607e
+      size: 22004759019
+    - path: artifacts/pipeline/usdify_objects.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: b1k_pipeline/generate_object_images_og.py
+      md5: b77f5c58389c56a8ecac955acbde580a
+      size: 3517
+    - path: b1k_pipeline/generate_object_images_slurm.py
+      md5: ebb496f52dac7f7ec9ad85ba4f0f98fe
+      size: 4416
+    outs:
+    - path: artifacts/pipeline/object_images.zip
+      md5: 35e38254e165668b0090a3e7fd3a0541
+      size: 3147580

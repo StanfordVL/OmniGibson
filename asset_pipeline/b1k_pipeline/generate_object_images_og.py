@@ -88,7 +88,7 @@ def main():
             og.sim.render()
             og.sim.render()
 
-            image = Image.fromarray(og.sim.viewer_camera.get_obs()["rgb"].copy())
+            image = Image.fromarray(og.sim.viewer_camera.get_obs()[0]["rgb"].copy())
             images.append(image)
 
         og.sim.remove_object(obj)
