@@ -39,7 +39,6 @@ class TrivialBackend(BDDLBackend):
             "draped": TrivialDrapedPredicate,
             "insource": TrivialInsourcePredicate,
             "broken": TrivialBrokenPredicate,
-            "assembled": TrivialAssembledPredicate,
             "grasped": TrivialGraspedPredicate,
         } 
         return PREDICATE_MAPPING[predicate_name]
@@ -61,7 +60,6 @@ class TrivialSimulator(object):
         self.real = set() 
         self.broken = set()
         self.closed = set()
-        self.assembled = set()
         # Binaries - populated with 2-tuples of string names
         self.saturated = set()
         self.covered = set() 
@@ -92,7 +90,6 @@ class TrivialSimulator(object):
             "on_fire": self.set_on_fire,
             "empty": self.set_empty,
             "broken": self.set_broken,
-            "assembled": self.set_assembled,
             "closed": self.set_closed,
             "future": self.set_future,
             "real": self.set_real,
@@ -248,16 +245,6 @@ class TrivialSimulator(object):
     
     def get_broken(self, objs):
         return tuple(obj.name for obj in objs) in self.broken
-    
-    def set_assembled(self, objs, is_assembled):
-        assert len(objs) == 1, f"`objs` has len other than 1: {objs}"
-        if is_assembled: 
-            self.assembled.add(objs)
-        else: 
-            self.assembled.discard(objs)
-    
-    def get_assembled(self, objs):
-        return tuple(obj.name for obj in objs) in self.assembled
     
     def set_future(self, objs, is_future):
         assert len(objs) == 1, f"`objs` has len other than 1: {objs}"
@@ -458,9 +445,6 @@ class TrivialGenericObject(object):
     def get_broken(self):
         return self.simulator.get_broken((self,))
     
-    def get_assembled(self):
-        return self.simulator.get_assembled((self,))
-    
     def get_future(self):
         return self.simulator.get_future((self,))
     
@@ -635,17 +619,6 @@ class TrivialBrokenPredicate(UnaryAtomicFormula):
     def _evaluate(self, obj):
         print(self.STATE_NAME, obj.name, obj.get_broken())
         return obj.get_broken()
-
-    def _sample(self, obj1, binary_state):
-        pass
-
-
-class TrivialAssembledPredicate(UnaryAtomicFormula):
-    STATE_NAME = "assembled"
-
-    def _evaluate(self, obj):
-        print(self.STATE_NAME, obj.name, obj.get_assembled())
-        return obj.get_assembled()
 
     def _sample(self, obj1, binary_state):
         pass
