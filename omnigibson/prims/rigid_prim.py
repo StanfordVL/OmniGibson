@@ -108,6 +108,7 @@ class RigidPrim(XFormPrim):
         # We iterate over all children of this object's prim,
         # and grab any that are presumed to be meshes
         self.update_meshes()
+
         # Possibly set the mass / density
         if not self.has_collision_meshes:
             # A meta (virtual) link has no collision meshes; set a negligible mass and a zero density (ignored)
@@ -474,6 +475,7 @@ class RigidPrim(XFormPrim):
             density = self._rigid_prim_view.get_densities()[0]
             if density == 0.0:
                 density = 1000.0
+
         return density
 
     @density.setter
