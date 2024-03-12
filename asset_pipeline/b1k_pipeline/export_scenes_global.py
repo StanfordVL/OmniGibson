@@ -6,6 +6,7 @@ import numpy as np
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 from fs.zipfs import ZipFS
+from fs.osfs import OSFS
 from scipy.spatial.transform import Rotation as R
 from concurrent import futures
 import tqdm
@@ -133,7 +134,7 @@ def process_target(target, scenes_dir):
     xmlstr = minidom.parseString(ET.tostring(scene_tree_root)).toprettyxml(indent="   ")
     xmlio = io.StringIO(xmlstr)
     tree = ET.parse(xmlio)
-    with scenes_dir.makedir(scene_name).makedir("urdf").open(f"{scene_name}_best.urdf", "wb") as f:
+    with OSFS(scenes_dir).makedir(scene_name).makedir("urdf").open(f"{scene_name}_best.urdf", "wb") as f:
         tree.write(f, xml_declaration=True)
 
 def main():
