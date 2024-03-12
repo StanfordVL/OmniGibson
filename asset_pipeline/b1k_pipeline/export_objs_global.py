@@ -577,8 +577,8 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
                 next_id = len(base_link_meta_links["attachment"][attachment_type])
                 
                 # Pretend that the attachment point is at the center of the part with its transform
-                next_id = len(meta_links["attachment"][attachment_type])
-                meta_links["attachment"][attachment_type][str(next_id)] = {
+                next_id = len(base_link_meta_links["attachment"][attachment_type])
+                base_link_meta_links["attachment"][attachment_type][str(next_id)] = {
                     "position": [0., 0., 0.],
                     "orientation": [0., 0., 0., 1.],                       
                 }
@@ -644,7 +644,7 @@ def process_target(target, objects_path, executor):
             raise ValueError(error_msg)
 
 def main():
-    with b1k_pipeline.utils.ParallelZipFS("objects.zip", write=True) as archive_fs:
+    with OSFS("/scr/ig_pipeline/tmp/export_objs2") as archive_fs:
         objects_dir = archive_fs.makedir("objects").getsyspath("/")
         # Load the mesh list from the object list json.
         errors = {}
