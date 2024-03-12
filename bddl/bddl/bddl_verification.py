@@ -81,8 +81,13 @@ VALID_ATTACHMENTS = set([
     ("skateboard_wheel.n.01", "skateboard_deck.n.01"),
     ("shelf_shelf.n.01", "shelf_back.n.01"),
     ("shelf_side.n.01", "shelf_back.n.01"),
-    ("shelf_baseboard.n.01", "shelf_back.n.01"),
+    ("shelf_baseboard.n.01", "shelf_side.n.01"),
     ("shelf_top.n.01", "shelf_back.n.01"),
+    ("desk_leg.n.01", "desk_bracket.n.01"),
+    ("desk_bracket.n.01", "desk_top.n.01"),
+    ("trampoline_leg.n.01", "trampoline_top.n.01"),
+    ("clothesline_rope.n.01", "pole.n.01"),
+    ("cabinet_door.n.01", "cabinet_base.n.01"),
 ])
 
 VALID_ROOMS = set()
