@@ -8443,18 +8443,18 @@ stages:
       md5: 2941590742764369a634a2300957b555
       size: 12525
     - path: b1k_pipeline/usd_conversion/usdify_objects.py
-      md5: 518abd158fa28d74e291d18521ef6ed7
-      size: 6944
+      md5: fc83c277ededb7354e71fba84a560f54
+      size: 6760
     - path: b1k_pipeline/usd_conversion/usdify_objects_process.py
       md5: 815120f473a24c6529c5b8612dfbb4fa
       size: 2230
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: 76fbf1c9c76f5f6418cc43e0ae2feb55
-      size: 11100341
+      md5: 4dc5ea5f08807dc5e942a7125e5dcecd
+      size: 22004713361
     - path: artifacts/pipeline/usdify_objects.json
-      md5: 611211f78e6095e0e1ce954cbfd75a61
-      size: 82
+      md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
+      size: 51
   export_scene@scenes/Beechwood_1_int:
     cmd: python -m b1k_pipeline.export_scene scenes/Beechwood_1_int
     deps:
