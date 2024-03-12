@@ -160,30 +160,6 @@ stages:
     outs:
     - artifacts/pipeline/export_objs.success
 
-  # generate_scene_images:
-  #   # Generate photos of each scene.
-  #   foreach: ${scenes}
-  #   do:
-  #     cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_images.py'
-  #     deps:
-  #     - b1k_pipeline/max/generate_images.py
-  #     - cad/${item}/processed.max
-  #     outs:
-  #     - cad/${item}/artifacts/top.png
-  #     - cad/${item}/artifacts/generate_images.success
-
-  # generate_camera_images:
-  #   # Generate photos of each camera in each scene.
-  #   foreach: ${final_scenes}
-  #   do:
-  #     cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_camera_images.py'
-  #     deps:
-  #     - b1k_pipeline/max/generate_camera_images.py
-  #     - cad/${item}/processed.max
-  #     outs:
-  #     - cad/${item}/artifacts/camera_images
-  #     - cad/${item}/artifacts/generate_camera_images.success
-
   room_object_list:
     # Generate a list of all objects found in each room in each scene.
     foreach: ${scenes_unfiltered}
@@ -417,14 +393,7 @@ stages:
     - b1k_pipeline/pack_dataset.py
     outs:
     - artifacts/og_dataset.zip
+    - artifacts/og_dataset_demo.zip
     - artifacts/pipeline/pack_dataset.json
     - artifacts/pipeline/pack_dataset.success
 
-  # upload_dataset:
-  #   # Upload the dataset to Cloud Storage.
-  #   cmd: 'python b1k_pipeline/upload_dataset.py'
-  #   deps:
-  #   - artifacts/og_dataset.zip
-  #   - b1k_pipeline/upload_dataset.py
-  #   outs:
-  #   - artifacts/pipeline/upload_dataset.success

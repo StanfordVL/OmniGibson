@@ -76,7 +76,24 @@ def main():
                     objects_dir.removetree(system_dir)
 
             # Now create the demo zip
-            # with fs.zipfs.ZipFS(OUT_FILENAME, write=True) as demo_out_fs:
+            with fs.zipfs.ZipFS(OUT_FILENAME, write=True) as demo_out_fs:
+                # Copy over the Rs_int scene directory
+                fs.copy.copy_fs(out_fs.opendir("scenes/Rs_int"), demo_out_fs.makedirs("scenes/Rs_int"))
+
+                # Copy over the water system directory
+                fs.copy.copy_fs(out_fs.opendir("systems/water"), demo_out_fs.makedirs("systems/water"))
+
+                # Copy over the object directories of ALL objects that are needed for Rs_int
+                rs_int_object_list = json.loads(b1k_pipeline.utils.PipelineFS().target_output("scenes/Rs_int").readtext("object_list.json"))
+                rs_int_needed_objects = {obj.split("-")[1] for obj in rs_int_object_list["needed_objects"]}
+                objects_dir = out_fs.opendir("objects")
+                for cat in objects_dir.listdir("/"):
+                    cat_dir = objects_dir.opendir(cat)
+                    for mdl in cat_dir.listdir("/"):
+                        mdl_dir = cat_dir.opendir(mdl)
+
+                        if mdl in rs_int_needed_objects:
+                            fs.copy.copy_fs(mdl_dir, demo_out_fs.makedirs(f"objects/{cat}/{mdl}", recreate=True))
 
     except Exception as e:
         success = False
