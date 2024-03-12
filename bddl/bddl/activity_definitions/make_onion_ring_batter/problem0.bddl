@@ -9,7 +9,6 @@
         salt.n.02_1 - salt.n.02
         onion_ring_batter.n.01_1 - onion_ring_batter.n.01
         electric_mixer.n.01_1 - electric_mixer.n.01
-        mixing_bowl.n.01_1 - mixing_bowl.n.01
         flour__sack.n.01_1 - flour__sack.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
         onion_powder__shaker.n.01_1 - onion_powder__shaker.n.01
@@ -38,7 +37,6 @@
         (ontop salt__shaker.n.01_1 countertop.n.01_1)
         (ontop onion_powder__shaker.n.01_1 countertop.n.01_1)
         (ontop electric_mixer.n.01_1 countertop.n.01_1) 
-        (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (future onion_ring_batter.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -50,7 +48,7 @@
     (:goal 
         (and 
             (real ?onion_ring_batter.n.01_1) 
-            (contains ?mixing_bowl.n.01_1 ?onion_ring_batter.n.01_1)
+            (contains ?electric_mixer.n.01_1 ?onion_ring_batter.n.01_1)
         )
     )
 )

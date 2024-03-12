@@ -8,7 +8,6 @@
         yeast.n.01_1 - yeast.n.01
         water.n.06_1 - water.n.06
         electric_mixer.n.01_1 - electric_mixer.n.01
-        mixing_bowl.n.01_1 - mixing_bowl.n.01
         bagel.n.01_1 bagel.n.01_2 bagel.n.01_3 bagel.n.01_4 - bagel.n.01
         raw_egg.n.01_1 - raw_egg.n.01
         sesame_seed.n.01_1 - sesame_seed.n.01
@@ -40,7 +39,6 @@
         (ontop yeast__jar.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (ontop electric_mixer.n.01_1 countertop.n.01_2) 
-        (attached mixing_bowl.n.01_1 electric_mixer.n.01_1) 
         (inside raw_egg.n.01_1 bowl.n.01_1) 
         (insource sesame_seed__shaker.n.01_1 sesame_seed.n.01_1) 
         (ontop sesame_seed__shaker.n.01_1 countertop.n.01_3) 
