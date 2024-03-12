@@ -6,7 +6,6 @@ stages:
       cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/new_sanity_check.py batch=true'
       deps:
       - cad/${item}/processed.max
-      # - cad/${item}/textures
       - b1k_pipeline/max/new_sanity_check.py
       outs:
       - cad/${item}/artifacts/sanitycheck.json
@@ -133,57 +132,6 @@ stages:
     outs:
     - artifacts/pipeline/collision_selection_validation.success
 
-  # export_objs:
-  #   # Process exported meshes into iGibson objects.
-  #   foreach: ${combined}
-  #   do:
-  #     cmd: 'python -m b1k_pipeline.export_objs ${item}'
-  #     deps:
-  #     - cad/${item}/artifacts/export_meshes.success
-  #     - cad/${item}/artifacts/meshes
-  #     - cad/${item}/artifacts/object_list.success
-  #     - cad/${item}/artifacts/object_list.json
-  #     - b1k_pipeline/export_objs.py
-  #     - b1k_pipeline/mesh_tree.py
-  #     outs:
-  #     - cad/${item}/artifacts/objects
-  #     - cad/${item}/artifacts/export_objs.json
-
-  # export_objs_success:
-  #   cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/export_objs.json artifacts/pipeline/export_objs.success'
-  #   deps:
-  #   - cad/#{combined}/artifacts/export_objs.json
-  #   - b1k_pipeline/check_success_aggregate.py
-  #   outs:
-  #   - artifacts/pipeline/export_objs.success
-
-  # validate_objs:
-  #   # Validate exported objects.
-  #   foreach: ${combined}
-  #   do:
-  #     cmd: 'python b1k_pipeline/validate_objs.py ${item}'
-  #     deps:
-  #     - cad/${item}/artifacts/objects
-  #     - cad/${item}/artifacts/export_objs.success
-  #     - b1k_pipeline/validate_objs.py
-  #     outs:
-  #     - cad/${item}/artifacts/validate_objs.json
-  #     - cad/${item}/artifacts/validate_objs.success
-
-  # aggregate_objs:
-  #   # Aggregate objects from different entries into a single location.
-  #   cmd: 'python b1k_pipeline/aggregate_objs.py'
-  #   deps:
-  #   - b1k_pipeline/aggregate_objs.py
-  #   - cad/#{combined}/artifacts/export_objs.success
-  #   - cad/#{combined}/artifacts/objects
-  #   - artifacts/pipeline/object_inventory.json
-  #   - artifacts/pipeline/object_inventory.success
-  #   outs:
-  #   - artifacts/aggregate/objects
-  #   - artifacts/pipeline/aggregate_objs.success
-  #   - artifacts/pipeline/aggregate_objs.json
-
   export_objs_global:
     # Process exported meshes into iGibson objects.
     cmd: 'python -m b1k_pipeline.export_objs_global'
@@ -289,42 +237,28 @@ stages:
     outs:
     - artifacts/pipeline/combined_room_object_list_future.json
 
-  export_scene:
+  export_scenes_global:
     # Generate scene URDF file from meshes.
-    foreach: ${final_scenes}
-    do:
-      cmd: 'python -m b1k_pipeline.export_scene ${item}'
-      deps:
-      - artifacts/pipeline/export_meshes.success
-      - cad/${item}/artifacts/meshes.zip
-      - cad/${item}/artifacts/room_object_list.json
-      - cad/${item}/artifacts/room_object_list.success
-      - b1k_pipeline/export_scene.py
-      - b1k_pipeline/export_objs_global.py
-      # - b1k_pipeline/mesh_tree.py
-      outs:
-      - cad/${item}/artifacts/scene.urdf
-      - cad/${item}/artifacts/export_scene.success
-
-  # export_scene_success:
-  #   cmd: 'python b1k_pipeline/check_success_aggregate.py artifacts/export_scene.json artifacts/pipeline/export_scene.success'
-  #   deps:
-  #   - cad/#{scenes}/artifacts/export_scene.json
-  #   - b1k_pipeline/check_success_aggregate.py
-  #   outs:
-  #   - artifacts/pipeline/export_scene.success
-
-  aggregate_scenes:
-    # Aggregate scenes from different entries into a single location.
-    cmd: 'python -m b1k_pipeline.aggregate_scenes'
+    cmd: 'python -m b1k_pipeline.export_scene ${item}'
     deps:
-    - cad/#{final_scenes}/artifacts/scene.urdf
-    - cad/#{final_scenes}/artifacts/export_scene.success
-    - b1k_pipeline/aggregate_scenes.py
-    - params.yaml
+    - artifacts/pipeline/export_meshes.success
+    - cad/#{scenes}/artifacts/meshes.zip
+    - cad/#{scenes}/artifacts/room_object_list.json
+    - cad/#{scenes}/artifacts/room_object_list.success
+    - b1k_pipeline/export_scenes_global.py
+    - b1k_pipeline/export_objs_global.py
+    - b1k_pipeline/mesh_tree.py
     outs:
     - artifacts/parallels/scenes.zip
-    - artifacts/pipeline/aggregate_scenes.success
+    - artifacts/pipeline/export_scenes.json
+
+  export_scenes_global_success:
+    cmd: 'python -m b1k_pipeline.check_success artifacts/pipeline/export_scenes.json artifacts/pipeline/export_scenes.success'
+    deps:
+    - artifacts/pipeline/export_scenes.json
+    - b1k_pipeline/check_success.py
+    outs:
+    - artifacts/pipeline/export_scenes.success
 
   validate_scenes:
     # Validate exported scene, e.g. physics stability.
@@ -351,9 +285,9 @@ stages:
     - artifacts/parallels/objects.zip
     - artifacts/parallels/metadata.zip
     - artifacts/parallels/fillable_volumes.zip
-    # - artifacts/pipeline/export_objs.success
+    - artifacts/pipeline/export_objs.success
     - artifacts/pipeline/aggregate_metadata.success
-    # - b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
+    - b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
     - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
     - b1k_pipeline/usd_conversion/import_metadata.py
     - b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
@@ -378,9 +312,9 @@ stages:
     - artifacts/parallels/objects_usd.zip
     - artifacts/parallels/scenes.zip
     - artifacts/parallels/metadata.zip
-    # - artifacts/pipeline/export_objs.success
+    - artifacts/pipeline/export_objs.success
+    - artifacts/pipeline/export_scenes.success
     - artifacts/pipeline/aggregate_metadata.success
-    - artifacts/pipeline/aggregate_scenes.success
     - b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
     - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
     - b1k_pipeline/usd_conversion/import_metadata.py
@@ -448,7 +382,7 @@ stages:
     deps:
     - b1k_pipeline/aggregate_metadata.py
     - artifacts/pipeline/object_inventory.json
-    # - artifacts/pipeline/object_inventory.success
+    - artifacts/pipeline/object_inventory.success
     - metadata/category_mapping.csv
     - metadata/non_sampleable_categories.csv
     - metadata/allowed_room_types.csv
@@ -475,7 +409,6 @@ stages:
     - artifacts/pipeline/usdify_objects.success
     - artifacts/pipeline/usdify_scenes.success
     - artifacts/pipeline/generate_systems.success
-    # - artifacts/pipeline/export_objs.success
     - artifacts/parallels/metadata.zip
     - artifacts/parallels/objects_usd.zip
     - artifacts/parallels/scenes_json.zip

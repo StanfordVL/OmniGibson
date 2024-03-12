@@ -20,7 +20,7 @@ ALLOWED_PART_TAGS = {
     "connectedpart",
 }
 
-def main(target):
+def process_target(target, scenes_dir):
     scene_name = os.path.split(target)[-1]
     pipeline_fs = b1k_pipeline.utils.PipelineFS()
 
@@ -130,12 +130,41 @@ def main(target):
     xmlstr = minidom.parseString(ET.tostring(scene_tree_root)).toprettyxml(indent="   ")
     xmlio = io.StringIO(xmlstr)
     tree = ET.parse(xmlio)
-    with target_output_fs.open("scene.urdf", "wb") as f:
+    with scenes_dir.makedir(scene_name).makedir("urdf").open(f"{scene_name}_best.urdf", "wb") as f:
         tree.write(f, xml_declaration=True)
 
-    # If we got here, we were successful. Let's create the success file.
-    with target_output_fs.open("export_scene.success", "w"):
-        pass
+def main():
+    with b1k_pipeline.utils.ParallelZipFS("scenes.zip", write=True) as archive_fs:
+        scenes_dir = archive_fs.makedir("objects").getsyspath("/")
+        errors = {}
+        target_futures = {}
+     
+        with futures.ProcessPoolExecutor(max_workers=16) as target_executor:
+            targets = get_targets("final_scenes")
+            for target in tqdm.tqdm(targets):
+                target_futures[target_executor.submit(process_target, target, scenes_dir)] = target
+            
+            with tqdm.tqdm(total=len(target_futures)) as pbar:
+                for future in futures.as_completed(target_futures.keys()):
+                    try:
+                        result = future.result()
+                    except:
+                        name = target_futures[future]
+                        errors[name] = traceback.format_exc()
+
+                    pbar.update(1)
+
+                    remaining_targets = [v for k, v in target_futures.items() if not k.done()]
+                    if len(remaining_targets) < 10:
+                        print("Remaining:", remaining_targets)
+
+            print("Time for executor shutdown")
+
+        print("Finished processing")
+
+    pipeline_fs = b1k_pipeline.utils.PipelineFS()
+    with pipeline_fs.pipeline_output().open("export_scenes.json", "w") as f:
+        json.dump({"success": not errors, "errors": errors}, f)
 
 
 if __name__ == "__main__":

@@ -124,8 +124,8 @@ def main():
     combined_unfiltered = objects_unfiltered + scenes_unfiltered
 
     # TODO: Revert this to filter out non-final scenes
-    # found_final_scenes = # set(FINAL_SCENES) & set(approved_scenes)
-    found_final_scenes = set(approved_scenes)
+    found_final_scenes = set(FINAL_SCENES) & set(approved_scenes)
+    # found_final_scenes = set(approved_scenes)
     missing_final_scene_paths = set(FINAL_SCENES) - found_final_scenes
     if missing_final_scene_paths:
         print(f"Missing scenes: {missing_final_scene_paths}")
