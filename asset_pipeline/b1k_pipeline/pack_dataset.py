@@ -77,6 +77,9 @@ def main():
 
             # Now create the demo zip
             with fs.zipfs.ZipFS(DEMO_OUT_FILENAME, write=True) as demo_out_fs:
+                # Copy over the metadata directory
+                fs.copy.copy_fs(out_fs.opendir("metadata"), demo_out_fs.makedirs("metadata"))
+
                 # Copy over the Rs_int scene directory
                 fs.copy.copy_fs(out_fs.opendir("scenes/Rs_int"), demo_out_fs.makedirs("scenes/Rs_int"))
 
