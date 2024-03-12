@@ -1299,7 +1299,7 @@ class FluidSystem(MicroPhysicalParticleSystem):
 
     @classproperty
     def particle_particle_rest_distance(cls):
-        # 0.6 is magic hardcoded number, random guess based on intuition from https://docs.omniverse.nvidia.com/extensions/latest/ext_physics/physics-particles.html#particle-particle-interaction
+        # Magic number, based on intuition from https://docs.omniverse.nvidia.com/extensions/latest/ext_physics/physics-particles.html#particle-particle-interaction
         return cls.particle_radius * 2.0 * m.FLUID_PARTICLE_PARTICLE_DISTANCE_SCALE
 
     @classproperty
