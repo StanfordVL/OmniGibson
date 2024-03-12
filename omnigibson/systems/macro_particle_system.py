@@ -23,7 +23,7 @@ log = create_module_logger(module_name=__name__)
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
 
-m.MIN_PARTICLE_RADIUS = 0.005   # Minimum particle radius for physical macro particles
+m.MIN_PARTICLE_RADIUS = 0.01   # Minimum particle radius for physical macro particles
 
 
 class MacroParticleSystem(BaseSystem):
