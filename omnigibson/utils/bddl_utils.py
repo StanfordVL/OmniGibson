@@ -829,8 +829,15 @@ class BDDLSampler:
                                 entity = self._object_scope[child_scope_name]
                                 conditions_to_sample.append((condition, positive, entity, child_scope_name))
 
-                        # Sort children based on their AABB so the larger objects are sampled first
-                        conditions_to_sample = reversed(sorted(conditions_to_sample, key=lambda x: np.product(x[2].aabb_extent)))
+                        # If we're sampling kinematics, sort children based on (a) whether they are cloth or not, and
+                        # then (b) their AABB, so that first all rigid objects are sampled before rigid objects,
+                        # and within each group the larger objects are sampled first
+                        rigid_conditions = [c for c in conditions_to_sample if c[2].prim_type != PrimType.CLOTH]
+                        cloth_conditions = [c for c in conditions_to_sample if c[2].prim_type == PrimType.CLOTH]
+                        conditions_to_sample = (
+                                list(reversed(sorted(rigid_conditions, key=lambda x: np.product(x[2].aabb_extent)))) +
+                                list(reversed(sorted(cloth_conditions, key=lambda x: np.product(x[2].aabb_extent))))
+                        )
 
                         # Sample!
                         for condition, positive, entity, child_scope_name in conditions_to_sample:
@@ -1075,10 +1082,16 @@ class BDDLSampler:
                             entity = self._object_scope[child_scope_name]
                             conditions_to_sample.append((condition, positive, entity, child_scope_name))
 
-                    # If we're sampling kinematics, sort children based on their AABB, so that the larger objects
-                    # are sampled first
+                    # If we're sampling kinematics, sort children based on (a) whether they are cloth or not, and then
+                    # (b) their AABB, so that first all rigid objects are sampled before cloth objects, and within each
+                    # group the larger objects are sampled first
                     if group == "kinematic":
-                        conditions_to_sample = reversed(sorted(conditions_to_sample, key=lambda x: np.product(x[2].aabb_extent)))
+                        rigid_conditions = [c for c in conditions_to_sample if c[2].prim_type != PrimType.CLOTH]
+                        cloth_conditions = [c for c in conditions_to_sample if c[2].prim_type == PrimType.CLOTH]
+                        conditions_to_sample = (
+                                list(reversed(sorted(rigid_conditions, key=lambda x: np.product(x[2].aabb_extent)))) +
+                                list(reversed(sorted(cloth_conditions, key=lambda x: np.product(x[2].aabb_extent))))
+                        )
 
                     # Sample!
                     for condition, positive, entity, child_scope_name in conditions_to_sample:
