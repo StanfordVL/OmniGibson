@@ -21,7 +21,7 @@ declare -A ENVS=(
     [NVIDIA_VISIBLE_DEVICES]=0
     [DISPLAY]=""
     [OMNIGIBSON_HEADLESS]=1
-    [CREDENTIALS_FPATH]=/cvgl/group/Gibson/og-data-0-3-0/key.json
+    [CREDENTIALS_FPATH]=/cvgl/group/Gibson/og-data-1-0-0/key.json
     [SAMPLING_SCENE_MODEL]=""
     [SAMPLING_ACTIVITIES]=""
     [SAMPLING_START_AT]=""
@@ -60,7 +60,7 @@ done
 
 # Define mounts to create (maps local directory to container directory)
 declare -A MOUNTS=(
-    [/cvgl/group/Gibson/og-data-0-3-0]=/data
+    [/cvgl/group/Gibson/og-data-1-0-0]=/data
     [${ISAAC_CACHE_PATH}/isaac-sim/kit/cache/Kit]=/isaac-sim/kit/cache/Kit
     [${ISAAC_CACHE_PATH}/isaac-sim/cache/ov]=/root/.cache/ov
     [${ISAAC_CACHE_PATH}/isaac-sim/cache/pip]=/root/.cache/pip
@@ -87,7 +87,7 @@ done
 
 # Create the image if it doesn't already exist
 CONTAINER_NAME=omnigibson_${GPU_ID}
-enroot create --force --name ${CONTAINER_NAME} /cvgl/group/Gibson/og-data-0-3-0/omnigibson-dev.sqsh
+enroot create --force --name ${CONTAINER_NAME} /cvgl/group/Gibson/og-data-1-0-0/omnigibson-dev.sqsh
 
 # Remove leading space in string
 ENV_KWARGS="${ENV_KWARGS:1}"

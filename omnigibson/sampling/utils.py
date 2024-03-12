@@ -25,7 +25,7 @@ folder_path = os.path.dirname(os.path.abspath(__file__))
 
 SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
 CREDENTIALS = os.environ.get("CREDENTIALS_FPATH", os.path.join(folder_path, "key.json"))
-WORKSHEET = "GTC2024 - 5a2d64"
+WORKSHEET = "GTC2024 - 8dd81c"
 USER = getpass.getuser()
 
 client = gspread.service_account(filename=CREDENTIALS)
@@ -59,6 +59,16 @@ def write_scenes_to_spreadsheet():
     for cell, scene in zip(cell_list, scenes_sorted):
         cell.value = scene
     worksheet.update_cells(cell_list)
+
+
+def get_worksheet_scene_row(scene_model):
+    scenes_sorted = get_scenes()
+
+    # Fill in this value to reserve it
+    idx = scenes_sorted.index(scene_model)
+    scene_row = 2 + idx
+
+    return scene_row
 
 
 def validate_scene_can_be_sampled(scene):
@@ -232,7 +242,7 @@ def _validate_object_state_stability(obj_name, obj_dict, strict=False):
     # If all passes, return True
     return True, None
 
-def create_stable_scene_json(scene_model):
+def create_stable_scene_json(scene_model, record_feedback=False):
     cfg = {
         "scene": {
             "type": "InteractiveTraversableScene",
@@ -265,6 +275,12 @@ def create_stable_scene_json(scene_model):
         print("Creating stable scene failed! Invalid messages:")
         for msg in invalid_msgs:
             print(msg)
+
+        # record this feedback if requested
+        if record_feedback:
+            feedback = "\n".join(invalid_msgs)
+            scene_row = get_worksheet_scene_row(scene_model=scene_model)
+            worksheet.update_acell(f"AA{scene_row}", feedback)
         raise ValueError("Scene is not stable!")
 
     for obj in env.scene.objects:
@@ -274,6 +290,11 @@ def create_stable_scene_json(scene_model):
     # Save this as a stable file
     path = os.path.join(gm.DATASET_PATH, "scenes", og.sim.scene.scene_model, "json", f"{scene_model}_stable.json")
     og.sim.save(json_path=path)
+
+    # record this feedback if requested
+    if record_feedback:
+        scene_row = get_worksheet_scene_row(scene_model=scene_model)
+        worksheet.update_acell(f"Z{scene_row}", 1)
 
     og.sim.stop()
     og.sim.clear()
