@@ -76,7 +76,7 @@ def main():
                     objects_dir.removetree(system_dir)
 
             # Now create the demo zip
-            with fs.zipfs.ZipFS(OUT_FILENAME, write=True) as demo_out_fs:
+            # with fs.zipfs.ZipFS(OUT_FILENAME, write=True) as demo_out_fs:
 
     except Exception as e:
         success = False
