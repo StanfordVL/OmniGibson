@@ -164,19 +164,20 @@ def main(random_selection=False, headless=False, short_exec=False):
             else:
                 continue
 
-        # sleep to avoid gspread query limits
-        time.sleep(np.random.uniform(1.0, 3.0))
-
         # Don't sample any invalid activities
         if activity not in valid_tasks:
             continue
 
-        if activity not in ACTIVITY_TO_ROW:
-            continue
-
         if not args.offline:
+            if activity not in ACTIVITY_TO_ROW:
+                continue
+
             # Get info from spreadsheet
             row = ACTIVITY_TO_ROW[activity]
+
+            # sleep to avoid gspread query limits
+            time.sleep(np.random.uniform(1.0, 3.0))
+
             in_progress, success, validated, scene_id, user, reason, exception, misc = worksheet.get(f"B{row}:I{row}")[0]
 
             # If we manually do not want to sample the task (DO NOT SAMPLE == "DNS", skip)
