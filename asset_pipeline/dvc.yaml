@@ -1929,6 +1929,7 @@ stages:
     - b1k_pipeline/pack_dataset.py
     outs:
     - artifacts/og_dataset.zip
+    - artifacts/og_dataset_demo.zip
     - artifacts/pipeline/pack_dataset.json
     - artifacts/pipeline/pack_dataset.success
   room_object_list:

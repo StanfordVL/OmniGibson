@@ -76,7 +76,7 @@ def main():
                     objects_dir.removetree(system_dir)
 
             # Now create the demo zip
-            with fs.zipfs.ZipFS(OUT_FILENAME, write=True) as demo_out_fs:
+            with fs.zipfs.ZipFS(DEMO_OUT_FILENAME, write=True) as demo_out_fs:
                 # Copy over the Rs_int scene directory
                 fs.copy.copy_fs(out_fs.opendir("scenes/Rs_int"), demo_out_fs.makedirs("scenes/Rs_int"))
 
