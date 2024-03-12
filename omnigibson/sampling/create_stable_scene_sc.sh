@@ -4,9 +4,9 @@
 #SBATCH --nodes=1
 #SBATCH --exclude=svl8,svl18
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=60G
-#SBATCH --gres=gpu:titanrtx:1
-#SBATCH --time=0-24:00:00
+#SBATCH --mem=40G
+#SBATCH --gres=gpu:1
+#SBATCH --time=0-1:00:00
 #SBATCH --output=%j.out
 #SBATCH --error=%j.err
 
