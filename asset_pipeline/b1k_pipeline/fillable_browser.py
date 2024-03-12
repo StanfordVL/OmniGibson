@@ -10,7 +10,7 @@ from scipy.spatial.transform import Rotation as R
 import tqdm
 
 import igibson
-igibson.ig_dataset_path = "/scr/ig_pipeline/tmp/export_objs2"
+igibson.ig_dataset_path = "/scr/ig_pipeline/tmp/export_objs3"
 
 from igibson.simulator import Simulator
 from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
@@ -33,7 +33,7 @@ def main():
     ])
     print("Found", len(fillable_paths), "fillable objects out of", len(fillable_models))
 
-    START_ID = 350
+    START_ID = 0
     for i, path in enumerate(fillable_paths[START_ID:START_ID+250]):
         ctr_x = i * 1.2
         metadata = json.loads((pathlib.Path(path).parent / "misc/metadata.json").read_text())

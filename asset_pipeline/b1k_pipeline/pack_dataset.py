@@ -22,6 +22,7 @@ SUCCESS_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "art
 IN_FILENAME_AGGREGATE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "aggregate")
 PARALLELS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "parallels")
 OUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "og_dataset.zip")
+DEMO_OUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "og_dataset_demo.zip")
 PARALLELS = [
     "objects_usd.zip",
     "metadata.zip",
@@ -73,6 +74,9 @@ def main():
                 if objects_dir.exists(system_dir):
                     print("Removing", system_dir)
                     objects_dir.removetree(system_dir)
+
+            # Now create the demo zip
+            with fs.zipfs.ZipFS(OUT_FILENAME, write=True) as demo_out_fs:
 
     except Exception as e:
         success = False

@@ -7,6 +7,9 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 from fs.zipfs import ZipFS
 from scipy.spatial.transform import Rotation as R
+from concurrent import futures
+import tqdm
+import traceback
 
 from b1k_pipeline.mesh_tree import build_mesh_tree
 from b1k_pipeline.export_objs_global import compute_object_bounding_box
@@ -140,7 +143,7 @@ def main():
         target_futures = {}
      
         with futures.ProcessPoolExecutor(max_workers=16) as target_executor:
-            targets = get_targets("final_scenes")
+            targets = b1k_pipeline.utils.get_targets("final_scenes")
             for target in tqdm.tqdm(targets):
                 target_futures[target_executor.submit(process_target, target, scenes_dir)] = target
             
