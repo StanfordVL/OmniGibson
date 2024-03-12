@@ -1579,15 +1579,6 @@ stages:
     - b1k_pipeline/check_success.py
     outs:
     - artifacts/pipeline/export_scenes.success
-  generate_object_images:
-    cmd: python -m b1k_pipeline.generate_object_images_slurm
-    deps:
-    - b1k_pipeline/generate_object_images_slurm.py
-    - b1k_pipeline/generate_object_images_og.py
-    - artifacts/parallels/objects_usd.zip
-    - artifacts/pipeline/usdify_objects.success
-    outs:
-    - artifacts/pipeline/object_images.zip
   generate_systems:
     cmd: python -m b1k_pipeline.generate_systems
     deps:

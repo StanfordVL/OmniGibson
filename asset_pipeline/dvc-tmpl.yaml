@@ -80,17 +80,6 @@ stages:
     outs:
     - artifacts/pipeline/object_inventory_future.json
 
-  generate_object_images:
-    # Generate photos of each object found in each entry.
-    cmd: 'python -m b1k_pipeline.generate_object_images_slurm'
-    deps:
-    - b1k_pipeline/generate_object_images_slurm.py
-    - b1k_pipeline/generate_object_images_og.py
-    - artifacts/parallels/objects_usd.zip
-    - artifacts/pipeline/usdify_objects.success
-    outs:
-    - artifacts/pipeline/object_images.zip
-
   export_meshes:
     # Export meshes from 3dsmax as obj/mtl files with baked textures.
     foreach: ${combined}
