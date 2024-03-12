@@ -24,19 +24,13 @@ def main():
             with pipeline_output_dir.open("collision_average_volumes.json", "r") as f:
                 collision_average_volumes = json.load(f)["volumes"]
 
-            # assert object_inventory["success"], "Object inventory was unsuccessful."
-
-            categories = {
-                obj.split("-")[0] for obj in object_inventory["providers"].keys()
-            }
-
             # For now, get categories from CSV file
             categories_by_id = {}
             avg_category_specs = {}
             with metadata_in_dir.open("category_mapping.csv", newline="") as csvfile:
                 reader = csv.DictReader(csvfile)
-                for row in reader:
-                    cat_id = int(row["id"].strip())
+                for i, row in enumerate(reader):
+                    cat_id = i  # Temporarily just use row idx. TODO: Cover everything
                     category = row["category"].strip()
                     categories_by_id[cat_id] = category
 
@@ -45,15 +39,15 @@ def main():
                     density = mass / volume if mass and volume else None
 
                     avg_category_specs[category] = {
-                        "enable_ag": None,
+                        # "enable_ag": None,
                         "mass": mass,
-                        "size": None,
+                        # "size": None,
                         "volume": volume,
                         "density": density,
                     }
 
             # Validate: have we found all categories on the list?
-            for cat in categories:
+            for cat in avg_category_specs:
                 if cat not in categories_by_id.values():
                     error_msgs.append(f"Could not find ID for category {cat}")
 
@@ -81,14 +75,6 @@ def main():
 
             # Only continue if no errors are found by now
             # assert not error_msgs
-
-            # Narrow the data down to existing categories
-            categories_by_id = {
-                k: v for k, v in categories_by_id.items() if v in categories
-            }
-            avg_category_specs = {
-                k: v for k, v in sorted(avg_category_specs.items()) if k in categories
-            }
 
             # Fill missing IDs with spaces
             category_ids = [

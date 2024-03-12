@@ -140,6 +140,7 @@ stages:
     - cad/#{combined}/artifacts/collision_meshes.zip
     - cad/#{combined}/artifacts/collision_selection.json
     - cad/#{combined}/artifacts/object_list.json
+    - metadata/orientation_edits.zip
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/collision_selection_validation.success
     - artifacts/pipeline/object_inventory.success

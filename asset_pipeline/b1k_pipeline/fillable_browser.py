@@ -10,7 +10,7 @@ from scipy.spatial.transform import Rotation as R
 import tqdm
 
 import igibson
-igibson.ig_dataset_path = "/scr/ig_pipeline/tmp/export_objs3"
+igibson.ig_dataset_path = "/scr/ig_pipeline/tmp/fedafr"
 
 from igibson.simulator import Simulator
 from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
