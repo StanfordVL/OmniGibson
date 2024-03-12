@@ -139,7 +139,7 @@ def process_target(target, scenes_dir):
 
 def main():
     with b1k_pipeline.utils.ParallelZipFS("scenes.zip", write=True) as archive_fs:
-        scenes_dir = archive_fs.makedir("objects").getsyspath("/")
+        scenes_dir = archive_fs.makedir("scenes").getsyspath("/")
         errors = {}
         target_futures = {}
      
