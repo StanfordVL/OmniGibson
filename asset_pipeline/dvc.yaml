@@ -1390,7 +1390,7 @@ stages:
     outs:
     - artifacts/pipeline/export_objs.success
   export_scenes_global:
-    cmd: python -m b1k_pipeline.export_scene ${item}
+    cmd: python -m b1k_pipeline.export_scenes_global
     deps:
     - artifacts/pipeline/export_meshes.success
     - cad/scenes/Beechwood_0_garden/artifacts/meshes.zip

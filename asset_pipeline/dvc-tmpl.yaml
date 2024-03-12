@@ -239,7 +239,7 @@ stages:
 
   export_scenes_global:
     # Generate scene URDF file from meshes.
-    cmd: 'python -m b1k_pipeline.export_scene ${item}'
+    cmd: 'python -m b1k_pipeline.export_scenes_global'
     deps:
     - artifacts/pipeline/export_meshes.success
     - cad/#{scenes}/artifacts/meshes.zip
