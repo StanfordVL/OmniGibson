@@ -32,21 +32,6 @@
                 (and 
                     (draped ?jersey.n.03_1 ?hanger.n.02_1)
                     (not 
-                        (draped ?belt.n.02_1 ?hanger.n.02_1)
-                    )
-                    (not 
-                        (draped ?underwear.n.01_1 ?hanger.n.02_1)
-                    )
-                )
-            )
-            (exists 
-                (?hanger.n.02 - hanger.n.02)
-                (and 
-                    (draped ?belt.n.02_1 ?hanger.n.02_1)
-                    (not 
-                        (draped ?jersey.n.03_1 ?hanger.n.02_1)
-                    )
-                    (not 
                         (draped ?underwear.n.01_1 ?hanger.n.02_1)
                     )
                 )
@@ -56,14 +41,12 @@
                 (and 
                     (draped ?underwear.n.01_1 ?hanger.n.02_1)
                     (not 
-                        (draped ?belt.n.02_1 ?hanger.n.02_1)
-                    )
-                    (not 
                         (draped ?jersey.n.03_1 ?hanger.n.02_1)
                     )
                 )
             )
             (nextto ?wicker_basket.n.01_1 ?wardrobe.n.01_1)
+            (inside ?belt.n.02_1 ?wardrobe.n.01_1)
         )
     )
 )
