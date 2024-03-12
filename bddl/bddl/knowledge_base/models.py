@@ -319,7 +319,7 @@ class Synset(Model):
         ]
         for property, meta_link in particle_pairs:
             if property in properties:
-                if 'method' in properties[property] and properties[property]['method'] != 1: # not projection
+                if 'method' in properties[property] and properties[property]['method'] != "projection":
                     continue
                 required_links.add(meta_link)
 
