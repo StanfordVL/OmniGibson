@@ -88,6 +88,9 @@ gm.GPU_AGGR_PAIRS_CAPACITY = (2 ** 14) * 1024
 # Maximum particle contacts allowed
 gm.GPU_MAX_PARTICLE_CONTACTS = 1024 * 1024
 
+# Maximum rigid patch contacts
+gm.GPU_MAX_RIGID_PATCH_COUNT = 256 * 1024
+
 # Whether to enable object state logic or not
 gm.ENABLE_OBJECT_STATES = True
 
