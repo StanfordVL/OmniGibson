@@ -201,6 +201,15 @@ def parse_task_mapping(fpath):
     return mapping
 
 
+def get_dns_activities():
+    n_tasks = len(get_valid_tasks())
+    return {val[0] for val in worksheet.get(f"A{2}:C{2 + n_tasks - 1}") if val[-1] is not None and str(val[-1]).lower() == "dns"}
+
+def get_non_misc_activities():
+    n_tasks = len(get_valid_tasks())
+    return {val[0] for val in worksheet.get(f"A{2}:I{2 + n_tasks - 1}") if val[-1] == "-"}
+
+
 def get_scene_compatible_activities(scene_model, mapping):
     return [activity for activity, scenes in mapping.items() if scene_model in scenes]
 
