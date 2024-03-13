@@ -202,7 +202,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
         # Skip any with unsupported predicates, but still record the reason why we can't sample
         conditions = Conditions(activity, 0, simulator_name="omnigibson")
-        all_predicates = set(get_predicates(conditions.parsed_initial_conditions) + get_predicates(conditions.parsed_goal_conditions)))
+        all_predicates = set(get_predicates(conditions.parsed_initial_conditions) + get_predicates(conditions.parsed_goal_conditions))
         unsupported_predicates = set.intersection(all_predicates, UNSUPPORTED_PREDICATES)
         if len(unsupported_predicates) > 0:
             should_sample = False
