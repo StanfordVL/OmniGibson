@@ -2,7 +2,6 @@
 #SBATCH --account=cvgl
 #SBATCH --partition=svl --qos=normal
 #SBATCH --nodes=1
-#SBATCH --exclude=svl8,svl18
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=60G
 #SBATCH --gres=gpu:titanrtx:1
