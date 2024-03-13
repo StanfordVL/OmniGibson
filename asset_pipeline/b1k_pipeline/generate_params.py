@@ -144,7 +144,6 @@ def main():
         "verified_scenes": verified_scenes,
         "combined": combined,
         "combined_unfiltered": combined_unfiltered,
-        "root_path": root_path,
     }
     with open(out_path, "w") as f:
         yaml.dump(params, f)
