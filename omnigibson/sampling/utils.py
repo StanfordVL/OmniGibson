@@ -29,8 +29,13 @@ CREDENTIALS = os.environ.get("CREDENTIALS_FPATH", os.path.join(folder_path, "key
 WORKSHEET = "GTC2024 - 8dd81c"
 USER = getpass.getuser()
 
-client = gspread.service_account(filename=CREDENTIALS)
-worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
+for _ in range(120):
+    try:
+        client = gspread.service_account(filename=CREDENTIALS)
+        worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
+        break
+    except:
+        time.sleep(1.0)
 
 class RetryWrapper:
     def __init__(self, obj, retries=120, delay=1.0):
