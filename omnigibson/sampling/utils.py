@@ -10,6 +10,7 @@ import bddl
 import gspread
 import getpass
 import copy
+import time
 from omnigibson.macros import gm, macros
 
 """
@@ -30,6 +31,27 @@ USER = getpass.getuser()
 
 client = gspread.service_account(filename=CREDENTIALS)
 worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
+
+class RetryWrapper:
+    def __init__(self, obj, retries=60, delay=1.0):
+        self.obj = obj
+        self.retries = retries
+        self.delay = delay
+
+    def __getattr__(self, attr):
+        orig_attr = getattr(self.obj, attr)
+        def wrapped(*args, **kwargs):
+            for _ in range(self.retries):
+                try:
+                    result = orig_attr(*args, **kwargs)
+                    return result
+                except Exception as e:
+                    print(f"Exception caught: {e}")
+                    time.sleep(self.delay)
+            raise Exception(f"Failed after {self.retries} retries")
+        return wrapped
+
+worksheet = RetryWrapper(worksheet)
 
 ACTIVITY_TO_ROW = {activity: i + 2 for i, activity in enumerate(worksheet.col_values(1)[1:])}
 
