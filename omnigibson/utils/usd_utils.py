@@ -795,7 +795,7 @@ def check_extent_radius_ratio(mesh_prim):
     trimesh_mesh_world = mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=False, include_texcoord=False, world_frame=True)
     min_extent = trimesh_mesh_world.extents.min()
     # If the mesh is too flat in the world frame, omniverse cannot create convex mesh for it
-    if min_extent < 1e-7:
+    if min_extent < 1e-5:
         return False
 
     trimesh_mesh = mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=False, include_texcoord=False, world_frame=False)
