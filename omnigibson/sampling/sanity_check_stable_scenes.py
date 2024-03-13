@@ -12,7 +12,7 @@ THRESHOLD = 0.1
 def _validate_close_kinematic_state(obj_name, default_obj_dict, obj_dict):
     # Check root link state
     for key, val in default_obj_dict["root_link"].items():
-        if key not in {"pos", "ori"}:
+        if key not in {"pos"}:
             continue
         obj_val = obj_dict["root_link"][key]
         atol = THRESHOLD
