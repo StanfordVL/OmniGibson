@@ -45,7 +45,7 @@ def main():
         if len(error_msgs) == 0:
             info[scene_model] = 1
         else:
-            info[scene_model] = "\n".join(error_msgs)
+            info[scene_model] = "\n".join(sorted(error_msgs))
 
     # Write to spreadsheet
     idx_to_scene = {i: sc for i, sc in enumerate(get_scenes())}
