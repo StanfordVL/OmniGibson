@@ -24,6 +24,19 @@ ALLOWED_PART_TAGS = {
     "connectedpart",
 }
 
+OBJECT_CORRECTIONS = {
+    "office_large": {
+        "bottom_cabinet_bamfsz_52": ([0.0, -0.02, 0.0], [0.0, 0.0, 0.0]),
+        "bottom_cabinet_bamfsz_53": ([0.0, -0.02, 0.], [0.0, 0.0, 0.0]),
+        "bottom_cabinet_bamfsz_56": ([0.02, 0.0, 0.0], [0.0, 0.0, 0.0]),
+        "bottom_cabinet_bamfsz_57": ([0.02, 0.0, 0.0], [0.0, 0.0, 0.0]),
+        "bottom_cabinet_bamfsz_58": ([-0.02, 0.0, 0.0], [0.0, 0.0, 0.0]),
+        "bottom_cabinet_bamfsz_59": ([-0.02, 0.0, 0.0], [0.0, 0.0, 0.0]),
+        "fridge_juwaoh_0": ([0.0, 0.0, 0.0], [-np.pi / 2.0 , 0.0, 0.0]),
+        "fridge_juwaoh_1": ([0.0, 0.0, 0.0], [-np.pi / 2.0, 0.0, 0.0]),
+    }
+}
+
 def process_target(target, scenes_dir):
     scene_name = os.path.split(target)[-1]
     pipeline_fs = b1k_pipeline.utils.PipelineFS()
@@ -103,6 +116,13 @@ def process_target(target, scenes_dir):
             assert corrected_bbox_transform[3, 3] == 1, "Homogeneous coordinate should be 1"
             corrected_bbox_center = corrected_bbox_transform[:3, 3]
             corrected_bbox_rot = R.from_matrix(corrected_bbox_transform[:3, :3])
+
+            # Apply any manual corrections
+            if scene_name in OBJECT_CORRECTIONS and obj_name_in_scene in OBJECT_CORRECTIONS[scene_name]:
+                print("Correcting object", obj_name_in_scene, "in", scene_name)
+                correction = OBJECT_CORRECTIONS[scene_name][obj_name_in_scene]
+                corrected_bbox_center += correction[0]
+                corrected_bbox_rot = R.from_euler("xyz", correction[1]) * corrected_bbox_rot
 
             # Save pose to scene URDF
             scene_link = ET.SubElement(scene_tree_root, "link")
