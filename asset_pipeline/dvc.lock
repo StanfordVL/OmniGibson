@@ -1258,8 +1258,8 @@ stages:
       md5: dc6210569748bc3f9875a148c181e8eb
       size: 339445
     - path: params.yaml
-      md5: 79e98b29f7f025aa3897e61693b5fa9b
-      size: 11083
+      md5: 3c6a1c48811fc91bd89e986a8d540ea3
+      size: 12211
     outs:
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -1541,8 +1541,8 @@ stages:
       md5: dc6210569748bc3f9875a148c181e8eb
       size: 339445
     - path: params.yaml
-      md5: 79e98b29f7f025aa3897e61693b5fa9b
-      size: 11083
+      md5: 3c6a1c48811fc91bd89e986a8d540ea3
+      size: 12211
     outs:
     - path: artifacts/pipeline/object_inventory.json
       md5: 4bad4cddaf0131479aba186f8d9e21e5
@@ -4286,8 +4286,8 @@ stages:
       md5: 50380e7647a34c18af72965e5ec76a1f
       size: 137
     - path: params.yaml
-      md5: 79e98b29f7f025aa3897e61693b5fa9b
-      size: 11083
+      md5: 3c6a1c48811fc91bd89e986a8d540ea3
+      size: 12211
     outs:
     - path: artifacts/pipeline/sanitycheck.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -7277,8 +7277,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/export_objs_global.py
-      md5: 5695a2b0c4b1de79fd32042f7354eed1
-      size: 31596
+      md5: b1b10075d7b5fe76844b5d9d321181b0
+      size: 32266
     - path: b1k_pipeline/mesh_tree.py
       md5: 7ed516b18128f96cb05dfea5974e193c
       size: 14897
@@ -8356,8 +8356,8 @@ stages:
       size: 201675
     outs:
     - path: artifacts/parallels/objects.zip
-      md5: 4806f32166ca36bdcfd7282c5615beba
-      size: 19216079716
+      md5: 337b0b1c59375bfe9e917525099564b1
+      size: 5658551
     - path: artifacts/pipeline/export_objs.json
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
       size: 31

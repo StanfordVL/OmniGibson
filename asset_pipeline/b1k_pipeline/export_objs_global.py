@@ -281,9 +281,20 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         # Save and merge precomputed collision mesh
         canonical_collision_meshes = []
         collision_filenames_and_scales = []
+        canonical_mesh_min, canonical_mesh_max = canonical_mesh.bounds
+        canonical_mesh_extent = canonical_mesh_max - canonical_mesh_min
+        collision_mesh_min = canonical_mesh_min.copy()
+        collision_mesh_min[canonical_mesh_extent < 0.01] = -np.inf
+        collision_mesh_max = canonical_mesh_max.copy()
+        collision_mesh_max[canonical_mesh_extent < 0.01] = np.inf
         for i, collision_mesh in enumerate(G.nodes[link_node]["collision_mesh"]):
             canonical_collision_mesh = transform_mesh(collision_mesh, mesh_center, canonical_orientation)
+
+            # Along axes where the object is bigger than 1cm, project the collision mesh to the object's AABB to help with overapproximations
+            canonical_collision_mesh.vertices = np.clip(canonical_collision_mesh.vertices, collision_mesh_min, collision_mesh_max)
+
             canonical_collision_mesh._cache.cache["vertex_normals"] = canonical_collision_mesh.vertex_normals
+
             collision_filename = obj_relative_path.replace(".obj", f"-{i}.obj")
             collision_scale = save_mesh_unit_bbox(canonical_collision_mesh, obj_link_collision_mesh_folder_fs, collision_filename)
             collision_filenames_and_scales.append((collision_filename, collision_scale))
