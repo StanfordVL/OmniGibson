@@ -40,6 +40,8 @@ def main():
 
         # Start the batched run
         object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
+        object_names = ["-".join(x.split("/")[-3:-1]) for x in object_glob]
+        object_glob = [path for path, name in zip(object_glob, object_names) if not out_temp_fs.exists(f"{name}.webp")]
         print("Queueing batches.")
         print("Total count: ", len(object_glob))
         futures = {}
@@ -69,14 +71,18 @@ def main():
                         print(f"Failed on a single item {batch[0]}. Skipping.")
                     else:
                         print(f"Subdividing batch of length {len(batch)}")
-                        batch_size = len(batch) // 2
-                        subbatches = [batch[:batch_size], batch[batch_size:]]
+                        batch_names = ["-".join(x.split("/")[-3:-1]) for x in object_glob]
+                        batch_remaining = [path for path, name in zip(batch, batch_names) if not out_temp_fs.exists(f"{name}.webp")]
+                        batch_size = len(batch_remaining) // 2
+                        subbatches = [batch_remaining[:batch_size], batch_remaining[batch_size:]]
                         for subbatch in subbatches:
-                            subcommand = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_fs.getsyspath("/"), out_temp_fs.getsyspath("/")] + subbatch
+                            if not subbatch:
+                                continue
                             worker_future = dask_client.submit(
-                                run_in_env,
-                                python_cmd=subcommand,
-                                omnigibson_env=True,
+                                run_on_batch,
+                                dataset_fs.getsyspath("/"),
+                                out_temp_fs.getsyspath("/"),
+                                subbatch,
                                 pure=False)
                             futures[worker_future] = subbatch
                         del futures[future]
