@@ -26,8 +26,8 @@ def main():
     scenes = get_available_og_scenes()
     info = dict()
     for scene_model in scenes:
-        best_path = os.path.join(gm.DATASET_PATH, "scenes", og.sim.scene.scene_model, "json", f"{scene_model}_best.json")
-        stable_path = os.path.join(gm.DATASET_PATH, "scenes", og.sim.scene.scene_model, "json", f"{scene_model}_stable.json")
+        best_path = os.path.join(gm.DATASET_PATH, "scenes", scene_model, "json", f"{scene_model}_best.json")
+        stable_path = os.path.join(gm.DATASET_PATH, "scenes", scene_model, "json", f"{scene_model}_stable.json")
         if not os.path.exists(stable_path):
             continue
         with open(best_path, "r") as f:
@@ -49,7 +49,7 @@ def main():
 
     # Write to spreadsheet
     idx_to_scene = {i: sc for i, sc in enumerate(get_scenes())}
-    cell_list = worksheet.range(f"AB{2}:A{2 + len(idx_to_scene) - 1}")
+    cell_list = worksheet.range(f"AB{2}:AB{2 + len(idx_to_scene) - 1}")
     for i, cell in enumerate(cell_list):
         scene = idx_to_scene[i]
         if scene in info:
