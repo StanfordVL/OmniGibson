@@ -18,7 +18,6 @@ def main(use_future=False):
     needed = set()
     providers = defaultdict(list)
     meta_links = defaultdict(set)
-    attachment_points = {}
     needed_by = defaultdict(list)
     skipped_files = []
     
@@ -45,9 +44,6 @@ def main(use_future=False):
                     providers[provided].append(target)
                 for obj, links in object_list["meta_links"].items():
                     meta_links[obj].update(links)
-                for obj, attachments in object_list["attachment_points"].items():
-                    assert obj not in attachment_points, f"{obj} has two sets of attachment points"
-                    attachment_points[obj] = attachments
                 
                 # Manually generate pseudo-metalinks for parts
                 for name, _, parent in object_list["max_tree"]:
@@ -103,7 +99,6 @@ def main(use_future=False):
             "providers": single_provider,
             "needed_by": needed_by,
             "meta_links": {x: sorted(y) for x, y in meta_links.items()},
-            "attachment_points": {x: y for x, y in sorted(attachment_points.items())},
             "error_skipped_files": sorted(skipped_files),
             "error_multiple_provided": multiple_provided,
             "error_missing_objects": sorted(missing_objects),

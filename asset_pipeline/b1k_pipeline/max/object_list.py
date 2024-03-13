@@ -98,7 +98,7 @@ def main():
         obj_match = b1k_pipeline.utils.parse_name(obj)
         if not parent_match or not obj_match:
             continue
-        if not obj_match.group("tag") or "Tconnectedpart" not in obj_match.group("tag"):
+        if not obj_match.group("tags") or "Tconnectedpart" not in obj_match.group("tags"):
             continue
         parent_id = parent_match.group("category") + "-" + parent_match.group("model_id")
         child_id = obj_match.group("category") + "-" + obj_match.group("model_id")
