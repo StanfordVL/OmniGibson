@@ -24,6 +24,82 @@ ALLOWED_PART_TAGS = {
     "connectedpart",
 }
 
+OBJECT_CORRECTIONS = {
+    "office_large": {
+        "bottom_cabinet_bamfsz_52": ([0.0, -0.02, 0.0], [0.0, 0.0, 0.0], None, "world"),
+        "bottom_cabinet_bamfsz_53": ([0.0, -0.02, 0.], [0.0, 0.0, 0.0], None, "world"),
+        "bottom_cabinet_bamfsz_56": ([0.02, 0.0, 0.0], [0.0, 0.0, 0.0], None, "world"),
+        "bottom_cabinet_bamfsz_57": ([0.02, 0.0, 0.0], [0.0, 0.0, 0.0], None, "world"),
+        "bottom_cabinet_bamfsz_58": ([-0.02, 0.0, 0.0], [0.0, 0.0, 0.0], None, "world"),
+        "bottom_cabinet_bamfsz_59": ([-0.02, 0.0, 0.0], [0.0, 0.0, 0.0], None, "world"),
+        "fridge_juwaoh_0": ([0.0, 0.0, 0.0], [-np.pi / 2.0 , 0.0, 0.0], None, "world"),
+        "fridge_juwaoh_1": ([0.0, 0.0, 0.0], [-np.pi / 2.0, 0.0, 0.0], None, "world"),
+    },
+    "Beechwood_0_garden": {
+        "coffee_table_qplrhv_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "coffee_table_wwgaym_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "coffee_table_hbgcej_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "coffee_table_rkdwxe_1": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "coffee_table_rkdwxe_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "sofa_rqipbs_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "coffee_table_mjyitq_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "armchair_nibzys_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "sofa_ahgkci_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], True, "world"),
+        "sofa_tlsxpc_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], True, "world"),
+        "coffee_table_lpwbgm_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], True, "world"),
+        "pot_plant_ibvdwh_0": ([0.03, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "pot_plant_ibvdwh_1": ([0.03, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "pot_plant_ibvdwh_2": ([0.03, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+    },
+    "house_single_floor": {
+        "stove_mjvqii_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "sink_awvzkn_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "countertop_rkgjer_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "countertop_gjeoer_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "fridge_dszchb_0": ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi], None, "world"),
+        "clothes_dryer_xsuyua_0": ([0.0, 0.0, 0.0], [0.0, 0.0, -np.pi / 2.0], None, "world"),
+        "water_glass_bbpraa_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "sink_vekaaf_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "countertop_ikwqer__0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+    },
+    "Wainscott_0_garden": {
+        "garden_umbrella_bkfuvq_0": ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], True, "world"),
+        "garden_umbrella_bkfuvq_1": ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], True, "world"),
+        "pedestal_table_ifmhpn_0": ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], True, "world"),
+        "pedestal_table_ifmhpn_1": ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], True, "world"),
+    },
+    "office_cubicles_right": {
+        "conference_table_fpkmyw_0": ([0.0, 0.0, 0.0], [np.pi, 0.0, 0.0], None, "world"),
+        "swivel_chair_ucawqa_0": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+        "swivel_chair_ucawqa_1": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+        "swivel_chair_ucawqa_2": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+        "swivel_chair_ucawqa_3": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+        "swivel_chair_ucawqa_4": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+        "swivel_chair_ucawqa_5": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+        "swivel_chair_ucawqa_6": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+        "swivel_chair_ucawqa_7": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+        "swivel_chair_ucawqa_8": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+        "swivel_chair_ucawqa_9": ([0.0, 0.0, 0.0], [-np.pi / 2, 0.0, -np.pi / 2], None, "local"),
+    },
+    "office_vendor_machine": {
+        "bottom_cabinet_bamfsz_0": ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_1": ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_2": ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_3": ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_4": ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_5": ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_6": ([0.0, -0.2, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_7": ([0.0, -0.2, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_8": ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_9": ([0.0, -0.2, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+        "bottom_cabinet_bamfsz_10": ([0.0, -0.2, 0.0], [0.0, 0.0, np.pi / 2], None, "local"),
+    },
+    "restaurant_diner": {
+        "straight_chair_nntxvr_0":  ([0.33, 0.0, 0.0], [0.0, 0.0, 0.0], None, "world"),
+        "straight_chair_nntxvr_1":  ([0.33, 0.0, 0.0], [0.0, 0.0, 0.0], None, "world"),
+    },
+}
+
 def process_target(target, scenes_dir):
     scene_name = os.path.split(target)[-1]
     pipeline_fs = b1k_pipeline.utils.PipelineFS()
@@ -92,6 +168,21 @@ def process_target(target, scenes_dir):
             if obj_rooms == "0":
                 obj_rooms = ""
 
+            # Apply any manual corrections
+            force_fixed = None
+            pos_correction = np.array([0, 0, 0])
+            correction_key = obj_name_in_scene.replace("-", "_")
+            if scene_name in OBJECT_CORRECTIONS and correction_key in OBJECT_CORRECTIONS[scene_name]:
+                print("Correcting object", correction_key, "in", scene_name)
+                pos_correction, orn_correction, force_fixed, rot_frame = OBJECT_CORRECTIONS[scene_name][correction_key]
+                if rot_frame == "world":
+                    canonical_orientation = R.from_euler("xyz", orn_correction) * R.from_quat(G.nodes[root_node]["canonical_orientation"])
+                elif rot_frame == "local":
+                    canonical_orientation = R.from_quat(G.nodes[root_node]["canonical_orientation"]) * R.from_euler("xyz", orn_correction)
+                else:
+                    raise ValueError(f"Unknown rot_frame {rot_frame}")
+                G.nodes[root_node]["canonical_orientation"] = canonical_orientation.as_quat()
+
             # Get the relevant bbox info.
             bbox_size, _, bbox_world_center, bbox_world_rot = compute_object_bounding_box(G.nodes[root_node])
 
@@ -104,6 +195,9 @@ def process_target(target, scenes_dir):
             corrected_bbox_center = corrected_bbox_transform[:3, 3]
             corrected_bbox_rot = R.from_matrix(corrected_bbox_transform[:3, :3])
 
+            # Apply the position correction
+            corrected_bbox_center += pos_correction
+
             # Save pose to scene URDF
             scene_link = ET.SubElement(scene_tree_root, "link")
             scene_link.attrib = {
@@ -114,9 +208,10 @@ def process_target(target, scenes_dir):
             }
             scene_link.attrib["bounding_box"] = " ".join(["%.4f" % item for item in bbox_size])
             joint = ET.SubElement(scene_tree_root, "joint")
+            joint_fixed = force_fixed if force_fixed is not None else (G.nodes[root_node]["is_loose"] is None)
             joint.attrib = {
                 "name": f"j_{obj_name_in_scene}",
-                "type": "fixed" if G.nodes[root_node]["is_loose"] is None else "floating",
+                "type": "fixed" if joint_fixed else "floating",
             }
             joint_origin = ET.SubElement(joint, "origin")
             joint_origin_xyz = corrected_bbox_center.tolist()
