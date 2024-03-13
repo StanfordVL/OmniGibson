@@ -33,7 +33,7 @@ client = gspread.service_account(filename=CREDENTIALS)
 worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
 
 class RetryWrapper:
-    def __init__(self, obj, retries=60, delay=1.0):
+    def __init__(self, obj, retries=120, delay=1.0):
         self.obj = obj
         self.retries = retries
         self.delay = delay
