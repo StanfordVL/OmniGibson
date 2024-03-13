@@ -3,6 +3,7 @@ import os
 import subprocess
 from dask.distributed import as_completed
 import fs.copy
+from fs.multifs import MultiFS
 from fs.zipfs import ZipFS
 import fs.path
 from fs.tempfs import TempFS
@@ -21,16 +22,22 @@ def run_on_scene(dataset_path, scene, output_dir):
 def main():
     with PipelineFS() as pipeline_fs, \
          pipeline_fs.open("artifacts/og_dataset.zip", "rb") as og_dataset_zip, \
+         pipeline_fs.open("artifacts/parallels/scenes.zip", "rb") as scenes_zip, \
          ZipFS(og_dataset_zip) as objects_fs, \
+         ZipFS(scenes_zip) as urdf_scenes_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as dataset_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as out_temp_fs:
         # Copy everything over to the dataset FS
         print("Copying input to dataset fs...")
 
+        multi_fs = MultiFS()
+        multi_fs.add_fs("objects", objects_fs)
+        multi_fs.add_fs("scenes", urdf_scenes_fs)
+
         # Copy all the files to the output zip filesystem.
-        total_files = sum(1 for f in objects_fs.walk.files())
+        total_files = sum(1 for f in multi_fs.walk.files())
         with tqdm.tqdm(total=total_files) as pbar:
-            fs.copy.copy_fs(objects_fs, dataset_fs, on_copy=lambda *args: pbar.update(1))
+            fs.copy.copy_fs(multi_fs, dataset_fs, on_copy=lambda *args: pbar.update(1))
 
         print("Launching cluster...")
         dask_client = launch_cluster(WORKER_COUNT)
