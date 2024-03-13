@@ -32,7 +32,7 @@ def main():
             continue
         with open(best_path, "r") as f:
             best_scene_dict = json.load(f)
-        with open(best_path, "r") as f:
+        with open(stable_path, "r") as f:
             stable_scene_dict = json.load(f)
 
         error_msgs = []
