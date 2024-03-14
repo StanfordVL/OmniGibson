@@ -7909,8 +7909,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: dcbb008c11ecf22d07a48920b9bcf682
       size: 3096152
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 853a65dca047d7689e9362254b31e804
       size: 9347
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -10288,8 +10287,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: dcbb008c11ecf22d07a48920b9bcf682
       size: 3096152
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 853a65dca047d7689e9362254b31e804
       size: 9347
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -11384,8 +11382,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: dcbb008c11ecf22d07a48920b9bcf682
       size: 3096152
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 853a65dca047d7689e9362254b31e804
       size: 9347
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -12188,8 +12185,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: 72c82c8e34bff048822fc06de024715a
       size: 4752
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     outs:
@@ -13204,8 +13200,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/max/export_meshes.py
-      md5: 8f67c8a3cae22b0303e1082e4d76f9c9
-      size: 23730
+      md5: 08b6378d12a2ce5b7c24ef986d091fd5
+      size: 23780
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       md5: 870d89f8bcdfbf8eb5e6bab8644e2d04
       size: 113211
@@ -13214,11 +13210,11 @@ stages:
       size: 202414578
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/export_meshes.json
-      md5: 1c8dbaa0afdeb9b98ed05d38f17635d0
-      size: 35531
+      md5: 4b4a546903bfeb9def6d035c7cf4fc6e
+      size: 35524
     - path: cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
-      md5: 2d0f42e275c8c216877baba165ec1cea
-      size: 256818544
+      md5: a0ecc1b41cb4a196e4bd1f5f51820830
+      size: 256268516
   export_meshes@scenes/Rs_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Rs_garden/processed.max b1k_pipeline/max/export_meshes.py
     deps:
@@ -14065,8 +14061,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: 2b617e1652f7762c84de2dfb464ffdfa
       size: 4794
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
