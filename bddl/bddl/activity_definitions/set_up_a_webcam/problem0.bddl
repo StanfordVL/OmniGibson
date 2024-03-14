@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        desktop_computer.n.01_1 - desktop_computer.n.01
+        monitor.n.04_1 - monitor.n.04
         desk.n.01_1 - desk.n.01
         mouse.n.04_1 - mouse.n.04
         keyboard.n.01_1 - keyboard.n.01
@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (ontop desktop_computer.n.01_1 desk.n.01_1) 
+        (ontop monitor.n.04_1 desk.n.01_1) 
         (ontop mouse.n.04_1 desk.n.01_1) 
         (ontop keyboard.n.01_1 desk.n.01_1) 
         (ontop webcam.n.02_1 desk.n.01_1)
@@ -23,7 +23,7 @@
     
     (:goal 
         (and 
-            (attached ?webcam.n.02_1 ?desktop_computer.n.01_1)
+            (attached ?webcam.n.02_1 ?monitor.n.04_1)
         )
     )
 )

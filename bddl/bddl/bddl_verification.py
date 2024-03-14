@@ -75,7 +75,7 @@ VALID_ATTACHMENTS = set([
     ("skateboard_wheel.n.01", "skateboard_deck.n.01"),
     ("trampoline_leg.n.01", "trampoline_top.n.01"),
     ("trout.n.01", "fishing_rod.n.01"),
-    ("webcam.n.02", "desktop_computer.n.01"),
+    ("webcam.n.02", "monitor.n.04"),
     ("window_blind.n.01", "wall_nail.n.01"),
     ("wind_chime.n.01", "pole.n.01"),
     ("wreath.n.01", "wall_nail.n.01"),
