@@ -1209,6 +1209,12 @@ class BDDLSampler:
                     # Sample!
                     for condition, positive, entity, child_scope_name in conditions_to_sample:
                         success = False
+
+                        kwargs = dict()
+                        # Reset if we're sampling a kinematic state
+                        if condition.STATE_NAME in {"inside", "ontop", "under"}:
+                            kwargs["reset_before_sampling"] = True
+
                         while True:
                             num_trials = 1
                             kwargs = dict()
