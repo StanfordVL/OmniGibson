@@ -143,7 +143,10 @@ class KnowledgeBaseProcessor():
         with open(GENERATED_DATA_DIR / "object_inventory_future.json", "r") as f:
             inventory = json.load(f)
             for orig_name, provider in self.tqdm(inventory["providers"].items()):
-                object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
+                object_name = orig_name
+                if orig_name.split("-")[1] in self.obj_rename_mapping_unique_set:
+                    assert orig_name in self.object_rename_mapping, f"{orig_name}'s ID is in the object rename mapping, but with a wrong category."
+                    object_name = self.object_rename_mapping[orig_name]
                 if object_name.split("-")[1] in self.deletion_queue:
                     continue
 
