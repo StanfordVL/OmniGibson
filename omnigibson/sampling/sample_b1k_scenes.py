@@ -15,7 +15,7 @@ from omnigibson.objects import DatasetObject
 from omnigibson.object_states import Contains
 from omnigibson.tasks import BehaviorTask
 from omnigibson.systems import remove_callback_on_system_init, remove_callback_on_system_clear, get_system, MicroPhysicalParticleSystem
-from omnigibson.systems.system_base import clear_all_systems, PhysicalParticleSystem
+from omnigibson.systems.system_base import clear_all_systems, PhysicalParticleSystem, VisualParticleSystem
 from omnigibson.utils.python_utils import clear as clear_pu
 from omnigibson.utils.python_utils import create_object_from_init_info
 from omnigibson.utils.bddl_utils import OBJECT_TAXONOMY
@@ -260,6 +260,17 @@ def main(random_selection=False, headless=False, short_exec=False):
 
                     for i in range(300):
                         og.sim.step(render=not gm.HEADLESS)
+
+                    # Remove any particles that fell out of the world
+                    for system_cls in (PhysicalParticleSystem, VisualParticleSystem):
+                        for system in system_cls.get_active_systems().values():
+                            if system.n_particles > 0:
+                                particle_positions, _ = system.get_particles_position_orientation()
+                                remove_idxs = np.where(particle_positions[:, -1] < -1.0)[0]
+                                if len(remove_idxs) > 0:
+                                    system.remove_particles(remove_idxs)
+
+                    og.sim.step(render=not gm.HEADLESS)
 
                     task_final_state = og.sim.dump_state()
                     task_scene_dict = {"state": task_final_state}
