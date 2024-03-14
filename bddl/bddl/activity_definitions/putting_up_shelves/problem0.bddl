@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (inroom floor.n.01_1 bathroom) 
+        (inroom floor.n.01_1 living_room)
         (ontop agent.n.01_1 floor.n.01_1)
         (ontop shelf_back.n.01_1 floor.n.01_1)
         (ontop shelf_side.n.01_1 floor.n.01_1)
