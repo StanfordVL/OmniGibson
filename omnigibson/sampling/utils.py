@@ -13,6 +13,7 @@ import getpass
 import copy
 import time
 from omnigibson.macros import gm, macros
+import omnigibson.utils.transform_utils as T
 
 """
 1. gcloud auth login
@@ -383,6 +384,10 @@ def validate_task(task, task_scene_dict, default_scene_dict):
 
                 else:
                     continue
+            elif key == "ori":
+                # Grab the axis angle representation to compute magnitude difference
+                val = 0
+                obj_val = np.linalg.norm(T.quat2axisangle(T.quat_distance(val, obj_val)))
             if not np.all(np.isclose(np.array(val), np.array(obj_val), atol=atol, rtol=0.0)):
                 return False, f"{obj_name} root link mismatch in {key}: default_obj_dict has: {val}, obj_dict has: {obj_val}"
 
