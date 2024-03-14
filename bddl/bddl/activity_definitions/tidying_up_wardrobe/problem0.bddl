@@ -30,18 +30,18 @@
             (exists 
                 (?hanger.n.02 - hanger.n.02)
                 (and 
-                    (draped ?jersey.n.03_1 ?hanger.n.02_1)
+                    (draped ?jersey.n.03_1 ?hanger.n.02)
                     (not 
-                        (draped ?underwear.n.01_1 ?hanger.n.02_1)
+                        (draped ?underwear.n.01_1 ?hanger.n.02)
                     )
                 )
             )
             (exists 
                 (?hanger.n.02 - hanger.n.02)
                 (and 
-                    (draped ?underwear.n.01_1 ?hanger.n.02_1)
+                    (draped ?underwear.n.01_1 ?hanger.n.02)
                     (not 
-                        (draped ?jersey.n.03_1 ?hanger.n.02_1)
+                        (draped ?jersey.n.03_1 ?hanger.n.02)
                     )
                 )
             )
