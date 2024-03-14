@@ -60,7 +60,8 @@ OBJECT_CORRECTIONS = {
         "clothes_dryer_xsuyua_0": ([0.0, 0.0, 0.0], [0.0, 0.0, -np.pi / 2.0], None, "world"),
         "water_glass_bbpraa_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
         "sink_vekaaf_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
-        "countertop_ikwqer__0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "countertop_ikwqer_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
+        "countertop_sjxber_0": ([0.0, 0.0, 0.03], [0.0, 0.0, 0.0], None, "world"),
     },
     "Wainscott_0_garden": {
         "garden_umbrella_bkfuvq_0": ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], True, "world"),
@@ -97,6 +98,8 @@ OBJECT_CORRECTIONS = {
     "restaurant_diner": {
         "straight_chair_nntxvr_0":  ([0.33, 0.0, 0.0], [0.0, 0.0, 0.0], None, "world"),
         "straight_chair_nntxvr_1":  ([0.33, 0.0, 0.0], [0.0, 0.0, 0.0], None, "world"),
+        "bottom_cabinet_olgoza_0":  ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi / 2], None, "world"),
+        "fridge_juwaoh_0":  ([0.0, 0.0, 0.0], [0.0, 0.0, np.pi / 2], None, "world"),
     },
 }
 
