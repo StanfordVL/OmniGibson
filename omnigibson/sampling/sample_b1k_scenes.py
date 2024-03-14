@@ -127,6 +127,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "grasping_mode": "physical",
                 "default_arm_pose": "diagonal30",
                 "default_reset_mode": "tuck",
+                "position": np.ones(3) * -50.0,
             },
         ],
     }
