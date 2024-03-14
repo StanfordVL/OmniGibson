@@ -13,8 +13,7 @@
     
     (:init 
         (ontop toolbox.n.01_1 floor.n.01_1) 
-        (open toolbox.n.01_1) 
-        (ontop pliers.n.01_1 floor.n.01_1) 
+        (ontop pliers.n.01_1 floor.n.01_1)
         (ontop wrench.n.03_1 floor.n.01_1) 
         (ontop hammer.n.02_1 floor.n.01_1) 
         (ontop screwdriver.n.01_1 floor.n.01_1) 
@@ -28,9 +27,6 @@
             (inside ?screwdriver.n.01_1 ?toolbox.n.01_1) 
             (inside ?wrench.n.03_1 ?toolbox.n.01_1) 
             (inside ?pliers.n.01_1 ?toolbox.n.01_1)
-            (not
-                (open ?toolbox.n.01_1)
-            )
         )
     )
 )

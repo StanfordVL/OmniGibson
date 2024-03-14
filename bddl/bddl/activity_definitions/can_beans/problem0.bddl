@@ -30,9 +30,6 @@
                 (?can.n.01 - can.n.01)
                 (and
                     (filled ?can.n.01 ?black_bean.n.01_1)
-                    (not
-                        (open ?can.n.01)
-                    )
                     (inside ?can.n.01 ?cabinet.n.01_1)
                 )
             )

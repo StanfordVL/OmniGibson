@@ -19,8 +19,7 @@
         (ontop flashlight.n.01_1 floor.n.01_1) 
         (ontop allen_wrench.n.01_1 floor.n.01_1) 
         (ontop screwdriver.n.01_1 floor.n.01_1) 
-        (open toolbox.n.01_1) 
-        (inroom floor.n.01_1 empty_room) 
+        (inroom floor.n.01_1 empty_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -31,9 +30,6 @@
             (inside ?flashlight.n.01_1 ?toolbox.n.01_1)
             (inside ?allen_wrench.n.01_1 ?toolbox.n.01_1)
             (inside ?screwdriver.n.01_1 ?toolbox.n.01_1)
-            (not
-                (open ?toolbox.n.01_1)
-            )
             (ontop ?toolbox.n.01_1 ?floor.n.01_1)
         )
     )

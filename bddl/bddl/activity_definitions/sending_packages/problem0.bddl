@@ -11,9 +11,7 @@
     
     (:init 
         (ontop package.n.02_1 coffee_table.n.01_1) 
-        (ontop package.n.02_2 coffee_table.n.01_1) 
-        (open package.n.02_1)
-        (open package.n.02_1)
+        (ontop package.n.02_2 coffee_table.n.01_1)
         (ontop mailbox.n.01_1 floor.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom floor.n.01_1 garden) 
@@ -29,9 +27,6 @@
                     (or
                         (inside ?package.n.02 ?mailbox.n.01_1)
                         (nextto ?package.n.02 ?mailbox.n.01_1)
-                    )
-                    (not
-                        (open ?package.n.02)
                     )
                 )
             ) 
