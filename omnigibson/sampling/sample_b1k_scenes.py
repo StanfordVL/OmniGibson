@@ -134,6 +134,8 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Attempt to sample the activity
     # env = create_env_with_stable_objects(cfg)
     env = og.Environment(configs=copy.deepcopy(cfg))
+    if gm.HEADLESS:
+        hide_all_lights()
 
     # After we load the robot, we do self.scene.reset() (one physics step) and then self.scene.update_initial_state().
     # We need to set all velocities to zero after this. Otherwise, the visual only objects will drift.
@@ -327,6 +329,9 @@ def main(random_selection=False, headless=False, short_exec=False):
 
             # env = create_env_with_stable_objects(cfg)
             env = og.Environment(configs=copy.deepcopy(cfg))
+
+            if gm.HEADLESS:
+                hide_all_lights()
 
             # After we load the robot, we do self.scene.reset() (one physics step) and then self.scene.update_initial_state().
             # We need to set all velocities to zero after this. Otherwise, the visual only objects will drift.

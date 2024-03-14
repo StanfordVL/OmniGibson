@@ -1,6 +1,7 @@
 import omnigibson as og
 from omnigibson.objects import DatasetObject
 from omnigibson.systems import MicroPhysicalParticleSystem, get_system
+import omnigibson.lazy as lazy
 from bddl.activity import Conditions, evaluate_state
 import numpy as np
 import csv
@@ -206,6 +207,23 @@ def get_notready_synsets():
                 notready_synsets.add(synset)
 
     return notready_synsets
+
+
+def get_all_lights(prim):
+    prims = []
+    for child in prim.GetChildren():
+        if "Light" in child.GetPrimTypeInfo().GetTypeName():
+            prims.append(child)
+        prims += get_all_lights(child)
+
+    return prims
+
+
+def hide_all_lights():
+    lights = get_all_lights(prim=og.sim.world_prim)
+    for light in lights:
+        imageable = lazy.pxr.UsdGeom.Imageable(light)
+        imageable.MakeInvisible()
 
 
 def parse_task_mapping(fpath):
