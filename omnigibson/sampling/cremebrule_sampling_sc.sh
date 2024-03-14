@@ -31,7 +31,7 @@ sbatch sample_tasks_sbatch.sh -m grocery_store_half_stocked # A
 #sbatch sample_tasks_sbatch.sh -m hotel_suite_small
 #sbatch sample_tasks_sbatch.sh -m house_double_floor_lower
 #sbatch sample_tasks_sbatch.sh -m house_double_floor_upper
-#sbatch sample_tasks_sbatch.sh -m house_single_floor
+sbatch sample_tasks_sbatch.sh -m house_single_floor
 #sbatch sample_tasks_sbatch.sh -m office_bike
 #sbatch sample_tasks_sbatch.sh -m office_cubicles_left
 #sbatch sample_tasks_sbatch.sh -m office_cubicles_right
