@@ -4,23 +4,23 @@
 #sbatch sample_tasks_sbatch.sh -m Benevolence_0_int
 #sbatch sample_tasks_sbatch.sh -m Benevolence_1_int # A
 #sbatch sample_tasks_sbatch.sh -m Benevolence_2_int
-#sbatch sample_tasks_sbatch.sh -m Ihlen_0_int # A
+sbatch sample_tasks_sbatch.sh -m Ihlen_0_int # A
 #sbatch sample_tasks_sbatch.sh -m Ihlen_1_int # A
 #sbatch sample_tasks_sbatch.sh -m Merom_0_garden # A
 #sbatch sample_tasks_sbatch.sh -m Merom_0_int
-sbatch sample_tasks_sbatch.sh -m Merom_1_int # A
+#sbatch sample_tasks_sbatch.sh -m Merom_1_int # A
 #sbatch sample_tasks_sbatch.sh -m Pomaria_0_garden
 #sbatch sample_tasks_sbatch.sh -m Pomaria_0_int
 #sbatch sample_tasks_sbatch.sh -m Pomaria_1_int # A
 #sbatch sample_tasks_sbatch.sh -m Pomaria_2_int
-sbatch sample_tasks_sbatch.sh -m Rs_garden # A
-#sbatch sample_tasks_sbatch.sh -m Rs_int # A
-#sbatch sample_tasks_sbatch.sh -m Wainscott_0_garden # A
+#sbatch sample_tasks_sbatch.sh -m Rs_garden # A
+sbatch sample_tasks_sbatch.sh -m Rs_int # A
+sbatch sample_tasks_sbatch.sh -m Wainscott_0_garden # A
 #sbatch sample_tasks_sbatch.sh -m Wainscott_0_int # A
 sbatch sample_tasks_sbatch.sh -m Wainscott_1_int # A
 #sbatch sample_tasks_sbatch.sh -m grocery_store_asian
-sbatch sample_tasks_sbatch.sh -m grocery_store_cafe # A
-sbatch sample_tasks_sbatch.sh -m grocery_store_convenience # A
+#sbatch sample_tasks_sbatch.sh -m grocery_store_cafe # A
+#sbatch sample_tasks_sbatch.sh -m grocery_store_convenience # A
 sbatch sample_tasks_sbatch.sh -m grocery_store_half_stocked # A
 #sbatch sample_tasks_sbatch.sh -m hall_arch_wood
 #sbatch sample_tasks_sbatch.sh -m hall_conference_large
