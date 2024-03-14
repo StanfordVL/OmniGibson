@@ -87,7 +87,6 @@ def main(random_selection=False, headless=False, short_exec=False):
             print(f"\nScene {args.scene_model} already completed sampling, terminating immediately!\n")
             return
 
-        worksheet.update_acell(f"W{scene_row}", 1)
         # Potentially update start_at based on current task observed
         # Current task is either an empty list [] or a filled list [['<ACTIVITY>']]
         current_task = worksheet.get(f"Y{scene_row}")
