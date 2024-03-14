@@ -12,6 +12,7 @@ import json
 import pathlib 
 from nltk.corpus import wordnet as wn
 import bddl.data_generation.prop_config as pcfg
+from bddl.bddl_verification import VALID_ATTACHMENTS
 
 
 CANONICAL_FN = pathlib.Path(__file__).parents[1] / "generated_data" / "syn_prop_annots_canonical.json"
@@ -21,7 +22,6 @@ SYN_TO_DESC_FILE = pathlib.Path(__file__).parents[1] / "generated_data" / "synse
 DESIRED_PROPS = set(pcfg.CROWD_PROP_NAMES + pcfg.GPT_PROP_NAMES + pcfg.INTERNAL_PROP_NAMES)
 
 PROP_TO_DESC = { #added by hand from B1K Object States Google Doc found here https://docs.google.com/document/d/10g5A-ODF4POFN0SxIhiQIuDh5L1X_8KXriwKfaKWUFc/edit?usp=sharing as of May 12, 2022
-
     "breakable": "broken",
     "burnable": "burnt",
     "cleaningTool": None,
@@ -68,6 +68,7 @@ PROP_TO_DESC = { #added by hand from B1K Object States Google Doc found here htt
     "rustable": "rusty",
     "wrinkleable": "wrinkly",
     "disinfectable": "disinfected",
+    "attachable": "attached",
     "mixable": None,
     "blendable": None,
     "rope": None,
@@ -115,6 +116,7 @@ def get_annots_canonical(syn_prop_dict):
 ############ GETTING PROPERTIES #############
 
 def add_programmatic_properties(synset_content): # runs programmatic addition over existing canonical input
+    valid_attachments_dict = dict(VALID_ATTACHMENTS)
     for synset in synset_content:
         if "liquid" in synset_content[synset]:
             synset_content[synset]["boilable"] = {}
@@ -132,6 +134,8 @@ def add_programmatic_properties(synset_content): # runs programmatic addition ov
         if ("nonSubstance" in synset_content[synset]) and ("cookable" in synset_content[synset] or "fillable" in synset_content[synset]):
             # cookables and fillables are both freezable
             synset_content[synset]["freezable"] = {}
+        if synset in valid_attachments_dict.keys() or synset in valid_attachments_dict.values():
+            synset_content[synset]["attachable"] = {}
         if "nonSubstance" in synset_content[synset]: # non-substances are both wetable and mixable
                 synset_content[synset].update({
                     "wetable": {},
