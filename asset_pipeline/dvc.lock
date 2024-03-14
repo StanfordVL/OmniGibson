@@ -1258,8 +1258,8 @@ stages:
       md5: dc6210569748bc3f9875a148c181e8eb
       size: 339445
     - path: params.yaml
-      md5: a18bbb5371fd7fffb932d292847596c8
-      size: 12239
+      md5: 79e98b29f7f025aa3897e61693b5fa9b
+      size: 11083
     outs:
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -1541,8 +1541,8 @@ stages:
       md5: dc6210569748bc3f9875a148c181e8eb
       size: 339445
     - path: params.yaml
-      md5: a18bbb5371fd7fffb932d292847596c8
-      size: 12239
+      md5: 79e98b29f7f025aa3897e61693b5fa9b
+      size: 11083
     outs:
     - path: artifacts/pipeline/object_inventory.json
       md5: 4bad4cddaf0131479aba186f8d9e21e5
@@ -4286,8 +4286,8 @@ stages:
       md5: 50380e7647a34c18af72965e5ec76a1f
       size: 137
     - path: params.yaml
-      md5: a18bbb5371fd7fffb932d292847596c8
-      size: 12239
+      md5: 79e98b29f7f025aa3897e61693b5fa9b
+      size: 11083
     outs:
     - path: artifacts/pipeline/sanitycheck.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -9581,8 +9581,8 @@ stages:
       md5: 316124978ffa260c160579b3d5c5607e
       size: 22004759019
     - path: artifacts/parallels/scenes.zip
-      md5: f4f4d359890dd095ba1081762a683a6d
-      size: 734666
+      md5: 5b10e344586bdfc8cda38e98c578a169
+      size: 165670
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -9611,18 +9611,18 @@ stages:
       md5: 2941590742764369a634a2300957b555
       size: 12525
     - path: b1k_pipeline/usd_conversion/usdify_scenes.py
-      md5: 01e10d22f3c5620e61599c849770892a
-      size: 3571
+      md5: cfeede18f51e374dbfc6d2b520b0445c
+      size: 3671
     - path: b1k_pipeline/usd_conversion/usdify_scenes_process.py
       md5: d79d250ca2e94cd4742ff0cbbc20df54
       size: 1937
     outs:
     - path: artifacts/parallels/scenes_json.zip
-      md5: 914fe14152fda084ed9db13db48af5c5
-      size: 5268251
+      md5: 54e127ece9bff69c2d488ca6540ef254
+      size: 1622975
     - path: artifacts/pipeline/usdify_scenes.json
-      md5: 38a4e6c5441fd2fa94a266aef80c5c14
-      size: 3611183
+      md5: 99914b932bd37a50b983c5e7c90ae93b
+      size: 2
     - path: artifacts/pipeline/usdify_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -13870,8 +13870,8 @@ stages:
       md5: 5695a2b0c4b1de79fd32042f7354eed1
       size: 31596
     - path: b1k_pipeline/export_scenes_global.py
-      md5: 12d6c8c160c8076be6a433296dad921a
-      size: 7644
+      md5: 616f473418f88c04a67598cc4ca9047f
+      size: 14342
     - path: b1k_pipeline/mesh_tree.py
       md5: 7ed516b18128f96cb05dfea5974e193c
       size: 14897
@@ -14388,10 +14388,13 @@ stages:
     - path: cad/scenes/school_gym/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
+    - path: params.yaml
+      md5: 79e98b29f7f025aa3897e61693b5fa9b
+      size: 11083
     outs:
     - path: artifacts/parallels/scenes.zip
-      md5: f4f4d359890dd095ba1081762a683a6d
-      size: 734666
+      md5: 5b10e344586bdfc8cda38e98c578a169
+      size: 165670
     - path: artifacts/pipeline/export_scenes.json
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
       size: 31

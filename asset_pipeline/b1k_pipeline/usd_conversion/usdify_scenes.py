@@ -15,8 +15,8 @@ WORKER_COUNT = 2
 def run_on_scene(dataset_path, scene):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_scenes_process", dataset_path, scene]
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
-    return subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd="/scr/ig_pipeline")
-
+    with open(f"/scr/ig_pipeline/logs/{scene}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{scene}.err", "w") as ferr:
+        return subprocess.run(cmd, stdout=f, stderr=ferr, check=True, cwd="/scr/ig_pipeline")
 
 def main():
     with PipelineFS() as pipeline_fs, \
@@ -60,10 +60,10 @@ def main():
             for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
                 try:
                     out = future.result()
-                    logs[futures[future]] = out.stdout.decode("utf-8")
+                    # logs[futures[future]] = out.stdout.decode("utf-8")
                 except subprocess.CalledProcessError as e:
                     print("Error in worker")
-                    print(e.stdout.decode("utf-8"))
+                    # print(e.stdout.decode("utf-8"))
 
             # Move the USDs to the output FS
             print("Copying scene JSONs to output FS...")

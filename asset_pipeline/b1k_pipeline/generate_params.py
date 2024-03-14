@@ -67,7 +67,7 @@ FINAL_SCENES = [
     "school_biology",
     "school_chemistry",
     "school_computer_lab_and_infirmary",
-    "gates_bedroom",
+    # "gates_bedroom",
 ]
 
 APPROVED_OBJS = {
@@ -144,7 +144,6 @@ def main():
         "verified_scenes": verified_scenes,
         "combined": combined,
         "combined_unfiltered": combined_unfiltered,
-        "root_path": root_path,
     }
     with open(out_path, "w") as f:
         yaml.dump(params, f)

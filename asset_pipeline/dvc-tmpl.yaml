@@ -214,6 +214,7 @@ stages:
     - b1k_pipeline/export_scenes_global.py
     - b1k_pipeline/export_objs_global.py
     - b1k_pipeline/mesh_tree.py
+    - params.yaml
     outs:
     - artifacts/parallels/scenes.zip
     - artifacts/pipeline/export_scenes.json
